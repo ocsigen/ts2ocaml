@@ -62,7 +62,9 @@ module Text =
     match lines.Length with
     | 0 -> empty
     | 1 -> Str lines.[0]
-    | _ -> lines |> Array.map Str |> Array.reduce (+)
+    | _ -> 
+      lines |> Array.mapi (fun i x -> if i = 0 then Str x else Newline + Str x)
+            |> Array.reduce (+)
 
   let inline indent x = Indent x
 

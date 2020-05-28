@@ -205,11 +205,11 @@ let getJsModuleName (path: string): string =
       | xs -> List.head xs
   out.Replace(".ts","").Replace(".d","")
 
-let primatives = ["string"; "obj"; "unit"; "float"; "bool"] |> Set.ofList
+let primitives = ["string"; "obj"; "unit"; "float"; "bool"; "int"] |> Set.ofList
 
 // espects a type where the namespace is simply dot separated
 let fixNamespaceString (name: string): string =
-  if primatives.Contains name then
+  if primitives.Contains name then
     name
   else
     let parts = name.Split [|'.'|]

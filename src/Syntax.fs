@@ -17,19 +17,24 @@ type PrimTypes =
   | Never
   | String | Bool | Number
   | Any | Void | Unknown
+  | RegExp
   | Object
 
-type Type =
+type BuiltInType =
+  | Promise of Type
+  | Date
+
+and Type =
   | PolymorphicThis
   | Ident of IdentType
   | TypeVar of string
   | Prim of PrimTypes
+  | BuiltIn of BuiltInType
   | TypeLiteral of Literal
   | AnonymousInterface of Class
   | Union of Type list | Intersection of Type list
   | Tuple of Type list | ReadonlyTuple of Type list
   | Array of Type | ReadonlyArray of Type
-  | Promise of Type
   | Function of FuncType<Type>
   | App of Type * Type list
   | UnknownType of string option

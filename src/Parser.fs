@@ -386,7 +386,8 @@ let readVariable (checker: TypeChecker) (v: Ts.VariableStatement) : Value list =
           match vd.initializer with
           | Some e ->
             match e.kind with
-            | Kind.StringLiteral | Kind.RegularExpressionLiteral -> Prim String
+            | Kind.StringLiteral -> Prim String
+            | Kind.RegularExpressionLiteral -> Prim RegExp
             | Kind.NumericLiteral | Kind.BigIntLiteral -> Prim Number
             | Kind.TrueKeyword | Kind.FalseKeyword -> Prim Bool
             | _ ->

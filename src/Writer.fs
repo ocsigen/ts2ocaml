@@ -40,16 +40,16 @@ module Text =
           sb.Append s |> ignore;
           match rhs with
           | [] -> sb.ToString()
-          | t :: rest -> go indent rest t
+          | (t, indent) :: rest -> go indent rest t
         | Concat (l, r) ->
-          go indent (r :: rhs) l
+          go indent ((r, indent) :: rhs) l
         | Newline ->
-          sb.AppendLine()
-            .Append(String.replicate (indent * indentLength) " ")
-            |> ignore;
+          sb.AppendLine() |> ignore;
           match rhs with
           | [] -> sb.ToString()
-          | t :: rest -> go indent rest t
+          | (t, indent) :: rest ->
+            sb.Append(String.replicate (indent * indentLength) " ") |> ignore;
+            go indent rest t
         | Indent t ->
           sb.Append(String.replicate indentLength " ") |> ignore;
           go (indent + 1) rhs t

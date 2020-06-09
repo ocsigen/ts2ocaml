@@ -31,7 +31,7 @@ module Text =
     | Newline
     | Str of string
   with
-    static member inline (+) (x, y) = Concat (x, y)
+    static member (+) (x, y) = Concat (x, y)
     override this.ToString() = this.ToString(2)
     member this.ToString(indentLength: int) =
       let sb = StringBuilder()
@@ -66,7 +66,7 @@ module Text =
       lines |> Array.mapi (fun i x -> if i = 0 then Str x else Newline + Str x)
             |> Array.reduce (+)
 
-  let inline indent x = Indent x
+  let indent x = Indent x
 
   let newline = Newline
 
@@ -75,6 +75,13 @@ module Text =
 
   let inline tprintf format = Printf.kprintf str format
   let inline tprintfn format = Printf.kprintf (fun s -> str s + newline) format
+
+  let between l r x = l @+ x +@ r
+
+  let join xs =
+    match xs with
+    | [] -> empty
+    | h :: t -> t |> List.fold (+) h
 
   let concat sep xs =
     match xs with
@@ -86,6 +93,31 @@ module Text =
       go h t
 
 open Text
+
+module Utils =
+  let recordBody inlined (fields: (text * text) list) =
+    let fields = fields |> List.map (fun (n, t) -> n +@ ": " + t)
+    if inlined then
+      concat (str "; ") fields
+    else
+      concat (str ";" + newline) fields
+
+  let variantBody poly inlined (cases: (string * text) list) =
+    let cases = cases |> List.map (fun (l, r) -> str (if poly then "`" else "") +@ l +@ " of " + r)
+    if inlined then
+      concat (str " | ") cases
+    else
+      str "| " + concat (str "|" + newline) cases
+ 
+  let attr isField name payload =
+    join [
+      if isField then str "@" else str "@@";
+      str name;
+      str " ";
+      concat (str " ") payload
+    ] |> between "[" "]"
+
+open Utils
 
 module Type =
   let string_ = str "string"
@@ -104,7 +136,7 @@ module Type =
   let tuple = function
     | [] -> failwith "empty tuple"
     | _ :: [] -> failwith "1-ary tuple"
-    | xs -> "(" @+ concat (str ", ") xs +@ ")"
+    | xs -> concat (str ", ") xs |> between "(" ")"
 
   let app t = function
     | [] -> failwith "type application with empty arguments"
@@ -114,4 +146,39 @@ module Type =
   let func args t =
     match args with
     | [] -> failwith "empty argument of function type"
-    | _ -> "(" @+ concat (str " -> ") args +@ " -> " + t +@ ")"
+    | _ -> concat (str " -> ") args +@ " -> " + t |> between "(" ")"
+
+  let object fields = recordBody true fields |> between "<" ">"
+
+  let polyVariant cases = variantBody true true cases
+
+module Definition =
+  let val_ name types = tprintf "val %s : " name + concat (str " -> ") types + newline
+
+  let module_ name isSig decls =
+    join [
+      tprintf "module %s %s" name (if isSig then " : sig" else " = struct")
+      newline
+      indent (concat newline decls)
+      newline
+      str "end"
+    ]
+
+  let variant name isPoly cases =
+    join [
+      tprintf "type %s = " name
+      newline
+      indent (variantBody isPoly false cases)
+    ]
+
+  let record name isObj fields =
+    join [
+      tprintf "type %s = " name
+      if isObj then str "<" else str "{"
+      newline
+      indent (recordBody false fields)
+      newline
+      if isObj then str ">" else str "}"
+    ]
+
+  let open_ names = names |> List.map (tprintf "open %s") |> concat newline

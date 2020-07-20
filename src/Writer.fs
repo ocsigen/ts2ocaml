@@ -1,102 +1,10 @@
 module Writer
 
-module Text =
-  #if FABLE_COMPILER
-  type StringBuilder (s: string) =
-    let mutable s = s
-    new () = StringBuilder ("")
-    member __.Length = s.Length
-    member sb.Append (s': string) = s <- s + s'; sb
-    member inline sb.Append (c: char) = sb.Append (string c)
-    member inline sb.Append (num: ^n) = sb.Append (sprintf "%d" num)
-    member inline sb.Append (o: obj) = sb.Append (string o)
-    member inline sb.AppendLine () = sb.Append System.Environment.NewLine
-    member inline sb.AppendLine (s: string) = (sb.Append (s)).AppendLine()
-    member sb.Remove (startIndex: int, length: int) =
-      if startIndex + length >= s.Length
-      then s <- s.Substring (0, startIndex)
-      else s <- s.Substring (0, startIndex) + s.Substring (startIndex + length)
-      sb
-    member inline __.ToString (startIndex: int, length: int) =
-      s.Substring (startIndex, length)
-    override __.ToString() = s
-  #else
-  type StringBuilder = System.Text.StringBuilder
-  #endif
-
-  type text =
-    private
-    | Indent of text
-    | Concat of text * text
-    | Newline
-    | Str of string
-  with
-    static member (+) (x, y) = Concat (x, y)
-    override this.ToString() = this.ToString(2)
-    member this.ToString(indentLength: int) =
-      let sb = StringBuilder()
-      let rec go indent rhs = function
-        | Str s ->
-          sb.Append s |> ignore;
-          match rhs with
-          | [] -> sb.ToString()
-          | (t, indent) :: rest -> go indent rest t
-        | Concat (l, r) ->
-          go indent ((r, indent) :: rhs) l
-        | Newline ->
-          sb.AppendLine() |> ignore;
-          match rhs with
-          | [] -> sb.ToString()
-          | (t, indent) :: rest ->
-            sb.Append(String.replicate (indent * indentLength) " ") |> ignore;
-            go indent rest t
-        | Indent t ->
-          sb.Append(String.replicate indentLength " ") |> ignore;
-          go (indent + 1) rhs t
-      go 0 [] this
-
-  let empty = Str ""
-
-  let str (s: string) =
-    let lines = s.Replace("\r\n", "\n").Split([|'\n'; '\r'|])
-    match lines.Length with
-    | 0 -> empty
-    | 1 -> Str lines.[0]
-    | _ -> 
-      lines |> Array.mapi (fun i x -> if i = 0 then Str x else Newline + Str x)
-            |> Array.reduce (+)
-
-  let indent x = Indent x
-
-  let newline = Newline
-
-  let inline (@+) s x = str s + x
-  let inline (+@) x s = x + str s
-
-  let inline tprintf format = Printf.kprintf str format
-  let inline tprintfn format = Printf.kprintf (fun s -> str s + newline) format
-
-  let between l r x = l @+ x +@ r
-
-  let join xs =
-    match xs with
-    | [] -> empty
-    | h :: t -> t |> List.fold (+) h
-
-  let concat sep xs =
-    match xs with
-    | [] -> empty
-    | h :: t ->
-      let rec go result = function
-        | [] -> result
-        | x :: xs -> go (result + sep + x) xs
-      go h t
-
+open Syntax
 open Text
 
 module Utils =
-  let recordBody inlined (fields: (text * text) list) =
-    let fields = fields |> List.map (fun (n, t) -> n +@ ": " + t)
+  let recordBody inlined (fields: text list) =
     if inlined then
       concat (str "; ") fields
     else
@@ -117,6 +25,11 @@ module Utils =
       concat (str " ") payload
     ] |> between "[" "]"
 
+  let constraint_ tyvar ty =
+    tprintf " constraint '%s = " tyvar + ty  
+
+  let comment text = tprintf "(* %s *)" text
+
 open Utils
 
 module Type =
@@ -125,11 +38,14 @@ module Type =
   let float_ = str "float"
   let regexp = str "Js.Re.t"
   let date = str "Js.Date.t"
+  let unit_ = str "()"
 
   let promise t = t +@ " Js.Promise.t"
   let null_ t = t +@ " Js.Null.t"
   let undefined_ t = t +@ " Js.Undefined.t"
   let null_undefined t = t +@ " Js.Nullable.t"
+  let js_t t = t +@ " Js.t"
+  let obj_ = str "Obj.t"
 
   let var s = tprintf "'%s" s
 
@@ -137,6 +53,8 @@ module Type =
     | [] -> failwith "empty tuple"
     | _ :: [] -> failwith "1-ary tuple"
     | xs -> concat (str ", ") xs |> between "(" ")"
+
+  let array_ t = t +@ " array"
 
   let app t = function
     | [] -> failwith "type application with empty arguments"
@@ -147,10 +65,12 @@ module Type =
     match args with
     | [] -> failwith "empty argument of function type"
     | _ -> concat (str " -> ") args +@ " -> " + t |> between "(" ")"
-
+  
   let object fields = recordBody true fields |> between "<" ">"
 
   let polyVariant cases = variantBody true true cases
+
+open Type
 
 module Definition =
   let val_ name types = tprintf "val %s : " name + concat (str " -> ") types + newline
@@ -182,3 +102,68 @@ module Definition =
     ]
 
   let open_ names = names |> List.map (tprintf "open %s") |> concat newline
+
+open Definition
+
+type Context = {
+  currentNamespace: string list
+}
+
+let rec writeType (ctx: Context) (ty: Type) : text =
+  match ty with
+  | PolymorphicThis -> comment "FIXME: polymorphic this" + obj_
+  | Ident i -> String.concat "." (i.name @ ["t"]) |> str
+  | TypeVar v -> tprintf "'%s" v
+  | Prim p ->
+    match p with
+    | Null -> null_ unit_ | Undefined -> undefined_ unit_
+    | Never -> comment "never" + obj_
+    | String -> string_ | Bool -> bool_ | Number -> float_
+    | Any -> comment "any" + obj_ | Void -> unit_ | Unknown -> comment "unknown" + obj_
+    | RegExp -> regexp | Object -> comment "FIXME: object" + obj_
+  | BuiltIn b ->
+    match b with
+    | Promise t -> promise (writeType ctx t)
+    | Date -> date
+  | TypeLiteral l -> comment "FIXME: type literal" + obj_
+  | AnonymousInterface i ->
+    js_t (object (i.members |> List.map (writeMember ctx)))
+  | Union ts ->
+    let canNull, ts =
+      if List.contains (Prim Null) ts then true, ts |> List.filter ((<>) (Prim Null))
+      else false, ts
+    let canUndefined, ts =
+      if List.contains (Prim Undefined) ts then true, ts |> List.filter ((<>) (Prim Undefined))
+      else false, ts
+    failwith "TODO"
+  | Intersection ts -> failwith "TODO"
+  | Tuple ts | ReadonlyTuple ts -> tuple (List.map (writeType ctx) ts)
+  | Array t | ReadonlyArray t -> array_ (writeType ctx t)
+  | Function f -> failwith "TODO"
+  | App (t, ts) -> app (writeType ctx t) (List.map (writeType ctx) ts)
+  | UnknownType (Some help) -> comment help + obj_
+  | UnknownType None -> comment "unknown type" + obj_
+
+and writeMember (ctx: Context) (m: MemberAttribute * Member) : text =
+  failwith "TODO"
+
+let writeTypeAlias (ctx: Context) (a: TypeAlias) : text =
+  failwith "TODO"
+
+let writeClass (ctx: Context) (c: Class) : text =
+  failwith "TODO"
+
+let writeEnum (ctx: Context) (e: Enum) : text =
+  failwith "TODO"
+
+let writeValue (ctx: Context) (v: Value) : text =
+  failwith "TODO"
+
+let writeExport (ctx: Context) (e: IdentType * ExportModifier) : text =
+  failwith "TODO"
+
+let rec writeStatement (ctx: Context) (s: Statement) : text =
+  failwith "TODO"
+
+and writeModule (ctx: Context) (m: Module) : text =
+  failwith "TODO"

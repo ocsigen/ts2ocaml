@@ -3,7 +3,6 @@ module Parser
 
 open Syntax
 open Naming
-open Fable.Core
 open Fable.Core.JsInterop
 open TypeScript
 

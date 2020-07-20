@@ -7,6 +7,7 @@
     <Compile Include="Syntax.fs" />
     <Compile Include="Naming.fs" />
     <Compile Include="Parser.fs" />
+    <Compile Include="Text.fs" />
     <Compile Include="Writer.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>

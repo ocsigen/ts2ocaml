@@ -150,6 +150,11 @@ let escapeProperty (s: string) =
     else
       s
 
+let escapeString (s: string) =
+  s.Replace("'", "\\'").Replace("\"", "\\\"").Replace("\\", "\\\\")
+   .Replace("\b", "\\b").Replace("\n", "\\n").Replace("\r", "\\r")
+   .Replace("\t", "\\t")
+
 let fixModuleName (s: string) =
   let s = s.Replace("'","") // remove single quotes
   let s = capitalize s

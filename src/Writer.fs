@@ -125,7 +125,12 @@ let rec writeType (ctx: Context) (ty: Type) : text =
     match b with
     | Promise t -> promise (writeType ctx t)
     | Date -> date
-  | TypeLiteral l -> comment "FIXME: type literal" + obj_
+  | TypeLiteral l ->
+    match l with
+    | LString s -> tprintf "\"%s\"" (Naming.escapeString s)
+    | LInt i -> tprintf "%d" i
+    | LBool true -> str "true" | LBool false -> str "false"
+    | LFloat f -> tprintf "%f" f
   | AnonymousInterface i ->
     js_t (object (i.members |> List.map (writeMember ctx)))
   | Union ts ->
@@ -135,7 +140,15 @@ let rec writeType (ctx: Context) (ty: Type) : text =
     let canUndefined, ts =
       if List.contains (Prim Undefined) ts then true, ts |> List.filter ((<>) (Prim Undefined))
       else false, ts
-    failwith "TODO"
+    let inner =
+      match ts with
+      | [] -> unit_ | [t] -> writeType ctx t
+      | ts -> failwith "TODO"
+    match canNull, canUndefined with
+    | true, true -> null_undefined inner
+    | true, false -> null_ inner
+    | false, true -> undefined_ inner
+    | false, false -> inner
   | Intersection ts -> failwith "TODO"
   | Tuple ts | ReadonlyTuple ts -> tuple (List.map (writeType ctx) ts)
   | Array t | ReadonlyArray t -> array_ (writeType ctx t)

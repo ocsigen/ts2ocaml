@@ -40,7 +40,7 @@ module Type =
   let date = str "Js.Date.t"
   let unit_ = str "()"
 
-  let promise t = t +@ " Js.Promise.t"
+  let promise = str "Js.Promise.t"
   let null_ t = t +@ " Js.Null.t"
   let undefined_ t = t +@ " Js.Undefined.t"
   let null_undefined t = t +@ " Js.Nullable.t"
@@ -54,7 +54,7 @@ module Type =
     | _ :: [] -> failwith "1-ary tuple"
     | xs -> concat (str ", ") xs |> between "(" ")"
 
-  let array_ t = t +@ " array"
+  let array_ = str "array"
 
   let app t = function
     | [] -> failwith "type application with empty arguments"
@@ -105,10 +105,6 @@ module Definition =
 
 open Definition
 
-type Context = {
-  currentNamespace: string list
-}
-
 let rec writeType (ctx: Context) (ty: Type) : text =
   match ty with
   | PolymorphicThis -> comment "FIXME: polymorphic this" + obj_
@@ -120,11 +116,11 @@ let rec writeType (ctx: Context) (ty: Type) : text =
     | Never -> comment "never" + obj_
     | String -> string_ | Bool -> bool_ | Number -> float_
     | Any -> comment "any" + obj_ | Void -> unit_ | Unknown -> comment "unknown" + obj_
-    | RegExp -> regexp | Object -> comment "FIXME: object" + obj_
-  | BuiltIn b ->
-    match b with
-    | Promise t -> promise (writeType ctx t)
-    | Date -> date
+    | RegExp -> regexp | Object -> comment "object" + obj_
+    | Promise -> promise | Date -> date
+    | Array | ReadonlyArray -> array_
+    | Error -> comment "FIXME: Error" + obj_
+    | UntypedFunction -> comment "FIXME: Untyped Function" + obj_
   | TypeLiteral l ->
     match l with
     | LString s -> tprintf "\"%s\"" (Naming.escapeString s)
@@ -133,7 +129,7 @@ let rec writeType (ctx: Context) (ty: Type) : text =
     | LFloat f -> tprintf "%f" f
   | AnonymousInterface i ->
     js_t (object (i.members |> List.map (writeMember ctx)))
-  | Union ts ->
+  | Union { types = ts } ->
     let canNull, ts =
       if List.contains (Prim Null) ts then true, ts |> List.filter ((<>) (Prim Null))
       else false, ts
@@ -149,13 +145,12 @@ let rec writeType (ctx: Context) (ty: Type) : text =
     | true, false -> null_ inner
     | false, true -> undefined_ inner
     | false, false -> inner
-  | Intersection ts -> failwith "TODO"
+  | Intersection { types = ts } -> failwith "TODO"
   | Tuple ts | ReadonlyTuple ts -> tuple (List.map (writeType ctx) ts)
-  | Array t | ReadonlyArray t -> array_ (writeType ctx t)
   | Function f -> failwith "TODO"
   | App (t, ts) -> app (writeType ctx t) (List.map (writeType ctx) ts)
-  | UnknownType (Some help) -> comment help + obj_
-  | UnknownType None -> comment "unknown type" + obj_
+  | UnknownType (Some help) -> comment (sprintf "FIXME: unknown type '%s'" help) + obj_
+  | UnknownType None -> comment "FIXME: unknown type" + obj_
 
 and writeMember (ctx: Context) (m: MemberAttribute * Member) : text =
   failwith "TODO"

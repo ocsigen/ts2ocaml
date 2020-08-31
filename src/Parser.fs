@@ -25,8 +25,8 @@ module Node =
     let src = n.getSourceFile()
     let pos = src.getLineAndCharacterOfPosition (n.getStart())
     let startPos = int <| src.getPositionOfLineAndCharacter(pos.line, 0.)
-    let endPos = int <| src.getPositionOfLineAndCharacter(pos.line + 1.0, 0.)
-    src.text.Substring(startPos, endPos - startPos - 1)
+    let endPos = int <| src.getLineEndOfPosition(n.getEnd())
+    src.text.Substring(startPos, endPos - startPos)
 
 let nodeWarn (node: Node) format =
   Printf.kprintf (fun s ->

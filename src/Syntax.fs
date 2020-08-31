@@ -24,18 +24,17 @@ type PrimTypes =
   | RegExp
   // ES6
   | Symbol
-  | Proxy
-  | Map | WeakMap
-  | Set | WeakSet
+  // | Proxy
+  // | Map | WeakMap
+  // | Set | WeakSet
   | Promise
   // ES2020
   | BigInt
   // TS
   | Never | Any | Void | Unknown
-  | Readonly
   | ReadonlyArray
-  | ReadonlyMap
-  | ReadonlySet
+  // | ReadonlyMap
+  // | ReadonlySet
 
 type Enum = {
   name: string

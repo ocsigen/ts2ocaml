@@ -98,7 +98,6 @@ and TypeParam = {
 and Class = {
   comments: Comment list
   name: string option
-  fullName: string list option
   accessibility: Accessibility
   isInterface: bool
   isExported: bool

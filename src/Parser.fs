@@ -180,7 +180,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
     let t = t :?> Ts.TypeLiteralNode
     let members = t.members |> List.ofSeq |> List.choose (readNamedDeclaration typrm checker) 
     AnonymousInterface {
-      name = None; fullName = None; isInterface = true; isExported = false
+      name = None; isInterface = true; isExported = false
       comments = []; implements = []; typeParams = []; accessibility = Public
       members = members
     }
@@ -336,12 +336,10 @@ let readInherits (typrm: Set<string>) (checker: TypeChecker) (hcs: Ts.HeritageCl
 
 let readInterface (checker: TypeChecker) (i: Ts.InterfaceDeclaration) : Class =
   let name = i.name.getText()
-  let fullName = getFullNameAtNodeLocation checker i
   let typrms = readTypeParameters Set.empty checker i.typeParameters
   let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
   {
     comments = [] // TODO
-    fullName = fullName
     name = Some name
     accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
     typeParams = typrms
@@ -352,17 +350,11 @@ let readInterface (checker: TypeChecker) (i: Ts.InterfaceDeclaration) : Class =
   }
 
 let readClass (checker: TypeChecker) (i: Ts.ClassDeclaration) : Class =
-  let fullName = getFullNameAtNodeLocation checker i
-  let name =
-    match i.name with
-    | Some id -> Some (id.getText())
-    | None -> fullName |> Option.map (String.concat ".")
   let typrms = readTypeParameters Set.empty checker i.typeParameters
   let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
   {
     comments = [] // TODO
-    fullName = fullName
-    name = name
+    name = i.name |> Option.map (fun id -> id.getText())
     accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
     typeParams = typrms
     implements = readInherits typrmsSet checker i.heritageClauses

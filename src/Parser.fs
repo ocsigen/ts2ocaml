@@ -158,7 +158,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
         if ts |> List.contains "T" then
           nodeWarn t "T"
           failwith ""
-        Ident { name = ts; fullName = getFullNameAtNodeLocation checker t }
+        Ident { name = ts; fullName = None (* getFullNameAtNodeLocation checker t *) }
     match t.typeArguments with
     | None -> lt
     | Some args -> App (lt, args |> Seq.map (readTypeNode typrm checker) |> List.ofSeq)
@@ -452,7 +452,7 @@ let readExportAssignment (checker: TypeChecker) (e: Ts.ExportAssignment) : Ident
   match extractNestedName e.expression |> Seq.toList with
   | [] -> nodeError e.expression "cannot parse node '%s' as identifier" (e.expression.getText())
   | ts ->
-    { name = ts; fullName = getFullNameAtNodeLocation checker e }, AsDefault
+    { name = ts; fullName = None (* getFullNameAtNodeLocation checker e *) }, AsDefault
 
 let rec readModule (checker: TypeChecker) (md: Ts.ModuleDeclaration) : Module =
   let name = nameToString md.name

@@ -72,8 +72,16 @@ and Intersection = {
 
 and IdentType = {
   name: string list
-  fullName: string list option
+  fullName: FullName option
 }
+
+and FullName =
+  | AliasName of string list * TypeAlias
+  | ClassName of string list * Class
+  | EnumName of string list * Enum
+  | EnumCaseName of string list * string * Enum
+  | ModuleName of string list * Module
+  | ValueName of string list * Value
 
 and FieldLike = { name:string; isOptional:bool; value:Type }
 
@@ -114,11 +122,7 @@ and MemberAttribute = {
   accessibility: Accessibility
 }
 
-module Enum =
-  let isStringEnum (e: Enum) =
-    e.cases |> List.exists (function (_, _, Some (LString _)) -> true | _ -> false)
-
-type Value = {
+and Value = {
   comments: Comment list
   name: string
   typ: Type
@@ -129,19 +133,19 @@ type Value = {
   accessibility : Accessibility option
 }
 
-type ExportModifier =
+and ExportModifier =
   | AsDefault
   // | As of string
   // | AsIs
 
-type TypeAlias = {
+and TypeAlias = {
   name: string
   typeArguments: TypeParam list
   target: Type
   erased: bool
 }
 
-type Statement =
+and Statement =
   | TypeAlias of TypeAlias
   | ClassDef of Class
   | EnumDef of Enum
@@ -163,63 +167,78 @@ type Context = {
   typesModuleName: string
 }
 
+module Enum =
+  let isStringEnum (e: Enum) =
+    e.cases |> List.exists (function (_, _, Some (LString _)) -> true | _ -> false)
+
 module Context =
   let ofParentNamespace (ctx: Context) : Context option =
     match ctx.currentNamespace with
     | [] -> None
     | _ :: ns -> Some { ctx with currentNamespace = ns }
 
+module FullName =
+  let toStrings (fnr: FullName option) : string list option =
+    match fnr with
+    | None -> None
+    | Some x ->
+      match x with
+      | AliasName (n, _) | ClassName (n, _) | EnumName (n, _) | ModuleName (n, _) | ValueName (n, _) -> Some n
+      | EnumCaseName (n, c, _) -> Some (n @ [c])
+
 module Utils =
-  let rec substTypeVar (subst: Map<string, Type>) = function
+  let rec mapTypeInTypeParam mapping (ctx: 'Context) (tp: TypeParam) =
+    { tp with
+        extends = Option.map (mapping ctx) tp.extends
+        defaultType = Option.map (mapping ctx) tp.defaultType }
+
+  and mapTypeInFuncType mapping (ctx: 'Context) f =
+    { f with
+        returnType = mapping ctx f.returnType
+        args = List.map (mapTypeInFieldLike mapping ctx) f.args }
+
+  and mapTypeInClass mapping (ctx: 'Context) (c: Class) : Class =
+    let mapMember = function
+      | Field (f, m, tps) -> Field (mapTypeInFieldLike mapping ctx f, m, List.map (mapTypeInTypeParam mapping ctx) tps)
+      | FunctionInterface (f, tps) -> FunctionInterface (mapTypeInFuncType mapping ctx f, List.map (mapTypeInTypeParam mapping ctx) tps)
+      | Indexer (f, m) -> Indexer (mapTypeInFuncType mapping ctx f, m)
+      | Constructor (c, tps) -> Constructor ({ c with args = List.map (mapTypeInFieldLike mapping ctx) c.args }, List.map (mapTypeInTypeParam mapping ctx) tps)
+      | Getter f -> Getter (mapTypeInFieldLike mapping ctx f)
+      | Setter f -> Setter (mapTypeInFieldLike mapping ctx f)
+      | New (f, tps) -> New (mapTypeInFuncType mapping ctx f, List.map (mapTypeInTypeParam mapping ctx) tps)
+    { c with
+        implements = c.implements |> List.map (mapping ctx)
+        members = c.members |> List.map (fun (a, m) -> a, mapMember m)
+        typeParams = c.typeParams |> List.map (mapTypeInTypeParam mapping ctx) }
+  
+  and mapTypeInFieldLike mapping (ctx: 'Context) (fl: FieldLike) : FieldLike =
+    { fl with value = mapping ctx fl.value }
+
+  let rec substTypeVar (subst: Map<string, Type>) _ctx = function
     | TypeVar v ->
       match subst |> Map.tryFind v with
       | Some t -> t
       | None -> TypeVar v
     | Union u ->
       Union {
-        types = u.types |> List.map (substTypeVar subst);
-        classIntersection = u.classIntersection |> Option.map (substTypeVarInClass subst)
+        types = u.types |> List.map (substTypeVar subst _ctx);
+        classIntersection = u.classIntersection |> Option.map (mapTypeInClass (substTypeVar subst) _ctx)
       }
     | Intersection i ->
       Intersection {
-        types = i.types |> List.map (substTypeVar subst);
-        classUnion = i.classUnion |> Option.map (substTypeVarInClass subst)
+        types = i.types |> List.map (substTypeVar subst _ctx);
+        classUnion = i.classUnion |> Option.map (mapTypeInClass (substTypeVar subst) _ctx)
       }
-    | Tuple ts -> Tuple (ts |> List.map (substTypeVar subst))
-    | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (substTypeVar subst))
-    | AnonymousInterface c -> AnonymousInterface (substTypeVarInClass subst c)
+    | Tuple ts -> Tuple (ts |> List.map (substTypeVar subst _ctx))
+    | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (substTypeVar subst _ctx))
+    | AnonymousInterface c -> AnonymousInterface (mapTypeInClass (substTypeVar subst) _ctx c)
     | Function f ->
       Function
         { f with
-            returnType = substTypeVar subst f.returnType;
-            args = List.map (substTypeVarInFieldLike subst) f.args }
-    | App (t, ts) -> App (substTypeVar subst t, ts |> List.map (substTypeVar subst))
+            returnType = substTypeVar subst _ctx f.returnType;
+            args = List.map (mapTypeInFieldLike (substTypeVar subst) _ctx) f.args }
+    | App (t, ts) -> App (substTypeVar subst _ctx t, ts |> List.map (substTypeVar subst _ctx))
     | t -> t
-  
-  and substTypeVarInFieldLike subst (fl: FieldLike) = 
-    { fl with value = substTypeVar subst fl.value }
-  
-  and substTypeVarInClass subst (c: Class) : Class =
-    let mapTypeParam (tp: TypeParam) =
-      { tp with
-          extends = Option.map (substTypeVar subst) tp.extends
-          defaultType = Option.map (substTypeVar subst) tp.defaultType }
-    let mapFuncType f =
-      { f with
-          returnType = substTypeVar subst f.returnType
-          args = List.map (substTypeVarInFieldLike subst) f.args }
-    let mapMember = function
-      | Field (f, m, tps) -> Field (substTypeVarInFieldLike subst f, m, List.map mapTypeParam tps)
-      | FunctionInterface (f, tps) -> FunctionInterface (mapFuncType f, List.map mapTypeParam tps)
-      | Indexer (f, m) -> Indexer (mapFuncType f, m)
-      | Constructor (c, tps) -> Constructor ({ c with args = List.map (substTypeVarInFieldLike subst) c.args }, List.map mapTypeParam tps)
-      | Getter f -> Getter (substTypeVarInFieldLike subst f)
-      | Setter f -> Setter (substTypeVarInFieldLike subst f)
-      | New (f, tps) -> New (mapFuncType f, List.map mapTypeParam tps)
-    { c with
-        implements = c.implements |> List.map (substTypeVar subst)
-        members = c.members |> List.map (fun (a, m) -> a, mapMember m)
-        typeParams = c.typeParams |> List.map mapTypeParam }
 
   let rec mergeStatements (stmts: Statement list) =
     let mutable result : Choice<Statement, Class ref, Module ref> list = []
@@ -239,7 +258,7 @@ module Utils =
               List.map2
                 (fun (tp: TypeParam) (tp': TypeParam) -> tp'.name, TypeVar tp.name)
                 i.typeParams (!iref').typeParams
-            !iref' |> substTypeVarInClass (mapping |> Map.ofList)
+            !iref' |> mapTypeInClass (substTypeVar (mapping |> Map.ofList)) ()
           assert (i.accessibility = i'.accessibility)
           let implements = List.distinct (i.implements @ i'.implements)
           let members = i.members @ i'.members
@@ -301,43 +320,77 @@ module Utils =
       definitionsMap = m
     }
 
-  type FullNameResult =
-    | AliasName of string list * TypeAlias
-    | ClassName of string list * Class
-    | EnumName of string list * Enum
-    | EnumCaseName of string list * string * Enum
-    | ModuleName of string list * Module
-    | ValueName of string list * Value
-    | NotFound of string list
-
-  module FullNameResult =
-    let getFullName (fnr: FullNameResult) : string list option =
-      match fnr with
-      | NotFound _ -> None
-      | AliasName (n, _) | ClassName (n, _) | EnumName (n, _) | ModuleName (n, _) | ValueName (n, _) -> Some n
-      | EnumCaseName (n, c, _) -> Some (n @ [c])
-
-  let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : FullNameResult =
+  let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : FullName option =
     let nsRev = List.rev ctx.currentNamespace
     let fullName = nsRev @ ident.name
     match ctx.definitionsMap |> Map.tryFind fullName with
-    | Some (TypeAlias a) -> AliasName (fullName, a)
-    | Some (ClassDef c) -> ClassName (fullName, c)
-    | Some (EnumDef e) -> EnumName (fullName, e)
-    | Some (Module m) -> ModuleName (fullName, m)
-    | Some (Value v) -> ValueName (fullName, v)
+    | Some (TypeAlias a) -> AliasName (fullName, a) |> Some
+    | Some (ClassDef c) -> ClassName (fullName, c) |> Some
+    | Some (EnumDef e) -> EnumName (fullName, e) |> Some
+    | Some (Module m) -> ModuleName (fullName, m) |> Some
+    | Some (Value v) -> ValueName (fullName, v) |> Some
     | None when List.length ident.name > 1 ->
       let possibleEnumName = nsRev @ (ident.name |> List.take (List.length ident.name - 1))
       let possibleEnumCaseName = ident.name |> List.last
       match ctx.definitionsMap |> Map.tryFind possibleEnumName with
       | Some (EnumDef e) when e.cases |> List.exists (fun (_, n, _) -> n = possibleEnumCaseName) ->
-        EnumCaseName (possibleEnumName, possibleEnumCaseName, e)
-      | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> NotFound ident.name
-    | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> NotFound ident.name
+        EnumCaseName (possibleEnumName, possibleEnumCaseName, e) |> Some
+      | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
+    | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
 
-  let rec resolveIdent (ctx: Context) = function
-    | Ident i when Option.isNone i.fullName ->
-      match FullNameResult.getFullName (getFullNameOfIdent ctx i) with
+  let rec mapIdent (mapping: Context -> IdentType -> Type) (ctx: Context) = function
+    | Ident i -> mapping ctx i
+    | Union u ->
+      Union {
+        types = u.types |> List.map (mapIdent mapping ctx);
+        classIntersection = u.classIntersection |> Option.map (mapTypeInClass (mapIdent mapping) ctx)
+      }
+    | Intersection i ->
+      Intersection {
+        types = i.types |> List.map (mapIdent mapping ctx);
+        classUnion = i.classUnion |> Option.map (mapTypeInClass (mapIdent mapping) ctx)
+      }
+    | Tuple ts -> Tuple (ts |> List.map (mapIdent mapping ctx))
+    | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (mapIdent mapping ctx))
+    | AnonymousInterface c -> AnonymousInterface (mapTypeInClass (mapIdent mapping) ctx c)
+    | Function f ->
+      Function
+        { f with
+            returnType = mapIdent mapping ctx f.returnType;
+            args = List.map (mapTypeInFieldLike (mapIdent mapping) ctx) f.args }
+    | App (t, ts) -> App (mapIdent mapping ctx t, ts |> List.map (mapIdent mapping ctx))
+    | x -> x
+
+  let rec mapIdentInStatements mapType mapExport (ctx: Context) (stmts: Statement list) : Statement list =
+    let f = function
+      | TypeAlias a ->
+        TypeAlias { a with target = mapIdent mapType ctx a.target; typeArguments = a.typeArguments |> List.map (mapTypeInTypeParam (mapIdent mapType) ctx) }
+      | ClassDef c -> ClassDef (mapTypeInClass (mapIdent mapType) ctx c)
+      | EnumDef e -> EnumDef e
+      | Export (i, m) -> mapExport ctx i m
+      | Value v ->
+        Value {
+          v with
+            typ = mapIdent mapType ctx v.typ
+            typeParams = v.typeParams |> List.map (mapTypeInTypeParam (mapIdent mapType) ctx)
+        }
+      | Module m ->
+        Module {
+          m with
+            statements =
+              mapIdentInStatements 
+                mapType mapExport
+                { ctx with currentNamespace = m.name :: ctx.currentNamespace }
+                m.statements 
+        }
+      | x -> x
+    stmts |> List.map f
+
+  let resolveIdentType (ctx: Context) (i: IdentType) : Type =
+    match i.fullName with
+    | Some _ -> Ident i
+    | None ->
+      match getFullNameOfIdent ctx i with
       | Some fn -> Ident { i with fullName = Some fn }
       | None ->
         eprintfn
@@ -345,82 +398,21 @@ module Utils =
           (String.concat "." i.name)
           (String.concat "." (List.rev ctx.currentNamespace))
         Ident i
-    | Union u ->
-      Union {
-        types = u.types |> List.map (resolveIdent ctx);
-        classIntersection = u.classIntersection |> Option.map (resolveIdentInClass ctx)
-      }
-    | Intersection i ->
-      Intersection {
-        types = i.types |> List.map (resolveIdent ctx);
-        classUnion = i.classUnion |> Option.map (resolveIdentInClass ctx)
-      }
-    | Tuple ts -> Tuple (ts |> List.map (resolveIdent ctx))
-    | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (resolveIdent ctx))
-    | AnonymousInterface c -> AnonymousInterface (resolveIdentInClass ctx c)
-    | Function f ->
-      Function
-        { f with
-            returnType = resolveIdent ctx f.returnType;
-            args = List.map (resolveIdentInFieldLike ctx) f.args }
-    | App (t, ts) -> App (resolveIdent ctx t, ts |> List.map (resolveIdent ctx))
-    | x -> x
 
-  and resolveIdentInTypeParam (ctx: Context) (tp: TypeParam) =
-    { tp with
-        extends = Option.map (resolveIdent ctx) tp.extends
-        defaultType = Option.map (resolveIdent ctx) tp.defaultType }
-
-  and resolveIdentInFuncType (ctx: Context) f =
-    { f with
-        returnType = resolveIdent ctx f.returnType
-        args = List.map (resolveIdentInFieldLike ctx) f.args }
-
-  and resolveIdentInClass (ctx: Context) (c: Class) : Class =
-    let mapMember = function
-      | Field (f, m, tps) -> Field (resolveIdentInFieldLike ctx f, m, List.map (resolveIdentInTypeParam ctx) tps)
-      | FunctionInterface (f, tps) -> FunctionInterface (resolveIdentInFuncType ctx f, List.map (resolveIdentInTypeParam ctx) tps)
-      | Indexer (f, m) -> Indexer (resolveIdentInFuncType ctx f, m)
-      | Constructor (c, tps) -> Constructor ({ c with args = List.map (resolveIdentInFieldLike ctx) c.args }, List.map (resolveIdentInTypeParam ctx) tps)
-      | Getter f -> Getter (resolveIdentInFieldLike ctx f)
-      | Setter f -> Setter (resolveIdentInFieldLike ctx f)
-      | New (f, tps) -> New (resolveIdentInFuncType ctx f, List.map (resolveIdentInTypeParam ctx) tps)
-    { c with
-        implements = c.implements |> List.map (resolveIdent ctx)
-        members = c.members |> List.map (fun (a, m) -> a, mapMember m)
-        typeParams = c.typeParams |> List.map (resolveIdentInTypeParam ctx) }
-  
-  and resolveIdentInFieldLike (ctx: Context) (fl: FieldLike) : FieldLike =
-    { fl with value = resolveIdent ctx fl.value }
-
-  let rec resolveIdentInStatements (ctx: Context) (stmts: Statement list) : Statement list =
-    let f = function
-      | TypeAlias a ->
-        TypeAlias { a with target = resolveIdent ctx a.target; typeArguments = a.typeArguments |> List.map (resolveIdentInTypeParam ctx) }
-      | ClassDef c -> ClassDef (resolveIdentInClass ctx c)
-      | EnumDef e -> EnumDef e
-      | Export (i, m) when Option.isNone i.fullName -> 
-        match FullNameResult.getFullName (getFullNameOfIdent ctx i) with
-        | Some fn -> Export ({ i with fullName = Some fn }, m)
+  let resolveIdentInStatements (ctx: Context) (stmts: Statement list) : Statement list =
+    mapIdentInStatements
+      resolveIdentType
+      (fun ctx i m ->
+        match i.fullName with
+        | Some _ -> Export (i, m)
         | None ->
-          eprintfn
-            "warn: resolveIdentInStatements: unknown identifier '%s' from namespace '%s'"
-            (String.concat "." i.name)
-            (String.concat "." (List.rev ctx.currentNamespace))
-          Export (i, m)
-      | Value v ->
-        Value {
-          v with
-            typ = resolveIdent ctx v.typ
-            typeParams = v.typeParams |> List.map (resolveIdentInTypeParam ctx)
-        }
-      | Module m ->
-        Module {
-          m with
-            statements =
-              resolveIdentInStatements 
-                { ctx with currentNamespace = m.name :: ctx.currentNamespace }
-                m.statements 
-        }
-      | x -> x
-    stmts |> List.map f
+          match getFullNameOfIdent ctx i with
+          | Some fn -> Export ({ i with fullName = Some fn }, m)
+          | None ->
+            eprintfn
+              "warn: resolveIdentInStatements: unknown identifier '%s' from namespace '%s'"
+              (String.concat "." i.name)
+              (String.concat "." (List.rev ctx.currentNamespace))
+            Export (i, m)
+      ) ctx stmts
+   

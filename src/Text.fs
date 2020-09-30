@@ -23,6 +23,7 @@ type StringBuilder (s: string) =
 type StringBuilder = System.Text.StringBuilder
 #endif
 
+[<StructuredFormatDisplay("{AsString}")>]
 type text =
   private
   | Indent of text
@@ -32,6 +33,7 @@ type text =
 with
   static member (+) (x, y) = Concat (x, y)
   override this.ToString() = this.ToString(2)
+  member this.AsString = this.ToString(0)
   member this.ToString(indentLength: int) =
     let sb = StringBuilder()
     let rec go indent rhs = function
@@ -53,6 +55,8 @@ with
         sb.Append(String.replicate indentLength " ") |> ignore;
         go (indent + 1) rhs t
     go 0 [] this
+
+let toString indentLength (t: text) = t.ToString(indentLength)
 
 let empty = Str ""
 

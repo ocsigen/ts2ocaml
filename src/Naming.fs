@@ -3,12 +3,6 @@ module Naming
 
 open System
 
-let stringContainsAny (a: string) (b: string list) =
-  b |> List.exists a.Contains
-
-let replace (pattern:string) (destPattern:string) (text: string) =
-  text.Replace(pattern,destPattern)
-
 module Keywords =
   let keywords =
     Set.ofList [
@@ -31,11 +25,6 @@ module Keywords =
     ]
 
   let primitives = ["string"; "obj"; "unit"; "float"; "bool"; "int"] |> Set.ofList
-
-let escapeString (s: string) =
-  s.Replace("'", "\\'").Replace("\"", "\\\"").Replace("\\", "\\\\")
-   .Replace("\b", "\\b").Replace("\n", "\\n").Replace("\r", "\\r")
-   .Replace("\t", "\\t")
 
 let removeQuotes (s: string) =
   if String.IsNullOrEmpty s then ""

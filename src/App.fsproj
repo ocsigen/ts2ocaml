@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="TypeScript.fs" />
+    <Compile Include="Utils.fs" />
     <Compile Include="Syntax.fs" />
     <Compile Include="Naming.fs" />
     <Compile Include="Parser.fs" />

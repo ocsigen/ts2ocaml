@@ -6,6 +6,13 @@ type Literal =
   | LFloat of float
   | LBool of bool
 
+module Literal =
+  let toString = function
+    | LString s -> sprintf "\"%s\"" (String.escape s)
+    | LInt i -> string i
+    | LFloat l -> string l
+    | LBool true -> "true" | LBool false -> "false"
+
 type Comment =
   | TextLine of string
   | Deprecated of string option
@@ -29,7 +36,7 @@ type PrimTypes =
   // | Set | WeakSet
   | Promise
   // ES2020
-  | BigInt
+  // | BigInt
   // TS
   | Never | Any | Void | Unknown
   | ReadonlyArray
@@ -138,7 +145,7 @@ and ExportModifier =
 
 and TypeAlias = {
   name: string
-  typeArguments: TypeParam list
+  typeParams: TypeParam list
   target: Type
   erased: bool
 }
@@ -162,6 +169,7 @@ and Module = {
 type Context = {
   currentNamespace: string list
   definitionsMap: Map<string list, Statement>
+  typeLiteralsMap: Map<Literal, int>
   typesModuleName: string
 }
 
@@ -176,14 +184,11 @@ module Context =
     | _ :: ns -> Some { ctx with currentNamespace = ns }
 
 module FullName =
-  let toStrings (fnr: FullName option) : string list option =
+  let toStrings (fnr: FullName) : string list =
     match fnr with
-    | None -> None
-    | Some x ->
-      match x with
-      | AliasName (n, _) | ClassName (n, _) | EnumName (n, _) | ModuleName (n, _) | ValueName (n, _) -> Some n
-      | EnumCaseName (n, c, _) -> Some (n @ [c])
-
+    | AliasName (n, _) | ClassName (n, _) | EnumName (n, _) | ModuleName (n, _) | ValueName (n, _) -> n
+    | EnumCaseName (n, c, _) -> n @ [c]
+  
 module Utils =
   let rec mapTypeInTypeParam mapping (ctx: 'Context) (tp: TypeParam) =
     { tp with
@@ -294,10 +299,46 @@ module Utils =
         m.statements |> List.fold (go ns') map |> Map.add ns' (Module m)
       | Export _ | UnknownStatement _ -> map
     stmts |> List.fold (go []) Map.empty
+  
+  let getTypeLiterals (stmts: Statement list) : Set<Literal> =
+    let rec go_t = function
+      | TypeLiteral l -> Seq.singleton l
+      | App (t, ts) -> seq { yield! go_t t; for t in ts do yield! go_t t }
+      | Union { types = ts } | Intersection { types = ts } | Tuple ts | ReadonlyTuple ts ->
+        seq { for t in ts do yield! go_t t }
+      | Function f ->
+        seq { yield! go_t f.returnType; for a in f.args do yield! go_t a.value }
+      | AnonymousInterface c ->
+        let ra = ResizeArray()
+        mapTypeInClass (fun () t -> ra.Add(t); t) () c |> ignore;
+        ra |> Seq.collect go_t
+      | _ -> Seq.empty
+    let rec go = function
+      | TypeAlias ta ->
+        seq {
+          yield! go_t ta.target;
+          for tp in ta.typeParams do
+            yield! [tp.defaultType; tp.extends] |> List.choose id |> Seq.collect go_t
+        }
+      | ClassDef c ->
+        let ra = ResizeArray()
+        mapTypeInClass (fun () t -> ra.Add(t); t) () c |> ignore;
+        ra |> Seq.collect go_t
+      | Module m ->
+        m.statements |> Seq.collect go
+      | Value v ->
+        seq {
+          yield! go_t v.typ
+          for tp in v.typeParams do
+            yield! [tp.defaultType; tp.extends] |> List.choose id |> Seq.collect go_t
+        }
+      | EnumDef e -> e.cases |> Seq.choose (fun (_, _, lo) -> lo)
+      | Export _ | UnknownStatement _ -> Seq.empty
+    stmts |> Seq.collect go |> Set.ofSeq
 
   let createRootContext (typesModuleName: string) (stmts: Statement list) : Context =
     let add name ty m =
-     m |> Map.add [name] (TypeAlias { name = name; typeArguments = []; target = ty; erased = true })
+     m |> Map.add [name] (TypeAlias { name = name; typeParams = []; target = ty; erased = true })
     let m =
       extractNamedDefinitions stmts
       // TODO
@@ -312,10 +353,12 @@ module Utils =
       |> add "RegExp" (Prim RegExp)
       |> add "ReadonlyArray" (Prim ReadonlyArray)
       |> add "Promise" (Prim Promise)
+    let tlm = getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
     {
       typesModuleName = typesModuleName;
       currentNamespace = [];
-      definitionsMap = m
+      definitionsMap = m;
+      typeLiteralsMap = tlm;
     }
 
   let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : FullName option =
@@ -362,7 +405,7 @@ module Utils =
   let rec mapIdentInStatements mapType mapExport (ctx: Context) (stmts: Statement list) : Statement list =
     let f = function
       | TypeAlias a ->
-        TypeAlias { a with target = mapIdent mapType ctx a.target; typeArguments = a.typeArguments |> List.map (mapTypeInTypeParam (mapIdent mapType) ctx) }
+        TypeAlias { a with target = mapIdent mapType ctx a.target; typeParams = a.typeParams |> List.map (mapTypeInTypeParam (mapIdent mapType) ctx) }
       | ClassDef c -> ClassDef (mapTypeInClass (mapIdent mapType) ctx c)
       | EnumDef e -> EnumDef e
       | Export (i, m) -> mapExport ctx i m
@@ -413,4 +456,56 @@ module Utils =
               (String.concat "." (List.rev ctx.currentNamespace))
             Export (i, m)
       ) ctx stmts
+
+  let mutable private inheritMap: Map<string list, Set<Type>> = Map.empty
    
+  let rec getAllInheritances (ctx: Context) (className: string list) : Set<Type> =
+    match inheritMap |> Map.tryFind className with
+    | Some s -> s
+    | None ->
+      match ctx.definitionsMap |> Map.tryFind className with
+      | Some (ClassDef c) ->
+        let result =
+          seq {
+            for t in c.implements do
+              yield t
+              match t with
+              | Ident { fullName = Some fn } ->
+                yield! getAllInheritances ctx (FullName.toStrings fn)
+              | App (Ident { fullName = Some fn }, ts) ->
+                let typrms =
+                  match ctx.definitionsMap |> Map.tryFind (FullName.toStrings fn) with
+                  | Some (ClassDef c) -> c.typeParams
+                  | Some (TypeAlias a) -> a.typeParams
+                  | _ -> []
+                let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
+                yield! getAllInheritances ctx (FullName.toStrings fn) |> Seq.map (substTypeVar subst ctx)
+              | _ -> ()
+          } |> Set.ofSeq
+        inheritMap <- inheritMap |> Map.add className result
+        result
+      | Some (EnumDef e) ->
+        let result = Ident { name = className; fullName = Some (EnumName (className, e)) } |> Set.singleton
+        inheritMap <- inheritMap |> Map.add className result
+        result
+      | Some (TypeAlias t) ->
+        let result =
+          seq {
+            match t.target with
+              | Ident { fullName = Some fn } ->
+                yield! getAllInheritances ctx (FullName.toStrings fn)
+              | App (Ident { fullName = Some fn }, ts) ->
+                let typrms =
+                  match ctx.definitionsMap |> Map.tryFind (FullName.toStrings fn) with
+                  | Some (ClassDef c) -> c.typeParams
+                  | Some (TypeAlias a) -> a.typeParams
+                  | _ -> []
+                let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
+                yield! getAllInheritances ctx (FullName.toStrings fn) |> Seq.map (substTypeVar subst ctx)
+              | _ -> ()
+          } |> Set.ofSeq
+        inheritMap <- inheritMap |> Map.add className result
+        result
+      | _ -> Set.empty
+
+

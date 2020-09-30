@@ -44,7 +44,11 @@ let main argv =
     let result = Syntax.Utils.mergeStatements stmts 
     let ctx = Syntax.Utils.createRootContext "Types" result
     let result = result |> Syntax.Utils.resolveIdentInStatements ctx
+    let ctx = Syntax.Utils.createRootContext "Types" result
+    (*
     for pstmt in result do
       Fable.Core.JS.JSON.stringify(pstmt, space=2) |> printfn "%s"
       ()
+    *)
+    Writer.emitFlattenedTypeNames ctx |> Text.toString 2 |> printfn "%s"
     0

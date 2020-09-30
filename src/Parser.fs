@@ -121,7 +121,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
   | Kind.UndefinedKeyword -> Prim Undefined
   | Kind.ObjectKeyword -> Prim Object
   | Kind.SymbolKeyword -> Prim PrimTypes.Symbol
-  | Kind.BigIntKeyword -> Prim BigInt
+  // | Kind.BigIntKeyword -> Prim BigInt
   | Kind.ArrayType ->
     let t = t :?> Ts.ArrayTypeNode
     let elem = readTypeNode typrm checker t.elementType
@@ -385,7 +385,7 @@ let readEnum (ed: Ts.EnumDeclaration) : Enum =
 let readTypeAlias (checker: TypeChecker) (a: Ts.TypeAliasDeclaration) : TypeAlias =
   let typrm = readTypeParameters Set.empty checker a.typeParameters
   let ty = readTypeNode (typrm |> List.map (fun x -> x.name) |> Set.ofList) checker a.``type``
-  { name = nameToString a.name; typeArguments = typrm; target = ty; erased = false; }
+  { name = nameToString a.name; typeParams = typrm; target = ty; erased = false; }
 
 let readVariable (checker: TypeChecker) (v: Ts.VariableStatement) : Value list =
   v.declarationList.declarations |> List.ofSeq |> List.choose (fun vd ->

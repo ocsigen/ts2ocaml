@@ -71,8 +71,6 @@ open Definition
 open Syntax
 open Type
 
-type IdentEmitMode = Structured | Flattened of appendLabelModule:bool
-
 let literalToIdentifier (ctx: Context) (l: Literal) : text =
   if ctx.typeLiteralsMap |> Map.containsKey l |> not then
     failwithf "literal '%s' is not found in the context" (Literal.toString l)
@@ -93,25 +91,18 @@ let literalToIdentifier (ctx: Context) (l: Literal) : text =
         | LBool true -> "true" | LBool false -> "false"
       tprintf "\\\"%s\"" s
 
+type IdentEmitMode = Structured | Flattened of appendTypeModule:bool
+
 let rec emitType (identEmitMode: IdentEmitMode) (ctx: Context) (ty: Type) : text =
   match ty with
   | Ident { fullName = Some fn } ->
     let fn = FullName.toStrings fn
     match identEmitMode with
     | Structured -> tprintf "%s.t" (getStructuredName fn)
-    | Flattened false -> app ts_t [str (getFlattenedLowerName fn)]
-    | Flattened true  -> app ts_t [tprintf "Labels.%s" (getFlattenedLowerName fn)]
+    | Flattened false -> str (getFlattenedLowerName fn)
+    | Flattened true  -> tprintf "Types.%s" (getFlattenedLowerName fn)
   | Ident i ->
     comment (sprintf "unknown type '%s'" (String.concat "." i.name)) + str (getStructuredName i.name + ".t")
-  | App (Ident { fullName = Some fn }, ts) when identEmitMode <> Structured ->
-    let n = getFlattenedLowerName (FullName.toStrings fn)
-    let args = ts |> List.map (emitType identEmitMode ctx)
-    match identEmitMode with
-    | Structured -> failwith "impossible"
-    | Flattened true ->
-      app ts_t [app (tprintf "Labels.%s" n) args]
-    | Flattened false ->
-      app ts_t [app (str n) args]
   | App (t, ts) -> app (emitType identEmitMode ctx t) (List.map (emitType identEmitMode ctx) ts)
   | TypeVar v -> tprintf "'%s" v
   | Prim p ->
@@ -152,7 +143,7 @@ let rec emitType (identEmitMode: IdentEmitMode) (ctx: Context) (ty: Type) : text
 let emitFlattenedTypeNames (ctx: Context) : text =
   module_ ctx.typesModuleName (
     concat newline [
-      str "module Ts = { type t<+'a>; type never; type any; type unknown; }"
+      str "module Ts = { type t<-'a>; type never; type any; type unknown; }"
 
       module_ "TypeLiterals" (
         concat newline [
@@ -162,7 +153,7 @@ let emitFlattenedTypeNames (ctx: Context) : text =
         ]
       )
 
-      module_ "Labels" (
+      module_ "Types" (
         let emitTypeName name args =
           if List.isEmpty args then str (getFlattenedLowerName name)
           else app (str (getFlattenedLowerName name)) args
@@ -176,14 +167,15 @@ let emitFlattenedTypeNames (ctx: Context) : text =
           | EnumDef e ->
             concat newline [
               yield
-                tprintf "%s %s = [ " prefix (getFlattenedLowerName k)
-                + concat (str " | ") [
-                  for (_, _, vo) in e.cases do
-                    match vo with
-                    | Some v ->
-                      yield str pv_head + literalToIdentifier ctx v
-                    | None -> ()
-                ] + str " ]"
+                tprintf "%s %s = " prefix (getFlattenedLowerName k)
+                + between "[ " " ]" (
+                    concat (str " | ") [
+                      for (_, _, vo) in e.cases do
+                        match vo with
+                        | Some v ->
+                          yield str pv_head + literalToIdentifier ctx v
+                        | None -> ()
+                ])
               for (_comments, name, vo) in e.cases do
                 match vo with
                 | Some v ->
@@ -192,16 +184,18 @@ let emitFlattenedTypeNames (ctx: Context) : text =
             ] |> Some
           | ClassDef c ->
             let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-            concat (str " | ") [
-              yield tprintf "%s %A = [ %s%A" prefix (emitTypeName k typrm) pv_head (emitCase k typrm)
-              for e in getAllInheritances ctx k do
-                match e with
-                | Ident { fullName = Some fn } ->
-                  yield tprintf "%s%s" pv_head (FullName.toStrings fn |> getFlattenedUpperName)
-                | App (Ident { fullName = Some fn }, ts) ->
-                  yield str pv_head + emitCase (FullName.toStrings fn) (ts |> List.map (emitType (Flattened false) ctx))
-                | _ -> ()
-            ] + str " ]" |> Some
+            tprintf "%s %A = " prefix (emitTypeName k typrm) + app ts_t [
+              str "[ " + concat (str " | ") [
+                yield tprintf "%s%A" pv_head (emitCase k typrm)
+                for e in getAllInheritances ctx k do
+                  match e with
+                  | Ident { fullName = Some fn } ->
+                    yield tprintf "%s%s" pv_head (FullName.toStrings fn |> getFlattenedUpperName)
+                  | App (Ident { fullName = Some fn }, ts) ->
+                    yield str pv_head + emitCase (FullName.toStrings fn) (ts |> List.map (emitType (Flattened false) ctx))
+                  | _ -> ()
+              ] + str " ]"
+            ] |> Some
             // TODO: emit extends of type parameters
           | TypeAlias p when p.erased = false ->
             let rec getLabel = function
@@ -236,10 +230,12 @@ let emitFlattenedTypeNames (ctx: Context) : text =
               | _ -> Set.empty
 
             let typrm = p.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-            concat (str " | ") [
-              yield tprintf "%s %A = [ %s%A" prefix (emitTypeName k typrm) pv_head (emitCase k typrm)
-              yield! getLabel p.target
-            ] + str " ]" |> Some
+            tprintf "%s %A = " prefix (emitTypeName k typrm) + app ts_t [
+              str "[ " + concat (str " | ") [
+                yield tprintf "%s%A" pv_head (emitCase k typrm)
+                yield! getLabel p.target
+              ] + str " ]"
+            ] |> Some
             // TODO: emit extends of type parameters
           | _ -> None
 

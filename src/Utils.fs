@@ -1,6 +1,10 @@
 [<AutoOpen>]
 module Utils
 
+module Char =
+  let isAlphabetOrDigit c =
+    ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9')
+
 module String =
   let containsAny (a: string) (b: string list) =
     b |> List.exists a.Contains

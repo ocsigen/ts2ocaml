@@ -134,10 +134,10 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
   | Kind.ThisType -> PolymorphicThis
   | Kind.UnionType ->
     let t = t :?> Ts.UnionTypeNode
-    Union { types = t.types |> Seq.map (readTypeNode typrm checker) |> List.ofSeq; classIntersection = None }
+    Union { types = t.types |> Seq.map (readTypeNode typrm checker) |> List.ofSeq }
   | Kind.IntersectionType ->
     let t = t :?> Ts.IntersectionTypeNode
-    Intersection { types = t.types |> Seq.map (readTypeNode typrm checker) |> List.ofSeq; classUnion = None }
+    Intersection { types = t.types |> Seq.map (readTypeNode typrm checker) |> List.ofSeq }
   | Kind.ParenthesizedType ->
     readTypeNode typrm checker ((t :?> Ts.ParenthesizedTypeNode).``type``)
   // ident, possibly tyapp

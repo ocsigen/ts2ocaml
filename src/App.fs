@@ -42,13 +42,13 @@ let main argv =
 
     let stmts = srcs |> Seq.collect (fun src -> src.statements) |> Seq.collect (Parser.readStatement checker) |> Seq.toList
     let result = Syntax.Utils.mergeStatements stmts 
-    let ctx = Syntax.Utils.createRootContext "Types" result
+    let ctx = Syntax.Utils.createRootContext "Internal" result
     let result = result |> Syntax.Utils.resolveIdentInStatements ctx
-    let ctx = Syntax.Utils.createRootContext "Types" result
+    let ctx = Syntax.Utils.createRootContext "Internal" result
     (*
     for pstmt in result do
       Fable.Core.JS.JSON.stringify(pstmt, space=2) |> printfn "%s"
       ()
     *)
-    Writer.emitFlattenedTypeNames ctx |> Text.toString 2 |> printfn "%s"
+    Writer.emitFlattenedDefinitions ctx |> Text.toString 2 |> printfn "%s"
     0

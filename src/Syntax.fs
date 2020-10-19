@@ -66,14 +66,10 @@ and Type =
 
 and Union = {
   types: Type list
-  /// an intersection of possible class types in the union.
-  classIntersection: Class option
 }
 
 and Intersection = {
   types: Type list
-  /// an union of possible class types in the intersection.
-  classUnion: Class option
 }
 
 and IdentType = {
@@ -170,7 +166,8 @@ type Context = {
   currentNamespace: string list
   definitionsMap: Map<string list, Statement>
   typeLiteralsMap: Map<Literal, int>
-  typesModuleName: string
+  anonymousInterfacesMap: Map<Class, int>
+  internalModuleName: string
 }
 
 module Enum =
@@ -225,12 +222,10 @@ module Utils =
     | Union u ->
       Union {
         types = u.types |> List.map (substTypeVar subst _ctx);
-        classIntersection = u.classIntersection |> Option.map (mapTypeInClass (substTypeVar subst) _ctx)
       }
     | Intersection i ->
       Intersection {
         types = i.types |> List.map (substTypeVar subst _ctx);
-        classUnion = i.classUnion |> Option.map (mapTypeInClass (substTypeVar subst) _ctx)
       }
     | Tuple ts -> Tuple (ts |> List.map (substTypeVar subst _ctx))
     | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (substTypeVar subst _ctx))
@@ -289,7 +284,7 @@ module Utils =
   let extractNamedDefinitions (stmts: Statement list) : Map<string list, Statement> =
     let rec go (ns: string list) map s =
       match s with
-      | TypeAlias { name = name }
+      | TypeAlias { name = name; erased = false }
       | ClassDef  { name = Some name }
       | EnumDef   { name = name }
       | Value     { name = name } -> map |> Map.add (ns @ [name]) s
@@ -297,46 +292,80 @@ module Utils =
       | Module m ->
         let ns' = ns @ [m.name]
         m.statements |> List.fold (go ns') map |> Map.add ns' (Module m)
-      | Export _ | UnknownStatement _ -> map
+      | _ -> map
     stmts |> List.fold (go []) Map.empty
-  
-  let getTypeLiterals (stmts: Statement list) : Set<Literal> =
-    let rec go_t = function
-      | TypeLiteral l -> Seq.singleton l
-      | App (t, ts) -> seq { yield! go_t t; for t in ts do yield! go_t t }
+
+  let findTypesInType (pred: Type -> bool * 'a option) (t: Type) : 'a seq =
+    let rec go_t x =
+      match x with
+      | App (t, ts) ->
+        seq {
+          let cont, y = pred x
+          match y with Some v -> yield v | None -> ()
+          if cont then
+            yield! go_t t
+            for t in ts do yield! go_t t
+        }
       | Union { types = ts } | Intersection { types = ts } | Tuple ts | ReadonlyTuple ts ->
-        seq { for t in ts do yield! go_t t }
+        seq {
+          let cont, y = pred x
+          match y with Some v -> yield v | None -> ()
+          if cont then
+            for t in ts do yield! go_t t
+        }
       | Function f ->
-        seq { yield! go_t f.returnType; for a in f.args do yield! go_t a.value }
+        seq {
+          let cont, y = pred x
+          match y with Some v -> yield v | None -> ()
+          if cont then
+            yield! go_t f.returnType
+            for a in f.args do yield! go_t a.value
+        }
       | AnonymousInterface c ->
-        let ra = ResizeArray()
-        mapTypeInClass (fun () t -> ra.Add(t); t) () c |> ignore;
-        ra |> Seq.collect go_t
-      | _ -> Seq.empty
+        let cont, y = pred x
+        let xs =
+          if cont then
+            let ra = ResizeArray()
+            mapTypeInClass (fun () t -> ra.Add(t); t) () c |> ignore;
+            ra |> Seq.collect go_t
+          else Seq.empty
+        Seq.append (Option.toList y) xs
+      | x -> pred x |> snd |> Option.map Seq.singleton |> Option.defaultValue Seq.empty
+    go_t t
+
+  let findTypesInStatements (pred: Type -> bool * 'a option) (stmts: Statement list) : 'a seq =
     let rec go = function
       | TypeAlias ta ->
         seq {
-          yield! go_t ta.target;
+          yield! findTypesInType pred ta.target;
           for tp in ta.typeParams do
-            yield! [tp.defaultType; tp.extends] |> List.choose id |> Seq.collect go_t
+            yield! [tp.defaultType; tp.extends] |> List.choose id |> Seq.collect (findTypesInType pred)
         }
-      | ClassDef c ->
-        let ra = ResizeArray()
-        mapTypeInClass (fun () t -> ra.Add(t); t) () c |> ignore;
-        ra |> Seq.collect go_t
+      | ClassDef c -> findTypesInType pred (AnonymousInterface c)
       | Module m ->
         m.statements |> Seq.collect go
       | Value v ->
         seq {
-          yield! go_t v.typ
+          yield! findTypesInType pred v.typ
           for tp in v.typeParams do
-            yield! [tp.defaultType; tp.extends] |> List.choose id |> Seq.collect go_t
+            yield! [tp.defaultType; tp.extends] |> List.choose id |> Seq.collect (findTypesInType pred)
         }
-      | EnumDef e -> e.cases |> Seq.choose (fun (_, _, lo) -> lo)
+      | EnumDef e ->
+        e.cases |> Seq.choose (fun (_, _, lo) -> lo)
+                |> Seq.collect (fun l -> findTypesInType pred (TypeLiteral l))
       | Export _ | UnknownStatement _ -> Seq.empty
-    stmts |> Seq.collect go |> Set.ofSeq
+    stmts |> Seq.collect go
 
-  let createRootContext (typesModuleName: string) (stmts: Statement list) : Context =
+  let getTypeLiterals stmts =
+    findTypesInStatements (function TypeLiteral l -> true, Some l | _ -> true, None) stmts |> Set.ofSeq
+  
+  let getAnonymousInterfaces stmts =
+    findTypesInStatements (function
+      | AnonymousInterface c when Option.isNone c.name -> true, Some c
+      | _ -> true, None
+    ) stmts |> Set.ofSeq
+  
+  let createRootContext (internalModuleName: string) (stmts: Statement list) : Context =
     let add name ty m =
      m |> Map.add [name] (TypeAlias { name = name; typeParams = []; target = ty; erased = true })
     let m =
@@ -354,11 +383,13 @@ module Utils =
       |> add "ReadonlyArray" (Prim ReadonlyArray)
       |> add "Promise" (Prim Promise)
     let tlm = getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
+    let aim = getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
     {
-      typesModuleName = typesModuleName;
-      currentNamespace = [];
-      definitionsMap = m;
-      typeLiteralsMap = tlm;
+      internalModuleName = internalModuleName
+      currentNamespace = []
+      definitionsMap = m
+      typeLiteralsMap = tlm
+      anonymousInterfacesMap = aim
     }
 
   let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : FullName option =
@@ -384,12 +415,10 @@ module Utils =
     | Union u ->
       Union {
         types = u.types |> List.map (mapIdent mapping ctx);
-        classIntersection = u.classIntersection |> Option.map (mapTypeInClass (mapIdent mapping) ctx)
       }
     | Intersection i ->
       Intersection {
         types = i.types |> List.map (mapIdent mapping ctx);
-        classUnion = i.classUnion |> Option.map (mapTypeInClass (mapIdent mapping) ctx)
       }
     | Tuple ts -> Tuple (ts |> List.map (mapIdent mapping ctx))
     | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (mapIdent mapping ctx))
@@ -507,5 +536,4 @@ module Utils =
         inheritMap <- inheritMap |> Map.add className result
         result
       | _ -> Set.empty
-
-
+  

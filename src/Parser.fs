@@ -261,6 +261,19 @@ and readNamedDeclaration (typrm: Set<string>) (checker: TypeChecker) (nd: Ts.Nam
     | _ -> ()
     let fl = { name = nameToString nd.name; isOptional = false; value = ty }
     Some (attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), []))
+  | Kind.PropertyDeclaration ->
+    let nd = nd :?> Ts.PropertyDeclaration
+    let ty =
+      match nd.``type`` with
+      | Some t -> readTypeNode typrm checker t
+      | None ->
+        UnknownType None
+    match ty with
+    | UnknownType None ->
+      nodeWarn nd "type not specified for field '%s'" (nameToString nd.name)
+    | _ -> ()
+    let fl = { name = nameToString nd.name; isOptional = false; value = ty }
+    Some (attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), []))
   | Kind.CallSignature ->
     let nd = nd :?> Ts.CallSignatureDeclaration
     let localTyprm, ty = extractType nd
@@ -461,7 +474,7 @@ let rec readModule (checker: TypeChecker) (md: Ts.ModuleDeclaration) : Module =
         let mb = nd :?> Ts.ModuleBlock
         mb.statements |> List.ofSeq |> List.collect (readStatement checker)
       | Kind.NamespaceKeyword | Kind.ExportKeyword | Kind.Identifier
-      | Kind.DeclareKeyword | Kind.StringLiteral | Kind.DotToken | Kind.SyntaxList -> []
+      | Kind.DeclareKeyword | Kind.StringLiteral | Kind.DotToken | Kind.SyntaxList | Kind.ModuleKeyword -> []
       | Kind.ModuleDeclaration ->
         [ Module (readModule checker (nd :?> Ts.ModuleDeclaration)) ]
       | _ ->

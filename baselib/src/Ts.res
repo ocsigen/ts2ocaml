@@ -67,5 +67,4 @@ module Union = {
     if (test(x, Boolean)) { Ok(magic(x) : bool) }
     else { Error(magic(x) : 'a) }
   }
-  
 }

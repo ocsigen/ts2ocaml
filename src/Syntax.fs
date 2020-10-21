@@ -487,53 +487,83 @@ module Utils =
       ) ctx stmts
 
   let mutable private inheritMap: Map<string list, Set<Type>> = Map.empty
+
+  let rec getAllInheritancesOfType (ctx: Context) (ty: Type) : Set<Type> =
+    let rec go t =
+      seq {
+        match t with
+        | Ident { fullName = Some fn } ->
+          yield! getAllInheritancesFromName ctx (FullName.toStrings fn)
+        | App (Ident { fullName = Some fn }, ts) ->
+          let typrms =
+            match ctx.definitionsMap |> Map.tryFind (FullName.toStrings fn) with
+            | Some (ClassDef c) -> c.typeParams
+            | Some (TypeAlias a) -> a.typeParams
+            | _ -> []
+          let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
+          yield! getAllInheritancesFromName ctx (FullName.toStrings fn) |> Seq.map (substTypeVar subst ctx)
+        | Union u -> yield! Set.intersectMany (List.map go u.types)
+        | Intersection i -> yield! Set.unionMany (List.map go i.types)
+        | _ -> ()
+      } |> Set.ofSeq
+    in go ty
    
-  let rec getAllInheritances (ctx: Context) (className: string list) : Set<Type> =
+  and getAllInheritancesFromName (ctx: Context) (className: string list) : Set<Type> =
     match inheritMap |> Map.tryFind className with
     | Some s -> s
     | None ->
-      match ctx.definitionsMap |> Map.tryFind className with
-      | Some (ClassDef c) ->
-        let result =
+      let result =
+        match ctx.definitionsMap |> Map.tryFind className with
+        | Some (ClassDef c) ->
           seq {
             for t in c.implements do
               yield t
-              match t with
-              | Ident { fullName = Some fn } ->
-                yield! getAllInheritances ctx (FullName.toStrings fn)
-              | App (Ident { fullName = Some fn }, ts) ->
-                let typrms =
-                  match ctx.definitionsMap |> Map.tryFind (FullName.toStrings fn) with
-                  | Some (ClassDef c) -> c.typeParams
-                  | Some (TypeAlias a) -> a.typeParams
-                  | _ -> []
-                let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
-                yield! getAllInheritances ctx (FullName.toStrings fn) |> Seq.map (substTypeVar subst ctx)
-              | _ -> ()
+              yield! getAllInheritancesOfType ctx t
           } |> Set.ofSeq
-        inheritMap <- inheritMap |> Map.add className result
-        result
-      | Some (EnumDef e) ->
-        let result = Ident { name = className; fullName = Some (EnumName (className, e)) } |> Set.singleton
-        inheritMap <- inheritMap |> Map.add className result
-        result
-      | Some (TypeAlias t) ->
-        let result =
-          seq {
-            match t.target with
-              | Ident { fullName = Some fn } ->
-                yield! getAllInheritances ctx (FullName.toStrings fn)
-              | App (Ident { fullName = Some fn }, ts) ->
-                let typrms =
-                  match ctx.definitionsMap |> Map.tryFind (FullName.toStrings fn) with
-                  | Some (ClassDef c) -> c.typeParams
-                  | Some (TypeAlias a) -> a.typeParams
-                  | _ -> []
-                let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
-                yield! getAllInheritances ctx (FullName.toStrings fn) |> Seq.map (substTypeVar subst ctx)
-              | _ -> ()
-          } |> Set.ofSeq
-        inheritMap <- inheritMap |> Map.add className result
-        result
-      | _ -> Set.empty
-  
+        | Some (TypeAlias t) -> getAllInheritancesOfType ctx t.target
+        | _ -> Set.empty
+      inheritMap <- inheritMap |> Map.add className result
+      result
+
+  let isEnum (_ctx: Context) (u: Union) : (PrimTypes option * Set<Literal>) option =
+    let getTypeOfLiteral l =
+        match l with
+        | LString _ -> String
+        | LBool _ -> Bool
+        | LInt _ | LFloat _ -> Number
+
+    let rec go t =
+      seq {
+        match t with
+        | Union u -> yield! Seq.collect go u.types
+        | Ident { fullName = Some fn } | App (Ident { fullName = Some fn }, _) ->
+          match fn with
+          | AliasName (_, a) -> yield! go a.target
+          | EnumName (_, e) ->
+            for _, _, c in e.cases do
+              match c with
+              | Some l -> yield Some l
+              | None -> ()
+          | EnumCaseName (_, name, e) ->
+            let _, _, v = e.cases |> List.find (fun (_, n, _) -> n = name)
+            match v with
+            | Some l -> yield Some l
+            | None -> ()
+          | _ -> yield None
+        | TypeLiteral l -> yield Some l
+        | _ -> yield None
+      }
+
+    let result = go (Union u)
+    if result |> Seq.contains None then None
+    else
+      let lits = result |> Seq.choose id |> Set.ofSeq
+      let ty = lits |> Seq.map getTypeOfLiteral |> Seq.distinct |> Seq.toList
+      match ty with
+      | [t] -> Some (Some t, lits)
+      | _ -> Some (None, lits)
+    
+
+  let coerceUnion (u: Union) : Union =
+    // TODO
+    u

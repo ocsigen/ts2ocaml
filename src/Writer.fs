@@ -1,5 +1,6 @@
 module Writer
 
+open System
 open Syntax
 open Text
 
@@ -81,7 +82,6 @@ module Term =
 
 open Type
 open Term
-open System
 
 let getFlattenedLowerName (name: string list) =
   let s = String.concat "_" name
@@ -126,8 +126,6 @@ module Definition =
     +@ " => " + value
   
 open Definition
-open Syntax
-open Type
 
 let literalToIdentifier (ctx: Context) (l: Literal) : text =
   let formatString (s: string) =

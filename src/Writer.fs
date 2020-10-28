@@ -5,46 +5,56 @@ open Syntax
 open Text
 
 module Utils =
-  let comment text = between "/* " " */" text
-  let commentStr text = tprintf "/* %s */" text
+  let comment text = between "(* " " *)" text
+  let commentStr text = tprintf "(* %s *)" text
+  let [<Literal>] pv_head = "`"
+  let inline TODO<'a> = failwith "TODO"
 
 open Utils
 
 module Type =
-  let string_t = str "string"
-  let boolean_t = str "bool"
-  let number_t = str "float"
-  let regexp_t = str "Js.Re.t"
-  let date_t = str "Js.Date.t"
-  let symbol_t = str "Js.Types.symbol"
-  let unit_t = str "unit"
-  let error_t = str "Js.Exn.t"
-  let array_t = str "array"
-  let readonlyArray_t = str "Js.Array.array_like"
-  let promise_t = str "Js.Promise.t"
-  let null_t = str "Js.Null.t"
-  let undefined_t = str "Js.Undefined.t"
-  let null_undefined_t = str "Js.Nullable.t"
-  let js_t = str "Js.t"
-  let ts_t = str "Ts.t"
-  let never_t = str "never"
-  let any_t = str "any"
+  // primitive types
+  // these types should reside in the "Js" module of the base library.
+  let string_t  = str "js_string"
+  let boolean_t = str "js_boolean"
+  let number_t  = str "js_number"
+  let object_t  = str "js_object"
+  let symbol_t  = str "js_symbol" // symbol is a ES5 type but should be distinguished from the boxed Symbol type
+  let unit_t    = str "unit"
+  let array_t   = str "js_array"
+  let null_t           = str "null_or"
+  let undefined_t      = str "undefined_or"
+  let null_undefined_t = str "null_or_undefined_or"
+
+  // ES5 types
+  // these types should reside in the "ES5" module of the base library.
+  let regexp_t  = str "RegExp.t"
+  let date_t    = str "Date.t"
+  let error_t   = str "Error.t"
+  let readonlyArray_t = str "ArrayLike.t"
+  let promise_t = str "Promise.t"
+
+  // TS specific types
+  // these types should reside in the "Ts" module of the base library.
+  let never_t   = str "never"
+  let any_t     = str "any"
   let unknown_t = str "unknown"
-  let obj_t = str "Obj.t"
+
+  // our types
+  let ts_t = str "Ts.t"
   let enum_t = str "enum"
-  let pv_head = "#"
 
   let tyVar s = tprintf "'%s" s
 
   let tyTuple = function
     | [] -> failwith "empty tuple"
     | _ :: [] -> failwith "1-ary tuple"
-    | xs -> concat (str ", ") xs |> between "(" ")"
+    | xs -> concat (str " * ") xs |> between "(" ")"
 
   let tyApp t = function
     | [] -> failwith "type application with empty arguments"
-    | [u] -> t + between "<" ">" u
-    | us -> t + between "<" ">" (concat (str ", ") us)
+    | [u] -> u +@ " " + t
+    | us -> tyTuple us +@ " " + t
 
   let and_ a b = tyApp (str "and_") [a; b]
   let or_  a b = tyApp (str "or_")  [a; b]
@@ -75,8 +85,8 @@ module Term =
 
   let termApp t = function
     | [] -> failwith "term application with empty arguments"
-    | [u] -> t + between "(" ")" u
-    | us -> t + between "(" ")" (concat (str ", ") us)
+    | us ->
+      (t :: us) |> concat (str " ") |> between "(" ")"
 
   let typeAssert term ty = between "(" ")" (term +@ ":" + ty)
 
@@ -103,9 +113,9 @@ module Definition =
 
   let module_ name content =
     concat newline [
-      tprintf "module %s = {" name
+      tprintf "module %s = struct" name
       indent content
-      str "}"
+      str "end"
     ]
 
   let abstractType name tyargs = 
@@ -118,7 +128,7 @@ module Definition =
     +@ " = " + ty
   
   let external_ name tyarg tyret extName =
-    tprintf "external %s: " name + tyarg +@ " => " + tyret + tprintf " = \"%s\"" extName
+    tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
 
   let letFunction name (args: (text * text) list) value =
     tprintf "let %s = " name
@@ -174,9 +184,9 @@ let rec emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> 
     | TypeVar v -> tprintf "'%s" v
     | Prim p ->
       match p with
-      | Null -> tyApp null_t [unit_t] | Undefined -> tyApp undefined_t [unit_t] | Object -> obj_t
+      | Null -> tyApp null_t [never_t] | Undefined -> tyApp undefined_t [never_t] | Object -> any_t
       | String -> string_t | Bool -> boolean_t | Number -> number_t
-      | UntypedFunction -> obj_t | Array -> array_t | Date -> date_t | Error -> error_t
+      | UntypedFunction -> any_t | Array -> array_t | Date -> date_t | Error -> error_t
       | RegExp -> regexp_t | Symbol -> symbol_t | Promise -> promise_t
       | Never -> never_t | Any -> any_t | Unknown -> unknown_t | Void -> unit_t
       | ReadonlyArray -> readonlyArray_t
@@ -199,14 +209,17 @@ let rec emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> 
           match isEnum ctx { types = rest } with
           | None -> union_t (u.types |> List.map (emitType overrideFunc ctx))
           | Some (po, lits) ->
+            (*
             tyApp enum_t [
               match po with
               | Some t -> yield emitType overrideFunc ctx (Prim t)
-              | None -> yield commentStr "WARNING: mixed enum type" + obj_t
+              | None -> yield commentStr "WARNING: mixed enum type" + any_t
               yield between "[ " " ]" (
                 concat (str " | ") (lits |> Set.toList |> List.map (fun x -> str pv_head + literalToIdentifier ctx x))
               )
             ]
+            *)
+            TODO
       let rec appendPrim = function
         | x :: [] when body = never_t -> emitType overrideFunc ctx x
         | Prim Number :: rest -> tyApp (str "number_or") [appendPrim rest]
@@ -225,11 +238,12 @@ let rec emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> 
       let body = appendNullOrUndefined nullOrUndefined
       body
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
-    | PolymorphicThis -> commentStr "FIXME: polymorphic this" + obj_t
+    | PolymorphicThis -> commentStr "FIXME: polymorphic this" + any_t
     | Function f ->
       if f.isVariadic then
-        commentStr "TODO: variadic function" + obj_t
+        commentStr "TODO: variadic function" + any_t
       else
+        (*
         between "(" ")" (
           concat (str " => ") [
             yield between "(" ")" (concat (str ", ") [
@@ -239,10 +253,12 @@ let rec emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> 
             yield emitType overrideFunc ctx f.returnType
           ]
         )
+        *)
+        TODO
     | Tuple ts | ReadonlyTuple ts ->
       tyTuple (ts |> List.map (emitType overrideFunc ctx))
     | UnknownType msgo ->
-      match msgo with None -> commentStr "FIXME: unknown type" + obj_t | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + obj_t
+      match msgo with None -> commentStr "FIXME: unknown type" + any_t | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + any_t
 
 let inline noOverride _emitType _ctx _ty = None
 
@@ -380,7 +396,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
             if lt.Length <> 1 then
               eprintfn "warn: the enum '%s' has multiple base types" e.name
               yield commentStr (sprintf "WARNING: the enum '%s' has multiple base types" e.name)
-            let ty = if lt.Length = 1 then lt.[0] else obj_t
+            let ty = if lt.Length = 1 then lt.[0] else any_t
             let cases =
               between "[ " " ]" (
                   concat (str " | ") [

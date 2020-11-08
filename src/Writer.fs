@@ -2,6 +2,7 @@ module Writer
 
 open System
 open Syntax
+open Typer
 open Text
 
 module Utils =
@@ -9,6 +10,23 @@ module Utils =
   let commentStr text = tprintf "(* %s *)" text
   let [<Literal>] pv_head = "`"
   let inline TODO<'a> = failwith "TODO"
+
+  let js_stop_start_implem sigContent implContent =
+    concat newline [
+      str "[@@@js.stop]"
+      sigContent
+      str "[@@@js.start]"
+      str "[@@@js.implem"
+      indent implContent
+      str "]"
+    ]
+
+  let js_custom_val content =
+    if content = empty then str "[@@js.custom]"
+    else concat newline [ str "[@@js.custom"; indent content; str "]" ]
+
+  let js_implem_val content =
+    concat newline [ str "[@@js.implem"; indent content; str "]" ]
 
 open Utils
 
@@ -20,7 +38,7 @@ module Type =
   let number_t  = str "js_number"
   let object_t  = str "js_object"
   let symbol_t  = str "js_symbol" // symbol is a ES5 type but should be distinguished from the boxed Symbol type
-  let unit_t    = str "unit"
+  let void_t    = str "unit"
   let array_t   = str "js_array"
   let null_t           = str "null_or"
   let undefined_t      = str "undefined_or"
@@ -36,13 +54,12 @@ module Type =
 
   // TS specific types
   // these types should reside in the "Ts" module of the base library.
-  let never_t   = str "never"
-  let any_t     = str "any"
-  let unknown_t = str "unknown"
+  let never_t   = str "ts_never"
+  let any_t     = str "ts_any"
+  let unknown_t = str "ts_unknown"
 
   // our types
   let ts_t = str "Ts.t"
-  let enum_t = str "enum"
 
   let tyVar s = tprintf "'%s" s
 
@@ -171,7 +188,24 @@ let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
   | None, None -> failwithf "the anonymous interface '%A' is not found in the context" c
   | _, Some n -> failwithf "the class or interface '%s' is not anonymous" n
 
-let rec emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text option) (ctx: Context) (ty: Type) : text =
+let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
+  let treatNullUndefined t =
+    match ru.caseNull, ru.caseUndefined with
+    | true, true -> tyApp null_undefined_t [t]
+    | true, false -> tyApp null_t [t]
+    | false, true -> tyApp undefined_t [t]
+    | false, false -> t
+
+  let treatDU (tagName: string) (cases: Map<Literal, Type>) t =
+    between "[" "]" (concat (str " | ") [
+
+      if not (t = never_t) then
+        yield tprintf "%sOther of " pv_head + t + str " [@js.default]"
+    ]) + tprintf " [@js.union on_field \"%s\"]" tagName
+  
+  failwith "TODO"
+
+and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text option) (ctx: Context) (ty: Type) : text =
   match overrideFunc (emitType overrideFunc) ctx ty with
   | Some t -> t
   | None ->
@@ -188,55 +222,11 @@ let rec emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> 
       | String -> string_t | Bool -> boolean_t | Number -> number_t
       | UntypedFunction -> any_t | Array -> array_t | Date -> date_t | Error -> error_t
       | RegExp -> regexp_t | Symbol -> symbol_t | Promise -> promise_t
-      | Never -> never_t | Any -> any_t | Unknown -> unknown_t | Void -> unit_t
+      | Never -> never_t | Any -> any_t | Unknown -> unknown_t | Void -> void_t
       | ReadonlyArray -> readonlyArray_t
     | TypeLiteral l -> literalToIdentifier ctx l
     | Intersection i -> intersection_t (i.types |> List.map (emitType overrideFunc ctx))
-    | Union u ->
-      let nullOrUndefined, rest =
-        u.types |> List.partition (function Prim (Null | Undefined) -> true | _ -> false)
-      let prims, rest =
-        rest |> List.partition (function 
-          | Prim (Number | String | Bool | Symbol)
-          | App (Prim Array, [_]) -> true
-          | _ -> false
-        )
-      let body =
-        match rest with
-        | [] -> never_t
-        | [x] -> emitType overrideFunc ctx x
-        | _ ->
-          match isEnum ctx { types = rest } with
-          | None -> union_t (u.types |> List.map (emitType overrideFunc ctx))
-          | Some (po, lits) ->
-            (*
-            tyApp enum_t [
-              match po with
-              | Some t -> yield emitType overrideFunc ctx (Prim t)
-              | None -> yield commentStr "WARNING: mixed enum type" + any_t
-              yield between "[ " " ]" (
-                concat (str " | ") (lits |> Set.toList |> List.map (fun x -> str pv_head + literalToIdentifier ctx x))
-              )
-            ]
-            *)
-            TODO
-      let rec appendPrim = function
-        | x :: [] when body = never_t -> emitType overrideFunc ctx x
-        | Prim Number :: rest -> tyApp (str "number_or") [appendPrim rest]
-        | Prim String :: rest -> tyApp (str "string_or") [appendPrim rest]
-        | Prim Bool :: rest -> tyApp (str "boolean_or") [appendPrim rest]
-        | Prim Symbol :: rest -> tyApp (str "symbol_or") [appendPrim rest]
-        | App (Prim Array, [t]) :: rest -> tyApp (str "array_or") [emitType overrideFunc ctx t; appendPrim rest]
-        | [] -> body
-        | _ -> failwith "impossible_appendPrim"
-      let body = appendPrim prims
-      let appendNullOrUndefined = function
-        | [Prim Null; Prim Undefined] | [Prim Undefined; Prim Null] -> tyApp null_undefined_t [body]
-        | [Prim Null] -> tyApp null_t [body] | [Prim Undefined] -> tyApp undefined_t [body]
-        | [] -> body
-        | _ -> failwith "impossible_appendNullOrUndefined"
-      let body = appendNullOrUndefined nullOrUndefined
-      body
+    | Union u -> emitResolvedUnion overrideFunc ctx (resolveUnion u)
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
     | PolymorphicThis -> commentStr "FIXME: polymorphic this" + any_t
     | Function f ->
@@ -312,11 +302,11 @@ let emitTsModule : text =
           (sprintf "union%i" i) args
           (or_ (List.head args)
                (tyApp (tprintf "union%i" (i-1)) (List.tail args)))
-    yield typeAlias "number_or" [tyVar "a"] (or_ number_t (tyVar "a"))
-    yield typeAlias "string_or" [tyVar "a"] (or_ string_t (tyVar "a"))
+    yield typeAlias "number_or"  [tyVar "a"] (or_ number_t (tyVar "a"))
+    yield typeAlias "string_or"  [tyVar "a"] (or_ string_t (tyVar "a"))
     yield typeAlias "boolean_or" [tyVar "a"] (or_ boolean_t (tyVar "a"))
-    yield typeAlias "symbol_or" [tyVar "a"] (or_ symbol_t (tyVar "a"))
-    yield typeAlias "array_or" [tyVar "t"; tyVar "a"] (or_ (tyApp array_t [tyVar "t"]) (tyVar "a"))
+    yield typeAlias "symbol_or"  [tyVar "a"] (or_ symbol_t (tyVar "a"))
+    yield typeAlias "array_or"   [tyVar "t"; tyVar "a"] (or_ (tyApp array_t [tyVar "t"]) (tyVar "a"))
 
     (*
     yield module_ "Union" (
@@ -389,7 +379,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         | EnumDef e ->
           let lt =
             e.cases
-            |> Seq.choose (function (_, _, Some l) -> getTypeOfLiteral l |> Some | _ -> None)
+            |> Seq.choose (function { value = Some l } -> getTypeOfLiteral l |> Some | _ -> None)
             |> Seq.distinct
             |> Seq.toArray
           concat newline [
@@ -400,17 +390,18 @@ let emitFlattenedDefinitions (ctx: Context) : text =
             let cases =
               between "[ " " ]" (
                   concat (str " | ") [
-                    for (_, _, vo) in e.cases do
+                    for { value = vo } in e.cases do
                       match vo with
                       | Some v ->
                         yield str pv_head + literalToIdentifier ctx v
                       | None -> ()
               ])
             yield
-              tprintf "%s %s = " prefix (getFlattenedLowerName k)
-              + tyApp enum_t [ty; cases]
+              //tprintf "%s %s = " prefix (getFlattenedLowerName k)
+              // + tyApp enum_t [ty; cases]
+              TODO
 
-            for (_comments, name, vo) in e.cases do
+            for { name = name; value = vo } in e.cases do
               match vo with
               | Some v ->
                 yield tprintf "and %s = %A" (getFlattenedLowerName (k @ [name])) (literalToIdentifier ctx v)

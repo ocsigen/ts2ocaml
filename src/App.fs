@@ -41,14 +41,23 @@ let main argv =
       node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
     let stmts = srcs |> Seq.collect (fun src -> src.statements) |> Seq.collect (Parser.readStatement checker) |> Seq.toList
-    let result = Syntax.Utils.mergeStatements stmts 
-    let ctx = Syntax.Utils.createRootContext "Internal" result
-    let result = result |> Syntax.Utils.resolveIdentInStatements ctx
-    let ctx = Syntax.Utils.createRootContext "Internal" result
+    let result = Typer.mergeStatements stmts 
+    let ctx = Typer.createRootContext "Internal" result
+    let result = result |> Typer.resolveIdentInStatements ctx
+    let ctx = Typer.createRootContext "Internal" result
+
+    let stringify x = Fable.Core.JS.JSON.stringify(x, space=2)
+
     (*
     for pstmt in result do
       Fable.Core.JS.JSON.stringify(pstmt, space=2) |> printfn "%s"
       ()
     *)
-    Writer.emitFlattenedDefinitions ctx |> Text.toString 2 |> printfn "%s"
+    // Writer.emitFlattenedDefinitions ctx |> Text.toString 2 |> printfn "%s"
+    ctx.definitionsMap |> Map.iter (fun _ v ->
+      match v with
+      | Syntax.TypeAlias { target = Syntax.Union u } ->
+        { Typer.resolveUnion u with otherTypes = Set.empty } |> stringify |> printfn "%s"
+      | _ -> ()
+    )
     0

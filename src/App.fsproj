@@ -7,6 +7,7 @@
     <Compile Include="Utils.fs" />
     <Compile Include="Text.fs" />
     <Compile Include="Syntax.fs" />
+    <Compile Include="Typer.fs" />
     <Compile Include="Naming.fs" />
     <Compile Include="Parser.fs" />
     <Compile Include="Writer.fs" />

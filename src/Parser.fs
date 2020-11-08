@@ -386,7 +386,7 @@ let readEnumCase (em: Ts.EnumMember) : EnumCase =
       | Some ((LInt _ | LString _) as l) -> Some l
       | _ -> nodeError ep "enum value '%s' for case '%s' not supported" (ep.getText()) name
   let comments = [] // TODO
-  (comments, name, value)
+  { comments = comments; name = name; value = value }
 
 let readEnum (ed: Ts.EnumDeclaration) : Enum =
   {

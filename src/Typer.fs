@@ -407,18 +407,14 @@ let getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
       | (Ident { fullName = Some fn } & Dummy tyargs) | App (Ident { fullName = Some fn }, tyargs) ->
         match fn |> lookupFullName ctx with
         | AliasName a ->
-          if List.isEmpty tyargs then yield! go a.target
-          else yield! go (App (a.target, tyargs))
+          let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) a.typeParams tyargs |> Map.ofList
+          yield! go (a.target |> substTypeVar bindings ())
         | EnumName e ->
           for c in e.cases do yield Choice1Of2 (Choice1Of2 c)
         | EnumCaseName (name, e) ->
           match e.cases |> List.tryFind (fun c -> c.name = name) with
           | Some c -> yield Choice1Of2 (Choice1Of2 c)
           | None -> yield Choice2Of2 t
-        | ClassName c ->
-          let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) c.typeParams tyargs |> Map.ofList
-          let c = c |> mapTypeInClass (substTypeVar bindings) ()
-          for t in c.implements do yield! go t
         | _ -> yield Choice2Of2 t
       | TypeLiteral l -> yield Choice1Of2 (Choice2Of2 l)
       | _ -> yield Choice2Of2 t
@@ -428,23 +424,29 @@ let getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
   Set.ofList e, { types = rest }
 
 let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> * Union =
+  let (|Dummy|) _ = []
+
   let rec getLiteralFieldsFromClass (c: Class) =
-    c.members |> List.choose (fun (_, m) ->
+    c.members |> List.collect (fun (_, m) ->
       match m with
       | Field (fl, _, []) ->
-        match fl.value with
-        | TypeLiteral l -> Some (fl.name, l)
-        | Ident { fullName = Some fn } ->
-          match fn |> lookupFullName ctx with
-          | EnumCaseName (cn, e) ->
-            match e.cases |> List.tryFind (fun c -> c.name = cn) with
-            | Some { value = Some v } -> Some (fl.name, v)
-            | _ -> None
-          | _ -> None
-        | _ -> None
-      | _ -> None) |> Set.ofList
+        let rec go t =
+          match t with
+          | TypeLiteral l -> [fl.name, l]
+          | (Ident { fullName = Some fn } & Dummy ts) | App (Ident { fullName = Some fn }, ts) ->
+            match fn |> lookupFullName ctx with
+            | EnumCaseName (cn, e) ->
+              match e.cases |> List.tryFind (fun c -> c.name = cn) with
+              | Some { value = Some v } -> [fl.name, v]
+              | _ -> []
+            | AliasName a ->
+              let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) a.typeParams ts |> Map.ofList
+              go (a.target |> substTypeVar bindings ())
+            | _ -> []
+          | _ -> []
+        go fl.value
+      | _ -> []) |> Set.ofList
   
-  let (|Dummy|) _ = []
 
   let rec goBase onUnion onIntersection onClass onOther t =
     seq {
@@ -590,10 +592,13 @@ let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
     let caseArray =
       if List.isEmpty arrayTypes then None
       else Some (resolveUnion ctx { types = arrayTypes })
+    printfn "rest1: %s" (rest |> List.map Type.pp |> String.concat ", ")
     let caseEnum, rest =
       getEnumFromUnion ctx { types = rest }
+    printfn "rest2: %s" (rest.types |> List.map Type.pp |> String.concat ", ")
     let discriminatedUnions, rest =
       getDiscriminatedFromUnion ctx rest
+    printfn "rest3: %s" (rest.types |> List.map Type.pp |> String.concat ", ")
     let otherTypes = Set.ofList rest.types
 
     let result = 

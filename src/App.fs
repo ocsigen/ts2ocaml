@@ -41,7 +41,7 @@ let main argv =
       node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
     let stmts = srcs |> Seq.collect (fun src -> src.statements) |> Seq.collect (Parser.readStatement checker) |> Seq.toList
-    let result = Typer.mergeStatements stmts 
+    let result = Typer.mergeStatements stmts
     let ctx = Typer.createRootContext "Internal" result
     let result = result |> Typer.resolveIdentInStatements ctx
     let ctx = Typer.createRootContext "Internal" result
@@ -57,7 +57,12 @@ let main argv =
     ctx.definitionsMap |> Map.iter (fun _ v ->
       match v with
       | Syntax.TypeAlias { target = Syntax.Union u } ->
-        { Typer.resolveUnion u with otherTypes = Set.empty } |> stringify |> printfn "%s"
+        Syntax.Union u |> Syntax.Type.pp |> printfn "%s"
+        let ru = Typer.resolveUnion ctx u
+        { ru with otherTypes = Set.empty } |> Typer.ResolvedUnion.pp |> printfn "%s"
+        ru.otherTypes |> Set.toList |> List.map (Syntax.Type.pp) |> String.concat " | " |> printfn "%s" 
+        printfn "------------------------------------------------"
+        printfn ""
       | _ -> ()
     )
     0

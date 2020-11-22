@@ -9,26 +9,37 @@ module Utils =
   let comment text = between "(* " " *)" text
   let commentStr text = tprintf "(* %s *)" text
   let [<Literal>] pv_head = "`"
+
+  [<Obsolete("TODO")>]
   let inline TODO<'a> = failwith "TODO"
+
+open Utils
+
+module Attr =
+  type Category = Normal | Block | Floating
+
+  let attr (c: Category) name payload =
+    let at = String.replicate (match c with Normal -> 1 | Block -> 2 | Floating -> 3) "@"
+    if payload = empty then tprintf "[%s%s " at name + payload +@ "]"
+    else tprintf "[%s%s]" at name
+
+  let js payload = attr Normal "js" payload
 
   let js_stop_start_implem sigContent implContent =
     concat newline [
-      str "[@@@js.stop]"
+      attr Floating "js.stop" empty
       sigContent
-      str "[@@@js.start]"
-      str "[@@@js.implem"
-      indent implContent
-      str "]"
+      attr Floating "js.start" empty
+      attr Floating "js.implem" (newline + indent implContent + newline)
     ]
 
   let js_custom_val content =
-    if content = empty then str "[@@js.custom]"
-    else concat newline [ str "[@@js.custom"; indent content; str "]" ]
+    if content = empty then attr Block "js.custom" empty
+    else attr Block "js.custom" (newline + indent content + newline)
 
-  let js_implem_val content =
-    concat newline [ str "[@@js.implem"; indent content; str "]" ]
+  let js_implem_val content = attr Block "js.implem" (newline + indent content + newline)
 
-open Utils
+open Attr
 
 module Type =
   // primitive types
@@ -58,8 +69,12 @@ module Type =
   let any_t     = str "ts_any"
   let unknown_t = str "ts_unknown"
 
+  // gen_js_api types
+  let ojs_t = str "Ojs.t"
+
   // our types
-  let ts_t = str "Ts.t"
+  let ts_intf  = str "ts_intf"
+  let ts_enum  = str "ts_enum"
 
   let tyVar s = tprintf "'%s" s
 
@@ -110,20 +125,21 @@ module Term =
 open Type
 open Term
 
-let getFlattenedLowerName (name: string list) =
-  let s = String.concat "_" name
-  if Char.IsUpper s.[0] then
-    sprintf "%c%s" (Char.ToLower s.[0]) s.[1..]
-  else s
+module Naming =
+  let flattenedLower (name: string list) =
+    let s = String.concat "_" name
+    if Char.IsUpper s.[0] then
+      sprintf "%c%s" (Char.ToLower s.[0]) s.[1..]
+    else s
 
-let getFlattenedUpperName (name: string list) =
-  let s = String.concat "_" name
-  if Char.IsLower s.[0] then
-    sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]
-  else s
+  let flattenedUpper (name: string list) =
+    let s = String.concat "_" name
+    if Char.IsLower s.[0] then
+      sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]
+    else s
 
-let getStructuredName (name: string list) =
-  name |> List.map (fun s -> sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]) |> String.concat "."
+  let structured (name: string list) =
+    name |> List.map (fun s -> sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]) |> String.concat "."
 
 module Definition =
   let open_ names = names |> List.map (tprintf "open %s") |> concat newline
@@ -131,6 +147,13 @@ module Definition =
   let module_ name content =
     concat newline [
       tprintf "module %s = struct" name
+      indent content
+      str "end"
+    ]
+
+  let moduleSig name content =
+    concat newline [
+      tprintf "module %s : sig" name
       indent content
       str "end"
     ]
@@ -147,11 +170,6 @@ module Definition =
   let external_ name tyarg tyret extName =
     tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
 
-  let letFunction name (args: (text * text) list) value =
-    tprintf "let %s = " name
-    + between "(" ")" (concat (str ", ") (args |> List.map (fun (n, t) -> n +@ ": " + t)))
-    +@ " => " + value
-  
 open Definition
 
 let literalToIdentifier (ctx: Context) (l: Literal) : text =
@@ -198,12 +216,11 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
 
   let treatDU (tagName: string) (cases: Map<Literal, Type>) t =
     between "[" "]" (concat (str " | ") [
-
-      if not (t = never_t) then
-        yield tprintf "%sOther of " pv_head + t + str " [@js.default]"
+      for (l, t) in Map.toSeq cases do
+        yield TODO
     ]) + tprintf " [@js.union on_field \"%s\"]" tagName
   
-  failwith "TODO"
+  TODO
 
 and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text option) (ctx: Context) (ty: Type) : text =
   match overrideFunc (emitType overrideFunc) ctx ty with
@@ -212,8 +229,8 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
     match ty with
     | Ident i ->
       match i.fullName with
-      | Some fn -> tprintf "%s.t" (getStructuredName (FullName.toStrings fn))
-      | None -> commentStr (sprintf "FIXME: unknown type '%s'" (String.concat "." i.name)) + str (getStructuredName i.name + ".t")
+      | Some fn -> tprintf "%s.t" (Naming.structured fn)
+      | None -> commentStr (sprintf "FIXME: unknown type '%s'" (String.concat "." i.name)) + str (Naming.structured i.name + ".t")
     | App (t, ts) -> tyApp (emitType overrideFunc ctx t) (List.map (emitType overrideFunc ctx) ts)
     | TypeVar v -> tprintf "'%s" v
     | Prim p ->
@@ -226,7 +243,7 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
       | ReadonlyArray -> readonlyArray_t
     | TypeLiteral l -> literalToIdentifier ctx l
     | Intersection i -> intersection_t (i.types |> List.map (emitType overrideFunc ctx))
-    | Union u -> emitResolvedUnion overrideFunc ctx (resolveUnion u)
+    | Union u -> emitResolvedUnion overrideFunc ctx (resolveUnion ctx u)
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
     | PolymorphicThis -> commentStr "FIXME: polymorphic this" + any_t
     | Function f ->
@@ -252,19 +269,34 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
 
 let inline noOverride _emitType _ctx _ty = None
 
+let emitType' ctx ty = emitType noOverride ctx ty
+
+type IdentEmitMode = Structured | Flattened of appendTypeModule:bool
+
+let rec emitTypeWithIdentEmitMode identEmitMode orf ctx ty =
+  if identEmitMode = Structured then emitType orf ctx ty
+  else
+    emitType (fun _emitType ctx ty ->
+      match ty with
+      | Ident { fullName = Some fn } ->
+        match identEmitMode with
+        | Structured -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
+        | Flattened false -> str (Naming.flattenedLower fn) |> Some
+        | Flattened true  -> tprintf "Types.%s" (Naming.flattenedLower fn) |> Some
+      | _ -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
+    ) ctx ty
+
 let emitTsModule : text =
   concat newline [
-    yield abstractType "t" [str "-'a"]
-    yield abstractType "never" []
-    yield abstractType "any" []
-    yield abstractType "unknown" []
-    yield abstractType "enum" [str "'t"; str "+'a"]
-    yield module_ "Unsafe" (
-      concat newline [
-        external_ "cast" (str "'a") (str "'b") "%identity"
-      ]
-    )
-    yield open_ ["Unsafe"]
+    yield abstractType "ts_never" []
+    yield abstractType "ts_any" []
+    yield abstractType "ts_unknown" []
+
+    yield abstractType "ts_intf" [str "-'a"]
+    yield
+      js_stop_start_implem
+        (abstractType "ts_enum" [str "'t"; str "+'a"])
+        (typeAlias    "ts_enum" [str "'t"; str "+'a"] (str "'t"))
     
     let alphabets = [for c in 'a' .. 'z' do tyVar (string c)]
 
@@ -277,21 +309,25 @@ let emitTsModule : text =
           (sprintf "intersection%i" i) args
           (and_ (List.head args)
                 (tyApp (tprintf "intersection%i" (i-1)) (List.tail args)))
+  
+    (*
     yield module_ "Intersection" (
       concat newline [
         yield external_ "car" (and_ (str "'a") (str "'b")) (str "'b") "%identity"
         yield external_ "cdr" (and_ (str "'a") (str "'b")) (str "'a") "%identity"
         for i = 2 to 8 do
           yield
-            letFunction
+            (*letFunction
               (sprintf "unwrap%i" i)
               [str "x", tyApp (tprintf "intersection%i" i) (List.take i alphabets)]
               (termTuple [
                 for t in List.take i alphabets do
                   typeAssert (termApp (str "cast") [str "x"]) t
-              ])
+              ])*)
+            TODO
       ]
     )
+    *)
 
     yield abstractType "or_" [tyVar "a"; tyVar "b"]
     yield typeAlias "union2" [tyVar "a"; tyVar "b"] (or_ (tyVar "a") (tyVar "b"))
@@ -311,45 +347,26 @@ let emitTsModule : text =
     (*
     yield module_ "Union" (
       concat newline [
-        yield open_ ["Js.Types"]
 
       ]
     )
     *)
   ]
 
-type IdentEmitMode = Structured | Flattened of appendTypeModule:bool
-
-let rec emitTypeWithIdentEmitMode identEmitMode orf ctx ty =
-  if identEmitMode = Structured then emitType orf ctx ty
-  else
-    emitType (fun _emitType ctx ty ->
-      match ty with
-      | Ident { fullName = Some fn } ->
-        let fn = FullName.toStrings fn
-        match identEmitMode with
-        | Structured -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
-        | Flattened false -> str (getFlattenedLowerName fn) |> Some
-        | Flattened true  -> tprintf "Types.%s" (getFlattenedLowerName fn) |> Some
-      | _ -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
-    ) ctx ty
-
 let emitFlattenedDefinitions (ctx: Context) : text =
   let emitType_ identEmitMode ctx ty = emitTypeWithIdentEmitMode identEmitMode noOverride ctx ty
-  module_ ctx.internalModuleName (
+  moduleSig ctx.internalModuleName (
     concat newline [
-      module_ "Ts" emitTsModule
+      moduleSig "Ts" emitTsModule
       open_ ["Ts"]
 
-      module_ "TypeLiterals" (
+      moduleSig "TypeLiterals" (
         let emitLiteral l =
-          let s =
-            match l with
-            | LString s -> tprintf "\"%s\"" (String.escape s |> String.replace "`" "\\`")
-            | LInt i -> tprintf "%i" i
-            | LFloat f -> tprintf "%f" f
-            | LBool true -> str "true" | LBool false -> str "false"
-          between "%raw(`" "`)" s
+          match l with
+          | LString s -> tprintf "\"%s\"" (String.escape s |> String.replace "`" "\\`")
+          | LInt i -> tprintf "%i" i
+          | LFloat f -> tprintf "%f" f
+          | LBool true -> str "true" | LBool false -> str "false"
         concat newline [
           for (l, _) in ctx.typeLiteralsMap |> Map.toSeq do
             let i = literalToIdentifier ctx l
@@ -362,17 +379,17 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         concat newline [
           for (a, _) in ctx.anonymousInterfacesMap |> Map.toSeq do
             let i = anonymousInterfaceToIdentifier ctx a
-            yield str "type " + i + str " = " + tyApp ts_t [between "[" "]" (str pv_head + i)]
+            yield str "type " + i + str " = " + tyApp ts_intf [between "[" "]" (str pv_head + i)]
         ]
       )
 
       let emitTypeName name args =
-        if List.isEmpty args then str (getFlattenedLowerName name)
-        else tyApp (str (getFlattenedLowerName name)) args
+        if List.isEmpty args then str (Naming.flattenedLower name)
+        else tyApp (str (Naming.flattenedLower name)) args
 
       let emitCase name args =
-        if List.isEmpty args then str (getFlattenedUpperName name)
-        else str (getFlattenedUpperName name) + between "(" ")" (concat (str ",") (args))
+        if List.isEmpty args then str (Naming.flattenedUpper name)
+        else str (Naming.flattenedUpper name) + between "(" ")" (concat (str ",") (args))
 
       let f prefix (k: string list, v: Statement) =
         match v with
@@ -404,7 +421,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
             for { name = name; value = vo } in e.cases do
               match vo with
               | Some v ->
-                yield tprintf "and %s = %A" (getFlattenedLowerName (k @ [name])) (literalToIdentifier ctx v)
+                yield tprintf "and %s = %A" (Naming.flattenedLower (k @ [name])) (literalToIdentifier ctx v)
               | None -> ()
           ] |> Some
         | ClassDef c ->
@@ -413,13 +430,13 @@ let emitFlattenedDefinitions (ctx: Context) : text =
             for e in getAllInheritancesFromName ctx k do
               match e with
               | Ident { fullName = Some fn } ->
-                yield tprintf "%s%s" pv_head (FullName.toStrings fn |> getFlattenedUpperName)
+                yield tprintf "%s%s" pv_head (Naming.flattenedUpper fn)
               | App (Ident { fullName = Some fn }, ts) ->
-                yield str pv_head + emitCase (FullName.toStrings fn) (ts |> List.map (emitType_ (Flattened false) ctx))
+                yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
               | _ -> ()
           ]
           concat newline [
-            yield tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_t [
+            yield tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_intf [
               str "[ " + concat (str " | ") [
                 yield  tprintf "%s%A" pv_head (emitCase k typrm)
                 yield! labels
@@ -430,23 +447,21 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         | TypeAlias p when p.erased = false ->
           let rec getLabel = function
             | Ident { fullName = Some fn } -> 
-              let k = FullName.toStrings fn
               seq {
-                yield tprintf "%s%s" pv_head (FullName.toStrings fn |> getFlattenedUpperName)
+                yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
                 for e in getAllInheritancesFromName ctx k do
                   match e with
                   | Ident { fullName = Some fn } ->
-                    yield tprintf "%s%s" pv_head (FullName.toStrings fn |> getFlattenedUpperName)
+                    yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
                   | App (Ident { fullName = Some fn }, ts) ->
-                    yield str pv_head + emitCase (FullName.toStrings fn) (ts |> List.map (emitType_ (Flattened false) ctx))
+                    yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
                   | _ -> ()
               } |> Set.ofSeq
             | App (Ident { fullName = Some fn }, ts) ->
-              let k = FullName.toStrings fn
               seq {
-                yield str pv_head + emitCase (FullName.toStrings fn) (ts |> List.map (emitType_ (Flattened false) ctx))
+                yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
                 let typrms =
-                  match ctx.definitionsMap |> Map.tryFind (FullName.toStrings fn) with
+                  match ctx.definitionsMap |> Map.tryFind fn with
                   | Some (ClassDef c) -> c.typeParams
                   | Some (TypeAlias a) -> a.typeParams
                   | _ -> []
@@ -454,9 +469,9 @@ let emitFlattenedDefinitions (ctx: Context) : text =
                 for e in getAllInheritancesFromName ctx k do
                   match e with
                   | Ident { fullName = Some fn } ->
-                    yield tprintf "%s%s" pv_head (FullName.toStrings fn |> getFlattenedUpperName)
+                    yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
                   | App (Ident { fullName = Some fn }, ts) ->
-                    yield str pv_head + emitCase (FullName.toStrings fn) (ts |> List.map (substTypeVar subst ctx >> emitType_ (Flattened false) ctx))
+                    yield str pv_head + emitCase fn (ts |> List.map (substTypeVar subst ctx >> emitType_ (Flattened false) ctx))
                   | _ -> ()
               } |> Set.ofSeq
             | Union ts -> ts.types |> List.map getLabel |> Set.intersectMany
@@ -474,7 +489,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
               // it can be casted to any known class or interface
               else
                 yield comment (emitType_ (Flattened false) ctx p.target)
-                yield tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_t [
+                yield tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_intf [
                   str "[ " + concat (str " | ") [
                     yield! labels
                   ] + str " ]"

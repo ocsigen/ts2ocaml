@@ -71,16 +71,8 @@ and Intersection = {
 
 and IdentType = {
   name: string list
-  fullName: FullName option
+  fullName: string list option
 }
-
-and FullName =
-  | AliasName of string list * TypeAlias
-  | ClassName of string list * Class
-  | EnumName of string list * Enum
-  | EnumCaseName of string list * string * Enum
-  | ModuleName of string list * Module
-  | ValueName of string list * Value
 
 and FieldLike = { name:string; isOptional:bool; value:Type }
 
@@ -175,8 +167,23 @@ module Enum =
   let isStringEnum (e: Enum) =
     e.cases |> List.exists (function { value = Some (LString _ ) } -> true | _ -> false)
 
-module FullName =
-  let toStrings (fnr: FullName) : string list =
-    match fnr with
-    | AliasName (n, _) | ClassName (n, _) | EnumName (n, _) | ModuleName (n, _) | ValueName (n, _) -> n
-    | EnumCaseName (n, c, _) -> n @ [c]
+module Type =
+  let rec pp = function
+    | PolymorphicThis -> "this"
+    | Ident i -> (if Option.isNone i.fullName then "?" else "") + (i.name |> String.concat ".")
+    | TypeVar v -> "'" + v
+    | Prim p -> sprintf "%A" p
+    | TypeLiteral l -> Literal.toString l
+    | AnonymousInterface _ -> "{..}"
+    | Union u -> "union<" + (u.types |> List.map pp |> String.concat " | ") + ">"
+    | Intersection i -> "intersection<" + (i.types |> List.map pp |> String.concat ", ") + ">"
+    | Tuple ts | ReadonlyTuple ts -> "(" + (ts |> List.map pp |> String.concat ", ") + ")"
+    | Function f ->
+      let args =
+        f.args
+        |> List.map (fun a -> sprintf "%s%s:%s" (if a.isOptional then "?" else "~") a.name (pp a.value))
+      "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"
+    | App (t, ts) -> pp t + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
+    | UnknownType None -> "?"
+    | UnknownType (Some msg) -> sprintf "?(%s)" msg
+

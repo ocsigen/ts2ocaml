@@ -1,6 +1,8 @@
 [<AutoOpen>]
 module Utils
 
+let inline (|Ref|) (x: 'a ref) = !x
+
 module Char =
   let isAlphabetOrDigit c =
     ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9')

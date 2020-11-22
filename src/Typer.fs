@@ -65,7 +65,8 @@ let rec substTypeVar (subst: Map<string, Type>) _ctx = function
           returnType = substTypeVar subst _ctx f.returnType;
           args = List.map (mapTypeInFieldLike (substTypeVar subst) _ctx) f.args }
   | App (t, ts) -> App (substTypeVar subst _ctx t, ts |> List.map (substTypeVar subst _ctx))
-  | t -> t
+  | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
+  | PolymorphicThis -> PolymorphicThis | UnknownType msgo -> UnknownType msgo
 
 let rec mergeStatements (stmts: Statement list) =
   let mutable result : Choice<Statement, Class ref, Module ref> list = []
@@ -221,6 +222,15 @@ let createRootContext (internalModuleName: string) (stmts: Statement list) : Con
     anonymousInterfacesMap = aim
   }
 
+type FullNameLookupResult =
+  | AliasName of TypeAlias
+  | ClassName of Class
+  | EnumName of Enum
+  | EnumCaseName of string * Enum
+  | ModuleName of Module
+  | ValueName of Value
+
+(*
 let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : FullName option =
   let nsRev = List.rev ctx.currentNamespace
   let fullName = nsRev @ ident.name
@@ -234,21 +244,49 @@ let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : FullName option =
     let possibleEnumName = nsRev @ (ident.name |> List.take (List.length ident.name - 1))
     let possibleEnumCaseName = ident.name |> List.last
     match ctx.definitionsMap |> Map.tryFind possibleEnumName with
-    | Some (EnumDef e) when e.cases |> List.exists (fun c -> c.name = possibleEnumCaseName) ->
+    | Some (EnumDef e) when (!e).cases |> List.exists (fun c -> c.name = possibleEnumCaseName) ->
       EnumCaseName (possibleEnumName, possibleEnumCaseName, e) |> Some
     | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
   | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
+*)
+
+let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : string list option =
+  let nsRev = List.rev ctx.currentNamespace
+  let fullName = nsRev @ ident.name
+  match ctx.definitionsMap |> Map.tryFind fullName with
+  | Some (TypeAlias _ | ClassDef _ | EnumDef _ | Module _ | Value _) -> Some fullName
+  | None when List.length ident.name > 1 ->
+    let possibleEnumName = nsRev @ (ident.name |> List.take (List.length ident.name - 1))
+    let possibleEnumCaseName = ident.name |> List.last
+    match ctx.definitionsMap |> Map.tryFind possibleEnumName with
+    | Some (EnumDef e) when e.cases |> List.exists (fun c -> c.name = possibleEnumCaseName) ->
+      Some (possibleEnumName @ [possibleEnumCaseName])
+    | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
+  | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
+
+let lookupFullName (ctx: Context) (fullName: string list) : FullNameLookupResult =
+  match ctx.definitionsMap |> Map.tryFind fullName with
+  | Some (TypeAlias a) -> AliasName a
+  | Some (ClassDef c) -> ClassName c
+  | Some (EnumDef e) -> EnumName e
+  | Some (Module m) -> ModuleName m
+  | Some (Value v) -> ValueName v
+  | None ->
+    let enumName = fullName |> List.take (List.length fullName - 1)
+    let enumCaseName = List.last fullName
+    match ctx.definitionsMap |> Map.tryFind enumName with
+    | Some (EnumDef e) ->
+      match e.cases |> List.tryFind (fun c -> c.name = enumCaseName) with
+      | Some _ -> EnumCaseName (enumCaseName, e)
+      | None -> failwithf "The enum '%s' does not have a case '%s" (enumName |> String.concat ".") enumCaseName
+    | _ -> failwithf "Current context doesn't contain '%s'" (fullName |> String.concat ".")
+  | _ -> failwithf "Current context doesn't contain '%s'" (fullName |> String.concat ".")
+
 
 let rec mapIdent (mapping: Context -> IdentType -> Type) (ctx: Context) = function
   | Ident i -> mapping ctx i
-  | Union u ->
-    Union {
-      types = u.types |> List.map (mapIdent mapping ctx);
-    }
-  | Intersection i ->
-    Intersection {
-      types = i.types |> List.map (mapIdent mapping ctx);
-    }
+  | Union u -> Union { types = u.types |> List.map (mapIdent mapping ctx) }
+  | Intersection i -> Intersection { types = i.types |> List.map (mapIdent mapping ctx) }
   | Tuple ts -> Tuple (ts |> List.map (mapIdent mapping ctx))
   | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (mapIdent mapping ctx))
   | AnonymousInterface c -> AnonymousInterface (mapTypeInClass (mapIdent mapping) ctx c)
@@ -258,13 +296,19 @@ let rec mapIdent (mapping: Context -> IdentType -> Type) (ctx: Context) = functi
           returnType = mapIdent mapping ctx f.returnType;
           args = List.map (mapTypeInFieldLike (mapIdent mapping) ctx) f.args }
   | App (t, ts) -> App (mapIdent mapping ctx t, ts |> List.map (mapIdent mapping ctx))
-  | x -> x
+  | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l | TypeVar v -> TypeVar v
+  | PolymorphicThis -> PolymorphicThis | UnknownType msg -> UnknownType msg
 
 let rec mapIdentInStatements mapType mapExport (ctx: Context) (stmts: Statement list) : Statement list =
   let f = function
     | TypeAlias a ->
-      TypeAlias { a with target = mapIdent mapType ctx a.target; typeParams = a.typeParams |> List.map (mapTypeInTypeParam (mapIdent mapType) ctx) }
-    | ClassDef c -> ClassDef (mapTypeInClass (mapIdent mapType) ctx c)
+      TypeAlias {
+        a with
+          target = mapIdent mapType ctx a.target
+          typeParams = a.typeParams |> List.map (mapTypeInTypeParam (mapIdent mapType) ctx)
+      }
+    | ClassDef c ->
+      ClassDef (mapTypeInClass (mapIdent mapType) ctx c)
     | EnumDef e -> EnumDef e
     | Export (i, m) -> mapExport ctx i m
     | Value v ->
@@ -282,7 +326,7 @@ let rec mapIdentInStatements mapType mapExport (ctx: Context) (stmts: Statement 
               { ctx with currentNamespace = m.name :: ctx.currentNamespace }
               m.statements 
       }
-    | x -> x
+    | UnknownStatement msgo -> UnknownStatement msgo
   stmts |> List.map f
 
 let resolveIdentType (ctx: Context) (i: IdentType) : IdentType =
@@ -322,15 +366,15 @@ let rec getAllInheritancesOfType (ctx: Context) (ty: Type) : Set<Type> =
     seq {
       match t with
       | Ident { fullName = Some fn } ->
-        yield! getAllInheritancesFromName ctx (FullName.toStrings fn)
+        yield! getAllInheritancesFromName ctx fn
       | App (Ident { fullName = Some fn }, ts) ->
         let typrms =
-          match ctx.definitionsMap |> Map.tryFind (FullName.toStrings fn) with
+          match ctx.definitionsMap |> Map.tryFind fn with
           | Some (ClassDef c) -> c.typeParams
           | Some (TypeAlias a) -> a.typeParams
           | _ -> []
         let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
-        yield! getAllInheritancesFromName ctx (FullName.toStrings fn) |> Seq.map (substTypeVar subst ctx)
+        yield! getAllInheritancesFromName ctx fn |> Seq.map (substTypeVar subst ctx)
       | Union u -> yield! Set.intersectMany (List.map go u.types)
       | Intersection i -> yield! Set.unionMany (List.map go i.types)
       | _ -> ()
@@ -354,20 +398,27 @@ and getAllInheritancesFromName (ctx: Context) (className: string list) : Set<Typ
     inheritMap <- inheritMap |> Map.add className result
     result
 
-let getEnumFromUnion (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
+let getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
+  let (|Dummy|) _ = []
   let rec go t =
     seq {
       match t with
-      | Union u -> yield! Seq.collect go u.types
-      | Ident { fullName = Some fn } | App (Ident { fullName = Some fn }, _) ->
-        match fn with
-        | AliasName (_, a) -> yield! go a.target
-        | EnumName (_, e) ->
+      | Union { types = types } | Intersection { types = types } -> yield! Seq.collect go types
+      | (Ident { fullName = Some fn } & Dummy tyargs) | App (Ident { fullName = Some fn }, tyargs) ->
+        match fn |> lookupFullName ctx with
+        | AliasName a ->
+          if List.isEmpty tyargs then yield! go a.target
+          else yield! go (App (a.target, tyargs))
+        | EnumName e ->
           for c in e.cases do yield Choice1Of2 (Choice1Of2 c)
-        | EnumCaseName (_, name, e) ->
+        | EnumCaseName (name, e) ->
           match e.cases |> List.tryFind (fun c -> c.name = name) with
           | Some c -> yield Choice1Of2 (Choice1Of2 c)
           | None -> yield Choice2Of2 t
+        | ClassName c ->
+          let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) c.typeParams tyargs |> Map.ofList
+          let c = c |> mapTypeInClass (substTypeVar bindings) ()
+          for t in c.implements do yield! go t
         | _ -> yield Choice2Of2 t
       | TypeLiteral l -> yield Choice1Of2 (Choice2Of2 l)
       | _ -> yield Choice2Of2 t
@@ -376,32 +427,46 @@ let getEnumFromUnion (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
   let e, rest = Seq.fold (fun (e, rest) -> function Choice1Of2 x -> x::e,rest | Choice2Of2 x -> e,x::rest) ([],[]) result
   Set.ofList e, { types = rest }
 
-let getDiscriminatedFromUnion (u: Union) : Map<string, Map<Literal, Type>> * Union =
-  let getLiteralFieldsFromClass (c: Class) =
+let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> * Union =
+  let rec getLiteralFieldsFromClass (c: Class) =
     c.members |> List.choose (fun (_, m) ->
       match m with
       | Field (fl, _, []) ->
         match fl.value with
         | TypeLiteral l -> Some (fl.name, l)
-        | Ident { fullName = Some (EnumCaseName (_, cn, e)) } ->
-          match e.cases |> List.tryFind (fun c -> c.name = cn) with
-          | Some { value = Some v } -> Some (fl.name, v)
+        | Ident { fullName = Some fn } ->
+          match fn |> lookupFullName ctx with
+          | EnumCaseName (cn, e) ->
+            match e.cases |> List.tryFind (fun c -> c.name = cn) with
+            | Some { value = Some v } -> Some (fl.name, v)
+            | _ -> None
           | _ -> None
         | _ -> None
       | _ -> None) |> Set.ofList
+  
+  let (|Dummy|) _ = []
 
   let rec goBase onUnion onIntersection onClass onOther t =
     seq {
       match t with
       | Union u -> yield! onUnion u
       | Intersection i -> yield! onIntersection i
-      | AnonymousInterface i -> yield onClass t i
-      | Ident { fullName = Some (AliasName (_, a)) } -> yield! goBase onUnion onIntersection onClass onOther a.target
-      | App (Ident { fullName = Some (AliasName (_, a))}, ts) -> yield! goBase onUnion onIntersection onClass onOther (App (a.target, ts))
-      | Ident { fullName = Some (ClassName (_, c))} -> yield onClass t c
-      | App (Ident { fullName = Some (ClassName (_, c))}, ts) ->
-        let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) c.typeParams ts |> Map.ofList
-        yield onClass t (c |> mapTypeInClass (substTypeVar bindings) ())
+      | AnonymousInterface i ->
+        yield onClass t i
+      | (Ident { fullName = Some fn } & Dummy ts) | App (Ident {fullName = Some fn}, ts) ->
+        match lookupFullName ctx fn with
+        | AliasName a ->
+          if List.isEmpty ts then
+            yield! goBase onUnion onIntersection onClass onOther a.target
+          else
+            yield! goBase onUnion onIntersection onClass onOther (App (a.target, ts))
+        | ClassName c ->
+          if List.isEmpty ts then
+            yield onClass t c
+          else
+            let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) c.typeParams ts |> Map.ofList
+            yield onClass t (c |> mapTypeInClass (substTypeVar bindings) ())
+        | _ -> yield onOther t
       | _ -> yield onOther t
    }
 
@@ -475,9 +540,35 @@ type ResolvedUnion = {
   otherTypes: Set<Type>
 }
 
+module ResolvedUnion =
+  let rec pp (ru: ResolvedUnion) =
+    let cases = [
+      if ru.caseNull then yield "null"
+      if ru.caseUndefined then yield "undefined"
+      for x in ru.typeofableTypes do
+        yield
+          match x with TNumber -> "number" | TString -> "string" | TBoolean -> "boolean" | TSymbol -> "symbol"
+      match ru.caseArray with
+      | Some t -> yield sprintf "array<%s>" (pp t)
+      | None -> ()
+      if not (Set.isEmpty ru.caseEnum) then
+        let cases =
+          ru.caseEnum
+          |> Set.toSeq
+          |> Seq.map (function
+            | Choice1Of2 { name = name; value = Some value } -> sprintf "%s=%s" name (Literal.toString value)
+            | Choice1Of2 { name = name; value = None } -> sprintf "%s=?" name
+            | Choice2Of2 l -> Literal.toString l)
+        yield sprintf "enum<%s>" (cases |> String.concat " | ")
+      for k, m in ru.discriminatedUnions |> Map.toSeq do
+        yield sprintf "du[%s]<%s>" k (m |> Map.toSeq |> Seq.map (snd >> Type.pp) |> String.concat ", ")
+      for t in ru.otherTypes |> Set.toSeq do yield Type.pp t
+    ]
+    cases |> String.concat " | "
+
 let mutable private resolveUnionMap: Map<Union, ResolvedUnion> = Map.empty
 
-let rec resolveUnion (u: Union) : ResolvedUnion =
+let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
   match resolveUnionMap |> Map.tryFind u with
   | Some t -> t
   | None ->
@@ -488,21 +579,22 @@ let rec resolveUnion (u: Union) : ResolvedUnion =
     let prims, arrayTypes, rest =
       rest |> List.fold (fun (prims, ats, rest) ->
         function
-        | Prim Number -> TNumber :: prims, ats, rest
-        | Prim String -> TString :: prims, ats, rest
+        | Prim Number -> TNumber  :: prims, ats, rest
+        | Prim String -> TString  :: prims, ats, rest
         | Prim Bool   -> TBoolean :: prims, ats, rest
-        | Prim Symbol -> TSymbol :: prims, ats, rest
+        | Prim Symbol -> TSymbol  :: prims, ats, rest
         | App (Prim Array, [t]) -> prims, t :: ats, rest
         | t -> prims, ats, t :: rest
       ) ([], [], [])
     let typeofableTypes = Set.ofList prims
     let caseArray =
       if List.isEmpty arrayTypes then None
-      else Some (resolveUnion { types = arrayTypes })
+      else Some (resolveUnion ctx { types = arrayTypes })
     let caseEnum, rest =
-      getEnumFromUnion { types = rest }
+      getEnumFromUnion ctx { types = rest }
     let discriminatedUnions, rest =
-      getDiscriminatedFromUnion rest
+      getDiscriminatedFromUnion ctx rest
+    let otherTypes = Set.ofList rest.types
 
     let result = 
       { caseNull = caseNull
@@ -511,7 +603,7 @@ let rec resolveUnion (u: Union) : ResolvedUnion =
         caseArray = caseArray
         caseEnum = caseEnum
         discriminatedUnions = discriminatedUnions
-        otherTypes = Set.ofList rest.types }
+        otherTypes = otherTypes }
     
     resolveUnionMap <- resolveUnionMap |> Map.add u result
     result

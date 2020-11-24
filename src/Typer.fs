@@ -230,26 +230,6 @@ type FullNameLookupResult =
   | ModuleName of Module
   | ValueName of Value
 
-(*
-let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : FullName option =
-  let nsRev = List.rev ctx.currentNamespace
-  let fullName = nsRev @ ident.name
-  match ctx.definitionsMap |> Map.tryFind fullName with
-  | Some (TypeAlias a) -> AliasName (fullName, a) |> Some
-  | Some (ClassDef c) -> ClassName (fullName, c) |> Some
-  | Some (EnumDef e) -> EnumName (fullName, e) |> Some
-  | Some (Module m) -> ModuleName (fullName, m) |> Some
-  | Some (Value v) -> ValueName (fullName, v) |> Some
-  | None when List.length ident.name > 1 ->
-    let possibleEnumName = nsRev @ (ident.name |> List.take (List.length ident.name - 1))
-    let possibleEnumCaseName = ident.name |> List.last
-    match ctx.definitionsMap |> Map.tryFind possibleEnumName with
-    | Some (EnumDef e) when (!e).cases |> List.exists (fun c -> c.name = possibleEnumCaseName) ->
-      EnumCaseName (possibleEnumName, possibleEnumCaseName, e) |> Some
-    | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
-  | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
-*)
-
 let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : string list option =
   let nsRev = List.rev ctx.currentNamespace
   let fullName = nsRev @ ident.name
@@ -603,13 +583,10 @@ let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
     let caseArray =
       if List.isEmpty arrayTypes then None
       else Some (Set.ofList arrayTypes) 
-    printfn "rest1: %s" (rest |> List.map Type.pp |> String.concat ", ")
     let caseEnum, rest =
       getEnumFromUnion ctx { types = rest }
-    printfn "rest2: %s" (rest.types |> List.map Type.pp |> String.concat ", ")
     let discriminatedUnions, rest =
       getDiscriminatedFromUnion ctx rest
-    printfn "rest3: %s" (rest.types |> List.map Type.pp |> String.concat ", ")
     let otherTypes = Set.ofList rest.types
 
     let result = 

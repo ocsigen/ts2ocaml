@@ -425,29 +425,7 @@ let getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
 
 let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> * Union =
   let (|Dummy|) _ = []
-
-  let rec getLiteralFieldsFromClass (c: Class) =
-    c.members |> List.collect (fun (_, m) ->
-      match m with
-      | Field (fl, _, []) ->
-        let rec go t =
-          match t with
-          | TypeLiteral l -> [fl.name, l]
-          | (Ident { fullName = Some fn } & Dummy ts) | App (Ident { fullName = Some fn }, ts) ->
-            match fn |> lookupFullName ctx with
-            | EnumCaseName (cn, e) ->
-              match e.cases |> List.tryFind (fun c -> c.name = cn) with
-              | Some { value = Some v } -> [fl.name, v]
-              | _ -> []
-            | AliasName a ->
-              let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) a.typeParams ts |> Map.ofList
-              go (a.target |> substTypeVar bindings ())
-            | _ -> []
-          | _ -> []
-        go fl.value
-      | _ -> []) |> Set.ofList
   
-
   let rec goBase onUnion onIntersection onClass onOther t =
     seq {
       match t with
@@ -472,7 +450,39 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
       | _ -> yield onOther t
    }
 
-  let rec goIntersection t : Set<string * Literal> =
+  let rec getLiteralFieldsFromClass (c: Class) =
+    let inheritedFields =
+      if not c.isInterface then Set.empty
+      else
+        c.implements
+        |> Seq.collect (fun t ->
+          go t |> Seq.choose (function
+            | Choice1Of2 (_, fields) -> Some fields
+            | Choice2Of2 _ -> None)
+          )
+        |> Set.unionMany
+        
+    c.members |> List.collect (fun (_, m) ->
+      match m with
+      | Field (fl, _, []) ->
+        let rec go t =
+          match t with
+          | TypeLiteral l -> [fl.name, l]
+          | (Ident { fullName = Some fn } & Dummy ts) | App (Ident { fullName = Some fn }, ts) ->
+            match fn |> lookupFullName ctx with
+            | EnumCaseName (cn, e) ->
+              match e.cases |> List.tryFind (fun c -> c.name = cn) with
+              | Some { value = Some v } -> [fl.name, v]
+              | _ -> []
+            | AliasName a ->
+              let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) a.typeParams ts |> Map.ofList
+              go (a.target |> substTypeVar bindings ())
+            | _ -> []
+          | _ -> []
+        go fl.value
+      | _ -> []) |> Set.ofList |> Set.union inheritedFields
+
+  and goIntersection t : Set<string * Literal> =
     goBase
       (fun u -> u.types |> List.map goIntersection |> Set.intersectMany |> Seq.singleton)
       (fun i -> i.types |> List.map goIntersection |> Set.unionMany |> Seq.singleton)
@@ -481,7 +491,7 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
       t
     |> Set.unionMany
 
-  let rec go t : Choice<Type * Set<string * Literal>, Type> seq =
+  and go t : Choice<Type * Set<string * Literal>, Type> seq =
     goBase
       (fun u -> Seq.collect go u.types)
       (fun i ->
@@ -491,7 +501,7 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
       (fun t c ->
         let fields = getLiteralFieldsFromClass c
         if Set.isEmpty fields then Choice2Of2 t
-        else Choice1Of2 (t, getLiteralFieldsFromClass c))
+        else Choice1Of2 (t, fields))
       (fun t -> Choice2Of2 t)
       t
 
@@ -513,6 +523,7 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
 
   let dus =
     classes
+    |> List.distinct
     |> List.map (fun (t, fields) ->
       let name, value = getBestTag fields
       name, (value, t))
@@ -536,7 +547,7 @@ type ResolvedUnion = {
   caseNull: bool
   caseUndefined: bool
   typeofableTypes: Set<TypeofableType>
-  caseArray: ResolvedUnion option
+  caseArray: Set<Type> option
   caseEnum: Set<Choice<EnumCase, Literal>>
   discriminatedUnions: Map<string, Map<Literal, Type>>
   otherTypes: Set<Type>
@@ -551,7 +562,7 @@ module ResolvedUnion =
         yield
           match x with TNumber -> "number" | TString -> "string" | TBoolean -> "boolean" | TSymbol -> "symbol"
       match ru.caseArray with
-      | Some t -> yield sprintf "array<%s>" (pp t)
+      | Some t -> yield sprintf "array<%s>" (t |> Set.toSeq |> Seq.map Type.pp |> String.concat " | ")
       | None -> ()
       if not (Set.isEmpty ru.caseEnum) then
         let cases =
@@ -591,7 +602,7 @@ let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
     let typeofableTypes = Set.ofList prims
     let caseArray =
       if List.isEmpty arrayTypes then None
-      else Some (resolveUnion ctx { types = arrayTypes })
+      else Some (Set.ofList arrayTypes) 
     printfn "rest1: %s" (rest |> List.map Type.pp |> String.concat ", ")
     let caseEnum, rest =
       getEnumFromUnion ctx { types = rest }

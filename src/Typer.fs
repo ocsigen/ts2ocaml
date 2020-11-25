@@ -533,6 +533,13 @@ type ResolvedUnion = {
   otherTypes: Set<Type>
 }
 
+module TypeofableType =
+  let toType = function
+    | TNumber -> Prim Number
+    | TString -> Prim String
+    | TBoolean -> Prim Bool
+    | TSymbol -> Prim Symbol
+
 module ResolvedUnion =
   let rec pp (ru: ResolvedUnion) =
     let cases = [

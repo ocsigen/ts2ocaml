@@ -91,6 +91,11 @@ module Type =
   let and_ a b = tyApp (str "and_") [a; b]
   let or_  a b = tyApp (str "or_")  [a; b]
 
+  let string_or t = or_ string_t t
+  let number_or t = or_ number_t t
+  let boolean_or t = or_ boolean_t t
+  let symbol_or t = or_ symbol_t t
+
   let union_t types =
     let l = List.length types
     if l < 1 then failwith "union type with only zero or one type"
@@ -121,6 +126,13 @@ module Term =
       (t :: us) |> concat (str " ") |> between "(" ")"
 
   let typeAssert term ty = between "(" ")" (term +@ ":" + ty)
+
+  let literal (l: Literal) =
+    match l with 
+    | LBool true -> str "true" | LBool false -> str "false"
+    | LInt i -> string i |> str
+    | LFloat f -> tprintf "%f" f
+    | LString s -> tprintf "\"%s\"" (String.escape s)
 
 open Type
 open Term
@@ -195,11 +207,6 @@ let literalToIdentifier (ctx: Context) (l: Literal) : text =
   | LFloat l -> tprintf "n_%s" (formatNumber l)
   | LBool true -> str "b_true" | LBool false -> str "b_false"
 
-let getTypeOfLiteral = function
-  | LString _ -> string_t
-  | LInt _ | LFloat _ -> number_t
-  | LBool _ -> boolean_t
-
 let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
   match ctx.anonymousInterfacesMap |> Map.tryFind c, c.name with
   | Some i, None -> tprintf "anonymous_interface_%i" i
@@ -214,10 +221,52 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
     | false, true -> tyApp undefined_t [t]
     | false, false -> t
 
-  let treatDU (tagName: string) (cases: Map<Literal, Type>) t =
+  let treatTypeofableTypes (ts: Set<TypeofableType>) t =
+    let emitOr tt t =
+      match tt with
+      | TNumber -> number_or t
+      | TString -> string_or t
+      | TBoolean -> boolean_or t
+      | TSymbol -> symbol_or t
+    let rec go = function
+      | [] -> t
+      | x :: [] ->
+        match t with
+        | None -> TypeofableType.toType x |> emitType overrideFunc ctx |> Some
+        | Some t -> emitOr x t |> Some
+      | x :: rest -> go rest |> Option.map (emitOr x)
+    Set.toList ts |> go
+
+  let treatArray (arr: Set<Type> option) t =
+    match arr with
+    | None -> t
+    | Some ts ->
+      // TODO: think how to map multiple array cases properly
+      let u = emitResolvedUnion overrideFunc ctx (resolveUnion ctx { types = Set.toList ts })
+      match t with
+      | None -> Some u
+      | Some t -> or_ (tyApp array_t [u]) t |> Some
+
+  let treatEnum (cases: Set<Choice<EnumCase, Literal>>) =
+    between "[" "]" (concat (str " | ") [
+      for c in Set.toSeq cases do
+        let name, value =
+          match c with
+          | Choice1Of2 e -> str e.name, e.value
+          | Choice2Of2 l -> "E_" @+ literalToIdentifier ctx l, Some l
+        let attr =
+          match value with
+          | Some v -> tprintf " [@js %A]" (literal v)
+          | None -> empty
+        yield pv_head @+ name + attr
+    ]) +@ " [@js.enum]"
+
+  let treatDU (tagName: string) (cases: Map<Literal, Type>) =
     between "[" "]" (concat (str " | ") [
       for (l, t) in Map.toSeq cases do
-        yield TODO
+        let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
+        let ty = emitType overrideFunc ctx t
+        yield tprintf "%A of %A [@js %A]" name ty (literal l)
     ]) + tprintf " [@js.union on_field \"%s\"]" tagName
   
   TODO
@@ -370,7 +419,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         concat newline [
           for (l, _) in ctx.typeLiteralsMap |> Map.toSeq do
             let i = literalToIdentifier ctx l
-            yield str "type " + i + str " = " + tyApp (str "Ts.enum") [getTypeOfLiteral l; between "[" "]" (str pv_head + i)]
+            yield str "type " + i + str " = " + tyApp (str "Ts.enum") [emitLiteral l; between "[" "]" (str pv_head + i)]
             yield str "let " + i + str ":" + i + str " = " + emitLiteral l
         ]
       )
@@ -396,14 +445,14 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         | EnumDef e ->
           let lt =
             e.cases
-            |> Seq.choose (function { value = Some l } -> getTypeOfLiteral l |> Some | _ -> None)
+            |> Seq.choose (function { value = Some l } -> Literal.getType l |> Some | _ -> None)
             |> Seq.distinct
             |> Seq.toArray
           concat newline [
             if lt.Length <> 1 then
               eprintfn "warn: the enum '%s' has multiple base types" e.name
               yield commentStr (sprintf "WARNING: the enum '%s' has multiple base types" e.name)
-            let ty = if lt.Length = 1 then lt.[0] else any_t
+            let ty = if lt.Length = 1 then emitType' ctx (Prim lt.[0]) else any_t
             let cases =
               between "[ " " ]" (
                   concat (str " | ") [

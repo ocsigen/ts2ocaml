@@ -74,7 +74,6 @@ module Type =
 
   // our types
   let ts_intf  = str "ts_intf"
-  let ts_enum  = str "ts_enum"
 
   let tyVar s = tprintf "'%s" s
 
@@ -88,6 +87,8 @@ module Type =
     | [u] -> u +@ " " + t
     | us -> tyTuple us +@ " " + t
 
+  let ts_enum baseType cases = tyApp (str "ts_enum") [baseType; cases]
+
   let and_ a b = tyApp (str "and_") [a; b]
   let or_  a b = tyApp (str "or_")  [a; b]
 
@@ -95,6 +96,7 @@ module Type =
   let number_or t = or_ number_t t
   let boolean_or t = or_ boolean_t t
   let symbol_or t = or_ symbol_t t
+  let enum_or baseType cases t = or_ (ts_enum baseType cases) t
 
   let union_t types =
     let l = List.length types
@@ -268,8 +270,62 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
         let ty = emitType overrideFunc ctx t
         yield tprintf "%A of %A [@js %A]" name ty (literal l)
     ]) + tprintf " [@js.union on_field \"%s\"]" tagName
+
+  let treatOther otherTypes =
+    let rec go = function
+      | [] -> failwith "impossible_emitResolvedUnion_treatOther_go"
+      | t :: [] -> emitType overrideFunc ctx t
+      | t :: ts -> or_ (emitType overrideFunc ctx t) (go ts)
+    go (Set.toList otherTypes)
+
+  let treatEnumOr (cases: Set<Choice<EnumCase, Literal>>) t =
+    let casesByType =
+      cases
+      |> Set.toList
+      |> List.groupBy (function
+        | Choice1Of2 { value = Some l }
+        | Choice2Of2 l ->
+          match Literal.getType l with
+          | String -> TString
+          | Number -> TNumber
+          | Bool   -> TBoolean
+          | _ -> failwith "impossible_emitResolvedUnion_treatEnumOr"
+        | _ -> failwith "impossible_emitResolvedUnion_treatEnumOr")
+    let rec go = function
+      | (typeofable, cases) :: rest ->
+        enum_or (typeofable |> TypeofableType.toType |> emitType overrideFunc ctx)
+                (treatEnum (Set.ofList cases))
+                (go rest)
+      | [] -> t
+    go casesByType
+
+  let treatDUMany du =
+    let rec go = function
+      | [] -> failwith "impossible_emitResolvedUnion_baseType_go"
+      | (tagName, cases) :: [] -> treatDU tagName cases
+      | (tagName, cases) :: rest -> or_ (treatDU tagName cases) (go rest)
+    go (Map.toList du)
+
+  let baseType =
+    match Set.isEmpty ru.caseEnum, Map.isEmpty ru.discriminatedUnions, Set.isEmpty ru.otherTypes with
+    | false, false, false -> None
+    | true, false, false -> Some (treatEnum ru.caseEnum)
+    | false, true, hasOther ->
+      let t = treatDUMany ru.discriminatedUnions
+      if hasOther then or_ t (treatOther ru.otherTypes) |> Some
+      else Some t
+    | false, false, true -> treatOther ru.otherTypes |> Some
+    | true, false, true -> treatOther ru.otherTypes |> treatEnumOr ru.caseEnum |> Some
+    | true, true, hasOther ->
+      let t = treatDUMany ru.discriminatedUnions
+      let t = if hasOther then or_ t (treatOther ru.otherTypes) else t
+      t |> treatEnumOr ru.caseEnum |> Some
+
+  baseType |> treatArray ru.caseArray
+           |> treatTypeofableTypes ru.typeofableTypes
+           |> Option.defaultValue never_t
+           |> treatNullUndefined
   
-  TODO
 
 and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text option) (ctx: Context) (ty: Type) : text =
   match overrideFunc (emitType overrideFunc) ctx ty with
@@ -392,6 +448,7 @@ let emitTsModule : text =
     yield typeAlias "boolean_or" [tyVar "a"] (or_ boolean_t (tyVar "a"))
     yield typeAlias "symbol_or"  [tyVar "a"] (or_ symbol_t (tyVar "a"))
     yield typeAlias "array_or"   [tyVar "t"; tyVar "a"] (or_ (tyApp array_t [tyVar "t"]) (tyVar "a"))
+    yield typeAlias "enum_or"    [tyVar "t"; tyVar "cases"; tyVar "a"] (or_ (ts_enum (tyVar "t") (tyVar "cases")) (tyVar "a"))
 
     (*
     yield module_ "Union" (

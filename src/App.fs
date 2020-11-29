@@ -54,15 +54,15 @@ let main argv =
       ()
     *)
     // Writer.emitFlattenedDefinitions ctx |> Text.toString 2 |> printfn "%s"
-    ctx.definitionsMap |> Map.iter (fun _ v ->
+    for _, v in Map.toSeq ctx.definitionsMap do
       match v with
       | Syntax.TypeAlias { target = Syntax.Union u } ->
         Syntax.Union u |> Syntax.Type.pp |> printfn "%s"
         let ru = Typer.resolveUnion ctx u
         { ru with otherTypes = Set.empty } |> Typer.ResolvedUnion.pp |> printfn "%s"
         ru.otherTypes |> Set.toList |> List.map (Syntax.Type.pp) |> String.concat " | " |> printfn "%s" 
+        Writer.emitResolvedUnion Writer.noOverride ctx ru |> Text.toString 2 |> printfn "%s"
         printfn "------------------------------------------------"
         printfn ""
       | _ -> ()
-    )
     0

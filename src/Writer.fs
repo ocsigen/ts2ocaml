@@ -77,15 +77,17 @@ module Type =
 
   let tyVar s = tprintf "'%s" s
 
-  let tyTuple = function
+  let tyMany sep = function
     | [] -> failwith "empty tuple"
     | _ :: [] -> failwith "1-ary tuple"
-    | xs -> concat (str " * ") xs |> between "(" ")"
+    | xs -> concat sep xs |> between "(" ")"
+
+  let tyTuple = tyMany (str " * ")
 
   let tyApp t = function
     | [] -> failwith "type application with empty arguments"
     | [u] -> u +@ " " + t
-    | us -> tyTuple us +@ " " + t
+    | us -> tyMany (str ", ") us +@ " " + t
 
   let ts_enum baseType cases = tyApp (str "ts_enum") [baseType; cases]
 
@@ -215,6 +217,21 @@ let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
   | None, None -> failwithf "the anonymous interface '%A' is not found in the context" c
   | _, Some n -> failwithf "the class or interface '%s' is not anonymous" n
 
+
+let treatEnum ctx (cases: Set<Choice<EnumCase, Literal>>) =
+  between "[" "]" (concat (str " | ") [
+    for c in Set.toSeq cases do
+      let name, value =
+        match c with
+        | Choice1Of2 e -> str e.name, e.value
+        | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l
+      let attr =
+        match value with
+        | Some v -> tprintf " [@js %A]" (literal v)
+        | None -> empty
+      yield pv_head @+ name + attr
+  ]) +@ " [@js.enum]"
+
 let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
   let treatNullUndefined t =
     match ru.caseNull, ru.caseUndefined with
@@ -249,25 +266,11 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
       | None -> Some u
       | Some t -> or_ (tyApp array_t [u]) t |> Some
 
-  let treatEnum (cases: Set<Choice<EnumCase, Literal>>) =
-    between "[" "]" (concat (str " | ") [
-      for c in Set.toSeq cases do
-        let name, value =
-          match c with
-          | Choice1Of2 e -> str e.name, e.value
-          | Choice2Of2 l -> "E_" @+ literalToIdentifier ctx l, Some l
-        let attr =
-          match value with
-          | Some v -> tprintf " [@js %A]" (literal v)
-          | None -> empty
-        yield pv_head @+ name + attr
-    ]) +@ " [@js.enum]"
-
   let treatDU (tagName: string) (cases: Map<Literal, Type>) =
     between "[" "]" (concat (str " | ") [
       for (l, t) in Map.toSeq cases do
         let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
-        let ty = emitType overrideFunc ctx t
+        let ty = emitTypeNoResolveUnion overrideFunc ctx t
         yield tprintf "%A of %A [@js %A]" name ty (literal l)
     ]) + tprintf " [@js.union on_field \"%s\"]" tagName
 
@@ -294,7 +297,7 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
     let rec go = function
       | (typeofable, cases) :: rest ->
         enum_or (typeofable |> TypeofableType.toType |> emitType overrideFunc ctx)
-                (treatEnum (Set.ofList cases))
+                (treatEnum ctx (Set.ofList cases))
                 (go rest)
       | [] -> t
     go casesByType
@@ -307,9 +310,9 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
     go (Map.toList du)
 
   let baseType =
-    match Set.isEmpty ru.caseEnum, Map.isEmpty ru.discriminatedUnions, Set.isEmpty ru.otherTypes with
+    match not (Set.isEmpty ru.caseEnum), not (Map.isEmpty ru.discriminatedUnions), not (Set.isEmpty ru.otherTypes) with
     | false, false, false -> None
-    | true, false, false -> Some (treatEnum ru.caseEnum)
+    | true, false, false -> Some (treatEnum ctx ru.caseEnum)
     | false, true, hasOther ->
       let t = treatDUMany ru.discriminatedUnions
       if hasOther then or_ t (treatOther ru.otherTypes) |> Some
@@ -325,7 +328,28 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
            |> treatTypeofableTypes ru.typeofableTypes
            |> Option.defaultValue never_t
            |> treatNullUndefined
-  
+
+(*
+let rec emitTypeWithIdentEmitMode identEmitMode orf ctx ty =
+  if identEmitMode = Structured then emitType orf ctx ty
+  else
+    emitType (fun _emitType ctx ty ->
+      match ty with
+      | Ident { fullName = Some fn } ->
+        match identEmitMode with
+        | Structured -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
+        | Flattened false -> str (Naming.flattenedLower fn) |> Some
+        | Flattened true  -> tprintf "Types.%s" (Naming.flattenedLower fn) |> Some
+      | _ -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
+    ) ctx ty
+*)
+
+and emitTypeNoResolveUnion orf ctx ty =
+  emitType (fun _emitType ctx ty ->
+    match ty with
+    | Union u -> union_t (u.types |> List.map (emitTypeNoResolveUnion orf ctx)) |> Some
+    | _ -> orf (emitTypeNoResolveUnion orf) ctx ty
+  ) ctx ty
 
 and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text option) (ctx: Context) (ty: Type) : text =
   match overrideFunc (emitType overrideFunc) ctx ty with
@@ -346,27 +370,43 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
       | RegExp -> regexp_t | Symbol -> symbol_t | Promise -> promise_t
       | Never -> never_t | Any -> any_t | Unknown -> unknown_t | Void -> void_t
       | ReadonlyArray -> readonlyArray_t
-    | TypeLiteral l -> literalToIdentifier ctx l
+    | TypeLiteral l ->
+      treatEnum ctx (Set.singleton (Choice2Of2 l))
     | Intersection i -> intersection_t (i.types |> List.map (emitType overrideFunc ctx))
     | Union u -> emitResolvedUnion overrideFunc ctx (resolveUnion ctx u)
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
     | PolymorphicThis -> commentStr "FIXME: polymorphic this" + any_t
     | Function f ->
-      if f.isVariadic then
-        commentStr "TODO: variadic function" + any_t
-      else
-        (*
-        between "(" ")" (
-          concat (str " => ") [
-            yield between "(" ")" (concat (str ", ") [
-              for a in f.args do
-                yield tprintf "~%s:" a.name + emitType overrideFunc ctx a.value + (if a.isOptional then str "=?" else empty)
-            ])
-            yield emitType overrideFunc ctx f.returnType
-          ]
-        )
-        *)
-        TODO
+      let rec go acc (args: FieldLike list) =
+        match args with
+        | [] -> acc + void_t
+        | x :: [] when f.isVariadic ->
+          assert (not x.isOptional)
+          acc + tprintf "~%s:" x.name + between "(" ")" (emitType overrideFunc ctx x.value +@ " [@js.variadic]")
+        | x :: xs ->
+          let needParen =
+            match x.value with
+            | Function _ -> true
+            | _ -> false
+          let prefix =
+            if x.isOptional then "?" else "~"
+          let ty =
+            if needParen then between "(" ")" (emitType overrideFunc ctx x.value)
+            else emitType overrideFunc ctx x.value
+          let t =
+            tprintf "%s%s:" prefix x.name + ty
+          if not x.isOptional && List.isEmpty xs then t
+          else go (t +@ " -> ") xs
+
+      let lhs = go empty f.args
+      let rhs =
+        match f.returnType with
+        | Prim Void -> void_t
+        | Function _ ->
+          between "(" ")" (emitType overrideFunc ctx f.returnType +@ " [@js.dummy]")
+        | _ -> emitType overrideFunc ctx f.returnType
+
+      lhs +@ " -> " + rhs   
     | Tuple ts | ReadonlyTuple ts ->
       tyTuple (ts |> List.map (emitType overrideFunc ctx))
     | UnknownType msgo ->
@@ -466,22 +506,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
       moduleSig "Ts" emitTsModule
       open_ ["Ts"]
 
-      moduleSig "TypeLiterals" (
-        let emitLiteral l =
-          match l with
-          | LString s -> tprintf "\"%s\"" (String.escape s |> String.replace "`" "\\`")
-          | LInt i -> tprintf "%i" i
-          | LFloat f -> tprintf "%f" f
-          | LBool true -> str "true" | LBool false -> str "false"
-        concat newline [
-          for (l, _) in ctx.typeLiteralsMap |> Map.toSeq do
-            let i = literalToIdentifier ctx l
-            yield str "type " + i + str " = " + tyApp (str "Ts.enum") [emitLiteral l; between "[" "]" (str pv_head + i)]
-            yield str "let " + i + str ":" + i + str " = " + emitLiteral l
-        ]
-      )
-
-      module_ "AnonymousInterfaces" (
+      moduleSig "AnonymousInterfaces" (
         concat newline [
           for (a, _) in ctx.anonymousInterfacesMap |> Map.toSeq do
             let i = anonymousInterfaceToIdentifier ctx a
@@ -500,35 +525,22 @@ let emitFlattenedDefinitions (ctx: Context) : text =
       let f prefix (k: string list, v: Statement) =
         match v with
         | EnumDef e ->
-          let lt =
-            e.cases
-            |> Seq.choose (function { value = Some l } -> Literal.getType l |> Some | _ -> None)
-            |> Seq.distinct
-            |> Seq.toArray
           concat newline [
-            if lt.Length <> 1 then
-              eprintfn "warn: the enum '%s' has multiple base types" e.name
-              yield commentStr (sprintf "WARNING: the enum '%s' has multiple base types" e.name)
-            let ty = if lt.Length = 1 then emitType' ctx (Prim lt.[0]) else any_t
-            let cases =
-              between "[ " " ]" (
-                  concat (str " | ") [
-                    for { value = vo } in e.cases do
-                      match vo with
-                      | Some v ->
-                        yield str pv_head + literalToIdentifier ctx v
-                      | None -> ()
-              ])
+            let treatEnum (cases: EnumCase list) =
+              between "[" "]" (concat (str " | ") [
+                for c in cases do
+                  let name, value = str c.name, c.value
+                  let attr =
+                    match value with
+                    | Some v -> tprintf " [@js %A]" (literal v)
+                    | None -> empty
+                  yield pv_head @+ name + attr
+              ]) +@ " [@js.enum]"
             yield
-              //tprintf "%s %s = " prefix (getFlattenedLowerName k)
-              // + tyApp enum_t [ty; cases]
-              TODO
-
-            for { name = name; value = vo } in e.cases do
-              match vo with
-              | Some v ->
-                yield tprintf "and %s = %A" (Naming.flattenedLower (k @ [name])) (literalToIdentifier ctx v)
-              | None -> ()
+              tprintf "%s %s = " prefix (Naming.flattenedLower k)
+                + treatEnum e.cases
+            for c in e.cases do
+              yield tprintf "and %s = %A" (Naming.flattenedLower (k @ [c.name])) (treatEnum [c])
           ] |> Some
         | ClassDef c ->
           let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
@@ -607,9 +619,8 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           // TODO: emit extends of type parameters
         | _ -> None
 
-      module_ "Types" (
+      moduleSig "Types" (
         concat newline [
-          yield str "open TypeLiterals"
           yield str "open AnonymousInterfaces"
           let prefix = seq { yield "type rec"; while true do yield "and" }
           yield!

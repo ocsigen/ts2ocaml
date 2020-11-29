@@ -61,7 +61,7 @@ let toString indentLength (t: text) = t.ToString(indentLength)
 let empty = Str ""
 
 let str (s: string) =
-  let lines = s.Replace("\r\n", "\n").Split([|'\n'; '\r'|])
+  let lines = s.Split([|System.Environment.NewLine|], System.StringSplitOptions.None)
   match lines.Length with
   | 0 -> empty
   | 1 -> Str lines.[0]

@@ -177,6 +177,7 @@ module Definition =
   let abstractType name tyargs = 
     str "type "
     + (if List.isEmpty tyargs then str name else tyApp (str name) tyargs)
+    // +@ " = private Ojs.t"
 
   let typeAlias name tyargs ty =
     str "type "
@@ -382,14 +383,14 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
         | [] -> acc + void_t
         | x :: [] when f.isVariadic ->
           assert (not x.isOptional)
-          acc + tprintf "~%s:" x.name + between "(" ")" (emitType overrideFunc ctx x.value +@ " [@js.variadic]")
+          acc + tprintf "%s:" x.name + between "(" ")" (emitType overrideFunc ctx x.value +@ " [@js.variadic]")
         | x :: xs ->
           let needParen =
             match x.value with
             | Function _ -> true
             | _ -> false
           let prefix =
-            if x.isOptional then "?" else "~"
+            if x.isOptional then "?" else ""
           let ty =
             if needParen then between "(" ")" (emitType overrideFunc ctx x.value)
             else emitType overrideFunc ctx x.value
@@ -431,8 +432,42 @@ let rec emitTypeWithIdentEmitMode identEmitMode orf ctx ty =
       | _ -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
     ) ctx ty
 
+let emitDummyJsModule : text =
+  concat newline [
+    yield abstractType "js_string" []
+    yield abstractType "js_number" []
+    yield abstractType "js_boolean" []
+    yield abstractType "js_symbol" []
+    yield abstractType "js_object" []
+    yield abstractType "js_array" [tyVar "a"]
+    yield typeAlias "or_null" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
+    yield typeAlias "or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
+    yield typeAlias "or_null_or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
+    yield
+      moduleSig "RegExp" (concat newline [
+        yield abstractType "t" []
+      ])
+    yield
+      moduleSig "Date" (concat newline [
+        yield abstractType "t" []
+      ])
+    yield
+      moduleSig "Error" (concat newline [
+        yield abstractType "t" []
+      ])
+    yield
+      moduleSig "ArrayLike" (concat newline [
+        yield abstractType "t" [tyVar "a"]
+      ])
+    yield
+      moduleSig "Promise" (concat newline [
+        yield abstractType "t" [tyVar "a"]
+      ])
+  ]
+
 let emitTsModule : text =
   concat newline [
+    yield open_ ["Js"]
     yield abstractType "ts_never" []
     yield abstractType "ts_any" []
     yield abstractType "ts_unknown" []
@@ -505,8 +540,9 @@ let emitFlattenedDefinitions (ctx: Context) : text =
   let emitType_ identEmitMode ctx ty = emitTypeWithIdentEmitMode identEmitMode noOverride ctx ty
   moduleSig ctx.internalModuleName (
     concat newline [
+      moduleSig "Js" emitDummyJsModule
       moduleSig "Ts" emitTsModule
-      open_ ["Ts"]
+      open_ ["Js"; "Ts"]
 
       moduleSig "AnonymousInterfaces" (
         concat newline [
@@ -521,8 +557,10 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         else tyApp (str (Naming.flattenedLower name)) args
 
       let emitCase name args =
-        if List.isEmpty args then str (Naming.flattenedUpper name)
-        else str (Naming.flattenedUpper name) + between "(" ")" (concat (str ",") (args))
+        match args with
+        | [] -> str (Naming.flattenedUpper name)
+        | [arg] -> tprintf "%s of %A" (Naming.flattenedUpper name) arg
+        | _ -> tprintf "%s of %A" (Naming.flattenedUpper name) (tyTuple args)
 
       let f prefix (k: string list, v: Statement) =
         match v with

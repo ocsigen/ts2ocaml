@@ -53,7 +53,8 @@ let main argv =
       Fable.Core.JS.JSON.stringify(pstmt, space=2) |> printfn "%s"
       ()
     *)
-    // Writer.emitFlattenedDefinitions ctx |> Text.toString 2 |> printfn "%s"
+    Writer.emitFlattenedDefinitions ctx |> Text.toString 2 |> printfn "%s"
+    (*
     for _, v in Map.toSeq ctx.definitionsMap do
       match v with
       | Syntax.TypeAlias { target = Syntax.Union u } ->
@@ -65,4 +66,5 @@ let main argv =
         printfn "------------------------------------------------"
         printfn ""
       | _ -> ()
+    *)
     0

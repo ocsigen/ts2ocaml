@@ -20,7 +20,7 @@ module Attr =
 
   let attr (c: Category) name payload =
     let at = String.replicate (match c with Normal -> 1 | Block -> 2 | Floating -> 3) "@"
-    if payload = empty then tprintf "[%s%s " at name + payload +@ "]"
+    if payload <> empty then tprintf "[%s%s " at name + payload +@ "]"
     else tprintf "[%s%s]" at name
 
   let js payload = attr Normal "js" payload
@@ -51,9 +51,9 @@ module Type =
   let symbol_t  = str "js_symbol" // symbol is a ES5 type but should be distinguished from the boxed Symbol type
   let void_t    = str "unit"
   let array_t   = str "js_array"
-  let null_t           = str "null_or"
-  let undefined_t      = str "undefined_or"
-  let null_undefined_t = str "null_or_undefined_or"
+  let null_t           = str "or_null"
+  let undefined_t      = str "or_undefined"
+  let null_undefined_t = str "or_null_or_undefined"
 
   // ES5 types
   // these types should reside in the "ES5" module of the base library.
@@ -94,18 +94,18 @@ module Type =
   let and_ a b = tyApp (str "and_") [a; b]
   let or_  a b = tyApp (str "or_")  [a; b]
 
-  let string_or t = or_ string_t t
-  let number_or t = or_ number_t t
-  let boolean_or t = or_ boolean_t t
-  let symbol_or t = or_ symbol_t t
-  let enum_or baseType cases t = or_ (ts_enum baseType cases) t
+  let string_or t = tyApp (str "or_string") [t]
+  let number_or t = tyApp (str "or_number") [t]
+  let boolean_or t = tyApp (str "or_boolean") [t]
+  let symbol_or t = tyApp (str "or_symbol") [t]
+  let enum_or baseType cases t = or_ t (ts_enum baseType cases)
 
   let union_t types =
     let l = List.length types
     if l < 1 then failwith "union type with only zero or one type"
     else
       let rec go i = function
-        | h :: t when i > 8 -> or_ h (go (i-1) t)
+        | h :: t when i > 8 -> or_ (go (i-1) t) h
         | xs -> tyApp (tprintf "union%i" i) xs
       go l types
 
@@ -114,7 +114,7 @@ module Type =
     if l < 1 then failwith "union type with only zero or one type"
     else
       let rec go i = function
-        | h :: t when i > 8 -> and_ h (go (i-1) t)
+        | h :: t when i > 8 -> and_ (go (i-1) t) h
         | xs -> tyApp (tprintf "intersection%i" i) xs
       go l types
 
@@ -446,14 +446,14 @@ let emitTsModule : text =
     let alphabets = [for c in 'a' .. 'z' do tyVar (string c)]
 
     yield abstractType "and_" [tyVar "a"; tyVar "b"]
-    yield typeAlias "intersection2" [tyVar "a"; tyVar "b"] (and_ (tyVar "a") (tyVar "b"))
+    yield typeAlias "intersection2" [tyVar "a"; tyVar "b"] (and_ (tyVar "b") (tyVar "a"))
     for i = 3 to 8 do
       let args = alphabets |> List.take i
       yield
         typeAlias
           (sprintf "intersection%i" i) args
-          (and_ (List.head args)
-                (tyApp (tprintf "intersection%i" (i-1)) (List.tail args)))
+          (and_ (tyApp (tprintf "intersection%i" (i-1)) (List.tail args))
+                (List.head args))
   
     (*
     yield module_ "Intersection" (
@@ -475,20 +475,22 @@ let emitTsModule : text =
     *)
 
     yield abstractType "or_" [tyVar "a"; tyVar "b"]
-    yield typeAlias "union2" [tyVar "a"; tyVar "b"] (or_ (tyVar "a") (tyVar "b"))
+    yield typeAlias "union2" [tyVar "a"; tyVar "b"] (or_ (tyVar "b") (tyVar "a"))
     for i = 3 to 8 do
       let args = alphabets |> List.take i
       yield
         typeAlias
           (sprintf "union%i" i) args
-          (or_ (List.head args)
-               (tyApp (tprintf "union%i" (i-1)) (List.tail args)))
-    yield typeAlias "number_or"  [tyVar "a"] (or_ number_t (tyVar "a"))
-    yield typeAlias "string_or"  [tyVar "a"] (or_ string_t (tyVar "a"))
-    yield typeAlias "boolean_or" [tyVar "a"] (or_ boolean_t (tyVar "a"))
-    yield typeAlias "symbol_or"  [tyVar "a"] (or_ symbol_t (tyVar "a"))
-    yield typeAlias "array_or"   [tyVar "t"; tyVar "a"] (or_ (tyApp array_t [tyVar "t"]) (tyVar "a"))
-    yield typeAlias "enum_or"    [tyVar "t"; tyVar "cases"; tyVar "a"] (or_ (ts_enum (tyVar "t") (tyVar "cases")) (tyVar "a"))
+          (or_ (tyApp (tprintf "union%i" (i-1)) (List.tail args))
+               (List.head args))
+
+    yield typeAlias "or_number"  [tyVar "a"] (or_ (tyVar "a") number_t)
+    yield typeAlias "or_string"  [tyVar "a"] (or_ (tyVar "a") string_t)
+    yield typeAlias "or_boolean" [tyVar "a"] (or_ (tyVar "a") boolean_t)
+    yield typeAlias "or_symbol"  [tyVar "a"] (or_ (tyVar "a") symbol_t)
+    yield typeAlias "or_array"   [tyVar "a"; tyVar "t"] (or_  (tyVar "a") (tyApp array_t [tyVar "t"]))
+    yield typeAlias "or_enum"    [tyVar "a"; tyVar "t"; tyVar "cases"]
+                                 (or_ (tyVar "a") (ts_enum (tyVar "t") (tyVar "cases")))
 
     (*
     yield module_ "Union" (
@@ -622,11 +624,11 @@ let emitFlattenedDefinitions (ctx: Context) : text =
       moduleSig "Types" (
         concat newline [
           yield str "open AnonymousInterfaces"
-          let prefix = seq { yield "type rec"; while true do yield "and" }
+          let prefix = seq { yield "type"; while true do yield "and" }
           yield!
             ctx.definitionsMap
             |> Map.toSeq
-            |> Seq.skipWhile (fun t -> f "type rec" t |> Option.isNone)
+            |> Seq.skipWhile (fun t -> f "type" t |> Option.isNone)
             |> Seq.map2 (fun prefix t -> f prefix t) prefix
             |> Seq.choose id
         ]

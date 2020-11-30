@@ -15,6 +15,7 @@ module Utils =
 
 open Utils
 
+[<RequireQualifiedAccess>]
 module Attr =
   type Category = Normal | Block | Floating
 
@@ -25,11 +26,14 @@ module Attr =
 
   let js payload = attr Normal "js" payload
 
+  let js_stop = attr Floating "js.stop" empty
+  let js_start = attr Floating "js.start" empty
+
   let js_stop_start_implem sigContent implContent =
     concat newline [
-      attr Floating "js.stop" empty
+      js_stop
       sigContent
-      attr Floating "js.start" empty
+      js_start
       attr Floating "js.implem" (newline + indent implContent + newline)
     ]
 
@@ -39,41 +43,47 @@ module Attr =
 
   let js_implem_val content = attr Block "js.implem" (newline + indent content + newline)
 
-open Attr
+[<RequireQualifiedAccess>]
+module Ppx =
+  let js body = "[%js: " @+ newline + indent body + newline +@ "]"
+
+  let include_ body = "include " @+ js body
+
+  let module_  name body = tprintf "module %s = " name + js body
 
 module Type =
   // primitive types
   // these types should reside in the "Js" module of the base library.
-  let string_t  = str "js_string"
-  let boolean_t = str "js_boolean"
-  let number_t  = str "js_number"
-  let object_t  = str "js_object"
-  let symbol_t  = str "js_symbol" // symbol is a ES5 type but should be distinguished from the boxed Symbol type
+  let string_t  = str "Js.string"
+  let boolean_t = str "Js.boolean"
+  let number_t  = str "Js.number"
+  let object_t  = str "Js.untyped_object"
+  let symbol_t  = str "Js.symbol" // symbol is a ES5 type but should be distinguished from the boxed Symbol type
   let void_t    = str "unit"
-  let array_t   = str "js_array"
-  let null_t           = str "or_null"
-  let undefined_t      = str "or_undefined"
-  let null_undefined_t = str "or_null_or_undefined"
+  let array_t   = str "Js.array"
+  let null_t           = str "Js.or_null"
+  let undefined_t      = str "Js.or_undefined"
+  let null_undefined_t = str "Js.or_null_or_undefined"
 
   // ES5 types
-  // these types should reside in the "ES5" module of the base library.
-  let regexp_t  = str "RegExp.t"
-  let date_t    = str "Date.t"
-  let error_t   = str "Error.t"
-  let readonlyArray_t = str "ArrayLike.t"
-  let promise_t = str "Promise.t"
+  // these types should reside in the "Es5" module of the base library.
+  let regexp_t  = str "Es5.RegExp.t"
+  let date_t    = str "Es5.Date.t"
+  let error_t   = str "Es5.Error.t"
+  let readonlyArray_t = str "Es5.ArrayLike.t"
+  let promise_t = str "Es5.Promise.t"
 
   // TS specific types
   // these types should reside in the "Ts" module of the base library.
-  let never_t   = str "ts_never"
-  let any_t     = str "ts_any"
-  let unknown_t = str "ts_unknown"
+  let never_t   = str "Ts.never"
+  let any_t     = str "Ts.any"
+  let unknown_t = str "Ts.unknown"
 
   // gen_js_api types
   let ojs_t = str "Ojs.t"
 
   // our types
-  let ts_intf  = str "ts_intf"
+  let ts_intf  = str "Ts.intf"
 
   let tyVar s = tprintf "'%s" s
 
@@ -89,15 +99,19 @@ module Type =
     | [u] -> u +@ " " + t
     | us -> tyMany (str ", ") us +@ " " + t
 
-  let ts_enum baseType cases = tyApp (str "ts_enum") [baseType; cases]
+  let tyAppOpt t args =
+    if List.isEmpty args then t
+    else tyApp t args
 
-  let and_ a b = tyApp (str "and_") [a; b]
-  let or_  a b = tyApp (str "or_")  [a; b]
+  let ts_enum baseType cases = tyApp (str "Ts.enum") [baseType; cases]
 
-  let string_or t = tyApp (str "or_string") [t]
-  let number_or t = tyApp (str "or_number") [t]
-  let boolean_or t = tyApp (str "or_boolean") [t]
-  let symbol_or t = tyApp (str "or_symbol") [t]
+  let and_ a b = tyApp (str "Ts.and_") [a; b]
+  let or_  a b = tyApp (str "Ts.or_")  [a; b]
+
+  let string_or t = tyApp (str "Ts.or_string") [t]
+  let number_or t = tyApp (str "Ts.or_number") [t]
+  let boolean_or t = tyApp (str "Ts.or_boolean") [t]
+  let symbol_or t = tyApp (str "Ts.or_symbol") [t]
   let enum_or baseType cases t = or_ t (ts_enum baseType cases)
 
   let union_t types =
@@ -106,7 +120,7 @@ module Type =
     else
       let rec go i = function
         | h :: t when i > 8 -> or_ (go (i-1) t) h
-        | xs -> tyApp (tprintf "union%i" i) xs
+        | xs -> tyApp (tprintf "Ts.union%i" i) xs
       go l types
 
   let intersection_t types =
@@ -115,7 +129,7 @@ module Type =
     else
       let rec go i = function
         | h :: t when i > 8 -> and_ (go (i-1) t) h
-        | xs -> tyApp (tprintf "intersection%i" i) xs
+        | xs -> tyApp (tprintf "Ts.intersection%i" i) xs
       go l types
 
 module Term =
@@ -177,12 +191,20 @@ module Definition =
   let abstractType name tyargs = 
     str "type "
     + (if List.isEmpty tyargs then str name else tyApp (str name) tyargs)
-    // +@ " = private Ojs.t"
+
+  let abstractTypeOjs name tyargs =
+    abstractType name tyargs +@ " = private Ojs.t"
 
   let typeAlias name tyargs ty =
     str "type "
     + (if List.isEmpty tyargs then str name else tyApp (str name) tyargs)
     +@ " = " + ty
+
+  let val_ name ty =
+    tprintf "val %s: " name + ty
+
+  let let_ name args value =
+    tprintf "let %s " name + concat (str " ") args +@ " = " + value
   
   let external_ name tyarg tyret extName =
     tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
@@ -218,7 +240,6 @@ let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
   | None, None -> failwithf "the anonymous interface '%A' is not found in the context" c
   | _, Some n -> failwithf "the class or interface '%s' is not anonymous" n
 
-
 let treatEnum ctx (cases: Set<Choice<EnumCase, Literal>>) =
   between "[" "]" (concat (str " | ") [
     for c in Set.toSeq cases do
@@ -228,7 +249,7 @@ let treatEnum ctx (cases: Set<Choice<EnumCase, Literal>>) =
         | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l
       let attr =
         match value with
-        | Some v -> tprintf " [@js %A]" (literal v)
+        | Some v -> Attr.js (literal v)
         | None -> empty
       yield pv_head @+ name + attr
   ]) +@ " [@js.enum]"
@@ -272,7 +293,7 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
       for (l, t) in Map.toSeq cases do
         let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
         let ty = emitTypeNoResolveUnion overrideFunc ctx t
-        yield tprintf "%A of %A [@js %A]" name ty (literal l)
+        yield tprintf "%A of %A " name ty + Attr.js (literal l)
     ]) + tprintf " [@js.union on_field \"%s\"]" tagName
 
   let treatOther otherTypes =
@@ -432,123 +453,176 @@ let rec emitTypeWithIdentEmitMode identEmitMode orf ctx ty =
       | _ -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
     ) ctx ty
 
-let emitDummyJsModule : text =
-  concat newline [
-    yield abstractType "js_string" []
-    yield abstractType "js_number" []
-    yield abstractType "js_boolean" []
-    yield abstractType "js_symbol" []
-    yield abstractType "js_object" []
-    yield abstractType "js_array" [tyVar "a"]
-    yield typeAlias "or_null" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
-    yield typeAlias "or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
-    yield typeAlias "or_null_or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
-    yield
-      moduleSig "RegExp" (concat newline [
-        yield abstractType "t" []
-      ])
-    yield
-      moduleSig "Date" (concat newline [
-        yield abstractType "t" []
-      ])
-    yield
-      moduleSig "Error" (concat newline [
-        yield abstractType "t" []
-      ])
-    yield
-      moduleSig "ArrayLike" (concat newline [
-        yield abstractType "t" [tyVar "a"]
-      ])
-    yield
-      moduleSig "Promise" (concat newline [
-        yield abstractType "t" [tyVar "a"]
-      ])
-  ]
+module BaseLibrary =
 
-let emitTsModule : text =
-  concat newline [
-    yield open_ ["Js"]
-    yield abstractType "ts_never" []
-    yield abstractType "ts_any" []
-    yield abstractType "ts_unknown" []
+  let private emitTyargsPart isToJs tyargs =
+    tyargs |> List.map (fun tyarg ->
+              between "(" ")" (if isToJs then tyarg +@ " -> " + ojs_t else ojs_t +@ " -> " + tyarg)
+              +@ " -> ")
+           |> concat empty
 
-    yield abstractType "ts_intf" [str "-'a"]
-    yield
-      js_stop_start_implem
-        (abstractType "ts_enum" [str "'t"; str "+'a"])
-        (typeAlias    "ts_enum" [str "'t"; str "+'a"] (str "'t"))
+  let private genConverters name tyargs =
+    let ty = tyAppOpt (str name) tyargs
+    [
+      yield val_ (name + "_to_js") (emitTyargsPart true tyargs + ty +@ " -> Ojs.t")
+      yield val_ (name + "_of_js") (emitTyargsPart false tyargs +@ "Ojs.t -> " + ty)
+    ]
+
+  let private genTypeWithConverters name tyargs =
+    [
+      yield abstractTypeOjs name tyargs
+      yield! genConverters name tyargs
+    ]
+
+  let aliasWithConverters name tyargs value =
+    [
+      yield typeAlias name tyargs value
+      yield! genConverters name tyargs
+    ]
+
+  let dummyJsModule : text =
+    concat newline [
+      yield! genTypeWithConverters "string" []
+      yield! genTypeWithConverters "number" []
+      yield! genTypeWithConverters "boolean" []
+      yield! genTypeWithConverters "symbol" []
+      yield! genTypeWithConverters "untyped_object" []
+      yield! genTypeWithConverters "array" [tyVar "a"]
+      yield! aliasWithConverters "or_null" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
+      yield! aliasWithConverters "or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
+      yield! aliasWithConverters "or_null_or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
+    ]
+
+  let dummyES5Module : text =
+    concat newline [
+      yield
+        moduleSig "RegExp" (concat newline [
+          yield! genTypeWithConverters "t" []
+        ])
+      yield
+        moduleSig "Date" (concat newline [
+          yield! genTypeWithConverters "t" []
+        ])
+      yield
+        moduleSig "Error" (concat newline [
+          yield! genTypeWithConverters "t" []
+        ])
+      yield
+        moduleSig "ArrayLike" (concat newline [
+          yield! genTypeWithConverters "t" [tyVar "a"]
+        ])
+      yield
+        moduleSig "Promise" (concat newline [
+          yield! genTypeWithConverters "t" [tyVar "a"]
+        ])
+    ]
+
+  let tsModule : text =
+    concat newline [
+      yield! genTypeWithConverters "never" []
+      yield! genTypeWithConverters "any" []
+      yield! genTypeWithConverters "unknown" []
+
+      yield
+        Attr.js_stop_start_implem
+          (concat newline [
+            yield abstractType "intf" [str "-'a"]
+            yield! genConverters "intf" [str "'a"]
+          ])
+          (concat newline [
+            typeAlias    "intf" [str "-'a"] ojs_t
+            let_ "intf_to_js" [str "_"; str "intf"] (str "intf")
+            let_ "intf_of_js" [str "_"; str "intf"] (str "intf")
+          ])
+
+      yield
+        Attr.js_stop_start_implem
+          (concat newline [
+            yield abstractType "enum" [str "'t"; str "+'a"]
+            yield! genConverters "enum" [str "'t"; str "'a"]
+          ])
+          (concat newline [
+            typeAlias    "enum" [str "'t"; str "+'a"] (str "'t")
+            let_ "enum_to_js" [str "f"; str "_"; str "e"] (termApp (str "f") [str "e"])
+            let_ "enum_of_js" [str "f"; str "_"; str "e"] (termApp (str "f") [str "e"])
+          ])
+      
+      let alphabets = [for c in 'a' .. 'z' do tyVar (string c)]
+
+      yield! genTypeWithConverters "and_" [tyVar "a"; tyVar "b"]
+      let and_ a b = tyApp (str "and_") [a; b]
+      yield! aliasWithConverters "intersection2" [tyVar "a"; tyVar "b"] (and_ (tyVar "b") (tyVar "a"))
+      for i = 3 to 8 do
+        let args = alphabets |> List.take i
+        yield! aliasWithConverters
+            (sprintf "intersection%i" i) args
+            (and_ (tyApp (tprintf "intersection%i" (i-1)) (List.tail args))
+                  (List.head args))
     
-    let alphabets = [for c in 'a' .. 'z' do tyVar (string c)]
+      (*
+      yield module_ "Intersection" (
+        concat newline [
+          yield external_ "car" (and_ (str "'a") (str "'b")) (str "'b") "%identity"
+          yield external_ "cdr" (and_ (str "'a") (str "'b")) (str "'a") "%identity"
+          for i = 2 to 8 do
+            yield
+              (*letFunction
+                (sprintf "unwrap%i" i)
+                [str "x", tyApp (tprintf "intersection%i" i) (List.take i alphabets)]
+                (termTuple [
+                  for t in List.take i alphabets do
+                    typeAssert (termApp (str "cast") [str "x"]) t
+                ])*)
+              TODO
+        ]
+      )
+      *)
 
-    yield abstractType "and_" [tyVar "a"; tyVar "b"]
-    yield typeAlias "intersection2" [tyVar "a"; tyVar "b"] (and_ (tyVar "b") (tyVar "a"))
-    for i = 3 to 8 do
-      let args = alphabets |> List.take i
-      yield
-        typeAlias
-          (sprintf "intersection%i" i) args
-          (and_ (tyApp (tprintf "intersection%i" (i-1)) (List.tail args))
-                (List.head args))
-  
-    (*
-    yield module_ "Intersection" (
-      concat newline [
-        yield external_ "car" (and_ (str "'a") (str "'b")) (str "'b") "%identity"
-        yield external_ "cdr" (and_ (str "'a") (str "'b")) (str "'a") "%identity"
-        for i = 2 to 8 do
-          yield
-            (*letFunction
-              (sprintf "unwrap%i" i)
-              [str "x", tyApp (tprintf "intersection%i" i) (List.take i alphabets)]
-              (termTuple [
-                for t in List.take i alphabets do
-                  typeAssert (termApp (str "cast") [str "x"]) t
-              ])*)
-            TODO
-      ]
-    )
-    *)
+      yield! genTypeWithConverters "or_" [tyVar "a"; tyVar "b"]
+      let or_ a b = tyApp (str "or_") [a; b]
+      yield! aliasWithConverters "union2" [tyVar "a"; tyVar "b"] (or_ (tyVar "b") (tyVar "a"))
+      for i = 3 to 8 do
+        let args = alphabets |> List.take i
+        yield! aliasWithConverters
+            (sprintf "union%i" i) args
+            (or_ (tyApp (tprintf "union%i" (i-1)) (List.tail args))
+                 (List.head args))
 
-    yield abstractType "or_" [tyVar "a"; tyVar "b"]
-    yield typeAlias "union2" [tyVar "a"; tyVar "b"] (or_ (tyVar "b") (tyVar "a"))
-    for i = 3 to 8 do
-      let args = alphabets |> List.take i
-      yield
-        typeAlias
-          (sprintf "union%i" i) args
-          (or_ (tyApp (tprintf "union%i" (i-1)) (List.tail args))
-               (List.head args))
+      yield! aliasWithConverters "or_number"  [tyVar "a"] (or_ (tyVar "a") number_t)
+      yield! aliasWithConverters "or_string"  [tyVar "a"] (or_ (tyVar "a") string_t)
+      yield! aliasWithConverters "or_boolean" [tyVar "a"] (or_ (tyVar "a") boolean_t)
+      yield! aliasWithConverters "or_symbol"  [tyVar "a"] (or_ (tyVar "a") symbol_t)
+      yield! aliasWithConverters "or_array"   [tyVar "a"; tyVar "t"] (or_  (tyVar "a") (tyApp array_t [tyVar "t"]))
+      yield! aliasWithConverters "or_enum"    [tyVar "a"; tyVar "t"; tyVar "cases"]
+                                   (or_ (tyVar "a") (tyApp (str "enum") [tyVar "t"; tyVar "cases"]))
 
-    yield typeAlias "or_number"  [tyVar "a"] (or_ (tyVar "a") number_t)
-    yield typeAlias "or_string"  [tyVar "a"] (or_ (tyVar "a") string_t)
-    yield typeAlias "or_boolean" [tyVar "a"] (or_ (tyVar "a") boolean_t)
-    yield typeAlias "or_symbol"  [tyVar "a"] (or_ (tyVar "a") symbol_t)
-    yield typeAlias "or_array"   [tyVar "a"; tyVar "t"] (or_  (tyVar "a") (tyApp array_t [tyVar "t"]))
-    yield typeAlias "or_enum"    [tyVar "a"; tyVar "t"; tyVar "cases"]
-                                 (or_ (tyVar "a") (ts_enum (tyVar "t") (tyVar "cases")))
+      (*
+      yield module_ "Union" (
+        concat newline [
 
-    (*
-    yield module_ "Union" (
-      concat newline [
-
-      ]
-    )
-    *)
-  ]
+        ]
+      )
+      *)
+    ]
 
 let emitFlattenedDefinitions (ctx: Context) : text =
   let emitType_ identEmitMode ctx ty = emitTypeWithIdentEmitMode identEmitMode noOverride ctx ty
   moduleSig ctx.internalModuleName (
     concat newline [
-      moduleSig "Js" emitDummyJsModule
-      moduleSig "Ts" emitTsModule
-      open_ ["Js"; "Ts"]
+      // Ppx.module_ "Js"  BaseLibrary.dummyJsModule
+      // Ppx.module_ "Es5" BaseLibrary.dummyES5Module
+      // Ppx.module_ "Ts"  BaseLibrary.tsModule
+
+      moduleSig "Js"  BaseLibrary.dummyJsModule
+      moduleSig "Es5" BaseLibrary.dummyES5Module
+      moduleSig "Ts"  BaseLibrary.tsModule
 
       moduleSig "AnonymousInterfaces" (
         concat newline [
           for (a, _) in ctx.anonymousInterfacesMap |> Map.toSeq do
             let i = anonymousInterfaceToIdentifier ctx a
-            yield str "type " + i + str " = " + tyApp ts_intf [between "[" "]" (str pv_head + i)]
+            let def = str "type " + i + str " = " + tyApp ts_intf [between "[" "]" (str pv_head + i)]
+            yield Attr.js_stop_start_implem def def
         ]
       )
 
@@ -572,7 +646,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
                   let name, value = str c.name, c.value
                   let attr =
                     match value with
-                    | Some v -> tprintf " [@js %A]" (literal v)
+                    | Some v -> Attr.js (literal v)
                     | None -> empty
                   yield pv_head @+ name + attr
               ]) +@ " [@js.enum]"
@@ -594,12 +668,14 @@ let emitFlattenedDefinitions (ctx: Context) : text =
               | _ -> ()
           ]
           concat newline [
-            yield tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_intf [
-              str "[ " + concat (str " | ") [
-                yield  tprintf "%s%A" pv_head (emitCase k typrm)
-                yield! labels
-              ] + str " ]"
-            ]
+            let def =
+              tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_intf [
+                str "[ " + concat (str " | ") [
+                  yield  tprintf "%s%A" pv_head (emitCase k typrm)
+                  yield! labels
+                ] + str " ]"
+              ]
+            yield Attr.js_stop_start_implem def def
           ] |> Some
           // TODO: emit extends of type parameters
         | TypeAlias p when p.erased = false ->
@@ -647,11 +723,13 @@ let emitFlattenedDefinitions (ctx: Context) : text =
               // it can be casted to any known class or interface
               else
                 yield comment (emitType_ (Flattened false) ctx p.target)
-                yield tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_intf [
-                  str "[ " + concat (str " | ") [
-                    yield! labels
-                  ] + str " ]"
-                ]
+                let def =
+                  tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_intf [
+                    str "[ " + concat (str " | ") [
+                      yield! labels
+                    ] + str " ]"
+                  ]
+                yield Attr.js_stop_start_implem def def
             // it does not introduce any subtyping relationship
             | _ ->
               yield tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ (Flattened false ) ctx p.target

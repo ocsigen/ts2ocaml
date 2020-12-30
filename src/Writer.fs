@@ -43,6 +43,8 @@ module Attr =
 
   let js_implem_val content = attr Block "js.implem" (newline + indent content + newline)
 
+  let js_custom_typ content = attr Block "js.custom" (newline + indent content + newline)
+
 [<RequireQualifiedAccess>]
 module Ppx =
   let js body = "[%js: " @+ newline + indent body + newline +@ "]"
@@ -203,9 +205,13 @@ module Definition =
   let val_ name ty =
     tprintf "val %s: " name + ty
 
-  let let_ name args value =
-    tprintf "let %s " name + concat (str " ") args +@ " = " + value
-  
+  let let_ name args retTyOpt value =
+    let retTy =
+      match retTyOpt with
+      | None -> empty
+      | Some t -> " : " @+ t
+    tprintf "let %s " name + concat (str " ") args + retTy +@ " = " + value
+
   let external_ name tyarg tyret extName =
     tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
 
@@ -531,8 +537,8 @@ module BaseLibrary =
           ])
           (concat newline [
             typeAlias    "intf" [str "-'a"] ojs_t
-            let_ "intf_to_js" [str "_"; str "intf"] (str "intf")
-            let_ "intf_of_js" [str "_"; str "intf"] (str "intf")
+            let_ "intf_to_js" [str "_"; str "x"] (Some ojs_t) (str "x")
+            let_ "intf_of_js" [str "_"; str "x"] (Some (str "intf")) (str "x")
           ])
 
       yield
@@ -543,8 +549,8 @@ module BaseLibrary =
           ])
           (concat newline [
             typeAlias    "enum" [str "'t"; str "+'a"] (str "'t")
-            let_ "enum_to_js" [str "f"; str "_"; str "e"] (termApp (str "f") [str "e"])
-            let_ "enum_of_js" [str "f"; str "_"; str "e"] (termApp (str "f") [str "e"])
+            let_ "enum_to_js" [str "f"; str "_"; str "e"] (Some ojs_t) (termApp (str "f") [str "e"])
+            let_ "enum_of_js" [str "f"; str "_"; str "e"] (Some (str "enum")) (termApp (str "f") [str "e"])
           ])
       
       let alphabets = [for c in 'a' .. 'z' do tyVar (string c)]
@@ -637,6 +643,17 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         | _ -> tprintf "%s of %A" (Naming.flattenedUpper name) (tyTuple args)
 
       let f prefix (k: string list, v: Statement) =
+
+        let genMapper (typeParams: TypeParam list) =
+          let ty = Naming.flattenedLower k
+          let f suffix tin tout =
+            let_
+              (ty + suffix)
+              (List.map (fun (x: TypeParam) -> str ("_" + x.name)) typeParams @ [between "(" ")" ("x : " @+ tin)])
+              (Some tout)
+              (termApp (str "Obj.magic") [str "x"])
+          [ f "_to_js" (str ty) ojs_t; f "_of_js" ojs_t (str ty) ]
+
         match v with
         | EnumDef e ->
           concat newline [
@@ -669,13 +686,16 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           ]
           concat newline [
             let def =
-              tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_intf [
-                str "[ " + concat (str " | ") [
-                  yield  tprintf "%s%A" pv_head (emitCase k typrm)
-                  yield! labels
-                ] + str " ]"
+              tprintf "%s %A = " prefix (emitTypeName k typrm)
+              + tyApp ts_intf [
+                between "[" "]" (
+                  concat (str " | ") [
+                    yield  tprintf "%s%A" pv_head (emitCase k typrm)
+                    yield! labels
+                  ]
+                )
               ]
-            yield Attr.js_stop_start_implem def def
+            yield def +@ " " + Attr.js_custom_typ (concat newline (genMapper c.typeParams))
           ] |> Some
           // TODO: emit extends of type parameters
         | TypeAlias p when p.erased = false ->
@@ -713,6 +733,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
             | _ -> Set.empty
 
           let typrm = p.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
+
           concat newline [
             match p.target with
             | Union _ | Intersection _ ->
@@ -729,10 +750,11 @@ let emitFlattenedDefinitions (ctx: Context) : text =
                       yield! labels
                     ] + str " ]"
                   ]
-                yield Attr.js_stop_start_implem def def
+                yield def +@ " " + Attr.js_custom_typ (concat newline (genMapper p.typeParams))
             // it does not introduce any subtyping relationship
             | _ ->
-              yield tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ (Flattened false ) ctx p.target
+              let def = tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ (Flattened false ) ctx p.target
+              yield def +@ " " + Attr.js_custom_typ (concat newline (genMapper p.typeParams))
           ] |> Some
           // TODO: emit extends of type parameters
         | _ -> None

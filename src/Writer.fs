@@ -357,21 +357,6 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
            |> Option.defaultValue never_t
            |> treatNullUndefined
 
-(*
-let rec emitTypeWithIdentEmitMode identEmitMode orf ctx ty =
-  if identEmitMode = Structured then emitType orf ctx ty
-  else
-    emitType (fun _emitType ctx ty ->
-      match ty with
-      | Ident { fullName = Some fn } ->
-        match identEmitMode with
-        | Structured -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
-        | Flattened false -> str (Naming.flattenedLower fn) |> Some
-        | Flattened true  -> tprintf "Types.%s" (Naming.flattenedLower fn) |> Some
-      | _ -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
-    ) ctx ty
-*)
-
 and emitTypeNoResolveUnion orf ctx ty =
   emitType (fun _emitType ctx ty ->
     match ty with
@@ -611,14 +596,57 @@ module BaseLibrary =
       *)
     ]
 
+
+let emitTypeName name args =
+  if List.isEmpty args then str (Naming.flattenedLower name)
+  else tyApp (str (Naming.flattenedLower name)) args
+
+let emitCase name args =
+  match args with
+  | [] -> str (Naming.flattenedUpper name)
+  | [arg] -> tprintf "%s of %A" (Naming.flattenedUpper name) arg
+  | _ -> tprintf "%s of %A" (Naming.flattenedUpper name) (tyTuple args)
+
+let getSafeLabels ctx ty =
+  let emitType_ identEmitMode ctx ty = emitTypeWithIdentEmitMode identEmitMode noOverride ctx ty
+  let rec getLabel = function
+    | Ident { fullName = Some fn } -> 
+      seq {
+        yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
+        for e in getAllInheritancesFromName ctx fn do
+          match e with
+          | Ident { fullName = Some fn } ->
+            yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
+          | App (Ident { fullName = Some fn }, ts) ->
+            yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
+          | _ -> ()
+      } |> Set.ofSeq
+    | App (Ident { fullName = Some fn }, ts) ->
+      seq {
+        yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
+        let typrms =
+          match ctx.definitionsMap |> Map.tryFind fn with
+          | Some (ClassDef c) -> c.typeParams
+          | Some (TypeAlias a) -> a.typeParams
+          | _ -> []
+        let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
+        for e in getAllInheritancesFromName ctx fn do
+          match e with
+          | Ident { fullName = Some fn } ->
+            yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
+          | App (Ident { fullName = Some fn }, ts) ->
+            yield str pv_head + emitCase fn (ts |> List.map (substTypeVar subst ctx >> emitType_ (Flattened false) ctx))
+          | _ -> ()
+      } |> Set.ofSeq
+    | Union ts -> ts.types |> List.map getLabel |> Set.intersectMany
+    | Intersection ts -> ts.types |> List.map getLabel |> Set.unionMany
+    | _ -> Set.empty
+  getLabel ty
+
 let emitFlattenedDefinitions (ctx: Context) : text =
   let emitType_ identEmitMode ctx ty = emitTypeWithIdentEmitMode identEmitMode noOverride ctx ty
   moduleSig ctx.internalModuleName (
     concat newline [
-      // Ppx.module_ "Js"  BaseLibrary.dummyJsModule
-      // Ppx.module_ "Es5" BaseLibrary.dummyES5Module
-      // Ppx.module_ "Ts"  BaseLibrary.tsModule
-
       moduleSig "Js"  BaseLibrary.dummyJsModule
       moduleSig "Es5" BaseLibrary.dummyES5Module
       moduleSig "Ts"  BaseLibrary.tsModule
@@ -632,18 +660,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         ]
       )
 
-      let emitTypeName name args =
-        if List.isEmpty args then str (Naming.flattenedLower name)
-        else tyApp (str (Naming.flattenedLower name)) args
-
-      let emitCase name args =
-        match args with
-        | [] -> str (Naming.flattenedUpper name)
-        | [arg] -> tprintf "%s of %A" (Naming.flattenedUpper name) arg
-        | _ -> tprintf "%s of %A" (Naming.flattenedUpper name) (tyTuple args)
-
       let f prefix (k: string list, v: Statement) =
-
         let genMapper (typeParams: TypeParam list) =
           let ty = Naming.flattenedLower k
           let f suffix tin tout =
@@ -699,63 +716,8 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           ] |> Some
           // TODO: emit extends of type parameters
         | TypeAlias p when p.erased = false ->
-          let rec getLabel = function
-            | Ident { fullName = Some fn } -> 
-              seq {
-                yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
-                for e in getAllInheritancesFromName ctx k do
-                  match e with
-                  | Ident { fullName = Some fn } ->
-                    yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
-                  | App (Ident { fullName = Some fn }, ts) ->
-                    yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
-                  | _ -> ()
-              } |> Set.ofSeq
-            | App (Ident { fullName = Some fn }, ts) ->
-              seq {
-                yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
-                let typrms =
-                  match ctx.definitionsMap |> Map.tryFind fn with
-                  | Some (ClassDef c) -> c.typeParams
-                  | Some (TypeAlias a) -> a.typeParams
-                  | _ -> []
-                let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
-                for e in getAllInheritancesFromName ctx k do
-                  match e with
-                  | Ident { fullName = Some fn } ->
-                    yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
-                  | App (Ident { fullName = Some fn }, ts) ->
-                    yield str pv_head + emitCase fn (ts |> List.map (substTypeVar subst ctx >> emitType_ (Flattened false) ctx))
-                  | _ -> ()
-              } |> Set.ofSeq
-            | Union ts -> ts.types |> List.map getLabel |> Set.intersectMany
-            | Intersection ts -> ts.types |> List.map getLabel |> Set.unionMany
-            | _ -> Set.empty
-
           let typrm = p.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-
-          concat newline [
-            match p.target with
-            | Union _ | Intersection _ ->
-              let labels = getLabel p.target
-              // it cannot be casted to any known class or interface
-              if Set.isEmpty labels then
-                yield tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ (Flattened false ) ctx p.target
-              // it can be casted to any known class or interface
-              else
-                yield comment (emitType_ (Flattened false) ctx p.target)
-                let def =
-                  tprintf "%s %A = " prefix (emitTypeName k typrm) + tyApp ts_intf [
-                    str "[ " + concat (str " | ") [
-                      yield! labels
-                    ] + str " ]"
-                  ]
-                yield def +@ " " + Attr.js_custom_typ (concat newline (genMapper p.typeParams))
-            // it does not introduce any subtyping relationship
-            | _ ->
-              let def = tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ (Flattened false ) ctx p.target
-              yield def +@ " " + Attr.js_custom_typ (concat newline (genMapper p.typeParams))
-          ] |> Some
+          tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ (Flattened false ) ctx p.target |> Some
           // TODO: emit extends of type parameters
         | _ -> None
 

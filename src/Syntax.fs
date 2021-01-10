@@ -76,7 +76,7 @@ and IdentType = {
 
 and FieldLike = { name:string; isOptional:bool; value:Type }
 
-and FuncType<'returnType> = { args:FieldLike list; isVariadic:bool; returnType:'returnType }
+and FuncType<'returnType> = { args:Choice<FieldLike, Type> list; isVariadic:bool; returnType:'returnType }
 
 and Accessibility = Public | Protected | Private
 and Mutability = ReadOnly | WriteOnly | Mutable
@@ -100,6 +100,7 @@ and Class = {
 
 and Member =
   | Field of FieldLike * Mutability * TypeParam list
+  | Method of string * FuncType<Type> * TypeParam list
   | FunctionInterface of FuncType<Type> * TypeParam list
   | Indexer of FuncType<Type> * Mutability
   | Getter of FieldLike | Setter of FieldLike
@@ -118,7 +119,6 @@ and Value = {
   typ: Type
   typeParams: TypeParam list
   isConst: bool
-  isStatic: bool
   isExported: bool
   accessibility : Accessibility option
 }
@@ -181,7 +181,9 @@ module Type =
     | Function f ->
       let args =
         f.args
-        |> List.map (fun a -> sprintf "%s%s:%s" (if a.isOptional then "?" else "~") a.name (pp a.value))
+        |> List.map (function 
+          | Choice1Of2 a -> sprintf "%s%s:%s" (if a.isOptional then "?" else "~") a.name (pp a.value)
+          | Choice2Of2 t -> pp t)
       "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"
     | App (t, ts) -> pp t + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
     | UnknownType None -> "?"

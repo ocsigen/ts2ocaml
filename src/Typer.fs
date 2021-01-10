@@ -21,20 +21,26 @@ let rec mapTypeInTypeParam mapping (ctx: 'Context) (tp: TypeParam) =
       extends = Option.map (mapping ctx) tp.extends
       defaultType = Option.map (mapping ctx) tp.defaultType }
 
+and mapTypeInArg mapping ctx (arg: Choice<FieldLike, Type>) =
+  match arg with
+  | Choice1Of2 a -> mapTypeInFieldLike mapping ctx a |> Choice1Of2
+  | Choice2Of2 t -> mapping ctx t |> Choice2Of2
+
 and mapTypeInFuncType mapping (ctx: 'Context) f =
   { f with
       returnType = mapping ctx f.returnType
-      args = List.map (mapTypeInFieldLike mapping ctx) f.args }
+      args = List.map (mapTypeInArg mapping ctx) f.args }
 
 and mapTypeInClass mapping (ctx: 'Context) (c: Class) : Class =
   let mapMember = function
     | Field (f, m, tps) -> Field (mapTypeInFieldLike mapping ctx f, m, List.map (mapTypeInTypeParam mapping ctx) tps)
     | FunctionInterface (f, tps) -> FunctionInterface (mapTypeInFuncType mapping ctx f, List.map (mapTypeInTypeParam mapping ctx) tps)
     | Indexer (f, m) -> Indexer (mapTypeInFuncType mapping ctx f, m)
-    | Constructor (c, tps) -> Constructor ({ c with args = List.map (mapTypeInFieldLike mapping ctx) c.args }, List.map (mapTypeInTypeParam mapping ctx) tps)
+    | Constructor (c, tps) -> Constructor ({ c with args = List.map (mapTypeInArg mapping ctx) c.args }, List.map (mapTypeInTypeParam mapping ctx) tps)
     | Getter f -> Getter (mapTypeInFieldLike mapping ctx f)
     | Setter f -> Setter (mapTypeInFieldLike mapping ctx f)
     | New (f, tps) -> New (mapTypeInFuncType mapping ctx f, List.map (mapTypeInTypeParam mapping ctx) tps)
+    | Method (name, f, tps) -> Method (name, mapTypeInFuncType mapping ctx f, List.map (mapTypeInTypeParam mapping ctx) tps)
   { c with
       implements = c.implements |> List.map (mapping ctx)
       members = c.members |> List.map (fun (a, m) -> a, mapMember m)
@@ -63,7 +69,7 @@ let rec substTypeVar (subst: Map<string, Type>) _ctx = function
     Function
       { f with
           returnType = substTypeVar subst _ctx f.returnType;
-          args = List.map (mapTypeInFieldLike (substTypeVar subst) _ctx) f.args }
+          args = List.map (mapTypeInArg (substTypeVar subst) _ctx) f.args }
   | App (t, ts) -> App (substTypeVar subst _ctx t, ts |> List.map (substTypeVar subst _ctx))
   | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
   | PolymorphicThis -> PolymorphicThis | UnknownType msgo -> UnknownType msgo
@@ -149,7 +155,11 @@ let findTypesInType (pred: Type -> bool * 'a option) (t: Type) : 'a seq =
         match y with Some v -> yield v | None -> ()
         if cont then
           yield! go_t f.returnType
-          for a in f.args do yield! go_t a.value
+          for a in f.args do
+            match a with
+            | Choice1Of2 { value = t }
+            | Choice2Of2 t ->
+              yield! go_t t
       }
     | AnonymousInterface c ->
       let cont, y = pred x
@@ -274,7 +284,7 @@ let rec mapIdent (mapping: Context -> IdentType -> Type) (ctx: Context) = functi
     Function
       { f with
           returnType = mapIdent mapping ctx f.returnType;
-          args = List.map (mapTypeInFieldLike (mapIdent mapping) ctx) f.args }
+          args = List.map (mapTypeInArg (mapIdent mapping) ctx) f.args }
   | App (t, ts) -> App (mapIdent mapping ctx t, ts |> List.map (mapIdent mapping ctx))
   | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l | TypeVar v -> TypeVar v
   | PolymorphicThis -> PolymorphicThis | UnknownType msg -> UnknownType msg

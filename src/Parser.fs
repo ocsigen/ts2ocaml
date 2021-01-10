@@ -217,16 +217,24 @@ and readParameters<'retType> (typrm: Set<string>) (checker: TypeChecker) (ps: Ts
   let args =
     ps
     |> Seq.mapi (fun i p ->
-      let name =
-        p.name |> getBindingName |> Option.defaultValue (sprintf "p%i" i)
       let isOptional = p.questionToken |> Option.isSome
+      let nameOpt = p.name |> getBindingName
       let ty =
         match p.``type`` with
         | Some t -> readTypeNode typrm checker t
         | None ->
-          nodeWarn p "type not specified for param '%s'" name;
+          match nameOpt with
+          | Some name ->
+            nodeWarn p "type not specified for param '%s'" name
+          | None ->
+            nodeWarn p "type not specified for param %i" i
           UnknownType None
-      { name = name; isOptional = isOptional; value = ty }
+      match nameOpt with
+      | Some name ->
+        Choice1Of2 { name = name; isOptional = isOptional; value = ty }
+      | None ->
+        assert (not isOptional);
+        Choice2Of2 ty
     )
     |> Seq.toList
   { args = args; isVariadic = isVariadic; returnType = retType }
@@ -283,9 +291,8 @@ and readNamedDeclaration (typrm: Set<string>) (checker: TypeChecker) (nd: Ts.Nam
     let nd = nd :?> Ts.SignatureDeclarationBase
     let localTyprm, retTy = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
-    let ty = Function (readParameters typrm checker nd.parameters retTy)
-    let fl = { name = nameToString nd.name; isOptional = false; value = ty }
-    Some (attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), localTyprm))
+    let func = readParameters typrm checker nd.parameters retTy
+    Some (attr, Method (nameToString nd.name, func, localTyprm))
   | Kind.IndexSignature ->
     let nd = nd :?> Ts.IndexSignatureDeclaration
     let localTyprm, ty = extractType nd
@@ -319,7 +326,11 @@ and readNamedDeclaration (typrm: Set<string>) (checker: TypeChecker) (nd: Ts.Nam
     if not (List.isEmpty localTyprm) then nodeWarn nd "setter with type argument is not supported"
     match readParameters typrm checker nd.parameters () with
     | { args = [ty]; isVariadic = false } ->
-      Some (attr, Setter { ty with name = nameToString nd.name })
+      match ty with
+      | Choice1Of2 named ->
+        Some (attr, Setter { named with name = nameToString nd.name })
+      | Choice2Of2 ty ->
+        Some (attr, Setter { name = nameToString nd.name; isOptional = false; value = ty })
     | _ ->
       nodeWarn nd "invalid setter for '%s'" (nameToString nd.name)
       None
@@ -424,11 +435,10 @@ let readVariable (checker: TypeChecker) (v: Ts.VariableStatement) : Value list =
             nodeWarn vd "type missing for variable '%s'" name
             UnknownType None
       let isConst = (int vd.flags) ||| (int Ts.NodeFlags.Const) <> 0
-      let isStatic = hasModifier Kind.StaticKeyword vd.modifiers
       let isExported = hasModifier Kind.ExportKeyword vd.modifiers
       let accessibility = getAccessibility vd.modifiers
       let comments = [] // TODO
-      Some { comments = comments; name = name; typ = ty; typeParams = []; isConst = isConst; isStatic = isStatic; isExported = isExported; accessibility = accessibility }
+      Some { comments = comments; name = name; typ = ty; typeParams = []; isConst = isConst; isExported = isExported; accessibility = accessibility }
   )
 
 let readFunction (checker: TypeChecker) (f: Ts.FunctionDeclaration) : Value option =
@@ -438,7 +448,6 @@ let readFunction (checker: TypeChecker) (f: Ts.FunctionDeclaration) : Value opti
   | Some name ->
     let name = nameToString name
     let comments = [] // TODO
-    let isStatic = hasModifier Kind.StaticKeyword f.modifiers
     let isExported = hasModifier Kind.ExportKeyword f.modifiers
     let accessibility = getAccessibility f.modifiers
     let typrm = readTypeParameters Set.empty checker f.typeParameters
@@ -451,7 +460,7 @@ let readFunction (checker: TypeChecker) (f: Ts.FunctionDeclaration) : Value opti
           nodeWarn f "return type missing for function '%s'" name
           UnknownType None
       Function (readParameters typrm checker f.parameters retTy)
-    Some { comments = comments; name = name; typ = ty; typeParams = typrm; isConst = false; isStatic = isStatic; isExported = isExported; accessibility = accessibility }
+    Some { comments = comments; name = name; typ = ty; typeParams = typrm; isConst = false; isExported = isExported; accessibility = accessibility }
 
 let readExportAssignment (checker: TypeChecker) (e: Ts.ExportAssignment) : IdentType * ExportModifier =
   match extractNestedName e.expression |> Seq.toList with

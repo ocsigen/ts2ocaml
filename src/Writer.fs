@@ -6,8 +6,11 @@ open Typer
 open Text
 
 module Utils =
-  let comment text = between "(* " " *)" text
+  let comment text = if text = empty then empty else between "(* " " *)" text
   let commentStr text = tprintf "(* %s *)" text
+  let docComment text = if text = empty then empty else between "(** " " *)" text
+  let docCommentStr text = tprintf "(** %s *)" text
+
   let [<Literal>] pv_head = "`"
 
   [<Obsolete("TODO")>]
@@ -44,6 +47,18 @@ module Attr =
   let js_implem_val content = attr Block "js.implem" (newline + indent content + newline)
 
   let js_custom_typ content = attr Block "js.custom" (newline + indent content + newline)
+
+  let js_create = attr Block "js.create" empty
+
+  let private str' s = between "\"" "\"" (str s)
+
+  let js_get name = attr Block "js.get" (str' name)
+  
+  let js_set name = attr Block "js.set" (str' name)
+
+  let js_call name = attr Block "js.call" (str' name)
+  
+  let js_global name = attr Block "js.global" (str' name)
 
 [<RequireQualifiedAccess>]
 module Ppx =
@@ -158,11 +173,46 @@ open Type
 open Term
 
 module Naming =
+  let ocamlKeywords =
+    set [
+      "and"; "as"; "assert"; "asr"; "begin"; "class"; 
+      "constraint"; "do"; "done"; "downto"; "else"; "end";
+      "exception"; "external"; "false"; "for"; "fun"; "function";
+      "functor"; "if"; "in"; "include"; "inherit"; "initializer";
+      "land"; "lazy"; "let"; "lor"; "lsl"; "lsr";
+      "lxor"; "match"; "method"; "mod"; "module"; "mutable";
+      "new"; "nonrec"; "object"; "of"; "open"; "or";
+      "private"; "rec"; "sig"; "struct"; "then"; "to";
+      "true"; "try"; "type"; "val"; "virtual"; "when";
+      "while"; "with"
+    ]
+
+  let ourReservedNames =
+    set [
+      "create"; "invoke"; "get"; "set"
+    ]
+
+  let reservedNames = Set.union ocamlKeywords ourReservedNames
+
+  let variableName (name: string) =
+    let result =
+      if Char.IsUpper name.[0] then
+        sprintf "%c%s" (Char.ToLower name.[0]) name.[1..]
+      else name
+    if reservedNames |> Set.contains result then result + "_" else result
+
+  let moduleName (name: string) =
+    if Char.IsLower name.[0] then
+      sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
+    else name
+
   let flattenedLower (name: string list) =
     let s = String.concat "_" name
-    if Char.IsUpper s.[0] then
-      sprintf "%c%s" (Char.ToLower s.[0]) s.[1..]
-    else s
+    let result =
+      if Char.IsUpper s.[0] then
+        sprintf "%c%s" (Char.ToLower s.[0]) s.[1..]
+      else s
+    if reservedNames |> Set.contains result then result + "_" else result
 
   let flattenedUpper (name: string list) =
     let s = String.concat "_" name
@@ -175,6 +225,8 @@ module Naming =
 
 module Definition =
   let open_ names = names |> List.map (tprintf "open %s") |> concat newline
+  
+  let include_ names = names |> List.map (tprintf "include %s") |> concat newline
 
   let module_ name content =
     concat newline [
@@ -186,6 +238,13 @@ module Definition =
   let moduleSig name content =
     concat newline [
       tprintf "module %s : sig" name
+      indent content
+      str "end"
+    ]
+
+  let moduleScopeSig scope name content =
+    concat newline [
+      tprintf "module[@js.scope \"%s\"] %s : sig" scope name
       indent content
       str "end"
     ]
@@ -216,6 +275,14 @@ module Definition =
     tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
 
 open Definition
+
+let emitComment (c: Comment) : text =
+  match c with
+  | Deprecated (Some text) -> tprintf "@deprecated %s" text
+  | Deprecated None -> tprintf "@deprecated"
+  | TextLine text -> str text
+  | Param (id, text) -> tprintf "@param %s %s" id text
+  | Return text -> tprintf "@return %s" text
 
 let literalToIdentifier (ctx: Context) (l: Literal) : text =
   let formatString (s: string) =
@@ -258,7 +325,7 @@ let treatEnum ctx (cases: Set<Choice<EnumCase, Literal>>) =
         | Some v -> Attr.js (literal v)
         | None -> empty
       yield pv_head @+ name + attr
-  ]) +@ " [@js.enum]"
+  ]) +@ " [@js.enum]" |> between "(" ")"
 
 let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
   let treatNullUndefined t =
@@ -300,7 +367,7 @@ let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
         let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
         let ty = emitTypeNoResolveUnion overrideFunc ctx t
         yield tprintf "%A of %A " name ty + Attr.js (literal l)
-    ]) + tprintf " [@js.union on_field \"%s\"]" tagName
+    ]) + tprintf " [@js.union on_field \"%s\"]" tagName |> between "(" ")"
 
   let treatOther otherTypes =
     let rec go = function
@@ -371,7 +438,7 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
     match ty with
     | Ident i ->
       match i.fullName with
-      | Some fn -> tprintf "%s.t" (Naming.structured fn)
+      | Some fn -> str (Naming.flattenedLower fn)
       | None -> commentStr (sprintf "FIXME: unknown type '%s'" (String.concat "." i.name)) + str (Naming.structured i.name + ".t")
     | App (t, ts) -> tyApp (emitType overrideFunc ctx t) (List.map (emitType overrideFunc ctx) ts)
     | TypeVar v -> tprintf "'%s" v
@@ -390,13 +457,15 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
     | PolymorphicThis -> commentStr "FIXME: polymorphic this" + any_t
     | Function f ->
-      let rec go acc (args: FieldLike list) =
+      let rec go acc (args: Choice<FieldLike, Type> list) =
         match args with
         | [] -> acc + void_t
-        | x :: [] when f.isVariadic ->
+        | Choice1Of2 x :: [] when f.isVariadic ->
           assert (not x.isOptional)
-          acc + tprintf "%s:" x.name + between "(" ")" (emitType overrideFunc ctx x.value +@ " [@js.variadic]")
-        | x :: xs ->
+          acc + tprintf "%s:" (Naming.variableName x.name) + between "(" ")" (emitType overrideFunc ctx x.value +@ " [@js.variadic]")
+        | Choice2Of2 t :: [] when f.isVariadic ->
+          acc + emitType overrideFunc ctx t +@ " [@js.variadic]"
+        | Choice1Of2 x :: xs ->
           let needParen =
             match x.value with
             | Function _ -> true
@@ -407,9 +476,14 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
             if needParen then between "(" ")" (emitType overrideFunc ctx x.value)
             else emitType overrideFunc ctx x.value
           let t =
-            tprintf "%s%s:" prefix x.name + ty
-          if not x.isOptional && List.isEmpty xs then t
-          else go (t +@ " -> ") xs
+            tprintf "%s%s:" prefix (Naming.variableName x.name) + ty
+          if not x.isOptional && List.isEmpty xs then acc + t
+          else go (acc + t +@ " -> ") xs
+        | Choice2Of2 t :: xs ->
+          let needParen = match t with Function _ -> true | _ -> false
+          let t = if needParen then between "(" ")" (emitType overrideFunc ctx t) else emitType overrideFunc ctx t
+          if List.isEmpty xs then acc + t
+          else go (acc + t +@ " -> ") xs
 
       let lhs = go empty f.args
       let rhs =
@@ -427,22 +501,7 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
 
 let inline noOverride _emitType _ctx _ty = None
 
-let emitType' ctx ty = emitType noOverride ctx ty
-
-type IdentEmitMode = Structured | Flattened of appendTypeModule:bool
-
-let rec emitTypeWithIdentEmitMode identEmitMode orf ctx ty =
-  if identEmitMode = Structured then emitType orf ctx ty
-  else
-    emitType (fun _emitType ctx ty ->
-      match ty with
-      | Ident { fullName = Some fn } ->
-        match identEmitMode with
-        | Structured -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
-        | Flattened false -> str (Naming.flattenedLower fn) |> Some
-        | Flattened true  -> tprintf "Types.%s" (Naming.flattenedLower fn) |> Some
-      | _ -> orf (emitTypeWithIdentEmitMode identEmitMode orf) ctx ty
-    ) ctx ty
+let emitType_ ctx ty = emitType noOverride ctx ty
 
 module BaseLibrary =
 
@@ -608,7 +667,6 @@ let emitCase name args =
   | _ -> tprintf "%s of %A" (Naming.flattenedUpper name) (tyTuple args)
 
 let getSafeLabels ctx ty =
-  let emitType_ identEmitMode ctx ty = emitTypeWithIdentEmitMode identEmitMode noOverride ctx ty
   let rec getLabel = function
     | Ident { fullName = Some fn } -> 
       seq {
@@ -618,12 +676,12 @@ let getSafeLabels ctx ty =
           | Ident { fullName = Some fn } ->
             yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
           | App (Ident { fullName = Some fn }, ts) ->
-            yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
+            yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
           | _ -> ()
       } |> Set.ofSeq
     | App (Ident { fullName = Some fn }, ts) ->
       seq {
-        yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
+        yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
         let typrms =
           match ctx.definitionsMap |> Map.tryFind fn with
           | Some (ClassDef c) -> c.typeParams
@@ -635,7 +693,7 @@ let getSafeLabels ctx ty =
           | Ident { fullName = Some fn } ->
             yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
           | App (Ident { fullName = Some fn }, ts) ->
-            yield str pv_head + emitCase fn (ts |> List.map (substTypeVar subst ctx >> emitType_ (Flattened false) ctx))
+            yield str pv_head + emitCase fn (ts |> List.map (substTypeVar subst ctx >> emitType_ ctx))
           | _ -> ()
       } |> Set.ofSeq
     | Union ts -> ts.types |> List.map getLabel |> Set.intersectMany
@@ -644,7 +702,6 @@ let getSafeLabels ctx ty =
   getLabel ty
 
 let emitFlattenedDefinitions (ctx: Context) : text =
-  let emitType_ identEmitMode ctx ty = emitTypeWithIdentEmitMode identEmitMode noOverride ctx ty
   moduleSig ctx.internalModuleName (
     concat newline [
       moduleSig "Js"  BaseLibrary.dummyJsModule
@@ -698,7 +755,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
               | Ident { fullName = Some fn } ->
                 yield tprintf "%s%s" pv_head (Naming.flattenedUpper fn)
               | App (Ident { fullName = Some fn }, ts) ->
-                yield str pv_head + emitCase fn (ts |> List.map (emitType_ (Flattened false) ctx))
+                yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
               | _ -> ()
           ]
           concat newline [
@@ -717,13 +774,13 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           // TODO: emit extends of type parameters
         | TypeAlias p when p.erased = false ->
           let typrm = p.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-          tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ (Flattened false ) ctx p.target |> Some
+          tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ ctx p.target |> Some
           // TODO: emit extends of type parameters
         | _ -> None
 
       moduleSig "Types" (
         concat newline [
-          yield str "open AnonymousInterfaces"
+          yield open_ ["AnonymousInterfaces"]
           let prefix = seq { yield "type"; while true do yield "and" }
           yield!
             ctx.definitionsMap
@@ -735,3 +792,115 @@ let emitFlattenedDefinitions (ctx: Context) : text =
       )
     ]
   ) + newline
+
+
+
+let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
+  let (|Dummy|) _ = []
+  let rec go (ctx: Context) (s: Statement) : text =
+    match s with
+    | Module m ->
+      moduleScopeSig
+        m.name
+        (Naming.moduleName m.name)
+        (concat newline (List.map (go ({ ctx with currentNamespace = m.name :: ctx.currentNamespace})) m.statements))
+    | Export (e, _) -> commentStr (sprintf "export = %s" (String.concat "." e.name))
+    | UnknownStatement (Some s) -> commentStr s
+    | UnknownStatement None -> commentStr "unknown statement"
+    | TypeAlias { name = name; typeParams = typeParams } | (EnumDef { name = name } & Dummy typeParams) ->
+      let k = List.rev (name :: ctx.currentNamespace)
+      let tyargs = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
+      concat newline [
+        yield
+          moduleSig (Naming.moduleName name) (
+            typeAlias "t" tyargs (emitTypeName k tyargs)
+          )
+      ]
+    | EnumDef _ -> failwith "impossible_emitStructuredDefinitions_EnumDef"
+    | Value v ->
+      concat newline [
+        yield val_ (Naming.variableName v.name) (emitType_ ctx v.typ) + str " " + Attr.js_global v.name
+      ]
+    | ClassDef c ->
+      match c.name with
+      | None -> failwith "impossible_emitStructuredDefinitions_ClassDef"
+      | Some name ->
+        let k = List.rev (name :: ctx.currentNamespace)
+        let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
+        let selfTyText = str "t"
+        let ident = { name = [name]; fullName = Some k }
+        let selfTy = 
+          if List.isEmpty c.typeParams then Ident ident
+          else App (Ident ident, List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams)
+
+        let orf _emitType _ctx ty =
+          match ty with
+          | Ident i when i = ident -> Some selfTyText
+          | _ -> None
+        let emitType_ ctx ty = emitType orf ctx ty
+        
+        concat newline [
+          yield
+            moduleScopeSig name (Naming.moduleName name) (concat newline [
+              let rec emitMember (ma: MemberAttribute) m = [
+                match m with
+                | Constructor (ft, _typrm) ->
+                  let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy }
+                  yield val_ "create" (emitType_ ctx ty) + str " " + Attr.js_create
+                | Field ({ name = name; value = Function ft }, _, _)
+                | Method (name, ft, _) ->
+                  let ty, attr =
+                    if ma.isStatic then Function ft, Attr.js_global name
+                    else
+                      let ft =
+                        { args = Choice2Of2 selfTy :: ft.args
+                          returnType = ft.returnType
+                          isVariadic = ft.isVariadic }
+                      Function ft, Attr.js_call name
+                  yield tprintf "val %s: " (Naming.variableName name) + emitType_ ctx ty + str " " + attr
+                | Getter fl | Field (fl, ReadOnly, _) when fl.value <> Prim Void ->
+                  let lhs = if ma.isStatic then void_t else selfTyText
+                  let rhs =
+                    let retTy = emitType_ ctx fl.value
+                    if fl.isOptional then tyApp undefined_t [retTy] else retTy
+                  yield tprintf "val get_%s: " fl.name + lhs + str " -> " + rhs + str " " + Attr.js_get fl.name
+                | Setter fl | Field (fl, WriteOnly, _) when fl.value <> Prim Void ->
+                  let vTy = emitType_ ctx fl.value
+                  let lhs =
+                    if ma.isStatic then vTy else selfTyText + str " -> " + vTy
+                  yield tprintf "val set_%s: " fl.name + lhs + str " -> " + void_t + str " " + Attr.js_set fl.name
+                | Field (fl, Mutable, _) ->
+                  yield! emitMember ma (Getter fl)
+                  yield! emitMember ma (Setter fl)
+                | FunctionInterface (ft, _) ->
+                  yield comment (str "val invoke: " + emitType_ ctx (Function ft))
+                | Indexer (ft, ReadOnly) ->
+                  yield comment (str "val get: " + emitType_ ctx (Function ft))
+                | Indexer (ft, WriteOnly) ->
+                  let ft =
+                    { args = ft.args @ [ Choice2Of2 ft.returnType ]
+                      isVariadic = false;
+                      returnType = Prim Void }
+                  yield comment (str "val set: " + emitType_ ctx (Function ft))
+                | Indexer (ft, Mutable) ->
+                  yield! emitMember ma (Indexer (ft, ReadOnly))
+                  yield! emitMember ma (Indexer (ft, WriteOnly))
+                // field/getter/setter of void value is ignored
+                | Getter { name = n } | Setter { name = n } | Field ({ name = n }, _, _) ->
+                  eprintf "warn: the field/getter/setter '%s' of type '%s' has type 'void' and is ignored" n name
+                  ()
+                | New _ -> ()
+              ]
+
+              yield typeAlias "t" tyargs (emitTypeName k tyargs)
+              for ma, m in c.members do yield! emitMember ma m
+            ])
+        ]
+
+
+  concat newline [
+    yield open_ [ ctx.internalModuleName ]
+    yield open_ [ "AnonymousInterfaces"; "Types" ]
+
+    for stmt in stmts do yield go ctx stmt
+  ]

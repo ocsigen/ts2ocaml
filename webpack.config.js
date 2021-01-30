@@ -29,7 +29,7 @@ module.exports = {
   target: "node",
   externals: nodeExternals,
   output: {
-    filename: 'ts2buckle.js',
+    filename: 'ts2ocaml.js',
     path: path.join(__dirname, "./output"),
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),

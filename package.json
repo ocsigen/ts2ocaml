@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "ts2buckle",
+  "name": "ts2ocaml",
   "scripts": {
     "build": "webpack",
     "watch": "webpack -w"
@@ -8,9 +8,9 @@
   "files": [
     "output/"
   ],
-  "main": "./output/ts2buckle.js",
+  "main": "./output/ts2ocaml.js",
   "bin": {
-    "ts2buckle": "./output/ts2buckle.js"
+    "ts2ocaml": "./output/ts2ocaml.js"
   },
   "dependencies": {
     "typescript": "^3.8.3"

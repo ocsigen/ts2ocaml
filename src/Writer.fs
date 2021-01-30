@@ -56,7 +56,13 @@ module Attr =
   
   let js_set name = attr Block "js.set" (str' name)
 
+  let js_index_get = attr Block "js.index_get" empty
+  
+  let js_index_set = attr Block "js.index_set" empty
+
   let js_call name = attr Block "js.call" (str' name)
+
+  let js_apply = attr Block "js.apply" empty
   
   let js_global name = attr Block "js.global" (str' name)
 
@@ -77,7 +83,7 @@ module Type =
   let object_t  = str "Js.untyped_object"
   let symbol_t  = str "Js.symbol" // symbol is a ES5 type but should be distinguished from the boxed Symbol type
   let void_t    = str "unit"
-  let array_t   = str "Js.array"
+  let array_t   = str "list"
   let null_t           = str "Js.or_null"
   let undefined_t      = str "Js.or_undefined"
   let null_undefined_t = str "Js.or_null_or_undefined"
@@ -838,64 +844,71 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
           | Ident i when i = ident -> Some selfTyText
           | _ -> None
         let emitType_ ctx ty = emitType orf ctx ty
-        
-        concat newline [
-          yield
-            moduleScopeSig name (Naming.moduleName name) (concat newline [
-              let rec emitMember (ma: MemberAttribute) m = [
-                match m with
-                | Constructor (ft, _typrm) ->
-                  let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy }
-                  yield val_ "create" (emitType_ ctx ty) + str " " + Attr.js_create
-                | Field ({ name = name; value = Function ft }, _, _)
-                | Method (name, ft, _) ->
-                  let ty, attr =
-                    if ma.isStatic then Function ft, Attr.js_global name
-                    else
-                      let ft =
-                        { args = Choice2Of2 selfTy :: ft.args
-                          returnType = ft.returnType
-                          isVariadic = ft.isVariadic }
-                      Function ft, Attr.js_call name
-                  yield tprintf "val %s: " (Naming.variableName name) + emitType_ ctx ty + str " " + attr
-                | Getter fl | Field (fl, ReadOnly, _) when fl.value <> Prim Void ->
-                  let lhs = if ma.isStatic then void_t else selfTyText
-                  let rhs =
-                    let retTy = emitType_ ctx fl.value
-                    if fl.isOptional then tyApp undefined_t [retTy] else retTy
-                  yield tprintf "val get_%s: " fl.name + lhs + str " -> " + rhs + str " " + Attr.js_get fl.name
-                | Setter fl | Field (fl, WriteOnly, _) when fl.value <> Prim Void ->
-                  let vTy = emitType_ ctx fl.value
-                  let lhs =
-                    if ma.isStatic then vTy else selfTyText + str " -> " + vTy
-                  yield tprintf "val set_%s: " fl.name + lhs + str " -> " + void_t + str " " + Attr.js_set fl.name
-                | Field (fl, Mutable, _) ->
-                  yield! emitMember ma (Getter fl)
-                  yield! emitMember ma (Setter fl)
-                | FunctionInterface (ft, _) ->
-                  yield comment (str "val invoke: " + emitType_ ctx (Function ft))
-                | Indexer (ft, ReadOnly) ->
-                  yield comment (str "val get: " + emitType_ ctx (Function ft))
-                | Indexer (ft, WriteOnly) ->
-                  let ft =
-                    { args = ft.args @ [ Choice2Of2 ft.returnType ]
-                      isVariadic = false;
-                      returnType = Prim Void }
-                  yield comment (str "val set: " + emitType_ ctx (Function ft))
-                | Indexer (ft, Mutable) ->
-                  yield! emitMember ma (Indexer (ft, ReadOnly))
-                  yield! emitMember ma (Indexer (ft, WriteOnly))
-                // field/getter/setter of void value is ignored
-                | Getter { name = n } | Setter { name = n } | Field ({ name = n }, _, _) ->
-                  eprintf "warn: the field/getter/setter '%s' of type '%s' has type 'void' and is ignored" n name
-                  ()
-                | New _ -> ()
-              ]
 
-              yield typeAlias "t" tyargs (emitTypeName k tyargs)
-              for ma, m in c.members do yield! emitMember ma m
-            ])
-        ]
+        let removeLabels (xs: Choice<FieldLike, Type> list) =
+          xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
+
+        if List.isEmpty c.members then
+          moduleSig name (concat newline [
+            yield typeAlias "t" tyargs (emitTypeName k tyargs)
+          ])
+        else
+          concat newline [
+            yield
+              moduleScopeSig name (Naming.moduleName name) (concat newline [
+                let rec emitMember (ma: MemberAttribute) m = [
+                  match m with
+                  | Constructor (ft, _typrm) ->
+                    let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy }
+                    yield val_ "create" (emitType_ ctx ty) + str " " + Attr.js_create
+                  | Field ({ name = name; value = Function ft }, _, _)
+                  | Method (name, ft, _) ->
+                    let ty, attr =
+                      if ma.isStatic then Function ft, Attr.js_global name
+                      else
+                        let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
+                        Function ft, Attr.js_call name
+                    yield tprintf "val %s: " (Naming.variableName name) + emitType_ ctx ty + str " " + attr
+                  | Getter fl | Field (fl, ReadOnly, _) when fl.value <> Prim Void ->
+                    let lhs = if ma.isStatic then void_t else selfTyText
+                    let rhs =
+                      let retTy = emitType_ ctx fl.value
+                      if fl.isOptional then tyApp undefined_t [retTy] else retTy
+                    yield tprintf "val get_%s: " fl.name + lhs + str " -> " + rhs + str " " + Attr.js_get fl.name
+                  | Setter fl | Field (fl, WriteOnly, _) when fl.value <> Prim Void ->
+                    let vTy = emitType_ ctx fl.value
+                    let lhs =
+                      if ma.isStatic then vTy else selfTyText + str " -> " + vTy
+                    yield tprintf "val set_%s: " fl.name + lhs + str " -> " + void_t + str " " + Attr.js_set fl.name
+                  | Field (fl, Mutable, _) ->
+                    yield! emitMember ma (Getter fl)
+                    yield! emitMember ma (Setter fl)
+                  | FunctionInterface (ft, _) ->
+                    let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
+                    yield str "val apply: " + emitType_ ctx (Function ft) + str " " + Attr.js_apply
+                  | Indexer (ft, ReadOnly) ->
+                    let ft = { ft with args = Choice2Of2 selfTy :: removeLabels ft.args }
+                    yield str "val get: " + emitType_ ctx (Function ft) + str " " + Attr.js_index_get
+                  | Indexer (ft, WriteOnly) ->
+                    let ft =
+                      { args = Choice2Of2 selfTy :: removeLabels ft.args @ [ Choice2Of2 ft.returnType ]
+                        isVariadic = false;
+                        returnType = Prim Void }
+                    yield str "val set: " + emitType_ ctx (Function ft) + str " " + Attr.js_index_set
+                  | Indexer (ft, Mutable) ->
+                    yield! emitMember ma (Indexer (ft, ReadOnly))
+                    yield! emitMember ma (Indexer (ft, WriteOnly))
+                  // field/getter/setter of void value is ignored
+                  | Getter { name = n } | Setter { name = n } | Field ({ name = n }, _, _) ->
+                    eprintf "warn: the field/getter/setter '%s' of type '%s' has type 'void' and is ignored" n name
+                    ()
+                  | New _ -> ()
+                ]
+
+                yield typeAlias "t" tyargs (emitTypeName k tyargs)
+                for ma, m in c.members do yield! emitMember ma m
+              ])
+          ]
 
 
   concat newline [

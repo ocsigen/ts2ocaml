@@ -46,7 +46,7 @@ module Attr =
 
   let js_implem_val content = attr Block "js.implem" (newline + indent content + newline)
 
-  let js_custom_typ content = attr Block "js.custom" (newline + indent content + newline)
+  let js_custom_typ content = attr Block "js.custom" content
 
   let js_create = attr Block "js.create" empty
 
@@ -175,6 +175,17 @@ module Term =
     | LFloat f -> tprintf "%f" f
     | LString s -> tprintf "\"%s\"" (String.escape s)
 
+  let record (fields: (string * text) list) =
+    if List.isEmpty fields then failwith "empty fields of record"
+    else
+      List.map (fun (name, body) -> name + "=" @+ body) fields
+      |> concat (str "; ")
+      |> between "{ " " }"
+
+  let termFun (args: text list) (body: text) =
+    if List.isEmpty args then failwith "empty args of fun"
+    else "fun " @+ concat (str " ") args +@ " -> " + body
+
 open Type
 open Term
 
@@ -210,6 +221,8 @@ module Naming =
   let moduleName (name: string) =
     if Char.IsLower name.[0] then
       sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
+    else if name.[0] = '_' then
+      "M" + name
     else name
 
   let flattenedLower (name: string list) =
@@ -446,7 +459,8 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
       match i.fullName with
       | Some fn -> str (Naming.flattenedLower fn)
       | None -> commentStr (sprintf "FIXME: unknown type '%s'" (String.concat "." i.name)) + str (Naming.structured i.name + ".t")
-    | App (t, ts) -> tyApp (emitType overrideFunc ctx t) (List.map (emitType overrideFunc ctx) ts)
+    | App (t, ts) ->
+      tyApp (emitType overrideFunc ctx t) (List.map (emitType overrideFunc ctx) ts)
     | TypeVar v -> tprintf "'%s" v
     | Prim p ->
       match p with
@@ -708,6 +722,14 @@ let getSafeLabels ctx ty =
   getLabel ty
 
 let emitFlattenedDefinitions (ctx: Context) : text =
+  let genJsCustomMapper (typrms: TypeParam list) =
+    let body =
+      if List.isEmpty typrms then str "Obj.magic"
+      else
+        let args = typrms |> List.map (fun tp -> tprintf "_%s" tp.name)
+        between "(" ")" (termFun args (str "Obj.magic"))
+    record [ "of_js", body; "to_js", body ]
+
   moduleSig ctx.internalModuleName (
     concat newline [
       moduleSig "Js"  BaseLibrary.dummyJsModule
@@ -719,21 +741,11 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           for (a, _) in ctx.anonymousInterfacesMap |> Map.toSeq do
             let i = anonymousInterfaceToIdentifier ctx a
             let def = str "type " + i + str " = " + tyApp ts_intf [between "[" "]" (str pv_head + i)]
-            yield Attr.js_stop_start_implem def def
+            yield def + newline + Attr.js_custom_typ (genJsCustomMapper a.typeParams)
         ]
       )
 
       let f prefix (k: string list, v: Statement) =
-        let genMapper (typeParams: TypeParam list) =
-          let ty = Naming.flattenedLower k
-          let f suffix tin tout =
-            let_
-              (ty + suffix)
-              (List.map (fun (x: TypeParam) -> str ("_" + x.name)) typeParams @ [between "(" ")" ("x : " @+ tin)])
-              (Some tout)
-              (termApp (str "Obj.magic") [str "x"])
-          [ f "_to_js" (str ty) ojs_t; f "_of_js" ojs_t (str ty) ]
-
         match v with
         | EnumDef e ->
           concat newline [
@@ -775,7 +787,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
                   ]
                 )
               ]
-            yield def +@ " " + Attr.js_custom_typ (concat newline (genMapper c.typeParams))
+            yield def + newline + Attr.js_custom_typ (genJsCustomMapper c.typeParams)
           ] |> Some
           // TODO: emit extends of type parameters
         | TypeAlias p when p.erased = false ->
@@ -868,33 +880,39 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
                       else
                         let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
                         Function ft, Attr.js_call name
-                    yield tprintf "val %s: " (Naming.variableName name) + emitType_ ctx ty + str " " + attr
+                    yield val_ (Naming.variableName name) (emitType_ ctx ty) + str " " + attr
                   | Getter fl | Field (fl, ReadOnly, _) when fl.value <> Prim Void ->
-                    let lhs = if ma.isStatic then void_t else selfTyText
-                    let rhs =
-                      let retTy = emitType_ ctx fl.value
-                      if fl.isOptional then tyApp undefined_t [retTy] else retTy
-                    yield tprintf "val get_%s: " fl.name + lhs + str " -> " + rhs + str " " + Attr.js_get fl.name
+                    let ty =
+                      let args =
+                        if ma.isStatic then [Choice2Of2 (Prim Void)]
+                        else [Choice2Of2 selfTy]
+                      let ret =
+                        if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
+                        else fl.value
+                      Function { isVariadic = false; args = args; returnType = ret }
+                    yield val_ ("get_" + fl.name) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
                   | Setter fl | Field (fl, WriteOnly, _) when fl.value <> Prim Void ->
-                    let vTy = emitType_ ctx fl.value
-                    let lhs =
-                      if ma.isStatic then vTy else selfTyText + str " -> " + vTy
-                    yield tprintf "val set_%s: " fl.name + lhs + str " -> " + void_t + str " " + Attr.js_set fl.name
+                    let ty =
+                      let args =
+                        if ma.isStatic then [Choice2Of2 fl.value]
+                        else [Choice2Of2 selfTy; Choice2Of2 fl.value]
+                      Function { isVariadic = false; args = args; returnType = Prim Void }
+                    yield val_ ("set_" + fl.name) (emitType_ ctx ty) + str " " + Attr.js_set fl.name
                   | Field (fl, Mutable, _) ->
                     yield! emitMember ma (Getter fl)
                     yield! emitMember ma (Setter fl)
                   | FunctionInterface (ft, _) ->
                     let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
-                    yield str "val apply: " + emitType_ ctx (Function ft) + str " " + Attr.js_apply
+                    yield val_ "apply" (emitType_ ctx (Function ft)) + str " " + Attr.js_apply
                   | Indexer (ft, ReadOnly) ->
                     let ft = { ft with args = Choice2Of2 selfTy :: removeLabels ft.args }
-                    yield str "val get: " + emitType_ ctx (Function ft) + str " " + Attr.js_index_get
+                    yield val_ "get" (emitType_ ctx (Function ft)) + str " " + Attr.js_index_get
                   | Indexer (ft, WriteOnly) ->
                     let ft =
                       { args = Choice2Of2 selfTy :: removeLabels ft.args @ [ Choice2Of2 ft.returnType ]
                         isVariadic = false;
                         returnType = Prim Void }
-                    yield str "val set: " + emitType_ ctx (Function ft) + str " " + Attr.js_index_set
+                    yield val_ "set" (emitType_ ctx (Function ft)) + str " " + Attr.js_index_set
                   | Indexer (ft, Mutable) ->
                     yield! emitMember ma (Indexer (ft, ReadOnly))
                     yield! emitMember ma (Indexer (ft, WriteOnly))

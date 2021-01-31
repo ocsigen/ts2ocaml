@@ -41,7 +41,7 @@ let main argv =
       node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
     let stmts = srcs |> Seq.collect (fun src -> src.statements) |> Seq.collect (Parser.readStatement checker) |> Seq.toList
-    let result = Typer.mergeStatements stmts
+    let result = stmts |> List.map Typer.replaceAliasToFunctionWithInterface |> Typer.mergeStatements
     let ctx = Typer.createRootContext "Internal" result
     let result = result |> Typer.resolveIdentInStatements ctx
     let ctx = Typer.createRootContext "Internal" result

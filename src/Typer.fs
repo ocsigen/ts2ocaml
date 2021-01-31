@@ -74,6 +74,28 @@ let rec substTypeVar (subst: Map<string, Type>) _ctx = function
   | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
   | PolymorphicThis -> PolymorphicThis | UnknownType msgo -> UnknownType msgo
 
+let rec replaceAliasToFunctionWithInterface = function
+  | Module m ->
+    Module { m with statements = List.map replaceAliasToFunctionWithInterface m.statements }
+  | TypeAlias ta ->
+    match ta.target with
+    | Function f ->
+      ClassDef {
+        name = Some ta.name
+        isInterface = true
+        comments = []
+        accessibility = Protected
+        isExported = false
+        implements = []
+        typeParams = ta.typeParams
+        members = [ 
+          { comments = []; accessibility = Public; isStatic = false },
+          FunctionInterface (f, [])
+        ]
+      }
+    | _ -> TypeAlias ta
+  | x -> x
+
 let rec mergeStatements (stmts: Statement list) =
   let mutable result : Choice<Statement, Class ref, Module ref> list = []
   let mutable intfMap = Map.empty

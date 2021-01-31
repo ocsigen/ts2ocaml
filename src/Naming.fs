@@ -26,13 +26,13 @@ module Keywords =
 
   let primitives = ["string"; "obj"; "unit"; "float"; "bool"; "int"] |> Set.ofList
 
-let removeQuotes (s: string) =
+let removeQuotesAndTrim (s: string) =
   if String.IsNullOrEmpty s then ""
   else
     let c = s.[0]
     if (c = '\"' || c = ''')
-    then s.Trim(c)
-    else s
+    then s.Trim(c).Trim()
+    else s.Trim()
 
 // gets the JavaScript module name
 // intended for use by SourceFile.fileName which has slashes normalized

@@ -61,7 +61,7 @@ let isReadOnly (m: Ts.ModifiersArray option) : bool =
   m |> hasModifier Kind.ReadonlyKeyword
 
 let nameToString (pn: 'a): string =
-  !!pn?getText() |> removeQuotes
+  !!pn?getText() |> removeQuotesAndTrim
 
 let getBindingName (bn: Ts.BindingName): string option =
   let syntaxNode : Node = !! bn

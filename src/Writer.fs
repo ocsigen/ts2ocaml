@@ -332,7 +332,32 @@ let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
   | None, None -> failwithf "the anonymous interface '%A' is not found in the context" c
   | _, Some n -> failwithf "the class or interface '%s' is not anonymous" n
 
-let treatEnum ctx (cases: Set<Choice<EnumCase, Literal>>) =
+type Variance = Covariant | Contravariant | Invariant with
+  static member (~-) (v: Variance) =
+    match v with
+    | Covariant -> Contravariant
+    | Contravariant -> Covariant
+    | Invariant -> Invariant
+
+type EmitTypeFlags = {
+  resolveUnion: bool
+  needParen: bool
+  variance: Variance
+  failContravariantTypeVar: bool
+  skipAttributesOnContravariantPosition: bool
+}
+
+module EmitTypeFlags =
+  let defaultValue =
+    {
+      resolveUnion = true
+      needParen = false
+      variance = Covariant
+      failContravariantTypeVar = false
+      skipAttributesOnContravariantPosition = false
+    }
+
+let treatEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<EnumCase, Literal>>) =
   between "[" "]" (concat (str " | ") [
     for c in Set.toSeq cases do
       let name, value =
@@ -341,127 +366,31 @@ let treatEnum ctx (cases: Set<Choice<EnumCase, Literal>>) =
         | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l
       let attr =
         match value with
+        | _ when flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant -> empty
         | Some v -> Attr.js (literal v)
         | None -> empty
       yield pv_head @+ name + attr
   ]) +@ " [@js.enum]" |> between "(" ")"
 
-let rec emitResolvedUnion overrideFunc ctx (ru: ResolvedUnion) =
-  let treatNullUndefined t =
-    match ru.caseNull, ru.caseUndefined with
-    | true, true -> tyApp null_undefined_t [t]
-    | true, false -> tyApp null_t [t]
-    | false, true -> tyApp undefined_t [t]
-    | false, false -> t
-
-  let treatTypeofableTypes (ts: Set<TypeofableType>) t =
-    let emitOr tt t =
-      match tt with
-      | TNumber -> number_or t
-      | TString -> string_or t
-      | TBoolean -> boolean_or t
-      | TSymbol -> symbol_or t
-    let rec go = function
-      | [] -> t
-      | x :: [] ->
-        match t with
-        | None -> TypeofableType.toType x |> emitType overrideFunc ctx |> Some
-        | Some t -> emitOr x t |> Some
-      | x :: rest -> go rest |> Option.map (emitOr x)
-    Set.toList ts |> go
-
-  let treatArray (arr: Set<Type> option) t =
-    match arr with
-    | None -> t
-    | Some ts ->
-      // TODO: think how to map multiple array cases properly
-      let u = emitResolvedUnion overrideFunc ctx (resolveUnion ctx { types = Set.toList ts })
-      match t with
-      | None -> Some u
-      | Some t -> or_ (tyApp array_t [u]) t |> Some
-
-  let treatDU (tagName: string) (cases: Map<Literal, Type>) =
-    between "[" "]" (concat (str " | ") [
-      for (l, t) in Map.toSeq cases do
-        let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
-        let ty = emitTypeNoResolveUnion overrideFunc ctx t
-        yield tprintf "%A of %A " name ty + Attr.js (literal l)
-    ]) + tprintf " [@js.union on_field \"%s\"]" tagName |> between "(" ")"
-
-  let treatOther otherTypes =
-    let rec go = function
-      | [] -> failwith "impossible_emitResolvedUnion_treatOther_go"
-      | t :: [] -> emitType overrideFunc ctx t
-      | t :: ts -> or_ (emitType overrideFunc ctx t) (go ts)
-    go (Set.toList otherTypes)
-
-  let treatEnumOr (cases: Set<Choice<EnumCase, Literal>>) t =
-    let casesByType =
-      cases
-      |> Set.toList
-      |> List.groupBy (function
-        | Choice1Of2 { value = Some l }
-        | Choice2Of2 l ->
-          match Literal.getType l with
-          | String -> TString
-          | Number -> TNumber
-          | Bool   -> TBoolean
-          | _ -> failwith "impossible_emitResolvedUnion_treatEnumOr"
-        | _ -> failwith "impossible_emitResolvedUnion_treatEnumOr")
-    let rec go = function
-      | (typeofable, cases) :: rest ->
-        enum_or (typeofable |> TypeofableType.toType |> emitType overrideFunc ctx)
-                (treatEnum ctx (Set.ofList cases))
-                (go rest)
-      | [] -> t
-    go casesByType
-
-  let treatDUMany du =
-    let rec go = function
-      | [] -> failwith "impossible_emitResolvedUnion_baseType_go"
-      | (tagName, cases) :: [] -> treatDU tagName cases
-      | (tagName, cases) :: rest -> or_ (treatDU tagName cases) (go rest)
-    go (Map.toList du)
-
-  let baseType =
-    match not (Set.isEmpty ru.caseEnum), not (Map.isEmpty ru.discriminatedUnions), not (Set.isEmpty ru.otherTypes) with
-    | false, false, false -> None
-    | true, false, false -> Some (treatEnum ctx ru.caseEnum)
-    | false, true, hasOther ->
-      let t = treatDUMany ru.discriminatedUnions
-      if hasOther then or_ t (treatOther ru.otherTypes) |> Some
-      else Some t
-    | false, false, true -> treatOther ru.otherTypes |> Some
-    | true, false, true -> treatOther ru.otherTypes |> treatEnumOr ru.caseEnum |> Some
-    | true, true, hasOther ->
-      let t = treatDUMany ru.discriminatedUnions
-      let t = if hasOther then or_ t (treatOther ru.otherTypes) else t
-      t |> treatEnumOr ru.caseEnum |> Some
-
-  baseType |> treatArray ru.caseArray
-           |> treatTypeofableTypes ru.typeofableTypes
-           |> Option.defaultValue never_t
-           |> treatNullUndefined
-
-and emitTypeNoResolveUnion orf ctx ty =
-  emitType (fun _emitType ctx ty ->
-    match ty with
-    | Union u -> union_t (u.types |> List.map (emitTypeNoResolveUnion orf ctx)) |> Some
-    | _ -> orf (emitTypeNoResolveUnion orf) ctx ty
-  ) ctx ty
-
-and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text option) (ctx: Context) (ty: Type) : text =
-  match overrideFunc (emitType overrideFunc) ctx ty with
+let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text option) (ctx: Context) (ty: Type) : text =
+  match overrideFunc (emitTypeImpl flags overrideFunc) ctx ty with
   | Some t -> t
   | None ->
     match ty with
     | Ident i ->
       match i.fullName with
-      | Some fn -> str (Naming.flattenedLower fn)
+      | Some fn ->
+        match ctx.definitionsMap |> Map.tryFind fn with
+        | Some (TypeAlias ta) when ta.erased -> emitTypeImpl flags overrideFunc ctx ta.target
+        | _ -> str (Naming.flattenedLower fn)
       | None -> commentStr (sprintf "FIXME: unknown type '%s'" (String.concat "." i.name)) + str (Naming.structured i.name + ".t")
     | App (t, ts) ->
-      tyApp (emitType overrideFunc ctx t) (List.map (emitType overrideFunc ctx) ts)
-    | TypeVar v -> tprintf "'%s" v
+      tyApp (emitTypeImpl flags overrideFunc ctx t) (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
+    | TypeVar v ->
+      if flags.failContravariantTypeVar && flags.variance = Contravariant then
+        commentStr (sprintf "FIXME: contravariant type variable '%s'" v) + any_t
+      else
+        tprintf "'%s" v
     | Prim p ->
       match p with
       | Null -> tyApp null_t [never_t] | Undefined -> tyApp undefined_t [never_t] | Object -> any_t
@@ -471,57 +400,144 @@ and emitType (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text
       | Never -> never_t | Any -> any_t | Unknown -> unknown_t | Void -> void_t
       | ReadonlyArray -> readonlyArray_t
     | TypeLiteral l ->
-      treatEnum ctx (Set.singleton (Choice2Of2 l))
-    | Intersection i -> intersection_t (i.types |> List.map (emitType overrideFunc ctx))
-    | Union u -> emitResolvedUnion overrideFunc ctx (resolveUnion ctx u)
+      treatEnum flags ctx (Set.singleton (Choice2Of2 l))
+    | Intersection i -> intersection_t (i.types |> List.map (emitTypeImpl flags overrideFunc ctx))
+    | Union u ->
+      if not flags.resolveUnion then
+        union_t (u.types |> List.map (emitTypeImpl flags overrideFunc ctx))
+      else
+        let ru = resolveUnion ctx u
+        let flags = { flags with needParen = true }
+        let skipOnContravariant text =
+          if flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant then empty
+          else text
+        let treatNullUndefined t =
+          match ru.caseNull, ru.caseUndefined with
+          | true, true -> tyApp null_undefined_t [t]
+          | true, false -> tyApp null_t [t]
+          | false, true -> tyApp undefined_t [t]
+          | false, false -> t
+        let treatTypeofableTypes (ts: Set<TypeofableType>) t =
+          let emitOr tt t =
+            match tt with
+            | TNumber -> number_or t
+            | TString -> string_or t
+            | TBoolean -> boolean_or t
+            | TSymbol -> symbol_or t
+          let rec go = function
+            | [] -> t
+            | x :: [] ->
+              match t with
+              | None -> TypeofableType.toType x |> emitTypeImpl flags overrideFunc ctx |> Some
+              | Some t -> emitOr x t |> Some
+            | x :: rest -> go rest |> Option.map (emitOr x)
+          Set.toList ts |> go
+        let treatArray (arr: Set<Type> option) t =
+          match arr with
+          | None -> t
+          | Some ts ->
+            // TODO: think how to map multiple array cases properly
+            let u = emitTypeImpl flags overrideFunc ctx (Union { types = Set.toList ts })
+            match t with
+            | None -> Some u
+            | Some t -> or_ (tyApp array_t [u]) t |> Some
+        let treatDU (tagName: string) (cases: Map<Literal, Type>) =
+          between "[" "]" (concat (str " | ") [
+            for (l, t) in Map.toSeq cases do
+              let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
+              let ty = emitTypeImpl { flags with resolveUnion = false } overrideFunc ctx t
+              let body = tprintf "%A of %A " name ty
+              yield body + skipOnContravariant (Attr.js (literal l))
+          ]) + tprintf " [@js.union on_field \"%s\"]" tagName |> between "(" ")"
+        let treatOther otherTypes =
+          let rec go = function
+            | [] -> failwith "impossible_emitResolvedUnion_treatOther_go"
+            | t :: [] -> emitTypeImpl flags overrideFunc ctx t
+            | t :: ts -> or_ (emitTypeImpl flags overrideFunc ctx t) (go ts)
+          go (Set.toList otherTypes)
+        let treatEnumOr (cases: Set<Choice<EnumCase, Literal>>) t =
+          let casesByType =
+            cases
+            |> Set.toList
+            |> List.groupBy (function
+              | Choice1Of2 { value = Some l }
+              | Choice2Of2 l ->
+                match Literal.getType l with
+                | String -> TString
+                | Number -> TNumber
+                | Bool   -> TBoolean
+                | _ -> failwith "impossible_emitResolvedUnion_treatEnumOr"
+              | _ -> failwith "impossible_emitResolvedUnion_treatEnumOr")
+          let rec go = function
+            | (typeofable, cases) :: rest ->
+              enum_or (typeofable |> TypeofableType.toType |> emitTypeImpl flags overrideFunc ctx)
+                      (treatEnum flags ctx (Set.ofList cases))
+                      (go rest)
+            | [] -> t
+          go casesByType
+        let treatDUMany du =
+          let rec go = function
+            | [] -> failwith "impossible_emitResolvedUnion_baseType_go"
+            | (tagName, cases) :: [] -> treatDU tagName cases
+            | (tagName, cases) :: rest -> or_ (treatDU tagName cases) (go rest)
+          go (Map.toList du)
+        let baseType =
+          match not (Set.isEmpty ru.caseEnum), not (Map.isEmpty ru.discriminatedUnions), not (Set.isEmpty ru.otherTypes) with
+          | false, false, false -> None
+          | true, false, false -> Some (treatEnum flags ctx ru.caseEnum)
+          | false, true, hasOther ->
+            let t = treatDUMany ru.discriminatedUnions
+            if hasOther then or_ t (treatOther ru.otherTypes) |> Some
+            else Some t
+          | false, false, true -> treatOther ru.otherTypes |> Some
+          | true, false, true -> treatOther ru.otherTypes |> treatEnumOr ru.caseEnum |> Some
+          | true, true, hasOther ->
+            let t = treatDUMany ru.discriminatedUnions
+            let t = if hasOther then or_ t (treatOther ru.otherTypes) else t
+            t |> treatEnumOr ru.caseEnum |> Some
+
+        baseType |> treatArray ru.caseArray
+                 |> treatTypeofableTypes ru.typeofableTypes
+                 |> Option.defaultValue never_t
+                 |> treatNullUndefined
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
     | PolymorphicThis -> commentStr "FIXME: polymorphic this" + any_t
     | Function f ->
       let rec go acc (args: Choice<FieldLike, Type> list) =
+        let flags = { flags with variance = -flags.variance }
         match args with
         | [] -> acc + void_t
         | Choice1Of2 x :: [] when f.isVariadic ->
           assert (not x.isOptional)
-          acc + tprintf "%s:" (Naming.variableName x.name) + between "(" ")" (emitType overrideFunc ctx x.value +@ " [@js.variadic]")
+          acc + tprintf "%s:" (Naming.variableName x.name) + between "(" ")" (emitTypeImpl flags overrideFunc ctx x.value +@ " [@js.variadic]")
         | Choice2Of2 t :: [] when f.isVariadic ->
-          acc + emitType overrideFunc ctx t +@ " [@js.variadic]"
+          acc + emitTypeImpl flags overrideFunc ctx t +@ " [@js.variadic]"
         | Choice1Of2 x :: xs ->
-          let needParen =
-            match x.value with
-            | Function _ -> true
-            | _ -> false
           let prefix =
             if x.isOptional then "?" else ""
-          let ty =
-            if needParen then between "(" ")" (emitType overrideFunc ctx x.value)
-            else emitType overrideFunc ctx x.value
-          let t =
-            tprintf "%s%s:" prefix (Naming.variableName x.name) + ty
+          let ty = emitTypeImpl { flags with needParen = true } overrideFunc ctx x.value
+          let t = tprintf "%s%s:" prefix (Naming.variableName x.name) + ty
           if not x.isOptional && List.isEmpty xs then acc + t
           else go (acc + t +@ " -> ") xs
         | Choice2Of2 t :: xs ->
-          let needParen = match t with Function _ -> true | _ -> false
-          let t = if needParen then between "(" ")" (emitType overrideFunc ctx t) else emitType overrideFunc ctx t
+          let t = emitTypeImpl { flags with needParen = true } overrideFunc ctx t
           if List.isEmpty xs then acc + t
           else go (acc + t +@ " -> ") xs
-
       let lhs = go empty f.args
       let rhs =
         match f.returnType with
         | Prim Void -> void_t
         | Function _ ->
-          between "(" ")" (emitType overrideFunc ctx f.returnType +@ " [@js.dummy]")
-        | _ -> emitType overrideFunc ctx f.returnType
-
-      lhs +@ " -> " + rhs   
+          between "(" ")" (emitTypeImpl flags overrideFunc ctx f.returnType +@ " [@js.dummy]")
+        | _ -> emitTypeImpl flags overrideFunc ctx f.returnType
+      let result = lhs +@ " -> " + rhs
+      if flags.needParen then result |> between "(" ")" else result
     | Tuple ts | ReadonlyTuple ts ->
-      tyTuple (ts |> List.map (emitType overrideFunc ctx))
+      tyTuple (ts |> List.map (emitTypeImpl flags overrideFunc ctx))
     | UnknownType msgo ->
       match msgo with None -> commentStr "FIXME: unknown type" + any_t | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + any_t
 
 let inline noOverride _emitType _ctx _ty = None
-
-let emitType_ ctx ty = emitType noOverride ctx ty
 
 module BaseLibrary =
 
@@ -687,6 +703,8 @@ let emitCase name args =
   | _ -> tprintf "%s of %A" (Naming.flattenedUpper name) (tyTuple args)
 
 let getSafeLabels ctx ty =
+  let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
+
   let rec getLabel = function
     | Ident { fullName = Some fn } -> 
       seq {
@@ -722,6 +740,8 @@ let getSafeLabels ctx ty =
   getLabel ty
 
 let emitFlattenedDefinitions (ctx: Context) : text =
+  let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
+
   let genJsCustomMapper (typrms: TypeParam list) =
     let body =
       if List.isEmpty typrms then str "Obj.magic"
@@ -811,10 +831,10 @@ let emitFlattenedDefinitions (ctx: Context) : text =
     ]
   ) + newline
 
-
-
 let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
   let (|Dummy|) _ = []
+  let emitType = emitTypeImpl { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
+  let emitType_ = emitType noOverride
   let rec go (ctx: Context) (s: Statement) : text =
     match s with
     | Module m ->
@@ -840,98 +860,123 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         yield val_ (Naming.variableName v.name) (emitType_ ctx v.typ) + str " " + Attr.js_global v.name
       ]
     | ClassDef c ->
-      match c.name with
-      | None -> failwith "impossible_emitStructuredDefinitions_ClassDef"
-      | Some name ->
-        let k = List.rev (name :: ctx.currentNamespace)
-        let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-        let selfTyText = str "t"
-        let ident = { name = [name]; fullName = Some k }
-        let selfTy = 
-          if List.isEmpty c.typeParams then Ident ident
-          else App (Ident ident, List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams)
+      let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
 
-        let orf _emitType _ctx ty =
-          match ty with
-          | Ident i when i = ident -> Some selfTyText
-          | _ -> None
-        let emitType_ ctx ty = emitType orf ctx ty
+      let name, selfTy, selfTyName, isSelfTy, isAnonymous =
+        match c.name with
+        | Some n ->
+          let k = List.rev (n :: ctx.currentNamespace)
+          let ident = { name = [n]; fullName = Some k }
+          let selfTy = 
+            if List.isEmpty c.typeParams then Ident ident
+            else App (Ident ident, List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams)
+          n,
+          selfTy,
+          emitTypeName k tyargs,
+          (function Ident { fullName = Some fn } when k = fn -> true | _ -> false),
+          false
+        | None ->
+          match ctx.anonymousInterfacesMap |> Map.tryFind c with
+          | Some i ->
+            sprintf "AnonymousInterface%d" i,
+            AnonymousInterface c,
+            tprintf "anonymous_interface_%d" i,
+            (fun t -> t = AnonymousInterface c),
+            true
+          | None -> failwith "impossible_emitStructuredDefinitions_ClassDef"
 
-        let removeLabels (xs: Choice<FieldLike, Type> list) =
-          xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
-
-        if List.isEmpty c.members then
-          moduleSig name (concat newline [
-            yield typeAlias "t" tyargs (emitTypeName k tyargs)
-          ])
+      let selfTyText = str "t"
+      let orf _emitType _ctx ty =
+        if isSelfTy ty then Some selfTyText
         else
-          concat newline [
-            yield
-              moduleScopeSig name (Naming.moduleName name) (concat newline [
-                let rec emitMember (ma: MemberAttribute) m = [
-                  match m with
-                  | Constructor (ft, _typrm) ->
-                    let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy }
-                    yield val_ "create" (emitType_ ctx ty) + str " " + Attr.js_create
-                  | Field ({ name = name; value = Function ft }, _, _)
-                  | Method (name, ft, _) ->
-                    let ty, attr =
-                      if ma.isStatic then Function ft, Attr.js_global name
-                      else
-                        let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
-                        Function ft, Attr.js_call name
-                    yield val_ (Naming.variableName name) (emitType_ ctx ty) + str " " + attr
-                  | Getter fl | Field (fl, ReadOnly, _) when fl.value <> Prim Void ->
-                    let ty =
-                      let args =
-                        if ma.isStatic then [Choice2Of2 (Prim Void)]
-                        else [Choice2Of2 selfTy]
-                      let ret =
-                        if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
-                        else fl.value
-                      Function { isVariadic = false; args = args; returnType = ret }
-                    yield val_ ("get_" + fl.name) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
-                  | Setter fl | Field (fl, WriteOnly, _) when fl.value <> Prim Void ->
-                    let ty =
-                      let args =
-                        if ma.isStatic then [Choice2Of2 fl.value]
-                        else [Choice2Of2 selfTy; Choice2Of2 fl.value]
-                      Function { isVariadic = false; args = args; returnType = Prim Void }
-                    yield val_ ("set_" + fl.name) (emitType_ ctx ty) + str " " + Attr.js_set fl.name
-                  | Field (fl, Mutable, _) ->
-                    yield! emitMember ma (Getter fl)
-                    yield! emitMember ma (Setter fl)
-                  | FunctionInterface (ft, _) ->
-                    let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
-                    yield val_ "apply" (emitType_ ctx (Function ft)) + str " " + Attr.js_apply
-                  | Indexer (ft, ReadOnly) ->
-                    let ft = { ft with args = Choice2Of2 selfTy :: removeLabels ft.args }
-                    yield val_ "get" (emitType_ ctx (Function ft)) + str " " + Attr.js_index_get
-                  | Indexer (ft, WriteOnly) ->
-                    let ft =
-                      { args = Choice2Of2 selfTy :: removeLabels ft.args @ [ Choice2Of2 ft.returnType ]
-                        isVariadic = false;
-                        returnType = Prim Void }
-                    yield val_ "set" (emitType_ ctx (Function ft)) + str " " + Attr.js_index_set
-                  | Indexer (ft, Mutable) ->
-                    yield! emitMember ma (Indexer (ft, ReadOnly))
-                    yield! emitMember ma (Indexer (ft, WriteOnly))
-                  // field/getter/setter of void value is ignored
-                  | Getter { name = n } | Setter { name = n } | Field ({ name = n }, _, _) ->
-                    eprintf "warn: the field/getter/setter '%s' of type '%s' has type 'void' and is ignored" n name
-                    ()
-                  | New _ -> ()
-                ]
+          match ty with
+          | PolymorphicThis -> Some (_emitType ctx selfTy)
+          | _ -> None
+      let emitType_ ctx ty = emitType orf ctx ty
 
-                yield typeAlias "t" tyargs (emitTypeName k tyargs)
-                for ma, m in c.members do yield! emitMember ma m
-              ])
-          ]
+      let removeLabels (xs: Choice<FieldLike, Type> list) =
+        xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
+
+      let rec emitMember (ma: MemberAttribute) m = [
+        match m with
+        | Constructor (ft, _typrm) ->
+          let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy }
+          yield val_ "create" (emitType_ ctx ty) + str " " + Attr.js_create
+        | Field ({ name = name; value = Function ft }, _, _)
+        | Method (name, ft, _) ->
+          let ty, attr =
+            if ma.isStatic then Function ft, Attr.js_global name
+            else
+              let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
+              Function ft, Attr.js_call name
+          yield val_ (Naming.variableName name) (emitType_ ctx ty) + str " " + attr
+        | Getter fl | Field (fl, ReadOnly, _) when fl.value <> Prim Void ->
+          let ty =
+            let args =
+              if ma.isStatic then [Choice2Of2 (Prim Void)]
+              else [Choice2Of2 selfTy]
+            let ret =
+              if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
+              else fl.value
+            Function { isVariadic = false; args = args; returnType = ret }
+          yield val_ ("get_" + fl.name) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
+        | Setter fl | Field (fl, WriteOnly, _) when fl.value <> Prim Void ->
+          let ty =
+            let args =
+              if ma.isStatic then [Choice2Of2 fl.value]
+              else [Choice2Of2 selfTy; Choice2Of2 fl.value]
+            Function { isVariadic = false; args = args; returnType = Prim Void }
+          yield val_ ("set_" + fl.name) (emitType_ ctx ty) + str " " + Attr.js_set fl.name
+        | Field (fl, Mutable, _) ->
+          yield! emitMember ma (Getter fl)
+          yield! emitMember ma (Setter fl)
+        | FunctionInterface (ft, _) ->
+          let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
+          yield val_ "apply" (emitType_ ctx (Function ft)) + str " " + Attr.js_apply
+        | Indexer (ft, ReadOnly) ->
+          let ft = { ft with args = Choice2Of2 selfTy :: removeLabels ft.args }
+          yield val_ "get" (emitType_ ctx (Function ft)) + str " " + Attr.js_index_get
+        | Indexer (ft, WriteOnly) ->
+          let ft =
+            { args = Choice2Of2 selfTy :: removeLabels ft.args @ [ Choice2Of2 ft.returnType ]
+              isVariadic = false;
+              returnType = Prim Void }
+          yield val_ "set" (emitType_ ctx (Function ft)) + str " " + Attr.js_index_set
+        | Indexer (ft, Mutable) ->
+          yield! emitMember ma (Indexer (ft, ReadOnly))
+          yield! emitMember ma (Indexer (ft, WriteOnly))
+        // field/getter/setter of void value is ignored
+        | Getter { name = n } | Setter { name = n } | Field ({ name = n }, _, _) ->
+          eprintf "warn: the field/getter/setter '%s' of type '%s' has type 'void' and is ignored" n name
+          ()
+        | New _ -> ()
+      ]
+
+      let members = [
+        for ma, m in c.members do yield! emitMember ma m
+      ]
+
+      if List.isEmpty members || isAnonymous then
+        moduleSig name (concat newline [
+          yield typeAlias "t" tyargs selfTyName
+          yield! members
+        ])
+      else
+        concat newline [
+          yield
+            moduleScopeSig name (Naming.moduleName name) (concat newline [
+              yield  typeAlias "t" tyargs selfTyName
+              yield! members
+            ])
+        ]
 
 
   concat newline [
     yield open_ [ ctx.internalModuleName ]
     yield open_ [ "AnonymousInterfaces"; "Types" ]
+
+    for c, _ in ctx.anonymousInterfacesMap |> Map.toSeq do
+      yield go ctx (ClassDef c)
 
     for stmt in stmts do yield go ctx stmt
   ]

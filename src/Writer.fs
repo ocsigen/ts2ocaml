@@ -44,6 +44,7 @@ module Attr =
     if content = empty then attr Block "js.custom" empty
     else attr Block "js.custom" (newline + indent content + newline)
 
+  let js_implem_floating content = attr Floating "js.implem" (newline + indent content + newline)
   let js_implem_val content = attr Block "js.implem" (newline + indent content + newline)
 
   let js_custom_typ content = attr Block "js.custom" content
@@ -632,7 +633,7 @@ module BaseLibrary =
           (concat newline [
             typeAlias    "intf" [str "-'a"] ojs_t
             let_ "intf_to_js" [str "_"; str "x"] (Some ojs_t) (str "x")
-            let_ "intf_of_js" [str "_"; str "x"] (Some (str "intf")) (str "x")
+            let_ "intf_of_js" [str "_"; str "x"] (Some (tyApp (str "intf") [str "_"])) (str "x")
           ])
 
       yield
@@ -644,7 +645,7 @@ module BaseLibrary =
           (concat newline [
             typeAlias    "enum" [str "'t"; str "+'a"] (str "'t")
             let_ "enum_to_js" [str "f"; str "_"; str "e"] (Some ojs_t) (termApp (str "f") [str "e"])
-            let_ "enum_of_js" [str "f"; str "_"; str "e"] (Some (str "enum")) (termApp (str "f") [str "e"])
+            let_ "enum_of_js" [str "f"; str "_"; str "e"] (Some (tyApp (str "enum") [str "_"])) (termApp (str "f") [str "e"])
           ])
       
       let alphabets = [for c in 'a' .. 'z' do tyVar (string c)]
@@ -753,6 +754,12 @@ let getSafeLabels ctx ty =
     | _ -> Set.empty
   getLabel ty
 
+let emitHeader =
+  concat newline [
+    str "[@@@ocaml.warning \"-7-11-32-39\"]"
+    Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-39\"]")
+  ]
+
 let emitFlattenedDefinitions (ctx: Context) : text =
   let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
 
@@ -849,10 +856,44 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
   let (|Dummy|) _ = []
   let emitType = emitTypeImpl { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
   let emitType_ = emitType noOverride
+
+  let emitMappers tName (typrms: TypeParam list) =
+    let t_ty =
+      let t_ident =
+        Ident { name = [tName]; fullName = Some [tName] }
+      if List.isEmpty typrms then t_ident
+      else App (t_ident, typrms |> List.map (fun typrm -> TypeVar typrm.name))
+    let ojs_t_ty = Ident { name = ["Ojs"; "t"]; fullName = Some ["Ojs"; "t"] }
+    let orf _emitType _ctx ty =
+      match ty with
+      | App (Ident { name = [n] }, ts) when n = tName ->
+        tyApp (str tName) (List.map (_emitType _ctx) ts) |> Some
+      | Ident { name = [n] } when n = tName -> Some (str tName)
+      | Ident { name = ["Ojs"; "t"] } -> Some (str "Ojs.t")
+      | _ -> None
+    let emitType_ = emitType orf
+    let funTy toJs =
+      let mapperArgs =
+        typrms |> List.map (fun typrm ->
+          if toJs then
+            Function { args = [Choice2Of2 (TypeVar typrm.name)]; returnType = ojs_t_ty; isVariadic = false } |> Choice2Of2
+          else
+            Function { args = [Choice2Of2 ojs_t_ty]; returnType = TypeVar typrm.name; isVariadic = false } |> Choice2Of2
+        )
+      if toJs then
+        Function { args = mapperArgs @ [Choice2Of2 t_ty]; returnType = ojs_t_ty; isVariadic = false }
+      else
+        Function { args = mapperArgs @ [Choice2Of2 ojs_t_ty]; returnType = t_ty; isVariadic = false }
+    [
+      val_ (sprintf "%s_to_js" tName) (emitType_ ctx (funTy true))
+      val_ (sprintf "%s_of_js" tName) (emitType_ ctx (funTy false))
+    ]
+
   let emitTypeAliases (typrms: TypeParam list) target =
     let tyargs = typrms |> List.map (fun x -> tprintf "'%s" x.name)
     [
       yield typeAlias "t" tyargs target
+      yield! emitMappers "t" typrms
       let rec go i tyargs typrms =
         match tyargs, typrms with
         | _ :: tyargs, { defaultType = Some ty } :: typrms ->
@@ -860,7 +901,12 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
             let t' = tprintf "t%s" (String.replicate (i-1) "_")
             let tyText = emitType_ ctx ty
             tyApp t' (List.rev (tyText :: tyargs))
-          typeAlias (sprintf "t%s" (String.replicate i "_")) (List.rev tyargs) target' :: go (i+1) tyargs typrms
+          let tName = sprintf "t%s" (String.replicate i "_")
+          [
+            yield  typeAlias tName (List.rev tyargs) target'
+            yield! emitMappers tName typrms
+            yield! go (i+1) tyargs typrms
+          ]
         | _, _ -> []
       yield! go 1 (List.rev tyargs) (List.rev typrms)
     ]
@@ -881,7 +927,9 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       concat newline [
         yield
           moduleSig (Naming.moduleName name) (
-            concat newline (emitTypeAliases typeParams (emitTypeName k tyargs))
+            concat newline [
+              yield! emitTypeAliases typeParams (emitTypeName k tyargs)
+            ]
           )
       ]
     | EnumDef _ -> failwith "impossible_emitStructuredDefinitions_EnumDef"
@@ -1008,4 +1056,12 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       yield go ctx (ClassDef c)
 
     for stmt in stmts do yield go ctx stmt
+  ]
+
+let emitAll ctx stmts =
+  concat newline [
+    emitHeader
+
+    emitFlattenedDefinitions ctx
+    emitStructuredDefinitions ctx stmts
   ]

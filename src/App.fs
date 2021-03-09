@@ -53,9 +53,8 @@ let main argv =
       Fable.Core.JS.JSON.stringify(pstmt, space=2) |> printfn "%s"
       ()
     *)
-    Writer.emitFlattenedDefinitions ctx |> Text.toString 2 |> printfn "%s"
 
-    Writer.emitStructuredDefinitions ctx result |> Text.toString 2 |> printfn "%s"
+    Writer.emitAll ctx result |> Text.toString 2 |> printfn "%s"
     (*
     for _, v in Map.toSeq ctx.definitionsMap do
       match v with

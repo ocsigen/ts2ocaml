@@ -41,10 +41,7 @@ let main argv =
       node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
     let stmts = srcs |> Seq.collect (fun src -> src.statements) |> Seq.collect (Parser.readStatement checker) |> Seq.toList
-    let result = stmts |> List.map Typer.replaceAliasToFunctionWithInterface |> Typer.mergeStatements
-    let ctx = Typer.createRootContext "Internal" result
-    let result = result |> Typer.resolveIdentInStatements ctx
-    let ctx = Typer.createRootContext "Internal" result
+
 
     let stringify x = Fable.Core.JS.JSON.stringify(x, space=2)
 
@@ -54,7 +51,9 @@ let main argv =
       ()
     *)
 
+    let ctx, result = Typer.runAll stmts
     Writer.emitAll ctx result |> Text.toString 2 |> printfn "%s"
+
     (*
     for _, v in Map.toSeq ctx.definitionsMap do
       match v with

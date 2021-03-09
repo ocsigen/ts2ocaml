@@ -657,3 +657,10 @@ let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
     
     resolveUnionMap <- resolveUnionMap |> Map.add u result
     result
+
+let runAll stmts =
+  let result = stmts |> List.map replaceAliasToFunctionWithInterface |> mergeStatements
+  let ctx = createRootContext "Internal" result
+  let result = result |> resolveIdentInStatements ctx
+  let ctx = createRootContext "Internal" result
+  ctx, result

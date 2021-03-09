@@ -96,6 +96,24 @@ let rec replaceAliasToFunctionWithInterface = function
     | _ -> TypeAlias ta
   | x -> x
 
+let rec assignTypeParams fn (typrms: TypeParam list) (xs: 'a list) (f: TypeParam -> 'a -> 'b) (g: TypeParam -> 'b) : 'b list =
+  match typrms, xs with
+  | typrm :: typrms, x :: xs ->
+    f typrm x :: assignTypeParams fn typrms xs f g
+  | typrm :: typrms, [] ->
+    g typrm :: assignTypeParams fn typrms [] f g
+  | [], _ :: _ -> failwithf "assignTypeParams: too many type arguments for type '%s'" (String.concat "." fn)
+  | [], [] -> []
+
+let createBindings fn typrms ts =
+  assignTypeParams fn typrms ts
+    (fun tv ty -> tv.name, ty)
+    (fun tv ->
+      match tv.defaultType with
+      | Some ty -> tv.name, ty
+      | None -> failwithf "createBindings: insufficient type arguments for type '%s'" (String.concat "." fn))
+  |> Map.ofList
+
 let rec mergeStatements (stmts: Statement list) =
   let mutable result : Choice<Statement, Class ref, Module ref> list = []
   let mutable intfMap = Map.empty
@@ -229,7 +247,7 @@ let getAnonymousInterfaces stmts =
 
 let createRootContext (internalModuleName: string) (stmts: Statement list) : Context =
   let add name ty m =
-   m |> Map.add [name] (TypeAlias { name = name; typeParams = []; target = ty; erased = true })
+    m |> Map.add [name] (TypeAlias { name = name; typeParams = []; target = ty; erased = true })
   let m =
     extractNamedDefinitions stmts
     // TODO
@@ -380,13 +398,13 @@ let rec getAllInheritancesOfType (ctx: Context) (ty: Type) : Set<Type> =
       | Ident { fullName = Some fn } ->
         yield! getAllInheritancesFromName ctx fn
       | App (Ident { fullName = Some fn }, ts) ->
-        let typrms =
-          match ctx.definitionsMap |> Map.tryFind fn with
-          | Some (ClassDef c) -> c.typeParams
-          | Some (TypeAlias a) -> a.typeParams
-          | _ -> []
-        let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
-        yield! getAllInheritancesFromName ctx fn |> Seq.map (substTypeVar subst ctx)
+        let lookupResult = lookupFullName ctx fn
+        match lookupResult with
+        | AliasName a when a.erased -> ()
+        | AliasName { typeParams = typrms } | ClassName { typeParams = typrms } ->
+          let subst = createBindings fn typrms ts
+          yield! getAllInheritancesFromName ctx fn |> Seq.map (substTypeVar subst ctx)
+        | _ -> ()
       | Union u -> yield! Set.intersectMany (List.map go u.types)
       | Intersection i -> yield! Set.unionMany (List.map go i.types)
       | _ -> ()
@@ -405,12 +423,12 @@ and getAllInheritancesFromName (ctx: Context) (className: string list) : Set<Typ
             yield t
             yield! getAllInheritancesOfType ctx t
         } |> Set.ofSeq
-      | Some (TypeAlias t) -> getAllInheritancesOfType ctx t.target
+      | Some (TypeAlias t) when not t.erased -> getAllInheritancesOfType ctx t.target
       | _ -> Set.empty
     inheritMap <- inheritMap |> Map.add className result
     result
 
-let getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
+let rec getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
   let (|Dummy|) _ = []
   let rec go t =
     seq {
@@ -419,7 +437,7 @@ let getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
       | (Ident { fullName = Some fn } & Dummy tyargs) | App (Ident { fullName = Some fn }, tyargs) ->
         match fn |> lookupFullName ctx with
         | AliasName a ->
-          let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) a.typeParams tyargs |> Map.ofList
+          let bindings = createBindings fn a.typeParams tyargs
           yield! go (a.target |> substTypeVar bindings ())
         | EnumName e ->
           for c in e.cases do yield Choice1Of2 (Choice1Of2 c)
@@ -456,7 +474,7 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
           if List.isEmpty ts then
             yield onClass t c
           else
-            let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) c.typeParams ts |> Map.ofList
+            let bindings = createBindings fn c.typeParams ts
             yield onClass t (c |> mapTypeInClass (substTypeVar bindings) ())
         | _ -> yield onOther t
       | _ -> yield onOther t
@@ -487,7 +505,7 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
               | Some { value = Some v } -> [fl.name, v]
               | _ -> []
             | AliasName a ->
-              let bindings = List.map2 (fun (a: TypeParam) v -> a.name, v) a.typeParams ts |> Map.ofList
+              let bindings = createBindings fn a.typeParams ts
               go (a.target |> substTypeVar bindings ())
             | _ -> []
           | _ -> []

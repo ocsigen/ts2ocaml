@@ -377,15 +377,29 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
   | Some t -> t
   | None ->
     match ty with
+    | App (t, ts) ->
+      let ts =
+        match t with
+        | Ident { fullName = Some fn } ->
+          match lookupFullName ctx fn with
+          | AliasName { typeParams = typrms; erased = false }
+          | ClassName { typeParams = typrms } ->
+            assignTypeParams fn typrms ts
+              (fun _ t -> t)
+              (fun tv ->
+                match tv.defaultType with
+                | Some t -> t
+                | None -> failwithf "emitTypeImpl: insufficient type params for type '%s'" (String.concat "." fn))
+          | _ -> ts
+        | _ -> ts
+      tyApp (emitTypeImpl flags overrideFunc ctx t) (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
     | Ident i ->
       match i.fullName with
       | Some fn ->
-        match ctx.definitionsMap |> Map.tryFind fn with
-        | Some (TypeAlias ta) when ta.erased -> emitTypeImpl flags overrideFunc ctx ta.target
+        match lookupFullName ctx fn with
+        | AliasName ta when ta.erased -> emitTypeImpl flags overrideFunc ctx ta.target
         | _ -> str (Naming.flattenedLower fn)
       | None -> commentStr (sprintf "FIXME: unknown type '%s'" (String.concat "." i.name)) + str (Naming.structured i.name + ".t")
-    | App (t, ts) ->
-      tyApp (emitTypeImpl flags overrideFunc ctx t) (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
     | TypeVar v ->
       if flags.failContravariantTypeVar && flags.variance = Contravariant then
         commentStr (sprintf "FIXME: contravariant type variable '%s'" v) + any_t
@@ -725,7 +739,7 @@ let getSafeLabels ctx ty =
           | Some (ClassDef c) -> c.typeParams
           | Some (TypeAlias a) -> a.typeParams
           | _ -> []
-        let subst = List.map2 (fun (tv: TypeParam) ty -> tv.name, ty) typrms ts |> Map.ofList
+        let subst = createBindings fn typrms ts
         for e in getAllInheritancesFromName ctx fn do
           match e with
           | Ident { fullName = Some fn } ->
@@ -835,6 +849,22 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
   let (|Dummy|) _ = []
   let emitType = emitTypeImpl { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
   let emitType_ = emitType noOverride
+  let emitTypeAliases (typrms: TypeParam list) target =
+    let tyargs = typrms |> List.map (fun x -> tprintf "'%s" x.name)
+    [
+      yield typeAlias "t" tyargs target
+      let rec go i tyargs typrms =
+        match tyargs, typrms with
+        | _ :: tyargs, { defaultType = Some ty } :: typrms ->
+          let target' =
+            let t' = tprintf "t%s" (String.replicate (i-1) "_")
+            let tyText = emitType_ ctx ty
+            tyApp t' (List.rev (tyText :: tyargs))
+          typeAlias (sprintf "t%s" (String.replicate i "_")) (List.rev tyargs) target' :: go (i+1) tyargs typrms
+        | _, _ -> []
+      yield! go 1 (List.rev tyargs) (List.rev typrms)
+    ]
+
   let rec go (ctx: Context) (s: Statement) : text =
     match s with
     | Module m ->
@@ -851,7 +881,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       concat newline [
         yield
           moduleSig (Naming.moduleName name) (
-            typeAlias "t" tyargs (emitTypeName k tyargs)
+            concat newline (emitTypeAliases typeParams (emitTypeName k tyargs))
           )
       ]
     | EnumDef _ -> failwith "impossible_emitStructuredDefinitions_EnumDef"
@@ -862,7 +892,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
     | ClassDef c ->
       let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
 
-      let name, selfTy, selfTyName, isSelfTy, isAnonymous =
+      let name, selfTy, selfTyText, isSelfTy, isAnonymous =
         match c.name with
         | Some n ->
           let k = List.rev (n :: ctx.currentNamespace)
@@ -885,9 +915,8 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
             true
           | None -> failwith "impossible_emitStructuredDefinitions_ClassDef"
 
-      let selfTyText = str "t"
       let orf _emitType _ctx ty =
-        if isSelfTy ty then Some selfTyText
+        if isSelfTy ty then Some (str "t")
         else
           match ty with
           | PolymorphicThis -> Some (_emitType ctx selfTy)
@@ -958,14 +987,14 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
 
       if List.isEmpty members || isAnonymous then
         moduleSig name (concat newline [
-          yield typeAlias "t" tyargs selfTyName
+          yield! emitTypeAliases c.typeParams selfTyText
           yield! members
         ])
       else
         concat newline [
           yield
             moduleScopeSig name (Naming.moduleName name) (concat newline [
-              yield  typeAlias "t" tyargs selfTyName
+              yield! emitTypeAliases c.typeParams selfTyText
               yield! members
             ])
         ]

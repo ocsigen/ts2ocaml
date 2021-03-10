@@ -269,6 +269,20 @@ module Definition =
       str "end"
     ]
 
+  let moduleType name content =
+    concat newline [
+      tprintf "module type %s = sig" name
+      indent content
+      str "end"
+    ]
+
+  let functor_ name moduleName moduleType content =
+    concat newline [
+      tprintf "module %s (%s: " name moduleName + moduleType +@ ") : sig"
+      indent content
+      str "end"
+    ]
+
   let abstractType name tyargs = 
     str "type "
     + (if List.isEmpty tyargs then str name else tyApp (str name) tyargs)
@@ -756,6 +770,72 @@ let getSafeLabels ctx ty =
     | _ -> Set.empty
   getLabel ty
 
+let emitMappers ctx emitType tName (typrms: TypeParam list) =
+  let t_ty =
+    let t_ident =
+      Ident { name = [tName]; fullName = Some [tName]; loc = UnknownLocation }
+    if List.isEmpty typrms then t_ident
+    else App (t_ident, typrms |> List.map (fun typrm -> TypeVar typrm.name))
+  let ojs_t_ty = Ident { name = ["Ojs"; "t"]; fullName = Some ["Ojs"; "t"]; loc = UnknownLocation }
+  let orf _emitType _ctx ty =
+    match ty with
+    | App (Ident { name = [n] }, ts) when n = tName ->
+      tyApp (str tName) (List.map (_emitType _ctx) ts) |> Some
+    | Ident { name = [n] } when n = tName -> Some (str tName)
+    | Ident { name = ["Ojs"; "t"] } -> Some (str "Ojs.t")
+    | _ -> None
+  let emitType_ = emitType orf
+  let funTy toJs =
+    let mapperArgs =
+      typrms |> List.map (fun typrm ->
+        if toJs then
+          Function { args = [Choice2Of2 (TypeVar typrm.name)]; returnType = ojs_t_ty; isVariadic = false } |> Choice2Of2
+        else
+          Function { args = [Choice2Of2 ojs_t_ty]; returnType = TypeVar typrm.name; isVariadic = false } |> Choice2Of2
+      )
+    if toJs then
+      Function { args = mapperArgs @ [Choice2Of2 t_ty]; returnType = ojs_t_ty; isVariadic = false }
+    else
+      Function { args = mapperArgs @ [Choice2Of2 ojs_t_ty]; returnType = t_ty; isVariadic = false }
+  [
+    val_ (sprintf "%s_to_js" tName) (emitType_ ctx (funTy true))
+    val_ (sprintf "%s_of_js" tName) (emitType_ ctx (funTy false))
+  ]
+
+let emitUnknownIdentifiers ctx =
+  let missingModule =
+    let rec f ko (t: Trie<string, int>) =
+      let content =
+        concat newline [
+          match t.value with
+          | None -> ()
+          | Some arity ->
+            let typrm : TypeParam list = [ for i in 1 .. arity do yield { name = sprintf "T%d" i; extends = None; defaultType = None } ]
+            yield abstractType "t" (typrm |> List.map (fun tp -> tprintf "'%s" tp.name))
+            yield! emitMappers ctx (emitTypeImpl EmitTypeFlags.defaultValue) "t" typrm
+          for k, t in t.childs |> Map.toSeq do
+            yield f (Some k) t
+        ]
+      match ko with
+      | None -> content
+      | Some k -> moduleSig k content
+      
+    moduleType "Missing" (f None ctx.unknownIdentifiers)
+
+  if ctx.unknownIdentifiers |> Trie.isEmpty then empty
+  else
+    concat newline [
+      comment (newline + indent (concat newline [
+        yield str "unknown identifiers:"
+        for name, i in ctx.unknownIdentifiers |> Trie.toSeq do
+          if i = 0 then
+            yield indent (tprintf "- %s" (String.concat "." name))
+          else
+            yield indent (tprintf "- %s<%s>" (String.concat "." name) (Seq.replicate i "_" |> String.concat ", "))
+      ]) + newline)
+      Attr.js_stop_start_implem missingModule missingModule
+    ]
+
 let emitHeader =
   concat newline [
     str "[@@@ocaml.warning \"-7-11-32-39\"]"
@@ -859,43 +939,11 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
   let emitType = emitTypeImpl { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
   let emitType_ = emitType noOverride
 
-  let emitMappers tName (typrms: TypeParam list) =
-    let t_ty =
-      let t_ident =
-        Ident { name = [tName]; fullName = Some [tName]; loc = UnknownLocation }
-      if List.isEmpty typrms then t_ident
-      else App (t_ident, typrms |> List.map (fun typrm -> TypeVar typrm.name))
-    let ojs_t_ty = Ident { name = ["Ojs"; "t"]; fullName = Some ["Ojs"; "t"]; loc = UnknownLocation }
-    let orf _emitType _ctx ty =
-      match ty with
-      | App (Ident { name = [n] }, ts) when n = tName ->
-        tyApp (str tName) (List.map (_emitType _ctx) ts) |> Some
-      | Ident { name = [n] } when n = tName -> Some (str tName)
-      | Ident { name = ["Ojs"; "t"] } -> Some (str "Ojs.t")
-      | _ -> None
-    let emitType_ = emitType orf
-    let funTy toJs =
-      let mapperArgs =
-        typrms |> List.map (fun typrm ->
-          if toJs then
-            Function { args = [Choice2Of2 (TypeVar typrm.name)]; returnType = ojs_t_ty; isVariadic = false } |> Choice2Of2
-          else
-            Function { args = [Choice2Of2 ojs_t_ty]; returnType = TypeVar typrm.name; isVariadic = false } |> Choice2Of2
-        )
-      if toJs then
-        Function { args = mapperArgs @ [Choice2Of2 t_ty]; returnType = ojs_t_ty; isVariadic = false }
-      else
-        Function { args = mapperArgs @ [Choice2Of2 ojs_t_ty]; returnType = t_ty; isVariadic = false }
-    [
-      val_ (sprintf "%s_to_js" tName) (emitType_ ctx (funTy true))
-      val_ (sprintf "%s_of_js" tName) (emitType_ ctx (funTy false))
-    ]
-
   let emitTypeAliases (typrms: TypeParam list) target =
     let tyargs = typrms |> List.map (fun x -> tprintf "'%s" x.name)
     [
       yield typeAlias "t" tyargs target
-      yield! emitMappers "t" typrms
+      yield! emitMappers ctx emitType "t" typrms
       let rec go i tyargs typrms =
         match tyargs, typrms with
         | _ :: tyargs, { defaultType = Some ty } :: typrms ->
@@ -906,7 +954,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
           let tName = sprintf "t%s" (String.replicate i "_")
           [
             yield  typeAlias tName (List.rev tyargs) target'
-            yield! emitMappers tName typrms
+            yield! emitMappers ctx emitType tName typrms
             yield! go (i+1) tyargs typrms
           ]
         | _, _ -> []
@@ -1068,8 +1116,22 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
 
 let emitAll ctx stmts =
   concat newline [
-    emitHeader
+    yield emitHeader
+    yield empty
+    yield emitUnknownIdentifiers ctx
+    yield empty
 
-    emitFlattenedDefinitions ctx
-    emitStructuredDefinitions ctx stmts
+    let defs = [ 
+      emitFlattenedDefinitions ctx
+      empty
+      emitStructuredDefinitions ctx stmts
+    ]
+    if Trie.isEmpty ctx.unknownIdentifiers then
+      yield! defs
+    else
+      yield
+        functor_ "Make" "M" (str "Missing") (concat newline [
+          yield  open_ ["M"]
+          yield! defs
+        ])
   ]

@@ -2,12 +2,59 @@ module Typer
 
 open Syntax
 
+type Trie<'k, 'v when 'k: comparison> = {
+  value: 'v option
+  childs: Map<'k, Trie<'k, 'v>>
+}
+
+module Trie =
+  let empty<'k, 'v when 'k: comparison> : Trie<'k, 'v> =
+    { value = None; childs = Map.empty }
+  let rec add (ks: 'k list) (v: 'v) (t: Trie<'k, 'v>) =
+    match ks with
+    | [] -> { t with value = Some v }
+    | k :: ks ->
+      let child =
+        match Map.tryFind k t.childs with
+        | None -> empty
+        | Some child -> child
+      { t with childs = t.childs |> Map.add k (add ks v child) }
+  let rec tryFind (ks: 'k list) (t: Trie<'k, 'v>) =
+    match ks with
+    | [] -> t.value
+    | k :: ks ->
+      match Map.tryFind k t.childs with
+      | None -> None
+      | Some child -> tryFind ks child
+  let rec getSubTrie (ks: 'k list) (t: Trie<'k, 'v>) =
+    match ks with
+    | [] -> Some t
+    | k :: ks ->
+      match Map.tryFind k t.childs with
+      | None -> None
+      | Some child -> getSubTrie ks child
+  let toSeq (t: Trie<'k, 'v>) =
+    let rec go ks t =
+      seq {
+        match t.value with
+        | None -> ()
+        | Some v -> yield List.rev ks, v
+        for k, child in Map.toSeq t.childs do
+          yield! go (k :: ks) child
+      }
+    go [] t
+  let isEmpty (t: Trie<_, _>) =
+    t.value.IsNone && Map.isEmpty t.childs
+  let ofSeq (xs: seq<'k list * 'v>) =
+    xs |> Seq.fold (fun state (ks, v) -> add ks v state) empty
+
 type Context = {
   currentNamespace: string list
   definitionsMap: Map<string list, Statement>
   typeLiteralsMap: Map<Literal, int>
   anonymousInterfacesMap: Map<Class, int>
   internalModuleName: string
+  unknownIdentifiers: Trie<string, int>
 }
 
 module Context =
@@ -204,57 +251,78 @@ let extractNamedDefinitions (stmts: Statement list) : Map<string list, Statement
     | _ -> map
   stmts |> List.fold (go []) Map.empty
 
-let findTypesInType (pred: Type -> bool * 'a option) (t: Type) : 'a seq =
+let findTypesInType (pred: Type -> Choice<bool, Type list> * 'a option) (t: Type) : 'a seq =
   let rec go_t x =
     match x with
     | App (t, ts) ->
       seq {
         let cont, y = pred x
         match y with Some v -> yield v | None -> ()
-        if cont then
+        match cont with
+        | Choice1Of2 false -> ()
+        | Choice1Of2 true ->
           yield! go_t t
           for t in ts do yield! go_t t
+        | Choice2Of2 ts -> for t in ts do yield! go_t t
       }
     | Union { types = ts } | Intersection { types = ts } | Tuple ts | ReadonlyTuple ts ->
       seq {
         let cont, y = pred x
         match y with Some v -> yield v | None -> ()
-        if cont then
+        match cont with
+        | Choice1Of2 false -> ()
+        | Choice1Of2 true ->
           for t in ts do yield! go_t t
+        | Choice2Of2 ts -> for t in ts do yield! go_t t
       }
     | Function f ->
       seq {
         let cont, y = pred x
         match y with Some v -> yield v | None -> ()
-        if cont then
+        match cont with
+        | Choice1Of2 false -> ()
+        | Choice1Of2 true ->
           yield! go_t f.returnType
           for a in f.args do
             match a with
             | Choice1Of2 { value = t }
             | Choice2Of2 t ->
               yield! go_t t
+        | Choice2Of2 ts -> for t in ts do yield! go_t t
       }
     | IndexedAccess (t1, t2, _) ->
       seq {
         let cont, y = pred x
         match y with Some v -> yield v | None -> ()
-        if cont then
+        match cont with
+        | Choice1Of2 false -> ()
+        | Choice1Of2 true ->
           yield! go_t t1
           yield! go_t t2
+        | Choice2Of2 ts -> for t in ts do yield! go_t t
       }
     | AnonymousInterface c ->
       let cont, y = pred x
       let xs =
-        if cont then
+        match cont with
+        | Choice1Of2 false -> Seq.empty
+        | Choice1Of2 true ->
           let ra = ResizeArray()
           mapTypeInClass (fun () t -> ra.Add(t); t) () c |> ignore;
           ra |> Seq.collect go_t
-        else Seq.empty
+        | Choice2Of2 ts -> ts |> Seq.collect go_t
       Seq.append (Option.toList y) xs
-    | x -> pred x |> snd |> Option.map Seq.singleton |> Option.defaultValue Seq.empty
+    | x ->
+      seq {
+        let cont, y = pred x
+        match y with Some v -> yield v | None -> ()
+        match cont with
+        | Choice1Of2 _ -> ()
+        | Choice2Of2 ts -> for t in ts do yield! go_t t
+      }
   go_t t
 
-let findTypesInStatements (pred: Type -> bool * 'a option) (stmts: Statement list) : 'a seq =
+let findTypesInStatements pred (stmts: Statement list) : 'a seq =
   let rec go = function
     | TypeAlias ta ->
       seq {
@@ -278,15 +346,24 @@ let findTypesInStatements (pred: Type -> bool * 'a option) (stmts: Statement lis
   stmts |> Seq.collect go
 
 let getTypeLiterals stmts =
-  findTypesInStatements (function TypeLiteral l -> true, Some l | _ -> true, None) stmts |> Set.ofSeq
+  findTypesInStatements (function TypeLiteral l -> Choice1Of2 true, Some l | _ -> Choice1Of2 true, None) stmts |> Set.ofSeq
 
 let getAnonymousInterfaces stmts =
   findTypesInStatements (function
-    | AnonymousInterface c when Option.isNone c.name -> true, Some c
-    | _ -> true, None
+    | AnonymousInterface c when Option.isNone c.name -> Choice1Of2 true, Some c
+    | _ -> Choice1Of2 true, None
   ) stmts |> Set.ofSeq
 
-let createRootContext (internalModuleName: string) (stmts: Statement list) : Context =
+let getUnknownIdentifiers stmts =
+  findTypesInStatements (function
+    | App (Ident {name = name; fullName = None}, ts) ->
+      Choice2Of2 ts, Some (name, List.length ts)
+    | Ident { name = name; fullName = None } ->
+      Choice1Of2 true, Some (name, 0)
+    | _ -> Choice1Of2 true, None
+  ) stmts |> Trie.ofSeq
+
+let private createRootContextForTyper internalModuleName stmts =
   let add name ty m =
     m |> Map.add [name] (TypeAlias { name = name; typeParams = []; target = ty; erased = true })
   let m =
@@ -303,15 +380,23 @@ let createRootContext (internalModuleName: string) (stmts: Statement list) : Con
     |> add "RegExp" (Prim RegExp)
     |> add "ReadonlyArray" (Prim ReadonlyArray)
     |> add "Promise" (Prim Promise)
-  let tlm = getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
-  let aim = getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
   {
     internalModuleName = internalModuleName
     currentNamespace = []
     definitionsMap = m
-    typeLiteralsMap = tlm
-    anonymousInterfacesMap = aim
+    typeLiteralsMap = Map.empty
+    anonymousInterfacesMap = Map.empty
+    unknownIdentifiers = Trie.empty
   }
+
+let createRootContext (internalModuleName: string) (stmts: Statement list) : Context =
+  let tlm = getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
+  let aim = getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
+  let uid = getUnknownIdentifiers stmts
+  { createRootContextForTyper internalModuleName stmts with
+      typeLiteralsMap = tlm
+      anonymousInterfacesMap = aim
+      unknownIdentifiers = uid }
 
 type FullNameLookupResult =
   | AliasName of TypeAlias
@@ -832,10 +917,21 @@ let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
     result
 
 let runAll stmts =
-  let result = stmts |> List.map replaceAliasToFunctionWithInterface |> mergeStatements
-  let ctx = createRootContext "Internal" result
+
+  let result =
+    stmts |> List.map replaceAliasToFunctionWithInterface // replace alias to function type with a function interface
+          |> mergeStatements // merge modules, interfaces, etc
+  // build a context
+  let ctx = createRootContextForTyper "Internal" result
+  
+  // resolve every identifier into its full name
   let result = result |> resolveIdentInStatements ctx
-  let ctx = createRootContext "Internal" result
+  // rebuild the context with the identifiers resolved to full name
+  let ctx = createRootContextForTyper "Internal" result
+
+  // resolve every indexed access type and type query
   let result = result |> resolveIndexedAccessAndTypeQuery ctx
+  // rebuild the context because resolbeIndexedAccessAndTypeQuery may introduce additional anonymous function interfaces
   let ctx = createRootContext "Internal" result
+
   ctx, result

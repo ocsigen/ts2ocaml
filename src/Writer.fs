@@ -414,7 +414,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
         match lookupFullName ctx fn with
         | AliasName ta when ta.erased -> emitTypeImpl flags overrideFunc ctx ta.target
         | _ -> str (Naming.flattenedLower fn)
-      | None -> commentStr (sprintf "FIXME: unknown type '%s'" (String.concat "." i.name)) + str (Naming.structured i.name + ".t")
+      | None -> str (Naming.structured i.name + ".t")
     | TypeVar v ->
       if flags.failContravariantTypeVar && flags.variance = Contravariant then
         commentStr (sprintf "FIXME: contravariant type variable '%s'" v) + any_t

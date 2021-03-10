@@ -16,6 +16,11 @@ module Enum =
     System.Enum.GetName(typeof<'enum>, e) 
 
 module Node =
+  let location (n: Node) =
+    let src = n.getSourceFile()
+    let pos = src.getLineAndCharacterOfPosition (n.getStart())
+    Location (src, pos)
+
   let ppLocation (n: Node) =
     let src = n.getSourceFile()
     let pos = src.getLineAndCharacterOfPosition (n.getStart())
@@ -155,10 +160,8 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
       | [x] when typrm |> Set.contains x -> TypeVar x
       | [] -> nodeError lhs "cannot parse node '%s' as identifier" (lhs.getText())
       | ts ->
-        if ts |> List.contains "T" then
-          nodeWarn t "T"
-          failwith ""
-        Ident { name = ts; fullName = None (* getFullNameAtNodeLocation checker t *) }
+        let loc = Node.location lhs
+        Ident { name = ts; fullName = None; loc = loc  }
     match t.typeArguments with
     | None -> lt
     | Some args -> App (lt, args |> Seq.map (readTypeNode typrm checker) |> List.ofSeq)
@@ -205,6 +208,16 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
     | _ ->
       nodeWarn t "unsupported type operator '%s'" (Enum.pp t.operator)
       UnknownType (Some (t.getText()))
+  | Kind.IndexedAccessType ->
+    let t = t :?> Ts.IndexedAccessTypeNode
+    let lhs = readTypeNode Set.empty checker t.objectType
+    let rhs = readTypeNode Set.empty checker t.indexType
+    IndexedAccess (lhs, rhs, Node.location t)
+  | Kind.TypeQuery ->
+    let t = t :?> Ts.TypeQueryNode
+    let nameNode = box t.exprName :?> Node
+    let name = extractNestedName nameNode
+    TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }, Node.location t)
   // fallbacks
   | Kind.TypePredicate -> Prim Bool
   | _ ->
@@ -466,7 +479,7 @@ let readExportAssignment (checker: TypeChecker) (e: Ts.ExportAssignment) : Ident
   match extractNestedName e.expression |> Seq.toList with
   | [] -> nodeError e.expression "cannot parse node '%s' as identifier" (e.expression.getText())
   | ts ->
-    { name = ts; fullName = None (* getFullNameAtNodeLocation checker e *) }, AsDefault
+    { name = ts; fullName = None; loc = Node.location e.expression }, AsDefault
 
 let rec readModule (checker: TypeChecker) (md: Ts.ModuleDeclaration) : Module =
   let name = nameToString md.name

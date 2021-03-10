@@ -49,6 +49,36 @@ and mapTypeInClass mapping (ctx: 'Context) (c: Class) : Class =
 and mapTypeInFieldLike mapping (ctx: 'Context) (fl: FieldLike) : FieldLike =
   { fl with value = mapping ctx fl.value }
 
+let rec mapTypeInStatements mapping ctx stmts =
+  let f = function
+    | TypeAlias a ->
+      TypeAlias {
+        a with
+          target = mapping ctx a.target
+          typeParams = a.typeParams |> List.map (mapTypeInTypeParam mapping ctx)
+      }
+    | ClassDef c ->
+      ClassDef (mapTypeInClass mapping ctx c)
+    | EnumDef e -> EnumDef e
+    | Export (i, m) -> Export (i, m)
+    | Value v ->
+      Value {
+        v with
+          typ = mapping ctx v.typ
+          typeParams = v.typeParams |> List.map (mapTypeInTypeParam mapping ctx)
+      }
+    | Module m ->
+      Module {
+        m with
+          statements =
+            mapTypeInStatements 
+              mapping
+              { ctx with currentNamespace = m.name :: ctx.currentNamespace }
+              m.statements 
+      }
+    | UnknownStatement msgo -> UnknownStatement msgo
+  stmts |> List.map f
+
 let rec substTypeVar (subst: Map<string, Type>) _ctx = function
   | TypeVar v ->
     match subst |> Map.tryFind v with
@@ -72,7 +102,10 @@ let rec substTypeVar (subst: Map<string, Type>) _ctx = function
           args = List.map (mapTypeInArg (substTypeVar subst) _ctx) f.args }
   | App (t, ts) -> App (substTypeVar subst _ctx t, ts |> List.map (substTypeVar subst _ctx))
   | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
-  | PolymorphicThis -> PolymorphicThis | UnknownType msgo -> UnknownType msgo
+  | PolymorphicThis -> PolymorphicThis
+  | IndexedAccess (t1, t2, loc) -> IndexedAccess (substTypeVar subst _ctx t1, substTypeVar subst _ctx t2, loc)
+  | TypeQuery (i, loc) -> TypeQuery (i, loc)
+  | UnknownType msgo -> UnknownType msgo
 
 let rec replaceAliasToFunctionWithInterface = function
   | Module m ->
@@ -201,6 +234,14 @@ let findTypesInType (pred: Type -> bool * 'a option) (t: Type) : 'a seq =
             | Choice2Of2 t ->
               yield! go_t t
       }
+    | IndexedAccess (t1, t2, _) ->
+      seq {
+        let cont, y = pred x
+        match y with Some v -> yield v | None -> ()
+        if cont then
+          yield! go_t t1
+          yield! go_t t2
+      }
     | AnonymousInterface c ->
       let cont, y = pred x
       let xs =
@@ -279,6 +320,7 @@ type FullNameLookupResult =
   | EnumCaseName of string * Enum
   | ModuleName of Module
   | ValueName of Value
+  | MemberName of MemberAttribute * Member
 
 let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : string list option =
   let nsRev = List.rev ctx.currentNamespace
@@ -302,19 +344,38 @@ let lookupFullName (ctx: Context) (fullName: string list) : FullNameLookupResult
   | Some (Module m) -> ModuleName m
   | Some (Value v) -> ValueName v
   | None ->
-    let enumName = fullName |> List.take (List.length fullName - 1)
-    let enumCaseName = List.last fullName
-    match ctx.definitionsMap |> Map.tryFind enumName with
+    let containerName = fullName |> List.take (List.length fullName - 1)
+    let itemName = List.last fullName
+    match ctx.definitionsMap |> Map.tryFind containerName with
     | Some (EnumDef e) ->
-      match e.cases |> List.tryFind (fun c -> c.name = enumCaseName) with
-      | Some _ -> EnumCaseName (enumCaseName, e)
-      | None -> failwithf "The enum '%s' does not have a case '%s" (enumName |> String.concat ".") enumCaseName
+      match e.cases |> List.tryFind (fun c -> c.name = itemName) with
+      | Some _ -> EnumCaseName (itemName, e)
+      | None -> failwithf "The enum '%s' does not have a case '%s" (containerName |> String.concat ".") itemName
+    | Some (ClassDef c) ->
+      let result =
+        c.members |> List.tryPick (fun (ma, m) ->
+          match m with
+          | Field (fl, _, _) | Getter fl | Setter fl when fl.name = itemName -> MemberName (ma, m) |> Some
+          | Method (name, _, _) when name = itemName -> MemberName (ma, m) |> Some
+          | _ -> None
+        )
+      match result with
+      | None ->
+        match c.name with
+        | Some name -> failwithf "The class '%s' does not have a member '%s'" name itemName
+        | None -> failwithf "The "
+      | Some x -> x
     | _ -> failwithf "Current context doesn't contain '%s'" (fullName |> String.concat ".")
   | _ -> failwithf "Current context doesn't contain '%s'" (fullName |> String.concat ".")
 
+let tryLookupFullName ctx fullName =
+  try
+    lookupFullName ctx fullName |> Some
+  with
+    | _ -> None
 
-let rec mapIdent (mapping: Context -> IdentType -> Type) (ctx: Context) = function
-  | Ident i -> mapping ctx i
+let rec mapIdent (mapping: Context -> IdentType -> IdentType) (ctx: Context) = function
+  | Ident i -> Ident (mapping ctx i)
   | Union u -> Union { types = u.types |> List.map (mapIdent mapping ctx) }
   | Intersection i -> Intersection { types = i.types |> List.map (mapIdent mapping ctx) }
   | Tuple ts -> Tuple (ts |> List.map (mapIdent mapping ctx))
@@ -327,7 +388,10 @@ let rec mapIdent (mapping: Context -> IdentType -> Type) (ctx: Context) = functi
           args = List.map (mapTypeInArg (mapIdent mapping) ctx) f.args }
   | App (t, ts) -> App (mapIdent mapping ctx t, ts |> List.map (mapIdent mapping ctx))
   | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l | TypeVar v -> TypeVar v
-  | PolymorphicThis -> PolymorphicThis | UnknownType msg -> UnknownType msg
+  | PolymorphicThis -> PolymorphicThis
+  | IndexedAccess (t1, t2, loc) -> IndexedAccess (mapIdent mapping ctx t1, mapIdent mapping ctx t2, loc)
+  | TypeQuery (i, loc) -> TypeQuery (mapping ctx i, loc)
+  | UnknownType msg -> UnknownType msg
 
 let rec mapIdentInStatements mapType mapExport (ctx: Context) (stmts: Statement list) : Statement list =
   let f = function
@@ -374,7 +438,7 @@ let resolveIdentType (ctx: Context) (i: IdentType) : IdentType =
 
 let resolveIdentInStatements (ctx: Context) (stmts: Statement list) : Statement list =
   mapIdentInStatements
-    (fun ctx i -> resolveIdentType ctx i |> Ident)
+    (fun ctx i -> resolveIdentType ctx i)
     (fun ctx i m ->
       match i.fullName with
       | Some _ -> Export (i, m)
@@ -427,6 +491,115 @@ and getAllInheritancesFromName (ctx: Context) (className: string list) : Set<Typ
       | _ -> Set.empty
     inheritMap <- inheritMap |> Map.add className result
     result
+
+let private createFunctionInterface typrms ft =
+  {
+    comments = []
+    name = None
+    accessibility = Public
+    isInterface = true
+    isExported = false
+    implements = []
+    typeParams = []
+    members = [
+      { comments = []; isStatic = false; accessibility = Public },
+      FunctionInterface (ft, typrms)
+    ]
+  }
+
+let rec resolveIndexedAccessAndTypeQuery (ctx: Context) (stmts: Statement list) =
+  let (|Dummy|) _ = []
+  let rec f ctx = function
+    | PolymorphicThis -> PolymorphicThis
+    | Ident i -> Ident i | TypeVar v -> TypeVar v | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
+    | AnonymousInterface c -> mapTypeInClass f ctx c |> AnonymousInterface
+    | Union { types = types } -> Union { types = List.map (f ctx) types }
+    | Intersection { types = types } -> Intersection { types = List.map (f ctx) types }
+    | Tuple ts -> Tuple (List.map (f ctx) ts)
+    | ReadonlyTuple ts -> ReadonlyTuple (List.map (f ctx) ts)
+    | Function ft -> mapTypeInFuncType f ctx ft |> Function
+    | App (t, ts) -> App (f ctx t, List.map (f ctx) ts)
+    | IndexedAccess (tobj, tindex, loc) ->
+      let memberChooser m t2 =
+        match m, t2 with
+        | (Field (fl, _, []) | Getter fl | Setter fl),
+          TypeLiteral (LString name) when fl.name = name ->
+          if fl.isOptional then Some (Union { types = [fl.value; Prim Undefined] })
+          else Some fl.value
+        | Constructor (_, _), TypeLiteral (LString name) when name = "constructor" ->
+          Some (Prim UntypedFunction)
+        | Indexer (ft, _), (Prim Number | TypeLiteral (LInt _)) -> Some ft.returnType
+        | Method (name', ft, typrms), TypeLiteral (LString name) when name = name' ->
+          Some (AnonymousInterface (createFunctionInterface typrms ft))
+        | _, _ -> None
+      let rec go t1 t2 =
+        let onFail () =
+          let tyText = Type.pp (IndexedAccess (t1, t2, loc))
+          eprintfn "cannot resolve an indexed access type '%s' %s" tyText loc.AsString
+          UnknownType (Some tyText)
+        match t1, t2 with
+        | UnknownType msgo, _ ->
+          let msg =
+            match msgo with
+            | None -> sprintf "<unknown>[%s]" (Type.pp t2)
+            | Some msg -> sprintf "%s[%s]" msg (Type.pp t2)
+          eprintfn "cannot resolve an indexed access type '%s' %s" msg loc.AsString
+          UnknownType (Some msg)
+        | Union { types = ts }, _ -> Union { types = List.map (fun t1 -> go t1 t2) ts }
+        | Intersection { types = ts }, _ -> Intersection { types = List.map (fun t1 -> go t1 t2) ts }
+        | AnonymousInterface c, _ ->
+          let result = c.members |> List.choose (fun (ma, m) -> memberChooser m t2)
+          match result with
+          | [] -> onFail ()
+          | [t] -> t
+          | ts -> Intersection { types = ts }
+        | App ((Prim Array | Prim ReadonlyArray), [t]), Prim (Number | Any) -> f ctx t
+        | (Tuple ts | ReadonlyTuple ts), TypeLiteral (LInt i) ->
+          match ts |> List.tryItem i with
+          | Some t -> t
+          | None -> onFail ()
+        | (Tuple ts | ReadonlyTuple ts), Prim (Number | Any) -> Union { types = ts }
+        | (App (Ident { fullName = Some fn }, ts) | (Ident { fullName = Some fn } & Dummy ts)), _ ->
+          match lookupFullName ctx fn with
+          | AliasName ta ->
+            let subst = createBindings fn ta.typeParams ts
+            go ta.target t2 |> substTypeVar subst ctx
+          | ClassName c ->
+            let subst = createBindings fn c.typeParams ts
+            go (AnonymousInterface c) t2 |> substTypeVar subst ctx
+          | ValueName v ->
+            let subst = createBindings fn v.typeParams ts
+            go v.typ t2 |> substTypeVar subst ctx
+          | _ -> onFail ()
+        | _, _ -> onFail ()
+      go (f ctx tobj) (f ctx tindex)
+    | TypeQuery (i, loc) ->
+      let onFail () =
+        let tyText = Type.pp (TypeQuery (i, loc))
+        eprintfn "cannot resolve a type query '%s' %s" tyText loc.AsString
+        UnknownType (Some tyText)
+      match i.fullName with
+      | None -> onFail ()
+      | Some fn ->
+        let result typrms ty =
+          match typrms, ty with
+          | _ :: _, Function ft -> AnonymousInterface (createFunctionInterface typrms ft)
+          | _ :: _, _ -> onFail ()
+          | [], _ -> ty
+        match lookupFullName ctx fn with
+        | ValueName v -> result v.typeParams v.typ
+        | MemberName (_, m) ->
+          match m with
+          | Field (ft, _, typrms) | (Getter ft & Dummy typrms) | (Setter ft & Dummy typrms) ->
+            match ft.isOptional, result typrms ft.value with
+            | true, UnknownType msgo -> UnknownType msgo
+            | true, t -> Union { types =  [t; Prim Undefined] }
+            | false, t -> t
+          | Method (_, ft, typrms) -> result typrms (Function ft)
+          | _ -> onFail ()
+        | _ -> onFail ()
+    | UnknownType msgo -> UnknownType msgo
+  mapTypeInStatements f ctx stmts
 
 let rec getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
   let (|Dummy|) _ = []
@@ -662,5 +835,7 @@ let runAll stmts =
   let result = stmts |> List.map replaceAliasToFunctionWithInterface |> mergeStatements
   let ctx = createRootContext "Internal" result
   let result = result |> resolveIdentInStatements ctx
+  let ctx = createRootContext "Internal" result
+  let result = result |> resolveIndexedAccessAndTypeQuery ctx
   let ctx = createRootContext "Internal" result
   ctx, result

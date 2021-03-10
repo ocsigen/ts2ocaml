@@ -1,4 +1,35 @@
 module Syntax
+open TypeScript
+
+[<CustomEquality; CustomComparison; StructuredFormatDisplay("{AsString}")>]
+type Location = 
+  | Location of Ts.SourceFile * Ts.LineAndCharacter
+  | UnknownLocation
+with
+  member x.AsString =
+    match x with
+    | Location (src, pos) ->
+      sprintf "line %i, col %i of %s"
+        (int pos.line + 1)
+        (int pos.character + 1)
+        src.fileName
+    | UnknownLocation -> "<unknown>"
+  member x.AsComparable =
+    match x with
+    | UnknownLocation -> None
+    | Location (src, pos) ->
+      Some (src.fileName, pos.line, pos.character)
+  override x.ToString() = x.AsString
+  override x.Equals(yo) =
+    match yo with
+    | :? Location as y -> x.AsComparable = y.AsComparable
+    | _ -> false
+  override x.GetHashCode() = x.AsComparable.GetHashCode()
+  interface System.IComparable with
+    member x.CompareTo(yo) =
+      match yo with
+      | :? Location as y -> compare x.AsComparable y.AsComparable
+      | _ -> invalidArg "yo" "cannot compare values"
 
 type Literal =
   | LString of string
@@ -59,6 +90,8 @@ and Type =
   | Tuple of Type list | ReadonlyTuple of Type list
   | Function of FuncType<Type>
   | App of Type * Type list
+  | IndexedAccess of Type * Type * Location
+  | TypeQuery of IdentType * Location
   | UnknownType of string option
 
 and Union = {
@@ -72,6 +105,7 @@ and Intersection = {
 and IdentType = {
   name: string list
   fullName: string list option
+  loc: Location
 }
 
 and FieldLike = { name:string; isOptional:bool; value:Type }
@@ -186,6 +220,8 @@ module Type =
           | Choice2Of2 t -> pp t)
       "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"
     | App (t, ts) -> pp t + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
+    | IndexedAccess (t, u, _) -> sprintf "%s[%s]" (pp t) (pp u)
+    | TypeQuery (i, _) -> sprintf "typeof %s" (String.concat "." i.name)
     | UnknownType None -> "?"
     | UnknownType (Some msg) -> sprintf "?(%s)" msg
 

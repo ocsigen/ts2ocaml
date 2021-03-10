@@ -549,6 +549,8 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       if flags.needParen then result |> between "(" ")" else result
     | Tuple ts | ReadonlyTuple ts ->
       tyTuple (ts |> List.map (emitTypeImpl flags overrideFunc ctx))
+    | IndexedAccess _ -> failwith "impossible_emitTypeImpl_IndexedAccess"
+    | TypeQuery _ -> failwith "impossible_emitTypeImpl_TypeQuery"
     | UnknownType msgo ->
       match msgo with None -> commentStr "FIXME: unknown type" + any_t | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + any_t
 
@@ -860,10 +862,10 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
   let emitMappers tName (typrms: TypeParam list) =
     let t_ty =
       let t_ident =
-        Ident { name = [tName]; fullName = Some [tName] }
+        Ident { name = [tName]; fullName = Some [tName]; loc = UnknownLocation }
       if List.isEmpty typrms then t_ident
       else App (t_ident, typrms |> List.map (fun typrm -> TypeVar typrm.name))
-    let ojs_t_ty = Ident { name = ["Ojs"; "t"]; fullName = Some ["Ojs"; "t"] }
+    let ojs_t_ty = Ident { name = ["Ojs"; "t"]; fullName = Some ["Ojs"; "t"]; loc = UnknownLocation }
     let orf _emitType _ctx ty =
       match ty with
       | App (Ident { name = [n] }, ts) when n = tName ->
@@ -944,7 +946,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         match c.name with
         | Some n ->
           let k = List.rev (n :: ctx.currentNamespace)
-          let ident = { name = [n]; fullName = Some k }
+          let ident = { name = [n]; fullName = Some k; loc = UnknownLocation }
           let selfTy = 
             if List.isEmpty c.typeParams then Ident ident
             else App (Ident ident, List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams)

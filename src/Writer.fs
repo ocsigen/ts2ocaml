@@ -989,7 +989,12 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
               let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
               Function ft, Attr.js_call name
           yield val_ (Naming.variableName name) (emitType_ ctx ty) + str " " + attr
-        | Getter fl | Field (fl, ReadOnly, _) when fl.value <> Prim Void ->
+        | Getter fl | Field (fl, ReadOnly, _) ->
+          let fl =
+            if fl.value <> Prim Void then fl
+            else
+              eprintf "warn: the field/getter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
+              { fl with value = Prim Unknown }
           let ty =
             let args =
               if ma.isStatic then [Choice2Of2 (Prim Void)]
@@ -999,7 +1004,12 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
               else fl.value
             Function { isVariadic = false; args = args; returnType = ret }
           yield val_ ("get_" + fl.name) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
-        | Setter fl | Field (fl, WriteOnly, _) when fl.value <> Prim Void ->
+        | Setter fl | Field (fl, WriteOnly, _) ->
+          let fl =
+            if fl.value <> Prim Void then fl
+            else
+              eprintf "warn: the field/setter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
+              { fl with value = Prim Unknown }
           let ty =
             let args =
               if ma.isStatic then [Choice2Of2 fl.value]
@@ -1024,10 +1034,6 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         | Indexer (ft, Mutable) ->
           yield! emitMember ma (Indexer (ft, ReadOnly))
           yield! emitMember ma (Indexer (ft, WriteOnly))
-        // field/getter/setter of void value is ignored
-        | Getter { name = n } | Setter { name = n } | Field ({ name = n }, _, _) ->
-          eprintf "warn: the field/getter/setter '%s' of type '%s' has type 'void' and is ignored" n name
-          ()
         | New _ -> ()
       ]
 

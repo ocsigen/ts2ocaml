@@ -89,7 +89,7 @@ and Type =
   | Union of Union | Intersection of Intersection
   | Tuple of Type list | ReadonlyTuple of Type list
   | Function of FuncType<Type>
-  | App of Type * Type list
+  | App of Type * Type list * Location
   | IndexedAccess of Type * Type * Location
   | TypeQuery of IdentType * Location
   | UnknownType of string option
@@ -219,7 +219,7 @@ module Type =
           | Choice1Of2 a -> sprintf "%s%s:%s" (if a.isOptional then "?" else "~") a.name (pp a.value)
           | Choice2Of2 t -> pp t)
       "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"
-    | App (t, ts) -> pp t + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
+    | App (t, ts, _) -> pp t + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
     | IndexedAccess (t, u, _) -> sprintf "%s[%s]" (pp t) (pp u)
     | TypeQuery (i, _) -> sprintf "typeof %s" (String.concat "." i.name)
     | UnknownType None -> "?"

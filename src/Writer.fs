@@ -392,14 +392,14 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
   | Some t -> t
   | None ->
     match ty with
-    | App (t, ts) ->
+    | App (t, ts, loc) ->
       let ts =
         match t with
         | Ident { fullName = Some fn } ->
           match lookupFullName ctx fn with
           | AliasName { typeParams = typrms; erased = false }
           | ClassName { typeParams = typrms } ->
-            assignTypeParams fn typrms ts
+            assignTypeParams fn loc typrms ts
               (fun _ t -> t)
               (fun tv ->
                 match tv.defaultType with
@@ -562,7 +562,10 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       let result = lhs +@ " -> " + rhs
       if flags.needParen then result |> between "(" ")" else result
     | Tuple ts | ReadonlyTuple ts ->
-      tyTuple (ts |> List.map (emitTypeImpl flags overrideFunc ctx))
+      match ts with
+      | []  -> void_t
+      | [t] -> emitTypeImpl flags overrideFunc ctx t
+      | _   -> tyTuple (ts |> List.map (emitTypeImpl flags overrideFunc ctx))
     | IndexedAccess _ -> failwith "impossible_emitTypeImpl_IndexedAccess"
     | TypeQuery _ -> failwith "impossible_emitTypeImpl_TypeQuery"
     | UnknownType msgo ->
@@ -744,11 +747,11 @@ let getSafeLabels ctx ty =
           match e with
           | Ident { fullName = Some fn } ->
             yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
-          | App (Ident { fullName = Some fn }, ts) ->
+          | App (Ident { fullName = Some fn }, ts, _) ->
             yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
           | _ -> ()
       } |> Set.ofSeq
-    | App (Ident { fullName = Some fn }, ts) ->
+    | App (Ident { fullName = Some fn }, ts, loc) ->
       seq {
         yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
         let typrms =
@@ -756,12 +759,12 @@ let getSafeLabels ctx ty =
           | Some (ClassDef c) -> c.typeParams
           | Some (TypeAlias a) -> a.typeParams
           | _ -> []
-        let subst = createBindings fn typrms ts
+        let subst = createBindings fn loc typrms ts
         for e in getAllInheritancesFromName ctx fn do
           match e with
           | Ident { fullName = Some fn } ->
             yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
-          | App (Ident { fullName = Some fn }, ts) ->
+          | App (Ident { fullName = Some fn }, ts, _) ->
             yield str pv_head + emitCase fn (ts |> List.map (substTypeVar subst ctx >> emitType_ ctx))
           | _ -> ()
       } |> Set.ofSeq
@@ -775,11 +778,11 @@ let emitMappers ctx emitType tName (typrms: TypeParam list) =
     let t_ident =
       Ident { name = [tName]; fullName = Some [tName]; loc = UnknownLocation }
     if List.isEmpty typrms then t_ident
-    else App (t_ident, typrms |> List.map (fun typrm -> TypeVar typrm.name))
+    else App (t_ident, typrms |> List.map (fun typrm -> TypeVar typrm.name), UnknownLocation)
   let ojs_t_ty = Ident { name = ["Ojs"; "t"]; fullName = Some ["Ojs"; "t"]; loc = UnknownLocation }
   let orf _emitType _ctx ty =
     match ty with
-    | App (Ident { name = [n] }, ts) when n = tName ->
+    | App (Ident { name = [n] }, ts, _) when n = tName ->
       tyApp (str tName) (List.map (_emitType _ctx) ts) |> Some
     | Ident { name = [n] } when n = tName -> Some (str tName)
     | Ident { name = ["Ojs"; "t"] } -> Some (str "Ojs.t")
@@ -910,7 +913,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
               match e with
               | Ident { fullName = Some fn } ->
                 yield tprintf "%s%s" pv_head (Naming.flattenedUpper fn)
-              | App (Ident { fullName = Some fn }, ts) ->
+              | App (Ident { fullName = Some fn }, ts, _) ->
                 yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
               | _ -> ()
           ]
@@ -1012,7 +1015,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
           let ident = { name = [n]; fullName = Some k; loc = UnknownLocation }
           let selfTy = 
             if List.isEmpty c.typeParams then Ident ident
-            else App (Ident ident, List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams)
+            else App (Ident ident, List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams, UnknownLocation)
           n,
           selfTy,
           emitTypeName k tyargs,

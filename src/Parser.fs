@@ -130,7 +130,10 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
   | Kind.ArrayType ->
     let t = t :?> Ts.ArrayTypeNode
     let elem = readTypeNode typrm checker t.elementType
-    if isReadOnly t.modifiers then App (Prim ReadonlyArray, [elem]) else App (Prim Array, [elem])
+    if isReadOnly t.modifiers then
+      App (Prim ReadonlyArray, [elem], Node.location t)
+    else
+      App (Prim Array, [elem], Node.location t)
   | Kind.TupleType ->
     let t = t :?> Ts.TupleTypeNode
     let elems = t.elementTypes |> Seq.map (readTypeNode typrm checker) |> List.ofSeq
@@ -164,7 +167,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
         Ident { name = ts; fullName = None; loc = loc  }
     match t.typeArguments with
     | None -> lt
-    | Some args -> App (lt, args |> Seq.map (readTypeNode typrm checker) |> List.ofSeq)
+    | Some args -> App (lt, args |> Seq.map (readTypeNode typrm checker) |> List.ofSeq, Node.location t)
   | Kind.FunctionType ->
     let t = t :?> Ts.FunctionTypeNode
     let typrms = readTypeParameters typrm checker t.typeParameters
@@ -197,7 +200,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
       | Kind.ArrayType ->
         let t' = t' :?> Ts.ArrayTypeNode
         let elem = readTypeNode typrm checker t'.elementType
-        App (Prim ReadonlyArray, [elem])
+        App (Prim ReadonlyArray, [elem], Node.location t')
       | Kind.TupleType ->
         let t' = t' :?> Ts.TupleTypeNode
         let elems = t'.elementTypes |> Seq.map (readTypeNode typrm checker) |> List.ofSeq
@@ -210,8 +213,8 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
       UnknownType (Some (t.getText()))
   | Kind.IndexedAccessType ->
     let t = t :?> Ts.IndexedAccessTypeNode
-    let lhs = readTypeNode Set.empty checker t.objectType
-    let rhs = readTypeNode Set.empty checker t.indexType
+    let lhs = readTypeNode typrm checker t.objectType
+    let rhs = readTypeNode typrm checker t.indexType
     IndexedAccess (lhs, rhs, Node.location t)
   | Kind.TypeQuery ->
     let t = t :?> Ts.TypeQueryNode

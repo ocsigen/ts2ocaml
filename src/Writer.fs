@@ -804,15 +804,22 @@ let emitMappers ctx emitType tName (typrms: TypeParam list) =
 
 let emitUnknownIdentifiers ctx =
   let missingModule =
-    let rec f ko (t: Trie<string, int>) =
+    let rec f ko (t: Trie<string, Set<int>>) =
       let content =
         concat newline [
           match t.value with
           | None -> ()
-          | Some arity ->
-            let typrm : TypeParam list = [ for i in 1 .. arity do yield { name = sprintf "T%d" i; extends = None; defaultType = None } ]
-            yield abstractType "t" (typrm |> List.map (fun tp -> tprintf "'%s" tp.name))
-            yield! emitMappers ctx (emitTypeImpl EmitTypeFlags.defaultValue) "t" typrm
+          | Some arities ->
+            let maxArity = Set.maxElement arities
+            let emit arity =
+              let name =
+                "t" + String.replicate (maxArity - arity) "_"
+              let typrm : TypeParam list = [ for i in 1 .. arity do yield { name = sprintf "T%d" i; extends = None; defaultType = None } ]
+              [
+                yield abstractType name (typrm |> List.map (fun tp -> tprintf "'%s" tp.name))
+                yield! emitMappers ctx (emitTypeImpl EmitTypeFlags.defaultValue) name typrm
+              ]
+            for arity in arities do yield! emit arity
           for k, t in t.childs |> Map.toSeq do
             yield f (Some k) t
         ]
@@ -827,11 +834,19 @@ let emitUnknownIdentifiers ctx =
     concat newline [
       comment (newline + indent (concat newline [
         yield str "unknown identifiers:"
-        for name, i in ctx.unknownIdentifiers |> Trie.toSeq do
-          if i = 0 then
-            yield indent (tprintf "- %s" (String.concat "." name))
+        for name, arities in ctx.unknownIdentifiers |> Trie.toSeq do
+          if Set.forall ((=) 0) arities then
+            yield (tprintf "- %s" (String.concat "." name))
           else
-            yield indent (tprintf "- %s<%s>" (String.concat "." name) (Seq.replicate i "_" |> String.concat ", "))
+            let tyargs =
+              let minArity = Set.minElement arities
+              let maxArity = Set.maxElement arities
+              [
+                for i = 1 to maxArity do
+                  if i <= minArity then yield sprintf "T%d" i
+                  else yield sprintf "T%d?" i
+              ]
+            yield (tprintf "- %s<%s>" (String.concat "." name) (String.concat ", " tyargs))
       ]) + newline)
       Attr.js_stop_start_implem missingModule missingModule
     ]

@@ -2,51 +2,6 @@ module Typer
 
 open Syntax
 
-type Trie<'k, 'v when 'k: comparison> = {
-  value: 'v option
-  childs: Map<'k, Trie<'k, 'v>>
-}
-
-module Trie =
-  let empty<'k, 'v when 'k: comparison> : Trie<'k, 'v> =
-    { value = None; childs = Map.empty }
-  let rec add (ks: 'k list) (v: 'v) (t: Trie<'k, 'v>) =
-    match ks with
-    | [] -> { t with value = Some v }
-    | k :: ks ->
-      let child =
-        match Map.tryFind k t.childs with
-        | None -> empty
-        | Some child -> child
-      { t with childs = t.childs |> Map.add k (add ks v child) }
-  let rec tryFind (ks: 'k list) (t: Trie<'k, 'v>) =
-    match ks with
-    | [] -> t.value
-    | k :: ks ->
-      match Map.tryFind k t.childs with
-      | None -> None
-      | Some child -> tryFind ks child
-  let rec getSubTrie (ks: 'k list) (t: Trie<'k, 'v>) =
-    match ks with
-    | [] -> Some t
-    | k :: ks ->
-      match Map.tryFind k t.childs with
-      | None -> None
-      | Some child -> getSubTrie ks child
-  let toSeq (t: Trie<'k, 'v>) =
-    let rec go ks t =
-      seq {
-        match t.value with
-        | None -> ()
-        | Some v -> yield List.rev ks, v
-        for k, child in Map.toSeq t.childs do
-          yield! go (k :: ks) child
-      }
-    go [] t
-  let isEmpty (t: Trie<_, _>) =
-    t.value.IsNone && Map.isEmpty t.childs
-  let ofSeq (xs: seq<'k list * 'v>) =
-    xs |> Seq.fold (fun state (ks, v) -> add ks v state) empty
 
 type Context = {
   currentNamespace: string list
@@ -54,7 +9,7 @@ type Context = {
   typeLiteralsMap: Map<Literal, int>
   anonymousInterfacesMap: Map<Class, int>
   internalModuleName: string
-  unknownIdentifiers: Trie<string, int>
+  unknownIdentifiers: Trie<string, Set<int>>
 }
 
 module Context =
@@ -357,11 +312,11 @@ let getAnonymousInterfaces stmts =
 let getUnknownIdentifiers stmts =
   findTypesInStatements (function
     | App (Ident {name = name; fullName = None}, ts) ->
-      Choice2Of2 ts, Some (name, List.length ts)
+      Choice2Of2 ts, Some (name, Set.singleton (List.length ts))
     | Ident { name = name; fullName = None } ->
-      Choice1Of2 true, Some (name, 0)
+      Choice1Of2 true, Some (name, Set.singleton (0))
     | _ -> Choice1Of2 true, None
-  ) stmts |> Trie.ofSeq
+  ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
 let private createRootContextForTyper internalModuleName stmts =
   let add name ty m =

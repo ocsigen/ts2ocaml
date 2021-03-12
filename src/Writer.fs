@@ -566,8 +566,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       | []  -> void_t
       | [t] -> emitTypeImpl flags overrideFunc ctx t
       | _   -> tyTuple (ts |> List.map (emitTypeImpl flags overrideFunc ctx))
-    | IndexedAccess _ -> failwith "impossible_emitTypeImpl_IndexedAccess"
-    | TypeQuery _ -> failwith "impossible_emitTypeImpl_TypeQuery"
+    | Erased _ -> failwith "impossible_emitTypeImpl_erased"
     | UnknownType msgo ->
       match msgo with None -> commentStr "FIXME: unknown type" + any_t | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + any_t
 

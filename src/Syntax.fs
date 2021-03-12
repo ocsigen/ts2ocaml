@@ -90,9 +90,13 @@ and Type =
   | Tuple of Type list | ReadonlyTuple of Type list
   | Function of FuncType<Type>
   | App of Type * Type list * Location
-  | IndexedAccess of Type * Type * Location
-  | TypeQuery of IdentType * Location
+  | Erased of ErasedType * Location
   | UnknownType of string option
+
+and ErasedType =
+  | IndexedAccess of Type * Type
+  | TypeQuery of IdentType
+  | Keyof of Type
 
 and Union = {
   types: Type list
@@ -220,8 +224,11 @@ module Type =
           | Choice2Of2 t -> pp t)
       "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"
     | App (t, ts, _) -> pp t + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
-    | IndexedAccess (t, u, _) -> sprintf "%s[%s]" (pp t) (pp u)
-    | TypeQuery (i, _) -> sprintf "typeof %s" (String.concat "." i.name)
+    | Erased (e, _) ->
+      match e with
+      | IndexedAccess (t, u) -> sprintf "%s[%s]" (pp t) (pp u)
+      | TypeQuery i -> sprintf "typeof %s" (String.concat "." i.name)
+      | Keyof t -> sprintf "keyof %s" (pp t)
     | UnknownType None -> "?"
     | UnknownType (Some msg) -> sprintf "?(%s)" msg
 

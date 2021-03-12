@@ -208,6 +208,8 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
       | _ ->
         nodeWarn t "unsupported 'readonly' modifier for type '%s'" (t.getText())
         UnknownType (Some (t.getText()))
+    | Kind.KeyOfKeyword ->
+      Erased (Keyof (readTypeNode typrm checker t.``type``), Node.location t)
     | _ ->
       nodeWarn t "unsupported type operator '%s'" (Enum.pp t.operator)
       UnknownType (Some (t.getText()))
@@ -215,12 +217,12 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
     let t = t :?> Ts.IndexedAccessTypeNode
     let lhs = readTypeNode typrm checker t.objectType
     let rhs = readTypeNode typrm checker t.indexType
-    IndexedAccess (lhs, rhs, Node.location t)
+    Erased (IndexedAccess (lhs, rhs), Node.location t)
   | Kind.TypeQuery ->
     let t = t :?> Ts.TypeQueryNode
     let nameNode = box t.exprName :?> Node
     let name = extractNestedName nameNode
-    TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }, Node.location t)
+    Erased (TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }), Node.location t)
   // fallbacks
   | Kind.TypePredicate -> Prim Bool
   | _ ->

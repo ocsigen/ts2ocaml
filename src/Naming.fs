@@ -24,7 +24,8 @@ module Keywords =
       "HTMLDialogElement"; "HTMLWebViewElement"
     ]
 
-  let primitives = ["string"; "obj"; "unit"; "float"; "bool"; "int"] |> Set.ofList
+  let primitives = Set.ofList [ "string"; "obj"; "unit"; "float"; "bool"; "int" ]
+  let basicTypes = Set.ofList [ "list"; "array"; "option" ]
 
 let removeQuotesAndTrim (s: string) =
   if String.IsNullOrEmpty s then ""

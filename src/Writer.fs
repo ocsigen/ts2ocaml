@@ -76,39 +76,54 @@ module Ppx =
   let module_  name body = tprintf "module %s = " name + js body
 
 module Type =
-  // primitive types
-  // these types should reside in the "Js" module of the base library.
-  let string_t  = str "Js.string"
-  let boolean_t = str "Js.boolean"
-  let number_t  = str "Js.number"
-  let object_t  = str "Js.untyped_object"
-  let symbol_t  = str "Js.symbol" // symbol is a ES5 type but should be distinguished from the boxed Symbol type
-  let void_t    = str "unit"
+  // prim types that are JS-able and defined as interface in typescript/lib/lib.*.d.ts
+  let jsablePrimTypeInterfaces =
+    Map.ofList [
+      "String",  String
+      "Boolean", Bool
+      "Number",  Number
+      "Array",   Array
+      "ReadonlyArray", Array
+    ]
+
+  let nonJsablePrimTypeInterfaces =
+    Map.ofList [
+      "Object", Object
+      "Function", UntypedFunction
+      "Symbol", Symbol
+      "RegExp", RegExp
+      "BigInt", BigInt
+    ]
+
+  // JS-able OCaml types
+  let void_t = str "unit"
+  let string_t  = str "string"
+  let boolean_t = str "bool"
+  let number_t  = str "float"
   let array_t   = str "list"
-  let null_t           = str "Js.or_null"
-  let undefined_t      = str "Js.or_undefined"
-  let null_undefined_t = str "Js.or_null_or_undefined"
+  let readonlyArray_t = str "list"
+  
+  // JS only types
+  // ES5
+  let object_t  = str "untyped_object"
+  let function_t = str "untyped_function"
+  let symbol_t  = str "symbol"
+  let regexp_t  = str "regexp"
+  // ES2020
+  let bigint_t = str "bigint"
 
-  // ES5 types
-  // these types should reside in the "Es5" module of the base library.
-  let regexp_t  = str "Es5.RegExp.t"
-  let date_t    = str "Es5.Date.t"
-  let error_t   = str "Es5.Error.t"
-  let readonlyArray_t = str "Es5.ArrayLike.t"
-  let promise_t = str "Es5.Promise.t"
-
-  // TS specific types
-  // these types should reside in the "Ts" module of the base library.
-  let never_t   = str "Ts.never"
-  let any_t     = str "Ts.any"
-  let unknown_t = str "Ts.unknown"
+  // TS types
+  let never_t   = str "never"
+  let any_t     = str "any"
+  let unknown_t = str "unknown"
+  let null_t           = str "or_null"
+  let undefined_t      = str "or_undefined"
+  let null_undefined_t = str "or_null_or_undefined"
 
   // gen_js_api types
   let ojs_t = str "Ojs.t"
 
   // our types
-  let ts_intf  = str "Ts.intf"
-
   let tyVar s = tprintf "'%s" s
 
   let tyMany sep = function
@@ -127,16 +142,17 @@ module Type =
     if List.isEmpty args then t
     else tyApp t args
 
-  let ts_enum baseType cases = tyApp (str "Ts.enum") [baseType; cases]
+  let intf  = str "intf"
+  let enum baseType cases = tyApp (str "enum") [baseType; cases]
 
-  let and_ a b = tyApp (str "Ts.and_") [a; b]
-  let or_  a b = tyApp (str "Ts.or_")  [a; b]
+  let and_ a b = tyApp (str "and_") [a; b]
+  let or_  a b = tyApp (str "or_")  [a; b]
 
-  let string_or t = tyApp (str "Ts.or_string") [t]
-  let number_or t = tyApp (str "Ts.or_number") [t]
-  let boolean_or t = tyApp (str "Ts.or_boolean") [t]
-  let symbol_or t = tyApp (str "Ts.or_symbol") [t]
-  let enum_or baseType cases t = or_ t (ts_enum baseType cases)
+  let string_or t  = tyApp (str "or_string") [t]
+  let number_or t  = tyApp (str "or_number") [t]
+  let boolean_or t = tyApp (str "or_boolean") [t]
+  let symbol_or t  = tyApp (str "or_symbol") [t]
+  let enum_or baseType cases t = or_ t (enum baseType cases)
 
   let union_t types =
     let l = List.length types
@@ -144,7 +160,7 @@ module Type =
     else
       let rec go i = function
         | h :: t when i > 8 -> or_ (go (i-1) t) h
-        | xs -> tyApp (tprintf "Ts.union%i" i) xs
+        | xs -> tyApp (tprintf "union%i" i) xs
       go l types
 
   let intersection_t types =
@@ -153,7 +169,7 @@ module Type =
     else
       let rec go i = function
         | h :: t when i > 8 -> and_ (go (i-1) t) h
-        | xs -> tyApp (tprintf "Ts.intersection%i" i) xs
+        | xs -> tyApp (tprintf "intersection%i" i) xs
       go l types
 
 module Term =
@@ -191,28 +207,24 @@ open Type
 open Term
 
 module Naming =
-  let ocamlKeywords =
-    set [
-      "and"; "as"; "assert"; "asr"; "begin"; "class"; 
-      "constraint"; "do"; "done"; "downto"; "else"; "end";
-      "exception"; "external"; "false"; "for"; "fun"; "function";
-      "functor"; "if"; "in"; "include"; "inherit"; "initializer";
-      "land"; "lazy"; "let"; "lor"; "lsl"; "lsr";
-      "lxor"; "match"; "method"; "mod"; "module"; "mutable";
-      "new"; "nonrec"; "object"; "of"; "open"; "or";
-      "private"; "rec"; "sig"; "struct"; "then"; "to";
-      "true"; "try"; "type"; "val"; "virtual"; "when";
-      "while"; "with"
-    ]
-
   let ourReservedNames =
     set [
-      "create"; "invoke"; "get"; "set"
+      "create"; "apply"; "get"; "set";
     ]
 
-  let reservedNames = Set.union ocamlKeywords ourReservedNames
+  let reservedNames =
+    Set.unionMany [
+      Naming.Keywords.keywords
+      ourReservedNames
+    ]
 
-  let variableName (name: string) =
+  let removeInvalidChars (s: string) =
+    s.ToCharArray()
+    |> Array.map (fun c -> if Char.isAlphabetOrDigit c || c = '_' then c else '_')
+    |> System.String
+
+  let valueName (name: string) =
+    let name = removeInvalidChars name
     let result =
       if Char.IsUpper name.[0] then
         sprintf "%c%s" (Char.ToLower name.[0]) name.[1..]
@@ -220,28 +232,31 @@ module Naming =
     if reservedNames |> Set.contains result then result + "_" else result
 
   let moduleName (name: string) =
+    let name = removeInvalidChars name
     if Char.IsLower name.[0] then
       sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
     else if name.[0] = '_' then
       "M" + name
     else name
 
-  let flattenedLower (name: string list) =
-    let s = String.concat "_" name
-    let result =
-      if Char.IsUpper s.[0] then
-        sprintf "%c%s" (Char.ToLower s.[0]) s.[1..]
-      else s
-    if reservedNames |> Set.contains result then result + "_" else result
-
-  let flattenedUpper (name: string list) =
-    let s = String.concat "_" name
+  let constructorName (name: string list) =
+    let s = String.concat "_" name |> removeInvalidChars
     if Char.IsLower s.[0] then
       sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]
     else s
 
-  let structured (name: string list) =
-    name |> List.map (fun s -> sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]) |> String.concat "."
+  let flattenedTypeName (name: string list) =
+    let s = String.concat "_" name |> removeInvalidChars
+    let result =
+      if Char.IsUpper s.[0] then "_" + s
+      else s
+    if reservedNames |> Set.contains result then result + "_" else result
+
+  let structuredTypeName (name: string list) =
+    name
+    |> List.map removeInvalidChars
+    |> List.map (fun s -> sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..])
+    |> String.concat "."
 
 module Definition =
   let open_ names = names |> List.map (tprintf "open %s") |> concat newline
@@ -360,6 +375,7 @@ type EmitTypeFlags = {
   variance: Variance
   failContravariantTypeVar: bool
   skipAttributesOnContravariantPosition: bool
+  forceVariadic: bool
 }
 
 module EmitTypeFlags =
@@ -370,6 +386,7 @@ module EmitTypeFlags =
       variance = Covariant
       failContravariantTypeVar = false
       skipAttributesOnContravariantPosition = false
+      forceVariadic = false
     }
 
 let treatEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<EnumCase, Literal>>) =
@@ -387,34 +404,44 @@ let treatEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<EnumCase, Literal>>)
       yield pv_head @+ name + attr
   ]) +@ " [@js.enum]" |> between "(" ")"
 
+
 let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text option) (ctx: Context) (ty: Type) : text =
   match overrideFunc (emitTypeImpl flags overrideFunc) ctx ty with
   | Some t -> t
   | None ->
     match ty with
+    | App (Prim Array, ts, _) when flags.forceVariadic ->
+      tyApp array_t (List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx) ts)
+    | App (Prim ReadonlyArray, ts, _) when flags.forceVariadic ->
+      tyApp readonlyArray_t (List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx) ts)
+    | _ when flags.forceVariadic ->
+      commentStr (sprintf "FIXME: type '%s' cannot be used for variadic argument" (Type.pp ty)) + tyApp array_t [any_t]
     | App (t, ts, loc) ->
       let ts =
         match t with
         | Ident { fullName = Some fn } ->
-          match lookupFullName ctx fn with
-          | AliasName { typeParams = typrms; erased = false }
-          | ClassName { typeParams = typrms } ->
-            assignTypeParams fn loc typrms ts
-              (fun _ t -> t)
-              (fun tv ->
-                match tv.defaultType with
-                | Some t -> t
-                | None -> failwithf "emitTypeImpl: insufficient type params for type '%s'" (String.concat "." fn))
-          | _ -> ts
+          tryLookupFullNameWith ctx fn (function
+            | AliasName { typeParams = typrms; erased = false }
+            | ClassName { typeParams = typrms } ->
+              assignTypeParams fn loc typrms ts
+                (fun _ t -> t)
+                (fun tv ->
+                  match tv.defaultType with
+                  | Some t -> t
+                  | None -> failwithf "emitTypeImpl: insufficient type params for type '%s'" (String.concat "." fn))
+              |> Some
+            | _ -> None
+          ) |> Option.defaultValue ts
         | _ -> ts
       tyApp (emitTypeImpl flags overrideFunc ctx t) (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
     | Ident i ->
       match i.fullName with
       | Some fn ->
-        match lookupFullName ctx fn with
-        | AliasName ta when ta.erased -> emitTypeImpl flags overrideFunc ctx ta.target
-        | _ -> str (Naming.flattenedLower fn)
-      | None -> str (Naming.structured i.name + ".t")
+        tryLookupFullNameWith ctx fn (function
+          | AliasName ta when ta.erased -> emitTypeImpl flags overrideFunc ctx ta.target |> Some
+          | _ -> None
+        ) |> Option.defaultWith (fun () -> str (Naming.flattenedTypeName fn))
+      | None -> str (Naming.structuredTypeName i.name + ".t")
     | TypeVar v ->
       if flags.failContravariantTypeVar && flags.variance = Contravariant then
         commentStr (sprintf "FIXME: contravariant type variable '%s'" v) + any_t
@@ -422,12 +449,13 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
         tprintf "'%s" v
     | Prim p ->
       match p with
-      | Null -> tyApp null_t [never_t] | Undefined -> tyApp undefined_t [never_t] | Object -> any_t
+      | Null -> tyApp null_t [never_t] | Undefined -> tyApp undefined_t [never_t]
       | String -> string_t | Bool -> boolean_t | Number -> number_t
-      | UntypedFunction -> any_t | Array -> array_t | Date -> date_t | Error -> error_t
-      | RegExp -> regexp_t | Symbol -> symbol_t | Promise -> promise_t
+      | Object -> object_t | UntypedFunction -> function_t
+      | RegExp -> regexp_t | Symbol -> symbol_t
       | Never -> never_t | Any -> any_t | Unknown -> unknown_t | Void -> void_t
-      | ReadonlyArray -> readonlyArray_t
+      | Array -> array_t | ReadonlyArray -> readonlyArray_t
+      | BigInt -> bigint_t
     | TypeLiteral l ->
       treatEnum flags ctx (Set.singleton (Choice2Of2 l))
     | Intersection i -> intersection_t (i.types |> List.map (emitTypeImpl flags overrideFunc ctx))
@@ -538,14 +566,14 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
         | [] -> acc + void_t
         | Choice1Of2 x :: [] when f.isVariadic ->
           assert (not x.isOptional)
-          acc + tprintf "%s:" (Naming.variableName x.name) + between "(" ")" (emitTypeImpl flags overrideFunc ctx x.value +@ " [@js.variadic]")
+          acc + tprintf "%s:" (Naming.valueName x.name) + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx x.value +@ " [@js.variadic]")
         | Choice2Of2 t :: [] when f.isVariadic ->
-          acc + emitTypeImpl flags overrideFunc ctx t +@ " [@js.variadic]"
+          acc + emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx t +@ " [@js.variadic]"
         | Choice1Of2 x :: xs ->
           let prefix =
             if x.isOptional then "?" else ""
           let ty = emitTypeImpl { flags with needParen = true } overrideFunc ctx x.value
-          let t = tprintf "%s%s:" prefix (Naming.variableName x.name) + ty
+          let t = tprintf "%s%s:" prefix (Naming.valueName x.name) + ty
           if not x.isOptional && List.isEmpty xs then acc + t
           else go (acc + t +@ " -> ") xs
         | Choice2Of2 t :: xs ->
@@ -557,7 +585,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
         match f.returnType with
         | Prim Void -> void_t
         | Function _ ->
-          between "(" ")" (emitTypeImpl flags overrideFunc ctx f.returnType +@ " [@js.dummy]")
+          between "(" ")" (emitTypeImpl flags overrideFunc ctx f.returnType)
         | _ -> emitTypeImpl flags overrideFunc ctx f.returnType
       let result = lhs +@ " -> " + rhs
       if flags.needParen then result |> between "(" ")" else result
@@ -571,6 +599,20 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       match msgo with None -> commentStr "FIXME: unknown type" + any_t | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + any_t
 
 let inline noOverride _emitType _ctx _ty = None
+
+let emitCase name args =
+  match args with
+  | [] -> str (Naming.constructorName name)
+  | [arg] -> tprintf "%s of %A" (Naming.constructorName name) arg
+  | _ -> tprintf "%s of %A" (Naming.constructorName name) (tyTuple args)
+
+let genJsCustomMapper (typrms: TypeParam list) =
+  let body =
+    if List.isEmpty typrms then str "Obj.magic"
+    else
+      let args = typrms |> List.map (fun tp -> tprintf "_%s" tp.name)
+      between "(" ")" (termFun args (str "Obj.magic"))
+  record [ "of_js", body; "to_js", body ]
 
 module BaseLibrary =
 
@@ -593,55 +635,28 @@ module BaseLibrary =
       yield! genConverters name tyargs
     ]
 
-  let aliasWithConverters name tyargs value =
+  let private aliasWithConverters name tyargs value =
     [
       yield typeAlias name tyargs value
       yield! genConverters name tyargs
     ]
 
-  let dummyJsModule : text =
-    concat newline [
-      yield! genTypeWithConverters "string" []
-      yield! genTypeWithConverters "number" []
-      yield! genTypeWithConverters "boolean" []
-      yield! genTypeWithConverters "symbol" []
-      yield! genTypeWithConverters "untyped_object" []
-      yield! genTypeWithConverters "array" [tyVar "a"]
-      yield! aliasWithConverters "or_null" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
-      yield! aliasWithConverters "or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
-      yield! aliasWithConverters "or_null_or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
-    ]
+  let private genInterface name tag tyargs =
+    typeAlias name (List.map str tyargs)
+      (tyApp intf [
+        between "[" "]" (
+          concat (str " | ") [
+            yield  tprintf "%s%s" pv_head tag
+          ]
+        )
+      ])
+    + newline
+    + Attr.js_custom_typ (genJsCustomMapper (tyargs |> List.map (fun s ->
+        { name = s; extends = None; defaultType = None }
+      )))
 
-  let dummyES5Module : text =
+  let dummyModule : text =
     concat newline [
-      yield
-        moduleSig "RegExp" (concat newline [
-          yield! genTypeWithConverters "t" []
-        ])
-      yield
-        moduleSig "Date" (concat newline [
-          yield! genTypeWithConverters "t" []
-        ])
-      yield
-        moduleSig "Error" (concat newline [
-          yield! genTypeWithConverters "t" []
-        ])
-      yield
-        moduleSig "ArrayLike" (concat newline [
-          yield! genTypeWithConverters "t" [tyVar "a"]
-        ])
-      yield
-        moduleSig "Promise" (concat newline [
-          yield! genTypeWithConverters "t" [tyVar "a"]
-        ])
-    ]
-
-  let tsModule : text =
-    concat newline [
-      yield! genTypeWithConverters "never" []
-      yield! genTypeWithConverters "any" []
-      yield! genTypeWithConverters "unknown" []
-
       yield
         Attr.js_stop_start_implem
           (concat newline [
@@ -653,6 +668,20 @@ module BaseLibrary =
             let_ "intf_to_js" [str "_"; str "x"] (Some ojs_t) (str "x")
             let_ "intf_of_js" [str "_"; str "x"] (Some (tyApp (str "intf") [str "_"])) (str "x")
           ])
+
+      yield genInterface "untyped_object" "Object" []
+      yield genInterface "untyped_function" "Function" []
+      yield genInterface "symbol" "Symbol" []
+      yield genInterface "regexp" "RegExp" []
+      yield genInterface "bigint" "BigInt" []
+
+      yield! aliasWithConverters "or_null" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
+      yield! aliasWithConverters "or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
+      yield! aliasWithConverters "or_null_or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
+
+      yield! genTypeWithConverters "never" []
+      yield! genTypeWithConverters "any" []
+      yield! genTypeWithConverters "unknown" []
 
       yield
         Attr.js_stop_start_implem
@@ -707,13 +736,12 @@ module BaseLibrary =
             (or_ (tyApp (tprintf "union%i" (i-1)) (List.tail args))
                  (List.head args))
 
-      yield! aliasWithConverters "or_number"  [tyVar "a"] (or_ (tyVar "a") number_t)
-      yield! aliasWithConverters "or_string"  [tyVar "a"] (or_ (tyVar "a") string_t)
-      yield! aliasWithConverters "or_boolean" [tyVar "a"] (or_ (tyVar "a") boolean_t)
-      yield! aliasWithConverters "or_symbol"  [tyVar "a"] (or_ (tyVar "a") symbol_t)
-      yield! aliasWithConverters "or_array"   [tyVar "a"; tyVar "t"] (or_  (tyVar "a") (tyApp array_t [tyVar "t"]))
-      yield! aliasWithConverters "or_enum"    [tyVar "a"; tyVar "t"; tyVar "cases"]
-                                   (or_ (tyVar "a") (tyApp (str "enum") [tyVar "t"; tyVar "cases"]))
+      yield! genTypeWithConverters "or_number"  [tyVar "a"]
+      yield! genTypeWithConverters "or_string"  [tyVar "a"]
+      yield! genTypeWithConverters "or_boolean" [tyVar "a"]
+      yield! genTypeWithConverters "or_symbol"  [tyVar "a"]
+      yield! genTypeWithConverters "or_array"   [tyVar "a"; tyVar "t"]
+      yield! genTypeWithConverters "or_enum"    [tyVar "a"; tyVar "t"; tyVar "cases"]
 
       (*
       yield module_ "Union" (
@@ -726,14 +754,8 @@ module BaseLibrary =
 
 
 let emitTypeName name args =
-  if List.isEmpty args then str (Naming.flattenedLower name)
-  else tyApp (str (Naming.flattenedLower name)) args
-
-let emitCase name args =
-  match args with
-  | [] -> str (Naming.flattenedUpper name)
-  | [arg] -> tprintf "%s of %A" (Naming.flattenedUpper name) arg
-  | _ -> tprintf "%s of %A" (Naming.flattenedUpper name) (tyTuple args)
+  if List.isEmpty args then str (Naming.flattenedTypeName name)
+  else tyApp (str (Naming.flattenedTypeName name)) args
 
 let getSafeLabels ctx ty =
   let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
@@ -741,11 +763,11 @@ let getSafeLabels ctx ty =
   let rec getLabel = function
     | Ident { fullName = Some fn } -> 
       seq {
-        yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
+        yield tprintf "%s%s" pv_head (fn |> Naming.constructorName)
         for e in getAllInheritancesFromName ctx fn do
           match e with
           | Ident { fullName = Some fn } ->
-            yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
+            yield tprintf "%s%s" pv_head (fn |> Naming.constructorName)
           | App (Ident { fullName = Some fn }, ts, _) ->
             yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
           | _ -> ()
@@ -754,15 +776,16 @@ let getSafeLabels ctx ty =
       seq {
         yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
         let typrms =
-          match ctx.definitionsMap |> Map.tryFind fn with
-          | Some (ClassDef c) -> c.typeParams
-          | Some (TypeAlias a) -> a.typeParams
-          | _ -> []
+          tryLookupFullNameWith ctx fn (function
+            | ClassName c -> Some c.typeParams
+            | AliasName a -> Some a.typeParams
+            | _ -> None
+          ) |> Option.defaultValue []
         let subst = createBindings fn loc typrms ts
         for e in getAllInheritancesFromName ctx fn do
           match e with
           | Ident { fullName = Some fn } ->
-            yield tprintf "%s%s" pv_head (fn |> Naming.flattenedUpper)
+            yield tprintf "%s%s" pv_head (fn |> Naming.constructorName)
           | App (Ident { fullName = Some fn }, ts, _) ->
             yield str pv_head + emitCase fn (ts |> List.map (substTypeVar subst ctx >> emitType_ ctx))
           | _ -> ()
@@ -862,25 +885,16 @@ let emitHeader =
 let emitFlattenedDefinitions (ctx: Context) : text =
   let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
 
-  let genJsCustomMapper (typrms: TypeParam list) =
-    let body =
-      if List.isEmpty typrms then str "Obj.magic"
-      else
-        let args = typrms |> List.map (fun tp -> tprintf "_%s" tp.name)
-        between "(" ")" (termFun args (str "Obj.magic"))
-    record [ "of_js", body; "to_js", body ]
-
   moduleSig ctx.internalModuleName (
     concat newline [
-      moduleSig "Js"  BaseLibrary.dummyJsModule
-      moduleSig "Es5" BaseLibrary.dummyES5Module
-      moduleSig "Ts"  BaseLibrary.tsModule
+      moduleSig "Ts2ocaml_baselib"  BaseLibrary.dummyModule
+      open_ ["Ts2ocaml_baselib"]
 
       moduleSig "AnonymousInterfaces" (
         concat newline [
           for (a, _) in ctx.anonymousInterfacesMap |> Map.toSeq do
             let i = anonymousInterfaceToIdentifier ctx a
-            let def = str "type " + i + str " = " + tyApp ts_intf [between "[" "]" (str pv_head + i)]
+            let def = str "type " + i + str " = " + tyApp intf [between "[" "]" (str pv_head + i)]
             yield def + newline + Attr.js_custom_typ (genJsCustomMapper a.typeParams)
         ]
       )
@@ -900,41 +914,59 @@ let emitFlattenedDefinitions (ctx: Context) : text =
                   yield pv_head @+ name + attr
               ]) +@ " [@js.enum]"
             yield
-              tprintf "%s %s = " prefix (Naming.flattenedLower k)
+              tprintf "%s %s = " prefix (Naming.flattenedTypeName k)
                 + treatEnum e.cases
             for c in e.cases do
-              yield tprintf "and %s = %A" (Naming.flattenedLower (k @ [c.name])) (treatEnum [c])
+              yield tprintf "and %s = %A" (Naming.flattenedTypeName (k @ [c.name])) (treatEnum [c])
           ] |> Some
         | ClassDef c ->
-          let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-          let labels = [
-            for e in getAllInheritancesFromName ctx k do
-              match e with
-              | Ident { fullName = Some fn } ->
-                yield tprintf "%s%s" pv_head (Naming.flattenedUpper fn)
-              | App (Ident { fullName = Some fn }, ts, _) ->
-                yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
-              | _ -> ()
-          ]
-          concat newline [
-            let def =
-              tprintf "%s %A = " prefix (emitTypeName k typrm)
-              + tyApp ts_intf [
-                between "[" "]" (
-                  concat (str " | ") [
-                    yield  tprintf "%s%A" pv_head (emitCase k typrm)
-                    yield! labels
-                  ]
-                )
-              ]
-            yield def + newline + Attr.js_custom_typ (genJsCustomMapper c.typeParams)
-          ] |> Some
+          let normalClass () =
+            let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
+            let labels = [
+              for e in getAllInheritancesFromName ctx k do
+                match e with
+                | Ident { fullName = Some fn } ->
+                  yield tprintf "%s%s" pv_head (Naming.constructorName fn)
+                | App (Ident { fullName = Some fn }, ts, _) ->
+                  yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
+                | _ -> ()
+            ]
+            concat newline [
+              let def =
+                tprintf "%s %A = " prefix (emitTypeName k typrm)
+                + tyApp intf [
+                  between "[" "]" (
+                    concat (str " | ") [
+                      yield  tprintf "%s%A" pv_head (emitCase k typrm)
+                      yield! labels
+                    ]
+                  )
+                ]
+              yield def + newline + Attr.js_custom_typ (genJsCustomMapper c.typeParams)
+            ] |> Some
+          match k with
+          | [name] when Map.containsKey name nonJsablePrimTypeInterfaces ->
+            let prim =
+              match k with
+              | [name] -> Map.find name nonJsablePrimTypeInterfaces
+              | _ -> failwith "impossible_emitFlattenedDefinitions_f_ClassDef_prim"
+            let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
+            let target =
+              match c.typeParams with
+              | [] -> Prim prim
+              | _  -> App (Prim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
+            tprintf "%s %A = " prefix (emitTypeName k typrm) + (emitType_ ctx target) |> Some
+          | _ -> normalClass ()
           // TODO: emit extends of type parameters
-        | TypeAlias p when p.erased = false ->
-          let typrm = p.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-          tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ ctx p.target |> Some
+        | TypeAlias { erased = false; typeParams = typeParams; target = target } ->
+          let typrm = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
+          tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ ctx target |> Some
           // TODO: emit extends of type parameters
-        | _ -> None
+        | Value _
+        | Module _
+        | TypeAlias { erased = true } -> None
+        | Export _
+        | UnknownStatement _ -> failwithf "impossible_emitFlattenedDefinitions(%A)" v
 
       moduleSig "Types" (
         concat newline [
@@ -942,7 +974,8 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           let prefix = seq { yield "type"; while true do yield "and" }
           yield!
             ctx.definitionsMap
-            |> Map.toSeq
+            |> Trie.toSeq
+            |> Seq.collect (fun (k, vs) -> vs |> Seq.map (fun v -> k, v))
             |> Seq.skipWhile (fun t -> f "type" t |> Option.isNone)
             |> Seq.map2 (fun prefix t -> f prefix t) prefix
             |> Seq.choose id
@@ -1002,7 +1035,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
     | EnumDef _ -> failwith "impossible_emitStructuredDefinitions_EnumDef"
     | Value v ->
       concat newline [
-        yield val_ (Naming.variableName v.name) (emitType_ ctx v.typ) + str " " + Attr.js_global v.name
+        yield val_ (Naming.valueName v.name) (emitType_ ctx v.typ) + str " " + Attr.js_global v.name
       ]
     | ClassDef c ->
       let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
@@ -1053,7 +1086,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
             else
               let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
               Function ft, Attr.js_call name
-          yield val_ (Naming.variableName name) (emitType_ ctx ty) + str " " + attr
+          yield val_ (Naming.valueName name) (emitType_ ctx ty) + str " " + attr
         | Getter fl | Field (fl, ReadOnly, _) ->
           let fl =
             if fl.value <> Prim Void then fl
@@ -1068,7 +1101,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
               if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
               else fl.value
             Function { isVariadic = false; args = args; returnType = ret }
-          yield val_ ("get_" + fl.name) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
+          yield val_ ("get_" + Naming.removeInvalidChars fl.name) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
         | Setter fl | Field (fl, WriteOnly, _) ->
           let fl =
             if fl.value <> Prim Void then fl
@@ -1080,7 +1113,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
               if ma.isStatic then [Choice2Of2 fl.value]
               else [Choice2Of2 selfTy; Choice2Of2 fl.value]
             Function { isVariadic = false; args = args; returnType = Prim Void }
-          yield val_ ("set_" + fl.name) (emitType_ ctx ty) + str " " + Attr.js_set fl.name
+          yield val_ ("set_" + Naming.removeInvalidChars fl.name) (emitType_ ctx ty) + str " " + Attr.js_set fl.name
         | Field (fl, Mutable, _) ->
           yield! emitMember ma (Getter fl)
           yield! emitMember ma (Setter fl)
@@ -1104,6 +1137,19 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
 
       let members = [
         for ma, m in c.members do yield! emitMember ma m
+        match c.name with
+        | None -> ()
+        | Some name ->
+          match jsablePrimTypeInterfaces |> Map.tryFind name with
+          | None -> ()
+          | Some prim ->
+            let targetTy =
+              if List.isEmpty c.typeParams then Prim prim
+              else App (Prim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
+            let toMlTy = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = targetTy }
+            let ofMlTy = Function { isVariadic = false; args = [Choice2Of2 targetTy]; returnType = selfTy }
+            yield val_ "to_ml" (emitType_ ctx toMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
+            yield val_ "of_ml" (emitType_ ctx ofMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
       ]
 
       if List.isEmpty members || isAnonymous then
@@ -1123,7 +1169,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
 
   concat newline [
     yield open_ [ ctx.internalModuleName ]
-    yield open_ [ "AnonymousInterfaces"; "Types" ]
+    yield open_ [ "Ts2ocaml_baselib"; "AnonymousInterfaces"; "Types" ]
 
     for c, _ in ctx.anonymousInterfacesMap |> Map.toSeq do
       yield go ctx (ClassDef c)

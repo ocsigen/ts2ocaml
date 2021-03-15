@@ -48,6 +48,14 @@ module Trie =
 
   let add ks v t = addOrUpdate ks v (fun _ x -> x) t
 
+  let rec containsKey (ks: 'k list) (t: Trie<'k, 'v>) =
+    match ks with
+    | [] -> true
+    | k :: ks ->
+      match Map.tryFind k t.childs with
+      | None -> false
+      | Some child -> containsKey ks child
+
   let rec tryFind (ks: 'k list) (t: Trie<'k, 'v>) =
     match ks with
     | [] -> t.value

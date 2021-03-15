@@ -116,17 +116,17 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
   match t.kind with
   // primitives
   | Kind.StringKeyword -> Prim String
-  | Kind.NumberKeyword -> Prim Number
   | Kind.BooleanKeyword -> Prim Bool
+  | Kind.NumberKeyword -> Prim Number
   | Kind.AnyKeyword -> Prim Any
   | Kind.VoidKeyword -> Prim Void
   | Kind.UnknownKeyword -> Prim Unknown
-  | Kind.NeverKeyword -> Prim Never
   | Kind.NullKeyword -> Prim Null
+  | Kind.NeverKeyword -> Prim Never
   | Kind.UndefinedKeyword -> Prim Undefined
   | Kind.ObjectKeyword -> Prim Object
   | Kind.SymbolKeyword -> Prim PrimTypes.Symbol
-  // | Kind.BigIntKeyword -> Prim BigInt
+  | Kind.BigIntKeyword -> Prim BigInt
   | Kind.ArrayType ->
     let t = t :?> Ts.ArrayTypeNode
     let elem = readTypeNode typrm checker t.elementType

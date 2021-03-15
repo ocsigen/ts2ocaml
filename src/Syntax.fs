@@ -44,28 +44,13 @@ type Comment =
   | Return of string
 
 type PrimTypes =
-  // ES5
-  | Null | Undefined
-  | Object
   | String | Bool | Number
-  | UntypedFunction
-  | Array
-  | Date
-  | Error
-  | RegExp
-  // ES6
-  | Symbol
-  // | Proxy
-  // | Map | WeakMap
-  // | Set | WeakSet
-  | Promise
-  // ES2020
-  // | BigInt
-  // TS
-  | Never | Any | Void | Unknown
-  | ReadonlyArray
-  // | ReadonlyMap
-  // | ReadonlySet
+  | Any | Void | Unknown
+  | Null | Never | Undefined
+  | Object | UntypedFunction
+  | Symbol | RegExp
+  | Array | ReadonlyArray
+  | BigInt
 
 type Enum = {
   comments: Comment list

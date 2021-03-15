@@ -5,7 +5,7 @@ open Syntax
 
 type Context = {
   currentNamespace: string list
-  definitionsMap: Map<string list, Statement>
+  definitionsMap: Trie<string, Statement list>
   typeLiteralsMap: Map<Literal, int>
   anonymousInterfacesMap: Map<Class, int>
   internalModuleName: string
@@ -199,19 +199,22 @@ let rec mergeStatements (stmts: Statement list) =
       Module { !n with statements = mergeStatements (!n).statements }
   )
 
-let extractNamedDefinitions (stmts: Statement list) : Map<string list, Statement> =
-  let rec go (ns: string list) map s =
+let extractNamedDefinitions (stmts: Statement list) : Trie<string, Statement list> =
+  let rec go (ns: string list) trie s =
     match s with
+    | TypeAlias { erased = true }
+    | Export _
+    | UnknownStatement _ -> trie
     | TypeAlias { name = name; erased = false }
     | ClassDef  { name = Some name }
     | EnumDef   { name = name }
-    | Value     { name = name } -> map |> Map.add (ns @ [name]) s
+    | Value     { name = name } ->
+      trie |> Trie.addOrUpdate (ns @ [name]) [s] List.append
     | ClassDef  { name = None } -> failwith "impossible_extractNamedDefinitions"
     | Module m ->
       let ns' = ns @ [m.name]
-      m.statements |> List.fold (go ns') map |> Map.add ns' (Module m)
-    | _ -> map
-  stmts |> List.fold (go []) Map.empty
+      m.statements |> List.fold (go ns') trie |> Trie.addOrUpdate ns' [Module m] List.append
+  stmts |> List.fold (go []) Trie.empty
 
 let findTypesInType (pred: Type -> Choice<bool, Type list> * 'a option) (t: Type) : 'a seq =
   let rec go_t x =
@@ -327,21 +330,21 @@ let getUnknownIdentifiers stmts =
 
 let private createRootContextForTyper internalModuleName stmts =
   let add name ty m =
-    m |> Map.add [name] (TypeAlias { name = name; typeParams = []; target = ty; erased = true })
+    if m |> Trie.containsKey [name] then m
+    else
+      m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true }]
   let m =
     extractNamedDefinitions stmts
-    // TODO
-    |> add "Object" (Prim Object)
     |> add "String" (Prim String)
-    |> add "Number" (Prim Number)
     |> add "Boolean" (Prim Bool)
+    |> add "Number" (Prim Number)
+    |> add "Object" (Prim Object)
     |> add "Function" (Prim UntypedFunction)
-    |> add "Array" (Prim Array)
-    |> add "Date" (Prim Date)
-    |> add "Error" (Prim Error)
+    |> add "Symbol" (Prim Symbol)
     |> add "RegExp" (Prim RegExp)
+    |> add "Array" (Prim Array)
     |> add "ReadonlyArray" (Prim ReadonlyArray)
-    |> add "Promise" (Prim Promise)
+    |> add "BigInt" (Prim BigInt)
   {
     internalModuleName = internalModuleName
     currentNamespace = []
@@ -368,60 +371,90 @@ type FullNameLookupResult =
   | ModuleName of Module
   | ValueName of Value
   | MemberName of MemberAttribute * Member
+  | NotFound of string option
 
 let rec getFullNameOfIdent (ctx: Context) (ident: IdentType) : string list option =
   let nsRev = List.rev ctx.currentNamespace
   let fullName = nsRev @ ident.name
-  match ctx.definitionsMap |> Map.tryFind fullName with
-  | Some (TypeAlias _ | ClassDef _ | EnumDef _ | Module _ | Value _) -> Some fullName
+  let onFail () =
+    match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
+  match ctx.definitionsMap |> Trie.tryFind fullName with
+  | Some ((TypeAlias _ | ClassDef _ | EnumDef _ | Module _ | Value _) :: _) -> Some fullName
   | None when List.length ident.name > 1 ->
     let possibleEnumName = nsRev @ (ident.name |> List.take (List.length ident.name - 1))
     let possibleEnumCaseName = ident.name |> List.last
-    match ctx.definitionsMap |> Map.tryFind possibleEnumName with
-    | Some (EnumDef e) when e.cases |> List.exists (fun c -> c.name = possibleEnumCaseName) ->
-      Some (possibleEnumName @ [possibleEnumCaseName])
-    | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
-  | _ -> match Context.ofParentNamespace ctx with Some ctx -> getFullNameOfIdent ctx ident | None -> None
+    let rec find = function
+      | EnumDef e :: _ when e.cases |> List.exists (fun c -> c.name = possibleEnumCaseName) ->
+        Some (possibleEnumName @ [possibleEnumCaseName])
+      | _ :: xs -> find xs
+      | [] -> onFail ()
+    match ctx.definitionsMap |> Trie.tryFind possibleEnumName with
+    | Some xs -> find xs
+    | _ -> onFail ()
+  | _ -> onFail ()
 
-let lookupFullName (ctx: Context) (fullName: string list) : FullNameLookupResult =
-  match ctx.definitionsMap |> Map.tryFind fullName with
-  | Some (TypeAlias a) -> AliasName a
-  | Some (ClassDef c) -> ClassName c
-  | Some (EnumDef e) -> EnumName e
-  | Some (Module m) -> ModuleName m
-  | Some (Value v) -> ValueName v
-  | None ->
+let lookupFullName (ctx: Context) (fullName: string list) : FullNameLookupResult list =
+  let conv = function
+    | TypeAlias a -> AliasName a |> Some
+    | ClassDef c -> ClassName c |> Some
+    | EnumDef e -> EnumName e |> Some
+    | Module m -> ModuleName m |> Some
+    | Value v -> ValueName v |> Some
+    | _ -> None
+  let result = ctx.definitionsMap |> Trie.tryFind fullName
+  [
+    match result with
+    | Some xs -> yield! List.choose conv xs
+    | None -> ()
     let containerName = fullName |> List.take (List.length fullName - 1)
     let itemName = List.last fullName
-    match ctx.definitionsMap |> Map.tryFind containerName with
-    | Some (EnumDef e) ->
-      match e.cases |> List.tryFind (fun c -> c.name = itemName) with
-      | Some _ -> EnumCaseName (itemName, e)
-      | None -> failwithf "The enum '%s' does not have a case '%s" (containerName |> String.concat ".") itemName
-    | Some (ClassDef c) ->
-      let result =
-        c.members |> List.tryPick (fun (ma, m) ->
-          match m with
-          | Field (fl, _, _) | Getter fl | Setter fl when fl.name = itemName -> MemberName (ma, m) |> Some
-          | Method (name, _, _) when name = itemName -> MemberName (ma, m) |> Some
-          | _ -> None
-        )
-      match result with
-      | None ->
-        match c.name with
-        | Some name ->
-          failwithf "The class '%s' does not have a member '%s'" name itemName
+    let containerResult = ctx.definitionsMap |> Trie.tryFind containerName
+    let notFound fmt =
+      Printf.ksprintf (fun s -> NotFound (Some s)) fmt
+    let rec find = function
+      | EnumDef e :: rest ->
+        match e.cases |> List.tryFind (fun c -> c.name = itemName) with
+        | Some _ -> EnumCaseName (itemName, e) :: find rest
         | None ->
-          failwithf "The anonymous interface '%s' does not have a member '%s'" (Type.pp (AnonymousInterface c)) itemName
-      | Some x -> x
-    | _ -> failwithf "Current context doesn't contain '%s'" (fullName |> String.concat ".")
-  | _ -> failwithf "Current context doesn't contain '%s'" (fullName |> String.concat ".")
+          notFound "The enum '%s' does not have a case '%s" (containerName |> String.concat ".") itemName :: find rest
+      | ClassDef c :: rest ->
+        let result =
+          c.members |> List.tryPick (fun (ma, m) ->
+            match m with
+            | Field (fl, _, _) | Getter fl | Setter fl when fl.name = itemName -> MemberName (ma, m) |> Some
+            | Method (name, _, _) when name = itemName -> MemberName (ma, m) |> Some
+            | _ -> None
+          )
+        match result with
+        | None ->
+          match c.name with
+          | Some name ->
+            notFound "The class '%s' does not have a member '%s'" name itemName :: find rest
+          | None ->
+            notFound "The anonymous interface '%s' does not have a member '%s'" (Type.pp (AnonymousInterface c)) itemName :: find rest
+        | Some x -> x :: find rest
+      | _ :: rest -> find rest
+      | [] -> [notFound "Current context doesn't contain '%s'" (fullName |> String.concat ".")]
+    match containerResult with
+    | Some xs -> yield! find xs
+    | None -> ()
+  ]
 
-let tryLookupFullName ctx fullName =
-  try
-    lookupFullName ctx fullName |> Some
-  with
-    | _ -> None
+let lookupFullNameWith ctx fullName picker =
+  let result = lookupFullName ctx fullName
+  match List.tryPick picker result with
+  | Some x -> x
+  | None ->
+    match List.choose (function NotFound msg -> msg | _ -> None) result with
+    | [] ->
+      failwithf "error: failed to find '%s' from the context. current context doesn't contain it."
+        (String.concat "." fullName)
+    | errors ->
+      failwithf "error: failed to find '%s' from the context. %s"
+        (errors |> List.map (fun s -> "       " + s) |> String.concat System.Environment.NewLine) 
+
+let tryLookupFullNameWith ctx fullName picker =
+  lookupFullName ctx fullName |> List.tryPick picker
 
 let rec mapIdent (mapping: Context -> IdentType -> IdentType) (ctx: Context) = function
   | Ident i -> Ident (mapping ctx i)
@@ -506,13 +539,14 @@ let rec getAllInheritancesOfType (ctx: Context) (ty: Type) : Set<Type> =
       | Ident { fullName = Some fn } ->
         yield! getAllInheritancesFromName ctx fn
       | App (Ident { fullName = Some fn }, ts, loc) ->
-        let lookupResult = lookupFullName ctx fn
-        match lookupResult with
-        | AliasName a when a.erased -> ()
-        | AliasName { typeParams = typrms } | ClassName { typeParams = typrms } ->
-          let subst = createBindings fn loc typrms ts
-          yield! getAllInheritancesFromName ctx fn |> Seq.map (substTypeVar subst ctx)
-        | _ -> ()
+        yield!
+          lookupFullName ctx fn
+          |> List.tryPick (function
+            | AliasName { typeParams = typrms } | ClassName { typeParams = typrms } ->
+              let subst = createBindings fn loc typrms ts
+              getAllInheritancesFromName ctx fn |> Seq.map (substTypeVar subst ctx) |> Some
+            | _ -> None
+          ) |> Option.defaultValue Seq.empty
       | Union u -> yield! Set.intersectMany (List.map go u.types)
       | Intersection i -> yield! Set.unionMany (List.map go i.types)
       | _ -> ()
@@ -524,15 +558,16 @@ and getAllInheritancesFromName (ctx: Context) (className: string list) : Set<Typ
   | Some s -> s
   | None ->
     let result =
-      match ctx.definitionsMap |> Map.tryFind className with
-      | Some (ClassDef c) ->
-        seq {
-          for t in c.implements do
-            yield t
-            yield! getAllInheritancesOfType ctx t
-        } |> Set.ofSeq
-      | Some (TypeAlias t) when not t.erased -> getAllInheritancesOfType ctx t.target
-      | _ -> Set.empty
+      lookupFullName ctx className |> Seq.collect (function
+        | ClassName c ->
+          seq {
+            for t in c.implements do
+              yield t
+              yield! getAllInheritancesOfType ctx t
+          }
+        | AliasName t when not t.erased -> getAllInheritancesOfType ctx t.target |> Set.toSeq
+        | _ -> Seq.empty
+      ) |> Set.ofSeq
     inheritMap <- inheritMap |> Map.add className result
     result
 
@@ -551,7 +586,7 @@ let private createFunctionInterface typrms ft =
     ]
   }
 
-let rec resolveIndexedAccessAndTypeQuery (ctx: Context) (stmts: Statement list) =
+let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
   let (|Dummy|) _ = []
   let rec f ctx = function
     | PolymorphicThis -> PolymorphicThis
@@ -581,7 +616,7 @@ let rec resolveIndexedAccessAndTypeQuery (ctx: Context) (stmts: Statement list) 
         let rec go t1 t2 =
           let onFail () =
             let tyText = Type.pp (Erased (IndexedAccess (t1, t2), loc))
-            eprintfn "cannot resolve an indexed access type '%s' at %s" tyText loc.AsString
+            eprintfn "warn: cannot resolve an indexed access type '%s' at %s" tyText loc.AsString
             UnknownType (Some tyText)
           match t1, t2 with
           | Union { types = ts }, _ -> Union { types = List.map (fun t1 -> go t1 t2) ts }
@@ -599,23 +634,21 @@ let rec resolveIndexedAccessAndTypeQuery (ctx: Context) (stmts: Statement list) 
             | None -> onFail ()
           | (Tuple ts | ReadonlyTuple ts), Prim (Number | Any) -> Union { types = ts }
           | (App (Ident { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)), _ ->
-            match lookupFullName ctx fn with
-            | AliasName ta when not ta.erased ->
-              let subst = createBindings fn loc ta.typeParams ts
-              go ta.target t2 |> substTypeVar subst ctx
-            | ClassName c ->
-              let subst = createBindings fn loc c.typeParams ts
-              go (AnonymousInterface c) t2 |> substTypeVar subst ctx
-            | ValueName v ->
-              let subst = createBindings fn loc v.typeParams ts
-              go v.typ t2 |> substTypeVar subst ctx
-            | _ -> onFail ()
+            tryLookupFullNameWith ctx fn (function 
+              | AliasName ta when not ta.erased ->
+                let subst = createBindings fn loc ta.typeParams ts
+                go ta.target t2 |> substTypeVar subst ctx |> Some
+              | ClassName c ->
+                let subst = createBindings fn loc c.typeParams ts
+                go (AnonymousInterface c) t2 |> substTypeVar subst ctx |> Some
+              | _ -> None
+            ) |> Option.defaultWith onFail
           | _, _ -> onFail ()
         go (f ctx tobj) (f ctx tindex)
       | TypeQuery i ->
         let onFail () =
           let tyText = Type.pp (Erased (TypeQuery i, loc))
-          eprintfn "cannot resolve a type query '%s' at %s" tyText loc.AsString
+          eprintfn "warn: cannot resolve a type query '%s' at %s" tyText loc.AsString
           UnknownType (Some tyText)
         match i.fullName with
         | None -> onFail ()
@@ -625,23 +658,24 @@ let rec resolveIndexedAccessAndTypeQuery (ctx: Context) (stmts: Statement list) 
             | _ :: _, Function ft -> AnonymousInterface (createFunctionInterface typrms ft)
             | _ :: _, _ -> onFail ()
             | [], _ -> ty
-          match lookupFullName ctx fn with
-          | ValueName v -> result v.typeParams v.typ
-          | MemberName (_, m) ->
-            match m with
-            | Field (ft, _, typrms) | (Getter ft & Dummy typrms) | (Setter ft & Dummy typrms) ->
-              match ft.isOptional, result typrms ft.value with
-              | true, UnknownType msgo -> UnknownType msgo
-              | true, t -> Union { types =  [t; Prim Undefined] }
-              | false, t -> t
-            | Method (_, ft, typrms) -> result typrms (Function ft)
-            | _ -> onFail ()
-          | _ -> onFail ()
+          tryLookupFullNameWith ctx fn (function
+            | ValueName v -> result v.typeParams v.typ |> Some
+            | MemberName (_, m) ->
+              match m with
+              | Field (ft, _, typrms) | (Getter ft & Dummy typrms) | (Setter ft & Dummy typrms) ->
+                match ft.isOptional, result typrms ft.value with
+                | true, UnknownType msgo -> UnknownType msgo |> Some
+                | true, t -> Union { types =  [t; Prim Undefined] } |> Some
+                | false, t -> Some t
+              | Method (_, ft, typrms) -> result typrms (Function ft) |> Some
+              | _ -> None
+            | _ -> None
+          ) |> Option.defaultWith onFail
       | Keyof t ->
         let t = f ctx t
         let onFail () =
           let tyText = Type.pp t
-          eprintfn "cannot resolve a type operator 'keyof %s' at %s" tyText loc.AsString
+          eprintfn "warn: cannot resolve a type operator 'keyof %s' at %s" tyText loc.AsString
           UnknownType (Some tyText) 
         let memberChooser = function
           | Field (fl, _, _) | Getter fl | Setter fl -> Set.singleton (TypeLiteral (LString fl.name))
@@ -654,14 +688,15 @@ let rec resolveIndexedAccessAndTypeQuery (ctx: Context) (stmts: Statement list) 
             i.members |> List.map (snd >> memberChooser) |> Set.unionMany
           | App ((Prim Array | Prim ReadonlyArray), [_], _) | Tuple _ | ReadonlyTuple _ -> Set.singleton (Prim Number)
           | (App (Ident { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)) ->
-            match lookupFullName ctx fn with
-            | AliasName ta when not ta.erased ->
-              let subst = createBindings fn loc ta.typeParams ts
-              go ta.target |> Set.map (substTypeVar subst ctx)
-            | ClassName c ->
-              let subst = createBindings fn loc c.typeParams ts
-              c.members |> List.map (snd >> memberChooser >> Set.map (substTypeVar subst ctx)) |> Set.unionMany
-            | _ -> Set.empty
+            tryLookupFullNameWith ctx fn (function
+              | AliasName ta when not ta.erased ->
+                let subst = createBindings fn loc ta.typeParams ts
+                go ta.target |> Set.map (substTypeVar subst ctx) |> Some
+              | ClassName c ->
+                let subst = createBindings fn loc c.typeParams ts
+                c.members |> List.map (snd >> memberChooser >> Set.map (substTypeVar subst ctx)) |> Set.unionMany |> Some
+              | _ -> None
+            ) |> Option.defaultValue Set.empty
           | _ -> Set.empty
         let types = go t
         if Set.isEmpty types then onFail ()
@@ -677,17 +712,18 @@ let rec getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union
       match t with
       | Union { types = types } | Intersection { types = types } -> yield! Seq.collect go types
       | (Ident { fullName = Some fn; loc = loc } & Dummy tyargs) | App (Ident { fullName = Some fn }, tyargs, loc) ->
-        match fn |> lookupFullName ctx with
-        | AliasName a when not a.erased ->
-          let bindings = createBindings fn loc a.typeParams tyargs
-          yield! go (a.target |> substTypeVar bindings ())
-        | EnumName e ->
-          for c in e.cases do yield Choice1Of2 (Choice1Of2 c)
-        | EnumCaseName (name, e) ->
-          match e.cases |> List.tryFind (fun c -> c.name = name) with
-          | Some c -> yield Choice1Of2 (Choice1Of2 c)
-          | None -> yield Choice2Of2 t
-        | _ -> yield Choice2Of2 t
+        for x in fn |> lookupFullName ctx do
+          match x with
+          | AliasName a when not a.erased ->
+            let bindings = createBindings fn loc a.typeParams tyargs
+            yield! go (a.target |> substTypeVar bindings ())
+          | EnumName e ->
+            for c in e.cases do yield Choice1Of2 (Choice1Of2 c)
+          | EnumCaseName (name, e) ->
+            match e.cases |> List.tryFind (fun c -> c.name = name) with
+            | Some c -> yield Choice1Of2 (Choice1Of2 c)
+            | None -> yield Choice2Of2 t
+          | _ -> yield Choice2Of2 t
       | TypeLiteral l -> yield Choice1Of2 (Choice2Of2 l)
       | _ -> yield Choice2Of2 t
     }
@@ -706,19 +742,20 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
       | AnonymousInterface i ->
         yield onClass t i
       | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (Ident {fullName = Some fn}, ts, loc) ->
-        match lookupFullName ctx fn with
-        | AliasName a ->
-          if List.isEmpty ts then
-            yield! goBase onUnion onIntersection onClass onOther a.target
-          else
-            yield! goBase onUnion onIntersection onClass onOther (App (a.target, ts, UnknownLocation))
-        | ClassName c ->
-          if List.isEmpty ts then
-            yield onClass t c
-          else
-            let bindings = createBindings fn loc c.typeParams ts
-            yield onClass t (c |> mapTypeInClass (substTypeVar bindings) ())
-        | _ -> yield onOther t
+        for x in lookupFullName ctx fn do
+          match x with
+          | AliasName a ->
+            if List.isEmpty ts then
+              yield! goBase onUnion onIntersection onClass onOther a.target
+            else
+              yield! goBase onUnion onIntersection onClass onOther (App (a.target, ts, UnknownLocation))
+          | ClassName c ->
+            if List.isEmpty ts then
+              yield onClass t c
+            else
+              let bindings = createBindings fn loc c.typeParams ts
+              yield onClass t (c |> mapTypeInClass (substTypeVar bindings) ())
+          | _ -> yield onOther t
       | _ -> yield onOther t
    }
 
@@ -741,15 +778,16 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
           match t with
           | TypeLiteral l -> [fl.name, l]
           | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (Ident { fullName = Some fn }, ts, loc) ->
-            match fn |> lookupFullName ctx with
-            | EnumCaseName (cn, e) ->
-              match e.cases |> List.tryFind (fun c -> c.name = cn) with
-              | Some { value = Some v } -> [fl.name, v]
-              | _ -> []
-            | AliasName a when not a.erased ->
-              let bindings = createBindings fn loc a.typeParams ts
-              go (a.target |> substTypeVar bindings ())
-            | _ -> []
+            tryLookupFullNameWith ctx fn (function
+              | EnumCaseName (cn, e) ->
+                match e.cases |> List.tryFind (fun c -> c.name = cn) with
+                | Some { value = Some v } -> Some [fl.name, v]
+                | _ -> None
+              | AliasName a when not a.erased ->
+                let bindings = createBindings fn loc a.typeParams ts
+                go (a.target |> substTypeVar bindings ()) |> Some
+              | _ -> None
+            ) |> Option.defaultValue []
           | _ -> []
         go fl.value
       | _ -> []) |> Set.ofList |> Set.union inheritedFields
@@ -914,7 +952,7 @@ let runAll stmts =
   let ctx = createRootContextForTyper "Internal" result
 
   // resolve every indexed access type and type query
-  let result = result |> resolveIndexedAccessAndTypeQuery ctx
+  let result = result |> resolveErasedTypes ctx
   // rebuild the context because resolbeIndexedAccessAndTypeQuery may introduce additional anonymous function interfaces
   let ctx = createRootContext "Internal" result
 

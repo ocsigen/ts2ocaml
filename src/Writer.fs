@@ -49,7 +49,7 @@ module Attr =
 
   let js_custom_typ content = attr Block "js.custom" content
 
-  let js_create = attr Block "js.create" empty
+  let js_create is_newable = attr Block "js.create" (if is_newable then str "as_constructor" else empty)
 
   let private str' s = between "\"" "\"" (str s)
 
@@ -209,7 +209,7 @@ open Term
 module Naming =
   let ourReservedNames =
     set [
-      "create"; "apply"; "get"; "set";
+      "create"; "apply"; "get"; "set"; "cast"
     ]
 
   let reservedNames =
@@ -375,6 +375,7 @@ type EmitTypeFlags = {
   variance: Variance
   failContravariantTypeVar: bool
   skipAttributesOnContravariantPosition: bool
+  emitFunctionArgNames: bool
   forceVariadic: bool
 }
 
@@ -386,6 +387,7 @@ module EmitTypeFlags =
       variance = Covariant
       failContravariantTypeVar = false
       skipAttributesOnContravariantPosition = false
+      emitFunctionArgNames = true
       forceVariadic = false
     }
 
@@ -564,19 +566,19 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
         let flags = { flags with variance = -flags.variance }
         match args with
         | [] -> acc + void_t
-        | Choice1Of2 x :: [] when f.isVariadic ->
+        | Choice1Of2 x :: [] when f.isVariadic && flags.emitFunctionArgNames ->
           assert (not x.isOptional)
           acc + tprintf "%s:" (Naming.valueName x.name) + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx x.value +@ " [@js.variadic]")
-        | Choice2Of2 t :: [] when f.isVariadic ->
-          acc + emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx t +@ " [@js.variadic]"
-        | Choice1Of2 x :: xs ->
+        | Choice2Of2 t :: [] | Choice1Of2 { value = t } :: [] when f.isVariadic ->
+          acc + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx t +@ " [@js.variadic]")
+        | Choice1Of2 x :: xs when flags.emitFunctionArgNames ->
           let prefix =
             if x.isOptional then "?" else ""
           let ty = emitTypeImpl { flags with needParen = true } overrideFunc ctx x.value
           let t = tprintf "%s%s:" prefix (Naming.valueName x.name) + ty
           if not x.isOptional && List.isEmpty xs then acc + t
           else go (acc + t +@ " -> ") xs
-        | Choice2Of2 t :: xs ->
+        | Choice2Of2 t :: xs | Choice1Of2 { value = t } :: xs ->
           let t = emitTypeImpl { flags with needParen = true } overrideFunc ctx t
           if List.isEmpty xs then acc + t
           else go (acc + t +@ " -> ") xs
@@ -585,7 +587,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
         match f.returnType with
         | Prim Void -> void_t
         | Function _ ->
-          between "(" ")" (emitTypeImpl flags overrideFunc ctx f.returnType)
+          between "(" ")" (emitTypeImpl { flags with emitFunctionArgNames = false } overrideFunc ctx f.returnType +@ " [@js.dummy]")
         | _ -> emitTypeImpl flags overrideFunc ctx f.returnType
       let result = lhs +@ " -> " + rhs
       if flags.needParen then result |> between "(" ")" else result
@@ -878,8 +880,8 @@ let emitUnknownIdentifiers ctx =
 
 let emitHeader =
   concat newline [
-    str "[@@@ocaml.warning \"-7-11-32-39\"]"
-    Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-39\"]")
+    str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
+    Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]")
   ]
 
 let emitFlattenedDefinitions (ctx: Context) : text =
@@ -1011,13 +1013,16 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       yield! go 1 (List.rev tyargs) (List.rev typrms)
     ]
 
-  let rec go (ctx: Context) (s: Statement) : text =
+  let rec go (renamer: OverloadRenamer) (ctx: Context) (s: Statement) : text =
     match s with
     | Module m ->
       moduleScopeSig
-        m.name
+        (m.name |> renamer.Rename "module")
         (Naming.moduleName m.name)
-        (concat newline (List.map (go ({ ctx with currentNamespace = m.name :: ctx.currentNamespace})) m.statements))
+        (concat newline (
+          m.statements |> List.map (fun x ->
+            let renamer = new OverloadRenamer()
+            go renamer ({ ctx with currentNamespace = m.name :: ctx.currentNamespace}) x)))
     | Export (e, _) -> commentStr (sprintf "export = %s" (String.concat "." e.name))
     | UnknownStatement (Some s) -> commentStr s
     | UnknownStatement None -> commentStr "unknown statement"
@@ -1026,7 +1031,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       let tyargs = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
       concat newline [
         yield
-          moduleSig (Naming.moduleName name) (
+          moduleSig (Naming.moduleName name |> renamer.Rename "module") (
             concat newline [
               yield! emitTypeAliases typeParams (emitTypeName k tyargs)
             ]
@@ -1035,7 +1040,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
     | EnumDef _ -> failwith "impossible_emitStructuredDefinitions_EnumDef"
     | Value v ->
       concat newline [
-        yield val_ (Naming.valueName v.name) (emitType_ ctx v.typ) + str " " + Attr.js_global v.name
+        yield val_ (Naming.valueName v.name |> renamer.Rename "value") (emitType_ ctx v.typ) + str " " + Attr.js_global v.name
       ]
     | ClassDef c ->
       let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
@@ -1074,19 +1079,22 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       let removeLabels (xs: Choice<FieldLike, Type> list) =
         xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
 
-      let rec emitMember (ma: MemberAttribute) m = [
+      let rec emitMember (renamer: OverloadRenamer) (ma: MemberAttribute) m = [
+        let rename s = renamer.Rename "value" s
         match m with
-        | Constructor (ft, _typrm) ->
+        | Constructor (ft, typrm) ->
           let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy }
-          yield val_ "create" (emitType_ ctx ty) + str " " + Attr.js_create
-        | Field ({ name = name; value = Function ft }, _, _)
-        | Method (name, ft, _) ->
+          yield val_ (rename "create") (emitType_ ctx ty) + str " " + Attr.js_create false
+        | New (ft, typrm) ->
+          yield val_ (rename "create") (emitType_ ctx (Function ft)) + str " " + Attr.js_create true
+        | Field ({ name = name; value = Function ft }, _, typrm)
+        | Method (name, ft, typrm) ->
           let ty, attr =
             if ma.isStatic then Function ft, Attr.js_global name
             else
               let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
               Function ft, Attr.js_call name
-          yield val_ (Naming.valueName name) (emitType_ ctx ty) + str " " + attr
+          yield val_ (Naming.valueName name |> rename) (emitType_ ctx ty) + str " " + attr
         | Getter fl | Field (fl, ReadOnly, _) ->
           let fl =
             if fl.value <> Prim Void then fl
@@ -1101,7 +1109,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
               if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
               else fl.value
             Function { isVariadic = false; args = args; returnType = ret }
-          yield val_ ("get_" + Naming.removeInvalidChars fl.name) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
+          yield val_ ("get_" + Naming.removeInvalidChars fl.name |> rename) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
         | Setter fl | Field (fl, WriteOnly, _) ->
           let fl =
             if fl.value <> Prim Void then fl
@@ -1113,30 +1121,30 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
               if ma.isStatic then [Choice2Of2 fl.value]
               else [Choice2Of2 selfTy; Choice2Of2 fl.value]
             Function { isVariadic = false; args = args; returnType = Prim Void }
-          yield val_ ("set_" + Naming.removeInvalidChars fl.name) (emitType_ ctx ty) + str " " + Attr.js_set fl.name
+          yield val_ ("set_" + Naming.removeInvalidChars fl.name |> rename) (emitType_ ctx ty) + str " " + Attr.js_set fl.name
         | Field (fl, Mutable, _) ->
-          yield! emitMember ma (Getter fl)
-          yield! emitMember ma (Setter fl)
+          yield! emitMember renamer ma (Getter fl)
+          yield! emitMember renamer ma (Setter fl)
         | FunctionInterface (ft, _) ->
           let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
-          yield val_ "apply" (emitType_ ctx (Function ft)) + str " " + Attr.js_apply
+          yield val_ (rename "apply") (emitType_ ctx (Function ft)) + str " " + Attr.js_apply
         | Indexer (ft, ReadOnly) ->
           let ft = { ft with args = Choice2Of2 selfTy :: removeLabels ft.args }
-          yield val_ "get" (emitType_ ctx (Function ft)) + str " " + Attr.js_index_get
+          yield val_ (rename "get") (emitType_ ctx (Function ft)) + str " " + Attr.js_index_get
         | Indexer (ft, WriteOnly) ->
           let ft =
             { args = Choice2Of2 selfTy :: removeLabels ft.args @ [ Choice2Of2 ft.returnType ]
               isVariadic = false;
               returnType = Prim Void }
-          yield val_ "set" (emitType_ ctx (Function ft)) + str " " + Attr.js_index_set
+          yield val_ (rename "set") (emitType_ ctx (Function ft)) + str " " + Attr.js_index_set
         | Indexer (ft, Mutable) ->
-          yield! emitMember ma (Indexer (ft, ReadOnly))
-          yield! emitMember ma (Indexer (ft, WriteOnly))
-        | New _ -> ()
+          yield! emitMember renamer ma (Indexer (ft, ReadOnly))
+          yield! emitMember renamer ma (Indexer (ft, WriteOnly))
       ]
 
       let members = [
-        for ma, m in c.members do yield! emitMember ma m
+        let renamer = new OverloadRenamer()
+        for ma, m in c.members do yield! emitMember renamer ma m
         match c.name with
         | None -> ()
         | Some name ->
@@ -1148,19 +1156,19 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
               else App (Prim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
             let toMlTy = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = targetTy }
             let ofMlTy = Function { isVariadic = false; args = [Choice2Of2 targetTy]; returnType = selfTy }
-            yield val_ "to_ml" (emitType_ ctx toMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
-            yield val_ "of_ml" (emitType_ ctx ofMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
+            yield val_ ("to_ml" |> renamer.Rename "value") (emitType_ ctx toMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
+            yield val_ ("of_ml" |> renamer.Rename "value") (emitType_ ctx ofMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
       ]
 
       if List.isEmpty members || isAnonymous then
-        moduleSig name (concat newline [
+        moduleSig (Naming.moduleName name |> renamer.Rename "module") (concat newline [
           yield! emitTypeAliases c.typeParams selfTyText
           yield! members
         ])
       else
         concat newline [
           yield
-            moduleScopeSig name (Naming.moduleName name) (concat newline [
+            moduleScopeSig name (Naming.moduleName name |> renamer.Rename "module") (concat newline [
               yield! emitTypeAliases c.typeParams selfTyText
               yield! members
             ])
@@ -1172,9 +1180,12 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
     yield open_ [ "Ts2ocaml_baselib"; "AnonymousInterfaces"; "Types" ]
 
     for c, _ in ctx.anonymousInterfacesMap |> Map.toSeq do
-      yield go ctx (ClassDef c)
+      let renamer = new OverloadRenamer()
+      yield go renamer ctx (ClassDef c)
 
-    for stmt in stmts do yield go ctx stmt
+    for stmt in stmts do
+      let renamer = new OverloadRenamer()
+      yield go renamer ctx stmt
   ]
 
 let emitAll ctx stmts =

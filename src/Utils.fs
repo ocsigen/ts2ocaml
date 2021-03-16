@@ -1,6 +1,8 @@
 [<AutoOpen>]
 module Utils
 
+open System
+
 let inline (|Ref|) (x: 'a ref) = !x
 
 module Char =
@@ -20,6 +22,23 @@ module String =
      .Replace("'", "\\'").Replace("\"", "\\\"")
      .Replace("\b", "\\b").Replace("\n", "\\n").Replace("\r", "\\r")
      .Replace("\t", "\\t")
+
+type OverloadRenamer(?rename: string -> int -> string) =
+  let rename =
+    match rename with
+    | Some f -> f
+    | None -> (fun s i -> s + (String.replicate i "'"))
+  let m = new Collections.Generic.Dictionary<string * string, int>()
+  member __.Rename (ns: string) (name: string) =
+    match m.TryGetValue((ns, name)) with
+    | true, i ->
+      m.[(ns, name)] <- i + 1
+      let name' = rename name (i+1)
+      m.[(ns, name')] <- 0
+      name'
+    | false, _ ->
+      m.[(ns, name)] <- 0
+      name
 
 type Trie<'k, 'v when 'k: comparison> = {
   value: 'v option

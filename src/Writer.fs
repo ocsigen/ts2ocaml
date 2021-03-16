@@ -1145,6 +1145,9 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       let members = [
         let renamer = new OverloadRenamer()
         for ma, m in c.members do yield! emitMember renamer ma m
+        for parent in c.implements do
+          let ty = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = parent }
+          yield val_ ("cast" |> renamer.Rename "value") (emitType_ ctx ty) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
         match c.name with
         | None -> ()
         | Some name ->

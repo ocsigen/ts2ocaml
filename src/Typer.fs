@@ -542,7 +542,7 @@ let rec getAllInheritancesOfType (ctx: Context) (ty: Type) : Set<Type> =
         yield!
           lookupFullName ctx fn
           |> List.tryPick (function
-            | AliasName { typeParams = typrms } | ClassName { typeParams = typrms } ->
+            | AliasName { typeParams = typrms; erased = false } | ClassName { typeParams = typrms } ->
               let subst = createBindings fn loc typrms ts
               getAllInheritancesFromName ctx fn |> Seq.map (substTypeVar subst ctx) |> Some
             | _ -> None

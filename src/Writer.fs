@@ -440,7 +440,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       match i.fullName with
       | Some fn ->
         tryLookupFullNameWith ctx fn (function
-          | AliasName ta when ta.erased -> emitTypeImpl flags overrideFunc ctx ta.target |> Some
+          | AliasName { target = target; erased = true } -> emitTypeImpl flags overrideFunc ctx target |> Some
           | _ -> None
         ) |> Option.defaultWith (fun () -> str (Naming.flattenedTypeName fn))
       | None -> str (Naming.structuredTypeName i.name + ".t")
@@ -460,13 +460,15 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       | BigInt -> bigint_t
     | TypeLiteral l ->
       treatEnum flags ctx (Set.singleton (Choice2Of2 l))
-    | Intersection i -> intersection_t (i.types |> List.map (emitTypeImpl flags overrideFunc ctx))
+    | Intersection i ->
+      let flags = { flags with needParen = true }
+      intersection_t (i.types |> List.map (emitTypeImpl flags overrideFunc ctx))
     | Union u ->
+      let flags = { flags with needParen = true }
       if not flags.resolveUnion then
         union_t (u.types |> List.map (emitTypeImpl flags overrideFunc ctx))
       else
         let ru = resolveUnion ctx u
-        let flags = { flags with needParen = true }
         let skipOnContravariant text =
           if flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant then empty
           else text
@@ -529,7 +531,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
               | _ -> failwith "impossible_emitResolvedUnion_treatEnumOr")
           let rec go = function
             | (typeofable, cases) :: rest ->
-              enum_or (typeofable |> TypeofableType.toType |> emitTypeImpl flags overrideFunc ctx)
+              enum_or (typeofable |> TypeofableType.toType |> emitTypeImpl { flags with needParen = true } overrideFunc ctx)
                       (treatEnum flags ctx (Set.ofList cases))
                       (go rest)
             | [] -> t
@@ -583,12 +585,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
           if List.isEmpty xs then acc + t
           else go (acc + t +@ " -> ") xs
       let lhs = go empty f.args
-      let rhs =
-        match f.returnType with
-        | Prim Void -> void_t
-        | Function _ ->
-          between "(" ")" (emitTypeImpl { flags with emitFunctionArgNames = false } overrideFunc ctx f.returnType +@ " [@js.dummy]")
-        | _ -> emitTypeImpl flags overrideFunc ctx f.returnType
+      let rhs = emitTypeImpl { flags with emitFunctionArgNames = false; needParen = true } overrideFunc ctx f.returnType +@ " [@js.dummy]"
       let result = lhs +@ " -> " + rhs
       if flags.needParen then result |> between "(" ")" else result
     | Tuple ts | ReadonlyTuple ts ->

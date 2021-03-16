@@ -849,7 +849,10 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
          |> Map.ofList)
     |> Map.ofList
 
-  dus, { types = rest }
+  if Map.isEmpty dus then
+    Map.empty, u
+  else
+    dus, { types = rest }
 
 type TypeofableType = TNumber | TString | TBoolean | TSymbol
 
@@ -921,9 +924,13 @@ let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
       if List.isEmpty arrayTypes then None
       else Some (Set.ofList arrayTypes) 
     let caseEnum, rest =
-      getEnumFromUnion ctx { types = rest }
+      match rest with
+      | _ :: _ :: _ -> getEnumFromUnion ctx { types = rest }
+      | _ -> Set.empty, { types = rest }
     let discriminatedUnions, rest =
-      getDiscriminatedFromUnion ctx rest
+      match rest.types with
+      | _ :: _ :: _ -> getDiscriminatedFromUnion ctx rest
+      | _ -> Map.empty, rest
     let otherTypes = Set.ofList rest.types
 
     let result = 

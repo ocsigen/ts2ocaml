@@ -23,12 +23,18 @@ module String =
      .Replace("\b", "\\b").Replace("\n", "\\n").Replace("\r", "\\r")
      .Replace("\t", "\\t")
 
-type OverloadRenamer(?rename: string -> int -> string) =
+type OverloadRenamer(?rename: string -> int -> string, ?used: Set<string * string>) =
   let rename =
     match rename with
     | Some f -> f
     | None -> (fun s i -> s + (String.replicate i "'"))
   let m = new Collections.Generic.Dictionary<string * string, int>()
+  do
+    match used with
+    | None -> ()
+    | Some used ->
+      for name in used |> Set.toSeq do
+        m.[name] <- 0
   member __.Rename (ns: string) (name: string) =
     match m.TryGetValue((ns, name)) with
     | true, i ->

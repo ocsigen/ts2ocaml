@@ -156,6 +156,13 @@ let createBindings fn (loc: Location) typrms ts =
         failwithf "createBindings: insufficient type arguments for type '%s' at %s" (String.concat "." fn) (loc.AsString))
   |> Map.ofList
 
+let getPossibleArityOfType (typrms: TypeParam list) : Set<int> =
+  let maxArity = List.length typrms
+  let rec go i = function
+    | { defaultType = Some _ } :: rest -> (i-1) :: go (i-1) rest
+    | _ -> []
+  maxArity :: go maxArity typrms |> Set.ofList
+
 let rec mergeStatements (stmts: Statement list) =
   let mutable result : Choice<Statement, Class ref, Module ref> list = []
   let mutable intfMap = Map.empty

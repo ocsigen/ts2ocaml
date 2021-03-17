@@ -148,11 +148,16 @@ module Type =
   let and_ a b = tyApp (str "and_") [a; b]
   let or_  a b = tyApp (str "or_")  [a; b]
 
+  let primitive_union = str "prim_union"
+  let primitive_or t = tyApp (str "or_prim_union") [t]
   let string_or t  = tyApp (str "or_string") [t]
   let number_or t  = tyApp (str "or_number") [t]
   let boolean_or t = tyApp (str "or_boolean") [t]
   let symbol_or t  = tyApp (str "or_symbol") [t]
-  let enum_or baseType cases t = or_ t (enum baseType cases)
+  let bigint_or t  = tyApp (str "or_bigint") [t]
+
+  let array_or elemT t = tyApp (str "or_array") [t; elemT]
+  let enum_or cases t = tyApp (str "or_enum") [t; cases]
 
   let union_t types =
     let l = List.length types
@@ -505,23 +510,26 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
             | TString -> string_or t
             | TBoolean -> boolean_or t
             | TSymbol -> symbol_or t
-          let rec go = function
-            | [] -> t
-            | x :: [] ->
-              match t with
-              | None -> TypeofableType.toType x |> emitTypeImpl flags overrideFunc ctx |> Some
-              | Some t -> emitOr x t |> Some
-            | x :: rest -> go rest |> Option.map (emitOr x)
-          Set.toList ts |> go
+            | TBigInt -> bigint_or t
+          match Set.toList ts with
+          | [] -> t
+          | [x] ->
+            match t with
+            | None -> TypeofableType.toType x |> emitTypeImpl flags overrideFunc ctx |> Some
+            | Some t -> Some (emitOr x t)
+          | _ :: _ :: _ ->
+            match t with
+            | Some t -> Some (primitive_or t)
+            | None -> Some primitive_union
         let treatArray (arr: Set<Type> option) t =
           match arr with
           | None -> t
           | Some ts ->
             // TODO: think how to map multiple array cases properly
-            let u = emitTypeImpl flags overrideFunc ctx (Union { types = Set.toList ts })
+            let elemT = emitTypeImpl flags overrideFunc ctx (Union { types = Set.toList ts })
             match t with
-            | None -> Some u
-            | Some t -> or_ (tyApp array_t [u]) t |> Some
+            | None -> Some (tyApp array_t [elemT])
+            | Some t -> Some (array_or elemT t)
         let treatDU (tagName: string) (cases: Map<Literal, Type>) =
           between "[" "]" (concat (str " | ") [
             for (l, t) in Map.toSeq cases do
@@ -537,25 +545,8 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
             | t :: ts -> or_ (emitTypeImpl flags overrideFunc ctx t) (go ts)
           go (Set.toList otherTypes)
         let treatEnumOr (cases: Set<Choice<EnumCase, Literal>>) t =
-          let casesByType =
-            cases
-            |> Set.toList
-            |> List.groupBy (function
-              | Choice1Of2 { value = Some l }
-              | Choice2Of2 l ->
-                match Literal.getType l with
-                | String -> TString
-                | Number -> TNumber
-                | Bool   -> TBoolean
-                | _ -> failwith "impossible_emitResolvedUnion_treatEnumOr"
-              | _ -> failwith "impossible_emitResolvedUnion_treatEnumOr")
-          let rec go = function
-            | (typeofable, cases) :: rest ->
-              enum_or (typeofable |> TypeofableType.toType |> emitTypeImpl { flags with needParen = true } overrideFunc ctx)
-                      (treatEnum flags ctx (Set.ofList cases))
-                      (go rest)
-            | [] -> t
-          go casesByType
+          if Set.isEmpty cases then t
+          else enum_or (treatEnum flags ctx cases) t
         let treatDUMany du =
           let rec go = function
             | [] -> failwith "impossible_emitResolvedUnion_baseType_go"
@@ -640,145 +631,6 @@ let genJsCustomMapper (typrms: TypeParam list) =
       let args = typrms |> List.map (fun tp -> tprintf "_%s" tp.name)
       between "(" ")" (termFun args (str "Obj.magic"))
   record [ "of_js", body; "to_js", body ]
-
-module BaseLibrary =
-
-  let private emitTyargsPart isToJs tyargs =
-    tyargs |> List.map (fun tyarg ->
-              between "(" ")" (if isToJs then tyarg +@ " -> " + ojs_t else ojs_t +@ " -> " + tyarg)
-              +@ " -> ")
-           |> concat empty
-
-  let private genConverters name tyargs =
-    let ty = tyAppOpt (str name) tyargs
-    [
-      yield val_ (name + "_to_js") (emitTyargsPart true tyargs + ty +@ " -> Ojs.t")
-      yield val_ (name + "_of_js") (emitTyargsPart false tyargs +@ "Ojs.t -> " + ty)
-    ]
-
-  let private genTypeWithConverters name tyargs =
-    [
-      yield abstractTypeOjs name tyargs
-      yield! genConverters name tyargs
-    ]
-
-  let private aliasWithConverters name tyargs value =
-    [
-      yield typeAlias name tyargs value
-      yield! genConverters name tyargs
-    ]
-
-  let private genInterface name tag tyargs =
-    typeAlias name (List.map str tyargs)
-      (tyApp intf [
-        between "[" "]" (
-          concat (str " | ") [
-            yield  tprintf "%s%s" pv_head tag
-          ]
-        )
-      ])
-    + newline
-    + Attr.js_custom_typ (genJsCustomMapper (tyargs |> List.map (fun s ->
-        { name = s; extends = None; defaultType = None }
-      )))
-
-  let dummyModule : text =
-    concat newline [
-      yield
-        Attr.js_stop_start_implem
-          (concat newline [
-            yield abstractType "intf" [str "-'a"]
-            yield! genConverters "intf" [str "'a"]
-          ])
-          (concat newline [
-            typeAlias    "intf" [str "-'a"] ojs_t
-            let_ "intf_to_js" [str "_"; str "x"] (Some ojs_t) (str "x")
-            let_ "intf_of_js" [str "_"; str "x"] (Some (tyApp (str "intf") [str "_"])) (str "x")
-          ])
-
-      yield genInterface "untyped_object" "Object" []
-      yield genInterface "untyped_function" "Function" []
-      yield genInterface "symbol" "Symbol" []
-      yield genInterface "regexp" "RegExp" []
-      yield genInterface "bigint" "BigInt" []
-
-      yield! aliasWithConverters "or_null" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
-      yield! aliasWithConverters "or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
-      yield! aliasWithConverters "or_null_or_undefined" [tyVar "a"] (tyApp (str "option") [tyVar "a"])
-
-      yield! genTypeWithConverters "never" []
-      yield! genTypeWithConverters "any" []
-      yield! genTypeWithConverters "unknown" []
-
-      yield
-        Attr.js_stop_start_implem
-          (concat newline [
-            yield abstractType "enum" [str "'t"; str "+'a"]
-            yield! genConverters "enum" [str "'t"; str "'a"]
-          ])
-          (concat newline [
-            typeAlias    "enum" [str "'t"; str "+'a"] (str "'t")
-            let_ "enum_to_js" [str "f"; str "_"; str "e"] (Some ojs_t) (termApp (str "f") [str "e"])
-            let_ "enum_of_js" [str "f"; str "_"; str "e"] (Some (tyApp (str "enum") [str "_"])) (termApp (str "f") [str "e"])
-          ])
-      
-      let alphabets = [for c in 'a' .. 'z' do tyVar (string c)]
-
-      yield! genTypeWithConverters "and_" [tyVar "a"; tyVar "b"]
-      let and_ a b = tyApp (str "and_") [a; b]
-      yield! aliasWithConverters "intersection2" [tyVar "a"; tyVar "b"] (and_ (tyVar "b") (tyVar "a"))
-      for i = 3 to 8 do
-        let args = alphabets |> List.take i
-        yield! aliasWithConverters
-            (sprintf "intersection%i" i) args
-            (and_ (tyApp (tprintf "intersection%i" (i-1)) (List.tail args))
-                  (List.head args))
-    
-      (*
-      yield module_ "Intersection" (
-        concat newline [
-          yield external_ "car" (and_ (str "'a") (str "'b")) (str "'b") "%identity"
-          yield external_ "cdr" (and_ (str "'a") (str "'b")) (str "'a") "%identity"
-          for i = 2 to 8 do
-            yield
-              (*letFunction
-                (sprintf "unwrap%i" i)
-                [str "x", tyApp (tprintf "intersection%i" i) (List.take i alphabets)]
-                (termTuple [
-                  for t in List.take i alphabets do
-                    typeAssert (termApp (str "cast") [str "x"]) t
-                ])*)
-              TODO
-        ]
-      )
-      *)
-
-      yield! genTypeWithConverters "or_" [tyVar "a"; tyVar "b"]
-      let or_ a b = tyApp (str "or_") [a; b]
-      yield! aliasWithConverters "union2" [tyVar "a"; tyVar "b"] (or_ (tyVar "b") (tyVar "a"))
-      for i = 3 to 8 do
-        let args = alphabets |> List.take i
-        yield! aliasWithConverters
-            (sprintf "union%i" i) args
-            (or_ (tyApp (tprintf "union%i" (i-1)) (List.tail args))
-                 (List.head args))
-
-      yield! genTypeWithConverters "or_number"  [tyVar "a"]
-      yield! genTypeWithConverters "or_string"  [tyVar "a"]
-      yield! genTypeWithConverters "or_boolean" [tyVar "a"]
-      yield! genTypeWithConverters "or_symbol"  [tyVar "a"]
-      yield! genTypeWithConverters "or_array"   [tyVar "a"; tyVar "t"]
-      yield! genTypeWithConverters "or_enum"    [tyVar "a"; tyVar "t"; tyVar "cases"]
-
-      (*
-      yield module_ "Union" (
-        concat newline [
-
-        ]
-      )
-      *)
-    ]
-
 
 let emitTypeName name args =
   if List.isEmpty args then str (Naming.flattenedTypeName name)
@@ -912,9 +764,6 @@ let emitFlattenedDefinitions (ctx: Context) : text =
 
   moduleSig ctx.internalModuleName (
     concat newline [
-      moduleSig "Ts2ocaml_baselib"  BaseLibrary.dummyModule
-      open_ ["Ts2ocaml_baselib"]
-
       moduleSig "AnonymousInterfaces" (
         concat newline [
           for (a, _) in ctx.anonymousInterfacesMap |> Map.toSeq do
@@ -1205,7 +1054,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
 
   concat newline [
     yield open_ [ ctx.internalModuleName ]
-    yield open_ [ "Ts2ocaml_baselib"; "AnonymousInterfaces"; "Types" ]
+    yield open_ [ "AnonymousInterfaces"; "Types" ]
 
     for c, _ in ctx.anonymousInterfacesMap |> Map.toSeq do
       let renamer = new OverloadRenamer()
@@ -1219,13 +1068,11 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
 let emitAll ctx stmts =
   concat newline [
     yield emitHeader
-    yield empty
+    yield open_ [ "Ts2ocaml_baselib" ]
     yield emitUnknownIdentifiers ctx
-    yield empty
 
     let defs = [ 
       emitFlattenedDefinitions ctx
-      empty
       emitStructuredDefinitions ctx stmts
     ]
     if Trie.isEmpty ctx.unknownIdentifiers then

@@ -1,0 +1,6 @@
+gen_js_api.install
+ojs.install
+*.merlin
+_build
+_opam
+.vscode

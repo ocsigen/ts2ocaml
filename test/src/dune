@@ -1,0 +1,93 @@
+(executable
+  (name main)
+  (libraries gen_js_api)
+  (link_flags -no-check-prims)
+  (preprocess (pps gen_js_api.ppx))
+  (modes js)
+  (js_of_ocaml)
+)
+
+(rule
+  (targets ts2ocaml_baselib.ml)
+  (deps ts2ocaml_baselib.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets typescript.ml)
+  (deps typescript.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets es5.ml)
+  (deps es5.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets es6.ml)
+  (deps es6.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets es2015.ml)
+  (deps es2015.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets es2016.ml)
+  (deps es2016.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets es2017.ml)
+  (deps es2017.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets es2018.ml)
+  (deps es2018.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets es2019.ml)
+  (deps es2019.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets es2020.ml)
+  (deps es2020.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets esnext.ml)
+  (deps esnext.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+ 
+(rule
+  (targets dom.ml)
+  (deps dom.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets dom_iterable.ml)
+  (deps dom_iterable.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets monaco.ml)
+  (deps monaco.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets main.js)
+  (deps main.bc.js)
+  (action (run cp %{deps} %{targets})))
+
+(alias
+  (name DEFAULT)
+  (deps main.js main.html))
+
+(rule
+ (alias runtest)
+ (deps main.js)
+ (action
+  (run node %{dep:./main.js})))

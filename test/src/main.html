@@ -1,0 +1,103 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <div class="myClass">Blabla</div>
+    <canvas id="canvas" width="200" height="200">
+      Bla
+    </canvas>
+    <script type="text/javascript">
+      var myArray = [1, 2, 3];
+
+      function wrapper(f) {
+          return function (x, y) {
+              console.log("Before");
+              var r = f(x, y);
+              console.log("Result 1 = " + r);
+              var r = f(r, y);
+              console.log("Result 2 = " + r);
+              return r;
+          }
+      }
+      function caller(f) {
+        console.log("Before call");
+        var r = f();
+        console.log("After call");
+        return r;
+      }
+
+      function Person(name, foo) {
+        console.log(arguments);
+        this.name = name;
+        this.foo = foo;
+        this.get = function () {
+          return [this.name, this.foo];
+        };
+        this.set = function (a) {
+          this.name = a[0];
+          this.foo = a[1];
+        };
+        console.log("New Person object created");
+      }
+
+      function testVariadic(f) {
+        console.log(f());
+        console.log(f(0));
+        console.log(f(0, 1));
+        console.log(f(0, 1, 2));
+        console.log(f(0, 1, 2, 3));
+        console.log(f(0, 1, 2, 3, 4));
+      }
+
+      function testVariadic2(f) {
+        console.log(f("Hello"));
+        console.log(f("Hello", 0));
+        console.log(f("Hello", 0, 1));
+        console.log(f("Hello", 0, 1, 2));
+        console.log(f("Hello", 0, 1, 2, 3));
+        console.log(f("Hello", 0, 1, 2, 3, 4));
+      }
+
+      function testOptArgs(f) {
+        console.log(f());
+        console.log(f(10));
+        console.log(f(10, 10));
+      }
+
+      function test_sum() {
+        print_sum({kind:"A"});
+        print_sum({kind:"B", arg:806});
+        print_sum({kind:"C", arg:[806, "bar"]});
+        print_sum({kind:"D", age:24, name:"Toto"});
+      }
+
+      var myDict = { "gen_js_api": "OK", "js_of_ocaml": "OK" };
+
+      function test_flatten(kind) {
+        switch(kind) {
+        case "A": {
+          console.log("A");
+          break;
+        }
+        case "B": {
+          console.log("B "+arguments[1]);
+          break;
+        }
+        case "C": {
+          console.log("C "+arguments[1]);
+          break;
+        }
+        case "D": {
+          console.log("D ("+arguments[1]+", "+arguments[2]+")");
+          break;
+        }
+        }
+      }
+    </script>
+    <script type="text/javascript" src="main.js">
+    </script>
+    <script type="text/javascript">
+      console.log(myArray);
+    </script>
+  </body>
+</html>

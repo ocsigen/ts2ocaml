@@ -861,7 +861,7 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
   else
     dus, { types = rest }
 
-type TypeofableType = TNumber | TString | TBoolean | TSymbol
+type TypeofableType = TNumber | TString | TBoolean | TSymbol | TBigInt
 
 type ResolvedUnion = {
   caseNull: bool
@@ -879,6 +879,7 @@ module TypeofableType =
     | TString -> Prim String
     | TBoolean -> Prim Bool
     | TSymbol -> Prim Symbol
+    | TBigInt -> Prim BigInt
 
 module ResolvedUnion =
   let rec pp (ru: ResolvedUnion) =
@@ -887,7 +888,7 @@ module ResolvedUnion =
       if ru.caseUndefined then yield "undefined"
       for x in ru.typeofableTypes do
         yield
-          match x with TNumber -> "number" | TString -> "string" | TBoolean -> "boolean" | TSymbol -> "symbol"
+          match x with TNumber -> "number" | TString -> "string" | TBoolean -> "boolean" | TSymbol -> "symbol" | TBigInt -> "bigint"
       match ru.caseArray with
       | Some t -> yield sprintf "array<%s>" (t |> Set.toSeq |> Seq.map Type.pp |> String.concat " | ")
       | None -> ()
@@ -923,6 +924,7 @@ let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
         | Prim String -> TString  :: prims, ats, rest
         | Prim Bool   -> TBoolean :: prims, ats, rest
         | Prim Symbol -> TSymbol  :: prims, ats, rest
+        | Prim BigInt -> TBigInt  :: prims, ats, rest
         | App (Prim Array, [t], _) -> prims, t :: ats, rest
         | t -> prims, ats, t :: rest
       ) ([], [], [])

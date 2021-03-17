@@ -49,7 +49,7 @@ module Attr =
 
   let js_custom_typ content = attr Block "js.custom" content
 
-  let js_create is_newable = attr Block "js.create" (if is_newable then str "as_constructor" else empty)
+  let js_create = attr Block "js.create" empty
 
   let private str' s = between "\"" "\"" (str s)
 
@@ -63,7 +63,7 @@ module Attr =
 
   let js_call name = attr Block "js.call" (str' name)
 
-  let js_apply = attr Block "js.apply" empty
+  let js_apply is_newable = attr Block "js.apply" (if is_newable then str "as_constructor" else empty)
   
   let js_global name = attr Block "js.global" (str' name)
 
@@ -958,9 +958,10 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         match m with
         | Constructor (ft, typrm) ->
           let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy }
-          yield val_ (rename "create") (emitType_ ctx ty) + str " " + Attr.js_create false
+          yield val_ (rename "create") (emitType_ ctx ty) + str " " + Attr.js_create
         | New (ft, typrm) ->
-          yield val_ (rename "create") (emitType_ ctx (Function ft)) + str " " + Attr.js_create true
+          let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
+          yield val_ (rename "create") (emitType_ ctx (Function ft)) + str " " + Attr.js_apply true
         | Field ({ name = name; value = Function ft }, _, typrm)
         | Method (name, ft, typrm) ->
           let ty, attr =
@@ -1001,7 +1002,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
           yield! emitMember renamer ma (Setter fl)
         | FunctionInterface (ft, _) ->
           let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
-          yield val_ (rename "apply") (emitType_ ctx (Function ft)) + str " " + Attr.js_apply
+          yield val_ (rename "apply") (emitType_ ctx (Function ft)) + str " " + Attr.js_apply false
         | Indexer (ft, ReadOnly) ->
           let ft = { ft with args = Choice2Of2 selfTy :: removeLabels ft.args }
           yield val_ (rename "get") (emitType_ ctx (Function ft)) + str " " + Attr.js_index_get

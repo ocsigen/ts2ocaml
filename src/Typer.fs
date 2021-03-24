@@ -102,7 +102,7 @@ let rec substTypeVar (subst: Map<string, Type>) _ctx = function
       { f with
           returnType = substTypeVar subst _ctx f.returnType;
           args = List.map (mapTypeInArg (substTypeVar subst) _ctx) f.args }
-  | App (t, ts, loc) -> App (substTypeVar subst _ctx t, ts |> List.map (substTypeVar subst _ctx), loc)
+  | App (t, ts, loc) -> App (t, ts |> List.map (substTypeVar subst _ctx), loc)
   | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
   | PolymorphicThis -> PolymorphicThis
   | Erased (e, loc) ->
@@ -233,7 +233,7 @@ let findTypesInType (pred: Type -> Choice<bool, Type list> * 'a option) (t: Type
         match cont with
         | Choice1Of2 false -> ()
         | Choice1Of2 true ->
-          yield! go_t t
+          yield! go_t (Type.ofAppLeftHandSide t)
           for t in ts do yield! go_t t
         | Choice2Of2 ts -> for t in ts do yield! go_t t
       }
@@ -328,7 +328,7 @@ let getAnonymousInterfaces stmts =
 
 let getUnknownIdentifiers stmts =
   findTypesInStatements (function
-    | App (Ident {name = name; fullName = None}, ts, _) ->
+    | App (AIdent {name = name; fullName = None}, ts, _) ->
       Choice2Of2 ts, Some (name, Set.singleton (List.length ts))
     | Ident { name = name; fullName = None } ->
       Choice1Of2 true, Some (name, Set.singleton (0))
@@ -475,7 +475,7 @@ let rec mapIdent (mapping: Context -> IdentType -> IdentType) (ctx: Context) = f
       { f with
           returnType = mapIdent mapping ctx f.returnType;
           args = List.map (mapTypeInArg (mapIdent mapping) ctx) f.args }
-  | App (t, ts, loc) -> App (mapIdent mapping ctx t, ts |> List.map (mapIdent mapping ctx), loc)
+  | App (t, ts, loc) -> App (mapIdentInAppLHS mapping ctx t, ts |> List.map (mapIdent mapping ctx), loc)
   | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l | TypeVar v -> TypeVar v
   | PolymorphicThis -> PolymorphicThis
   | Erased (e, loc) ->
@@ -486,6 +486,10 @@ let rec mapIdent (mapping: Context -> IdentType -> IdentType) (ctx: Context) = f
       | Keyof t -> Keyof (mapIdent mapping ctx t)
     Erased (e', loc)
   | UnknownType msg -> UnknownType msg
+
+and mapIdentInAppLHS mapping ctx = function
+  | APrim p -> APrim p
+  | AIdent i -> AIdent (mapping ctx i)
 
 let rec mapIdentInStatements mapType mapExport (ctx: Context) (stmts: Statement list) : Statement list =
   let f = function
@@ -545,7 +549,7 @@ let rec getAllInheritancesOfType (ctx: Context) (ty: Type) : Set<Type> =
       match t with
       | Ident { fullName = Some fn } ->
         yield! getAllInheritancesFromName ctx fn
-      | App (Ident { fullName = Some fn }, ts, loc) ->
+      | App (AIdent { fullName = Some fn }, ts, loc) ->
         yield!
           lookupFullName ctx fn
           |> List.tryPick (function
@@ -604,7 +608,7 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
     | Tuple ts -> Tuple (List.map (f ctx) ts)
     | ReadonlyTuple ts -> ReadonlyTuple (List.map (f ctx) ts)
     | Function ft -> mapTypeInFuncType f ctx ft |> Function
-    | App (t, ts, loc) -> App (f ctx t, List.map (f ctx) ts, loc)
+    | App (t, ts, loc) -> App (t, List.map (f ctx) ts, loc)
     | Erased (e, loc) ->
       match e with
       | IndexedAccess (tobj, tindex) ->
@@ -634,13 +638,13 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
             | [] -> onFail ()
             | [t] -> t
             | ts -> Intersection { types = ts }
-          | App ((Prim Array | Prim ReadonlyArray), [t], _), Prim (Number | Any) -> f ctx t
+          | App ((APrim Array | APrim ReadonlyArray), [t], _), Prim (Number | Any) -> f ctx t
           | (Tuple ts | ReadonlyTuple ts), TypeLiteral (LInt i) ->
             match ts |> List.tryItem i with
             | Some t -> t
             | None -> onFail ()
           | (Tuple ts | ReadonlyTuple ts), Prim (Number | Any) -> Union { types = ts }
-          | (App (Ident { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)), _ ->
+          | (App (AIdent { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)), _ ->
             tryLookupFullNameWith ctx fn (function 
               | AliasName ta when not ta.erased ->
                 let subst = createBindings fn loc ta.typeParams ts
@@ -693,8 +697,8 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
           | Intersection { types = ts } -> ts |> List.map go |> Set.unionMany
           | AnonymousInterface i ->
             i.members |> List.map (snd >> memberChooser) |> Set.unionMany
-          | App ((Prim Array | Prim ReadonlyArray), [_], _) | Tuple _ | ReadonlyTuple _ -> Set.singleton (Prim Number)
-          | (App (Ident { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)) ->
+          | App ((APrim Array | APrim ReadonlyArray), [_], _) | Tuple _ | ReadonlyTuple _ -> Set.singleton (Prim Number)
+          | (App (AIdent { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)) ->
             tryLookupFullNameWith ctx fn (function
               | AliasName ta when not ta.erased ->
                 let subst = createBindings fn loc ta.typeParams ts
@@ -718,7 +722,7 @@ let rec getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union
     seq {
       match t with
       | Union { types = types } | Intersection { types = types } -> yield! Seq.collect go types
-      | (Ident { fullName = Some fn; loc = loc } & Dummy tyargs) | App (Ident { fullName = Some fn }, tyargs, loc) ->
+      | (Ident { fullName = Some fn; loc = loc } & Dummy tyargs) | App (AIdent { fullName = Some fn }, tyargs, loc) ->
         for x in fn |> lookupFullName ctx do
           match x with
           | AliasName a when not a.erased ->
@@ -748,14 +752,19 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
       | Intersection i -> yield! onIntersection i
       | AnonymousInterface i ->
         yield onClass t i
-      | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (Ident {fullName = Some fn}, ts, loc) ->
+      | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (AIdent {fullName = Some fn}, ts, loc) ->
         for x in lookupFullName ctx fn do
           match x with
           | AliasName a ->
             if List.isEmpty ts then
               yield! goBase onUnion onIntersection onClass onOther a.target
             else
-              yield! goBase onUnion onIntersection onClass onOther (App (a.target, ts, UnknownLocation))
+              let lhs =
+                match a.target with
+                | Ident i -> AIdent i
+                | Prim p -> APrim p
+                | _ -> failwithf "error: invalid type alias to '%s' on %s" (Type.pp a.target) (loc.AsString)
+              yield! goBase onUnion onIntersection onClass onOther (App (lhs, ts, UnknownLocation))
           | ClassName c ->
             if List.isEmpty ts then
               yield onClass t c
@@ -784,7 +793,7 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
         let rec go t =
           match t with
           | TypeLiteral l -> [fl.name, l]
-          | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (Ident { fullName = Some fn }, ts, loc) ->
+          | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (AIdent { fullName = Some fn }, ts, loc) ->
             tryLookupFullNameWith ctx fn (function
               | EnumCaseName (cn, e) ->
                 match e.cases |> List.tryFind (fun c -> c.name = cn) with
@@ -925,7 +934,7 @@ let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
         | Prim Bool   -> TBoolean :: prims, ats, rest
         | Prim Symbol -> TSymbol  :: prims, ats, rest
         | Prim BigInt -> TBigInt  :: prims, ats, rest
-        | App (Prim Array, [t], _) -> prims, t :: ats, rest
+        | App (APrim Array, [t], _) -> prims, t :: ats, rest
         | t -> prims, ats, t :: rest
       ) ([], [], [])
     let typeofableTypes = Set.ofList prims

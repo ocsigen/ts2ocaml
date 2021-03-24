@@ -425,9 +425,9 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
   | Some t -> t
   | None ->
     match ty with
-    | App (Prim Array, ts, _) when flags.forceVariadic ->
+    | App (APrim Array, ts, _) when flags.forceVariadic ->
       tyApp array_t (List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx) ts)
-    | App (Prim ReadonlyArray, ts, _) when flags.forceVariadic ->
+    | App (APrim ReadonlyArray, ts, _) when flags.forceVariadic ->
       tyApp readonlyArray_t (List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx) ts)
     | _ when flags.forceVariadic ->
       commentStr (sprintf "FIXME: type '%s' cannot be used for variadic argument" (Type.pp ty)) + tyApp array_t [any_t]
@@ -435,7 +435,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       let emit t ts =
         tyAppOpt (emitTypeImpl { flags with hasTypeArgumentsHandled = true } overrideFunc ctx t) (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
       match t with
-      | Ident { fullName = Some fn } ->
+      | AIdent { fullName = Some fn } ->
         let ts =
           tryLookupFullNameWith ctx fn (function
             | AliasName { typeParams = typrms; erased = false }
@@ -449,14 +449,12 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
               |> Some
             | _ -> None
           ) |> Option.defaultValue ts
-        emit t ts
-      | Ident { name = name; fullName = None } ->
+        emit (Type.ofAppLeftHandSide t) ts
+      | AIdent { name = name; fullName = None } ->
         let lhs =
           str (Naming.structuredTypeName name + "." + Naming.createTypeNameOfArity (List.length ts) None "t")
         tyAppOpt lhs (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
-      | Prim _ -> emit t ts
-      | _ ->
-        failwith "unexpected_emitTypeImpl_nonIdentOrPrim"
+      | APrim _ -> emit (Type.ofAppLeftHandSide t) ts
     | Ident i ->
       match i.fullName with
       | Some fn ->
@@ -464,7 +462,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
           | AliasName { target = target; erased = true } -> emitTypeImpl flags overrideFunc ctx target |> Some
           | AliasName { typeParams = typrms; erased = false }
           | ClassName { typeParams = typrms } when not (List.isEmpty typrms) && not flags.hasTypeArgumentsHandled ->
-            emitTypeImpl flags overrideFunc ctx (App (Ident i, [], i.loc)) |> Some
+            emitTypeImpl flags overrideFunc ctx (App (AIdent i, [], i.loc)) |> Some
           | _ -> None
         ) |> Option.defaultWith (fun () -> str (Naming.flattenedTypeName fn))
       | None ->
@@ -647,11 +645,11 @@ let getSafeLabels ctx ty =
           match e with
           | Ident { fullName = Some fn } ->
             yield tprintf "%s%s" pv_head (fn |> Naming.constructorName)
-          | App (Ident { fullName = Some fn }, ts, _) ->
+          | App (AIdent { fullName = Some fn }, ts, _) ->
             yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
           | _ -> ()
       } |> Set.ofSeq
-    | App (Ident { fullName = Some fn }, ts, loc) ->
+    | App (AIdent { fullName = Some fn }, ts, loc) ->
       seq {
         yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
         let typrms =
@@ -665,7 +663,7 @@ let getSafeLabels ctx ty =
           match e with
           | Ident { fullName = Some fn } ->
             yield tprintf "%s%s" pv_head (fn |> Naming.constructorName)
-          | App (Ident { fullName = Some fn }, ts, _) ->
+          | App (AIdent { fullName = Some fn }, ts, _) ->
             yield str pv_head + emitCase fn (ts |> List.map (substTypeVar subst ctx >> emitType_ ctx))
           | _ -> ()
       } |> Set.ofSeq
@@ -677,13 +675,13 @@ let getSafeLabels ctx ty =
 let emitMappers ctx emitType tName (typrms: TypeParam list) =
   let t_ty =
     let t_ident =
-      Ident { name = [tName]; fullName = Some [tName]; loc = UnknownLocation }
-    if List.isEmpty typrms then t_ident
-    else App (t_ident, typrms |> List.map (fun typrm -> TypeVar typrm.name), UnknownLocation)
+      { name = [tName]; fullName = Some [tName]; loc = UnknownLocation }
+    if List.isEmpty typrms then Ident t_ident
+    else App (AIdent t_ident, typrms |> List.map (fun typrm -> TypeVar typrm.name), UnknownLocation)
   let ojs_t_ty = Ident { name = ["Ojs"; "t"]; fullName = Some ["Ojs"; "t"]; loc = UnknownLocation }
   let orf _emitType _ctx ty =
     match ty with
-    | App (Ident { name = [n] }, ts, _) when n = tName ->
+    | App (AIdent { name = [n] }, ts, _) when n = tName ->
       tyApp (str tName) (List.map (_emitType _ctx) ts) |> Some
     | Ident { name = [n] } when n = tName -> Some (str tName)
     | Ident { name = ["Ojs"; "t"] } -> Some (str "Ojs.t")
@@ -801,7 +799,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
                 match e with
                 | Ident { fullName = Some fn } ->
                   yield tprintf "%s%s" pv_head (Naming.constructorName fn)
-                | App (Ident { fullName = Some fn }, ts, _) ->
+                | App (AIdent { fullName = Some fn }, ts, _) ->
                   yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
                 | _ -> ()
             ]
@@ -828,7 +826,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
             let target =
               match c.typeParams with
               | [] -> Prim prim
-              | _  -> App (Prim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
+              | _  -> App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
             tprintf "%s %A = " prefix (emitTypeName k typrm) + (emitType_ ctx target) |> Some
           | _ -> normalClass ()
           // TODO: emit extends of type parameters
@@ -926,7 +924,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
           let ident = { name = [n]; fullName = Some k; loc = UnknownLocation }
           let selfTy = 
             if List.isEmpty c.typeParams then Ident ident
-            else App (Ident ident, List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams, UnknownLocation)
+            else App (AIdent ident, List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams, UnknownLocation)
           n,
           selfTy,
           emitTypeName k tyargs,
@@ -1031,7 +1029,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
           | Some prim ->
             let targetTy =
               if List.isEmpty c.typeParams then Prim prim
-              else App (Prim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
+              else App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
             let toMlTy = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = targetTy }
             let ofMlTy = Function { isVariadic = false; args = [Choice2Of2 targetTy]; returnType = selfTy }
             yield val_ ("to_ml" |> renamer.Rename "value") (emitType_ ctx toMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty

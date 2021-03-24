@@ -43,7 +43,7 @@ type Comment =
   | Param of string * string
   | Return of string
 
-type PrimTypes =
+type PrimType =
   | String | Bool | Number
   | Any | Void | Unknown
   | Null | Never | Undefined
@@ -68,15 +68,19 @@ and Type =
   | PolymorphicThis
   | Ident of IdentType
   | TypeVar of string
-  | Prim of PrimTypes
+  | Prim of PrimType
   | TypeLiteral of Literal
   | AnonymousInterface of Class
   | Union of Union | Intersection of Intersection
   | Tuple of Type list | ReadonlyTuple of Type list
   | Function of FuncType<Type>
-  | App of Type * Type list * Location
+  | App of AppLeftHandSide * Type list * Location
   | Erased of ErasedType * Location
   | UnknownType of string option
+
+and AppLeftHandSide =
+  | AIdent of IdentType
+  | APrim of PrimType
 
 and ErasedType =
   | IndexedAccess of Type * Type
@@ -191,6 +195,10 @@ module Enum =
     e.cases |> List.exists (function { value = Some (LString _ ) } -> true | _ -> false)
 
 module Type =
+  let ofAppLeftHandSide = function
+    | AIdent i -> Ident i
+    | APrim p -> Prim p
+
   let rec pp = function
     | PolymorphicThis -> "this"
     | Ident i -> (if Option.isNone i.fullName then "?" else "") + (i.name |> String.concat ".")
@@ -208,7 +216,7 @@ module Type =
           | Choice1Of2 a -> sprintf "%s%s:%s" (if a.isOptional then "?" else "~") a.name (pp a.value)
           | Choice2Of2 t -> pp t)
       "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"
-    | App (t, ts, _) -> pp t + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
+    | App (t, ts, _) -> pp (ofAppLeftHandSide t) + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
     | Erased (e, _) ->
       match e with
       | IndexedAccess (t, u) -> sprintf "%s[%s]" (pp t) (pp u)
@@ -216,4 +224,3 @@ module Type =
       | Keyof t -> sprintf "keyof %s" (pp t)
     | UnknownType None -> "?"
     | UnknownType (Some msg) -> sprintf "?(%s)" msg
-

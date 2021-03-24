@@ -278,9 +278,9 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _BigInt64Array [@@js.get "prototype"]
-    val create: ?length:float -> unit -> _BigInt64Array [@@js.create as_constructor]
-    val create': array:bigint Iterable.t_1 -> _BigInt64Array [@@js.create as_constructor]
-    val create'': buffer:ArrayBufferLike.t_0 -> ?byteOffset:float -> ?length:float -> unit -> _BigInt64Array [@@js.create as_constructor]
+    val create: t -> ?length:float -> unit -> _BigInt64Array [@@js.apply as_constructor]
+    val create': t -> array:bigint Iterable.t_1 -> _BigInt64Array [@@js.apply as_constructor]
+    val create'': t -> buffer:ArrayBufferLike.t_0 -> ?byteOffset:float -> ?length:float -> unit -> _BigInt64Array [@@js.apply as_constructor]
     val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
     val of_: t -> items:(bigint list [@js.variadic]) -> _BigInt64Array [@@js.call "of"]
     val from: t -> arrayLike:bigint ArrayLike.t_1 -> _BigInt64Array [@@js.call "from"]
@@ -339,9 +339,9 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _BigUint64Array [@@js.get "prototype"]
-    val create: ?length:float -> unit -> _BigUint64Array [@@js.create as_constructor]
-    val create': array:bigint Iterable.t_1 -> _BigUint64Array [@@js.create as_constructor]
-    val create'': buffer:ArrayBufferLike.t_0 -> ?byteOffset:float -> ?length:float -> unit -> _BigUint64Array [@@js.create as_constructor]
+    val create: t -> ?length:float -> unit -> _BigUint64Array [@@js.apply as_constructor]
+    val create': t -> array:bigint Iterable.t_1 -> _BigUint64Array [@@js.apply as_constructor]
+    val create'': t -> buffer:ArrayBufferLike.t_0 -> ?byteOffset:float -> ?length:float -> unit -> _BigUint64Array [@@js.apply as_constructor]
     val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
     val of_: t -> items:(bigint list [@js.variadic]) -> _BigUint64Array [@@js.call "of"]
     val from: t -> arrayLike:bigint ArrayLike.t_1 -> _BigUint64Array [@@js.call "from"]

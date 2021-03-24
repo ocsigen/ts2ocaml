@@ -294,7 +294,7 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SharedArrayBuffer [@@js.get "prototype"]
-    val create: byteLength:float -> _SharedArrayBuffer [@@js.create as_constructor]
+    val create: t -> byteLength:float -> _SharedArrayBuffer [@@js.apply as_constructor]
   end
   val sharedArrayBuffer: _SharedArrayBufferConstructor [@@js.global "SharedArrayBuffer"]
   module[@js.scope "ArrayBufferTypes"] ArrayBufferTypes : sig
@@ -348,7 +348,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: unit -> Int8Array.t_0 [@@js.create as_constructor]
+    val create: t -> Int8Array.t_0 [@@js.apply as_constructor]
   end
   module[@js.scope "Uint8ArrayConstructor"] Uint8ArrayConstructor : sig
     type t = _Uint8ArrayConstructor
@@ -357,7 +357,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: unit -> Uint8Array.t_0 [@@js.create as_constructor]
+    val create: t -> Uint8Array.t_0 [@@js.apply as_constructor]
   end
   module[@js.scope "Uint8ClampedArrayConstructor"] Uint8ClampedArrayConstructor : sig
     type t = _Uint8ClampedArrayConstructor
@@ -366,7 +366,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: unit -> Uint8ClampedArray.t_0 [@@js.create as_constructor]
+    val create: t -> Uint8ClampedArray.t_0 [@@js.apply as_constructor]
   end
   module[@js.scope "Int16ArrayConstructor"] Int16ArrayConstructor : sig
     type t = _Int16ArrayConstructor
@@ -375,7 +375,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: unit -> Int16Array.t_0 [@@js.create as_constructor]
+    val create: t -> Int16Array.t_0 [@@js.apply as_constructor]
   end
   module[@js.scope "Uint16ArrayConstructor"] Uint16ArrayConstructor : sig
     type t = _Uint16ArrayConstructor
@@ -384,7 +384,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: unit -> Uint16Array.t_0 [@@js.create as_constructor]
+    val create: t -> Uint16Array.t_0 [@@js.apply as_constructor]
   end
   module[@js.scope "Int32ArrayConstructor"] Int32ArrayConstructor : sig
     type t = _Int32ArrayConstructor
@@ -393,7 +393,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: unit -> Int32Array.t_0 [@@js.create as_constructor]
+    val create: t -> Int32Array.t_0 [@@js.apply as_constructor]
   end
   module[@js.scope "Uint32ArrayConstructor"] Uint32ArrayConstructor : sig
     type t = _Uint32ArrayConstructor
@@ -402,7 +402,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: unit -> Uint32Array.t_0 [@@js.create as_constructor]
+    val create: t -> Uint32Array.t_0 [@@js.apply as_constructor]
   end
   module[@js.scope "Float32ArrayConstructor"] Float32ArrayConstructor : sig
     type t = _Float32ArrayConstructor
@@ -411,7 +411,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: unit -> Float32Array.t_0 [@@js.create as_constructor]
+    val create: t -> Float32Array.t_0 [@@js.apply as_constructor]
   end
   module[@js.scope "Float64ArrayConstructor"] Float64ArrayConstructor : sig
     type t = _Float64ArrayConstructor
@@ -420,6 +420,6 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: unit -> Float64Array.t_0 [@@js.create as_constructor]
+    val create: t -> Float64Array.t_0 [@@js.apply as_constructor]
   end
 end

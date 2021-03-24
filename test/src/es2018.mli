@@ -97,7 +97,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: ?locales:string list or_string -> ?options:_Intl_PluralRulesOptions -> unit -> _Intl_PluralRules [@@js.create as_constructor]
+    val create: t -> ?locales:string list or_string -> ?options:_Intl_PluralRulesOptions -> unit -> _Intl_PluralRules [@@js.apply as_constructor]
     val apply: t -> ?locales:string list or_string -> ?options:_Intl_PluralRulesOptions -> unit -> _Intl_PluralRules [@@js.apply]
     val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_PluralRulesOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
   end
@@ -130,7 +130,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: args:(any list [@js.variadic]) -> (unknown, any, unknown) _AsyncGenerator [@@js.create as_constructor]
+    val create: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _AsyncGenerator [@@js.apply as_constructor]
     val apply: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _AsyncGenerator [@@js.apply]
     val get_length: t -> float [@@js.get "length"]
     val get_name: t -> string [@@js.get "name"]
@@ -143,7 +143,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: args:(string list [@js.variadic]) -> _AsyncGeneratorFunction [@@js.create as_constructor]
+    val create: t -> args:(string list [@js.variadic]) -> _AsyncGeneratorFunction [@@js.apply as_constructor]
     val apply: t -> args:(string list [@js.variadic]) -> _AsyncGeneratorFunction [@@js.apply]
     val get_length: t -> float [@@js.get "length"]
     val get_name: t -> string [@@js.get "name"]

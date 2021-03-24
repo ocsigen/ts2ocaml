@@ -125,15 +125,15 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
   | Kind.NeverKeyword -> Prim Never
   | Kind.UndefinedKeyword -> Prim Undefined
   | Kind.ObjectKeyword -> Prim Object
-  | Kind.SymbolKeyword -> Prim PrimTypes.Symbol
+  | Kind.SymbolKeyword -> Prim PrimType.Symbol
   | Kind.BigIntKeyword -> Prim BigInt
   | Kind.ArrayType ->
     let t = t :?> Ts.ArrayTypeNode
     let elem = readTypeNode typrm checker t.elementType
     if isReadOnly t.modifiers then
-      App (Prim ReadonlyArray, [elem], Node.location t)
+      App (APrim ReadonlyArray, [elem], Node.location t)
     else
-      App (Prim Array, [elem], Node.location t)
+      App (APrim Array, [elem], Node.location t)
   | Kind.TupleType ->
     let t = t :?> Ts.TupleTypeNode
     let elems = t.elementTypes |> Seq.map (readTypeNode typrm checker) |> List.ofSeq
@@ -153,21 +153,20 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
   // ident, possibly tyapp, appearing in extends / implements
   | Kind.ExpressionWithTypeArguments ->
     let t = t :?> Ts.NodeWithTypeArguments
-    let lt =
-      let lhs : Node =
-        match t.kind with
-        | Kind.TypeReference -> !!(t :?> Ts.TypeReferenceNode).typeName
-        | Kind.ExpressionWithTypeArguments -> !!(t :?> Ts.ExpressionWithTypeArguments).expression
-        | _ -> failwith "impossible"
-      match extractNestedName lhs |> List.ofSeq with
-      | [x] when typrm |> Set.contains x -> TypeVar x
-      | [] -> nodeError lhs "cannot parse node '%s' as identifier" (lhs.getText())
-      | ts ->
-        let loc = Node.location lhs
-        Ident { name = ts; fullName = None; loc = loc  }
-    match t.typeArguments with
-    | None -> lt
-    | Some args -> App (lt, args |> Seq.map (readTypeNode typrm checker) |> List.ofSeq, Node.location t)
+    let lhs : Node =
+      match t.kind with
+      | Kind.TypeReference -> !!(t :?> Ts.TypeReferenceNode).typeName
+      | Kind.ExpressionWithTypeArguments -> !!(t :?> Ts.ExpressionWithTypeArguments).expression
+      | _ -> failwith "impossible"
+    match extractNestedName lhs |> List.ofSeq with
+    | [x] when typrm |> Set.contains x -> TypeVar x
+    | [] -> nodeError lhs "cannot parse node '%s' as identifier" (lhs.getText())
+    | ts ->
+      let loc = Node.location lhs
+      let lt = { name = ts; fullName = None; loc = loc  }
+      match t.typeArguments with
+      | None -> Ident lt
+      | Some args -> App (AIdent lt, args |> Seq.map (readTypeNode typrm checker) |> List.ofSeq, Node.location t)
   | Kind.FunctionType ->
     let t = t :?> Ts.FunctionTypeNode
     let typrms = readTypeParameters typrm checker t.typeParameters
@@ -200,7 +199,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
       | Kind.ArrayType ->
         let t' = t' :?> Ts.ArrayTypeNode
         let elem = readTypeNode typrm checker t'.elementType
-        App (Prim ReadonlyArray, [elem], Node.location t')
+        App (APrim ReadonlyArray, [elem], Node.location t')
       | Kind.TupleType ->
         let t' = t' :?> Ts.TupleTypeNode
         let elems = t'.elementTypes |> Seq.map (readTypeNode typrm checker) |> List.ofSeq

@@ -454,7 +454,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
         let lhs =
           str (Naming.structuredTypeName name + "." + Naming.createTypeNameOfArity (List.length ts) None "t")
         tyAppOpt lhs (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
-      | APrim _ -> emit (Type.ofAppLeftHandSide t) ts
+      | APrim _ | AAnonymousInterface _ -> emit (Type.ofAppLeftHandSide t) ts
     | Ident i ->
       match i.fullName with
       | Some fn ->
@@ -766,7 +766,11 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         concat newline [
           for (a, _) in ctx.anonymousInterfacesMap |> Map.toSeq do
             let i = anonymousInterfaceToIdentifier ctx a
-            let def = str "type " + i + str " = " + tyApp intf [between "[" "]" (str pv_head + i)]
+            let def =
+              typeAlias
+                (Text.toString 0 i)
+                (a.typeParams |> List.map (fun x -> tprintf "'%s" x.name))
+                (tyApp intf [between "[" "]" (str pv_head + i)])
             yield def + newline + Attr.js_custom_typ (genJsCustomMapper a.typeParams)
         ]
       )
@@ -916,15 +920,15 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       ]
     | ClassDef c ->
       let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-
       let name, selfTy, selfTyText, isSelfTy, isAnonymous =
+        let typrms = List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams
         match c.name with
         | Some n ->
           let k = List.rev (n :: ctx.currentNamespace)
           let ident = { name = [n]; fullName = Some k; loc = UnknownLocation }
           let selfTy = 
             if List.isEmpty c.typeParams then Ident ident
-            else App (AIdent ident, List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams, UnknownLocation)
+            else App (AIdent ident, typrms, UnknownLocation)
           n,
           selfTy,
           emitTypeName k tyargs,
@@ -933,9 +937,14 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         | None ->
           match ctx.anonymousInterfacesMap |> Map.tryFind c with
           | Some i ->
-            sprintf "AnonymousInterface%d" i,
-            AnonymousInterface c,
-            tprintf "anonymous_interface_%d" i,
+            let n = sprintf "AnonymousInterface%d" i
+            let k = [sprintf "anonymous_interface_%d" i]
+            let selfTy =
+              if List.isEmpty c.typeParams then AnonymousInterface c
+              else App (AAnonymousInterface c, typrms, UnknownLocation)
+            n,
+            selfTy,
+            emitTypeName k tyargs,
             (fun t -> t = AnonymousInterface c),
             true
           | None -> failwith "impossible_emitStructuredDefinitions_ClassDef"

@@ -31,17 +31,19 @@ module Node =
     let pos = src.getLineAndCharacterOfPosition (n.getStart())
     let startPos = int <| src.getPositionOfLineAndCharacter(pos.line, 0.)
     let endPos = int <| src.getLineEndOfPosition(n.getEnd())
-    src.text.Substring(startPos, endPos - startPos)
+    let text = src.text.Substring(startPos, endPos - startPos).Replace("\r\n", "\n").Replace("\r", "\n")
+    let lines = text.Split('\n')
+    lines |> Array.map (sprintf "> %s") |> String.concat System.Environment.NewLine
 
 let nodeWarn (node: Node) format =
   Printf.kprintf (fun s ->
     eprintfn "warn: %s at %s" s (Node.ppLocation node)
-    eprintfn "> %s" (Node.ppLine node)
+    eprintfn "%s" (Node.ppLine node)
   ) format
 
 let nodeError node format =
   Printf.kprintf (fun s ->
-    failwithf "error: %s at %s\n> %s" s (Node.ppLocation node) (Node.ppLine node)
+    failwithf "error: %s at %s\n%s" s (Node.ppLocation node) (Node.ppLine node)
   ) format
 
 let hasModifier (kind: Ts.SyntaxKind) (modifiers: Ts.ModifiersArray option) =
@@ -173,6 +175,12 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
     let typrm = Set.union typrm (typrms |> List.map (fun x -> x.name) |> Set.ofList)
     let retTy = readTypeNode typrm checker t.``type``
     Function (readParameters typrm checker t.parameters retTy)
+  | Kind.ConstructorType ->
+    let t = t :?> Ts.ConstructorTypeNode
+    let typrms = readTypeParameters typrm checker t.typeParameters
+    let typrm' = Set.union typrm (typrms |> List.map (fun x -> x.name) |> Set.ofList)
+    let retTy = readTypeNode typrm' checker t.``type``
+    Erased (NewableFunction (readParameters typrm' checker t.parameters retTy, typrms), Node.location t)
   | Kind.LiteralType ->
     let t = t :?> Ts.LiteralTypeNode
     match readLiteral (!!t.literal) with
@@ -223,7 +231,9 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
     let name = extractNestedName nameNode
     Erased (TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }), Node.location t)
   // fallbacks
-  | Kind.TypePredicate -> Prim Bool
+  | Kind.TypePredicate ->
+    nodeWarn t "type predicate is not supported and treated as boolean"
+    Prim Bool
   | _ ->
     nodeWarn t "unsupported TypeNode kind: %s" (Enum.pp t.kind);
     UnknownType (Some (t.getText()))

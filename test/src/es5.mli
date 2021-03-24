@@ -12,6 +12,28 @@ module Internal : sig
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     type anonymous_interface_2 = [`anonymous_interface_2] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type anonymous_interface_3 = [`anonymous_interface_3] intf
+    [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type anonymous_interface_4 = [`anonymous_interface_4] intf
+    [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type ('A, 'A0, 'A1, 'A2, 'A3, 'R) anonymous_interface_5 = [`anonymous_interface_5] intf
+    [@@js.custom { of_js=(fun _A _A0 _A1 _A2 _A3 _R -> Obj.magic); to_js=(fun _A _A0 _A1 _A2 _A3 _R -> Obj.magic) }]
+    type ('A, 'A0, 'A1, 'A2, 'R) anonymous_interface_6 = [`anonymous_interface_6] intf
+    [@@js.custom { of_js=(fun _A _A0 _A1 _A2 _R -> Obj.magic); to_js=(fun _A _A0 _A1 _A2 _R -> Obj.magic) }]
+    type ('A, 'A0, 'A1, 'R) anonymous_interface_7 = [`anonymous_interface_7] intf
+    [@@js.custom { of_js=(fun _A _A0 _A1 _R -> Obj.magic); to_js=(fun _A _A0 _A1 _R -> Obj.magic) }]
+    type ('A, 'A0, 'R) anonymous_interface_8 = [`anonymous_interface_8] intf
+    [@@js.custom { of_js=(fun _A _A0 _R -> Obj.magic); to_js=(fun _A _A0 _R -> Obj.magic) }]
+    type ('A, 'R) anonymous_interface_9 = [`anonymous_interface_9] intf
+    [@@js.custom { of_js=(fun _A _R -> Obj.magic); to_js=(fun _A _R -> Obj.magic) }]
+    type ('A, 'T) anonymous_interface_10 = [`anonymous_interface_10] intf
+    [@@js.custom { of_js=(fun _A _T -> Obj.magic); to_js=(fun _A _T -> Obj.magic) }]
+    type ('AX, 'R) anonymous_interface_11 = [`anonymous_interface_11] intf
+    [@@js.custom { of_js=(fun _AX _R -> Obj.magic); to_js=(fun _AX _R -> Obj.magic) }]
+    type ('AX, 'R) anonymous_interface_12 = [`anonymous_interface_12] intf
+    [@@js.custom { of_js=(fun _AX _R -> Obj.magic); to_js=(fun _AX _R -> Obj.magic) }]
+    type 'T anonymous_interface_13 = [`anonymous_interface_13] intf
+    [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
   end
   module Types : sig
     open AnonymousInterfaces
@@ -134,7 +156,7 @@ module Internal : sig
     }' *)any
     and 'T _Promise = [`Promise of 'T] intf
     [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
-    and _PromiseConstructorLike = (* FIXME: unknown type 'new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) => PromiseLike<T>' *)any
+    and _PromiseConstructorLike = anonymous_interface_1
     and 'T _PromiseLike = [`PromiseLike of 'T] intf
     [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
     and _PropertyDecorator = [`PropertyDecorator] intf
@@ -224,12 +246,30 @@ module AnonymousInterface0 : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val create: t -> args:((* FIXME: type 'Any' cannot be used for variadic argument *)any list [@js.variadic]) -> any [@@js.apply as_constructor]
+end
+module AnonymousInterface1 : sig
+  type t = anonymous_interface_1
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  type t_0 = t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val create: t -> executor:(resolve:(?value:('T, 'T _PromiseLike) or_ -> unit -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T _PromiseLike [@@js.apply as_constructor]
+end
+module AnonymousInterface2 : sig
+  type t = anonymous_interface_2
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  type t_0 = t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
   val create: t -> ?locales:string list or_string -> ?options:_Intl_CollatorOptions -> unit -> _Intl_Collator [@@js.apply as_constructor]
   val apply: t -> ?locales:string list or_string -> ?options:_Intl_CollatorOptions -> unit -> _Intl_Collator [@@js.apply]
   val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_CollatorOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
 end
-module AnonymousInterface1 : sig
-  type t = anonymous_interface_1
+module AnonymousInterface3 : sig
+  type t = anonymous_interface_3
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   type t_0 = t
@@ -239,8 +279,8 @@ module AnonymousInterface1 : sig
   val apply: t -> ?locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> _Intl_NumberFormat [@@js.apply]
   val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
 end
-module AnonymousInterface2 : sig
-  type t = anonymous_interface_2
+module AnonymousInterface4 : sig
+  type t = anonymous_interface_4
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   type t_0 = t
@@ -249,6 +289,87 @@ module AnonymousInterface2 : sig
   val create: t -> ?locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> _Intl_DateTimeFormat [@@js.apply as_constructor]
   val apply: t -> ?locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> _Intl_DateTimeFormat [@@js.apply]
   val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
+end
+module AnonymousInterface5 : sig
+  type ('A, 'A0, 'A1, 'A2, 'A3, 'R) t = ('A, 'A0, 'A1, 'A2, 'A3, 'R) anonymous_interface_5
+  val t_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('A2 -> Ojs.t) -> ('A3 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'A2, 'A3, 'R) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'A2) -> (Ojs.t -> 'A3) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'A2, 'A3, 'R) t
+  type ('A, 'A0, 'A1, 'A2, 'A3, 'R) t_6 = ('A, 'A0, 'A1, 'A2, 'A3, 'R) t
+  val t_6_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('A2 -> Ojs.t) -> ('A3 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'A2, 'A3, 'R) t_6 -> Ojs.t
+  val t_6_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'A2) -> (Ojs.t -> 'A3) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'A2, 'A3, 'R) t_6
+  val create: ('A, 'A0, 'A1, 'A2, 'A3, 'R) t -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+end
+module AnonymousInterface6 : sig
+  type ('A, 'A0, 'A1, 'A2, 'R) t = ('A, 'A0, 'A1, 'A2, 'R) anonymous_interface_6
+  val t_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('A2 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'A2, 'R) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'A2) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'A2, 'R) t
+  type ('A, 'A0, 'A1, 'A2, 'R) t_5 = ('A, 'A0, 'A1, 'A2, 'R) t
+  val t_5_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('A2 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'A2, 'R) t_5 -> Ojs.t
+  val t_5_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'A2) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'A2, 'R) t_5
+  val create: ('A, 'A0, 'A1, 'A2, 'R) t -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+end
+module AnonymousInterface7 : sig
+  type ('A, 'A0, 'A1, 'R) t = ('A, 'A0, 'A1, 'R) anonymous_interface_7
+  val t_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'R) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'R) t
+  type ('A, 'A0, 'A1, 'R) t_4 = ('A, 'A0, 'A1, 'R) t
+  val t_4_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'R) t_4 -> Ojs.t
+  val t_4_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'R) t_4
+  val create: ('A, 'A0, 'A1, 'R) t -> arg0:'A0 -> arg1:'A1 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+end
+module AnonymousInterface8 : sig
+  type ('A, 'A0, 'R) t = ('A, 'A0, 'R) anonymous_interface_8
+  val t_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'R) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'R) t
+  type ('A, 'A0, 'R) t_3 = ('A, 'A0, 'R) t
+  val t_3_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'R) t_3 -> Ojs.t
+  val t_3_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'R) t_3
+  val create: ('A, 'A0, 'R) t -> arg0:'A0 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+end
+module AnonymousInterface9 : sig
+  type ('A, 'R) t = ('A, 'R) anonymous_interface_9
+  val t_to_js: ('A -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'R) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'R) t
+  type ('A, 'R) t_2 = ('A, 'R) t
+  val t_2_to_js: ('A -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'R) t_2 -> Ojs.t
+  val t_2_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'R) t_2
+  val create: ('A, 'R) t -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+end
+module AnonymousInterface10 : sig
+  type ('A, 'T) t = ('A, 'T) anonymous_interface_10
+  val t_to_js: ('A -> Ojs.t) -> ('T -> Ojs.t) -> ('A, 'T) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'T) -> Ojs.t -> ('A, 'T) t
+  type ('A, 'T) t_2 = ('A, 'T) t
+  val t_2_to_js: ('A -> Ojs.t) -> ('T -> Ojs.t) -> ('A, 'T) t_2 -> Ojs.t
+  val t_2_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'T) -> Ojs.t -> ('A, 'T) t_2
+  val create: ('A, 'T) t -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'T [@@js.apply as_constructor]
+end
+module AnonymousInterface11 : sig
+  type ('AX, 'R) t = ('AX, 'R) anonymous_interface_11
+  val t_to_js: ('AX -> Ojs.t) -> ('R -> Ojs.t) -> ('AX, 'R) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'AX) -> (Ojs.t -> 'R) -> Ojs.t -> ('AX, 'R) t
+  type ('AX, 'R) t_2 = ('AX, 'R) t
+  val t_2_to_js: ('AX -> Ojs.t) -> ('R -> Ojs.t) -> ('AX, 'R) t_2 -> Ojs.t
+  val t_2_of_js: (Ojs.t -> 'AX) -> (Ojs.t -> 'R) -> Ojs.t -> ('AX, 'R) t_2
+  val create: ('AX, 'R) t -> args:('AX list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+end
+module AnonymousInterface12 : sig
+  type ('AX, 'R) t = ('AX, 'R) anonymous_interface_12
+  val t_to_js: ('AX -> Ojs.t) -> ('R -> Ojs.t) -> ('AX, 'R) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'AX) -> (Ojs.t -> 'R) -> Ojs.t -> ('AX, 'R) t
+  type ('AX, 'R) t_2 = ('AX, 'R) t
+  val t_2_to_js: ('AX -> Ojs.t) -> ('R -> Ojs.t) -> ('AX, 'R) t_2 -> Ojs.t
+  val t_2_of_js: (Ojs.t -> 'AX) -> (Ojs.t -> 'R) -> Ojs.t -> ('AX, 'R) t_2
+  val create: ('AX, 'R) t -> args:('AX list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+end
+module AnonymousInterface13 : sig
+  type 'T t = 'T anonymous_interface_13
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+  type 'T t_1 = 'T t
+  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  val create: 'T t -> 'T [@@js.apply as_constructor]
 end
 val naN: float [@@js.global "NaN"]
 val infinity: float [@@js.global "Infinity"]
@@ -426,15 +547,15 @@ module[@js.scope "NewableFunction"] NewableFunction : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply_: t -> this:(* FIXME: unknown type 'new () => T' *)any -> thisArg:'T -> unit [@@js.call "apply"]
-  val apply_': t -> this:(* FIXME: unknown type 'new (...args: A) => T' *)any -> thisArg:'T -> args:'A -> unit [@@js.call "apply"]
-  val call: t -> this:(* FIXME: unknown type 'new (...args: A) => T' *)any -> thisArg:'T -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> unit [@@js.call "call"]
+  val apply_: t -> this:'T anonymous_interface_13 -> thisArg:'T -> unit [@@js.call "apply"]
+  val apply_': t -> this:('A, 'T) anonymous_interface_10 -> thisArg:'T -> args:'A -> unit [@@js.call "apply"]
+  val call: t -> this:('A, 'T) anonymous_interface_10 -> thisArg:'T -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> unit [@@js.call "call"]
   val bind: t -> this:'T -> thisArg:any -> 'T [@@js.call "bind"]
-  val bind': t -> this:(* FIXME: unknown type 'new (arg0: A0, ...args: A) => R' *)any -> thisArg:any -> arg0:'A0 -> (* FIXME: unknown type 'new (...args: A) => R' *)any [@@js.call "bind"]
-  val bind'': t -> this:(* FIXME: unknown type 'new (arg0: A0, arg1: A1, ...args: A) => R' *)any -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> (* FIXME: unknown type 'new (...args: A) => R' *)any [@@js.call "bind"]
-  val bind''': t -> this:(* FIXME: unknown type 'new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R' *)any -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> (* FIXME: unknown type 'new (...args: A) => R' *)any [@@js.call "bind"]
-  val bind'''': t -> this:(* FIXME: unknown type 'new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R' *)any -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> (* FIXME: unknown type 'new (...args: A) => R' *)any [@@js.call "bind"]
-  val bind''''': t -> this:(* FIXME: unknown type 'new (...args: AX[]) => R' *)any -> thisArg:any -> args:('AX list [@js.variadic]) -> (* FIXME: unknown type 'new (...args: AX[]) => R' *)any [@@js.call "bind"]
+  val bind': t -> this:('A, 'A0, 'R) anonymous_interface_8 -> thisArg:any -> arg0:'A0 -> ('A, 'R) anonymous_interface_9 [@@js.call "bind"]
+  val bind'': t -> this:('A, 'A0, 'A1, 'R) anonymous_interface_7 -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> ('A, 'R) anonymous_interface_9 [@@js.call "bind"]
+  val bind''': t -> this:('A, 'A0, 'A1, 'A2, 'R) anonymous_interface_6 -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> ('A, 'R) anonymous_interface_9 [@@js.call "bind"]
+  val bind'''': t -> this:('A, 'A0, 'A1, 'A2, 'A3, 'R) anonymous_interface_5 -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> ('A, 'R) anonymous_interface_9 [@@js.call "bind"]
+  val bind''''': t -> this:('AX, 'R) anonymous_interface_11 -> thisArg:any -> args:('AX list [@js.variadic]) -> ('AX, 'R) anonymous_interface_12 [@@js.call "bind"]
   val cast: t -> _Function [@@js.cast]
 end
 module[@js.scope "IArguments"] IArguments : sig
@@ -1887,7 +2008,7 @@ module[@js.scope "Intl"] Intl : sig
     val compare: t -> x:string -> y:string -> float [@@js.call "compare"]
     val resolvedOptions: t -> _Intl_ResolvedCollatorOptions [@@js.call "resolvedOptions"]
   end
-  val collator: anonymous_interface_0 [@@js.global "Collator"]
+  val collator: anonymous_interface_2 [@@js.global "Collator"]
   module[@js.scope "NumberFormatOptions"] NumberFormatOptions : sig
     type t = _Intl_NumberFormatOptions
     val t_to_js: t -> Ojs.t
@@ -1956,7 +2077,7 @@ module[@js.scope "Intl"] Intl : sig
     val format: t -> value:float -> string [@@js.call "format"]
     val resolvedOptions: t -> _Intl_ResolvedNumberFormatOptions [@@js.call "resolvedOptions"]
   end
-  val numberFormat: anonymous_interface_1 [@@js.global "NumberFormat"]
+  val numberFormat: anonymous_interface_3 [@@js.global "NumberFormat"]
   module[@js.scope "DateTimeFormatOptions"] DateTimeFormatOptions : sig
     type t = _Intl_DateTimeFormatOptions
     val t_to_js: t -> Ojs.t
@@ -2037,5 +2158,5 @@ module[@js.scope "Intl"] Intl : sig
     val format: t -> ?date:_Date or_number -> unit -> string [@@js.call "format"]
     val resolvedOptions: t -> _Intl_ResolvedDateTimeFormatOptions [@@js.call "resolvedOptions"]
   end
-  val dateTimeFormat: anonymous_interface_2 [@@js.global "DateTimeFormat"]
+  val dateTimeFormat: anonymous_interface_4 [@@js.global "DateTimeFormat"]
 end

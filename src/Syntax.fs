@@ -81,11 +81,13 @@ and Type =
 and AppLeftHandSide =
   | AIdent of IdentType
   | APrim of PrimType
+  | AAnonymousInterface of Class
 
 and ErasedType =
   | IndexedAccess of Type * Type
   | TypeQuery of IdentType
   | Keyof of Type
+  | NewableFunction of FuncType<Type> * TypeParam list
 
 and Union = {
   types: Type list
@@ -198,6 +200,7 @@ module Type =
   let ofAppLeftHandSide = function
     | AIdent i -> Ident i
     | APrim p -> Prim p
+    | AAnonymousInterface i -> AnonymousInterface i
 
   let rec pp = function
     | PolymorphicThis -> "this"
@@ -222,5 +225,13 @@ module Type =
       | IndexedAccess (t, u) -> sprintf "%s[%s]" (pp t) (pp u)
       | TypeQuery i -> sprintf "typeof %s" (String.concat "." i.name)
       | Keyof t -> sprintf "keyof %s" (pp t)
+      | NewableFunction (f, typrms) ->
+        let typrms =
+          if List.isEmpty typrms then ""
+          else
+            let args =
+              typrms |> List.map (fun x -> sprintf "'%s" x.name)
+            sprintf "<%s>" (args |> String.concat ", ")
+        sprintf "new %s%s" typrms (pp (Function f))
     | UnknownType None -> "?"
     | UnknownType (Some msg) -> sprintf "?(%s)" msg

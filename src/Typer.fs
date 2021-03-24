@@ -97,11 +97,7 @@ let rec substTypeVar (subst: Map<string, Type>) _ctx = function
   | Tuple ts -> Tuple (ts |> List.map (substTypeVar subst _ctx))
   | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (substTypeVar subst _ctx))
   | AnonymousInterface c -> AnonymousInterface (mapTypeInClass (substTypeVar subst) _ctx c)
-  | Function f ->
-    Function
-      { f with
-          returnType = substTypeVar subst _ctx f.returnType;
-          args = List.map (mapTypeInArg (substTypeVar subst) _ctx) f.args }
+  | Function f -> Function (substTypeVarInFunction subst _ctx f)
   | App (t, ts, loc) -> App (t, ts |> List.map (substTypeVar subst _ctx), loc)
   | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
   | PolymorphicThis -> PolymorphicThis
@@ -111,8 +107,19 @@ let rec substTypeVar (subst: Map<string, Type>) _ctx = function
       | IndexedAccess (t1, t2) -> IndexedAccess (substTypeVar subst _ctx t1, substTypeVar subst _ctx t2)
       | TypeQuery i -> TypeQuery i
       | Keyof t -> Keyof (substTypeVar subst _ctx t)
+      | NewableFunction (f, typrms) ->
+        let mapTyprm (tp: TypeParam) =
+          { tp with
+              extends = Option.map (substTypeVar subst _ctx) tp.extends
+              defaultType = Option.map (substTypeVar subst _ctx) tp.defaultType }
+        NewableFunction (substTypeVarInFunction subst _ctx f, List.map mapTyprm typrms)
     Erased (e', loc)
   | UnknownType msgo -> UnknownType msgo
+
+and substTypeVarInFunction subst _ctx f =
+  { f with
+      returnType = substTypeVar subst _ctx f.returnType;
+      args = List.map (mapTypeInArg (substTypeVar subst) _ctx) f.args }
 
 let rec replaceAliasToFunctionWithInterface = function
   | Module m ->
@@ -317,6 +324,12 @@ let findTypesInStatements pred (stmts: Statement list) : 'a seq =
     | Export _ | UnknownStatement _ -> Seq.empty
   stmts |> Seq.collect go
 
+let getTypeVarsInType ty =
+  findTypesInType (function
+    | TypeVar s -> Choice1Of2 false, Some s
+    | _ -> Choice1Of2 true, None
+  ) ty
+
 let getTypeLiterals stmts =
   findTypesInStatements (function TypeLiteral l -> Choice1Of2 true, Some l | _ -> Choice1Of2 true, None) stmts |> Set.ofSeq
 
@@ -470,11 +483,7 @@ let rec mapIdent (mapping: Context -> IdentType -> IdentType) (ctx: Context) = f
   | Tuple ts -> Tuple (ts |> List.map (mapIdent mapping ctx))
   | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (mapIdent mapping ctx))
   | AnonymousInterface c -> AnonymousInterface (mapTypeInClass (mapIdent mapping) ctx c)
-  | Function f ->
-    Function
-      { f with
-          returnType = mapIdent mapping ctx f.returnType;
-          args = List.map (mapTypeInArg (mapIdent mapping) ctx) f.args }
+  | Function f -> Function (mapIdentInFunction mapping ctx f)
   | App (t, ts, loc) -> App (mapIdentInAppLHS mapping ctx t, ts |> List.map (mapIdent mapping ctx), loc)
   | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l | TypeVar v -> TypeVar v
   | PolymorphicThis -> PolymorphicThis
@@ -484,12 +493,24 @@ let rec mapIdent (mapping: Context -> IdentType -> IdentType) (ctx: Context) = f
       | IndexedAccess (t1, t2) -> IndexedAccess (mapIdent mapping ctx t1, mapIdent mapping ctx t2)
       | TypeQuery i -> TypeQuery (mapping ctx i)
       | Keyof t -> Keyof (mapIdent mapping ctx t)
+      | NewableFunction (f, typrms) ->
+        let mapTyprm (tp: TypeParam) =
+          { tp with
+              extends = Option.map (mapIdent mapping ctx) tp.extends
+              defaultType = Option.map (mapIdent mapping ctx) tp.defaultType }
+        NewableFunction (mapIdentInFunction mapping ctx f, List.map mapTyprm typrms)
     Erased (e', loc)
   | UnknownType msg -> UnknownType msg
+
+and mapIdentInFunction mapping ctx f =
+  { f with
+      returnType = mapIdent mapping ctx f.returnType;
+      args = List.map (mapTypeInArg (mapIdent mapping) ctx) f.args }
 
 and mapIdentInAppLHS mapping ctx = function
   | APrim p -> APrim p
   | AIdent i -> AIdent (mapping ctx i)
+  | AAnonymousInterface i -> AAnonymousInterface (mapTypeInClass (mapIdent mapping) ctx i)
 
 let rec mapIdentInStatements mapType mapExport (ctx: Context) (stmts: Statement list) : Statement list =
   let f = function
@@ -582,20 +603,36 @@ and getAllInheritancesFromName (ctx: Context) (className: string list) : Set<Typ
     inheritMap <- inheritMap |> Map.add className result
     result
 
-let private createFunctionInterface typrms ft =
-  {
-    comments = []
-    name = None
-    accessibility = Public
-    isInterface = true
-    isExported = false
-    implements = []
-    typeParams = []
-    members = [
-      { comments = []; isStatic = false; accessibility = Public },
-      FunctionInterface (ft, typrms)
-    ]
-  }
+let private createFunctionInterfaceBase isNewable (typrms: TypeParam list) ft loc =
+  let usedTyprms =
+    getTypeVarsInType (Function ft)
+    |> Set.ofSeq
+  let boundTyprms =
+    let typrms = typrms |> List.map (fun x -> x.name) |> Set.ofList
+    Set.difference usedTyprms typrms
+    |> Set.toList
+    |> List.map (fun name -> { name = name; extends = None; defaultType = None })
+  let ai =
+    {
+      comments = []
+      name = None
+      accessibility = Public
+      isInterface = true
+      isExported = false
+      implements = []
+      typeParams = boundTyprms
+      members = [
+        { comments = []; isStatic = false; accessibility = Public },
+        if isNewable then New (ft, typrms)
+        else FunctionInterface (ft, typrms)
+      ]
+    }
+  if List.isEmpty boundTyprms then AnonymousInterface ai
+  else
+    App (AAnonymousInterface ai, boundTyprms |> List.map (fun x -> TypeVar x.name), loc)
+
+let private createFunctionInterface = createFunctionInterfaceBase false
+let private createNewableFunctionInterface = createFunctionInterfaceBase true
 
 let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
   let (|Dummy|) _ = []
@@ -622,7 +659,7 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
             Some (Prim UntypedFunction)
           | Indexer (ft, _), (Prim Number | TypeLiteral (LInt _)) -> Some ft.returnType
           | Method (name', ft, typrms), TypeLiteral (LString name) when name = name' ->
-            Some (AnonymousInterface (createFunctionInterface typrms ft))
+            Some (createFunctionInterface typrms ft loc)
           | _, _ -> None
         let rec go t1 t2 =
           let onFail () =
@@ -666,7 +703,7 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
         | Some fn ->
           let result typrms ty =
             match typrms, ty with
-            | _ :: _, Function ft -> AnonymousInterface (createFunctionInterface typrms ft)
+            | _ :: _, Function ft -> createFunctionInterface typrms ft loc
             | _ :: _, _ -> onFail ()
             | [], _ -> ty
           tryLookupFullNameWith ctx fn (function
@@ -713,6 +750,8 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
         if Set.isEmpty types then onFail ()
         else
           Union { types = Set.toList types }
+      | NewableFunction (f, tyargs) ->
+        createNewableFunctionInterface tyargs f loc
     | UnknownType msgo -> UnknownType msgo
   mapTypeInStatements f ctx stmts
 

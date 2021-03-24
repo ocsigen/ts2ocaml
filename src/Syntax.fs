@@ -22,13 +22,13 @@ with
   override x.ToString() = x.AsString
   override x.Equals(yo) =
     match yo with
-    | :? Location as y -> x.AsComparable = y.AsComparable
+    | :? Location as y -> true
     | _ -> false
-  override x.GetHashCode() = x.AsComparable.GetHashCode()
+  override x.GetHashCode() = 0
   interface System.IComparable with
     member x.CompareTo(yo) =
       match yo with
-      | :? Location as y -> compare x.AsComparable y.AsComparable
+      | :? Location as y -> 0
       | _ -> invalidArg "yo" "cannot compare values"
 
 type Literal =

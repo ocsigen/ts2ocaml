@@ -485,11 +485,11 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       treatEnum flags ctx (Set.singleton (Choice2Of2 l))
     | Intersection i ->
       let flags = { flags with needParen = true }
-      intersection_t (i.types |> List.map (emitTypeImpl flags overrideFunc ctx))
+      intersection_t (i.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
     | Union u ->
       let flags = { flags with needParen = true }
       if not flags.resolveUnion then
-        union_t (u.types |> List.map (emitTypeImpl flags overrideFunc ctx))
+        union_t (u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
       else
         let ru = resolveUnion ctx u
         let skipOnContravariant text =

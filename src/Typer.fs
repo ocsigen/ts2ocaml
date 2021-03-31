@@ -649,7 +649,7 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
     | Erased (e, loc) ->
       match e with
       | IndexedAccess (tobj, tindex) ->
-        let memberChooser m t2 =
+        let rec memberChooser m t2 =
           match m, t2 with
           | (Field (fl, _, []) | Getter fl | Setter fl),
             TypeLiteral (LString name) when fl.name = name ->
@@ -746,10 +746,10 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
               | _ -> None
             ) |> Option.defaultValue Set.empty
           | _ -> Set.empty
-        let types = go t
-        if Set.isEmpty types then onFail ()
-        else
-          Union { types = Set.toList types }
+        match Set.toList (go t) with
+        | [] -> onFail ()
+        | [t] -> t
+        | types -> Union { types = types }
       | NewableFunction (f, tyargs) ->
         createNewableFunctionInterface tyargs f loc
     | UnknownType msgo -> UnknownType msgo

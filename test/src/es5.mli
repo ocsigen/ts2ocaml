@@ -41,7 +41,7 @@ module Internal : sig
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     and _ArrayBufferConstructor = [`ArrayBufferConstructor] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    and _ArrayBufferLike = (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any
+    and _ArrayBufferLike = _ArrayBuffer
     and _ArrayBufferTypes = [`ArrayBufferTypes] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     and _ArrayBufferView = [`ArrayBufferView] intf
@@ -1481,7 +1481,7 @@ module[@js.scope "Int8ArrayConstructor"] Int8ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Int8Array [@@js.get "prototype"]
   val create: t -> length:float -> _Int8Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(float _ArrayLike, (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any) or_ -> _Int8Array [@@js.apply as_constructor]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Int8Array [@@js.apply as_constructor]
   val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int8Array [@@js.apply as_constructor]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Int8Array [@@js.call "of"]
@@ -1538,7 +1538,7 @@ module[@js.scope "Uint8ArrayConstructor"] Uint8ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint8Array [@@js.get "prototype"]
   val create: t -> length:float -> _Uint8Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(float _ArrayLike, (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any) or_ -> _Uint8Array [@@js.apply as_constructor]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Uint8Array [@@js.apply as_constructor]
   val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint8Array [@@js.apply as_constructor]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint8Array [@@js.call "of"]
@@ -1595,7 +1595,7 @@ module[@js.scope "Uint8ClampedArrayConstructor"] Uint8ClampedArrayConstructor : 
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint8ClampedArray [@@js.get "prototype"]
   val create: t -> length:float -> _Uint8ClampedArray [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(float _ArrayLike, (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any) or_ -> _Uint8ClampedArray [@@js.apply as_constructor]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Uint8ClampedArray [@@js.apply as_constructor]
   val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint8ClampedArray [@@js.apply as_constructor]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint8ClampedArray [@@js.call "of"]
@@ -1652,7 +1652,7 @@ module[@js.scope "Int16ArrayConstructor"] Int16ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Int16Array [@@js.get "prototype"]
   val create: t -> length:float -> _Int16Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(float _ArrayLike, (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any) or_ -> _Int16Array [@@js.apply as_constructor]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Int16Array [@@js.apply as_constructor]
   val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int16Array [@@js.apply as_constructor]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Int16Array [@@js.call "of"]
@@ -1709,7 +1709,7 @@ module[@js.scope "Uint16ArrayConstructor"] Uint16ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint16Array [@@js.get "prototype"]
   val create: t -> length:float -> _Uint16Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(float _ArrayLike, (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any) or_ -> _Uint16Array [@@js.apply as_constructor]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Uint16Array [@@js.apply as_constructor]
   val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint16Array [@@js.apply as_constructor]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint16Array [@@js.call "of"]
@@ -1766,7 +1766,7 @@ module[@js.scope "Int32ArrayConstructor"] Int32ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Int32Array [@@js.get "prototype"]
   val create: t -> length:float -> _Int32Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(float _ArrayLike, (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any) or_ -> _Int32Array [@@js.apply as_constructor]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Int32Array [@@js.apply as_constructor]
   val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int32Array [@@js.apply as_constructor]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Int32Array [@@js.call "of"]
@@ -1823,7 +1823,7 @@ module[@js.scope "Uint32ArrayConstructor"] Uint32ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint32Array [@@js.get "prototype"]
   val create: t -> length:float -> _Uint32Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(float _ArrayLike, (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any) or_ -> _Uint32Array [@@js.apply as_constructor]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Uint32Array [@@js.apply as_constructor]
   val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint32Array [@@js.apply as_constructor]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint32Array [@@js.call "of"]
@@ -1880,7 +1880,7 @@ module[@js.scope "Float32ArrayConstructor"] Float32ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Float32Array [@@js.get "prototype"]
   val create: t -> length:float -> _Float32Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(float _ArrayLike, (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any) or_ -> _Float32Array [@@js.apply as_constructor]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Float32Array [@@js.apply as_constructor]
   val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Float32Array [@@js.apply as_constructor]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Float32Array [@@js.call "of"]
@@ -1936,7 +1936,7 @@ module[@js.scope "Float64ArrayConstructor"] Float64ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Float64Array [@@js.get "prototype"]
   val create: t -> length:float -> _Float64Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(float _ArrayLike, (* FIXME: unknown type '{..}[union<"ArrayBuffer">]' *)any) or_ -> _Float64Array [@@js.apply as_constructor]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Float64Array [@@js.apply as_constructor]
   val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Float64Array [@@js.apply as_constructor]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Float64Array [@@js.call "of"]

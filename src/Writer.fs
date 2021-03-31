@@ -486,8 +486,12 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       intersection_t (i.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
     | Union u ->
       let flags = { flags with needParen = true }
+      let safe_union_t = function
+        | [] -> failwith "union type with only zero types"
+        | [t] -> t
+        | ts -> union_t ts
       if not flags.resolveUnion then
-        union_t (u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
+        safe_union_t (u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
       else
         let ru = resolveUnion ctx u
         let skipOnContravariant text =
@@ -533,20 +537,20 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
               yield body + skipOnContravariant (Attr.js (literal l))
           ]) + tprintf " [@js.union on_field \"%s\"]" tagName |> between "(" ")"
         let treatOther otherTypes =
-          let rec go = function
-            | [] -> failwith "impossible_emitResolvedUnion_treatOther_go"
-            | t :: [] -> emitTypeImpl flags overrideFunc ctx t
-            | t :: ts -> or_ (emitTypeImpl flags overrideFunc ctx t) (go ts)
-          go (Set.toList otherTypes)
+          if Set.isEmpty otherTypes then
+            failwith "impossible_emitResolvedUnion_treatOther_go"
+          else
+            otherTypes |> Set.toList |> List.map (emitTypeImpl flags overrideFunc ctx) |> safe_union_t
         let treatEnumOr (cases: Set<Choice<EnumCase, Literal>>) t =
           if Set.isEmpty cases then t
           else enum_or (treatEnum flags ctx cases) t
         let treatDUMany du =
-          let rec go = function
-            | [] -> failwith "impossible_emitResolvedUnion_baseType_go"
-            | (tagName, cases) :: [] -> treatDU tagName cases
-            | (tagName, cases) :: rest -> or_ (treatDU tagName cases) (go rest)
-          go (Map.toList du)
+          if Map.isEmpty du then
+            failwith "impossible_emitResolvedUnion_baseType_go"
+          else
+            Map.toList du
+            |> List.map (fun (tagName, cases) -> treatDU tagName cases)
+            |> safe_union_t
         let baseType =
           match not (Set.isEmpty ru.caseEnum), not (Map.isEmpty ru.discriminatedUnions), not (Set.isEmpty ru.otherTypes) with
           | false, false, false -> None

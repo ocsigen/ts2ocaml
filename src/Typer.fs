@@ -757,10 +757,12 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
 
 let rec getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
   let (|Dummy|) _ = []
+
   let rec go t =
     seq {
       match t with
-      | Union { types = types } | Intersection { types = types } -> yield! Seq.collect go types
+      | Union { types = types } -> yield! Seq.collect go types
+      | Intersection { types = types } -> yield! types |> List.map (go >> Set.ofSeq) |> Set.intersectMany |> Set.toSeq
       | (Ident { fullName = Some fn; loc = loc } & Dummy tyargs) | App (AIdent { fullName = Some fn }, tyargs, loc) ->
         for x in fn |> lookupFullName ctx do
           match x with
@@ -777,9 +779,17 @@ let rec getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union
       | TypeLiteral l -> yield Choice1Of2 (Choice2Of2 l)
       | _ -> yield Choice2Of2 t
     }
-  let result = go (Union u)
-  let e, rest = Seq.fold (fun (e, rest) -> function Choice1Of2 x -> x::e,rest | Choice2Of2 x -> e,x::rest) ([],[]) result
-  Set.ofList e, { types = rest }
+
+  let f (cases, types) ty =
+    let c, rest = go ty |> Seq.fold (fun (e, rest) -> function Choice1Of2 x -> Set.add x e, rest | Choice2Of2 x -> e, x::rest) (Set.empty, [])
+    match Set.isEmpty c, rest with
+    | true,  [] -> cases, types
+    | true,  _  -> cases, ty :: types // preserve the original type as much as possible
+    | false, [] -> Set.union c cases, types
+    | false, ts -> Set.union c cases, ts @ types
+
+  let cases, types = u.types |> List.fold f (Set.empty, [])
+  cases, { types = types }
 
 let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> * Union =
   let (|Dummy|) _ = []
@@ -790,14 +800,11 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
     | Erased _ -> failwith "impossible_getDiscriminatedFromUnion_getLiteralFieldsFromType_Erased"
     | Union u ->
       let result = u.types |> List.map getLiteralFieldsFromType
-      let commonFields = result |> List.map (Map.toSeq >> Seq.map fst >> Set.ofSeq) |> Set.intersectMany
       result |> List.fold (fun state fields ->
         fields |> Map.fold (fun state k v ->
-          if Set.contains k commonFields then
-            match state |> Map.tryFind k with
-            | None -> state |> Map.add k v
-            | Some v' -> state |> Map.add k (Set.union v v')
-          else state
+          match state |> Map.tryFind k with
+          | None -> state |> Map.add k v
+          | Some v' -> state |> Map.add k (Set.union v v')
         ) state
       ) Map.empty
     | Intersection i ->
@@ -811,7 +818,7 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
       ) Map.empty |> Map.filter (fun _ v -> Set.isEmpty v |> not)
     | AnonymousInterface c -> getLiteralFieldsFromClass c
     | App (AAnonymousInterface c, ts, loc) ->
-      let name = sprintf "anonymous_interface_%d" (ctx.anonymousInterfacesMap |> Map.find c)
+      let name = sprintf "anonymous interface %d" (ctx.anonymousInterfacesMap |> Map.find c)
       let bindings = createBindings [name] loc c.typeParams ts
       getLiteralFieldsFromClass (c |> mapTypeInClass (substTypeVar bindings) ())
     | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (AIdent { fullName = Some fn }, ts, loc) ->
@@ -937,134 +944,6 @@ let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> *
                 | xs -> k, Union { types = xs })
            |> Map.ofList)
       |> Map.ofList
-    dus, { types = List.distinct rest }
-
-let getDiscriminatedFromUnion' ctx (u: Union) : Map<string, Map<Literal, Type>> * Union =
-  let (|Dummy|) _ = []
-  
-  let rec goBase onUnion onIntersection onClass onOther t =
-    seq {
-      match t with
-      | Union u -> yield! onUnion u
-      | Intersection i -> yield! onIntersection i
-      | AnonymousInterface i ->
-        yield onClass t i
-      | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (AIdent {fullName = Some fn}, ts, loc) ->
-        for x in lookupFullName ctx fn do
-          match x with
-          | AliasName a when not a.erased ->
-            if List.isEmpty ts then
-              yield! goBase onUnion onIntersection onClass onOther a.target
-            else
-              let lhs =
-                match a.target with
-                | Ident i -> AIdent i
-                | Prim p -> APrim p
-                | _ -> failwithf "error: invalid type alias to '%s' on %s" (Type.pp a.target) (loc.AsString)
-              yield! goBase onUnion onIntersection onClass onOther (App (lhs, ts, UnknownLocation))
-          | ClassName c ->
-            if List.isEmpty ts then
-              yield onClass t c
-            else
-              let bindings = createBindings fn loc c.typeParams ts
-              yield onClass t (c |> mapTypeInClass (substTypeVar bindings) ())
-          | _ -> yield onOther t
-      | _ -> yield onOther t
-   }
-
-  let rec getLiteralFieldsFromClass (c: Class) =
-    let inheritedFields =
-      if not c.isInterface then Set.empty
-      else
-        c.implements
-        |> Seq.collect (fun t ->
-          go t |> Seq.choose (function
-            | Choice1Of2 (_, fields) -> Some fields
-            | Choice2Of2 _ -> None)
-          )
-        |> Set.unionMany
-        
-    c.members |> List.collect (fun (_, m) ->
-      match m with
-      | Field (fl, _, []) ->
-        let rec go t =
-          match t with
-          | TypeLiteral l -> [fl.name, l]
-          | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (AIdent { fullName = Some fn }, ts, loc) ->
-            tryLookupFullNameWith ctx fn (function
-              | EnumCaseName (cn, e) ->
-                match e.cases |> List.tryFind (fun c -> c.name = cn) with
-                | Some { value = Some v } -> Some [fl.name, v]
-                | _ -> None
-              | AliasName a when not a.erased ->
-                let bindings = createBindings fn loc a.typeParams ts
-                go (a.target |> substTypeVar bindings ()) |> Some
-              | _ -> None
-            ) |> Option.defaultValue []
-          | _ -> []
-        go fl.value
-      | _ -> []) |> Set.ofList |> Set.union inheritedFields
-
-  and goIntersection t : Set<string * Literal> =
-    goBase
-      (fun u -> u.types |> List.map goIntersection |> Set.intersectMany |> Seq.singleton)
-      (fun i -> i.types |> List.map goIntersection |> Set.unionMany |> Seq.singleton)
-      (fun _ i -> getLiteralFieldsFromClass i)
-      (fun _ -> Set.empty)
-      t
-    |> Set.unionMany
-
-  and go t : Choice<Type * Set<string * Literal>, Type> seq =
-    goBase
-      (fun u -> Seq.collect go u.types)
-      (fun i ->
-        let fields = goIntersection (Intersection i)
-        if Set.isEmpty fields then Seq.singleton (Choice2Of2 (Intersection i))
-        else Seq.singleton (Choice1Of2 (Intersection i, fields)))
-      (fun t c ->
-        let fields = getLiteralFieldsFromClass c
-        if Set.isEmpty fields then Choice2Of2 t
-        else Choice1Of2 (t, fields))
-      (fun t -> Choice2Of2 t)
-      t
-
-  let classes, rest = Seq.fold (fun (e, rest) -> function Choice1Of2 x -> x::e,rest | Choice2Of2 x -> e,x::rest) ([],[]) (go (Union u))
-
-  let tagDict = new System.Collections.Generic.Dictionary<string, uint32>()
-  for (_, fields) in classes do
-    for (name, _) in fields |> Set.toSeq do
-      match tagDict.TryGetValue(name) with
-      | true, i -> tagDict.[name] <- i + 1u
-      | false, _ -> tagDict.[name] <- 1u
-
-  let getBestTag (fields: Set<string * Literal>) =
-    fields |> Set.toSeq |> Seq.maxBy (fun (name, _) ->
-      match tagDict.TryGetValue(name) with
-      | true, i -> i
-      | false, _ -> 0u
-    )
-
-  let dus =
-    classes
-    |> List.distinct
-    |> List.map (fun (t, fields) ->
-      let name, value = getBestTag fields
-      name, (value, t))
-    |> List.groupBy fst
-    |> List.map (fun (name, xs) ->
-      name,
-      xs |> List.map snd
-         |> List.groupBy fst
-         |> List.map (fun (k, xs) ->
-              match xs with
-              | [x] -> k, snd x
-              | xs -> k, Union { types = List.map snd xs |> List.distinct })
-         |> Map.ofList)
-    |> Map.ofList
-
-  if Map.isEmpty dus then
-    Map.empty, { u with types = List.distinct u.types }
-  else
     dus, { types = List.distinct rest }
 
 type TypeofableType = TNumber | TString | TBoolean | TSymbol | TBigInt

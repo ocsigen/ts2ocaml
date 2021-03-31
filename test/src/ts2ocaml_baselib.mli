@@ -230,30 +230,6 @@ module Union: sig
   val inject_6: 'g -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 [@@js.custom let inject_6 x = Obj.magic x]
 end
 
-type 'a or_prim_union = [`Number of float | `String of string | `Boolean of bool | `Symbol of symbol | `BigInt of bigint | `Other of 'a] [@@js.custom {
-  of_js = (fun a_of_js x ->
-    match Ojs.type_of x with
-    | "number" -> `Number (Ojs.float_of_js x)
-    | "string" -> `String (Ojs.string_of_js x)
-    | "boolean" -> `Boolean (Ojs.bool_of_js x)
-    | "symbol" -> `Symbol (symbol_of_js x)
-    | "bigint" -> `BigInt (bigint_of_js x) 
-    | _ -> `Other (a_of_js x));
-  to_js = (fun a_to_js -> function
-    | `Number x -> Ojs.float_to_js x
-    | `String x -> Ojs.string_to_js x
-    | `Boolean x -> Ojs.bool_to_js x
-    | `Symbol x -> symbol_to_js x
-    | `BigInt x -> bigint_to_js x
-    | `Other x -> a_to_js x)
-}]
-val or_prim_union_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_prim_union
-val or_prim_union_to_js: ('a -> Ojs.t) -> 'a or_prim_union -> Ojs.t
-
-type prim_union = never or_prim_union
-val prim_union_of_js: Ojs.t -> prim_union
-val prim_union_to_js: prim_union -> Ojs.t
-
 type 'a or_string = [`String of string | `Other of 'a] [@@js.custom {
   of_js = (fun a_of_js x -> match Ojs.type_of x with "string" -> `String (Ojs.string_of_js x) | _ -> `Other (a_of_js x));
   to_js = (fun a_to_js -> function `String x -> Ojs.string_to_js x | `Other x -> a_to_js x)

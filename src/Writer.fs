@@ -148,8 +148,6 @@ module Type =
   let and_ a b = tyApp (str "and_") [a; b]
   let or_  a b = tyApp (str "or_")  [a; b]
 
-  let primitive_union = str "prim_union"
-  let primitive_or t = tyApp (str "or_prim_union") [t]
   let string_or t  = tyApp (str "or_string") [t]
   let number_or t  = tyApp (str "or_number") [t]
   let boolean_or t = tyApp (str "or_boolean") [t]
@@ -509,16 +507,14 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
             | TBoolean -> boolean_or t
             | TSymbol -> symbol_or t
             | TBigInt -> bigint_or t
-          match Set.toList ts with
-          | [] -> t
-          | [x] ->
-            match t with
-            | None -> TypeofableType.toType x |> emitTypeImpl flags overrideFunc ctx |> Some
-            | Some t -> Some (emitOr x t)
-          | _ :: _ :: _ ->
-            match t with
-            | Some t -> Some (primitive_or t)
-            | None -> Some primitive_union
+          let rec go = function
+            | [] -> t
+            | [x] ->
+              match t with
+              | None -> TypeofableType.toType x |> emitTypeImpl flags overrideFunc ctx |> Some
+              | Some t -> Some (emitOr x t)
+            | x :: rest -> go rest |> Option.map (emitOr x)
+          Set.toList ts |> go
         let treatArray (arr: Set<Type> option) t =
           match arr with
           | None -> t

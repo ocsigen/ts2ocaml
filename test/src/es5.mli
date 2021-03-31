@@ -30,9 +30,7 @@ module Internal : sig
     [@@js.custom { of_js=(fun _A _T -> Obj.magic); to_js=(fun _A _T -> Obj.magic) }]
     type ('AX, 'R) anonymous_interface_11 = [`anonymous_interface_11] intf
     [@@js.custom { of_js=(fun _AX _R -> Obj.magic); to_js=(fun _AX _R -> Obj.magic) }]
-    type ('AX, 'R) anonymous_interface_12 = [`anonymous_interface_12] intf
-    [@@js.custom { of_js=(fun _AX _R -> Obj.magic); to_js=(fun _AX _R -> Obj.magic) }]
-    type 'T anonymous_interface_13 = [`anonymous_interface_13] intf
+    type 'T anonymous_interface_12 = [`anonymous_interface_12] intf
     [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
   end
   module Types : sig
@@ -165,7 +163,7 @@ module Internal : sig
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     and _PropertyDescriptorMap = [`PropertyDescriptorMap] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    and _PropertyKey = prim_union
+    and _PropertyKey = symbol or_string or_number
     and _RangeError = [`RangeError | `Error] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     and _RangeErrorConstructor = [`RangeErrorConstructor | `ErrorConstructor] intf
@@ -275,9 +273,9 @@ module AnonymousInterface3 : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> _Intl_NumberFormat [@@js.apply as_constructor]
-  val apply: t -> ?locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> _Intl_NumberFormat [@@js.apply]
-  val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
+  val create: t -> ?locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> _Intl_DateTimeFormat [@@js.apply as_constructor]
+  val apply: t -> ?locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> _Intl_DateTimeFormat [@@js.apply]
+  val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
 end
 module AnonymousInterface4 : sig
   type t = anonymous_interface_4
@@ -286,9 +284,9 @@ module AnonymousInterface4 : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> _Intl_DateTimeFormat [@@js.apply as_constructor]
-  val apply: t -> ?locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> _Intl_DateTimeFormat [@@js.apply]
-  val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
+  val create: t -> ?locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> _Intl_NumberFormat [@@js.apply as_constructor]
+  val apply: t -> ?locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> _Intl_NumberFormat [@@js.apply]
+  val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
 end
 module AnonymousInterface5 : sig
   type ('A, 'A0, 'A1, 'A2, 'A3, 'R) t = ('A, 'A0, 'A1, 'A2, 'A3, 'R) anonymous_interface_5
@@ -354,16 +352,7 @@ module AnonymousInterface11 : sig
   val create: ('AX, 'R) t -> args:('AX list [@js.variadic]) -> 'R [@@js.apply as_constructor]
 end
 module AnonymousInterface12 : sig
-  type ('AX, 'R) t = ('AX, 'R) anonymous_interface_12
-  val t_to_js: ('AX -> Ojs.t) -> ('R -> Ojs.t) -> ('AX, 'R) t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'AX) -> (Ojs.t -> 'R) -> Ojs.t -> ('AX, 'R) t
-  type ('AX, 'R) t_2 = ('AX, 'R) t
-  val t_2_to_js: ('AX -> Ojs.t) -> ('R -> Ojs.t) -> ('AX, 'R) t_2 -> Ojs.t
-  val t_2_of_js: (Ojs.t -> 'AX) -> (Ojs.t -> 'R) -> Ojs.t -> ('AX, 'R) t_2
-  val create: ('AX, 'R) t -> args:('AX list [@js.variadic]) -> 'R [@@js.apply as_constructor]
-end
-module AnonymousInterface13 : sig
-  type 'T t = 'T anonymous_interface_13
+  type 'T t = 'T anonymous_interface_12
   val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   type 'T t_1 = 'T t
@@ -381,7 +370,7 @@ val isFinite: number:float -> bool [@@js.global "isFinite"]
 val decodeURI: encodedURI:string -> string [@@js.global "decodeURI"]
 val decodeURIComponent: encodedURIComponent:string -> string [@@js.global "decodeURIComponent"]
 val encodeURI: uri:string -> string [@@js.global "encodeURI"]
-val encodeURIComponent: uriComponent:prim_union -> string [@@js.global "encodeURIComponent"]
+val encodeURIComponent: uriComponent:bool or_string or_number -> string [@@js.global "encodeURIComponent"]
 val escape: string:string -> string [@@js.global "escape"]
 val unescape: string:string -> string [@@js.global "unescape"]
 module[@js.scope "Symbol"] Symbol : sig
@@ -547,7 +536,7 @@ module[@js.scope "NewableFunction"] NewableFunction : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply_: t -> this:'T anonymous_interface_13 -> thisArg:'T -> unit [@@js.call "apply"]
+  val apply_: t -> this:'T anonymous_interface_12 -> thisArg:'T -> unit [@@js.call "apply"]
   val apply_': t -> this:('A, 'T) anonymous_interface_10 -> thisArg:'T -> args:'A -> unit [@@js.call "apply"]
   val call: t -> this:('A, 'T) anonymous_interface_10 -> thisArg:'T -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> unit [@@js.call "call"]
   val bind: t -> this:'T -> thisArg:any -> 'T [@@js.call "bind"]
@@ -555,7 +544,7 @@ module[@js.scope "NewableFunction"] NewableFunction : sig
   val bind'': t -> this:('A, 'A0, 'A1, 'R) anonymous_interface_7 -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> ('A, 'R) anonymous_interface_9 [@@js.call "bind"]
   val bind''': t -> this:('A, 'A0, 'A1, 'A2, 'R) anonymous_interface_6 -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> ('A, 'R) anonymous_interface_9 [@@js.call "bind"]
   val bind'''': t -> this:('A, 'A0, 'A1, 'A2, 'A3, 'R) anonymous_interface_5 -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> ('A, 'R) anonymous_interface_9 [@@js.call "bind"]
-  val bind''''': t -> this:('AX, 'R) anonymous_interface_11 -> thisArg:any -> args:('AX list [@js.variadic]) -> ('AX, 'R) anonymous_interface_12 [@@js.call "bind"]
+  val bind''''': t -> this:('AX, 'R) anonymous_interface_11 -> thisArg:any -> args:('AX list [@js.variadic]) -> ('AX, 'R) anonymous_interface_11 [@@js.call "bind"]
   val cast: t -> _Function [@@js.cast]
 end
 module[@js.scope "IArguments"] IArguments : sig
@@ -790,7 +779,7 @@ module[@js.scope "DateConstructor"] DateConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val create: t -> _Date [@@js.apply as_constructor]
-  val create': t -> value:prim_union -> _Date [@@js.apply as_constructor]
+  val create': t -> value:string or_number -> _Date [@@js.apply as_constructor]
   val create'': t -> year:float -> month:float -> ?date:float -> ?hours:float -> ?minutes:float -> ?seconds:float -> ?ms:float -> unit -> _Date [@@js.apply as_constructor]
   val apply: t -> string [@@js.apply]
   val get_prototype: t -> _Date [@@js.get "prototype"]
@@ -1042,8 +1031,8 @@ module[@js.scope "JSON"] JSON : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val parse: t -> text:string -> ?reviver:(this:any -> key:string -> value:any -> any) -> unit -> any [@@js.call "parse"]
-  val stringify: t -> value:any -> ?replacer:(this:any -> key:string -> value:any -> any) -> ?space:prim_union -> unit -> string [@@js.call "stringify"]
-  val stringify': t -> value:any -> ?replacer:prim_union list or_null -> ?space:prim_union -> unit -> string [@@js.call "stringify"]
+  val stringify: t -> value:any -> ?replacer:(this:any -> key:string -> value:any -> any) -> ?space:string or_number -> unit -> string [@@js.call "stringify"]
+  val stringify': t -> value:any -> ?replacer:string or_number list or_null -> ?space:string or_number -> unit -> string [@@js.call "stringify"]
 end
 val jSON: _JSON [@@js.global "JSON"]
 module[@js.scope "ReadonlyArray"] ReadonlyArray : sig
@@ -1183,7 +1172,7 @@ module[@js.scope "PropertyDecorator"] PropertyDecorator : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: t -> target:_Object -> propertyKey:prim_union -> unit [@@js.apply]
+  val apply: t -> target:_Object -> propertyKey:symbol or_string -> unit [@@js.apply]
 end
 module[@js.scope "MethodDecorator"] MethodDecorator : sig
   type t = _MethodDecorator
@@ -1192,7 +1181,7 @@ module[@js.scope "MethodDecorator"] MethodDecorator : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: t -> target:_Object -> propertyKey:prim_union -> descriptor:'T _TypedPropertyDescriptor -> (unit, 'T _TypedPropertyDescriptor) or_ [@@js.apply]
+  val apply: t -> target:_Object -> propertyKey:symbol or_string -> descriptor:'T _TypedPropertyDescriptor -> (unit, 'T _TypedPropertyDescriptor) or_ [@@js.apply]
 end
 module[@js.scope "ParameterDecorator"] ParameterDecorator : sig
   type t = _ParameterDecorator
@@ -1201,7 +1190,7 @@ module[@js.scope "ParameterDecorator"] ParameterDecorator : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: t -> target:_Object -> propertyKey:prim_union -> parameterIndex:float -> unit [@@js.apply]
+  val apply: t -> target:_Object -> propertyKey:symbol or_string -> parameterIndex:float -> unit [@@js.apply]
 end
 module PromiseConstructorLike : sig
   type t = _PromiseConstructorLike
@@ -2077,7 +2066,7 @@ module[@js.scope "Intl"] Intl : sig
     val format: t -> value:float -> string [@@js.call "format"]
     val resolvedOptions: t -> _Intl_ResolvedNumberFormatOptions [@@js.call "resolvedOptions"]
   end
-  val numberFormat: anonymous_interface_3 [@@js.global "NumberFormat"]
+  val numberFormat: anonymous_interface_4 [@@js.global "NumberFormat"]
   module[@js.scope "DateTimeFormatOptions"] DateTimeFormatOptions : sig
     type t = _Intl_DateTimeFormatOptions
     val t_to_js: t -> Ojs.t
@@ -2158,5 +2147,5 @@ module[@js.scope "Intl"] Intl : sig
     val format: t -> ?date:_Date or_number -> unit -> string [@@js.call "format"]
     val resolvedOptions: t -> _Intl_ResolvedDateTimeFormatOptions [@@js.call "resolvedOptions"]
   end
-  val dateTimeFormat: anonymous_interface_4 [@@js.global "DateTimeFormat"]
+  val dateTimeFormat: anonymous_interface_3 [@@js.global "DateTimeFormat"]
 end

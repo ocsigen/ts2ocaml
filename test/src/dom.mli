@@ -1655,7 +1655,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _ByteLengthQueuingStrategy = [`ByteLengthQueuingStrategy | `QueuingStrategy of ArrayBufferView.t_0] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _CDATASection = [`CDATASection | `CharacterData | `ChildNode | `EventTarget | `Node | `Node | `NonDocumentTypeChildNode | `Slotable | `Text] intf
+      and _CDATASection = [`CDATASection | `CharacterData | `ChildNode | `EventTarget | `Node | `NonDocumentTypeChildNode | `Slotable | `Text] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _COSEAlgorithmIdentifier = float
       and _CSS = [`CSS] intf
@@ -1715,7 +1715,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _CanvasImageSmoothing = [`CanvasImageSmoothing] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _CanvasImageSource = (_HTMLCanvasElement, (_HTMLImageElement, (_HTMLVideoElement, (_ImageBitmap, (_OffscreenCanvas, _SVGImageElement) or_) or_) or_) or_) or_
+      and _CanvasImageSource = (([`U_s171_async of _HTMLImageElement [@js "async"] | `U_s183_auto of _HTMLImageElement [@js "auto"] | `U_s781_sync of _HTMLImageElement [@js "sync"]] [@js.union on_field "decoding"]), (_HTMLCanvasElement, (_HTMLVideoElement, (_ImageBitmap, (_OffscreenCanvas, _SVGImageElement) or_) or_) or_) or_) or_
       and _CanvasLineCap = ([`L_s217_butt[@js "butt"] | `L_s694_round[@js "round"] | `L_s752_square[@js "square"]] [@js.enum])
       and _CanvasLineJoin = ([`L_s201_bevel[@js "bevel"] | `L_s537_miter[@js "miter"] | `L_s694_round[@js "round"]] [@js.enum])
       and _CanvasPath = [`CanvasPath] intf
@@ -1756,7 +1756,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _ChannelSplitterOptions = [`ChannelSplitterOptions | `AudioNodeOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _CharacterData = [`CharacterData | `ChildNode | `EventTarget | `Node | `Node | `NonDocumentTypeChildNode] intf
+      and _CharacterData = [`CharacterData | `ChildNode | `EventTarget | `Node | `NonDocumentTypeChildNode] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _ChildNode = [`ChildNode | `EventTarget | `Node] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -1779,7 +1779,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _CloseEventInit = [`CloseEventInit | `EventInit] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _Comment = [`Comment | `CharacterData | `ChildNode | `EventTarget | `Node | `Node | `NonDocumentTypeChildNode] intf
+      and _Comment = [`Comment | `CharacterData | `ChildNode | `EventTarget | `Node | `NonDocumentTypeChildNode] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _CompositeOperation = ([`L_s138_accumulate[@js "accumulate"] | `L_s142_add[@js "add"] | `L_s680_replace[@js "replace"]] [@js.enum])
       and _CompositeOperationOrAuto = ([`L_s138_accumulate[@js "accumulate"] | `L_s142_add[@js "add"] | `L_s183_auto[@js "auto"] | `L_s680_replace[@js "replace"]] [@js.enum])
@@ -1966,7 +1966,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _DocumentTimelineOptions = [`DocumentTimelineOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _DocumentType = [`DocumentType | `ChildNode | `EventTarget | `Node | `Node] intf
+      and _DocumentType = [`DocumentType | `ChildNode | `EventTarget | `Node] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _DoubleRange = [`DoubleRange] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2000,7 +2000,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _EffectTiming = [`EffectTiming] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _Element = [`Element | `Animatable | `ChildNode | `EventTarget | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _Element = [`Element | `Animatable | `ChildNode | `EventTarget | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _ElementCSSInlineStyle = [`ElementCSSInlineStyle] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2129,27 +2129,27 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLAllCollection = [`HTMLAllCollection] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLAnchorElement = [`HTMLAnchorElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLHyperlinkElementUtils | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLAnchorElement = [`HTMLAnchorElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLHyperlinkElementUtils | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLAppletElement = [`HTMLAppletElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLAppletElement = [`HTMLAppletElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLAreaElement = [`HTMLAreaElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLHyperlinkElementUtils | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLAreaElement = [`HTMLAreaElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLHyperlinkElementUtils | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLAudioElement = [`HTMLAudioElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLMediaElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLAudioElement = [`HTMLAudioElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLMediaElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLBRElement = [`HTMLBRElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLBRElement = [`HTMLBRElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLBaseElement = [`HTMLBaseElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLBaseElement = [`HTMLBaseElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLBaseFontElement = [`HTMLBaseFontElement | `Animatable | `ChildNode | `DOML2DeprecatedColorProperty | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLBaseFontElement = [`HTMLBaseFontElement | `Animatable | `ChildNode | `DOML2DeprecatedColorProperty | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLBodyElement = [`HTMLBodyElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable | `WindowEventHandlers] intf
+      and _HTMLBodyElement = [`HTMLBodyElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable | `WindowEventHandlers] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLBodyElementEventMap = [`HTMLBodyElementEventMap | `DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLElementEventMap | `WindowEventHandlersEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLButtonElement = [`HTMLButtonElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLButtonElement = [`HTMLButtonElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLCanvasElement = [`HTMLCanvasElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLCanvasElement = [`HTMLCanvasElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLCollection = [`HTMLCollection | `HTMLCollectionBase] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2157,23 +2157,23 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and 'T _HTMLCollectionOf = [`HTMLCollectionOf of 'T | `HTMLCollectionBase] intf
       [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
-      and _HTMLDListElement = [`HTMLDListElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLDListElement = [`HTMLDListElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLDataElement = [`HTMLDataElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLDataElement = [`HTMLDataElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLDataListElement = [`HTMLDataListElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLDataListElement = [`HTMLDataListElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLDetailsElement = [`HTMLDetailsElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLDetailsElement = [`HTMLDetailsElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLDialogElement = [`HTMLDialogElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLDialogElement = [`HTMLDialogElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLDirectoryElement = [`HTMLDirectoryElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLDirectoryElement = [`HTMLDirectoryElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLDivElement = [`HTMLDivElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLDivElement = [`HTMLDivElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLDocument = [`HTMLDocument | `Document | `DocumentAndElementEventHandlers | `DocumentOrShadowRoot | `EventTarget | `GlobalEventHandlers | `Node | `NonElementParentNode | `ParentNode | `XPathEvaluatorBase] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLElement = [`HTMLElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLElement = [`HTMLElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLElementDeprecatedTagNameMap = [`HTMLElementDeprecatedTagNameMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2181,135 +2181,135 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLElementTagNameMap = [`HTMLElementTagNameMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLEmbedElement = [`HTMLEmbedElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLEmbedElement = [`HTMLEmbedElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLFieldSetElement = [`HTMLFieldSetElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLFieldSetElement = [`HTMLFieldSetElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLFontElement = [`HTMLFontElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLFontElement = [`HTMLFontElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLFormControlsCollection = [`HTMLFormControlsCollection | `HTMLCollectionBase] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLFormElement = [`HTMLFormElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLFormElement = [`HTMLFormElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLFrameElement = [`HTMLFrameElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLFrameElement = [`HTMLFrameElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLFrameSetElement = [`HTMLFrameSetElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable | `WindowEventHandlers] intf
+      and _HTMLFrameSetElement = [`HTMLFrameSetElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable | `WindowEventHandlers] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLFrameSetElementEventMap = [`HTMLFrameSetElementEventMap | `DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLElementEventMap | `WindowEventHandlersEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLHRElement = [`HTMLHRElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLHRElement = [`HTMLHRElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLHeadElement = [`HTMLHeadElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLHeadElement = [`HTMLHeadElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLHeadingElement = [`HTMLHeadingElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLHeadingElement = [`HTMLHeadingElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLHtmlElement = [`HTMLHtmlElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLHtmlElement = [`HTMLHtmlElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLHyperlinkElementUtils = [`HTMLHyperlinkElementUtils] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLIFrameElement = [`HTMLIFrameElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLIFrameElement = [`HTMLIFrameElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLImageElement = [`HTMLImageElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLImageElement = [`HTMLImageElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLInputElement = [`HTMLInputElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLInputElement = [`HTMLInputElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLLIElement = [`HTMLLIElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLLIElement = [`HTMLLIElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLLabelElement = [`HTMLLabelElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLLabelElement = [`HTMLLabelElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLLegendElement = [`HTMLLegendElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLLegendElement = [`HTMLLegendElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLLinkElement = [`HTMLLinkElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `LinkStyle | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLLinkElement = [`HTMLLinkElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `LinkStyle | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLMapElement = [`HTMLMapElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLMapElement = [`HTMLMapElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLMarqueeElement = [`HTMLMarqueeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLMarqueeElement = [`HTMLMarqueeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLMarqueeElementEventMap = [`HTMLMarqueeElementEventMap | `DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLElementEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLMediaElement = [`HTMLMediaElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLMediaElement = [`HTMLMediaElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLMediaElementEventMap = [`HTMLMediaElementEventMap | `DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLElementEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLMenuElement = [`HTMLMenuElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLMenuElement = [`HTMLMenuElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLMetaElement = [`HTMLMetaElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLMetaElement = [`HTMLMetaElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLMeterElement = [`HTMLMeterElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLMeterElement = [`HTMLMeterElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLModElement = [`HTMLModElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLModElement = [`HTMLModElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLOListElement = [`HTMLOListElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLOListElement = [`HTMLOListElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLObjectElement = [`HTMLObjectElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLObjectElement = [`HTMLObjectElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLOptGroupElement = [`HTMLOptGroupElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLOptGroupElement = [`HTMLOptGroupElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLOptionElement = [`HTMLOptionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLOptionElement = [`HTMLOptionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLOptionsCollection = [`HTMLOptionsCollection | `HTMLCollectionBase | `HTMLCollectionOf of _HTMLOptionElement] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLOrSVGElement = [`HTMLOrSVGElement] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLOrSVGImageElement = (_HTMLImageElement, _SVGImageElement) or_
+      and _HTMLOrSVGImageElement = (([`U_s171_async of _HTMLImageElement [@js "async"] | `U_s183_auto of _HTMLImageElement [@js "auto"] | `U_s781_sync of _HTMLImageElement [@js "sync"]] [@js.union on_field "decoding"]), _SVGImageElement) or_
       and _HTMLOrSVGScriptElement = (_HTMLScriptElement, _SVGScriptElement) or_
-      and _HTMLOutputElement = [`HTMLOutputElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLOutputElement = [`HTMLOutputElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLParagraphElement = [`HTMLParagraphElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLParagraphElement = [`HTMLParagraphElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLParamElement = [`HTMLParamElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLParamElement = [`HTMLParamElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLPictureElement = [`HTMLPictureElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLPictureElement = [`HTMLPictureElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLPreElement = [`HTMLPreElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLPreElement = [`HTMLPreElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLProgressElement = [`HTMLProgressElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLProgressElement = [`HTMLProgressElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLQuoteElement = [`HTMLQuoteElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLQuoteElement = [`HTMLQuoteElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLScriptElement = [`HTMLScriptElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLScriptElement = [`HTMLScriptElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLSelectElement = [`HTMLSelectElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLSelectElement = [`HTMLSelectElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLSlotElement = [`HTMLSlotElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLSlotElement = [`HTMLSlotElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLSourceElement = [`HTMLSourceElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLSourceElement = [`HTMLSourceElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLSpanElement = [`HTMLSpanElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLSpanElement = [`HTMLSpanElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLStyleElement = [`HTMLStyleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `LinkStyle | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLStyleElement = [`HTMLStyleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `LinkStyle | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTableCaptionElement = [`HTMLTableCaptionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTableCaptionElement = [`HTMLTableCaptionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTableCellElement = [`HTMLTableCellElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTableCellElement = [`HTMLTableCellElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTableColElement = [`HTMLTableColElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTableColElement = [`HTMLTableColElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTableDataCellElement = [`HTMLTableDataCellElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLTableCellElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTableDataCellElement = [`HTMLTableDataCellElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLTableCellElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTableElement = [`HTMLTableElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTableElement = [`HTMLTableElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTableHeaderCellElement = [`HTMLTableHeaderCellElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLTableCellElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTableHeaderCellElement = [`HTMLTableHeaderCellElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLTableCellElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTableRowElement = [`HTMLTableRowElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTableRowElement = [`HTMLTableRowElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTableSectionElement = [`HTMLTableSectionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTableSectionElement = [`HTMLTableSectionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTemplateElement = [`HTMLTemplateElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTemplateElement = [`HTMLTemplateElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTextAreaElement = [`HTMLTextAreaElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTextAreaElement = [`HTMLTextAreaElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTimeElement = [`HTMLTimeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTimeElement = [`HTMLTimeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTitleElement = [`HTMLTitleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTitleElement = [`HTMLTitleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLTrackElement = [`HTMLTrackElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLTrackElement = [`HTMLTrackElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLUListElement = [`HTMLUListElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLUListElement = [`HTMLUListElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLUnknownElement = [`HTMLUnknownElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLUnknownElement = [`HTMLUnknownElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLVideoElement = [`HTMLVideoElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLMediaElement | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
+      and _HTMLVideoElement = [`HTMLVideoElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLMediaElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLVideoElementEventMap = [`HTMLVideoElementEventMap | `DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLElementEventMap | `HTMLMediaElementEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2371,7 +2371,7 @@ module Make (M: Missing) : sig
       and _IDBTransactionEventMap = [`IDBTransactionEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _IDBTransactionMode = ([`L_s666_readonly[@js "readonly"] | `L_s667_readwrite[@js "readwrite"] | `L_s844_versionchange[@js "versionchange"]] [@js.enum])
-      and _IDBValidKey = (ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, _IDBArrayKey) or_) or_) or_ or_prim_union
+      and _IDBValidKey = (ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, _IDBArrayKey) or_) or_) or_ or_string or_number
       and _IDBVersionChangeEvent = [`IDBVersionChangeEvent | `Event] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _IDBVersionChangeEventInit = [`IDBVersionChangeEventInit | `EventInit] intf
@@ -2388,7 +2388,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _ImageBitmapRenderingContextSettings = [`ImageBitmapRenderingContextSettings] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _ImageBitmapSource = (_Blob, (_HTMLCanvasElement, (_HTMLImageElement, (_HTMLVideoElement, (_ImageBitmap, (_ImageData, (_OffscreenCanvas, _SVGImageElement) or_) or_) or_) or_) or_) or_) or_
+      and _ImageBitmapSource = (([`U_s171_async of _HTMLImageElement [@js "async"] | `U_s183_auto of _HTMLImageElement [@js "auto"] | `U_s781_sync of _HTMLImageElement [@js "sync"]] [@js.union on_field "decoding"]), (_Blob, (_HTMLCanvasElement, (_HTMLVideoElement, (_ImageBitmap, (_ImageData, (_OffscreenCanvas, _SVGImageElement) or_) or_) or_) or_) or_) or_) or_
       and _ImageData = [`ImageData] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _ImageEncodeOptions = [`ImageEncodeOptions] intf
@@ -2591,7 +2591,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _MessageEventInit = [`MessageEventInit | `EventInit] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _MessageEventSource = (_MessagePort, (_ServiceWorker, _Window) or_) or_
+      and _MessageEventSource = (([`U_s139_activated of _ServiceWorker [@js "activated"] | `U_s140_activating of _ServiceWorker [@js "activating"] | `U_s458_installed of _ServiceWorker [@js "installed"] | `U_s459_installing of _ServiceWorker [@js "installing"] | `U_s607_parsed of _ServiceWorker [@js "parsed"] | `U_s671_redundant of _ServiceWorker [@js "redundant"]] [@js.union on_field "state"]), (_MessagePort, _Window) or_) or_
       and _MessagePort = [`MessagePort | `EventTarget] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _MessagePortEventMap = [`MessagePortEventMap] intf
@@ -2709,7 +2709,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _OffscreenCanvasRenderingContext2D = [`OffscreenCanvasRenderingContext2D | `CanvasCompositing | `CanvasDrawImage | `CanvasDrawPath | `CanvasFillStrokeStyles | `CanvasFilters | `CanvasImageData | `CanvasImageSmoothing | `CanvasPath | `CanvasPathDrawingStyles | `CanvasRect | `CanvasShadowStyles | `CanvasState | `CanvasText | `CanvasTextDrawingStyles | `CanvasTransform] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _OffscreenRenderingContext = (_ImageBitmapRenderingContext, (_OffscreenCanvasRenderingContext2D, (_WebGL2RenderingContext, _WebGLRenderingContext) or_) or_) or_
+      and _OffscreenRenderingContext = (([`U_s454_inherit of _OffscreenCanvasRenderingContext2D [@js "inherit"] | `U_s509_ltr of _OffscreenCanvasRenderingContext2D [@js "ltr"] | `U_s698_rtl of _OffscreenCanvasRenderingContext2D [@js "rtl"]] [@js.union on_field "direction"]), (_ImageBitmapRenderingContext, (_WebGL2RenderingContext, _WebGLRenderingContext) or_) or_) or_
       and _OffscreenRenderingContextId = ([`L_s1_2d[@js "2d"] | `L_s202_bitmaprenderer[@js "bitmaprenderer"] | `L_s867_webgl[@js "webgl"] | `L_s868_webgl2[@js "webgl2"]] [@js.enum])
       and _OnBeforeUnloadEventHandler = _OnBeforeUnloadEventHandlerNonNull or_null
       and _OnBeforeUnloadEventHandlerNonNull = [`OnBeforeUnloadEventHandlerNonNull] intf
@@ -2855,7 +2855,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _PostMessageOptions = [`PostMessageOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _ProcessingInstruction = [`ProcessingInstruction | `CharacterData | `ChildNode | `EventTarget | `Node | `Node | `NonDocumentTypeChildNode] intf
+      and _ProcessingInstruction = [`ProcessingInstruction | `CharacterData | `ChildNode | `EventTarget | `Node | `NonDocumentTypeChildNode] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and 'T _ProgressEvent = [`ProgressEvent of 'T | `Event] intf
       [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
@@ -3130,7 +3130,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _RTCTrackEventInit = [`RTCTrackEventInit | `EventInit] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _RTCTransport = (_RTCDtlsTransport, _RTCSrtpSdesTransport) or_
+      and _RTCTransport = (([`U_s247_closed of _RTCDtlsTransport [@js "closed"] | `U_s255_connected of _RTCDtlsTransport [@js "connected"] | `U_s256_connecting of _RTCDtlsTransport [@js "connecting"] | `U_s341_failed of _RTCDtlsTransport [@js "failed"] | `U_s560_new of _RTCDtlsTransport [@js "new"]] [@js.union on_field "state"]), _RTCSrtpSdesTransport) or_
       and _RTCTransportStats = [`RTCTransportStats | `RTCStats] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _RadioNodeList = [`RadioNodeList | `NodeList] intf
@@ -3168,7 +3168,7 @@ module Make (M: Missing) : sig
       and _ReferrerPolicy = ([`L_s0[@js ""] | `L_s566_no_referrer[@js "no-referrer"] | `L_s567_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s595_origin[@js "origin"] | `L_s596_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s703_same_origin[@js "same-origin"] | `L_s764_strict_origin[@js "strict-origin"] | `L_s765_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s829_unsafe_url[@js "unsafe-url"]] [@js.enum])
       and _RegistrationOptions = [`RegistrationOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _RenderingContext = (_CanvasRenderingContext2D, (_ImageBitmapRenderingContext, (_WebGL2RenderingContext, _WebGLRenderingContext) or_) or_) or_
+      and _RenderingContext = (([`U_s454_inherit of _CanvasRenderingContext2D [@js "inherit"] | `U_s509_ltr of _CanvasRenderingContext2D [@js "ltr"] | `U_s698_rtl of _CanvasRenderingContext2D [@js "rtl"]] [@js.union on_field "direction"]), (_ImageBitmapRenderingContext, (_WebGL2RenderingContext, _WebGLRenderingContext) or_) or_) or_
       and _Request = [`Request | `Body] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _RequestCache = ([`L_s276_default[@js "default"] | `L_s380_force_cache[@js "force-cache"] | `L_s564_no_cache[@js "no-cache"] | `L_s568_no_store[@js "no-store"] | `L_s587_only_if_cached[@js "only-if-cached"] | `L_s676_reload[@js "reload"]] [@js.enum])
@@ -3200,15 +3200,15 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _RsaPssParams = [`RsaPssParams | `Algorithm] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGAElement = [`SVGAElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGURIReference | `Slotable] intf
+      and _SVGAElement = [`SVGAElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGAngle = [`SVGAngle] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGAnimateElement = [`SVGAnimateElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimationElement | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGAnimateElement = [`SVGAnimateElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimationElement | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGAnimateMotionElement = [`SVGAnimateMotionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimationElement | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGAnimateMotionElement = [`SVGAnimateMotionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimationElement | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGAnimateTransformElement = [`SVGAnimateTransformElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimationElement | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGAnimateTransformElement = [`SVGAnimateTransformElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimationElement | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGAnimatedAngle = [`SVGAnimatedAngle] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3236,23 +3236,23 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGAnimatedTransformList = [`SVGAnimatedTransformList] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGAnimationElement = [`SVGAnimationElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGAnimationElement = [`SVGAnimationElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGBoundingBoxOptions = [`SVGBoundingBoxOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGCircleElement = [`SVGCircleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGCircleElement = [`SVGCircleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGClipPathElement = [`SVGClipPathElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGClipPathElement = [`SVGClipPathElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGComponentTransferFunctionElement = [`SVGComponentTransferFunctionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGComponentTransferFunctionElement = [`SVGComponentTransferFunctionElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGCursorElement = [`SVGCursorElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGCursorElement = [`SVGCursorElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGDefsElement = [`SVGDefsElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGDefsElement = [`SVGDefsElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGDescElement = [`SVGDescElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGDescElement = [`SVGDescElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGElement = [`SVGElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElementInstance | `Slotable] intf
+      and _SVGElement = [`SVGElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGElementEventMap = [`SVGElementEventMap | `DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3262,96 +3262,96 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGElementTagNameMap = [`SVGElementTagNameMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGEllipseElement = [`SVGEllipseElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGEllipseElement = [`SVGEllipseElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEBlendElement = [`SVGFEBlendElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEBlendElement = [`SVGFEBlendElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEColorMatrixElement = [`SVGFEColorMatrixElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEColorMatrixElement = [`SVGFEColorMatrixElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEComponentTransferElement = [`SVGFEComponentTransferElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEComponentTransferElement = [`SVGFEComponentTransferElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFECompositeElement = [`SVGFECompositeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFECompositeElement = [`SVGFECompositeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEConvolveMatrixElement = [`SVGFEConvolveMatrixElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEConvolveMatrixElement = [`SVGFEConvolveMatrixElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEDiffuseLightingElement = [`SVGFEDiffuseLightingElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEDiffuseLightingElement = [`SVGFEDiffuseLightingElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEDisplacementMapElement = [`SVGFEDisplacementMapElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEDisplacementMapElement = [`SVGFEDisplacementMapElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEDistantLightElement = [`SVGFEDistantLightElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGFEDistantLightElement = [`SVGFEDistantLightElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEDropShadowElement = [`SVGFEDropShadowElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEDropShadowElement = [`SVGFEDropShadowElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEFloodElement = [`SVGFEFloodElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEFloodElement = [`SVGFEFloodElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEFuncAElement = [`SVGFEFuncAElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGComponentTransferFunctionElement | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGFEFuncAElement = [`SVGFEFuncAElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGComponentTransferFunctionElement | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEFuncBElement = [`SVGFEFuncBElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGComponentTransferFunctionElement | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGFEFuncBElement = [`SVGFEFuncBElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGComponentTransferFunctionElement | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEFuncGElement = [`SVGFEFuncGElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGComponentTransferFunctionElement | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGFEFuncGElement = [`SVGFEFuncGElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGComponentTransferFunctionElement | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEFuncRElement = [`SVGFEFuncRElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGComponentTransferFunctionElement | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGFEFuncRElement = [`SVGFEFuncRElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGComponentTransferFunctionElement | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEGaussianBlurElement = [`SVGFEGaussianBlurElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEGaussianBlurElement = [`SVGFEGaussianBlurElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEImageElement = [`SVGFEImageElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `SVGURIReference | `Slotable] intf
+      and _SVGFEImageElement = [`SVGFEImageElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEMergeElement = [`SVGFEMergeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEMergeElement = [`SVGFEMergeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEMergeNodeElement = [`SVGFEMergeNodeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGFEMergeNodeElement = [`SVGFEMergeNodeElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEMorphologyElement = [`SVGFEMorphologyElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEMorphologyElement = [`SVGFEMorphologyElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEOffsetElement = [`SVGFEOffsetElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFEOffsetElement = [`SVGFEOffsetElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFEPointLightElement = [`SVGFEPointLightElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGFEPointLightElement = [`SVGFEPointLightElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFESpecularLightingElement = [`SVGFESpecularLightingElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFESpecularLightingElement = [`SVGFESpecularLightingElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFESpotLightElement = [`SVGFESpotLightElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGFESpotLightElement = [`SVGFESpotLightElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFETileElement = [`SVGFETileElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFETileElement = [`SVGFETileElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFETurbulenceElement = [`SVGFETurbulenceElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
+      and _SVGFETurbulenceElement = [`SVGFETurbulenceElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFilterPrimitiveStandardAttributes | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGFilterElement = [`SVGFilterElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGURIReference | `Slotable] intf
+      and _SVGFilterElement = [`SVGFilterElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGFilterPrimitiveStandardAttributes = [`SVGFilterPrimitiveStandardAttributes] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGFitToViewBox = [`SVGFitToViewBox] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGForeignObjectElement = [`SVGForeignObjectElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGForeignObjectElement = [`SVGForeignObjectElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGGElement = [`SVGGElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGGElement = [`SVGGElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGGeometryElement = [`SVGGeometryElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGGeometryElement = [`SVGGeometryElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGGradientElement = [`SVGGradientElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGURIReference | `Slotable] intf
+      and _SVGGradientElement = [`SVGGradientElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGGraphicsElement = [`SVGGraphicsElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGTests | `Slotable] intf
+      and _SVGGraphicsElement = [`SVGGraphicsElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGImageElement = [`SVGImageElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGURIReference | `Slotable] intf
+      and _SVGImageElement = [`SVGImageElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGLength = [`SVGLength] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGLengthList = [`SVGLengthList] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGLineElement = [`SVGLineElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGLineElement = [`SVGLineElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGLinearGradientElement = [`SVGLinearGradientElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGradientElement | `SVGURIReference | `Slotable] intf
+      and _SVGLinearGradientElement = [`SVGLinearGradientElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGradientElement | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGMarkerElement = [`SVGMarkerElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `Slotable] intf
+      and _SVGMarkerElement = [`SVGMarkerElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGMaskElement = [`SVGMaskElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGMaskElement = [`SVGMaskElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGMatrix = _DOMMatrix
-      and _SVGMetadataElement = [`SVGMetadataElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGMetadataElement = [`SVGMetadataElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGNumber = [`SVGNumber] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGNumberList = [`SVGNumberList] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGPathElement = [`SVGPathElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGPathElement = [`SVGPathElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGPathSeg = [`SVGPathSeg] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3395,51 +3395,51 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGPathSegMovetoRel = [`SVGPathSegMovetoRel | `SVGPathSeg] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGPatternElement = [`SVGPatternElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `SVGURIReference | `Slotable] intf
+      and _SVGPatternElement = [`SVGPatternElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGPoint = _DOMPoint
       and _SVGPointList = [`SVGPointList] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGPolygonElement = [`SVGPolygonElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimatedPoints | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGPolygonElement = [`SVGPolygonElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimatedPoints | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGPolylineElement = [`SVGPolylineElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimatedPoints | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGPolylineElement = [`SVGPolylineElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGAnimatedPoints | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGPreserveAspectRatio = [`SVGPreserveAspectRatio] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGRadialGradientElement = [`SVGRadialGradientElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGradientElement | `SVGURIReference | `Slotable] intf
+      and _SVGRadialGradientElement = [`SVGRadialGradientElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGradientElement | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGRect = _DOMRect
-      and _SVGRectElement = [`SVGRectElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGRectElement = [`SVGRectElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGeometryElement | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGSVGElement = [`SVGSVGElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `DocumentEvent | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `SVGGraphicsElement | `SVGTests | `SVGZoomAndPan | `Slotable] intf
+      and _SVGSVGElement = [`SVGSVGElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `DocumentEvent | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `SVGGraphicsElement | `SVGTests | `SVGZoomAndPan | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGSVGElementEventMap = [`SVGSVGElementEventMap | `DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `SVGElementEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGScriptElement = [`SVGScriptElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGURIReference | `Slotable] intf
+      and _SVGScriptElement = [`SVGScriptElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGStopElement = [`SVGStopElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGStopElement = [`SVGStopElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGStringList = [`SVGStringList] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGStyleElement = [`SVGStyleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGStyleElement = [`SVGStyleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGSwitchElement = [`SVGSwitchElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGSwitchElement = [`SVGSwitchElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGSymbolElement = [`SVGSymbolElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `Slotable] intf
+      and _SVGSymbolElement = [`SVGSymbolElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGTSpanElement = [`SVGTSpanElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGTextContentElement | `SVGTextPositioningElement | `Slotable] intf
+      and _SVGTSpanElement = [`SVGTSpanElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGTextContentElement | `SVGTextPositioningElement | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGTests = [`SVGTests] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGTextContentElement = [`SVGTextContentElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
+      and _SVGTextContentElement = [`SVGTextContentElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGTextElement = [`SVGTextElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGTextContentElement | `SVGTextPositioningElement | `Slotable] intf
+      and _SVGTextElement = [`SVGTextElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGTextContentElement | `SVGTextPositioningElement | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGTextPathElement = [`SVGTextPathElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGTextContentElement | `SVGURIReference | `Slotable] intf
+      and _SVGTextPathElement = [`SVGTextPathElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGTextContentElement | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGTextPositioningElement = [`SVGTextPositioningElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGTextContentElement | `Slotable] intf
+      and _SVGTextPositioningElement = [`SVGTextPositioningElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGTextContentElement | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGTitleElement = [`SVGTitleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
+      and _SVGTitleElement = [`SVGTitleElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGTransform = [`SVGTransform] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3449,9 +3449,9 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGUnitTypes = [`SVGUnitTypes] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGUseElement = [`SVGUseElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGURIReference | `Slotable] intf
+      and _SVGUseElement = [`SVGUseElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGGraphicsElement | `SVGTests | `SVGURIReference | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _SVGViewElement = [`SVGViewElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `SVGZoomAndPan | `Slotable] intf
+      and _SVGViewElement = [`SVGViewElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGElementInstance | `SVGFitToViewBox | `SVGZoomAndPan | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _SVGZoomAndPan = [`SVGZoomAndPan] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3598,8 +3598,8 @@ module Make (M: Missing) : sig
       and _SupportedType = ([`L_s165_application_xhtml_xml[@js "application/xhtml+xml"] | `L_s166_application_xml[@js "application/xml"] | `L_s446_image_svg_xml[@js "image/svg+xml"] | `L_s792_text_html[@js "text/html"] | `L_s793_text_xml[@js "text/xml"]] [@js.enum])
       and _SyncManager = [`SyncManager] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _TexImageSource = (_HTMLCanvasElement, (_HTMLImageElement, (_HTMLVideoElement, (_ImageBitmap, (_ImageData, _OffscreenCanvas) or_) or_) or_) or_) or_
-      and _Text = [`Text | `CharacterData | `ChildNode | `EventTarget | `Node | `Node | `NonDocumentTypeChildNode | `Slotable] intf
+      and _TexImageSource = (([`U_s171_async of _HTMLImageElement [@js "async"] | `U_s183_auto of _HTMLImageElement [@js "auto"] | `U_s781_sync of _HTMLImageElement [@js "sync"]] [@js.union on_field "decoding"]), (_HTMLCanvasElement, (_HTMLVideoElement, (_ImageBitmap, (_ImageData, _OffscreenCanvas) or_) or_) or_) or_) or_
+      and _Text = [`Text | `CharacterData | `ChildNode | `EventTarget | `Node | `NonDocumentTypeChildNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _TextDecodeOptions = [`TextDecodeOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12484,8 +12484,8 @@ module Make (M: Missing) : sig
     val set_easing: t -> string -> unit [@@js.set "easing"]
     val get_offset: t -> float or_null [@@js.get "offset"]
     val set_offset: t -> float or_null -> unit [@@js.set "offset"]
-    val get: t -> string -> prim_union or_null_or_undefined [@@js.index_get]
-    val set: t -> string -> prim_union or_null_or_undefined -> unit [@@js.index_set]
+    val get: t -> string -> string or_number or_null_or_undefined [@@js.index_get]
+    val set: t -> string -> string or_number or_null_or_undefined -> unit [@@js.index_set]
   end
   module[@js.scope "ConfirmSiteSpecificExceptionsInformation"] ConfirmSiteSpecificExceptionsInformation : sig
     type t = _ConfirmSiteSpecificExceptionsInformation
@@ -12951,8 +12951,8 @@ module Make (M: Missing) : sig
     val set_delay: t -> float -> unit [@@js.set "delay"]
     val get_direction: t -> _PlaybackDirection [@@js.get "direction"]
     val set_direction: t -> _PlaybackDirection -> unit [@@js.set "direction"]
-    val get_duration: t -> prim_union [@@js.get "duration"]
-    val set_duration: t -> prim_union -> unit [@@js.set "duration"]
+    val get_duration: t -> string or_number [@@js.get "duration"]
+    val set_duration: t -> string or_number -> unit [@@js.set "duration"]
     val get_easing: t -> string [@@js.get "easing"]
     val set_easing: t -> string -> unit [@@js.set "easing"]
     val get_endDelay: t -> float [@@js.get "endDelay"]
@@ -13479,8 +13479,8 @@ module Make (M: Missing) : sig
     val set_easing: t -> string -> unit [@@js.set "easing"]
     val get_offset: t -> float or_null [@@js.get "offset"]
     val set_offset: t -> float or_null -> unit [@@js.set "offset"]
-    val get: t -> string -> prim_union or_null_or_undefined [@@js.index_get]
-    val set: t -> string -> prim_union or_null_or_undefined -> unit [@@js.index_set]
+    val get: t -> string -> string or_number or_null_or_undefined [@@js.index_get]
+    val set: t -> string -> string or_number or_null_or_undefined -> unit [@@js.index_set]
   end
   module[@js.scope "KeyframeAnimationOptions"] KeyframeAnimationOptions : sig
     type t = _KeyframeAnimationOptions
@@ -14009,8 +14009,8 @@ module Make (M: Missing) : sig
     val set_delay: t -> float -> unit [@@js.set "delay"]
     val get_direction: t -> _PlaybackDirection [@@js.get "direction"]
     val set_direction: t -> _PlaybackDirection -> unit [@@js.set "direction"]
-    val get_duration: t -> prim_union [@@js.get "duration"]
-    val set_duration: t -> prim_union -> unit [@@js.set "duration"]
+    val get_duration: t -> string or_number [@@js.get "duration"]
+    val set_duration: t -> string or_number -> unit [@@js.set "duration"]
     val get_easing: t -> string [@@js.get "easing"]
     val set_easing: t -> string -> unit [@@js.set "easing"]
     val get_endDelay: t -> float [@@js.get "endDelay"]
@@ -14409,8 +14409,8 @@ module Make (M: Missing) : sig
     val set_easing: t -> string list or_string -> unit [@@js.set "easing"]
     val get_offset: t -> float or_null list or_number [@@js.get "offset"]
     val set_offset: t -> float or_null list or_number -> unit [@@js.set "offset"]
-    val get: t -> string -> float or_null or_string list or_prim_union or_null_or_undefined [@@js.index_get]
-    val set: t -> string -> float or_null or_string list or_prim_union or_null_or_undefined -> unit [@@js.index_set]
+    val get: t -> string -> float or_null or_string list or_string or_number or_null_or_undefined [@@js.index_get]
+    val set: t -> string -> float or_null or_string list or_string or_number or_null_or_undefined -> unit [@@js.index_set]
   end
   module[@js.scope "PublicKeyCredentialCreationOptions"] PublicKeyCredentialCreationOptions : sig
     type t = _PublicKeyCredentialCreationOptions
@@ -15781,8 +15781,8 @@ module Make (M: Missing) : sig
     val set_origin: t -> string -> unit [@@js.set "origin"]
     val get_ports: t -> _MessagePort list or_null [@@js.get "ports"]
     val set_ports: t -> _MessagePort list or_null -> unit [@@js.set "ports"]
-    val get_source: t -> (_MessagePort, _ServiceWorker) or_ or_null [@@js.get "source"]
-    val set_source: t -> (_MessagePort, _ServiceWorker) or_ or_null -> unit [@@js.set "source"]
+    val get_source: t -> (([`U_s139_activated of _ServiceWorker [@js "activated"] | `U_s140_activating of _ServiceWorker [@js "activating"] | `U_s458_installed of _ServiceWorker [@js "installed"] | `U_s459_installing of _ServiceWorker [@js "installing"] | `U_s607_parsed of _ServiceWorker [@js "parsed"] | `U_s671_redundant of _ServiceWorker [@js "redundant"]] [@js.union on_field "state"]), _MessagePort) or_ or_null [@@js.get "source"]
+    val set_source: t -> (([`U_s139_activated of _ServiceWorker  | `U_s140_activating of _ServiceWorker  | `U_s458_installed of _ServiceWorker  | `U_s459_installing of _ServiceWorker  | `U_s607_parsed of _ServiceWorker  | `U_s671_redundant of _ServiceWorker ] [@js.union on_field "state"]), _MessagePort) or_ or_null -> unit [@@js.set "source"]
     val cast: t -> _EventInit [@@js.cast]
   end
   module[@js.scope "ShadowRootInit"] ShadowRootInit : sig
@@ -16005,8 +16005,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_track: t -> (_AudioTrack, (_TextTrack, _VideoTrack) or_) or_ or_null [@@js.get "track"]
-    val set_track: t -> (_AudioTrack, (_TextTrack, _VideoTrack) or_) or_ or_null -> unit [@@js.set "track"]
+    val get_track: t -> (([`U_s298_disabled of _TextTrack [@js "disabled"] | `U_s416_hidden of _TextTrack [@js "hidden"] | `U_s731_showing of _TextTrack [@js "showing"]] [@js.union on_field "mode"]), (_AudioTrack, _VideoTrack) or_) or_ or_null [@@js.get "track"]
+    val set_track: t -> (([`U_s298_disabled of _TextTrack  | `U_s416_hidden of _TextTrack  | `U_s731_showing of _TextTrack ] [@js.union on_field "mode"]), (_AudioTrack, _VideoTrack) or_) or_ or_null -> unit [@@js.set "track"]
     val cast: t -> _EventInit [@@js.cast]
   end
   module[@js.scope "Transformer"] Transformer : sig
@@ -22205,8 +22205,8 @@ module Make (M: Missing) : sig
     val get_seeking: t -> bool [@@js.get "seeking"]
     val get_src: t -> string [@@js.get "src"]
     val set_src: t -> string -> unit [@@js.set "src"]
-    val get_srcObject: t -> (_Blob, (_MediaSource, _MediaStream) or_) or_ or_null [@@js.get "srcObject"]
-    val set_srcObject: t -> (_Blob, (_MediaSource, _MediaStream) or_) or_ or_null -> unit [@@js.set "srcObject"]
+    val get_srcObject: t -> (([`U_s247_closed of _MediaSource [@js "closed"] | `U_s328_ended of _MediaSource [@js "ended"] | `U_s590_open of _MediaSource [@js "open"]] [@js.union on_field "readyState"]), (_Blob, _MediaStream) or_) or_ or_null [@@js.get "srcObject"]
+    val set_srcObject: t -> (([`U_s247_closed of _MediaSource  | `U_s328_ended of _MediaSource  | `U_s590_open of _MediaSource ] [@js.union on_field "readyState"]), (_Blob, _MediaStream) or_) or_ or_null -> unit [@@js.set "srcObject"]
     val get_textTracks: t -> _TextTrackList [@@js.get "textTracks"]
     val get_videoTracks: t -> _VideoTrackList [@@js.get "videoTracks"]
     val get_volume: t -> float [@@js.get "volume"]
@@ -23508,7 +23508,7 @@ module Make (M: Missing) : sig
     val set_onsuccess: 'T t -> (this:'T t -> ev:_Event -> any) or_null -> unit [@@js.set "onsuccess"]
     val get_readyState: 'T t -> _IDBRequestReadyState [@@js.get "readyState"]
     val get_result: 'T t -> 'T [@@js.get "result"]
-    val get_source: 'T t -> (_IDBCursor, (_IDBIndex, _IDBObjectStore) or_) or_ [@@js.get "source"]
+    val get_source: 'T t -> (([`U_s561_next of _IDBCursor [@js "next"] | `U_s562_nextunique of _IDBCursor [@js "nextunique"] | `U_s651_prev of _IDBCursor [@js "prev"] | `U_s652_prevunique of _IDBCursor [@js "prevunique"]] [@js.union on_field "direction"]), (_IDBIndex, _IDBObjectStore) or_) or_ [@@js.get "source"]
     val get_transaction: 'T t -> _IDBTransaction or_null [@@js.get "transaction"]
     val addEventListener: 'T t -> type_:'K -> listener:(this:'T t -> ev:(* FIXME: unknown type '{..}['K]' *)any -> any) -> ?options:_AddEventListenerOptions or_boolean -> unit -> unit [@@js.call "addEventListener"]
     val addEventListener': 'T t -> type_:string -> listener:_EventListenerOrEventListenerObject -> ?options:_AddEventListenerOptions or_boolean -> unit -> unit [@@js.call "addEventListener"]
@@ -25711,7 +25711,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val query: t -> permissionDesc:(([`U_s536_midi of _MidiPermissionDescriptor  | `U_s661_push of _PushPermissionDescriptor ] [@js.union on_field "name"]), (_DevicePermissionDescriptor, _PermissionDescriptor) or_) or_ -> _PermissionStatus Promise.t_1 [@@js.call "query"]
+    val query: t -> permissionDesc:([`U_s137_accelerometer of _PermissionDescriptor  | `U_s155_ambient_light_sensor of _PermissionDescriptor  | `U_s187_background_sync of _PermissionDescriptor  | `U_s207_bluetooth of _PermissionDescriptor  | `U_s222_camera of (_PermissionDescriptor, _DevicePermissionDescriptor) union2  | `U_s245_clipboard of _PermissionDescriptor  | `U_s288_device_info of _PermissionDescriptor  | `U_s394_geolocation of _PermissionDescriptor  | `U_s398_gyroscope of _PermissionDescriptor  | `U_s510_magnetometer of _PermissionDescriptor  | `U_s534_microphone of (_PermissionDescriptor, _DevicePermissionDescriptor) union2  | `U_s536_midi of (_PermissionDescriptor, _MidiPermissionDescriptor) union2  | `U_s577_notifications of _PermissionDescriptor  | `U_s619_persistent_storage of _PermissionDescriptor  | `U_s661_push of (_PermissionDescriptor, _PushPermissionDescriptor) union2  | `U_s747_speaker of (_PermissionDescriptor, _DevicePermissionDescriptor) union2 ] [@js.union on_field "name"]) -> _PermissionStatus Promise.t_1 [@@js.call "query"]
   end
   val permissions: anonymous_interface_332 [@@js.global "Permissions"]
   module[@js.scope "Plugin"] Plugin : sig
@@ -26333,7 +26333,7 @@ module Make (M: Missing) : sig
     val get_remoteDescription: t -> _RTCSessionDescription or_null [@@js.get "remoteDescription"]
     val get_sctp: t -> _RTCSctpTransport or_null [@@js.get "sctp"]
     val get_signalingState: t -> _RTCSignalingState [@@js.get "signalingState"]
-    val addIceCandidate: t -> candidate:(_RTCIceCandidate, _RTCIceCandidateInit) or_ -> unit Promise.t_1 [@@js.call "addIceCandidate"]
+    val addIceCandidate: t -> candidate:(([`U_s697_rtcp of _RTCIceCandidate  | `U_s699_rtp of _RTCIceCandidate ] [@js.union on_field "component"]), _RTCIceCandidateInit) or_ -> unit Promise.t_1 [@@js.call "addIceCandidate"]
     val addTrack: t -> track:_MediaStreamTrack -> streams:(_MediaStream list [@js.variadic]) -> _RTCRtpSender [@@js.call "addTrack"]
     val addTransceiver: t -> trackOrKind:_MediaStreamTrack or_string -> ?init:_RTCRtpTransceiverInit -> unit -> _RTCRtpTransceiver [@@js.call "addTransceiver"]
     val close: t -> unit [@@js.call "close"]
@@ -29214,7 +29214,7 @@ module Make (M: Missing) : sig
     val get_lastEventId: t -> string [@@js.get "lastEventId"]
     val get_origin: t -> string [@@js.get "origin"]
     val get_ports: t -> _MessagePort list or_null [@@js.get "ports"]
-    val get_source: t -> (_MessagePort, _ServiceWorker) or_ or_null [@@js.get "source"]
+    val get_source: t -> (([`U_s139_activated of _ServiceWorker [@js "activated"] | `U_s140_activating of _ServiceWorker [@js "activating"] | `U_s458_installed of _ServiceWorker [@js "installed"] | `U_s459_installing of _ServiceWorker [@js "installing"] | `U_s607_parsed of _ServiceWorker [@js "parsed"] | `U_s671_redundant of _ServiceWorker [@js "redundant"]] [@js.union on_field "state"]), _MessagePort) or_ or_null [@@js.get "source"]
     val cast: t -> _Event [@@js.cast]
   end
   val serviceWorkerMessageEvent: anonymous_interface_509 [@@js.global "ServiceWorkerMessageEvent"]
@@ -29784,7 +29784,7 @@ module Make (M: Missing) : sig
     val exportKey: t -> format:([`L_s469_jwk] [@js.enum]) -> key:_CryptoKey -> _JsonWebKey PromiseLike.t_1 [@@js.call "exportKey"]
     val exportKey': t -> format:([`L_s623_pkcs8 | `L_s665_raw | `L_s751_spki] [@js.enum]) -> key:_CryptoKey -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "exportKey"]
     val exportKey'': t -> format:string -> key:_CryptoKey -> (ArrayBuffer.t_0, _JsonWebKey) or_ PromiseLike.t_1 [@@js.call "exportKey"]
-    val generateKey: t -> algorithm:string -> extractable:bool -> keyUsages:string list -> (_CryptoKey, _CryptoKeyPair) or_ PromiseLike.t_1 [@@js.call "generateKey"]
+    val generateKey: t -> algorithm:string -> extractable:bool -> keyUsages:string list -> (([`U_s654_private of _CryptoKey [@js "private"] | `U_s659_public of _CryptoKey [@js "public"] | `U_s710_secret of _CryptoKey [@js "secret"]] [@js.union on_field "type"]), _CryptoKeyPair) or_ PromiseLike.t_1 [@@js.call "generateKey"]
     val generateKey': t -> algorithm:(_DhKeyGenParams, (_EcKeyGenParams, _RsaHashedKeyGenParams) or_) or_ -> extractable:bool -> keyUsages:string list -> _CryptoKeyPair PromiseLike.t_1 [@@js.call "generateKey"]
     val generateKey'': t -> algorithm:(_AesKeyGenParams, (_HmacKeyGenParams, _Pbkdf2Params) or_) or_ -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "generateKey"]
     val importKey: t -> format:([`L_s469_jwk] [@js.enum]) -> keyData:_JsonWebKey -> algorithm:(_AesKeyAlgorithm, (_DhImportKeyParams, (_EcKeyImportParams, (_HmacImportParams, _RsaHashedImportParams) or_) or_) or_) or_ or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "importKey"]
@@ -30153,7 +30153,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_track: t -> (_AudioTrack, (_TextTrack, _VideoTrack) or_) or_ or_null [@@js.get "track"]
+    val get_track: t -> (([`U_s298_disabled of _TextTrack [@js "disabled"] | `U_s416_hidden of _TextTrack [@js "hidden"] | `U_s731_showing of _TextTrack [@js "showing"]] [@js.union on_field "mode"]), (_AudioTrack, _VideoTrack) or_) or_ or_null [@@js.get "track"]
     val cast: t -> _Event [@@js.cast]
   end
   val trackEvent: anonymous_interface_552 [@@js.global "TrackEvent"]
@@ -32149,8 +32149,8 @@ module Make (M: Missing) : sig
     val get_name: t -> string [@@js.get "name"]
     val set_name: t -> string -> unit [@@js.set "name"]
     val get_navigator: t -> _Navigator [@@js.get "navigator"]
-    val get_offscreenBuffering: t -> prim_union [@@js.get "offscreenBuffering"]
-    val set_offscreenBuffering: t -> prim_union -> unit [@@js.set "offscreenBuffering"]
+    val get_offscreenBuffering: t -> bool or_string [@@js.get "offscreenBuffering"]
+    val set_offscreenBuffering: t -> bool or_string -> unit [@@js.set "offscreenBuffering"]
     val get_oncompassneedscalibration: t -> (this:t -> ev:_Event -> any) or_null [@@js.get "oncompassneedscalibration"]
     val set_oncompassneedscalibration: t -> (this:t -> ev:_Event -> any) or_null -> unit [@@js.set "oncompassneedscalibration"]
     val get_ondevicelight: t -> (this:t -> ev:_DeviceLightEvent -> any) or_null [@@js.get "ondevicelight"]
@@ -32217,7 +32217,7 @@ module Make (M: Missing) : sig
     val set_onvrdisplaypresentchange: t -> (this:t -> ev:_Event -> any) or_null -> unit [@@js.set "onvrdisplaypresentchange"]
     val get_opener: t -> any [@@js.get "opener"]
     val set_opener: t -> any -> unit [@@js.set "opener"]
-    val get_orientation: t -> prim_union [@@js.get "orientation"]
+    val get_orientation: t -> string or_number [@@js.get "orientation"]
     val get_outerHeight: t -> float [@@js.get "outerHeight"]
     val get_outerWidth: t -> float [@@js.get "outerWidth"]
     val get_pageXOffset: t -> float [@@js.get "pageXOffset"]
@@ -32560,7 +32560,7 @@ module Make (M: Missing) : sig
     val open_: t -> method_:string -> url:string -> unit [@@js.call "open"]
     val open_': t -> method_:string -> url:string -> async:bool -> ?username:string or_null -> ?password:string or_null -> unit -> unit [@@js.call "open"]
     val overrideMimeType: t -> mime:string -> unit [@@js.call "overrideMimeType"]
-    val send: t -> ?body:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (_Blob, (_Document, (_FormData, (_URLSearchParams, (string, Uint8Array.t_0 _ReadableStream) or_) or_) or_) or_) or_) or_) or_ or_null -> unit -> unit [@@js.call "send"]
+    val send: t -> ?body:(([`U_s416_hidden of _Document  | `U_s851_visible of _Document ] [@js.union on_field "visibilityState"]), (ArrayBuffer.t_0, (ArrayBufferView.t_0, (_Blob, (_FormData, (_URLSearchParams, (string, Uint8Array.t_0 _ReadableStream) or_) or_) or_) or_) or_) or_) or_ or_null -> unit -> unit [@@js.call "send"]
     val setRequestHeader: t -> name:string -> value:string -> unit [@@js.call "setRequestHeader"]
     val get_DONE: t -> float [@@js.get "DONE"]
     val get_HEADERS_RECEIVED: t -> float [@@js.get "HEADERS_RECEIVED"]
@@ -32970,10 +32970,10 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
     end
     val compile: bytes:_BufferSource -> _WebAssembly_Module Promise.t_1 [@@js.global "compile"]
-    val compileStreaming: source:(_Response, _Response Promise.t_1) or_ -> _WebAssembly_Module Promise.t_1 [@@js.global "compileStreaming"]
+    val compileStreaming: source:(([`U_s194_basic of _Response  | `U_s263_cors of _Response  | `U_s276_default of _Response  | `U_s332_error of _Response  | `U_s588_opaque of _Response  | `U_s589_opaqueredirect of _Response ] [@js.union on_field "type"]), _Response Promise.t_1) or_ -> _WebAssembly_Module Promise.t_1 [@@js.global "compileStreaming"]
     val instantiate: bytes:_BufferSource -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_WebAssemblyInstantiatedSource Promise.t_1 [@@js.global "instantiate"]
     val instantiate: moduleObject:_WebAssembly_Module -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_Instance Promise.t_1 [@@js.global "instantiate"]
-    val instantiateStreaming: response:(_Response, _Response PromiseLike.t_1) or_ -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_WebAssemblyInstantiatedSource Promise.t_1 [@@js.global "instantiateStreaming"]
+    val instantiateStreaming: response:(([`U_s194_basic of _Response  | `U_s263_cors of _Response  | `U_s276_default of _Response  | `U_s332_error of _Response  | `U_s588_opaque of _Response  | `U_s589_opaqueredirect of _Response ] [@js.union on_field "type"]), _Response PromiseLike.t_1) or_ -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_WebAssemblyInstantiatedSource Promise.t_1 [@@js.global "instantiateStreaming"]
     val validate: bytes:_BufferSource -> bool [@@js.global "validate"]
   end
   module[@js.scope "BlobCallback"] BlobCallback : sig
@@ -33690,7 +33690,7 @@ module Make (M: Missing) : sig
   val msContentScript: _ExtensionScriptApis [@@js.global "msContentScript"]
   val name: never [@@js.global "name"]
   val navigator: _Navigator [@@js.global "navigator"]
-  val offscreenBuffering: prim_union [@@js.global "offscreenBuffering"]
+  val offscreenBuffering: bool or_string [@@js.global "offscreenBuffering"]
   val oncompassneedscalibration: (this:_Window -> ev:_Event -> any) or_null [@@js.global "oncompassneedscalibration"]
   val ondevicelight: (this:_Window -> ev:_DeviceLightEvent -> any) or_null [@@js.global "ondevicelight"]
   val ondevicemotion: (this:_Window -> ev:_DeviceMotionEvent -> any) or_null [@@js.global "ondevicemotion"]
@@ -33724,7 +33724,7 @@ module Make (M: Missing) : sig
   val onvrdisplaypointerunrestricted: (this:_Window -> ev:_Event -> any) or_null [@@js.global "onvrdisplaypointerunrestricted"]
   val onvrdisplaypresentchange: (this:_Window -> ev:_Event -> any) or_null [@@js.global "onvrdisplaypresentchange"]
   val opener: any [@@js.global "opener"]
-  val orientation: prim_union [@@js.global "orientation"]
+  val orientation: string or_number [@@js.global "orientation"]
   val outerHeight: float [@@js.global "outerHeight"]
   val outerWidth: float [@@js.global "outerWidth"]
   val pageXOffset: float [@@js.global "pageXOffset"]

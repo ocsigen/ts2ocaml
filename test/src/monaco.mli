@@ -403,7 +403,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and monaco_editor_IMarkerData = [`Monaco_editor_IMarkerData] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and monaco_editor_IModel = [`Monaco_editor_IModel | `Monaco_editor_IEditableTextModel | `Monaco_editor_IReadOnlyModel | `Monaco_editor_ITextModel | `Monaco_editor_ITextModel | `Monaco_editor_ITextModel | `Monaco_editor_ITextModelWithDecorations | `Monaco_editor_ITextModelWithMarkers | `Monaco_editor_ITextModelWithMarkers | `Monaco_editor_ITokenizedModel] intf
+      and monaco_editor_IModel = [`Monaco_editor_IModel | `Monaco_editor_IEditableTextModel | `Monaco_editor_IReadOnlyModel | `Monaco_editor_ITextModel | `Monaco_editor_ITextModelWithDecorations | `Monaco_editor_ITextModelWithMarkers | `Monaco_editor_ITokenizedModel] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and monaco_editor_IModelChangedEvent = [`Monaco_editor_IModelChangedEvent] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -726,7 +726,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and monaco_languages_typescript_CompilerOptions = [`Monaco_languages_typescript_CompilerOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and monaco_languages_typescript_CompilerOptionsValue = prim_union or_string list or_prim_union
+      and monaco_languages_typescript_CompilerOptionsValue = string or_number or_string list or_boolean or_string or_number
       and monaco_languages_typescript_DiagnosticsOptions = [`Monaco_languages_typescript_DiagnosticsOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and monaco_languages_typescript_JsxEmit = [`None[@js 0] | `Preserve[@js 1] | `React[@js 2]] [@js.enum]
@@ -2523,8 +2523,8 @@ module Make (M: Missing) : sig
         val set_lineNumbersMinChars: t -> float -> unit [@@js.set "lineNumbersMinChars"]
         val get_glyphMargin: t -> bool [@@js.get "glyphMargin"]
         val set_glyphMargin: t -> bool -> unit [@@js.set "glyphMargin"]
-        val get_lineDecorationsWidth: t -> prim_union [@@js.get "lineDecorationsWidth"]
-        val set_lineDecorationsWidth: t -> prim_union -> unit [@@js.set "lineDecorationsWidth"]
+        val get_lineDecorationsWidth: t -> string or_number [@@js.get "lineDecorationsWidth"]
+        val set_lineDecorationsWidth: t -> string or_number -> unit [@@js.set "lineDecorationsWidth"]
         val get_revealHorizontalRightPadding: t -> float [@@js.get "revealHorizontalRightPadding"]
         val set_revealHorizontalRightPadding: t -> float -> unit [@@js.set "revealHorizontalRightPadding"]
         val get_roundedSelection: t -> bool [@@js.get "roundedSelection"]
@@ -3276,8 +3276,8 @@ module Make (M: Missing) : sig
         val t_0_of_js: Ojs.t -> t_0
         val get_triggerCharacters: t -> string list [@@js.get "triggerCharacters"]
         val set_triggerCharacters: t -> string list -> unit [@@js.set "triggerCharacters"]
-        val provideCompletionItems: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> ((monaco_languages_CompletionList, (monaco_languages_CompletionItem list monaco_Thenable, monaco_languages_CompletionList monaco_Thenable) or_) or_, monaco_languages_CompletionItem) or_array [@@js.call "provideCompletionItems"]
-        val resolveCompletionItem: t -> item:monaco_languages_CompletionItem -> token:monaco_CancellationToken -> (monaco_languages_CompletionItem, monaco_languages_CompletionItem monaco_Thenable) or_ [@@js.call "resolveCompletionItem"]
+        val provideCompletionItems: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> ((monaco_languages_CompletionList, (monaco_languages_CompletionList monaco_Thenable, monaco_languages_CompletionItem list monaco_Thenable) or_) or_, monaco_languages_CompletionItem) or_array [@@js.call "provideCompletionItems"]
+        val resolveCompletionItem: t -> item:monaco_languages_CompletionItem -> token:monaco_CancellationToken -> (([`U_n_0 of monaco_languages_CompletionItem [@js 0] | `U_n_1 of monaco_languages_CompletionItem [@js 1] | `U_n_2 of monaco_languages_CompletionItem [@js 2] | `U_n_3 of monaco_languages_CompletionItem [@js 3] | `U_n_4 of monaco_languages_CompletionItem [@js 4] | `U_n_5 of monaco_languages_CompletionItem [@js 5] | `U_n_6 of monaco_languages_CompletionItem [@js 6] | `U_n_7 of monaco_languages_CompletionItem [@js 7] | `U_n_8 of monaco_languages_CompletionItem [@js 8] | `U_n_9 of monaco_languages_CompletionItem [@js 9] | `U_n_10 of monaco_languages_CompletionItem [@js 10] | `U_n_11 of monaco_languages_CompletionItem [@js 11] | `U_n_12 of monaco_languages_CompletionItem [@js 12] | `U_n_13 of monaco_languages_CompletionItem [@js 13] | `U_n_14 of monaco_languages_CompletionItem [@js 14] | `U_n_15 of monaco_languages_CompletionItem [@js 15] | `U_n_16 of monaco_languages_CompletionItem [@js 16] | `U_n_17 of monaco_languages_CompletionItem [@js 17] | `U_n_18 of monaco_languages_CompletionItem [@js 18]] [@js.union on_field "kind"]), monaco_languages_CompletionItem monaco_Thenable) or_ [@@js.call "resolveCompletionItem"]
       end
       module[@js.scope "CommentRule"] CommentRule : sig
         type t = monaco_languages_CommentRule

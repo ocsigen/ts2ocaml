@@ -500,7 +500,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> value:_Date or_prim_union -> _Date [@@js.apply as_constructor]
+    val create: t -> value:_Date or_string or_number -> _Date [@@js.apply as_constructor]
   end
   module[@js.scope "Function"] Function : sig
     type t = _Function
@@ -729,7 +729,7 @@ module Make (M: Missing) : sig
     val get_toStringTag: t -> symbol [@@js.get "toStringTag"]
     val get_unscopables: t -> symbol [@@js.get "unscopables"]
     val get_prototype: t -> _Symbol [@@js.get "prototype"]
-    val apply: t -> ?description:prim_union -> unit -> symbol [@@js.apply]
+    val apply: t -> ?description:string or_number -> unit -> symbol [@@js.apply]
     val for_: t -> key:string -> symbol [@@js.call "for"]
     val keyFor: t -> sym:symbol -> string or_undefined [@@js.call "keyFor"]
     val get_iterator: t -> symbol [@@js.get "iterator"]
@@ -1119,7 +1119,7 @@ module Make (M: Missing) : sig
     val _Symbol_toPrimitive_: t -> hint:([`L_s13_default] [@js.enum]) -> string [@@js.call "[Symbol.toPrimitive]"]
     val _Symbol_toPrimitive_': t -> hint:([`L_s15_string] [@js.enum]) -> string [@@js.call "[Symbol.toPrimitive]"]
     val _Symbol_toPrimitive_'': t -> hint:([`L_s14_number] [@js.enum]) -> float [@@js.call "[Symbol.toPrimitive]"]
-    val _Symbol_toPrimitive_''': t -> hint:string -> prim_union [@@js.call "[Symbol.toPrimitive]"]
+    val _Symbol_toPrimitive_''': t -> hint:string -> string or_number [@@js.call "[Symbol.toPrimitive]"]
   end
   module[@js.scope "JSON"] JSON : sig
     type t = _JSON

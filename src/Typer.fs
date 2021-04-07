@@ -10,6 +10,7 @@ type Context = {
   anonymousInterfacesMap: Map<Class, int>
   internalModuleName: string
   unknownIdentifiers: Trie<string, Set<int>>
+  defaultExport: IdentType option
 }
 
 module Context =
@@ -348,6 +349,13 @@ let getUnknownIdentifiers stmts =
     | _ -> Choice1Of2 true, None
   ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
+let rec getDefaultExport stmts =
+  let go = function
+    | Module m -> getDefaultExport m.statements
+    | Export (i, AsDefault) -> Some i
+    | _ -> None
+  stmts |> List.tryPick go
+
 let private createRootContextForTyper internalModuleName stmts =
   let add name ty m =
     if m |> Trie.containsKey [name] then m
@@ -372,16 +380,19 @@ let private createRootContextForTyper internalModuleName stmts =
     typeLiteralsMap = Map.empty
     anonymousInterfacesMap = Map.empty
     unknownIdentifiers = Trie.empty
+    defaultExport = None
   }
 
 let createRootContext (internalModuleName: string) (stmts: Statement list) : Context =
   let tlm = getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
   let aim = getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
   let uid = getUnknownIdentifiers stmts
+  let de  = getDefaultExport stmts
   { createRootContextForTyper internalModuleName stmts with
       typeLiteralsMap = tlm
       anonymousInterfacesMap = aim
-      unknownIdentifiers = uid }
+      unknownIdentifiers = uid
+      defaultExport = de }
 
 type FullNameLookupResult =
   | AliasName of TypeAlias

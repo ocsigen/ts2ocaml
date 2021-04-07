@@ -1277,7 +1277,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val makeCredential: t -> accountInformation:Account.t_0 -> cryptoParameters:ScopedCredentialParameters.t_0 Iterable.t_1 -> attestationChallenge:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ or_null -> ?options:ScopedCredentialOptions.t_0 -> unit -> ScopedCredentialInfo.t_0 Promise.t_1 [@@js.call "makeCredential"]
+    val makeCredential: t -> accountInformation:Account.t_0 -> cryptoParameters:ScopedCredentialParameters.t_0 Iterable.t_1 -> attestationChallenge:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ or_null -> ?options:ScopedCredentialOptions.t_0 -> unit -> ScopedCredentialInfo.t_0 Promise.t_1 [@@js.call "makeCredential"]
   end
   module[@js.scope "WebGL2RenderingContextBase"] WebGL2RenderingContextBase : sig
     type t = _WebGL2RenderingContextBase

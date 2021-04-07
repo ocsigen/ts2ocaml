@@ -66,11 +66,11 @@ module Make (M: Missing) : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-    val flatMap: 'T t -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U t) or_) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
-    val flat: 'T t -> this:('U t t t t t, ('U list t t t t, ('U t list t t t, ('U list list t t t, ('U t t list t t, ('U list t list t t, ('U t list list t t, ('U list list list t t, ('U t t t list t, ('U list t t list t, ('U t list t list t, ('U list list t list t, ('U t t list list t, ('U list t list list t, ('U t list list list t, 'U list list list list t) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> depth:([`L_n_4] [@js.enum]) -> 'U list [@@js.call "flat"]
-    val flat': 'T t -> this:('U t t t t, ('U list t t t, ('U t list t t, ('U list list t t, ('U t t list t, ('U list t list t, ('U t list list t, 'U list list list t) or_) or_) or_) or_) or_) or_) or_ -> depth:([`L_n_3] [@js.enum]) -> 'U list [@@js.call "flat"]
-    val flat'': 'T t -> this:('U t t t, ('U list t t, ('U t list t, 'U list list t) or_) or_) or_ -> depth:([`L_n_2] [@js.enum]) -> 'U list [@@js.call "flat"]
-    val flat''': 'T t -> this:('U t t, 'U list t) or_ -> ?depth:([`L_n_1] [@js.enum]) -> unit -> 'U list [@@js.call "flat"]
+    val flatMap: 'T t -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U t) union2) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
+    val flat: 'T t -> this:((((((((('U t t t list t, 'U list t t list t, 'U t list t list t, 'U list list t list t, 'U t t list list t, 'U list t list list t, 'U t list list list t, 'U list list list list t) union8, 'U list list list t t) or_, 'U t list list t t) or_, 'U list t list t t) or_, 'U t t list t t) or_, 'U list list t t t) or_, 'U t list t t t) or_, 'U list t t t t) or_, 'U t t t t t) or_ -> depth:([`L_n_4] [@js.enum]) -> 'U list [@@js.call "flat"]
+    val flat': 'T t -> this:('U t t t t, 'U list t t t, 'U t list t t, 'U list list t t, 'U t t list t, 'U list t list t, 'U t list list t, 'U list list list t) union8 -> depth:([`L_n_3] [@js.enum]) -> 'U list [@@js.call "flat"]
+    val flat'': 'T t -> this:('U t t t, 'U list t t, 'U t list t, 'U list list t) union4 -> depth:([`L_n_2] [@js.enum]) -> 'U list [@@js.call "flat"]
+    val flat''': 'T t -> this:('U t t, 'U list t) union2 -> ?depth:([`L_n_1] [@js.enum]) -> unit -> 'U list [@@js.call "flat"]
     val flat'''': 'T t -> this:'U t -> depth:([`L_n_0] [@js.enum]) -> 'U list [@@js.call "flat"]
     val flat''''': 'T t -> ?depth:float -> unit -> any list [@@js.call "flat"]
     val to_ml: 'T t -> 'T list [@@js.cast]
@@ -83,7 +83,7 @@ module Make (M: Missing) : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-    val flatMap: 'T t -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U _ReadonlyArray) or_) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
+    val flatMap: 'T t -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U _ReadonlyArray) union2) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
     val flat: 'T t -> this:'U list list list list list list list list -> depth:([`L_n_7] [@js.enum]) -> 'U list [@@js.call "flat"]
     val flat': 'T t -> this:'U list list list list list list list -> depth:([`L_n_6] [@js.enum]) -> 'U list [@@js.call "flat"]
     val flat'': 'T t -> this:'U list list list list list list -> depth:([`L_n_5] [@js.enum]) -> 'U list [@@js.call "flat"]

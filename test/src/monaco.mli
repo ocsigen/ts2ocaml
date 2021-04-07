@@ -1,7 +1,12 @@
 [@@@ocaml.warning "-7-11-32-33-39"]
 [@@@js.implem 
   [@@@ocaml.warning "-7-11-32-33-39"]
+
+  let _imports = Ts2ocaml_baselib.pure_js_expr "require('monaco-editor')"
 ]
+
+[@@@js.scope _imports]
+
 open Ts2ocaml_baselib
 (* 
   unknown identifiers:
@@ -69,6 +74,7 @@ end
     end
   end
 ]
+
 module Make (M: Missing) : sig
   open M
   module Internal : sig
@@ -385,7 +391,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and monaco_editor_IEditorMinimapOptions = [`Monaco_editor_IEditorMinimapOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and monaco_editor_IEditorModel = (monaco_editor_IDiffEditorModel, monaco_editor_IModel) or_
+      and monaco_editor_IEditorModel = (monaco_editor_IDiffEditorModel, monaco_editor_IModel) union2
       and monaco_editor_IEditorMouseEvent = [`Monaco_editor_IEditorMouseEvent] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and monaco_editor_IEditorOptions = [`Monaco_editor_IEditorOptions] intf
@@ -394,7 +400,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and monaco_editor_IEditorScrollbarOptions = [`Monaco_editor_IEditorScrollbarOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and monaco_editor_IEditorViewState = (monaco_editor_ICodeEditorViewState, monaco_editor_IDiffEditorViewState) or_
+      and monaco_editor_IEditorViewState = (monaco_editor_ICodeEditorViewState, monaco_editor_IDiffEditorViewState) union2
       and monaco_editor_IIdentifiedSingleEditOperation = [`Monaco_editor_IIdentifiedSingleEditOperation] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and monaco_editor_ILineChange = [`Monaco_editor_ILineChange | `Monaco_editor_IChange] intf
@@ -987,8 +993,8 @@ module Make (M: Missing) : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-      val then_: 'T t -> ?onfulfilled:(value:'T -> ('TResult, 'TResult t) or_) -> ?onrejected:(reason:any -> ('TResult, 'TResult t) or_) -> unit -> 'TResult t [@@js.call "then"]
-      val then_': 'T t -> ?onfulfilled:(value:'T -> ('TResult, 'TResult t) or_) -> ?onrejected:(reason:any -> unit) -> unit -> 'TResult t [@@js.call "then"]
+      val then_: 'T t -> ?onfulfilled:(value:'T -> ('TResult, 'TResult t) union2) -> ?onrejected:(reason:any -> ('TResult, 'TResult t) union2) -> unit -> 'TResult t [@@js.call "then"]
+      val then_': 'T t -> ?onfulfilled:(value:'T -> ('TResult, 'TResult t) union2) -> ?onrejected:(reason:any -> unit) -> unit -> 'TResult t [@@js.call "then"]
     end
     module[@js.scope "IDisposable"] IDisposable : sig
       type t = monaco_IDisposable
@@ -1035,7 +1041,7 @@ module Make (M: Missing) : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-      val apply: 'T t -> value:('T, 'T monaco_Thenable) or_ -> unit [@@js.apply]
+      val apply: 'T t -> value:('T, 'T monaco_Thenable) union2 -> unit [@@js.apply]
     end
     module[@js.scope "ProgressCallback"] ProgressCallback : sig
       type t = monaco_ProgressCallback
@@ -1055,15 +1061,15 @@ module Make (M: Missing) : sig
       val t_1_of_js: (Ojs.t -> 'V) -> Ojs.t -> 'V t_1
       val create: init:(complete:'V monaco_TValueCallback -> error:(err:any -> unit) -> progress:monaco_ProgressCallback -> unit) -> ?oncancel:any -> unit -> 'V t [@@js.create]
       val then_: 'V t -> ?success:(value:'V -> 'U t) -> ?error:(err:any -> 'U t) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
-      val then_': 'V t -> ?success:(value:'V -> 'U t) -> ?error:(err:any -> ('U, 'U t) or_) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
+      val then_': 'V t -> ?success:(value:'V -> 'U t) -> ?error:(err:any -> ('U, 'U t) union2) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
       val then_'': 'V t -> ?success:(value:'V -> 'U t) -> ?error:(err:any -> 'U) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
       val then_''': 'V t -> ?success:(value:'V -> 'U t) -> ?error:(err:any -> unit) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
-      val then_'''': 'V t -> ?success:(value:'V -> ('U, 'U t) or_) -> ?error:(err:any -> 'U t) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
-      val then_''''': 'V t -> ?success:(value:'V -> ('U, 'U t) or_) -> ?error:(err:any -> ('U, 'U t) or_) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
-      val then_'''''': 'V t -> ?success:(value:'V -> ('U, 'U t) or_) -> ?error:(err:any -> 'U) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
-      val then_''''''': 'V t -> ?success:(value:'V -> ('U, 'U t) or_) -> ?error:(err:any -> unit) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
+      val then_'''': 'V t -> ?success:(value:'V -> ('U, 'U t) union2) -> ?error:(err:any -> 'U t) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
+      val then_''''': 'V t -> ?success:(value:'V -> ('U, 'U t) union2) -> ?error:(err:any -> ('U, 'U t) union2) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
+      val then_'''''': 'V t -> ?success:(value:'V -> ('U, 'U t) union2) -> ?error:(err:any -> 'U) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
+      val then_''''''': 'V t -> ?success:(value:'V -> ('U, 'U t) union2) -> ?error:(err:any -> unit) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
       val then_'''''''': 'V t -> ?success:(value:'V -> 'U) -> ?error:(err:any -> 'U t) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
-      val then_''''''''': 'V t -> ?success:(value:'V -> 'U) -> ?error:(err:any -> ('U, 'U t) or_) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
+      val then_''''''''': 'V t -> ?success:(value:'V -> 'U) -> ?error:(err:any -> ('U, 'U t) union2) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
       val then_'''''''''': 'V t -> ?success:(value:'V -> 'U) -> ?error:(err:any -> 'U) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
       val then_''''''''''': 'V t -> ?success:(value:'V -> 'U) -> ?error:(err:any -> unit) -> ?progress:monaco_ProgressCallback -> unit -> 'U t [@@js.call "then"]
       val done_: 'V t -> ?success:(value:'V -> unit) -> ?error:(err:any -> any) -> ?progress:monaco_ProgressCallback -> unit -> unit [@@js.call "done"]
@@ -2137,7 +2143,7 @@ module Make (M: Missing) : sig
         val set_contextMenuGroupId: t -> string -> unit [@@js.set "contextMenuGroupId"]
         val get_contextMenuOrder: t -> float [@@js.get "contextMenuOrder"]
         val set_contextMenuOrder: t -> float -> unit [@@js.set "contextMenuOrder"]
-        val run: t -> editor:monaco_editor_ICommonCodeEditor -> (unit, unit monaco_Promise) or_ [@@js.call "run"]
+        val run: t -> editor:monaco_editor_ICommonCodeEditor -> (unit, unit monaco_Promise) union2 [@@js.call "run"]
       end
       module[@js.scope "IEditorAction"] IEditorAction : sig
         type t = monaco_editor_IEditorAction
@@ -3276,8 +3282,8 @@ module Make (M: Missing) : sig
         val t_0_of_js: Ojs.t -> t_0
         val get_triggerCharacters: t -> string list [@@js.get "triggerCharacters"]
         val set_triggerCharacters: t -> string list -> unit [@@js.set "triggerCharacters"]
-        val provideCompletionItems: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> ((monaco_languages_CompletionList, (monaco_languages_CompletionList monaco_Thenable, monaco_languages_CompletionItem list monaco_Thenable) or_) or_, monaco_languages_CompletionItem) or_array [@@js.call "provideCompletionItems"]
-        val resolveCompletionItem: t -> item:monaco_languages_CompletionItem -> token:monaco_CancellationToken -> (([`U_n_0 of monaco_languages_CompletionItem [@js 0] | `U_n_1 of monaco_languages_CompletionItem [@js 1] | `U_n_2 of monaco_languages_CompletionItem [@js 2] | `U_n_3 of monaco_languages_CompletionItem [@js 3] | `U_n_4 of monaco_languages_CompletionItem [@js 4] | `U_n_5 of monaco_languages_CompletionItem [@js 5] | `U_n_6 of monaco_languages_CompletionItem [@js 6] | `U_n_7 of monaco_languages_CompletionItem [@js 7] | `U_n_8 of monaco_languages_CompletionItem [@js 8] | `U_n_9 of monaco_languages_CompletionItem [@js 9] | `U_n_10 of monaco_languages_CompletionItem [@js 10] | `U_n_11 of monaco_languages_CompletionItem [@js 11] | `U_n_12 of monaco_languages_CompletionItem [@js 12] | `U_n_13 of monaco_languages_CompletionItem [@js 13] | `U_n_14 of monaco_languages_CompletionItem [@js 14] | `U_n_15 of monaco_languages_CompletionItem [@js 15] | `U_n_16 of monaco_languages_CompletionItem [@js 16] | `U_n_17 of monaco_languages_CompletionItem [@js 17] | `U_n_18 of monaco_languages_CompletionItem [@js 18]] [@js.union on_field "kind"]), monaco_languages_CompletionItem monaco_Thenable) or_ [@@js.call "resolveCompletionItem"]
+        val provideCompletionItems: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> ((monaco_languages_CompletionList, monaco_languages_CompletionList monaco_Thenable, monaco_languages_CompletionItem list monaco_Thenable) union3, monaco_languages_CompletionItem) or_array [@@js.call "provideCompletionItems"]
+        val resolveCompletionItem: t -> item:monaco_languages_CompletionItem -> token:monaco_CancellationToken -> (monaco_languages_CompletionItem, monaco_languages_CompletionItem monaco_Thenable) union2 [@@js.call "resolveCompletionItem"]
       end
       module[@js.scope "CommentRule"] CommentRule : sig
         type t = monaco_languages_CommentRule
@@ -3451,7 +3457,7 @@ module Make (M: Missing) : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
-        val provideHover: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Hover, monaco_languages_Hover monaco_Thenable) or_ [@@js.call "provideHover"]
+        val provideHover: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Hover, monaco_languages_Hover monaco_Thenable) union2 [@@js.call "provideHover"]
       end
       module[@js.scope "ParameterInformation"] ParameterInformation : sig
         type t = monaco_languages_ParameterInformation
@@ -3502,7 +3508,7 @@ module Make (M: Missing) : sig
         val t_0_of_js: Ojs.t -> t_0
         val get_signatureHelpTriggerCharacters: t -> string list [@@js.get "signatureHelpTriggerCharacters"]
         val set_signatureHelpTriggerCharacters: t -> string list -> unit [@@js.set "signatureHelpTriggerCharacters"]
-        val provideSignatureHelp: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_SignatureHelp, monaco_languages_SignatureHelp monaco_Thenable) or_ [@@js.call "provideSignatureHelp"]
+        val provideSignatureHelp: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_SignatureHelp, monaco_languages_SignatureHelp monaco_Thenable) union2 [@@js.call "provideSignatureHelp"]
       end
       module DocumentHighlightKind : sig
         type t = monaco_languages_DocumentHighlightKind
@@ -3579,7 +3585,7 @@ module Make (M: Missing) : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
-        val provideDefinition: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, (monaco_languages_Location, (monaco_languages_Definition monaco_Thenable, monaco_languages_Location list) or_) or_) or_ [@@js.call "provideDefinition"]
+        val provideDefinition: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, monaco_languages_Definition monaco_Thenable) union2 [@@js.call "provideDefinition"]
       end
       module[@js.scope "ImplementationProvider"] ImplementationProvider : sig
         type t = monaco_languages_ImplementationProvider
@@ -3588,7 +3594,7 @@ module Make (M: Missing) : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
-        val provideImplementation: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, (monaco_languages_Location, (monaco_languages_Definition monaco_Thenable, monaco_languages_Location list) or_) or_) or_ [@@js.call "provideImplementation"]
+        val provideImplementation: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, monaco_languages_Definition monaco_Thenable) union2 [@@js.call "provideImplementation"]
       end
       module[@js.scope "TypeDefinitionProvider"] TypeDefinitionProvider : sig
         type t = monaco_languages_TypeDefinitionProvider
@@ -3597,7 +3603,7 @@ module Make (M: Missing) : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
-        val provideTypeDefinition: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, (monaco_languages_Location, (monaco_languages_Definition monaco_Thenable, monaco_languages_Location list) or_) or_) or_ [@@js.call "provideTypeDefinition"]
+        val provideTypeDefinition: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, monaco_languages_Definition monaco_Thenable) union2 [@@js.call "provideTypeDefinition"]
       end
       module SymbolKind : sig
         type t = monaco_languages_SymbolKind
@@ -3707,7 +3713,7 @@ module Make (M: Missing) : sig
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
         val provideLinks: t -> model:monaco_editor_IReadOnlyModel -> token:monaco_CancellationToken -> (monaco_languages_ILink list monaco_Thenable, monaco_languages_ILink) or_array [@@js.call "provideLinks"]
-        val resolveLink: t -> link:monaco_languages_ILink -> token:monaco_CancellationToken -> (monaco_languages_ILink, monaco_languages_ILink monaco_Thenable) or_ [@@js.call "resolveLink"]
+        val resolveLink: t -> link:monaco_languages_ILink -> token:monaco_CancellationToken -> (monaco_languages_ILink, monaco_languages_ILink monaco_Thenable) union2 [@@js.call "resolveLink"]
       end
       module[@js.scope "IResourceEdit"] IResourceEdit : sig
         type t = monaco_languages_IResourceEdit
@@ -3742,7 +3748,7 @@ module Make (M: Missing) : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
-        val provideRenameEdits: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> newName:string -> token:monaco_CancellationToken -> (monaco_languages_WorkspaceEdit, monaco_languages_WorkspaceEdit monaco_Thenable) or_ [@@js.call "provideRenameEdits"]
+        val provideRenameEdits: t -> model:monaco_editor_IReadOnlyModel -> position:monaco_Position -> newName:string -> token:monaco_CancellationToken -> (monaco_languages_WorkspaceEdit, monaco_languages_WorkspaceEdit monaco_Thenable) union2 [@@js.call "provideRenameEdits"]
       end
       module[@js.scope "Command"] Command : sig
         type t = monaco_languages_Command
@@ -3784,7 +3790,7 @@ module Make (M: Missing) : sig
         val get_onDidChange: t -> t monaco_IEvent [@@js.get "onDidChange"]
         val set_onDidChange: t -> t monaco_IEvent -> unit [@@js.set "onDidChange"]
         val provideCodeLenses: t -> model:monaco_editor_IReadOnlyModel -> token:monaco_CancellationToken -> (monaco_languages_ICodeLensSymbol list monaco_Thenable, monaco_languages_ICodeLensSymbol) or_array [@@js.call "provideCodeLenses"]
-        val resolveCodeLens: t -> model:monaco_editor_IReadOnlyModel -> codeLens:monaco_languages_ICodeLensSymbol -> token:monaco_CancellationToken -> (monaco_languages_ICodeLensSymbol, monaco_languages_ICodeLensSymbol monaco_Thenable) or_ [@@js.call "resolveCodeLens"]
+        val resolveCodeLens: t -> model:monaco_editor_IReadOnlyModel -> codeLens:monaco_languages_ICodeLensSymbol -> token:monaco_CancellationToken -> (monaco_languages_ICodeLensSymbol, monaco_languages_ICodeLensSymbol monaco_Thenable) union2 [@@js.call "resolveCodeLens"]
       end
       module[@js.scope "ILanguageExtensionPoint"] ILanguageExtensionPoint : sig
         type t = monaco_languages_ILanguageExtensionPoint

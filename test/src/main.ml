@@ -12,7 +12,11 @@ open Es5
 
 open Ts2ocaml_baselib
 
+include [%js:
+  val console_log: 'a -> unit [@@js.global "console.log"]
+]
+
 let () =
-  Printf.printf "%f" (Es5.Math.get_PI math);
-  Printf.printf "%b" (is_array (Ojs.list_to_js Ojs.int_to_js [1;2;3]));
+  Printf.printf "%f\n" (Es5.Math.get_PI math);
+  Printf.printf "%b\n" (is_array (Ojs.list_to_js Ojs.int_to_js [1;2;3]));
 ;;

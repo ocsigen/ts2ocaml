@@ -97,7 +97,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> ?locales:string list or_string -> ?options:_Intl_PluralRulesOptions -> unit -> _Intl_PluralRules [@@js.apply as_constructor]
+    val create: t -> ?locales:string list or_string -> ?options:_Intl_PluralRulesOptions -> unit -> _Intl_PluralRules [@@js.apply_newable]
     val apply: t -> ?locales:string list or_string -> ?options:_Intl_PluralRulesOptions -> unit -> _Intl_PluralRules [@@js.apply]
     val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_PluralRulesOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
   end
@@ -118,7 +118,7 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val next: ('T, 'TReturn, 'TNext) t -> args:((* FIXME: type 'union<() | ('TNext)>' cannot be used for variadic argument *)any list [@js.variadic]) -> ('T, 'TReturn) IteratorResult.t_2 _Promise [@@js.call "next"]
-    val return: ('T, 'TReturn, 'TNext) t -> value:('TReturn, 'TReturn PromiseLike.t_1) or_ -> ('T, 'TReturn) IteratorResult.t_2 _Promise [@@js.call "return"]
+    val return: ('T, 'TReturn, 'TNext) t -> value:('TReturn, 'TReturn PromiseLike.t_1) union2 -> ('T, 'TReturn) IteratorResult.t_2 _Promise [@@js.call "return"]
     val throw: ('T, 'TReturn, 'TNext) t -> e:any -> ('T, 'TReturn) IteratorResult.t_2 _Promise [@@js.call "throw"]
     val _Symbol_asyncIterator_: ('T, 'TReturn, 'TNext) t -> ('T, 'TReturn, 'TNext) t [@@js.call "[Symbol.asyncIterator]"]
     val cast: ('T, 'TReturn, 'TNext) t -> ('T, 'TReturn, 'TNext) _AsyncIterator [@@js.cast]
@@ -130,7 +130,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _AsyncGenerator [@@js.apply as_constructor]
+    val create: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _AsyncGenerator [@@js.apply_newable]
     val apply: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _AsyncGenerator [@@js.apply]
     val get_length: t -> float [@@js.get "length"]
     val get_name: t -> string [@@js.get "name"]
@@ -143,7 +143,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> args:(string list [@js.variadic]) -> _AsyncGeneratorFunction [@@js.apply as_constructor]
+    val create: t -> args:(string list [@js.variadic]) -> _AsyncGeneratorFunction [@@js.apply_newable]
     val apply: t -> args:(string list [@js.variadic]) -> _AsyncGeneratorFunction [@@js.apply]
     val get_length: t -> float [@@js.get "length"]
     val get_name: t -> string [@@js.get "name"]
@@ -166,7 +166,7 @@ module Make (M: Missing) : sig
     val t_3_to_js: ('T -> Ojs.t) -> ('TReturn -> Ojs.t) -> ('TNext -> Ojs.t) -> ('T, 'TReturn, 'TNext) t_3 -> Ojs.t
     val t_3_of_js: (Ojs.t -> 'T) -> (Ojs.t -> 'TReturn) -> (Ojs.t -> 'TNext) -> Ojs.t -> ('T, 'TReturn, 'TNext) t_3
     val next: ('T, 'TReturn, 'TNext) t -> args:((* FIXME: type 'union<() | ('TNext)>' cannot be used for variadic argument *)any list [@js.variadic]) -> ('T, 'TReturn) IteratorResult.t_2 _Promise [@@js.call "next"]
-    val return: ('T, 'TReturn, 'TNext) t -> ?value:('TReturn, 'TReturn PromiseLike.t_1) or_ -> unit -> ('T, 'TReturn) IteratorResult.t_2 _Promise [@@js.call "return"]
+    val return: ('T, 'TReturn, 'TNext) t -> ?value:('TReturn, 'TReturn PromiseLike.t_1) union2 -> unit -> ('T, 'TReturn) IteratorResult.t_2 _Promise [@@js.call "return"]
     val throw: ('T, 'TReturn, 'TNext) t -> ?e:any -> unit -> ('T, 'TReturn) IteratorResult.t_2 _Promise [@@js.call "throw"]
   end
   module[@js.scope "AsyncIterable"] AsyncIterable : sig

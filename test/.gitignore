@@ -4,3 +4,5 @@ ojs.install
 _build
 _opam
 .vscode
+build
+node_modules

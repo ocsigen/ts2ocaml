@@ -341,9 +341,9 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get__Symbol_species_: t -> t [@@js.get "[Symbol.species]"]
-    val create: t -> iterable:('K * 'V) _Iterable -> ('K, 'V) _Map [@@js.apply as_constructor]
-    val create': t -> (any, any) _Map [@@js.apply as_constructor]
-    val create'': t -> ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) _Map [@@js.apply as_constructor]
+    val create: t -> iterable:('K * 'V) _Iterable -> ('K, 'V) _Map [@@js.apply_newable]
+    val create': t -> (any, any) _Map [@@js.apply_newable]
+    val create'': t -> ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) _Map [@@js.apply_newable]
     val get_prototype: t -> (any, any) _Map [@@js.get "prototype"]
   end
   val map: _MapConstructor [@@js.global "Map"]
@@ -383,8 +383,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> iterable:('K * 'V) _Iterable -> ('K, 'V) _WeakMap [@@js.apply as_constructor]
-    val create': t -> ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) _WeakMap [@@js.apply as_constructor]
+    val create: t -> iterable:('K * 'V) _Iterable -> ('K, 'V) _WeakMap [@@js.apply_newable]
+    val create': t -> ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) _WeakMap [@@js.apply_newable]
     val get_prototype: t -> (untyped_object, any) _WeakMap [@@js.get "prototype"]
   end
   val weakMap: _WeakMapConstructor [@@js.global "WeakMap"]
@@ -415,8 +415,8 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get__Symbol_species_: t -> t [@@js.get "[Symbol.species]"]
-    val create: t -> ?iterable:'T _Iterable or_null -> unit -> 'T _Set [@@js.apply as_constructor]
-    val create': t -> ?values:'T list or_null -> unit -> 'T _Set [@@js.apply as_constructor]
+    val create: t -> ?iterable:'T _Iterable or_null -> unit -> 'T _Set [@@js.apply_newable]
+    val create': t -> ?values:'T list or_null -> unit -> 'T _Set [@@js.apply_newable]
     val get_prototype: t -> any _Set [@@js.get "prototype"]
   end
   val set_: _SetConstructor [@@js.global "Set"]
@@ -454,8 +454,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> iterable:'T _Iterable -> 'T _WeakSet [@@js.apply as_constructor]
-    val create': t -> ?values:'T list or_null -> unit -> 'T _WeakSet [@@js.apply as_constructor]
+    val create: t -> iterable:'T _Iterable -> 'T _WeakSet [@@js.apply_newable]
+    val create': t -> ?values:'T list or_null -> unit -> 'T _WeakSet [@@js.apply_newable]
     val get_prototype: t -> untyped_object _WeakSet [@@js.get "prototype"]
   end
   val weakSet: _WeakSetConstructor [@@js.global "WeakSet"]
@@ -487,8 +487,8 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get__Symbol_species_: t -> t [@@js.get "[Symbol.species]"]
-    val from: t -> iterable:('T ArrayLike.t_1, 'T _Iterable) or_ -> 'T list [@@js.call "from"]
-    val from': t -> iterable:('T ArrayLike.t_1, 'T _Iterable) or_ -> mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list [@@js.call "from"]
+    val from: t -> iterable:('T ArrayLike.t_1, 'T _Iterable) union2 -> 'T list [@@js.call "from"]
+    val from': t -> iterable:('T ArrayLike.t_1, 'T _Iterable) union2 -> mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list [@@js.call "from"]
     val from'': t -> arrayLike:'T ArrayLike.t_1 -> 'T list [@@js.call "from"]
     val from''': t -> arrayLike:'T ArrayLike.t_1 -> mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list [@@js.call "from"]
     val of_: t -> items:('T list [@js.variadic]) -> 'T list [@@js.call "of"]
@@ -500,7 +500,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> value:_Date or_string or_number -> _Date [@@js.apply as_constructor]
+    val create: t -> value:_Date or_string or_number -> _Date [@@js.apply_newable]
   end
   module[@js.scope "Function"] Function : sig
     type t = _Function
@@ -612,7 +612,7 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get__Symbol_species_: t -> t [@@js.get "[Symbol.species]"]
-    val create: t -> pattern:_RegExp or_string -> ?flags:string -> unit -> _RegExp [@@js.apply as_constructor]
+    val create: t -> pattern:_RegExp or_string -> ?flags:string -> unit -> _RegExp [@@js.apply_newable]
     val apply: t -> pattern:_RegExp or_string -> ?flags:string -> unit -> _RegExp [@@js.apply]
   end
   module[@js.scope "String"] String : sig
@@ -692,7 +692,7 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get__Symbol_toStringTag_: t -> string [@@js.get "[Symbol.toStringTag]"]
-    val create: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _Generator [@@js.apply as_constructor]
+    val create: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _Generator [@@js.apply_newable]
     val apply: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _Generator [@@js.apply]
     val get_length: t -> float [@@js.get "length"]
     val get_name: t -> string [@@js.get "name"]
@@ -705,7 +705,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> args:(string list [@js.variadic]) -> _GeneratorFunction [@@js.apply as_constructor]
+    val create: t -> args:(string list [@js.variadic]) -> _GeneratorFunction [@@js.apply_newable]
     val apply: t -> args:(string list [@js.variadic]) -> _GeneratorFunction [@@js.apply]
     val get_length: t -> float [@@js.get "length"]
     val get_name: t -> string [@@js.get "name"]
@@ -823,24 +823,24 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get__Symbol_species_: t -> t [@@js.get "[Symbol.species]"]
     val get_prototype: t -> any _Promise [@@js.get "prototype"]
-    val create: t -> executor:(resolve:(?value:('T, 'T PromiseLike.t_1) or_ -> unit -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T _Promise [@@js.apply as_constructor]
-    val all: t -> values:(('T1, 'T1 PromiseLike.t_1) or_ * ('T2, 'T2 PromiseLike.t_1) or_ * ('T3, 'T3 PromiseLike.t_1) or_ * ('T4, 'T4 PromiseLike.t_1) or_ * ('T5, 'T5 PromiseLike.t_1) or_ * ('T6, 'T6 PromiseLike.t_1) or_ * ('T7, 'T7 PromiseLike.t_1) or_ * ('T8, 'T8 PromiseLike.t_1) or_ * ('T9, 'T9 PromiseLike.t_1) or_ * ('T10, 'T10 PromiseLike.t_1) or_) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8 * 'T9 * 'T10) _Promise [@@js.call "all"]
-    val all': t -> values:(('T1, 'T1 PromiseLike.t_1) or_ * ('T2, 'T2 PromiseLike.t_1) or_ * ('T3, 'T3 PromiseLike.t_1) or_ * ('T4, 'T4 PromiseLike.t_1) or_ * ('T5, 'T5 PromiseLike.t_1) or_ * ('T6, 'T6 PromiseLike.t_1) or_ * ('T7, 'T7 PromiseLike.t_1) or_ * ('T8, 'T8 PromiseLike.t_1) or_ * ('T9, 'T9 PromiseLike.t_1) or_) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8 * 'T9) _Promise [@@js.call "all"]
-    val all'': t -> values:(('T1, 'T1 PromiseLike.t_1) or_ * ('T2, 'T2 PromiseLike.t_1) or_ * ('T3, 'T3 PromiseLike.t_1) or_ * ('T4, 'T4 PromiseLike.t_1) or_ * ('T5, 'T5 PromiseLike.t_1) or_ * ('T6, 'T6 PromiseLike.t_1) or_ * ('T7, 'T7 PromiseLike.t_1) or_ * ('T8, 'T8 PromiseLike.t_1) or_) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8) _Promise [@@js.call "all"]
-    val all''': t -> values:(('T1, 'T1 PromiseLike.t_1) or_ * ('T2, 'T2 PromiseLike.t_1) or_ * ('T3, 'T3 PromiseLike.t_1) or_ * ('T4, 'T4 PromiseLike.t_1) or_ * ('T5, 'T5 PromiseLike.t_1) or_ * ('T6, 'T6 PromiseLike.t_1) or_ * ('T7, 'T7 PromiseLike.t_1) or_) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7) _Promise [@@js.call "all"]
-    val all'''': t -> values:(('T1, 'T1 PromiseLike.t_1) or_ * ('T2, 'T2 PromiseLike.t_1) or_ * ('T3, 'T3 PromiseLike.t_1) or_ * ('T4, 'T4 PromiseLike.t_1) or_ * ('T5, 'T5 PromiseLike.t_1) or_ * ('T6, 'T6 PromiseLike.t_1) or_) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6) _Promise [@@js.call "all"]
-    val all''''': t -> values:(('T1, 'T1 PromiseLike.t_1) or_ * ('T2, 'T2 PromiseLike.t_1) or_ * ('T3, 'T3 PromiseLike.t_1) or_ * ('T4, 'T4 PromiseLike.t_1) or_ * ('T5, 'T5 PromiseLike.t_1) or_) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5) _Promise [@@js.call "all"]
-    val all'''''': t -> values:(('T1, 'T1 PromiseLike.t_1) or_ * ('T2, 'T2 PromiseLike.t_1) or_ * ('T3, 'T3 PromiseLike.t_1) or_ * ('T4, 'T4 PromiseLike.t_1) or_) -> ('T1 * 'T2 * 'T3 * 'T4) _Promise [@@js.call "all"]
-    val all''''''': t -> values:(('T1, 'T1 PromiseLike.t_1) or_ * ('T2, 'T2 PromiseLike.t_1) or_ * ('T3, 'T3 PromiseLike.t_1) or_) -> ('T1 * 'T2 * 'T3) _Promise [@@js.call "all"]
-    val all'''''''': t -> values:(('T1, 'T1 PromiseLike.t_1) or_ * ('T2, 'T2 PromiseLike.t_1) or_) -> ('T1 * 'T2) _Promise [@@js.call "all"]
-    val all''''''''': t -> values:('T, 'T PromiseLike.t_1) or_ list -> 'T list _Promise [@@js.call "all"]
+    val create: t -> executor:(resolve:(?value:('T, 'T PromiseLike.t_1) union2 -> unit -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T _Promise [@@js.apply_newable]
+    val all: t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2 * ('T5, 'T5 PromiseLike.t_1) union2 * ('T6, 'T6 PromiseLike.t_1) union2 * ('T7, 'T7 PromiseLike.t_1) union2 * ('T8, 'T8 PromiseLike.t_1) union2 * ('T9, 'T9 PromiseLike.t_1) union2 * ('T10, 'T10 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8 * 'T9 * 'T10) _Promise [@@js.call "all"]
+    val all': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2 * ('T5, 'T5 PromiseLike.t_1) union2 * ('T6, 'T6 PromiseLike.t_1) union2 * ('T7, 'T7 PromiseLike.t_1) union2 * ('T8, 'T8 PromiseLike.t_1) union2 * ('T9, 'T9 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8 * 'T9) _Promise [@@js.call "all"]
+    val all'': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2 * ('T5, 'T5 PromiseLike.t_1) union2 * ('T6, 'T6 PromiseLike.t_1) union2 * ('T7, 'T7 PromiseLike.t_1) union2 * ('T8, 'T8 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8) _Promise [@@js.call "all"]
+    val all''': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2 * ('T5, 'T5 PromiseLike.t_1) union2 * ('T6, 'T6 PromiseLike.t_1) union2 * ('T7, 'T7 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7) _Promise [@@js.call "all"]
+    val all'''': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2 * ('T5, 'T5 PromiseLike.t_1) union2 * ('T6, 'T6 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6) _Promise [@@js.call "all"]
+    val all''''': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2 * ('T5, 'T5 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5) _Promise [@@js.call "all"]
+    val all'''''': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4) _Promise [@@js.call "all"]
+    val all''''''': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3) _Promise [@@js.call "all"]
+    val all'''''''': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2) -> ('T1 * 'T2) _Promise [@@js.call "all"]
+    val all''''''''': t -> values:('T, 'T PromiseLike.t_1) union2 list -> 'T list _Promise [@@js.call "all"]
     val race: t -> values:'T list -> (* FIXME: unknown type 'T extends PromiseLike<infer U> ? U : T' *)any _Promise [@@js.call "race"]
     val race': t -> values:'T _Iterable -> (* FIXME: unknown type 'T extends PromiseLike<infer U> ? U : T' *)any _Promise [@@js.call "race"]
     val reject: t -> ?reason:any -> unit -> 'T _Promise [@@js.call "reject"]
-    val resolve: t -> value:('T, 'T PromiseLike.t_1) or_ -> 'T _Promise [@@js.call "resolve"]
+    val resolve: t -> value:('T, 'T PromiseLike.t_1) union2 -> 'T _Promise [@@js.call "resolve"]
     val resolve': t -> unit _Promise [@@js.call "resolve"]
-    val all'''''''''': t -> values:('TAll, 'TAll PromiseLike.t_1) or_ _Iterable -> 'TAll list _Promise [@@js.call "all"]
-    val race'': t -> values:('T, 'T PromiseLike.t_1) or_ _Iterable -> 'T _Promise [@@js.call "race"]
+    val all'''''''''': t -> values:('TAll, 'TAll PromiseLike.t_1) union2 _Iterable -> 'TAll list _Promise [@@js.call "all"]
+    val race'': t -> values:('T, 'T PromiseLike.t_1) union2 _Iterable -> 'T _Promise [@@js.call "race"]
   end
   module[@js.scope "Reflect"] Reflect : sig
     val enumerate: target:untyped_object -> any _IterableIterator [@@js.global "enumerate"]
@@ -878,7 +878,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> elements:float _Iterable -> _Int8Array [@@js.apply as_constructor]
+    val create: t -> elements:float _Iterable -> _Int8Array [@@js.apply_newable]
     val from: t -> arrayLike:float _Iterable -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> _Int8Array [@@js.call "from"]
   end
   module[@js.scope "Uint8Array"] Uint8Array : sig
@@ -901,7 +901,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> elements:float _Iterable -> _Uint8Array [@@js.apply as_constructor]
+    val create: t -> elements:float _Iterable -> _Uint8Array [@@js.apply_newable]
     val from: t -> arrayLike:float _Iterable -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> _Uint8Array [@@js.call "from"]
   end
   module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
@@ -924,7 +924,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> elements:float _Iterable -> _Uint8ClampedArray [@@js.apply as_constructor]
+    val create: t -> elements:float _Iterable -> _Uint8ClampedArray [@@js.apply_newable]
     val from: t -> arrayLike:float _Iterable -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> _Uint8ClampedArray [@@js.call "from"]
   end
   module[@js.scope "Int16Array"] Int16Array : sig
@@ -947,7 +947,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> elements:float _Iterable -> _Int16Array [@@js.apply as_constructor]
+    val create: t -> elements:float _Iterable -> _Int16Array [@@js.apply_newable]
     val from: t -> arrayLike:float _Iterable -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> _Int16Array [@@js.call "from"]
   end
   module[@js.scope "Uint16Array"] Uint16Array : sig
@@ -970,7 +970,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> elements:float _Iterable -> _Uint16Array [@@js.apply as_constructor]
+    val create: t -> elements:float _Iterable -> _Uint16Array [@@js.apply_newable]
     val from: t -> arrayLike:float _Iterable -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> _Uint16Array [@@js.call "from"]
   end
   module[@js.scope "Int32Array"] Int32Array : sig
@@ -993,7 +993,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> elements:float _Iterable -> _Int32Array [@@js.apply as_constructor]
+    val create: t -> elements:float _Iterable -> _Int32Array [@@js.apply_newable]
     val from: t -> arrayLike:float _Iterable -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> _Int32Array [@@js.call "from"]
   end
   module[@js.scope "Uint32Array"] Uint32Array : sig
@@ -1016,7 +1016,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> elements:float _Iterable -> _Uint32Array [@@js.apply as_constructor]
+    val create: t -> elements:float _Iterable -> _Uint32Array [@@js.apply_newable]
     val from: t -> arrayLike:float _Iterable -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> _Uint32Array [@@js.call "from"]
   end
   module[@js.scope "Float32Array"] Float32Array : sig
@@ -1039,7 +1039,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> elements:float _Iterable -> _Float32Array [@@js.apply as_constructor]
+    val create: t -> elements:float _Iterable -> _Float32Array [@@js.apply_newable]
     val from: t -> arrayLike:float _Iterable -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> _Float32Array [@@js.call "from"]
   end
   module[@js.scope "Float64Array"] Float64Array : sig
@@ -1062,7 +1062,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> elements:float _Iterable -> _Float64Array [@@js.apply as_constructor]
+    val create: t -> elements:float _Iterable -> _Float64Array [@@js.apply_newable]
     val from: t -> arrayLike:float _Iterable -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> _Float64Array [@@js.call "from"]
   end
   val promise: _PromiseConstructor [@@js.global "Promise"]
@@ -1096,7 +1096,7 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val revocable: t -> target:'T -> handler:'T _ProxyHandler -> anonymous_interface_2 [@@js.call "revocable"]
-    val create: t -> target:'T -> handler:'T _ProxyHandler -> 'T [@@js.apply as_constructor]
+    val create: t -> target:'T -> handler:'T _ProxyHandler -> 'T [@@js.apply_newable]
   end
   val proxy: _ProxyConstructor [@@js.global "Proxy"]
   val symbol: _SymbolConstructor [@@js.global "Symbol"]

@@ -1640,17 +1640,17 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _BlobCallback = [`BlobCallback] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _BlobPart = (ArrayBuffer.t_0, (ArrayBufferView.t_0, _Blob) or_) or_ or_string
+      and _BlobPart = (_Blob, _BufferSource) union2 or_string
       and _BlobPropertyBag = [`BlobPropertyBag] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _Body = [`Body] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _BodyInit = (ArrayBuffer.t_0, (ArrayBufferView.t_0, (_Blob, (_FormData, (_URLSearchParams, Uint8Array.t_0 _ReadableStream) or_) or_) or_) or_) or_ or_string
+      and _BodyInit = (_Blob, _BufferSource, _FormData, _URLSearchParams, Uint8Array.t_0 _ReadableStream) union5 or_string
       and _BroadcastChannel = [`BroadcastChannel | `EventTarget] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _BroadcastChannelEventMap = [`BroadcastChannelEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _BufferSource = (ArrayBuffer.t_0, ArrayBufferView.t_0) or_
+      and _BufferSource = (ArrayBuffer.t_0, ArrayBufferView.t_0) union2
       and _ByteLengthChunk = [`ByteLengthChunk] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _ByteLengthQueuingStrategy = [`ByteLengthQueuingStrategy | `QueuingStrategy of ArrayBufferView.t_0] intf
@@ -1715,7 +1715,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _CanvasImageSmoothing = [`CanvasImageSmoothing] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _CanvasImageSource = (([`U_s171_async of _HTMLImageElement [@js "async"] | `U_s183_auto of _HTMLImageElement [@js "auto"] | `U_s781_sync of _HTMLImageElement [@js "sync"]] [@js.union on_field "decoding"]), (_HTMLCanvasElement, (_HTMLVideoElement, (_ImageBitmap, (_OffscreenCanvas, _SVGImageElement) or_) or_) or_) or_) or_
+      and _CanvasImageSource = (_HTMLCanvasElement, _HTMLOrSVGImageElement, _HTMLVideoElement, _ImageBitmap, _OffscreenCanvas) union5
       and _CanvasLineCap = ([`L_s217_butt[@js "butt"] | `L_s694_round[@js "round"] | `L_s752_square[@js "square"]] [@js.enum])
       and _CanvasLineJoin = ([`L_s201_bevel[@js "bevel"] | `L_s537_miter[@js "miter"] | `L_s694_round[@js "round"]] [@js.enum])
       and _CanvasPath = [`CanvasPath] intf
@@ -2031,7 +2031,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _EventListenerOptions = [`EventListenerOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _EventListenerOrEventListenerObject = (_EventListener, _EventListenerObject) or_
+      and _EventListenerOrEventListenerObject = (_EventListener, _EventListenerObject) union2
       and _EventModifierInit = [`EventModifierInit | `EventInit | `UIEventInit] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _EventSource = [`EventSource | `EventTarget] intf
@@ -2251,8 +2251,8 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLOrSVGElement = [`HTMLOrSVGElement] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HTMLOrSVGImageElement = (([`U_s171_async of _HTMLImageElement [@js "async"] | `U_s183_auto of _HTMLImageElement [@js "auto"] | `U_s781_sync of _HTMLImageElement [@js "sync"]] [@js.union on_field "decoding"]), _SVGImageElement) or_
-      and _HTMLOrSVGScriptElement = (_HTMLScriptElement, _SVGScriptElement) or_
+      and _HTMLOrSVGImageElement = (_HTMLImageElement, _SVGImageElement) union2
+      and _HTMLOrSVGScriptElement = (_HTMLScriptElement, _SVGScriptElement) union2
       and _HTMLOutputElement = [`HTMLOutputElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HTMLParagraphElement = [`HTMLParagraphElement | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slotable] intf
@@ -2320,7 +2320,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _Headers = [`Headers] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _HeadersInit = ((_Headers, (string, string) Record.t_2) or_, string list) or_array
+      and _HeadersInit = ((_Headers, (string, string) Record.t_2) union2, string list) or_array
       and _History = [`History] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _HkdfCtrParams = [`HkdfCtrParams | `Algorithm] intf
@@ -2371,7 +2371,7 @@ module Make (M: Missing) : sig
       and _IDBTransactionEventMap = [`IDBTransactionEventMap] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _IDBTransactionMode = ([`L_s666_readonly[@js "readonly"] | `L_s667_readwrite[@js "readwrite"] | `L_s844_versionchange[@js "versionchange"]] [@js.enum])
-      and _IDBValidKey = (ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, _IDBArrayKey) or_) or_) or_ or_string or_number
+      and _IDBValidKey = (_BufferSource, Date.t_0, _IDBArrayKey) union3 or_string or_number
       and _IDBVersionChangeEvent = [`IDBVersionChangeEvent | `Event] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _IDBVersionChangeEventInit = [`IDBVersionChangeEventInit | `EventInit] intf
@@ -2388,7 +2388,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _ImageBitmapRenderingContextSettings = [`ImageBitmapRenderingContextSettings] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _ImageBitmapSource = (([`U_s171_async of _HTMLImageElement [@js "async"] | `U_s183_auto of _HTMLImageElement [@js "auto"] | `U_s781_sync of _HTMLImageElement [@js "sync"]] [@js.union on_field "decoding"]), (_Blob, (_HTMLCanvasElement, (_HTMLVideoElement, (_ImageBitmap, (_ImageData, (_OffscreenCanvas, _SVGImageElement) or_) or_) or_) or_) or_) or_) or_
+      and _ImageBitmapSource = (_Blob, _CanvasImageSource, _ImageData) union3
       and _ImageData = [`ImageData] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _ImageEncodeOptions = [`ImageEncodeOptions] intf
@@ -2591,7 +2591,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _MessageEventInit = [`MessageEventInit | `EventInit] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _MessageEventSource = (([`U_s139_activated of _ServiceWorker [@js "activated"] | `U_s140_activating of _ServiceWorker [@js "activating"] | `U_s458_installed of _ServiceWorker [@js "installed"] | `U_s459_installing of _ServiceWorker [@js "installing"] | `U_s607_parsed of _ServiceWorker [@js "parsed"] | `U_s671_redundant of _ServiceWorker [@js "redundant"]] [@js.union on_field "state"]), (_MessagePort, _Window) or_) or_
+      and _MessageEventSource = (_MessagePort, _ServiceWorker, _WindowProxy) union3
       and _MessagePort = [`MessagePort | `EventTarget] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _MessagePortEventMap = [`MessagePortEventMap] intf
@@ -2709,7 +2709,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _OffscreenCanvasRenderingContext2D = [`OffscreenCanvasRenderingContext2D | `CanvasCompositing | `CanvasDrawImage | `CanvasDrawPath | `CanvasFillStrokeStyles | `CanvasFilters | `CanvasImageData | `CanvasImageSmoothing | `CanvasPath | `CanvasPathDrawingStyles | `CanvasRect | `CanvasShadowStyles | `CanvasState | `CanvasText | `CanvasTextDrawingStyles | `CanvasTransform] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _OffscreenRenderingContext = (([`U_s454_inherit of _OffscreenCanvasRenderingContext2D [@js "inherit"] | `U_s509_ltr of _OffscreenCanvasRenderingContext2D [@js "ltr"] | `U_s698_rtl of _OffscreenCanvasRenderingContext2D [@js "rtl"]] [@js.union on_field "direction"]), (_ImageBitmapRenderingContext, (_WebGL2RenderingContext, _WebGLRenderingContext) or_) or_) or_
+      and _OffscreenRenderingContext = (_ImageBitmapRenderingContext, _OffscreenCanvasRenderingContext2D, _WebGL2RenderingContext, _WebGLRenderingContext) union4
       and _OffscreenRenderingContextId = ([`L_s1_2d[@js "2d"] | `L_s202_bitmaprenderer[@js "bitmaprenderer"] | `L_s867_webgl[@js "webgl"] | `L_s868_webgl2[@js "webgl2"]] [@js.enum])
       and _OnBeforeUnloadEventHandler = _OnBeforeUnloadEventHandlerNonNull or_null
       and _OnBeforeUnloadEventHandlerNonNull = [`OnBeforeUnloadEventHandlerNonNull] intf
@@ -2977,7 +2977,7 @@ module Make (M: Missing) : sig
       and _RTCIceComponent = ([`L_s697_rtcp[@js "rtcp"] | `L_s699_rtp[@js "rtp"]] [@js.enum])
       and _RTCIceConnectionState = ([`L_s236_checking[@js "checking"] | `L_s247_closed[@js "closed"] | `L_s254_completed[@js "completed"] | `L_s255_connected[@js "connected"] | `L_s300_disconnected[@js "disconnected"] | `L_s341_failed[@js "failed"] | `L_s560_new[@js "new"]] [@js.enum])
       and _RTCIceCredentialType = ([`L_s579_oauth[@js "oauth"] | `L_s609_password[@js "password"]] [@js.enum])
-      and _RTCIceGatherCandidate = (_RTCIceCandidateComplete, _RTCIceCandidateDictionary) or_
+      and _RTCIceGatherCandidate = (_RTCIceCandidateComplete, _RTCIceCandidateDictionary) union2
       and _RTCIceGatherOptions = [`RTCIceGatherOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _RTCIceGatherPolicy = ([`L_s149_all[@js "all"] | `L_s569_nohost[@js "nohost"] | `L_s673_relay[@js "relay"]] [@js.enum])
@@ -3130,7 +3130,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _RTCTrackEventInit = [`RTCTrackEventInit | `EventInit] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _RTCTransport = (([`U_s247_closed of _RTCDtlsTransport [@js "closed"] | `U_s255_connected of _RTCDtlsTransport [@js "connected"] | `U_s256_connecting of _RTCDtlsTransport [@js "connecting"] | `U_s341_failed of _RTCDtlsTransport [@js "failed"] | `U_s560_new of _RTCDtlsTransport [@js "new"]] [@js.union on_field "state"]), _RTCSrtpSdesTransport) or_
+      and _RTCTransport = (_RTCDtlsTransport, _RTCSrtpSdesTransport) union2
       and _RTCTransportStats = [`RTCTransportStats | `RTCStats] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _RadioNodeList = [`RadioNodeList | `NodeList] intf
@@ -3168,7 +3168,7 @@ module Make (M: Missing) : sig
       and _ReferrerPolicy = ([`L_s0[@js ""] | `L_s566_no_referrer[@js "no-referrer"] | `L_s567_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s595_origin[@js "origin"] | `L_s596_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s703_same_origin[@js "same-origin"] | `L_s764_strict_origin[@js "strict-origin"] | `L_s765_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s829_unsafe_url[@js "unsafe-url"]] [@js.enum])
       and _RegistrationOptions = [`RegistrationOptions] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _RenderingContext = (([`U_s454_inherit of _CanvasRenderingContext2D [@js "inherit"] | `U_s509_ltr of _CanvasRenderingContext2D [@js "ltr"] | `U_s698_rtl of _CanvasRenderingContext2D [@js "rtl"]] [@js.union on_field "direction"]), (_ImageBitmapRenderingContext, (_WebGL2RenderingContext, _WebGLRenderingContext) or_) or_) or_
+      and _RenderingContext = (_CanvasRenderingContext2D, _ImageBitmapRenderingContext, _WebGL2RenderingContext, _WebGLRenderingContext) union4
       and _Request = [`Request | `Body] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _RequestCache = ([`L_s276_default[@js "default"] | `L_s380_force_cache[@js "force-cache"] | `L_s564_no_cache[@js "no-cache"] | `L_s568_no_store[@js "no-store"] | `L_s587_only_if_cached[@js "only-if-cached"] | `L_s676_reload[@js "reload"]] [@js.enum])
@@ -3598,7 +3598,7 @@ module Make (M: Missing) : sig
       and _SupportedType = ([`L_s165_application_xhtml_xml[@js "application/xhtml+xml"] | `L_s166_application_xml[@js "application/xml"] | `L_s446_image_svg_xml[@js "image/svg+xml"] | `L_s792_text_html[@js "text/html"] | `L_s793_text_xml[@js "text/xml"]] [@js.enum])
       and _SyncManager = [`SyncManager] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _TexImageSource = (([`U_s171_async of _HTMLImageElement [@js "async"] | `U_s183_auto of _HTMLImageElement [@js "auto"] | `U_s781_sync of _HTMLImageElement [@js "sync"]] [@js.union on_field "decoding"]), (_HTMLCanvasElement, (_HTMLVideoElement, (_ImageBitmap, (_ImageData, _OffscreenCanvas) or_) or_) or_) or_) or_
+      and _TexImageSource = (_HTMLCanvasElement, _HTMLImageElement, _HTMLVideoElement, _ImageBitmap, _ImageData, _OffscreenCanvas) union6
       and _Text = [`Text | `CharacterData | `ChildNode | `EventTarget | `Node | `NonDocumentTypeChildNode | `Slotable] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _TextDecodeOptions = [`TextDecodeOptions] intf
@@ -3657,7 +3657,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _TrackEventInit = [`TrackEventInit | `EventInit] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _Transferable = (ArrayBuffer.t_0, (_ImageBitmap, (_MessagePort, _OffscreenCanvas) or_) or_) or_
+      and _Transferable = (ArrayBuffer.t_0, _ImageBitmap, _MessagePort, _OffscreenCanvas) union4
       and ('I, 'O) _TransformStream = [`TransformStream of ('I * 'O)] intf
       [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
       and 'O _TransformStreamDefaultController = [`TransformStreamDefaultController of 'O] intf
@@ -3759,7 +3759,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _WebAssembly_CompileError = [`WebAssembly_CompileError] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _WebAssembly_ExportValue = (untyped_function, (_WebAssembly_Global, (_WebAssembly_Memory, _WebAssembly_Table) or_) or_) or_
+      and _WebAssembly_ExportValue = (untyped_function, _WebAssembly_Global, _WebAssembly_Memory, _WebAssembly_Table) union4
       and _WebAssembly_Exports = (string, _WebAssembly_ExportValue) Record.t_2
       and _WebAssembly_Global = [`WebAssembly_Global] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3924,7 +3924,7 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _XPathExpression = [`XPathExpression] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _XPathNSResolver = (anonymous_interface_611, (prefix:string or_null -> string or_null)) or_
+      and _XPathNSResolver = (anonymous_interface_611, (prefix:string or_null -> string or_null)) union2
       and _XPathResult = [`XPathResult] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _XSLTProcessor = [`XSLTProcessor] intf
@@ -4016,7 +4016,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AbortController [@@js.get "prototype"]
     val set_prototype: t -> _AbortController -> unit [@@js.set "prototype"]
-    val create: t -> _AbortController [@@js.apply as_constructor]
+    val create: t -> _AbortController [@@js.apply_newable]
   end
   module AnonymousInterface6 : sig
     type t = anonymous_interface_6
@@ -4027,7 +4027,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AbortSignal [@@js.get "prototype"]
     val set_prototype: t -> _AbortSignal -> unit [@@js.set "prototype"]
-    val create: t -> _AbortSignal [@@js.apply as_constructor]
+    val create: t -> _AbortSignal [@@js.apply_newable]
   end
   module AnonymousInterface7 : sig
     type t = anonymous_interface_7
@@ -4038,7 +4038,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AbstractRange [@@js.get "prototype"]
     val set_prototype: t -> _AbstractRange -> unit [@@js.set "prototype"]
-    val create: t -> _AbstractRange [@@js.apply as_constructor]
+    val create: t -> _AbstractRange [@@js.apply_newable]
   end
   module AnonymousInterface8 : sig
     type t = anonymous_interface_8
@@ -4049,7 +4049,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AnalyserNode [@@js.get "prototype"]
     val set_prototype: t -> _AnalyserNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_AnalyserOptions -> unit -> _AnalyserNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_AnalyserOptions -> unit -> _AnalyserNode [@@js.apply_newable]
   end
   module AnonymousInterface9 : sig
     type t = anonymous_interface_9
@@ -4060,7 +4060,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Animation [@@js.get "prototype"]
     val set_prototype: t -> _Animation -> unit [@@js.set "prototype"]
-    val create: t -> ?effect:_AnimationEffect or_null -> ?timeline:_AnimationTimeline or_null -> unit -> _Animation [@@js.apply as_constructor]
+    val create: t -> ?effect:_AnimationEffect or_null -> ?timeline:_AnimationTimeline or_null -> unit -> _Animation [@@js.apply_newable]
   end
   module AnonymousInterface10 : sig
     type t = anonymous_interface_10
@@ -4071,7 +4071,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AnimationEffect [@@js.get "prototype"]
     val set_prototype: t -> _AnimationEffect -> unit [@@js.set "prototype"]
-    val create: t -> _AnimationEffect [@@js.apply as_constructor]
+    val create: t -> _AnimationEffect [@@js.apply_newable]
   end
   module AnonymousInterface11 : sig
     type t = anonymous_interface_11
@@ -4082,7 +4082,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AnimationEvent [@@js.get "prototype"]
     val set_prototype: t -> _AnimationEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?animationEventInitDict:_AnimationEventInit -> unit -> _AnimationEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?animationEventInitDict:_AnimationEventInit -> unit -> _AnimationEvent [@@js.apply_newable]
   end
   module AnonymousInterface12 : sig
     type t = anonymous_interface_12
@@ -4093,7 +4093,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AnimationPlaybackEvent [@@js.get "prototype"]
     val set_prototype: t -> _AnimationPlaybackEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_AnimationPlaybackEventInit -> unit -> _AnimationPlaybackEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_AnimationPlaybackEventInit -> unit -> _AnimationPlaybackEvent [@@js.apply_newable]
   end
   module AnonymousInterface13 : sig
     type t = anonymous_interface_13
@@ -4104,7 +4104,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AnimationTimeline [@@js.get "prototype"]
     val set_prototype: t -> _AnimationTimeline -> unit [@@js.set "prototype"]
-    val create: t -> _AnimationTimeline [@@js.apply as_constructor]
+    val create: t -> _AnimationTimeline [@@js.apply_newable]
   end
   module AnonymousInterface14 : sig
     type t = anonymous_interface_14
@@ -4115,7 +4115,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ApplicationCache [@@js.get "prototype"]
     val set_prototype: t -> _ApplicationCache -> unit [@@js.set "prototype"]
-    val create: t -> _ApplicationCache [@@js.apply as_constructor]
+    val create: t -> _ApplicationCache [@@js.apply_newable]
     val get_CHECKING: t -> float [@@js.get "CHECKING"]
     val get_DOWNLOADING: t -> float [@@js.get "DOWNLOADING"]
     val get_IDLE: t -> float [@@js.get "IDLE"]
@@ -4132,7 +4132,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Attr [@@js.get "prototype"]
     val set_prototype: t -> _Attr -> unit [@@js.set "prototype"]
-    val create: t -> _Attr [@@js.apply as_constructor]
+    val create: t -> _Attr [@@js.apply_newable]
   end
   module AnonymousInterface16 : sig
     type t = anonymous_interface_16
@@ -4143,7 +4143,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioBuffer [@@js.get "prototype"]
     val set_prototype: t -> _AudioBuffer -> unit [@@js.set "prototype"]
-    val create: t -> options:_AudioBufferOptions -> _AudioBuffer [@@js.apply as_constructor]
+    val create: t -> options:_AudioBufferOptions -> _AudioBuffer [@@js.apply_newable]
   end
   module AnonymousInterface17 : sig
     type t = anonymous_interface_17
@@ -4154,7 +4154,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioBufferSourceNode [@@js.get "prototype"]
     val set_prototype: t -> _AudioBufferSourceNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_AudioBufferSourceOptions -> unit -> _AudioBufferSourceNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_AudioBufferSourceOptions -> unit -> _AudioBufferSourceNode [@@js.apply_newable]
   end
   module AnonymousInterface18 : sig
     type t = anonymous_interface_18
@@ -4165,7 +4165,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioContext [@@js.get "prototype"]
     val set_prototype: t -> _AudioContext -> unit [@@js.set "prototype"]
-    val create: t -> ?contextOptions:_AudioContextOptions -> unit -> _AudioContext [@@js.apply as_constructor]
+    val create: t -> ?contextOptions:_AudioContextOptions -> unit -> _AudioContext [@@js.apply_newable]
   end
   module AnonymousInterface19 : sig
     type t = anonymous_interface_19
@@ -4176,7 +4176,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioDestinationNode [@@js.get "prototype"]
     val set_prototype: t -> _AudioDestinationNode -> unit [@@js.set "prototype"]
-    val create: t -> _AudioDestinationNode [@@js.apply as_constructor]
+    val create: t -> _AudioDestinationNode [@@js.apply_newable]
   end
   module AnonymousInterface20 : sig
     type t = anonymous_interface_20
@@ -4187,7 +4187,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioListener [@@js.get "prototype"]
     val set_prototype: t -> _AudioListener -> unit [@@js.set "prototype"]
-    val create: t -> _AudioListener [@@js.apply as_constructor]
+    val create: t -> _AudioListener [@@js.apply_newable]
   end
   module AnonymousInterface21 : sig
     type t = anonymous_interface_21
@@ -4198,7 +4198,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioNode [@@js.get "prototype"]
     val set_prototype: t -> _AudioNode -> unit [@@js.set "prototype"]
-    val create: t -> _AudioNode [@@js.apply as_constructor]
+    val create: t -> _AudioNode [@@js.apply_newable]
   end
   module AnonymousInterface22 : sig
     type t = anonymous_interface_22
@@ -4209,7 +4209,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioParam [@@js.get "prototype"]
     val set_prototype: t -> _AudioParam -> unit [@@js.set "prototype"]
-    val create: t -> _AudioParam [@@js.apply as_constructor]
+    val create: t -> _AudioParam [@@js.apply_newable]
   end
   module AnonymousInterface23 : sig
     type t = anonymous_interface_23
@@ -4220,7 +4220,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioParamMap [@@js.get "prototype"]
     val set_prototype: t -> _AudioParamMap -> unit [@@js.set "prototype"]
-    val create: t -> _AudioParamMap [@@js.apply as_constructor]
+    val create: t -> _AudioParamMap [@@js.apply_newable]
   end
   module AnonymousInterface24 : sig
     type t = anonymous_interface_24
@@ -4231,7 +4231,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioProcessingEvent [@@js.get "prototype"]
     val set_prototype: t -> _AudioProcessingEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_AudioProcessingEventInit -> _AudioProcessingEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_AudioProcessingEventInit -> _AudioProcessingEvent [@@js.apply_newable]
   end
   module AnonymousInterface25 : sig
     type t = anonymous_interface_25
@@ -4242,7 +4242,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioScheduledSourceNode [@@js.get "prototype"]
     val set_prototype: t -> _AudioScheduledSourceNode -> unit [@@js.set "prototype"]
-    val create: t -> _AudioScheduledSourceNode [@@js.apply as_constructor]
+    val create: t -> _AudioScheduledSourceNode [@@js.apply_newable]
   end
   module AnonymousInterface26 : sig
     type t = anonymous_interface_26
@@ -4253,7 +4253,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioTrack [@@js.get "prototype"]
     val set_prototype: t -> _AudioTrack -> unit [@@js.set "prototype"]
-    val create: t -> _AudioTrack [@@js.apply as_constructor]
+    val create: t -> _AudioTrack [@@js.apply_newable]
   end
   module AnonymousInterface27 : sig
     type t = anonymous_interface_27
@@ -4264,7 +4264,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioTrackList [@@js.get "prototype"]
     val set_prototype: t -> _AudioTrackList -> unit [@@js.set "prototype"]
-    val create: t -> _AudioTrackList [@@js.apply as_constructor]
+    val create: t -> _AudioTrackList [@@js.apply_newable]
   end
   module AnonymousInterface28 : sig
     type t = anonymous_interface_28
@@ -4275,7 +4275,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioWorklet [@@js.get "prototype"]
     val set_prototype: t -> _AudioWorklet -> unit [@@js.set "prototype"]
-    val create: t -> _AudioWorklet [@@js.apply as_constructor]
+    val create: t -> _AudioWorklet [@@js.apply_newable]
   end
   module AnonymousInterface29 : sig
     type t = anonymous_interface_29
@@ -4286,7 +4286,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AudioWorkletNode [@@js.get "prototype"]
     val set_prototype: t -> _AudioWorkletNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> name:string -> ?options:_AudioWorkletNodeOptions -> unit -> _AudioWorkletNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> name:string -> ?options:_AudioWorkletNodeOptions -> unit -> _AudioWorkletNode [@@js.apply_newable]
   end
   module AnonymousInterface30 : sig
     type t = anonymous_interface_30
@@ -4297,7 +4297,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AuthenticatorAssertionResponse [@@js.get "prototype"]
     val set_prototype: t -> _AuthenticatorAssertionResponse -> unit [@@js.set "prototype"]
-    val create: t -> _AuthenticatorAssertionResponse [@@js.apply as_constructor]
+    val create: t -> _AuthenticatorAssertionResponse [@@js.apply_newable]
   end
   module AnonymousInterface31 : sig
     type t = anonymous_interface_31
@@ -4308,7 +4308,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AuthenticatorAttestationResponse [@@js.get "prototype"]
     val set_prototype: t -> _AuthenticatorAttestationResponse -> unit [@@js.set "prototype"]
-    val create: t -> _AuthenticatorAttestationResponse [@@js.apply as_constructor]
+    val create: t -> _AuthenticatorAttestationResponse [@@js.apply_newable]
   end
   module AnonymousInterface32 : sig
     type t = anonymous_interface_32
@@ -4319,7 +4319,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _AuthenticatorResponse [@@js.get "prototype"]
     val set_prototype: t -> _AuthenticatorResponse -> unit [@@js.set "prototype"]
-    val create: t -> _AuthenticatorResponse [@@js.apply as_constructor]
+    val create: t -> _AuthenticatorResponse [@@js.apply_newable]
   end
   module AnonymousInterface33 : sig
     type t = anonymous_interface_33
@@ -4330,7 +4330,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _BarProp [@@js.get "prototype"]
     val set_prototype: t -> _BarProp -> unit [@@js.set "prototype"]
-    val create: t -> _BarProp [@@js.apply as_constructor]
+    val create: t -> _BarProp [@@js.apply_newable]
   end
   module AnonymousInterface34 : sig
     type t = anonymous_interface_34
@@ -4341,7 +4341,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _BaseAudioContext [@@js.get "prototype"]
     val set_prototype: t -> _BaseAudioContext -> unit [@@js.set "prototype"]
-    val create: t -> _BaseAudioContext [@@js.apply as_constructor]
+    val create: t -> _BaseAudioContext [@@js.apply_newable]
   end
   module AnonymousInterface35 : sig
     type t = anonymous_interface_35
@@ -4352,7 +4352,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _BeforeUnloadEvent [@@js.get "prototype"]
     val set_prototype: t -> _BeforeUnloadEvent -> unit [@@js.set "prototype"]
-    val create: t -> _BeforeUnloadEvent [@@js.apply as_constructor]
+    val create: t -> _BeforeUnloadEvent [@@js.apply_newable]
   end
   module AnonymousInterface36 : sig
     type t = anonymous_interface_36
@@ -4363,7 +4363,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _BhxBrowser [@@js.get "prototype"]
     val set_prototype: t -> _BhxBrowser -> unit [@@js.set "prototype"]
-    val create: t -> _BhxBrowser [@@js.apply as_constructor]
+    val create: t -> _BhxBrowser [@@js.apply_newable]
   end
   module AnonymousInterface37 : sig
     type t = anonymous_interface_37
@@ -4374,7 +4374,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _BiquadFilterNode [@@js.get "prototype"]
     val set_prototype: t -> _BiquadFilterNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_BiquadFilterOptions -> unit -> _BiquadFilterNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_BiquadFilterOptions -> unit -> _BiquadFilterNode [@@js.apply_newable]
   end
   module AnonymousInterface38 : sig
     type t = anonymous_interface_38
@@ -4385,7 +4385,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Blob [@@js.get "prototype"]
     val set_prototype: t -> _Blob -> unit [@@js.set "prototype"]
-    val create: t -> ?blobParts:_BlobPart list -> ?options:_BlobPropertyBag -> unit -> _Blob [@@js.apply as_constructor]
+    val create: t -> ?blobParts:_BlobPart list -> ?options:_BlobPropertyBag -> unit -> _Blob [@@js.apply_newable]
   end
   module AnonymousInterface39 : sig
     type t = anonymous_interface_39
@@ -4396,7 +4396,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _BroadcastChannel [@@js.get "prototype"]
     val set_prototype: t -> _BroadcastChannel -> unit [@@js.set "prototype"]
-    val create: t -> name:string -> _BroadcastChannel [@@js.apply as_constructor]
+    val create: t -> name:string -> _BroadcastChannel [@@js.apply_newable]
   end
   module AnonymousInterface40 : sig
     type t = anonymous_interface_40
@@ -4407,7 +4407,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ByteLengthQueuingStrategy [@@js.get "prototype"]
     val set_prototype: t -> _ByteLengthQueuingStrategy -> unit [@@js.set "prototype"]
-    val create: t -> options:anonymous_interface_2 -> _ByteLengthQueuingStrategy [@@js.apply as_constructor]
+    val create: t -> options:anonymous_interface_2 -> _ByteLengthQueuingStrategy [@@js.apply_newable]
   end
   module AnonymousInterface41 : sig
     type t = anonymous_interface_41
@@ -4418,7 +4418,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CDATASection [@@js.get "prototype"]
     val set_prototype: t -> _CDATASection -> unit [@@js.set "prototype"]
-    val create: t -> _CDATASection [@@js.apply as_constructor]
+    val create: t -> _CDATASection [@@js.apply_newable]
   end
   module AnonymousInterface42 : sig
     type t = anonymous_interface_42
@@ -4429,7 +4429,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSConditionRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSConditionRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSConditionRule [@@js.apply as_constructor]
+    val create: t -> _CSSConditionRule [@@js.apply_newable]
   end
   module AnonymousInterface43 : sig
     type t = anonymous_interface_43
@@ -4440,7 +4440,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSFontFaceRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSFontFaceRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSFontFaceRule [@@js.apply as_constructor]
+    val create: t -> _CSSFontFaceRule [@@js.apply_newable]
   end
   module AnonymousInterface44 : sig
     type t = anonymous_interface_44
@@ -4451,7 +4451,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSGroupingRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSGroupingRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSGroupingRule [@@js.apply as_constructor]
+    val create: t -> _CSSGroupingRule [@@js.apply_newable]
   end
   module AnonymousInterface45 : sig
     type t = anonymous_interface_45
@@ -4462,7 +4462,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSImportRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSImportRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSImportRule [@@js.apply as_constructor]
+    val create: t -> _CSSImportRule [@@js.apply_newable]
   end
   module AnonymousInterface46 : sig
     type t = anonymous_interface_46
@@ -4473,7 +4473,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSKeyframeRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSKeyframeRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSKeyframeRule [@@js.apply as_constructor]
+    val create: t -> _CSSKeyframeRule [@@js.apply_newable]
   end
   module AnonymousInterface47 : sig
     type t = anonymous_interface_47
@@ -4484,7 +4484,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSKeyframesRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSKeyframesRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSKeyframesRule [@@js.apply as_constructor]
+    val create: t -> _CSSKeyframesRule [@@js.apply_newable]
   end
   module AnonymousInterface48 : sig
     type t = anonymous_interface_48
@@ -4495,7 +4495,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSMediaRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSMediaRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSMediaRule [@@js.apply as_constructor]
+    val create: t -> _CSSMediaRule [@@js.apply_newable]
   end
   module AnonymousInterface49 : sig
     type t = anonymous_interface_49
@@ -4506,7 +4506,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSNamespaceRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSNamespaceRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSNamespaceRule [@@js.apply as_constructor]
+    val create: t -> _CSSNamespaceRule [@@js.apply_newable]
   end
   module AnonymousInterface50 : sig
     type t = anonymous_interface_50
@@ -4517,7 +4517,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSPageRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSPageRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSPageRule [@@js.apply as_constructor]
+    val create: t -> _CSSPageRule [@@js.apply_newable]
   end
   module AnonymousInterface51 : sig
     type t = anonymous_interface_51
@@ -4528,7 +4528,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSRule [@@js.apply as_constructor]
+    val create: t -> _CSSRule [@@js.apply_newable]
     val get_CHARSET_RULE: t -> float [@@js.get "CHARSET_RULE"]
     val get_FONT_FACE_RULE: t -> float [@@js.get "FONT_FACE_RULE"]
     val get_IMPORT_RULE: t -> float [@@js.get "IMPORT_RULE"]
@@ -4551,7 +4551,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSRuleList [@@js.get "prototype"]
     val set_prototype: t -> _CSSRuleList -> unit [@@js.set "prototype"]
-    val create: t -> _CSSRuleList [@@js.apply as_constructor]
+    val create: t -> _CSSRuleList [@@js.apply_newable]
   end
   module AnonymousInterface53 : sig
     type t = anonymous_interface_53
@@ -4562,7 +4562,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSStyleDeclaration [@@js.get "prototype"]
     val set_prototype: t -> _CSSStyleDeclaration -> unit [@@js.set "prototype"]
-    val create: t -> _CSSStyleDeclaration [@@js.apply as_constructor]
+    val create: t -> _CSSStyleDeclaration [@@js.apply_newable]
   end
   module AnonymousInterface54 : sig
     type t = anonymous_interface_54
@@ -4573,7 +4573,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSStyleRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSStyleRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSStyleRule [@@js.apply as_constructor]
+    val create: t -> _CSSStyleRule [@@js.apply_newable]
   end
   module AnonymousInterface55 : sig
     type t = anonymous_interface_55
@@ -4584,7 +4584,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSStyleSheet [@@js.get "prototype"]
     val set_prototype: t -> _CSSStyleSheet -> unit [@@js.set "prototype"]
-    val create: t -> _CSSStyleSheet [@@js.apply as_constructor]
+    val create: t -> _CSSStyleSheet [@@js.apply_newable]
   end
   module AnonymousInterface56 : sig
     type t = anonymous_interface_56
@@ -4595,7 +4595,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CSSSupportsRule [@@js.get "prototype"]
     val set_prototype: t -> _CSSSupportsRule -> unit [@@js.set "prototype"]
-    val create: t -> _CSSSupportsRule [@@js.apply as_constructor]
+    val create: t -> _CSSSupportsRule [@@js.apply_newable]
   end
   module AnonymousInterface57 : sig
     type t = anonymous_interface_57
@@ -4606,7 +4606,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Cache [@@js.get "prototype"]
     val set_prototype: t -> _Cache -> unit [@@js.set "prototype"]
-    val create: t -> _Cache [@@js.apply as_constructor]
+    val create: t -> _Cache [@@js.apply_newable]
   end
   module AnonymousInterface58 : sig
     type t = anonymous_interface_58
@@ -4617,7 +4617,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CacheStorage [@@js.get "prototype"]
     val set_prototype: t -> _CacheStorage -> unit [@@js.set "prototype"]
-    val create: t -> _CacheStorage [@@js.apply as_constructor]
+    val create: t -> _CacheStorage [@@js.apply_newable]
   end
   module AnonymousInterface59 : sig
     type t = anonymous_interface_59
@@ -4628,7 +4628,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CanvasGradient [@@js.get "prototype"]
     val set_prototype: t -> _CanvasGradient -> unit [@@js.set "prototype"]
-    val create: t -> _CanvasGradient [@@js.apply as_constructor]
+    val create: t -> _CanvasGradient [@@js.apply_newable]
   end
   module AnonymousInterface60 : sig
     type t = anonymous_interface_60
@@ -4639,7 +4639,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CanvasPattern [@@js.get "prototype"]
     val set_prototype: t -> _CanvasPattern -> unit [@@js.set "prototype"]
-    val create: t -> _CanvasPattern [@@js.apply as_constructor]
+    val create: t -> _CanvasPattern [@@js.apply_newable]
   end
   module AnonymousInterface61 : sig
     type t = anonymous_interface_61
@@ -4650,7 +4650,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CanvasRenderingContext2D [@@js.get "prototype"]
     val set_prototype: t -> _CanvasRenderingContext2D -> unit [@@js.set "prototype"]
-    val create: t -> _CanvasRenderingContext2D [@@js.apply as_constructor]
+    val create: t -> _CanvasRenderingContext2D [@@js.apply_newable]
   end
   module AnonymousInterface62 : sig
     type t = anonymous_interface_62
@@ -4661,7 +4661,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CaretPosition [@@js.get "prototype"]
     val set_prototype: t -> _CaretPosition -> unit [@@js.set "prototype"]
-    val create: t -> _CaretPosition [@@js.apply as_constructor]
+    val create: t -> _CaretPosition [@@js.apply_newable]
   end
   module AnonymousInterface63 : sig
     type t = anonymous_interface_63
@@ -4672,7 +4672,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ChannelMergerNode [@@js.get "prototype"]
     val set_prototype: t -> _ChannelMergerNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_ChannelMergerOptions -> unit -> _ChannelMergerNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_ChannelMergerOptions -> unit -> _ChannelMergerNode [@@js.apply_newable]
   end
   module AnonymousInterface64 : sig
     type t = anonymous_interface_64
@@ -4683,7 +4683,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ChannelSplitterNode [@@js.get "prototype"]
     val set_prototype: t -> _ChannelSplitterNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_ChannelSplitterOptions -> unit -> _ChannelSplitterNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_ChannelSplitterOptions -> unit -> _ChannelSplitterNode [@@js.apply_newable]
   end
   module AnonymousInterface65 : sig
     type t = anonymous_interface_65
@@ -4694,7 +4694,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CharacterData [@@js.get "prototype"]
     val set_prototype: t -> _CharacterData -> unit [@@js.set "prototype"]
-    val create: t -> _CharacterData [@@js.apply as_constructor]
+    val create: t -> _CharacterData [@@js.apply_newable]
   end
   module AnonymousInterface66 : sig
     type t = anonymous_interface_66
@@ -4705,7 +4705,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ClientRect [@@js.get "prototype"]
     val set_prototype: t -> _ClientRect -> unit [@@js.set "prototype"]
-    val create: t -> _ClientRect [@@js.apply as_constructor]
+    val create: t -> _ClientRect [@@js.apply_newable]
   end
   module AnonymousInterface67 : sig
     type t = anonymous_interface_67
@@ -4716,7 +4716,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ClientRectList [@@js.get "prototype"]
     val set_prototype: t -> _ClientRectList -> unit [@@js.set "prototype"]
-    val create: t -> _ClientRectList [@@js.apply as_constructor]
+    val create: t -> _ClientRectList [@@js.apply_newable]
   end
   module AnonymousInterface68 : sig
     type t = anonymous_interface_68
@@ -4727,7 +4727,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Clipboard [@@js.get "prototype"]
     val set_prototype: t -> _Clipboard -> unit [@@js.set "prototype"]
-    val create: t -> _Clipboard [@@js.apply as_constructor]
+    val create: t -> _Clipboard [@@js.apply_newable]
   end
   module AnonymousInterface69 : sig
     type t = anonymous_interface_69
@@ -4738,7 +4738,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ClipboardEvent [@@js.get "prototype"]
     val set_prototype: t -> _ClipboardEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_ClipboardEventInit -> unit -> _ClipboardEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_ClipboardEventInit -> unit -> _ClipboardEvent [@@js.apply_newable]
   end
   module AnonymousInterface70 : sig
     type t = anonymous_interface_70
@@ -4749,7 +4749,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CloseEvent [@@js.get "prototype"]
     val set_prototype: t -> _CloseEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_CloseEventInit -> unit -> _CloseEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_CloseEventInit -> unit -> _CloseEvent [@@js.apply_newable]
   end
   module AnonymousInterface71 : sig
     type t = anonymous_interface_71
@@ -4760,7 +4760,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Comment [@@js.get "prototype"]
     val set_prototype: t -> _Comment -> unit [@@js.set "prototype"]
-    val create: t -> ?data:string -> unit -> _Comment [@@js.apply as_constructor]
+    val create: t -> ?data:string -> unit -> _Comment [@@js.apply_newable]
   end
   module AnonymousInterface72 : sig
     type t = anonymous_interface_72
@@ -4771,7 +4771,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAssembly_CompileError [@@js.get "prototype"]
     val set_prototype: t -> _WebAssembly_CompileError -> unit [@@js.set "prototype"]
-    val create: t -> _WebAssembly_CompileError [@@js.apply as_constructor]
+    val create: t -> _WebAssembly_CompileError [@@js.apply_newable]
   end
   module AnonymousInterface73 : sig
     type t = anonymous_interface_73
@@ -4782,7 +4782,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CompositionEvent [@@js.get "prototype"]
     val set_prototype: t -> _CompositionEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_CompositionEventInit -> unit -> _CompositionEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_CompositionEventInit -> unit -> _CompositionEvent [@@js.apply_newable]
   end
   module AnonymousInterface74 : sig
     type t = anonymous_interface_74
@@ -4793,7 +4793,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Console [@@js.get "prototype"]
     val set_prototype: t -> _Console -> unit [@@js.set "prototype"]
-    val create: t -> _Console [@@js.apply as_constructor]
+    val create: t -> _Console [@@js.apply_newable]
   end
   module AnonymousInterface75 : sig
     type t = anonymous_interface_75
@@ -4804,7 +4804,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ConstantSourceNode [@@js.get "prototype"]
     val set_prototype: t -> _ConstantSourceNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_ConstantSourceOptions -> unit -> _ConstantSourceNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_ConstantSourceOptions -> unit -> _ConstantSourceNode [@@js.apply_newable]
   end
   module AnonymousInterface76 : sig
     type t = anonymous_interface_76
@@ -4815,7 +4815,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ConvolverNode [@@js.get "prototype"]
     val set_prototype: t -> _ConvolverNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_ConvolverOptions -> unit -> _ConvolverNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_ConvolverOptions -> unit -> _ConvolverNode [@@js.apply_newable]
   end
   module AnonymousInterface77 : sig
     type t = anonymous_interface_77
@@ -4826,7 +4826,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CountQueuingStrategy [@@js.get "prototype"]
     val set_prototype: t -> _CountQueuingStrategy -> unit [@@js.set "prototype"]
-    val create: t -> options:anonymous_interface_2 -> _CountQueuingStrategy [@@js.apply as_constructor]
+    val create: t -> options:anonymous_interface_2 -> _CountQueuingStrategy [@@js.apply_newable]
   end
   module AnonymousInterface78 : sig
     type t = anonymous_interface_78
@@ -4837,7 +4837,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Credential [@@js.get "prototype"]
     val set_prototype: t -> _Credential -> unit [@@js.set "prototype"]
-    val create: t -> _Credential [@@js.apply as_constructor]
+    val create: t -> _Credential [@@js.apply_newable]
   end
   module AnonymousInterface79 : sig
     type t = anonymous_interface_79
@@ -4848,7 +4848,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CredentialsContainer [@@js.get "prototype"]
     val set_prototype: t -> _CredentialsContainer -> unit [@@js.set "prototype"]
-    val create: t -> _CredentialsContainer [@@js.apply as_constructor]
+    val create: t -> _CredentialsContainer [@@js.apply_newable]
   end
   module AnonymousInterface80 : sig
     type t = anonymous_interface_80
@@ -4859,7 +4859,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Crypto [@@js.get "prototype"]
     val set_prototype: t -> _Crypto -> unit [@@js.set "prototype"]
-    val create: t -> _Crypto [@@js.apply as_constructor]
+    val create: t -> _Crypto [@@js.apply_newable]
   end
   module AnonymousInterface81 : sig
     type t = anonymous_interface_81
@@ -4870,7 +4870,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CryptoKey [@@js.get "prototype"]
     val set_prototype: t -> _CryptoKey -> unit [@@js.set "prototype"]
-    val create: t -> _CryptoKey [@@js.apply as_constructor]
+    val create: t -> _CryptoKey [@@js.apply_newable]
   end
   module AnonymousInterface82 : sig
     type t = anonymous_interface_82
@@ -4881,7 +4881,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CryptoKeyPair [@@js.get "prototype"]
     val set_prototype: t -> _CryptoKeyPair -> unit [@@js.set "prototype"]
-    val create: t -> _CryptoKeyPair [@@js.apply as_constructor]
+    val create: t -> _CryptoKeyPair [@@js.apply_newable]
   end
   module AnonymousInterface83 : sig
     type t = anonymous_interface_83
@@ -4892,7 +4892,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _CustomElementRegistry [@@js.get "prototype"]
     val set_prototype: t -> _CustomElementRegistry -> unit [@@js.set "prototype"]
-    val create: t -> _CustomElementRegistry [@@js.apply as_constructor]
+    val create: t -> _CustomElementRegistry [@@js.apply_newable]
   end
   module AnonymousInterface84 : sig
     type t = anonymous_interface_84
@@ -4903,7 +4903,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> any _CustomEvent [@@js.get "prototype"]
     val set_prototype: t -> any _CustomEvent -> unit [@@js.set "prototype"]
-    val create: t -> typeArg:string -> ?eventInitDict:'T _CustomEventInit -> unit -> 'T _CustomEvent [@@js.apply as_constructor]
+    val create: t -> typeArg:string -> ?eventInitDict:'T _CustomEventInit -> unit -> 'T _CustomEvent [@@js.apply_newable]
   end
   module AnonymousInterface85 : sig
     type t = anonymous_interface_85
@@ -4914,7 +4914,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMError [@@js.get "prototype"]
     val set_prototype: t -> _DOMError -> unit [@@js.set "prototype"]
-    val create: t -> _DOMError [@@js.apply as_constructor]
+    val create: t -> _DOMError [@@js.apply_newable]
   end
   module AnonymousInterface86 : sig
     type t = anonymous_interface_86
@@ -4925,7 +4925,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMException [@@js.get "prototype"]
     val set_prototype: t -> _DOMException -> unit [@@js.set "prototype"]
-    val create: t -> ?message:string -> ?name:string -> unit -> _DOMException [@@js.apply as_constructor]
+    val create: t -> ?message:string -> ?name:string -> unit -> _DOMException [@@js.apply_newable]
     val get_ABORT_ERR: t -> float [@@js.get "ABORT_ERR"]
     val get_DATA_CLONE_ERR: t -> float [@@js.get "DATA_CLONE_ERR"]
     val get_DOMSTRING_SIZE_ERR: t -> float [@@js.get "DOMSTRING_SIZE_ERR"]
@@ -4961,7 +4961,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMImplementation [@@js.get "prototype"]
     val set_prototype: t -> _DOMImplementation -> unit [@@js.set "prototype"]
-    val create: t -> _DOMImplementation [@@js.apply as_constructor]
+    val create: t -> _DOMImplementation [@@js.apply_newable]
   end
   module AnonymousInterface88 : sig
     type t = anonymous_interface_88
@@ -4972,7 +4972,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMMatrix [@@js.get "prototype"]
     val set_prototype: t -> _DOMMatrix -> unit [@@js.set "prototype"]
-    val create: t -> ?init:float list or_string -> unit -> _DOMMatrix [@@js.apply as_constructor]
+    val create: t -> ?init:float list or_string -> unit -> _DOMMatrix [@@js.apply_newable]
     val fromFloat32Array: t -> array32:Float32Array.t_0 -> _DOMMatrix [@@js.call "fromFloat32Array"]
     val fromFloat64Array: t -> array64:Float64Array.t_0 -> _DOMMatrix [@@js.call "fromFloat64Array"]
     val fromMatrix: t -> ?other:_DOMMatrixInit -> unit -> _DOMMatrix [@@js.call "fromMatrix"]
@@ -4986,7 +4986,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMMatrixReadOnly [@@js.get "prototype"]
     val set_prototype: t -> _DOMMatrixReadOnly -> unit [@@js.set "prototype"]
-    val create: t -> ?init:float list or_string -> unit -> _DOMMatrixReadOnly [@@js.apply as_constructor]
+    val create: t -> ?init:float list or_string -> unit -> _DOMMatrixReadOnly [@@js.apply_newable]
     val fromFloat32Array: t -> array32:Float32Array.t_0 -> _DOMMatrixReadOnly [@@js.call "fromFloat32Array"]
     val fromFloat64Array: t -> array64:Float64Array.t_0 -> _DOMMatrixReadOnly [@@js.call "fromFloat64Array"]
     val fromMatrix: t -> ?other:_DOMMatrixInit -> unit -> _DOMMatrixReadOnly [@@js.call "fromMatrix"]
@@ -5001,7 +5001,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMParser [@@js.get "prototype"]
     val set_prototype: t -> _DOMParser -> unit [@@js.set "prototype"]
-    val create: t -> _DOMParser [@@js.apply as_constructor]
+    val create: t -> _DOMParser [@@js.apply_newable]
   end
   module AnonymousInterface91 : sig
     type t = anonymous_interface_91
@@ -5012,7 +5012,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMPoint [@@js.get "prototype"]
     val set_prototype: t -> _DOMPoint -> unit [@@js.set "prototype"]
-    val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> _DOMPoint [@@js.apply as_constructor]
+    val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> _DOMPoint [@@js.apply_newable]
     val fromPoint: t -> ?other:_DOMPointInit -> unit -> _DOMPoint [@@js.call "fromPoint"]
   end
   module AnonymousInterface92 : sig
@@ -5024,7 +5024,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMPointReadOnly [@@js.get "prototype"]
     val set_prototype: t -> _DOMPointReadOnly -> unit [@@js.set "prototype"]
-    val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> _DOMPointReadOnly [@@js.apply as_constructor]
+    val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> _DOMPointReadOnly [@@js.apply_newable]
     val fromPoint: t -> ?other:_DOMPointInit -> unit -> _DOMPointReadOnly [@@js.call "fromPoint"]
   end
   module AnonymousInterface93 : sig
@@ -5036,7 +5036,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMQuad [@@js.get "prototype"]
     val set_prototype: t -> _DOMQuad -> unit [@@js.set "prototype"]
-    val create: t -> ?p1:_DOMPointInit -> ?p2:_DOMPointInit -> ?p3:_DOMPointInit -> ?p4:_DOMPointInit -> unit -> _DOMQuad [@@js.apply as_constructor]
+    val create: t -> ?p1:_DOMPointInit -> ?p2:_DOMPointInit -> ?p3:_DOMPointInit -> ?p4:_DOMPointInit -> unit -> _DOMQuad [@@js.apply_newable]
     val fromQuad: t -> ?other:_DOMQuadInit -> unit -> _DOMQuad [@@js.call "fromQuad"]
     val fromRect: t -> ?other:_DOMRectInit -> unit -> _DOMQuad [@@js.call "fromRect"]
   end
@@ -5049,7 +5049,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMRect [@@js.get "prototype"]
     val set_prototype: t -> _DOMRect -> unit [@@js.set "prototype"]
-    val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> _DOMRect [@@js.apply as_constructor]
+    val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> _DOMRect [@@js.apply_newable]
     val fromRect: t -> ?other:_DOMRectInit -> unit -> _DOMRect [@@js.call "fromRect"]
   end
   module AnonymousInterface95 : sig
@@ -5061,7 +5061,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMRectList [@@js.get "prototype"]
     val set_prototype: t -> _DOMRectList -> unit [@@js.set "prototype"]
-    val create: t -> _DOMRectList [@@js.apply as_constructor]
+    val create: t -> _DOMRectList [@@js.apply_newable]
   end
   module AnonymousInterface96 : sig
     type t = anonymous_interface_96
@@ -5072,7 +5072,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMRectReadOnly [@@js.get "prototype"]
     val set_prototype: t -> _DOMRectReadOnly -> unit [@@js.set "prototype"]
-    val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> _DOMRectReadOnly [@@js.apply as_constructor]
+    val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> _DOMRectReadOnly [@@js.apply_newable]
     val fromRect: t -> ?other:_DOMRectInit -> unit -> _DOMRectReadOnly [@@js.call "fromRect"]
   end
   module AnonymousInterface97 : sig
@@ -5084,7 +5084,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMSettableTokenList [@@js.get "prototype"]
     val set_prototype: t -> _DOMSettableTokenList -> unit [@@js.set "prototype"]
-    val create: t -> _DOMSettableTokenList [@@js.apply as_constructor]
+    val create: t -> _DOMSettableTokenList [@@js.apply_newable]
   end
   module AnonymousInterface98 : sig
     type t = anonymous_interface_98
@@ -5095,7 +5095,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMStringList [@@js.get "prototype"]
     val set_prototype: t -> _DOMStringList -> unit [@@js.set "prototype"]
-    val create: t -> _DOMStringList [@@js.apply as_constructor]
+    val create: t -> _DOMStringList [@@js.apply_newable]
   end
   module AnonymousInterface99 : sig
     type t = anonymous_interface_99
@@ -5106,7 +5106,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMStringMap [@@js.get "prototype"]
     val set_prototype: t -> _DOMStringMap -> unit [@@js.set "prototype"]
-    val create: t -> _DOMStringMap [@@js.apply as_constructor]
+    val create: t -> _DOMStringMap [@@js.apply_newable]
   end
   module AnonymousInterface100 : sig
     type t = anonymous_interface_100
@@ -5117,7 +5117,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DOMTokenList [@@js.get "prototype"]
     val set_prototype: t -> _DOMTokenList -> unit [@@js.set "prototype"]
-    val create: t -> _DOMTokenList [@@js.apply as_constructor]
+    val create: t -> _DOMTokenList [@@js.apply_newable]
   end
   module AnonymousInterface101 : sig
     type t = anonymous_interface_101
@@ -5128,7 +5128,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DataCue [@@js.get "prototype"]
     val set_prototype: t -> _DataCue -> unit [@@js.set "prototype"]
-    val create: t -> _DataCue [@@js.apply as_constructor]
+    val create: t -> _DataCue [@@js.apply_newable]
   end
   module AnonymousInterface102 : sig
     type t = anonymous_interface_102
@@ -5139,7 +5139,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DataTransfer [@@js.get "prototype"]
     val set_prototype: t -> _DataTransfer -> unit [@@js.set "prototype"]
-    val create: t -> _DataTransfer [@@js.apply as_constructor]
+    val create: t -> _DataTransfer [@@js.apply_newable]
   end
   module AnonymousInterface103 : sig
     type t = anonymous_interface_103
@@ -5150,7 +5150,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DataTransferItem [@@js.get "prototype"]
     val set_prototype: t -> _DataTransferItem -> unit [@@js.set "prototype"]
-    val create: t -> _DataTransferItem [@@js.apply as_constructor]
+    val create: t -> _DataTransferItem [@@js.apply_newable]
   end
   module AnonymousInterface104 : sig
     type t = anonymous_interface_104
@@ -5161,7 +5161,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DataTransferItemList [@@js.get "prototype"]
     val set_prototype: t -> _DataTransferItemList -> unit [@@js.set "prototype"]
-    val create: t -> _DataTransferItemList [@@js.apply as_constructor]
+    val create: t -> _DataTransferItemList [@@js.apply_newable]
   end
   module AnonymousInterface105 : sig
     type t = anonymous_interface_105
@@ -5172,7 +5172,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DeferredPermissionRequest [@@js.get "prototype"]
     val set_prototype: t -> _DeferredPermissionRequest -> unit [@@js.set "prototype"]
-    val create: t -> _DeferredPermissionRequest [@@js.apply as_constructor]
+    val create: t -> _DeferredPermissionRequest [@@js.apply_newable]
   end
   module AnonymousInterface106 : sig
     type t = anonymous_interface_106
@@ -5183,7 +5183,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DelayNode [@@js.get "prototype"]
     val set_prototype: t -> _DelayNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_DelayOptions -> unit -> _DelayNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_DelayOptions -> unit -> _DelayNode [@@js.apply_newable]
   end
   module AnonymousInterface107 : sig
     type t = anonymous_interface_107
@@ -5194,7 +5194,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DeviceAcceleration [@@js.get "prototype"]
     val set_prototype: t -> _DeviceAcceleration -> unit [@@js.set "prototype"]
-    val create: t -> _DeviceAcceleration [@@js.apply as_constructor]
+    val create: t -> _DeviceAcceleration [@@js.apply_newable]
   end
   module AnonymousInterface108 : sig
     type t = anonymous_interface_108
@@ -5205,7 +5205,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DeviceLightEvent [@@js.get "prototype"]
     val set_prototype: t -> _DeviceLightEvent -> unit [@@js.set "prototype"]
-    val create: t -> typeArg:string -> ?eventInitDict:_DeviceLightEventInit -> unit -> _DeviceLightEvent [@@js.apply as_constructor]
+    val create: t -> typeArg:string -> ?eventInitDict:_DeviceLightEventInit -> unit -> _DeviceLightEvent [@@js.apply_newable]
   end
   module AnonymousInterface109 : sig
     type t = anonymous_interface_109
@@ -5216,7 +5216,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DeviceMotionEvent [@@js.get "prototype"]
     val set_prototype: t -> _DeviceMotionEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_DeviceMotionEventInit -> unit -> _DeviceMotionEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_DeviceMotionEventInit -> unit -> _DeviceMotionEvent [@@js.apply_newable]
     val requestPermission: t -> _PermissionState Promise.t_1 [@@js.call "requestPermission"]
   end
   module AnonymousInterface110 : sig
@@ -5228,7 +5228,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DeviceOrientationEvent [@@js.get "prototype"]
     val set_prototype: t -> _DeviceOrientationEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_DeviceOrientationEventInit -> unit -> _DeviceOrientationEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_DeviceOrientationEventInit -> unit -> _DeviceOrientationEvent [@@js.apply_newable]
     val requestPermission: t -> _PermissionState Promise.t_1 [@@js.call "requestPermission"]
   end
   module AnonymousInterface111 : sig
@@ -5240,7 +5240,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DeviceRotationRate [@@js.get "prototype"]
     val set_prototype: t -> _DeviceRotationRate -> unit [@@js.set "prototype"]
-    val create: t -> _DeviceRotationRate [@@js.apply as_constructor]
+    val create: t -> _DeviceRotationRate [@@js.apply_newable]
   end
   module AnonymousInterface112 : sig
     type t = anonymous_interface_112
@@ -5251,7 +5251,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Document [@@js.get "prototype"]
     val set_prototype: t -> _Document -> unit [@@js.set "prototype"]
-    val create: t -> _Document [@@js.apply as_constructor]
+    val create: t -> _Document [@@js.apply_newable]
   end
   module AnonymousInterface113 : sig
     type t = anonymous_interface_113
@@ -5262,7 +5262,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DocumentFragment [@@js.get "prototype"]
     val set_prototype: t -> _DocumentFragment -> unit [@@js.set "prototype"]
-    val create: t -> _DocumentFragment [@@js.apply as_constructor]
+    val create: t -> _DocumentFragment [@@js.apply_newable]
   end
   module AnonymousInterface114 : sig
     type t = anonymous_interface_114
@@ -5273,7 +5273,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DocumentTimeline [@@js.get "prototype"]
     val set_prototype: t -> _DocumentTimeline -> unit [@@js.set "prototype"]
-    val create: t -> ?options:_DocumentTimelineOptions -> unit -> _DocumentTimeline [@@js.apply as_constructor]
+    val create: t -> ?options:_DocumentTimelineOptions -> unit -> _DocumentTimeline [@@js.apply_newable]
   end
   module AnonymousInterface115 : sig
     type t = anonymous_interface_115
@@ -5284,7 +5284,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DocumentType [@@js.get "prototype"]
     val set_prototype: t -> _DocumentType -> unit [@@js.set "prototype"]
-    val create: t -> _DocumentType [@@js.apply as_constructor]
+    val create: t -> _DocumentType [@@js.apply_newable]
   end
   module AnonymousInterface116 : sig
     type t = anonymous_interface_116
@@ -5295,7 +5295,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DragEvent [@@js.get "prototype"]
     val set_prototype: t -> _DragEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_DragEventInit -> unit -> _DragEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_DragEventInit -> unit -> _DragEvent [@@js.apply_newable]
   end
   module AnonymousInterface117 : sig
     type t = anonymous_interface_117
@@ -5306,7 +5306,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _DynamicsCompressorNode [@@js.get "prototype"]
     val set_prototype: t -> _DynamicsCompressorNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_DynamicsCompressorOptions -> unit -> _DynamicsCompressorNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_DynamicsCompressorOptions -> unit -> _DynamicsCompressorNode [@@js.apply_newable]
   end
   module AnonymousInterface118 : sig
     type t = anonymous_interface_118
@@ -5317,7 +5317,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Element [@@js.get "prototype"]
     val set_prototype: t -> _Element -> unit [@@js.set "prototype"]
-    val create: t -> _Element [@@js.apply as_constructor]
+    val create: t -> _Element [@@js.apply_newable]
   end
   module AnonymousInterface119 : sig
     type t = anonymous_interface_119
@@ -5328,7 +5328,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ErrorEvent [@@js.get "prototype"]
     val set_prototype: t -> _ErrorEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_ErrorEventInit -> unit -> _ErrorEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_ErrorEventInit -> unit -> _ErrorEvent [@@js.apply_newable]
   end
   module AnonymousInterface120 : sig
     type t = anonymous_interface_120
@@ -5339,7 +5339,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Event [@@js.get "prototype"]
     val set_prototype: t -> _Event -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_EventInit -> unit -> _Event [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_EventInit -> unit -> _Event [@@js.apply_newable]
     val get_AT_TARGET: t -> float [@@js.get "AT_TARGET"]
     val get_BUBBLING_PHASE: t -> float [@@js.get "BUBBLING_PHASE"]
     val get_CAPTURING_PHASE: t -> float [@@js.get "CAPTURING_PHASE"]
@@ -5354,7 +5354,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _EventSource [@@js.get "prototype"]
     val set_prototype: t -> _EventSource -> unit [@@js.set "prototype"]
-    val create: t -> url:string -> ?eventSourceInitDict:_EventSourceInit -> unit -> _EventSource [@@js.apply as_constructor]
+    val create: t -> url:string -> ?eventSourceInitDict:_EventSourceInit -> unit -> _EventSource [@@js.apply_newable]
     val get_CLOSED: t -> float [@@js.get "CLOSED"]
     val get_CONNECTING: t -> float [@@js.get "CONNECTING"]
     val get_OPEN: t -> float [@@js.get "OPEN"]
@@ -5368,7 +5368,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _EventTarget [@@js.get "prototype"]
     val set_prototype: t -> _EventTarget -> unit [@@js.set "prototype"]
-    val create: t -> _EventTarget [@@js.apply as_constructor]
+    val create: t -> _EventTarget [@@js.apply_newable]
   end
   module AnonymousInterface123 : sig
     type t = anonymous_interface_123
@@ -5379,7 +5379,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ExtensionScriptApis [@@js.get "prototype"]
     val set_prototype: t -> _ExtensionScriptApis -> unit [@@js.set "prototype"]
-    val create: t -> _ExtensionScriptApis [@@js.apply as_constructor]
+    val create: t -> _ExtensionScriptApis [@@js.apply_newable]
   end
   module AnonymousInterface124 : sig
     type t = anonymous_interface_124
@@ -5390,7 +5390,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _External [@@js.get "prototype"]
     val set_prototype: t -> _External -> unit [@@js.set "prototype"]
-    val create: t -> _External [@@js.apply as_constructor]
+    val create: t -> _External [@@js.apply_newable]
   end
   module AnonymousInterface125 : sig
     type t = anonymous_interface_125
@@ -5401,7 +5401,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _File [@@js.get "prototype"]
     val set_prototype: t -> _File -> unit [@@js.set "prototype"]
-    val create: t -> fileBits:_BlobPart list -> fileName:string -> ?options:_FilePropertyBag -> unit -> _File [@@js.apply as_constructor]
+    val create: t -> fileBits:_BlobPart list -> fileName:string -> ?options:_FilePropertyBag -> unit -> _File [@@js.apply_newable]
   end
   module AnonymousInterface126 : sig
     type t = anonymous_interface_126
@@ -5412,7 +5412,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _FileList [@@js.get "prototype"]
     val set_prototype: t -> _FileList -> unit [@@js.set "prototype"]
-    val create: t -> _FileList [@@js.apply as_constructor]
+    val create: t -> _FileList [@@js.apply_newable]
   end
   module AnonymousInterface127 : sig
     type t = anonymous_interface_127
@@ -5423,7 +5423,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _FileReader [@@js.get "prototype"]
     val set_prototype: t -> _FileReader -> unit [@@js.set "prototype"]
-    val create: t -> _FileReader [@@js.apply as_constructor]
+    val create: t -> _FileReader [@@js.apply_newable]
     val get_DONE: t -> float [@@js.get "DONE"]
     val get_EMPTY: t -> float [@@js.get "EMPTY"]
     val get_LOADING: t -> float [@@js.get "LOADING"]
@@ -5437,7 +5437,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _FocusEvent [@@js.get "prototype"]
     val set_prototype: t -> _FocusEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_FocusEventInit -> unit -> _FocusEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_FocusEventInit -> unit -> _FocusEvent [@@js.apply_newable]
   end
   module AnonymousInterface129 : sig
     type t = anonymous_interface_129
@@ -5448,7 +5448,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _FocusNavigationEvent [@@js.get "prototype"]
     val set_prototype: t -> _FocusNavigationEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_FocusNavigationEventInit -> unit -> _FocusNavigationEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_FocusNavigationEventInit -> unit -> _FocusNavigationEvent [@@js.apply_newable]
   end
   module AnonymousInterface130 : sig
     type t = anonymous_interface_130
@@ -5459,7 +5459,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _FormData [@@js.get "prototype"]
     val set_prototype: t -> _FormData -> unit [@@js.set "prototype"]
-    val create: t -> ?form:_HTMLFormElement -> unit -> _FormData [@@js.apply as_constructor]
+    val create: t -> ?form:_HTMLFormElement -> unit -> _FormData [@@js.apply_newable]
   end
   module AnonymousInterface131 : sig
     type t = anonymous_interface_131
@@ -5470,7 +5470,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _GainNode [@@js.get "prototype"]
     val set_prototype: t -> _GainNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_GainOptions -> unit -> _GainNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_GainOptions -> unit -> _GainNode [@@js.apply_newable]
   end
   module AnonymousInterface132 : sig
     type t = anonymous_interface_132
@@ -5481,7 +5481,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Gamepad [@@js.get "prototype"]
     val set_prototype: t -> _Gamepad -> unit [@@js.set "prototype"]
-    val create: t -> _Gamepad [@@js.apply as_constructor]
+    val create: t -> _Gamepad [@@js.apply_newable]
   end
   module AnonymousInterface133 : sig
     type t = anonymous_interface_133
@@ -5492,7 +5492,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _GamepadButton [@@js.get "prototype"]
     val set_prototype: t -> _GamepadButton -> unit [@@js.set "prototype"]
-    val create: t -> _GamepadButton [@@js.apply as_constructor]
+    val create: t -> _GamepadButton [@@js.apply_newable]
   end
   module AnonymousInterface134 : sig
     type t = anonymous_interface_134
@@ -5503,7 +5503,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _GamepadEvent [@@js.get "prototype"]
     val set_prototype: t -> _GamepadEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_GamepadEventInit -> _GamepadEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_GamepadEventInit -> _GamepadEvent [@@js.apply_newable]
   end
   module AnonymousInterface135 : sig
     type t = anonymous_interface_135
@@ -5514,7 +5514,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _GamepadHapticActuator [@@js.get "prototype"]
     val set_prototype: t -> _GamepadHapticActuator -> unit [@@js.set "prototype"]
-    val create: t -> _GamepadHapticActuator [@@js.apply as_constructor]
+    val create: t -> _GamepadHapticActuator [@@js.apply_newable]
   end
   module AnonymousInterface136 : sig
     type t = anonymous_interface_136
@@ -5525,7 +5525,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _GamepadPose [@@js.get "prototype"]
     val set_prototype: t -> _GamepadPose -> unit [@@js.set "prototype"]
-    val create: t -> _GamepadPose [@@js.apply as_constructor]
+    val create: t -> _GamepadPose [@@js.apply_newable]
   end
   module AnonymousInterface137 : sig
     type t = anonymous_interface_137
@@ -5536,7 +5536,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAssembly_Global [@@js.get "prototype"]
     val set_prototype: t -> _WebAssembly_Global -> unit [@@js.set "prototype"]
-    val create: t -> descriptor:_WebAssembly_GlobalDescriptor -> ?v:any -> unit -> _WebAssembly_Global [@@js.apply as_constructor]
+    val create: t -> descriptor:_WebAssembly_GlobalDescriptor -> ?v:any -> unit -> _WebAssembly_Global [@@js.apply_newable]
   end
   module AnonymousInterface138 : sig
     type t = anonymous_interface_138
@@ -5547,7 +5547,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLAllCollection [@@js.get "prototype"]
     val set_prototype: t -> _HTMLAllCollection -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLAllCollection [@@js.apply as_constructor]
+    val create: t -> _HTMLAllCollection [@@js.apply_newable]
   end
   module AnonymousInterface139 : sig
     type t = anonymous_interface_139
@@ -5558,7 +5558,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLAnchorElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLAnchorElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLAnchorElement [@@js.apply as_constructor]
+    val create: t -> _HTMLAnchorElement [@@js.apply_newable]
   end
   module AnonymousInterface140 : sig
     type t = anonymous_interface_140
@@ -5569,7 +5569,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLAppletElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLAppletElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLAppletElement [@@js.apply as_constructor]
+    val create: t -> _HTMLAppletElement [@@js.apply_newable]
   end
   module AnonymousInterface141 : sig
     type t = anonymous_interface_141
@@ -5580,7 +5580,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLAreaElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLAreaElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLAreaElement [@@js.apply as_constructor]
+    val create: t -> _HTMLAreaElement [@@js.apply_newable]
   end
   module AnonymousInterface142 : sig
     type t = anonymous_interface_142
@@ -5591,7 +5591,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLAudioElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLAudioElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLAudioElement [@@js.apply as_constructor]
+    val create: t -> _HTMLAudioElement [@@js.apply_newable]
   end
   module AnonymousInterface143 : sig
     type t = anonymous_interface_143
@@ -5602,7 +5602,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLBRElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLBRElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLBRElement [@@js.apply as_constructor]
+    val create: t -> _HTMLBRElement [@@js.apply_newable]
   end
   module AnonymousInterface144 : sig
     type t = anonymous_interface_144
@@ -5613,7 +5613,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLBaseElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLBaseElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLBaseElement [@@js.apply as_constructor]
+    val create: t -> _HTMLBaseElement [@@js.apply_newable]
   end
   module AnonymousInterface145 : sig
     type t = anonymous_interface_145
@@ -5624,7 +5624,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLBaseFontElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLBaseFontElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLBaseFontElement [@@js.apply as_constructor]
+    val create: t -> _HTMLBaseFontElement [@@js.apply_newable]
   end
   module AnonymousInterface146 : sig
     type t = anonymous_interface_146
@@ -5635,7 +5635,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLBodyElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLBodyElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLBodyElement [@@js.apply as_constructor]
+    val create: t -> _HTMLBodyElement [@@js.apply_newable]
   end
   module AnonymousInterface147 : sig
     type t = anonymous_interface_147
@@ -5646,7 +5646,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLButtonElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLButtonElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLButtonElement [@@js.apply as_constructor]
+    val create: t -> _HTMLButtonElement [@@js.apply_newable]
   end
   module AnonymousInterface148 : sig
     type t = anonymous_interface_148
@@ -5657,7 +5657,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLCanvasElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLCanvasElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLCanvasElement [@@js.apply as_constructor]
+    val create: t -> _HTMLCanvasElement [@@js.apply_newable]
   end
   module AnonymousInterface149 : sig
     type t = anonymous_interface_149
@@ -5668,7 +5668,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLCollection [@@js.get "prototype"]
     val set_prototype: t -> _HTMLCollection -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLCollection [@@js.apply as_constructor]
+    val create: t -> _HTMLCollection [@@js.apply_newable]
   end
   module AnonymousInterface150 : sig
     type t = anonymous_interface_150
@@ -5679,7 +5679,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLDListElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLDListElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLDListElement [@@js.apply as_constructor]
+    val create: t -> _HTMLDListElement [@@js.apply_newable]
   end
   module AnonymousInterface151 : sig
     type t = anonymous_interface_151
@@ -5690,7 +5690,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLDataElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLDataElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLDataElement [@@js.apply as_constructor]
+    val create: t -> _HTMLDataElement [@@js.apply_newable]
   end
   module AnonymousInterface152 : sig
     type t = anonymous_interface_152
@@ -5701,7 +5701,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLDataListElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLDataListElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLDataListElement [@@js.apply as_constructor]
+    val create: t -> _HTMLDataListElement [@@js.apply_newable]
   end
   module AnonymousInterface153 : sig
     type t = anonymous_interface_153
@@ -5712,7 +5712,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLDetailsElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLDetailsElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLDetailsElement [@@js.apply as_constructor]
+    val create: t -> _HTMLDetailsElement [@@js.apply_newable]
   end
   module AnonymousInterface154 : sig
     type t = anonymous_interface_154
@@ -5723,7 +5723,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLDialogElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLDialogElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLDialogElement [@@js.apply as_constructor]
+    val create: t -> _HTMLDialogElement [@@js.apply_newable]
   end
   module AnonymousInterface155 : sig
     type t = anonymous_interface_155
@@ -5734,7 +5734,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLDirectoryElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLDirectoryElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLDirectoryElement [@@js.apply as_constructor]
+    val create: t -> _HTMLDirectoryElement [@@js.apply_newable]
   end
   module AnonymousInterface156 : sig
     type t = anonymous_interface_156
@@ -5745,7 +5745,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLDivElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLDivElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLDivElement [@@js.apply as_constructor]
+    val create: t -> _HTMLDivElement [@@js.apply_newable]
   end
   module AnonymousInterface157 : sig
     type t = anonymous_interface_157
@@ -5756,7 +5756,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLDocument [@@js.get "prototype"]
     val set_prototype: t -> _HTMLDocument -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLDocument [@@js.apply as_constructor]
+    val create: t -> _HTMLDocument [@@js.apply_newable]
   end
   module AnonymousInterface158 : sig
     type t = anonymous_interface_158
@@ -5767,7 +5767,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLElement [@@js.apply as_constructor]
+    val create: t -> _HTMLElement [@@js.apply_newable]
   end
   module AnonymousInterface159 : sig
     type t = anonymous_interface_159
@@ -5778,7 +5778,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLEmbedElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLEmbedElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLEmbedElement [@@js.apply as_constructor]
+    val create: t -> _HTMLEmbedElement [@@js.apply_newable]
   end
   module AnonymousInterface160 : sig
     type t = anonymous_interface_160
@@ -5789,7 +5789,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLFieldSetElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLFieldSetElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLFieldSetElement [@@js.apply as_constructor]
+    val create: t -> _HTMLFieldSetElement [@@js.apply_newable]
   end
   module AnonymousInterface161 : sig
     type t = anonymous_interface_161
@@ -5800,7 +5800,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLFontElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLFontElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLFontElement [@@js.apply as_constructor]
+    val create: t -> _HTMLFontElement [@@js.apply_newable]
   end
   module AnonymousInterface162 : sig
     type t = anonymous_interface_162
@@ -5811,7 +5811,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLFormControlsCollection [@@js.get "prototype"]
     val set_prototype: t -> _HTMLFormControlsCollection -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLFormControlsCollection [@@js.apply as_constructor]
+    val create: t -> _HTMLFormControlsCollection [@@js.apply_newable]
   end
   module AnonymousInterface163 : sig
     type t = anonymous_interface_163
@@ -5822,7 +5822,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLFormElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLFormElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLFormElement [@@js.apply as_constructor]
+    val create: t -> _HTMLFormElement [@@js.apply_newable]
   end
   module AnonymousInterface164 : sig
     type t = anonymous_interface_164
@@ -5833,7 +5833,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLFrameElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLFrameElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLFrameElement [@@js.apply as_constructor]
+    val create: t -> _HTMLFrameElement [@@js.apply_newable]
   end
   module AnonymousInterface165 : sig
     type t = anonymous_interface_165
@@ -5844,7 +5844,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLFrameSetElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLFrameSetElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLFrameSetElement [@@js.apply as_constructor]
+    val create: t -> _HTMLFrameSetElement [@@js.apply_newable]
   end
   module AnonymousInterface166 : sig
     type t = anonymous_interface_166
@@ -5855,7 +5855,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLHRElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLHRElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLHRElement [@@js.apply as_constructor]
+    val create: t -> _HTMLHRElement [@@js.apply_newable]
   end
   module AnonymousInterface167 : sig
     type t = anonymous_interface_167
@@ -5866,7 +5866,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLHeadElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLHeadElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLHeadElement [@@js.apply as_constructor]
+    val create: t -> _HTMLHeadElement [@@js.apply_newable]
   end
   module AnonymousInterface168 : sig
     type t = anonymous_interface_168
@@ -5877,7 +5877,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLHeadingElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLHeadingElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLHeadingElement [@@js.apply as_constructor]
+    val create: t -> _HTMLHeadingElement [@@js.apply_newable]
   end
   module AnonymousInterface169 : sig
     type t = anonymous_interface_169
@@ -5888,7 +5888,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLHtmlElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLHtmlElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLHtmlElement [@@js.apply as_constructor]
+    val create: t -> _HTMLHtmlElement [@@js.apply_newable]
   end
   module AnonymousInterface170 : sig
     type t = anonymous_interface_170
@@ -5899,7 +5899,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLIFrameElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLIFrameElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLIFrameElement [@@js.apply as_constructor]
+    val create: t -> _HTMLIFrameElement [@@js.apply_newable]
   end
   module AnonymousInterface171 : sig
     type t = anonymous_interface_171
@@ -5910,7 +5910,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLImageElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLImageElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLImageElement [@@js.apply as_constructor]
+    val create: t -> _HTMLImageElement [@@js.apply_newable]
   end
   module AnonymousInterface172 : sig
     type t = anonymous_interface_172
@@ -5921,7 +5921,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLInputElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLInputElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLInputElement [@@js.apply as_constructor]
+    val create: t -> _HTMLInputElement [@@js.apply_newable]
   end
   module AnonymousInterface173 : sig
     type t = anonymous_interface_173
@@ -5932,7 +5932,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLLIElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLLIElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLLIElement [@@js.apply as_constructor]
+    val create: t -> _HTMLLIElement [@@js.apply_newable]
   end
   module AnonymousInterface174 : sig
     type t = anonymous_interface_174
@@ -5943,7 +5943,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLLabelElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLLabelElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLLabelElement [@@js.apply as_constructor]
+    val create: t -> _HTMLLabelElement [@@js.apply_newable]
   end
   module AnonymousInterface175 : sig
     type t = anonymous_interface_175
@@ -5954,7 +5954,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLLegendElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLLegendElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLLegendElement [@@js.apply as_constructor]
+    val create: t -> _HTMLLegendElement [@@js.apply_newable]
   end
   module AnonymousInterface176 : sig
     type t = anonymous_interface_176
@@ -5965,7 +5965,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLLinkElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLLinkElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLLinkElement [@@js.apply as_constructor]
+    val create: t -> _HTMLLinkElement [@@js.apply_newable]
   end
   module AnonymousInterface177 : sig
     type t = anonymous_interface_177
@@ -5976,7 +5976,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLMapElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLMapElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLMapElement [@@js.apply as_constructor]
+    val create: t -> _HTMLMapElement [@@js.apply_newable]
   end
   module AnonymousInterface178 : sig
     type t = anonymous_interface_178
@@ -5987,7 +5987,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLMarqueeElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLMarqueeElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLMarqueeElement [@@js.apply as_constructor]
+    val create: t -> _HTMLMarqueeElement [@@js.apply_newable]
   end
   module AnonymousInterface179 : sig
     type t = anonymous_interface_179
@@ -5998,7 +5998,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLMediaElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLMediaElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLMediaElement [@@js.apply as_constructor]
+    val create: t -> _HTMLMediaElement [@@js.apply_newable]
     val get_HAVE_CURRENT_DATA: t -> float [@@js.get "HAVE_CURRENT_DATA"]
     val get_HAVE_ENOUGH_DATA: t -> float [@@js.get "HAVE_ENOUGH_DATA"]
     val get_HAVE_FUTURE_DATA: t -> float [@@js.get "HAVE_FUTURE_DATA"]
@@ -6018,7 +6018,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLMenuElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLMenuElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLMenuElement [@@js.apply as_constructor]
+    val create: t -> _HTMLMenuElement [@@js.apply_newable]
   end
   module AnonymousInterface181 : sig
     type t = anonymous_interface_181
@@ -6029,7 +6029,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLMetaElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLMetaElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLMetaElement [@@js.apply as_constructor]
+    val create: t -> _HTMLMetaElement [@@js.apply_newable]
   end
   module AnonymousInterface182 : sig
     type t = anonymous_interface_182
@@ -6040,7 +6040,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLMeterElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLMeterElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLMeterElement [@@js.apply as_constructor]
+    val create: t -> _HTMLMeterElement [@@js.apply_newable]
   end
   module AnonymousInterface183 : sig
     type t = anonymous_interface_183
@@ -6051,7 +6051,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLModElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLModElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLModElement [@@js.apply as_constructor]
+    val create: t -> _HTMLModElement [@@js.apply_newable]
   end
   module AnonymousInterface184 : sig
     type t = anonymous_interface_184
@@ -6062,7 +6062,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLOListElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLOListElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLOListElement [@@js.apply as_constructor]
+    val create: t -> _HTMLOListElement [@@js.apply_newable]
   end
   module AnonymousInterface185 : sig
     type t = anonymous_interface_185
@@ -6073,7 +6073,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLObjectElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLObjectElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLObjectElement [@@js.apply as_constructor]
+    val create: t -> _HTMLObjectElement [@@js.apply_newable]
   end
   module AnonymousInterface186 : sig
     type t = anonymous_interface_186
@@ -6084,7 +6084,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLOptGroupElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLOptGroupElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLOptGroupElement [@@js.apply as_constructor]
+    val create: t -> _HTMLOptGroupElement [@@js.apply_newable]
   end
   module AnonymousInterface187 : sig
     type t = anonymous_interface_187
@@ -6095,7 +6095,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLOptionElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLOptionElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLOptionElement [@@js.apply as_constructor]
+    val create: t -> _HTMLOptionElement [@@js.apply_newable]
   end
   module AnonymousInterface188 : sig
     type t = anonymous_interface_188
@@ -6106,7 +6106,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLOptionsCollection [@@js.get "prototype"]
     val set_prototype: t -> _HTMLOptionsCollection -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLOptionsCollection [@@js.apply as_constructor]
+    val create: t -> _HTMLOptionsCollection [@@js.apply_newable]
   end
   module AnonymousInterface189 : sig
     type t = anonymous_interface_189
@@ -6117,7 +6117,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLOutputElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLOutputElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLOutputElement [@@js.apply as_constructor]
+    val create: t -> _HTMLOutputElement [@@js.apply_newable]
   end
   module AnonymousInterface190 : sig
     type t = anonymous_interface_190
@@ -6128,7 +6128,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLParagraphElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLParagraphElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLParagraphElement [@@js.apply as_constructor]
+    val create: t -> _HTMLParagraphElement [@@js.apply_newable]
   end
   module AnonymousInterface191 : sig
     type t = anonymous_interface_191
@@ -6139,7 +6139,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLParamElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLParamElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLParamElement [@@js.apply as_constructor]
+    val create: t -> _HTMLParamElement [@@js.apply_newable]
   end
   module AnonymousInterface192 : sig
     type t = anonymous_interface_192
@@ -6150,7 +6150,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLPictureElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLPictureElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLPictureElement [@@js.apply as_constructor]
+    val create: t -> _HTMLPictureElement [@@js.apply_newable]
   end
   module AnonymousInterface193 : sig
     type t = anonymous_interface_193
@@ -6161,7 +6161,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLPreElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLPreElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLPreElement [@@js.apply as_constructor]
+    val create: t -> _HTMLPreElement [@@js.apply_newable]
   end
   module AnonymousInterface194 : sig
     type t = anonymous_interface_194
@@ -6172,7 +6172,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLProgressElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLProgressElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLProgressElement [@@js.apply as_constructor]
+    val create: t -> _HTMLProgressElement [@@js.apply_newable]
   end
   module AnonymousInterface195 : sig
     type t = anonymous_interface_195
@@ -6183,7 +6183,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLQuoteElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLQuoteElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLQuoteElement [@@js.apply as_constructor]
+    val create: t -> _HTMLQuoteElement [@@js.apply_newable]
   end
   module AnonymousInterface196 : sig
     type t = anonymous_interface_196
@@ -6194,7 +6194,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLScriptElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLScriptElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLScriptElement [@@js.apply as_constructor]
+    val create: t -> _HTMLScriptElement [@@js.apply_newable]
   end
   module AnonymousInterface197 : sig
     type t = anonymous_interface_197
@@ -6205,7 +6205,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLSelectElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLSelectElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLSelectElement [@@js.apply as_constructor]
+    val create: t -> _HTMLSelectElement [@@js.apply_newable]
   end
   module AnonymousInterface198 : sig
     type t = anonymous_interface_198
@@ -6216,7 +6216,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLSlotElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLSlotElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLSlotElement [@@js.apply as_constructor]
+    val create: t -> _HTMLSlotElement [@@js.apply_newable]
   end
   module AnonymousInterface199 : sig
     type t = anonymous_interface_199
@@ -6227,7 +6227,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLSourceElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLSourceElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLSourceElement [@@js.apply as_constructor]
+    val create: t -> _HTMLSourceElement [@@js.apply_newable]
   end
   module AnonymousInterface200 : sig
     type t = anonymous_interface_200
@@ -6238,7 +6238,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLSpanElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLSpanElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLSpanElement [@@js.apply as_constructor]
+    val create: t -> _HTMLSpanElement [@@js.apply_newable]
   end
   module AnonymousInterface201 : sig
     type t = anonymous_interface_201
@@ -6249,7 +6249,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLStyleElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLStyleElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLStyleElement [@@js.apply as_constructor]
+    val create: t -> _HTMLStyleElement [@@js.apply_newable]
   end
   module AnonymousInterface202 : sig
     type t = anonymous_interface_202
@@ -6260,7 +6260,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTableCaptionElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTableCaptionElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTableCaptionElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTableCaptionElement [@@js.apply_newable]
   end
   module AnonymousInterface203 : sig
     type t = anonymous_interface_203
@@ -6271,7 +6271,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTableCellElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTableCellElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTableCellElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTableCellElement [@@js.apply_newable]
   end
   module AnonymousInterface204 : sig
     type t = anonymous_interface_204
@@ -6282,7 +6282,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTableColElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTableColElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTableColElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTableColElement [@@js.apply_newable]
   end
   module AnonymousInterface205 : sig
     type t = anonymous_interface_205
@@ -6293,7 +6293,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTableDataCellElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTableDataCellElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTableDataCellElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTableDataCellElement [@@js.apply_newable]
   end
   module AnonymousInterface206 : sig
     type t = anonymous_interface_206
@@ -6304,7 +6304,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTableElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTableElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTableElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTableElement [@@js.apply_newable]
   end
   module AnonymousInterface207 : sig
     type t = anonymous_interface_207
@@ -6315,7 +6315,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTableHeaderCellElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTableHeaderCellElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTableHeaderCellElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTableHeaderCellElement [@@js.apply_newable]
   end
   module AnonymousInterface208 : sig
     type t = anonymous_interface_208
@@ -6326,7 +6326,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTableRowElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTableRowElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTableRowElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTableRowElement [@@js.apply_newable]
   end
   module AnonymousInterface209 : sig
     type t = anonymous_interface_209
@@ -6337,7 +6337,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTableSectionElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTableSectionElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTableSectionElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTableSectionElement [@@js.apply_newable]
   end
   module AnonymousInterface210 : sig
     type t = anonymous_interface_210
@@ -6348,7 +6348,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTemplateElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTemplateElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTemplateElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTemplateElement [@@js.apply_newable]
   end
   module AnonymousInterface211 : sig
     type t = anonymous_interface_211
@@ -6359,7 +6359,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTextAreaElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTextAreaElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTextAreaElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTextAreaElement [@@js.apply_newable]
   end
   module AnonymousInterface212 : sig
     type t = anonymous_interface_212
@@ -6370,7 +6370,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTimeElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTimeElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTimeElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTimeElement [@@js.apply_newable]
   end
   module AnonymousInterface213 : sig
     type t = anonymous_interface_213
@@ -6381,7 +6381,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTitleElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTitleElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTitleElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTitleElement [@@js.apply_newable]
   end
   module AnonymousInterface214 : sig
     type t = anonymous_interface_214
@@ -6392,7 +6392,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLTrackElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLTrackElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLTrackElement [@@js.apply as_constructor]
+    val create: t -> _HTMLTrackElement [@@js.apply_newable]
     val get_ERROR: t -> float [@@js.get "ERROR"]
     val get_LOADED: t -> float [@@js.get "LOADED"]
     val get_LOADING: t -> float [@@js.get "LOADING"]
@@ -6407,7 +6407,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLUListElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLUListElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLUListElement [@@js.apply as_constructor]
+    val create: t -> _HTMLUListElement [@@js.apply_newable]
   end
   module AnonymousInterface216 : sig
     type t = anonymous_interface_216
@@ -6418,7 +6418,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLUnknownElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLUnknownElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLUnknownElement [@@js.apply as_constructor]
+    val create: t -> _HTMLUnknownElement [@@js.apply_newable]
   end
   module AnonymousInterface217 : sig
     type t = anonymous_interface_217
@@ -6429,7 +6429,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HTMLVideoElement [@@js.get "prototype"]
     val set_prototype: t -> _HTMLVideoElement -> unit [@@js.set "prototype"]
-    val create: t -> _HTMLVideoElement [@@js.apply as_constructor]
+    val create: t -> _HTMLVideoElement [@@js.apply_newable]
   end
   module AnonymousInterface218 : sig
     type t = anonymous_interface_218
@@ -6440,7 +6440,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _HashChangeEvent [@@js.get "prototype"]
     val set_prototype: t -> _HashChangeEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_HashChangeEventInit -> unit -> _HashChangeEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_HashChangeEventInit -> unit -> _HashChangeEvent [@@js.apply_newable]
   end
   module AnonymousInterface219 : sig
     type t = anonymous_interface_219
@@ -6451,7 +6451,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Headers [@@js.get "prototype"]
     val set_prototype: t -> _Headers -> unit [@@js.set "prototype"]
-    val create: t -> ?init:_HeadersInit -> unit -> _Headers [@@js.apply as_constructor]
+    val create: t -> ?init:_HeadersInit -> unit -> _Headers [@@js.apply_newable]
   end
   module AnonymousInterface220 : sig
     type t = anonymous_interface_220
@@ -6462,7 +6462,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _History [@@js.get "prototype"]
     val set_prototype: t -> _History -> unit [@@js.set "prototype"]
-    val create: t -> _History [@@js.apply as_constructor]
+    val create: t -> _History [@@js.apply_newable]
   end
   module AnonymousInterface221 : sig
     type t = anonymous_interface_221
@@ -6473,7 +6473,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBCursor [@@js.get "prototype"]
     val set_prototype: t -> _IDBCursor -> unit [@@js.set "prototype"]
-    val create: t -> _IDBCursor [@@js.apply as_constructor]
+    val create: t -> _IDBCursor [@@js.apply_newable]
   end
   module AnonymousInterface222 : sig
     type t = anonymous_interface_222
@@ -6484,7 +6484,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBCursorWithValue [@@js.get "prototype"]
     val set_prototype: t -> _IDBCursorWithValue -> unit [@@js.set "prototype"]
-    val create: t -> _IDBCursorWithValue [@@js.apply as_constructor]
+    val create: t -> _IDBCursorWithValue [@@js.apply_newable]
   end
   module AnonymousInterface223 : sig
     type t = anonymous_interface_223
@@ -6495,7 +6495,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBDatabase [@@js.get "prototype"]
     val set_prototype: t -> _IDBDatabase -> unit [@@js.set "prototype"]
-    val create: t -> _IDBDatabase [@@js.apply as_constructor]
+    val create: t -> _IDBDatabase [@@js.apply_newable]
   end
   module AnonymousInterface224 : sig
     type t = anonymous_interface_224
@@ -6506,7 +6506,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBFactory [@@js.get "prototype"]
     val set_prototype: t -> _IDBFactory -> unit [@@js.set "prototype"]
-    val create: t -> _IDBFactory [@@js.apply as_constructor]
+    val create: t -> _IDBFactory [@@js.apply_newable]
   end
   module AnonymousInterface225 : sig
     type t = anonymous_interface_225
@@ -6517,7 +6517,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBIndex [@@js.get "prototype"]
     val set_prototype: t -> _IDBIndex -> unit [@@js.set "prototype"]
-    val create: t -> _IDBIndex [@@js.apply as_constructor]
+    val create: t -> _IDBIndex [@@js.apply_newable]
   end
   module AnonymousInterface226 : sig
     type t = anonymous_interface_226
@@ -6528,7 +6528,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBKeyRange [@@js.get "prototype"]
     val set_prototype: t -> _IDBKeyRange -> unit [@@js.set "prototype"]
-    val create: t -> _IDBKeyRange [@@js.apply as_constructor]
+    val create: t -> _IDBKeyRange [@@js.apply_newable]
     val bound: t -> lower:any -> upper:any -> ?lowerOpen:bool -> ?upperOpen:bool -> unit -> _IDBKeyRange [@@js.call "bound"]
     val lowerBound: t -> lower:any -> ?open_:bool -> unit -> _IDBKeyRange [@@js.call "lowerBound"]
     val only: t -> value:any -> _IDBKeyRange [@@js.call "only"]
@@ -6543,7 +6543,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBObjectStore [@@js.get "prototype"]
     val set_prototype: t -> _IDBObjectStore -> unit [@@js.set "prototype"]
-    val create: t -> _IDBObjectStore [@@js.apply as_constructor]
+    val create: t -> _IDBObjectStore [@@js.apply_newable]
   end
   module AnonymousInterface228 : sig
     type t = anonymous_interface_228
@@ -6554,7 +6554,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBOpenDBRequest [@@js.get "prototype"]
     val set_prototype: t -> _IDBOpenDBRequest -> unit [@@js.set "prototype"]
-    val create: t -> _IDBOpenDBRequest [@@js.apply as_constructor]
+    val create: t -> _IDBOpenDBRequest [@@js.apply_newable]
   end
   module AnonymousInterface229 : sig
     type t = anonymous_interface_229
@@ -6565,7 +6565,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> any _IDBRequest [@@js.get "prototype"]
     val set_prototype: t -> any _IDBRequest -> unit [@@js.set "prototype"]
-    val create: t -> any _IDBRequest [@@js.apply as_constructor]
+    val create: t -> any _IDBRequest [@@js.apply_newable]
   end
   module AnonymousInterface230 : sig
     type t = anonymous_interface_230
@@ -6576,7 +6576,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBTransaction [@@js.get "prototype"]
     val set_prototype: t -> _IDBTransaction -> unit [@@js.set "prototype"]
-    val create: t -> _IDBTransaction [@@js.apply as_constructor]
+    val create: t -> _IDBTransaction [@@js.apply_newable]
   end
   module AnonymousInterface231 : sig
     type t = anonymous_interface_231
@@ -6587,7 +6587,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IDBVersionChangeEvent [@@js.get "prototype"]
     val set_prototype: t -> _IDBVersionChangeEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_IDBVersionChangeEventInit -> unit -> _IDBVersionChangeEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_IDBVersionChangeEventInit -> unit -> _IDBVersionChangeEvent [@@js.apply_newable]
   end
   module AnonymousInterface232 : sig
     type t = anonymous_interface_232
@@ -6598,7 +6598,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IIRFilterNode [@@js.get "prototype"]
     val set_prototype: t -> _IIRFilterNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> options:_IIRFilterOptions -> _IIRFilterNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> options:_IIRFilterOptions -> _IIRFilterNode [@@js.apply_newable]
   end
   module AnonymousInterface233 : sig
     type t = anonymous_interface_233
@@ -6609,7 +6609,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ImageBitmap [@@js.get "prototype"]
     val set_prototype: t -> _ImageBitmap -> unit [@@js.set "prototype"]
-    val create: t -> _ImageBitmap [@@js.apply as_constructor]
+    val create: t -> _ImageBitmap [@@js.apply_newable]
   end
   module AnonymousInterface234 : sig
     type t = anonymous_interface_234
@@ -6620,7 +6620,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ImageBitmapRenderingContext [@@js.get "prototype"]
     val set_prototype: t -> _ImageBitmapRenderingContext -> unit [@@js.set "prototype"]
-    val create: t -> _ImageBitmapRenderingContext [@@js.apply as_constructor]
+    val create: t -> _ImageBitmapRenderingContext [@@js.apply_newable]
   end
   module AnonymousInterface235 : sig
     type t = anonymous_interface_235
@@ -6631,8 +6631,8 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ImageData [@@js.get "prototype"]
     val set_prototype: t -> _ImageData -> unit [@@js.set "prototype"]
-    val create: t -> width:float -> height:float -> _ImageData [@@js.apply as_constructor]
-    val create': t -> array:Uint8ClampedArray.t_0 -> width:float -> ?height:float -> unit -> _ImageData [@@js.apply as_constructor]
+    val create: t -> width:float -> height:float -> _ImageData [@@js.apply_newable]
+    val create': t -> array:Uint8ClampedArray.t_0 -> width:float -> ?height:float -> unit -> _ImageData [@@js.apply_newable]
   end
   module AnonymousInterface236 : sig
     type t = anonymous_interface_236
@@ -6643,7 +6643,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _InputDeviceInfo [@@js.get "prototype"]
     val set_prototype: t -> _InputDeviceInfo -> unit [@@js.set "prototype"]
-    val create: t -> _InputDeviceInfo [@@js.apply as_constructor]
+    val create: t -> _InputDeviceInfo [@@js.apply_newable]
   end
   module AnonymousInterface237 : sig
     type t = anonymous_interface_237
@@ -6654,7 +6654,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _InputEvent [@@js.get "prototype"]
     val set_prototype: t -> _InputEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_InputEventInit -> unit -> _InputEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_InputEventInit -> unit -> _InputEvent [@@js.apply_newable]
   end
   module AnonymousInterface238 : sig
     type t = anonymous_interface_238
@@ -6665,7 +6665,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAssembly_Instance [@@js.get "prototype"]
     val set_prototype: t -> _WebAssembly_Instance -> unit [@@js.set "prototype"]
-    val create: t -> module_:_WebAssembly_Module -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_Instance [@@js.apply as_constructor]
+    val create: t -> module_:_WebAssembly_Module -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_Instance [@@js.apply_newable]
   end
   module AnonymousInterface239 : sig
     type t = anonymous_interface_239
@@ -6676,7 +6676,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IntersectionObserver [@@js.get "prototype"]
     val set_prototype: t -> _IntersectionObserver -> unit [@@js.set "prototype"]
-    val create: t -> callback:_IntersectionObserverCallback -> ?options:_IntersectionObserverInit -> unit -> _IntersectionObserver [@@js.apply as_constructor]
+    val create: t -> callback:_IntersectionObserverCallback -> ?options:_IntersectionObserverInit -> unit -> _IntersectionObserver [@@js.apply_newable]
   end
   module AnonymousInterface240 : sig
     type t = anonymous_interface_240
@@ -6687,7 +6687,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _IntersectionObserverEntry [@@js.get "prototype"]
     val set_prototype: t -> _IntersectionObserverEntry -> unit [@@js.set "prototype"]
-    val create: t -> intersectionObserverEntryInit:_IntersectionObserverEntryInit -> _IntersectionObserverEntry [@@js.apply as_constructor]
+    val create: t -> intersectionObserverEntryInit:_IntersectionObserverEntryInit -> _IntersectionObserverEntry [@@js.apply_newable]
   end
   module AnonymousInterface241 : sig
     type t = anonymous_interface_241
@@ -6698,7 +6698,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _KeyboardEvent [@@js.get "prototype"]
     val set_prototype: t -> _KeyboardEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_KeyboardEventInit -> unit -> _KeyboardEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_KeyboardEventInit -> unit -> _KeyboardEvent [@@js.apply_newable]
     val get_DOM_KEY_LOCATION_LEFT: t -> float [@@js.get "DOM_KEY_LOCATION_LEFT"]
     val get_DOM_KEY_LOCATION_NUMPAD: t -> float [@@js.get "DOM_KEY_LOCATION_NUMPAD"]
     val get_DOM_KEY_LOCATION_RIGHT: t -> float [@@js.get "DOM_KEY_LOCATION_RIGHT"]
@@ -6713,8 +6713,8 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _KeyframeEffect [@@js.get "prototype"]
     val set_prototype: t -> _KeyframeEffect -> unit [@@js.set "prototype"]
-    val create: t -> target:_Element or_null -> keyframes:(_PropertyIndexedKeyframes, _Keyframe) or_array or_null -> ?options:_KeyframeEffectOptions or_number -> unit -> _KeyframeEffect [@@js.apply as_constructor]
-    val create': t -> source:_KeyframeEffect -> _KeyframeEffect [@@js.apply as_constructor]
+    val create: t -> target:_Element or_null -> keyframes:(_PropertyIndexedKeyframes, _Keyframe) or_array or_null -> ?options:_KeyframeEffectOptions or_number -> unit -> _KeyframeEffect [@@js.apply_newable]
+    val create': t -> source:_KeyframeEffect -> _KeyframeEffect [@@js.apply_newable]
   end
   module AnonymousInterface243 : sig
     type t = anonymous_interface_243
@@ -6725,7 +6725,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAssembly_LinkError [@@js.get "prototype"]
     val set_prototype: t -> _WebAssembly_LinkError -> unit [@@js.set "prototype"]
-    val create: t -> _WebAssembly_LinkError [@@js.apply as_constructor]
+    val create: t -> _WebAssembly_LinkError [@@js.apply_newable]
   end
   module AnonymousInterface244 : sig
     type t = anonymous_interface_244
@@ -6736,7 +6736,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ListeningStateChangedEvent [@@js.get "prototype"]
     val set_prototype: t -> _ListeningStateChangedEvent -> unit [@@js.set "prototype"]
-    val create: t -> _ListeningStateChangedEvent [@@js.apply as_constructor]
+    val create: t -> _ListeningStateChangedEvent [@@js.apply_newable]
   end
   module AnonymousInterface245 : sig
     type t = anonymous_interface_245
@@ -6747,7 +6747,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Location [@@js.get "prototype"]
     val set_prototype: t -> _Location -> unit [@@js.set "prototype"]
-    val create: t -> _Location [@@js.apply as_constructor]
+    val create: t -> _Location [@@js.apply_newable]
   end
   module AnonymousInterface246 : sig
     type t = anonymous_interface_246
@@ -6758,7 +6758,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSAssertion [@@js.get "prototype"]
     val set_prototype: t -> _MSAssertion -> unit [@@js.set "prototype"]
-    val create: t -> _MSAssertion [@@js.apply as_constructor]
+    val create: t -> _MSAssertion [@@js.apply_newable]
   end
   module AnonymousInterface247 : sig
     type t = anonymous_interface_247
@@ -6769,7 +6769,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSBlobBuilder [@@js.get "prototype"]
     val set_prototype: t -> _MSBlobBuilder -> unit [@@js.set "prototype"]
-    val create: t -> _MSBlobBuilder [@@js.apply as_constructor]
+    val create: t -> _MSBlobBuilder [@@js.apply_newable]
   end
   module AnonymousInterface248 : sig
     type t = anonymous_interface_248
@@ -6780,7 +6780,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSFIDOCredentialAssertion [@@js.get "prototype"]
     val set_prototype: t -> _MSFIDOCredentialAssertion -> unit [@@js.set "prototype"]
-    val create: t -> _MSFIDOCredentialAssertion [@@js.apply as_constructor]
+    val create: t -> _MSFIDOCredentialAssertion [@@js.apply_newable]
   end
   module AnonymousInterface249 : sig
     type t = anonymous_interface_249
@@ -6791,7 +6791,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSFIDOSignature [@@js.get "prototype"]
     val set_prototype: t -> _MSFIDOSignature -> unit [@@js.set "prototype"]
-    val create: t -> _MSFIDOSignature [@@js.apply as_constructor]
+    val create: t -> _MSFIDOSignature [@@js.apply_newable]
   end
   module AnonymousInterface250 : sig
     type t = anonymous_interface_250
@@ -6802,7 +6802,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSFIDOSignatureAssertion [@@js.get "prototype"]
     val set_prototype: t -> _MSFIDOSignatureAssertion -> unit [@@js.set "prototype"]
-    val create: t -> _MSFIDOSignatureAssertion [@@js.apply as_constructor]
+    val create: t -> _MSFIDOSignatureAssertion [@@js.apply_newable]
   end
   module AnonymousInterface251 : sig
     type t = anonymous_interface_251
@@ -6813,7 +6813,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSGesture [@@js.get "prototype"]
     val set_prototype: t -> _MSGesture -> unit [@@js.set "prototype"]
-    val create: t -> _MSGesture [@@js.apply as_constructor]
+    val create: t -> _MSGesture [@@js.apply_newable]
   end
   module AnonymousInterface252 : sig
     type t = anonymous_interface_252
@@ -6824,7 +6824,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSGestureEvent [@@js.get "prototype"]
     val set_prototype: t -> _MSGestureEvent -> unit [@@js.set "prototype"]
-    val create: t -> _MSGestureEvent [@@js.apply as_constructor]
+    val create: t -> _MSGestureEvent [@@js.apply_newable]
     val get_MSGESTURE_FLAG_BEGIN: t -> float [@@js.get "MSGESTURE_FLAG_BEGIN"]
     val get_MSGESTURE_FLAG_CANCEL: t -> float [@@js.get "MSGESTURE_FLAG_CANCEL"]
     val get_MSGESTURE_FLAG_END: t -> float [@@js.get "MSGESTURE_FLAG_END"]
@@ -6840,7 +6840,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSGraphicsTrust [@@js.get "prototype"]
     val set_prototype: t -> _MSGraphicsTrust -> unit [@@js.set "prototype"]
-    val create: t -> _MSGraphicsTrust [@@js.apply as_constructor]
+    val create: t -> _MSGraphicsTrust [@@js.apply_newable]
   end
   module AnonymousInterface254 : sig
     type t = anonymous_interface_254
@@ -6851,7 +6851,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSInputMethodContext [@@js.get "prototype"]
     val set_prototype: t -> _MSInputMethodContext -> unit [@@js.set "prototype"]
-    val create: t -> _MSInputMethodContext [@@js.apply as_constructor]
+    val create: t -> _MSInputMethodContext [@@js.apply_newable]
   end
   module AnonymousInterface255 : sig
     type t = anonymous_interface_255
@@ -6862,7 +6862,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSMediaKeyError [@@js.get "prototype"]
     val set_prototype: t -> _MSMediaKeyError -> unit [@@js.set "prototype"]
-    val create: t -> _MSMediaKeyError [@@js.apply as_constructor]
+    val create: t -> _MSMediaKeyError [@@js.apply_newable]
     val get_MS_MEDIA_KEYERR_CLIENT: t -> float [@@js.get "MS_MEDIA_KEYERR_CLIENT"]
     val get_MS_MEDIA_KEYERR_DOMAIN: t -> float [@@js.get "MS_MEDIA_KEYERR_DOMAIN"]
     val get_MS_MEDIA_KEYERR_HARDWARECHANGE: t -> float [@@js.get "MS_MEDIA_KEYERR_HARDWARECHANGE"]
@@ -6879,7 +6879,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSMediaKeyMessageEvent [@@js.get "prototype"]
     val set_prototype: t -> _MSMediaKeyMessageEvent -> unit [@@js.set "prototype"]
-    val create: t -> _MSMediaKeyMessageEvent [@@js.apply as_constructor]
+    val create: t -> _MSMediaKeyMessageEvent [@@js.apply_newable]
   end
   module AnonymousInterface257 : sig
     type t = anonymous_interface_257
@@ -6890,7 +6890,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSMediaKeyNeededEvent [@@js.get "prototype"]
     val set_prototype: t -> _MSMediaKeyNeededEvent -> unit [@@js.set "prototype"]
-    val create: t -> _MSMediaKeyNeededEvent [@@js.apply as_constructor]
+    val create: t -> _MSMediaKeyNeededEvent [@@js.apply_newable]
   end
   module AnonymousInterface258 : sig
     type t = anonymous_interface_258
@@ -6901,7 +6901,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSMediaKeySession [@@js.get "prototype"]
     val set_prototype: t -> _MSMediaKeySession -> unit [@@js.set "prototype"]
-    val create: t -> _MSMediaKeySession [@@js.apply as_constructor]
+    val create: t -> _MSMediaKeySession [@@js.apply_newable]
   end
   module AnonymousInterface259 : sig
     type t = anonymous_interface_259
@@ -6912,7 +6912,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSMediaKeys [@@js.get "prototype"]
     val set_prototype: t -> _MSMediaKeys -> unit [@@js.set "prototype"]
-    val create: t -> keySystem:string -> _MSMediaKeys [@@js.apply as_constructor]
+    val create: t -> keySystem:string -> _MSMediaKeys [@@js.apply_newable]
     val isTypeSupported: t -> keySystem:string -> ?type_:string or_null -> unit -> bool [@@js.call "isTypeSupported"]
     val isTypeSupportedWithFeatures: t -> keySystem:string -> ?type_:string or_null -> unit -> string [@@js.call "isTypeSupportedWithFeatures"]
   end
@@ -6925,7 +6925,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSPointerEvent [@@js.get "prototype"]
     val set_prototype: t -> _MSPointerEvent -> unit [@@js.set "prototype"]
-    val create: t -> typeArg:string -> ?eventInitDict:_PointerEventInit -> unit -> _MSPointerEvent [@@js.apply as_constructor]
+    val create: t -> typeArg:string -> ?eventInitDict:_PointerEventInit -> unit -> _MSPointerEvent [@@js.apply_newable]
   end
   module AnonymousInterface261 : sig
     type t = anonymous_interface_261
@@ -6936,7 +6936,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MSStream [@@js.get "prototype"]
     val set_prototype: t -> _MSStream -> unit [@@js.set "prototype"]
-    val create: t -> _MSStream [@@js.apply as_constructor]
+    val create: t -> _MSStream [@@js.apply_newable]
   end
   module AnonymousInterface262 : sig
     type t = anonymous_interface_262
@@ -6947,7 +6947,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaDeviceInfo [@@js.get "prototype"]
     val set_prototype: t -> _MediaDeviceInfo -> unit [@@js.set "prototype"]
-    val create: t -> _MediaDeviceInfo [@@js.apply as_constructor]
+    val create: t -> _MediaDeviceInfo [@@js.apply_newable]
   end
   module AnonymousInterface263 : sig
     type t = anonymous_interface_263
@@ -6958,7 +6958,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaDevices [@@js.get "prototype"]
     val set_prototype: t -> _MediaDevices -> unit [@@js.set "prototype"]
-    val create: t -> _MediaDevices [@@js.apply as_constructor]
+    val create: t -> _MediaDevices [@@js.apply_newable]
   end
   module AnonymousInterface264 : sig
     type t = anonymous_interface_264
@@ -6969,7 +6969,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaElementAudioSourceNode [@@js.get "prototype"]
     val set_prototype: t -> _MediaElementAudioSourceNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_AudioContext -> options:_MediaElementAudioSourceOptions -> _MediaElementAudioSourceNode [@@js.apply as_constructor]
+    val create: t -> context:_AudioContext -> options:_MediaElementAudioSourceOptions -> _MediaElementAudioSourceNode [@@js.apply_newable]
   end
   module AnonymousInterface265 : sig
     type t = anonymous_interface_265
@@ -6980,7 +6980,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaEncryptedEvent [@@js.get "prototype"]
     val set_prototype: t -> _MediaEncryptedEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_MediaEncryptedEventInit -> unit -> _MediaEncryptedEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_MediaEncryptedEventInit -> unit -> _MediaEncryptedEvent [@@js.apply_newable]
   end
   module AnonymousInterface266 : sig
     type t = anonymous_interface_266
@@ -6991,7 +6991,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaError [@@js.get "prototype"]
     val set_prototype: t -> _MediaError -> unit [@@js.set "prototype"]
-    val create: t -> _MediaError [@@js.apply as_constructor]
+    val create: t -> _MediaError [@@js.apply_newable]
     val get_MEDIA_ERR_ABORTED: t -> float [@@js.get "MEDIA_ERR_ABORTED"]
     val get_MEDIA_ERR_DECODE: t -> float [@@js.get "MEDIA_ERR_DECODE"]
     val get_MEDIA_ERR_NETWORK: t -> float [@@js.get "MEDIA_ERR_NETWORK"]
@@ -7007,7 +7007,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaKeyMessageEvent [@@js.get "prototype"]
     val set_prototype: t -> _MediaKeyMessageEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_MediaKeyMessageEventInit -> _MediaKeyMessageEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_MediaKeyMessageEventInit -> _MediaKeyMessageEvent [@@js.apply_newable]
   end
   module AnonymousInterface268 : sig
     type t = anonymous_interface_268
@@ -7018,7 +7018,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaKeySession [@@js.get "prototype"]
     val set_prototype: t -> _MediaKeySession -> unit [@@js.set "prototype"]
-    val create: t -> _MediaKeySession [@@js.apply as_constructor]
+    val create: t -> _MediaKeySession [@@js.apply_newable]
   end
   module AnonymousInterface269 : sig
     type t = anonymous_interface_269
@@ -7029,7 +7029,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaKeyStatusMap [@@js.get "prototype"]
     val set_prototype: t -> _MediaKeyStatusMap -> unit [@@js.set "prototype"]
-    val create: t -> _MediaKeyStatusMap [@@js.apply as_constructor]
+    val create: t -> _MediaKeyStatusMap [@@js.apply_newable]
   end
   module AnonymousInterface270 : sig
     type t = anonymous_interface_270
@@ -7040,7 +7040,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaKeySystemAccess [@@js.get "prototype"]
     val set_prototype: t -> _MediaKeySystemAccess -> unit [@@js.set "prototype"]
-    val create: t -> _MediaKeySystemAccess [@@js.apply as_constructor]
+    val create: t -> _MediaKeySystemAccess [@@js.apply_newable]
   end
   module AnonymousInterface271 : sig
     type t = anonymous_interface_271
@@ -7051,7 +7051,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaKeys [@@js.get "prototype"]
     val set_prototype: t -> _MediaKeys -> unit [@@js.set "prototype"]
-    val create: t -> _MediaKeys [@@js.apply as_constructor]
+    val create: t -> _MediaKeys [@@js.apply_newable]
   end
   module AnonymousInterface272 : sig
     type t = anonymous_interface_272
@@ -7062,7 +7062,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaList [@@js.get "prototype"]
     val set_prototype: t -> _MediaList -> unit [@@js.set "prototype"]
-    val create: t -> _MediaList [@@js.apply as_constructor]
+    val create: t -> _MediaList [@@js.apply_newable]
   end
   module AnonymousInterface273 : sig
     type t = anonymous_interface_273
@@ -7073,7 +7073,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaQueryList [@@js.get "prototype"]
     val set_prototype: t -> _MediaQueryList -> unit [@@js.set "prototype"]
-    val create: t -> _MediaQueryList [@@js.apply as_constructor]
+    val create: t -> _MediaQueryList [@@js.apply_newable]
   end
   module AnonymousInterface274 : sig
     type t = anonymous_interface_274
@@ -7084,7 +7084,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaQueryListEvent [@@js.get "prototype"]
     val set_prototype: t -> _MediaQueryListEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_MediaQueryListEventInit -> unit -> _MediaQueryListEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_MediaQueryListEventInit -> unit -> _MediaQueryListEvent [@@js.apply_newable]
   end
   module AnonymousInterface275 : sig
     type t = anonymous_interface_275
@@ -7095,7 +7095,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaSource [@@js.get "prototype"]
     val set_prototype: t -> _MediaSource -> unit [@@js.set "prototype"]
-    val create: t -> _MediaSource [@@js.apply as_constructor]
+    val create: t -> _MediaSource [@@js.apply_newable]
     val isTypeSupported: t -> type_:string -> bool [@@js.call "isTypeSupported"]
   end
   module AnonymousInterface276 : sig
@@ -7107,9 +7107,9 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaStream [@@js.get "prototype"]
     val set_prototype: t -> _MediaStream -> unit [@@js.set "prototype"]
-    val create: t -> _MediaStream [@@js.apply as_constructor]
-    val create': t -> stream:_MediaStream -> _MediaStream [@@js.apply as_constructor]
-    val create'': t -> tracks:_MediaStreamTrack list -> _MediaStream [@@js.apply as_constructor]
+    val create: t -> _MediaStream [@@js.apply_newable]
+    val create': t -> stream:_MediaStream -> _MediaStream [@@js.apply_newable]
+    val create'': t -> tracks:_MediaStreamTrack list -> _MediaStream [@@js.apply_newable]
   end
   module AnonymousInterface277 : sig
     type t = anonymous_interface_277
@@ -7120,7 +7120,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaStreamAudioDestinationNode [@@js.get "prototype"]
     val set_prototype: t -> _MediaStreamAudioDestinationNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_AudioContext -> ?options:_AudioNodeOptions -> unit -> _MediaStreamAudioDestinationNode [@@js.apply as_constructor]
+    val create: t -> context:_AudioContext -> ?options:_AudioNodeOptions -> unit -> _MediaStreamAudioDestinationNode [@@js.apply_newable]
   end
   module AnonymousInterface278 : sig
     type t = anonymous_interface_278
@@ -7131,7 +7131,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaStreamAudioSourceNode [@@js.get "prototype"]
     val set_prototype: t -> _MediaStreamAudioSourceNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_AudioContext -> options:_MediaStreamAudioSourceOptions -> _MediaStreamAudioSourceNode [@@js.apply as_constructor]
+    val create: t -> context:_AudioContext -> options:_MediaStreamAudioSourceOptions -> _MediaStreamAudioSourceNode [@@js.apply_newable]
   end
   module AnonymousInterface279 : sig
     type t = anonymous_interface_279
@@ -7142,7 +7142,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaStreamError [@@js.get "prototype"]
     val set_prototype: t -> _MediaStreamError -> unit [@@js.set "prototype"]
-    val create: t -> _MediaStreamError [@@js.apply as_constructor]
+    val create: t -> _MediaStreamError [@@js.apply_newable]
   end
   module AnonymousInterface280 : sig
     type t = anonymous_interface_280
@@ -7153,7 +7153,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaStreamErrorEvent [@@js.get "prototype"]
     val set_prototype: t -> _MediaStreamErrorEvent -> unit [@@js.set "prototype"]
-    val create: t -> typeArg:string -> ?eventInitDict:_MediaStreamErrorEventInit -> unit -> _MediaStreamErrorEvent [@@js.apply as_constructor]
+    val create: t -> typeArg:string -> ?eventInitDict:_MediaStreamErrorEventInit -> unit -> _MediaStreamErrorEvent [@@js.apply_newable]
   end
   module AnonymousInterface281 : sig
     type t = anonymous_interface_281
@@ -7164,7 +7164,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaStreamEvent [@@js.get "prototype"]
     val set_prototype: t -> _MediaStreamEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_MediaStreamEventInit -> _MediaStreamEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_MediaStreamEventInit -> _MediaStreamEvent [@@js.apply_newable]
   end
   module AnonymousInterface282 : sig
     type t = anonymous_interface_282
@@ -7175,7 +7175,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaStreamTrack [@@js.get "prototype"]
     val set_prototype: t -> _MediaStreamTrack -> unit [@@js.set "prototype"]
-    val create: t -> _MediaStreamTrack [@@js.apply as_constructor]
+    val create: t -> _MediaStreamTrack [@@js.apply_newable]
   end
   module AnonymousInterface283 : sig
     type t = anonymous_interface_283
@@ -7186,7 +7186,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaStreamTrackAudioSourceNode [@@js.get "prototype"]
     val set_prototype: t -> _MediaStreamTrackAudioSourceNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_AudioContext -> options:_MediaStreamTrackAudioSourceOptions -> _MediaStreamTrackAudioSourceNode [@@js.apply as_constructor]
+    val create: t -> context:_AudioContext -> options:_MediaStreamTrackAudioSourceOptions -> _MediaStreamTrackAudioSourceNode [@@js.apply_newable]
   end
   module AnonymousInterface284 : sig
     type t = anonymous_interface_284
@@ -7197,7 +7197,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MediaStreamTrackEvent [@@js.get "prototype"]
     val set_prototype: t -> _MediaStreamTrackEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_MediaStreamTrackEventInit -> _MediaStreamTrackEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_MediaStreamTrackEventInit -> _MediaStreamTrackEvent [@@js.apply_newable]
   end
   module AnonymousInterface285 : sig
     type t = anonymous_interface_285
@@ -7208,7 +7208,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAssembly_Memory [@@js.get "prototype"]
     val set_prototype: t -> _WebAssembly_Memory -> unit [@@js.set "prototype"]
-    val create: t -> descriptor:_WebAssembly_MemoryDescriptor -> _WebAssembly_Memory [@@js.apply as_constructor]
+    val create: t -> descriptor:_WebAssembly_MemoryDescriptor -> _WebAssembly_Memory [@@js.apply_newable]
   end
   module AnonymousInterface286 : sig
     type t = anonymous_interface_286
@@ -7219,7 +7219,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MessageChannel [@@js.get "prototype"]
     val set_prototype: t -> _MessageChannel -> unit [@@js.set "prototype"]
-    val create: t -> _MessageChannel [@@js.apply as_constructor]
+    val create: t -> _MessageChannel [@@js.apply_newable]
   end
   module AnonymousInterface287 : sig
     type t = anonymous_interface_287
@@ -7230,7 +7230,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MessageEvent [@@js.get "prototype"]
     val set_prototype: t -> _MessageEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_MessageEventInit -> unit -> _MessageEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_MessageEventInit -> unit -> _MessageEvent [@@js.apply_newable]
   end
   module AnonymousInterface288 : sig
     type t = anonymous_interface_288
@@ -7241,7 +7241,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MessagePort [@@js.get "prototype"]
     val set_prototype: t -> _MessagePort -> unit [@@js.set "prototype"]
-    val create: t -> _MessagePort [@@js.apply as_constructor]
+    val create: t -> _MessagePort [@@js.apply_newable]
   end
   module AnonymousInterface289 : sig
     type t = anonymous_interface_289
@@ -7252,7 +7252,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MimeType [@@js.get "prototype"]
     val set_prototype: t -> _MimeType -> unit [@@js.set "prototype"]
-    val create: t -> _MimeType [@@js.apply as_constructor]
+    val create: t -> _MimeType [@@js.apply_newable]
   end
   module AnonymousInterface290 : sig
     type t = anonymous_interface_290
@@ -7263,7 +7263,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MimeTypeArray [@@js.get "prototype"]
     val set_prototype: t -> _MimeTypeArray -> unit [@@js.set "prototype"]
-    val create: t -> _MimeTypeArray [@@js.apply as_constructor]
+    val create: t -> _MimeTypeArray [@@js.apply_newable]
   end
   module AnonymousInterface291 : sig
     type t = anonymous_interface_291
@@ -7274,7 +7274,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAssembly_Module [@@js.get "prototype"]
     val set_prototype: t -> _WebAssembly_Module -> unit [@@js.set "prototype"]
-    val create: t -> bytes:_BufferSource -> _WebAssembly_Module [@@js.apply as_constructor]
+    val create: t -> bytes:_BufferSource -> _WebAssembly_Module [@@js.apply_newable]
     val customSections: t -> moduleObject:_WebAssembly_Module -> sectionName:string -> ArrayBuffer.t_0 list [@@js.call "customSections"]
     val exports: t -> moduleObject:_WebAssembly_Module -> _WebAssembly_ModuleExportDescriptor list [@@js.call "exports"]
     val imports: t -> moduleObject:_WebAssembly_Module -> _WebAssembly_ModuleImportDescriptor list [@@js.call "imports"]
@@ -7288,7 +7288,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MouseEvent [@@js.get "prototype"]
     val set_prototype: t -> _MouseEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_MouseEventInit -> unit -> _MouseEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_MouseEventInit -> unit -> _MouseEvent [@@js.apply_newable]
   end
   module AnonymousInterface293 : sig
     type t = anonymous_interface_293
@@ -7299,7 +7299,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MutationEvent [@@js.get "prototype"]
     val set_prototype: t -> _MutationEvent -> unit [@@js.set "prototype"]
-    val create: t -> _MutationEvent [@@js.apply as_constructor]
+    val create: t -> _MutationEvent [@@js.apply_newable]
     val get_ADDITION: t -> float [@@js.get "ADDITION"]
     val get_MODIFICATION: t -> float [@@js.get "MODIFICATION"]
     val get_REMOVAL: t -> float [@@js.get "REMOVAL"]
@@ -7313,7 +7313,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MutationObserver [@@js.get "prototype"]
     val set_prototype: t -> _MutationObserver -> unit [@@js.set "prototype"]
-    val create: t -> callback:_MutationCallback -> _MutationObserver [@@js.apply as_constructor]
+    val create: t -> callback:_MutationCallback -> _MutationObserver [@@js.apply_newable]
   end
   module AnonymousInterface295 : sig
     type t = anonymous_interface_295
@@ -7324,7 +7324,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _MutationRecord [@@js.get "prototype"]
     val set_prototype: t -> _MutationRecord -> unit [@@js.set "prototype"]
-    val create: t -> _MutationRecord [@@js.apply as_constructor]
+    val create: t -> _MutationRecord [@@js.apply_newable]
   end
   module AnonymousInterface296 : sig
     type t = anonymous_interface_296
@@ -7335,7 +7335,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _NamedNodeMap [@@js.get "prototype"]
     val set_prototype: t -> _NamedNodeMap -> unit [@@js.set "prototype"]
-    val create: t -> _NamedNodeMap [@@js.apply as_constructor]
+    val create: t -> _NamedNodeMap [@@js.apply_newable]
   end
   module AnonymousInterface297 : sig
     type t = anonymous_interface_297
@@ -7346,7 +7346,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _NavigationPreloadManager [@@js.get "prototype"]
     val set_prototype: t -> _NavigationPreloadManager -> unit [@@js.set "prototype"]
-    val create: t -> _NavigationPreloadManager [@@js.apply as_constructor]
+    val create: t -> _NavigationPreloadManager [@@js.apply_newable]
   end
   module AnonymousInterface298 : sig
     type t = anonymous_interface_298
@@ -7357,7 +7357,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Navigator [@@js.get "prototype"]
     val set_prototype: t -> _Navigator -> unit [@@js.set "prototype"]
-    val create: t -> _Navigator [@@js.apply as_constructor]
+    val create: t -> _Navigator [@@js.apply_newable]
   end
   module AnonymousInterface299 : sig
     type t = anonymous_interface_299
@@ -7368,7 +7368,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Node [@@js.get "prototype"]
     val set_prototype: t -> _Node -> unit [@@js.set "prototype"]
-    val create: t -> _Node [@@js.apply as_constructor]
+    val create: t -> _Node [@@js.apply_newable]
     val get_ATTRIBUTE_NODE: t -> float [@@js.get "ATTRIBUTE_NODE"]
     val get_CDATA_SECTION_NODE: t -> float [@@js.get "CDATA_SECTION_NODE"]
     val get_COMMENT_NODE: t -> float [@@js.get "COMMENT_NODE"]
@@ -7397,7 +7397,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _NodeIterator [@@js.get "prototype"]
     val set_prototype: t -> _NodeIterator -> unit [@@js.set "prototype"]
-    val create: t -> _NodeIterator [@@js.apply as_constructor]
+    val create: t -> _NodeIterator [@@js.apply_newable]
   end
   module AnonymousInterface301 : sig
     type t = anonymous_interface_301
@@ -7408,7 +7408,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _NodeList [@@js.get "prototype"]
     val set_prototype: t -> _NodeList -> unit [@@js.set "prototype"]
-    val create: t -> _NodeList [@@js.apply as_constructor]
+    val create: t -> _NodeList [@@js.apply_newable]
   end
   module AnonymousInterface302 : sig
     type t = anonymous_interface_302
@@ -7419,7 +7419,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Notification [@@js.get "prototype"]
     val set_prototype: t -> _Notification -> unit [@@js.set "prototype"]
-    val create: t -> title:string -> ?options:_NotificationOptions -> unit -> _Notification [@@js.apply as_constructor]
+    val create: t -> title:string -> ?options:_NotificationOptions -> unit -> _Notification [@@js.apply_newable]
     val get_maxActions: t -> float [@@js.get "maxActions"]
     val get_permission: t -> _NotificationPermission [@@js.get "permission"]
     val requestPermission: t -> ?deprecatedCallback:_NotificationPermissionCallback -> unit -> _NotificationPermission Promise.t_1 [@@js.call "requestPermission"]
@@ -7433,7 +7433,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _OfflineAudioCompletionEvent [@@js.get "prototype"]
     val set_prototype: t -> _OfflineAudioCompletionEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_OfflineAudioCompletionEventInit -> _OfflineAudioCompletionEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_OfflineAudioCompletionEventInit -> _OfflineAudioCompletionEvent [@@js.apply_newable]
   end
   module AnonymousInterface304 : sig
     type t = anonymous_interface_304
@@ -7444,8 +7444,8 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _OfflineAudioContext [@@js.get "prototype"]
     val set_prototype: t -> _OfflineAudioContext -> unit [@@js.set "prototype"]
-    val create: t -> contextOptions:_OfflineAudioContextOptions -> _OfflineAudioContext [@@js.apply as_constructor]
-    val create': t -> numberOfChannels:float -> length:float -> sampleRate:float -> _OfflineAudioContext [@@js.apply as_constructor]
+    val create: t -> contextOptions:_OfflineAudioContextOptions -> _OfflineAudioContext [@@js.apply_newable]
+    val create': t -> numberOfChannels:float -> length:float -> sampleRate:float -> _OfflineAudioContext [@@js.apply_newable]
   end
   module AnonymousInterface305 : sig
     type t = anonymous_interface_305
@@ -7456,7 +7456,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _OffscreenCanvas [@@js.get "prototype"]
     val set_prototype: t -> _OffscreenCanvas -> unit [@@js.set "prototype"]
-    val create: t -> width:float -> height:float -> _OffscreenCanvas [@@js.apply as_constructor]
+    val create: t -> width:float -> height:float -> _OffscreenCanvas [@@js.apply_newable]
   end
   module AnonymousInterface306 : sig
     type t = anonymous_interface_306
@@ -7467,7 +7467,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _OffscreenCanvasRenderingContext2D [@@js.get "prototype"]
     val set_prototype: t -> _OffscreenCanvasRenderingContext2D -> unit [@@js.set "prototype"]
-    val create: t -> _OffscreenCanvasRenderingContext2D [@@js.apply as_constructor]
+    val create: t -> _OffscreenCanvasRenderingContext2D [@@js.apply_newable]
   end
   module AnonymousInterface307 : sig
     type t = anonymous_interface_307
@@ -7478,7 +7478,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _OscillatorNode [@@js.get "prototype"]
     val set_prototype: t -> _OscillatorNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_OscillatorOptions -> unit -> _OscillatorNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_OscillatorOptions -> unit -> _OscillatorNode [@@js.apply_newable]
   end
   module AnonymousInterface308 : sig
     type t = anonymous_interface_308
@@ -7489,7 +7489,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _OverconstrainedError [@@js.get "prototype"]
     val set_prototype: t -> _OverconstrainedError -> unit [@@js.set "prototype"]
-    val create: t -> _OverconstrainedError [@@js.apply as_constructor]
+    val create: t -> _OverconstrainedError [@@js.apply_newable]
   end
   module AnonymousInterface309 : sig
     type t = anonymous_interface_309
@@ -7500,7 +7500,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _OverflowEvent [@@js.get "prototype"]
     val set_prototype: t -> _OverflowEvent -> unit [@@js.set "prototype"]
-    val create: t -> _OverflowEvent [@@js.apply as_constructor]
+    val create: t -> _OverflowEvent [@@js.apply_newable]
     val get_BOTH: t -> float [@@js.get "BOTH"]
     val get_HORIZONTAL: t -> float [@@js.get "HORIZONTAL"]
     val get_VERTICAL: t -> float [@@js.get "VERTICAL"]
@@ -7514,7 +7514,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PageTransitionEvent [@@js.get "prototype"]
     val set_prototype: t -> _PageTransitionEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_PageTransitionEventInit -> unit -> _PageTransitionEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_PageTransitionEventInit -> unit -> _PageTransitionEvent [@@js.apply_newable]
   end
   module AnonymousInterface311 : sig
     type t = anonymous_interface_311
@@ -7525,7 +7525,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PannerNode [@@js.get "prototype"]
     val set_prototype: t -> _PannerNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_PannerOptions -> unit -> _PannerNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_PannerOptions -> unit -> _PannerNode [@@js.apply_newable]
   end
   module AnonymousInterface312 : sig
     type t = anonymous_interface_312
@@ -7536,7 +7536,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Path2D [@@js.get "prototype"]
     val set_prototype: t -> _Path2D -> unit [@@js.set "prototype"]
-    val create: t -> ?path:_Path2D or_string -> unit -> _Path2D [@@js.apply as_constructor]
+    val create: t -> ?path:_Path2D or_string -> unit -> _Path2D [@@js.apply_newable]
   end
   module AnonymousInterface313 : sig
     type t = anonymous_interface_313
@@ -7547,7 +7547,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PaymentAddress [@@js.get "prototype"]
     val set_prototype: t -> _PaymentAddress -> unit [@@js.set "prototype"]
-    val create: t -> _PaymentAddress [@@js.apply as_constructor]
+    val create: t -> _PaymentAddress [@@js.apply_newable]
   end
   module AnonymousInterface314 : sig
     type t = anonymous_interface_314
@@ -7558,7 +7558,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PaymentRequest [@@js.get "prototype"]
     val set_prototype: t -> _PaymentRequest -> unit [@@js.set "prototype"]
-    val create: t -> methodData:_PaymentMethodData list -> details:_PaymentDetailsInit -> ?options:_PaymentOptions -> unit -> _PaymentRequest [@@js.apply as_constructor]
+    val create: t -> methodData:_PaymentMethodData list -> details:_PaymentDetailsInit -> ?options:_PaymentOptions -> unit -> _PaymentRequest [@@js.apply_newable]
   end
   module AnonymousInterface315 : sig
     type t = anonymous_interface_315
@@ -7569,7 +7569,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PaymentRequestUpdateEvent [@@js.get "prototype"]
     val set_prototype: t -> _PaymentRequestUpdateEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_PaymentRequestUpdateEventInit -> unit -> _PaymentRequestUpdateEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_PaymentRequestUpdateEventInit -> unit -> _PaymentRequestUpdateEvent [@@js.apply_newable]
   end
   module AnonymousInterface316 : sig
     type t = anonymous_interface_316
@@ -7580,7 +7580,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PaymentResponse [@@js.get "prototype"]
     val set_prototype: t -> _PaymentResponse -> unit [@@js.set "prototype"]
-    val create: t -> _PaymentResponse [@@js.apply as_constructor]
+    val create: t -> _PaymentResponse [@@js.apply_newable]
   end
   module AnonymousInterface317 : sig
     type t = anonymous_interface_317
@@ -7591,7 +7591,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerfWidgetExternal [@@js.get "prototype"]
     val set_prototype: t -> _PerfWidgetExternal -> unit [@@js.set "prototype"]
-    val create: t -> _PerfWidgetExternal [@@js.apply as_constructor]
+    val create: t -> _PerfWidgetExternal [@@js.apply_newable]
   end
   module AnonymousInterface318 : sig
     type t = anonymous_interface_318
@@ -7602,7 +7602,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Performance [@@js.get "prototype"]
     val set_prototype: t -> _Performance -> unit [@@js.set "prototype"]
-    val create: t -> _Performance [@@js.apply as_constructor]
+    val create: t -> _Performance [@@js.apply_newable]
   end
   module AnonymousInterface319 : sig
     type t = anonymous_interface_319
@@ -7613,7 +7613,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerformanceEntry [@@js.get "prototype"]
     val set_prototype: t -> _PerformanceEntry -> unit [@@js.set "prototype"]
-    val create: t -> _PerformanceEntry [@@js.apply as_constructor]
+    val create: t -> _PerformanceEntry [@@js.apply_newable]
   end
   module AnonymousInterface320 : sig
     type t = anonymous_interface_320
@@ -7624,7 +7624,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerformanceMark [@@js.get "prototype"]
     val set_prototype: t -> _PerformanceMark -> unit [@@js.set "prototype"]
-    val create: t -> _PerformanceMark [@@js.apply as_constructor]
+    val create: t -> _PerformanceMark [@@js.apply_newable]
   end
   module AnonymousInterface321 : sig
     type t = anonymous_interface_321
@@ -7635,7 +7635,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerformanceMeasure [@@js.get "prototype"]
     val set_prototype: t -> _PerformanceMeasure -> unit [@@js.set "prototype"]
-    val create: t -> _PerformanceMeasure [@@js.apply as_constructor]
+    val create: t -> _PerformanceMeasure [@@js.apply_newable]
   end
   module AnonymousInterface322 : sig
     type t = anonymous_interface_322
@@ -7646,7 +7646,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerformanceNavigation [@@js.get "prototype"]
     val set_prototype: t -> _PerformanceNavigation -> unit [@@js.set "prototype"]
-    val create: t -> _PerformanceNavigation [@@js.apply as_constructor]
+    val create: t -> _PerformanceNavigation [@@js.apply_newable]
     val get_TYPE_BACK_FORWARD: t -> float [@@js.get "TYPE_BACK_FORWARD"]
     val get_TYPE_NAVIGATE: t -> float [@@js.get "TYPE_NAVIGATE"]
     val get_TYPE_RELOAD: t -> float [@@js.get "TYPE_RELOAD"]
@@ -7661,7 +7661,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerformanceNavigationTiming [@@js.get "prototype"]
     val set_prototype: t -> _PerformanceNavigationTiming -> unit [@@js.set "prototype"]
-    val create: t -> _PerformanceNavigationTiming [@@js.apply as_constructor]
+    val create: t -> _PerformanceNavigationTiming [@@js.apply_newable]
   end
   module AnonymousInterface324 : sig
     type t = anonymous_interface_324
@@ -7672,7 +7672,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerformanceObserver [@@js.get "prototype"]
     val set_prototype: t -> _PerformanceObserver -> unit [@@js.set "prototype"]
-    val create: t -> callback:_PerformanceObserverCallback -> _PerformanceObserver [@@js.apply as_constructor]
+    val create: t -> callback:_PerformanceObserverCallback -> _PerformanceObserver [@@js.apply_newable]
     val get_supportedEntryTypes: t -> string list [@@js.get "supportedEntryTypes"]
   end
   module AnonymousInterface325 : sig
@@ -7684,7 +7684,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerformanceObserverEntryList [@@js.get "prototype"]
     val set_prototype: t -> _PerformanceObserverEntryList -> unit [@@js.set "prototype"]
-    val create: t -> _PerformanceObserverEntryList [@@js.apply as_constructor]
+    val create: t -> _PerformanceObserverEntryList [@@js.apply_newable]
   end
   module AnonymousInterface326 : sig
     type t = anonymous_interface_326
@@ -7695,7 +7695,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerformanceResourceTiming [@@js.get "prototype"]
     val set_prototype: t -> _PerformanceResourceTiming -> unit [@@js.set "prototype"]
-    val create: t -> _PerformanceResourceTiming [@@js.apply as_constructor]
+    val create: t -> _PerformanceResourceTiming [@@js.apply_newable]
   end
   module AnonymousInterface327 : sig
     type t = anonymous_interface_327
@@ -7706,7 +7706,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PerformanceTiming [@@js.get "prototype"]
     val set_prototype: t -> _PerformanceTiming -> unit [@@js.set "prototype"]
-    val create: t -> _PerformanceTiming [@@js.apply as_constructor]
+    val create: t -> _PerformanceTiming [@@js.apply_newable]
   end
   module AnonymousInterface328 : sig
     type t = anonymous_interface_328
@@ -7717,7 +7717,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PeriodicWave [@@js.get "prototype"]
     val set_prototype: t -> _PeriodicWave -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_PeriodicWaveOptions -> unit -> _PeriodicWave [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_PeriodicWaveOptions -> unit -> _PeriodicWave [@@js.apply_newable]
   end
   module AnonymousInterface329 : sig
     type t = anonymous_interface_329
@@ -7728,7 +7728,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PermissionRequest [@@js.get "prototype"]
     val set_prototype: t -> _PermissionRequest -> unit [@@js.set "prototype"]
-    val create: t -> _PermissionRequest [@@js.apply as_constructor]
+    val create: t -> _PermissionRequest [@@js.apply_newable]
   end
   module AnonymousInterface330 : sig
     type t = anonymous_interface_330
@@ -7739,7 +7739,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PermissionRequestedEvent [@@js.get "prototype"]
     val set_prototype: t -> _PermissionRequestedEvent -> unit [@@js.set "prototype"]
-    val create: t -> _PermissionRequestedEvent [@@js.apply as_constructor]
+    val create: t -> _PermissionRequestedEvent [@@js.apply_newable]
   end
   module AnonymousInterface331 : sig
     type t = anonymous_interface_331
@@ -7750,7 +7750,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PermissionStatus [@@js.get "prototype"]
     val set_prototype: t -> _PermissionStatus -> unit [@@js.set "prototype"]
-    val create: t -> _PermissionStatus [@@js.apply as_constructor]
+    val create: t -> _PermissionStatus [@@js.apply_newable]
   end
   module AnonymousInterface332 : sig
     type t = anonymous_interface_332
@@ -7761,7 +7761,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Permissions [@@js.get "prototype"]
     val set_prototype: t -> _Permissions -> unit [@@js.set "prototype"]
-    val create: t -> _Permissions [@@js.apply as_constructor]
+    val create: t -> _Permissions [@@js.apply_newable]
   end
   module AnonymousInterface333 : sig
     type t = anonymous_interface_333
@@ -7772,7 +7772,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Plugin [@@js.get "prototype"]
     val set_prototype: t -> _Plugin -> unit [@@js.set "prototype"]
-    val create: t -> _Plugin [@@js.apply as_constructor]
+    val create: t -> _Plugin [@@js.apply_newable]
   end
   module AnonymousInterface334 : sig
     type t = anonymous_interface_334
@@ -7783,7 +7783,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PluginArray [@@js.get "prototype"]
     val set_prototype: t -> _PluginArray -> unit [@@js.set "prototype"]
-    val create: t -> _PluginArray [@@js.apply as_constructor]
+    val create: t -> _PluginArray [@@js.apply_newable]
   end
   module AnonymousInterface335 : sig
     type t = anonymous_interface_335
@@ -7794,7 +7794,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PointerEvent [@@js.get "prototype"]
     val set_prototype: t -> _PointerEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_PointerEventInit -> unit -> _PointerEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_PointerEventInit -> unit -> _PointerEvent [@@js.apply_newable]
   end
   module AnonymousInterface336 : sig
     type t = anonymous_interface_336
@@ -7805,7 +7805,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PopStateEvent [@@js.get "prototype"]
     val set_prototype: t -> _PopStateEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_PopStateEventInit -> unit -> _PopStateEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_PopStateEventInit -> unit -> _PopStateEvent [@@js.apply_newable]
   end
   module AnonymousInterface337 : sig
     type t = anonymous_interface_337
@@ -7816,7 +7816,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ProcessingInstruction [@@js.get "prototype"]
     val set_prototype: t -> _ProcessingInstruction -> unit [@@js.set "prototype"]
-    val create: t -> _ProcessingInstruction [@@js.apply as_constructor]
+    val create: t -> _ProcessingInstruction [@@js.apply_newable]
   end
   module AnonymousInterface338 : sig
     type t = anonymous_interface_338
@@ -7827,7 +7827,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _EventTarget _ProgressEvent [@@js.get "prototype"]
     val set_prototype: t -> _EventTarget _ProgressEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_ProgressEventInit -> unit -> _EventTarget _ProgressEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_ProgressEventInit -> unit -> _EventTarget _ProgressEvent [@@js.apply_newable]
   end
   module AnonymousInterface339 : sig
     type t = anonymous_interface_339
@@ -7838,7 +7838,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PromiseRejectionEvent [@@js.get "prototype"]
     val set_prototype: t -> _PromiseRejectionEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_PromiseRejectionEventInit -> _PromiseRejectionEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_PromiseRejectionEventInit -> _PromiseRejectionEvent [@@js.apply_newable]
   end
   module AnonymousInterface340 : sig
     type t = anonymous_interface_340
@@ -7849,7 +7849,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PublicKeyCredential [@@js.get "prototype"]
     val set_prototype: t -> _PublicKeyCredential -> unit [@@js.set "prototype"]
-    val create: t -> _PublicKeyCredential [@@js.apply as_constructor]
+    val create: t -> _PublicKeyCredential [@@js.apply_newable]
     val isUserVerifyingPlatformAuthenticatorAvailable: t -> bool Promise.t_1 [@@js.call "isUserVerifyingPlatformAuthenticatorAvailable"]
   end
   module AnonymousInterface341 : sig
@@ -7861,7 +7861,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PushManager [@@js.get "prototype"]
     val set_prototype: t -> _PushManager -> unit [@@js.set "prototype"]
-    val create: t -> _PushManager [@@js.apply as_constructor]
+    val create: t -> _PushManager [@@js.apply_newable]
     val get_supportedContentEncodings: t -> string list [@@js.get "supportedContentEncodings"]
   end
   module AnonymousInterface342 : sig
@@ -7873,7 +7873,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PushSubscription [@@js.get "prototype"]
     val set_prototype: t -> _PushSubscription -> unit [@@js.set "prototype"]
-    val create: t -> _PushSubscription [@@js.apply as_constructor]
+    val create: t -> _PushSubscription [@@js.apply_newable]
   end
   module AnonymousInterface343 : sig
     type t = anonymous_interface_343
@@ -7884,7 +7884,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _PushSubscriptionOptions [@@js.get "prototype"]
     val set_prototype: t -> _PushSubscriptionOptions -> unit [@@js.set "prototype"]
-    val create: t -> _PushSubscriptionOptions [@@js.apply as_constructor]
+    val create: t -> _PushSubscriptionOptions [@@js.apply_newable]
   end
   module AnonymousInterface344 : sig
     type t = anonymous_interface_344
@@ -7895,7 +7895,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCCertificate [@@js.get "prototype"]
     val set_prototype: t -> _RTCCertificate -> unit [@@js.set "prototype"]
-    val create: t -> _RTCCertificate [@@js.apply as_constructor]
+    val create: t -> _RTCCertificate [@@js.apply_newable]
     val getSupportedAlgorithms: t -> _AlgorithmIdentifier list [@@js.call "getSupportedAlgorithms"]
   end
   module AnonymousInterface345 : sig
@@ -7907,7 +7907,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCDTMFSender [@@js.get "prototype"]
     val set_prototype: t -> _RTCDTMFSender -> unit [@@js.set "prototype"]
-    val create: t -> _RTCDTMFSender [@@js.apply as_constructor]
+    val create: t -> _RTCDTMFSender [@@js.apply_newable]
   end
   module AnonymousInterface346 : sig
     type t = anonymous_interface_346
@@ -7918,7 +7918,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCDTMFToneChangeEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCDTMFToneChangeEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_RTCDTMFToneChangeEventInit -> _RTCDTMFToneChangeEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_RTCDTMFToneChangeEventInit -> _RTCDTMFToneChangeEvent [@@js.apply_newable]
   end
   module AnonymousInterface347 : sig
     type t = anonymous_interface_347
@@ -7929,7 +7929,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCDataChannel [@@js.get "prototype"]
     val set_prototype: t -> _RTCDataChannel -> unit [@@js.set "prototype"]
-    val create: t -> _RTCDataChannel [@@js.apply as_constructor]
+    val create: t -> _RTCDataChannel [@@js.apply_newable]
   end
   module AnonymousInterface348 : sig
     type t = anonymous_interface_348
@@ -7940,7 +7940,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCDataChannelEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCDataChannelEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_RTCDataChannelEventInit -> _RTCDataChannelEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_RTCDataChannelEventInit -> _RTCDataChannelEvent [@@js.apply_newable]
   end
   module AnonymousInterface349 : sig
     type t = anonymous_interface_349
@@ -7951,7 +7951,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCDtlsTransport [@@js.get "prototype"]
     val set_prototype: t -> _RTCDtlsTransport -> unit [@@js.set "prototype"]
-    val create: t -> _RTCDtlsTransport [@@js.apply as_constructor]
+    val create: t -> _RTCDtlsTransport [@@js.apply_newable]
   end
   module AnonymousInterface350 : sig
     type t = anonymous_interface_350
@@ -7962,7 +7962,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCDtlsTransportStateChangedEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCDtlsTransportStateChangedEvent -> unit [@@js.set "prototype"]
-    val create: t -> _RTCDtlsTransportStateChangedEvent [@@js.apply as_constructor]
+    val create: t -> _RTCDtlsTransportStateChangedEvent [@@js.apply_newable]
   end
   module AnonymousInterface351 : sig
     type t = anonymous_interface_351
@@ -7973,7 +7973,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCDtmfSender [@@js.get "prototype"]
     val set_prototype: t -> _RTCDtmfSender -> unit [@@js.set "prototype"]
-    val create: t -> sender:_RTCRtpSender -> _RTCDtmfSender [@@js.apply as_constructor]
+    val create: t -> sender:_RTCRtpSender -> _RTCDtmfSender [@@js.apply_newable]
   end
   module AnonymousInterface352 : sig
     type t = anonymous_interface_352
@@ -7984,7 +7984,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCError [@@js.get "prototype"]
     val set_prototype: t -> _RTCError -> unit [@@js.set "prototype"]
-    val create: t -> init:_RTCErrorInit -> ?message:string -> unit -> _RTCError [@@js.apply as_constructor]
+    val create: t -> init:_RTCErrorInit -> ?message:string -> unit -> _RTCError [@@js.apply_newable]
   end
   module AnonymousInterface353 : sig
     type t = anonymous_interface_353
@@ -7995,7 +7995,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCErrorEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCErrorEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_RTCErrorEventInit -> _RTCErrorEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_RTCErrorEventInit -> _RTCErrorEvent [@@js.apply_newable]
   end
   module AnonymousInterface354 : sig
     type t = anonymous_interface_354
@@ -8006,7 +8006,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCIceCandidate [@@js.get "prototype"]
     val set_prototype: t -> _RTCIceCandidate -> unit [@@js.set "prototype"]
-    val create: t -> ?candidateInitDict:_RTCIceCandidateInit -> unit -> _RTCIceCandidate [@@js.apply as_constructor]
+    val create: t -> ?candidateInitDict:_RTCIceCandidateInit -> unit -> _RTCIceCandidate [@@js.apply_newable]
   end
   module AnonymousInterface355 : sig
     type t = anonymous_interface_355
@@ -8017,7 +8017,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCIceCandidatePairChangedEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCIceCandidatePairChangedEvent -> unit [@@js.set "prototype"]
-    val create: t -> _RTCIceCandidatePairChangedEvent [@@js.apply as_constructor]
+    val create: t -> _RTCIceCandidatePairChangedEvent [@@js.apply_newable]
   end
   module AnonymousInterface356 : sig
     type t = anonymous_interface_356
@@ -8028,7 +8028,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCIceGatherer [@@js.get "prototype"]
     val set_prototype: t -> _RTCIceGatherer -> unit [@@js.set "prototype"]
-    val create: t -> options:_RTCIceGatherOptions -> _RTCIceGatherer [@@js.apply as_constructor]
+    val create: t -> options:_RTCIceGatherOptions -> _RTCIceGatherer [@@js.apply_newable]
   end
   module AnonymousInterface357 : sig
     type t = anonymous_interface_357
@@ -8039,7 +8039,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCIceGathererEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCIceGathererEvent -> unit [@@js.set "prototype"]
-    val create: t -> _RTCIceGathererEvent [@@js.apply as_constructor]
+    val create: t -> _RTCIceGathererEvent [@@js.apply_newable]
   end
   module AnonymousInterface358 : sig
     type t = anonymous_interface_358
@@ -8050,7 +8050,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCIceTransport [@@js.get "prototype"]
     val set_prototype: t -> _RTCIceTransport -> unit [@@js.set "prototype"]
-    val create: t -> _RTCIceTransport [@@js.apply as_constructor]
+    val create: t -> _RTCIceTransport [@@js.apply_newable]
   end
   module AnonymousInterface359 : sig
     type t = anonymous_interface_359
@@ -8061,7 +8061,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCIceTransportStateChangedEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCIceTransportStateChangedEvent -> unit [@@js.set "prototype"]
-    val create: t -> _RTCIceTransportStateChangedEvent [@@js.apply as_constructor]
+    val create: t -> _RTCIceTransportStateChangedEvent [@@js.apply_newable]
   end
   module AnonymousInterface360 : sig
     type t = anonymous_interface_360
@@ -8072,7 +8072,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCIdentityAssertion [@@js.get "prototype"]
     val set_prototype: t -> _RTCIdentityAssertion -> unit [@@js.set "prototype"]
-    val create: t -> idp:string -> name:string -> _RTCIdentityAssertion [@@js.apply as_constructor]
+    val create: t -> idp:string -> name:string -> _RTCIdentityAssertion [@@js.apply_newable]
   end
   module AnonymousInterface361 : sig
     type t = anonymous_interface_361
@@ -8083,7 +8083,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCPeerConnection [@@js.get "prototype"]
     val set_prototype: t -> _RTCPeerConnection -> unit [@@js.set "prototype"]
-    val create: t -> ?configuration:_RTCConfiguration -> unit -> _RTCPeerConnection [@@js.apply as_constructor]
+    val create: t -> ?configuration:_RTCConfiguration -> unit -> _RTCPeerConnection [@@js.apply_newable]
     val generateCertificate: t -> keygenAlgorithm:_AlgorithmIdentifier -> _RTCCertificate Promise.t_1 [@@js.call "generateCertificate"]
     val getDefaultIceServers: t -> _RTCIceServer list [@@js.call "getDefaultIceServers"]
   end
@@ -8096,7 +8096,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCPeerConnectionIceErrorEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCPeerConnectionIceErrorEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_RTCPeerConnectionIceErrorEventInit -> _RTCPeerConnectionIceErrorEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_RTCPeerConnectionIceErrorEventInit -> _RTCPeerConnectionIceErrorEvent [@@js.apply_newable]
   end
   module AnonymousInterface363 : sig
     type t = anonymous_interface_363
@@ -8107,7 +8107,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCPeerConnectionIceEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCPeerConnectionIceEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_RTCPeerConnectionIceEventInit -> unit -> _RTCPeerConnectionIceEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_RTCPeerConnectionIceEventInit -> unit -> _RTCPeerConnectionIceEvent [@@js.apply_newable]
   end
   module AnonymousInterface364 : sig
     type t = anonymous_interface_364
@@ -8118,7 +8118,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCRtpReceiver [@@js.get "prototype"]
     val set_prototype: t -> _RTCRtpReceiver -> unit [@@js.set "prototype"]
-    val create: t -> _RTCRtpReceiver [@@js.apply as_constructor]
+    val create: t -> _RTCRtpReceiver [@@js.apply_newable]
     val getCapabilities: t -> kind:string -> _RTCRtpCapabilities or_null [@@js.call "getCapabilities"]
   end
   module AnonymousInterface365 : sig
@@ -8130,7 +8130,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCRtpSender [@@js.get "prototype"]
     val set_prototype: t -> _RTCRtpSender -> unit [@@js.set "prototype"]
-    val create: t -> _RTCRtpSender [@@js.apply as_constructor]
+    val create: t -> _RTCRtpSender [@@js.apply_newable]
     val getCapabilities: t -> kind:string -> _RTCRtpCapabilities or_null [@@js.call "getCapabilities"]
   end
   module AnonymousInterface366 : sig
@@ -8142,7 +8142,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCRtpTransceiver [@@js.get "prototype"]
     val set_prototype: t -> _RTCRtpTransceiver -> unit [@@js.set "prototype"]
-    val create: t -> _RTCRtpTransceiver [@@js.apply as_constructor]
+    val create: t -> _RTCRtpTransceiver [@@js.apply_newable]
   end
   module AnonymousInterface367 : sig
     type t = anonymous_interface_367
@@ -8153,7 +8153,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCSctpTransport [@@js.get "prototype"]
     val set_prototype: t -> _RTCSctpTransport -> unit [@@js.set "prototype"]
-    val create: t -> _RTCSctpTransport [@@js.apply as_constructor]
+    val create: t -> _RTCSctpTransport [@@js.apply_newable]
   end
   module AnonymousInterface368 : sig
     type t = anonymous_interface_368
@@ -8164,7 +8164,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCSessionDescription [@@js.get "prototype"]
     val set_prototype: t -> _RTCSessionDescription -> unit [@@js.set "prototype"]
-    val create: t -> ?descriptionInitDict:_RTCSessionDescriptionInit -> unit -> _RTCSessionDescription [@@js.apply as_constructor]
+    val create: t -> ?descriptionInitDict:_RTCSessionDescriptionInit -> unit -> _RTCSessionDescription [@@js.apply_newable]
   end
   module AnonymousInterface369 : sig
     type t = anonymous_interface_369
@@ -8175,7 +8175,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCSrtpSdesTransport [@@js.get "prototype"]
     val set_prototype: t -> _RTCSrtpSdesTransport -> unit [@@js.set "prototype"]
-    val create: t -> transport:_RTCIceTransport -> encryptParameters:_RTCSrtpSdesParameters -> decryptParameters:_RTCSrtpSdesParameters -> _RTCSrtpSdesTransport [@@js.apply as_constructor]
+    val create: t -> transport:_RTCIceTransport -> encryptParameters:_RTCSrtpSdesParameters -> decryptParameters:_RTCSrtpSdesParameters -> _RTCSrtpSdesTransport [@@js.apply_newable]
     val getLocalParameters: t -> _RTCSrtpSdesParameters list [@@js.call "getLocalParameters"]
   end
   module AnonymousInterface370 : sig
@@ -8187,7 +8187,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCSsrcConflictEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCSsrcConflictEvent -> unit [@@js.set "prototype"]
-    val create: t -> _RTCSsrcConflictEvent [@@js.apply as_constructor]
+    val create: t -> _RTCSsrcConflictEvent [@@js.apply_newable]
   end
   module AnonymousInterface371 : sig
     type t = anonymous_interface_371
@@ -8198,7 +8198,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCStatsEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCStatsEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_RTCStatsEventInit -> _RTCStatsEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_RTCStatsEventInit -> _RTCStatsEvent [@@js.apply_newable]
   end
   module AnonymousInterface372 : sig
     type t = anonymous_interface_372
@@ -8209,7 +8209,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCStatsProvider [@@js.get "prototype"]
     val set_prototype: t -> _RTCStatsProvider -> unit [@@js.set "prototype"]
-    val create: t -> _RTCStatsProvider [@@js.apply as_constructor]
+    val create: t -> _RTCStatsProvider [@@js.apply_newable]
   end
   module AnonymousInterface373 : sig
     type t = anonymous_interface_373
@@ -8220,7 +8220,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCStatsReport [@@js.get "prototype"]
     val set_prototype: t -> _RTCStatsReport -> unit [@@js.set "prototype"]
-    val create: t -> _RTCStatsReport [@@js.apply as_constructor]
+    val create: t -> _RTCStatsReport [@@js.apply_newable]
   end
   module AnonymousInterface374 : sig
     type t = anonymous_interface_374
@@ -8231,7 +8231,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RTCTrackEvent [@@js.get "prototype"]
     val set_prototype: t -> _RTCTrackEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_RTCTrackEventInit -> _RTCTrackEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_RTCTrackEventInit -> _RTCTrackEvent [@@js.apply_newable]
   end
   module AnonymousInterface375 : sig
     type t = anonymous_interface_375
@@ -8242,7 +8242,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RadioNodeList [@@js.get "prototype"]
     val set_prototype: t -> _RadioNodeList -> unit [@@js.set "prototype"]
-    val create: t -> _RadioNodeList [@@js.apply as_constructor]
+    val create: t -> _RadioNodeList [@@js.apply_newable]
   end
   module AnonymousInterface376 : sig
     type t = anonymous_interface_376
@@ -8253,7 +8253,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _RandomSource [@@js.get "prototype"]
     val set_prototype: t -> _RandomSource -> unit [@@js.set "prototype"]
-    val create: t -> _RandomSource [@@js.apply as_constructor]
+    val create: t -> _RandomSource [@@js.apply_newable]
   end
   module AnonymousInterface377 : sig
     type t = anonymous_interface_377
@@ -8264,7 +8264,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Range [@@js.get "prototype"]
     val set_prototype: t -> _Range -> unit [@@js.set "prototype"]
-    val create: t -> _Range [@@js.apply as_constructor]
+    val create: t -> _Range [@@js.apply_newable]
     val get_END_TO_END: t -> float [@@js.get "END_TO_END"]
     val get_END_TO_START: t -> float [@@js.get "END_TO_START"]
     val get_START_TO_END: t -> float [@@js.get "START_TO_END"]
@@ -8280,8 +8280,8 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> any _ReadableStream [@@js.get "prototype"]
     val set_prototype: t -> any _ReadableStream -> unit [@@js.set "prototype"]
-    val create: t -> underlyingSource:_UnderlyingByteSource -> ?strategy:anonymous_interface_3 -> unit -> Uint8Array.t_0 _ReadableStream [@@js.apply as_constructor]
-    val create': t -> ?underlyingSource:'R _UnderlyingSource -> ?strategy:'R _QueuingStrategy -> unit -> 'R _ReadableStream [@@js.apply as_constructor]
+    val create: t -> underlyingSource:_UnderlyingByteSource -> ?strategy:anonymous_interface_3 -> unit -> Uint8Array.t_0 _ReadableStream [@@js.apply_newable]
+    val create': t -> ?underlyingSource:'R _UnderlyingSource -> ?strategy:'R _QueuingStrategy -> unit -> 'R _ReadableStream [@@js.apply_newable]
   end
   module AnonymousInterface379 : sig
     type t = anonymous_interface_379
@@ -8292,7 +8292,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> any _ReadableStreamReader [@@js.get "prototype"]
     val set_prototype: t -> any _ReadableStreamReader -> unit [@@js.set "prototype"]
-    val create: t -> any _ReadableStreamReader [@@js.apply as_constructor]
+    val create: t -> any _ReadableStreamReader [@@js.apply_newable]
   end
   module AnonymousInterface380 : sig
     type t = anonymous_interface_380
@@ -8303,7 +8303,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Request [@@js.get "prototype"]
     val set_prototype: t -> _Request -> unit [@@js.set "prototype"]
-    val create: t -> input:_RequestInfo -> ?init:_RequestInit -> unit -> _Request [@@js.apply as_constructor]
+    val create: t -> input:_RequestInfo -> ?init:_RequestInit -> unit -> _Request [@@js.apply_newable]
   end
   module AnonymousInterface381 : sig
     type t = anonymous_interface_381
@@ -8314,7 +8314,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Response [@@js.get "prototype"]
     val set_prototype: t -> _Response -> unit [@@js.set "prototype"]
-    val create: t -> ?body:_BodyInit or_null -> ?init:_ResponseInit -> unit -> _Response [@@js.apply as_constructor]
+    val create: t -> ?body:_BodyInit or_null -> ?init:_ResponseInit -> unit -> _Response [@@js.apply_newable]
     val error: t -> _Response [@@js.call "error"]
     val redirect: t -> url:string -> ?status:float -> unit -> _Response [@@js.call "redirect"]
   end
@@ -8327,7 +8327,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAssembly_RuntimeError [@@js.get "prototype"]
     val set_prototype: t -> _WebAssembly_RuntimeError -> unit [@@js.set "prototype"]
-    val create: t -> _WebAssembly_RuntimeError [@@js.apply as_constructor]
+    val create: t -> _WebAssembly_RuntimeError [@@js.apply_newable]
   end
   module AnonymousInterface383 : sig
     type t = anonymous_interface_383
@@ -8338,7 +8338,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGAElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAElement [@@js.apply as_constructor]
+    val create: t -> _SVGAElement [@@js.apply_newable]
   end
   module AnonymousInterface384 : sig
     type t = anonymous_interface_384
@@ -8349,7 +8349,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAngle [@@js.get "prototype"]
     val set_prototype: t -> _SVGAngle -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAngle [@@js.apply as_constructor]
+    val create: t -> _SVGAngle [@@js.apply_newable]
     val get_SVG_ANGLETYPE_DEG: t -> float [@@js.get "SVG_ANGLETYPE_DEG"]
     val get_SVG_ANGLETYPE_GRAD: t -> float [@@js.get "SVG_ANGLETYPE_GRAD"]
     val get_SVG_ANGLETYPE_RAD: t -> float [@@js.get "SVG_ANGLETYPE_RAD"]
@@ -8365,7 +8365,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimateElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimateElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimateElement [@@js.apply as_constructor]
+    val create: t -> _SVGAnimateElement [@@js.apply_newable]
   end
   module AnonymousInterface386 : sig
     type t = anonymous_interface_386
@@ -8376,7 +8376,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimateMotionElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimateMotionElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimateMotionElement [@@js.apply as_constructor]
+    val create: t -> _SVGAnimateMotionElement [@@js.apply_newable]
   end
   module AnonymousInterface387 : sig
     type t = anonymous_interface_387
@@ -8387,7 +8387,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimateTransformElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimateTransformElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimateTransformElement [@@js.apply as_constructor]
+    val create: t -> _SVGAnimateTransformElement [@@js.apply_newable]
   end
   module AnonymousInterface388 : sig
     type t = anonymous_interface_388
@@ -8398,7 +8398,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedAngle [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedAngle -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedAngle [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedAngle [@@js.apply_newable]
   end
   module AnonymousInterface389 : sig
     type t = anonymous_interface_389
@@ -8409,7 +8409,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedBoolean [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedBoolean -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedBoolean [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedBoolean [@@js.apply_newable]
   end
   module AnonymousInterface390 : sig
     type t = anonymous_interface_390
@@ -8420,7 +8420,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedEnumeration [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedEnumeration -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedEnumeration [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedEnumeration [@@js.apply_newable]
   end
   module AnonymousInterface391 : sig
     type t = anonymous_interface_391
@@ -8431,7 +8431,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedInteger [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedInteger -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedInteger [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedInteger [@@js.apply_newable]
   end
   module AnonymousInterface392 : sig
     type t = anonymous_interface_392
@@ -8442,7 +8442,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedLength [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedLength -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedLength [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedLength [@@js.apply_newable]
   end
   module AnonymousInterface393 : sig
     type t = anonymous_interface_393
@@ -8453,7 +8453,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedLengthList [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedLengthList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedLengthList [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedLengthList [@@js.apply_newable]
   end
   module AnonymousInterface394 : sig
     type t = anonymous_interface_394
@@ -8464,7 +8464,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedNumber [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedNumber -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedNumber [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedNumber [@@js.apply_newable]
   end
   module AnonymousInterface395 : sig
     type t = anonymous_interface_395
@@ -8475,7 +8475,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedNumberList [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedNumberList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedNumberList [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedNumberList [@@js.apply_newable]
   end
   module AnonymousInterface396 : sig
     type t = anonymous_interface_396
@@ -8486,7 +8486,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedPreserveAspectRatio [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedPreserveAspectRatio -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedPreserveAspectRatio [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedPreserveAspectRatio [@@js.apply_newable]
   end
   module AnonymousInterface397 : sig
     type t = anonymous_interface_397
@@ -8497,7 +8497,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedRect [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedRect -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedRect [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedRect [@@js.apply_newable]
   end
   module AnonymousInterface398 : sig
     type t = anonymous_interface_398
@@ -8508,7 +8508,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedString [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedString -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedString [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedString [@@js.apply_newable]
   end
   module AnonymousInterface399 : sig
     type t = anonymous_interface_399
@@ -8519,7 +8519,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimatedTransformList [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimatedTransformList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimatedTransformList [@@js.apply as_constructor]
+    val create: t -> _SVGAnimatedTransformList [@@js.apply_newable]
   end
   module AnonymousInterface400 : sig
     type t = anonymous_interface_400
@@ -8530,7 +8530,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGAnimationElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGAnimationElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGAnimationElement [@@js.apply as_constructor]
+    val create: t -> _SVGAnimationElement [@@js.apply_newable]
   end
   module AnonymousInterface401 : sig
     type t = anonymous_interface_401
@@ -8541,7 +8541,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGCircleElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGCircleElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGCircleElement [@@js.apply as_constructor]
+    val create: t -> _SVGCircleElement [@@js.apply_newable]
   end
   module AnonymousInterface402 : sig
     type t = anonymous_interface_402
@@ -8552,7 +8552,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGClipPathElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGClipPathElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGClipPathElement [@@js.apply as_constructor]
+    val create: t -> _SVGClipPathElement [@@js.apply_newable]
   end
   module AnonymousInterface403 : sig
     type t = anonymous_interface_403
@@ -8563,7 +8563,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGComponentTransferFunctionElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGComponentTransferFunctionElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGComponentTransferFunctionElement [@@js.apply as_constructor]
+    val create: t -> _SVGComponentTransferFunctionElement [@@js.apply_newable]
     val get_SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: t -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE"]
     val get_SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: t -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_GAMMA"]
     val get_SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: t -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY"]
@@ -8580,7 +8580,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGCursorElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGCursorElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGCursorElement [@@js.apply as_constructor]
+    val create: t -> _SVGCursorElement [@@js.apply_newable]
   end
   module AnonymousInterface405 : sig
     type t = anonymous_interface_405
@@ -8591,7 +8591,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGDefsElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGDefsElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGDefsElement [@@js.apply as_constructor]
+    val create: t -> _SVGDefsElement [@@js.apply_newable]
   end
   module AnonymousInterface406 : sig
     type t = anonymous_interface_406
@@ -8602,7 +8602,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGDescElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGDescElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGDescElement [@@js.apply as_constructor]
+    val create: t -> _SVGDescElement [@@js.apply_newable]
   end
   module AnonymousInterface407 : sig
     type t = anonymous_interface_407
@@ -8613,7 +8613,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGElement [@@js.apply as_constructor]
+    val create: t -> _SVGElement [@@js.apply_newable]
   end
   module AnonymousInterface408 : sig
     type t = anonymous_interface_408
@@ -8624,7 +8624,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGElementInstance [@@js.get "prototype"]
     val set_prototype: t -> _SVGElementInstance -> unit [@@js.set "prototype"]
-    val create: t -> _SVGElementInstance [@@js.apply as_constructor]
+    val create: t -> _SVGElementInstance [@@js.apply_newable]
   end
   module AnonymousInterface409 : sig
     type t = anonymous_interface_409
@@ -8635,7 +8635,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGElementInstanceList [@@js.get "prototype"]
     val set_prototype: t -> _SVGElementInstanceList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGElementInstanceList [@@js.apply as_constructor]
+    val create: t -> _SVGElementInstanceList [@@js.apply_newable]
   end
   module AnonymousInterface410 : sig
     type t = anonymous_interface_410
@@ -8646,7 +8646,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGEllipseElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGEllipseElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGEllipseElement [@@js.apply as_constructor]
+    val create: t -> _SVGEllipseElement [@@js.apply_newable]
   end
   module AnonymousInterface411 : sig
     type t = anonymous_interface_411
@@ -8657,7 +8657,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEBlendElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEBlendElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEBlendElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEBlendElement [@@js.apply_newable]
     val get_SVG_FEBLEND_MODE_COLOR: t -> float [@@js.get "SVG_FEBLEND_MODE_COLOR"]
     val get_SVG_FEBLEND_MODE_COLOR_BURN: t -> float [@@js.get "SVG_FEBLEND_MODE_COLOR_BURN"]
     val get_SVG_FEBLEND_MODE_COLOR_DODGE: t -> float [@@js.get "SVG_FEBLEND_MODE_COLOR_DODGE"]
@@ -8685,7 +8685,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEColorMatrixElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEColorMatrixElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEColorMatrixElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEColorMatrixElement [@@js.apply_newable]
     val get_SVG_FECOLORMATRIX_TYPE_HUEROTATE: t -> float [@@js.get "SVG_FECOLORMATRIX_TYPE_HUEROTATE"]
     val get_SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: t -> float [@@js.get "SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA"]
     val get_SVG_FECOLORMATRIX_TYPE_MATRIX: t -> float [@@js.get "SVG_FECOLORMATRIX_TYPE_MATRIX"]
@@ -8701,7 +8701,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEComponentTransferElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEComponentTransferElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEComponentTransferElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEComponentTransferElement [@@js.apply_newable]
   end
   module AnonymousInterface414 : sig
     type t = anonymous_interface_414
@@ -8712,7 +8712,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFECompositeElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFECompositeElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFECompositeElement [@@js.apply as_constructor]
+    val create: t -> _SVGFECompositeElement [@@js.apply_newable]
     val get_SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_ARITHMETIC"]
     val get_SVG_FECOMPOSITE_OPERATOR_ATOP: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_ATOP"]
     val get_SVG_FECOMPOSITE_OPERATOR_IN: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_IN"]
@@ -8730,7 +8730,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEConvolveMatrixElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEConvolveMatrixElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEConvolveMatrixElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEConvolveMatrixElement [@@js.apply_newable]
     val get_SVG_EDGEMODE_DUPLICATE: t -> float [@@js.get "SVG_EDGEMODE_DUPLICATE"]
     val get_SVG_EDGEMODE_NONE: t -> float [@@js.get "SVG_EDGEMODE_NONE"]
     val get_SVG_EDGEMODE_UNKNOWN: t -> float [@@js.get "SVG_EDGEMODE_UNKNOWN"]
@@ -8745,7 +8745,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEDiffuseLightingElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEDiffuseLightingElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEDiffuseLightingElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEDiffuseLightingElement [@@js.apply_newable]
   end
   module AnonymousInterface417 : sig
     type t = anonymous_interface_417
@@ -8756,7 +8756,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEDisplacementMapElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEDisplacementMapElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEDisplacementMapElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEDisplacementMapElement [@@js.apply_newable]
     val get_SVG_CHANNEL_A: t -> float [@@js.get "SVG_CHANNEL_A"]
     val get_SVG_CHANNEL_B: t -> float [@@js.get "SVG_CHANNEL_B"]
     val get_SVG_CHANNEL_G: t -> float [@@js.get "SVG_CHANNEL_G"]
@@ -8772,7 +8772,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEDistantLightElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEDistantLightElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEDistantLightElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEDistantLightElement [@@js.apply_newable]
   end
   module AnonymousInterface419 : sig
     type t = anonymous_interface_419
@@ -8783,7 +8783,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEDropShadowElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEDropShadowElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEDropShadowElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEDropShadowElement [@@js.apply_newable]
   end
   module AnonymousInterface420 : sig
     type t = anonymous_interface_420
@@ -8794,7 +8794,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEFloodElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEFloodElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEFloodElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEFloodElement [@@js.apply_newable]
   end
   module AnonymousInterface421 : sig
     type t = anonymous_interface_421
@@ -8805,7 +8805,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEFuncAElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEFuncAElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEFuncAElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEFuncAElement [@@js.apply_newable]
   end
   module AnonymousInterface422 : sig
     type t = anonymous_interface_422
@@ -8816,7 +8816,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEFuncBElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEFuncBElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEFuncBElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEFuncBElement [@@js.apply_newable]
   end
   module AnonymousInterface423 : sig
     type t = anonymous_interface_423
@@ -8827,7 +8827,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEFuncGElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEFuncGElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEFuncGElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEFuncGElement [@@js.apply_newable]
   end
   module AnonymousInterface424 : sig
     type t = anonymous_interface_424
@@ -8838,7 +8838,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEFuncRElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEFuncRElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEFuncRElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEFuncRElement [@@js.apply_newable]
   end
   module AnonymousInterface425 : sig
     type t = anonymous_interface_425
@@ -8849,7 +8849,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEGaussianBlurElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEGaussianBlurElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEGaussianBlurElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEGaussianBlurElement [@@js.apply_newable]
   end
   module AnonymousInterface426 : sig
     type t = anonymous_interface_426
@@ -8860,7 +8860,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEImageElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEImageElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEImageElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEImageElement [@@js.apply_newable]
   end
   module AnonymousInterface427 : sig
     type t = anonymous_interface_427
@@ -8871,7 +8871,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEMergeElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEMergeElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEMergeElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEMergeElement [@@js.apply_newable]
   end
   module AnonymousInterface428 : sig
     type t = anonymous_interface_428
@@ -8882,7 +8882,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEMergeNodeElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEMergeNodeElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEMergeNodeElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEMergeNodeElement [@@js.apply_newable]
   end
   module AnonymousInterface429 : sig
     type t = anonymous_interface_429
@@ -8893,7 +8893,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEMorphologyElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEMorphologyElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEMorphologyElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEMorphologyElement [@@js.apply_newable]
     val get_SVG_MORPHOLOGY_OPERATOR_DILATE: t -> float [@@js.get "SVG_MORPHOLOGY_OPERATOR_DILATE"]
     val get_SVG_MORPHOLOGY_OPERATOR_ERODE: t -> float [@@js.get "SVG_MORPHOLOGY_OPERATOR_ERODE"]
     val get_SVG_MORPHOLOGY_OPERATOR_UNKNOWN: t -> float [@@js.get "SVG_MORPHOLOGY_OPERATOR_UNKNOWN"]
@@ -8907,7 +8907,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEOffsetElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEOffsetElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEOffsetElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEOffsetElement [@@js.apply_newable]
   end
   module AnonymousInterface431 : sig
     type t = anonymous_interface_431
@@ -8918,7 +8918,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFEPointLightElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFEPointLightElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFEPointLightElement [@@js.apply as_constructor]
+    val create: t -> _SVGFEPointLightElement [@@js.apply_newable]
   end
   module AnonymousInterface432 : sig
     type t = anonymous_interface_432
@@ -8929,7 +8929,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFESpecularLightingElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFESpecularLightingElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFESpecularLightingElement [@@js.apply as_constructor]
+    val create: t -> _SVGFESpecularLightingElement [@@js.apply_newable]
   end
   module AnonymousInterface433 : sig
     type t = anonymous_interface_433
@@ -8940,7 +8940,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFESpotLightElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFESpotLightElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFESpotLightElement [@@js.apply as_constructor]
+    val create: t -> _SVGFESpotLightElement [@@js.apply_newable]
   end
   module AnonymousInterface434 : sig
     type t = anonymous_interface_434
@@ -8951,7 +8951,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFETileElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFETileElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFETileElement [@@js.apply as_constructor]
+    val create: t -> _SVGFETileElement [@@js.apply_newable]
   end
   module AnonymousInterface435 : sig
     type t = anonymous_interface_435
@@ -8962,7 +8962,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFETurbulenceElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFETurbulenceElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFETurbulenceElement [@@js.apply as_constructor]
+    val create: t -> _SVGFETurbulenceElement [@@js.apply_newable]
     val get_SVG_STITCHTYPE_NOSTITCH: t -> float [@@js.get "SVG_STITCHTYPE_NOSTITCH"]
     val get_SVG_STITCHTYPE_STITCH: t -> float [@@js.get "SVG_STITCHTYPE_STITCH"]
     val get_SVG_STITCHTYPE_UNKNOWN: t -> float [@@js.get "SVG_STITCHTYPE_UNKNOWN"]
@@ -8979,7 +8979,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGFilterElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGFilterElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGFilterElement [@@js.apply as_constructor]
+    val create: t -> _SVGFilterElement [@@js.apply_newable]
   end
   module AnonymousInterface437 : sig
     type t = anonymous_interface_437
@@ -8990,7 +8990,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGForeignObjectElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGForeignObjectElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGForeignObjectElement [@@js.apply as_constructor]
+    val create: t -> _SVGForeignObjectElement [@@js.apply_newable]
   end
   module AnonymousInterface438 : sig
     type t = anonymous_interface_438
@@ -9001,7 +9001,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGGElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGGElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGGElement [@@js.apply as_constructor]
+    val create: t -> _SVGGElement [@@js.apply_newable]
   end
   module AnonymousInterface439 : sig
     type t = anonymous_interface_439
@@ -9012,7 +9012,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGGeometryElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGGeometryElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGGeometryElement [@@js.apply as_constructor]
+    val create: t -> _SVGGeometryElement [@@js.apply_newable]
   end
   module AnonymousInterface440 : sig
     type t = anonymous_interface_440
@@ -9023,7 +9023,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGGradientElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGGradientElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGGradientElement [@@js.apply as_constructor]
+    val create: t -> _SVGGradientElement [@@js.apply_newable]
     val get_SVG_SPREADMETHOD_PAD: t -> float [@@js.get "SVG_SPREADMETHOD_PAD"]
     val get_SVG_SPREADMETHOD_REFLECT: t -> float [@@js.get "SVG_SPREADMETHOD_REFLECT"]
     val get_SVG_SPREADMETHOD_REPEAT: t -> float [@@js.get "SVG_SPREADMETHOD_REPEAT"]
@@ -9038,7 +9038,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGGraphicsElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGGraphicsElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGGraphicsElement [@@js.apply as_constructor]
+    val create: t -> _SVGGraphicsElement [@@js.apply_newable]
   end
   module AnonymousInterface442 : sig
     type t = anonymous_interface_442
@@ -9049,7 +9049,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGImageElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGImageElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGImageElement [@@js.apply as_constructor]
+    val create: t -> _SVGImageElement [@@js.apply_newable]
   end
   module AnonymousInterface443 : sig
     type t = anonymous_interface_443
@@ -9060,7 +9060,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGLength [@@js.get "prototype"]
     val set_prototype: t -> _SVGLength -> unit [@@js.set "prototype"]
-    val create: t -> _SVGLength [@@js.apply as_constructor]
+    val create: t -> _SVGLength [@@js.apply_newable]
     val get_SVG_LENGTHTYPE_CM: t -> float [@@js.get "SVG_LENGTHTYPE_CM"]
     val get_SVG_LENGTHTYPE_EMS: t -> float [@@js.get "SVG_LENGTHTYPE_EMS"]
     val get_SVG_LENGTHTYPE_EXS: t -> float [@@js.get "SVG_LENGTHTYPE_EXS"]
@@ -9082,7 +9082,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGLengthList [@@js.get "prototype"]
     val set_prototype: t -> _SVGLengthList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGLengthList [@@js.apply as_constructor]
+    val create: t -> _SVGLengthList [@@js.apply_newable]
   end
   module AnonymousInterface445 : sig
     type t = anonymous_interface_445
@@ -9093,7 +9093,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGLineElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGLineElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGLineElement [@@js.apply as_constructor]
+    val create: t -> _SVGLineElement [@@js.apply_newable]
   end
   module AnonymousInterface446 : sig
     type t = anonymous_interface_446
@@ -9104,7 +9104,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGLinearGradientElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGLinearGradientElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGLinearGradientElement [@@js.apply as_constructor]
+    val create: t -> _SVGLinearGradientElement [@@js.apply_newable]
   end
   module AnonymousInterface447 : sig
     type t = anonymous_interface_447
@@ -9115,7 +9115,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGMarkerElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGMarkerElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGMarkerElement [@@js.apply as_constructor]
+    val create: t -> _SVGMarkerElement [@@js.apply_newable]
     val get_SVG_MARKERUNITS_STROKEWIDTH: t -> float [@@js.get "SVG_MARKERUNITS_STROKEWIDTH"]
     val get_SVG_MARKERUNITS_UNKNOWN: t -> float [@@js.get "SVG_MARKERUNITS_UNKNOWN"]
     val get_SVG_MARKERUNITS_USERSPACEONUSE: t -> float [@@js.get "SVG_MARKERUNITS_USERSPACEONUSE"]
@@ -9132,7 +9132,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGMaskElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGMaskElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGMaskElement [@@js.apply as_constructor]
+    val create: t -> _SVGMaskElement [@@js.apply_newable]
   end
   module AnonymousInterface449 : sig
     type t = anonymous_interface_449
@@ -9143,7 +9143,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGMetadataElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGMetadataElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGMetadataElement [@@js.apply as_constructor]
+    val create: t -> _SVGMetadataElement [@@js.apply_newable]
   end
   module AnonymousInterface450 : sig
     type t = anonymous_interface_450
@@ -9154,7 +9154,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGNumber [@@js.get "prototype"]
     val set_prototype: t -> _SVGNumber -> unit [@@js.set "prototype"]
-    val create: t -> _SVGNumber [@@js.apply as_constructor]
+    val create: t -> _SVGNumber [@@js.apply_newable]
   end
   module AnonymousInterface451 : sig
     type t = anonymous_interface_451
@@ -9165,7 +9165,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGNumberList [@@js.get "prototype"]
     val set_prototype: t -> _SVGNumberList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGNumberList [@@js.apply as_constructor]
+    val create: t -> _SVGNumberList [@@js.apply_newable]
   end
   module AnonymousInterface452 : sig
     type t = anonymous_interface_452
@@ -9176,7 +9176,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathElement [@@js.apply as_constructor]
+    val create: t -> _SVGPathElement [@@js.apply_newable]
   end
   module AnonymousInterface453 : sig
     type t = anonymous_interface_453
@@ -9187,7 +9187,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSeg [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSeg -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSeg [@@js.apply as_constructor]
+    val create: t -> _SVGPathSeg [@@js.apply_newable]
     val get_PATHSEG_ARC_ABS: t -> float [@@js.get "PATHSEG_ARC_ABS"]
     val get_PATHSEG_ARC_REL: t -> float [@@js.get "PATHSEG_ARC_REL"]
     val get_PATHSEG_CLOSEPATH: t -> float [@@js.get "PATHSEG_CLOSEPATH"]
@@ -9218,7 +9218,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegArcAbs [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegArcAbs -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegArcAbs [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegArcAbs [@@js.apply_newable]
   end
   module AnonymousInterface455 : sig
     type t = anonymous_interface_455
@@ -9229,7 +9229,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegArcRel [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegArcRel -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegArcRel [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegArcRel [@@js.apply_newable]
   end
   module AnonymousInterface456 : sig
     type t = anonymous_interface_456
@@ -9240,7 +9240,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegClosePath [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegClosePath -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegClosePath [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegClosePath [@@js.apply_newable]
   end
   module AnonymousInterface457 : sig
     type t = anonymous_interface_457
@@ -9251,7 +9251,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegCurvetoCubicAbs [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegCurvetoCubicAbs -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegCurvetoCubicAbs [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegCurvetoCubicAbs [@@js.apply_newable]
   end
   module AnonymousInterface458 : sig
     type t = anonymous_interface_458
@@ -9262,7 +9262,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegCurvetoCubicRel [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegCurvetoCubicRel -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegCurvetoCubicRel [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegCurvetoCubicRel [@@js.apply_newable]
   end
   module AnonymousInterface459 : sig
     type t = anonymous_interface_459
@@ -9273,7 +9273,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegCurvetoCubicSmoothAbs [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegCurvetoCubicSmoothAbs -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegCurvetoCubicSmoothAbs [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegCurvetoCubicSmoothAbs [@@js.apply_newable]
   end
   module AnonymousInterface460 : sig
     type t = anonymous_interface_460
@@ -9284,7 +9284,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegCurvetoCubicSmoothRel [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegCurvetoCubicSmoothRel -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegCurvetoCubicSmoothRel [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegCurvetoCubicSmoothRel [@@js.apply_newable]
   end
   module AnonymousInterface461 : sig
     type t = anonymous_interface_461
@@ -9295,7 +9295,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegCurvetoQuadraticAbs [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegCurvetoQuadraticAbs -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegCurvetoQuadraticAbs [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegCurvetoQuadraticAbs [@@js.apply_newable]
   end
   module AnonymousInterface462 : sig
     type t = anonymous_interface_462
@@ -9306,7 +9306,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegCurvetoQuadraticRel [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegCurvetoQuadraticRel -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegCurvetoQuadraticRel [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegCurvetoQuadraticRel [@@js.apply_newable]
   end
   module AnonymousInterface463 : sig
     type t = anonymous_interface_463
@@ -9317,7 +9317,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegCurvetoQuadraticSmoothAbs [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegCurvetoQuadraticSmoothAbs -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegCurvetoQuadraticSmoothAbs [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegCurvetoQuadraticSmoothAbs [@@js.apply_newable]
   end
   module AnonymousInterface464 : sig
     type t = anonymous_interface_464
@@ -9328,7 +9328,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegCurvetoQuadraticSmoothRel [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegCurvetoQuadraticSmoothRel -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegCurvetoQuadraticSmoothRel [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegCurvetoQuadraticSmoothRel [@@js.apply_newable]
   end
   module AnonymousInterface465 : sig
     type t = anonymous_interface_465
@@ -9339,7 +9339,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegLinetoAbs [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegLinetoAbs -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegLinetoAbs [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegLinetoAbs [@@js.apply_newable]
   end
   module AnonymousInterface466 : sig
     type t = anonymous_interface_466
@@ -9350,7 +9350,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegLinetoHorizontalAbs [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegLinetoHorizontalAbs -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegLinetoHorizontalAbs [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegLinetoHorizontalAbs [@@js.apply_newable]
   end
   module AnonymousInterface467 : sig
     type t = anonymous_interface_467
@@ -9361,7 +9361,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegLinetoHorizontalRel [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegLinetoHorizontalRel -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegLinetoHorizontalRel [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegLinetoHorizontalRel [@@js.apply_newable]
   end
   module AnonymousInterface468 : sig
     type t = anonymous_interface_468
@@ -9372,7 +9372,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegLinetoRel [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegLinetoRel -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegLinetoRel [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegLinetoRel [@@js.apply_newable]
   end
   module AnonymousInterface469 : sig
     type t = anonymous_interface_469
@@ -9383,7 +9383,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegLinetoVerticalAbs [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegLinetoVerticalAbs -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegLinetoVerticalAbs [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegLinetoVerticalAbs [@@js.apply_newable]
   end
   module AnonymousInterface470 : sig
     type t = anonymous_interface_470
@@ -9394,7 +9394,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegLinetoVerticalRel [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegLinetoVerticalRel -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegLinetoVerticalRel [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegLinetoVerticalRel [@@js.apply_newable]
   end
   module AnonymousInterface471 : sig
     type t = anonymous_interface_471
@@ -9405,7 +9405,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegList [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegList [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegList [@@js.apply_newable]
   end
   module AnonymousInterface472 : sig
     type t = anonymous_interface_472
@@ -9416,7 +9416,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegMovetoAbs [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegMovetoAbs -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegMovetoAbs [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegMovetoAbs [@@js.apply_newable]
   end
   module AnonymousInterface473 : sig
     type t = anonymous_interface_473
@@ -9427,7 +9427,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPathSegMovetoRel [@@js.get "prototype"]
     val set_prototype: t -> _SVGPathSegMovetoRel -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPathSegMovetoRel [@@js.apply as_constructor]
+    val create: t -> _SVGPathSegMovetoRel [@@js.apply_newable]
   end
   module AnonymousInterface474 : sig
     type t = anonymous_interface_474
@@ -9438,7 +9438,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPatternElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGPatternElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPatternElement [@@js.apply as_constructor]
+    val create: t -> _SVGPatternElement [@@js.apply_newable]
   end
   module AnonymousInterface475 : sig
     type t = anonymous_interface_475
@@ -9449,7 +9449,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPointList [@@js.get "prototype"]
     val set_prototype: t -> _SVGPointList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPointList [@@js.apply as_constructor]
+    val create: t -> _SVGPointList [@@js.apply_newable]
   end
   module AnonymousInterface476 : sig
     type t = anonymous_interface_476
@@ -9460,7 +9460,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPolygonElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGPolygonElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPolygonElement [@@js.apply as_constructor]
+    val create: t -> _SVGPolygonElement [@@js.apply_newable]
   end
   module AnonymousInterface477 : sig
     type t = anonymous_interface_477
@@ -9471,7 +9471,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPolylineElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGPolylineElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPolylineElement [@@js.apply as_constructor]
+    val create: t -> _SVGPolylineElement [@@js.apply_newable]
   end
   module AnonymousInterface478 : sig
     type t = anonymous_interface_478
@@ -9482,7 +9482,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGPreserveAspectRatio [@@js.get "prototype"]
     val set_prototype: t -> _SVGPreserveAspectRatio -> unit [@@js.set "prototype"]
-    val create: t -> _SVGPreserveAspectRatio [@@js.apply as_constructor]
+    val create: t -> _SVGPreserveAspectRatio [@@js.apply_newable]
     val get_SVG_MEETORSLICE_MEET: t -> float [@@js.get "SVG_MEETORSLICE_MEET"]
     val get_SVG_MEETORSLICE_SLICE: t -> float [@@js.get "SVG_MEETORSLICE_SLICE"]
     val get_SVG_MEETORSLICE_UNKNOWN: t -> float [@@js.get "SVG_MEETORSLICE_UNKNOWN"]
@@ -9507,7 +9507,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGRadialGradientElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGRadialGradientElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGRadialGradientElement [@@js.apply as_constructor]
+    val create: t -> _SVGRadialGradientElement [@@js.apply_newable]
   end
   module AnonymousInterface480 : sig
     type t = anonymous_interface_480
@@ -9518,7 +9518,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGRectElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGRectElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGRectElement [@@js.apply as_constructor]
+    val create: t -> _SVGRectElement [@@js.apply_newable]
   end
   module AnonymousInterface481 : sig
     type t = anonymous_interface_481
@@ -9529,7 +9529,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGSVGElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGSVGElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGSVGElement [@@js.apply as_constructor]
+    val create: t -> _SVGSVGElement [@@js.apply_newable]
     val get_SVG_ZOOMANDPAN_DISABLE: t -> float [@@js.get "SVG_ZOOMANDPAN_DISABLE"]
     val get_SVG_ZOOMANDPAN_MAGNIFY: t -> float [@@js.get "SVG_ZOOMANDPAN_MAGNIFY"]
     val get_SVG_ZOOMANDPAN_UNKNOWN: t -> float [@@js.get "SVG_ZOOMANDPAN_UNKNOWN"]
@@ -9543,7 +9543,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGScriptElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGScriptElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGScriptElement [@@js.apply as_constructor]
+    val create: t -> _SVGScriptElement [@@js.apply_newable]
   end
   module AnonymousInterface483 : sig
     type t = anonymous_interface_483
@@ -9554,7 +9554,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGStopElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGStopElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGStopElement [@@js.apply as_constructor]
+    val create: t -> _SVGStopElement [@@js.apply_newable]
   end
   module AnonymousInterface484 : sig
     type t = anonymous_interface_484
@@ -9565,7 +9565,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGStringList [@@js.get "prototype"]
     val set_prototype: t -> _SVGStringList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGStringList [@@js.apply as_constructor]
+    val create: t -> _SVGStringList [@@js.apply_newable]
   end
   module AnonymousInterface485 : sig
     type t = anonymous_interface_485
@@ -9576,7 +9576,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGStyleElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGStyleElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGStyleElement [@@js.apply as_constructor]
+    val create: t -> _SVGStyleElement [@@js.apply_newable]
   end
   module AnonymousInterface486 : sig
     type t = anonymous_interface_486
@@ -9587,7 +9587,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGSwitchElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGSwitchElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGSwitchElement [@@js.apply as_constructor]
+    val create: t -> _SVGSwitchElement [@@js.apply_newable]
   end
   module AnonymousInterface487 : sig
     type t = anonymous_interface_487
@@ -9598,7 +9598,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGSymbolElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGSymbolElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGSymbolElement [@@js.apply as_constructor]
+    val create: t -> _SVGSymbolElement [@@js.apply_newable]
   end
   module AnonymousInterface488 : sig
     type t = anonymous_interface_488
@@ -9609,7 +9609,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGTSpanElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGTSpanElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGTSpanElement [@@js.apply as_constructor]
+    val create: t -> _SVGTSpanElement [@@js.apply_newable]
   end
   module AnonymousInterface489 : sig
     type t = anonymous_interface_489
@@ -9620,7 +9620,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGTextContentElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGTextContentElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGTextContentElement [@@js.apply as_constructor]
+    val create: t -> _SVGTextContentElement [@@js.apply_newable]
     val get_LENGTHADJUST_SPACING: t -> float [@@js.get "LENGTHADJUST_SPACING"]
     val get_LENGTHADJUST_SPACINGANDGLYPHS: t -> float [@@js.get "LENGTHADJUST_SPACINGANDGLYPHS"]
     val get_LENGTHADJUST_UNKNOWN: t -> float [@@js.get "LENGTHADJUST_UNKNOWN"]
@@ -9634,7 +9634,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGTextElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGTextElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGTextElement [@@js.apply as_constructor]
+    val create: t -> _SVGTextElement [@@js.apply_newable]
   end
   module AnonymousInterface491 : sig
     type t = anonymous_interface_491
@@ -9645,7 +9645,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGTextPathElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGTextPathElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGTextPathElement [@@js.apply as_constructor]
+    val create: t -> _SVGTextPathElement [@@js.apply_newable]
     val get_TEXTPATH_METHODTYPE_ALIGN: t -> float [@@js.get "TEXTPATH_METHODTYPE_ALIGN"]
     val get_TEXTPATH_METHODTYPE_STRETCH: t -> float [@@js.get "TEXTPATH_METHODTYPE_STRETCH"]
     val get_TEXTPATH_METHODTYPE_UNKNOWN: t -> float [@@js.get "TEXTPATH_METHODTYPE_UNKNOWN"]
@@ -9662,7 +9662,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGTextPositioningElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGTextPositioningElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGTextPositioningElement [@@js.apply as_constructor]
+    val create: t -> _SVGTextPositioningElement [@@js.apply_newable]
   end
   module AnonymousInterface493 : sig
     type t = anonymous_interface_493
@@ -9673,7 +9673,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGTitleElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGTitleElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGTitleElement [@@js.apply as_constructor]
+    val create: t -> _SVGTitleElement [@@js.apply_newable]
   end
   module AnonymousInterface494 : sig
     type t = anonymous_interface_494
@@ -9684,7 +9684,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGTransform [@@js.get "prototype"]
     val set_prototype: t -> _SVGTransform -> unit [@@js.set "prototype"]
-    val create: t -> _SVGTransform [@@js.apply as_constructor]
+    val create: t -> _SVGTransform [@@js.apply_newable]
     val get_SVG_TRANSFORM_MATRIX: t -> float [@@js.get "SVG_TRANSFORM_MATRIX"]
     val get_SVG_TRANSFORM_ROTATE: t -> float [@@js.get "SVG_TRANSFORM_ROTATE"]
     val get_SVG_TRANSFORM_SCALE: t -> float [@@js.get "SVG_TRANSFORM_SCALE"]
@@ -9702,7 +9702,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGTransformList [@@js.get "prototype"]
     val set_prototype: t -> _SVGTransformList -> unit [@@js.set "prototype"]
-    val create: t -> _SVGTransformList [@@js.apply as_constructor]
+    val create: t -> _SVGTransformList [@@js.apply_newable]
   end
   module AnonymousInterface496 : sig
     type t = anonymous_interface_496
@@ -9713,7 +9713,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGUnitTypes [@@js.get "prototype"]
     val set_prototype: t -> _SVGUnitTypes -> unit [@@js.set "prototype"]
-    val create: t -> _SVGUnitTypes [@@js.apply as_constructor]
+    val create: t -> _SVGUnitTypes [@@js.apply_newable]
     val get_SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: t -> float [@@js.get "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX"]
     val get_SVG_UNIT_TYPE_UNKNOWN: t -> float [@@js.get "SVG_UNIT_TYPE_UNKNOWN"]
     val get_SVG_UNIT_TYPE_USERSPACEONUSE: t -> float [@@js.get "SVG_UNIT_TYPE_USERSPACEONUSE"]
@@ -9727,7 +9727,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGUseElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGUseElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGUseElement [@@js.apply as_constructor]
+    val create: t -> _SVGUseElement [@@js.apply_newable]
   end
   module AnonymousInterface498 : sig
     type t = anonymous_interface_498
@@ -9738,7 +9738,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGViewElement [@@js.get "prototype"]
     val set_prototype: t -> _SVGViewElement -> unit [@@js.set "prototype"]
-    val create: t -> _SVGViewElement [@@js.apply as_constructor]
+    val create: t -> _SVGViewElement [@@js.apply_newable]
     val get_SVG_ZOOMANDPAN_DISABLE: t -> float [@@js.get "SVG_ZOOMANDPAN_DISABLE"]
     val get_SVG_ZOOMANDPAN_MAGNIFY: t -> float [@@js.get "SVG_ZOOMANDPAN_MAGNIFY"]
     val get_SVG_ZOOMANDPAN_UNKNOWN: t -> float [@@js.get "SVG_ZOOMANDPAN_UNKNOWN"]
@@ -9752,7 +9752,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SVGZoomEvent [@@js.get "prototype"]
     val set_prototype: t -> _SVGZoomEvent -> unit [@@js.set "prototype"]
-    val create: t -> _SVGZoomEvent [@@js.apply as_constructor]
+    val create: t -> _SVGZoomEvent [@@js.apply_newable]
   end
   module AnonymousInterface500 : sig
     type t = anonymous_interface_500
@@ -9763,7 +9763,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ScopedCredential [@@js.get "prototype"]
     val set_prototype: t -> _ScopedCredential -> unit [@@js.set "prototype"]
-    val create: t -> _ScopedCredential [@@js.apply as_constructor]
+    val create: t -> _ScopedCredential [@@js.apply_newable]
   end
   module AnonymousInterface501 : sig
     type t = anonymous_interface_501
@@ -9774,7 +9774,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ScopedCredentialInfo [@@js.get "prototype"]
     val set_prototype: t -> _ScopedCredentialInfo -> unit [@@js.set "prototype"]
-    val create: t -> _ScopedCredentialInfo [@@js.apply as_constructor]
+    val create: t -> _ScopedCredentialInfo [@@js.apply_newable]
   end
   module AnonymousInterface502 : sig
     type t = anonymous_interface_502
@@ -9785,7 +9785,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Screen [@@js.get "prototype"]
     val set_prototype: t -> _Screen -> unit [@@js.set "prototype"]
-    val create: t -> _Screen [@@js.apply as_constructor]
+    val create: t -> _Screen [@@js.apply_newable]
   end
   module AnonymousInterface503 : sig
     type t = anonymous_interface_503
@@ -9796,7 +9796,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ScreenOrientation [@@js.get "prototype"]
     val set_prototype: t -> _ScreenOrientation -> unit [@@js.set "prototype"]
-    val create: t -> _ScreenOrientation [@@js.apply as_constructor]
+    val create: t -> _ScreenOrientation [@@js.apply_newable]
   end
   module AnonymousInterface504 : sig
     type t = anonymous_interface_504
@@ -9807,7 +9807,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ScriptProcessorNode [@@js.get "prototype"]
     val set_prototype: t -> _ScriptProcessorNode -> unit [@@js.set "prototype"]
-    val create: t -> _ScriptProcessorNode [@@js.apply as_constructor]
+    val create: t -> _ScriptProcessorNode [@@js.apply_newable]
   end
   module AnonymousInterface505 : sig
     type t = anonymous_interface_505
@@ -9818,7 +9818,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SecurityPolicyViolationEvent [@@js.get "prototype"]
     val set_prototype: t -> _SecurityPolicyViolationEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_SecurityPolicyViolationEventInit -> unit -> _SecurityPolicyViolationEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_SecurityPolicyViolationEventInit -> unit -> _SecurityPolicyViolationEvent [@@js.apply_newable]
   end
   module AnonymousInterface506 : sig
     type t = anonymous_interface_506
@@ -9829,7 +9829,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Selection [@@js.get "prototype"]
     val set_prototype: t -> _Selection -> unit [@@js.set "prototype"]
-    val create: t -> _Selection [@@js.apply as_constructor]
+    val create: t -> _Selection [@@js.apply_newable]
     val toString: t -> string [@@js.call "toString"]
   end
   module AnonymousInterface507 : sig
@@ -9841,7 +9841,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ServiceWorker [@@js.get "prototype"]
     val set_prototype: t -> _ServiceWorker -> unit [@@js.set "prototype"]
-    val create: t -> _ServiceWorker [@@js.apply as_constructor]
+    val create: t -> _ServiceWorker [@@js.apply_newable]
   end
   module AnonymousInterface508 : sig
     type t = anonymous_interface_508
@@ -9852,7 +9852,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ServiceWorkerContainer [@@js.get "prototype"]
     val set_prototype: t -> _ServiceWorkerContainer -> unit [@@js.set "prototype"]
-    val create: t -> _ServiceWorkerContainer [@@js.apply as_constructor]
+    val create: t -> _ServiceWorkerContainer [@@js.apply_newable]
   end
   module AnonymousInterface509 : sig
     type t = anonymous_interface_509
@@ -9863,7 +9863,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ServiceWorkerMessageEvent [@@js.get "prototype"]
     val set_prototype: t -> _ServiceWorkerMessageEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_ServiceWorkerMessageEventInit -> unit -> _ServiceWorkerMessageEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_ServiceWorkerMessageEventInit -> unit -> _ServiceWorkerMessageEvent [@@js.apply_newable]
   end
   module AnonymousInterface510 : sig
     type t = anonymous_interface_510
@@ -9874,7 +9874,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ServiceWorkerRegistration [@@js.get "prototype"]
     val set_prototype: t -> _ServiceWorkerRegistration -> unit [@@js.set "prototype"]
-    val create: t -> _ServiceWorkerRegistration [@@js.apply as_constructor]
+    val create: t -> _ServiceWorkerRegistration [@@js.apply_newable]
   end
   module AnonymousInterface511 : sig
     type t = anonymous_interface_511
@@ -9885,7 +9885,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ShadowRoot [@@js.get "prototype"]
     val set_prototype: t -> _ShadowRoot -> unit [@@js.set "prototype"]
-    val create: t -> _ShadowRoot [@@js.apply as_constructor]
+    val create: t -> _ShadowRoot [@@js.apply_newable]
   end
   module AnonymousInterface512 : sig
     type t = anonymous_interface_512
@@ -9896,7 +9896,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SourceBuffer [@@js.get "prototype"]
     val set_prototype: t -> _SourceBuffer -> unit [@@js.set "prototype"]
-    val create: t -> _SourceBuffer [@@js.apply as_constructor]
+    val create: t -> _SourceBuffer [@@js.apply_newable]
   end
   module AnonymousInterface513 : sig
     type t = anonymous_interface_513
@@ -9907,7 +9907,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SourceBufferList [@@js.get "prototype"]
     val set_prototype: t -> _SourceBufferList -> unit [@@js.set "prototype"]
-    val create: t -> _SourceBufferList [@@js.apply as_constructor]
+    val create: t -> _SourceBufferList [@@js.apply_newable]
   end
   module AnonymousInterface514 : sig
     type t = anonymous_interface_514
@@ -9918,7 +9918,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechGrammar [@@js.get "prototype"]
     val set_prototype: t -> _SpeechGrammar -> unit [@@js.set "prototype"]
-    val create: t -> _SpeechGrammar [@@js.apply as_constructor]
+    val create: t -> _SpeechGrammar [@@js.apply_newable]
   end
   module AnonymousInterface515 : sig
     type t = anonymous_interface_515
@@ -9929,7 +9929,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechGrammarList [@@js.get "prototype"]
     val set_prototype: t -> _SpeechGrammarList -> unit [@@js.set "prototype"]
-    val create: t -> _SpeechGrammarList [@@js.apply as_constructor]
+    val create: t -> _SpeechGrammarList [@@js.apply_newable]
   end
   module AnonymousInterface516 : sig
     type t = anonymous_interface_516
@@ -9940,7 +9940,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechRecognition [@@js.get "prototype"]
     val set_prototype: t -> _SpeechRecognition -> unit [@@js.set "prototype"]
-    val create: t -> _SpeechRecognition [@@js.apply as_constructor]
+    val create: t -> _SpeechRecognition [@@js.apply_newable]
   end
   module AnonymousInterface517 : sig
     type t = anonymous_interface_517
@@ -9951,7 +9951,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechRecognitionAlternative [@@js.get "prototype"]
     val set_prototype: t -> _SpeechRecognitionAlternative -> unit [@@js.set "prototype"]
-    val create: t -> _SpeechRecognitionAlternative [@@js.apply as_constructor]
+    val create: t -> _SpeechRecognitionAlternative [@@js.apply_newable]
   end
   module AnonymousInterface518 : sig
     type t = anonymous_interface_518
@@ -9962,7 +9962,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechRecognitionEvent [@@js.get "prototype"]
     val set_prototype: t -> _SpeechRecognitionEvent -> unit [@@js.set "prototype"]
-    val create: t -> _SpeechRecognitionEvent [@@js.apply as_constructor]
+    val create: t -> _SpeechRecognitionEvent [@@js.apply_newable]
   end
   module AnonymousInterface519 : sig
     type t = anonymous_interface_519
@@ -9973,7 +9973,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechRecognitionResult [@@js.get "prototype"]
     val set_prototype: t -> _SpeechRecognitionResult -> unit [@@js.set "prototype"]
-    val create: t -> _SpeechRecognitionResult [@@js.apply as_constructor]
+    val create: t -> _SpeechRecognitionResult [@@js.apply_newable]
   end
   module AnonymousInterface520 : sig
     type t = anonymous_interface_520
@@ -9984,7 +9984,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechRecognitionResultList [@@js.get "prototype"]
     val set_prototype: t -> _SpeechRecognitionResultList -> unit [@@js.set "prototype"]
-    val create: t -> _SpeechRecognitionResultList [@@js.apply as_constructor]
+    val create: t -> _SpeechRecognitionResultList [@@js.apply_newable]
   end
   module AnonymousInterface521 : sig
     type t = anonymous_interface_521
@@ -9995,7 +9995,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechSynthesis [@@js.get "prototype"]
     val set_prototype: t -> _SpeechSynthesis -> unit [@@js.set "prototype"]
-    val create: t -> _SpeechSynthesis [@@js.apply as_constructor]
+    val create: t -> _SpeechSynthesis [@@js.apply_newable]
   end
   module AnonymousInterface522 : sig
     type t = anonymous_interface_522
@@ -10006,7 +10006,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechSynthesisErrorEvent [@@js.get "prototype"]
     val set_prototype: t -> _SpeechSynthesisErrorEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_SpeechSynthesisErrorEventInit -> _SpeechSynthesisErrorEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_SpeechSynthesisErrorEventInit -> _SpeechSynthesisErrorEvent [@@js.apply_newable]
   end
   module AnonymousInterface523 : sig
     type t = anonymous_interface_523
@@ -10017,7 +10017,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechSynthesisEvent [@@js.get "prototype"]
     val set_prototype: t -> _SpeechSynthesisEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_SpeechSynthesisEventInit -> _SpeechSynthesisEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_SpeechSynthesisEventInit -> _SpeechSynthesisEvent [@@js.apply_newable]
   end
   module AnonymousInterface524 : sig
     type t = anonymous_interface_524
@@ -10028,7 +10028,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechSynthesisUtterance [@@js.get "prototype"]
     val set_prototype: t -> _SpeechSynthesisUtterance -> unit [@@js.set "prototype"]
-    val create: t -> ?text:string -> unit -> _SpeechSynthesisUtterance [@@js.apply as_constructor]
+    val create: t -> ?text:string -> unit -> _SpeechSynthesisUtterance [@@js.apply_newable]
   end
   module AnonymousInterface525 : sig
     type t = anonymous_interface_525
@@ -10039,7 +10039,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SpeechSynthesisVoice [@@js.get "prototype"]
     val set_prototype: t -> _SpeechSynthesisVoice -> unit [@@js.set "prototype"]
-    val create: t -> _SpeechSynthesisVoice [@@js.apply as_constructor]
+    val create: t -> _SpeechSynthesisVoice [@@js.apply_newable]
   end
   module AnonymousInterface526 : sig
     type t = anonymous_interface_526
@@ -10050,7 +10050,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _StaticRange [@@js.get "prototype"]
     val set_prototype: t -> _StaticRange -> unit [@@js.set "prototype"]
-    val create: t -> init:_StaticRangeInit -> _StaticRange [@@js.apply as_constructor]
+    val create: t -> init:_StaticRangeInit -> _StaticRange [@@js.apply_newable]
   end
   module AnonymousInterface527 : sig
     type t = anonymous_interface_527
@@ -10061,7 +10061,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _StereoPannerNode [@@js.get "prototype"]
     val set_prototype: t -> _StereoPannerNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_StereoPannerOptions -> unit -> _StereoPannerNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_StereoPannerOptions -> unit -> _StereoPannerNode [@@js.apply_newable]
   end
   module AnonymousInterface528 : sig
     type t = anonymous_interface_528
@@ -10072,7 +10072,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Storage [@@js.get "prototype"]
     val set_prototype: t -> _Storage -> unit [@@js.set "prototype"]
-    val create: t -> _Storage [@@js.apply as_constructor]
+    val create: t -> _Storage [@@js.apply_newable]
   end
   module AnonymousInterface529 : sig
     type t = anonymous_interface_529
@@ -10083,7 +10083,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _StorageEvent [@@js.get "prototype"]
     val set_prototype: t -> _StorageEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_StorageEventInit -> unit -> _StorageEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_StorageEventInit -> unit -> _StorageEvent [@@js.apply_newable]
   end
   module AnonymousInterface530 : sig
     type t = anonymous_interface_530
@@ -10094,7 +10094,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _StorageManager [@@js.get "prototype"]
     val set_prototype: t -> _StorageManager -> unit [@@js.set "prototype"]
-    val create: t -> _StorageManager [@@js.apply as_constructor]
+    val create: t -> _StorageManager [@@js.apply_newable]
   end
   module AnonymousInterface531 : sig
     type t = anonymous_interface_531
@@ -10105,7 +10105,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _StyleMedia [@@js.get "prototype"]
     val set_prototype: t -> _StyleMedia -> unit [@@js.set "prototype"]
-    val create: t -> _StyleMedia [@@js.apply as_constructor]
+    val create: t -> _StyleMedia [@@js.apply_newable]
   end
   module AnonymousInterface532 : sig
     type t = anonymous_interface_532
@@ -10116,7 +10116,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _StyleSheet [@@js.get "prototype"]
     val set_prototype: t -> _StyleSheet -> unit [@@js.set "prototype"]
-    val create: t -> _StyleSheet [@@js.apply as_constructor]
+    val create: t -> _StyleSheet [@@js.apply_newable]
   end
   module AnonymousInterface533 : sig
     type t = anonymous_interface_533
@@ -10127,7 +10127,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _StyleSheetList [@@js.get "prototype"]
     val set_prototype: t -> _StyleSheetList -> unit [@@js.set "prototype"]
-    val create: t -> _StyleSheetList [@@js.apply as_constructor]
+    val create: t -> _StyleSheetList [@@js.apply_newable]
   end
   module AnonymousInterface534 : sig
     type t = anonymous_interface_534
@@ -10138,7 +10138,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SubtleCrypto [@@js.get "prototype"]
     val set_prototype: t -> _SubtleCrypto -> unit [@@js.set "prototype"]
-    val create: t -> _SubtleCrypto [@@js.apply as_constructor]
+    val create: t -> _SubtleCrypto [@@js.apply_newable]
   end
   module AnonymousInterface535 : sig
     type t = anonymous_interface_535
@@ -10149,7 +10149,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _SyncManager [@@js.get "prototype"]
     val set_prototype: t -> _SyncManager -> unit [@@js.set "prototype"]
-    val create: t -> _SyncManager [@@js.apply as_constructor]
+    val create: t -> _SyncManager [@@js.apply_newable]
   end
   module AnonymousInterface536 : sig
     type t = anonymous_interface_536
@@ -10160,7 +10160,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAssembly_Table [@@js.get "prototype"]
     val set_prototype: t -> _WebAssembly_Table -> unit [@@js.set "prototype"]
-    val create: t -> descriptor:_WebAssembly_TableDescriptor -> _WebAssembly_Table [@@js.apply as_constructor]
+    val create: t -> descriptor:_WebAssembly_TableDescriptor -> _WebAssembly_Table [@@js.apply_newable]
   end
   module AnonymousInterface537 : sig
     type t = anonymous_interface_537
@@ -10171,7 +10171,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Text [@@js.get "prototype"]
     val set_prototype: t -> _Text -> unit [@@js.set "prototype"]
-    val create: t -> ?data:string -> unit -> _Text [@@js.apply as_constructor]
+    val create: t -> ?data:string -> unit -> _Text [@@js.apply_newable]
   end
   module AnonymousInterface538 : sig
     type t = anonymous_interface_538
@@ -10182,7 +10182,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextDecoder [@@js.get "prototype"]
     val set_prototype: t -> _TextDecoder -> unit [@@js.set "prototype"]
-    val create: t -> ?label:string -> ?options:_TextDecoderOptions -> unit -> _TextDecoder [@@js.apply as_constructor]
+    val create: t -> ?label:string -> ?options:_TextDecoderOptions -> unit -> _TextDecoder [@@js.apply_newable]
   end
   module AnonymousInterface539 : sig
     type t = anonymous_interface_539
@@ -10193,7 +10193,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextDecoderStream [@@js.get "prototype"]
     val set_prototype: t -> _TextDecoderStream -> unit [@@js.set "prototype"]
-    val create: t -> ?label:string -> ?options:_TextDecoderOptions -> unit -> _TextDecoderStream [@@js.apply as_constructor]
+    val create: t -> ?label:string -> ?options:_TextDecoderOptions -> unit -> _TextDecoderStream [@@js.apply_newable]
   end
   module AnonymousInterface540 : sig
     type t = anonymous_interface_540
@@ -10204,7 +10204,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextEncoder [@@js.get "prototype"]
     val set_prototype: t -> _TextEncoder -> unit [@@js.set "prototype"]
-    val create: t -> _TextEncoder [@@js.apply as_constructor]
+    val create: t -> _TextEncoder [@@js.apply_newable]
   end
   module AnonymousInterface541 : sig
     type t = anonymous_interface_541
@@ -10215,7 +10215,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextEncoderStream [@@js.get "prototype"]
     val set_prototype: t -> _TextEncoderStream -> unit [@@js.set "prototype"]
-    val create: t -> _TextEncoderStream [@@js.apply as_constructor]
+    val create: t -> _TextEncoderStream [@@js.apply_newable]
   end
   module AnonymousInterface542 : sig
     type t = anonymous_interface_542
@@ -10226,7 +10226,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextEvent [@@js.get "prototype"]
     val set_prototype: t -> _TextEvent -> unit [@@js.set "prototype"]
-    val create: t -> _TextEvent [@@js.apply as_constructor]
+    val create: t -> _TextEvent [@@js.apply_newable]
     val get_DOM_INPUT_METHOD_DROP: t -> float [@@js.get "DOM_INPUT_METHOD_DROP"]
     val get_DOM_INPUT_METHOD_HANDWRITING: t -> float [@@js.get "DOM_INPUT_METHOD_HANDWRITING"]
     val get_DOM_INPUT_METHOD_IME: t -> float [@@js.get "DOM_INPUT_METHOD_IME"]
@@ -10247,7 +10247,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextMetrics [@@js.get "prototype"]
     val set_prototype: t -> _TextMetrics -> unit [@@js.set "prototype"]
-    val create: t -> _TextMetrics [@@js.apply as_constructor]
+    val create: t -> _TextMetrics [@@js.apply_newable]
   end
   module AnonymousInterface544 : sig
     type t = anonymous_interface_544
@@ -10258,7 +10258,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextTrack [@@js.get "prototype"]
     val set_prototype: t -> _TextTrack -> unit [@@js.set "prototype"]
-    val create: t -> _TextTrack [@@js.apply as_constructor]
+    val create: t -> _TextTrack [@@js.apply_newable]
     val get_DISABLED: t -> float [@@js.get "DISABLED"]
     val get_ERROR: t -> float [@@js.get "ERROR"]
     val get_HIDDEN: t -> float [@@js.get "HIDDEN"]
@@ -10276,7 +10276,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextTrackCue [@@js.get "prototype"]
     val set_prototype: t -> _TextTrackCue -> unit [@@js.set "prototype"]
-    val create: t -> startTime:float -> endTime:float -> text:string -> _TextTrackCue [@@js.apply as_constructor]
+    val create: t -> startTime:float -> endTime:float -> text:string -> _TextTrackCue [@@js.apply_newable]
   end
   module AnonymousInterface546 : sig
     type t = anonymous_interface_546
@@ -10287,7 +10287,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextTrackCueList [@@js.get "prototype"]
     val set_prototype: t -> _TextTrackCueList -> unit [@@js.set "prototype"]
-    val create: t -> _TextTrackCueList [@@js.apply as_constructor]
+    val create: t -> _TextTrackCueList [@@js.apply_newable]
   end
   module AnonymousInterface547 : sig
     type t = anonymous_interface_547
@@ -10298,7 +10298,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TextTrackList [@@js.get "prototype"]
     val set_prototype: t -> _TextTrackList -> unit [@@js.set "prototype"]
-    val create: t -> _TextTrackList [@@js.apply as_constructor]
+    val create: t -> _TextTrackList [@@js.apply_newable]
   end
   module AnonymousInterface548 : sig
     type t = anonymous_interface_548
@@ -10309,7 +10309,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TimeRanges [@@js.get "prototype"]
     val set_prototype: t -> _TimeRanges -> unit [@@js.set "prototype"]
-    val create: t -> _TimeRanges [@@js.apply as_constructor]
+    val create: t -> _TimeRanges [@@js.apply_newable]
   end
   module AnonymousInterface549 : sig
     type t = anonymous_interface_549
@@ -10320,7 +10320,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Touch [@@js.get "prototype"]
     val set_prototype: t -> _Touch -> unit [@@js.set "prototype"]
-    val create: t -> touchInitDict:_TouchInit -> _Touch [@@js.apply as_constructor]
+    val create: t -> touchInitDict:_TouchInit -> _Touch [@@js.apply_newable]
   end
   module AnonymousInterface550 : sig
     type t = anonymous_interface_550
@@ -10331,7 +10331,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TouchEvent [@@js.get "prototype"]
     val set_prototype: t -> _TouchEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_TouchEventInit -> unit -> _TouchEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_TouchEventInit -> unit -> _TouchEvent [@@js.apply_newable]
   end
   module AnonymousInterface551 : sig
     type t = anonymous_interface_551
@@ -10342,7 +10342,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TouchList [@@js.get "prototype"]
     val set_prototype: t -> _TouchList -> unit [@@js.set "prototype"]
-    val create: t -> _TouchList [@@js.apply as_constructor]
+    val create: t -> _TouchList [@@js.apply_newable]
   end
   module AnonymousInterface552 : sig
     type t = anonymous_interface_552
@@ -10353,7 +10353,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TrackEvent [@@js.get "prototype"]
     val set_prototype: t -> _TrackEvent -> unit [@@js.set "prototype"]
-    val create: t -> typeArg:string -> ?eventInitDict:_TrackEventInit -> unit -> _TrackEvent [@@js.apply as_constructor]
+    val create: t -> typeArg:string -> ?eventInitDict:_TrackEventInit -> unit -> _TrackEvent [@@js.apply_newable]
   end
   module AnonymousInterface553 : sig
     type t = anonymous_interface_553
@@ -10364,7 +10364,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> (any, any) _TransformStream [@@js.get "prototype"]
     val set_prototype: t -> (any, any) _TransformStream -> unit [@@js.set "prototype"]
-    val create: t -> ?transformer:('I, 'O) _Transformer -> ?writableStrategy:'I _QueuingStrategy -> ?readableStrategy:'O _QueuingStrategy -> unit -> ('I, 'O) _TransformStream [@@js.apply as_constructor]
+    val create: t -> ?transformer:('I, 'O) _Transformer -> ?writableStrategy:'I _QueuingStrategy -> ?readableStrategy:'O _QueuingStrategy -> unit -> ('I, 'O) _TransformStream [@@js.apply_newable]
   end
   module AnonymousInterface554 : sig
     type t = anonymous_interface_554
@@ -10375,7 +10375,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TransitionEvent [@@js.get "prototype"]
     val set_prototype: t -> _TransitionEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?transitionEventInitDict:_TransitionEventInit -> unit -> _TransitionEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?transitionEventInitDict:_TransitionEventInit -> unit -> _TransitionEvent [@@js.apply_newable]
   end
   module AnonymousInterface555 : sig
     type t = anonymous_interface_555
@@ -10386,7 +10386,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _TreeWalker [@@js.get "prototype"]
     val set_prototype: t -> _TreeWalker -> unit [@@js.set "prototype"]
-    val create: t -> _TreeWalker [@@js.apply as_constructor]
+    val create: t -> _TreeWalker [@@js.apply_newable]
   end
   module AnonymousInterface556 : sig
     type t = anonymous_interface_556
@@ -10397,7 +10397,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _UIEvent [@@js.get "prototype"]
     val set_prototype: t -> _UIEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_UIEventInit -> unit -> _UIEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_UIEventInit -> unit -> _UIEvent [@@js.apply_newable]
   end
   module AnonymousInterface557 : sig
     type t = anonymous_interface_557
@@ -10408,7 +10408,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _URL [@@js.get "prototype"]
     val set_prototype: t -> _URL -> unit [@@js.set "prototype"]
-    val create: t -> url:string -> ?base:_URL or_string -> unit -> _URL [@@js.apply as_constructor]
+    val create: t -> url:string -> ?base:_URL or_string -> unit -> _URL [@@js.apply_newable]
     val createObjectURL: t -> object_:any -> string [@@js.call "createObjectURL"]
     val revokeObjectURL: t -> url:string -> unit [@@js.call "revokeObjectURL"]
   end
@@ -10421,7 +10421,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _URLSearchParams [@@js.get "prototype"]
     val set_prototype: t -> _URLSearchParams -> unit [@@js.set "prototype"]
-    val create: t -> ?init:((_URLSearchParams, (string, string) Record.t_2) or_, string list) or_array or_string -> unit -> _URLSearchParams [@@js.apply as_constructor]
+    val create: t -> ?init:((_URLSearchParams, (string, string) Record.t_2) union2, string list) or_array or_string -> unit -> _URLSearchParams [@@js.apply_newable]
     val toString: t -> string [@@js.call "toString"]
   end
   module AnonymousInterface559 : sig
@@ -10433,7 +10433,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VRDisplay [@@js.get "prototype"]
     val set_prototype: t -> _VRDisplay -> unit [@@js.set "prototype"]
-    val create: t -> _VRDisplay [@@js.apply as_constructor]
+    val create: t -> _VRDisplay [@@js.apply_newable]
   end
   module AnonymousInterface560 : sig
     type t = anonymous_interface_560
@@ -10444,7 +10444,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VRDisplayCapabilities [@@js.get "prototype"]
     val set_prototype: t -> _VRDisplayCapabilities -> unit [@@js.set "prototype"]
-    val create: t -> _VRDisplayCapabilities [@@js.apply as_constructor]
+    val create: t -> _VRDisplayCapabilities [@@js.apply_newable]
   end
   module AnonymousInterface561 : sig
     type t = anonymous_interface_561
@@ -10455,7 +10455,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VRDisplayEvent [@@js.get "prototype"]
     val set_prototype: t -> _VRDisplayEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> eventInitDict:_VRDisplayEventInit -> _VRDisplayEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> eventInitDict:_VRDisplayEventInit -> _VRDisplayEvent [@@js.apply_newable]
   end
   module AnonymousInterface562 : sig
     type t = anonymous_interface_562
@@ -10466,7 +10466,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VREyeParameters [@@js.get "prototype"]
     val set_prototype: t -> _VREyeParameters -> unit [@@js.set "prototype"]
-    val create: t -> _VREyeParameters [@@js.apply as_constructor]
+    val create: t -> _VREyeParameters [@@js.apply_newable]
   end
   module AnonymousInterface563 : sig
     type t = anonymous_interface_563
@@ -10477,7 +10477,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VRFieldOfView [@@js.get "prototype"]
     val set_prototype: t -> _VRFieldOfView -> unit [@@js.set "prototype"]
-    val create: t -> _VRFieldOfView [@@js.apply as_constructor]
+    val create: t -> _VRFieldOfView [@@js.apply_newable]
   end
   module AnonymousInterface564 : sig
     type t = anonymous_interface_564
@@ -10488,7 +10488,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VRFrameData [@@js.get "prototype"]
     val set_prototype: t -> _VRFrameData -> unit [@@js.set "prototype"]
-    val create: t -> _VRFrameData [@@js.apply as_constructor]
+    val create: t -> _VRFrameData [@@js.apply_newable]
   end
   module AnonymousInterface565 : sig
     type t = anonymous_interface_565
@@ -10499,7 +10499,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VRPose [@@js.get "prototype"]
     val set_prototype: t -> _VRPose -> unit [@@js.set "prototype"]
-    val create: t -> _VRPose [@@js.apply as_constructor]
+    val create: t -> _VRPose [@@js.apply_newable]
   end
   module AnonymousInterface566 : sig
     type t = anonymous_interface_566
@@ -10510,7 +10510,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VTTCue [@@js.get "prototype"]
     val set_prototype: t -> _VTTCue -> unit [@@js.set "prototype"]
-    val create: t -> startTime:float -> endTime:float -> text:string -> _VTTCue [@@js.apply as_constructor]
+    val create: t -> startTime:float -> endTime:float -> text:string -> _VTTCue [@@js.apply_newable]
   end
   module AnonymousInterface567 : sig
     type t = anonymous_interface_567
@@ -10521,7 +10521,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VTTRegion [@@js.get "prototype"]
     val set_prototype: t -> _VTTRegion -> unit [@@js.set "prototype"]
-    val create: t -> _VTTRegion [@@js.apply as_constructor]
+    val create: t -> _VTTRegion [@@js.apply_newable]
   end
   module AnonymousInterface568 : sig
     type t = anonymous_interface_568
@@ -10532,7 +10532,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _ValidityState [@@js.get "prototype"]
     val set_prototype: t -> _ValidityState -> unit [@@js.set "prototype"]
-    val create: t -> _ValidityState [@@js.apply as_constructor]
+    val create: t -> _ValidityState [@@js.apply_newable]
   end
   module AnonymousInterface569 : sig
     type t = anonymous_interface_569
@@ -10543,7 +10543,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VideoPlaybackQuality [@@js.get "prototype"]
     val set_prototype: t -> _VideoPlaybackQuality -> unit [@@js.set "prototype"]
-    val create: t -> _VideoPlaybackQuality [@@js.apply as_constructor]
+    val create: t -> _VideoPlaybackQuality [@@js.apply_newable]
   end
   module AnonymousInterface570 : sig
     type t = anonymous_interface_570
@@ -10554,7 +10554,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VideoTrack [@@js.get "prototype"]
     val set_prototype: t -> _VideoTrack -> unit [@@js.set "prototype"]
-    val create: t -> _VideoTrack [@@js.apply as_constructor]
+    val create: t -> _VideoTrack [@@js.apply_newable]
   end
   module AnonymousInterface571 : sig
     type t = anonymous_interface_571
@@ -10565,7 +10565,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _VideoTrackList [@@js.get "prototype"]
     val set_prototype: t -> _VideoTrackList -> unit [@@js.set "prototype"]
-    val create: t -> _VideoTrackList [@@js.apply as_constructor]
+    val create: t -> _VideoTrackList [@@js.apply_newable]
   end
   module AnonymousInterface572 : sig
     type t = anonymous_interface_572
@@ -10576,7 +10576,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WaveShaperNode [@@js.get "prototype"]
     val set_prototype: t -> _WaveShaperNode -> unit [@@js.set "prototype"]
-    val create: t -> context:_BaseAudioContext -> ?options:_WaveShaperOptions -> unit -> _WaveShaperNode [@@js.apply as_constructor]
+    val create: t -> context:_BaseAudioContext -> ?options:_WaveShaperOptions -> unit -> _WaveShaperNode [@@js.apply_newable]
   end
   module AnonymousInterface573 : sig
     type t = anonymous_interface_573
@@ -10587,7 +10587,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAuthentication [@@js.get "prototype"]
     val set_prototype: t -> _WebAuthentication -> unit [@@js.set "prototype"]
-    val create: t -> _WebAuthentication [@@js.apply as_constructor]
+    val create: t -> _WebAuthentication [@@js.apply_newable]
   end
   module AnonymousInterface574 : sig
     type t = anonymous_interface_574
@@ -10598,7 +10598,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebAuthnAssertion [@@js.get "prototype"]
     val set_prototype: t -> _WebAuthnAssertion -> unit [@@js.set "prototype"]
-    val create: t -> _WebAuthnAssertion [@@js.apply as_constructor]
+    val create: t -> _WebAuthnAssertion [@@js.apply_newable]
   end
   module AnonymousInterface575 : sig
     type t = anonymous_interface_575
@@ -10609,7 +10609,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGL2RenderingContext [@@js.get "prototype"]
     val set_prototype: t -> _WebGL2RenderingContext -> unit [@@js.set "prototype"]
-    val create: t -> _WebGL2RenderingContext [@@js.apply as_constructor]
+    val create: t -> _WebGL2RenderingContext [@@js.apply_newable]
     val get_ACTIVE_ATTRIBUTES: t -> _GLenum [@@js.get "ACTIVE_ATTRIBUTES"]
     val get_ACTIVE_TEXTURE: t -> _GLenum [@@js.get "ACTIVE_TEXTURE"]
     val get_ACTIVE_UNIFORMS: t -> _GLenum [@@js.get "ACTIVE_UNIFORMS"]
@@ -11179,7 +11179,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLActiveInfo [@@js.get "prototype"]
     val set_prototype: t -> _WebGLActiveInfo -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLActiveInfo [@@js.apply as_constructor]
+    val create: t -> _WebGLActiveInfo [@@js.apply_newable]
   end
   module AnonymousInterface577 : sig
     type t = anonymous_interface_577
@@ -11190,7 +11190,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLBuffer [@@js.get "prototype"]
     val set_prototype: t -> _WebGLBuffer -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLBuffer [@@js.apply as_constructor]
+    val create: t -> _WebGLBuffer [@@js.apply_newable]
   end
   module AnonymousInterface578 : sig
     type t = anonymous_interface_578
@@ -11201,7 +11201,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLContextEvent [@@js.get "prototype"]
     val set_prototype: t -> _WebGLContextEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInit:_WebGLContextEventInit -> unit -> _WebGLContextEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInit:_WebGLContextEventInit -> unit -> _WebGLContextEvent [@@js.apply_newable]
   end
   module AnonymousInterface579 : sig
     type t = anonymous_interface_579
@@ -11212,7 +11212,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLFramebuffer [@@js.get "prototype"]
     val set_prototype: t -> _WebGLFramebuffer -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLFramebuffer [@@js.apply as_constructor]
+    val create: t -> _WebGLFramebuffer [@@js.apply_newable]
   end
   module AnonymousInterface580 : sig
     type t = anonymous_interface_580
@@ -11223,7 +11223,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLObject [@@js.get "prototype"]
     val set_prototype: t -> _WebGLObject -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLObject [@@js.apply as_constructor]
+    val create: t -> _WebGLObject [@@js.apply_newable]
   end
   module AnonymousInterface581 : sig
     type t = anonymous_interface_581
@@ -11234,7 +11234,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLProgram [@@js.get "prototype"]
     val set_prototype: t -> _WebGLProgram -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLProgram [@@js.apply as_constructor]
+    val create: t -> _WebGLProgram [@@js.apply_newable]
   end
   module AnonymousInterface582 : sig
     type t = anonymous_interface_582
@@ -11245,7 +11245,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLQuery [@@js.get "prototype"]
     val set_prototype: t -> _WebGLQuery -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLQuery [@@js.apply as_constructor]
+    val create: t -> _WebGLQuery [@@js.apply_newable]
   end
   module AnonymousInterface583 : sig
     type t = anonymous_interface_583
@@ -11256,7 +11256,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLRenderbuffer [@@js.get "prototype"]
     val set_prototype: t -> _WebGLRenderbuffer -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLRenderbuffer [@@js.apply as_constructor]
+    val create: t -> _WebGLRenderbuffer [@@js.apply_newable]
   end
   module AnonymousInterface584 : sig
     type t = anonymous_interface_584
@@ -11267,7 +11267,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLRenderingContext [@@js.get "prototype"]
     val set_prototype: t -> _WebGLRenderingContext -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLRenderingContext [@@js.apply as_constructor]
+    val create: t -> _WebGLRenderingContext [@@js.apply_newable]
     val get_ACTIVE_ATTRIBUTES: t -> _GLenum [@@js.get "ACTIVE_ATTRIBUTES"]
     val get_ACTIVE_TEXTURE: t -> _GLenum [@@js.get "ACTIVE_TEXTURE"]
     val get_ACTIVE_UNIFORMS: t -> _GLenum [@@js.get "ACTIVE_UNIFORMS"]
@@ -11574,7 +11574,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLSampler [@@js.get "prototype"]
     val set_prototype: t -> _WebGLSampler -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLSampler [@@js.apply as_constructor]
+    val create: t -> _WebGLSampler [@@js.apply_newable]
   end
   module AnonymousInterface586 : sig
     type t = anonymous_interface_586
@@ -11585,7 +11585,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLShader [@@js.get "prototype"]
     val set_prototype: t -> _WebGLShader -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLShader [@@js.apply as_constructor]
+    val create: t -> _WebGLShader [@@js.apply_newable]
   end
   module AnonymousInterface587 : sig
     type t = anonymous_interface_587
@@ -11596,7 +11596,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLShaderPrecisionFormat [@@js.get "prototype"]
     val set_prototype: t -> _WebGLShaderPrecisionFormat -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLShaderPrecisionFormat [@@js.apply as_constructor]
+    val create: t -> _WebGLShaderPrecisionFormat [@@js.apply_newable]
   end
   module AnonymousInterface588 : sig
     type t = anonymous_interface_588
@@ -11607,7 +11607,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLSync [@@js.get "prototype"]
     val set_prototype: t -> _WebGLSync -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLSync [@@js.apply as_constructor]
+    val create: t -> _WebGLSync [@@js.apply_newable]
   end
   module AnonymousInterface589 : sig
     type t = anonymous_interface_589
@@ -11618,7 +11618,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLTexture [@@js.get "prototype"]
     val set_prototype: t -> _WebGLTexture -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLTexture [@@js.apply as_constructor]
+    val create: t -> _WebGLTexture [@@js.apply_newable]
   end
   module AnonymousInterface590 : sig
     type t = anonymous_interface_590
@@ -11629,7 +11629,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLTransformFeedback [@@js.get "prototype"]
     val set_prototype: t -> _WebGLTransformFeedback -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLTransformFeedback [@@js.apply as_constructor]
+    val create: t -> _WebGLTransformFeedback [@@js.apply_newable]
   end
   module AnonymousInterface591 : sig
     type t = anonymous_interface_591
@@ -11640,7 +11640,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLUniformLocation [@@js.get "prototype"]
     val set_prototype: t -> _WebGLUniformLocation -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLUniformLocation [@@js.apply as_constructor]
+    val create: t -> _WebGLUniformLocation [@@js.apply_newable]
   end
   module AnonymousInterface592 : sig
     type t = anonymous_interface_592
@@ -11651,7 +11651,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebGLVertexArrayObject [@@js.get "prototype"]
     val set_prototype: t -> _WebGLVertexArrayObject -> unit [@@js.set "prototype"]
-    val create: t -> _WebGLVertexArrayObject [@@js.apply as_constructor]
+    val create: t -> _WebGLVertexArrayObject [@@js.apply_newable]
   end
   module AnonymousInterface593 : sig
     type t = anonymous_interface_593
@@ -11662,7 +11662,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebKitPoint [@@js.get "prototype"]
     val set_prototype: t -> _WebKitPoint -> unit [@@js.set "prototype"]
-    val create: t -> ?x:float -> ?y:float -> unit -> _WebKitPoint [@@js.apply as_constructor]
+    val create: t -> ?x:float -> ?y:float -> unit -> _WebKitPoint [@@js.apply_newable]
   end
   module AnonymousInterface594 : sig
     type t = anonymous_interface_594
@@ -11673,7 +11673,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WebSocket [@@js.get "prototype"]
     val set_prototype: t -> _WebSocket -> unit [@@js.set "prototype"]
-    val create: t -> url:string -> ?protocols:string list or_string -> unit -> _WebSocket [@@js.apply as_constructor]
+    val create: t -> url:string -> ?protocols:string list or_string -> unit -> _WebSocket [@@js.apply_newable]
     val get_CLOSED: t -> float [@@js.get "CLOSED"]
     val get_CLOSING: t -> float [@@js.get "CLOSING"]
     val get_CONNECTING: t -> float [@@js.get "CONNECTING"]
@@ -11688,7 +11688,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _WheelEvent [@@js.get "prototype"]
     val set_prototype: t -> _WheelEvent -> unit [@@js.set "prototype"]
-    val create: t -> type_:string -> ?eventInitDict:_WheelEventInit -> unit -> _WheelEvent [@@js.apply as_constructor]
+    val create: t -> type_:string -> ?eventInitDict:_WheelEventInit -> unit -> _WheelEvent [@@js.apply_newable]
     val get_DOM_DELTA_LINE: t -> float [@@js.get "DOM_DELTA_LINE"]
     val get_DOM_DELTA_PAGE: t -> float [@@js.get "DOM_DELTA_PAGE"]
     val get_DOM_DELTA_PIXEL: t -> float [@@js.get "DOM_DELTA_PIXEL"]
@@ -11702,7 +11702,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Window [@@js.get "prototype"]
     val set_prototype: t -> _Window -> unit [@@js.set "prototype"]
-    val create: t -> _Window [@@js.apply as_constructor]
+    val create: t -> _Window [@@js.apply_newable]
   end
   module AnonymousInterface597 : sig
     type t = anonymous_interface_597
@@ -11713,7 +11713,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Worker [@@js.get "prototype"]
     val set_prototype: t -> _Worker -> unit [@@js.set "prototype"]
-    val create: t -> stringUrl:_URL or_string -> ?options:_WorkerOptions -> unit -> _Worker [@@js.apply as_constructor]
+    val create: t -> stringUrl:_URL or_string -> ?options:_WorkerOptions -> unit -> _Worker [@@js.apply_newable]
   end
   module AnonymousInterface598 : sig
     type t = anonymous_interface_598
@@ -11724,7 +11724,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _Worklet [@@js.get "prototype"]
     val set_prototype: t -> _Worklet -> unit [@@js.set "prototype"]
-    val create: t -> _Worklet [@@js.apply as_constructor]
+    val create: t -> _Worklet [@@js.apply_newable]
   end
   module AnonymousInterface599 : sig
     type t = anonymous_interface_599
@@ -11735,7 +11735,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> any _WritableStream [@@js.get "prototype"]
     val set_prototype: t -> any _WritableStream -> unit [@@js.set "prototype"]
-    val create: t -> ?underlyingSink:'W _UnderlyingSink -> ?strategy:'W _QueuingStrategy -> unit -> 'W _WritableStream [@@js.apply as_constructor]
+    val create: t -> ?underlyingSink:'W _UnderlyingSink -> ?strategy:'W _QueuingStrategy -> unit -> 'W _WritableStream [@@js.apply_newable]
   end
   module AnonymousInterface600 : sig
     type t = anonymous_interface_600
@@ -11746,7 +11746,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _XMLDocument [@@js.get "prototype"]
     val set_prototype: t -> _XMLDocument -> unit [@@js.set "prototype"]
-    val create: t -> _XMLDocument [@@js.apply as_constructor]
+    val create: t -> _XMLDocument [@@js.apply_newable]
   end
   module AnonymousInterface601 : sig
     type t = anonymous_interface_601
@@ -11757,7 +11757,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _XMLHttpRequest [@@js.get "prototype"]
     val set_prototype: t -> _XMLHttpRequest -> unit [@@js.set "prototype"]
-    val create: t -> _XMLHttpRequest [@@js.apply as_constructor]
+    val create: t -> _XMLHttpRequest [@@js.apply_newable]
     val get_DONE: t -> float [@@js.get "DONE"]
     val get_HEADERS_RECEIVED: t -> float [@@js.get "HEADERS_RECEIVED"]
     val get_LOADING: t -> float [@@js.get "LOADING"]
@@ -11773,7 +11773,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _XMLHttpRequestEventTarget [@@js.get "prototype"]
     val set_prototype: t -> _XMLHttpRequestEventTarget -> unit [@@js.set "prototype"]
-    val create: t -> _XMLHttpRequestEventTarget [@@js.apply as_constructor]
+    val create: t -> _XMLHttpRequestEventTarget [@@js.apply_newable]
   end
   module AnonymousInterface603 : sig
     type t = anonymous_interface_603
@@ -11784,7 +11784,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _XMLHttpRequestUpload [@@js.get "prototype"]
     val set_prototype: t -> _XMLHttpRequestUpload -> unit [@@js.set "prototype"]
-    val create: t -> _XMLHttpRequestUpload [@@js.apply as_constructor]
+    val create: t -> _XMLHttpRequestUpload [@@js.apply_newable]
   end
   module AnonymousInterface604 : sig
     type t = anonymous_interface_604
@@ -11795,7 +11795,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _XMLSerializer [@@js.get "prototype"]
     val set_prototype: t -> _XMLSerializer -> unit [@@js.set "prototype"]
-    val create: t -> _XMLSerializer [@@js.apply as_constructor]
+    val create: t -> _XMLSerializer [@@js.apply_newable]
   end
   module AnonymousInterface605 : sig
     type t = anonymous_interface_605
@@ -11806,7 +11806,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _XPathEvaluator [@@js.get "prototype"]
     val set_prototype: t -> _XPathEvaluator -> unit [@@js.set "prototype"]
-    val create: t -> _XPathEvaluator [@@js.apply as_constructor]
+    val create: t -> _XPathEvaluator [@@js.apply_newable]
   end
   module AnonymousInterface606 : sig
     type t = anonymous_interface_606
@@ -11817,7 +11817,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _XPathExpression [@@js.get "prototype"]
     val set_prototype: t -> _XPathExpression -> unit [@@js.set "prototype"]
-    val create: t -> _XPathExpression [@@js.apply as_constructor]
+    val create: t -> _XPathExpression [@@js.apply_newable]
   end
   module AnonymousInterface607 : sig
     type t = anonymous_interface_607
@@ -11828,7 +11828,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _XPathResult [@@js.get "prototype"]
     val set_prototype: t -> _XPathResult -> unit [@@js.set "prototype"]
-    val create: t -> _XPathResult [@@js.apply as_constructor]
+    val create: t -> _XPathResult [@@js.apply_newable]
     val get_ANY_TYPE: t -> float [@@js.get "ANY_TYPE"]
     val get_ANY_UNORDERED_NODE_TYPE: t -> float [@@js.get "ANY_UNORDERED_NODE_TYPE"]
     val get_BOOLEAN_TYPE: t -> float [@@js.get "BOOLEAN_TYPE"]
@@ -11849,7 +11849,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _XSLTProcessor [@@js.get "prototype"]
     val set_prototype: t -> _XSLTProcessor -> unit [@@js.set "prototype"]
-    val create: t -> _XSLTProcessor [@@js.apply as_constructor]
+    val create: t -> _XSLTProcessor [@@js.apply_newable]
   end
   module AnonymousInterface609 : sig
     type t = anonymous_interface_609
@@ -11860,7 +11860,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> webkitRTCPeerConnection [@@js.get "prototype"]
     val set_prototype: t -> webkitRTCPeerConnection -> unit [@@js.set "prototype"]
-    val create: t -> configuration:_RTCConfiguration -> webkitRTCPeerConnection [@@js.apply as_constructor]
+    val create: t -> configuration:_RTCConfiguration -> webkitRTCPeerConnection [@@js.apply_newable]
   end
   module AnonymousInterface610 : sig
     type t = anonymous_interface_610
@@ -11890,7 +11890,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> ?src:string -> unit -> _HTMLAudioElement [@@js.apply as_constructor]
+    val create: t -> ?src:string -> unit -> _HTMLAudioElement [@@js.apply_newable]
   end
   module AnonymousInterface613 : sig
     type t = anonymous_interface_613
@@ -11899,7 +11899,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> ?text:string -> ?value:string -> ?defaultSelected:bool -> ?selected:bool -> unit -> _HTMLOptionElement [@@js.apply as_constructor]
+    val create: t -> ?text:string -> ?value:string -> ?defaultSelected:bool -> ?selected:bool -> unit -> _HTMLOptionElement [@@js.apply_newable]
   end
   module AnonymousInterface614 : sig
     type t = anonymous_interface_614
@@ -11908,7 +11908,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> ?width:float -> ?height:float -> unit -> _HTMLImageElement [@@js.apply as_constructor]
+    val create: t -> ?width:float -> ?height:float -> unit -> _HTMLImageElement [@@js.apply_newable]
   end
   module[@js.scope "Account"] Account : sig
     type t = _Account
@@ -11948,8 +11948,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_iv: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "iv"]
-    val set_iv: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "iv"]
+    val get_iv: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "iv"]
+    val set_iv: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "iv"]
     val cast: t -> _Algorithm [@@js.cast]
   end
   module[@js.scope "AesCtrParams"] AesCtrParams : sig
@@ -11959,8 +11959,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_counter: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "counter"]
-    val set_counter: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "counter"]
+    val get_counter: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "counter"]
+    val set_counter: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "counter"]
     val get_length: t -> float [@@js.get "length"]
     val set_length: t -> float -> unit [@@js.set "length"]
     val cast: t -> _Algorithm [@@js.cast]
@@ -11983,10 +11983,10 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_additionalData: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "additionalData"]
-    val set_additionalData: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "additionalData"]
-    val get_iv: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "iv"]
-    val set_iv: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "iv"]
+    val get_additionalData: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "additionalData"]
+    val set_additionalData: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "additionalData"]
+    val get_iv: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "iv"]
+    val set_iv: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "iv"]
     val get_tagLength: t -> float [@@js.get "tagLength"]
     val set_tagLength: t -> float -> unit [@@js.set "tagLength"]
     val cast: t -> _Algorithm [@@js.cast]
@@ -13225,10 +13225,10 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_hash: t -> _HashAlgorithmIdentifier [@@js.get "hash"]
     val set_hash: t -> _HashAlgorithmIdentifier -> unit [@@js.set "hash"]
-    val get_info: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "info"]
-    val set_info: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "info"]
-    val get_salt: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "salt"]
-    val set_salt: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "salt"]
+    val get_info: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "info"]
+    val set_info: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "info"]
+    val get_salt: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "salt"]
+    val set_salt: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "salt"]
     val cast: t -> _Algorithm [@@js.cast]
   end
   module[@js.scope "HmacImportParams"] HmacImportParams : sig
@@ -14237,8 +14237,8 @@ module Make (M: Missing) : sig
     val set_hash: t -> _HashAlgorithmIdentifier -> unit [@@js.set "hash"]
     val get_iterations: t -> float [@@js.get "iterations"]
     val set_iterations: t -> float -> unit [@@js.set "iterations"]
-    val get_salt: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "salt"]
-    val set_salt: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "salt"]
+    val get_salt: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "salt"]
+    val set_salt: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "salt"]
     val cast: t -> _Algorithm [@@js.cast]
   end
   module[@js.scope "PerformanceObserverInit"] PerformanceObserverInit : sig
@@ -15614,8 +15614,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_label: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "label"]
-    val set_label: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "label"]
+    val get_label: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "label"]
+    val set_label: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "label"]
     val cast: t -> _Algorithm [@@js.cast]
   end
   module[@js.scope "RsaOtherPrimesInfo"] RsaOtherPrimesInfo : sig
@@ -15666,8 +15666,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_id: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ or_null [@@js.get "id"]
-    val set_id: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ or_null -> unit [@@js.set "id"]
+    val get_id: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ or_null [@@js.get "id"]
+    val set_id: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ or_null -> unit [@@js.set "id"]
     val get_transports: t -> _Transport list [@@js.get "transports"]
     val set_transports: t -> _Transport list -> unit [@@js.set "transports"]
     val get_type: t -> _ScopedCredentialType [@@js.get "type"]
@@ -15781,8 +15781,8 @@ module Make (M: Missing) : sig
     val set_origin: t -> string -> unit [@@js.set "origin"]
     val get_ports: t -> _MessagePort list or_null [@@js.get "ports"]
     val set_ports: t -> _MessagePort list or_null -> unit [@@js.set "ports"]
-    val get_source: t -> (([`U_s139_activated of _ServiceWorker [@js "activated"] | `U_s140_activating of _ServiceWorker [@js "activating"] | `U_s458_installed of _ServiceWorker [@js "installed"] | `U_s459_installing of _ServiceWorker [@js "installing"] | `U_s607_parsed of _ServiceWorker [@js "parsed"] | `U_s671_redundant of _ServiceWorker [@js "redundant"]] [@js.union on_field "state"]), _MessagePort) or_ or_null [@@js.get "source"]
-    val set_source: t -> (([`U_s139_activated of _ServiceWorker  | `U_s140_activating of _ServiceWorker  | `U_s458_installed of _ServiceWorker  | `U_s459_installing of _ServiceWorker  | `U_s607_parsed of _ServiceWorker  | `U_s671_redundant of _ServiceWorker ] [@js.union on_field "state"]), _MessagePort) or_ or_null -> unit [@@js.set "source"]
+    val get_source: t -> (_MessagePort, _ServiceWorker) union2 or_null [@@js.get "source"]
+    val set_source: t -> (_MessagePort, _ServiceWorker) union2 or_null -> unit [@@js.set "source"]
     val cast: t -> _EventInit [@@js.cast]
   end
   module[@js.scope "ShadowRootInit"] ShadowRootInit : sig
@@ -16005,8 +16005,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_track: t -> (([`U_s298_disabled of _TextTrack [@js "disabled"] | `U_s416_hidden of _TextTrack [@js "hidden"] | `U_s731_showing of _TextTrack [@js "showing"]] [@js.union on_field "mode"]), (_AudioTrack, _VideoTrack) or_) or_ or_null [@@js.get "track"]
-    val set_track: t -> (([`U_s298_disabled of _TextTrack  | `U_s416_hidden of _TextTrack  | `U_s731_showing of _TextTrack ] [@js.union on_field "mode"]), (_AudioTrack, _VideoTrack) or_) or_ or_null -> unit [@@js.set "track"]
+    val get_track: t -> (_AudioTrack, _TextTrack, _VideoTrack) union3 or_null [@@js.get "track"]
+    val set_track: t -> (_AudioTrack, _TextTrack, _VideoTrack) union3 or_null -> unit [@@js.set "track"]
     val cast: t -> _EventInit [@@js.cast]
   end
   module[@js.scope "Transformer"] Transformer : sig
@@ -16395,8 +16395,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_iv: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "iv"]
-    val set_iv: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "iv"]
+    val get_iv: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "iv"]
+    val set_iv: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "iv"]
     val cast: t -> _Algorithm [@@js.cast]
   end
   module[@js.scope "AesCmacParams"] AesCmacParams : sig
@@ -18387,10 +18387,10 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_fillStyle: t -> (_CanvasGradient, _CanvasPattern) or_ or_string [@@js.get "fillStyle"]
-    val set_fillStyle: t -> (_CanvasGradient, _CanvasPattern) or_ or_string -> unit [@@js.set "fillStyle"]
-    val get_strokeStyle: t -> (_CanvasGradient, _CanvasPattern) or_ or_string [@@js.get "strokeStyle"]
-    val set_strokeStyle: t -> (_CanvasGradient, _CanvasPattern) or_ or_string -> unit [@@js.set "strokeStyle"]
+    val get_fillStyle: t -> (_CanvasGradient, _CanvasPattern) union2 or_string [@@js.get "fillStyle"]
+    val set_fillStyle: t -> (_CanvasGradient, _CanvasPattern) union2 or_string -> unit [@@js.set "fillStyle"]
+    val get_strokeStyle: t -> (_CanvasGradient, _CanvasPattern) union2 or_string [@@js.get "strokeStyle"]
+    val set_strokeStyle: t -> (_CanvasGradient, _CanvasPattern) union2 or_string -> unit [@@js.set "strokeStyle"]
     val createLinearGradient: t -> x0:float -> y0:float -> x1:float -> y1:float -> _CanvasGradient [@@js.call "createLinearGradient"]
     val createPattern: t -> image:_CanvasImageSource -> repetition:string -> _CanvasPattern or_null [@@js.call "createPattern"]
     val createRadialGradient: t -> x0:float -> y0:float -> r0:float -> x1:float -> y1:float -> r1:float -> _CanvasGradient [@@js.call "createRadialGradient"]
@@ -19649,7 +19649,7 @@ module Make (M: Missing) : sig
     val get_lastModified: t -> string [@@js.get "lastModified"]
     val get_linkColor: t -> string [@@js.get "linkColor"]
     val set_linkColor: t -> string -> unit [@@js.set "linkColor"]
-    val get_links: t -> (_HTMLAnchorElement, _HTMLAreaElement) or_ _HTMLCollectionOf [@@js.get "links"]
+    val get_links: t -> (_HTMLAnchorElement, _HTMLAreaElement) union2 _HTMLCollectionOf [@@js.get "links"]
     val get_location: t -> _Location [@@js.get "location"]
     val set_location: t -> _Location -> unit [@@js.set "location"]
     val get_onfullscreenchange: t -> (this:t -> ev:_Event -> any) or_null [@@js.get "onfullscreenchange"]
@@ -20935,8 +20935,8 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get_length: t -> float [@@js.get "length"]
-    val item: t -> ?nameOrIndex:string -> unit -> (_Element, _HTMLCollection) or_ or_null [@@js.call "item"]
-    val namedItem: t -> name:string -> (_Element, _HTMLCollection) or_ or_null [@@js.call "namedItem"]
+    val item: t -> ?nameOrIndex:string -> unit -> (_Element, _HTMLCollection) union2 or_null [@@js.call "item"]
+    val namedItem: t -> name:string -> (_Element, _HTMLCollection) union2 or_null [@@js.call "namedItem"]
     val get: t -> float -> _Element [@@js.index_get]
     val set: t -> float -> _Element -> unit [@@js.index_set]
   end
@@ -21532,7 +21532,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val namedItem: t -> name:string -> (_Element, _RadioNodeList) or_ or_null [@@js.call "namedItem"]
+    val namedItem: t -> name:string -> (_Element, _RadioNodeList) union2 or_null [@@js.call "namedItem"]
     val cast: t -> _HTMLCollectionBase [@@js.cast]
   end
   val hTMLFormControlsCollection: anonymous_interface_162 [@@js.global "HTMLFormControlsCollection"]
@@ -22205,8 +22205,8 @@ module Make (M: Missing) : sig
     val get_seeking: t -> bool [@@js.get "seeking"]
     val get_src: t -> string [@@js.get "src"]
     val set_src: t -> string -> unit [@@js.set "src"]
-    val get_srcObject: t -> (([`U_s247_closed of _MediaSource [@js "closed"] | `U_s328_ended of _MediaSource [@js "ended"] | `U_s590_open of _MediaSource [@js "open"]] [@js.union on_field "readyState"]), (_Blob, _MediaStream) or_) or_ or_null [@@js.get "srcObject"]
-    val set_srcObject: t -> (([`U_s247_closed of _MediaSource  | `U_s328_ended of _MediaSource  | `U_s590_open of _MediaSource ] [@js.union on_field "readyState"]), (_Blob, _MediaStream) or_) or_ or_null -> unit [@@js.set "srcObject"]
+    val get_srcObject: t -> (_Blob, _MediaSource, _MediaStream) union3 or_null [@@js.get "srcObject"]
+    val set_srcObject: t -> (_Blob, _MediaSource, _MediaStream) union3 or_null -> unit [@@js.set "srcObject"]
     val get_textTracks: t -> _TextTrackList [@@js.get "textTracks"]
     val get_videoTracks: t -> _VideoTrackList [@@js.get "videoTracks"]
     val get_volume: t -> float [@@js.get "volume"]
@@ -22457,7 +22457,7 @@ module Make (M: Missing) : sig
     val set_length: t -> float -> unit [@@js.set "length"]
     val get_selectedIndex: t -> float [@@js.get "selectedIndex"]
     val set_selectedIndex: t -> float -> unit [@@js.set "selectedIndex"]
-    val add: t -> element:(_HTMLOptGroupElement, _HTMLOptionElement) or_ -> ?before:_HTMLElement or_number or_null -> unit -> unit [@@js.call "add"]
+    val add: t -> element:(_HTMLOptGroupElement, _HTMLOptionElement) union2 -> ?before:_HTMLElement or_number or_null -> unit -> unit [@@js.call "add"]
     val remove: t -> index:float -> unit [@@js.call "remove"]
     val cast: t -> _HTMLOptionElement _HTMLCollectionOf [@@js.cast]
   end
@@ -22684,7 +22684,7 @@ module Make (M: Missing) : sig
     val get_value: t -> string [@@js.get "value"]
     val set_value: t -> string -> unit [@@js.set "value"]
     val get_willValidate: t -> bool [@@js.get "willValidate"]
-    val add: t -> element:(_HTMLOptGroupElement, _HTMLOptionElement) or_ -> ?before:_HTMLElement or_number or_null -> unit -> unit [@@js.call "add"]
+    val add: t -> element:(_HTMLOptGroupElement, _HTMLOptionElement) union2 -> ?before:_HTMLElement or_number or_null -> unit -> unit [@@js.call "add"]
     val checkValidity: t -> bool [@@js.call "checkValidity"]
     val item: t -> index:float -> _Element or_null [@@js.call "item"]
     val namedItem: t -> name:string -> _HTMLOptionElement or_null [@@js.call "namedItem"]
@@ -22696,8 +22696,8 @@ module Make (M: Missing) : sig
     val addEventListener': t -> type_:string -> listener:_EventListenerOrEventListenerObject -> ?options:_AddEventListenerOptions or_boolean -> unit -> unit [@@js.call "addEventListener"]
     val removeEventListener: t -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type '{..}['K]' *)any -> any) -> ?options:_EventListenerOptions or_boolean -> unit -> unit [@@js.call "removeEventListener"]
     val removeEventListener': t -> type_:string -> listener:_EventListenerOrEventListenerObject -> ?options:_EventListenerOptions or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-    val get: t -> float -> (_HTMLOptGroupElement, _HTMLOptionElement) or_ [@@js.index_get]
-    val set: t -> float -> (_HTMLOptGroupElement, _HTMLOptionElement) or_ -> unit [@@js.index_set]
+    val get: t -> float -> (_HTMLOptGroupElement, _HTMLOptionElement) union2 [@@js.index_get]
+    val set: t -> float -> (_HTMLOptGroupElement, _HTMLOptionElement) union2 -> unit [@@js.index_set]
     val cast: t -> _HTMLElement [@@js.cast]
   end
   val hTMLSelectElement: anonymous_interface_197 [@@js.global "HTMLSelectElement"]
@@ -22951,7 +22951,7 @@ module Make (M: Missing) : sig
     val set_align: t -> string -> unit [@@js.set "align"]
     val get_bgColor: t -> string [@@js.get "bgColor"]
     val set_bgColor: t -> string -> unit [@@js.set "bgColor"]
-    val get_cells: t -> (_HTMLTableDataCellElement, _HTMLTableHeaderCellElement) or_ _HTMLCollectionOf [@@js.get "cells"]
+    val get_cells: t -> (_HTMLTableDataCellElement, _HTMLTableHeaderCellElement) union2 _HTMLCollectionOf [@@js.get "cells"]
     val get_ch: t -> string [@@js.get "ch"]
     val set_ch: t -> string -> unit [@@js.set "ch"]
     val get_chOff: t -> string [@@js.get "chOff"]
@@ -23280,12 +23280,12 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_context: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "context"]
-    val set_context: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "context"]
+    val get_context: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "context"]
+    val set_context: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "context"]
     val get_hash: t -> _Algorithm or_string [@@js.get "hash"]
     val set_hash: t -> _Algorithm or_string -> unit [@@js.set "hash"]
-    val get_label: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ [@@js.get "label"]
-    val set_label: t -> (ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unit [@@js.set "label"]
+    val get_label: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ [@@js.get "label"]
+    val set_label: t -> ((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unit [@@js.set "label"]
     val cast: t -> _Algorithm [@@js.cast]
   end
   module[@js.scope "IDBArrayKey"] IDBArrayKey : sig
@@ -23307,7 +23307,7 @@ module Make (M: Missing) : sig
     val get_direction: t -> _IDBCursorDirection [@@js.get "direction"]
     val get_key: t -> _IDBValidKey [@@js.get "key"]
     val get_primaryKey: t -> _IDBValidKey [@@js.get "primaryKey"]
-    val get_source: t -> (_IDBIndex, _IDBObjectStore) or_ [@@js.get "source"]
+    val get_source: t -> (_IDBIndex, _IDBObjectStore) union2 [@@js.get "source"]
     val advance: t -> count:float -> unit [@@js.call "advance"]
     val continue: t -> ?key:_IDBValidKey -> unit -> unit [@@js.call "continue"]
     val continuePrimaryKey: t -> key:_IDBValidKey -> primaryKey:_IDBValidKey -> unit [@@js.call "continuePrimaryKey"]
@@ -23396,13 +23396,13 @@ module Make (M: Missing) : sig
     val set_name: t -> string -> unit [@@js.set "name"]
     val get_objectStore: t -> _IDBObjectStore [@@js.get "objectStore"]
     val get_unique: t -> bool [@@js.get "unique"]
-    val count: t -> ?key:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ -> unit -> float _IDBRequest [@@js.call "count"]
-    val get_: t -> key:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ -> any or_undefined _IDBRequest [@@js.call "get"]
-    val getAll: t -> ?query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ or_null -> ?count:float -> unit -> any list _IDBRequest [@@js.call "getAll"]
-    val getAllKeys: t -> ?query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ or_null -> ?count:float -> unit -> _IDBValidKey list _IDBRequest [@@js.call "getAllKeys"]
-    val getKey: t -> key:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ -> _IDBValidKey or_undefined _IDBRequest [@@js.call "getKey"]
-    val openCursor: t -> ?query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ or_null -> ?direction:_IDBCursorDirection -> unit -> _IDBCursorWithValue or_null _IDBRequest [@@js.call "openCursor"]
-    val openKeyCursor: t -> ?query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ or_null -> ?direction:_IDBCursorDirection -> unit -> _IDBCursor or_null _IDBRequest [@@js.call "openKeyCursor"]
+    val count: t -> ?key:(_IDBKeyRange, _IDBValidKey) union2 -> unit -> float _IDBRequest [@@js.call "count"]
+    val get_: t -> key:(_IDBKeyRange, _IDBValidKey) union2 -> any or_undefined _IDBRequest [@@js.call "get"]
+    val getAll: t -> ?query:(_IDBKeyRange, _IDBValidKey) union2 or_null -> ?count:float -> unit -> any list _IDBRequest [@@js.call "getAll"]
+    val getAllKeys: t -> ?query:(_IDBKeyRange, _IDBValidKey) union2 or_null -> ?count:float -> unit -> _IDBValidKey list _IDBRequest [@@js.call "getAllKeys"]
+    val getKey: t -> key:(_IDBKeyRange, _IDBValidKey) union2 -> _IDBValidKey or_undefined _IDBRequest [@@js.call "getKey"]
+    val openCursor: t -> ?query:(_IDBKeyRange, _IDBValidKey) union2 or_null -> ?direction:_IDBCursorDirection -> unit -> _IDBCursorWithValue or_null _IDBRequest [@@js.call "openCursor"]
+    val openKeyCursor: t -> ?query:(_IDBKeyRange, _IDBValidKey) union2 or_null -> ?direction:_IDBCursorDirection -> unit -> _IDBCursor or_null _IDBRequest [@@js.call "openKeyCursor"]
   end
   val iDBIndex: anonymous_interface_225 [@@js.global "IDBIndex"]
   module[@js.scope "IDBKeyRange"] IDBKeyRange : sig
@@ -23434,17 +23434,17 @@ module Make (M: Missing) : sig
     val get_transaction: t -> _IDBTransaction [@@js.get "transaction"]
     val add: t -> value:any -> ?key:_IDBValidKey -> unit -> _IDBValidKey _IDBRequest [@@js.call "add"]
     val clear: t -> never or_undefined _IDBRequest [@@js.call "clear"]
-    val count: t -> ?key:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ -> unit -> float _IDBRequest [@@js.call "count"]
+    val count: t -> ?key:(_IDBKeyRange, _IDBValidKey) union2 -> unit -> float _IDBRequest [@@js.call "count"]
     val createIndex: t -> name:string -> keyPath:string list or_string -> ?options:_IDBIndexParameters -> unit -> _IDBIndex [@@js.call "createIndex"]
-    val delete: t -> key:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ -> never or_undefined _IDBRequest [@@js.call "delete"]
+    val delete: t -> key:(_IDBKeyRange, _IDBValidKey) union2 -> never or_undefined _IDBRequest [@@js.call "delete"]
     val deleteIndex: t -> name:string -> unit [@@js.call "deleteIndex"]
-    val get_: t -> query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ -> any or_undefined _IDBRequest [@@js.call "get"]
-    val getAll: t -> ?query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ or_null -> ?count:float -> unit -> any list _IDBRequest [@@js.call "getAll"]
-    val getAllKeys: t -> ?query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ or_null -> ?count:float -> unit -> _IDBValidKey list _IDBRequest [@@js.call "getAllKeys"]
-    val getKey: t -> query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ -> _IDBValidKey or_undefined _IDBRequest [@@js.call "getKey"]
+    val get_: t -> query:(_IDBKeyRange, _IDBValidKey) union2 -> any or_undefined _IDBRequest [@@js.call "get"]
+    val getAll: t -> ?query:(_IDBKeyRange, _IDBValidKey) union2 or_null -> ?count:float -> unit -> any list _IDBRequest [@@js.call "getAll"]
+    val getAllKeys: t -> ?query:(_IDBKeyRange, _IDBValidKey) union2 or_null -> ?count:float -> unit -> _IDBValidKey list _IDBRequest [@@js.call "getAllKeys"]
+    val getKey: t -> query:(_IDBKeyRange, _IDBValidKey) union2 -> _IDBValidKey or_undefined _IDBRequest [@@js.call "getKey"]
     val index: t -> name:string -> _IDBIndex [@@js.call "index"]
-    val openCursor: t -> ?query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ or_null -> ?direction:_IDBCursorDirection -> unit -> _IDBCursorWithValue or_null _IDBRequest [@@js.call "openCursor"]
-    val openKeyCursor: t -> ?query:(ArrayBuffer.t_0, (ArrayBufferView.t_0, (Date.t_0, (_IDBArrayKey, (_IDBKeyRange, (string, float) or_) or_) or_) or_) or_) or_ or_null -> ?direction:_IDBCursorDirection -> unit -> _IDBCursor or_null _IDBRequest [@@js.call "openKeyCursor"]
+    val openCursor: t -> ?query:(_IDBKeyRange, _IDBValidKey) union2 or_null -> ?direction:_IDBCursorDirection -> unit -> _IDBCursorWithValue or_null _IDBRequest [@@js.call "openCursor"]
+    val openKeyCursor: t -> ?query:(_IDBKeyRange, _IDBValidKey) union2 or_null -> ?direction:_IDBCursorDirection -> unit -> _IDBCursor or_null _IDBRequest [@@js.call "openKeyCursor"]
     val put: t -> value:any -> ?key:_IDBValidKey -> unit -> _IDBValidKey _IDBRequest [@@js.call "put"]
   end
   val iDBObjectStore: anonymous_interface_227 [@@js.global "IDBObjectStore"]
@@ -23508,7 +23508,7 @@ module Make (M: Missing) : sig
     val set_onsuccess: 'T t -> (this:'T t -> ev:_Event -> any) or_null -> unit [@@js.set "onsuccess"]
     val get_readyState: 'T t -> _IDBRequestReadyState [@@js.get "readyState"]
     val get_result: 'T t -> 'T [@@js.get "result"]
-    val get_source: 'T t -> (([`U_s561_next of _IDBCursor [@js "next"] | `U_s562_nextunique of _IDBCursor [@js "nextunique"] | `U_s651_prev of _IDBCursor [@js "prev"] | `U_s652_prevunique of _IDBCursor [@js "prevunique"]] [@js.union on_field "direction"]), (_IDBIndex, _IDBObjectStore) or_) or_ [@@js.get "source"]
+    val get_source: 'T t -> (_IDBCursor, _IDBIndex, _IDBObjectStore) union3 [@@js.get "source"]
     val get_transaction: 'T t -> _IDBTransaction or_null [@@js.get "transaction"]
     val addEventListener: 'T t -> type_:'K -> listener:(this:'T t -> ev:(* FIXME: unknown type '{..}['K]' *)any -> any) -> ?options:_AddEventListenerOptions or_boolean -> unit -> unit [@@js.call "addEventListener"]
     val addEventListener': 'T t -> type_:string -> listener:_EventListenerOrEventListenerObject -> ?options:_AddEventListenerOptions or_boolean -> unit -> unit [@@js.call "addEventListener"]
@@ -23619,7 +23619,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_canvas: t -> (_HTMLCanvasElement, _OffscreenCanvas) or_ [@@js.get "canvas"]
+    val get_canvas: t -> (_HTMLCanvasElement, _OffscreenCanvas) union2 [@@js.get "canvas"]
     val transferFromImageBitmap: t -> bitmap:_ImageBitmap or_null -> unit [@@js.call "transferFromImageBitmap"]
   end
   val imageBitmapRenderingContext: anonymous_interface_234 [@@js.global "ImageBitmapRenderingContext"]
@@ -24781,7 +24781,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val sendBeacon: t -> url:string -> ?data:(ArrayBuffer.t_0, (_Blob, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (_FormData, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ or_string or_null -> unit -> bool [@@js.call "sendBeacon"]
+    val sendBeacon: t -> url:string -> ?data:((((((_FormData, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float64Array.t_0) or_, Float32Array.t_0) or_, DataView.t_0) or_, _Blob) or_, ArrayBuffer.t_0) or_ or_string or_null -> unit -> bool [@@js.call "sendBeacon"]
   end
   module[@js.scope "NavigatorConcurrentHardware"] NavigatorConcurrentHardware : sig
     type t = _NavigatorConcurrentHardware
@@ -25398,7 +25398,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val updateWith: t -> detailsPromise:(_PaymentDetailsUpdate, _PaymentDetailsUpdate Promise.t_1) or_ -> unit [@@js.call "updateWith"]
+    val updateWith: t -> detailsPromise:(_PaymentDetailsUpdate, _PaymentDetailsUpdate Promise.t_1) union2 -> unit [@@js.call "updateWith"]
     val cast: t -> _Event [@@js.cast]
   end
   val paymentRequestUpdateEvent: anonymous_interface_315 [@@js.global "PaymentRequestUpdateEvent"]
@@ -26192,7 +26192,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_candidate: t -> (_RTCIceCandidateComplete, _RTCIceCandidateDictionary) or_ [@@js.get "candidate"]
+    val get_candidate: t -> (_RTCIceCandidateComplete, _RTCIceCandidateDictionary) union2 [@@js.get "candidate"]
     val cast: t -> _Event [@@js.cast]
   end
   val rTCIceGathererEvent: anonymous_interface_357 [@@js.global "RTCIceGathererEvent"]
@@ -26333,7 +26333,7 @@ module Make (M: Missing) : sig
     val get_remoteDescription: t -> _RTCSessionDescription or_null [@@js.get "remoteDescription"]
     val get_sctp: t -> _RTCSctpTransport or_null [@@js.get "sctp"]
     val get_signalingState: t -> _RTCSignalingState [@@js.get "signalingState"]
-    val addIceCandidate: t -> candidate:(([`U_s697_rtcp of _RTCIceCandidate  | `U_s699_rtp of _RTCIceCandidate ] [@js.union on_field "component"]), _RTCIceCandidateInit) or_ -> unit Promise.t_1 [@@js.call "addIceCandidate"]
+    val addIceCandidate: t -> candidate:(_RTCIceCandidate, _RTCIceCandidateInit) union2 -> unit Promise.t_1 [@@js.call "addIceCandidate"]
     val addTrack: t -> track:_MediaStreamTrack -> streams:(_MediaStream list [@js.variadic]) -> _RTCRtpSender [@@js.call "addTrack"]
     val addTransceiver: t -> trackOrKind:_MediaStreamTrack or_string -> ?init:_RTCRtpTransceiverInit -> unit -> _RTCRtpTransceiver [@@js.call "addTransceiver"]
     val close: t -> unit [@@js.call "close"]
@@ -28602,8 +28602,8 @@ module Make (M: Missing) : sig
     val getComputedStyle: t -> elt:_Element -> ?pseudoElt:string or_null -> unit -> _CSSStyleDeclaration [@@js.call "getComputedStyle"]
     val getCurrentTime: t -> float [@@js.call "getCurrentTime"]
     val getElementById: t -> elementId:string -> _Element [@@js.call "getElementById"]
-    val getEnclosureList: t -> rect:_SVGRect -> referenceElement:_SVGElement -> (_SVGCircleElement, (_SVGEllipseElement, (_SVGImageElement, (_SVGLineElement, (_SVGPathElement, (_SVGPolygonElement, (_SVGPolylineElement, (_SVGRectElement, (_SVGTextElement, _SVGUseElement) or_) or_) or_) or_) or_) or_) or_) or_) or_ _NodeListOf [@@js.call "getEnclosureList"]
-    val getIntersectionList: t -> rect:_SVGRect -> referenceElement:_SVGElement -> (_SVGCircleElement, (_SVGEllipseElement, (_SVGImageElement, (_SVGLineElement, (_SVGPathElement, (_SVGPolygonElement, (_SVGPolylineElement, (_SVGRectElement, (_SVGTextElement, _SVGUseElement) or_) or_) or_) or_) or_) or_) or_) or_) or_ _NodeListOf [@@js.call "getIntersectionList"]
+    val getEnclosureList: t -> rect:_SVGRect -> referenceElement:_SVGElement -> (((_SVGImageElement, _SVGLineElement, _SVGPathElement, _SVGPolygonElement, _SVGPolylineElement, _SVGRectElement, _SVGTextElement, _SVGUseElement) union8, _SVGEllipseElement) or_, _SVGCircleElement) or_ _NodeListOf [@@js.call "getEnclosureList"]
+    val getIntersectionList: t -> rect:_SVGRect -> referenceElement:_SVGElement -> (((_SVGImageElement, _SVGLineElement, _SVGPathElement, _SVGPolygonElement, _SVGPolylineElement, _SVGRectElement, _SVGTextElement, _SVGUseElement) union8, _SVGEllipseElement) or_, _SVGCircleElement) or_ _NodeListOf [@@js.call "getIntersectionList"]
     val pauseAnimations: t -> unit [@@js.call "pauseAnimations"]
     val setCurrentTime: t -> seconds:float -> unit [@@js.call "setCurrentTime"]
     val suspendRedraw: t -> maxWaitMilliseconds:float -> float [@@js.call "suspendRedraw"]
@@ -29214,7 +29214,7 @@ module Make (M: Missing) : sig
     val get_lastEventId: t -> string [@@js.get "lastEventId"]
     val get_origin: t -> string [@@js.get "origin"]
     val get_ports: t -> _MessagePort list or_null [@@js.get "ports"]
-    val get_source: t -> (([`U_s139_activated of _ServiceWorker [@js "activated"] | `U_s140_activating of _ServiceWorker [@js "activating"] | `U_s458_installed of _ServiceWorker [@js "installed"] | `U_s459_installing of _ServiceWorker [@js "installing"] | `U_s607_parsed of _ServiceWorker [@js "parsed"] | `U_s671_redundant of _ServiceWorker [@js "redundant"]] [@js.union on_field "state"]), _MessagePort) or_ or_null [@@js.get "source"]
+    val get_source: t -> (_MessagePort, _ServiceWorker) union2 or_null [@@js.get "source"]
     val cast: t -> _Event [@@js.cast]
   end
   val serviceWorkerMessageEvent: anonymous_interface_509 [@@js.global "ServiceWorkerMessageEvent"]
@@ -29776,23 +29776,23 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val decrypt: t -> algorithm:(_AesCbcParams, (_AesCfbParams, (_AesCmacParams, (_AesCtrParams, (_AesGcmParams, _RsaOaepParams) or_) or_) or_) or_) or_ or_string -> key:_CryptoKey -> data:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "decrypt"]
-    val deriveBits: t -> algorithm:(_ConcatParams, (_DhKeyDeriveParams, (_EcdhKeyDeriveParams, (_HkdfCtrParams, _Pbkdf2Params) or_) or_) or_) or_ or_string -> baseKey:_CryptoKey -> length:float -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "deriveBits"]
-    val deriveKey: t -> algorithm:(_ConcatParams, (_DhKeyDeriveParams, (_EcdhKeyDeriveParams, (_HkdfCtrParams, _Pbkdf2Params) or_) or_) or_) or_ or_string -> baseKey:_CryptoKey -> derivedKeyType:(_AesDerivedKeyParams, (_ConcatParams, (_HkdfCtrParams, (_HmacImportParams, _Pbkdf2Params) or_) or_) or_) or_ or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "deriveKey"]
-    val digest: t -> algorithm:_Algorithm or_string -> data:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "digest"]
-    val encrypt: t -> algorithm:(_AesCbcParams, (_AesCfbParams, (_AesCmacParams, (_AesCtrParams, (_AesGcmParams, _RsaOaepParams) or_) or_) or_) or_) or_ or_string -> key:_CryptoKey -> data:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "encrypt"]
+    val decrypt: t -> algorithm:(_AesCbcParams, _AesCfbParams, _AesCmacParams, _AesCtrParams, _AesGcmParams, _RsaOaepParams) union6 or_string -> key:_CryptoKey -> data:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "decrypt"]
+    val deriveBits: t -> algorithm:(_ConcatParams, _DhKeyDeriveParams, _EcdhKeyDeriveParams, _HkdfCtrParams, _Pbkdf2Params) union5 or_string -> baseKey:_CryptoKey -> length:float -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "deriveBits"]
+    val deriveKey: t -> algorithm:(_ConcatParams, _DhKeyDeriveParams, _EcdhKeyDeriveParams, _HkdfCtrParams, _Pbkdf2Params) union5 or_string -> baseKey:_CryptoKey -> derivedKeyType:(_AesDerivedKeyParams, _ConcatParams, _HkdfCtrParams, _HmacImportParams, _Pbkdf2Params) union5 or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "deriveKey"]
+    val digest: t -> algorithm:_Algorithm or_string -> data:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "digest"]
+    val encrypt: t -> algorithm:(_AesCbcParams, _AesCfbParams, _AesCmacParams, _AesCtrParams, _AesGcmParams, _RsaOaepParams) union6 or_string -> key:_CryptoKey -> data:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "encrypt"]
     val exportKey: t -> format:([`L_s469_jwk] [@js.enum]) -> key:_CryptoKey -> _JsonWebKey PromiseLike.t_1 [@@js.call "exportKey"]
     val exportKey': t -> format:([`L_s623_pkcs8 | `L_s665_raw | `L_s751_spki] [@js.enum]) -> key:_CryptoKey -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "exportKey"]
-    val exportKey'': t -> format:string -> key:_CryptoKey -> (ArrayBuffer.t_0, _JsonWebKey) or_ PromiseLike.t_1 [@@js.call "exportKey"]
-    val generateKey: t -> algorithm:string -> extractable:bool -> keyUsages:string list -> (([`U_s654_private of _CryptoKey [@js "private"] | `U_s659_public of _CryptoKey [@js "public"] | `U_s710_secret of _CryptoKey [@js "secret"]] [@js.union on_field "type"]), _CryptoKeyPair) or_ PromiseLike.t_1 [@@js.call "generateKey"]
-    val generateKey': t -> algorithm:(_DhKeyGenParams, (_EcKeyGenParams, _RsaHashedKeyGenParams) or_) or_ -> extractable:bool -> keyUsages:string list -> _CryptoKeyPair PromiseLike.t_1 [@@js.call "generateKey"]
-    val generateKey'': t -> algorithm:(_AesKeyGenParams, (_HmacKeyGenParams, _Pbkdf2Params) or_) or_ -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "generateKey"]
-    val importKey: t -> format:([`L_s469_jwk] [@js.enum]) -> keyData:_JsonWebKey -> algorithm:(_AesKeyAlgorithm, (_DhImportKeyParams, (_EcKeyImportParams, (_HmacImportParams, _RsaHashedImportParams) or_) or_) or_) or_ or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "importKey"]
-    val importKey': t -> format:([`L_s623_pkcs8 | `L_s665_raw | `L_s751_spki] [@js.enum]) -> keyData:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> algorithm:(_AesKeyAlgorithm, (_DhImportKeyParams, (_EcKeyImportParams, (_HmacImportParams, _RsaHashedImportParams) or_) or_) or_) or_ or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "importKey"]
-    val importKey'': t -> format:string -> keyData:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (_JsonWebKey, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> algorithm:(_AesKeyAlgorithm, (_DhImportKeyParams, (_EcKeyImportParams, (_HmacImportParams, _RsaHashedImportParams) or_) or_) or_) or_ or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "importKey"]
-    val sign: t -> algorithm:(_AesCmacParams, (_EcdsaParams, _RsaPssParams) or_) or_ or_string -> key:_CryptoKey -> data:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "sign"]
-    val unwrapKey: t -> format:string -> wrappedKey:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> unwrappingKey:_CryptoKey -> unwrapAlgorithm:_Algorithm or_string -> unwrappedKeyAlgorithm:_Algorithm or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "unwrapKey"]
-    val verify: t -> algorithm:(_AesCmacParams, (_EcdsaParams, _RsaPssParams) or_) or_ or_string -> key:_CryptoKey -> signature:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> data:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ -> bool PromiseLike.t_1 [@@js.call "verify"]
+    val exportKey'': t -> format:string -> key:_CryptoKey -> (ArrayBuffer.t_0, _JsonWebKey) union2 PromiseLike.t_1 [@@js.call "exportKey"]
+    val generateKey: t -> algorithm:string -> extractable:bool -> keyUsages:string list -> (_CryptoKey, _CryptoKeyPair) union2 PromiseLike.t_1 [@@js.call "generateKey"]
+    val generateKey': t -> algorithm:(_DhKeyGenParams, _EcKeyGenParams, _RsaHashedKeyGenParams) union3 -> extractable:bool -> keyUsages:string list -> _CryptoKeyPair PromiseLike.t_1 [@@js.call "generateKey"]
+    val generateKey'': t -> algorithm:(_AesKeyGenParams, _HmacKeyGenParams, _Pbkdf2Params) union3 -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "generateKey"]
+    val importKey: t -> format:([`L_s469_jwk] [@js.enum]) -> keyData:_JsonWebKey -> algorithm:(_AesKeyAlgorithm, _DhImportKeyParams, _EcKeyImportParams, _HmacImportParams, _RsaHashedImportParams) union5 or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "importKey"]
+    val importKey': t -> format:([`L_s623_pkcs8 | `L_s665_raw | `L_s751_spki] [@js.enum]) -> keyData:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> algorithm:(_AesKeyAlgorithm, _DhImportKeyParams, _EcKeyImportParams, _HmacImportParams, _RsaHashedImportParams) union5 or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "importKey"]
+    val importKey'': t -> format:string -> keyData:(((((Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, _JsonWebKey, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float64Array.t_0) or_, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> algorithm:(_AesKeyAlgorithm, _DhImportKeyParams, _EcKeyImportParams, _HmacImportParams, _RsaHashedImportParams) union5 or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "importKey"]
+    val sign: t -> algorithm:(_AesCmacParams, _EcdsaParams, _RsaPssParams) union3 or_string -> key:_CryptoKey -> data:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "sign"]
+    val unwrapKey: t -> format:string -> wrappedKey:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> unwrappingKey:_CryptoKey -> unwrapAlgorithm:_Algorithm or_string -> unwrappedKeyAlgorithm:_Algorithm or_string -> extractable:bool -> keyUsages:string list -> _CryptoKey PromiseLike.t_1 [@@js.call "unwrapKey"]
+    val verify: t -> algorithm:(_AesCmacParams, _EcdsaParams, _RsaPssParams) union3 or_string -> key:_CryptoKey -> signature:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> data:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ -> bool PromiseLike.t_1 [@@js.call "verify"]
     val wrapKey: t -> format:string -> key:_CryptoKey -> wrappingKey:_CryptoKey -> wrapAlgorithm:_Algorithm or_string -> ArrayBuffer.t_0 PromiseLike.t_1 [@@js.call "wrapKey"]
   end
   val subtleCrypto: anonymous_interface_534 [@@js.global "SubtleCrypto"]
@@ -30153,7 +30153,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_track: t -> (([`U_s298_disabled of _TextTrack [@js "disabled"] | `U_s416_hidden of _TextTrack [@js "hidden"] | `U_s731_showing of _TextTrack [@js "showing"]] [@js.union on_field "mode"]), (_AudioTrack, _VideoTrack) or_) or_ or_null [@@js.get "track"]
+    val get_track: t -> (_AudioTrack, _TextTrack, _VideoTrack) union3 or_null [@@js.get "track"]
     val cast: t -> _Event [@@js.cast]
   end
   val trackEvent: anonymous_interface_552 [@@js.global "TrackEvent"]
@@ -30735,8 +30735,8 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val getAssertion: t -> assertionChallenge:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ or_null -> ?options:_AssertionOptions -> unit -> _WebAuthnAssertion Promise.t_1 [@@js.call "getAssertion"]
-    val makeCredential: t -> accountInformation:_Account -> cryptoParameters:_ScopedCredentialParameters list -> attestationChallenge:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ or_null -> ?options:_ScopedCredentialOptions -> unit -> _ScopedCredentialInfo Promise.t_1 [@@js.call "makeCredential"]
+    val getAssertion: t -> assertionChallenge:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ or_null -> ?options:_AssertionOptions -> unit -> _WebAuthnAssertion Promise.t_1 [@@js.call "getAssertion"]
+    val makeCredential: t -> accountInformation:_Account -> cryptoParameters:_ScopedCredentialParameters list -> attestationChallenge:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ or_null -> ?options:_ScopedCredentialOptions -> unit -> _ScopedCredentialInfo Promise.t_1 [@@js.call "makeCredential"]
   end
   val webAuthentication: anonymous_interface_573 [@@js.global "WebAuthentication"]
   module[@js.scope "WebAuthnAssertion"] WebAuthnAssertion : sig
@@ -31271,7 +31271,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_canvas: t -> (_HTMLCanvasElement, _OffscreenCanvas) or_ [@@js.get "canvas"]
+    val get_canvas: t -> (_HTMLCanvasElement, _OffscreenCanvas) union2 [@@js.get "canvas"]
     val get_drawingBufferHeight: t -> _GLsizei [@@js.get "drawingBufferHeight"]
     val get_drawingBufferWidth: t -> _GLsizei [@@js.get "drawingBufferWidth"]
     val activeTexture: t -> texture:_GLenum -> unit [@@js.call "activeTexture"]
@@ -31380,7 +31380,7 @@ module Make (M: Missing) : sig
     val isTexture: t -> texture:_WebGLTexture or_null -> _GLboolean [@@js.call "isTexture"]
     val lineWidth: t -> width:_GLfloat -> unit [@@js.call "lineWidth"]
     val linkProgram: t -> program:_WebGLProgram -> unit [@@js.call "linkProgram"]
-    val pixelStorei: t -> pname:_GLenum -> param:(bool, float) or_ -> unit [@@js.call "pixelStorei"]
+    val pixelStorei: t -> pname:_GLenum -> param:(_GLboolean, _GLint) union2 -> unit [@@js.call "pixelStorei"]
     val polygonOffset: t -> factor:_GLfloat -> units:_GLfloat -> unit [@@js.call "polygonOffset"]
     val renderbufferStorage: t -> target:_GLenum -> internalformat:_GLenum -> width:_GLsizei -> height:_GLsizei -> unit [@@js.call "renderbufferStorage"]
     val sampleCoverage: t -> value:_GLclampf -> invert:_GLboolean -> unit [@@js.call "sampleCoverage"]
@@ -31882,7 +31882,7 @@ module Make (M: Missing) : sig
     val get_readyState: t -> float [@@js.get "readyState"]
     val get_url: t -> string [@@js.get "url"]
     val close: t -> ?code:float -> ?reason:string -> unit -> unit [@@js.call "close"]
-    val send: t -> data:(ArrayBufferLike.t_0, (ArrayBufferView.t_0, _Blob) or_) or_ or_string -> unit [@@js.call "send"]
+    val send: t -> data:(ArrayBufferLike.t_0, ArrayBufferView.t_0, _Blob) union3 or_string -> unit [@@js.call "send"]
     val get_CLOSED: t -> float [@@js.get "CLOSED"]
     val get_CLOSING: t -> float [@@js.get "CLOSING"]
     val get_CONNECTING: t -> float [@@js.get "CONNECTING"]
@@ -32560,7 +32560,7 @@ module Make (M: Missing) : sig
     val open_: t -> method_:string -> url:string -> unit [@@js.call "open"]
     val open_': t -> method_:string -> url:string -> async:bool -> ?username:string or_null -> ?password:string or_null -> unit -> unit [@@js.call "open"]
     val overrideMimeType: t -> mime:string -> unit [@@js.call "overrideMimeType"]
-    val send: t -> ?body:(([`U_s416_hidden of _Document  | `U_s851_visible of _Document ] [@js.union on_field "visibilityState"]), (ArrayBuffer.t_0, (ArrayBufferView.t_0, (_Blob, (_FormData, (_URLSearchParams, (string, Uint8Array.t_0 _ReadableStream) or_) or_) or_) or_) or_) or_) or_ or_null -> unit -> unit [@@js.call "send"]
+    val send: t -> ?body:(_BodyInit, _Document) union2 or_null -> unit -> unit [@@js.call "send"]
     val setRequestHeader: t -> name:string -> value:string -> unit [@@js.call "setRequestHeader"]
     val get_DONE: t -> float [@@js.get "DONE"]
     val get_HEADERS_RECEIVED: t -> float [@@js.get "HEADERS_RECEIVED"]
@@ -32970,10 +32970,10 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
     end
     val compile: bytes:_BufferSource -> _WebAssembly_Module Promise.t_1 [@@js.global "compile"]
-    val compileStreaming: source:(([`U_s194_basic of _Response  | `U_s263_cors of _Response  | `U_s276_default of _Response  | `U_s332_error of _Response  | `U_s588_opaque of _Response  | `U_s589_opaqueredirect of _Response ] [@js.union on_field "type"]), _Response Promise.t_1) or_ -> _WebAssembly_Module Promise.t_1 [@@js.global "compileStreaming"]
+    val compileStreaming: source:(_Response, _Response Promise.t_1) union2 -> _WebAssembly_Module Promise.t_1 [@@js.global "compileStreaming"]
     val instantiate: bytes:_BufferSource -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_WebAssemblyInstantiatedSource Promise.t_1 [@@js.global "instantiate"]
     val instantiate: moduleObject:_WebAssembly_Module -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_Instance Promise.t_1 [@@js.global "instantiate"]
-    val instantiateStreaming: response:(([`U_s194_basic of _Response  | `U_s263_cors of _Response  | `U_s276_default of _Response  | `U_s332_error of _Response  | `U_s588_opaque of _Response  | `U_s589_opaqueredirect of _Response ] [@js.union on_field "type"]), _Response PromiseLike.t_1) or_ -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_WebAssemblyInstantiatedSource Promise.t_1 [@@js.global "instantiateStreaming"]
+    val instantiateStreaming: response:(_Response, _Response PromiseLike.t_1) union2 -> ?importObject:_WebAssembly_Imports -> unit -> _WebAssembly_WebAssemblyInstantiatedSource Promise.t_1 [@@js.global "instantiateStreaming"]
     val validate: bytes:_BufferSource -> bool [@@js.global "validate"]
   end
   module[@js.scope "BlobCallback"] BlobCallback : sig
@@ -32992,7 +32992,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val create: t -> _HTMLElement [@@js.apply as_constructor]
+    val create: t -> _HTMLElement [@@js.apply_newable]
   end
   module[@js.scope "DecodeErrorCallback"] DecodeErrorCallback : sig
     type t = _DecodeErrorCallback
@@ -33028,7 +33028,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val apply: t -> keyId:(ArrayBuffer.t_0, (DataView.t_0, (Float32Array.t_0, (Float64Array.t_0, (Int16Array.t_0, (Int32Array.t_0, (Int8Array.t_0, (Uint16Array.t_0, (Uint32Array.t_0, (Uint8Array.t_0, Uint8ClampedArray.t_0) or_) or_) or_) or_) or_) or_) or_) or_) or_) or_ or_null -> status:_MediaKeyStatus -> unit [@@js.apply]
+    val apply: t -> keyId:((((Float64Array.t_0, Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0, Uint8ClampedArray.t_0) union8, Float32Array.t_0) or_, DataView.t_0) or_, ArrayBuffer.t_0) or_ or_null -> status:_MediaKeyStatus -> unit [@@js.apply]
   end
   module[@js.scope "FrameRequestCallback"] FrameRequestCallback : sig
     type t = _FrameRequestCallback
@@ -33193,7 +33193,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val apply: t -> controller:_ReadableByteStreamController -> (unit, unit PromiseLike.t_1) or_ [@@js.apply]
+    val apply: t -> controller:_ReadableByteStreamController -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   end
   module[@js.scope "ReadableStreamDefaultControllerCallback"] ReadableStreamDefaultControllerCallback : sig
     type 'R t = 'R _ReadableStreamDefaultControllerCallback
@@ -33202,7 +33202,7 @@ module Make (M: Missing) : sig
     type 'R t_1 = 'R t
     val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-    val apply: 'R t -> controller:'R _ReadableStreamDefaultController -> (unit, unit PromiseLike.t_1) or_ [@@js.apply]
+    val apply: 'R t -> controller:'R _ReadableStreamDefaultController -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   end
   module[@js.scope "ReadableStreamErrorCallback"] ReadableStreamErrorCallback : sig
     type t = _ReadableStreamErrorCallback
@@ -33211,7 +33211,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val apply: t -> reason:any -> (unit, unit PromiseLike.t_1) or_ [@@js.apply]
+    val apply: t -> reason:any -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   end
   module[@js.scope "TransformStreamDefaultControllerCallback"] TransformStreamDefaultControllerCallback : sig
     type 'O t = 'O _TransformStreamDefaultControllerCallback
@@ -33220,7 +33220,7 @@ module Make (M: Missing) : sig
     type 'O t_1 = 'O t
     val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
-    val apply: 'O t -> controller:'O _TransformStreamDefaultController -> (unit, unit PromiseLike.t_1) or_ [@@js.apply]
+    val apply: 'O t -> controller:'O _TransformStreamDefaultController -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   end
   module[@js.scope "TransformStreamDefaultControllerTransformCallback"] TransformStreamDefaultControllerTransformCallback : sig
     type ('I, 'O) t = ('I, 'O) _TransformStreamDefaultControllerTransformCallback
@@ -33229,7 +33229,7 @@ module Make (M: Missing) : sig
     type ('I, 'O) t_2 = ('I, 'O) t
     val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
-    val apply: ('I, 'O) t -> chunk:'I -> controller:'O _TransformStreamDefaultController -> (unit, unit PromiseLike.t_1) or_ [@@js.apply]
+    val apply: ('I, 'O) t -> chunk:'I -> controller:'O _TransformStreamDefaultController -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   end
   module[@js.scope "VoidFunction"] VoidFunction : sig
     type t = _VoidFunction
@@ -33247,7 +33247,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val apply: t -> (unit, unit PromiseLike.t_1) or_ [@@js.apply]
+    val apply: t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   end
   module[@js.scope "WritableStreamDefaultControllerStartCallback"] WritableStreamDefaultControllerStartCallback : sig
     type t = _WritableStreamDefaultControllerStartCallback
@@ -33256,7 +33256,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val apply: t -> controller:_WritableStreamDefaultController -> (unit, unit PromiseLike.t_1) or_ [@@js.apply]
+    val apply: t -> controller:_WritableStreamDefaultController -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   end
   module[@js.scope "WritableStreamDefaultControllerWriteCallback"] WritableStreamDefaultControllerWriteCallback : sig
     type 'W t = 'W _WritableStreamDefaultControllerWriteCallback
@@ -33265,7 +33265,7 @@ module Make (M: Missing) : sig
     type 'W t_1 = 'W t
     val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
-    val apply: 'W t -> chunk:'W -> controller:_WritableStreamDefaultController -> (unit, unit PromiseLike.t_1) or_ [@@js.apply]
+    val apply: 'W t -> chunk:'W -> controller:_WritableStreamDefaultController -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   end
   module[@js.scope "WritableStreamErrorCallback"] WritableStreamErrorCallback : sig
     type t = _WritableStreamErrorCallback
@@ -33274,7 +33274,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val apply: t -> reason:any -> (unit, unit PromiseLike.t_1) or_ [@@js.apply]
+    val apply: t -> reason:any -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   end
   module[@js.scope "HTMLElementTagNameMap"] HTMLElementTagNameMap : sig
     type t = _HTMLElementTagNameMap

@@ -244,7 +244,7 @@ module AnonymousInterface0 : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> args:((* FIXME: type 'Any' cannot be used for variadic argument *)any list [@js.variadic]) -> any [@@js.apply as_constructor]
+  val create: t -> args:((* FIXME: type 'Any' cannot be used for variadic argument *)any list [@js.variadic]) -> any [@@js.apply_newable]
 end
 module AnonymousInterface1 : sig
   type t = anonymous_interface_1
@@ -253,7 +253,7 @@ module AnonymousInterface1 : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> executor:(resolve:(?value:('T, 'T _PromiseLike) or_ -> unit -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T _PromiseLike [@@js.apply as_constructor]
+  val create: t -> executor:(resolve:(?value:('T, 'T _PromiseLike) union2 -> unit -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T _PromiseLike [@@js.apply_newable]
 end
 module AnonymousInterface2 : sig
   type t = anonymous_interface_2
@@ -262,7 +262,7 @@ module AnonymousInterface2 : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?locales:string list or_string -> ?options:_Intl_CollatorOptions -> unit -> _Intl_Collator [@@js.apply as_constructor]
+  val create: t -> ?locales:string list or_string -> ?options:_Intl_CollatorOptions -> unit -> _Intl_Collator [@@js.apply_newable]
   val apply: t -> ?locales:string list or_string -> ?options:_Intl_CollatorOptions -> unit -> _Intl_Collator [@@js.apply]
   val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_CollatorOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
 end
@@ -273,7 +273,7 @@ module AnonymousInterface3 : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> _Intl_DateTimeFormat [@@js.apply as_constructor]
+  val create: t -> ?locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> _Intl_DateTimeFormat [@@js.apply_newable]
   val apply: t -> ?locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> _Intl_DateTimeFormat [@@js.apply]
   val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_DateTimeFormatOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
 end
@@ -284,7 +284,7 @@ module AnonymousInterface4 : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> _Intl_NumberFormat [@@js.apply as_constructor]
+  val create: t -> ?locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> _Intl_NumberFormat [@@js.apply_newable]
   val apply: t -> ?locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> _Intl_NumberFormat [@@js.apply]
   val supportedLocalesOf: t -> locales:string list or_string -> ?options:_Intl_NumberFormatOptions -> unit -> string list [@@js.call "supportedLocalesOf"]
 end
@@ -295,7 +295,7 @@ module AnonymousInterface5 : sig
   type ('A, 'A0, 'A1, 'A2, 'A3, 'R) t_6 = ('A, 'A0, 'A1, 'A2, 'A3, 'R) t
   val t_6_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('A2 -> Ojs.t) -> ('A3 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'A2, 'A3, 'R) t_6 -> Ojs.t
   val t_6_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'A2) -> (Ojs.t -> 'A3) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'A2, 'A3, 'R) t_6
-  val create: ('A, 'A0, 'A1, 'A2, 'A3, 'R) t -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+  val create: ('A, 'A0, 'A1, 'A2, 'A3, 'R) t -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply_newable]
 end
 module AnonymousInterface6 : sig
   type ('A, 'A0, 'A1, 'A2, 'R) t = ('A, 'A0, 'A1, 'A2, 'R) anonymous_interface_6
@@ -304,7 +304,7 @@ module AnonymousInterface6 : sig
   type ('A, 'A0, 'A1, 'A2, 'R) t_5 = ('A, 'A0, 'A1, 'A2, 'R) t
   val t_5_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('A2 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'A2, 'R) t_5 -> Ojs.t
   val t_5_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'A2) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'A2, 'R) t_5
-  val create: ('A, 'A0, 'A1, 'A2, 'R) t -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+  val create: ('A, 'A0, 'A1, 'A2, 'R) t -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply_newable]
 end
 module AnonymousInterface7 : sig
   type ('A, 'A0, 'A1, 'R) t = ('A, 'A0, 'A1, 'R) anonymous_interface_7
@@ -313,7 +313,7 @@ module AnonymousInterface7 : sig
   type ('A, 'A0, 'A1, 'R) t_4 = ('A, 'A0, 'A1, 'R) t
   val t_4_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'R) t_4 -> Ojs.t
   val t_4_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'R) t_4
-  val create: ('A, 'A0, 'A1, 'R) t -> arg0:'A0 -> arg1:'A1 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+  val create: ('A, 'A0, 'A1, 'R) t -> arg0:'A0 -> arg1:'A1 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply_newable]
 end
 module AnonymousInterface8 : sig
   type ('A, 'A0, 'R) t = ('A, 'A0, 'R) anonymous_interface_8
@@ -322,7 +322,7 @@ module AnonymousInterface8 : sig
   type ('A, 'A0, 'R) t_3 = ('A, 'A0, 'R) t
   val t_3_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'R) t_3 -> Ojs.t
   val t_3_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'R) t_3
-  val create: ('A, 'A0, 'R) t -> arg0:'A0 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+  val create: ('A, 'A0, 'R) t -> arg0:'A0 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply_newable]
 end
 module AnonymousInterface9 : sig
   type ('A, 'R) t = ('A, 'R) anonymous_interface_9
@@ -331,7 +331,7 @@ module AnonymousInterface9 : sig
   type ('A, 'R) t_2 = ('A, 'R) t
   val t_2_to_js: ('A -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'R) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'R) t_2
-  val create: ('A, 'R) t -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+  val create: ('A, 'R) t -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply_newable]
 end
 module AnonymousInterface10 : sig
   type ('A, 'T) t = ('A, 'T) anonymous_interface_10
@@ -340,7 +340,7 @@ module AnonymousInterface10 : sig
   type ('A, 'T) t_2 = ('A, 'T) t
   val t_2_to_js: ('A -> Ojs.t) -> ('T -> Ojs.t) -> ('A, 'T) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'T) -> Ojs.t -> ('A, 'T) t_2
-  val create: ('A, 'T) t -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'T [@@js.apply as_constructor]
+  val create: ('A, 'T) t -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'T [@@js.apply_newable]
 end
 module AnonymousInterface11 : sig
   type ('AX, 'R) t = ('AX, 'R) anonymous_interface_11
@@ -349,7 +349,7 @@ module AnonymousInterface11 : sig
   type ('AX, 'R) t_2 = ('AX, 'R) t
   val t_2_to_js: ('AX -> Ojs.t) -> ('R -> Ojs.t) -> ('AX, 'R) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'AX) -> (Ojs.t -> 'R) -> Ojs.t -> ('AX, 'R) t_2
-  val create: ('AX, 'R) t -> args:('AX list [@js.variadic]) -> 'R [@@js.apply as_constructor]
+  val create: ('AX, 'R) t -> args:('AX list [@js.variadic]) -> 'R [@@js.apply_newable]
 end
 module AnonymousInterface12 : sig
   type 'T t = 'T anonymous_interface_12
@@ -358,7 +358,7 @@ module AnonymousInterface12 : sig
   type 'T t_1 = 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-  val create: 'T t -> 'T [@@js.apply as_constructor]
+  val create: 'T t -> 'T [@@js.apply_newable]
 end
 val naN: float [@@js.global "NaN"]
 val infinity: float [@@js.global "Infinity"]
@@ -442,7 +442,7 @@ module[@js.scope "ObjectConstructor"] ObjectConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?value:any -> unit -> _Object [@@js.apply as_constructor]
+  val create: t -> ?value:any -> unit -> _Object [@@js.apply_newable]
   val apply: t -> any [@@js.apply]
   val apply': t -> value:any -> any [@@js.apply]
   val get_prototype: t -> _Object [@@js.get "prototype"]
@@ -490,7 +490,7 @@ module[@js.scope "FunctionConstructor"] FunctionConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> args:(string list [@js.variadic]) -> _Function [@@js.apply as_constructor]
+  val create: t -> args:(string list [@js.variadic]) -> _Function [@@js.apply_newable]
   val apply: t -> args:(string list [@js.variadic]) -> _Function [@@js.apply]
   val get_prototype: t -> _Function [@@js.get "prototype"]
 end
@@ -526,7 +526,7 @@ module[@js.scope "CallableFunction"] CallableFunction : sig
   val bind'': t -> this:(this:'T -> arg0:'A0 -> arg1:'A1 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R) -> thisArg:'T -> arg0:'A0 -> arg1:'A1 -> (args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"]
   val bind''': t -> this:(this:'T -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R) -> thisArg:'T -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> (args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"]
   val bind'''': t -> this:(this:'T -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R) -> thisArg:'T -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> (args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"]
-  val bind''''': t -> this:(this:'T -> args:('AX list [@js.variadic]) -> 'R) -> thisArg:'T -> args:('AX list [@js.variadic]) -> (args':('AX list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"]
+  (* val bind''''': t -> this:(this:'T -> args:('AX list [@js.variadic]) -> 'R) -> thisArg:'T -> args:('AX list [@js.variadic]) -> (args':('AX list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"] *)
   val cast: t -> _Function [@@js.cast]
 end
 module[@js.scope "NewableFunction"] NewableFunction : sig
@@ -602,7 +602,7 @@ module[@js.scope "StringConstructor"] StringConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?value:any -> unit -> _String [@@js.apply as_constructor]
+  val create: t -> ?value:any -> unit -> _String [@@js.apply_newable]
   val apply: t -> ?value:any -> unit -> string [@@js.apply]
   val get_prototype: t -> _String [@@js.get "prototype"]
   val fromCharCode: t -> codes:(float list [@js.variadic]) -> string [@@js.call "fromCharCode"]
@@ -626,7 +626,7 @@ module[@js.scope "BooleanConstructor"] BooleanConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?value:any -> unit -> _Boolean [@@js.apply as_constructor]
+  val create: t -> ?value:any -> unit -> _Boolean [@@js.apply_newable]
   val apply: t -> ?value:'T -> unit -> bool [@@js.apply]
   val get_prototype: t -> _Boolean [@@js.get "prototype"]
 end
@@ -654,7 +654,7 @@ module[@js.scope "NumberConstructor"] NumberConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?value:any -> unit -> _Number [@@js.apply as_constructor]
+  val create: t -> ?value:any -> unit -> _Number [@@js.apply_newable]
   val apply: t -> ?value:any -> unit -> float [@@js.apply]
   val get_prototype: t -> _Number [@@js.get "prototype"]
   val get_MAX_VALUE: t -> float [@@js.get "MAX_VALUE"]
@@ -778,9 +778,9 @@ module[@js.scope "DateConstructor"] DateConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> _Date [@@js.apply as_constructor]
-  val create': t -> value:string or_number -> _Date [@@js.apply as_constructor]
-  val create'': t -> year:float -> month:float -> ?date:float -> ?hours:float -> ?minutes:float -> ?seconds:float -> ?ms:float -> unit -> _Date [@@js.apply as_constructor]
+  val create: t -> _Date [@@js.apply_newable]
+  val create': t -> value:string or_number -> _Date [@@js.apply_newable]
+  val create'': t -> year:float -> month:float -> ?date:float -> ?hours:float -> ?minutes:float -> ?seconds:float -> ?ms:float -> unit -> _Date [@@js.apply_newable]
   val apply: t -> string [@@js.apply]
   val get_prototype: t -> _Date [@@js.get "prototype"]
   val parse: t -> s:string -> float [@@js.call "parse"]
@@ -838,8 +838,8 @@ module[@js.scope "RegExpConstructor"] RegExpConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> pattern:_RegExp or_string -> _RegExp [@@js.apply as_constructor]
-  val create': t -> pattern:string -> ?flags:string -> unit -> _RegExp [@@js.apply as_constructor]
+  val create: t -> pattern:_RegExp or_string -> _RegExp [@@js.apply_newable]
+  val create': t -> pattern:string -> ?flags:string -> unit -> _RegExp [@@js.apply_newable]
   val apply: t -> pattern:_RegExp or_string -> _RegExp [@@js.apply]
   val apply': t -> pattern:string -> ?flags:string -> unit -> _RegExp [@@js.apply]
   val get_prototype: t -> _RegExp [@@js.get "prototype"]
@@ -886,7 +886,7 @@ module[@js.scope "ErrorConstructor"] ErrorConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?message:string -> unit -> _Error [@@js.apply as_constructor]
+  val create: t -> ?message:string -> unit -> _Error [@@js.apply_newable]
   val apply: t -> ?message:string -> unit -> _Error [@@js.apply]
   val get_prototype: t -> _Error [@@js.get "prototype"]
 end
@@ -907,7 +907,7 @@ module[@js.scope "EvalErrorConstructor"] EvalErrorConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?message:string -> unit -> _EvalError [@@js.apply as_constructor]
+  val create: t -> ?message:string -> unit -> _EvalError [@@js.apply_newable]
   val apply: t -> ?message:string -> unit -> _EvalError [@@js.apply]
   val get_prototype: t -> _EvalError [@@js.get "prototype"]
   val cast: t -> _ErrorConstructor [@@js.cast]
@@ -929,7 +929,7 @@ module[@js.scope "RangeErrorConstructor"] RangeErrorConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?message:string -> unit -> _RangeError [@@js.apply as_constructor]
+  val create: t -> ?message:string -> unit -> _RangeError [@@js.apply_newable]
   val apply: t -> ?message:string -> unit -> _RangeError [@@js.apply]
   val get_prototype: t -> _RangeError [@@js.get "prototype"]
   val cast: t -> _ErrorConstructor [@@js.cast]
@@ -951,7 +951,7 @@ module[@js.scope "ReferenceErrorConstructor"] ReferenceErrorConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?message:string -> unit -> _ReferenceError [@@js.apply as_constructor]
+  val create: t -> ?message:string -> unit -> _ReferenceError [@@js.apply_newable]
   val apply: t -> ?message:string -> unit -> _ReferenceError [@@js.apply]
   val get_prototype: t -> _ReferenceError [@@js.get "prototype"]
   val cast: t -> _ErrorConstructor [@@js.cast]
@@ -973,7 +973,7 @@ module[@js.scope "SyntaxErrorConstructor"] SyntaxErrorConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?message:string -> unit -> _SyntaxError [@@js.apply as_constructor]
+  val create: t -> ?message:string -> unit -> _SyntaxError [@@js.apply_newable]
   val apply: t -> ?message:string -> unit -> _SyntaxError [@@js.apply]
   val get_prototype: t -> _SyntaxError [@@js.get "prototype"]
   val cast: t -> _ErrorConstructor [@@js.cast]
@@ -995,7 +995,7 @@ module[@js.scope "TypeErrorConstructor"] TypeErrorConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?message:string -> unit -> _TypeError [@@js.apply as_constructor]
+  val create: t -> ?message:string -> unit -> _TypeError [@@js.apply_newable]
   val apply: t -> ?message:string -> unit -> _TypeError [@@js.apply]
   val get_prototype: t -> _TypeError [@@js.get "prototype"]
   val cast: t -> _ErrorConstructor [@@js.cast]
@@ -1017,7 +1017,7 @@ module[@js.scope "URIErrorConstructor"] URIErrorConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?message:string -> unit -> _URIError [@@js.apply as_constructor]
+  val create: t -> ?message:string -> unit -> _URIError [@@js.apply_newable]
   val apply: t -> ?message:string -> unit -> _URIError [@@js.apply]
   val get_prototype: t -> _URIError [@@js.get "prototype"]
   val cast: t -> _ErrorConstructor [@@js.cast]
@@ -1046,7 +1046,7 @@ module[@js.scope "ReadonlyArray"] ReadonlyArray : sig
   val toString: 'T t -> string [@@js.call "toString"]
   val toLocaleString: 'T t -> string [@@js.call "toLocaleString"]
   val concat: 'T t -> items:('T _ConcatArray list [@js.variadic]) -> 'T list [@@js.call "concat"]
-  val concat': 'T t -> items:(('T, 'T _ConcatArray) or_ list [@js.variadic]) -> 'T list [@@js.call "concat"]
+  val concat': 'T t -> items:(('T, 'T _ConcatArray) union2 list [@js.variadic]) -> 'T list [@@js.call "concat"]
   val join: 'T t -> ?separator:string -> unit -> string [@@js.call "join"]
   val slice: 'T t -> ?start:float -> ?end_:float -> unit -> 'T list [@@js.call "slice"]
   val indexOf: 'T t -> searchElement:'T -> ?fromIndex:float -> unit -> float [@@js.call "indexOf"]
@@ -1093,7 +1093,7 @@ module[@js.scope "Array"] Array : sig
   val pop: 'T t -> 'T or_undefined [@@js.call "pop"]
   val push: 'T t -> items:('T list [@js.variadic]) -> float [@@js.call "push"]
   val concat: 'T t -> items:('T _ConcatArray list [@js.variadic]) -> 'T list [@@js.call "concat"]
-  val concat': 'T t -> items:(('T, 'T _ConcatArray) or_ list [@js.variadic]) -> 'T list [@@js.call "concat"]
+  val concat': 'T t -> items:(('T, 'T _ConcatArray) union2 list [@js.variadic]) -> 'T list [@@js.call "concat"]
   val join: 'T t -> ?separator:string -> unit -> string [@@js.call "join"]
   val reverse: 'T t -> 'T list [@@js.call "reverse"]
   val shift: 'T t -> 'T or_undefined [@@js.call "shift"]
@@ -1128,9 +1128,9 @@ module[@js.scope "ArrayConstructor"] ArrayConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> ?arrayLength:float -> unit -> any list [@@js.apply as_constructor]
-  val create': t -> arrayLength:float -> 'T list [@@js.apply as_constructor]
-  val create'': t -> items:('T list [@js.variadic]) -> 'T list [@@js.apply as_constructor]
+  val create: t -> ?arrayLength:float -> unit -> any list [@@js.apply_newable]
+  val create': t -> arrayLength:float -> 'T list [@@js.apply_newable]
+  val create'': t -> items:('T list [@js.variadic]) -> 'T list [@@js.apply_newable]
   val apply: t -> ?arrayLength:float -> unit -> any list [@@js.apply]
   val apply': t -> arrayLength:float -> 'T list [@@js.apply]
   val apply'': t -> items:('T list [@js.variadic]) -> 'T list [@@js.apply]
@@ -1163,7 +1163,7 @@ module[@js.scope "ClassDecorator"] ClassDecorator : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: t -> target:'TFunction -> ('TFunction, unit) or_ [@@js.apply]
+  val apply: t -> target:'TFunction -> ('TFunction, unit) union2 [@@js.apply]
 end
 module[@js.scope "PropertyDecorator"] PropertyDecorator : sig
   type t = _PropertyDecorator
@@ -1181,7 +1181,7 @@ module[@js.scope "MethodDecorator"] MethodDecorator : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: t -> target:_Object -> propertyKey:symbol or_string -> descriptor:'T _TypedPropertyDescriptor -> (unit, 'T _TypedPropertyDescriptor) or_ [@@js.apply]
+  val apply: t -> target:_Object -> propertyKey:symbol or_string -> descriptor:'T _TypedPropertyDescriptor -> (unit, 'T _TypedPropertyDescriptor) union2 [@@js.apply]
 end
 module[@js.scope "ParameterDecorator"] ParameterDecorator : sig
   type t = _ParameterDecorator
@@ -1207,7 +1207,7 @@ module[@js.scope "PromiseLike"] PromiseLike : sig
   type 'T t_1 = 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-  val then_: 'T t -> ?onfulfilled:(value:'T -> ('TResult1, 'TResult1 t) or_) or_null_or_undefined -> ?onrejected:(reason:any -> ('TResult2, 'TResult2 t) or_) or_null_or_undefined -> unit -> ('TResult1, 'TResult2) or_ t [@@js.call "then"]
+  val then_: 'T t -> ?onfulfilled:(value:'T -> ('TResult1, 'TResult1 t) union2) or_null_or_undefined -> ?onrejected:(reason:any -> ('TResult2, 'TResult2 t) union2) or_null_or_undefined -> unit -> ('TResult1, 'TResult2) union2 t [@@js.call "then"]
 end
 module[@js.scope "Promise"] Promise : sig
   type 'T t = 'T _Promise
@@ -1216,8 +1216,8 @@ module[@js.scope "Promise"] Promise : sig
   type 'T t_1 = 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-  val then_: 'T t -> ?onfulfilled:(value:'T -> ('TResult1, 'TResult1 _PromiseLike) or_) or_null_or_undefined -> ?onrejected:(reason:any -> ('TResult2, 'TResult2 _PromiseLike) or_) or_null_or_undefined -> unit -> ('TResult1, 'TResult2) or_ t [@@js.call "then"]
-  val catch: 'T t -> ?onrejected:(reason:any -> ('TResult, 'TResult _PromiseLike) or_) or_null_or_undefined -> unit -> ('T, 'TResult) or_ t [@@js.call "catch"]
+  val then_: 'T t -> ?onfulfilled:(value:'T -> ('TResult1, 'TResult1 _PromiseLike) union2) or_null_or_undefined -> ?onrejected:(reason:any -> ('TResult2, 'TResult2 _PromiseLike) union2) or_null_or_undefined -> unit -> ('TResult1, 'TResult2) union2 t [@@js.call "then"]
+  val catch: 'T t -> ?onrejected:(reason:any -> ('TResult, 'TResult _PromiseLike) union2) or_null_or_undefined -> unit -> ('T, 'TResult) union2 t [@@js.call "catch"]
 end
 module[@js.scope "ArrayLike"] ArrayLike : sig
   type 'T t = 'T _ArrayLike
@@ -1377,7 +1377,7 @@ module[@js.scope "ArrayBufferConstructor"] ArrayBufferConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _ArrayBuffer [@@js.get "prototype"]
-  val create: t -> byteLength:float -> _ArrayBuffer [@@js.apply as_constructor]
+  val create: t -> byteLength:float -> _ArrayBuffer [@@js.apply_newable]
   val isView: t -> arg:any -> bool [@@js.call "isView"]
 end
 val arrayBuffer: _ArrayBufferConstructor [@@js.global "ArrayBuffer"]
@@ -1429,7 +1429,7 @@ module[@js.scope "DataViewConstructor"] DataViewConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?byteLength:float -> unit -> _DataView [@@js.apply as_constructor]
+  val create: t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?byteLength:float -> unit -> _DataView [@@js.apply_newable]
 end
 val dataView: _DataViewConstructor [@@js.global "DataView"]
 module[@js.scope "Int8Array"] Int8Array : sig
@@ -1480,9 +1480,9 @@ module[@js.scope "Int8ArrayConstructor"] Int8ArrayConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Int8Array [@@js.get "prototype"]
-  val create: t -> length:float -> _Int8Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Int8Array [@@js.apply as_constructor]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int8Array [@@js.apply as_constructor]
+  val create: t -> length:float -> _Int8Array [@@js.apply_newable]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Int8Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int8Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Int8Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Int8Array [@@js.call "from"]
@@ -1537,9 +1537,9 @@ module[@js.scope "Uint8ArrayConstructor"] Uint8ArrayConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint8Array [@@js.get "prototype"]
-  val create: t -> length:float -> _Uint8Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Uint8Array [@@js.apply as_constructor]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint8Array [@@js.apply as_constructor]
+  val create: t -> length:float -> _Uint8Array [@@js.apply_newable]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint8Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint8Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint8Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Uint8Array [@@js.call "from"]
@@ -1594,9 +1594,9 @@ module[@js.scope "Uint8ClampedArrayConstructor"] Uint8ClampedArrayConstructor : 
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint8ClampedArray [@@js.get "prototype"]
-  val create: t -> length:float -> _Uint8ClampedArray [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Uint8ClampedArray [@@js.apply as_constructor]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint8ClampedArray [@@js.apply as_constructor]
+  val create: t -> length:float -> _Uint8ClampedArray [@@js.apply_newable]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint8ClampedArray [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint8ClampedArray [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint8ClampedArray [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Uint8ClampedArray [@@js.call "from"]
@@ -1651,9 +1651,9 @@ module[@js.scope "Int16ArrayConstructor"] Int16ArrayConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Int16Array [@@js.get "prototype"]
-  val create: t -> length:float -> _Int16Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Int16Array [@@js.apply as_constructor]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int16Array [@@js.apply as_constructor]
+  val create: t -> length:float -> _Int16Array [@@js.apply_newable]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Int16Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int16Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Int16Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Int16Array [@@js.call "from"]
@@ -1708,9 +1708,9 @@ module[@js.scope "Uint16ArrayConstructor"] Uint16ArrayConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint16Array [@@js.get "prototype"]
-  val create: t -> length:float -> _Uint16Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Uint16Array [@@js.apply as_constructor]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint16Array [@@js.apply as_constructor]
+  val create: t -> length:float -> _Uint16Array [@@js.apply_newable]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint16Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint16Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint16Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Uint16Array [@@js.call "from"]
@@ -1765,9 +1765,9 @@ module[@js.scope "Int32ArrayConstructor"] Int32ArrayConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Int32Array [@@js.get "prototype"]
-  val create: t -> length:float -> _Int32Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Int32Array [@@js.apply as_constructor]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int32Array [@@js.apply as_constructor]
+  val create: t -> length:float -> _Int32Array [@@js.apply_newable]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Int32Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int32Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Int32Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Int32Array [@@js.call "from"]
@@ -1822,9 +1822,9 @@ module[@js.scope "Uint32ArrayConstructor"] Uint32ArrayConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint32Array [@@js.get "prototype"]
-  val create: t -> length:float -> _Uint32Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Uint32Array [@@js.apply as_constructor]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint32Array [@@js.apply as_constructor]
+  val create: t -> length:float -> _Uint32Array [@@js.apply_newable]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint32Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint32Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint32Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Uint32Array [@@js.call "from"]
@@ -1879,9 +1879,9 @@ module[@js.scope "Float32ArrayConstructor"] Float32ArrayConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Float32Array [@@js.get "prototype"]
-  val create: t -> length:float -> _Float32Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Float32Array [@@js.apply as_constructor]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Float32Array [@@js.apply as_constructor]
+  val create: t -> length:float -> _Float32Array [@@js.apply_newable]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Float32Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Float32Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Float32Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Float32Array [@@js.call "from"]
@@ -1935,9 +1935,9 @@ module[@js.scope "Float64ArrayConstructor"] Float64ArrayConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Float64Array [@@js.get "prototype"]
-  val create: t -> length:float -> _Float64Array [@@js.apply as_constructor]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBuffer, float _ArrayLike) or_ -> _Float64Array [@@js.apply as_constructor]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Float64Array [@@js.apply as_constructor]
+  val create: t -> length:float -> _Float64Array [@@js.apply_newable]
+  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Float64Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Float64Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Float64Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Float64Array [@@js.call "from"]

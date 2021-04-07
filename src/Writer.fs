@@ -63,7 +63,7 @@ module Attr =
 
   let js_call name = attr Block "js.call" (str' name)
 
-  let js_apply is_newable = attr Block "js.apply" (if is_newable then str "as_constructor" else empty)
+  let js_apply is_newable = attr Block (if is_newable then "js.apply_constructor" else "js.apply") empty
   
   let js_global name = attr Block "js.global" (str' name)
 

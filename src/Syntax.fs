@@ -43,6 +43,14 @@ type Comment =
   | Param of string * string
   | Return of string
 
+type ICommented =
+  abstract getComments: unit -> Comment list
+
+type Commented<'t> = { value: 't; comments: Comment list }
+  with
+  interface ICommented with
+    member this.getComments() = this.comments
+
 type PrimType =
   | String | Bool | Number
   | Any | Void | Unknown
@@ -53,16 +61,21 @@ type PrimType =
   | BigInt
 
 type Enum = {
-  comments: Comment list
   name: string
+  isExported: Exported
   cases: EnumCase list
-}
+  comments: Comment list
+} with
+  interface ICommented with
+    member this.getComments() = this.comments
 
 and EnumCase = {
-  comments: Comment list
   name: string
   value: Literal option
-}
+  comments: Comment list
+} with
+  interface ICommented with
+    member this.getComments() = this.comments
 
 and Type =
   | PolymorphicThis
@@ -117,15 +130,17 @@ and TypeParam = {
 }
 
 and Class = {
-  comments: Comment list
   name: string option
   accessibility: Accessibility
   isInterface: bool
-  isExported: bool
+  isExported: Exported
   implements: Type list
   typeParams: TypeParam list
   members: (MemberAttribute * Member) list
-}
+  comments: Comment list
+} with
+  interface ICommented with
+    member this.getComments() = this.comments
 
 and Member =
   | Field of FieldLike * Mutability * TypeParam list
@@ -140,29 +155,31 @@ and MemberAttribute = {
   comments: Comment list
   isStatic: bool
   accessibility: Accessibility
-}
+} with
+  interface ICommented with
+    member this.getComments() = this.comments
 
 and Value = {
-  comments: Comment list
   name: string
   typ: Type
   typeParams: TypeParam list
   isConst: bool
-  isExported: bool
+  isExported: Exported
   accessibility : Accessibility option
-}
-
-and ExportModifier =
-  | AsDefault
-  // | As of string
-  // | AsIs
+  comments: Comment list
+} with
+  interface ICommented with
+    member this.getComments() = this.comments
 
 and TypeAlias = {
   name: string
   typeParams: TypeParam list
   target: Type
   erased: bool
-}
+  comments: Comment list
+} with
+  interface ICommented with
+    member this.getComments() = this.comments
 
 and Statement =
   | TypeAlias of TypeAlias
@@ -170,15 +187,37 @@ and Statement =
   | EnumDef of Enum
   | Module of Module
   | Value of Value
-  | Export of IdentType * ExportModifier
-  | UnknownStatement of string option
+  | Export of Export * Comment list
+  | UnknownStatement of string option * Comment list
+  | FloatingComment of Comment list
+  with
+  interface ICommented with
+    member this.getComments() =
+      match this with
+      | TypeAlias ta -> ta.comments | ClassDef c -> c.comments
+      | EnumDef e -> e.comments | Module m -> m.comments
+      | Value v -> v.comments
+      | Export (_, c) | UnknownStatement (_, c) | FloatingComment c -> c
 
 and Module = {
   name: string
-  isExported: bool
+  isExported: Exported 
   isNamespace: bool
   statements: Statement list
-}
+  comments: Comment list
+} with
+  interface ICommented with
+    member this.getComments() = this.comments
+
+and Export =
+  | CommonJsExport of IdentType
+  | ES6DefaultExport of IdentType
+  | ES6Export of {| target: IdentType; renameAs: string option |} list
+
+and [<RequireQualifiedAccess>] Exported =
+  | No
+  | Yes
+  | Default
 
 module Literal =
   let toString = function

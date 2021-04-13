@@ -10,7 +10,6 @@ type Context = {
   anonymousInterfacesMap: Map<Class, int>
   internalModuleName: string
   unknownIdentifiers: Trie<string, Set<int>>
-  defaultExport: IdentType option
 }
 
 module Context =
@@ -63,7 +62,7 @@ let rec mapTypeInStatements mapping ctx stmts =
     | ClassDef c ->
       ClassDef (mapTypeInClass mapping ctx c)
     | EnumDef e -> EnumDef e
-    | Export (i, m) -> Export (i, m)
+    | Export (e, c) -> Export (e, c)
     | Value v ->
       Value {
         v with
@@ -79,7 +78,8 @@ let rec mapTypeInStatements mapping ctx stmts =
               { ctx with currentNamespace = m.name :: ctx.currentNamespace }
               m.statements 
       }
-    | UnknownStatement msgo -> UnknownStatement msgo
+    | UnknownStatement (msgo, c) -> UnknownStatement (msgo, c)
+    | FloatingComment c -> FloatingComment c
   stmts |> List.map f
 
 let rec substTypeVar (subst: Map<string, Type>) _ctx = function
@@ -133,7 +133,7 @@ let rec replaceAliasToFunctionWithInterface = function
         isInterface = true
         comments = []
         accessibility = Protected
-        isExported = false
+        isExported = Exported.No
         implements = []
         typeParams = ta.typeParams
         members = [ 
@@ -219,7 +219,8 @@ let extractNamedDefinitions (stmts: Statement list) : Trie<string, Statement lis
     match s with
     | TypeAlias { erased = true }
     | Export _
-    | UnknownStatement _ -> trie
+    | UnknownStatement _
+    | FloatingComment _ -> trie
     | TypeAlias { name = name; erased = false }
     | ClassDef  { name = Some name }
     | EnumDef   { name = name }
@@ -322,7 +323,7 @@ let findTypesInStatements pred (stmts: Statement list) : 'a seq =
     | EnumDef e ->
       e.cases |> Seq.choose (fun c -> c.value)
               |> Seq.collect (fun l -> findTypesInType pred (TypeLiteral l))
-    | Export _ | UnknownStatement _ -> Seq.empty
+    | Export _ | UnknownStatement _ | FloatingComment _ -> Seq.empty
   stmts |> Seq.collect go
 
 let getTypeVarsInType ty =
@@ -349,18 +350,11 @@ let getUnknownIdentifiers stmts =
     | _ -> Choice1Of2 true, None
   ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
-let rec getDefaultExport stmts =
-  let go = function
-    | Module m -> getDefaultExport m.statements
-    | Export (i, AsDefault) -> Some i
-    | _ -> None
-  stmts |> List.tryPick go
-
 let private createRootContextForTyper internalModuleName stmts =
   let add name ty m =
     if m |> Trie.containsKey [name] then m
     else
-      m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true }]
+      m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true; comments = [] }]
   let m =
     extractNamedDefinitions stmts
     |> add "String" (Prim String)
@@ -380,19 +374,16 @@ let private createRootContextForTyper internalModuleName stmts =
     typeLiteralsMap = Map.empty
     anonymousInterfacesMap = Map.empty
     unknownIdentifiers = Trie.empty
-    defaultExport = None
   }
 
 let createRootContext (internalModuleName: string) (stmts: Statement list) : Context =
   let tlm = getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
   let aim = getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
   let uid = getUnknownIdentifiers stmts
-  let de  = getDefaultExport stmts
   { createRootContextForTyper internalModuleName stmts with
       typeLiteralsMap = tlm
       anonymousInterfacesMap = aim
-      unknownIdentifiers = uid
-      defaultExport = de }
+      unknownIdentifiers = uid }
 
 type FullNameLookupResult =
   | AliasName of TypeAlias
@@ -534,7 +525,7 @@ let rec mapIdentInStatements mapType mapExport (ctx: Context) (stmts: Statement 
     | ClassDef c ->
       ClassDef (mapTypeInClass (mapIdent mapType) ctx c)
     | EnumDef e -> EnumDef e
-    | Export (i, m) -> mapExport ctx i m
+    | Export (e, c) -> Export (mapExport ctx e, c)
     | Value v ->
       Value {
         v with
@@ -550,7 +541,7 @@ let rec mapIdentInStatements mapType mapExport (ctx: Context) (stmts: Statement 
               { ctx with currentNamespace = m.name :: ctx.currentNamespace }
               m.statements 
       }
-    | UnknownStatement msgo -> UnknownStatement msgo
+    | UnknownStatement (msgo, c) -> UnknownStatement (msgo, c) | FloatingComment c -> FloatingComment c
   stmts |> List.map f
 
 let resolveIdentType (ctx: Context) (i: IdentType) : IdentType =
@@ -564,13 +555,10 @@ let resolveIdentType (ctx: Context) (i: IdentType) : IdentType =
 let resolveIdentInStatements (ctx: Context) (stmts: Statement list) : Statement list =
   mapIdentInStatements
     (fun ctx i -> resolveIdentType ctx i)
-    (fun ctx i m ->
-      match i.fullName with
-      | Some _ -> Export (i, m)
-      | None ->
-        match getFullNameOfIdent ctx i with
-        | Some fn -> Export ({ i with fullName = Some fn }, m)
-        | None -> Export (i, m)
+    (fun ctx -> function
+      | CommonJsExport i -> CommonJsExport (resolveIdentType ctx i)
+      | ES6DefaultExport i -> ES6DefaultExport (resolveIdentType ctx i)
+      | ES6Export xs -> ES6Export (xs |> List.map (fun x -> {| x with target = resolveIdentType ctx x.target |}))
     ) ctx stmts
 
 let mutable private inheritMap: Map<string list, Set<Type>> = Map.empty
@@ -629,7 +617,7 @@ let private createFunctionInterfaceBase isNewable (typrms: TypeParam list) ft lo
       name = None
       accessibility = Public
       isInterface = true
-      isExported = false
+      isExported = Exported.No
       implements = []
       typeParams = boundTyprms
       members = [

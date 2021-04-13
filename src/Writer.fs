@@ -840,9 +840,10 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           // TODO: emit extends of type parameters
         | Value _
         | Module _
-        | TypeAlias { erased = true } -> None
+        | TypeAlias { erased = true }
         | Export _
-        | UnknownStatement _ -> failwithf "impossible_emitFlattenedDefinitions(%A)" v
+        | UnknownStatement _
+        | FloatingComment _ -> failwithf "impossible_emitFlattenedDefinitions(%A)" v
 
       moduleSig "Types" (
         concat newline [
@@ -899,9 +900,10 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
           m.statements |> List.map (fun x ->
             let renamer = new OverloadRenamer()
             go renamer ({ ctx with currentNamespace = m.name :: ctx.currentNamespace}) x)))
-    | Export (e, _) -> commentStr (sprintf "export = %s" (String.concat "." e.name))
-    | UnknownStatement (Some s) -> commentStr s
-    | UnknownStatement None -> commentStr "unknown statement"
+    | Export (_, _) -> empty // TODO
+    | UnknownStatement (Some s, _) -> commentStr s
+    | UnknownStatement (None, _) -> commentStr "unknown statement"
+    | FloatingComment _ -> empty // TODO
     | TypeAlias { name = name; typeParams = typeParams } | (EnumDef { name = name } & Dummy typeParams) ->
       let k = List.rev (name :: ctx.currentNamespace)
       let tyargs = typeParams |> List.map (fun x -> tprintf "'%s" x.name)

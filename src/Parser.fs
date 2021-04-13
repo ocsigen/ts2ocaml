@@ -64,6 +64,17 @@ let getAccessibility (modifiersOpt: Ts.ModifiersArray option) : Accessibility op
       None
   | None -> None
 
+let getExported (modifiersOpt: Ts.ModifiersArray option) : Exported =
+  match modifiersOpt with
+  | None -> Exported.No
+  | Some modifiers ->
+    if modifiers |> Seq.exists (fun m -> m.kind = Kind.ExportKeyword) |> not then
+      Exported.No
+    else if modifiers |> Seq.exists (fun m -> m.kind = Kind.DefaultKeyword) then
+      Exported.Default
+    else
+      Exported.Yes
+
 let isReadOnly (m: Ts.ModifiersArray option) : bool =
   m |> hasModifier Kind.ReadonlyKeyword
 
@@ -193,7 +204,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
     let t = t :?> Ts.TypeLiteralNode
     let members = t.members |> List.ofSeq |> List.choose (readNamedDeclaration typrm checker) 
     AnonymousInterface {
-      name = None; isInterface = true; isExported = false
+      name = None; isInterface = true; isExported = Exported.No
       comments = []; implements = []; typeParams = []; accessibility = Public
       members = members
     }
@@ -396,7 +407,7 @@ let readInterface (checker: TypeChecker) (i: Ts.InterfaceDeclaration) : Class =
     typeParams = typrms
     implements = readInherits typrmsSet checker i.heritageClauses
     isInterface = true
-    isExported = i.modifiers |> Option.map (Seq.exists (fun m -> m.kind = Kind.ExportKeyword)) |> Option.defaultValue false
+    isExported = getExported i.modifiers
     members = i.members |> List.ofSeq |> List.choose (readNamedDeclaration typrmsSet checker)
   }
 
@@ -410,7 +421,7 @@ let readClass (checker: TypeChecker) (i: Ts.ClassDeclaration) : Class =
     typeParams = typrms
     implements = readInherits typrmsSet checker i.heritageClauses
     isInterface = false
-    isExported = hasModifier Kind.ExportKeyword i.modifiers
+    isExported = getExported i.modifiers
     members = i.members |> List.ofSeq |> List.choose (readNamedDeclaration typrmsSet checker)
   }
 
@@ -431,18 +442,21 @@ let readEnum (ed: Ts.EnumDeclaration) : Enum =
     name = ed.name |> nameToString
     comments = [] // TODO
     cases = ed.members |> List.ofSeq |> List.map readEnumCase
+    isExported = getExported ed.modifiers
   }
 
 let readTypeAlias (checker: TypeChecker) (a: Ts.TypeAliasDeclaration) : TypeAlias =
   let typrm = readTypeParameters Set.empty checker a.typeParameters
   let ty = readTypeNode (typrm |> List.map (fun x -> x.name) |> Set.ofList) checker a.``type``
-  { name = nameToString a.name; typeParams = typrm; target = ty; erased = false; }
+  { name = nameToString a.name; typeParams = typrm; target = ty; erased = false; comments = [] (* TODO*) }
 
-let readVariable (checker: TypeChecker) (v: Ts.VariableStatement) : Value list =
-  v.declarationList.declarations |> List.ofSeq |> List.choose (fun vd ->
+let readVariable (checker: TypeChecker) (v: Ts.VariableStatement) : Statement list =
+  v.declarationList.declarations |> List.ofSeq |> List.map (fun vd ->
+    let comments = [] // TODO
     match getBindingName vd.name with
     | None ->
-      nodeWarn vd "name is not defined for variable"; None
+      nodeWarn vd "name is not defined for variable"
+      UnknownStatement (Some (vd.getText()), comments) 
     | Some name ->
       let ty =
         match vd.``type`` with
@@ -462,10 +476,9 @@ let readVariable (checker: TypeChecker) (v: Ts.VariableStatement) : Value list =
             nodeWarn vd "type missing for variable '%s'" name
             UnknownType None
       let isConst = (int vd.flags) ||| (int Ts.NodeFlags.Const) <> 0
-      let isExported = hasModifier Kind.ExportKeyword vd.modifiers
+      let isExported = getExported vd.modifiers
       let accessibility = getAccessibility vd.modifiers
-      let comments = [] // TODO
-      Some { comments = comments; name = name; typ = ty; typeParams = []; isConst = isConst; isExported = isExported; accessibility = accessibility }
+      Value { comments = comments; name = name; typ = ty; typeParams = []; isConst = isConst; isExported = isExported; accessibility = accessibility }
   )
 
 let readFunction (checker: TypeChecker) (f: Ts.FunctionDeclaration) : Value option =
@@ -475,7 +488,7 @@ let readFunction (checker: TypeChecker) (f: Ts.FunctionDeclaration) : Value opti
   | Some name ->
     let name = nameToString name
     let comments = [] // TODO
-    let isExported = hasModifier Kind.ExportKeyword f.modifiers
+    let isExported = getExported f.modifiers
     let accessibility = getAccessibility f.modifiers
     let typrm = readTypeParameters Set.empty checker f.typeParameters
     let ty =
@@ -489,18 +502,47 @@ let readFunction (checker: TypeChecker) (f: Ts.FunctionDeclaration) : Value opti
       Function (readParameters typrm checker f.parameters retTy)
     Some { comments = comments; name = name; typ = ty; typeParams = typrm; isConst = false; isExported = isExported; accessibility = accessibility }
 
-let readExportAssignment (checker: TypeChecker) (e: Ts.ExportAssignment) : IdentType * ExportModifier =
+let readExportAssignment (checker: TypeChecker) (e: Ts.ExportAssignment) : Statement option =
+  let comments = [] // TODO
   match extractNestedName e.expression |> Seq.toList with
-  | [] -> nodeError e.expression "cannot parse node '%s' as identifier" (e.expression.getText())
+  | [] -> nodeWarn e.expression "cannot parse node '%s' as identifier" (e.expression.getText()); None
   | ts ->
-    { name = ts; fullName = None; loc = Node.location e.expression }, AsDefault
+    let ident = { name = ts; fullName = None; loc = Node.location e.expression }
+    match e.isExportEquals with
+    | Some true -> Export (CommonJsExport ident, comments) |> Some
+    | _ -> Export (ES6DefaultExport ident, comments) |> Some
+
+let readExportDeclaration (checker: TypeChecker) (e: Ts.ExportDeclaration) : Statement option =
+  let comments = [] // TODO
+  match e.exportClause, e.moduleSpecifier with
+  | None, _
+  | _, Some _ ->
+    nodeWarn e "re-exporting an external module is not supported."; None
+  | Some bindings, None ->
+    let kind = (bindings |> box :?> Ts.Node).kind
+    match kind with
+    | Kind.NamespaceExport ->
+      nodeWarn e "don't know what to do with this."; None
+    | Kind.NamedExports ->
+      let nes = bindings |> box :?> Ts.NamedExports
+      let elems =
+        nes.elements
+        |> Seq.map (fun x -> 
+          let ident = { name = [x.name.text]; fullName = None; loc = Node.location x.name }
+          match x.propertyName with
+          | None -> {| target = ident; renameAs = None |}
+          | Some propertyName -> {| target = ident; renameAs = Some propertyName.text  |})
+        |> Seq.toList
+      Some (Export (ES6Export elems, comments))
+    | _ ->
+      nodeWarn e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
 
 let rec readModule (checker: TypeChecker) (md: Ts.ModuleDeclaration) : Module =
   let name = nameToString md.name
   let check kind = 
     md.getChildren() |> Seq.exists (fun nd -> nd.kind = kind)
   let isNamespace = check Kind.NamespaceKeyword
-  let isExported = check Kind.ExportKeyword
+  let isExported = getExported md.modifiers
   let statements =
     md.getChildren()
     |> Seq.toList
@@ -517,19 +559,22 @@ let rec readModule (checker: TypeChecker) (md: Ts.ModuleDeclaration) : Module =
         nodeWarn nd "unknown kind in ModuleDeclaration: %s" (Enum.pp nd.kind)
         []
     )
-  { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements    }
+  { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements; comments = [] (* TODO *) }
 
 and readStatement (checker: TypeChecker) (stmt: Ts.Statement) : Statement list =
+  let onError () =
+    UnknownStatement (Some (stmt.getText()), [] (* TODO: comment *))
   match stmt.kind with
   | Kind.TypeAliasDeclaration -> [readTypeAlias checker (stmt :?> _) |> TypeAlias]
   | Kind.InterfaceDeclaration -> [readInterface checker (stmt :?> _) |> ClassDef]
   | Kind.ClassDeclaration -> [readClass checker (stmt :?> _) |> ClassDef]
   | Kind.EnumDeclaration -> [readEnum (stmt :?> _) |> EnumDef]
   | Kind.ModuleDeclaration -> [readModule checker (stmt :?> _) |> Module]
-  | Kind.VariableStatement -> readVariable checker (stmt :?> _) |> List.map Value
-  | Kind.FunctionDeclaration -> readFunction checker (stmt :?> _) |> Option.map Value |> Option.toList
-  | Kind.ExportAssignment -> [readExportAssignment checker (stmt :?> _) |> Export]
+  | Kind.VariableStatement -> readVariable checker (stmt :?> _)
+  | Kind.FunctionDeclaration -> [readFunction checker (stmt :?> _) |> Option.map Value |> Option.defaultWith onError]
+  | Kind.ExportAssignment -> [readExportAssignment checker (stmt :?> _) |> Option.defaultWith onError]
+  | Kind.ExportDeclaration -> [readExportDeclaration checker (stmt :?> _) |> Option.defaultWith onError]
   | _ ->
     nodeWarn stmt "skipping unsupported Statement kind: %s" (Enum.pp stmt.kind)
-    [ UnknownStatement (Some (stmt.getText())) ]
+    [ UnknownStatement (Some (stmt.getText()), [] (* TODO: comment *)) ]
 

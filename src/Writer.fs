@@ -206,6 +206,9 @@ module Term =
     if List.isEmpty args then failwith "empty args of fun"
     else "fun " @+ concat (str " ") args +@ " -> " + body
 
+  let pureJSExpr (js: string) =
+    termApp (str "Ts2ocaml_baselib.pure_js_expr") [literal (LString js)]
+
 open Type
 open Term
 

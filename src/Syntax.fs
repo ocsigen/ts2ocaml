@@ -210,14 +210,82 @@ and Module = {
     member this.getComments() = this.comments
 
 and Export =
+  /// ```ts
+  /// export = ident;
+  /// ```
+  /// use the followings to import:
+  ///
+  /// ES6 (through Babel):
+  /// ```js
+  ///   import whatever from "path";
+  /// ```
+  ///
+  /// CJS:
+  /// ```js
+  ///   const whatever = require("path");
+  /// ```
   | CommonJsExport of IdentType
+  /// ```ts
+  /// export default ident;
+  /// ```
+  /// use the followings to import:
+  ///
+  /// ES6:
+  /// ```js
+  /// import whatever from "path";
+  /// ```
+  ///
+  /// CJS (through Babel):
+  /// ```js
+  /// const whatever = require("path").default;
+  /// ```
   | ES6DefaultExport of IdentType
+  /// ```ts
+  /// export { target }; // name = target, when renameAs = None
+  /// export { target as name }; // when renameAs = Some name
+  /// ```
+  /// use the followings to import:
+  ///
+  /// ES6:
+  /// ```js
+  ///   import { name } from "path";
+  /// ```
+  ///
+  /// CJS (through Babel):
+  /// ```js
+  ///   const whatever = require("path").name;
+  /// ```
   | ES6Export of {| target: IdentType; renameAs: string option |} list
+  /// ```ts
+  /// export as namespace ns;
+  /// ```
+  /// use the followings to import:
+  ///
+  /// ES6:
+  /// ```js
+  ///   import * as whatever from "path";
+  /// ```
+  ///
+  /// CJS (through Babel):
+  /// ```js
+  ///   const whatever = require("path");
+  /// ``` 
+  | ExportAsNamespace of ns:string
 
 and [<RequireQualifiedAccess>] Exported =
   | No
+  /// ```ts
+  /// export class Foo { .. }
+  /// ```
   | Yes
+  /// ```ts
+  /// export default class Foo { .. }
+  /// ```
   | Default
+  /// ```ts
+  /// declare class Foo { .. }
+  /// ```
+  | Declared
 
 module Literal =
   let toString = function

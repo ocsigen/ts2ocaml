@@ -52,28 +52,24 @@ let hasModifier (kind: Ts.SyntaxKind) (modifiers: Ts.ModifiersArray option) =
   | Some mds -> mds |> Seq.exists (fun md -> md.kind = kind)
 
 let getAccessibility (modifiersOpt: Ts.ModifiersArray option) : Accessibility option =
-  match modifiersOpt with
-  | Some modifiers ->
-    if modifiers |> Seq.exists (fun m -> m.kind = Kind.PublicKeyword) then
-      Some Public
-    else if modifiers |> Seq.exists (fun m -> m.kind = Kind.ProtectedKeyword) then
-      Some Protected
-    else if modifiers |> Seq.exists (fun m -> m.kind = Kind.PrivateKeyword) then
-      Some Private
-    else
-      None
-  | None -> None
+  if modifiersOpt |> hasModifier Kind.PublicKeyword then
+    Some Public
+  else if modifiersOpt |> hasModifier Kind.ProtectedKeyword then
+    Some Protected
+  else if modifiersOpt |> hasModifier Kind.PrivateKeyword then
+    Some Private
+  else
+    None
 
 let getExported (modifiersOpt: Ts.ModifiersArray option) : Exported =
-  match modifiersOpt with
-  | None -> Exported.No
-  | Some modifiers ->
-    if modifiers |> Seq.exists (fun m -> m.kind = Kind.ExportKeyword) |> not then
-      Exported.No
-    else if modifiers |> Seq.exists (fun m -> m.kind = Kind.DefaultKeyword) then
-      Exported.Default
-    else
-      Exported.Yes
+  if modifiersOpt |> hasModifier Kind.DeclareKeyword then
+    Exported.Declared
+  else if modifiersOpt |> hasModifier Kind.ExportKeyword |> not then
+    Exported.No
+  else if modifiersOpt |> hasModifier Kind.DefaultKeyword then
+    Exported.Default
+  else
+    Exported.Yes
 
 let isReadOnly (m: Ts.ModifiersArray option) : bool =
   m |> hasModifier Kind.ReadonlyKeyword
@@ -522,7 +518,8 @@ let readExportDeclaration (checker: TypeChecker) (e: Ts.ExportDeclaration) : Sta
     let kind = (bindings |> box :?> Ts.Node).kind
     match kind with
     | Kind.NamespaceExport ->
-      nodeWarn e "don't know what to do with this."; None
+      let ne = bindings |> box :?> Ts.NamespaceExport
+      Some (Export (ExportAsNamespace ne.name.text, comments))
     | Kind.NamedExports ->
       let nes = bindings |> box :?> Ts.NamedExports
       let elems =

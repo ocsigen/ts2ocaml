@@ -2,7 +2,6 @@ module Typer
 
 open Syntax
 
-
 type Context = {
   currentNamespace: string list
   definitionsMap: Trie<string, Statement list>
@@ -559,6 +558,7 @@ let resolveIdentInStatements (ctx: Context) (stmts: Statement list) : Statement 
       | CommonJsExport i -> CommonJsExport (resolveIdentType ctx i)
       | ES6DefaultExport i -> ES6DefaultExport (resolveIdentType ctx i)
       | ES6Export xs -> ES6Export (xs |> List.map (fun x -> {| x with target = resolveIdentType ctx x.target |}))
+      | ExportAsNamespace ns -> ExportAsNamespace ns
     ) ctx stmts
 
 let mutable private inheritMap: Map<string list, Set<Type>> = Map.empty

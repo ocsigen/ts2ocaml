@@ -7,7 +7,7 @@ nuget Fake.Core.String
 nuget Fake.Core.ReleaseNotes
 nuget Fake.IO.FileSystem
 nuget Fake.Tools.Git
-nuget Fake.JavaScript.Npm
+nuget Fake.JavaScript.Yarn
 //"
 #load ".fake/build.fsx/intellisense.fsx"
 
@@ -38,8 +38,8 @@ Target.create "Install" (fun _ ->
         "ts2ocaml.sln"
 )
 
-Target.create "NpmInstall" (fun _ ->
-    Npm.install id
+Target.create "YarnInstall" (fun _ ->
+    Yarn.install id
 )
 
 Target.create "Build" (fun _ ->
@@ -53,11 +53,11 @@ Target.create "Watch" (fun _ ->
 // Build order
 "Clean"
     ==> "Install"
-    ==> "NpmInstall"
+    ==> "YarnInstall"
     ==> "Build"
 
 "Watch"
-    <== [ "NpmInstall" ]
+    <== [ "YarnInstall" ]
 
 // start build
 Target.runOrDefault "Build"

@@ -1,12 +1,7 @@
 [@@@ocaml.warning "-7-11-32-33-39"]
 [@@@js.implem 
   [@@@ocaml.warning "-7-11-32-33-39"]
-
-  let _imports = Ts2ocaml_baselib.pure_js_expr "require('monaco-editor')"
 ]
-
-[@@@js.scope _imports]
-
 open Ts2ocaml_baselib
 (* 
   unknown identifiers:
@@ -74,7 +69,6 @@ end
     end
   end
 ]
-
 module Make (M: Missing) : sig
   open M
   module Internal : sig

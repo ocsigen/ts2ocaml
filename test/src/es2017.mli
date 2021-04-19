@@ -280,8 +280,6 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get_byteLength: t -> float [@@js.get "byteLength"]
-    val get_length: t -> float [@@js.get "length"]
-    val set_length: t -> float -> unit [@@js.set "length"]
     val slice: t -> begin_:float -> ?end_:float -> unit -> t [@@js.call "slice"]
     val get__Symbol_species_: t -> t [@@js.get "[Symbol.species]"]
     val get__Symbol_toStringTag_: t -> ([`L_s1_SharedArrayBuffer[@js "SharedArrayBuffer"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
@@ -324,7 +322,7 @@ module Make (M: Missing) : sig
     val store: t -> typedArray:(Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0) union6 -> index:float -> value:float -> float [@@js.call "store"]
     val sub: t -> typedArray:(Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0) union6 -> index:float -> value:float -> float [@@js.call "sub"]
     val wait: t -> typedArray:Int32Array.t_0 -> index:float -> value:float -> ?timeout:float -> unit -> ([`L_s9_not_equal[@js "not-equal"] | `L_s10_ok[@js "ok"] | `L_s13_timed_out[@js "timed-out"]] [@js.enum]) [@@js.call "wait"]
-    val notify: t -> typedArray:Int32Array.t_0 -> index:float -> count:float -> float [@@js.call "notify"]
+    val notify: t -> typedArray:Int32Array.t_0 -> index:float -> ?count:float -> unit -> float [@@js.call "notify"]
     val xor: t -> typedArray:(Int16Array.t_0, Int32Array.t_0, Int8Array.t_0, Uint16Array.t_0, Uint32Array.t_0, Uint8Array.t_0) union6 -> index:float -> value:float -> float [@@js.call "xor"]
     val get__Symbol_toStringTag_: t -> ([`L_s0_Atomics[@js "Atomics"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
   end

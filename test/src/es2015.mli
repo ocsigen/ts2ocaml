@@ -546,10 +546,10 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get_EPSILON: t -> float [@@js.get "EPSILON"]
-    val isFinite: t -> number:float -> bool [@@js.call "isFinite"]
-    val isInteger: t -> number:float -> bool [@@js.call "isInteger"]
-    val isNaN: t -> number:float -> bool [@@js.call "isNaN"]
-    val isSafeInteger: t -> number:float -> bool [@@js.call "isSafeInteger"]
+    val isFinite: t -> number:unknown -> bool [@@js.call "isFinite"]
+    val isInteger: t -> number:unknown -> bool [@@js.call "isInteger"]
+    val isNaN: t -> number:unknown -> bool [@@js.call "isNaN"]
+    val isSafeInteger: t -> number:unknown -> bool [@@js.call "isSafeInteger"]
     val get_MAX_SAFE_INTEGER: t -> float [@@js.get "MAX_SAFE_INTEGER"]
     val get_MIN_SAFE_INTEGER: t -> float [@@js.get "MIN_SAFE_INTEGER"]
     val parseFloat: t -> string:string -> float [@@js.call "parseFloat"]
@@ -823,7 +823,7 @@ module Make (M: Missing) : sig
     val t_0_of_js: Ojs.t -> t_0
     val get__Symbol_species_: t -> t [@@js.get "[Symbol.species]"]
     val get_prototype: t -> any _Promise [@@js.get "prototype"]
-    val create: t -> executor:(resolve:(?value:('T, 'T PromiseLike.t_1) union2 -> unit -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T _Promise [@@js.apply_newable]
+    val create: t -> executor:(resolve:(value:('T, 'T PromiseLike.t_1) union2 -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T _Promise [@@js.apply_newable]
     val all: t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2 * ('T5, 'T5 PromiseLike.t_1) union2 * ('T6, 'T6 PromiseLike.t_1) union2 * ('T7, 'T7 PromiseLike.t_1) union2 * ('T8, 'T8 PromiseLike.t_1) union2 * ('T9, 'T9 PromiseLike.t_1) union2 * ('T10, 'T10 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8 * 'T9 * 'T10) _Promise [@@js.call "all"]
     val all': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2 * ('T5, 'T5 PromiseLike.t_1) union2 * ('T6, 'T6 PromiseLike.t_1) union2 * ('T7, 'T7 PromiseLike.t_1) union2 * ('T8, 'T8 PromiseLike.t_1) union2 * ('T9, 'T9 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8 * 'T9) _Promise [@@js.call "all"]
     val all'': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2 * ('T3, 'T3 PromiseLike.t_1) union2 * ('T4, 'T4 PromiseLike.t_1) union2 * ('T5, 'T5 PromiseLike.t_1) union2 * ('T6, 'T6 PromiseLike.t_1) union2 * ('T7, 'T7 PromiseLike.t_1) union2 * ('T8, 'T8 PromiseLike.t_1) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8) _Promise [@@js.call "all"]
@@ -835,28 +835,12 @@ module Make (M: Missing) : sig
     val all'''''''': t -> values:(('T1, 'T1 PromiseLike.t_1) union2 * ('T2, 'T2 PromiseLike.t_1) union2) -> ('T1 * 'T2) _Promise [@@js.call "all"]
     val all''''''''': t -> values:('T, 'T PromiseLike.t_1) union2 list -> 'T list _Promise [@@js.call "all"]
     val race: t -> values:'T list -> (* FIXME: unknown type 'T extends PromiseLike<infer U> ? U : T' *)any _Promise [@@js.call "race"]
-    val race': t -> values:'T _Iterable -> (* FIXME: unknown type 'T extends PromiseLike<infer U> ? U : T' *)any _Promise [@@js.call "race"]
     val reject: t -> ?reason:any -> unit -> 'T _Promise [@@js.call "reject"]
-    val resolve: t -> value:('T, 'T PromiseLike.t_1) union2 -> 'T _Promise [@@js.call "resolve"]
-    val resolve': t -> unit _Promise [@@js.call "resolve"]
-    val all'''''''''': t -> values:('TAll, 'TAll PromiseLike.t_1) union2 _Iterable -> 'TAll list _Promise [@@js.call "all"]
+    val resolve: t -> unit _Promise [@@js.call "resolve"]
+    val resolve': t -> value:('T, 'T PromiseLike.t_1) union2 -> 'T _Promise [@@js.call "resolve"]
+    val all'''''''''': t -> values:('T, 'T PromiseLike.t_1) union2 _Iterable -> 'T list _Promise [@@js.call "all"]
+    val race': t -> values:'T _Iterable -> (* FIXME: unknown type 'T extends PromiseLike<infer U> ? U : T' *)any _Promise [@@js.call "race"]
     val race'': t -> values:('T, 'T PromiseLike.t_1) union2 _Iterable -> 'T _Promise [@@js.call "race"]
-  end
-  module[@js.scope "Reflect"] Reflect : sig
-    val enumerate: target:untyped_object -> any _IterableIterator [@@js.global "enumerate"]
-    val apply_: target:_Function -> thisArgument:any -> argumentsList:any ArrayLike.t_1 -> any [@@js.global "apply"]
-    val construct: target:_Function -> argumentsList:any ArrayLike.t_1 -> ?newTarget:any -> unit -> any [@@js.global "construct"]
-    val defineProperty: target:untyped_object -> propertyKey:PropertyKey.t_0 -> attributes:PropertyDescriptor.t_0 -> bool [@@js.global "defineProperty"]
-    val deleteProperty: target:untyped_object -> propertyKey:PropertyKey.t_0 -> bool [@@js.global "deleteProperty"]
-    val get_: target:untyped_object -> propertyKey:PropertyKey.t_0 -> ?receiver:any -> unit -> any [@@js.global "get"]
-    val getOwnPropertyDescriptor: target:untyped_object -> propertyKey:PropertyKey.t_0 -> PropertyDescriptor.t_0 or_undefined [@@js.global "getOwnPropertyDescriptor"]
-    val getPrototypeOf: target:untyped_object -> untyped_object [@@js.global "getPrototypeOf"]
-    val has: target:untyped_object -> propertyKey:PropertyKey.t_0 -> bool [@@js.global "has"]
-    val isExtensible: target:untyped_object -> bool [@@js.global "isExtensible"]
-    val ownKeys: target:untyped_object -> PropertyKey.t_0 list [@@js.global "ownKeys"]
-    val preventExtensions: target:untyped_object -> bool [@@js.global "preventExtensions"]
-    val set_: target:untyped_object -> propertyKey:PropertyKey.t_0 -> value:any -> ?receiver:any -> unit -> bool [@@js.global "set"]
-    val setPrototypeOf: target:untyped_object -> proto:any -> bool [@@js.global "setPrototypeOf"]
   end
   module[@js.scope "Int8Array"] Int8Array : sig
     type t = _Int8Array
@@ -888,7 +872,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get__Symbol_toStringTag_: t -> ([`L_s9_UInt8Array[@js "UInt8Array"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
+    val get__Symbol_toStringTag_: t -> ([`L_s11_Uint8Array[@js "Uint8Array"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
     val _Symbol_iterator_: t -> float _IterableIterator [@@js.call "[Symbol.iterator]"]
     val entries: t -> (float * float) _IterableIterator [@@js.call "entries"]
     val keys: t -> float _IterableIterator [@@js.call "keys"]
@@ -957,7 +941,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get__Symbol_toStringTag_: t -> ([`L_s10_Uint16Array[@js "Uint16Array"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
+    val get__Symbol_toStringTag_: t -> ([`L_s9_Uint16Array[@js "Uint16Array"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
     val _Symbol_iterator_: t -> float _IterableIterator [@@js.call "[Symbol.iterator]"]
     val entries: t -> (float * float) _IterableIterator [@@js.call "entries"]
     val keys: t -> float _IterableIterator [@@js.call "keys"]
@@ -1003,7 +987,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get__Symbol_toStringTag_: t -> ([`L_s11_Uint32Array[@js "Uint32Array"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
+    val get__Symbol_toStringTag_: t -> ([`L_s10_Uint32Array[@js "Uint32Array"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
     val _Symbol_iterator_: t -> float _IterableIterator [@@js.call "[Symbol.iterator]"]
     val entries: t -> (float * float) _IterableIterator [@@js.call "entries"]
     val keys: t -> float _IterableIterator [@@js.call "keys"]
@@ -1073,20 +1057,19 @@ module Make (M: Missing) : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    val apply_: 'T t -> target:'T -> thisArg:any -> argArray:any list -> any [@@js.call "apply"]
+    val construct: 'T t -> target:'T -> argArray:any list -> newTarget:_Function -> untyped_object [@@js.call "construct"]
+    val defineProperty: 'T t -> target:'T -> p:symbol or_string -> attributes:PropertyDescriptor.t_0 -> bool [@@js.call "defineProperty"]
+    val deleteProperty: 'T t -> target:'T -> p:symbol or_string -> bool [@@js.call "deleteProperty"]
+    val get_: 'T t -> target:'T -> p:symbol or_string -> receiver:any -> any [@@js.call "get"]
+    val getOwnPropertyDescriptor: 'T t -> target:'T -> p:symbol or_string -> PropertyDescriptor.t_0 or_undefined [@@js.call "getOwnPropertyDescriptor"]
     val getPrototypeOf: 'T t -> target:'T -> untyped_object or_null [@@js.call "getPrototypeOf"]
-    val setPrototypeOf: 'T t -> target:'T -> v:any -> bool [@@js.call "setPrototypeOf"]
+    val has: 'T t -> target:'T -> p:symbol or_string -> bool [@@js.call "has"]
     val isExtensible: 'T t -> target:'T -> bool [@@js.call "isExtensible"]
+    val ownKeys: 'T t -> target:'T -> symbol or_string ArrayLike.t_1 [@@js.call "ownKeys"]
     val preventExtensions: 'T t -> target:'T -> bool [@@js.call "preventExtensions"]
-    val getOwnPropertyDescriptor: 'T t -> target:'T -> p:PropertyKey.t_0 -> PropertyDescriptor.t_0 or_undefined [@@js.call "getOwnPropertyDescriptor"]
-    val has: 'T t -> target:'T -> p:PropertyKey.t_0 -> bool [@@js.call "has"]
-    val get_: 'T t -> target:'T -> p:PropertyKey.t_0 -> receiver:any -> any [@@js.call "get"]
-    val set_: 'T t -> target:'T -> p:PropertyKey.t_0 -> value:any -> receiver:any -> bool [@@js.call "set"]
-    val deleteProperty: 'T t -> target:'T -> p:PropertyKey.t_0 -> bool [@@js.call "deleteProperty"]
-    val defineProperty: 'T t -> target:'T -> p:PropertyKey.t_0 -> attributes:PropertyDescriptor.t_0 -> bool [@@js.call "defineProperty"]
-    val enumerate: 'T t -> target:'T -> PropertyKey.t_0 list [@@js.call "enumerate"]
-    val ownKeys: 'T t -> target:'T -> PropertyKey.t_0 list [@@js.call "ownKeys"]
-    val apply_: 'T t -> target:'T -> thisArg:any -> ?argArray:any -> unit -> any [@@js.call "apply"]
-    val construct: 'T t -> target:'T -> argArray:any -> ?newTarget:any -> unit -> untyped_object [@@js.call "construct"]
+    val set_: 'T t -> target:'T -> p:symbol or_string -> value:any -> receiver:any -> bool [@@js.call "set"]
+    val setPrototypeOf: 'T t -> target:'T -> v:untyped_object or_null -> bool [@@js.call "setPrototypeOf"]
   end
   module[@js.scope "ProxyConstructor"] ProxyConstructor : sig
     type t = _ProxyConstructor
@@ -1099,6 +1082,21 @@ module Make (M: Missing) : sig
     val create: t -> target:'T -> handler:'T _ProxyHandler -> 'T [@@js.apply_newable]
   end
   val proxy: _ProxyConstructor [@@js.global "Proxy"]
+  module[@js.scope "Reflect"] Reflect : sig
+    val apply_: target:_Function -> thisArgument:any -> argumentsList:any ArrayLike.t_1 -> any [@@js.global "apply"]
+    val construct: target:_Function -> argumentsList:any ArrayLike.t_1 -> ?newTarget:_Function -> unit -> any [@@js.global "construct"]
+    val defineProperty: target:untyped_object -> propertyKey:PropertyKey.t_0 -> attributes:PropertyDescriptor.t_0 -> bool [@@js.global "defineProperty"]
+    val deleteProperty: target:untyped_object -> propertyKey:PropertyKey.t_0 -> bool [@@js.global "deleteProperty"]
+    val get_: target:untyped_object -> propertyKey:PropertyKey.t_0 -> ?receiver:any -> unit -> any [@@js.global "get"]
+    val getOwnPropertyDescriptor: target:untyped_object -> propertyKey:PropertyKey.t_0 -> PropertyDescriptor.t_0 or_undefined [@@js.global "getOwnPropertyDescriptor"]
+    val getPrototypeOf: target:untyped_object -> untyped_object or_null [@@js.global "getPrototypeOf"]
+    val has: target:untyped_object -> propertyKey:PropertyKey.t_0 -> bool [@@js.global "has"]
+    val isExtensible: target:untyped_object -> bool [@@js.global "isExtensible"]
+    val ownKeys: target:untyped_object -> symbol or_string list [@@js.global "ownKeys"]
+    val preventExtensions: target:untyped_object -> bool [@@js.global "preventExtensions"]
+    val set_: target:untyped_object -> propertyKey:PropertyKey.t_0 -> value:any -> ?receiver:any -> unit -> bool [@@js.global "set"]
+    val setPrototypeOf: target:untyped_object -> proto:untyped_object or_null -> bool [@@js.global "setPrototypeOf"]
+  end
   val symbol: _SymbolConstructor [@@js.global "Symbol"]
   module[@js.scope "Symbol"] Symbol : sig
     type t = _Symbol
@@ -1107,6 +1105,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    val _Symbol_toPrimitive_: t -> hint:string -> symbol [@@js.call "[Symbol.toPrimitive]"]
     val get__Symbol_toStringTag_: t -> string [@@js.get "[Symbol.toStringTag]"]
   end
   module[@js.scope "Date"] Date : sig

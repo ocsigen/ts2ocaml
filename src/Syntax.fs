@@ -78,6 +78,7 @@ and EnumCase = {
     member this.getComments() = this.comments
 
 and Type =
+  | Intrinsic
   | PolymorphicThis
   | Ident of IdentType
   | TypeVar of string
@@ -315,6 +316,7 @@ module Type =
     | AAnonymousInterface i -> AnonymousInterface i
 
   let rec pp = function
+    | Intrinsic -> "intrinsic"
     | PolymorphicThis -> "this"
     | Ident i -> (if Option.isNone i.fullName then "?" else "") + (i.name |> String.concat ".")
     | TypeVar v -> "'" + v

@@ -438,7 +438,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       match t with
       | AIdent { fullName = Some fn } ->
         let ts =
-          tryLookupFullNameWith ctx fn (function
+          FullName.tryLookupWith ctx fn (function
             | AliasName { typeParams = typrms; erased = false }
             | ClassName { typeParams = typrms } ->
               assignTypeParams fn loc typrms ts
@@ -459,7 +459,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
     | Ident i ->
       match i.fullName with
       | Some fn ->
-        tryLookupFullNameWith ctx fn (function
+        FullName.tryLookupWith ctx fn (function
           | AliasName { target = target; erased = true } -> emitTypeImpl flags overrideFunc ctx target |> Some
           | AliasName { typeParams = typrms; erased = false }
           | ClassName { typeParams = typrms } when not (List.isEmpty typrms) && not flags.hasTypeArgumentsHandled ->
@@ -496,7 +496,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       if not flags.resolveUnion then
         safe_union_t (u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
       else
-        let ru = resolveUnion ctx u
+        let ru = ResolvedUnion.resolve ctx u
         let skipOnContravariant text =
           if flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant then empty
           else text
@@ -575,6 +575,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
                  |> treatNullUndefined
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
     | PolymorphicThis -> commentStr "FIXME: polymorphic this" + any_t
+    | Intrinsic -> ojs_t
     | Function f ->
       let renamer = new OverloadRenamer(used=(flags.avoidTheseArgumentNames |> Set.map (fun s -> "value", s)))
       let inline rename x = renamer.Rename "value" x
@@ -657,7 +658,7 @@ let getSafeLabels ctx ty =
       seq {
         yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
         let typrms =
-          tryLookupFullNameWith ctx fn (function
+          FullName.tryLookupWith ctx fn (function
             | ClassName c -> Some c.typeParams
             | AliasName a -> Some a.typeParams
             | _ -> None
@@ -844,7 +845,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           // TODO: emit extends of type parameters
         | Value _
         | Module _
-        | TypeAlias { erased = true }
+        | TypeAlias { erased = true } -> None
         | Export _
         | UnknownStatement _
         | FloatingComment _ -> failwithf "impossible_emitFlattenedDefinitions(%A)" v
@@ -875,7 +876,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
     [
       yield typeAlias "t" tyargs target
       yield! emitMappers ctx emitType "t" typrms
-      let arities = getPossibleArityOfType typrms
+      let arities = getPossibleArity typrms
       for arity in arities |> Set.toSeq |> Seq.sortDescending do
         let name = Naming.createTypeNameOfArity arity None "t"
         let tyargs' = List.take arity tyargs

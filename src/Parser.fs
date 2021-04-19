@@ -148,6 +148,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
     let t = t :?> Ts.TupleTypeNode
     readTupleTypeNode typrm checker t (isReadOnly t.modifiers)
   // complex types
+  | Kind.IntrinsicKeyword -> Intrinsic
   | Kind.ThisType -> PolymorphicThis
   | Kind.UnionType ->
     let t = t :?> Ts.UnionTypeNode
@@ -190,11 +191,13 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
     Erased (NewableFunction (readParameters typrm' checker t.parameters retTy, typrms), Node.location t)
   | Kind.LiteralType ->
     let t = t :?> Ts.LiteralTypeNode
-    match readLiteral (!!t.literal) with
-    | Some l -> TypeLiteral l
-    | None -> 
-      nodeWarn t "unsupported literal type '%s'" (t.getText());
-      UnknownType (Some (t.getText()))
+    if t.getText() = "null" then Prim Null // handle NullLiteral
+    else
+      match readLiteral (!!t.literal) with
+      | Some l -> TypeLiteral l
+      | None -> 
+        nodeWarn t "unsupported literal type '%s'" (t.getText());
+        UnknownType (Some (t.getText()))
   // anonymous interface
   | Kind.TypeLiteral ->
     let t = t :?> Ts.TypeLiteralNode

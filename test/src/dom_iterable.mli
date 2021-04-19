@@ -8,9 +8,9 @@ open Ts2ocaml_baselib
   - Account
   - ArrayBuffer
   - Attr
-  - AudioTrack
   - BufferSource
   - CSSRule
+  - CSSStyleSheet
   - ClientRect
   - DOMPoint
   - DOMRect
@@ -29,6 +29,8 @@ open Ts2ocaml_baselib
   - GLuint
   - IDBIndex
   - IDBIndexParameters
+  - IDBTransaction
+  - IDBTransactionMode
   - IIRFilterNode
   - Int16Array
   - Int32Array
@@ -54,7 +56,6 @@ open Ts2ocaml_baselib
   - SourceBuffer
   - SpeechGrammar
   - SpeechRecognitionAlternative
-  - StyleSheet
   - TextTrack
   - TextTrackCue
   - Touch
@@ -63,7 +64,6 @@ open Ts2ocaml_baselib
   - Uint8Array
   - Uint8ClampedArray
   - VRLayer
-  - VideoTrack
   - WebGLProgram
   - WebGLUniformLocation
  *)
@@ -84,17 +84,17 @@ module type Missing = sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
   end
-  module AudioTrack : sig
-    type t_0
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
   module BufferSource : sig
     type t_0
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
   end
   module CSSRule : sig
+    type t_0
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module CSSStyleSheet : sig
     type t_0
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
@@ -185,6 +185,16 @@ module type Missing = sig
     val t_0_of_js: Ojs.t -> t_0
   end
   module IDBIndexParameters : sig
+    type t_0
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module IDBTransaction : sig
+    type t_0
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module IDBTransactionMode : sig
     type t_0
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
@@ -314,11 +324,6 @@ module type Missing = sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
   end
-  module StyleSheet : sig
-    type t_0
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
   module TextTrack : sig
     type t_0
     val t_0_to_js: t_0 -> Ojs.t
@@ -359,11 +364,6 @@ module type Missing = sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
   end
-  module VideoTrack : sig
-    type t_0
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
   module WebGLProgram : sig
     type t_0
     val t_0_to_js: t_0 -> Ojs.t
@@ -393,17 +393,17 @@ end
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
-    module AudioTrack : sig
-      type t_0
-      val t_0_to_js: t_0 -> Ojs.t
-      val t_0_of_js: Ojs.t -> t_0
-    end
     module BufferSource : sig
       type t_0
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
     module CSSRule : sig
+      type t_0
+      val t_0_to_js: t_0 -> Ojs.t
+      val t_0_of_js: Ojs.t -> t_0
+    end
+    module CSSStyleSheet : sig
       type t_0
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
@@ -494,6 +494,16 @@ end
       val t_0_of_js: Ojs.t -> t_0
     end
     module IDBIndexParameters : sig
+      type t_0
+      val t_0_to_js: t_0 -> Ojs.t
+      val t_0_of_js: Ojs.t -> t_0
+    end
+    module IDBTransaction : sig
+      type t_0
+      val t_0_to_js: t_0 -> Ojs.t
+      val t_0_of_js: Ojs.t -> t_0
+    end
+    module IDBTransactionMode : sig
       type t_0
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
@@ -623,11 +633,6 @@ end
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
-    module StyleSheet : sig
-      type t_0
-      val t_0_to_js: t_0 -> Ojs.t
-      val t_0_of_js: Ojs.t -> t_0
-    end
     module TextTrack : sig
       type t_0
       val t_0_to_js: t_0 -> Ojs.t
@@ -668,11 +673,6 @@ end
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
-    module VideoTrack : sig
-      type t_0
-      val t_0_to_js: t_0 -> Ojs.t
-      val t_0_of_js: Ojs.t -> t_0
-    end
     module WebGLProgram : sig
       type t_0
       val t_0_to_js: t_0 -> Ojs.t
@@ -696,8 +696,6 @@ module Make (M: Missing) : sig
       type _AudioParam = [`AudioParam] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _AudioParamMap = [`AudioParamMap] intf
-      [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _AudioTrackList = [`AudioTrackList] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _BaseAudioContext = [`BaseAudioContext] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -734,6 +732,8 @@ module Make (M: Missing) : sig
       and _HTMLSelectElement = [`HTMLSelectElement] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _Headers = [`Headers] intf
+      [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+      and _IDBDatabase = [`IDBDatabase] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _IDBObjectStore = [`IDBObjectStore] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -787,8 +787,6 @@ module Make (M: Missing) : sig
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _VRDisplay = [`VRDisplay] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-      and _VideoTrackList = [`VideoTrackList] intf
-      [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _WEBGL_draw_buffers = [`WEBGL_draw_buffers] intf
       [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
       and _WebAuthentication = [`WebAuthentication] intf
@@ -824,15 +822,6 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val cast: t -> (string, _AudioParam) ReadonlyMap.t_2 [@@js.cast]
-  end
-  module[@js.scope "AudioTrackList"] AudioTrackList : sig
-    type t = _AudioTrackList
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    type t_0 = t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val _Symbol_iterator_: t -> AudioTrack.t_0 IterableIterator.t_1 [@@js.call "[Symbol.iterator]"]
   end
   module[@js.scope "BaseAudioContext"] BaseAudioContext : sig
     type t = _BaseAudioContext
@@ -1005,6 +994,15 @@ module Make (M: Missing) : sig
     val entries: t -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
     val keys: t -> string IterableIterator.t_1 [@@js.call "keys"]
     val values: t -> string IterableIterator.t_1 [@@js.call "values"]
+  end
+  module[@js.scope "IDBDatabase"] IDBDatabase : sig
+    type t = _IDBDatabase
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    type t_0 = t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val transaction: t -> storeNames:string Iterable.t_1 or_string -> ?mode:IDBTransactionMode.t_0 -> unit -> IDBTransaction.t_0 [@@js.call "transaction"]
   end
   module[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     type t = _IDBObjectStore
@@ -1202,7 +1200,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val _Symbol_iterator_: t -> StyleSheet.t_0 IterableIterator.t_1 [@@js.call "[Symbol.iterator]"]
+    val _Symbol_iterator_: t -> CSSStyleSheet.t_0 IterableIterator.t_1 [@@js.call "[Symbol.iterator]"]
   end
   module[@js.scope "TextTrackCueList"] TextTrackCueList : sig
     type t = _TextTrackCueList
@@ -1251,15 +1249,6 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val requestPresent: t -> layers:VRLayer.t_0 Iterable.t_1 -> unit Promise.t_1 [@@js.call "requestPresent"]
-  end
-  module[@js.scope "VideoTrackList"] VideoTrackList : sig
-    type t = _VideoTrackList
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    type t_0 = t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val _Symbol_iterator_: t -> VideoTrack.t_0 IterableIterator.t_1 [@@js.call "[Symbol.iterator]"]
   end
   module[@js.scope "WEBGL_draw_buffers"] WEBGL_draw_buffers : sig
     type t = _WEBGL_draw_buffers

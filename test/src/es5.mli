@@ -56,6 +56,7 @@ module Internal : sig
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     and _CallableFunction = [`CallableFunction | `Function] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    and 'S _Capitalize = Ojs.t
     and _ClassDecorator = [`ClassDecorator] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     and 'T _ConcatArray = [`ConcatArray of 'T] intf
@@ -127,6 +128,7 @@ module Internal : sig
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     and _JSON = [`JSON] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    and 'S _Lowercase = Ojs.t
     and _Math = [`Math] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     and _MethodDecorator = [`MethodDecorator] intf
@@ -231,6 +233,8 @@ module Internal : sig
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     and _Uint8ClampedArrayConstructor = [`Uint8ClampedArrayConstructor] intf
     [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    and 'S _Uncapitalize = Ojs.t
+    and 'S _Uppercase = Ojs.t
   end
 end
 
@@ -253,7 +257,7 @@ module AnonymousInterface1 : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val create: t -> executor:(resolve:(?value:('T, 'T _PromiseLike) union2 -> unit -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T _PromiseLike [@@js.apply_newable]
+  val create: t -> executor:(resolve:(value:('T, 'T _PromiseLike) union2 -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T _PromiseLike [@@js.apply_newable]
 end
 module AnonymousInterface2 : sig
   type t = anonymous_interface_2
@@ -526,7 +530,7 @@ module[@js.scope "CallableFunction"] CallableFunction : sig
   val bind'': t -> this:(this:'T -> arg0:'A0 -> arg1:'A1 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R) -> thisArg:'T -> arg0:'A0 -> arg1:'A1 -> (args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"]
   val bind''': t -> this:(this:'T -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R) -> thisArg:'T -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> (args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"]
   val bind'''': t -> this:(this:'T -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R) -> thisArg:'T -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> (args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"]
-  (* val bind''''': t -> this:(this:'T -> args:('AX list [@js.variadic]) -> 'R) -> thisArg:'T -> args:('AX list [@js.variadic]) -> (args':('AX list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"] *)
+  val bind''''': t -> this:(this:'T -> args:('AX list [@js.variadic]) -> 'R) -> thisArg:'T -> args:('AX list [@js.variadic]) -> (args':('AX list [@js.variadic]) -> 'R [@js.dummy]) [@@js.call "bind"]
   val cast: t -> _Function [@@js.cast]
 end
 module[@js.scope "NewableFunction"] NewableFunction : sig
@@ -1051,12 +1055,13 @@ module[@js.scope "ReadonlyArray"] ReadonlyArray : sig
   val slice: 'T t -> ?start:float -> ?end_:float -> unit -> 'T list [@@js.call "slice"]
   val indexOf: 'T t -> searchElement:'T -> ?fromIndex:float -> unit -> float [@@js.call "indexOf"]
   val lastIndexOf: 'T t -> searchElement:'T -> ?fromIndex:float -> unit -> float [@@js.call "lastIndexOf"]
-  val every: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
-  val some: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val every: 'T t -> predicate:(value:'T -> index:float -> array:'T list -> bool) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every': 'T t -> predicate:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val some: 'T t -> predicate:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val forEach: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val map: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> 'U) -> ?thisArg:any -> unit -> 'U list [@@js.call "map"]
-  val filter: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> bool) -> ?thisArg:any -> unit -> 'S list [@@js.call "filter"]
-  val filter': 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> 'T list [@@js.call "filter"]
+  val filter: 'T t -> predicate:(value:'T -> index:float -> array:'T list -> bool) -> ?thisArg:any -> unit -> 'S list [@@js.call "filter"]
+  val filter': 'T t -> predicate:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> 'T list [@@js.call "filter"]
   val reduce: 'T t -> callbackfn:(previousValue:'T -> currentValue:'T -> currentIndex:float -> array:'T list -> 'T) -> 'T [@@js.call "reduce"]
   val reduce': 'T t -> callbackfn:(previousValue:'T -> currentValue:'T -> currentIndex:float -> array:'T list -> 'T) -> initialValue:'T -> 'T [@@js.call "reduce"]
   val reduce'': 'T t -> callbackfn:(previousValue:'U -> currentValue:'T -> currentIndex:float -> array:'T list -> 'U) -> initialValue:'U -> 'U [@@js.call "reduce"]
@@ -1104,12 +1109,13 @@ module[@js.scope "Array"] Array : sig
   val unshift: 'T t -> items:('T list [@js.variadic]) -> float [@@js.call "unshift"]
   val indexOf: 'T t -> searchElement:'T -> ?fromIndex:float -> unit -> float [@@js.call "indexOf"]
   val lastIndexOf: 'T t -> searchElement:'T -> ?fromIndex:float -> unit -> float [@@js.call "lastIndexOf"]
-  val every: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
-  val some: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val every: 'T t -> predicate:(value:'T -> index:float -> array:'T list -> bool) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every': 'T t -> predicate:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val some: 'T t -> predicate:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val forEach: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val map: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> 'U) -> ?thisArg:any -> unit -> 'U list [@@js.call "map"]
-  val filter: 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> bool) -> ?thisArg:any -> unit -> 'S list [@@js.call "filter"]
-  val filter': 'T t -> callbackfn:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> 'T list [@@js.call "filter"]
+  val filter: 'T t -> predicate:(value:'T -> index:float -> array:'T list -> bool) -> ?thisArg:any -> unit -> 'S list [@@js.call "filter"]
+  val filter': 'T t -> predicate:(value:'T -> index:float -> array:'T list -> unknown) -> ?thisArg:any -> unit -> 'T list [@@js.call "filter"]
   val reduce: 'T t -> callbackfn:(previousValue:'T -> currentValue:'T -> currentIndex:float -> array:'T list -> 'T) -> 'T [@@js.call "reduce"]
   val reduce': 'T t -> callbackfn:(previousValue:'T -> currentValue:'T -> currentIndex:float -> array:'T list -> 'T) -> initialValue:'T -> 'T [@@js.call "reduce"]
   val reduce'': 'T t -> callbackfn:(previousValue:'U -> currentValue:'T -> currentIndex:float -> array:'T list -> 'U) -> initialValue:'U -> 'U [@@js.call "reduce"]
@@ -1333,6 +1339,38 @@ module InstanceType : sig
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
 end
+module Uppercase : sig
+  type 'S t = 'S _Uppercase
+  val t_to_js: ('S -> Ojs.t) -> 'S t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t
+  type 'S t_1 = 'S t
+  val t_1_to_js: ('S -> Ojs.t) -> 'S t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t_1
+end
+module Lowercase : sig
+  type 'S t = 'S _Lowercase
+  val t_to_js: ('S -> Ojs.t) -> 'S t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t
+  type 'S t_1 = 'S t
+  val t_1_to_js: ('S -> Ojs.t) -> 'S t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t_1
+end
+module Capitalize : sig
+  type 'S t = 'S _Capitalize
+  val t_to_js: ('S -> Ojs.t) -> 'S t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t
+  type 'S t_1 = 'S t
+  val t_1_to_js: ('S -> Ojs.t) -> 'S t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t_1
+end
+module Uncapitalize : sig
+  type 'S t = 'S _Uncapitalize
+  val t_to_js: ('S -> Ojs.t) -> 'S t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t
+  type 'S t_1 = 'S t
+  val t_1_to_js: ('S -> Ojs.t) -> 'S t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t_1
+end
 module ThisType : sig
   type 'T t = 'T _ThisType
   val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -1429,6 +1467,7 @@ module[@js.scope "DataViewConstructor"] DataViewConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val get_prototype: t -> _DataView [@@js.get "prototype"]
   val create: t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?byteLength:float -> unit -> _DataView [@@js.apply_newable]
 end
 val dataView: _DataViewConstructor [@@js.global "DataView"]
@@ -1444,9 +1483,9 @@ module[@js.scope "Int8Array"] Int8Array : sig
   val get_byteLength: t -> float [@@js.get "byteLength"]
   val get_byteOffset: t -> float [@@js.get "byteOffset"]
   val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
-  val every: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
   val fill: t -> value:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "fill"]
-  val filter: t -> callbackfn:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  val filter: t -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
   val find: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float or_undefined [@@js.call "find"]
   val findIndex: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
   val forEach: t -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
@@ -1464,11 +1503,12 @@ module[@js.scope "Int8Array"] Int8Array : sig
   val reverse: t -> t [@@js.call "reverse"]
   val set_: t -> array:float _ArrayLike -> ?offset:float -> unit -> unit [@@js.call "set"]
   val slice: t -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  val some: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val some: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val sort: t -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "sort"]
   val subarray: t -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
   val toLocaleString: t -> string [@@js.call "toLocaleString"]
   val toString: t -> string [@@js.call "toString"]
+  val valueOf: t -> t [@@js.call "valueOf"]
   val get: t -> float -> float [@@js.index_get]
   val set: t -> float -> float -> unit [@@js.index_set]
 end
@@ -1481,8 +1521,8 @@ module[@js.scope "Int8ArrayConstructor"] Int8ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Int8Array [@@js.get "prototype"]
   val create: t -> length:float -> _Int8Array [@@js.apply_newable]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Int8Array [@@js.apply_newable]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int8Array [@@js.apply_newable]
+  val create': t -> array:(_ArrayBufferLike, float _ArrayLike) union2 -> _Int8Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?length:float -> unit -> _Int8Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Int8Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Int8Array [@@js.call "from"]
@@ -1501,9 +1541,9 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
   val get_byteLength: t -> float [@@js.get "byteLength"]
   val get_byteOffset: t -> float [@@js.get "byteOffset"]
   val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
-  val every: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
   val fill: t -> value:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "fill"]
-  val filter: t -> callbackfn:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  val filter: t -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
   val find: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float or_undefined [@@js.call "find"]
   val findIndex: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
   val forEach: t -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
@@ -1521,11 +1561,12 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
   val reverse: t -> t [@@js.call "reverse"]
   val set_: t -> array:float _ArrayLike -> ?offset:float -> unit -> unit [@@js.call "set"]
   val slice: t -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  val some: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val some: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val sort: t -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "sort"]
   val subarray: t -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
   val toLocaleString: t -> string [@@js.call "toLocaleString"]
   val toString: t -> string [@@js.call "toString"]
+  val valueOf: t -> t [@@js.call "valueOf"]
   val get: t -> float -> float [@@js.index_get]
   val set: t -> float -> float -> unit [@@js.index_set]
 end
@@ -1538,8 +1579,8 @@ module[@js.scope "Uint8ArrayConstructor"] Uint8ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint8Array [@@js.get "prototype"]
   val create: t -> length:float -> _Uint8Array [@@js.apply_newable]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint8Array [@@js.apply_newable]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint8Array [@@js.apply_newable]
+  val create': t -> array:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint8Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?length:float -> unit -> _Uint8Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint8Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Uint8Array [@@js.call "from"]
@@ -1558,9 +1599,9 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
   val get_byteLength: t -> float [@@js.get "byteLength"]
   val get_byteOffset: t -> float [@@js.get "byteOffset"]
   val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
-  val every: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
   val fill: t -> value:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "fill"]
-  val filter: t -> callbackfn:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  val filter: t -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
   val find: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float or_undefined [@@js.call "find"]
   val findIndex: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
   val forEach: t -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
@@ -1578,11 +1619,12 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
   val reverse: t -> t [@@js.call "reverse"]
   val set_: t -> array:float _ArrayLike -> ?offset:float -> unit -> unit [@@js.call "set"]
   val slice: t -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  val some: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val some: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val sort: t -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "sort"]
   val subarray: t -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
   val toLocaleString: t -> string [@@js.call "toLocaleString"]
   val toString: t -> string [@@js.call "toString"]
+  val valueOf: t -> t [@@js.call "valueOf"]
   val get: t -> float -> float [@@js.index_get]
   val set: t -> float -> float -> unit [@@js.index_set]
 end
@@ -1595,8 +1637,8 @@ module[@js.scope "Uint8ClampedArrayConstructor"] Uint8ClampedArrayConstructor : 
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint8ClampedArray [@@js.get "prototype"]
   val create: t -> length:float -> _Uint8ClampedArray [@@js.apply_newable]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint8ClampedArray [@@js.apply_newable]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint8ClampedArray [@@js.apply_newable]
+  val create': t -> array:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint8ClampedArray [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?length:float -> unit -> _Uint8ClampedArray [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint8ClampedArray [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Uint8ClampedArray [@@js.call "from"]
@@ -1615,9 +1657,9 @@ module[@js.scope "Int16Array"] Int16Array : sig
   val get_byteLength: t -> float [@@js.get "byteLength"]
   val get_byteOffset: t -> float [@@js.get "byteOffset"]
   val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
-  val every: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
   val fill: t -> value:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "fill"]
-  val filter: t -> callbackfn:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  val filter: t -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
   val find: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float or_undefined [@@js.call "find"]
   val findIndex: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
   val forEach: t -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
@@ -1635,11 +1677,12 @@ module[@js.scope "Int16Array"] Int16Array : sig
   val reverse: t -> t [@@js.call "reverse"]
   val set_: t -> array:float _ArrayLike -> ?offset:float -> unit -> unit [@@js.call "set"]
   val slice: t -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  val some: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val some: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val sort: t -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "sort"]
   val subarray: t -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
   val toLocaleString: t -> string [@@js.call "toLocaleString"]
   val toString: t -> string [@@js.call "toString"]
+  val valueOf: t -> t [@@js.call "valueOf"]
   val get: t -> float -> float [@@js.index_get]
   val set: t -> float -> float -> unit [@@js.index_set]
 end
@@ -1652,8 +1695,8 @@ module[@js.scope "Int16ArrayConstructor"] Int16ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Int16Array [@@js.get "prototype"]
   val create: t -> length:float -> _Int16Array [@@js.apply_newable]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Int16Array [@@js.apply_newable]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int16Array [@@js.apply_newable]
+  val create': t -> array:(_ArrayBufferLike, float _ArrayLike) union2 -> _Int16Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?length:float -> unit -> _Int16Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Int16Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Int16Array [@@js.call "from"]
@@ -1672,9 +1715,9 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
   val get_byteLength: t -> float [@@js.get "byteLength"]
   val get_byteOffset: t -> float [@@js.get "byteOffset"]
   val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
-  val every: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
   val fill: t -> value:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "fill"]
-  val filter: t -> callbackfn:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  val filter: t -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
   val find: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float or_undefined [@@js.call "find"]
   val findIndex: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
   val forEach: t -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
@@ -1692,11 +1735,12 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
   val reverse: t -> t [@@js.call "reverse"]
   val set_: t -> array:float _ArrayLike -> ?offset:float -> unit -> unit [@@js.call "set"]
   val slice: t -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  val some: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val some: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val sort: t -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "sort"]
   val subarray: t -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
   val toLocaleString: t -> string [@@js.call "toLocaleString"]
   val toString: t -> string [@@js.call "toString"]
+  val valueOf: t -> t [@@js.call "valueOf"]
   val get: t -> float -> float [@@js.index_get]
   val set: t -> float -> float -> unit [@@js.index_set]
 end
@@ -1709,8 +1753,8 @@ module[@js.scope "Uint16ArrayConstructor"] Uint16ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint16Array [@@js.get "prototype"]
   val create: t -> length:float -> _Uint16Array [@@js.apply_newable]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint16Array [@@js.apply_newable]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint16Array [@@js.apply_newable]
+  val create': t -> array:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint16Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?length:float -> unit -> _Uint16Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint16Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Uint16Array [@@js.call "from"]
@@ -1729,9 +1773,9 @@ module[@js.scope "Int32Array"] Int32Array : sig
   val get_byteLength: t -> float [@@js.get "byteLength"]
   val get_byteOffset: t -> float [@@js.get "byteOffset"]
   val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
-  val every: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
   val fill: t -> value:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "fill"]
-  val filter: t -> callbackfn:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  val filter: t -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
   val find: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float or_undefined [@@js.call "find"]
   val findIndex: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
   val forEach: t -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
@@ -1749,11 +1793,12 @@ module[@js.scope "Int32Array"] Int32Array : sig
   val reverse: t -> t [@@js.call "reverse"]
   val set_: t -> array:float _ArrayLike -> ?offset:float -> unit -> unit [@@js.call "set"]
   val slice: t -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  val some: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val some: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val sort: t -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "sort"]
   val subarray: t -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
   val toLocaleString: t -> string [@@js.call "toLocaleString"]
   val toString: t -> string [@@js.call "toString"]
+  val valueOf: t -> t [@@js.call "valueOf"]
   val get: t -> float -> float [@@js.index_get]
   val set: t -> float -> float -> unit [@@js.index_set]
 end
@@ -1766,8 +1811,8 @@ module[@js.scope "Int32ArrayConstructor"] Int32ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Int32Array [@@js.get "prototype"]
   val create: t -> length:float -> _Int32Array [@@js.apply_newable]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Int32Array [@@js.apply_newable]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Int32Array [@@js.apply_newable]
+  val create': t -> array:(_ArrayBufferLike, float _ArrayLike) union2 -> _Int32Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?length:float -> unit -> _Int32Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Int32Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Int32Array [@@js.call "from"]
@@ -1786,9 +1831,9 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
   val get_byteLength: t -> float [@@js.get "byteLength"]
   val get_byteOffset: t -> float [@@js.get "byteOffset"]
   val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
-  val every: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
   val fill: t -> value:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "fill"]
-  val filter: t -> callbackfn:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  val filter: t -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
   val find: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float or_undefined [@@js.call "find"]
   val findIndex: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
   val forEach: t -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
@@ -1806,11 +1851,12 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
   val reverse: t -> t [@@js.call "reverse"]
   val set_: t -> array:float _ArrayLike -> ?offset:float -> unit -> unit [@@js.call "set"]
   val slice: t -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  val some: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val some: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val sort: t -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "sort"]
   val subarray: t -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
   val toLocaleString: t -> string [@@js.call "toLocaleString"]
   val toString: t -> string [@@js.call "toString"]
+  val valueOf: t -> t [@@js.call "valueOf"]
   val get: t -> float -> float [@@js.index_get]
   val set: t -> float -> float -> unit [@@js.index_set]
 end
@@ -1823,8 +1869,8 @@ module[@js.scope "Uint32ArrayConstructor"] Uint32ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Uint32Array [@@js.get "prototype"]
   val create: t -> length:float -> _Uint32Array [@@js.apply_newable]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint32Array [@@js.apply_newable]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Uint32Array [@@js.apply_newable]
+  val create': t -> array:(_ArrayBufferLike, float _ArrayLike) union2 -> _Uint32Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?length:float -> unit -> _Uint32Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Uint32Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Uint32Array [@@js.call "from"]
@@ -1843,9 +1889,9 @@ module[@js.scope "Float32Array"] Float32Array : sig
   val get_byteLength: t -> float [@@js.get "byteLength"]
   val get_byteOffset: t -> float [@@js.get "byteOffset"]
   val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
-  val every: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
   val fill: t -> value:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "fill"]
-  val filter: t -> callbackfn:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  val filter: t -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
   val find: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float or_undefined [@@js.call "find"]
   val findIndex: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
   val forEach: t -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
@@ -1863,11 +1909,12 @@ module[@js.scope "Float32Array"] Float32Array : sig
   val reverse: t -> t [@@js.call "reverse"]
   val set_: t -> array:float _ArrayLike -> ?offset:float -> unit -> unit [@@js.call "set"]
   val slice: t -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  val some: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val some: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val sort: t -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "sort"]
   val subarray: t -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
   val toLocaleString: t -> string [@@js.call "toLocaleString"]
   val toString: t -> string [@@js.call "toString"]
+  val valueOf: t -> t [@@js.call "valueOf"]
   val get: t -> float -> float [@@js.index_get]
   val set: t -> float -> float -> unit [@@js.index_set]
 end
@@ -1880,8 +1927,8 @@ module[@js.scope "Float32ArrayConstructor"] Float32ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Float32Array [@@js.get "prototype"]
   val create: t -> length:float -> _Float32Array [@@js.apply_newable]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Float32Array [@@js.apply_newable]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Float32Array [@@js.apply_newable]
+  val create': t -> array:(_ArrayBufferLike, float _ArrayLike) union2 -> _Float32Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?length:float -> unit -> _Float32Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Float32Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Float32Array [@@js.call "from"]
@@ -1900,9 +1947,9 @@ module[@js.scope "Float64Array"] Float64Array : sig
   val get_byteLength: t -> float [@@js.get "byteLength"]
   val get_byteOffset: t -> float [@@js.get "byteOffset"]
   val copyWithin: t -> target:float -> start:float -> ?end_:float -> unit -> t [@@js.call "copyWithin"]
-  val every: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
+  val every: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "every"]
   val fill: t -> value:float -> ?start:float -> ?end_:float -> unit -> t [@@js.call "fill"]
-  val filter: t -> callbackfn:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
+  val filter: t -> predicate:(value:float -> index:float -> array:t -> any) -> ?thisArg:any -> unit -> t [@@js.call "filter"]
   val find: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float or_undefined [@@js.call "find"]
   val findIndex: t -> predicate:(value:float -> index:float -> obj:t -> bool) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
   val forEach: t -> callbackfn:(value:float -> index:float -> array:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
@@ -1920,10 +1967,11 @@ module[@js.scope "Float64Array"] Float64Array : sig
   val reverse: t -> t [@@js.call "reverse"]
   val set_: t -> array:float _ArrayLike -> ?offset:float -> unit -> unit [@@js.call "set"]
   val slice: t -> ?start:float -> ?end_:float -> unit -> t [@@js.call "slice"]
-  val some: t -> callbackfn:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
+  val some: t -> predicate:(value:float -> index:float -> array:t -> unknown) -> ?thisArg:any -> unit -> bool [@@js.call "some"]
   val sort: t -> ?compareFn:(a:float -> b:float -> float) -> unit -> t [@@js.call "sort"]
   val subarray: t -> ?begin_:float -> ?end_:float -> unit -> t [@@js.call "subarray"]
   val toString: t -> string [@@js.call "toString"]
+  val valueOf: t -> t [@@js.call "valueOf"]
   val get: t -> float -> float [@@js.index_get]
   val set: t -> float -> float -> unit [@@js.index_set]
 end
@@ -1936,8 +1984,8 @@ module[@js.scope "Float64ArrayConstructor"] Float64ArrayConstructor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_prototype: t -> _Float64Array [@@js.get "prototype"]
   val create: t -> length:float -> _Float64Array [@@js.apply_newable]
-  val create': t -> arrayOrArrayBuffer:(_ArrayBufferLike, float _ArrayLike) union2 -> _Float64Array [@@js.apply_newable]
-  val create'': t -> buffer:_ArrayBufferLike -> byteOffset:float -> ?length:float -> unit -> _Float64Array [@@js.apply_newable]
+  val create': t -> array:(_ArrayBufferLike, float _ArrayLike) union2 -> _Float64Array [@@js.apply_newable]
+  val create'': t -> buffer:_ArrayBufferLike -> ?byteOffset:float -> ?length:float -> unit -> _Float64Array [@@js.apply_newable]
   val get_BYTES_PER_ELEMENT: t -> float [@@js.get "BYTES_PER_ELEMENT"]
   val of_: t -> items:(float list [@js.variadic]) -> _Float64Array [@@js.call "of"]
   val from: t -> arrayLike:float _ArrayLike -> _Float64Array [@@js.call "from"]
@@ -2013,6 +2061,8 @@ module[@js.scope "Intl"] Intl : sig
     val set_currency: t -> string -> unit [@@js.set "currency"]
     val get_currencyDisplay: t -> string [@@js.get "currencyDisplay"]
     val set_currencyDisplay: t -> string -> unit [@@js.set "currencyDisplay"]
+    val get_currencySign: t -> string [@@js.get "currencySign"]
+    val set_currencySign: t -> string -> unit [@@js.set "currencySign"]
     val get_useGrouping: t -> bool [@@js.get "useGrouping"]
     val set_useGrouping: t -> bool -> unit [@@js.set "useGrouping"]
     val get_minimumIntegerDigits: t -> float [@@js.get "minimumIntegerDigits"]
@@ -2074,28 +2124,28 @@ module[@js.scope "Intl"] Intl : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val get_localeMatcher: t -> string [@@js.get "localeMatcher"]
-    val set_localeMatcher: t -> string -> unit [@@js.set "localeMatcher"]
-    val get_weekday: t -> string [@@js.get "weekday"]
-    val set_weekday: t -> string -> unit [@@js.set "weekday"]
-    val get_era: t -> string [@@js.get "era"]
-    val set_era: t -> string -> unit [@@js.set "era"]
-    val get_year: t -> string [@@js.get "year"]
-    val set_year: t -> string -> unit [@@js.set "year"]
-    val get_month: t -> string [@@js.get "month"]
-    val set_month: t -> string -> unit [@@js.set "month"]
-    val get_day: t -> string [@@js.get "day"]
-    val set_day: t -> string -> unit [@@js.set "day"]
-    val get_hour: t -> string [@@js.get "hour"]
-    val set_hour: t -> string -> unit [@@js.set "hour"]
-    val get_minute: t -> string [@@js.get "minute"]
-    val set_minute: t -> string -> unit [@@js.set "minute"]
-    val get_second: t -> string [@@js.get "second"]
-    val set_second: t -> string -> unit [@@js.set "second"]
-    val get_timeZoneName: t -> string [@@js.get "timeZoneName"]
-    val set_timeZoneName: t -> string -> unit [@@js.set "timeZoneName"]
-    val get_formatMatcher: t -> string [@@js.get "formatMatcher"]
-    val set_formatMatcher: t -> string -> unit [@@js.set "formatMatcher"]
+    val get_localeMatcher: t -> ([`L_s2_best_fit[@js "best fit"] | `L_s4_lookup[@js "lookup"]] [@js.enum]) [@@js.get "localeMatcher"]
+    val set_localeMatcher: t -> ([`L_s2_best_fit | `L_s4_lookup] [@js.enum]) -> unit [@@js.set "localeMatcher"]
+    val get_weekday: t -> ([`L_s3_long[@js "long"] | `L_s5_narrow[@js "narrow"] | `L_s7_short[@js "short"]] [@js.enum]) [@@js.get "weekday"]
+    val set_weekday: t -> ([`L_s3_long | `L_s5_narrow | `L_s7_short] [@js.enum]) -> unit [@@js.set "weekday"]
+    val get_era: t -> ([`L_s3_long[@js "long"] | `L_s5_narrow[@js "narrow"] | `L_s7_short[@js "short"]] [@js.enum]) [@@js.get "era"]
+    val set_era: t -> ([`L_s3_long | `L_s5_narrow | `L_s7_short] [@js.enum]) -> unit [@@js.set "era"]
+    val get_year: t -> ([`L_s0_2_digit[@js "2-digit"] | `L_s6_numeric[@js "numeric"]] [@js.enum]) [@@js.get "year"]
+    val set_year: t -> ([`L_s0_2_digit | `L_s6_numeric] [@js.enum]) -> unit [@@js.set "year"]
+    val get_month: t -> ([`L_s0_2_digit[@js "2-digit"] | `L_s3_long[@js "long"] | `L_s5_narrow[@js "narrow"] | `L_s6_numeric[@js "numeric"] | `L_s7_short[@js "short"]] [@js.enum]) [@@js.get "month"]
+    val set_month: t -> ([`L_s0_2_digit | `L_s3_long | `L_s5_narrow | `L_s6_numeric | `L_s7_short] [@js.enum]) -> unit [@@js.set "month"]
+    val get_day: t -> ([`L_s0_2_digit[@js "2-digit"] | `L_s6_numeric[@js "numeric"]] [@js.enum]) [@@js.get "day"]
+    val set_day: t -> ([`L_s0_2_digit | `L_s6_numeric] [@js.enum]) -> unit [@@js.set "day"]
+    val get_hour: t -> ([`L_s0_2_digit[@js "2-digit"] | `L_s6_numeric[@js "numeric"]] [@js.enum]) [@@js.get "hour"]
+    val set_hour: t -> ([`L_s0_2_digit | `L_s6_numeric] [@js.enum]) -> unit [@@js.set "hour"]
+    val get_minute: t -> ([`L_s0_2_digit[@js "2-digit"] | `L_s6_numeric[@js "numeric"]] [@js.enum]) [@@js.get "minute"]
+    val set_minute: t -> ([`L_s0_2_digit | `L_s6_numeric] [@js.enum]) -> unit [@@js.set "minute"]
+    val get_second: t -> ([`L_s0_2_digit[@js "2-digit"] | `L_s6_numeric[@js "numeric"]] [@js.enum]) [@@js.get "second"]
+    val set_second: t -> ([`L_s0_2_digit | `L_s6_numeric] [@js.enum]) -> unit [@@js.set "second"]
+    val get_timeZoneName: t -> ([`L_s3_long[@js "long"] | `L_s7_short[@js "short"]] [@js.enum]) [@@js.get "timeZoneName"]
+    val set_timeZoneName: t -> ([`L_s3_long | `L_s7_short] [@js.enum]) -> unit [@@js.set "timeZoneName"]
+    val get_formatMatcher: t -> ([`L_s1_basic[@js "basic"] | `L_s2_best_fit[@js "best fit"]] [@js.enum]) [@@js.get "formatMatcher"]
+    val set_formatMatcher: t -> ([`L_s1_basic | `L_s2_best_fit] [@js.enum]) -> unit [@@js.set "formatMatcher"]
     val get_hour12: t -> bool [@@js.get "hour12"]
     val set_hour12: t -> bool -> unit [@@js.set "hour12"]
     val get_timeZone: t -> string [@@js.get "timeZone"]

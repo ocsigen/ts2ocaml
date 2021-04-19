@@ -81,6 +81,9 @@ let rec mapTypeInStatements mapping ctx stmts =
     | FloatingComment c -> FloatingComment c
   stmts |> List.map f
 
+let mapTypeInTupleType (f: Type -> Type) (ts: TupleType) =
+  { ts with types = ts.types |> List.map (fun t -> {| t with value = f t.value|})}
+
 let rec substTypeVar (subst: Map<string, Type>) _ctx = function
   | TypeVar v ->
     match subst |> Map.tryFind v with
@@ -94,8 +97,7 @@ let rec substTypeVar (subst: Map<string, Type>) _ctx = function
     Intersection {
       types = i.types |> List.map (substTypeVar subst _ctx);
     }
-  | Tuple ts -> Tuple (ts |> List.map (substTypeVar subst _ctx))
-  | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (substTypeVar subst _ctx))
+  | Tuple ts -> Tuple (ts |> mapTypeInTupleType (substTypeVar subst _ctx))
   | AnonymousInterface c -> AnonymousInterface (mapTypeInClass (substTypeVar subst) _ctx c)
   | Function f -> Function (substTypeVarInFunction subst _ctx f)
   | App (t, ts, loc) -> App (t, ts |> List.map (substTypeVar subst _ctx), loc)
@@ -245,7 +247,7 @@ let findTypesInType (pred: Type -> Choice<bool, Type list> * 'a option) (t: Type
           for t in ts do yield! go_t t
         | Choice2Of2 ts -> for t in ts do yield! go_t t
       }
-    | Union { types = ts } | Intersection { types = ts } | Tuple ts | ReadonlyTuple ts ->
+    | Union { types = ts } | Intersection { types = ts } ->
       seq {
         let cont, y = pred x
         match y with Some v -> yield v | None -> ()
@@ -253,6 +255,15 @@ let findTypesInType (pred: Type -> Choice<bool, Type list> * 'a option) (t: Type
         | Choice1Of2 false -> ()
         | Choice1Of2 true ->
           for t in ts do yield! go_t t
+        | Choice2Of2 ts -> for t in ts do yield! go_t t
+      }
+    | Tuple { types = ts } ->
+      seq {
+        let cont, y = pred x
+        match y with Some v -> yield v | None -> ()
+        match cont with
+        | Choice1Of2 false -> ()
+        | Choice1Of2 true -> for t in ts do yield! go_t t.value
         | Choice2Of2 ts -> for t in ts do yield! go_t t
       }
     | Function f ->
@@ -481,8 +492,7 @@ let rec mapIdent (mapping: Context -> IdentType -> IdentType) (ctx: Context) = f
   | Ident i -> Ident (mapping ctx i)
   | Union u -> Union { types = u.types |> List.map (mapIdent mapping ctx) }
   | Intersection i -> Intersection { types = i.types |> List.map (mapIdent mapping ctx) }
-  | Tuple ts -> Tuple (ts |> List.map (mapIdent mapping ctx))
-  | ReadonlyTuple ts -> ReadonlyTuple (ts |> List.map (mapIdent mapping ctx))
+  | Tuple ts -> Tuple (mapTypeInTupleType (mapIdent mapping ctx) ts)
   | AnonymousInterface c -> AnonymousInterface (mapTypeInClass (mapIdent mapping) ctx c)
   | Function f -> Function (mapIdentInFunction mapping ctx f)
   | App (t, ts, loc) -> App (mapIdentInAppLHS mapping ctx t, ts |> List.map (mapIdent mapping ctx), loc)
@@ -641,8 +651,7 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
     | AnonymousInterface c -> mapTypeInClass f ctx c |> AnonymousInterface
     | Union { types = types } -> Union { types = List.map (f ctx) types }
     | Intersection { types = types } -> Intersection { types = List.map (f ctx) types }
-    | Tuple ts -> Tuple (List.map (f ctx) ts)
-    | ReadonlyTuple ts -> ReadonlyTuple (List.map (f ctx) ts)
+    | Tuple ts -> Tuple (mapTypeInTupleType (f ctx) ts)
     | Function ft -> mapTypeInFuncType f ctx ft |> Function
     | App (t, ts, loc) -> App (t, List.map (f ctx) ts, loc)
     | Erased (e, loc) ->
@@ -675,11 +684,11 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
             | [t] -> t
             | ts -> Intersection { types = ts }
           | App ((APrim Array | APrim ReadonlyArray), [t], _), Prim (Number | Any) -> f ctx t
-          | (Tuple ts | ReadonlyTuple ts), TypeLiteral (LInt i) ->
-            match ts |> List.tryItem i with
-            | Some t -> t
+          | Tuple ts, TypeLiteral (LInt i) ->
+            match ts.types |> List.tryItem i with
+            | Some t -> t.value
             | None -> onFail ()
-          | (Tuple ts | ReadonlyTuple ts), Prim (Number | Any) -> Union { types = ts }
+          | Tuple ts, Prim (Number | Any) -> Union { types = ts.types |> List.map (fun x -> x.value) }
           | (App (AIdent { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)), _ ->
             tryLookupFullNameWith ctx fn (function 
               | AliasName ta when not ta.erased ->
@@ -733,7 +742,7 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
           | Intersection { types = ts } -> ts |> List.map go |> Set.unionMany
           | AnonymousInterface i ->
             i.members |> List.map (snd >> memberChooser) |> Set.unionMany
-          | App ((APrim Array | APrim ReadonlyArray), [_], _) | Tuple _ | ReadonlyTuple _ -> Set.singleton (Prim Number)
+          | App ((APrim Array | APrim ReadonlyArray), [_], _) | Tuple _ -> Set.singleton (Prim Number)
           | (App (AIdent { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)) ->
             tryLookupFullNameWith ctx fn (function
               | AliasName ta when not ta.erased ->
@@ -754,7 +763,7 @@ let rec resolveErasedTypes (ctx: Context) (stmts: Statement list) =
     | UnknownType msgo -> UnknownType msgo
   mapTypeInStatements f ctx stmts
 
-let rec getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union =
+let rec getEnumFromUnion ctx (u: UnionType) : Set<Choice<EnumCase, Literal>> * UnionType =
   let (|Dummy|) _ = []
 
   let rec go t =
@@ -790,12 +799,12 @@ let rec getEnumFromUnion ctx (u: Union) : Set<Choice<EnumCase, Literal>> * Union
   let cases, types = u.types |> List.fold f (Set.empty, [])
   cases, { types = types }
 
-let getDiscriminatedFromUnion ctx (u: Union) : Map<string, Map<Literal, Type>> * Union =
+let getDiscriminatedFromUnion ctx (u: UnionType) : Map<string, Map<Literal, Type>> * UnionType =
   let (|Dummy|) _ = []
 
   let rec getLiteralFieldsFromType (ty: Type) : Map<string, Set<Literal>> =
     match ty with
-    | PolymorphicThis | TypeVar _ | Prim _ | TypeLiteral _ | Tuple _ | ReadonlyTuple _ | Function _ -> Map.empty
+    | PolymorphicThis | TypeVar _ | Prim _ | TypeLiteral _ | Tuple _ | Function _ -> Map.empty
     | Erased _ -> failwith "impossible_getDiscriminatedFromUnion_getLiteralFieldsFromType_Erased"
     | Union u ->
       let result = u.types |> List.map getLiteralFieldsFromType
@@ -991,9 +1000,9 @@ module ResolvedUnion =
     ]
     cases |> String.concat " | "
 
-let mutable private resolveUnionMap: Map<Union, ResolvedUnion> = Map.empty
+let mutable private resolveUnionMap: Map<UnionType, ResolvedUnion> = Map.empty
 
-let rec resolveUnion (ctx: Context) (u: Union) : ResolvedUnion =
+let rec resolveUnion (ctx: Context) (u: UnionType) : ResolvedUnion =
   match resolveUnionMap |> Map.tryFind u with
   | Some t -> t
   | None ->

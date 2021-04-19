@@ -84,8 +84,8 @@ and Type =
   | Prim of PrimType
   | TypeLiteral of Literal
   | AnonymousInterface of Class
-  | Union of Union | Intersection of Intersection
-  | Tuple of Type list | ReadonlyTuple of Type list
+  | Union of UnionType | Intersection of IntersectionType
+  | Tuple of TupleType
   | Function of FuncType<Type>
   | App of AppLeftHandSide * Type list * Location
   | Erased of ErasedType * Location
@@ -102,12 +102,17 @@ and ErasedType =
   | Keyof of Type
   | NewableFunction of FuncType<Type> * TypeParam list
 
-and Union = {
+and UnionType = {
   types: Type list
 }
 
-and Intersection = {
+and IntersectionType = {
   types: Type list
+}
+
+and TupleType = {
+  types: {| value: Type; name: string option |} list
+  isReadOnly: bool
 }
 
 and IdentType = {
@@ -318,7 +323,12 @@ module Type =
     | AnonymousInterface _ -> "{..}"
     | Union u -> "union<" + (u.types |> List.map pp |> String.concat " | ") + ">"
     | Intersection i -> "intersection<" + (i.types |> List.map pp |> String.concat ", ") + ">"
-    | Tuple ts | ReadonlyTuple ts -> "(" + (ts |> List.map pp |> String.concat ", ") + ")"
+    | Tuple ts ->
+      "(" + (
+        ts.types
+        |> List.map (fun t -> (match t.name with Some n -> n + ":" | None -> "") + pp t.value)
+        |> String.concat ", "
+      ) + ")"
     | Function f ->
       let args =
         f.args

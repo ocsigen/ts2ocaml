@@ -608,11 +608,12 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
         | _ -> x
       let result = lhs +@ " -> " + rhs
       if flags.needParen then result |> between "(" ")" else result
-    | Tuple ts | ReadonlyTuple ts ->
-      match ts with
+    | Tuple ts ->
+      // TODO: emit label
+      match ts.types with
       | []  -> void_t
-      | [t] -> emitTypeImpl flags overrideFunc ctx t
-      | _   -> tyTuple (ts |> List.map (emitTypeImpl flags overrideFunc ctx))
+      | [t] -> emitTypeImpl flags overrideFunc ctx t.value
+      | ts  -> tyTuple (ts |> List.map (fun x -> emitTypeImpl flags overrideFunc ctx x.value))
     | Erased _ -> failwith "impossible_emitTypeImpl_erased"
     | UnknownType msgo ->
       match msgo with None -> commentStr "FIXME: unknown type" + any_t | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + any_t

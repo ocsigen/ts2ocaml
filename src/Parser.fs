@@ -3,6 +3,7 @@ module Parser
 
 open Syntax
 open Naming
+open Fable.Core
 open Fable.Core.JsInterop
 open TypeScript
 
@@ -145,8 +146,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
       App (APrim Array, [elem], Node.location t)
   | Kind.TupleType ->
     let t = t :?> Ts.TupleTypeNode
-    let elems = t.elementTypes |> Seq.map (readTypeNode typrm checker) |> List.ofSeq
-    if isReadOnly t.modifiers then ReadonlyTuple elems else Tuple elems
+    readTupleTypeNode typrm checker t (isReadOnly t.modifiers)
   // complex types
   | Kind.ThisType -> PolymorphicThis
   | Kind.UnionType ->
@@ -217,8 +217,7 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
         App (APrim ReadonlyArray, [elem], Node.location t')
       | Kind.TupleType ->
         let t' = t' :?> Ts.TupleTypeNode
-        let elems = t'.elementTypes |> Seq.map (readTypeNode typrm checker) |> List.ofSeq
-        ReadonlyTuple elems
+        readTupleTypeNode typrm checker t' true
       | _ ->
         nodeWarn t "unsupported 'readonly' modifier for type '%s'" (t.getText())
         UnknownType (Some (t.getText()))
@@ -244,6 +243,17 @@ let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode
   | _ ->
     nodeWarn t "unsupported TypeNode kind: %s" (Enum.pp t.kind);
     UnknownType (Some (t.getText()))
+
+and readTupleTypeNode (typrm: Set<string>) (checker: TypeChecker) (tuple: Ts.TupleTypeNode) isReadOnly : Type =
+  let f (x: U2<Ts.TypeNode, Ts.NamedTupleMember>) =
+    let xNode = box x :?> Ts.Node
+    match xNode.kind with
+    | Kind.NamedTupleMember ->
+      let x = xNode :?> Ts.NamedTupleMember
+      {| value = readTypeNode typrm checker x.``type``; name = Some x.name.text |}
+    | _ ->
+      {| value = readTypeNode typrm checker (xNode :?> Ts.TypeNode); name = None |}
+  Tuple { types = Seq.map f tuple.elements |> List.ofSeq; isReadOnly = isReadOnly }
 
 and readParameters<'retType> (typrm: Set<string>) (checker: TypeChecker) (ps: Ts.ParameterDeclaration seq) (retType: 'retType) : FuncType<'retType> =
   let isVariadic =

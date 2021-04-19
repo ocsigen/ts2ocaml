@@ -221,13 +221,13 @@ val union8_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.
 val union8_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> (Ojs.t -> 'h) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8
 
 module Union: sig
-  val inject_0: 'a -> ('a, 'b) union2 [@@js.custom let inject_0 x = Obj.magic x]
-  val inject_1: 'b -> ('a, 'b, 'c) union3 [@@js.custom let inject_1 x = Obj.magic x]
-  val inject_2: 'c -> ('a, 'b, 'c, 'd) union4 [@@js.custom let inject_2 x = Obj.magic x]
-  val inject_3: 'd -> ('a, 'b, 'c, 'd, 'e) union5 [@@js.custom let inject_3 x = Obj.magic x]
-  val inject_4: 'e -> ('a, 'b, 'c, 'd, 'e, 'f) union6 [@@js.custom let inject_4 x = Obj.magic x]
-  val inject_5: 'f -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7 [@@js.custom let inject_5 x = Obj.magic x]
-  val inject_6: 'g -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 [@@js.custom let inject_6 x = Obj.magic x]
+  val inject_0: 'a -> ('a, 'b) union2 [@@js.custom let inject_0 x = Or.inr x]
+  val inject_1: 'b -> ('a, 'b, 'c) union3 [@@js.custom let inject_1 x = Or.inl (inject_0 x)]
+  val inject_2: 'c -> ('a, 'b, 'c, 'd) union4 [@@js.custom let inject_2 x = Or.inl (inject_1 x)]
+  val inject_3: 'd -> ('a, 'b, 'c, 'd, 'e) union5 [@@js.custom let inject_3 x = Or.inl (inject_2 x)]
+  val inject_4: 'e -> ('a, 'b, 'c, 'd, 'e, 'f) union6 [@@js.custom let inject_4 x = Or.inl (inject_3 x)]
+  val inject_5: 'f -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7 [@@js.custom let inject_5 x = Or.inl (inject_4 x) ]
+  val inject_6: 'g -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 [@@js.custom let inject_6 x = Or.inl (inject_5 x)]
 end
 
 type 'a or_string = [`String of string | `Other of 'a] [@@js.custom {

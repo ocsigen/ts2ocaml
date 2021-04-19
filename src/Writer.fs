@@ -615,7 +615,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> t
       | []  -> void_t
       | [t] -> emitTypeImpl flags overrideFunc ctx t.value
       | ts  -> tyTuple (ts |> List.map (fun x -> emitTypeImpl flags overrideFunc ctx x.value))
-    | Erased _ -> failwith "impossible_emitTypeImpl_erased"
+    | Erased (_, loc) -> failwithf "impossible_emitTypeImpl_erased: %s" loc.AsString
     | UnknownType msgo ->
       match msgo with None -> commentStr "FIXME: unknown type" + any_t | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + any_t
 

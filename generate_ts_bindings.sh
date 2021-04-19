@@ -21,6 +21,7 @@ ts2ocaml "./node_modules/typescript/lib/lib.es2018*.d.ts" es2018
 ts2ocaml "./node_modules/typescript/lib/lib.es2019*.d.ts" es2019
 ts2ocaml "./node_modules/typescript/lib/lib.es2020*.d.ts" es2020
 ts2ocaml "./node_modules/typescript/lib/lib.esnext*.d.ts" esnext
+ts2ocaml "./node_modules/@types/node/*.d.ts" node
 ts2ocaml ./node_modules/typescript/lib/typescript.d.ts typescript
 ts2ocaml ./monaco.d.ts monaco
 

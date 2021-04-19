@@ -379,15 +379,15 @@ module Type =
   let createNewableFunctionInterface = createFunctionInterfaceBase true
 
   let inline private (|Dummy|) _ = []
-  let rec resolveErasedType ctx = function
+  let rec resolveErasedTypeImpl typeQueries ctx = function
     | PolymorphicThis -> PolymorphicThis | Intrinsic -> Intrinsic
     | Ident i -> Ident i | TypeVar v -> TypeVar v | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
-    | AnonymousInterface c -> mapInClass resolveErasedType ctx c |> AnonymousInterface
-    | Union { types = types } -> Union { types = List.map (resolveErasedType ctx) types }
-    | Intersection { types = types } -> Intersection { types = List.map (resolveErasedType ctx) types }
-    | Tuple ts -> Tuple (mapInTupleType (resolveErasedType ctx) ts)
-    | Function ft -> mapInFuncType resolveErasedType ctx ft |> Function
-    | App (t, ts, loc) -> App (t, List.map (resolveErasedType ctx) ts, loc)
+    | AnonymousInterface c -> mapInClass (resolveErasedTypeImpl typeQueries) ctx c |> AnonymousInterface
+    | Union { types = types } -> Union { types = List.map (resolveErasedTypeImpl typeQueries ctx) types }
+    | Intersection { types = types } -> Intersection { types = List.map (resolveErasedTypeImpl typeQueries ctx) types }
+    | Tuple ts -> Tuple (mapInTupleType (resolveErasedTypeImpl typeQueries ctx) ts)
+    | Function ft -> mapInFuncType (resolveErasedTypeImpl typeQueries) ctx ft |> Function
+    | App (t, ts, loc) -> App (t, List.map (resolveErasedTypeImpl typeQueries ctx) ts, loc)
     | Erased (e, loc) ->
       match e with
       | IndexedAccess (tobj, tindex) ->
@@ -417,7 +417,7 @@ module Type =
             | [] -> onFail ()
             | [t] -> t
             | ts -> Intersection { types = ts }
-          | App ((APrim Array | APrim ReadonlyArray), [t], _), Prim (Number | Any) -> resolveErasedType ctx t
+          | App ((APrim Array | APrim ReadonlyArray), [t], _), Prim (Number | Any) -> t
           | Tuple ts, TypeLiteral (LInt i) ->
             match ts.types |> List.tryItem i with
             | Some t -> t.value
@@ -427,14 +427,17 @@ module Type =
             FullName.tryLookupWith ctx fn (function 
               | AliasName ta when not ta.erased ->
                 let subst = createBindings fn loc ta.typeParams ts
-                go ta.target t2 |> substTypeVar subst ctx |> Some
+                let target =
+                  ta.target |> substTypeVar subst ctx |> resolveErasedTypeImpl typeQueries ctx
+                go target t2 |> Some
               | ClassName c ->
                 let subst = createBindings fn loc c.typeParams ts
-                go (AnonymousInterface c) t2 |> substTypeVar subst ctx |> Some
+                let c = c |> mapInClass (fun ctx -> substTypeVar subst ctx >> resolveErasedTypeImpl typeQueries ctx) ctx
+                go (AnonymousInterface c) t2 |> Some
               | _ -> None
             ) |> Option.defaultWith onFail
           | _, _ -> onFail ()
-        go (resolveErasedType ctx tobj) (resolveErasedType ctx tindex)
+        go (resolveErasedTypeImpl typeQueries ctx tobj) (resolveErasedTypeImpl typeQueries ctx tindex)
       | TypeQuery i ->
         let onFail () =
           let tyText = Type.pp (Erased (TypeQuery i, loc))
@@ -442,8 +445,15 @@ module Type =
           UnknownType (Some tyText)
         match i.fullName with
         | None -> onFail ()
+        | Some fn when typeQueries |> Set.contains fn ->
+          let tyText = Type.pp (Erased (TypeQuery i, loc))
+          eprintfn "warn: a recursive type query '%s' is detected and is ignored at %s" tyText loc.AsString
+          UnknownType (Some tyText)          
         | Some fn ->
           let result typrms ty =
+            let typeQueries = Set.add fn typeQueries
+            let typrms = List.map (mapInTypeParam (resolveErasedTypeImpl typeQueries) ctx) typrms
+            let ty = resolveErasedTypeImpl typeQueries ctx ty
             match typrms, ty with
             | _ :: _, Function ft -> createFunctionInterface typrms ft loc
             | _ :: _, _ -> onFail ()
@@ -462,7 +472,7 @@ module Type =
             | _ -> None
           ) |> Option.defaultWith onFail
       | Keyof t ->
-        let t = resolveErasedType ctx t
+        let t = resolveErasedTypeImpl typeQueries ctx t
         let onFail () =
           let tyText = Type.pp t
           eprintfn "warn: cannot resolve a type operator 'keyof %s' at %s" tyText loc.AsString
@@ -471,7 +481,8 @@ module Type =
           | Field (fl, _, _) | Getter fl | Setter fl -> Set.singleton (TypeLiteral (LString fl.name))
           | Method (name, _, _) -> Set.singleton (TypeLiteral (LString name))
           | _ -> Set.empty
-        let rec go = function
+        let rec go t =
+          match t with
           | Union { types = ts } -> ts |> List.map go |> Set.intersectMany
           | Intersection { types = ts } -> ts |> List.map go |> Set.unionMany
           | AnonymousInterface i ->
@@ -481,10 +492,11 @@ module Type =
             FullName.tryLookupWith ctx fn (function
               | AliasName ta when not ta.erased ->
                 let subst = createBindings fn loc ta.typeParams ts
-                go ta.target |> Set.map (substTypeVar subst ctx) |> Some
+                ta.target |> substTypeVar subst ctx |> resolveErasedTypeImpl typeQueries ctx |> go |> Some
               | ClassName c ->
                 let subst = createBindings fn loc c.typeParams ts
-                c.members |> List.map (snd >> memberChooser >> Set.map (substTypeVar subst ctx)) |> Set.unionMany |> Some
+                let c = c |> mapInClass (fun ctx -> substTypeVar subst ctx >> resolveErasedTypeImpl typeQueries ctx) ctx
+                c.members |> List.map (snd >> memberChooser) |> Set.unionMany |> Some
               | _ -> None
             ) |> Option.defaultValue Set.empty
           | _ -> Set.empty
@@ -492,8 +504,13 @@ module Type =
         | [] -> onFail ()
         | [t] -> t
         | types -> Union { types = types }
-      | NewableFunction (f, tyargs) -> createNewableFunctionInterface tyargs f loc
+      | NewableFunction (f, tyargs) ->
+        let f = mapInFuncType (resolveErasedTypeImpl typeQueries) ctx f
+        let tyargs = List.map (mapInTypeParam (resolveErasedTypeImpl typeQueries) ctx) tyargs
+        createNewableFunctionInterface tyargs f loc
     | UnknownType msgo -> UnknownType msgo
+  
+  let resolveErasedType ctx ty = resolveErasedTypeImpl Set.empty ctx ty
 
 module Statement =
   let rec replaceAliasToFunctionWithInterface = function
@@ -858,13 +875,8 @@ module ResolvedUnion =
           | AliasName a when not a.erased ->
             if List.isEmpty ts then Some (getLiteralFieldsFromType a.target)
             else
-              let lhs =
-                match a.target with
-                | Ident i -> AIdent i
-                | Prim p -> APrim p
-                | AnonymousInterface c -> AAnonymousInterface c
-                | _ -> failwithf "error: invalid type alias to '%s' on %s" (Type.pp a.target) (loc.AsString)
-              Some (getLiteralFieldsFromType (App (lhs, ts, UnknownLocation)))
+              let bindings = Type.createBindings fn loc a.typeParams ts
+              Some (getLiteralFieldsFromType (a.target |> Type.substTypeVar bindings ()))
           | ClassName c ->
             if List.isEmpty ts then Some (getLiteralFieldsFromClass c)
             else

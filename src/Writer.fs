@@ -732,14 +732,14 @@ let emitUnknownIdentifiers ctx =
       | None -> content
       | Some k -> moduleSig k content
       
-    moduleType "Missing" (f None ctx.unknownIdentifiers)
+    moduleType "Missing" (f None ctx.unknownIdentTypes)
 
-  if ctx.unknownIdentifiers |> Trie.isEmpty then empty
+  if ctx.unknownIdentTypes |> Trie.isEmpty then empty
   else
     concat newline [
       comment (newline + indent (concat newline [
         yield str "unknown identifiers:"
-        for name, arities in ctx.unknownIdentifiers |> Trie.toSeq do
+        for name, arities in ctx.unknownIdentTypes |> Trie.toSeq do
           if Set.forall ((=) 0) arities then
             yield (tprintf "- %s" (String.concat "." name))
           else
@@ -1090,7 +1090,7 @@ let emitAll ctx stmts =
       emitFlattenedDefinitions ctx
       emitStructuredDefinitions ctx stmts
     ]
-    if Trie.isEmpty ctx.unknownIdentifiers then
+    if Trie.isEmpty ctx.unknownIdentTypes then
       yield! defs
     else
       yield

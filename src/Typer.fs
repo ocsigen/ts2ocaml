@@ -8,7 +8,7 @@ type Context = {
   typeLiteralsMap: Map<Literal, int>
   anonymousInterfacesMap: Map<Class, int>
   internalModuleName: string
-  unknownIdentifiers: Trie<string, Set<int>>
+  unknownIdentTypes: Trie<string, Set<int>>
 }
 
 module Context =
@@ -611,13 +611,15 @@ module Statement =
       | _ -> Choice1Of2 true, None
     ) stmts |> Set.ofSeq
 
-  let getUnknownIdentifiers stmts =
+  let getUnknownIdentTypes ctx stmts =
+    let (|Dummy|) _ = []
     findTypesInStatements (function
-      | App (AIdent {name = name; fullName = None}, ts, _) ->
+      | App (AIdent {name = name; fullName = None}, ts, _)
+      | (Ident { name = name; fullName = None } & Dummy ts) ->
         Choice2Of2 ts, Some (name, Set.singleton (List.length ts))
-      | Ident { name = name; fullName = None } ->
-        Choice1Of2 true, Some (name, Set.singleton (0))
-      //| App (AIdent {name = name; fullName = Some fn}, ts, _) when 
+      | App (AIdent {name = name; fullName = Some fn}, ts, _)
+      | (Ident { name = name; fullName = Some fn} & Dummy ts) when not (FullName.isType ctx fn) ->
+        Choice2Of2 ts, Some (name, Set.singleton (List.length ts))
       | _ -> Choice1Of2 true, None
     ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
@@ -1046,17 +1048,18 @@ let private createRootContextForTyper internalModuleName stmts =
     definitionsMap = m
     typeLiteralsMap = Map.empty
     anonymousInterfacesMap = Map.empty
-    unknownIdentifiers = Trie.empty
+    unknownIdentTypes = Trie.empty
   }
 
 let createRootContext (internalModuleName: string) (stmts: Statement list) : Context =
+  let ctx = createRootContextForTyper internalModuleName stmts
   let tlm = Statement.getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
   let aim = Statement.getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
-  let uid = Statement.getUnknownIdentifiers stmts
-  { createRootContextForTyper internalModuleName stmts with
+  let uit = Statement.getUnknownIdentTypes ctx stmts
+  { ctx with
       typeLiteralsMap = tlm
       anonymousInterfacesMap = aim
-      unknownIdentifiers = uid }
+      unknownIdentTypes = uit }
 
 let runAll stmts =
   let result =

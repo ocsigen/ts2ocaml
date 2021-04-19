@@ -292,3 +292,5 @@ __pycache__/
 .ionide
 .ignored
 output/
+
+*.fs.js*

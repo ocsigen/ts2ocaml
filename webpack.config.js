@@ -2,10 +2,13 @@
 // For a more comprehensive configuration check:
 // https://github.com/fable-compiler/webpack-config-template
 
+var CONFIG = {
+  fsharpEntry: './src/App.fs.js',
+  outputDir: './output',
+}
+
 var path = require("path");
-var webpack = require("webpack");
 var fs = require('fs');
-var fableUtils = require("fable-utils");
 
 console.log("Bundling for cli...");
 
@@ -25,20 +28,14 @@ fs.readdirSync(nodeModulesDir)
 module.exports = {
   mode: 'development',
   devtool: "inline-source-map",
-  entry: "./src/App.fsproj",
+  entry: CONFIG.fsharpEntry,
   target: "node",
   externals: nodeExternals,
   output: {
     filename: 'ts2ocaml.js',
-    path: path.join(__dirname, "./output"),
+    path: path.join(__dirname, CONFIG.outputDir),
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
-  },
-  module: {
-    rules: [{
-            test: /\.fs(x|proj)?$/,
-            use: "fable-loader"
-        }]
   },
   resolve: {
     modules: [nodeModulesDir]

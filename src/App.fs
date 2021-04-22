@@ -5,51 +5,52 @@ open TypeScript
 open TypeScript.Ts
 open Node.Api
 
-let createProgram tsPaths (sourceFiles: SourceFile list) =
+let createProgram (tsPaths: string seq) (sourceFiles: SourceFile list) =
     let options = jsOptions<CompilerOptions>(fun o ->
-        o.removeComments <- Some false
+      o.removeComments <- Some false
+      o.target <- Some ScriptTarget.ES2015
+      o.``module`` <- Some ModuleKind.CommonJS
     )
-    let host =
-      {|
-        getSourceFile = fun (fileName, languageVersion) ->
-          sourceFiles |> List.tryFind (fun sf -> sf.fileName = fileName && sf.languageVersion = languageVersion)
-        writeFile =
-          { new WriteFileCallback with member __.Invoke(_, _, _, _, _) = () }
-        getDefaultLibFileName = fun _ -> "lib.d.ts"
-        useCaseSensitiveFileNames = fun _ -> false
-        getCanonicalFileName = id
-        getCurrentDirectory = fun _ -> ""
-        getNewLine = fun _ -> System.Environment.NewLine
-        fileExists = fun fileName -> List.contains fileName tsPaths
-        readFile = fun _ -> Some ""
-        directoryExists = fun _ -> true
-        getDirectories = fun _ -> ResizeArray []
-      |}
-    ts.createProgram(ResizeArray tsPaths, options, !!host)
+    let host = ts.createCompilerHost(options, true)
+    ts.createProgram(ResizeArray tsPaths, options, host)
+
+open Fable.Core
+
+[<Emit("typeof $0")>]
+let jsTypeof (x: 'a) : string = jsNative
+
+let stringify (x: obj) =
+  let objSet = JS.Constructors.Set.Create()
+  Fable.Core.JS.JSON.stringify(x, space=2, replacer=(fun _key value ->
+    if not (isNullOrUndefined value) && jsTypeof value = "object" then
+      if objSet.has(value) then box "<circular object>"
+      else
+        objSet.add value |> ignore
+        value
+    else
+      value
+  ))
 
 [<EntryPoint>]
 let main argv =
   if argv.Length < 1 then 0
   else
     let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))
-    let srcs = inputs |> Seq.map (fun (a, i) -> ts.createSourceFile (a, i, ScriptTarget.Latest, true))
-    let program = createProgram (Array.toList argv) (Seq.toList srcs)
+    let srcs =
+      inputs |> Seq.map (fun (a, i) ->
+        ts.createSourceFile (a, i, ScriptTarget.ES2015, setParentNodes=true, scriptKind=ScriptKind.TS))
+    let program = createProgram argv (Seq.toList srcs)
     let checker = program.getTypeChecker ()
     let rec display (node: Node) depth =
       let indent = String.replicate depth "  "
       System.Enum.GetName(typeof<SyntaxKind>, node.kind) |> printfn "%s%A" indent
       node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
-    let stmts = srcs |> Seq.collect (fun src -> src.statements) |> Seq.collect (Parser.readStatement checker) |> Seq.toList
-
-
-    let stringify x = Fable.Core.JS.JSON.stringify(x, space=2)
-
-    (*
-    for pstmt in result do
-      Fable.Core.JS.JSON.stringify(pstmt, space=2) |> printfn "%s"
-      ()
-    *)
+    let stmts =
+      srcs
+      |> Seq.collect (fun src -> src.statements)
+      |> Seq.collect (Parser.readStatement checker)
+      |> Seq.toList
 
     let ctx, result = Typer.runAll stmts
     Writer.emitAll ctx result |> Text.toString 2 |> printfn "%s"

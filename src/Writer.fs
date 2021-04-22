@@ -339,12 +339,24 @@ module Definition =
 open Definition
 
 let emitComment (c: Comment) : text =
+  let escape (lines: string list) =
+    lines |> List.map (String.escapeWith ["{"; "}"; "["; "]"; "@"])
   match c with
-  | Deprecated (Some text) -> tprintf "@deprecated %s" text
-  | Deprecated None -> tprintf "@deprecated"
-  | TextLine text -> str text
-  | Param (id, text) -> tprintf "@param %s %s" id text
-  | Return text -> tprintf "@return %s" text
+  | Description lines | Summary lines -> strLines (escape lines)
+  | Param (name, lines) -> tprintf "@param %s " name + strLines (escape lines)
+  | Return lines -> "@return " @+ strLines (escape lines)
+  | Deprecated lines -> "@deprecated " @+ strLines (escape lines)
+  | Example lines -> 
+    concat newline [
+      str "example:"
+      between "[" "]" (strLines (escape lines))
+    ]
+  | See (link, lines) -> tprintf "@see \"%s\" " link + strLines (escape lines)
+  | Other ("author", lines, _) -> "@author " @+ strLines (escape lines)
+  | Other ("since", lines, _) -> "@since " @+ strLines (escape lines)
+  | Other ("version", lines, _) -> "@version " @+ strLines (escape lines)
+  | Other (("throws" | "exception"), lines, _) -> "@raise exn " @+ strLines (escape lines)
+  | Other (tag, lines, _) -> tprintf "%s: " tag + strLines (escape lines)
 
 let literalToIdentifier (ctx: Context) (l: Literal) : text =
   let formatString (s: string) =
@@ -710,6 +722,13 @@ let emitMappers ctx emitType tName (typrms: TypeParam list) =
   ]
 
 let emitUnknownIdentifiers ctx =
+  let mergeTrie (t: Trie<string, Set<int>>) =
+    t |> Trie.toSeq
+      |> Seq.map (fun (k, v) -> (k |> List.map Naming.moduleName, v))
+      |> Seq.fold (fun state (k, v) -> state |> Trie.addOrUpdate k v Set.union) Trie.empty
+
+  let unknownIdentTypes = mergeTrie ctx.unknownIdentTypes
+
   let missingModule =
     let rec f ko (t: Trie<string, Set<int>>) =
       let content =
@@ -732,14 +751,14 @@ let emitUnknownIdentifiers ctx =
       | None -> content
       | Some k -> moduleSig k content
       
-    moduleType "Missing" (f None ctx.unknownIdentTypes)
+    moduleType "Missing" (f None unknownIdentTypes)
 
-  if ctx.unknownIdentTypes |> Trie.isEmpty then empty
+  if unknownIdentTypes |> Trie.isEmpty then empty
   else
     concat newline [
       comment (newline + indent (concat newline [
         yield str "unknown identifiers:"
-        for name, arities in ctx.unknownIdentTypes |> Trie.toSeq do
+        for name, arities in unknownIdentTypes |> Trie.toSeq do
           if Set.forall ((=) 0) arities then
             yield (tprintf "- %s" (String.concat "." name))
           else
@@ -896,6 +915,11 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
     ]
 
   let rec go (renamer: OverloadRenamer) (ctx: Context) (s: Statement) : text =
+    let comments =
+      match (s :> ICommented).getComments() with
+      | [] -> empty
+      | xs -> docComment (xs |> List.map emitComment |> concat newline) + newline
+    comments + 
     match s with
     | Module m ->
       moduleScopeSig
@@ -908,7 +932,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
     | Export (_, _) -> empty // TODO
     | UnknownStatement (Some s, _) -> commentStr s
     | UnknownStatement (None, _) -> commentStr "unknown statement"
-    | FloatingComment _ -> empty // TODO
+    | FloatingComment xs -> xs |> List.map emitComment |> concat newline |> comment
     | TypeAlias { name = name; typeParams = typeParams } | (EnumDef { name = name } & Dummy typeParams) ->
       let k = List.rev (name :: ctx.currentNamespace)
       let tyargs = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
@@ -968,6 +992,11 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
 
       let rec emitMember (renamer: OverloadRenamer) (ma: MemberAttribute) m = [
+        match ma.comments with
+        | [] -> ()
+        | xs ->
+          yield docComment (xs |> List.map emitComment |> concat newline)
+
         let rename s = renamer.Rename "value" s
         match m with
         | Constructor (ft, typrm) ->
@@ -1065,7 +1094,6 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
               yield! members
             ])
         ]
-
 
   concat newline [
     yield open_ [ ctx.internalModuleName ]

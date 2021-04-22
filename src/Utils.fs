@@ -23,6 +23,11 @@ module String =
      .Replace("\b", "\\b").Replace("\n", "\\n").Replace("\r", "\\r")
      .Replace("\t", "\\t")
 
+  let escapeWith (escaped: string seq) (s: string) =
+    escaped |> Seq.fold (fun (state: string) e ->
+      state.Replace(e, "\\" + e)
+    ) s
+
 type OverloadRenamer(?rename: string -> int -> string, ?used: Set<string * string>) =
   let rename =
     match rename with

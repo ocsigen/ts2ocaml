@@ -37,19 +37,29 @@ type Literal =
   | LFloat of float
   | LBool of bool
 
+[<CustomEquality; CustomComparison>]
 type Comment =
-  | TextLine of string
-  | Deprecated of string option
-  | Param of string * string
-  | Return of string
+  | Description of string list
+  | Summary of string list
+  | Param of name:string * string list
+  | Return of string list
+  | Deprecated of string list
+  | Example of string list
+  | See of link:string * text:string list
+  | Other of tag:string * text:string list * orig:Ts.JSDocTag
+  override x.Equals(yo) =
+    match yo with
+    | :? Comment as y -> true
+    | _ -> false
+  override x.GetHashCode() = 0
+  interface System.IComparable with
+    member x.CompareTo(yo) =
+      match yo with
+      | :? Comment as y -> 0
+      | _ -> invalidArg "yo" "cannot compare values"
 
 type ICommented =
   abstract getComments: unit -> Comment list
-
-type Commented<'t> = { value: 't; comments: Comment list }
-  with
-  interface ICommented with
-    member this.getComments() = this.comments
 
 type PrimType =
   | String | Bool | Number

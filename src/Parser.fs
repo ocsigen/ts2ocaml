@@ -88,6 +88,100 @@ let getBindingName (bn: Ts.BindingName): string option =
   | Kind.ArrayBindingPattern -> None
   | _ -> nodeError syntaxNode "unknown Binding Name kind: %s" (Enum.pp syntaxNode.kind)
 
+let rec extractNestedName (node: Node) =
+  seq {
+    if ts.isIdentifier node then
+      yield (node :?> Ts.Identifier).text
+    else if ts.isQualifiedName node then
+      let node = node :?> Ts.QualifiedName
+      yield! extractNestedName (box node.left :?> Node)
+      yield node.right.text
+    else
+      for child in node.getChildren() do
+        yield! extractNestedName child
+  }
+
+let readCommentText (str: string) : string list =
+  str.Replace("\r\n","\n").Replace("\r","\n").Split [|'\n'|] |> List.ofArray
+
+let readJSDocTag (tag: Ts.JSDocTag) : Comment =
+  let text = tag.comment |> Option.map readCommentText |> Option.defaultValue []
+  match tag.kind with
+  | Kind.JSDocParameterTag ->
+    let tag = tag :?> Ts.JSDocParameterTag
+    Param ((box tag.name :?> Node) |> extractNestedName |> String.concat ".", text)
+  | Kind.JSDocReturnTag -> Return text
+  | Kind.JSDocDeprecatedTag -> Deprecated text
+  | Kind.JSDocSeeTag ->
+    let tag = tag :?> Ts.JSDocSeeTag
+    See ((box tag.name :?> Node) |> extractNestedName |> String.concat ".", text)
+  | _ ->
+    match tag.tagName.text with
+    | "description" | "desc" -> Description text
+    | "summary" -> Summary text
+    | "example" -> Example text
+    | tagName -> Other (tagName, text, tag)
+
+let readCommentsOfNode (checker: TypeChecker) (node: Node) : Comment list =
+  let desc =
+    let text =
+      ts.getSyntheticLeadingComments(node)
+      |> Option.map (fun x -> x :> _ seq)
+      |> Option.defaultValue Seq.empty
+      |> List.ofSeq
+      |> List.collect (fun sdp -> sdp.text |> readCommentText)
+    if List.isEmpty text then []
+    else [Description text]
+  let tags =
+    ts.getJSDocTags node
+    |> Seq.map readJSDocTag
+    |> List.ofSeq
+  desc @ tags
+
+let readComments (docComment: ResizeArray<Ts.SymbolDisplayPart>) (tags: Ts.JSDocTag seq) : Comment list =
+  let desc =
+    let text =
+      docComment
+      |> List.ofSeq
+      |> List.collect (fun sdp -> sdp.text |> readCommentText)
+    if List.isEmpty text then []
+    else [Description text]
+  let tags =
+    tags
+    |> Seq.map readJSDocTag
+    |> List.ofSeq
+  desc @ tags
+
+let readCommentsForNamedDeclaration (checker: TypeChecker) (nd: Ts.NamedDeclaration) : Comment list =
+  let fallback () =
+    let noDocComment () =
+      readComments (ResizeArray()) (ts.getJSDocTags nd)
+    match nd.name with
+    | _ when isNullOrUndefined nd.name -> noDocComment ()
+    | None -> noDocComment ()
+    | Some name ->
+      match checker.getSymbolAtLocation !!name with
+      | None -> noDocComment ()
+      | Some symbol ->
+        readComments (symbol.getDocumentationComment (Some checker)) (ts.getJSDocTags nd)
+
+  match nd.kind with
+  // check if it is a SignatureDeclaration
+  | Kind.CallSignature | Kind.ConstructSignature | Kind.MethodSignature | Kind.IndexSignature
+  | Kind.FunctionType | Kind.ConstructorType | Kind.JSDocFunctionType | Kind.FunctionDeclaration
+  | Kind.MethodDeclaration | Kind.Constructor | Kind.GetAccessor | Kind.SetAccessor
+  | Kind.FunctionExpression | Kind.ArrowFunction ->
+    try
+      match checker.getSignatureFromDeclaration nd with
+      | None ->
+        fallback ()
+      | Some signature ->
+        match readComments (signature.getDocumentationComment (Some checker)) (ts.getJSDocTags nd) with
+        | [] -> fallback ()
+        | xs -> xs
+    with  _ -> fallback ()
+  | _ -> fallback ()
+
 let readLiteral (node: Node) : Literal option =
   match node.kind with
   | Kind.StringLiteral ->
@@ -102,25 +196,10 @@ let readLiteral (node: Node) : Literal option =
     else if parsedAsFloat then Some (LFloat floatValue)
     else None
 
-let rec extractNestedName (node: Node) =
-  seq {
-    if ts.isIdentifier node then
-      yield (node :?> Ts.Identifier).text
-    else
-      for child in node.getChildren() do
-        yield! extractNestedName child
-  }
-
 let getFullNameAtNodeLocation (checker: TypeChecker) (nd: Node) =
     match checker.getSymbolAtLocation nd with
     | None -> None
     | Some smb -> checker.getFullyQualifiedName smb |> Option.ofObj |> Option.map (fun s -> s.Split '.' |> Array.toList)
-
-let readMemberAttribute (checker: TypeChecker) (nd: Ts.NamedDeclaration) : MemberAttribute =
-  let accessibility = getAccessibility nd.modifiers |> Option.defaultValue Public
-  let isStatic = hasModifier Kind.StaticKeyword nd.modifiers
-  let comments = [] // TODO
-  { accessibility = accessibility; isStatic = isStatic; comments = comments }
 
 let rec readTypeNode (typrm: Set<string>) (checker: TypeChecker) (t: Ts.TypeNode) : Type =
   match t.kind with
@@ -286,6 +365,12 @@ and readParameters<'retType> (typrm: Set<string>) (checker: TypeChecker) (ps: Ts
     |> Seq.toList
   { args = args; isVariadic = isVariadic; returnType = retType }
 
+and readMemberAttribute (checker: TypeChecker) (nd: Ts.NamedDeclaration) : MemberAttribute =
+  let accessibility = getAccessibility nd.modifiers |> Option.defaultValue Public
+  let isStatic = hasModifier Kind.StaticKeyword nd.modifiers
+  let comments = readCommentsForNamedDeclaration checker nd
+  { accessibility = accessibility; isStatic = isStatic; comments = comments }
+
 and readNamedDeclaration (typrm: Set<string>) (checker: TypeChecker) (nd: Ts.NamedDeclaration) : (MemberAttribute * Member) option =
   let attr = readMemberAttribute checker nd
   let extractType (sdb: Ts.SignatureDeclarationBase) =
@@ -410,7 +495,7 @@ let readInterface (checker: TypeChecker) (i: Ts.InterfaceDeclaration) : Class =
   let typrms = readTypeParameters Set.empty checker i.typeParameters
   let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
   {
-    comments = [] // TODO
+    comments = readCommentsForNamedDeclaration checker i
     name = Some name
     accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
     typeParams = typrms
@@ -424,7 +509,7 @@ let readClass (checker: TypeChecker) (i: Ts.ClassDeclaration) : Class =
   let typrms = readTypeParameters Set.empty checker i.typeParameters
   let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
   {
-    comments = [] // TODO
+    comments = readCommentsForNamedDeclaration checker i
     name = i.name |> Option.map (fun id -> id.getText())
     accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
     typeParams = typrms
@@ -434,7 +519,7 @@ let readClass (checker: TypeChecker) (i: Ts.ClassDeclaration) : Class =
     members = i.members |> List.ofSeq |> List.choose (readNamedDeclaration typrmsSet checker)
   }
 
-let readEnumCase (em: Ts.EnumMember) : EnumCase =
+let readEnumCase (checker: TypeChecker) (em: Ts.EnumMember) : EnumCase =
   let name = em.name |> nameToString
   let value =
     match em.initializer with
@@ -443,25 +528,26 @@ let readEnumCase (em: Ts.EnumMember) : EnumCase =
       match readLiteral ep with
       | Some ((LInt _ | LString _) as l) -> Some l
       | _ -> nodeError ep "enum value '%s' for case '%s' not supported" (ep.getText()) name
-  let comments = [] // TODO
+  let comments = readCommentsForNamedDeclaration checker em
   { comments = comments; name = name; value = value }
 
-let readEnum (ed: Ts.EnumDeclaration) : Enum =
+let readEnum (checker: TypeChecker) (ed: Ts.EnumDeclaration) : Enum =
   {
     name = ed.name |> nameToString
-    comments = [] // TODO
-    cases = ed.members |> List.ofSeq |> List.map readEnumCase
+    comments = readCommentsForNamedDeclaration checker ed
+    cases = ed.members |> List.ofSeq |> List.map (readEnumCase checker)
     isExported = getExported ed.modifiers
   }
 
 let readTypeAlias (checker: TypeChecker) (a: Ts.TypeAliasDeclaration) : TypeAlias =
   let typrm = readTypeParameters Set.empty checker a.typeParameters
   let ty = readTypeNode (typrm |> List.map (fun x -> x.name) |> Set.ofList) checker a.``type``
-  { name = nameToString a.name; typeParams = typrm; target = ty; erased = false; comments = [] (* TODO*) }
+  let comments = readCommentsForNamedDeclaration checker a
+  { name = nameToString a.name; typeParams = typrm; target = ty; erased = false; comments = comments }
 
 let readVariable (checker: TypeChecker) (v: Ts.VariableStatement) : Statement list =
   v.declarationList.declarations |> List.ofSeq |> List.map (fun vd ->
-    let comments = [] // TODO
+    let comments = readCommentsForNamedDeclaration checker vd
     match getBindingName vd.name with
     | None ->
       nodeWarn vd "name is not defined for variable"
@@ -496,7 +582,7 @@ let readFunction (checker: TypeChecker) (f: Ts.FunctionDeclaration) : Value opti
     nodeWarn f "name is not defined for function"; None
   | Some name ->
     let name = nameToString name
-    let comments = [] // TODO
+    let comments = readCommentsForNamedDeclaration checker f
     let isExported = getExported f.modifiers
     let accessibility = getAccessibility f.modifiers
     let typrm = readTypeParameters Set.empty checker f.typeParameters
@@ -512,7 +598,7 @@ let readFunction (checker: TypeChecker) (f: Ts.FunctionDeclaration) : Value opti
     Some { comments = comments; name = name; typ = ty; typeParams = typrm; isConst = false; isExported = isExported; accessibility = accessibility }
 
 let readExportAssignment (checker: TypeChecker) (e: Ts.ExportAssignment) : Statement option =
-  let comments = [] // TODO
+  let comments = readCommentsForNamedDeclaration checker e
   match extractNestedName e.expression |> Seq.toList with
   | [] -> nodeWarn e.expression "cannot parse node '%s' as identifier" (e.expression.getText()); None
   | ts ->
@@ -522,7 +608,7 @@ let readExportAssignment (checker: TypeChecker) (e: Ts.ExportAssignment) : State
     | _ -> Export (ES6DefaultExport ident, comments) |> Some
 
 let readExportDeclaration (checker: TypeChecker) (e: Ts.ExportDeclaration) : Statement option =
-  let comments = [] // TODO
+  let comments = readCommentsForNamedDeclaration checker e
   match e.exportClause, e.moduleSpecifier with
   | None, _
   | _, Some _ ->
@@ -547,6 +633,22 @@ let readExportDeclaration (checker: TypeChecker) (e: Ts.ExportDeclaration) : Sta
     | _ ->
       nodeWarn e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
 
+let readJSDocImpl (checker: TypeChecker) (doc: Ts.JSDoc) : Comment list =
+  let desc =
+    doc.comment
+    |> Option.map (readCommentText >> Description >> List.singleton)
+    |> Option.defaultValue []
+  let tags =
+    doc.tags
+    |> Option.map (Seq.map readJSDocTag >> List.ofSeq)
+    |> Option.defaultValue []
+  desc @ tags
+
+let readJSDoc (checker: TypeChecker) (doc: Ts.JSDoc) : Statement option =
+  match readJSDocImpl checker doc with
+  | [] -> None
+  | xs -> FloatingComment xs |> Some
+
 let rec readModule (checker: TypeChecker) (md: Ts.ModuleDeclaration) : Module =
   let name = nameToString md.name
   let check kind = 
@@ -563,28 +665,35 @@ let rec readModule (checker: TypeChecker) (md: Ts.ModuleDeclaration) : Module =
         mb.statements |> List.ofSeq |> List.collect (readStatement checker)
       | Kind.NamespaceKeyword | Kind.ExportKeyword | Kind.Identifier
       | Kind.DeclareKeyword | Kind.StringLiteral | Kind.DotToken | Kind.SyntaxList | Kind.ModuleKeyword -> []
+      | Kind.JSDocComment -> []
       | Kind.ModuleDeclaration ->
         [ Module (readModule checker (nd :?> Ts.ModuleDeclaration)) ]
       | _ ->
         nodeWarn nd "unknown kind in ModuleDeclaration: %s" (Enum.pp nd.kind)
-        []
-    )
-  { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements; comments = [] (* TODO *) }
+        [])
+  let comments =
+    md.getChildren()
+    |> Seq.filter (fun nd -> nd.kind = Kind.JSDocComment)
+    |> List.ofSeq
+    |> List.collect (fun nd -> nd :?> Ts.JSDoc |> readJSDocImpl checker)
+  { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements; comments = comments }
 
 and readStatement (checker: TypeChecker) (stmt: Ts.Statement) : Statement list =
   let onError () =
-    UnknownStatement (Some (stmt.getText()), [] (* TODO: comment *))
+    let comments = readCommentsForNamedDeclaration checker (stmt :?> Ts.DeclarationStatement)
+    UnknownStatement (Some (stmt.getText()), comments)
   match stmt.kind with
   | Kind.TypeAliasDeclaration -> [readTypeAlias checker (stmt :?> _) |> TypeAlias]
   | Kind.InterfaceDeclaration -> [readInterface checker (stmt :?> _) |> ClassDef]
   | Kind.ClassDeclaration -> [readClass checker (stmt :?> _) |> ClassDef]
-  | Kind.EnumDeclaration -> [readEnum (stmt :?> _) |> EnumDef]
+  | Kind.EnumDeclaration -> [readEnum checker (stmt :?> _) |> EnumDef]
   | Kind.ModuleDeclaration -> [readModule checker (stmt :?> _) |> Module]
   | Kind.VariableStatement -> readVariable checker (stmt :?> _)
   | Kind.FunctionDeclaration -> [readFunction checker (stmt :?> _) |> Option.map Value |> Option.defaultWith onError]
   | Kind.ExportAssignment -> [readExportAssignment checker (stmt :?> _) |> Option.defaultWith onError]
   | Kind.ExportDeclaration -> [readExportDeclaration checker (stmt :?> _) |> Option.defaultWith onError]
+  | Kind.JSDocComment -> [readJSDoc checker (stmt :?> Ts.JSDoc) |> Option.defaultWith onError]
   | _ ->
     nodeWarn stmt "skipping unsupported Statement kind: %s" (Enum.pp stmt.kind)
-    [ UnknownStatement (Some (stmt.getText()), [] (* TODO: comment *)) ]
+    [onError ()]
 

@@ -3,11 +3,11 @@ module Typer
 open Syntax
 
 type Context = {
+  internalModuleName: string
   currentNamespace: string list
   definitionsMap: Trie<string, Statement list>
   typeLiteralsMap: Map<Literal, int>
   anonymousInterfacesMap: Map<Class, int>
-  internalModuleName: string
   unknownIdentTypes: Trie<string, Set<int>>
 }
 
@@ -541,7 +541,7 @@ module Statement =
     let mutable nsMap = Map.empty
     for stmt in stmts do
       match stmt with
-      | ClassDef i when i.isInterface ->
+      | ClassDef i (* when i.isInterface *) ->
         match intfMap |> Map.tryFind i.name with
         | None ->
           let iref = ref i

@@ -26,17 +26,25 @@ type StringBuilder = System.Text.StringBuilder
 [<StructuredFormatDisplay("{AsString}")>]
 type text =
   private
+  | Empty
   | Indent of text
   | Concat of text * text
   | Newline
   | Str of string
 with
-  static member (+) (x, y) = Concat (x, y)
+  static member (+) (x, y) =
+    match x, y with
+    | Empty, t | t, Empty -> t
+    | _, _ -> Concat (x, y)
   override this.ToString() = this.ToString(2)
   member this.AsString = this.ToString(0)
   member this.ToString(indentLength: int) =
     let sb = StringBuilder()
     let rec go indent rhs = function
+      | Empty ->
+        match rhs with
+        | [] -> sb.ToString()
+        | (t, indent) :: rest -> go indent rest t
       | Str s ->
         sb.Append s |> ignore;
         match rhs with
@@ -58,16 +66,20 @@ with
 
 let toString indentLength (t: text) = t.ToString(indentLength)
 
-let empty = Str ""
+let empty = Empty
 
-let str (s: string) =
-  let lines = s.Split([|System.Environment.NewLine|], System.StringSplitOptions.None)
+let strLines (lines: string seq) =
+  let lines = Seq.toArray lines
   match lines.Length with
   | 0 -> empty
   | 1 -> Str lines.[0]
   | _ -> 
     lines |> Array.mapi (fun i x -> if i = 0 then Str x else Newline + Str x)
           |> Array.reduce (+)
+
+let str (s: string) =
+  let lines = s.Split([|System.Environment.NewLine|], System.StringSplitOptions.None)
+  strLines lines
 
 let indent x = Indent x
 

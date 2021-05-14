@@ -106,7 +106,7 @@ module FullName =
           (String.concat "." fullName)
       | errors ->
         failwithf "error: failed to find '%s' from the context. %s"
-          (errors |> List.map (fun s -> "       " + s) |> String.concat System.Environment.NewLine) 
+          (errors |> List.map (fun s -> "       " + s) |> String.concat System.Environment.NewLine)
 
   let tryLookupWith ctx fullName picker =
     lookup ctx fullName |> List.tryPick picker
@@ -424,7 +424,7 @@ module Type =
             | None -> onFail ()
           | Tuple ts, Prim (Number | Any) -> Union { types = ts.types |> List.map (fun x -> x.value) }
           | (App (AIdent { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)), _ ->
-            FullName.tryLookupWith ctx fn (function 
+            FullName.tryLookupWith ctx fn (function
               | AliasName ta when not ta.erased ->
                 let subst = createBindings fn loc ta.typeParams ts
                 let target =
@@ -448,7 +448,7 @@ module Type =
         | Some fn when typeQueries |> Set.contains fn ->
           let tyText = Type.pp (Erased (TypeQuery i, loc))
           eprintfn "warn: a recursive type query '%s' is detected and is ignored at %s" tyText loc.AsString
-          UnknownType (Some tyText)          
+          UnknownType (Some tyText)
         | Some fn ->
           let result typrms ty =
             let typeQueries = Set.add fn typeQueries
@@ -476,7 +476,7 @@ module Type =
         let onFail () =
           let tyText = Type.pp t
           eprintfn "warn: cannot resolve a type operator 'keyof %s' at %s" tyText loc.AsString
-          UnknownType (Some tyText) 
+          UnknownType (Some tyText)
         let memberChooser = function
           | Field (fl, _, _) | Getter fl | Setter fl -> Set.singleton (TypeLiteral (LString fl.name))
           | Method (name, _, _) -> Set.singleton (TypeLiteral (LString name))
@@ -509,7 +509,7 @@ module Type =
         let tyargs = List.map (mapInTypeParam (resolveErasedTypeImpl typeQueries) ctx) tyargs
         createNewableFunctionInterface tyargs f loc
     | UnknownType msgo -> UnknownType msgo
-  
+
   let resolveErasedType ctx ty = resolveErasedTypeImpl Set.empty ctx ty
 
 module Statement =
@@ -527,7 +527,7 @@ module Statement =
           isExported = Exported.No
           implements = []
           typeParams = ta.typeParams
-          members = [ 
+          members = [
             { comments = []; accessibility = Public; isStatic = false },
             FunctionInterface (f, [])
           ]
@@ -539,6 +539,26 @@ module Statement =
     let mutable result : Choice<Statement, Class ref, Module ref> list = []
     let mutable intfMap = Map.empty
     let mutable nsMap = Map.empty
+    let mergeTypeParams tps1 tps2 =
+      let rec go acc = function
+        | [], [] -> List.rev acc
+        | tp1 :: rest1, tp2 :: rest2 ->
+          let inline check t1 t2 =
+            match t1, t2 with
+            | Some t, None | None, Some t -> Some t
+            | None, None -> None
+            | Some t1, Some t2 ->
+              assert (t1 = t2)
+              Some t1
+          let extends = check tp1.extends tp2.extends
+          let defaultType = check tp1.defaultType tp2.defaultType
+          assert (tp1.name = tp2.name)
+          let tp = { name = tp1.name; extends = extends; defaultType = defaultType }
+          go (tp :: acc) (rest1, rest2)
+        | tp :: rest1, rest2
+        | rest1, tp :: rest2 -> go (tp :: acc) (rest1, rest2)
+      go [] (tps1, tps2)
+
     for stmt in stmts do
       match stmt with
       | ClassDef i (* when i.isInterface *) ->
@@ -548,16 +568,15 @@ module Statement =
           intfMap <- (intfMap |> Map.add i.name iref)
           result <- Choice2Of3 iref :: result
         | Some iref' ->
-          let i' =
-            let mapping =
-              List.map2
-                (fun (tp: TypeParam) (tp': TypeParam) -> tp'.name, TypeVar tp.name)
-                i.typeParams (!iref').typeParams
-            !iref' |> Type.mapInClass (Type.substTypeVar (mapping |> Map.ofList)) ()
+          let i' = !iref'
           assert (i.accessibility = i'.accessibility)
-          let implements = List.distinct (i.implements @ i'.implements)
-          let members = i.members @ i'.members
-          let i = { i with implements = implements; members = members }
+          let i =
+            { i with
+                isInterface = i.isInterface && i'.isInterface
+                comments = i.comments @ i'.comments
+                typeParams = mergeTypeParams i.typeParams i'.typeParams
+                implements = List.distinct (i.implements @ i'.implements)
+                members = i.members @ i'.members }
           iref' := i
       | Module n (* when n.isNamespace *) ->
         match nsMap |> Map.tryFind n.name with
@@ -665,7 +684,7 @@ module Statement =
               mapType
                 mapping
                 { ctx with currentNamespace = m.name :: ctx.currentNamespace }
-                m.statements 
+                m.statements
         }
       | UnknownStatement (msgo, c) -> UnknownStatement (msgo, c)
       | FloatingComment c -> FloatingComment c
@@ -732,10 +751,10 @@ module Ident =
         Module {
           m with
             statements =
-              mapInStatements 
+              mapInStatements
                 mapType mapExport
                 { ctx with currentNamespace = m.name :: ctx.currentNamespace }
-                m.statements 
+                m.statements
         }
       | UnknownStatement (msgo, c) -> UnknownStatement (msgo, c) | FloatingComment c -> FloatingComment c
     stmts |> List.map f
@@ -1014,7 +1033,7 @@ module ResolvedUnion =
       let typeofableTypes = Set.ofList prims
       let caseArray =
         if List.isEmpty arrayTypes then None
-        else Some (Set.ofList arrayTypes) 
+        else Some (Set.ofList arrayTypes)
       let caseEnum, rest =
         match rest with
         | _ :: _ :: _ -> getEnumFromUnion ctx { types = rest }
@@ -1025,7 +1044,7 @@ module ResolvedUnion =
         | _ -> Map.empty, rest
       let otherTypes = Set.ofList rest.types
 
-      let result = 
+      let result =
         { caseNull = caseNull
           caseUndefined = caseUndefined
           typeofableTypes = typeofableTypes
@@ -1033,7 +1052,7 @@ module ResolvedUnion =
           caseEnum = caseEnum
           discriminatedUnions = discriminatedUnions
           otherTypes = otherTypes }
-      
+
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
@@ -1079,7 +1098,7 @@ let runAll stmts =
           |> Statement.merge // merge modules, interfaces, etc
   // build a context
   let ctx = createRootContextForTyper "Internal" result
-  
+
   // resolve every identifier into its full name
   let result = result |> Ident.resolveInStatements ctx
   // rebuild the context with the identifiers resolved to full name

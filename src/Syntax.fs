@@ -2,7 +2,7 @@ module Syntax
 open TypeScript
 
 [<CustomEquality; CustomComparison; StructuredFormatDisplay("{AsString}")>]
-type Location = 
+type Location =
   | Location of Ts.SourceFile * Ts.LineAndCharacter
   | UnknownLocation
 with
@@ -217,7 +217,7 @@ and Statement =
 
 and Module = {
   name: string
-  isExported: Exported 
+  isExported: Exported
   isNamespace: bool
   statements: Statement list
   comments: Comment list
@@ -285,7 +285,7 @@ and Export =
   /// CJS (through Babel):
   /// ```js
   ///   const whatever = require("path");
-  /// ``` 
+  /// ```
   | ExportAsNamespace of ns:string
 
 and [<RequireQualifiedAccess>] Exported =
@@ -302,6 +302,19 @@ and [<RequireQualifiedAccess>] Exported =
   /// declare class Foo { .. }
   /// ```
   | Declared
+
+type Reference =
+  | FileReference of string
+  | TypeReference of string
+  | LibReference of string
+
+type SourceFile = {
+  fileName: string
+  statements: Statement list
+  references: Reference list
+  hasNoDefaultLib: bool
+  moduleName: string option
+}
 
 module Literal =
   let toString = function
@@ -344,7 +357,7 @@ module Type =
     | Function f ->
       let args =
         f.args
-        |> List.map (function 
+        |> List.map (function
           | Choice1Of2 a -> sprintf "%s%s:%s" (if a.isOptional then "?" else "~") a.name (pp a.value)
           | Choice2Of2 t -> pp t)
       "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"

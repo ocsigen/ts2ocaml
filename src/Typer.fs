@@ -1056,13 +1056,16 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
-let private createRootContextForTyper internalModuleName stmts =
+let private createRootContextForTyper internalModuleName (srcs: SourceFile list) =
+  // TODO: handle SourceFile-specific things
   let add name ty m =
     if m |> Trie.containsKey [name] then m
     else
       m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true; comments = [] }]
   let m =
-    Statement.extractNamedDefinitions stmts
+    srcs
+    |> List.collect (fun src -> src.statements)
+    |> Statement.extractNamedDefinitions
     |> add "String" (Prim String)
     |> add "Boolean" (Prim Bool)
     |> add "Number" (Prim Number)
@@ -1082,8 +1085,10 @@ let private createRootContextForTyper internalModuleName stmts =
     unknownIdentTypes = Trie.empty
   }
 
-let createRootContext (internalModuleName: string) (stmts: Statement list) : Context =
-  let ctx = createRootContextForTyper internalModuleName stmts
+let createRootContext (internalModuleName: string) (srcs: SourceFile list) : Context =
+  // TODO: handle SourceFile-specific things
+  let ctx = createRootContextForTyper internalModuleName srcs
+  let stmts = srcs |> List.collect (fun src -> src.statements)
   let tlm = Statement.getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
   let aim = Statement.getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
   let uit = Statement.getUnknownIdentTypes ctx stmts
@@ -1092,20 +1097,32 @@ let createRootContext (internalModuleName: string) (stmts: Statement list) : Con
       anonymousInterfacesMap = aim
       unknownIdentTypes = uit }
 
-let runAll stmts =
+let runAll (srcs: SourceFile list) =
+  // TODO: handle SourceFile-specific things
+
+  let inline mapStatements f (src: SourceFile) =
+    { src with statements = f src.statements }
+
   let result =
-    stmts |> List.map Statement.replaceAliasToFunctionWithInterface // replace alias to function type with a function interface
-          |> Statement.merge // merge modules, interfaces, etc
+    srcs
+    |> List.map (
+      mapStatements (fun stmts ->
+        stmts |> List.map Statement.replaceAliasToFunctionWithInterface // replace alias to function type with a function interface
+              |> Statement.merge // merge modules, interfaces, etc
+      )
+    )
   // build a context
+
   let ctx = createRootContextForTyper "Internal" result
 
   // resolve every identifier into its full name
-  let result = result |> Ident.resolveInStatements ctx
+  let result =
+    result |> List.map (mapStatements (Ident.resolveInStatements ctx))
   // rebuild the context with the identifiers resolved to full name
   let ctx = createRootContextForTyper "Internal" result
 
   // resolve every indexed access type and type query
-  let result = result |> Statement.resolveErasedTypes ctx
+  let result = result |> List.map (mapStatements (Statement.resolveErasedTypes ctx))
   // rebuild the context because resolbeIndexedAccessAndTypeQuery may introduce additional anonymous function interfaces
   let ctx = createRootContext "Internal" result
 

@@ -1140,7 +1140,10 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       yield go renamer ctx stmt
   ]
 
-let emitAll ctx stmts =
+let emitAll ctx (srcs: SourceFile list) =
+  // TODO: handle all the stuffs
+  let stmts = srcs |> List.collect (fun x -> x.statements)
+
   concat newline [
     yield emitHeader
     yield open_ [ "Ts2ocaml_baselib" ]
@@ -1159,3 +1162,4 @@ let emitAll ctx stmts =
           yield! defs
         ])
   ]
+

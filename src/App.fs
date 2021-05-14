@@ -2,13 +2,13 @@ module App
 
 open Fable.Core.JsInterop
 open TypeScript
-open TypeScript.Ts
 open Node.Api
+open Syntax
 
 type ICompilerHost =
-  abstract getSourceFile: fileName: string * languageVersion: ScriptTarget * ?onError: (string -> unit) * ?shouldCreateNewSourceFile: bool -> SourceFile option
-  abstract getSourceFileByPath: fileName: string * path: Path * languageVersion: ScriptTarget * ?onError: (string -> unit) * ?shouldCreateNewSourceFile: bool -> SourceFile option
-  abstract getDefaultLibFileName: options: CompilerOptions -> string
+  abstract getSourceFile: fileName: string * languageVersion: Ts.ScriptTarget * ?onError: (string -> unit) * ?shouldCreateNewSourceFile: bool -> Ts.SourceFile option
+  abstract getSourceFileByPath: fileName: string * path: Ts.Path * languageVersion: Ts.ScriptTarget * ?onError: (string -> unit) * ?shouldCreateNewSourceFile: bool -> Ts.SourceFile option
+  abstract getDefaultLibFileName: options: Ts.CompilerOptions -> string
   abstract useCaseSensitiveFileNames: unit -> bool
   abstract getCanonicalFileName: fileName: string -> string
   abstract getCurrentDirectory: unit -> string
@@ -19,10 +19,10 @@ type ICompilerHost =
   abstract getDirectories: path: string -> ResizeArray<string>
 
 
-let createProgram (tsPaths: string[]) (sourceFiles: SourceFile list) =
-    let options = jsOptions<CompilerOptions>(fun o ->
-      o.target <- Some ScriptTarget.ES2015
-      o.``module`` <- Some ModuleKind.CommonJS
+let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
+    let options = jsOptions<Ts.CompilerOptions>(fun o ->
+      o.target <- Some Ts.ScriptTarget.ES2015
+      o.``module`` <- Some Ts.ModuleKind.CommonJS
       o.incremental <- Some false
       o.checkJs <- Some true
       o.lib <- Some (ResizeArray ["ESNext"; "DOM"])
@@ -71,25 +71,41 @@ let stringify (x: obj) =
 let main argv =
   if argv.Length < 1 then 0
   else
-    let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))
-    let srcs =
-      inputs |> Seq.map (fun (a, i) ->
-        ts.createSourceFile (a, i, ScriptTarget.Latest, setParentNodes=true))
-    let program = createProgram argv (Seq.toList srcs)
+    let program =
+      let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))
+      let srcs =
+        inputs |> Seq.map (fun (a, i) ->
+          ts.createSourceFile (a, i, Ts.ScriptTarget.Latest, setParentNodes=true))
+      createProgram argv (Seq.toList srcs)
+
     let srcs = program.getSourceFiles()
     let checker = program.getTypeChecker()
-    let rec display (node: Node) depth =
+    let rec display (node: Ts.Node) depth =
       let indent = String.replicate depth "  "
-      System.Enum.GetName(typeof<SyntaxKind>, node.kind) |> printfn "%s%A" indent
+      System.Enum.GetName(typeof<Ts.SyntaxKind>, node.kind) |> printfn "%s%A" indent
       node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
-    let stmts =
+    let srcs =
       srcs
-      |> Seq.collect (fun src ->
-        src.statements |> Seq.collect (Parser.readStatement {| checker = checker; sourceFile = src |}))
       |> Seq.toList
+      |> List.map (fun src ->
+        let references =
+          Seq.concat [
+            src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
+            src.typeReferenceDirectives |> Seq.map (fun x -> TypeReference x.fileName)
+            src.libReferenceDirectives |> Seq.map (fun x -> LibReference x.fileName)
+          ] |> Seq.toList
+        let statements =
+          src.statements
+          |> Seq.collect (Parser.readStatement {| checker = checker; sourceFile = src |})
+          |> Seq.toList
+        { statements = statements
+          fileName = src.fileName
+          moduleName = src.moduleName
+          hasNoDefaultLib = src.hasNoDefaultLib
+          references = references })
 
-    let ctx, result = Typer.runAll stmts
+    let ctx, result = Typer.runAll srcs
     Writer.emitAll ctx result |> Text.toString 2 |> printfn "%s"
 
     (*

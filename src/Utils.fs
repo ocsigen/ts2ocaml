@@ -5,6 +5,10 @@ open System
 
 let inline (|Ref|) (x: 'a ref) = !x
 
+let inline (|NullOrUndefined|_|) x =
+  if Fable.Core.JsInterop.isNullOrUndefined x then Some ()
+  else None
+
 module Char =
   let isAlphabetOrDigit c =
     ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9')

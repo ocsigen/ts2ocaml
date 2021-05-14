@@ -4043,7 +4043,7 @@ module Ts =
         | This
 
     type __String =
-        U2<obj, InternalSymbolName>
+        U2<string, InternalSymbolName>
 
     /// ReadonlyMap where keys are `__String`s.
     type [<AllowNullLiteral>] ReadonlyUnderscoreEscapedMap<'T> =

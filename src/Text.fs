@@ -69,17 +69,18 @@ let toString indentLength (t: text) = t.ToString(indentLength)
 let empty = Empty
 
 let strLines (lines: string seq) =
-  let lines = Seq.toArray lines
+  let lines =
+    lines
+    |> Seq.collect (fun s -> s.Split([|"\r\n"; "\r"; "\n"|], System.StringSplitOptions.None))
+    |> Seq.toArray
   match lines.Length with
   | 0 -> empty
   | 1 -> Str lines.[0]
-  | _ -> 
+  | _ ->
     lines |> Array.mapi (fun i x -> if i = 0 then Str x else Newline + Str x)
           |> Array.reduce (+)
 
-let str (s: string) =
-  let lines = s.Split([|System.Environment.NewLine|], System.StringSplitOptions.None)
-  strLines lines
+let str (s: string) = strLines [s]
 
 let indent x = Indent x
 
@@ -106,3 +107,9 @@ let concat sep xs =
       | [] -> result
       | x :: xs -> go (result + sep + x) xs
     go h t
+
+let rec isMultiLine = function
+  | Newline -> true
+  | Indent x -> isMultiLine x
+  | Concat (x, y) -> isMultiLine x || isMultiLine y
+  | Empty | Str _ -> false

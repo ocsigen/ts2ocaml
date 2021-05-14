@@ -6,9 +6,21 @@ open Typer
 open Text
 
 module Utils =
-  let comment text = if text = empty then empty else between "(* " " *)" text
+  let comment text =
+    if text = empty then empty
+    else
+      let inner =
+        if isMultiLine text then newline + indent text + newline
+        else between " " " " text
+      between "(*" "*)" inner
   let commentStr text = tprintf "(* %s *)" text
-  let docComment text = if text = empty then empty else between "(** " " *)" text
+  let docComment text =
+    if text = empty then empty
+    else
+      let inner =
+        if isMultiLine text then newline + indent text + newline
+        else between " " " " text
+      between "(**" "*)" inner
   let docCommentStr text = tprintf "(** %s *)" text
 
   let [<Literal>] pv_head = "`"
@@ -54,17 +66,17 @@ module Attr =
   let private str' s = between "\"" "\"" (str s)
 
   let js_get name = attr Block "js.get" (str' name)
-  
+
   let js_set name = attr Block "js.set" (str' name)
 
   let js_index_get = attr Block "js.index_get" empty
-  
+
   let js_index_set = attr Block "js.index_set" empty
 
   let js_call name = attr Block "js.call" (str' name)
 
   let js_apply is_newable = attr Block (if is_newable then "js.apply_newable" else "js.apply") empty
-  
+
   let js_global name = attr Block "js.global" (str' name)
 
 [<RequireQualifiedAccess>]
@@ -102,7 +114,7 @@ module Type =
   let number_t  = str "float"
   let array_t   = str "list"
   let readonlyArray_t = str "list"
-  
+
   // JS only types
   // ES5
   let object_t  = str "untyped_object"
@@ -189,7 +201,7 @@ module Term =
   let typeAssert term ty = between "(" ")" (term +@ ":" + ty)
 
   let literal (l: Literal) =
-    match l with 
+    match l with
     | LBool true -> str "true" | LBool false -> str "false"
     | LInt i -> string i |> str
     | LFloat f -> tprintf "%f" f
@@ -273,7 +285,7 @@ module Naming =
 
 module Definition =
   let open_ names = names |> List.map (tprintf "open %s") |> concat newline
-  
+
   let include_ names = names |> List.map (tprintf "include %s") |> concat newline
 
   let module_ name content =
@@ -311,7 +323,7 @@ module Definition =
       str "end"
     ]
 
-  let abstractType name tyargs = 
+  let abstractType name tyargs =
     str "type "
     + (if List.isEmpty tyargs then str name else tyApp (str name) tyargs)
 
@@ -339,14 +351,25 @@ module Definition =
 open Definition
 
 let emitComment (c: Comment) : text =
+  // https://github.com/ocaml/ocaml/issues/5745
+  let escapeDoubleQuote (lines: string list) =
+    let dqCount =
+      lines |> List.sumBy (fun (s: string) -> s.ToCharArray() |> Array.sumBy (function '"' -> 1 | _ -> 0))
+    if dqCount % 2 = 0 then lines
+    else lines @ ["\""]
+
   let escape (lines: string list) =
-    lines |> List.map (String.escapeWith ["{"; "}"; "["; "]"; "@"])
+    lines
+    |> List.map (String.escapeWith ["{"; "}"; "["; "]"; "@"])
+    |> List.map (String.replace "*)" "* )")
+    |> escapeDoubleQuote
+
   match c with
   | Description lines | Summary lines -> strLines (escape lines)
   | Param (name, lines) -> tprintf "@param %s " name + strLines (escape lines)
   | Return lines -> "@return " @+ strLines (escape lines)
   | Deprecated lines -> "@deprecated " @+ strLines (escape lines)
-  | Example lines -> 
+  | Example lines ->
     concat newline [
       str "example:"
       between "[" "]" (strLines (escape lines))
@@ -655,7 +678,7 @@ let getSafeLabels ctx ty =
   let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
 
   let rec getLabel = function
-    | Ident { fullName = Some fn } -> 
+    | Ident { fullName = Some fn } ->
       seq {
         yield tprintf "%s%s" pv_head (fn |> Naming.constructorName)
         for e in getAllInheritancesFromName ctx fn do
@@ -750,7 +773,7 @@ let emitUnknownIdentifiers ctx =
       match ko with
       | None -> content
       | Some k -> moduleSig k content
-      
+
     moduleType "Missing" (f None unknownIdentTypes)
 
   if unknownIdentTypes |> Trie.isEmpty then empty
@@ -919,16 +942,25 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       match (s :> ICommented).getComments() with
       | [] -> empty
       | xs -> docComment (xs |> List.map emitComment |> concat newline) + newline
-    comments + 
+    comments +
     match s with
     | Module m ->
-      moduleScopeSig
-        (m.name |> renamer.Rename "module")
-        (Naming.moduleName m.name)
-        (concat newline (
-          m.statements |> List.map (fun x ->
+      let content =
+        concat newline (
+          m.statements |> List.map (fun stmt ->
             let renamer = new OverloadRenamer()
-            go renamer ({ ctx with currentNamespace = m.name :: ctx.currentNamespace}) x)))
+            go renamer ({ ctx with currentNamespace = m.name :: ctx.currentNamespace}) stmt
+          )
+        )
+      if m.statements |> List.forall (function Export _ | UnknownStatement _ -> true | _ -> false) then
+        moduleSig
+          (Naming.moduleName m.name |> renamer.Rename "module")
+          content
+      else
+        moduleScopeSig
+          m.name
+          (Naming.moduleName m.name |> renamer.Rename "module")
+          content
     | Export (_, _) -> empty // TODO
     | UnknownStatement (Some s, _) -> commentStr s
     | UnknownStatement (None, _) -> commentStr "unknown statement"
@@ -957,7 +989,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         | Some n ->
           let k = List.rev (n :: ctx.currentNamespace)
           let ident = { name = [n]; fullName = Some k; loc = UnknownLocation }
-          let selfTy = 
+          let selfTy =
             if List.isEmpty c.typeParams then Ident ident
             else App (AIdent ident, typrms, UnknownLocation)
           n,
@@ -1114,7 +1146,7 @@ let emitAll ctx stmts =
     yield open_ [ "Ts2ocaml_baselib" ]
     yield emitUnknownIdentifiers ctx
 
-    let defs = [ 
+    let defs = [
       emitFlattenedDefinitions ctx
       emitStructuredDefinitions ctx stmts
     ]

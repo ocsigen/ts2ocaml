@@ -3,11 +3,13 @@
   [@@@ocaml.warning "-7-11-32-33-39"]
 ]
 open Ts2ocaml_baselib
-(* 
-  unknown identifiers:
-  - Iterable<T1>
-  - PropertyKey
- *)
+(*
+  
+    unknown identifiers:
+    - Iterable<T1>
+    - PropertyKey
+
+*)
 [@@@js.stop]
 module type Missing = sig
   module Iterable : sig
@@ -86,7 +88,21 @@ module Make (M: Missing) : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    (**
+      Calls a defined callback function on each element of an array. Then, flattens the result into
+      a new array.
+      This is identical to a map followed by flat with depth 1.
+      @param callback A function that accepts up to three arguments. The flatMap method calls the
+      callback function one time for each element in the array.
+      @param thisArg An object to which the this keyword can refer in the callback function. If
+      thisArg is omitted, undefined is used as the this value.
+    *)
     val flatMap: 'T t -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U t) union2) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
+    (**
+      Returns a new array with all sub-array elements concatenated into it recursively up to the
+      specified depth.
+      @param depth The maximum recursion depth
+    *)
     val flat: 'T t -> this:'A -> ?depth:'D -> unit -> ('A, 'D) _FlatArray list [@@js.call "flat"]
     val to_ml: 'T t -> 'T list [@@js.cast]
     val of_ml: 'T list -> 'T t [@@js.cast]
@@ -98,7 +114,21 @@ module Make (M: Missing) : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    (**
+      Calls a defined callback function on each element of an array. Then, flattens the result into
+      a new array.
+      This is identical to a map followed by flat with depth 1.
+      @param callback A function that accepts up to three arguments. The flatMap method calls the
+      callback function one time for each element in the array.
+      @param thisArg An object to which the this keyword can refer in the callback function. If
+      thisArg is omitted, undefined is used as the this value.
+    *)
     val flatMap: 'T t -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U _ReadonlyArray) union2) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
+    (**
+      Returns a new array with all sub-array elements concatenated into it recursively up to the
+      specified depth.
+      @param depth The maximum recursion depth
+    *)
     val flat: 'T t -> this:'A -> ?depth:'D -> unit -> ('A, 'D) _FlatArray list [@@js.call "flat"]
     val to_ml: 'T t -> 'T list [@@js.cast]
     val of_ml: 'T list -> 'T t [@@js.cast]
@@ -110,7 +140,15 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (**
+      Returns an object created by key-value entries for properties and methods
+      @param entries An iterable object that contains key-value entries for properties and methods.
+    *)
     val fromEntries: t -> entries:(PropertyKey.t_0 * 'T) Iterable.t_1 -> anonymous_interface_0 [@@js.call "fromEntries"]
+    (**
+      Returns an object created by key-value entries for properties and methods
+      @param entries An iterable object that contains key-value entries for properties and methods.
+    *)
     val fromEntries': t -> entries:any list Iterable.t_1 -> any [@@js.call "fromEntries"]
   end
   module[@js.scope "String"] String : sig
@@ -120,9 +158,13 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (** Removes the trailing white space and line terminator characters from a string. *)
     val trimEnd: t -> string [@@js.call "trimEnd"]
+    (** Removes the leading white space and line terminator characters from a string. *)
     val trimStart: t -> string [@@js.call "trimStart"]
+    (** Removes the leading white space and line terminator characters from a string. *)
     val trimLeft: t -> string [@@js.call "trimLeft"]
+    (** Removes the trailing white space and line terminator characters from a string. *)
     val trimRight: t -> string [@@js.call "trimRight"]
     val to_ml: t -> string [@@js.cast]
     val of_ml: string -> t [@@js.cast]
@@ -134,6 +176,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (** Expose the \[\[Description\]\] internal slot of a symbol directly. *)
     val get_description: t -> string or_undefined [@@js.get "description"]
   end
 end

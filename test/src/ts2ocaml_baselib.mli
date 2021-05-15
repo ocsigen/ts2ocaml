@@ -47,7 +47,7 @@ module Unknown: sig
 end
 
 [@@@js.stop]
-type -'a intf
+type -'a intf = private Ojs.t
 val intf_to_js: ('a -> Ojs.t) -> 'a intf -> Ojs.t
 val intf_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a intf
 [@@@js.start]

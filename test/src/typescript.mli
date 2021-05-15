@@ -3,11 +3,13 @@
   [@@@ocaml.warning "-7-11-32-33-39"]
 ]
 open Ts2ocaml_baselib
-(* 
-  unknown identifiers:
-  - Date
-  - Promise<T1>
- *)
+(*
+  
+    unknown identifiers:
+    - Date
+    - Promise<T1>
+
+*)
 [@@@js.stop]
 module type Missing = sig
   module Date : sig
@@ -2759,7 +2761,13 @@ module Make (M: Missing) : sig
   end
   module[@js.scope "ts"] Ts : sig
     val versionMajorMinor: string [@@js.global "versionMajorMinor"]
+    (** The version of the TypeScript compiler release *)
     val version: string [@@js.global "version"]
+    (**
+      Type of objects whose values are all of the same type.
+      The `in` and `for-in` operators can *not* be safely used,
+      since `Object.prototype` may be modified by outside code.
+    *)
     module[@js.scope "MapLike"] MapLike : sig
       type 'T t = 'T ts_MapLike
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -2792,6 +2800,7 @@ module Make (M: Missing) : sig
       val set___sortedArrayBrand: 'T t -> any -> unit [@@js.set "__sortedArrayBrand"]
       val cast: 'T t -> 'T list [@@js.cast]
     end
+    (** Common read methods for ES6 Map/Set. *)
     module[@js.scope "ReadonlyCollection"] ReadonlyCollection : sig
       type 'K t = 'K ts_ReadonlyCollection
       val t_to_js: ('K -> Ojs.t) -> 'K t -> Ojs.t
@@ -2803,6 +2812,7 @@ module Make (M: Missing) : sig
       val has: 'K t -> key:'K -> bool [@@js.call "has"]
       val keys: 'K t -> 'K ts_Iterator [@@js.call "keys"]
     end
+    (** Common write methods for ES6 Map/Set. *)
     module[@js.scope "Collection"] Collection : sig
       type 'K t = 'K ts_Collection
       val t_to_js: ('K -> Ojs.t) -> 'K t -> Ojs.t
@@ -2814,6 +2824,7 @@ module Make (M: Missing) : sig
       val clear: 'K t -> unit [@@js.call "clear"]
       val cast: 'K t -> 'K ts_ReadonlyCollection [@@js.cast]
     end
+    (** ES6 Map interface, only read methods included. *)
     module[@js.scope "ReadonlyESMap"] ReadonlyESMap : sig
       type ('K, 'V) t = ('K, 'V) ts_ReadonlyESMap
       val t_to_js: ('K -> Ojs.t) -> ('V -> Ojs.t) -> ('K, 'V) t -> Ojs.t
@@ -2827,6 +2838,11 @@ module Make (M: Missing) : sig
       val forEach: ('K, 'V) t -> action:(value:'V -> key:'K -> unit) -> unit [@@js.call "forEach"]
       val cast: ('K, 'V) t -> 'K ts_ReadonlyCollection [@@js.cast]
     end
+    (**
+      ES6 Map interface, only read methods included.
+      @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
+      ES6 Map interface, only read methods included.
+    *)
     module[@js.scope "ReadonlyMap"] ReadonlyMap : sig
       type 'T t = 'T ts_ReadonlyMap
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -2836,6 +2852,7 @@ module Make (M: Missing) : sig
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
       val cast: 'T t -> (string, 'T) ts_ReadonlyESMap [@@js.cast]
     end
+    (** ES6 Map interface. *)
     module[@js.scope "ESMap"] ESMap : sig
       type ('K, 'V) t = ('K, 'V) ts_ESMap
       val t_to_js: ('K -> Ojs.t) -> ('V -> Ojs.t) -> ('K, 'V) t -> Ojs.t
@@ -2847,6 +2864,11 @@ module Make (M: Missing) : sig
       val cast: ('K, 'V) t -> ('K, 'V) ts_ReadonlyESMap [@@js.cast]
       val cast': ('K, 'V) t -> 'K ts_Collection [@@js.cast]
     end
+    (**
+      ES6 Map interface.
+      @deprecated Use `ts.ESMap<K, V>` instead.
+      ES6 Map interface.
+    *)
     module[@js.scope "Map"] Map : sig
       type 'T t = 'T ts_Map
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -2856,6 +2878,7 @@ module Make (M: Missing) : sig
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
       val cast: 'T t -> (string, 'T) ts_ESMap [@@js.cast]
     end
+    (** ES6 Set interface, only read methods included. *)
     module[@js.scope "ReadonlySet"] ReadonlySet : sig
       type 'T t = 'T ts_ReadonlySet
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -2869,6 +2892,7 @@ module Make (M: Missing) : sig
       val forEach: 'T t -> action:(value:'T -> key:'T -> unit) -> unit [@@js.call "forEach"]
       val cast: 'T t -> 'T ts_ReadonlyCollection [@@js.cast]
     end
+    (** ES6 Set interface. *)
     module[@js.scope "Set"] Set : sig
       type 'T t = 'T ts_Set
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -2881,6 +2905,7 @@ module Make (M: Missing) : sig
       val cast: 'T t -> 'T ts_ReadonlySet [@@js.cast]
       val cast': 'T t -> 'T ts_Collection [@@js.cast]
     end
+    (** ES6 Iterator type. *)
     module[@js.scope "Iterator"] Iterator : sig
       type 'T t = 'T ts_Iterator
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -2890,6 +2915,7 @@ module Make (M: Missing) : sig
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
       val next: 'T t -> ([`U_b_false of anonymous_interface_14 [@js false] | `U_b_true of anonymous_interface_15 [@js true]] [@js.union on_field "done"]) [@@js.call "next"]
     end
+    (** Array that is only intended to be pushed to, never read. *)
     module[@js.scope "Push"] Push : sig
       type 'T t = 'T ts_Push
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -3270,6 +3296,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (** @deprecated Use `AwaitKeyword` instead. *)
     module AwaitKeywordToken : sig
       type t = ts_AwaitKeywordToken
       val t_to_js: t -> Ojs.t
@@ -3278,6 +3305,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (** @deprecated Use `AssertsKeyword` instead. *)
     module AssertsToken : sig
       type t = ts_AssertsToken
       val t_to_js: t -> Ojs.t
@@ -3383,6 +3411,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (** @deprecated Use `ReadonlyKeyword` instead. *)
     module ReadonlyToken : sig
       type t = ts_ReadonlyToken
       val t_to_js: t -> Ojs.t
@@ -3448,6 +3477,10 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val get_text: t -> string [@@js.get "text"]
       val get_kind: t -> ts_SyntaxKind_Identifier [@@js.get "kind"]
+      (**
+        Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
+        Text of identifier, but if the identifier begins with two underscores, this will begin with three.
+      *)
       val get_escapedText: t -> ts___String [@@js.get "escapedText"]
       val get_originalKeywordKind: t -> ts_SyntaxKind [@@js.get "originalKeywordKind"]
       val get_isInJSDocNamespace: t -> bool [@@js.get "isInJSDocNamespace"]
@@ -3580,6 +3613,7 @@ module Make (M: Missing) : sig
       val get_kind: t -> ts_SyntaxKind_TypeParameter [@@js.get "kind"]
       val get_parent: t -> ([`U_n_164 of ts_DeclarationWithTypeParameterChildren [@js 164] | `U_n_165 of ts_DeclarationWithTypeParameterChildren [@js 165] | `U_n_166 of ts_DeclarationWithTypeParameterChildren [@js 166] | `U_n_167 of ts_DeclarationWithTypeParameterChildren [@js 167] | `U_n_168 of ts_DeclarationWithTypeParameterChildren [@js 168] | `U_n_169 of ts_DeclarationWithTypeParameterChildren [@js 169] | `U_n_170 of ts_DeclarationWithTypeParameterChildren [@js 170] | `U_n_171 of ts_DeclarationWithTypeParameterChildren [@js 171] | `U_n_174 of ts_DeclarationWithTypeParameterChildren [@js 174] | `U_n_175 of ts_DeclarationWithTypeParameterChildren [@js 175] | `U_n_185 of ts_InferTypeNode [@js 185] | `U_n_208 of ts_DeclarationWithTypeParameterChildren [@js 208] | `U_n_209 of ts_DeclarationWithTypeParameterChildren [@js 209] | `U_n_221 of ts_DeclarationWithTypeParameterChildren [@js 221] | `U_n_251 of ts_DeclarationWithTypeParameterChildren [@js 251] | `U_n_252 of ts_DeclarationWithTypeParameterChildren [@js 252] | `U_n_253 of ts_DeclarationWithTypeParameterChildren [@js 253] | `U_n_254 of ts_DeclarationWithTypeParameterChildren [@js 254] | `U_n_308 of ts_DeclarationWithTypeParameterChildren [@js 308] | `U_n_330 of ts_DeclarationWithTypeParameterChildren [@js 330]] [@js.union on_field "kind"]) [@@js.get "parent"]
       val get_name: t -> ts_Identifier [@@js.get "name"]
+      (** Note: Consider calling `getEffectiveConstraintOfTypeParameter` *)
       val get_constraint: t -> ts_TypeNode [@@js.get "constraint"]
       val get_default: t -> ts_TypeNode [@@js.get "default"]
       val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -3743,6 +3777,7 @@ module Make (M: Missing) : sig
       val get_name: t -> ts_PropertyName [@@js.get "name"]
       val cast: t -> ts_NamedDeclaration [@@js.cast]
     end
+    (** Unlike ObjectLiteralElement, excludes JSXAttribute and JSXSpreadAttribute. *)
     module ObjectLiteralElementLike : sig
       type t = ts_ObjectLiteralElementLike
       val t_to_js: t -> Ojs.t
@@ -3855,6 +3890,14 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (**
+      Several node kinds share function-like features such as a signature,
+      a name, and a body. These nodes should extend FunctionLikeDeclarationBase.
+      Examples:
+      - FunctionDeclaration
+      - MethodDeclaration
+      - AccessorDeclaration
+    *)
     module[@js.scope "FunctionLikeDeclarationBase"] FunctionLikeDeclarationBase : sig
       type t = ts_FunctionLikeDeclarationBase
       val t_to_js: t -> Ojs.t
@@ -3878,6 +3921,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (** @deprecated Use SignatureDeclaration *)
     module FunctionLike : sig
       type t = ts_FunctionLike
       val t_to_js: t -> Ojs.t
@@ -3942,6 +3986,7 @@ module Make (M: Missing) : sig
       val cast': t -> ts_ClassElement [@@js.cast]
       val cast'': t -> ts_JSDocContainer [@@js.cast]
     end
+    (** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. *)
     module[@js.scope "SemicolonClassElement"] SemicolonClassElement : sig
       type t = ts_SemicolonClassElement
       val t_to_js: t -> Ojs.t
@@ -4434,6 +4479,7 @@ module Make (M: Missing) : sig
       val set__unaryExpressionBrand: t -> any -> unit [@@js.set "_unaryExpressionBrand"]
       val cast: t -> ts_Expression [@@js.cast]
     end
+    (** Deprecated, please use UpdateExpression *)
     module IncrementExpression : sig
       type t = ts_IncrementExpression
       val t_to_js: t -> Ojs.t
@@ -5238,6 +5284,12 @@ module Make (M: Missing) : sig
       val get_expression: t -> ts_Expression [@@js.get "expression"]
       val cast: t -> ts_Expression [@@js.cast]
     end
+    (**
+      This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
+      ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
+      JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
+      ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
+    *)
     module[@js.scope "ObjectLiteralExpressionBase"] ObjectLiteralExpressionBase : sig
       type 'T t = 'T ts_ObjectLiteralExpressionBase
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -5319,6 +5371,7 @@ module Make (M: Missing) : sig
       val get_expression: t -> ts_SuperExpression [@@js.get "expression"]
       val cast: t -> ts_PropertyAccessExpression [@@js.cast]
     end
+    (** Brand for a PropertyAccessExpression which, like a QualifiedName, consists of a sequence of identifiers separated by dots. *)
     module[@js.scope "PropertyAccessEntityNameExpression"] PropertyAccessEntityNameExpression : sig
       type t = ts_PropertyAccessEntityNameExpression
       val t_to_js: t -> Ojs.t
@@ -5752,6 +5805,7 @@ module Make (M: Missing) : sig
       val get_kind: t -> ts_SyntaxKind_NotEmittedStatement [@@js.get "kind"]
       val cast: t -> ts_Statement [@@js.cast]
     end
+    (** A list of comma-separated expressions. This node is only created by transformations. *)
     module[@js.scope "CommaListExpression"] CommaListExpression : sig
       type t = ts_CommaListExpression
       val t_to_js: t -> Ojs.t
@@ -6145,6 +6199,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
       val get_kind: t -> ts_SyntaxKind_ClassDeclaration [@@js.get "kind"]
+      (** May be undefined in `export default class \{ ... \}`. *)
       val get_name: t -> ts_Identifier [@@js.get "name"]
       val cast: t -> ts_ClassLikeDeclarationBase [@@js.cast]
       val cast': t -> ts_DeclarationStatement [@@js.cast]
@@ -6351,6 +6406,11 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (**
+      One of:
+      - import x = require("mod");
+      - import x = M.x;
+    *)
     module[@js.scope "ImportEqualsDeclaration"] ImportEqualsDeclaration : sig
       type t = ts_ImportEqualsDeclaration
       val t_to_js: t -> Ojs.t
@@ -6388,6 +6448,7 @@ module Make (M: Missing) : sig
       val get_kind: t -> ts_SyntaxKind_ImportDeclaration [@@js.get "kind"]
       val get_parent: t -> ([`U_n_257 of ts_ModuleBlock [@js 257] | `U_n_297 of ts_SourceFile [@js 297]] [@js.union on_field "kind"]) [@@js.get "parent"]
       val get_importClause: t -> ts_ImportClause [@@js.get "importClause"]
+      (** If this is not a StringLiteral it will be a grammar error. *)
       val get_moduleSpecifier: t -> ts_Expression [@@js.get "moduleSpecifier"]
       val cast: t -> ts_Statement [@@js.cast]
       val cast': t -> ts_JSDocContainer [@@js.cast]
@@ -6468,7 +6529,9 @@ module Make (M: Missing) : sig
       val get_kind: t -> ts_SyntaxKind_ExportDeclaration [@@js.get "kind"]
       val get_parent: t -> ([`U_n_257 of ts_ModuleBlock [@js 257] | `U_n_297 of ts_SourceFile [@js 297]] [@js.union on_field "kind"]) [@@js.get "parent"]
       val get_isTypeOnly: t -> bool [@@js.get "isTypeOnly"]
+      (** Will not be assigned in the case of `export * from "foo";` *)
       val get_exportClause: t -> ts_NamedExportBindings [@@js.get "exportClause"]
+      (** If this is not a StringLiteral it will be a grammar error. *)
       val get_moduleSpecifier: t -> ts_Expression [@@js.get "moduleSpecifier"]
       val cast: t -> ts_DeclarationStatement [@@js.cast]
       val cast': t -> ts_JSDocContainer [@@js.cast]
@@ -6547,6 +6610,10 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (**
+      This is either an `export =` or an `export default` declaration.
+      Unless `isExportEquals` is set, this node was parsed as an `export default`.
+    *)
     module[@js.scope "ExportAssignment"] ExportAssignment : sig
       type t = ts_ExportAssignment
       val t_to_js: t -> Ojs.t
@@ -6783,6 +6850,10 @@ module Make (M: Missing) : sig
       val get_kind: t -> ts_SyntaxKind_JSDocTag [@@js.get "kind"]
       val cast: t -> ts_JSDocTag [@@js.cast]
     end
+    (**
+      Note that `\@extends` is a synonym of `\@augments`.
+      Both tags are represented by this interface.
+    *)
     module[@js.scope "JSDocAugmentsTag"] JSDocAugmentsTag : sig
       type t = ts_JSDocAugmentsTag
       val t_to_js: t -> Ojs.t
@@ -6999,6 +7070,7 @@ module Make (M: Missing) : sig
       val get_parent: t -> ts_JSDoc [@@js.get "parent"]
       val get_name: t -> ts_EntityName [@@js.get "name"]
       val get_typeExpression: t -> ts_JSDocTypeExpression [@@js.get "typeExpression"]
+      (** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like *)
       val get_isNameFirst: t -> bool [@@js.get "isNameFirst"]
       val get_isBracketed: t -> bool [@@js.get "isBracketed"]
       val cast: t -> ts_JSDocTag [@@js.cast]
@@ -7033,6 +7105,7 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val get_kind: t -> ts_SyntaxKind_JSDocTypeLiteral [@@js.get "kind"]
       val get_jsDocPropertyTags: t -> ts_JSDocPropertyLikeTag list [@@js.get "jsDocPropertyTags"]
+      (** If true, then this type literal represents an *array* of its type. *)
       val get_isArrayType: t -> bool [@@js.get "isArrayType"]
       val cast: t -> ts_JSDocType [@@js.cast]
     end
@@ -7235,7 +7308,31 @@ module Make (M: Missing) : sig
       val set_languageVariant: t -> ts_LanguageVariant -> unit [@@js.set "languageVariant"]
       val get_isDeclarationFile: t -> bool [@@js.get "isDeclarationFile"]
       val set_isDeclarationFile: t -> bool -> unit [@@js.set "isDeclarationFile"]
+      (**
+        lib.d.ts should have a reference comment like
+        
+         /// <reference no-default-lib="true"/>
+        
+        If any other file has this comment, it signals not to include lib.d.ts
+        because this containing file is intended to act as a default library.
+      *)
+      (**
+        lib.d.ts should have a reference comment like
+        
+         /// <reference no-default-lib="true"/>
+        
+        If any other file has this comment, it signals not to include lib.d.ts
+        because this containing file is intended to act as a default library.
+      *)
       val get_hasNoDefaultLib: t -> bool [@@js.get "hasNoDefaultLib"]
+      (**
+        lib.d.ts should have a reference comment like
+        
+         /// <reference no-default-lib="true"/>
+        
+        If any other file has this comment, it signals not to include lib.d.ts
+        because this containing file is intended to act as a default library.
+      *)
       val set_hasNoDefaultLib: t -> bool -> unit [@@js.set "hasNoDefaultLib"]
       val get_languageVersion: t -> ts_ScriptTarget [@@js.get "languageVersion"]
       val set_languageVersion: t -> ts_ScriptTarget -> unit [@@js.set "languageVersion"]
@@ -7458,10 +7555,19 @@ module Make (M: Missing) : sig
       val get_useCaseSensitiveFileNames: t -> bool [@@js.get "useCaseSensitiveFileNames"]
       val set_useCaseSensitiveFileNames: t -> bool -> unit [@@js.set "useCaseSensitiveFileNames"]
       val readDirectory: t -> rootDir:string -> extensions:string list -> excludes:string list or_undefined -> includes:string list -> ?depth:float -> unit -> string list [@@js.call "readDirectory"]
+      (**
+        Gets a value indicating whether the specified path exists and is a file.
+        @param path The path to test.
+      *)
       val fileExists: t -> path:string -> bool [@@js.call "fileExists"]
       val readFile: t -> path:string -> string or_undefined [@@js.call "readFile"]
       val trace: t -> s:string -> unit [@@js.call "trace"]
     end
+    (**
+      Branded string for keeping track of when we've turned an ambiguous path
+      specified like "./blah" to an absolute path to an actual
+      tsconfig file, e.g. "/root/blah/tsconfig.json"
+    *)
     module ResolvedConfigFileName : sig
       type t = ts_ResolvedConfigFileName
       val t_to_js: t -> Ojs.t
@@ -7495,6 +7601,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
       val isCancellationRequested: t -> bool [@@js.call "isCancellationRequested"]
+      (** @raise exn OperationCanceledException if isCancellationRequested is true *)
       val throwIfCancellationRequested: t -> unit [@@js.call "throwIfCancellationRequested"]
     end
     module[@js.scope "Program"] Program : sig
@@ -7505,15 +7612,29 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
       val getCurrentDirectory: t -> string [@@js.call "getCurrentDirectory"]
+      (** Get a list of root file names that were passed to a 'createProgram' *)
       val getRootFileNames: t -> string list [@@js.call "getRootFileNames"]
+      (** Get a list of files in the program *)
       val getSourceFiles: t -> ts_SourceFile list [@@js.call "getSourceFiles"]
+      (**
+        Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
+        the JavaScript and declaration files will be produced for all the files in this program.
+        If targetSourceFile is specified, then only the JavaScript and declaration for that
+        specific file will be generated.
+        
+        If writeFile is not specified then the writeFile callback from the compiler host will be
+        used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
+        will be invoked when writing the JavaScript and declaration files.
+      *)
       val emit: t -> ?targetSourceFile:ts_SourceFile -> ?writeFile:ts_WriteFileCallback -> ?cancellationToken:ts_CancellationToken -> ?emitOnlyDtsFiles:bool -> ?customTransformers:ts_CustomTransformers -> unit -> ts_EmitResult [@@js.call "emit"]
       val getOptionsDiagnostics: t -> ?cancellationToken:ts_CancellationToken -> unit -> ts_Diagnostic list [@@js.call "getOptionsDiagnostics"]
       val getGlobalDiagnostics: t -> ?cancellationToken:ts_CancellationToken -> unit -> ts_Diagnostic list [@@js.call "getGlobalDiagnostics"]
       val getSyntacticDiagnostics: t -> ?sourceFile:ts_SourceFile -> ?cancellationToken:ts_CancellationToken -> unit -> ts_DiagnosticWithLocation list [@@js.call "getSyntacticDiagnostics"]
+      (** The first time this is called, it will return global diagnostics (no location). *)
       val getSemanticDiagnostics: t -> ?sourceFile:ts_SourceFile -> ?cancellationToken:ts_CancellationToken -> unit -> ts_Diagnostic list [@@js.call "getSemanticDiagnostics"]
       val getDeclarationDiagnostics: t -> ?sourceFile:ts_SourceFile -> ?cancellationToken:ts_CancellationToken -> unit -> ts_DiagnosticWithLocation list [@@js.call "getDeclarationDiagnostics"]
       val getConfigFileParsingDiagnostics: t -> ts_Diagnostic list [@@js.call "getConfigFileParsingDiagnostics"]
+      (** Gets a type checker that can be used to semantically analyze source files in the program. *)
       val getTypeChecker: t -> ts_TypeChecker [@@js.call "getTypeChecker"]
       val getTypeCatalog: t -> ts_Type list [@@js.call "getTypeCatalog"]
       val getNodeCount: t -> float [@@js.call "getNodeCount"]
@@ -7568,11 +7689,20 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Custom transformers to evaluate before built-in .js transformations. *)
+      (** Custom transformers to evaluate before built-in .js transformations. *)
       val get_before: t -> (ts_CustomTransformerFactory, ts_SourceFile ts_TransformerFactory) union2 list [@@js.get "before"]
+      (** Custom transformers to evaluate before built-in .js transformations. *)
       val set_before: t -> (ts_CustomTransformerFactory, ts_SourceFile ts_TransformerFactory) union2 list -> unit [@@js.set "before"]
+      (** Custom transformers to evaluate after built-in .js transformations. *)
+      (** Custom transformers to evaluate after built-in .js transformations. *)
       val get_after: t -> (ts_CustomTransformerFactory, ts_SourceFile ts_TransformerFactory) union2 list [@@js.get "after"]
+      (** Custom transformers to evaluate after built-in .js transformations. *)
       val set_after: t -> (ts_CustomTransformerFactory, ts_SourceFile ts_TransformerFactory) union2 list -> unit [@@js.set "after"]
+      (** Custom transformers to evaluate after built-in .d.ts transformations. *)
+      (** Custom transformers to evaluate after built-in .d.ts transformations. *)
       val get_afterDeclarations: t -> (ts_CustomTransformerFactory, ([`U_n_297 of ts_SourceFile [@js 297] | `U_n_298 of ts_Bundle [@js 298]] [@js.union on_field "kind"]) ts_TransformerFactory) union2 list [@@js.get "afterDeclarations"]
+      (** Custom transformers to evaluate after built-in .d.ts transformations. *)
       val set_afterDeclarations: t -> (ts_CustomTransformerFactory, ([`U_n_297 of ts_SourceFile  | `U_n_298 of ts_Bundle ] [@js.union on_field "kind"]) ts_TransformerFactory) union2 list -> unit [@@js.set "afterDeclarations"]
     end
     module[@js.scope "SourceMapSpan"] SourceMapSpan : sig
@@ -7582,19 +7712,38 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Line number in the .js file. *)
+      (** Line number in the .js file. *)
       val get_emittedLine: t -> float [@@js.get "emittedLine"]
+      (** Line number in the .js file. *)
       val set_emittedLine: t -> float -> unit [@@js.set "emittedLine"]
+      (** Column number in the .js file. *)
+      (** Column number in the .js file. *)
       val get_emittedColumn: t -> float [@@js.get "emittedColumn"]
+      (** Column number in the .js file. *)
       val set_emittedColumn: t -> float -> unit [@@js.set "emittedColumn"]
+      (** Line number in the .ts file. *)
+      (** Line number in the .ts file. *)
       val get_sourceLine: t -> float [@@js.get "sourceLine"]
+      (** Line number in the .ts file. *)
       val set_sourceLine: t -> float -> unit [@@js.set "sourceLine"]
+      (** Column number in the .ts file. *)
+      (** Column number in the .ts file. *)
       val get_sourceColumn: t -> float [@@js.get "sourceColumn"]
+      (** Column number in the .ts file. *)
       val set_sourceColumn: t -> float -> unit [@@js.set "sourceColumn"]
+      (** Optional name (index into names array) associated with this span. *)
+      (** Optional name (index into names array) associated with this span. *)
       val get_nameIndex: t -> float [@@js.get "nameIndex"]
+      (** Optional name (index into names array) associated with this span. *)
       val set_nameIndex: t -> float -> unit [@@js.set "nameIndex"]
+      (** .ts file (index into sources array) associated with this span *)
+      (** .ts file (index into sources array) associated with this span *)
       val get_sourceIndex: t -> float [@@js.get "sourceIndex"]
+      (** .ts file (index into sources array) associated with this span *)
       val set_sourceIndex: t -> float -> unit [@@js.set "sourceIndex"]
     end
+    (** Return code used by getEmitOutput function to indicate status of the function *)
     module ExitStatus : sig
       type t = ts_ExitStatus
       val t_to_js: t -> Ojs.t
@@ -7612,7 +7761,10 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val get_emitSkipped: t -> bool [@@js.get "emitSkipped"]
       val set_emitSkipped: t -> bool -> unit [@@js.set "emitSkipped"]
+      (** Contains declaration emit diagnostics *)
+      (** Contains declaration emit diagnostics *)
       val get_diagnostics: t -> ts_Diagnostic list [@@js.get "diagnostics"]
+      (** Contains declaration emit diagnostics *)
       val set_diagnostics: t -> ts_Diagnostic list -> unit [@@js.set "diagnostics"]
       val get_emittedFiles: t -> string list [@@js.get "emittedFiles"]
       val set_emittedFiles: t -> string list -> unit [@@js.set "emittedFiles"]
@@ -7639,19 +7791,39 @@ module Make (M: Missing) : sig
       val getNullableType: t -> type_:ts_Type -> flags:ts_TypeFlags -> ts_Type [@@js.call "getNullableType"]
       val getNonNullableType: t -> type_:ts_Type -> ts_Type [@@js.call "getNonNullableType"]
       val getTypeArguments: t -> type_:ts_TypeReference -> ts_Type list [@@js.call "getTypeArguments"]
+      (** Note that the resulting nodes cannot be checked. *)
       val typeToTypeNode: t -> type_:ts_Type -> enclosingDeclaration:ts_Node or_undefined -> flags:ts_NodeBuilderFlags or_undefined -> ts_TypeNode or_undefined [@@js.call "typeToTypeNode"]
+      (** Note that the resulting nodes cannot be checked. *)
       val signatureToSignatureDeclaration: t -> signature:ts_Signature -> kind:ts_SyntaxKind -> enclosingDeclaration:ts_Node or_undefined -> flags:ts_NodeBuilderFlags or_undefined -> (ts_SignatureDeclaration, anonymous_interface_13) intersection2 or_undefined [@@js.call "signatureToSignatureDeclaration"]
+      (** Note that the resulting nodes cannot be checked. *)
       val indexInfoToIndexSignatureDeclaration: t -> indexInfo:ts_IndexInfo -> kind:ts_IndexKind -> enclosingDeclaration:ts_Node or_undefined -> flags:ts_NodeBuilderFlags or_undefined -> ts_IndexSignatureDeclaration or_undefined [@@js.call "indexInfoToIndexSignatureDeclaration"]
+      (** Note that the resulting nodes cannot be checked. *)
       val symbolToEntityName: t -> symbol:ts_Symbol -> meaning:ts_SymbolFlags -> enclosingDeclaration:ts_Node or_undefined -> flags:ts_NodeBuilderFlags or_undefined -> ts_EntityName or_undefined [@@js.call "symbolToEntityName"]
+      (** Note that the resulting nodes cannot be checked. *)
       val symbolToExpression: t -> symbol:ts_Symbol -> meaning:ts_SymbolFlags -> enclosingDeclaration:ts_Node or_undefined -> flags:ts_NodeBuilderFlags or_undefined -> ts_Expression or_undefined [@@js.call "symbolToExpression"]
+      (** Note that the resulting nodes cannot be checked. *)
       val symbolToTypeParameterDeclarations: t -> symbol:ts_Symbol -> enclosingDeclaration:ts_Node or_undefined -> flags:ts_NodeBuilderFlags or_undefined -> ts_TypeParameterDeclaration ts_NodeArray or_undefined [@@js.call "symbolToTypeParameterDeclarations"]
+      (** Note that the resulting nodes cannot be checked. *)
       val symbolToParameterDeclaration: t -> symbol:ts_Symbol -> enclosingDeclaration:ts_Node or_undefined -> flags:ts_NodeBuilderFlags or_undefined -> ts_ParameterDeclaration or_undefined [@@js.call "symbolToParameterDeclaration"]
+      (** Note that the resulting nodes cannot be checked. *)
       val typeParameterToDeclaration: t -> parameter:ts_TypeParameter -> enclosingDeclaration:ts_Node or_undefined -> flags:ts_NodeBuilderFlags or_undefined -> ts_TypeParameterDeclaration or_undefined [@@js.call "typeParameterToDeclaration"]
       val getSymbolsInScope: t -> location:ts_Node -> meaning:ts_SymbolFlags -> ts_Symbol list [@@js.call "getSymbolsInScope"]
       val getSymbolAtLocation: t -> node:ts_Node -> ts_Symbol or_undefined [@@js.call "getSymbolAtLocation"]
       val getSymbolsOfParameterPropertyDeclaration: t -> parameter:ts_ParameterDeclaration -> parameterName:string -> ts_Symbol list [@@js.call "getSymbolsOfParameterPropertyDeclaration"]
+      (**
+        The function returns the value (local variable) symbol of an identifier in the short-hand property assignment.
+        This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
+      *)
       val getShorthandAssignmentValueSymbol: t -> location:ts_Node -> ts_Symbol or_undefined [@@js.call "getShorthandAssignmentValueSymbol"]
       val getExportSpecifierLocalTargetSymbol: t -> location:([`U_n_78 of ts_Identifier  | `U_n_270 of ts_ExportSpecifier ] [@js.union on_field "kind"]) -> ts_Symbol or_undefined [@@js.call "getExportSpecifierLocalTargetSymbol"]
+      (**
+        If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
+        Otherwise returns its input.
+        For example, at `export type T = number;`:
+            - `getSymbolAtLocation` at the location `T` will return the exported symbol for `T`.
+            - But the result of `getSymbolsInScope` will contain the *local* symbol for `T`, not the exported symbol.
+            - Calling `getExportSymbolOfSymbol` on that local symbol will return the exported symbol.
+      *)
       val getExportSymbolOfSymbol: t -> symbol:ts_Symbol -> ts_Symbol [@@js.call "getExportSymbolOfSymbol"]
       val getPropertySymbolOfDestructuringAssignment: t -> location:ts_Identifier -> ts_Symbol or_undefined [@@js.call "getPropertySymbolOfDestructuringAssignment"]
       val getTypeOfAssignmentPattern: t -> pattern:ts_AssignmentPattern -> ts_Type [@@js.call "getTypeOfAssignmentPattern"]
@@ -7666,6 +7838,11 @@ module Make (M: Missing) : sig
       val getRootSymbols: t -> symbol:ts_Symbol -> ts_Symbol list [@@js.call "getRootSymbols"]
       val getSymbolOfExpando: t -> node:ts_Node -> allowDeclaration:bool -> ts_Symbol or_undefined [@@js.call "getSymbolOfExpando"]
       val getContextualType: t -> node:ts_Expression -> ts_Type or_undefined [@@js.call "getContextualType"]
+      (**
+        returns unknownSignature in the case of an error.
+        returns undefined if the node is not valid.
+        @param argumentCount Apparent number of arguments, passed in case of a possibly incomplete call. This should come from an ArgumentListInfo. See `signatureHelp.ts`.
+      *)
       val getResolvedSignature: t -> node:ts_CallLikeExpression -> ?candidatesOutArray:ts_Signature list -> ?argumentCount:float -> unit -> ts_Signature or_undefined [@@js.call "getResolvedSignature"]
       val getSignatureFromDeclaration: t -> declaration:ts_SignatureDeclaration -> ts_Signature or_undefined [@@js.call "getSignatureFromDeclaration"]
       val isImplementationOfOverload: t -> node:ts_SignatureDeclaration -> bool or_undefined [@@js.call "isImplementationOfOverload"]
@@ -7674,6 +7851,7 @@ module Make (M: Missing) : sig
       val isUnknownSymbol: t -> symbol:ts_Symbol -> bool [@@js.call "isUnknownSymbol"]
       val getConstantValue: t -> node:([`U_n_201 of ts_PropertyAccessExpression  | `U_n_202 of ts_ElementAccessExpression  | `U_n_291 of ts_EnumMember ] [@js.union on_field "kind"]) -> string or_number or_undefined [@@js.call "getConstantValue"]
       val isValidPropertyAccess: t -> node:([`U_n_157 of ts_QualifiedName  | `U_n_195 of ts_ImportTypeNode  | `U_n_201 of ts_PropertyAccessExpression ] [@js.union on_field "kind"]) -> propertyName:string -> bool [@@js.call "isValidPropertyAccess"]
+      (** Follow all aliases to get the original symbol. *)
       val getAliasedSymbol: t -> symbol:ts_Symbol -> ts_Symbol [@@js.call "getAliasedSymbol"]
       val getExportsOfModule: t -> moduleSymbol:ts_Symbol -> ts_Symbol list [@@js.call "getExportsOfModule"]
       val getJsxIntrinsicTagNamesAt: t -> location:ts_Node -> ts_Symbol list [@@js.call "getJsxIntrinsicTagNamesAt"]
@@ -7683,6 +7861,11 @@ module Make (M: Missing) : sig
       val getApparentType: t -> type_:ts_Type -> ts_Type [@@js.call "getApparentType"]
       val getBaseConstraintOfType: t -> type_:ts_Type -> ts_Type or_undefined [@@js.call "getBaseConstraintOfType"]
       val getDefaultFromTypeParameter: t -> type_:ts_Type -> ts_Type or_undefined [@@js.call "getDefaultFromTypeParameter"]
+      (**
+        Depending on the operation performed, it may be appropriate to throw away the checker
+        if the cancellation token is triggered. Typically, if it is used for error checking
+        and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
+      *)
       val runWithCancellationToken: t -> token:ts_CancellationToken -> cb:(checker:t -> 'T) -> 'T [@@js.call "runWithCancellationToken"]
     end
     module NodeBuilderFlags : sig
@@ -7850,6 +8033,14 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (**
+      This represents a string whose leading underscore have been escaped by adding extra leading underscores.
+      The shape of this brand is rather unique compared to others we've used.
+      Instead of just an intersection of a string and an object, it is that union-ed
+      with an intersection of void and an object. This makes it wholly incompatible
+      with a normal string (which is good, it cannot be misused on assignment or on usage),
+      while still being comparable with a normal string via === (also good) and castable from a string.
+    *)
     module M__String : sig
       type t = ts___String
       val t_to_js: t -> Ojs.t
@@ -7858,6 +8049,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (** ReadonlyMap where keys are `__String`s. *)
     module[@js.scope "ReadonlyUnderscoreEscapedMap"] ReadonlyUnderscoreEscapedMap : sig
       type 'T t = 'T ts_ReadonlyUnderscoreEscapedMap
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -7867,6 +8059,7 @@ module Make (M: Missing) : sig
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
       val cast: 'T t -> (ts___String, 'T) ts_ReadonlyESMap [@@js.cast]
     end
+    (** Map where keys are `__String`s. *)
     module[@js.scope "UnderscoreEscapedMap"] UnderscoreEscapedMap : sig
       type 'T t = 'T ts_UnderscoreEscapedMap
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -7877,6 +8070,7 @@ module Make (M: Missing) : sig
       val cast: 'T t -> (ts___String, 'T) ts_ESMap [@@js.cast]
       val cast': 'T t -> 'T ts_ReadonlyUnderscoreEscapedMap [@@js.cast]
     end
+    (** SymbolTable based on ES6 Map interface. *)
     module SymbolTable : sig
       type t = ts_SymbolTable
       val t_to_js: t -> Ojs.t
@@ -8030,6 +8224,7 @@ module Make (M: Missing) : sig
       val set_objectFlags: t -> ts_ObjectFlags -> unit [@@js.set "objectFlags"]
       val cast: t -> ts_Type [@@js.cast]
     end
+    (** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). *)
     module[@js.scope "InterfaceType"] InterfaceType : sig
       type t = ts_InterfaceType
       val t_to_js: t -> Ojs.t
@@ -8074,6 +8269,24 @@ module Make (M: Missing) : sig
       val set_declaredNumberIndexInfo: t -> ts_IndexInfo -> unit [@@js.set "declaredNumberIndexInfo"]
       val cast: t -> ts_InterfaceType [@@js.cast]
     end
+    (**
+      Type references (ObjectFlags.Reference). When a class or interface has type parameters or
+      a "this" type, references to the class or interface are made using type references. The
+      typeArguments property specifies the types to substitute for the type parameters of the
+      class or interface and optionally includes an extra element that specifies the type to
+      substitute for "this" in the resulting instantiation. When no extra argument is present,
+      the type reference itself is substituted for "this". The typeArguments property is undefined
+      if the class or interface has no type parameters and the reference isn't specifying an
+      explicit "this" argument.
+      Type references (ObjectFlags.Reference). When a class or interface has type parameters or
+      a "this" type, references to the class or interface are made using type references. The
+      typeArguments property specifies the types to substitute for the type parameters of the
+      class or interface and optionally includes an extra element that specifies the type to
+      substitute for "this" in the resulting instantiation. When no extra argument is present,
+      the type reference itself is substituted for "this". The typeArguments property is undefined
+      if the class or interface has no type parameters and the reference isn't specifying an
+      explicit "this" argument.
+    *)
     module[@js.scope "TypeReference"] TypeReference : sig
       type t = ts_TypeReference
       val t_to_js: t -> Ojs.t
@@ -8398,6 +8611,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (** @deprecated Use FileExtensionInfo instead. *)
     module JsFileExtensionInfo : sig
       type t = ts_JsFileExtensionInfo
       val t_to_js: t -> Ojs.t
@@ -8440,6 +8654,12 @@ module Make (M: Missing) : sig
       val get_reportsDeprecated: t -> anonymous_interface_0 [@@js.get "reportsDeprecated"]
       val set_reportsDeprecated: t -> anonymous_interface_0 -> unit [@@js.set "reportsDeprecated"]
     end
+    (**
+      A linked list of formatted diagnostic messages to be used as part of a multiline message.
+      It is built from the bottom up, leaving the head to be the "main" diagnostic.
+      While it seems that DiagnosticMessageChain is structurally similar to DiagnosticMessage,
+      the difference is that messages are all preformatted in DMC.
+    *)
     module[@js.scope "DiagnosticMessageChain"] DiagnosticMessageChain : sig
       type t = ts_DiagnosticMessageChain
       val t_to_js: t -> Ojs.t
@@ -8463,7 +8683,10 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. *)
+      (** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. *)
       val get_reportsUnnecessary: t -> anonymous_interface_0 [@@js.get "reportsUnnecessary"]
+      (** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. *)
       val set_reportsUnnecessary: t -> anonymous_interface_0 -> unit [@@js.set "reportsUnnecessary"]
       val get_reportsDeprecated: t -> anonymous_interface_0 [@@js.get "reportsDeprecated"]
       val set_reportsDeprecated: t -> anonymous_interface_0 -> unit [@@js.set "reportsDeprecated"]
@@ -8541,13 +8764,25 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** A normalized path on disk *)
+      (** A normalized path on disk *)
       val get_path: t -> string [@@js.get "path"]
+      (** A normalized path on disk *)
       val set_path: t -> string -> unit [@@js.set "path"]
+      (** The path as the user originally wrote it *)
+      (** The path as the user originally wrote it *)
       val get_originalPath: t -> string [@@js.get "originalPath"]
+      (** The path as the user originally wrote it *)
       val set_originalPath: t -> string -> unit [@@js.set "originalPath"]
+      (** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations *)
+      (** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations *)
       val get_prepend: t -> bool [@@js.get "prepend"]
+      (** True if the output of this reference should be prepended to the output of this project. Only valid for --outFile compilations *)
       val set_prepend: t -> bool -> unit [@@js.set "prepend"]
+      (** True if it is intended that this reference form a circularity *)
+      (** True if it is intended that this reference form a circularity *)
       val get_circular: t -> bool [@@js.get "circular"]
+      (** True if it is intended that this reference form a circularity *)
       val set_circular: t -> bool -> unit [@@js.set "circular"]
     end
     module WatchFileKind : sig
@@ -8761,7 +8996,10 @@ module Make (M: Missing) : sig
       val set_resolveJsonModule: t -> bool -> unit [@@js.set "resolveJsonModule"]
       val get_types: t -> string list [@@js.get "types"]
       val set_types: t -> string list -> unit [@@js.set "types"]
+      (** Paths used to compute primary types search locations *)
+      (** Paths used to compute primary types search locations *)
       val get_typeRoots: t -> string list [@@js.get "typeRoots"]
+      (** Paths used to compute primary types search locations *)
       val set_typeRoots: t -> string list -> unit [@@js.set "typeRoots"]
       val get_esModuleInterop: t -> bool [@@js.get "esModuleInterop"]
       val set_esModuleInterop: t -> bool -> unit [@@js.set "esModuleInterop"]
@@ -8799,7 +9037,19 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        @deprecated typingOptions.enableAutoDiscovery
+        Use typeAcquisition.enable instead.
+      *)
+      (**
+        @deprecated typingOptions.enableAutoDiscovery
+        Use typeAcquisition.enable instead.
+      *)
       val get_enableAutoDiscovery: t -> bool [@@js.get "enableAutoDiscovery"]
+      (**
+        @deprecated typingOptions.enableAutoDiscovery
+        Use typeAcquisition.enable instead.
+      *)
       val set_enableAutoDiscovery: t -> bool -> unit [@@js.set "enableAutoDiscovery"]
       val get_enable: t -> bool [@@js.get "enable"]
       val set_enable: t -> bool -> unit [@@js.set "enable"]
@@ -8851,7 +9101,10 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** 0-based. *)
+      (** 0-based. *)
       val get_line: t -> float [@@js.get "line"]
+      (** 0-based. *)
       val set_line: t -> float -> unit [@@js.set "line"]
       val get_character: t -> float [@@js.get "character"]
       val set_character: t -> float -> unit [@@js.set "character"]
@@ -8880,6 +9133,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (** Either a parsed command line or a parsed tsconfig.json *)
     module[@js.scope "ParsedCommandLine"] ParsedCommandLine : sig
       type t = ts_ParsedCommandLine
       val t_to_js: t -> Ojs.t
@@ -8945,10 +9199,21 @@ module Make (M: Missing) : sig
       val readFile: t -> fileName:string -> string or_undefined [@@js.call "readFile"]
       val trace: t -> s:string -> unit [@@js.call "trace"]
       val directoryExists: t -> directoryName:string -> bool [@@js.call "directoryExists"]
+      (**
+        Resolve a symbolic link.
+        @see "https" ://nodejs.org/api/fs.html#fs_fs_realpathsync_path_options
+      *)
       val realpath: t -> path:string -> string [@@js.call "realpath"]
       val getCurrentDirectory: t -> string [@@js.call "getCurrentDirectory"]
       val getDirectories: t -> path:string -> string list [@@js.call "getDirectories"]
     end
+    (**
+      Represents the result of module resolution.
+      Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
+      The Program will then filter results based on these flags.
+      
+      Prefer to return a `ResolvedModuleFull` so that the file type does not have to be inferred.
+    *)
     module[@js.scope "ResolvedModule"] ResolvedModule : sig
       type t = ts_ResolvedModule
       val t_to_js: t -> Ojs.t
@@ -8956,11 +9221,22 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Path of the file the module was resolved to. *)
+      (** Path of the file the module was resolved to. *)
       val get_resolvedFileName: t -> string [@@js.get "resolvedFileName"]
+      (** Path of the file the module was resolved to. *)
       val set_resolvedFileName: t -> string -> unit [@@js.set "resolvedFileName"]
+      (** True if `resolvedFileName` comes from `node_modules`. *)
+      (** True if `resolvedFileName` comes from `node_modules`. *)
       val get_isExternalLibraryImport: t -> bool [@@js.get "isExternalLibraryImport"]
+      (** True if `resolvedFileName` comes from `node_modules`. *)
       val set_isExternalLibraryImport: t -> bool -> unit [@@js.set "isExternalLibraryImport"]
     end
+    (**
+      ResolvedModule with an explicitly provided `extension` property.
+      Prefer this over `ResolvedModule`.
+      If changing this, remember to change `moduleResolutionIsEqualTo`.
+    *)
     module[@js.scope "ResolvedModuleFull"] ResolvedModuleFull : sig
       type t = ts_ResolvedModuleFull
       val t_to_js: t -> Ojs.t
@@ -8968,12 +9244,28 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
+        This is optional for backwards-compatibility, but will be added if not provided.
+      *)
+      (**
+        Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
+        This is optional for backwards-compatibility, but will be added if not provided.
+      *)
       val get_extension: t -> ts_Extension [@@js.get "extension"]
+      (**
+        Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
+        This is optional for backwards-compatibility, but will be added if not provided.
+      *)
       val set_extension: t -> ts_Extension -> unit [@@js.set "extension"]
       val get_packageId: t -> ts_PackageId [@@js.get "packageId"]
       val set_packageId: t -> ts_PackageId -> unit [@@js.set "packageId"]
       val cast: t -> ts_ResolvedModule [@@js.cast]
     end
+    (**
+      Unique identifier with a package name and version.
+      If changing this, remember to change `packageIdIsEqual`.
+    *)
     module[@js.scope "PackageId"] PackageId : sig
       type t = ts_PackageId
       val t_to_js: t -> Ojs.t
@@ -8981,11 +9273,41 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        Name of the package.
+        Should not include `\@types`.
+        If accessing a non-index file, this should include its name e.g. "foo/bar".
+      *)
+      (**
+        Name of the package.
+        Should not include `\@types`.
+        If accessing a non-index file, this should include its name e.g. "foo/bar".
+      *)
       val get_name: t -> string [@@js.get "name"]
+      (**
+        Name of the package.
+        Should not include `\@types`.
+        If accessing a non-index file, this should include its name e.g. "foo/bar".
+      *)
       val set_name: t -> string -> unit [@@js.set "name"]
+      (**
+        Name of a submodule within this package.
+        May be "".
+      *)
+      (**
+        Name of a submodule within this package.
+        May be "".
+      *)
       val get_subModuleName: t -> string [@@js.get "subModuleName"]
+      (**
+        Name of a submodule within this package.
+        May be "".
+      *)
       val set_subModuleName: t -> string -> unit [@@js.set "subModuleName"]
+      (** Version of the package, e.g. "1.2.3" *)
+      (** Version of the package, e.g. "1.2.3" *)
       val get_version: t -> string [@@js.get "version"]
+      (** Version of the package, e.g. "1.2.3" *)
       val set_version: t -> string -> unit [@@js.set "version"]
     end
     module Extension : sig
@@ -9018,7 +9340,10 @@ module Make (M: Missing) : sig
       val set_resolvedFileName: t -> string or_undefined -> unit [@@js.set "resolvedFileName"]
       val get_packageId: t -> ts_PackageId [@@js.get "packageId"]
       val set_packageId: t -> ts_PackageId -> unit [@@js.set "packageId"]
+      (** True if `resolvedFileName` comes from `node_modules`. *)
+      (** True if `resolvedFileName` comes from `node_modules`. *)
       val get_isExternalLibraryImport: t -> bool [@@js.get "isExternalLibraryImport"]
+      (** True if `resolvedFileName` comes from `node_modules`. *)
       val set_isExternalLibraryImport: t -> bool -> unit [@@js.set "isExternalLibraryImport"]
     end
     module[@js.scope "ResolvedTypeReferenceDirectiveWithFailedLookupLocations"] ResolvedTypeReferenceDirectiveWithFailedLookupLocations : sig
@@ -9051,6 +9376,7 @@ module Make (M: Missing) : sig
       val getNewLine: t -> string [@@js.call "getNewLine"]
       val readDirectory: t -> rootDir:string -> extensions:string list -> excludes:string list or_undefined -> includes:string list -> ?depth:float -> unit -> string list [@@js.call "readDirectory"]
       val resolveModuleNames: t -> moduleNames:string list -> containingFile:string -> reusedNames:string list or_undefined -> redirectedReference:ts_ResolvedProjectReference or_undefined -> options:ts_CompilerOptions -> ts_ResolvedModule or_undefined list [@@js.call "resolveModuleNames"]
+      (** This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files *)
       val resolveTypeReferenceDirectives: t -> typeReferenceDirectiveNames:string list -> containingFile:string -> redirectedReference:ts_ResolvedProjectReference or_undefined -> options:ts_CompilerOptions -> ts_ResolvedTypeReferenceDirective or_undefined list [@@js.call "resolveTypeReferenceDirectives"]
       val getEnvironmentVariable: t -> name:string -> string or_undefined [@@js.call "getEnvironmentVariable"]
       val createHash: t -> data:string -> string [@@js.call "createHash"]
@@ -9161,9 +9487,13 @@ module Make (M: Missing) : sig
       val createStringLiteralFromNode: t -> sourceNode:ts_PropertyNameLiteral -> ?isSingleQuote:bool -> unit -> ts_StringLiteral [@@js.call "createStringLiteralFromNode"]
       val createRegularExpressionLiteral: t -> text:string -> ts_RegularExpressionLiteral [@@js.call "createRegularExpressionLiteral"]
       val createIdentifier: t -> text:string -> ts_Identifier [@@js.call "createIdentifier"]
+      (** Create a unique temporary variable. *)
       val createTempVariable: t -> recordTempVariable:(node:ts_Identifier -> unit) or_undefined -> ts_Identifier [@@js.call "createTempVariable"]
+      (** Create a unique temporary variable for use in a loop. *)
       val createLoopVariable: t -> ts_Identifier [@@js.call "createLoopVariable"]
+      (** Create a unique name based on the supplied text. *)
       val createUniqueName: t -> text:string -> ?flags:ts_GeneratedIdentifierFlags -> unit -> ts_Identifier [@@js.call "createUniqueName"]
+      (** Create a unique name generated for a node. *)
       val getGeneratedNameForNode: t -> node:ts_Node or_undefined -> ts_Identifier [@@js.call "getGeneratedNameForNode"]
       val createPrivateIdentifier: t -> text:string -> ts_PrivateIdentifier [@@js.call "createPrivateIdentifier"]
       val createToken: t -> token:ts_SyntaxKind_SuperKeyword -> ts_SuperExpression [@@js.call "createToken"]
@@ -9223,8 +9553,10 @@ module Make (M: Missing) : sig
       val createFunctionTypeNode: t -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode -> ts_FunctionTypeNode [@@js.call "createFunctionTypeNode"]
       val updateFunctionTypeNode: t -> node:ts_FunctionTypeNode -> typeParameters:ts_TypeParameterDeclaration ts_NodeArray or_undefined -> parameters:ts_ParameterDeclaration ts_NodeArray -> type_:ts_TypeNode -> ts_FunctionTypeNode [@@js.call "updateFunctionTypeNode"]
       val createConstructorTypeNode: t -> modifiers:ts_Modifier list or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode -> ts_ConstructorTypeNode [@@js.call "createConstructorTypeNode"]
+      (** @deprecated  *)
       val createConstructorTypeNode': t -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode -> ts_ConstructorTypeNode [@@js.call "createConstructorTypeNode"]
       val updateConstructorTypeNode: t -> node:ts_ConstructorTypeNode -> modifiers:ts_Modifier list or_undefined -> typeParameters:ts_TypeParameterDeclaration ts_NodeArray or_undefined -> parameters:ts_ParameterDeclaration ts_NodeArray -> type_:ts_TypeNode -> ts_ConstructorTypeNode [@@js.call "updateConstructorTypeNode"]
+      (** @deprecated  *)
       val updateConstructorTypeNode': t -> node:ts_ConstructorTypeNode -> typeParameters:ts_TypeParameterDeclaration ts_NodeArray or_undefined -> parameters:ts_ParameterDeclaration ts_NodeArray -> type_:ts_TypeNode -> ts_ConstructorTypeNode [@@js.call "updateConstructorTypeNode"]
       val createTypeQueryNode: t -> exprName:ts_EntityName -> ts_TypeQueryNode [@@js.call "createTypeQueryNode"]
       val updateTypeQueryNode: t -> node:ts_TypeQueryNode -> exprName:ts_EntityName -> ts_TypeQueryNode [@@js.call "updateTypeQueryNode"]
@@ -9587,12 +9919,19 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
       val get_factory: t -> ts_NodeFactory [@@js.get "factory"]
+      (** Gets the compiler options supplied to the transformer. *)
       val getCompilerOptions: t -> ts_CompilerOptions [@@js.call "getCompilerOptions"]
+      (** Starts a new lexical environment. *)
       val startLexicalEnvironment: t -> unit [@@js.call "startLexicalEnvironment"]
+      (** Suspends the current lexical environment, usually after visiting a parameter list. *)
       val suspendLexicalEnvironment: t -> unit [@@js.call "suspendLexicalEnvironment"]
+      (** Resumes a suspended lexical environment, usually before visiting a function body. *)
       val resumeLexicalEnvironment: t -> unit [@@js.call "resumeLexicalEnvironment"]
+      (** Ends a lexical environment, returning any declarations. *)
       val endLexicalEnvironment: t -> ts_Statement list or_undefined [@@js.call "endLexicalEnvironment"]
+      (** Hoists a function declaration to the containing scope. *)
       val hoistFunctionDeclaration: t -> node:ts_FunctionDeclaration -> unit [@@js.call "hoistFunctionDeclaration"]
+      (** Hoists a variable declaration to the containing scope. *)
       val hoistVariableDeclaration: t -> node:ts_Identifier -> unit [@@js.call "hoistVariableDeclaration"]
     end
     module[@js.scope "TransformationContext"] TransformationContext : sig
@@ -9602,13 +9941,39 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Records a request for a non-scoped emit helper in the current context. *)
       val requestEmitHelper: t -> helper:ts_EmitHelper -> unit [@@js.call "requestEmitHelper"]
+      (** Gets and resets the requested non-scoped emit helpers. *)
       val readEmitHelpers: t -> ts_EmitHelper list or_undefined [@@js.call "readEmitHelpers"]
+      (** Enables expression substitutions in the pretty printer for the provided SyntaxKind. *)
       val enableSubstitution: t -> kind:ts_SyntaxKind -> unit [@@js.call "enableSubstitution"]
+      (** Determines whether expression substitutions are enabled for the provided node. *)
       val isSubstitutionEnabled: t -> node:ts_Node -> bool [@@js.call "isSubstitutionEnabled"]
+      (**
+        Hook used by transformers to substitute expressions just before they
+        are emitted by the pretty printer.
+        
+        NOTE: Transformation hooks should only be modified during `Transformer` initialization,
+        before returning the `NodeTransformer` callback.
+      *)
       val onSubstituteNode: t -> hint:ts_EmitHint -> node:ts_Node -> ts_Node [@@js.call "onSubstituteNode"]
+      (**
+        Enables before/after emit notifications in the pretty printer for the provided
+        SyntaxKind.
+      *)
       val enableEmitNotification: t -> kind:ts_SyntaxKind -> unit [@@js.call "enableEmitNotification"]
+      (**
+        Determines whether before/after emit notifications should be raised in the pretty
+        printer when it emits a node.
+      *)
       val isEmitNotificationEnabled: t -> node:ts_Node -> bool [@@js.call "isEmitNotificationEnabled"]
+      (**
+        Hook used to allow transformers to capture state before or after
+        the printer emits a node.
+        
+        NOTE: Transformation hooks should only be modified during `Transformer` initialization,
+        before returning the `NodeTransformer` callback.
+      *)
       val onEmitNode: t -> hint:ts_EmitHint -> node:ts_Node -> emitCallback:(hint:ts_EmitHint -> node:ts_Node -> unit) -> unit [@@js.call "onEmitNode"]
       val cast: t -> ts_CoreTransformationContext [@@js.cast]
     end
@@ -9619,13 +9984,35 @@ module Make (M: Missing) : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      (** Gets the transformed source files. *)
+      (** Gets the transformed source files. *)
       val get_transformed: 'T t -> 'T list [@@js.get "transformed"]
+      (** Gets the transformed source files. *)
       val set_transformed: 'T t -> 'T list -> unit [@@js.set "transformed"]
+      (** Gets diagnostics for the transformation. *)
+      (** Gets diagnostics for the transformation. *)
       val get_diagnostics: 'T t -> ts_DiagnosticWithLocation list [@@js.get "diagnostics"]
+      (** Gets diagnostics for the transformation. *)
       val set_diagnostics: 'T t -> ts_DiagnosticWithLocation list -> unit [@@js.set "diagnostics"]
+      (**
+        Gets a substitute for a node, if one is available; otherwise, returns the original node.
+        @param hint A hint as to the intended usage of the node.
+        @param node The node to substitute.
+      *)
       val substituteNode: 'T t -> hint:ts_EmitHint -> node:ts_Node -> ts_Node [@@js.call "substituteNode"]
+      (**
+        Emits a node with possible notification.
+        @param hint A hint as to the intended usage of the node.
+        @param node The node to emit.
+        @param emitCallback A callback used to emit the node.
+      *)
       val emitNodeWithNotification: 'T t -> hint:ts_EmitHint -> node:ts_Node -> emitCallback:(hint:ts_EmitHint -> node:ts_Node -> unit) -> unit [@@js.call "emitNodeWithNotification"]
+      (**
+        Indicates if a given node needs an emit notification
+        @param node The node to emit.
+      *)
       val isEmitNotificationEnabled: 'T t -> node:ts_Node -> bool [@@js.call "isEmitNotificationEnabled"]
+      (** Clean up EmitNode entries on any parse-tree nodes. *)
       val dispose: 'T t -> unit [@@js.call "dispose"]
     end
     module[@js.scope "TransformerFactory"] TransformerFactory : sig
@@ -9690,9 +10077,25 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        Print a node and its subtree as-is, without any emit transformations.
+        @param hint A value indicating the purpose of a node. This is primarily used to
+        distinguish between an `Identifier` used in an expression position, versus an
+        `Identifier` used as an `IdentifierName` as part of a declaration. For most nodes you
+        should just pass `Unspecified`.
+        @param node The node to print. The node and its subtree are printed as-is, without any
+        emit transformations.
+        @param sourceFile A source file that provides context for the node. The source text of
+        the file is used to emit the original source content for literals and identifiers, while
+        the identifiers of the source file are used when generating unique names to avoid
+        collisions.
+      *)
       val printNode: t -> hint:ts_EmitHint -> node:ts_Node -> sourceFile:ts_SourceFile -> string [@@js.call "printNode"]
+      (** Prints a list of nodes using the given format flags *)
       val printList: t -> format:ts_ListFormat -> list:'T ts_NodeArray -> sourceFile:ts_SourceFile -> string [@@js.call "printList"]
+      (** Prints a source file as-is, without any emit transformations. *)
       val printFile: t -> sourceFile:ts_SourceFile -> string [@@js.call "printFile"]
+      (** Prints a bundle of source files as-is, without any emit transformations. *)
       val printBundle: t -> bundle:ts_Bundle -> string [@@js.call "printBundle"]
     end
     module[@js.scope "PrintHandlers"] PrintHandlers : sig
@@ -9702,9 +10105,51 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        A hook used by the Printer when generating unique names to avoid collisions with
+        globally defined names that exist outside of the current source file.
+      *)
       val hasGlobalName: t -> name:string -> bool [@@js.call "hasGlobalName"]
+      (**
+        A hook used by the Printer to provide notifications prior to emitting a node. A
+        compatible implementation **must** invoke `emitCallback` with the provided `hint` and
+        `node` values.
+        @param hint A hint indicating the intended purpose of the node.
+        @param node The node to emit.
+        @param emitCallback A callback that, when invoked, will emit the node.
+        example:
+        [```ts
+        var printer = createPrinter(printerOptions, \{
+          onEmitNode(hint, node, emitCallback) \{
+            // set up or track state prior to emitting the node...
+            emitCallback(hint, node);
+            // restore state after emitting the node...
+          \}
+        \});
+        ```]
+      *)
       val onEmitNode: t -> hint:ts_EmitHint -> node:ts_Node or_undefined -> emitCallback:(hint:ts_EmitHint -> node:ts_Node or_undefined -> unit) -> unit [@@js.call "onEmitNode"]
+      (**
+        A hook used to check if an emit notification is required for a node.
+        @param node The node to emit.
+      *)
       val isEmitNotificationEnabled: t -> node:ts_Node or_undefined -> bool [@@js.call "isEmitNotificationEnabled"]
+      (**
+        A hook used by the Printer to perform just-in-time substitution of a node. This is
+        primarily used by node transformations that need to substitute one node for another,
+        such as replacing `myExportedVar` with `exports.myExportedVar`.
+        @param hint A hint indicating the intended purpose of the node.
+        @param node The node to emit.
+        example:
+        [```ts
+        var printer = createPrinter(printerOptions, \{
+          substituteNode(hint, node) \{
+            // perform substitution if necessary...
+            return node;
+          \}
+        \});
+        ```]
+      *)
       val substituteNode: t -> hint:ts_EmitHint -> node:ts_Node -> ts_Node [@@js.call "substituteNode"]
     end
     module[@js.scope "PrinterOptions"] PrinterOptions : sig
@@ -9791,12 +10236,14 @@ module Make (M: Missing) : sig
       val get_includeAutomaticOptionalChainCompletions: t -> bool [@@js.get "includeAutomaticOptionalChainCompletions"]
       val get_includeCompletionsWithInsertText: t -> bool [@@js.get "includeCompletionsWithInsertText"]
       val get_importModuleSpecifierPreference: t -> ([`L_s106_non_relative[@js "non-relative"] | `L_s120_project_relative[@js "project-relative"] | `L_s128_relative[@js "relative"] | `L_s133_shortest[@js "shortest"]] [@js.enum]) [@@js.get "importModuleSpecifierPreference"]
+      (** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" *)
       val get_importModuleSpecifierEnding: t -> ([`L_s42_auto[@js "auto"] | `L_s83_index[@js "index"] | `L_s89_js[@js "js"] | `L_s103_minimal[@js "minimal"]] [@js.enum]) [@@js.get "importModuleSpecifierEnding"]
       val get_allowTextChangesInNewFiles: t -> bool [@@js.get "allowTextChangesInNewFiles"]
       val get_providePrefixAndSuffixTextForRename: t -> bool [@@js.get "providePrefixAndSuffixTextForRename"]
       val get_includePackageJsonAutoImports: t -> ([`L_s42_auto[@js "auto"] | `L_s110_off[@js "off"] | `L_s111_on[@js "on"]] [@js.enum]) [@@js.get "includePackageJsonAutoImports"]
       val get_provideRefactorNotApplicableReason: t -> bool [@@js.get "provideRefactorNotApplicableReason"]
     end
+    (** Represents a bigint literal value without requiring bigint support *)
     module[@js.scope "PseudoBigInt"] PseudoBigInt : sig
       type t = ts_PseudoBigInt
       val t_to_js: t -> Ojs.t
@@ -9809,7 +10256,7 @@ module Make (M: Missing) : sig
       val get_base10Value: t -> string [@@js.get "base10Value"]
       val set_base10Value: t -> string -> unit [@@js.set "base10Value"]
     end
-    
+    (* ES6Export [] *)
     module FileWatcherEventKind : sig
       type t = ts_FileWatcherEventKind
       val t_to_js: t -> Ojs.t
@@ -9854,6 +10301,10 @@ module Make (M: Missing) : sig
       val readFile: t -> path:string -> ?encoding:string -> unit -> string or_undefined [@@js.call "readFile"]
       val getFileSize: t -> path:string -> float [@@js.call "getFileSize"]
       val writeFile: t -> path:string -> data:string -> ?writeByteOrderMark:bool -> unit -> unit [@@js.call "writeFile"]
+      (**
+        pollingInterval: - this parameter is used in polling-based watchers and ignored in watchers that
+        use native OS file watching
+      *)
       val watchFile: t -> path:string -> callback:ts_FileWatcherCallback -> ?pollingInterval:float -> ?options:ts_WatchOptions -> unit -> ts_FileWatcher [@@js.call "watchFile"]
       val watchDirectory: t -> path:string -> callback:ts_DirectoryWatcherCallback -> ?recursive:bool -> ?options:ts_WatchOptions -> unit -> ts_FileWatcher [@@js.call "watchDirectory"]
       val resolvePath: t -> path:string -> string [@@js.call "resolvePath"]
@@ -9867,7 +10318,9 @@ module Make (M: Missing) : sig
       val getModifiedTime: t -> path:string -> Date.t_0 or_undefined [@@js.call "getModifiedTime"]
       val setModifiedTime: t -> path:string -> time:Date.t_0 -> unit [@@js.call "setModifiedTime"]
       val deleteFile: t -> path:string -> unit [@@js.call "deleteFile"]
+      (** A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm) *)
       val createHash: t -> data:string -> string [@@js.call "createHash"]
+      (** This must be cryptographically secure. Only implement this method using `crypto.createHash("sha256")`. *)
       val createSHA256Hash: t -> data:string -> string [@@js.call "createSHA256Hash"]
       val getMemoryUsage: t -> float [@@js.call "getMemoryUsage"]
       val exit: t -> ?exitCode:float -> unit -> unit [@@js.call "exit"]
@@ -9889,7 +10342,7 @@ module Make (M: Missing) : sig
     end
     val getNodeMajorVersion: unit -> float or_undefined [@@js.global "getNodeMajorVersion"]
     val sys: ts_System [@@js.global "sys"]
-    
+    (* ES6Export [] *)
     module[@js.scope "ErrorCallback"] ErrorCallback : sig
       type t = ts_ErrorCallback
       val t_to_js: t -> Ojs.t
@@ -9947,6 +10400,7 @@ module Make (M: Missing) : sig
     val getPositionOfLineAndCharacter: sourceFile:ts_SourceFileLike -> line:float -> character:float -> float [@@js.global "getPositionOfLineAndCharacter"]
     val getLineAndCharacterOfPosition: sourceFile:ts_SourceFileLike -> position:float -> ts_LineAndCharacter [@@js.global "getLineAndCharacterOfPosition"]
     val isWhiteSpaceLike: ch:float -> bool [@@js.global "isWhiteSpaceLike"]
+    (** Does not include line breaks. For that, see isWhiteSpaceLike. *)
     val isWhiteSpaceSingleLine: ch:float -> bool [@@js.global "isWhiteSpaceSingleLine"]
     val isLineBreak: ch:float -> bool [@@js.global "isLineBreak"]
     val couldStartTrivia: text:string -> pos:float -> bool [@@js.global "couldStartTrivia"]
@@ -9958,6 +10412,7 @@ module Make (M: Missing) : sig
     val reduceEachTrailingCommentRange: text:string -> pos:float -> cb:(pos:float -> end_:float -> kind:ts_CommentKind -> hasTrailingNewLine:bool -> state:'T -> memo:'U -> 'U) -> state:'T -> initial:'U -> 'U or_undefined [@@js.global "reduceEachTrailingCommentRange"]
     val getLeadingCommentRanges: text:string -> pos:float -> ts_CommentRange list or_undefined [@@js.global "getLeadingCommentRanges"]
     val getTrailingCommentRanges: text:string -> pos:float -> ts_CommentRange list or_undefined [@@js.global "getTrailingCommentRanges"]
+    (** Optionally, get the shebang *)
     val getShebang: text:string -> string or_undefined [@@js.global "getShebang"]
     val isIdentifierStart: ch:float -> languageVersion:ts_ScriptTarget or_undefined -> bool [@@js.global "isIdentifierStart"]
     val isIdentifierPart: ch:float -> languageVersion:ts_ScriptTarget or_undefined -> ?identifierVariant:ts_LanguageVariant -> unit -> bool [@@js.global "isIdentifierPart"]
@@ -9982,6 +10437,14 @@ module Make (M: Missing) : sig
     val textChangeRangeIsUnchanged: range:ts_TextChangeRange -> bool [@@js.global "textChangeRangeIsUnchanged"]
     val createTextChangeRange: span:ts_TextSpan -> newLength:float -> ts_TextChangeRange [@@js.global "createTextChangeRange"]
     val unchangedTextChangeRange: ts_TextChangeRange [@@js.global "unchangedTextChangeRange"]
+    (**
+      Called to merge all the changes that occurred across several versions of a script snapshot
+      into a single change.  i.e. if a user keeps making successive edits to a script we will
+      have a text change from V1 to V2, V2 to V3, ..., Vn.
+      
+      This function will then merge those changes into a single change range valid between V1 and
+      Vn.
+    *)
     val collapseTextChangeRangesAcrossMultipleVersions: changes:ts_TextChangeRange list -> ts_TextChangeRange [@@js.global "collapseTextChangeRangesAcrossMultipleVersions"]
     val getTypeParameterOwner: d:ts_Declaration -> ts_Declaration or_undefined [@@js.global "getTypeParameterOwner"]
     module ParameterPropertyDeclaration : sig
@@ -9998,43 +10461,140 @@ module Make (M: Missing) : sig
     val walkUpBindingElementsAndPatterns: binding:ts_BindingElement -> ([`U_n_160 of ts_ParameterDeclaration [@js 160] | `U_n_249 of ts_VariableDeclaration [@js 249]] [@js.union on_field "kind"]) [@@js.global "walkUpBindingElementsAndPatterns"]
     val getCombinedModifierFlags: node:ts_Declaration -> ts_ModifierFlags [@@js.global "getCombinedModifierFlags"]
     val getCombinedNodeFlags: node:ts_Node -> ts_NodeFlags [@@js.global "getCombinedNodeFlags"]
+    (**
+      Checks to see if the locale is in the appropriate format,
+      and if it is, attempts to set the appropriate language.
+    *)
     val validateLocaleAndSetLanguage: locale:string -> sys:anonymous_interface_16 -> ?errors:ts_Diagnostic ts_Push -> unit -> unit [@@js.global "validateLocaleAndSetLanguage"]
     val getOriginalNode: node:ts_Node -> ts_Node [@@js.global "getOriginalNode"]
     val getOriginalNode: node:ts_Node -> nodeTest:(node:ts_Node -> bool) -> 'T [@@js.global "getOriginalNode"]
     val getOriginalNode: node:ts_Node or_undefined -> ts_Node or_undefined [@@js.global "getOriginalNode"]
     val getOriginalNode: node:ts_Node or_undefined -> nodeTest:(node:ts_Node or_undefined -> bool) -> 'T or_undefined [@@js.global "getOriginalNode"]
+    (**
+      Iterates through the parent chain of a node and performs the callback on each parent until the callback
+      returns a truthy value, then returns that value.
+      If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
+      At that point findAncestor returns undefined.
+    *)
     val findAncestor: node:ts_Node or_undefined -> callback:(element:ts_Node -> bool) -> 'T or_undefined [@@js.global "findAncestor"]
+    (**
+      Iterates through the parent chain of a node and performs the callback on each parent until the callback
+      returns a truthy value, then returns that value.
+      If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
+      At that point findAncestor returns undefined.
+    *)
     val findAncestor: node:ts_Node or_undefined -> callback:(element:ts_Node -> ([`L_s125_quit] [@js.enum]) or_boolean) -> ts_Node or_undefined [@@js.global "findAncestor"]
+    (**
+      Gets a value indicating whether a node originated in the parse tree.
+      @param node The node to test.
+    *)
     val isParseTreeNode: node:ts_Node -> bool [@@js.global "isParseTreeNode"]
+    (**
+      Gets the original parse tree node for a node.
+      @param node The original node.
+      @return The original parse tree node if found; otherwise, undefined.
+    *)
     val getParseTreeNode: node:ts_Node or_undefined -> ts_Node or_undefined [@@js.global "getParseTreeNode"]
+    (**
+      Gets the original parse tree node for a node.
+      @param node The original node.
+      @param nodeTest A callback used to ensure the correct type of parse tree node is returned.
+      @return The original parse tree node if found; otherwise, undefined.
+    *)
     val getParseTreeNode: node:'T or_undefined -> ?nodeTest:(node:ts_Node -> bool) -> unit -> 'T or_undefined [@@js.global "getParseTreeNode"]
+    (** Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__' *)
     val escapeLeadingUnderscores: identifier:string -> ts___String [@@js.global "escapeLeadingUnderscores"]
+    (**
+      Remove extra underscore from escaped identifier text content.
+      @param identifier The escaped identifier text.
+      @return The unescaped identifier text.
+    *)
     val unescapeLeadingUnderscores: identifier:ts___String -> string [@@js.global "unescapeLeadingUnderscores"]
     val idText: identifierOrPrivateName:([`U_n_78 of ts_Identifier  | `U_n_79 of ts_PrivateIdentifier ] [@js.union on_field "kind"]) -> string [@@js.global "idText"]
     val symbolName: symbol:ts_Symbol -> string [@@js.global "symbolName"]
     val getNameOfJSDocTypedef: declaration:ts_JSDocTypedefTag -> ([`U_n_78 of ts_Identifier [@js 78] | `U_n_79 of ts_PrivateIdentifier [@js 79]] [@js.union on_field "kind"]) or_undefined [@@js.global "getNameOfJSDocTypedef"]
     val getNameOfDeclaration: declaration:([`U_n_0 of (ts_Declaration, ts_Expression) union2  | `U_n_1 of (ts_Declaration, ts_Expression) union2  | `U_n_2 of (ts_Declaration, ts_Expression) union2  | `U_n_3 of (ts_Declaration, ts_Expression) union2  | `U_n_4 of (ts_Declaration, ts_Expression) union2  | `U_n_8 of (ts_Declaration, ts_Expression) union2  | `U_n_16 of (ts_Declaration, ts_Expression) union2  | `U_n_32 of (ts_Declaration, ts_Expression) union2  | `U_n_64 of (ts_Declaration, ts_Expression) union2  | `U_n_128 of (ts_Declaration, ts_Expression) union2  | `U_n_256 of (ts_Declaration, ts_Expression) union2  | `U_n_512 of (ts_Declaration, ts_Expression) union2  | `U_n_768 of (ts_Declaration, ts_Expression) union2  | `U_n_1024 of (ts_Declaration, ts_Expression) union2  | `U_n_2048 of (ts_Declaration, ts_Expression) union2  | `U_n_2816 of (ts_Declaration, ts_Expression) union2  | `U_n_4096 of (ts_Declaration, ts_Expression) union2  | `U_n_8192 of (ts_Declaration, ts_Expression) union2  | `U_n_16384 of (ts_Declaration, ts_Expression) union2  | `U_n_32768 of (ts_Declaration, ts_Expression) union2  | `U_n_40960 of (ts_Declaration, ts_Expression) union2  | `U_n_65536 of (ts_Declaration, ts_Expression) union2  | `U_n_131072 of (ts_Declaration, ts_Expression) union2  | `U_n_262144 of (ts_Declaration, ts_Expression) union2  | `U_n_524288 of (ts_Declaration, ts_Expression) union2  | `U_n_4194304 of (ts_Declaration, ts_Expression) union2  | `U_n_25358336 of (ts_Declaration, ts_Expression) union2  | `U_n_33554432 of (ts_Declaration, ts_Expression) union2 ] [@js.union on_field "flags"]) -> ts_DeclarationName or_undefined [@@js.global "getNameOfDeclaration"]
+    (**
+      Gets the JSDoc parameter tags for the node if present.
+      remarks: Returns any JSDoc param tag whose name matches the provided
+      parameter, whether a param tag on a containing function
+      expression, or a param tag on a variable declaration whose
+      initializer is the containing function. The tags closest to the
+      node are returned first, so in the previous example, the param
+      tag on the containing function expression would be first.
+      
+      For binding patterns, parameter tags are matched by position.
+    *)
     val getJSDocParameterTags: param:ts_ParameterDeclaration -> ts_JSDocParameterTag list [@@js.global "getJSDocParameterTags"]
+    (**
+      Gets the JSDoc type parameter tags for the node if present.
+      remarks: Returns any JSDoc template tag whose names match the provided
+      parameter, whether a template tag on a containing function
+      expression, or a template tag on a variable declaration whose
+      initializer is the containing function. The tags closest to the
+      node are returned first, so in the previous example, the template
+      tag on the containing function expression would be first.
+    *)
     val getJSDocTypeParameterTags: param:ts_TypeParameterDeclaration -> ts_JSDocTemplateTag list [@@js.global "getJSDocTypeParameterTags"]
+    (**
+      Return true if the node has JSDoc parameter tags.
+      remarks: Includes parameter tags that are not directly on the node,
+      for example on a variable declaration whose initializer is a function expression.
+    *)
     val hasJSDocParameterTags: node:([`U_n_164 of ts_SignatureDeclaration  | `U_n_165 of (ts_FunctionLikeDeclaration, ts_SignatureDeclaration) union2  | `U_n_166 of (ts_FunctionLikeDeclaration, ts_SignatureDeclaration) union2  | `U_n_167 of (ts_FunctionLikeDeclaration, ts_SignatureDeclaration) union2  | `U_n_168 of (ts_FunctionLikeDeclaration, ts_SignatureDeclaration) union2  | `U_n_169 of ts_SignatureDeclaration  | `U_n_170 of ts_SignatureDeclaration  | `U_n_171 of ts_SignatureDeclaration  | `U_n_174 of ts_SignatureDeclaration  | `U_n_175 of ts_SignatureDeclaration  | `U_n_208 of (ts_FunctionLikeDeclaration, ts_SignatureDeclaration) union2  | `U_n_209 of (ts_FunctionLikeDeclaration, ts_SignatureDeclaration) union2  | `U_n_251 of (ts_FunctionLikeDeclaration, ts_SignatureDeclaration) union2  | `U_n_308 of ts_SignatureDeclaration ] [@js.union on_field "kind"]) -> bool [@@js.global "hasJSDocParameterTags"]
+    (** Gets the JSDoc augments tag for the node if present *)
     val getJSDocAugmentsTag: node:ts_Node -> ts_JSDocAugmentsTag or_undefined [@@js.global "getJSDocAugmentsTag"]
+    (** Gets the JSDoc implements tags for the node if present *)
     val getJSDocImplementsTags: node:ts_Node -> ts_JSDocImplementsTag list [@@js.global "getJSDocImplementsTags"]
+    (** Gets the JSDoc class tag for the node if present *)
     val getJSDocClassTag: node:ts_Node -> ts_JSDocClassTag or_undefined [@@js.global "getJSDocClassTag"]
+    (** Gets the JSDoc public tag for the node if present *)
     val getJSDocPublicTag: node:ts_Node -> ts_JSDocPublicTag or_undefined [@@js.global "getJSDocPublicTag"]
+    (** Gets the JSDoc private tag for the node if present *)
     val getJSDocPrivateTag: node:ts_Node -> ts_JSDocPrivateTag or_undefined [@@js.global "getJSDocPrivateTag"]
+    (** Gets the JSDoc protected tag for the node if present *)
     val getJSDocProtectedTag: node:ts_Node -> ts_JSDocProtectedTag or_undefined [@@js.global "getJSDocProtectedTag"]
+    (** Gets the JSDoc protected tag for the node if present *)
     val getJSDocReadonlyTag: node:ts_Node -> ts_JSDocReadonlyTag or_undefined [@@js.global "getJSDocReadonlyTag"]
+    (** Gets the JSDoc deprecated tag for the node if present *)
     val getJSDocDeprecatedTag: node:ts_Node -> ts_JSDocDeprecatedTag or_undefined [@@js.global "getJSDocDeprecatedTag"]
+    (** Gets the JSDoc enum tag for the node if present *)
     val getJSDocEnumTag: node:ts_Node -> ts_JSDocEnumTag or_undefined [@@js.global "getJSDocEnumTag"]
+    (** Gets the JSDoc this tag for the node if present *)
     val getJSDocThisTag: node:ts_Node -> ts_JSDocThisTag or_undefined [@@js.global "getJSDocThisTag"]
+    (** Gets the JSDoc return tag for the node if present *)
     val getJSDocReturnTag: node:ts_Node -> ts_JSDocReturnTag or_undefined [@@js.global "getJSDocReturnTag"]
+    (** Gets the JSDoc template tag for the node if present *)
     val getJSDocTemplateTag: node:ts_Node -> ts_JSDocTemplateTag or_undefined [@@js.global "getJSDocTemplateTag"]
+    (** Gets the JSDoc type tag for the node if present and valid *)
     val getJSDocTypeTag: node:ts_Node -> ts_JSDocTypeTag or_undefined [@@js.global "getJSDocTypeTag"]
+    (**
+      Gets the type node for the node if provided via JSDoc.
+      remarks: The search includes any JSDoc param tag that relates
+      to the provided parameter, for example a type tag on the
+      parameter itself, or a param tag on a containing function
+      expression, or a param tag on a variable declaration whose
+      initializer is the containing function. The tags closest to the
+      node are examined first, so in the previous example, the type
+      tag directly on the node would be returned.
+    *)
     val getJSDocType: node:ts_Node -> ts_TypeNode or_undefined [@@js.global "getJSDocType"]
+    (**
+      Gets the return type node for the node if provided via JSDoc return tag or type tag.
+      remarks: `getJSDocReturnTag` just gets the whole JSDoc tag. This function
+      gets the type from inside the braces, after the fat arrow, etc.
+    *)
     val getJSDocReturnType: node:ts_Node -> ts_TypeNode or_undefined [@@js.global "getJSDocReturnType"]
+    (** Get all JSDoc tags related to a node, including those on parent nodes. *)
     val getJSDocTags: node:ts_Node -> ts_JSDocTag list [@@js.global "getJSDocTags"]
+    (** Gets all JSDoc tags that match a specified predicate *)
     val getAllJSDocTags: node:ts_Node -> predicate:(tag:ts_JSDocTag -> bool) -> 'T list [@@js.global "getAllJSDocTags"]
+    (** Gets all JSDoc tags of a specified kind *)
     val getAllJSDocTagsOfKind: node:ts_Node -> kind:ts_SyntaxKind -> ts_JSDocTag list [@@js.global "getAllJSDocTagsOfKind"]
+    (**
+      Gets the effective type parameters. If the node was parsed in a
+      JavaScript file, gets the type parameters from the `\@template` tag from JSDoc.
+    *)
     val getEffectiveTypeParameterDeclarations: node:ts_DeclarationWithTypeParameters -> ts_TypeParameterDeclaration list [@@js.global "getEffectiveTypeParameterDeclarations"]
     val getEffectiveConstraintOfTypeParameter: node:ts_TypeParameterDeclaration -> ts_TypeNode or_undefined [@@js.global "getEffectiveConstraintOfTypeParameter"]
     val isIdentifierOrPrivateIdentifier: node:ts_Node -> bool [@@js.global "isIdentifierOrPrivateIdentifier"]
@@ -10052,6 +10612,11 @@ module Make (M: Missing) : sig
     val isUnparsedTextLike: node:ts_Node -> bool [@@js.global "isUnparsedTextLike"]
     val isUnparsedNode: node:ts_Node -> bool [@@js.global "isUnparsedNode"]
     val isJSDocPropertyLikeTag: node:ts_Node -> bool [@@js.global "isJSDocPropertyLikeTag"]
+    (**
+      True if node is of some token syntax kind.
+      For example, this is true for an IfKeyword but not for an IfStatement.
+      Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
+    *)
     val isToken: n:ts_Node -> bool [@@js.global "isToken"]
     val isLiteralExpression: node:ts_Node -> bool [@@js.global "isLiteralExpression"]
     val isTemplateLiteralToken: node:ts_Node -> bool [@@js.global "isTemplateLiteralToken"]
@@ -10070,6 +10635,11 @@ module Make (M: Missing) : sig
     val isTypeElement: node:ts_Node -> bool [@@js.global "isTypeElement"]
     val isClassOrTypeElement: node:ts_Node -> bool [@@js.global "isClassOrTypeElement"]
     val isObjectLiteralElementLike: node:ts_Node -> bool [@@js.global "isObjectLiteralElementLike"]
+    (**
+      Node test that determines whether a node is a valid type node.
+      This differs from the `isPartOfTypeNode` function which determines whether a node is *part*
+      of a TypeNode.
+    *)
     val isTypeNode: node:ts_Node -> bool [@@js.global "isTypeNode"]
     val isFunctionOrConstructorTypeNode: node:ts_Node -> bool [@@js.global "isFunctionOrConstructorTypeNode"]
     val isPropertyAccessOrQualifiedName: node:ts_Node -> bool [@@js.global "isPropertyAccessOrQualifiedName"]
@@ -10081,9 +10651,11 @@ module Make (M: Missing) : sig
     val isIterationStatement: node:ts_Node -> lookInLabeledStatements:bool -> bool [@@js.global "isIterationStatement"]
     val isJsxOpeningLikeElement: node:ts_Node -> bool [@@js.global "isJsxOpeningLikeElement"]
     val isCaseOrDefaultClause: node:ts_Node -> bool [@@js.global "isCaseOrDefaultClause"]
+    (** True if node is of a kind that may contain comment text. *)
     val isJSDocCommentContainingNode: node:ts_Node -> bool [@@js.global "isJSDocCommentContainingNode"]
     val isSetAccessor: node:ts_Node -> bool [@@js.global "isSetAccessor"]
     val isGetAccessor: node:ts_Node -> bool [@@js.global "isGetAccessor"]
+    (** True if has initializer node attached to it. *)
     val hasOnlyExpressionInitializer: node:ts_Node -> bool [@@js.global "hasOnlyExpressionInitializer"]
     val isObjectLiteralElement: node:ts_Node -> bool [@@js.global "isObjectLiteralElement"]
     val isStringLiteralLike: node:ts_Node -> bool [@@js.global "isStringLiteralLike"]
@@ -10094,15 +10666,27 @@ module Make (M: Missing) : sig
     val createInputFiles: javascriptText:string -> declarationText:string -> ts_InputFiles [@@js.global "createInputFiles"]
     val createInputFiles: readFileText:(path:string -> string or_undefined) -> javascriptPath:string -> javascriptMapPath:string or_undefined -> declarationPath:string -> declarationMapPath:string or_undefined -> buildInfoPath:string or_undefined -> ts_InputFiles [@@js.global "createInputFiles"]
     val createInputFiles: javascriptText:string -> declarationText:string -> javascriptMapPath:string or_undefined -> javascriptMapText:string or_undefined -> declarationMapPath:string or_undefined -> declarationMapText:string or_undefined -> ts_InputFiles [@@js.global "createInputFiles"]
+    (** Create an external source map source file reference *)
     val createSourceMapSource: fileName:string -> text:string -> ?skipTrivia:(pos:float -> float) -> unit -> ts_SourceMapSource [@@js.global "createSourceMapSource"]
     val setOriginalNode: node:'T -> original:ts_Node or_undefined -> 'T [@@js.global "setOriginalNode"]
+    (**
+      Clears any `EmitNode` entries from parse-tree nodes.
+      @param sourceFile A source file.
+    *)
     val disposeEmitNodes: sourceFile:ts_SourceFile or_undefined -> unit [@@js.global "disposeEmitNodes"]
+    (** Sets flags that control emit behavior of a node. *)
     val setEmitFlags: node:'T -> emitFlags:ts_EmitFlags -> 'T [@@js.global "setEmitFlags"]
+    (** Gets a custom text range to use when emitting source maps. *)
     val getSourceMapRange: node:ts_Node -> ts_SourceMapRange [@@js.global "getSourceMapRange"]
+    (** Sets a custom text range to use when emitting source maps. *)
     val setSourceMapRange: node:'T -> range:ts_SourceMapRange or_undefined -> 'T [@@js.global "setSourceMapRange"]
+    (** Gets the TextRange to use for source maps for a token of a node. *)
     val getTokenSourceMapRange: node:ts_Node -> token:ts_SyntaxKind -> ts_SourceMapRange or_undefined [@@js.global "getTokenSourceMapRange"]
+    (** Sets the TextRange to use for source maps for a token of a node. *)
     val setTokenSourceMapRange: node:'T -> token:ts_SyntaxKind -> range:ts_SourceMapRange or_undefined -> 'T [@@js.global "setTokenSourceMapRange"]
+    (** Gets a custom text range to use when emitting comments. *)
     val getCommentRange: node:ts_Node -> ts_TextRange [@@js.global "getCommentRange"]
+    (** Sets a custom text range to use when emitting comments. *)
     val setCommentRange: node:'T -> range:ts_TextRange -> 'T [@@js.global "setCommentRange"]
     val getSyntheticLeadingComments: node:ts_Node -> ts_SynthesizedComment list or_undefined [@@js.global "getSyntheticLeadingComments"]
     val setSyntheticLeadingComments: node:'T -> comments:ts_SynthesizedComment list or_undefined -> 'T [@@js.global "setSyntheticLeadingComments"]
@@ -10111,12 +10695,19 @@ module Make (M: Missing) : sig
     val setSyntheticTrailingComments: node:'T -> comments:ts_SynthesizedComment list or_undefined -> 'T [@@js.global "setSyntheticTrailingComments"]
     val addSyntheticTrailingComment: node:'T -> kind:((ts_SyntaxKind_MultiLineCommentTrivia, ts_SyntaxKind_SingleLineCommentTrivia) union2, ([`MultiLineCommentTrivia | `SingleLineCommentTrivia] [@js.enum])) or_enum -> text:string -> ?hasTrailingNewLine:bool -> unit -> 'T [@@js.global "addSyntheticTrailingComment"]
     val moveSyntheticComments: node:'T -> original:ts_Node -> 'T [@@js.global "moveSyntheticComments"]
+    (** Gets the constant value to emit for an expression representing an enum. *)
     val getConstantValue: node:ts_AccessExpression -> string or_number or_undefined [@@js.global "getConstantValue"]
+    (** Sets the constant value to emit for an expression. *)
     val setConstantValue: node:ts_AccessExpression -> value:string or_number -> ts_AccessExpression [@@js.global "setConstantValue"]
+    (** Adds an EmitHelper to a node. *)
     val addEmitHelper: node:'T -> helper:ts_EmitHelper -> 'T [@@js.global "addEmitHelper"]
+    (** Add EmitHelpers to a node. *)
     val addEmitHelpers: node:'T -> helpers:ts_EmitHelper list or_undefined -> 'T [@@js.global "addEmitHelpers"]
+    (** Removes an EmitHelper from a node. *)
     val removeEmitHelper: node:ts_Node -> helper:ts_EmitHelper -> bool [@@js.global "removeEmitHelper"]
+    (** Gets the EmitHelpers of a node. *)
     val getEmitHelpers: node:ts_Node -> ts_EmitHelper list or_undefined [@@js.global "getEmitHelpers"]
+    (** Moves matching emit helpers from a source node to a target node. *)
     val moveEmitHelpers: source:ts_Node -> target:ts_Node -> predicate:(helper:ts_EmitHelper -> bool) -> unit [@@js.global "moveEmitHelpers"]
     val isNumericLiteral: node:ts_Node -> bool [@@js.global "isNumericLiteral"]
     val isBigIntLiteral: node:ts_Node -> bool [@@js.global "isBigIntLiteral"]
@@ -10305,13 +10896,29 @@ module Make (M: Missing) : sig
     val isJSDocPropertyTag: node:ts_Node -> bool [@@js.global "isJSDocPropertyTag"]
     val isJSDocImplementsTag: node:ts_Node -> bool [@@js.global "isJSDocImplementsTag"]
     val setTextRange: range:'T -> location:ts_TextRange or_undefined -> 'T [@@js.global "setTextRange"]
+    (**
+      Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
+      stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
+      embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
+      a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
+      @param node a given node to visit its children
+      @param cbNode a callback to be invoked for all child nodes
+      @param cbNodes a callback to be invoked for embedded array
+      remarks: `forEachChild` must visit the children of a node in the order
+      that they appear in the source code. The language service depends on this property to locate nodes by position.
+    *)
     val forEachChild: node:ts_Node -> cbNode:(node:ts_Node -> 'T or_undefined) -> ?cbNodes:(nodes:ts_Node ts_NodeArray -> 'T or_undefined) -> unit -> 'T or_undefined [@@js.global "forEachChild"]
     val createSourceFile: fileName:string -> sourceText:string -> languageVersion:ts_ScriptTarget -> ?setParentNodes:bool -> ?scriptKind:ts_ScriptKind -> unit -> ts_SourceFile [@@js.global "createSourceFile"]
     val parseIsolatedEntityName: text:string -> languageVersion:ts_ScriptTarget -> ts_EntityName or_undefined [@@js.global "parseIsolatedEntityName"]
+    (**
+      Parse json text into SyntaxTree and return node and parse errors if any
+      @param fileName 
+      @param sourceText 
+    *)
     val parseJsonText: fileName:string -> sourceText:string -> ts_JsonSourceFile [@@js.global "parseJsonText"]
     val isExternalModule: file:ts_SourceFile -> bool [@@js.global "isExternalModule"]
     val updateSourceFile: sourceFile:ts_SourceFile -> newText:string -> textChangeRange:ts_TextChangeRange -> ?aggressiveChecks:bool -> unit -> ts_SourceFile [@@js.global "updateSourceFile"]
-    
+    (* ES6Export [] *)
     val parseCommandLine: commandLine:string list -> ?readFile:(path:string -> string or_undefined) -> unit -> ts_ParsedCommandLine [@@js.global "parseCommandLine"]
     module[@js.scope "DiagnosticReporter"] DiagnosticReporter : sig
       type t = ts_DiagnosticReporter
@@ -10322,6 +10929,7 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val apply: t -> diagnostic:ts_Diagnostic -> unit [@@js.apply]
     end
+    (** Reports config file diagnostics *)
     module[@js.scope "ConfigFileDiagnosticsReporter"] ConfigFileDiagnosticsReporter : sig
       type t = ts_ConfigFileDiagnosticsReporter
       val t_to_js: t -> Ojs.t
@@ -10329,9 +10937,13 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Reports unrecoverable error when parsing config file *)
+      (** Reports unrecoverable error when parsing config file *)
       val get_onUnRecoverableConfigFileDiagnostic: t -> ts_DiagnosticReporter [@@js.get "onUnRecoverableConfigFileDiagnostic"]
+      (** Reports unrecoverable error when parsing config file *)
       val set_onUnRecoverableConfigFileDiagnostic: t -> ts_DiagnosticReporter -> unit [@@js.set "onUnRecoverableConfigFileDiagnostic"]
     end
+    (** Interface extending ParseConfigHost to support ParseConfigFile that reads config file and reports errors *)
     module[@js.scope "ParseConfigFileHost"] ParseConfigFileHost : sig
       type t = ts_ParseConfigFileHost
       val t_to_js: t -> Ojs.t
@@ -10343,12 +10955,41 @@ module Make (M: Missing) : sig
       val cast: t -> ts_ParseConfigHost [@@js.cast]
       val cast': t -> ts_ConfigFileDiagnosticsReporter [@@js.cast]
     end
+    (** Reads the config file, reports errors if any and exits if the config file cannot be found *)
     val getParsedCommandLineOfConfigFile: configFileName:string -> optionsToExtend:ts_CompilerOptions -> host:ts_ParseConfigFileHost -> ?extendedConfigCache:ts_ExtendedConfigCacheEntry ts_Map -> ?watchOptionsToExtend:ts_WatchOptions -> ?extraFileExtensions:ts_FileExtensionInfo list -> unit -> ts_ParsedCommandLine or_undefined [@@js.global "getParsedCommandLineOfConfigFile"]
+    (**
+      Read tsconfig.json file
+      @param fileName The path to the config file
+    *)
     val readConfigFile: fileName:string -> readFile:(path:string -> string or_undefined) -> anonymous_interface_6 [@@js.global "readConfigFile"]
+    (**
+      Parse the text of the tsconfig.json file
+      @param fileName The path to the config file
+      @param jsonText The text of the config file
+    *)
     val parseConfigFileTextToJson: fileName:string -> jsonText:string -> anonymous_interface_6 [@@js.global "parseConfigFileTextToJson"]
+    (**
+      Read tsconfig.json file
+      @param fileName The path to the config file
+    *)
     val readJsonConfigFile: fileName:string -> readFile:(path:string -> string or_undefined) -> ts_TsConfigSourceFile [@@js.global "readJsonConfigFile"]
+    (** Convert the json syntax tree into the json value *)
     val convertToObject: sourceFile:ts_JsonSourceFile -> errors:ts_Diagnostic ts_Push -> any [@@js.global "convertToObject"]
+    (**
+      Parse the contents of a config file (tsconfig.json).
+      @param json The contents of the config file to parse
+      @param host Instance of ParseConfigHost used to enumerate files in folder.
+      @param basePath A root directory to resolve relative path entries in the config
+      file to. e.g. outDir
+    *)
     val parseJsonConfigFileContent: json:any -> host:ts_ParseConfigHost -> basePath:string -> ?existingOptions:ts_CompilerOptions -> ?configFileName:string -> ?resolutionStack:ts_Path list -> ?extraFileExtensions:ts_FileExtensionInfo list -> ?extendedConfigCache:ts_ExtendedConfigCacheEntry ts_Map -> ?existingWatchOptions:ts_WatchOptions -> unit -> ts_ParsedCommandLine [@@js.global "parseJsonConfigFileContent"]
+    (**
+      Parse the contents of a config file (tsconfig.json).
+      @param jsonNode The contents of the config file to parse
+      @param host Instance of ParseConfigHost used to enumerate files in folder.
+      @param basePath A root directory to resolve relative path entries in the config
+      file to. e.g. outDir
+    *)
     val parseJsonSourceFileConfigFileContent: sourceFile:ts_TsConfigSourceFile -> host:ts_ParseConfigHost -> basePath:string -> ?existingOptions:ts_CompilerOptions -> ?configFileName:string -> ?resolutionStack:ts_Path list -> ?extraFileExtensions:ts_FileExtensionInfo list -> ?extendedConfigCache:ts_ExtendedConfigCacheEntry ts_Map -> ?existingWatchOptions:ts_WatchOptions -> unit -> ts_ParsedCommandLine [@@js.global "parseJsonSourceFileConfigFileContent"]
     module[@js.scope "ParsedTsconfig"] ParsedTsconfig : sig
       type t = ts_ParsedTsconfig
@@ -10365,7 +11006,10 @@ module Make (M: Missing) : sig
       val set_watchOptions: t -> ts_WatchOptions -> unit [@@js.set "watchOptions"]
       val get_typeAcquisition: t -> ts_TypeAcquisition [@@js.get "typeAcquisition"]
       val set_typeAcquisition: t -> ts_TypeAcquisition -> unit [@@js.set "typeAcquisition"]
+      (** Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet *)
+      (** Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet *)
       val get_extendedConfigPath: t -> string [@@js.get "extendedConfigPath"]
+      (** Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet *)
       val set_extendedConfigPath: t -> string -> unit [@@js.set "extendedConfigPath"]
     end
     module[@js.scope "ExtendedConfigCacheEntry"] ExtendedConfigCacheEntry : sig
@@ -10382,10 +11026,27 @@ module Make (M: Missing) : sig
     end
     val convertCompilerOptionsFromJson: jsonOptions:any -> basePath:string -> ?configFileName:string -> unit -> anonymous_interface_9 [@@js.global "convertCompilerOptionsFromJson"]
     val convertTypeAcquisitionFromJson: jsonOptions:any -> basePath:string -> ?configFileName:string -> unit -> anonymous_interface_10 [@@js.global "convertTypeAcquisitionFromJson"]
-    
+    (* ES6Export [] *)
     val getEffectiveTypeRoots: options:ts_CompilerOptions -> host:ts_GetEffectiveTypeRootsHost -> string list or_undefined [@@js.global "getEffectiveTypeRoots"]
+    (**
+      @param containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
+      This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
+      is assumed to be the same as root directory of the project.
+    *)
     val resolveTypeReferenceDirective: typeReferenceDirectiveName:string -> containingFile:string or_undefined -> options:ts_CompilerOptions -> host:ts_ModuleResolutionHost -> ?redirectedReference:ts_ResolvedProjectReference -> unit -> ts_ResolvedTypeReferenceDirectiveWithFailedLookupLocations [@@js.global "resolveTypeReferenceDirective"]
+    (**
+      Given a set of options, returns the set of type directive names
+        that should be included for this program automatically.
+      This list could either come from the config file,
+        or from enumerating the types root + initial secondary types lookup location.
+      More type directives might appear in the program later as a result of loading actual source files;
+        this list is only the set of defaults that are implicitly included.
+    *)
     val getAutomaticTypeDirectiveNames: options:ts_CompilerOptions -> host:ts_ModuleResolutionHost -> string list [@@js.global "getAutomaticTypeDirectiveNames"]
+    (**
+      Cached module resolutions per containing directory.
+      This assumes that any module id will have the same resolution for sibling files located in the same folder.
+    *)
     module[@js.scope "ModuleResolutionCache"] ModuleResolutionCache : sig
       type t = ts_ModuleResolutionCache
       val t_to_js: t -> Ojs.t
@@ -10396,6 +11057,10 @@ module Make (M: Missing) : sig
       val getOrCreateCacheForDirectory: t -> directoryName:string -> ?redirectedReference:ts_ResolvedProjectReference -> unit -> ts_ResolvedModuleWithFailedLookupLocations ts_Map [@@js.call "getOrCreateCacheForDirectory"]
       val cast: t -> ts_NonRelativeModuleNameResolutionCache [@@js.cast]
     end
+    (**
+      Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
+      We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
+    *)
     module[@js.scope "NonRelativeModuleNameResolutionCache"] NonRelativeModuleNameResolutionCache : sig
       type t = ts_NonRelativeModuleNameResolutionCache
       val t_to_js: t -> Ojs.t
@@ -10420,17 +11085,83 @@ module Make (M: Missing) : sig
     val resolveModuleName: moduleName:string -> containingFile:string -> compilerOptions:ts_CompilerOptions -> host:ts_ModuleResolutionHost -> ?cache:ts_ModuleResolutionCache -> ?redirectedReference:ts_ResolvedProjectReference -> unit -> ts_ResolvedModuleWithFailedLookupLocations [@@js.global "resolveModuleName"]
     val nodeModuleNameResolver: moduleName:string -> containingFile:string -> compilerOptions:ts_CompilerOptions -> host:ts_ModuleResolutionHost -> ?cache:ts_ModuleResolutionCache -> ?redirectedReference:ts_ResolvedProjectReference -> unit -> ts_ResolvedModuleWithFailedLookupLocations [@@js.global "nodeModuleNameResolver"]
     val classicNameResolver: moduleName:string -> containingFile:string -> compilerOptions:ts_CompilerOptions -> host:ts_ModuleResolutionHost -> ?cache:ts_NonRelativeModuleNameResolutionCache -> ?redirectedReference:ts_ResolvedProjectReference -> unit -> ts_ResolvedModuleWithFailedLookupLocations [@@js.global "classicNameResolver"]
+    (**
+      Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+      @param node The Node to visit.
+      @param visitor The callback used to visit the Node.
+      @param test A callback to execute to verify the Node is valid.
+      @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+    *)
     val visitNode: node:'T -> visitor:ts_Visitor or_undefined -> ?test:(node:ts_Node -> bool) -> ?lift:(node:ts_Node list -> 'T) -> unit -> 'T [@@js.global "visitNode"]
+    (**
+      Visits a Node using the supplied visitor, possibly returning a new Node in its place.
+      @param node The Node to visit.
+      @param visitor The callback used to visit the Node.
+      @param test A callback to execute to verify the Node is valid.
+      @param lift An optional callback to execute to lift a NodeArray into a valid Node.
+    *)
     val visitNode: node:'T or_undefined -> visitor:ts_Visitor or_undefined -> ?test:(node:ts_Node -> bool) -> ?lift:(node:ts_Node list -> 'T) -> unit -> 'T or_undefined [@@js.global "visitNode"]
+    (**
+      Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+      @param nodes The NodeArray to visit.
+      @param visitor The callback used to visit a Node.
+      @param test A node test to execute for each node.
+      @param start An optional value indicating the starting offset at which to start visiting.
+      @param count An optional value indicating the maximum number of nodes to visit.
+    *)
     val visitNodes: nodes:'T ts_NodeArray -> visitor:ts_Visitor or_undefined -> ?test:(node:ts_Node -> bool) -> ?start:float -> ?count:float -> unit -> 'T ts_NodeArray [@@js.global "visitNodes"]
+    (**
+      Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.
+      @param nodes The NodeArray to visit.
+      @param visitor The callback used to visit a Node.
+      @param test A node test to execute for each node.
+      @param start An optional value indicating the starting offset at which to start visiting.
+      @param count An optional value indicating the maximum number of nodes to visit.
+    *)
     val visitNodes: nodes:'T ts_NodeArray or_undefined -> visitor:ts_Visitor or_undefined -> ?test:(node:ts_Node -> bool) -> ?start:float -> ?count:float -> unit -> 'T ts_NodeArray or_undefined [@@js.global "visitNodes"]
+    (**
+      Starts a new lexical environment and visits a statement list, ending the lexical environment
+      and merging hoisted declarations upon completion.
+    *)
     val visitLexicalEnvironment: statements:ts_Statement ts_NodeArray -> visitor:ts_Visitor -> context:ts_TransformationContext -> ?start:float -> ?ensureUseStrict:bool -> ?nodesVisitor:ts_NodesVisitor -> unit -> ts_Statement ts_NodeArray [@@js.global "visitLexicalEnvironment"]
+    (**
+      Starts a new lexical environment and visits a parameter list, suspending the lexical
+      environment upon completion.
+    *)
     val visitParameterList: nodes:ts_ParameterDeclaration ts_NodeArray -> visitor:ts_Visitor -> context:ts_TransformationContext -> ?nodesVisitor:ts_NodesVisitor -> unit -> ts_ParameterDeclaration ts_NodeArray [@@js.global "visitParameterList"]
+    (**
+      Starts a new lexical environment and visits a parameter list, suspending the lexical
+      environment upon completion.
+    *)
     val visitParameterList: nodes:ts_ParameterDeclaration ts_NodeArray or_undefined -> visitor:ts_Visitor -> context:ts_TransformationContext -> ?nodesVisitor:ts_NodesVisitor -> unit -> ts_ParameterDeclaration ts_NodeArray or_undefined [@@js.global "visitParameterList"]
+    (**
+      Resumes a suspended lexical environment and visits a function body, ending the lexical
+      environment and merging hoisted declarations upon completion.
+    *)
     val visitFunctionBody: node:ts_FunctionBody -> visitor:ts_Visitor -> context:ts_TransformationContext -> ts_FunctionBody [@@js.global "visitFunctionBody"]
+    (**
+      Resumes a suspended lexical environment and visits a function body, ending the lexical
+      environment and merging hoisted declarations upon completion.
+    *)
     val visitFunctionBody: node:ts_FunctionBody or_undefined -> visitor:ts_Visitor -> context:ts_TransformationContext -> ts_FunctionBody or_undefined [@@js.global "visitFunctionBody"]
+    (**
+      Resumes a suspended lexical environment and visits a concise body, ending the lexical
+      environment and merging hoisted declarations upon completion.
+    *)
     val visitFunctionBody: node:ts_ConciseBody -> visitor:ts_Visitor -> context:ts_TransformationContext -> ts_ConciseBody [@@js.global "visitFunctionBody"]
+    (**
+      Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
+      @param node The Node whose children will be visited.
+      @param visitor The callback used to visit each child.
+      @param context A lexical environment context for the visitor.
+    *)
     val visitEachChild: node:'T -> visitor:ts_Visitor -> context:ts_TransformationContext -> 'T [@@js.global "visitEachChild"]
+    (**
+      Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
+      @param node The Node whose children will be visited.
+      @param visitor The callback used to visit each child.
+      @param context A lexical environment context for the visitor.
+    *)
     val visitEachChild: node:'T or_undefined -> visitor:ts_Visitor -> context:ts_TransformationContext -> ?nodesVisitor:anonymous_interface_24 -> ?tokenVisitor:ts_Visitor -> unit -> 'T or_undefined [@@js.global "visitEachChild"]
     val getTsBuildInfoEmitOutputFilePath: options:ts_CompilerOptions -> string or_undefined [@@js.global "getTsBuildInfoEmitOutputFilePath"]
     val getOutputFileNames: commandLine:ts_ParsedCommandLine -> inputFileName:string -> ignoreCase:bool -> string list [@@js.global "getOutputFileNames"]
@@ -10455,8 +11186,31 @@ module Make (M: Missing) : sig
     val formatDiagnosticsWithColorAndContext: diagnostics:ts_Diagnostic list -> host:ts_FormatDiagnosticsHost -> string [@@js.global "formatDiagnosticsWithColorAndContext"]
     val flattenDiagnosticMessageText: diag:ts_DiagnosticMessageChain or_string or_undefined -> newLine:string -> ?indent:float -> unit -> string [@@js.global "flattenDiagnosticMessageText"]
     val getConfigFileParsingDiagnostics: configFileParseResult:ts_ParsedCommandLine -> ts_Diagnostic list [@@js.global "getConfigFileParsingDiagnostics"]
+    (**
+      Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+      that represent a compilation unit.
+      
+      Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+      triple-slash-reference-path directives transitively. '\@types' and triple-slash-reference-types are also pulled in.
+      @param createProgramOptions - The options for creating a program.
+      @return A 'Program' object.
+    *)
     val createProgram: createProgramOptions:ts_CreateProgramOptions -> ts_Program [@@js.global "createProgram"]
+    (**
+      Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+      that represent a compilation unit.
+      
+      Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+      triple-slash-reference-path directives transitively. '\@types' and triple-slash-reference-types are also pulled in.
+      @param rootNames - A set of root files.
+      @param options - The compiler options which should be used.
+      @param host - The host interacts with the underlying file system.
+      @param oldProgram - Reuses an old program structure.
+      @param configFileParsingDiagnostics - error during config file parsing
+      @return A 'Program' object.
+    *)
     val createProgram: rootNames:string list -> options:ts_CompilerOptions -> ?host:ts_CompilerHost -> ?oldProgram:ts_Program -> ?configFileParsingDiagnostics:ts_Diagnostic list -> unit -> ts_Program [@@js.global "createProgram"]
+    (** @deprecated  *)
     module[@js.scope "ResolveProjectReferencePathHost"] ResolveProjectReferencePathHost : sig
       type t = ts_ResolveProjectReferencePathHost
       val t_to_js: t -> Ojs.t
@@ -10466,9 +11220,14 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val fileExists: t -> fileName:string -> bool [@@js.call "fileExists"]
     end
+    (**
+      Returns the target config filename of a project reference.
+      Note: The file might not exist.
+    *)
     val resolveProjectReferencePath: ref:ts_ProjectReference -> ts_ResolvedConfigFileName [@@js.global "resolveProjectReferencePath"]
+    (** @deprecated  *)
     val resolveProjectReferencePath: host:ts_ResolveProjectReferencePathHost -> ref:ts_ProjectReference -> ts_ResolvedConfigFileName [@@js.global "resolveProjectReferencePath"]
-    
+    (* ES6Export [] *)
     module[@js.scope "EmitOutput"] EmitOutput : sig
       type t = ts_EmitOutput
       val t_to_js: t -> Ojs.t
@@ -10510,11 +11269,26 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** return true if file names are treated with case sensitivity *)
       val useCaseSensitiveFileNames: t -> bool [@@js.call "useCaseSensitiveFileNames"]
+      (** If provided this would be used this hash instead of actual file shape text for detecting changes *)
       val createHash: t -> data:string -> string [@@js.call "createHash"]
+      (**
+        When emit or emitNextAffectedFile are called without writeFile,
+        this callback if present would be used to write files
+      *)
+      (**
+        When emit or emitNextAffectedFile are called without writeFile,
+        this callback if present would be used to write files
+      *)
       val get_writeFile: t -> ts_WriteFileCallback [@@js.get "writeFile"]
+      (**
+        When emit or emitNextAffectedFile are called without writeFile,
+        this callback if present would be used to write files
+      *)
       val set_writeFile: t -> ts_WriteFileCallback -> unit [@@js.set "writeFile"]
     end
+    (** Builder to manage the program state changes *)
     module[@js.scope "BuilderProgram"] BuilderProgram : sig
       type t = ts_BuilderProgram
       val t_to_js: t -> Ojs.t
@@ -10522,20 +11296,51 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Returns current program *)
       val getProgram: t -> ts_Program [@@js.call "getProgram"]
+      (** Get compiler options of the program *)
       val getCompilerOptions: t -> ts_CompilerOptions [@@js.call "getCompilerOptions"]
+      (** Get the source file in the program with file name *)
       val getSourceFile: t -> fileName:string -> ts_SourceFile or_undefined [@@js.call "getSourceFile"]
+      (** Get a list of files in the program *)
       val getSourceFiles: t -> ts_SourceFile list [@@js.call "getSourceFiles"]
+      (** Get the diagnostics for compiler options *)
       val getOptionsDiagnostics: t -> ?cancellationToken:ts_CancellationToken -> unit -> ts_Diagnostic list [@@js.call "getOptionsDiagnostics"]
+      (** Get the diagnostics that dont belong to any file *)
       val getGlobalDiagnostics: t -> ?cancellationToken:ts_CancellationToken -> unit -> ts_Diagnostic list [@@js.call "getGlobalDiagnostics"]
+      (** Get the diagnostics from config file parsing *)
       val getConfigFileParsingDiagnostics: t -> ts_Diagnostic list [@@js.call "getConfigFileParsingDiagnostics"]
+      (** Get the syntax diagnostics, for all source files if source file is not supplied *)
       val getSyntacticDiagnostics: t -> ?sourceFile:ts_SourceFile -> ?cancellationToken:ts_CancellationToken -> unit -> ts_Diagnostic list [@@js.call "getSyntacticDiagnostics"]
+      (** Get the declaration diagnostics, for all source files if source file is not supplied *)
       val getDeclarationDiagnostics: t -> ?sourceFile:ts_SourceFile -> ?cancellationToken:ts_CancellationToken -> unit -> ts_DiagnosticWithLocation list [@@js.call "getDeclarationDiagnostics"]
+      (** Get all the dependencies of the file *)
       val getAllDependencies: t -> sourceFile:ts_SourceFile -> string list [@@js.call "getAllDependencies"]
+      (**
+        Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
+        The semantic diagnostics are cached and managed here
+        Note that it is assumed that when asked about semantic diagnostics through this API,
+        the file has been taken out of affected files so it is safe to use cache or get from program and cache the diagnostics
+        In case of SemanticDiagnosticsBuilderProgram if the source file is not provided,
+        it will iterate through all the affected files, to ensure that cache stays valid and yet provide a way to get all semantic diagnostics
+      *)
       val getSemanticDiagnostics: t -> ?sourceFile:ts_SourceFile -> ?cancellationToken:ts_CancellationToken -> unit -> ts_Diagnostic list [@@js.call "getSemanticDiagnostics"]
+      (**
+        Emits the JavaScript and declaration files.
+        When targetSource file is specified, emits the files corresponding to that source file,
+        otherwise for the whole program.
+        In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
+        it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
+        it will only emit all the affected files instead of whole program
+        
+        The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+        in that order would be used to write the files
+      *)
       val emit: t -> ?targetSourceFile:ts_SourceFile -> ?writeFile:ts_WriteFileCallback -> ?cancellationToken:ts_CancellationToken -> ?emitOnlyDtsFiles:bool -> ?customTransformers:ts_CustomTransformers -> unit -> ts_EmitResult [@@js.call "emit"]
+      (** Get the current directory of the program *)
       val getCurrentDirectory: t -> string [@@js.call "getCurrentDirectory"]
     end
+    (** The builder that caches the semantic diagnostics for the program and handles the changed files and affected files *)
     module[@js.scope "SemanticDiagnosticsBuilderProgram"] SemanticDiagnosticsBuilderProgram : sig
       type t = ts_SemanticDiagnosticsBuilderProgram
       val t_to_js: t -> Ojs.t
@@ -10543,9 +11348,17 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        Gets the semantic diagnostics from the program for the next affected file and caches it
+        Returns undefined if the iteration is complete
+      *)
       val getSemanticDiagnosticsOfNextAffectedFile: t -> ?cancellationToken:ts_CancellationToken -> ?ignoreSourceFile:(sourceFile:ts_SourceFile -> bool) -> unit -> ts_Diagnostic list ts_AffectedFileResult [@@js.call "getSemanticDiagnosticsOfNextAffectedFile"]
       val cast: t -> ts_BuilderProgram [@@js.cast]
     end
+    (**
+      The builder that can handle the changes in program and iterate through changed file to emit the files
+      The semantic diagnostics are cached per file and managed by clearing for the changed/affected files
+    *)
     module[@js.scope "EmitAndSemanticDiagnosticsBuilderProgram"] EmitAndSemanticDiagnosticsBuilderProgram : sig
       type t = ts_EmitAndSemanticDiagnosticsBuilderProgram
       val t_to_js: t -> Ojs.t
@@ -10553,14 +11366,31 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
+        The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
+        in that order would be used to write the files
+      *)
       val emitNextAffectedFile: t -> ?writeFile:ts_WriteFileCallback -> ?cancellationToken:ts_CancellationToken -> ?emitOnlyDtsFiles:bool -> ?customTransformers:ts_CustomTransformers -> unit -> ts_EmitResult ts_AffectedFileResult [@@js.call "emitNextAffectedFile"]
       val cast: t -> ts_SemanticDiagnosticsBuilderProgram [@@js.cast]
     end
+    (** Create the builder to manage semantic diagnostics and cache them *)
     val createSemanticDiagnosticsBuilderProgram: newProgram:ts_Program -> host:ts_BuilderProgramHost -> ?oldProgram:ts_SemanticDiagnosticsBuilderProgram -> ?configFileParsingDiagnostics:ts_Diagnostic list -> unit -> ts_SemanticDiagnosticsBuilderProgram [@@js.global "createSemanticDiagnosticsBuilderProgram"]
+    (** Create the builder to manage semantic diagnostics and cache them *)
     val createSemanticDiagnosticsBuilderProgram: rootNames:string list or_undefined -> options:ts_CompilerOptions or_undefined -> ?host:ts_CompilerHost -> ?oldProgram:ts_SemanticDiagnosticsBuilderProgram -> ?configFileParsingDiagnostics:ts_Diagnostic list -> ?projectReferences:ts_ProjectReference list -> unit -> ts_SemanticDiagnosticsBuilderProgram [@@js.global "createSemanticDiagnosticsBuilderProgram"]
+    (**
+      Create the builder that can handle the changes in program and iterate through changed files
+      to emit the those files and manage semantic diagnostics cache as well
+    *)
     val createEmitAndSemanticDiagnosticsBuilderProgram: newProgram:ts_Program -> host:ts_BuilderProgramHost -> ?oldProgram:ts_EmitAndSemanticDiagnosticsBuilderProgram -> ?configFileParsingDiagnostics:ts_Diagnostic list -> unit -> ts_EmitAndSemanticDiagnosticsBuilderProgram [@@js.global "createEmitAndSemanticDiagnosticsBuilderProgram"]
+    (**
+      Create the builder that can handle the changes in program and iterate through changed files
+      to emit the those files and manage semantic diagnostics cache as well
+    *)
     val createEmitAndSemanticDiagnosticsBuilderProgram: rootNames:string list or_undefined -> options:ts_CompilerOptions or_undefined -> ?host:ts_CompilerHost -> ?oldProgram:ts_EmitAndSemanticDiagnosticsBuilderProgram -> ?configFileParsingDiagnostics:ts_Diagnostic list -> ?projectReferences:ts_ProjectReference list -> unit -> ts_EmitAndSemanticDiagnosticsBuilderProgram [@@js.global "createEmitAndSemanticDiagnosticsBuilderProgram"]
+    (** Creates a builder thats just abstraction over program and can be used with watch *)
     val createAbstractBuilder: newProgram:ts_Program -> host:ts_BuilderProgramHost -> ?oldProgram:ts_BuilderProgram -> ?configFileParsingDiagnostics:ts_Diagnostic list -> unit -> ts_BuilderProgram [@@js.global "createAbstractBuilder"]
+    (** Creates a builder thats just abstraction over program and can be used with watch *)
     val createAbstractBuilder: rootNames:string list or_undefined -> options:ts_CompilerOptions or_undefined -> ?host:ts_CompilerHost -> ?oldProgram:ts_BuilderProgram -> ?configFileParsingDiagnostics:ts_Diagnostic list -> ?projectReferences:ts_ProjectReference list -> unit -> ts_BuilderProgram [@@js.global "createAbstractBuilder"]
     module[@js.scope "ReadBuildProgramHost"] ReadBuildProgramHost : sig
       type t = ts_ReadBuildProgramHost
@@ -10614,6 +11444,7 @@ module Make (M: Missing) : sig
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
       val apply: 'T t -> rootNames:string list or_undefined -> options:ts_CompilerOptions or_undefined -> ?host:ts_CompilerHost -> ?oldProgram:'T -> ?configFileParsingDiagnostics:ts_Diagnostic list -> ?projectReferences:ts_ProjectReference list or_undefined -> unit -> 'T [@@js.apply]
     end
+    (** Host that has watch functionality used in --watch mode *)
     module[@js.scope "WatchHost"] WatchHost : sig
       type t = ts_WatchHost
       val t_to_js: t -> Ojs.t
@@ -10621,10 +11452,15 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** If provided, called with Diagnostic message that informs about change in watch status *)
       val onWatchStatusChange: t -> diagnostic:ts_Diagnostic -> newLine:string -> options:ts_CompilerOptions -> ?errorCount:float -> unit -> unit [@@js.call "onWatchStatusChange"]
+      (** Used to watch changes in source files, missing files needed to update the program or config file *)
       val watchFile: t -> path:string -> callback:ts_FileWatcherCallback -> ?pollingInterval:float -> ?options:ts_CompilerOptions -> unit -> ts_FileWatcher [@@js.call "watchFile"]
+      (** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added *)
       val watchDirectory: t -> path:string -> callback:ts_DirectoryWatcherCallback -> ?recursive:bool -> ?options:ts_CompilerOptions -> unit -> ts_FileWatcher [@@js.call "watchDirectory"]
+      (** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together *)
       val setTimeout: t -> callback:(args:(any list [@js.variadic]) -> unit) -> ms:float -> args:(any list [@js.variadic]) -> any [@@js.call "setTimeout"]
+      (** If provided, will be used to reset existing delayed compilation *)
       val clearTimeout: t -> timeoutId:any -> unit [@@js.call "clearTimeout"]
     end
     module[@js.scope "ProgramHost"] ProgramHost : sig
@@ -10634,7 +11470,10 @@ module Make (M: Missing) : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      (** Used to create the program when need for program creation or recreation detected *)
+      (** Used to create the program when need for program creation or recreation detected *)
       val get_createProgram: 'T t -> 'T ts_CreateProgram [@@js.get "createProgram"]
+      (** Used to create the program when need for program creation or recreation detected *)
       val set_createProgram: 'T t -> 'T ts_CreateProgram -> unit [@@js.set "createProgram"]
       val useCaseSensitiveFileNames: 'T t -> bool [@@js.call "useCaseSensitiveFileNames"]
       val getNewLine: 'T t -> string [@@js.call "getNewLine"]
@@ -10642,15 +11481,31 @@ module Make (M: Missing) : sig
       val getDefaultLibFileName: 'T t -> options:ts_CompilerOptions -> string [@@js.call "getDefaultLibFileName"]
       val getDefaultLibLocation: 'T t -> string [@@js.call "getDefaultLibLocation"]
       val createHash: 'T t -> data:string -> string [@@js.call "createHash"]
+      (**
+        Use to check file presence for source files and
+        if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
+      *)
       val fileExists: 'T t -> path:string -> bool [@@js.call "fileExists"]
+      (**
+        Use to read file text for source files and
+        if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
+      *)
       val readFile: 'T t -> path:string -> ?encoding:string -> unit -> string or_undefined [@@js.call "readFile"]
+      (** If provided, used for module resolution as well as to handle directory structure *)
       val directoryExists: 'T t -> path:string -> bool [@@js.call "directoryExists"]
+      (** If provided, used in resolutions as well as handling directory structure *)
       val getDirectories: 'T t -> path:string -> string list [@@js.call "getDirectories"]
+      (** If provided, used to cache and handle directory structure modifications *)
       val readDirectory: 'T t -> path:string -> ?extensions:string list -> ?exclude:string list -> ?include_:string list -> ?depth:float -> unit -> string list [@@js.call "readDirectory"]
+      (** Symbol links resolution *)
       val realpath: 'T t -> path:string -> string [@@js.call "realpath"]
+      (** If provided would be used to write log about compilation *)
       val trace: 'T t -> s:string -> unit [@@js.call "trace"]
+      (** If provided is used to get the environment variable *)
       val getEnvironmentVariable: 'T t -> name:string -> string or_undefined [@@js.call "getEnvironmentVariable"]
+      (** If provided, used to resolve the module names, otherwise typescript's default module resolution *)
       val resolveModuleNames: 'T t -> moduleNames:string list -> containingFile:string -> reusedNames:string list or_undefined -> redirectedReference:ts_ResolvedProjectReference or_undefined -> options:ts_CompilerOptions -> ts_ResolvedModule or_undefined list [@@js.call "resolveModuleNames"]
+      (** If provided, used to resolve type reference directives, otherwise typescript's default resolution *)
       val resolveTypeReferenceDirectives: 'T t -> typeReferenceDirectiveNames:string list -> containingFile:string -> redirectedReference:ts_ResolvedProjectReference or_undefined -> options:ts_CompilerOptions -> ts_ResolvedTypeReferenceDirective or_undefined list [@@js.call "resolveTypeReferenceDirectives"]
     end
     module[@js.scope "WatchCompilerHost"] WatchCompilerHost : sig
@@ -10660,11 +11515,14 @@ module Make (M: Missing) : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      (** Instead of using output d.ts file from project reference, use its source file *)
       val useSourceOfProjectReferenceRedirect: 'T t -> bool [@@js.call "useSourceOfProjectReferenceRedirect"]
+      (** If provided, callback to invoke after every new program creation *)
       val afterProgramCreate: 'T t -> program:'T -> unit [@@js.call "afterProgramCreate"]
       val cast: 'T t -> 'T ts_ProgramHost [@@js.cast]
       val cast': 'T t -> ts_WatchHost [@@js.cast]
     end
+    (** Host to create watch with root files and options *)
     module[@js.scope "WatchCompilerHostOfFilesAndCompilerOptions"] WatchCompilerHostOfFilesAndCompilerOptions : sig
       type 'T t = 'T ts_WatchCompilerHostOfFilesAndCompilerOptions
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -10672,16 +11530,26 @@ module Make (M: Missing) : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      (** root files to use to generate program *)
+      (** root files to use to generate program *)
       val get_rootFiles: 'T t -> string list [@@js.get "rootFiles"]
+      (** root files to use to generate program *)
       val set_rootFiles: 'T t -> string list -> unit [@@js.set "rootFiles"]
+      (** Compiler options *)
+      (** Compiler options *)
       val get_options: 'T t -> ts_CompilerOptions [@@js.get "options"]
+      (** Compiler options *)
       val set_options: 'T t -> ts_CompilerOptions -> unit [@@js.set "options"]
       val get_watchOptions: 'T t -> ts_WatchOptions [@@js.get "watchOptions"]
       val set_watchOptions: 'T t -> ts_WatchOptions -> unit [@@js.set "watchOptions"]
+      (** Project References *)
+      (** Project References *)
       val get_projectReferences: 'T t -> ts_ProjectReference list [@@js.get "projectReferences"]
+      (** Project References *)
       val set_projectReferences: 'T t -> ts_ProjectReference list -> unit [@@js.set "projectReferences"]
       val cast: 'T t -> 'T ts_WatchCompilerHost [@@js.cast]
     end
+    (** Host to create watch with config file *)
     module[@js.scope "WatchCompilerHostOfConfigFile"] WatchCompilerHostOfConfigFile : sig
       type 'T t = 'T ts_WatchCompilerHostOfConfigFile
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -10689,14 +11557,24 @@ module Make (M: Missing) : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      (** Name of the config file to compile *)
+      (** Name of the config file to compile *)
       val get_configFileName: 'T t -> string [@@js.get "configFileName"]
+      (** Name of the config file to compile *)
       val set_configFileName: 'T t -> string -> unit [@@js.set "configFileName"]
+      (** Options to extend *)
+      (** Options to extend *)
       val get_optionsToExtend: 'T t -> ts_CompilerOptions [@@js.get "optionsToExtend"]
+      (** Options to extend *)
       val set_optionsToExtend: 'T t -> ts_CompilerOptions -> unit [@@js.set "optionsToExtend"]
       val get_watchOptionsToExtend: 'T t -> ts_WatchOptions [@@js.get "watchOptionsToExtend"]
       val set_watchOptionsToExtend: 'T t -> ts_WatchOptions -> unit [@@js.set "watchOptionsToExtend"]
       val get_extraFileExtensions: 'T t -> ts_FileExtensionInfo list [@@js.get "extraFileExtensions"]
       val set_extraFileExtensions: 'T t -> ts_FileExtensionInfo list -> unit [@@js.set "extraFileExtensions"]
+      (**
+        Used to generate source file names from the config file and its include, exclude, files rules
+        and also to cache the directory stucture
+      *)
       val readDirectory: 'T t -> path:string -> ?extensions:string list -> ?exclude:string list -> ?include_:string list -> ?depth:float -> unit -> string list [@@js.call "readDirectory"]
       val cast: 'T t -> 'T ts_WatchCompilerHost [@@js.cast]
       val cast': 'T t -> ts_ConfigFileDiagnosticsReporter [@@js.cast]
@@ -10708,9 +11586,12 @@ module Make (M: Missing) : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      (** Synchronize with host and get updated program *)
       val getProgram: 'T t -> 'T [@@js.call "getProgram"]
+      (** Closes the watch *)
       val close: 'T t -> unit [@@js.call "close"]
     end
+    (** Creates the watch what generates program using the config file *)
     module[@js.scope "WatchOfConfigFile"] WatchOfConfigFile : sig
       type 'T t = 'T ts_WatchOfConfigFile
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -10720,6 +11601,7 @@ module Make (M: Missing) : sig
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
       val cast: 'T t -> 'T ts_Watch [@@js.cast]
     end
+    (** Creates the watch that generates program using the root files and compiler options *)
     module[@js.scope "WatchOfFilesAndCompilerOptions"] WatchOfFilesAndCompilerOptions : sig
       type 'T t = 'T ts_WatchOfFilesAndCompilerOptions
       val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -10727,12 +11609,17 @@ module Make (M: Missing) : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      (** Updates the root files in the program, only if this is not config file compilation *)
       val updateRootFileNames: 'T t -> fileNames:string list -> unit [@@js.call "updateRootFileNames"]
       val cast: 'T t -> 'T ts_Watch [@@js.cast]
     end
+    (** Create the watch compiler host for either configFile or fileNames and its options *)
     val createWatchCompilerHost: configFileName:string -> optionsToExtend:ts_CompilerOptions or_undefined -> system:ts_System -> ?createProgram:'T ts_CreateProgram -> ?reportDiagnostic:ts_DiagnosticReporter -> ?reportWatchStatus:ts_WatchStatusReporter -> ?watchOptionsToExtend:ts_WatchOptions -> ?extraFileExtensions:ts_FileExtensionInfo list -> unit -> 'T ts_WatchCompilerHostOfConfigFile [@@js.global "createWatchCompilerHost"]
+    (** Create the watch compiler host for either configFile or fileNames and its options *)
     val createWatchCompilerHost: rootFiles:string list -> options:ts_CompilerOptions -> system:ts_System -> ?createProgram:'T ts_CreateProgram -> ?reportDiagnostic:ts_DiagnosticReporter -> ?reportWatchStatus:ts_WatchStatusReporter -> ?projectReferences:ts_ProjectReference list -> ?watchOptions:ts_WatchOptions -> unit -> 'T ts_WatchCompilerHostOfFilesAndCompilerOptions [@@js.global "createWatchCompilerHost"]
+    (** Creates the watch from the host for root files and compiler options *)
     val createWatchProgram: host:'T ts_WatchCompilerHostOfFilesAndCompilerOptions -> 'T ts_WatchOfFilesAndCompilerOptions [@@js.global "createWatchProgram"]
+    (** Creates the watch from the host for config file *)
     val createWatchProgram: host:'T ts_WatchCompilerHostOfConfigFile -> 'T ts_WatchOfConfigFile [@@js.global "createWatchProgram"]
     module[@js.scope "BuildOptions"] BuildOptions : sig
       type t = ts_BuildOptions
@@ -10773,6 +11660,10 @@ module Make (M: Missing) : sig
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
       val createDirectory: 'T t -> path:string -> unit [@@js.call "createDirectory"]
+      (**
+        Should provide create directory and writeFile if done of invalidatedProjects is not invoked with
+        writeFileCallback
+      *)
       val writeFile: 'T t -> path:string -> data:string -> ?writeByteOrderMark:bool -> unit -> unit [@@js.call "writeFile"]
       val getModifiedTime: 'T t -> fileName:string -> Date.t_0 or_undefined [@@js.call "getModifiedTime"]
       val setModifiedTime: 'T t -> fileName:string -> date:Date.t_0 -> unit [@@js.call "setModifiedTime"]
@@ -10819,6 +11710,7 @@ module Make (M: Missing) : sig
       val cleanReferences: 'T t -> ?project:string -> unit -> ts_ExitStatus [@@js.call "cleanReferences"]
       val getNextInvalidatedProject: 'T t -> ?cancellationToken:ts_CancellationToken -> unit -> 'T ts_InvalidatedProject or_undefined [@@js.call "getNextInvalidatedProject"]
     end
+    (** Create a function that reports watch status by writing to the system and handles the formating of the diagnostic *)
     val createBuilderStatusReporter: system:ts_System -> ?pretty:bool -> unit -> ts_DiagnosticReporter [@@js.global "createBuilderStatusReporter"]
     val createSolutionBuilderHost: ?system:ts_System -> ?createProgram:'T ts_CreateProgram -> ?reportDiagnostic:ts_DiagnosticReporter -> ?reportSolutionBuilderStatus:ts_DiagnosticReporter -> ?reportErrorSummary:ts_ReportEmitErrorSummary -> unit -> 'T ts_SolutionBuilderHost [@@js.global "createSolutionBuilderHost"]
     val createSolutionBuilderWithWatchHost: ?system:ts_System -> ?createProgram:'T ts_CreateProgram -> ?reportDiagnostic:ts_DiagnosticReporter -> ?reportSolutionBuilderStatus:ts_DiagnosticReporter -> ?reportWatchStatus:ts_WatchStatusReporter -> unit -> 'T ts_SolutionBuilderWithWatchHost [@@js.global "createSolutionBuilderWithWatchHost"]
@@ -10841,6 +11733,7 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val get_kind: t -> ts_InvalidatedProjectKind [@@js.get "kind"]
       val get_project: t -> ts_ResolvedConfigFileName [@@js.get "project"]
+      (** To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly *)
       val done_: t -> ?cancellationToken:ts_CancellationToken -> ?writeFile:ts_WriteFileCallback -> ?customTransformers:ts_CustomTransformers -> unit -> ts_ExitStatus [@@js.call "done"]
       val getCompilerOptions: t -> ts_CompilerOptions [@@js.call "getCompilerOptions"]
       val getCurrentDirectory: t -> string [@@js.call "getCurrentDirectory"]
@@ -11123,6 +12016,11 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val getLineAndCharacterOfPosition: t -> pos:float -> ts_LineAndCharacter [@@js.call "getLineAndCharacterOfPosition"]
     end
+    (**
+      Represents an immutable snapshot of a script at a specified time.Once acquired, the
+      snapshot is observably immutable. i.e. the same calls with the same parameters will return
+      the same values.
+    *)
     module[@js.scope "IScriptSnapshot"] IScriptSnapshot : sig
       type t = ts_IScriptSnapshot
       val t_to_js: t -> Ojs.t
@@ -11130,9 +12028,19 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Gets a portion of the script snapshot specified by \[start, end). *)
       val getText: t -> start:float -> end_:float -> string [@@js.call "getText"]
+      (** Gets the length of this script snapshot. *)
       val getLength: t -> float [@@js.call "getLength"]
+      (**
+        Gets the TextChangeRange that describe how the text changed between this text and
+        an older version.  This information is used by the incremental parser to determine
+        what sections of the script need to be re-parsed.  'undefined' can be returned if the
+        change range cannot be determined.  However, in that case, incremental parsing will
+        not happen and the entire document will be re - parsed.
+      *)
       val getChangeRange: t -> oldSnapshot:t -> ts_TextChangeRange or_undefined [@@js.call "getChangeRange"]
+      (** Releases all resources held by this script snapshot *)
       val dispose: t -> unit [@@js.call "dispose"]
     end
     module[@js.scope "ScriptSnapshot"] ScriptSnapshot : sig
@@ -11231,6 +12139,7 @@ module Make (M: Missing) : sig
       val getResolvedModuleWithFailedLookupLocationsFromCache: t -> modulename:string -> containingFile:string -> ts_ResolvedModuleWithFailedLookupLocations or_undefined [@@js.call "getResolvedModuleWithFailedLookupLocationsFromCache"]
       val resolveTypeReferenceDirectives: t -> typeDirectiveNames:string list -> containingFile:string -> redirectedReference:ts_ResolvedProjectReference or_undefined -> options:ts_CompilerOptions -> ts_ResolvedTypeReferenceDirective or_undefined list [@@js.call "resolveTypeReferenceDirectives"]
       val getDirectories: t -> directoryName:string -> string list [@@js.call "getDirectories"]
+      (** Gets a set of custom transformers to use during emit. *)
       val getCustomTransformers: t -> ts_CustomTransformers or_undefined [@@js.call "getCustomTransformers"]
       val isKnownTypesPackageName: t -> name:string -> bool [@@js.call "isKnownTypesPackageName"]
       val installPackage: t -> options:ts_InstallPackageOptions -> ts_ApplyCodeActionCommandResult Promise.t_1 [@@js.call "installPackage"]
@@ -11260,20 +12169,91 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** This is used as a part of restarting the language service. *)
       val cleanupSemanticCache: t -> unit [@@js.call "cleanupSemanticCache"]
+      (**
+        Gets errors indicating invalid syntax in a file.
+        
+        In English, "this cdeo have, erorrs" is syntactically invalid because it has typos,
+        grammatical errors, and misplaced punctuation. Likewise, examples of syntax
+        errors in TypeScript are missing parentheses in an `if` statement, mismatched
+        curly braces, and using a reserved keyword as a variable name.
+        
+        These diagnostics are inexpensive to compute and don't require knowledge of
+        other files. Note that a non-empty result increases the likelihood of false positives
+        from `getSemanticDiagnostics`.
+        
+        While these represent the majority of syntax-related diagnostics, there are some
+        that require the type system, which will be present in `getSemanticDiagnostics`.
+        @param fileName A path to the file you want syntactic diagnostics for
+      *)
       val getSyntacticDiagnostics: t -> fileName:string -> ts_DiagnosticWithLocation list [@@js.call "getSyntacticDiagnostics"]
+      (**
+        Gets warnings or errors indicating type system issues in a given file.
+        Requesting semantic diagnostics may start up the type system and
+        run deferred work, so the first call may take longer than subsequent calls.
+        
+        Unlike the other get*Diagnostics functions, these diagnostics can potentially not
+        include a reference to a source file. Specifically, the first time this is called,
+        it will return global diagnostics with no associated location.
+        
+        To contrast the differences between semantic and syntactic diagnostics, consider the
+        sentence: "The sun is green." is syntactically correct; those are real English words with
+        correct sentence structure. However, it is semantically invalid, because it is not true.
+        @param fileName A path to the file you want semantic diagnostics for
+      *)
       val getSemanticDiagnostics: t -> fileName:string -> ts_Diagnostic list [@@js.call "getSemanticDiagnostics"]
+      (**
+        Gets suggestion diagnostics for a specific file. These diagnostics tend to
+        proactively suggest refactors, as opposed to diagnostics that indicate
+        potentially incorrect runtime behavior.
+        @param fileName A path to the file you want semantic diagnostics for
+      *)
       val getSuggestionDiagnostics: t -> fileName:string -> ts_DiagnosticWithLocation list [@@js.call "getSuggestionDiagnostics"]
+      (** Gets global diagnostics related to the program configuration and compiler options. *)
       val getCompilerOptionsDiagnostics: t -> ts_Diagnostic list [@@js.call "getCompilerOptionsDiagnostics"]
+      (** @deprecated Use getEncodedSyntacticClassifications instead. *)
       val getSyntacticClassifications: t -> fileName:string -> span:ts_TextSpan -> ts_ClassifiedSpan list [@@js.call "getSyntacticClassifications"]
       val getSyntacticClassifications': t -> fileName:string -> span:ts_TextSpan -> format:ts_SemanticClassificationFormat -> (ts_ClassifiedSpan, ts_ClassifiedSpan2020) union2 list [@@js.call "getSyntacticClassifications"]
+      (** @deprecated Use getEncodedSemanticClassifications instead. *)
       val getSemanticClassifications: t -> fileName:string -> span:ts_TextSpan -> ts_ClassifiedSpan list [@@js.call "getSemanticClassifications"]
       val getSemanticClassifications': t -> fileName:string -> span:ts_TextSpan -> format:ts_SemanticClassificationFormat -> (ts_ClassifiedSpan, ts_ClassifiedSpan2020) union2 list [@@js.call "getSemanticClassifications"]
+      (** Encoded as triples of \[start, length, ClassificationType\]. *)
       val getEncodedSyntacticClassifications: t -> fileName:string -> span:ts_TextSpan -> ts_Classifications [@@js.call "getEncodedSyntacticClassifications"]
+      (**
+        Gets semantic highlights information for a particular file. Has two formats, an older
+        version used by VS and a format used by VS Code.
+        @param fileName The path to the file
+        @param position A text span to return results within
+        @param format Which format to use, defaults to "original"
+        @return a number array encoded as triples of \[start, length, ClassificationType, ...\].
+      *)
       val getEncodedSemanticClassifications: t -> fileName:string -> span:ts_TextSpan -> ?format:ts_SemanticClassificationFormat -> unit -> ts_Classifications [@@js.call "getEncodedSemanticClassifications"]
+      (**
+        Gets completion entries at a particular position in a file.
+        @param fileName The path to the file
+        @param position A zero-based index of the character where you want the entries
+        @param options An object describing how the request was triggered and what kinds
+        of code actions can be returned with the completions.
+      *)
       val getCompletionsAtPosition: t -> fileName:string -> position:float -> options:ts_GetCompletionsAtPositionOptions or_undefined -> ts_CompletionInfo ts_WithMetadata or_undefined [@@js.call "getCompletionsAtPosition"]
+      (**
+        Gets the extended details for a completion entry retrieved from `getCompletionsAtPosition`.
+        @param fileName The path to the file
+        @param position A zero based index of the character where you want the entries
+        @param entryName The name from an existing completion which came from `getCompletionsAtPosition`
+        @param formatOptions How should code samples in the completions be formatted, can be undefined for backwards compatibility
+        @param source Source code for the current file, can be undefined for backwards compatibility
+        @param preferences User settings, can be undefined for backwards compatibility
+      *)
       val getCompletionEntryDetails: t -> fileName:string -> position:float -> entryName:string -> formatOptions:(([`U_n_0 of ts_FormatCodeOptions  | `U_n_1 of ts_FormatCodeOptions  | `U_n_2 of ts_FormatCodeOptions ] [@js.union on_field "IndentStyle"]), ([`U_n_0 of ts_FormatCodeSettings  | `U_n_1 of ts_FormatCodeSettings  | `U_n_2 of ts_FormatCodeSettings ] [@js.union on_field "indentStyle"])) union2 or_undefined -> source:string or_undefined -> preferences:ts_UserPreferences or_undefined -> ts_CompletionEntryDetails or_undefined [@@js.call "getCompletionEntryDetails"]
       val getCompletionEntrySymbol: t -> fileName:string -> position:float -> name:string -> source:string or_undefined -> ts_Symbol or_undefined [@@js.call "getCompletionEntrySymbol"]
+      (**
+        Gets semantic information about the identifier at a particular position in a
+        file. Quick info is what you typically see when you hover in an editor.
+        @param fileName The path to the file
+        @param position A zero-based index of the character where you want the quick info
+      *)
       val getQuickInfoAtPosition: t -> fileName:string -> position:float -> ts_QuickInfo or_undefined [@@js.call "getQuickInfoAtPosition"]
       val getNameOrDottedNameSpan: t -> fileName:string -> startPos:float -> endPos:float -> ts_TextSpan or_undefined [@@js.call "getNameOrDottedNameSpan"]
       val getBreakpointStatementAtPosition: t -> fileName:string -> position:float -> ts_TextSpan or_undefined [@@js.call "getBreakpointStatementAtPosition"]
@@ -11289,6 +12269,7 @@ module Make (M: Missing) : sig
       val findReferences: t -> fileName:string -> position:float -> ts_ReferencedSymbol list or_undefined [@@js.call "findReferences"]
       val getDocumentHighlights: t -> fileName:string -> position:float -> filesToSearch:string list -> ts_DocumentHighlights list or_undefined [@@js.call "getDocumentHighlights"]
       val getFileReferences: t -> fileName:string -> ts_ReferenceEntry list [@@js.call "getFileReferences"]
+      (** @deprecated  *)
       val getOccurrencesAtPosition: t -> fileName:string -> position:float -> ts_ReferenceEntry list or_undefined [@@js.call "getOccurrencesAtPosition"]
       val getNavigateToItems: t -> searchValue:string -> ?maxResultCount:float -> ?fileName:string -> ?excludeDtsFiles:bool -> unit -> ts_NavigateToItem list [@@js.call "getNavigateToItems"]
       val getNavigationBarItems: t -> fileName:string -> ts_NavigationBarItem list [@@js.call "getNavigationBarItems"]
@@ -11305,6 +12286,10 @@ module Make (M: Missing) : sig
       val getFormattingEditsAfterKeystroke: t -> fileName:string -> position:float -> key:string -> options:(([`U_n_0 of ts_FormatCodeOptions  | `U_n_1 of ts_FormatCodeOptions  | `U_n_2 of ts_FormatCodeOptions ] [@js.union on_field "IndentStyle"]), ([`U_n_0 of ts_FormatCodeSettings  | `U_n_1 of ts_FormatCodeSettings  | `U_n_2 of ts_FormatCodeSettings ] [@js.union on_field "indentStyle"])) union2 -> ts_TextChange list [@@js.call "getFormattingEditsAfterKeystroke"]
       val getDocCommentTemplateAtPosition: t -> fileName:string -> position:float -> ?options:ts_DocCommentTemplateOptions -> unit -> ts_TextInsertion or_undefined [@@js.call "getDocCommentTemplateAtPosition"]
       val isValidBraceCompletionAtPosition: t -> fileName:string -> position:float -> openingBrace:float -> bool [@@js.call "isValidBraceCompletionAtPosition"]
+      (**
+        This will return a defined result if the position is after the `>` of the opening tag, or somewhere in the text, of a JSXElement with no closing tag.
+        Editors should call this after `>` is typed.
+      *)
       val getJsxClosingTagAtPosition: t -> fileName:string -> position:float -> ts_JsxClosingTagInfo or_undefined [@@js.call "getJsxClosingTagAtPosition"]
       val getSpanOfEnclosingComment: t -> fileName:string -> position:float -> onlyMultiLine:bool -> ts_TextSpan or_undefined [@@js.call "getSpanOfEnclosingComment"]
       val toLineColumnOffset: t -> fileName:string -> position:float -> ts_LineAndCharacter [@@js.call "toLineColumnOffset"]
@@ -11313,8 +12298,11 @@ module Make (M: Missing) : sig
       val applyCodeActionCommand: t -> action:ts_CodeActionCommand -> ?formatSettings:ts_FormatCodeSettings -> unit -> ts_ApplyCodeActionCommandResult Promise.t_1 [@@js.call "applyCodeActionCommand"]
       val applyCodeActionCommand': t -> action:ts_CodeActionCommand list -> ?formatSettings:ts_FormatCodeSettings -> unit -> ts_ApplyCodeActionCommandResult list Promise.t_1 [@@js.call "applyCodeActionCommand"]
       val applyCodeActionCommand'': t -> action:(ts_CodeActionCommand, ts_CodeActionCommand) or_array -> ?formatSettings:ts_FormatCodeSettings -> unit -> (ts_ApplyCodeActionCommandResult, ts_ApplyCodeActionCommandResult) or_array Promise.t_1 [@@js.call "applyCodeActionCommand"]
+      (** @deprecated `fileName` will be ignored *)
       val applyCodeActionCommand''': t -> fileName:string -> action:ts_CodeActionCommand -> ts_ApplyCodeActionCommandResult Promise.t_1 [@@js.call "applyCodeActionCommand"]
+      (** @deprecated `fileName` will be ignored *)
       val applyCodeActionCommand'''': t -> fileName:string -> action:ts_CodeActionCommand list -> ts_ApplyCodeActionCommandResult list Promise.t_1 [@@js.call "applyCodeActionCommand"]
+      (** @deprecated `fileName` will be ignored *)
       val applyCodeActionCommand''''': t -> fileName:string -> action:(ts_CodeActionCommand, ts_CodeActionCommand) or_array -> (ts_ApplyCodeActionCommandResult, ts_ApplyCodeActionCommandResult) or_array Promise.t_1 [@@js.call "applyCodeActionCommand"]
       val getApplicableRefactors: t -> fileName:string -> positionOrRange:ts_TextRange or_number -> preferences:ts_UserPreferences or_undefined -> ?triggerReason:ts_RefactorTriggerReason -> ?kind:string -> unit -> ts_ApplicableRefactorInfo list [@@js.call "getApplicableRefactors"]
       val getEditsForRefactor: t -> fileName:string -> formatOptions:ts_FormatCodeSettings -> positionOrRange:ts_TextRange or_number -> refactorName:string -> actionName:string -> preferences:ts_UserPreferences or_undefined -> ts_RefactorEditInfo or_undefined [@@js.call "getEditsForRefactor"]
@@ -11372,11 +12360,29 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        If the editor is asking for completions because a certain character was typed
+        (as opposed to when the user explicitly requested them) this should be set.
+      *)
+      (**
+        If the editor is asking for completions because a certain character was typed
+        (as opposed to when the user explicitly requested them) this should be set.
+      *)
       val get_triggerCharacter: t -> ts_CompletionsTriggerCharacter [@@js.get "triggerCharacter"]
+      (**
+        If the editor is asking for completions because a certain character was typed
+        (as opposed to when the user explicitly requested them) this should be set.
+      *)
       val set_triggerCharacter: t -> ts_CompletionsTriggerCharacter -> unit [@@js.set "triggerCharacter"]
+      (** @deprecated Use includeCompletionsForModuleExports *)
+      (** @deprecated Use includeCompletionsForModuleExports *)
       val get_includeExternalModuleExports: t -> bool [@@js.get "includeExternalModuleExports"]
+      (** @deprecated Use includeCompletionsForModuleExports *)
       val set_includeExternalModuleExports: t -> bool -> unit [@@js.set "includeExternalModuleExports"]
+      (** @deprecated Use includeCompletionsWithInsertText *)
+      (** @deprecated Use includeCompletionsWithInsertText *)
       val get_includeInsertTextCompletions: t -> bool [@@js.get "includeInsertTextCompletions"]
+      (** @deprecated Use includeCompletionsWithInsertText *)
       val set_includeInsertTextCompletions: t -> bool -> unit [@@js.set "includeInsertTextCompletions"]
       val cast: t -> ts_UserPreferences [@@js.cast]
     end
@@ -11414,6 +12420,10 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (**
+      Signals that the user manually requested signature help.
+      The language service will unconditionally attempt to provide a result.
+    *)
     module[@js.scope "SignatureHelpInvokedReason"] SignatureHelpInvokedReason : sig
       type t = ts_SignatureHelpInvokedReason
       val t_to_js: t -> Ojs.t
@@ -11426,6 +12436,10 @@ module Make (M: Missing) : sig
       val get_triggerCharacter: t -> never or_undefined [@@js.get "triggerCharacter"]
       val set_triggerCharacter: t -> never or_undefined -> unit [@@js.set "triggerCharacter"]
     end
+    (**
+      Signals that the signature help request came from a user typing a character.
+      Depending on the character and the syntactic context, the request may or may not be served a result.
+    *)
     module[@js.scope "SignatureHelpCharacterTypedReason"] SignatureHelpCharacterTypedReason : sig
       type t = ts_SignatureHelpCharacterTypedReason
       val t_to_js: t -> Ojs.t
@@ -11435,9 +12449,18 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val get_kind: t -> ([`L_s47_characterTyped[@js "characterTyped"]] [@js.enum]) [@@js.get "kind"]
       val set_kind: t -> ([`L_s47_characterTyped] [@js.enum]) -> unit [@@js.set "kind"]
+      (** Character that was responsible for triggering signature help. *)
+      (** Character that was responsible for triggering signature help. *)
       val get_triggerCharacter: t -> ts_SignatureHelpTriggerCharacter [@@js.get "triggerCharacter"]
+      (** Character that was responsible for triggering signature help. *)
       val set_triggerCharacter: t -> ts_SignatureHelpTriggerCharacter -> unit [@@js.set "triggerCharacter"]
     end
+    (**
+      Signals that this signature help request came from typing a character or moving the cursor.
+      This should only occur if a signature help session was already active and the editor needs to see if it should adjust.
+      The language service will unconditionally attempt to provide a result.
+      `triggerCharacter` can be `undefined` for a retrigger caused by a cursor move.
+    *)
     module[@js.scope "SignatureHelpRetriggeredReason"] SignatureHelpRetriggeredReason : sig
       type t = ts_SignatureHelpRetriggeredReason
       val t_to_js: t -> Ojs.t
@@ -11447,7 +12470,10 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val get_kind: t -> ([`L_s130_retrigger[@js "retrigger"]] [@js.enum]) [@@js.get "kind"]
       val set_kind: t -> ([`L_s130_retrigger] [@js.enum]) -> unit [@@js.set "kind"]
+      (** Character that was responsible for triggering signature help. *)
+      (** Character that was responsible for triggering signature help. *)
       val get_triggerCharacter: t -> ts_SignatureHelpRetriggerCharacter [@@js.get "triggerCharacter"]
+      (** Character that was responsible for triggering signature help. *)
       val set_triggerCharacter: t -> ts_SignatureHelpRetriggerCharacter -> unit [@@js.set "triggerCharacter"]
     end
     module[@js.scope "ApplyCodeActionCommandResult"] ApplyCodeActionCommandResult : sig
@@ -11496,6 +12522,12 @@ module Make (M: Missing) : sig
       val get_classificationType: t -> float [@@js.get "classificationType"]
       val set_classificationType: t -> float -> unit [@@js.set "classificationType"]
     end
+    (**
+      Navigation bar interface designed for visual studio's dual-column layout.
+      This does not form a proper tree.
+      The navbar is returned as a list of top-level items, each of which has a list of child items.
+      Child items always have an empty array for their `childItems`.
+    *)
     module[@js.scope "NavigationBarItem"] NavigationBarItem : sig
       type t = ts_NavigationBarItem
       val t_to_js: t -> Ojs.t
@@ -11520,6 +12552,10 @@ module Make (M: Missing) : sig
       val get_grayed: t -> bool [@@js.get "grayed"]
       val set_grayed: t -> bool -> unit [@@js.set "grayed"]
     end
+    (**
+      Node in a tree of nested declarations in a file.
+      The top node is always a script or module node.
+    *)
     module[@js.scope "NavigationTree"] NavigationTree : sig
       type t = ts_NavigationTree
       val t_to_js: t -> Ojs.t
@@ -11527,17 +12563,38 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Name of the declaration, or a short description, e.g. "<class>". *)
+      (** Name of the declaration, or a short description, e.g. "<class>". *)
       val get_text: t -> string [@@js.get "text"]
+      (** Name of the declaration, or a short description, e.g. "<class>". *)
       val set_text: t -> string -> unit [@@js.set "text"]
       val get_kind: t -> ts_ScriptElementKind [@@js.get "kind"]
       val set_kind: t -> ts_ScriptElementKind -> unit [@@js.set "kind"]
+      (** ScriptElementKindModifier separated by commas, e.g. "public,abstract" *)
+      (** ScriptElementKindModifier separated by commas, e.g. "public,abstract" *)
       val get_kindModifiers: t -> string [@@js.get "kindModifiers"]
+      (** ScriptElementKindModifier separated by commas, e.g. "public,abstract" *)
       val set_kindModifiers: t -> string -> unit [@@js.set "kindModifiers"]
+      (**
+        Spans of the nodes that generated this declaration.
+        There will be more than one if this is the result of merging.
+      *)
+      (**
+        Spans of the nodes that generated this declaration.
+        There will be more than one if this is the result of merging.
+      *)
       val get_spans: t -> ts_TextSpan list [@@js.get "spans"]
+      (**
+        Spans of the nodes that generated this declaration.
+        There will be more than one if this is the result of merging.
+      *)
       val set_spans: t -> ts_TextSpan list -> unit [@@js.set "spans"]
       val get_nameSpan: t -> ts_TextSpan or_undefined [@@js.get "nameSpan"]
       val set_nameSpan: t -> ts_TextSpan or_undefined -> unit [@@js.set "nameSpan"]
+      (** Present if non-empty *)
+      (** Present if non-empty *)
       val get_childItems: t -> t list [@@js.get "childItems"]
+      (** Present if non-empty *)
       val set_childItems: t -> t list -> unit [@@js.set "childItems"]
     end
     module[@js.scope "CallHierarchyItem"] CallHierarchyItem : sig
@@ -11645,11 +12702,29 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Description of the code action to display in the UI of the editor *)
+      (** Description of the code action to display in the UI of the editor *)
       val get_description: t -> string [@@js.get "description"]
+      (** Description of the code action to display in the UI of the editor *)
       val set_description: t -> string -> unit [@@js.set "description"]
+      (** Text changes to apply to each file as part of the code action *)
+      (** Text changes to apply to each file as part of the code action *)
       val get_changes: t -> ts_FileTextChanges list [@@js.get "changes"]
+      (** Text changes to apply to each file as part of the code action *)
       val set_changes: t -> ts_FileTextChanges list -> unit [@@js.set "changes"]
+      (**
+        If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
+        This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
+      *)
+      (**
+        If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
+        This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
+      *)
       val get_commands: t -> ts_CodeActionCommand list [@@js.get "commands"]
+      (**
+        If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
+        This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
+      *)
       val set_commands: t -> ts_CodeActionCommand list -> unit [@@js.set "commands"]
     end
     module[@js.scope "CodeFixAction"] CodeFixAction : sig
@@ -11659,9 +12734,24 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Short name to identify the fix, for use by telemetry. *)
+      (** Short name to identify the fix, for use by telemetry. *)
       val get_fixName: t -> string [@@js.get "fixName"]
+      (** Short name to identify the fix, for use by telemetry. *)
       val set_fixName: t -> string -> unit [@@js.set "fixName"]
+      (**
+        If present, one may call 'getCombinedCodeFix' with this fixId.
+        This may be omitted to indicate that the code fix can't be applied in a group.
+      *)
+      (**
+        If present, one may call 'getCombinedCodeFix' with this fixId.
+        This may be omitted to indicate that the code fix can't be applied in a group.
+      *)
       val get_fixId: t -> anonymous_interface_0 [@@js.get "fixId"]
+      (**
+        If present, one may call 'getCombinedCodeFix' with this fixId.
+        This may be omitted to indicate that the code fix can't be applied in a group.
+      *)
       val set_fixId: t -> anonymous_interface_0 -> unit [@@js.set "fixId"]
       val get_fixAllDescription: t -> string [@@js.get "fixAllDescription"]
       val set_fixAllDescription: t -> string -> unit [@@js.set "fixAllDescription"]
@@ -11695,6 +12785,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (** A set of one or more available refactoring actions, grouped under a parent refactoring. *)
     module[@js.scope "ApplicableRefactorInfo"] ApplicableRefactorInfo : sig
       type t = ts_ApplicableRefactorInfo
       val t_to_js: t -> Ojs.t
@@ -11702,15 +12793,55 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** The programmatic name of the refactoring *)
+      (** The programmatic name of the refactoring *)
       val get_name: t -> string [@@js.get "name"]
+      (** The programmatic name of the refactoring *)
       val set_name: t -> string -> unit [@@js.set "name"]
+      (**
+        A description of this refactoring category to show to the user.
+        If the refactoring gets inlined (see below), this text will not be visible.
+      *)
+      (**
+        A description of this refactoring category to show to the user.
+        If the refactoring gets inlined (see below), this text will not be visible.
+      *)
       val get_description: t -> string [@@js.get "description"]
+      (**
+        A description of this refactoring category to show to the user.
+        If the refactoring gets inlined (see below), this text will not be visible.
+      *)
       val set_description: t -> string -> unit [@@js.set "description"]
+      (**
+        Inlineable refactorings can have their actions hoisted out to the top level
+        of a context menu. Non-inlineanable refactorings should always be shown inside
+        their parent grouping.
+        
+        If not specified, this value is assumed to be 'true'
+      *)
+      (**
+        Inlineable refactorings can have their actions hoisted out to the top level
+        of a context menu. Non-inlineanable refactorings should always be shown inside
+        their parent grouping.
+        
+        If not specified, this value is assumed to be 'true'
+      *)
       val get_inlineable: t -> bool [@@js.get "inlineable"]
+      (**
+        Inlineable refactorings can have their actions hoisted out to the top level
+        of a context menu. Non-inlineanable refactorings should always be shown inside
+        their parent grouping.
+        
+        If not specified, this value is assumed to be 'true'
+      *)
       val set_inlineable: t -> bool -> unit [@@js.set "inlineable"]
       val get_actions: t -> ts_RefactorActionInfo list [@@js.get "actions"]
       val set_actions: t -> ts_RefactorActionInfo list -> unit [@@js.set "actions"]
     end
+    (**
+      Represents a single refactoring action - for example, the "Extract Method..." refactor might
+      offer several actions, each corresponding to a surround class or closure to extract into.
+    *)
     module[@js.scope "RefactorActionInfo"] RefactorActionInfo : sig
       type t = ts_RefactorActionInfo
       val t_to_js: t -> Ojs.t
@@ -11718,15 +12849,52 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** The programmatic name of the refactoring action *)
+      (** The programmatic name of the refactoring action *)
       val get_name: t -> string [@@js.get "name"]
+      (** The programmatic name of the refactoring action *)
       val set_name: t -> string -> unit [@@js.set "name"]
+      (**
+        A description of this refactoring action to show to the user.
+        If the parent refactoring is inlined away, this will be the only text shown,
+        so this description should make sense by itself if the parent is inlineable=true
+      *)
+      (**
+        A description of this refactoring action to show to the user.
+        If the parent refactoring is inlined away, this will be the only text shown,
+        so this description should make sense by itself if the parent is inlineable=true
+      *)
       val get_description: t -> string [@@js.get "description"]
+      (**
+        A description of this refactoring action to show to the user.
+        If the parent refactoring is inlined away, this will be the only text shown,
+        so this description should make sense by itself if the parent is inlineable=true
+      *)
       val set_description: t -> string -> unit [@@js.set "description"]
+      (**
+        A message to show to the user if the refactoring cannot be applied in
+        the current context.
+      *)
+      (**
+        A message to show to the user if the refactoring cannot be applied in
+        the current context.
+      *)
       val get_notApplicableReason: t -> string [@@js.get "notApplicableReason"]
+      (**
+        A message to show to the user if the refactoring cannot be applied in
+        the current context.
+      *)
       val set_notApplicableReason: t -> string -> unit [@@js.set "notApplicableReason"]
+      (** The hierarchical dotted name of the refactor action. *)
+      (** The hierarchical dotted name of the refactor action. *)
       val get_kind: t -> string [@@js.get "kind"]
+      (** The hierarchical dotted name of the refactor action. *)
       val set_kind: t -> string -> unit [@@js.set "kind"]
     end
+    (**
+      A set of edits to make in response to a refactor action, plus an optional
+      location where renaming should be invoked from
+    *)
     module[@js.scope "RefactorEditInfo"] RefactorEditInfo : sig
       type t = ts_RefactorEditInfo
       val t_to_js: t -> Ojs.t
@@ -11760,7 +12928,10 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val get_newText: t -> string [@@js.get "newText"]
       val set_newText: t -> string -> unit [@@js.set "newText"]
+      (** The position in newText the caret should point to after the insertion. *)
+      (** The position in newText the caret should point to after the insertion. *)
       val get_caretOffset: t -> float [@@js.get "caretOffset"]
+      (** The position in newText the caret should point to after the insertion. *)
       val set_caretOffset: t -> float -> unit [@@js.set "caretOffset"]
     end
     module[@js.scope "DocumentSpan"] DocumentSpan : sig
@@ -11774,11 +12945,35 @@ module Make (M: Missing) : sig
       val set_textSpan: t -> ts_TextSpan -> unit [@@js.set "textSpan"]
       val get_fileName: t -> string [@@js.get "fileName"]
       val set_fileName: t -> string -> unit [@@js.set "fileName"]
+      (**
+        If the span represents a location that was remapped (e.g. via a .d.ts.map file),
+        then the original filename and span will be specified here
+      *)
+      (**
+        If the span represents a location that was remapped (e.g. via a .d.ts.map file),
+        then the original filename and span will be specified here
+      *)
       val get_originalTextSpan: t -> ts_TextSpan [@@js.get "originalTextSpan"]
+      (**
+        If the span represents a location that was remapped (e.g. via a .d.ts.map file),
+        then the original filename and span will be specified here
+      *)
       val set_originalTextSpan: t -> ts_TextSpan -> unit [@@js.set "originalTextSpan"]
       val get_originalFileName: t -> string [@@js.get "originalFileName"]
       val set_originalFileName: t -> string -> unit [@@js.set "originalFileName"]
+      (**
+        If DocumentSpan.textSpan is the span for name of the declaration,
+        then this is the span for relevant declaration
+      *)
+      (**
+        If DocumentSpan.textSpan is the span for name of the declaration,
+        then this is the span for relevant declaration
+      *)
       val get_contextSpan: t -> ts_TextSpan [@@js.get "contextSpan"]
+      (**
+        If DocumentSpan.textSpan is the span for name of the declaration,
+        then this is the span for relevant declaration
+      *)
       val set_contextSpan: t -> ts_TextSpan -> unit [@@js.set "contextSpan"]
       val get_originalContextSpan: t -> ts_TextSpan [@@js.get "originalContextSpan"]
       val set_originalContextSpan: t -> ts_TextSpan -> unit [@@js.set "originalContextSpan"]
@@ -12123,7 +13318,19 @@ module Make (M: Missing) : sig
       val t_0_of_js: Ojs.t -> t_0
       val get_canRename: t -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "canRename"]
       val set_canRename: t -> ([`L_b_true] [@js.enum]) -> unit [@@js.set "canRename"]
+      (**
+        File or directory to rename.
+        If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+      *)
+      (**
+        File or directory to rename.
+        If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+      *)
       val get_fileToRename: t -> string [@@js.get "fileToRename"]
+      (**
+        File or directory to rename.
+        If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+      *)
       val set_fileToRename: t -> string -> unit [@@js.set "fileToRename"]
       val get_displayName: t -> string [@@js.get "displayName"]
       val set_displayName: t -> string -> unit [@@js.set "displayName"]
@@ -12196,6 +13403,13 @@ module Make (M: Missing) : sig
       val get_parent: t -> t [@@js.get "parent"]
       val set_parent: t -> t -> unit [@@js.set "parent"]
     end
+    (**
+      Represents a single signature to show in signature help.
+      The id is used for subsequent calls into the language service to ask questions about the
+      signature help item in the context of any documents that have been updated.  i.e. after
+      an edit has happened, while signature help is still active, the host can ask important
+      questions like 'what parameter is the user currently contained within?'.
+    *)
     module[@js.scope "SignatureHelpItem"] SignatureHelpItem : sig
       type t = ts_SignatureHelpItem
       val t_to_js: t -> Ojs.t
@@ -12218,6 +13432,7 @@ module Make (M: Missing) : sig
       val get_tags: t -> ts_JSDocTagInfo list [@@js.get "tags"]
       val set_tags: t -> ts_JSDocTagInfo list -> unit [@@js.set "tags"]
     end
+    (** Represents a set of signature help items, and the preferred item that should be selected. *)
     module[@js.scope "SignatureHelpItems"] SignatureHelpItems : sig
       type t = ts_SignatureHelpItems
       val t_to_js: t -> Ojs.t
@@ -12243,13 +13458,34 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. *)
+      (** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. *)
       val get_isGlobalCompletion: t -> bool [@@js.get "isGlobalCompletion"]
+      (** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. *)
       val set_isGlobalCompletion: t -> bool -> unit [@@js.set "isGlobalCompletion"]
       val get_isMemberCompletion: t -> bool [@@js.get "isMemberCompletion"]
       val set_isMemberCompletion: t -> bool -> unit [@@js.set "isMemberCompletion"]
+      (**
+        In the absence of `CompletionEntry\["replacementSpan"\], the editor may choose whether to use
+        this span or its default one. If `CompletionEntry\["replacementSpan"\]` is defined, that span
+        must be used to commit that completion entry.
+      *)
+      (**
+        In the absence of `CompletionEntry\["replacementSpan"\], the editor may choose whether to use
+        this span or its default one. If `CompletionEntry\["replacementSpan"\]` is defined, that span
+        must be used to commit that completion entry.
+      *)
       val get_optionalReplacementSpan: t -> ts_TextSpan [@@js.get "optionalReplacementSpan"]
+      (**
+        In the absence of `CompletionEntry\["replacementSpan"\], the editor may choose whether to use
+        this span or its default one. If `CompletionEntry\["replacementSpan"\]` is defined, that span
+        must be used to commit that completion entry.
+      *)
       val set_optionalReplacementSpan: t -> ts_TextSpan -> unit [@@js.set "optionalReplacementSpan"]
+      (** true when the current location also allows for a new identifier *)
+      (** true when the current location also allows for a new identifier *)
       val get_isNewIdentifierLocation: t -> bool [@@js.get "isNewIdentifierLocation"]
+      (** true when the current location also allows for a new identifier *)
       val set_isNewIdentifierLocation: t -> bool -> unit [@@js.set "isNewIdentifierLocation"]
       val get_entries: t -> ts_CompletionEntry list [@@js.get "entries"]
       val set_entries: t -> ts_CompletionEntry list -> unit [@@js.set "entries"]
@@ -12271,7 +13507,22 @@ module Make (M: Missing) : sig
       val set_sortText: t -> string -> unit [@@js.set "sortText"]
       val get_insertText: t -> string [@@js.get "insertText"]
       val set_insertText: t -> string -> unit [@@js.set "insertText"]
+      (**
+        An optional span that indicates the text to be replaced by this completion item.
+        If present, this span should be used instead of the default one.
+        It will be set if the required span differs from the one generated by the default replacement behavior.
+      *)
+      (**
+        An optional span that indicates the text to be replaced by this completion item.
+        If present, this span should be used instead of the default one.
+        It will be set if the required span differs from the one generated by the default replacement behavior.
+      *)
       val get_replacementSpan: t -> ts_TextSpan [@@js.get "replacementSpan"]
+      (**
+        An optional span that indicates the text to be replaced by this completion item.
+        If present, this span should be used instead of the default one.
+        It will be set if the required span differs from the one generated by the default replacement behavior.
+      *)
       val set_replacementSpan: t -> ts_TextSpan -> unit [@@js.set "replacementSpan"]
       val get_hasAction: t -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "hasAction"]
       val set_hasAction: t -> ([`L_b_true] [@js.enum]) -> unit [@@js.set "hasAction"]
@@ -12315,15 +13566,39 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (** The span of the document to actually collapse. *)
+      (** The span of the document to actually collapse. *)
       val get_textSpan: t -> ts_TextSpan [@@js.get "textSpan"]
+      (** The span of the document to actually collapse. *)
       val set_textSpan: t -> ts_TextSpan -> unit [@@js.set "textSpan"]
+      (** The span of the document to display when the user hovers over the collapsed span. *)
+      (** The span of the document to display when the user hovers over the collapsed span. *)
       val get_hintSpan: t -> ts_TextSpan [@@js.get "hintSpan"]
+      (** The span of the document to display when the user hovers over the collapsed span. *)
       val set_hintSpan: t -> ts_TextSpan -> unit [@@js.set "hintSpan"]
+      (** The text to display in the editor for the collapsed region. *)
+      (** The text to display in the editor for the collapsed region. *)
       val get_bannerText: t -> string [@@js.get "bannerText"]
+      (** The text to display in the editor for the collapsed region. *)
       val set_bannerText: t -> string -> unit [@@js.set "bannerText"]
+      (**
+        Whether or not this region should be automatically collapsed when
+        the 'Collapse to Definitions' command is invoked.
+      *)
+      (**
+        Whether or not this region should be automatically collapsed when
+        the 'Collapse to Definitions' command is invoked.
+      *)
       val get_autoCollapse: t -> bool [@@js.get "autoCollapse"]
+      (**
+        Whether or not this region should be automatically collapsed when
+        the 'Collapse to Definitions' command is invoked.
+      *)
       val set_autoCollapse: t -> bool -> unit [@@js.set "autoCollapse"]
+      (** Classification of the contents of the span *)
+      (** Classification of the contents of the span *)
       val get_kind: t -> ts_OutliningSpanKind [@@js.get "kind"]
+      (** Classification of the contents of the span *)
       val set_kind: t -> ts_OutliningSpanKind -> unit [@@js.set "kind"]
     end
     module OutliningSpanKind : sig
@@ -12389,6 +13664,25 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        Gives lexical classifications of tokens on a line without any syntactic context.
+        For instance, a token consisting of the text 'string' can be either an identifier
+        named 'string' or the keyword 'string', however, because this classifier is not aware,
+        it relies on certain heuristics to give acceptable results. For classifications where
+        speed trumps accuracy, this function is preferable; however, for true accuracy, the
+        syntactic classifier is ideal. In fact, in certain editing scenarios, combining the
+        lexical, syntactic, and semantic classifiers may issue the best user experience.
+        @param text The text of a line to classify.
+        @param lexState The state of the lexical classifier at the end of the previous line.
+        @param syntacticClassifierAbsent Whether the client is *not* using a syntactic classifier.
+        If there is no syntactic classifier (syntacticClassifierAbsent=true),
+        certain heuristics may be used in its place; however, if there is a
+        syntactic classifier (syntacticClassifierAbsent=false), certain
+        classifications which may be incorrectly categorized will be given
+        back as Identifiers in order to allow the syntactic classifier to
+        subsume the classification.
+        @deprecated Use getLexicalClassifications instead.
+      *)
       val getClassificationsForLine: t -> text:string -> lexState:ts_EndOfLineState -> syntacticClassifierAbsent:bool -> ts_ClassificationResult [@@js.call "getClassificationsForLine"]
       val getEncodedLexicalClassifications: t -> text:string -> endOfLineState:ts_EndOfLineState -> syntacticClassifierAbsent:bool -> ts_Classifications [@@js.call "getEncodedLexicalClassifications"]
     end
@@ -12424,6 +13718,7 @@ module Make (M: Missing) : sig
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
     end
+    (** The classifier is used for syntactic highlighting in editors via the TSServer *)
     val createClassifier: unit -> ts_Classifier [@@js.global "createClassifier"]
     module[@js.scope "DocumentHighlights"] DocumentHighlights : sig
       type t = ts_DocumentHighlights
@@ -12437,6 +13732,21 @@ module Make (M: Missing) : sig
       val get_highlightSpans: t -> ts_HighlightSpan list [@@js.get "highlightSpans"]
       val set_highlightSpans: t -> ts_HighlightSpan list -> unit [@@js.set "highlightSpans"]
     end
+    (**
+      The document registry represents a store of SourceFile objects that can be shared between
+      multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
+      of files in the context.
+      SourceFile objects account for most of the memory usage by the language service. Sharing
+      the same DocumentRegistry instance between different instances of LanguageService allow
+      for more efficient memory utilization since all projects will share at least the library
+      file (lib.d.ts).
+      
+      A more advanced use of the document registry is to serialize sourceFile objects to disk
+      and re-hydrate them when needed.
+      
+      To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
+      to all subsequent createLanguageService calls.
+    *)
     module[@js.scope "DocumentRegistry"] DocumentRegistry : sig
       type t = ts_DocumentRegistry
       val t_to_js: t -> Ojs.t
@@ -12444,11 +13754,43 @@ module Make (M: Missing) : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      (**
+        Request a stored SourceFile with a given fileName and compilationSettings.
+        The first call to acquire will call createLanguageServiceSourceFile to generate
+        the SourceFile if was not found in the registry.
+        @param fileName The name of the file requested
+        @param compilationSettings Some compilation settings like target affects the
+        shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+        multiple copies of the same file for different compilation settings.
+        @param scriptSnapshot Text of the file. Only used if the file was not found
+        in the registry and a new one was created.
+        @param version Current version of the file. Only used if the file was not found
+        in the registry and a new one was created.
+      *)
       val acquireDocument: t -> fileName:string -> compilationSettings:ts_CompilerOptions -> scriptSnapshot:ts_IScriptSnapshot -> version:string -> ?scriptKind:ts_ScriptKind -> unit -> ts_SourceFile [@@js.call "acquireDocument"]
       val acquireDocumentWithKey: t -> fileName:string -> path:ts_Path -> compilationSettings:ts_CompilerOptions -> key:ts_DocumentRegistryBucketKey -> scriptSnapshot:ts_IScriptSnapshot -> version:string -> ?scriptKind:ts_ScriptKind -> unit -> ts_SourceFile [@@js.call "acquireDocumentWithKey"]
+      (**
+        Request an updated version of an already existing SourceFile with a given fileName
+        and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
+        to get an updated SourceFile.
+        @param fileName The name of the file requested
+        @param compilationSettings Some compilation settings like target affects the
+        shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+        multiple copies of the same file for different compilation settings.
+        @param scriptSnapshot Text of the file.
+        @param version Current version of the file.
+      *)
       val updateDocument: t -> fileName:string -> compilationSettings:ts_CompilerOptions -> scriptSnapshot:ts_IScriptSnapshot -> version:string -> ?scriptKind:ts_ScriptKind -> unit -> ts_SourceFile [@@js.call "updateDocument"]
       val updateDocumentWithKey: t -> fileName:string -> path:ts_Path -> compilationSettings:ts_CompilerOptions -> key:ts_DocumentRegistryBucketKey -> scriptSnapshot:ts_IScriptSnapshot -> version:string -> ?scriptKind:ts_ScriptKind -> unit -> ts_SourceFile [@@js.call "updateDocumentWithKey"]
       val getKeyForCompilationSettings: t -> settings:ts_CompilerOptions -> ts_DocumentRegistryBucketKey [@@js.call "getKeyForCompilationSettings"]
+      (**
+        Informs the DocumentRegistry that a file is not needed any longer.
+        
+        Note: It is not allowed to call release on a SourceFile that was not acquired from
+        this registry originally.
+        @param fileName The name of the file to be released
+        @param compilationSettings The compilation settings used to acquire the file
+      *)
       val releaseDocument: t -> fileName:string -> compilationSettings:ts_CompilerOptions -> unit [@@js.call "releaseDocument"]
       val releaseDocumentWithKey: t -> path:ts_Path -> key:ts_DocumentRegistryBucketKey -> unit [@@js.call "releaseDocumentWithKey"]
       val reportStats: t -> string [@@js.call "reportStats"]
@@ -12499,6 +13841,7 @@ module Make (M: Missing) : sig
     end
     val transpileModule: input:string -> transpileOptions:ts_TranspileOptions -> ts_TranspileOutput [@@js.global "transpileModule"]
     val transpile: input:string -> ?compilerOptions:ts_CompilerOptions -> ?fileName:string -> ?diagnostics:ts_Diagnostic list -> ?moduleName:string -> unit -> string [@@js.global "transpile"]
+    (** The version of the language service API *)
     val servicesVersion: string [@@js.global "servicesVersion"]
     val toEditorSettings: options:(([`U_n_0 of ts_EditorOptions  | `U_n_1 of ts_EditorOptions  | `U_n_2 of ts_EditorOptions ] [@js.union on_field "IndentStyle"]), ([`U_n_0 of ts_EditorSettings  | `U_n_1 of ts_EditorSettings  | `U_n_2 of ts_EditorSettings ] [@js.union on_field "indentStyle"])) union2 -> ts_EditorSettings [@@js.global "toEditorSettings"]
     val displayPartsToString: displayParts:ts_SymbolDisplayPart list or_undefined -> string [@@js.global "displayPartsToString"]
@@ -12507,355 +13850,719 @@ module Make (M: Missing) : sig
     val createLanguageServiceSourceFile: fileName:string -> scriptSnapshot:ts_IScriptSnapshot -> scriptTarget:ts_ScriptTarget -> version:string -> setNodeParents:bool -> ?scriptKind:ts_ScriptKind -> unit -> ts_SourceFile [@@js.global "createLanguageServiceSourceFile"]
     val updateLanguageServiceSourceFile: sourceFile:ts_SourceFile -> scriptSnapshot:ts_IScriptSnapshot -> version:string -> textChangeRange:ts_TextChangeRange or_undefined -> ?aggressiveChecks:bool -> unit -> ts_SourceFile [@@js.global "updateLanguageServiceSourceFile"]
     val createLanguageService: host:ts_LanguageServiceHost -> ?documentRegistry:ts_DocumentRegistry -> ?syntaxOnlyOrLanguageServiceMode:ts_LanguageServiceMode or_boolean -> unit -> ts_LanguageService [@@js.global "createLanguageService"]
+    (**
+      Get the path of the default library files (lib.d.ts) as distributed with the typescript
+      node package.
+      The functionality is not supported if the ts module is consumed outside of a node module.
+    *)
     val getDefaultLibFilePath: options:ts_CompilerOptions -> string [@@js.global "getDefaultLibFilePath"]
+    (**
+      Transform one or more nodes using the supplied transformers.
+      @param source A single `Node` or an array of `Node` objects.
+      @param transformers An array of `TransformerFactory` callbacks used to process the transformation.
+      @param compilerOptions Optional compiler options.
+    *)
     val transform: source:('T, 'T) or_array -> transformers:'T ts_TransformerFactory list -> ?compilerOptions:ts_CompilerOptions -> unit -> 'T ts_TransformationResult [@@js.global "transform"]
+    (** @deprecated Use `factory.createNodeArray` or the factory supplied by your transformation context instead. *)
     val createNodeArray: ?elements:'T list or_undefined -> ?hasTrailingComma:bool or_undefined -> unit -> 'T ts_NodeArray [@@js.global "createNodeArray"]
+    (** @deprecated Use `factory.createNumericLiteral` or the factory supplied by your transformation context instead. *)
     val createNumericLiteral: value:string or_number -> ?numericLiteralFlags:ts_TokenFlags or_undefined -> unit -> ts_NumericLiteral [@@js.global "createNumericLiteral"]
+    (** @deprecated Use `factory.createBigIntLiteral` or the factory supplied by your transformation context instead. *)
     val createBigIntLiteral: value:ts_PseudoBigInt or_string -> ts_BigIntLiteral [@@js.global "createBigIntLiteral"]
+    (** @deprecated Use `factory.createStringLiteral` or the factory supplied by your transformation context instead. *)
     val createStringLiteral: anonymous_interface_27 [@@js.global "createStringLiteral"]
+    (** @deprecated Use `factory.createStringLiteralFromNode` or the factory supplied by your transformation context instead. *)
     val createStringLiteralFromNode: sourceNode:ts_PropertyNameLiteral -> ?isSingleQuote:bool or_undefined -> unit -> ts_StringLiteral [@@js.global "createStringLiteralFromNode"]
+    (** @deprecated Use `factory.createRegularExpressionLiteral` or the factory supplied by your transformation context instead. *)
     val createRegularExpressionLiteral: text:string -> ts_RegularExpressionLiteral [@@js.global "createRegularExpressionLiteral"]
+    (** @deprecated Use `factory.createLoopVariable` or the factory supplied by your transformation context instead. *)
     val createLoopVariable: unit -> ts_Identifier [@@js.global "createLoopVariable"]
+    (** @deprecated Use `factory.createUniqueName` or the factory supplied by your transformation context instead. *)
     val createUniqueName: text:string -> ?flags:ts_GeneratedIdentifierFlags or_undefined -> unit -> ts_Identifier [@@js.global "createUniqueName"]
+    (** @deprecated Use `factory.createPrivateIdentifier` or the factory supplied by your transformation context instead. *)
     val createPrivateIdentifier: text:string -> ts_PrivateIdentifier [@@js.global "createPrivateIdentifier"]
+    (** @deprecated Use `factory.createSuper` or the factory supplied by your transformation context instead. *)
     val createSuper: unit -> ts_SuperExpression [@@js.global "createSuper"]
+    (** @deprecated Use `factory.createThis` or the factory supplied by your transformation context instead. *)
     val createThis: unit -> ts_ThisExpression [@@js.global "createThis"]
+    (** @deprecated Use `factory.createNull` or the factory supplied by your transformation context instead. *)
     val createNull: unit -> ts_NullLiteral [@@js.global "createNull"]
+    (** @deprecated Use `factory.createTrue` or the factory supplied by your transformation context instead. *)
     val createTrue: unit -> ts_TrueLiteral [@@js.global "createTrue"]
+    (** @deprecated Use `factory.createFalse` or the factory supplied by your transformation context instead. *)
     val createFalse: unit -> ts_FalseLiteral [@@js.global "createFalse"]
+    (** @deprecated Use `factory.createModifier` or the factory supplied by your transformation context instead. *)
     val createModifier: kind:'T -> 'T ts_ModifierToken [@@js.global "createModifier"]
+    (** @deprecated Use `factory.createModifiersFromModifierFlags` or the factory supplied by your transformation context instead. *)
     val createModifiersFromModifierFlags: flags:ts_ModifierFlags -> ts_Modifier list [@@js.global "createModifiersFromModifierFlags"]
+    (** @deprecated Use `factory.createQualifiedName` or the factory supplied by your transformation context instead. *)
     val createQualifiedName: left:ts_EntityName -> right:ts_Identifier or_string -> ts_QualifiedName [@@js.global "createQualifiedName"]
+    (** @deprecated Use `factory.updateQualifiedName` or the factory supplied by your transformation context instead. *)
     val updateQualifiedName: node:ts_QualifiedName -> left:ts_EntityName -> right:ts_Identifier -> ts_QualifiedName [@@js.global "updateQualifiedName"]
+    (** @deprecated Use `factory.createComputedPropertyName` or the factory supplied by your transformation context instead. *)
     val createComputedPropertyName: expression:ts_Expression -> ts_ComputedPropertyName [@@js.global "createComputedPropertyName"]
+    (** @deprecated Use `factory.updateComputedPropertyName` or the factory supplied by your transformation context instead. *)
     val updateComputedPropertyName: node:ts_ComputedPropertyName -> expression:ts_Expression -> ts_ComputedPropertyName [@@js.global "updateComputedPropertyName"]
+    (** @deprecated Use `factory.createTypeParameterDeclaration` or the factory supplied by your transformation context instead. *)
     val createTypeParameterDeclaration: name:ts_Identifier or_string -> ?constraint_:ts_TypeNode or_undefined -> ?defaultType:ts_TypeNode or_undefined -> unit -> ts_TypeParameterDeclaration [@@js.global "createTypeParameterDeclaration"]
+    (** @deprecated Use `factory.updateTypeParameterDeclaration` or the factory supplied by your transformation context instead. *)
     val updateTypeParameterDeclaration: node:ts_TypeParameterDeclaration -> name:ts_Identifier -> constraint_:ts_TypeNode or_undefined -> defaultType:ts_TypeNode or_undefined -> ts_TypeParameterDeclaration [@@js.global "updateTypeParameterDeclaration"]
+    (** @deprecated Use `factory.createParameterDeclaration` or the factory supplied by your transformation context instead. *)
     val createParameter: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> dotDotDotToken:ts_DotDotDotToken or_undefined -> name:ts_BindingName or_string -> ?questionToken:ts_QuestionToken or_undefined -> ?type_:ts_TypeNode or_undefined -> ?initializer_:ts_Expression or_undefined -> unit -> ts_ParameterDeclaration [@@js.global "createParameter"]
+    (** @deprecated Use `factory.updateParameterDeclaration` or the factory supplied by your transformation context instead. *)
     val updateParameter: node:ts_ParameterDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> dotDotDotToken:ts_DotDotDotToken or_undefined -> name:ts_BindingName or_string -> questionToken:ts_QuestionToken or_undefined -> type_:ts_TypeNode or_undefined -> initializer_:ts_Expression or_undefined -> ts_ParameterDeclaration [@@js.global "updateParameter"]
+    (** @deprecated Use `factory.createDecorator` or the factory supplied by your transformation context instead. *)
     val createDecorator: expression:ts_Expression -> ts_Decorator [@@js.global "createDecorator"]
+    (** @deprecated Use `factory.updateDecorator` or the factory supplied by your transformation context instead. *)
     val updateDecorator: node:ts_Decorator -> expression:ts_Expression -> ts_Decorator [@@js.global "updateDecorator"]
+    (** @deprecated Use `factory.createPropertyDeclaration` or the factory supplied by your transformation context instead. *)
     val createProperty: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_PropertyName or_string -> questionOrExclamationToken:([`U_n_53 of ts_ExclamationToken  | `U_n_57 of ts_QuestionToken ] [@js.union on_field "kind"]) or_undefined -> type_:ts_TypeNode or_undefined -> initializer_:ts_Expression or_undefined -> ts_PropertyDeclaration [@@js.global "createProperty"]
+    (** @deprecated Use `factory.updatePropertyDeclaration` or the factory supplied by your transformation context instead. *)
     val updateProperty: node:ts_PropertyDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_PropertyName or_string -> questionOrExclamationToken:([`U_n_53 of ts_ExclamationToken  | `U_n_57 of ts_QuestionToken ] [@js.union on_field "kind"]) or_undefined -> type_:ts_TypeNode or_undefined -> initializer_:ts_Expression or_undefined -> ts_PropertyDeclaration [@@js.global "updateProperty"]
+    (** @deprecated Use `factory.createMethodDeclaration` or the factory supplied by your transformation context instead. *)
     val createMethod: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> asteriskToken:ts_AsteriskToken or_undefined -> name:ts_PropertyName or_string -> questionToken:ts_QuestionToken or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> body:ts_Block or_undefined -> ts_MethodDeclaration [@@js.global "createMethod"]
+    (** @deprecated Use `factory.updateMethodDeclaration` or the factory supplied by your transformation context instead. *)
     val updateMethod: node:ts_MethodDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> asteriskToken:ts_AsteriskToken or_undefined -> name:ts_PropertyName -> questionToken:ts_QuestionToken or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> body:ts_Block or_undefined -> ts_MethodDeclaration [@@js.global "updateMethod"]
+    (** @deprecated Use `factory.createConstructorDeclaration` or the factory supplied by your transformation context instead. *)
     val createConstructor: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> parameters:ts_ParameterDeclaration list -> body:ts_Block or_undefined -> ts_ConstructorDeclaration [@@js.global "createConstructor"]
+    (** @deprecated Use `factory.updateConstructorDeclaration` or the factory supplied by your transformation context instead. *)
     val updateConstructor: node:ts_ConstructorDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> parameters:ts_ParameterDeclaration list -> body:ts_Block or_undefined -> ts_ConstructorDeclaration [@@js.global "updateConstructor"]
+    (** @deprecated Use `factory.createGetAccessorDeclaration` or the factory supplied by your transformation context instead. *)
     val createGetAccessor: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_PropertyName or_string -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> body:ts_Block or_undefined -> ts_GetAccessorDeclaration [@@js.global "createGetAccessor"]
+    (** @deprecated Use `factory.updateGetAccessorDeclaration` or the factory supplied by your transformation context instead. *)
     val updateGetAccessor: node:ts_GetAccessorDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_PropertyName -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> body:ts_Block or_undefined -> ts_GetAccessorDeclaration [@@js.global "updateGetAccessor"]
+    (** @deprecated Use `factory.createSetAccessorDeclaration` or the factory supplied by your transformation context instead. *)
     val createSetAccessor: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_PropertyName or_string -> parameters:ts_ParameterDeclaration list -> body:ts_Block or_undefined -> ts_SetAccessorDeclaration [@@js.global "createSetAccessor"]
+    (** @deprecated Use `factory.updateSetAccessorDeclaration` or the factory supplied by your transformation context instead. *)
     val updateSetAccessor: node:ts_SetAccessorDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_PropertyName -> parameters:ts_ParameterDeclaration list -> body:ts_Block or_undefined -> ts_SetAccessorDeclaration [@@js.global "updateSetAccessor"]
+    (** @deprecated Use `factory.createCallSignature` or the factory supplied by your transformation context instead. *)
     val createCallSignature: typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> ts_CallSignatureDeclaration [@@js.global "createCallSignature"]
+    (** @deprecated Use `factory.updateCallSignature` or the factory supplied by your transformation context instead. *)
     val updateCallSignature: node:ts_CallSignatureDeclaration -> typeParameters:ts_TypeParameterDeclaration ts_NodeArray or_undefined -> parameters:ts_ParameterDeclaration ts_NodeArray -> type_:ts_TypeNode or_undefined -> ts_CallSignatureDeclaration [@@js.global "updateCallSignature"]
+    (** @deprecated Use `factory.createConstructSignature` or the factory supplied by your transformation context instead. *)
     val createConstructSignature: typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> ts_ConstructSignatureDeclaration [@@js.global "createConstructSignature"]
+    (** @deprecated Use `factory.updateConstructSignature` or the factory supplied by your transformation context instead. *)
     val updateConstructSignature: node:ts_ConstructSignatureDeclaration -> typeParameters:ts_TypeParameterDeclaration ts_NodeArray or_undefined -> parameters:ts_ParameterDeclaration ts_NodeArray -> type_:ts_TypeNode or_undefined -> ts_ConstructSignatureDeclaration [@@js.global "updateConstructSignature"]
+    (** @deprecated Use `factory.updateIndexSignature` or the factory supplied by your transformation context instead. *)
     val updateIndexSignature: node:ts_IndexSignatureDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode -> ts_IndexSignatureDeclaration [@@js.global "updateIndexSignature"]
+    (** @deprecated Use `factory.createKeywordTypeNode` or the factory supplied by your transformation context instead. *)
     val createKeywordTypeNode: kind:'TKind -> 'TKind ts_KeywordTypeNode [@@js.global "createKeywordTypeNode"]
+    (** @deprecated Use `factory.createTypePredicateNode` or the factory supplied by your transformation context instead. *)
     val createTypePredicateNodeWithModifier: assertsModifier:ts_AssertsKeyword or_undefined -> parameterName:([`U_n_78 of ts_Identifier  | `U_n_187 of ts_ThisTypeNode ] [@js.union on_field "kind"]) or_string -> type_:ts_TypeNode or_undefined -> ts_TypePredicateNode [@@js.global "createTypePredicateNodeWithModifier"]
+    (** @deprecated Use `factory.updateTypePredicateNode` or the factory supplied by your transformation context instead. *)
     val updateTypePredicateNodeWithModifier: node:ts_TypePredicateNode -> assertsModifier:ts_AssertsKeyword or_undefined -> parameterName:([`U_n_78 of ts_Identifier  | `U_n_187 of ts_ThisTypeNode ] [@js.union on_field "kind"]) -> type_:ts_TypeNode or_undefined -> ts_TypePredicateNode [@@js.global "updateTypePredicateNodeWithModifier"]
+    (** @deprecated Use `factory.createTypeReferenceNode` or the factory supplied by your transformation context instead. *)
     val createTypeReferenceNode: typeName:ts_EntityName or_string -> ?typeArguments:ts_TypeNode list or_undefined -> unit -> ts_TypeReferenceNode [@@js.global "createTypeReferenceNode"]
+    (** @deprecated Use `factory.updateTypeReferenceNode` or the factory supplied by your transformation context instead. *)
     val updateTypeReferenceNode: node:ts_TypeReferenceNode -> typeName:ts_EntityName -> typeArguments:ts_TypeNode ts_NodeArray or_undefined -> ts_TypeReferenceNode [@@js.global "updateTypeReferenceNode"]
+    (** @deprecated Use `factory.createFunctionTypeNode` or the factory supplied by your transformation context instead. *)
     val createFunctionTypeNode: typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode -> ts_FunctionTypeNode [@@js.global "createFunctionTypeNode"]
+    (** @deprecated Use `factory.updateFunctionTypeNode` or the factory supplied by your transformation context instead. *)
     val updateFunctionTypeNode: node:ts_FunctionTypeNode -> typeParameters:ts_TypeParameterDeclaration ts_NodeArray or_undefined -> parameters:ts_ParameterDeclaration ts_NodeArray -> type_:ts_TypeNode -> ts_FunctionTypeNode [@@js.global "updateFunctionTypeNode"]
+    (** @deprecated Use `factory.createConstructorTypeNode` or the factory supplied by your transformation context instead. *)
     val createConstructorTypeNode: typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode -> ts_ConstructorTypeNode [@@js.global "createConstructorTypeNode"]
+    (** @deprecated Use `factory.updateConstructorTypeNode` or the factory supplied by your transformation context instead. *)
     val updateConstructorTypeNode: node:ts_ConstructorTypeNode -> typeParameters:ts_TypeParameterDeclaration ts_NodeArray or_undefined -> parameters:ts_ParameterDeclaration ts_NodeArray -> type_:ts_TypeNode -> ts_ConstructorTypeNode [@@js.global "updateConstructorTypeNode"]
+    (** @deprecated Use `factory.createTypeQueryNode` or the factory supplied by your transformation context instead. *)
     val createTypeQueryNode: exprName:ts_EntityName -> ts_TypeQueryNode [@@js.global "createTypeQueryNode"]
+    (** @deprecated Use `factory.updateTypeQueryNode` or the factory supplied by your transformation context instead. *)
     val updateTypeQueryNode: node:ts_TypeQueryNode -> exprName:ts_EntityName -> ts_TypeQueryNode [@@js.global "updateTypeQueryNode"]
+    (** @deprecated Use `factory.createTypeLiteralNode` or the factory supplied by your transformation context instead. *)
     val createTypeLiteralNode: members:ts_TypeElement list or_undefined -> ts_TypeLiteralNode [@@js.global "createTypeLiteralNode"]
+    (** @deprecated Use `factory.updateTypeLiteralNode` or the factory supplied by your transformation context instead. *)
     val updateTypeLiteralNode: node:ts_TypeLiteralNode -> members:ts_TypeElement ts_NodeArray -> ts_TypeLiteralNode [@@js.global "updateTypeLiteralNode"]
+    (** @deprecated Use `factory.createArrayTypeNode` or the factory supplied by your transformation context instead. *)
     val createArrayTypeNode: elementType:ts_TypeNode -> ts_ArrayTypeNode [@@js.global "createArrayTypeNode"]
+    (** @deprecated Use `factory.updateArrayTypeNode` or the factory supplied by your transformation context instead. *)
     val updateArrayTypeNode: node:ts_ArrayTypeNode -> elementType:ts_TypeNode -> ts_ArrayTypeNode [@@js.global "updateArrayTypeNode"]
+    (** @deprecated Use `factory.createTupleTypeNode` or the factory supplied by your transformation context instead. *)
     val createTupleTypeNode: elements:([`U_n_0 of ts_TypeNode  | `U_n_1 of ts_TypeNode  | `U_n_2 of ts_TypeNode  | `U_n_3 of ts_TypeNode  | `U_n_4 of ts_TypeNode  | `U_n_5 of ts_TypeNode  | `U_n_6 of ts_TypeNode  | `U_n_7 of ts_TypeNode  | `U_n_8 of ts_TypeNode  | `U_n_9 of ts_TypeNode  | `U_n_10 of ts_TypeNode  | `U_n_11 of ts_TypeNode  | `U_n_12 of ts_TypeNode  | `U_n_13 of ts_TypeNode  | `U_n_14 of ts_TypeNode  | `U_n_15 of ts_TypeNode  | `U_n_16 of ts_TypeNode  | `U_n_17 of ts_TypeNode  | `U_n_18 of ts_TypeNode  | `U_n_19 of ts_TypeNode  | `U_n_20 of ts_TypeNode  | `U_n_21 of ts_TypeNode  | `U_n_22 of ts_TypeNode  | `U_n_23 of ts_TypeNode  | `U_n_24 of ts_TypeNode  | `U_n_25 of ts_TypeNode  | `U_n_26 of ts_TypeNode  | `U_n_27 of ts_TypeNode  | `U_n_28 of ts_TypeNode  | `U_n_29 of ts_TypeNode  | `U_n_30 of ts_TypeNode  | `U_n_31 of ts_TypeNode  | `U_n_32 of ts_TypeNode  | `U_n_33 of ts_TypeNode  | `U_n_34 of ts_TypeNode  | `U_n_35 of ts_TypeNode  | `U_n_36 of ts_TypeNode  | `U_n_37 of ts_TypeNode  | `U_n_38 of ts_TypeNode  | `U_n_39 of ts_TypeNode  | `U_n_40 of ts_TypeNode  | `U_n_41 of ts_TypeNode  | `U_n_42 of ts_TypeNode  | `U_n_43 of ts_TypeNode  | `U_n_44 of ts_TypeNode  | `U_n_45 of ts_TypeNode  | `U_n_46 of ts_TypeNode  | `U_n_47 of ts_TypeNode  | `U_n_48 of ts_TypeNode  | `U_n_49 of ts_TypeNode  | `U_n_50 of ts_TypeNode  | `U_n_51 of ts_TypeNode  | `U_n_52 of ts_TypeNode  | `U_n_53 of ts_TypeNode  | `U_n_54 of ts_TypeNode  | `U_n_55 of ts_TypeNode  | `U_n_56 of ts_TypeNode  | `U_n_57 of ts_TypeNode  | `U_n_58 of ts_TypeNode  | `U_n_59 of ts_TypeNode  | `U_n_60 of ts_TypeNode  | `U_n_61 of ts_TypeNode  | `U_n_62 of ts_TypeNode  | `U_n_63 of ts_TypeNode  | `U_n_64 of ts_TypeNode  | `U_n_65 of ts_TypeNode  | `U_n_66 of ts_TypeNode  | `U_n_67 of ts_TypeNode  | `U_n_68 of ts_TypeNode  | `U_n_69 of ts_TypeNode  | `U_n_70 of ts_TypeNode  | `U_n_71 of ts_TypeNode  | `U_n_72 of ts_TypeNode  | `U_n_73 of ts_TypeNode  | `U_n_74 of ts_TypeNode  | `U_n_75 of ts_TypeNode  | `U_n_76 of ts_TypeNode  | `U_n_77 of ts_TypeNode  | `U_n_78 of ts_TypeNode  | `U_n_79 of ts_TypeNode  | `U_n_80 of ts_TypeNode  | `U_n_81 of ts_TypeNode  | `U_n_82 of ts_TypeNode  | `U_n_83 of ts_TypeNode  | `U_n_84 of ts_TypeNode  | `U_n_85 of ts_TypeNode  | `U_n_86 of ts_TypeNode  | `U_n_87 of ts_TypeNode  | `U_n_88 of ts_TypeNode  | `U_n_89 of ts_TypeNode  | `U_n_90 of ts_TypeNode  | `U_n_91 of ts_TypeNode  | `U_n_92 of ts_TypeNode  | `U_n_93 of ts_TypeNode  | `U_n_94 of ts_TypeNode  | `U_n_95 of ts_TypeNode  | `U_n_96 of ts_TypeNode  | `U_n_97 of ts_TypeNode  | `U_n_98 of ts_TypeNode  | `U_n_99 of ts_TypeNode  | `U_n_100 of ts_TypeNode  | `U_n_101 of ts_TypeNode  | `U_n_102 of ts_TypeNode  | `U_n_103 of ts_TypeNode  | `U_n_104 of ts_TypeNode  | `U_n_105 of ts_TypeNode  | `U_n_106 of ts_TypeNode  | `U_n_107 of ts_TypeNode  | `U_n_108 of ts_TypeNode  | `U_n_109 of ts_TypeNode  | `U_n_110 of ts_TypeNode  | `U_n_111 of ts_TypeNode  | `U_n_112 of ts_TypeNode  | `U_n_113 of ts_TypeNode  | `U_n_114 of ts_TypeNode  | `U_n_115 of ts_TypeNode  | `U_n_116 of ts_TypeNode  | `U_n_117 of ts_TypeNode  | `U_n_118 of ts_TypeNode  | `U_n_119 of ts_TypeNode  | `U_n_120 of ts_TypeNode  | `U_n_121 of ts_TypeNode  | `U_n_122 of ts_TypeNode  | `U_n_123 of ts_TypeNode  | `U_n_124 of ts_TypeNode  | `U_n_125 of ts_TypeNode  | `U_n_126 of ts_TypeNode  | `U_n_127 of ts_TypeNode  | `U_n_128 of ts_TypeNode  | `U_n_129 of ts_TypeNode  | `U_n_130 of ts_TypeNode  | `U_n_131 of ts_TypeNode  | `U_n_132 of ts_TypeNode  | `U_n_133 of ts_TypeNode  | `U_n_134 of ts_TypeNode  | `U_n_135 of ts_TypeNode  | `U_n_136 of ts_TypeNode  | `U_n_137 of ts_TypeNode  | `U_n_138 of ts_TypeNode  | `U_n_139 of ts_TypeNode  | `U_n_140 of ts_TypeNode  | `U_n_141 of ts_TypeNode  | `U_n_142 of ts_TypeNode  | `U_n_143 of ts_TypeNode  | `U_n_144 of ts_TypeNode  | `U_n_145 of ts_TypeNode  | `U_n_146 of ts_TypeNode  | `U_n_147 of ts_TypeNode  | `U_n_148 of ts_TypeNode  | `U_n_149 of ts_TypeNode  | `U_n_150 of ts_TypeNode  | `U_n_151 of ts_TypeNode  | `U_n_152 of ts_TypeNode  | `U_n_153 of ts_TypeNode  | `U_n_154 of ts_TypeNode  | `U_n_155 of ts_TypeNode  | `U_n_156 of ts_TypeNode  | `U_n_157 of ts_TypeNode  | `U_n_158 of ts_TypeNode  | `U_n_159 of ts_TypeNode  | `U_n_160 of ts_TypeNode  | `U_n_161 of ts_TypeNode  | `U_n_162 of ts_TypeNode  | `U_n_163 of ts_TypeNode  | `U_n_164 of ts_TypeNode  | `U_n_165 of ts_TypeNode  | `U_n_166 of ts_TypeNode  | `U_n_167 of ts_TypeNode  | `U_n_168 of ts_TypeNode  | `U_n_169 of ts_TypeNode  | `U_n_170 of ts_TypeNode  | `U_n_171 of ts_TypeNode  | `U_n_172 of ts_TypeNode  | `U_n_173 of ts_TypeNode  | `U_n_174 of ts_TypeNode  | `U_n_175 of ts_TypeNode  | `U_n_176 of ts_TypeNode  | `U_n_177 of ts_TypeNode  | `U_n_178 of ts_TypeNode  | `U_n_179 of ts_TypeNode  | `U_n_180 of ts_TypeNode  | `U_n_181 of ts_TypeNode  | `U_n_182 of ts_TypeNode  | `U_n_183 of ts_TypeNode  | `U_n_184 of ts_TypeNode  | `U_n_185 of ts_TypeNode  | `U_n_186 of ts_TypeNode  | `U_n_187 of ts_TypeNode  | `U_n_188 of ts_TypeNode  | `U_n_189 of ts_TypeNode  | `U_n_190 of ts_TypeNode  | `U_n_191 of ts_TypeNode  | `U_n_192 of (ts_TypeNode, ts_NamedTupleMember) union2  | `U_n_193 of ts_TypeNode  | `U_n_194 of ts_TypeNode  | `U_n_195 of ts_TypeNode  | `U_n_196 of ts_TypeNode  | `U_n_197 of ts_TypeNode  | `U_n_198 of ts_TypeNode  | `U_n_199 of ts_TypeNode  | `U_n_200 of ts_TypeNode  | `U_n_201 of ts_TypeNode  | `U_n_202 of ts_TypeNode  | `U_n_203 of ts_TypeNode  | `U_n_204 of ts_TypeNode  | `U_n_205 of ts_TypeNode  | `U_n_206 of ts_TypeNode  | `U_n_207 of ts_TypeNode  | `U_n_208 of ts_TypeNode  | `U_n_209 of ts_TypeNode  | `U_n_210 of ts_TypeNode  | `U_n_211 of ts_TypeNode  | `U_n_212 of ts_TypeNode  | `U_n_213 of ts_TypeNode  | `U_n_214 of ts_TypeNode  | `U_n_215 of ts_TypeNode  | `U_n_216 of ts_TypeNode  | `U_n_217 of ts_TypeNode  | `U_n_218 of ts_TypeNode  | `U_n_219 of ts_TypeNode  | `U_n_220 of ts_TypeNode  | `U_n_221 of ts_TypeNode  | `U_n_222 of ts_TypeNode  | `U_n_223 of ts_TypeNode  | `U_n_224 of ts_TypeNode  | `U_n_225 of ts_TypeNode  | `U_n_226 of ts_TypeNode  | `U_n_227 of ts_TypeNode  | `U_n_228 of ts_TypeNode  | `U_n_229 of ts_TypeNode  | `U_n_230 of ts_TypeNode  | `U_n_231 of ts_TypeNode  | `U_n_232 of ts_TypeNode  | `U_n_233 of ts_TypeNode  | `U_n_234 of ts_TypeNode  | `U_n_235 of ts_TypeNode  | `U_n_236 of ts_TypeNode  | `U_n_237 of ts_TypeNode  | `U_n_238 of ts_TypeNode  | `U_n_239 of ts_TypeNode  | `U_n_240 of ts_TypeNode  | `U_n_241 of ts_TypeNode  | `U_n_242 of ts_TypeNode  | `U_n_243 of ts_TypeNode  | `U_n_244 of ts_TypeNode  | `U_n_245 of ts_TypeNode  | `U_n_246 of ts_TypeNode  | `U_n_247 of ts_TypeNode  | `U_n_248 of ts_TypeNode  | `U_n_249 of ts_TypeNode  | `U_n_250 of ts_TypeNode  | `U_n_251 of ts_TypeNode  | `U_n_252 of ts_TypeNode  | `U_n_253 of ts_TypeNode  | `U_n_254 of ts_TypeNode  | `U_n_255 of ts_TypeNode  | `U_n_256 of ts_TypeNode  | `U_n_257 of ts_TypeNode  | `U_n_258 of ts_TypeNode  | `U_n_259 of ts_TypeNode  | `U_n_260 of ts_TypeNode  | `U_n_261 of ts_TypeNode  | `U_n_262 of ts_TypeNode  | `U_n_263 of ts_TypeNode  | `U_n_264 of ts_TypeNode  | `U_n_265 of ts_TypeNode  | `U_n_266 of ts_TypeNode  | `U_n_267 of ts_TypeNode  | `U_n_268 of ts_TypeNode  | `U_n_269 of ts_TypeNode  | `U_n_270 of ts_TypeNode  | `U_n_271 of ts_TypeNode  | `U_n_272 of ts_TypeNode  | `U_n_273 of ts_TypeNode  | `U_n_274 of ts_TypeNode  | `U_n_275 of ts_TypeNode  | `U_n_276 of ts_TypeNode  | `U_n_277 of ts_TypeNode  | `U_n_278 of ts_TypeNode  | `U_n_279 of ts_TypeNode  | `U_n_280 of ts_TypeNode  | `U_n_281 of ts_TypeNode  | `U_n_282 of ts_TypeNode  | `U_n_283 of ts_TypeNode  | `U_n_284 of ts_TypeNode  | `U_n_285 of ts_TypeNode  | `U_n_286 of ts_TypeNode  | `U_n_287 of ts_TypeNode  | `U_n_288 of ts_TypeNode  | `U_n_289 of ts_TypeNode  | `U_n_290 of ts_TypeNode  | `U_n_291 of ts_TypeNode  | `U_n_292 of ts_TypeNode  | `U_n_293 of ts_TypeNode  | `U_n_294 of ts_TypeNode  | `U_n_295 of ts_TypeNode  | `U_n_296 of ts_TypeNode  | `U_n_297 of ts_TypeNode  | `U_n_298 of ts_TypeNode  | `U_n_299 of ts_TypeNode  | `U_n_300 of ts_TypeNode  | `U_n_301 of ts_TypeNode  | `U_n_302 of ts_TypeNode  | `U_n_303 of ts_TypeNode  | `U_n_304 of ts_TypeNode  | `U_n_305 of ts_TypeNode  | `U_n_306 of ts_TypeNode  | `U_n_307 of ts_TypeNode  | `U_n_308 of ts_TypeNode  | `U_n_309 of ts_TypeNode  | `U_n_310 of ts_TypeNode  | `U_n_311 of ts_TypeNode  | `U_n_312 of ts_TypeNode  | `U_n_313 of ts_TypeNode  | `U_n_314 of ts_TypeNode  | `U_n_315 of ts_TypeNode  | `U_n_316 of ts_TypeNode  | `U_n_317 of ts_TypeNode  | `U_n_318 of ts_TypeNode  | `U_n_319 of ts_TypeNode  | `U_n_320 of ts_TypeNode  | `U_n_321 of ts_TypeNode  | `U_n_322 of ts_TypeNode  | `U_n_323 of ts_TypeNode  | `U_n_324 of ts_TypeNode  | `U_n_325 of ts_TypeNode  | `U_n_326 of ts_TypeNode  | `U_n_327 of ts_TypeNode  | `U_n_328 of ts_TypeNode  | `U_n_329 of ts_TypeNode  | `U_n_330 of ts_TypeNode  | `U_n_331 of ts_TypeNode  | `U_n_332 of ts_TypeNode  | `U_n_333 of ts_TypeNode  | `U_n_334 of ts_TypeNode  | `U_n_335 of ts_TypeNode  | `U_n_336 of ts_TypeNode  | `U_n_337 of ts_TypeNode  | `U_n_338 of ts_TypeNode  | `U_n_339 of ts_TypeNode  | `U_n_340 of ts_TypeNode  | `U_n_341 of ts_TypeNode ] [@js.union on_field "kind"]) list -> ts_TupleTypeNode [@@js.global "createTupleTypeNode"]
+    (** @deprecated Use `factory.updateTupleTypeNode` or the factory supplied by your transformation context instead. *)
     val updateTupleTypeNode: node:ts_TupleTypeNode -> elements:([`U_n_0 of ts_TypeNode  | `U_n_1 of ts_TypeNode  | `U_n_2 of ts_TypeNode  | `U_n_3 of ts_TypeNode  | `U_n_4 of ts_TypeNode  | `U_n_5 of ts_TypeNode  | `U_n_6 of ts_TypeNode  | `U_n_7 of ts_TypeNode  | `U_n_8 of ts_TypeNode  | `U_n_9 of ts_TypeNode  | `U_n_10 of ts_TypeNode  | `U_n_11 of ts_TypeNode  | `U_n_12 of ts_TypeNode  | `U_n_13 of ts_TypeNode  | `U_n_14 of ts_TypeNode  | `U_n_15 of ts_TypeNode  | `U_n_16 of ts_TypeNode  | `U_n_17 of ts_TypeNode  | `U_n_18 of ts_TypeNode  | `U_n_19 of ts_TypeNode  | `U_n_20 of ts_TypeNode  | `U_n_21 of ts_TypeNode  | `U_n_22 of ts_TypeNode  | `U_n_23 of ts_TypeNode  | `U_n_24 of ts_TypeNode  | `U_n_25 of ts_TypeNode  | `U_n_26 of ts_TypeNode  | `U_n_27 of ts_TypeNode  | `U_n_28 of ts_TypeNode  | `U_n_29 of ts_TypeNode  | `U_n_30 of ts_TypeNode  | `U_n_31 of ts_TypeNode  | `U_n_32 of ts_TypeNode  | `U_n_33 of ts_TypeNode  | `U_n_34 of ts_TypeNode  | `U_n_35 of ts_TypeNode  | `U_n_36 of ts_TypeNode  | `U_n_37 of ts_TypeNode  | `U_n_38 of ts_TypeNode  | `U_n_39 of ts_TypeNode  | `U_n_40 of ts_TypeNode  | `U_n_41 of ts_TypeNode  | `U_n_42 of ts_TypeNode  | `U_n_43 of ts_TypeNode  | `U_n_44 of ts_TypeNode  | `U_n_45 of ts_TypeNode  | `U_n_46 of ts_TypeNode  | `U_n_47 of ts_TypeNode  | `U_n_48 of ts_TypeNode  | `U_n_49 of ts_TypeNode  | `U_n_50 of ts_TypeNode  | `U_n_51 of ts_TypeNode  | `U_n_52 of ts_TypeNode  | `U_n_53 of ts_TypeNode  | `U_n_54 of ts_TypeNode  | `U_n_55 of ts_TypeNode  | `U_n_56 of ts_TypeNode  | `U_n_57 of ts_TypeNode  | `U_n_58 of ts_TypeNode  | `U_n_59 of ts_TypeNode  | `U_n_60 of ts_TypeNode  | `U_n_61 of ts_TypeNode  | `U_n_62 of ts_TypeNode  | `U_n_63 of ts_TypeNode  | `U_n_64 of ts_TypeNode  | `U_n_65 of ts_TypeNode  | `U_n_66 of ts_TypeNode  | `U_n_67 of ts_TypeNode  | `U_n_68 of ts_TypeNode  | `U_n_69 of ts_TypeNode  | `U_n_70 of ts_TypeNode  | `U_n_71 of ts_TypeNode  | `U_n_72 of ts_TypeNode  | `U_n_73 of ts_TypeNode  | `U_n_74 of ts_TypeNode  | `U_n_75 of ts_TypeNode  | `U_n_76 of ts_TypeNode  | `U_n_77 of ts_TypeNode  | `U_n_78 of ts_TypeNode  | `U_n_79 of ts_TypeNode  | `U_n_80 of ts_TypeNode  | `U_n_81 of ts_TypeNode  | `U_n_82 of ts_TypeNode  | `U_n_83 of ts_TypeNode  | `U_n_84 of ts_TypeNode  | `U_n_85 of ts_TypeNode  | `U_n_86 of ts_TypeNode  | `U_n_87 of ts_TypeNode  | `U_n_88 of ts_TypeNode  | `U_n_89 of ts_TypeNode  | `U_n_90 of ts_TypeNode  | `U_n_91 of ts_TypeNode  | `U_n_92 of ts_TypeNode  | `U_n_93 of ts_TypeNode  | `U_n_94 of ts_TypeNode  | `U_n_95 of ts_TypeNode  | `U_n_96 of ts_TypeNode  | `U_n_97 of ts_TypeNode  | `U_n_98 of ts_TypeNode  | `U_n_99 of ts_TypeNode  | `U_n_100 of ts_TypeNode  | `U_n_101 of ts_TypeNode  | `U_n_102 of ts_TypeNode  | `U_n_103 of ts_TypeNode  | `U_n_104 of ts_TypeNode  | `U_n_105 of ts_TypeNode  | `U_n_106 of ts_TypeNode  | `U_n_107 of ts_TypeNode  | `U_n_108 of ts_TypeNode  | `U_n_109 of ts_TypeNode  | `U_n_110 of ts_TypeNode  | `U_n_111 of ts_TypeNode  | `U_n_112 of ts_TypeNode  | `U_n_113 of ts_TypeNode  | `U_n_114 of ts_TypeNode  | `U_n_115 of ts_TypeNode  | `U_n_116 of ts_TypeNode  | `U_n_117 of ts_TypeNode  | `U_n_118 of ts_TypeNode  | `U_n_119 of ts_TypeNode  | `U_n_120 of ts_TypeNode  | `U_n_121 of ts_TypeNode  | `U_n_122 of ts_TypeNode  | `U_n_123 of ts_TypeNode  | `U_n_124 of ts_TypeNode  | `U_n_125 of ts_TypeNode  | `U_n_126 of ts_TypeNode  | `U_n_127 of ts_TypeNode  | `U_n_128 of ts_TypeNode  | `U_n_129 of ts_TypeNode  | `U_n_130 of ts_TypeNode  | `U_n_131 of ts_TypeNode  | `U_n_132 of ts_TypeNode  | `U_n_133 of ts_TypeNode  | `U_n_134 of ts_TypeNode  | `U_n_135 of ts_TypeNode  | `U_n_136 of ts_TypeNode  | `U_n_137 of ts_TypeNode  | `U_n_138 of ts_TypeNode  | `U_n_139 of ts_TypeNode  | `U_n_140 of ts_TypeNode  | `U_n_141 of ts_TypeNode  | `U_n_142 of ts_TypeNode  | `U_n_143 of ts_TypeNode  | `U_n_144 of ts_TypeNode  | `U_n_145 of ts_TypeNode  | `U_n_146 of ts_TypeNode  | `U_n_147 of ts_TypeNode  | `U_n_148 of ts_TypeNode  | `U_n_149 of ts_TypeNode  | `U_n_150 of ts_TypeNode  | `U_n_151 of ts_TypeNode  | `U_n_152 of ts_TypeNode  | `U_n_153 of ts_TypeNode  | `U_n_154 of ts_TypeNode  | `U_n_155 of ts_TypeNode  | `U_n_156 of ts_TypeNode  | `U_n_157 of ts_TypeNode  | `U_n_158 of ts_TypeNode  | `U_n_159 of ts_TypeNode  | `U_n_160 of ts_TypeNode  | `U_n_161 of ts_TypeNode  | `U_n_162 of ts_TypeNode  | `U_n_163 of ts_TypeNode  | `U_n_164 of ts_TypeNode  | `U_n_165 of ts_TypeNode  | `U_n_166 of ts_TypeNode  | `U_n_167 of ts_TypeNode  | `U_n_168 of ts_TypeNode  | `U_n_169 of ts_TypeNode  | `U_n_170 of ts_TypeNode  | `U_n_171 of ts_TypeNode  | `U_n_172 of ts_TypeNode  | `U_n_173 of ts_TypeNode  | `U_n_174 of ts_TypeNode  | `U_n_175 of ts_TypeNode  | `U_n_176 of ts_TypeNode  | `U_n_177 of ts_TypeNode  | `U_n_178 of ts_TypeNode  | `U_n_179 of ts_TypeNode  | `U_n_180 of ts_TypeNode  | `U_n_181 of ts_TypeNode  | `U_n_182 of ts_TypeNode  | `U_n_183 of ts_TypeNode  | `U_n_184 of ts_TypeNode  | `U_n_185 of ts_TypeNode  | `U_n_186 of ts_TypeNode  | `U_n_187 of ts_TypeNode  | `U_n_188 of ts_TypeNode  | `U_n_189 of ts_TypeNode  | `U_n_190 of ts_TypeNode  | `U_n_191 of ts_TypeNode  | `U_n_192 of (ts_TypeNode, ts_NamedTupleMember) union2  | `U_n_193 of ts_TypeNode  | `U_n_194 of ts_TypeNode  | `U_n_195 of ts_TypeNode  | `U_n_196 of ts_TypeNode  | `U_n_197 of ts_TypeNode  | `U_n_198 of ts_TypeNode  | `U_n_199 of ts_TypeNode  | `U_n_200 of ts_TypeNode  | `U_n_201 of ts_TypeNode  | `U_n_202 of ts_TypeNode  | `U_n_203 of ts_TypeNode  | `U_n_204 of ts_TypeNode  | `U_n_205 of ts_TypeNode  | `U_n_206 of ts_TypeNode  | `U_n_207 of ts_TypeNode  | `U_n_208 of ts_TypeNode  | `U_n_209 of ts_TypeNode  | `U_n_210 of ts_TypeNode  | `U_n_211 of ts_TypeNode  | `U_n_212 of ts_TypeNode  | `U_n_213 of ts_TypeNode  | `U_n_214 of ts_TypeNode  | `U_n_215 of ts_TypeNode  | `U_n_216 of ts_TypeNode  | `U_n_217 of ts_TypeNode  | `U_n_218 of ts_TypeNode  | `U_n_219 of ts_TypeNode  | `U_n_220 of ts_TypeNode  | `U_n_221 of ts_TypeNode  | `U_n_222 of ts_TypeNode  | `U_n_223 of ts_TypeNode  | `U_n_224 of ts_TypeNode  | `U_n_225 of ts_TypeNode  | `U_n_226 of ts_TypeNode  | `U_n_227 of ts_TypeNode  | `U_n_228 of ts_TypeNode  | `U_n_229 of ts_TypeNode  | `U_n_230 of ts_TypeNode  | `U_n_231 of ts_TypeNode  | `U_n_232 of ts_TypeNode  | `U_n_233 of ts_TypeNode  | `U_n_234 of ts_TypeNode  | `U_n_235 of ts_TypeNode  | `U_n_236 of ts_TypeNode  | `U_n_237 of ts_TypeNode  | `U_n_238 of ts_TypeNode  | `U_n_239 of ts_TypeNode  | `U_n_240 of ts_TypeNode  | `U_n_241 of ts_TypeNode  | `U_n_242 of ts_TypeNode  | `U_n_243 of ts_TypeNode  | `U_n_244 of ts_TypeNode  | `U_n_245 of ts_TypeNode  | `U_n_246 of ts_TypeNode  | `U_n_247 of ts_TypeNode  | `U_n_248 of ts_TypeNode  | `U_n_249 of ts_TypeNode  | `U_n_250 of ts_TypeNode  | `U_n_251 of ts_TypeNode  | `U_n_252 of ts_TypeNode  | `U_n_253 of ts_TypeNode  | `U_n_254 of ts_TypeNode  | `U_n_255 of ts_TypeNode  | `U_n_256 of ts_TypeNode  | `U_n_257 of ts_TypeNode  | `U_n_258 of ts_TypeNode  | `U_n_259 of ts_TypeNode  | `U_n_260 of ts_TypeNode  | `U_n_261 of ts_TypeNode  | `U_n_262 of ts_TypeNode  | `U_n_263 of ts_TypeNode  | `U_n_264 of ts_TypeNode  | `U_n_265 of ts_TypeNode  | `U_n_266 of ts_TypeNode  | `U_n_267 of ts_TypeNode  | `U_n_268 of ts_TypeNode  | `U_n_269 of ts_TypeNode  | `U_n_270 of ts_TypeNode  | `U_n_271 of ts_TypeNode  | `U_n_272 of ts_TypeNode  | `U_n_273 of ts_TypeNode  | `U_n_274 of ts_TypeNode  | `U_n_275 of ts_TypeNode  | `U_n_276 of ts_TypeNode  | `U_n_277 of ts_TypeNode  | `U_n_278 of ts_TypeNode  | `U_n_279 of ts_TypeNode  | `U_n_280 of ts_TypeNode  | `U_n_281 of ts_TypeNode  | `U_n_282 of ts_TypeNode  | `U_n_283 of ts_TypeNode  | `U_n_284 of ts_TypeNode  | `U_n_285 of ts_TypeNode  | `U_n_286 of ts_TypeNode  | `U_n_287 of ts_TypeNode  | `U_n_288 of ts_TypeNode  | `U_n_289 of ts_TypeNode  | `U_n_290 of ts_TypeNode  | `U_n_291 of ts_TypeNode  | `U_n_292 of ts_TypeNode  | `U_n_293 of ts_TypeNode  | `U_n_294 of ts_TypeNode  | `U_n_295 of ts_TypeNode  | `U_n_296 of ts_TypeNode  | `U_n_297 of ts_TypeNode  | `U_n_298 of ts_TypeNode  | `U_n_299 of ts_TypeNode  | `U_n_300 of ts_TypeNode  | `U_n_301 of ts_TypeNode  | `U_n_302 of ts_TypeNode  | `U_n_303 of ts_TypeNode  | `U_n_304 of ts_TypeNode  | `U_n_305 of ts_TypeNode  | `U_n_306 of ts_TypeNode  | `U_n_307 of ts_TypeNode  | `U_n_308 of ts_TypeNode  | `U_n_309 of ts_TypeNode  | `U_n_310 of ts_TypeNode  | `U_n_311 of ts_TypeNode  | `U_n_312 of ts_TypeNode  | `U_n_313 of ts_TypeNode  | `U_n_314 of ts_TypeNode  | `U_n_315 of ts_TypeNode  | `U_n_316 of ts_TypeNode  | `U_n_317 of ts_TypeNode  | `U_n_318 of ts_TypeNode  | `U_n_319 of ts_TypeNode  | `U_n_320 of ts_TypeNode  | `U_n_321 of ts_TypeNode  | `U_n_322 of ts_TypeNode  | `U_n_323 of ts_TypeNode  | `U_n_324 of ts_TypeNode  | `U_n_325 of ts_TypeNode  | `U_n_326 of ts_TypeNode  | `U_n_327 of ts_TypeNode  | `U_n_328 of ts_TypeNode  | `U_n_329 of ts_TypeNode  | `U_n_330 of ts_TypeNode  | `U_n_331 of ts_TypeNode  | `U_n_332 of ts_TypeNode  | `U_n_333 of ts_TypeNode  | `U_n_334 of ts_TypeNode  | `U_n_335 of ts_TypeNode  | `U_n_336 of ts_TypeNode  | `U_n_337 of ts_TypeNode  | `U_n_338 of ts_TypeNode  | `U_n_339 of ts_TypeNode  | `U_n_340 of ts_TypeNode  | `U_n_341 of ts_TypeNode ] [@js.union on_field "kind"]) list -> ts_TupleTypeNode [@@js.global "updateTupleTypeNode"]
+    (** @deprecated Use `factory.createOptionalTypeNode` or the factory supplied by your transformation context instead. *)
     val createOptionalTypeNode: type_:ts_TypeNode -> ts_OptionalTypeNode [@@js.global "createOptionalTypeNode"]
+    (** @deprecated Use `factory.updateOptionalTypeNode` or the factory supplied by your transformation context instead. *)
     val updateOptionalTypeNode: node:ts_OptionalTypeNode -> type_:ts_TypeNode -> ts_OptionalTypeNode [@@js.global "updateOptionalTypeNode"]
+    (** @deprecated Use `factory.createRestTypeNode` or the factory supplied by your transformation context instead. *)
     val createRestTypeNode: type_:ts_TypeNode -> ts_RestTypeNode [@@js.global "createRestTypeNode"]
+    (** @deprecated Use `factory.updateRestTypeNode` or the factory supplied by your transformation context instead. *)
     val updateRestTypeNode: node:ts_RestTypeNode -> type_:ts_TypeNode -> ts_RestTypeNode [@@js.global "updateRestTypeNode"]
+    (** @deprecated Use `factory.createUnionTypeNode` or the factory supplied by your transformation context instead. *)
     val createUnionTypeNode: types:ts_TypeNode list -> ts_UnionTypeNode [@@js.global "createUnionTypeNode"]
+    (** @deprecated Use `factory.updateUnionTypeNode` or the factory supplied by your transformation context instead. *)
     val updateUnionTypeNode: node:ts_UnionTypeNode -> types:ts_TypeNode ts_NodeArray -> ts_UnionTypeNode [@@js.global "updateUnionTypeNode"]
+    (** @deprecated Use `factory.createIntersectionTypeNode` or the factory supplied by your transformation context instead. *)
     val createIntersectionTypeNode: types:ts_TypeNode list -> ts_IntersectionTypeNode [@@js.global "createIntersectionTypeNode"]
+    (** @deprecated Use `factory.updateIntersectionTypeNode` or the factory supplied by your transformation context instead. *)
     val updateIntersectionTypeNode: node:ts_IntersectionTypeNode -> types:ts_TypeNode ts_NodeArray -> ts_IntersectionTypeNode [@@js.global "updateIntersectionTypeNode"]
+    (** @deprecated Use `factory.createConditionalTypeNode` or the factory supplied by your transformation context instead. *)
     val createConditionalTypeNode: checkType:ts_TypeNode -> extendsType:ts_TypeNode -> trueType:ts_TypeNode -> falseType:ts_TypeNode -> ts_ConditionalTypeNode [@@js.global "createConditionalTypeNode"]
+    (** @deprecated Use `factory.updateConditionalTypeNode` or the factory supplied by your transformation context instead. *)
     val updateConditionalTypeNode: node:ts_ConditionalTypeNode -> checkType:ts_TypeNode -> extendsType:ts_TypeNode -> trueType:ts_TypeNode -> falseType:ts_TypeNode -> ts_ConditionalTypeNode [@@js.global "updateConditionalTypeNode"]
+    (** @deprecated Use `factory.createInferTypeNode` or the factory supplied by your transformation context instead. *)
     val createInferTypeNode: typeParameter:ts_TypeParameterDeclaration -> ts_InferTypeNode [@@js.global "createInferTypeNode"]
+    (** @deprecated Use `factory.updateInferTypeNode` or the factory supplied by your transformation context instead. *)
     val updateInferTypeNode: node:ts_InferTypeNode -> typeParameter:ts_TypeParameterDeclaration -> ts_InferTypeNode [@@js.global "updateInferTypeNode"]
+    (** @deprecated Use `factory.createImportTypeNode` or the factory supplied by your transformation context instead. *)
     val createImportTypeNode: argument:ts_TypeNode -> ?qualifier:ts_EntityName or_undefined -> ?typeArguments:ts_TypeNode list or_undefined -> ?isTypeOf:bool or_undefined -> unit -> ts_ImportTypeNode [@@js.global "createImportTypeNode"]
+    (** @deprecated Use `factory.updateImportTypeNode` or the factory supplied by your transformation context instead. *)
     val updateImportTypeNode: node:ts_ImportTypeNode -> argument:ts_TypeNode -> qualifier:ts_EntityName or_undefined -> typeArguments:ts_TypeNode list or_undefined -> ?isTypeOf:bool or_undefined -> unit -> ts_ImportTypeNode [@@js.global "updateImportTypeNode"]
+    (** @deprecated Use `factory.createParenthesizedType` or the factory supplied by your transformation context instead. *)
     val createParenthesizedType: type_:ts_TypeNode -> ts_ParenthesizedTypeNode [@@js.global "createParenthesizedType"]
+    (** @deprecated Use `factory.updateParenthesizedType` or the factory supplied by your transformation context instead. *)
     val updateParenthesizedType: node:ts_ParenthesizedTypeNode -> type_:ts_TypeNode -> ts_ParenthesizedTypeNode [@@js.global "updateParenthesizedType"]
+    (** @deprecated Use `factory.createThisTypeNode` or the factory supplied by your transformation context instead. *)
     val createThisTypeNode: unit -> ts_ThisTypeNode [@@js.global "createThisTypeNode"]
+    (** @deprecated Use `factory.updateTypeOperatorNode` or the factory supplied by your transformation context instead. *)
     val updateTypeOperatorNode: node:ts_TypeOperatorNode -> type_:ts_TypeNode -> ts_TypeOperatorNode [@@js.global "updateTypeOperatorNode"]
+    (** @deprecated Use `factory.createIndexedAccessTypeNode` or the factory supplied by your transformation context instead. *)
     val createIndexedAccessTypeNode: objectType:ts_TypeNode -> indexType:ts_TypeNode -> ts_IndexedAccessTypeNode [@@js.global "createIndexedAccessTypeNode"]
+    (** @deprecated Use `factory.updateIndexedAccessTypeNode` or the factory supplied by your transformation context instead. *)
     val updateIndexedAccessTypeNode: node:ts_IndexedAccessTypeNode -> objectType:ts_TypeNode -> indexType:ts_TypeNode -> ts_IndexedAccessTypeNode [@@js.global "updateIndexedAccessTypeNode"]
+    (** @deprecated Use `factory.createMappedTypeNode` or the factory supplied by your transformation context instead. *)
     val createMappedTypeNode: readonlyToken:([`U_n_39 of ts_PlusToken  | `U_n_40 of ts_MinusToken  | `U_n_142 of ts_ReadonlyKeyword ] [@js.union on_field "kind"]) or_undefined -> typeParameter:ts_TypeParameterDeclaration -> nameType:ts_TypeNode or_undefined -> questionToken:([`U_n_39 of ts_PlusToken  | `U_n_40 of ts_MinusToken  | `U_n_57 of ts_QuestionToken ] [@js.union on_field "kind"]) or_undefined -> type_:ts_TypeNode or_undefined -> ts_MappedTypeNode [@@js.global "createMappedTypeNode"]
+    (** @deprecated Use `factory.updateMappedTypeNode` or the factory supplied by your transformation context instead. *)
     val updateMappedTypeNode: node:ts_MappedTypeNode -> readonlyToken:([`U_n_39 of ts_PlusToken  | `U_n_40 of ts_MinusToken  | `U_n_142 of ts_ReadonlyKeyword ] [@js.union on_field "kind"]) or_undefined -> typeParameter:ts_TypeParameterDeclaration -> nameType:ts_TypeNode or_undefined -> questionToken:([`U_n_39 of ts_PlusToken  | `U_n_40 of ts_MinusToken  | `U_n_57 of ts_QuestionToken ] [@js.union on_field "kind"]) or_undefined -> type_:ts_TypeNode or_undefined -> ts_MappedTypeNode [@@js.global "updateMappedTypeNode"]
+    (** @deprecated Use `factory.createLiteralTypeNode` or the factory supplied by your transformation context instead. *)
     val createLiteralTypeNode: literal:([`U_n_0 of ts_LiteralExpression  | `U_n_1 of ts_LiteralExpression  | `U_n_2 of ts_LiteralExpression  | `U_n_3 of ts_LiteralExpression  | `U_n_4 of ts_LiteralExpression  | `U_n_5 of ts_LiteralExpression  | `U_n_6 of ts_LiteralExpression  | `U_n_7 of ts_LiteralExpression  | `U_n_8 of ts_LiteralExpression  | `U_n_9 of ts_LiteralExpression  | `U_n_10 of ts_LiteralExpression  | `U_n_11 of ts_LiteralExpression  | `U_n_12 of ts_LiteralExpression  | `U_n_13 of ts_LiteralExpression  | `U_n_14 of ts_LiteralExpression  | `U_n_15 of ts_LiteralExpression  | `U_n_16 of ts_LiteralExpression  | `U_n_17 of ts_LiteralExpression  | `U_n_18 of ts_LiteralExpression  | `U_n_19 of ts_LiteralExpression  | `U_n_20 of ts_LiteralExpression  | `U_n_21 of ts_LiteralExpression  | `U_n_22 of ts_LiteralExpression  | `U_n_23 of ts_LiteralExpression  | `U_n_24 of ts_LiteralExpression  | `U_n_25 of ts_LiteralExpression  | `U_n_26 of ts_LiteralExpression  | `U_n_27 of ts_LiteralExpression  | `U_n_28 of ts_LiteralExpression  | `U_n_29 of ts_LiteralExpression  | `U_n_30 of ts_LiteralExpression  | `U_n_31 of ts_LiteralExpression  | `U_n_32 of ts_LiteralExpression  | `U_n_33 of ts_LiteralExpression  | `U_n_34 of ts_LiteralExpression  | `U_n_35 of ts_LiteralExpression  | `U_n_36 of ts_LiteralExpression  | `U_n_37 of ts_LiteralExpression  | `U_n_38 of ts_LiteralExpression  | `U_n_39 of ts_LiteralExpression  | `U_n_40 of ts_LiteralExpression  | `U_n_41 of ts_LiteralExpression  | `U_n_42 of ts_LiteralExpression  | `U_n_43 of ts_LiteralExpression  | `U_n_44 of ts_LiteralExpression  | `U_n_45 of ts_LiteralExpression  | `U_n_46 of ts_LiteralExpression  | `U_n_47 of ts_LiteralExpression  | `U_n_48 of ts_LiteralExpression  | `U_n_49 of ts_LiteralExpression  | `U_n_50 of ts_LiteralExpression  | `U_n_51 of ts_LiteralExpression  | `U_n_52 of ts_LiteralExpression  | `U_n_53 of ts_LiteralExpression  | `U_n_54 of ts_LiteralExpression  | `U_n_55 of ts_LiteralExpression  | `U_n_56 of ts_LiteralExpression  | `U_n_57 of ts_LiteralExpression  | `U_n_58 of ts_LiteralExpression  | `U_n_59 of ts_LiteralExpression  | `U_n_60 of ts_LiteralExpression  | `U_n_61 of ts_LiteralExpression  | `U_n_62 of ts_LiteralExpression  | `U_n_63 of ts_LiteralExpression  | `U_n_64 of ts_LiteralExpression  | `U_n_65 of ts_LiteralExpression  | `U_n_66 of ts_LiteralExpression  | `U_n_67 of ts_LiteralExpression  | `U_n_68 of ts_LiteralExpression  | `U_n_69 of ts_LiteralExpression  | `U_n_70 of ts_LiteralExpression  | `U_n_71 of ts_LiteralExpression  | `U_n_72 of ts_LiteralExpression  | `U_n_73 of ts_LiteralExpression  | `U_n_74 of ts_LiteralExpression  | `U_n_75 of ts_LiteralExpression  | `U_n_76 of ts_LiteralExpression  | `U_n_77 of ts_LiteralExpression  | `U_n_78 of ts_LiteralExpression  | `U_n_79 of ts_LiteralExpression  | `U_n_80 of ts_LiteralExpression  | `U_n_81 of ts_LiteralExpression  | `U_n_82 of ts_LiteralExpression  | `U_n_83 of ts_LiteralExpression  | `U_n_84 of ts_LiteralExpression  | `U_n_85 of ts_LiteralExpression  | `U_n_86 of ts_LiteralExpression  | `U_n_87 of ts_LiteralExpression  | `U_n_88 of ts_LiteralExpression  | `U_n_89 of ts_LiteralExpression  | `U_n_90 of ts_LiteralExpression  | `U_n_91 of ts_LiteralExpression  | `U_n_92 of ts_LiteralExpression  | `U_n_93 of ts_LiteralExpression  | `U_n_94 of (ts_LiteralExpression, ts_BooleanLiteral) union2  | `U_n_95 of ts_LiteralExpression  | `U_n_96 of ts_LiteralExpression  | `U_n_97 of ts_LiteralExpression  | `U_n_98 of ts_LiteralExpression  | `U_n_99 of ts_LiteralExpression  | `U_n_100 of ts_LiteralExpression  | `U_n_101 of ts_LiteralExpression  | `U_n_102 of ts_LiteralExpression  | `U_n_103 of (ts_LiteralExpression, ts_NullLiteral) union2  | `U_n_104 of ts_LiteralExpression  | `U_n_105 of ts_LiteralExpression  | `U_n_106 of ts_LiteralExpression  | `U_n_107 of ts_LiteralExpression  | `U_n_108 of ts_LiteralExpression  | `U_n_109 of (ts_LiteralExpression, ts_BooleanLiteral) union2  | `U_n_110 of ts_LiteralExpression  | `U_n_111 of ts_LiteralExpression  | `U_n_112 of ts_LiteralExpression  | `U_n_113 of ts_LiteralExpression  | `U_n_114 of ts_LiteralExpression  | `U_n_115 of ts_LiteralExpression  | `U_n_116 of ts_LiteralExpression  | `U_n_117 of ts_LiteralExpression  | `U_n_118 of ts_LiteralExpression  | `U_n_119 of ts_LiteralExpression  | `U_n_120 of ts_LiteralExpression  | `U_n_121 of ts_LiteralExpression  | `U_n_122 of ts_LiteralExpression  | `U_n_123 of ts_LiteralExpression  | `U_n_124 of ts_LiteralExpression  | `U_n_125 of ts_LiteralExpression  | `U_n_126 of ts_LiteralExpression  | `U_n_127 of ts_LiteralExpression  | `U_n_128 of ts_LiteralExpression  | `U_n_129 of ts_LiteralExpression  | `U_n_130 of ts_LiteralExpression  | `U_n_131 of ts_LiteralExpression  | `U_n_132 of ts_LiteralExpression  | `U_n_133 of ts_LiteralExpression  | `U_n_134 of ts_LiteralExpression  | `U_n_135 of ts_LiteralExpression  | `U_n_136 of ts_LiteralExpression  | `U_n_137 of ts_LiteralExpression  | `U_n_138 of ts_LiteralExpression  | `U_n_139 of ts_LiteralExpression  | `U_n_140 of ts_LiteralExpression  | `U_n_141 of ts_LiteralExpression  | `U_n_142 of ts_LiteralExpression  | `U_n_143 of ts_LiteralExpression  | `U_n_144 of ts_LiteralExpression  | `U_n_145 of ts_LiteralExpression  | `U_n_146 of ts_LiteralExpression  | `U_n_147 of ts_LiteralExpression  | `U_n_148 of ts_LiteralExpression  | `U_n_149 of ts_LiteralExpression  | `U_n_150 of ts_LiteralExpression  | `U_n_151 of ts_LiteralExpression  | `U_n_152 of ts_LiteralExpression  | `U_n_153 of ts_LiteralExpression  | `U_n_154 of ts_LiteralExpression  | `U_n_155 of ts_LiteralExpression  | `U_n_156 of ts_LiteralExpression  | `U_n_157 of ts_LiteralExpression  | `U_n_158 of ts_LiteralExpression  | `U_n_159 of ts_LiteralExpression  | `U_n_160 of ts_LiteralExpression  | `U_n_161 of ts_LiteralExpression  | `U_n_162 of ts_LiteralExpression  | `U_n_163 of ts_LiteralExpression  | `U_n_164 of ts_LiteralExpression  | `U_n_165 of ts_LiteralExpression  | `U_n_166 of ts_LiteralExpression  | `U_n_167 of ts_LiteralExpression  | `U_n_168 of ts_LiteralExpression  | `U_n_169 of ts_LiteralExpression  | `U_n_170 of ts_LiteralExpression  | `U_n_171 of ts_LiteralExpression  | `U_n_172 of ts_LiteralExpression  | `U_n_173 of ts_LiteralExpression  | `U_n_174 of ts_LiteralExpression  | `U_n_175 of ts_LiteralExpression  | `U_n_176 of ts_LiteralExpression  | `U_n_177 of ts_LiteralExpression  | `U_n_178 of ts_LiteralExpression  | `U_n_179 of ts_LiteralExpression  | `U_n_180 of ts_LiteralExpression  | `U_n_181 of ts_LiteralExpression  | `U_n_182 of ts_LiteralExpression  | `U_n_183 of ts_LiteralExpression  | `U_n_184 of ts_LiteralExpression  | `U_n_185 of ts_LiteralExpression  | `U_n_186 of ts_LiteralExpression  | `U_n_187 of ts_LiteralExpression  | `U_n_188 of ts_LiteralExpression  | `U_n_189 of ts_LiteralExpression  | `U_n_190 of ts_LiteralExpression  | `U_n_191 of ts_LiteralExpression  | `U_n_192 of ts_LiteralExpression  | `U_n_193 of ts_LiteralExpression  | `U_n_194 of ts_LiteralExpression  | `U_n_195 of ts_LiteralExpression  | `U_n_196 of ts_LiteralExpression  | `U_n_197 of ts_LiteralExpression  | `U_n_198 of ts_LiteralExpression  | `U_n_199 of ts_LiteralExpression  | `U_n_200 of ts_LiteralExpression  | `U_n_201 of ts_LiteralExpression  | `U_n_202 of ts_LiteralExpression  | `U_n_203 of ts_LiteralExpression  | `U_n_204 of ts_LiteralExpression  | `U_n_205 of ts_LiteralExpression  | `U_n_206 of ts_LiteralExpression  | `U_n_207 of ts_LiteralExpression  | `U_n_208 of ts_LiteralExpression  | `U_n_209 of ts_LiteralExpression  | `U_n_210 of ts_LiteralExpression  | `U_n_211 of ts_LiteralExpression  | `U_n_212 of ts_LiteralExpression  | `U_n_213 of ts_LiteralExpression  | `U_n_214 of (ts_LiteralExpression, ts_PrefixUnaryExpression) union2  | `U_n_215 of ts_LiteralExpression  | `U_n_216 of ts_LiteralExpression  | `U_n_217 of ts_LiteralExpression  | `U_n_218 of ts_LiteralExpression  | `U_n_219 of ts_LiteralExpression  | `U_n_220 of ts_LiteralExpression  | `U_n_221 of ts_LiteralExpression  | `U_n_222 of ts_LiteralExpression  | `U_n_223 of ts_LiteralExpression  | `U_n_224 of ts_LiteralExpression  | `U_n_225 of ts_LiteralExpression  | `U_n_226 of ts_LiteralExpression  | `U_n_227 of ts_LiteralExpression  | `U_n_228 of ts_LiteralExpression  | `U_n_229 of ts_LiteralExpression  | `U_n_230 of ts_LiteralExpression  | `U_n_231 of ts_LiteralExpression  | `U_n_232 of ts_LiteralExpression  | `U_n_233 of ts_LiteralExpression  | `U_n_234 of ts_LiteralExpression  | `U_n_235 of ts_LiteralExpression  | `U_n_236 of ts_LiteralExpression  | `U_n_237 of ts_LiteralExpression  | `U_n_238 of ts_LiteralExpression  | `U_n_239 of ts_LiteralExpression  | `U_n_240 of ts_LiteralExpression  | `U_n_241 of ts_LiteralExpression  | `U_n_242 of ts_LiteralExpression  | `U_n_243 of ts_LiteralExpression  | `U_n_244 of ts_LiteralExpression  | `U_n_245 of ts_LiteralExpression  | `U_n_246 of ts_LiteralExpression  | `U_n_247 of ts_LiteralExpression  | `U_n_248 of ts_LiteralExpression  | `U_n_249 of ts_LiteralExpression  | `U_n_250 of ts_LiteralExpression  | `U_n_251 of ts_LiteralExpression  | `U_n_252 of ts_LiteralExpression  | `U_n_253 of ts_LiteralExpression  | `U_n_254 of ts_LiteralExpression  | `U_n_255 of ts_LiteralExpression  | `U_n_256 of ts_LiteralExpression  | `U_n_257 of ts_LiteralExpression  | `U_n_258 of ts_LiteralExpression  | `U_n_259 of ts_LiteralExpression  | `U_n_260 of ts_LiteralExpression  | `U_n_261 of ts_LiteralExpression  | `U_n_262 of ts_LiteralExpression  | `U_n_263 of ts_LiteralExpression  | `U_n_264 of ts_LiteralExpression  | `U_n_265 of ts_LiteralExpression  | `U_n_266 of ts_LiteralExpression  | `U_n_267 of ts_LiteralExpression  | `U_n_268 of ts_LiteralExpression  | `U_n_269 of ts_LiteralExpression  | `U_n_270 of ts_LiteralExpression  | `U_n_271 of ts_LiteralExpression  | `U_n_272 of ts_LiteralExpression  | `U_n_273 of ts_LiteralExpression  | `U_n_274 of ts_LiteralExpression  | `U_n_275 of ts_LiteralExpression  | `U_n_276 of ts_LiteralExpression  | `U_n_277 of ts_LiteralExpression  | `U_n_278 of ts_LiteralExpression  | `U_n_279 of ts_LiteralExpression  | `U_n_280 of ts_LiteralExpression  | `U_n_281 of ts_LiteralExpression  | `U_n_282 of ts_LiteralExpression  | `U_n_283 of ts_LiteralExpression  | `U_n_284 of ts_LiteralExpression  | `U_n_285 of ts_LiteralExpression  | `U_n_286 of ts_LiteralExpression  | `U_n_287 of ts_LiteralExpression  | `U_n_288 of ts_LiteralExpression  | `U_n_289 of ts_LiteralExpression  | `U_n_290 of ts_LiteralExpression  | `U_n_291 of ts_LiteralExpression  | `U_n_292 of ts_LiteralExpression  | `U_n_293 of ts_LiteralExpression  | `U_n_294 of ts_LiteralExpression  | `U_n_295 of ts_LiteralExpression  | `U_n_296 of ts_LiteralExpression  | `U_n_297 of ts_LiteralExpression  | `U_n_298 of ts_LiteralExpression  | `U_n_299 of ts_LiteralExpression  | `U_n_300 of ts_LiteralExpression  | `U_n_301 of ts_LiteralExpression  | `U_n_302 of ts_LiteralExpression  | `U_n_303 of ts_LiteralExpression  | `U_n_304 of ts_LiteralExpression  | `U_n_305 of ts_LiteralExpression  | `U_n_306 of ts_LiteralExpression  | `U_n_307 of ts_LiteralExpression  | `U_n_308 of ts_LiteralExpression  | `U_n_309 of ts_LiteralExpression  | `U_n_310 of ts_LiteralExpression  | `U_n_311 of ts_LiteralExpression  | `U_n_312 of ts_LiteralExpression  | `U_n_313 of ts_LiteralExpression  | `U_n_314 of ts_LiteralExpression  | `U_n_315 of ts_LiteralExpression  | `U_n_316 of ts_LiteralExpression  | `U_n_317 of ts_LiteralExpression  | `U_n_318 of ts_LiteralExpression  | `U_n_319 of ts_LiteralExpression  | `U_n_320 of ts_LiteralExpression  | `U_n_321 of ts_LiteralExpression  | `U_n_322 of ts_LiteralExpression  | `U_n_323 of ts_LiteralExpression  | `U_n_324 of ts_LiteralExpression  | `U_n_325 of ts_LiteralExpression  | `U_n_326 of ts_LiteralExpression  | `U_n_327 of ts_LiteralExpression  | `U_n_328 of ts_LiteralExpression  | `U_n_329 of ts_LiteralExpression  | `U_n_330 of ts_LiteralExpression  | `U_n_331 of ts_LiteralExpression  | `U_n_332 of ts_LiteralExpression  | `U_n_333 of ts_LiteralExpression  | `U_n_334 of ts_LiteralExpression  | `U_n_335 of ts_LiteralExpression  | `U_n_336 of ts_LiteralExpression  | `U_n_337 of ts_LiteralExpression  | `U_n_338 of ts_LiteralExpression  | `U_n_339 of ts_LiteralExpression  | `U_n_340 of ts_LiteralExpression  | `U_n_341 of ts_LiteralExpression ] [@js.union on_field "kind"]) -> ts_LiteralTypeNode [@@js.global "createLiteralTypeNode"]
+    (** @deprecated Use `factory.updateLiteralTypeNode` or the factory supplied by your transformation context instead. *)
     val updateLiteralTypeNode: node:ts_LiteralTypeNode -> literal:([`U_n_0 of ts_LiteralExpression  | `U_n_1 of ts_LiteralExpression  | `U_n_2 of ts_LiteralExpression  | `U_n_3 of ts_LiteralExpression  | `U_n_4 of ts_LiteralExpression  | `U_n_5 of ts_LiteralExpression  | `U_n_6 of ts_LiteralExpression  | `U_n_7 of ts_LiteralExpression  | `U_n_8 of ts_LiteralExpression  | `U_n_9 of ts_LiteralExpression  | `U_n_10 of ts_LiteralExpression  | `U_n_11 of ts_LiteralExpression  | `U_n_12 of ts_LiteralExpression  | `U_n_13 of ts_LiteralExpression  | `U_n_14 of ts_LiteralExpression  | `U_n_15 of ts_LiteralExpression  | `U_n_16 of ts_LiteralExpression  | `U_n_17 of ts_LiteralExpression  | `U_n_18 of ts_LiteralExpression  | `U_n_19 of ts_LiteralExpression  | `U_n_20 of ts_LiteralExpression  | `U_n_21 of ts_LiteralExpression  | `U_n_22 of ts_LiteralExpression  | `U_n_23 of ts_LiteralExpression  | `U_n_24 of ts_LiteralExpression  | `U_n_25 of ts_LiteralExpression  | `U_n_26 of ts_LiteralExpression  | `U_n_27 of ts_LiteralExpression  | `U_n_28 of ts_LiteralExpression  | `U_n_29 of ts_LiteralExpression  | `U_n_30 of ts_LiteralExpression  | `U_n_31 of ts_LiteralExpression  | `U_n_32 of ts_LiteralExpression  | `U_n_33 of ts_LiteralExpression  | `U_n_34 of ts_LiteralExpression  | `U_n_35 of ts_LiteralExpression  | `U_n_36 of ts_LiteralExpression  | `U_n_37 of ts_LiteralExpression  | `U_n_38 of ts_LiteralExpression  | `U_n_39 of ts_LiteralExpression  | `U_n_40 of ts_LiteralExpression  | `U_n_41 of ts_LiteralExpression  | `U_n_42 of ts_LiteralExpression  | `U_n_43 of ts_LiteralExpression  | `U_n_44 of ts_LiteralExpression  | `U_n_45 of ts_LiteralExpression  | `U_n_46 of ts_LiteralExpression  | `U_n_47 of ts_LiteralExpression  | `U_n_48 of ts_LiteralExpression  | `U_n_49 of ts_LiteralExpression  | `U_n_50 of ts_LiteralExpression  | `U_n_51 of ts_LiteralExpression  | `U_n_52 of ts_LiteralExpression  | `U_n_53 of ts_LiteralExpression  | `U_n_54 of ts_LiteralExpression  | `U_n_55 of ts_LiteralExpression  | `U_n_56 of ts_LiteralExpression  | `U_n_57 of ts_LiteralExpression  | `U_n_58 of ts_LiteralExpression  | `U_n_59 of ts_LiteralExpression  | `U_n_60 of ts_LiteralExpression  | `U_n_61 of ts_LiteralExpression  | `U_n_62 of ts_LiteralExpression  | `U_n_63 of ts_LiteralExpression  | `U_n_64 of ts_LiteralExpression  | `U_n_65 of ts_LiteralExpression  | `U_n_66 of ts_LiteralExpression  | `U_n_67 of ts_LiteralExpression  | `U_n_68 of ts_LiteralExpression  | `U_n_69 of ts_LiteralExpression  | `U_n_70 of ts_LiteralExpression  | `U_n_71 of ts_LiteralExpression  | `U_n_72 of ts_LiteralExpression  | `U_n_73 of ts_LiteralExpression  | `U_n_74 of ts_LiteralExpression  | `U_n_75 of ts_LiteralExpression  | `U_n_76 of ts_LiteralExpression  | `U_n_77 of ts_LiteralExpression  | `U_n_78 of ts_LiteralExpression  | `U_n_79 of ts_LiteralExpression  | `U_n_80 of ts_LiteralExpression  | `U_n_81 of ts_LiteralExpression  | `U_n_82 of ts_LiteralExpression  | `U_n_83 of ts_LiteralExpression  | `U_n_84 of ts_LiteralExpression  | `U_n_85 of ts_LiteralExpression  | `U_n_86 of ts_LiteralExpression  | `U_n_87 of ts_LiteralExpression  | `U_n_88 of ts_LiteralExpression  | `U_n_89 of ts_LiteralExpression  | `U_n_90 of ts_LiteralExpression  | `U_n_91 of ts_LiteralExpression  | `U_n_92 of ts_LiteralExpression  | `U_n_93 of ts_LiteralExpression  | `U_n_94 of (ts_LiteralExpression, ts_BooleanLiteral) union2  | `U_n_95 of ts_LiteralExpression  | `U_n_96 of ts_LiteralExpression  | `U_n_97 of ts_LiteralExpression  | `U_n_98 of ts_LiteralExpression  | `U_n_99 of ts_LiteralExpression  | `U_n_100 of ts_LiteralExpression  | `U_n_101 of ts_LiteralExpression  | `U_n_102 of ts_LiteralExpression  | `U_n_103 of (ts_LiteralExpression, ts_NullLiteral) union2  | `U_n_104 of ts_LiteralExpression  | `U_n_105 of ts_LiteralExpression  | `U_n_106 of ts_LiteralExpression  | `U_n_107 of ts_LiteralExpression  | `U_n_108 of ts_LiteralExpression  | `U_n_109 of (ts_LiteralExpression, ts_BooleanLiteral) union2  | `U_n_110 of ts_LiteralExpression  | `U_n_111 of ts_LiteralExpression  | `U_n_112 of ts_LiteralExpression  | `U_n_113 of ts_LiteralExpression  | `U_n_114 of ts_LiteralExpression  | `U_n_115 of ts_LiteralExpression  | `U_n_116 of ts_LiteralExpression  | `U_n_117 of ts_LiteralExpression  | `U_n_118 of ts_LiteralExpression  | `U_n_119 of ts_LiteralExpression  | `U_n_120 of ts_LiteralExpression  | `U_n_121 of ts_LiteralExpression  | `U_n_122 of ts_LiteralExpression  | `U_n_123 of ts_LiteralExpression  | `U_n_124 of ts_LiteralExpression  | `U_n_125 of ts_LiteralExpression  | `U_n_126 of ts_LiteralExpression  | `U_n_127 of ts_LiteralExpression  | `U_n_128 of ts_LiteralExpression  | `U_n_129 of ts_LiteralExpression  | `U_n_130 of ts_LiteralExpression  | `U_n_131 of ts_LiteralExpression  | `U_n_132 of ts_LiteralExpression  | `U_n_133 of ts_LiteralExpression  | `U_n_134 of ts_LiteralExpression  | `U_n_135 of ts_LiteralExpression  | `U_n_136 of ts_LiteralExpression  | `U_n_137 of ts_LiteralExpression  | `U_n_138 of ts_LiteralExpression  | `U_n_139 of ts_LiteralExpression  | `U_n_140 of ts_LiteralExpression  | `U_n_141 of ts_LiteralExpression  | `U_n_142 of ts_LiteralExpression  | `U_n_143 of ts_LiteralExpression  | `U_n_144 of ts_LiteralExpression  | `U_n_145 of ts_LiteralExpression  | `U_n_146 of ts_LiteralExpression  | `U_n_147 of ts_LiteralExpression  | `U_n_148 of ts_LiteralExpression  | `U_n_149 of ts_LiteralExpression  | `U_n_150 of ts_LiteralExpression  | `U_n_151 of ts_LiteralExpression  | `U_n_152 of ts_LiteralExpression  | `U_n_153 of ts_LiteralExpression  | `U_n_154 of ts_LiteralExpression  | `U_n_155 of ts_LiteralExpression  | `U_n_156 of ts_LiteralExpression  | `U_n_157 of ts_LiteralExpression  | `U_n_158 of ts_LiteralExpression  | `U_n_159 of ts_LiteralExpression  | `U_n_160 of ts_LiteralExpression  | `U_n_161 of ts_LiteralExpression  | `U_n_162 of ts_LiteralExpression  | `U_n_163 of ts_LiteralExpression  | `U_n_164 of ts_LiteralExpression  | `U_n_165 of ts_LiteralExpression  | `U_n_166 of ts_LiteralExpression  | `U_n_167 of ts_LiteralExpression  | `U_n_168 of ts_LiteralExpression  | `U_n_169 of ts_LiteralExpression  | `U_n_170 of ts_LiteralExpression  | `U_n_171 of ts_LiteralExpression  | `U_n_172 of ts_LiteralExpression  | `U_n_173 of ts_LiteralExpression  | `U_n_174 of ts_LiteralExpression  | `U_n_175 of ts_LiteralExpression  | `U_n_176 of ts_LiteralExpression  | `U_n_177 of ts_LiteralExpression  | `U_n_178 of ts_LiteralExpression  | `U_n_179 of ts_LiteralExpression  | `U_n_180 of ts_LiteralExpression  | `U_n_181 of ts_LiteralExpression  | `U_n_182 of ts_LiteralExpression  | `U_n_183 of ts_LiteralExpression  | `U_n_184 of ts_LiteralExpression  | `U_n_185 of ts_LiteralExpression  | `U_n_186 of ts_LiteralExpression  | `U_n_187 of ts_LiteralExpression  | `U_n_188 of ts_LiteralExpression  | `U_n_189 of ts_LiteralExpression  | `U_n_190 of ts_LiteralExpression  | `U_n_191 of ts_LiteralExpression  | `U_n_192 of ts_LiteralExpression  | `U_n_193 of ts_LiteralExpression  | `U_n_194 of ts_LiteralExpression  | `U_n_195 of ts_LiteralExpression  | `U_n_196 of ts_LiteralExpression  | `U_n_197 of ts_LiteralExpression  | `U_n_198 of ts_LiteralExpression  | `U_n_199 of ts_LiteralExpression  | `U_n_200 of ts_LiteralExpression  | `U_n_201 of ts_LiteralExpression  | `U_n_202 of ts_LiteralExpression  | `U_n_203 of ts_LiteralExpression  | `U_n_204 of ts_LiteralExpression  | `U_n_205 of ts_LiteralExpression  | `U_n_206 of ts_LiteralExpression  | `U_n_207 of ts_LiteralExpression  | `U_n_208 of ts_LiteralExpression  | `U_n_209 of ts_LiteralExpression  | `U_n_210 of ts_LiteralExpression  | `U_n_211 of ts_LiteralExpression  | `U_n_212 of ts_LiteralExpression  | `U_n_213 of ts_LiteralExpression  | `U_n_214 of (ts_LiteralExpression, ts_PrefixUnaryExpression) union2  | `U_n_215 of ts_LiteralExpression  | `U_n_216 of ts_LiteralExpression  | `U_n_217 of ts_LiteralExpression  | `U_n_218 of ts_LiteralExpression  | `U_n_219 of ts_LiteralExpression  | `U_n_220 of ts_LiteralExpression  | `U_n_221 of ts_LiteralExpression  | `U_n_222 of ts_LiteralExpression  | `U_n_223 of ts_LiteralExpression  | `U_n_224 of ts_LiteralExpression  | `U_n_225 of ts_LiteralExpression  | `U_n_226 of ts_LiteralExpression  | `U_n_227 of ts_LiteralExpression  | `U_n_228 of ts_LiteralExpression  | `U_n_229 of ts_LiteralExpression  | `U_n_230 of ts_LiteralExpression  | `U_n_231 of ts_LiteralExpression  | `U_n_232 of ts_LiteralExpression  | `U_n_233 of ts_LiteralExpression  | `U_n_234 of ts_LiteralExpression  | `U_n_235 of ts_LiteralExpression  | `U_n_236 of ts_LiteralExpression  | `U_n_237 of ts_LiteralExpression  | `U_n_238 of ts_LiteralExpression  | `U_n_239 of ts_LiteralExpression  | `U_n_240 of ts_LiteralExpression  | `U_n_241 of ts_LiteralExpression  | `U_n_242 of ts_LiteralExpression  | `U_n_243 of ts_LiteralExpression  | `U_n_244 of ts_LiteralExpression  | `U_n_245 of ts_LiteralExpression  | `U_n_246 of ts_LiteralExpression  | `U_n_247 of ts_LiteralExpression  | `U_n_248 of ts_LiteralExpression  | `U_n_249 of ts_LiteralExpression  | `U_n_250 of ts_LiteralExpression  | `U_n_251 of ts_LiteralExpression  | `U_n_252 of ts_LiteralExpression  | `U_n_253 of ts_LiteralExpression  | `U_n_254 of ts_LiteralExpression  | `U_n_255 of ts_LiteralExpression  | `U_n_256 of ts_LiteralExpression  | `U_n_257 of ts_LiteralExpression  | `U_n_258 of ts_LiteralExpression  | `U_n_259 of ts_LiteralExpression  | `U_n_260 of ts_LiteralExpression  | `U_n_261 of ts_LiteralExpression  | `U_n_262 of ts_LiteralExpression  | `U_n_263 of ts_LiteralExpression  | `U_n_264 of ts_LiteralExpression  | `U_n_265 of ts_LiteralExpression  | `U_n_266 of ts_LiteralExpression  | `U_n_267 of ts_LiteralExpression  | `U_n_268 of ts_LiteralExpression  | `U_n_269 of ts_LiteralExpression  | `U_n_270 of ts_LiteralExpression  | `U_n_271 of ts_LiteralExpression  | `U_n_272 of ts_LiteralExpression  | `U_n_273 of ts_LiteralExpression  | `U_n_274 of ts_LiteralExpression  | `U_n_275 of ts_LiteralExpression  | `U_n_276 of ts_LiteralExpression  | `U_n_277 of ts_LiteralExpression  | `U_n_278 of ts_LiteralExpression  | `U_n_279 of ts_LiteralExpression  | `U_n_280 of ts_LiteralExpression  | `U_n_281 of ts_LiteralExpression  | `U_n_282 of ts_LiteralExpression  | `U_n_283 of ts_LiteralExpression  | `U_n_284 of ts_LiteralExpression  | `U_n_285 of ts_LiteralExpression  | `U_n_286 of ts_LiteralExpression  | `U_n_287 of ts_LiteralExpression  | `U_n_288 of ts_LiteralExpression  | `U_n_289 of ts_LiteralExpression  | `U_n_290 of ts_LiteralExpression  | `U_n_291 of ts_LiteralExpression  | `U_n_292 of ts_LiteralExpression  | `U_n_293 of ts_LiteralExpression  | `U_n_294 of ts_LiteralExpression  | `U_n_295 of ts_LiteralExpression  | `U_n_296 of ts_LiteralExpression  | `U_n_297 of ts_LiteralExpression  | `U_n_298 of ts_LiteralExpression  | `U_n_299 of ts_LiteralExpression  | `U_n_300 of ts_LiteralExpression  | `U_n_301 of ts_LiteralExpression  | `U_n_302 of ts_LiteralExpression  | `U_n_303 of ts_LiteralExpression  | `U_n_304 of ts_LiteralExpression  | `U_n_305 of ts_LiteralExpression  | `U_n_306 of ts_LiteralExpression  | `U_n_307 of ts_LiteralExpression  | `U_n_308 of ts_LiteralExpression  | `U_n_309 of ts_LiteralExpression  | `U_n_310 of ts_LiteralExpression  | `U_n_311 of ts_LiteralExpression  | `U_n_312 of ts_LiteralExpression  | `U_n_313 of ts_LiteralExpression  | `U_n_314 of ts_LiteralExpression  | `U_n_315 of ts_LiteralExpression  | `U_n_316 of ts_LiteralExpression  | `U_n_317 of ts_LiteralExpression  | `U_n_318 of ts_LiteralExpression  | `U_n_319 of ts_LiteralExpression  | `U_n_320 of ts_LiteralExpression  | `U_n_321 of ts_LiteralExpression  | `U_n_322 of ts_LiteralExpression  | `U_n_323 of ts_LiteralExpression  | `U_n_324 of ts_LiteralExpression  | `U_n_325 of ts_LiteralExpression  | `U_n_326 of ts_LiteralExpression  | `U_n_327 of ts_LiteralExpression  | `U_n_328 of ts_LiteralExpression  | `U_n_329 of ts_LiteralExpression  | `U_n_330 of ts_LiteralExpression  | `U_n_331 of ts_LiteralExpression  | `U_n_332 of ts_LiteralExpression  | `U_n_333 of ts_LiteralExpression  | `U_n_334 of ts_LiteralExpression  | `U_n_335 of ts_LiteralExpression  | `U_n_336 of ts_LiteralExpression  | `U_n_337 of ts_LiteralExpression  | `U_n_338 of ts_LiteralExpression  | `U_n_339 of ts_LiteralExpression  | `U_n_340 of ts_LiteralExpression  | `U_n_341 of ts_LiteralExpression ] [@js.union on_field "kind"]) -> ts_LiteralTypeNode [@@js.global "updateLiteralTypeNode"]
+    (** @deprecated Use `factory.createObjectBindingPattern` or the factory supplied by your transformation context instead. *)
     val createObjectBindingPattern: elements:ts_BindingElement list -> ts_ObjectBindingPattern [@@js.global "createObjectBindingPattern"]
+    (** @deprecated Use `factory.updateObjectBindingPattern` or the factory supplied by your transformation context instead. *)
     val updateObjectBindingPattern: node:ts_ObjectBindingPattern -> elements:ts_BindingElement list -> ts_ObjectBindingPattern [@@js.global "updateObjectBindingPattern"]
+    (** @deprecated Use `factory.createArrayBindingPattern` or the factory supplied by your transformation context instead. *)
     val createArrayBindingPattern: elements:ts_ArrayBindingElement list -> ts_ArrayBindingPattern [@@js.global "createArrayBindingPattern"]
+    (** @deprecated Use `factory.updateArrayBindingPattern` or the factory supplied by your transformation context instead. *)
     val updateArrayBindingPattern: node:ts_ArrayBindingPattern -> elements:ts_ArrayBindingElement list -> ts_ArrayBindingPattern [@@js.global "updateArrayBindingPattern"]
+    (** @deprecated Use `factory.createBindingElement` or the factory supplied by your transformation context instead. *)
     val createBindingElement: dotDotDotToken:ts_DotDotDotToken or_undefined -> propertyName:ts_PropertyName or_string or_undefined -> name:ts_BindingName or_string -> ?initializer_:ts_Expression or_undefined -> unit -> ts_BindingElement [@@js.global "createBindingElement"]
+    (** @deprecated Use `factory.updateBindingElement` or the factory supplied by your transformation context instead. *)
     val updateBindingElement: node:ts_BindingElement -> dotDotDotToken:ts_DotDotDotToken or_undefined -> propertyName:ts_PropertyName or_undefined -> name:ts_BindingName -> initializer_:ts_Expression or_undefined -> ts_BindingElement [@@js.global "updateBindingElement"]
+    (** @deprecated Use `factory.createArrayLiteralExpression` or the factory supplied by your transformation context instead. *)
     val createArrayLiteral: ?elements:ts_Expression list or_undefined -> ?multiLine:bool or_undefined -> unit -> ts_ArrayLiteralExpression [@@js.global "createArrayLiteral"]
+    (** @deprecated Use `factory.updateArrayLiteralExpression` or the factory supplied by your transformation context instead. *)
     val updateArrayLiteral: node:ts_ArrayLiteralExpression -> elements:ts_Expression list -> ts_ArrayLiteralExpression [@@js.global "updateArrayLiteral"]
+    (** @deprecated Use `factory.createObjectLiteralExpression` or the factory supplied by your transformation context instead. *)
     val createObjectLiteral: ?properties:ts_ObjectLiteralElementLike list or_undefined -> ?multiLine:bool or_undefined -> unit -> ts_ObjectLiteralExpression [@@js.global "createObjectLiteral"]
+    (** @deprecated Use `factory.updateObjectLiteralExpression` or the factory supplied by your transformation context instead. *)
     val updateObjectLiteral: node:ts_ObjectLiteralExpression -> properties:ts_ObjectLiteralElementLike list -> ts_ObjectLiteralExpression [@@js.global "updateObjectLiteral"]
+    (** @deprecated Use `factory.createPropertyAccessExpression` or the factory supplied by your transformation context instead. *)
     val createPropertyAccess: expression:ts_Expression -> name:([`U_n_78 of ts_Identifier  | `U_n_79 of ts_PrivateIdentifier ] [@js.union on_field "kind"]) or_string -> ts_PropertyAccessExpression [@@js.global "createPropertyAccess"]
+    (** @deprecated Use `factory.updatePropertyAccessExpression` or the factory supplied by your transformation context instead. *)
     val updatePropertyAccess: node:ts_PropertyAccessExpression -> expression:ts_Expression -> name:([`U_n_78 of ts_Identifier  | `U_n_79 of ts_PrivateIdentifier ] [@js.union on_field "kind"]) -> ts_PropertyAccessExpression [@@js.global "updatePropertyAccess"]
+    (** @deprecated Use `factory.createPropertyAccessChain` or the factory supplied by your transformation context instead. *)
     val createPropertyAccessChain: expression:ts_Expression -> questionDotToken:ts_QuestionDotToken or_undefined -> name:([`U_n_78 of ts_Identifier  | `U_n_79 of ts_PrivateIdentifier ] [@js.union on_field "kind"]) or_string -> ts_PropertyAccessChain [@@js.global "createPropertyAccessChain"]
+    (** @deprecated Use `factory.updatePropertyAccessChain` or the factory supplied by your transformation context instead. *)
     val updatePropertyAccessChain: node:ts_PropertyAccessChain -> expression:ts_Expression -> questionDotToken:ts_QuestionDotToken or_undefined -> name:([`U_n_78 of ts_Identifier  | `U_n_79 of ts_PrivateIdentifier ] [@js.union on_field "kind"]) -> ts_PropertyAccessChain [@@js.global "updatePropertyAccessChain"]
+    (** @deprecated Use `factory.createElementAccessExpression` or the factory supplied by your transformation context instead. *)
     val createElementAccess: expression:ts_Expression -> index:ts_Expression or_number -> ts_ElementAccessExpression [@@js.global "createElementAccess"]
+    (** @deprecated Use `factory.updateElementAccessExpression` or the factory supplied by your transformation context instead. *)
     val updateElementAccess: node:ts_ElementAccessExpression -> expression:ts_Expression -> argumentExpression:ts_Expression -> ts_ElementAccessExpression [@@js.global "updateElementAccess"]
+    (** @deprecated Use `factory.createElementAccessChain` or the factory supplied by your transformation context instead. *)
     val createElementAccessChain: expression:ts_Expression -> questionDotToken:ts_QuestionDotToken or_undefined -> index:ts_Expression or_number -> ts_ElementAccessChain [@@js.global "createElementAccessChain"]
+    (** @deprecated Use `factory.updateElementAccessChain` or the factory supplied by your transformation context instead. *)
     val updateElementAccessChain: node:ts_ElementAccessChain -> expression:ts_Expression -> questionDotToken:ts_QuestionDotToken or_undefined -> argumentExpression:ts_Expression -> ts_ElementAccessChain [@@js.global "updateElementAccessChain"]
+    (** @deprecated Use `factory.createCallExpression` or the factory supplied by your transformation context instead. *)
     val createCall: expression:ts_Expression -> typeArguments:ts_TypeNode list or_undefined -> argumentsArray:ts_Expression list or_undefined -> ts_CallExpression [@@js.global "createCall"]
+    (** @deprecated Use `factory.updateCallExpression` or the factory supplied by your transformation context instead. *)
     val updateCall: node:ts_CallExpression -> expression:ts_Expression -> typeArguments:ts_TypeNode list or_undefined -> argumentsArray:ts_Expression list -> ts_CallExpression [@@js.global "updateCall"]
+    (** @deprecated Use `factory.createCallChain` or the factory supplied by your transformation context instead. *)
     val createCallChain: expression:ts_Expression -> questionDotToken:ts_QuestionDotToken or_undefined -> typeArguments:ts_TypeNode list or_undefined -> argumentsArray:ts_Expression list or_undefined -> ts_CallChain [@@js.global "createCallChain"]
+    (** @deprecated Use `factory.updateCallChain` or the factory supplied by your transformation context instead. *)
     val updateCallChain: node:ts_CallChain -> expression:ts_Expression -> questionDotToken:ts_QuestionDotToken or_undefined -> typeArguments:ts_TypeNode list or_undefined -> argumentsArray:ts_Expression list -> ts_CallChain [@@js.global "updateCallChain"]
+    (** @deprecated Use `factory.createNewExpression` or the factory supplied by your transformation context instead. *)
     val createNew: expression:ts_Expression -> typeArguments:ts_TypeNode list or_undefined -> argumentsArray:ts_Expression list or_undefined -> ts_NewExpression [@@js.global "createNew"]
+    (** @deprecated Use `factory.updateNewExpression` or the factory supplied by your transformation context instead. *)
     val updateNew: node:ts_NewExpression -> expression:ts_Expression -> typeArguments:ts_TypeNode list or_undefined -> argumentsArray:ts_Expression list or_undefined -> ts_NewExpression [@@js.global "updateNew"]
+    (** @deprecated Use `factory.createTypeAssertion` or the factory supplied by your transformation context instead. *)
     val createTypeAssertion: type_:ts_TypeNode -> expression:ts_Expression -> ts_TypeAssertion [@@js.global "createTypeAssertion"]
+    (** @deprecated Use `factory.updateTypeAssertion` or the factory supplied by your transformation context instead. *)
     val updateTypeAssertion: node:ts_TypeAssertion -> type_:ts_TypeNode -> expression:ts_Expression -> ts_TypeAssertion [@@js.global "updateTypeAssertion"]
+    (** @deprecated Use `factory.createParenthesizedExpression` or the factory supplied by your transformation context instead. *)
     val createParen: expression:ts_Expression -> ts_ParenthesizedExpression [@@js.global "createParen"]
+    (** @deprecated Use `factory.updateParenthesizedExpression` or the factory supplied by your transformation context instead. *)
     val updateParen: node:ts_ParenthesizedExpression -> expression:ts_Expression -> ts_ParenthesizedExpression [@@js.global "updateParen"]
+    (** @deprecated Use `factory.createFunctionExpression` or the factory supplied by your transformation context instead. *)
     val createFunctionExpression: modifiers:ts_Modifier list or_undefined -> asteriskToken:ts_AsteriskToken or_undefined -> name:ts_Identifier or_string or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list or_undefined -> type_:ts_TypeNode or_undefined -> body:ts_Block -> ts_FunctionExpression [@@js.global "createFunctionExpression"]
+    (** @deprecated Use `factory.updateFunctionExpression` or the factory supplied by your transformation context instead. *)
     val updateFunctionExpression: node:ts_FunctionExpression -> modifiers:ts_Modifier list or_undefined -> asteriskToken:ts_AsteriskToken or_undefined -> name:ts_Identifier or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> body:ts_Block -> ts_FunctionExpression [@@js.global "updateFunctionExpression"]
+    (** @deprecated Use `factory.createDeleteExpression` or the factory supplied by your transformation context instead. *)
     val createDelete: expression:ts_Expression -> ts_DeleteExpression [@@js.global "createDelete"]
+    (** @deprecated Use `factory.updateDeleteExpression` or the factory supplied by your transformation context instead. *)
     val updateDelete: node:ts_DeleteExpression -> expression:ts_Expression -> ts_DeleteExpression [@@js.global "updateDelete"]
+    (** @deprecated Use `factory.createTypeOfExpression` or the factory supplied by your transformation context instead. *)
     val createTypeOf: expression:ts_Expression -> ts_TypeOfExpression [@@js.global "createTypeOf"]
+    (** @deprecated Use `factory.updateTypeOfExpression` or the factory supplied by your transformation context instead. *)
     val updateTypeOf: node:ts_TypeOfExpression -> expression:ts_Expression -> ts_TypeOfExpression [@@js.global "updateTypeOf"]
+    (** @deprecated Use `factory.createVoidExpression` or the factory supplied by your transformation context instead. *)
     val createVoid: expression:ts_Expression -> ts_VoidExpression [@@js.global "createVoid"]
+    (** @deprecated Use `factory.updateVoidExpression` or the factory supplied by your transformation context instead. *)
     val updateVoid: node:ts_VoidExpression -> expression:ts_Expression -> ts_VoidExpression [@@js.global "updateVoid"]
+    (** @deprecated Use `factory.createAwaitExpression` or the factory supplied by your transformation context instead. *)
     val createAwait: expression:ts_Expression -> ts_AwaitExpression [@@js.global "createAwait"]
+    (** @deprecated Use `factory.updateAwaitExpression` or the factory supplied by your transformation context instead. *)
     val updateAwait: node:ts_AwaitExpression -> expression:ts_Expression -> ts_AwaitExpression [@@js.global "updateAwait"]
+    (** @deprecated Use `factory.createPrefixExpression` or the factory supplied by your transformation context instead. *)
     val createPrefix: operator:ts_PrefixUnaryOperator -> operand:ts_Expression -> ts_PrefixUnaryExpression [@@js.global "createPrefix"]
+    (** @deprecated Use `factory.updatePrefixExpression` or the factory supplied by your transformation context instead. *)
     val updatePrefix: node:ts_PrefixUnaryExpression -> operand:ts_Expression -> ts_PrefixUnaryExpression [@@js.global "updatePrefix"]
+    (** @deprecated Use `factory.createPostfixUnaryExpression` or the factory supplied by your transformation context instead. *)
     val createPostfix: operand:ts_Expression -> operator:ts_PostfixUnaryOperator -> ts_PostfixUnaryExpression [@@js.global "createPostfix"]
+    (** @deprecated Use `factory.updatePostfixUnaryExpression` or the factory supplied by your transformation context instead. *)
     val updatePostfix: node:ts_PostfixUnaryExpression -> operand:ts_Expression -> ts_PostfixUnaryExpression [@@js.global "updatePostfix"]
+    (** @deprecated Use `factory.createBinaryExpression` or the factory supplied by your transformation context instead. *)
     val createBinary: left:ts_Expression -> operator:((((((((((((((((((((((((((((((((((((((((((((((((((((((((ts_SyntaxKind_PercentEqualsToken, ts_SyntaxKind_PercentToken, ts_SyntaxKind_PlusEqualsToken, ts_SyntaxKind_PlusToken, ts_SyntaxKind_QuestionQuestionEqualsToken, ts_SyntaxKind_QuestionQuestionToken, ts_SyntaxKind_SlashEqualsToken, ts_SyntaxKind_SlashToken) union8, ts_SyntaxKind_MinusToken) or_, ts_SyntaxKind_MinusEqualsToken) or_, ts_SyntaxKind_LessThanToken) or_, ts_SyntaxKind_LessThanLessThanToken) or_, ts_SyntaxKind_LessThanLessThanEqualsToken) or_, ts_SyntaxKind_LessThanEqualsToken) or_, ts_SyntaxKind_InstanceOfKeyword) or_, ts_SyntaxKind_InKeyword) or_, ts_SyntaxKind_GreaterThanToken) or_, ts_SyntaxKind_GreaterThanGreaterThanToken) or_, ts_SyntaxKind_GreaterThanGreaterThanGreaterThanToken) or_, ts_SyntaxKind_GreaterThanGreaterThanGreaterThanEqualsToken) or_, ts_SyntaxKind_GreaterThanGreaterThanEqualsToken) or_, ts_SyntaxKind_GreaterThanEqualsToken) or_, ts_SyntaxKind_ExclamationEqualsToken) or_, ts_SyntaxKind_ExclamationEqualsEqualsToken) or_, ts_SyntaxKind_EqualsToken) or_, ts_SyntaxKind_EqualsEqualsToken) or_, ts_SyntaxKind_EqualsEqualsEqualsToken) or_, ts_SyntaxKind_CommaToken) or_, ts_SyntaxKind_CaretToken) or_, ts_SyntaxKind_CaretEqualsToken) or_, ts_SyntaxKind_BarToken) or_, ts_SyntaxKind_BarEqualsToken) or_, ts_SyntaxKind_BarBarToken) or_, ts_SyntaxKind_BarBarEqualsToken) or_, ts_SyntaxKind_AsteriskToken) or_, ts_SyntaxKind_AsteriskEqualsToken) or_, ts_SyntaxKind_AsteriskAsteriskToken) or_, ts_SyntaxKind_AsteriskAsteriskEqualsToken) or_, ts_SyntaxKind_AmpersandToken) or_, ts_SyntaxKind_AmpersandEqualsToken) or_, ts_SyntaxKind_AmpersandAmpersandToken) or_, ts_SyntaxKind_AmpersandAmpersandEqualsToken) or_, ts_ShiftOperatorOrHigher) or_, ts_ShiftOperator) or_, ts_RelationalOperatorOrHigher) or_, ts_RelationalOperator) or_, ts_MultiplicativeOperatorOrHigher) or_, ts_MultiplicativeOperator) or_, ts_LogicalOperatorOrHigher) or_, ts_LogicalOperator) or_, ts_ExponentiationOperator) or_, ts_EqualityOperatorOrHigher) or_, ts_EqualityOperator) or_, ts_CompoundAssignmentOperator) or_, ts_BitwiseOperatorOrHigher) or_, ts_BitwiseOperator) or_, ts_BinaryOperatorToken) or_, ts_BinaryOperator) or_, ts_AssignmentOperatorOrHigher) or_, ts_AssignmentOperator) or_, ts_AdditiveOperatorOrHigher) or_, ts_AdditiveOperator) or_, ([`AmpersandAmpersandEqualsToken | `AmpersandAmpersandToken | `AmpersandEqualsToken | `AmpersandToken | `AsteriskAsteriskEqualsToken | `AsteriskAsteriskToken | `AsteriskEqualsToken | `AsteriskToken | `BarBarEqualsToken | `BarBarToken | `BarEqualsToken | `BarToken | `CaretEqualsToken | `CaretToken | `CommaToken | `EqualsEqualsEqualsToken | `EqualsEqualsToken | `EqualsToken | `ExclamationEqualsEqualsToken | `ExclamationEqualsToken | `GreaterThanEqualsToken | `GreaterThanGreaterThanEqualsToken | `GreaterThanGreaterThanGreaterThanEqualsToken | `GreaterThanGreaterThanGreaterThanToken | `GreaterThanGreaterThanToken | `GreaterThanToken | `InKeyword | `InstanceOfKeyword | `LessThanEqualsToken | `LessThanLessThanEqualsToken | `LessThanLessThanToken | `LessThanToken | `MinusEqualsToken | `MinusToken | `PercentEqualsToken | `PercentToken | `PlusEqualsToken | `PlusToken | `QuestionQuestionEqualsToken | `QuestionQuestionToken | `SlashEqualsToken | `SlashToken] [@js.enum])) or_enum -> right:ts_Expression -> ts_BinaryExpression [@@js.global "createBinary"]
+    (** @deprecated Use `factory.updateConditionalExpression` or the factory supplied by your transformation context instead. *)
     val updateConditional: node:ts_ConditionalExpression -> condition:ts_Expression -> questionToken:ts_QuestionToken -> whenTrue:ts_Expression -> colonToken:ts_ColonToken -> whenFalse:ts_Expression -> ts_ConditionalExpression [@@js.global "updateConditional"]
+    (** @deprecated Use `factory.createTemplateExpression` or the factory supplied by your transformation context instead. *)
     val createTemplateExpression: head:ts_TemplateHead -> templateSpans:ts_TemplateSpan list -> ts_TemplateExpression [@@js.global "createTemplateExpression"]
+    (** @deprecated Use `factory.updateTemplateExpression` or the factory supplied by your transformation context instead. *)
     val updateTemplateExpression: node:ts_TemplateExpression -> head:ts_TemplateHead -> templateSpans:ts_TemplateSpan list -> ts_TemplateExpression [@@js.global "updateTemplateExpression"]
+    (** @deprecated Use `factory.createTemplateHead` or the factory supplied by your transformation context instead. *)
     val createTemplateHead: anonymous_interface_29 [@@js.global "createTemplateHead"]
+    (** @deprecated Use `factory.createTemplateMiddle` or the factory supplied by your transformation context instead. *)
     val createTemplateMiddle: anonymous_interface_30 [@@js.global "createTemplateMiddle"]
+    (** @deprecated Use `factory.createTemplateTail` or the factory supplied by your transformation context instead. *)
     val createTemplateTail: anonymous_interface_31 [@@js.global "createTemplateTail"]
+    (** @deprecated Use `factory.createNoSubstitutionTemplateLiteral` or the factory supplied by your transformation context instead. *)
     val createNoSubstitutionTemplateLiteral: anonymous_interface_28 [@@js.global "createNoSubstitutionTemplateLiteral"]
+    (** @deprecated Use `factory.updateYieldExpression` or the factory supplied by your transformation context instead. *)
     val updateYield: node:ts_YieldExpression -> asteriskToken:ts_AsteriskToken or_undefined -> expression:ts_Expression or_undefined -> ts_YieldExpression [@@js.global "updateYield"]
+    (** @deprecated Use `factory.createSpreadExpression` or the factory supplied by your transformation context instead. *)
     val createSpread: expression:ts_Expression -> ts_SpreadElement [@@js.global "createSpread"]
+    (** @deprecated Use `factory.updateSpreadExpression` or the factory supplied by your transformation context instead. *)
     val updateSpread: node:ts_SpreadElement -> expression:ts_Expression -> ts_SpreadElement [@@js.global "updateSpread"]
+    (** @deprecated Use `factory.createOmittedExpression` or the factory supplied by your transformation context instead. *)
     val createOmittedExpression: unit -> ts_OmittedExpression [@@js.global "createOmittedExpression"]
+    (** @deprecated Use `factory.createAsExpression` or the factory supplied by your transformation context instead. *)
     val createAsExpression: expression:ts_Expression -> type_:ts_TypeNode -> ts_AsExpression [@@js.global "createAsExpression"]
+    (** @deprecated Use `factory.updateAsExpression` or the factory supplied by your transformation context instead. *)
     val updateAsExpression: node:ts_AsExpression -> expression:ts_Expression -> type_:ts_TypeNode -> ts_AsExpression [@@js.global "updateAsExpression"]
+    (** @deprecated Use `factory.createNonNullExpression` or the factory supplied by your transformation context instead. *)
     val createNonNullExpression: expression:ts_Expression -> ts_NonNullExpression [@@js.global "createNonNullExpression"]
+    (** @deprecated Use `factory.updateNonNullExpression` or the factory supplied by your transformation context instead. *)
     val updateNonNullExpression: node:ts_NonNullExpression -> expression:ts_Expression -> ts_NonNullExpression [@@js.global "updateNonNullExpression"]
+    (** @deprecated Use `factory.createNonNullChain` or the factory supplied by your transformation context instead. *)
     val createNonNullChain: expression:ts_Expression -> ts_NonNullChain [@@js.global "createNonNullChain"]
+    (** @deprecated Use `factory.updateNonNullChain` or the factory supplied by your transformation context instead. *)
     val updateNonNullChain: node:ts_NonNullChain -> expression:ts_Expression -> ts_NonNullChain [@@js.global "updateNonNullChain"]
+    (** @deprecated Use `factory.createMetaProperty` or the factory supplied by your transformation context instead. *)
     val createMetaProperty: keywordToken:((ts_SyntaxKind_ImportKeyword, ts_SyntaxKind_NewKeyword) union2, ([`ImportKeyword | `NewKeyword] [@js.enum])) or_enum -> name:ts_Identifier -> ts_MetaProperty [@@js.global "createMetaProperty"]
+    (** @deprecated Use `factory.updateMetaProperty` or the factory supplied by your transformation context instead. *)
     val updateMetaProperty: node:ts_MetaProperty -> name:ts_Identifier -> ts_MetaProperty [@@js.global "updateMetaProperty"]
+    (** @deprecated Use `factory.createTemplateSpan` or the factory supplied by your transformation context instead. *)
     val createTemplateSpan: expression:ts_Expression -> literal:([`U_n_16 of ts_TemplateMiddle  | `U_n_17 of ts_TemplateTail ] [@js.union on_field "kind"]) -> ts_TemplateSpan [@@js.global "createTemplateSpan"]
+    (** @deprecated Use `factory.updateTemplateSpan` or the factory supplied by your transformation context instead. *)
     val updateTemplateSpan: node:ts_TemplateSpan -> expression:ts_Expression -> literal:([`U_n_16 of ts_TemplateMiddle  | `U_n_17 of ts_TemplateTail ] [@js.union on_field "kind"]) -> ts_TemplateSpan [@@js.global "updateTemplateSpan"]
+    (** @deprecated Use `factory.createSemicolonClassElement` or the factory supplied by your transformation context instead. *)
     val createSemicolonClassElement: unit -> ts_SemicolonClassElement [@@js.global "createSemicolonClassElement"]
+    (** @deprecated Use `factory.createBlock` or the factory supplied by your transformation context instead. *)
     val createBlock: statements:ts_Statement list -> ?multiLine:bool or_undefined -> unit -> ts_Block [@@js.global "createBlock"]
+    (** @deprecated Use `factory.updateBlock` or the factory supplied by your transformation context instead. *)
     val updateBlock: node:ts_Block -> statements:ts_Statement list -> ts_Block [@@js.global "updateBlock"]
+    (** @deprecated Use `factory.createVariableStatement` or the factory supplied by your transformation context instead. *)
     val createVariableStatement: modifiers:ts_Modifier list or_undefined -> declarationList:(ts_VariableDeclarationList, ts_VariableDeclaration list) union2 -> ts_VariableStatement [@@js.global "createVariableStatement"]
+    (** @deprecated Use `factory.updateVariableStatement` or the factory supplied by your transformation context instead. *)
     val updateVariableStatement: node:ts_VariableStatement -> modifiers:ts_Modifier list or_undefined -> declarationList:ts_VariableDeclarationList -> ts_VariableStatement [@@js.global "updateVariableStatement"]
+    (** @deprecated Use `factory.createEmptyStatement` or the factory supplied by your transformation context instead. *)
     val createEmptyStatement: unit -> ts_EmptyStatement [@@js.global "createEmptyStatement"]
+    (** @deprecated Use `factory.createExpressionStatement` or the factory supplied by your transformation context instead. *)
     val createExpressionStatement: expression:ts_Expression -> ts_ExpressionStatement [@@js.global "createExpressionStatement"]
+    (** @deprecated Use `factory.updateExpressionStatement` or the factory supplied by your transformation context instead. *)
     val updateExpressionStatement: node:ts_ExpressionStatement -> expression:ts_Expression -> ts_ExpressionStatement [@@js.global "updateExpressionStatement"]
+    (** @deprecated Use `factory.createExpressionStatement` or the factory supplied by your transformation context instead. *)
     val createStatement: expression:ts_Expression -> ts_ExpressionStatement [@@js.global "createStatement"]
+    (** @deprecated Use `factory.updateExpressionStatement` or the factory supplied by your transformation context instead. *)
     val updateStatement: node:ts_ExpressionStatement -> expression:ts_Expression -> ts_ExpressionStatement [@@js.global "updateStatement"]
+    (** @deprecated Use `factory.createIfStatement` or the factory supplied by your transformation context instead. *)
     val createIf: expression:ts_Expression -> thenStatement:ts_Statement -> ?elseStatement:ts_Statement or_undefined -> unit -> ts_IfStatement [@@js.global "createIf"]
+    (** @deprecated Use `factory.updateIfStatement` or the factory supplied by your transformation context instead. *)
     val updateIf: node:ts_IfStatement -> expression:ts_Expression -> thenStatement:ts_Statement -> elseStatement:ts_Statement or_undefined -> ts_IfStatement [@@js.global "updateIf"]
+    (** @deprecated Use `factory.createDoStatement` or the factory supplied by your transformation context instead. *)
     val createDo: statement:ts_Statement -> expression:ts_Expression -> ts_DoStatement [@@js.global "createDo"]
+    (** @deprecated Use `factory.updateDoStatement` or the factory supplied by your transformation context instead. *)
     val updateDo: node:ts_DoStatement -> statement:ts_Statement -> expression:ts_Expression -> ts_DoStatement [@@js.global "updateDo"]
+    (** @deprecated Use `factory.createWhileStatement` or the factory supplied by your transformation context instead. *)
     val createWhile: expression:ts_Expression -> statement:ts_Statement -> ts_WhileStatement [@@js.global "createWhile"]
+    (** @deprecated Use `factory.updateWhileStatement` or the factory supplied by your transformation context instead. *)
     val updateWhile: node:ts_WhileStatement -> expression:ts_Expression -> statement:ts_Statement -> ts_WhileStatement [@@js.global "updateWhile"]
+    (** @deprecated Use `factory.createForStatement` or the factory supplied by your transformation context instead. *)
     val createFor: initializer_:ts_ForInitializer or_undefined -> condition:ts_Expression or_undefined -> incrementor:ts_Expression or_undefined -> statement:ts_Statement -> ts_ForStatement [@@js.global "createFor"]
+    (** @deprecated Use `factory.updateForStatement` or the factory supplied by your transformation context instead. *)
     val updateFor: node:ts_ForStatement -> initializer_:ts_ForInitializer or_undefined -> condition:ts_Expression or_undefined -> incrementor:ts_Expression or_undefined -> statement:ts_Statement -> ts_ForStatement [@@js.global "updateFor"]
+    (** @deprecated Use `factory.createForInStatement` or the factory supplied by your transformation context instead. *)
     val createForIn: initializer_:ts_ForInitializer -> expression:ts_Expression -> statement:ts_Statement -> ts_ForInStatement [@@js.global "createForIn"]
+    (** @deprecated Use `factory.updateForInStatement` or the factory supplied by your transformation context instead. *)
     val updateForIn: node:ts_ForInStatement -> initializer_:ts_ForInitializer -> expression:ts_Expression -> statement:ts_Statement -> ts_ForInStatement [@@js.global "updateForIn"]
+    (** @deprecated Use `factory.createForOfStatement` or the factory supplied by your transformation context instead. *)
     val createForOf: awaitModifier:ts_AwaitKeyword or_undefined -> initializer_:ts_ForInitializer -> expression:ts_Expression -> statement:ts_Statement -> ts_ForOfStatement [@@js.global "createForOf"]
+    (** @deprecated Use `factory.updateForOfStatement` or the factory supplied by your transformation context instead. *)
     val updateForOf: node:ts_ForOfStatement -> awaitModifier:ts_AwaitKeyword or_undefined -> initializer_:ts_ForInitializer -> expression:ts_Expression -> statement:ts_Statement -> ts_ForOfStatement [@@js.global "updateForOf"]
+    (** @deprecated Use `factory.createContinueStatement` or the factory supplied by your transformation context instead. *)
     val createContinue: ?label:ts_Identifier or_string or_undefined -> unit -> ts_ContinueStatement [@@js.global "createContinue"]
+    (** @deprecated Use `factory.updateContinueStatement` or the factory supplied by your transformation context instead. *)
     val updateContinue: node:ts_ContinueStatement -> label:ts_Identifier or_undefined -> ts_ContinueStatement [@@js.global "updateContinue"]
+    (** @deprecated Use `factory.createBreakStatement` or the factory supplied by your transformation context instead. *)
     val createBreak: ?label:ts_Identifier or_string or_undefined -> unit -> ts_BreakStatement [@@js.global "createBreak"]
+    (** @deprecated Use `factory.updateBreakStatement` or the factory supplied by your transformation context instead. *)
     val updateBreak: node:ts_BreakStatement -> label:ts_Identifier or_undefined -> ts_BreakStatement [@@js.global "updateBreak"]
+    (** @deprecated Use `factory.createReturnStatement` or the factory supplied by your transformation context instead. *)
     val createReturn: ?expression:ts_Expression or_undefined -> unit -> ts_ReturnStatement [@@js.global "createReturn"]
+    (** @deprecated Use `factory.updateReturnStatement` or the factory supplied by your transformation context instead. *)
     val updateReturn: node:ts_ReturnStatement -> expression:ts_Expression or_undefined -> ts_ReturnStatement [@@js.global "updateReturn"]
+    (** @deprecated Use `factory.createWithStatement` or the factory supplied by your transformation context instead. *)
     val createWith: expression:ts_Expression -> statement:ts_Statement -> ts_WithStatement [@@js.global "createWith"]
+    (** @deprecated Use `factory.updateWithStatement` or the factory supplied by your transformation context instead. *)
     val updateWith: node:ts_WithStatement -> expression:ts_Expression -> statement:ts_Statement -> ts_WithStatement [@@js.global "updateWith"]
+    (** @deprecated Use `factory.createSwitchStatement` or the factory supplied by your transformation context instead. *)
     val createSwitch: expression:ts_Expression -> caseBlock:ts_CaseBlock -> ts_SwitchStatement [@@js.global "createSwitch"]
+    (** @deprecated Use `factory.updateSwitchStatement` or the factory supplied by your transformation context instead. *)
     val updateSwitch: node:ts_SwitchStatement -> expression:ts_Expression -> caseBlock:ts_CaseBlock -> ts_SwitchStatement [@@js.global "updateSwitch"]
+    (** @deprecated Use `factory.createLabelStatement` or the factory supplied by your transformation context instead. *)
     val createLabel: label:ts_Identifier or_string -> statement:ts_Statement -> ts_LabeledStatement [@@js.global "createLabel"]
+    (** @deprecated Use `factory.updateLabelStatement` or the factory supplied by your transformation context instead. *)
     val updateLabel: node:ts_LabeledStatement -> label:ts_Identifier -> statement:ts_Statement -> ts_LabeledStatement [@@js.global "updateLabel"]
+    (** @deprecated Use `factory.createThrowStatement` or the factory supplied by your transformation context instead. *)
     val createThrow: expression:ts_Expression -> ts_ThrowStatement [@@js.global "createThrow"]
+    (** @deprecated Use `factory.updateThrowStatement` or the factory supplied by your transformation context instead. *)
     val updateThrow: node:ts_ThrowStatement -> expression:ts_Expression -> ts_ThrowStatement [@@js.global "updateThrow"]
+    (** @deprecated Use `factory.createTryStatement` or the factory supplied by your transformation context instead. *)
     val createTry: tryBlock:ts_Block -> catchClause:ts_CatchClause or_undefined -> finallyBlock:ts_Block or_undefined -> ts_TryStatement [@@js.global "createTry"]
+    (** @deprecated Use `factory.updateTryStatement` or the factory supplied by your transformation context instead. *)
     val updateTry: node:ts_TryStatement -> tryBlock:ts_Block -> catchClause:ts_CatchClause or_undefined -> finallyBlock:ts_Block or_undefined -> ts_TryStatement [@@js.global "updateTry"]
+    (** @deprecated Use `factory.createDebuggerStatement` or the factory supplied by your transformation context instead. *)
     val createDebuggerStatement: unit -> ts_DebuggerStatement [@@js.global "createDebuggerStatement"]
+    (** @deprecated Use `factory.createVariableDeclarationList` or the factory supplied by your transformation context instead. *)
     val createVariableDeclarationList: declarations:ts_VariableDeclaration list -> ?flags:ts_NodeFlags or_undefined -> unit -> ts_VariableDeclarationList [@@js.global "createVariableDeclarationList"]
+    (** @deprecated Use `factory.updateVariableDeclarationList` or the factory supplied by your transformation context instead. *)
     val updateVariableDeclarationList: node:ts_VariableDeclarationList -> declarations:ts_VariableDeclaration list -> ts_VariableDeclarationList [@@js.global "updateVariableDeclarationList"]
+    (** @deprecated Use `factory.createFunctionDeclaration` or the factory supplied by your transformation context instead. *)
     val createFunctionDeclaration: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> asteriskToken:ts_AsteriskToken or_undefined -> name:ts_Identifier or_string or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> body:ts_Block or_undefined -> ts_FunctionDeclaration [@@js.global "createFunctionDeclaration"]
+    (** @deprecated Use `factory.updateFunctionDeclaration` or the factory supplied by your transformation context instead. *)
     val updateFunctionDeclaration: node:ts_FunctionDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> asteriskToken:ts_AsteriskToken or_undefined -> name:ts_Identifier or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> body:ts_Block or_undefined -> ts_FunctionDeclaration [@@js.global "updateFunctionDeclaration"]
+    (** @deprecated Use `factory.createClassDeclaration` or the factory supplied by your transformation context instead. *)
     val createClassDeclaration: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_Identifier or_string or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> heritageClauses:ts_HeritageClause list or_undefined -> members:ts_ClassElement list -> ts_ClassDeclaration [@@js.global "createClassDeclaration"]
+    (** @deprecated Use `factory.updateClassDeclaration` or the factory supplied by your transformation context instead. *)
     val updateClassDeclaration: node:ts_ClassDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_Identifier or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> heritageClauses:ts_HeritageClause list or_undefined -> members:ts_ClassElement list -> ts_ClassDeclaration [@@js.global "updateClassDeclaration"]
+    (** @deprecated Use `factory.createInterfaceDeclaration` or the factory supplied by your transformation context instead. *)
     val createInterfaceDeclaration: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_Identifier or_string -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> heritageClauses:ts_HeritageClause list or_undefined -> members:ts_TypeElement list -> ts_InterfaceDeclaration [@@js.global "createInterfaceDeclaration"]
+    (** @deprecated Use `factory.updateInterfaceDeclaration` or the factory supplied by your transformation context instead. *)
     val updateInterfaceDeclaration: node:ts_InterfaceDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_Identifier -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> heritageClauses:ts_HeritageClause list or_undefined -> members:ts_TypeElement list -> ts_InterfaceDeclaration [@@js.global "updateInterfaceDeclaration"]
+    (** @deprecated Use `factory.createTypeAliasDeclaration` or the factory supplied by your transformation context instead. *)
     val createTypeAliasDeclaration: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_Identifier or_string -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> type_:ts_TypeNode -> ts_TypeAliasDeclaration [@@js.global "createTypeAliasDeclaration"]
+    (** @deprecated Use `factory.updateTypeAliasDeclaration` or the factory supplied by your transformation context instead. *)
     val updateTypeAliasDeclaration: node:ts_TypeAliasDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_Identifier -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> type_:ts_TypeNode -> ts_TypeAliasDeclaration [@@js.global "updateTypeAliasDeclaration"]
+    (** @deprecated Use `factory.createEnumDeclaration` or the factory supplied by your transformation context instead. *)
     val createEnumDeclaration: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_Identifier or_string -> members:ts_EnumMember list -> ts_EnumDeclaration [@@js.global "createEnumDeclaration"]
+    (** @deprecated Use `factory.updateEnumDeclaration` or the factory supplied by your transformation context instead. *)
     val updateEnumDeclaration: node:ts_EnumDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_Identifier -> members:ts_EnumMember list -> ts_EnumDeclaration [@@js.global "updateEnumDeclaration"]
+    (** @deprecated Use `factory.createModuleDeclaration` or the factory supplied by your transformation context instead. *)
     val createModuleDeclaration: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_ModuleName -> body:ts_ModuleBody or_undefined -> ?flags:ts_NodeFlags or_undefined -> unit -> ts_ModuleDeclaration [@@js.global "createModuleDeclaration"]
+    (** @deprecated Use `factory.updateModuleDeclaration` or the factory supplied by your transformation context instead. *)
     val updateModuleDeclaration: node:ts_ModuleDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> name:ts_ModuleName -> body:ts_ModuleBody or_undefined -> ts_ModuleDeclaration [@@js.global "updateModuleDeclaration"]
+    (** @deprecated Use `factory.createModuleBlock` or the factory supplied by your transformation context instead. *)
     val createModuleBlock: statements:ts_Statement list -> ts_ModuleBlock [@@js.global "createModuleBlock"]
+    (** @deprecated Use `factory.updateModuleBlock` or the factory supplied by your transformation context instead. *)
     val updateModuleBlock: node:ts_ModuleBlock -> statements:ts_Statement list -> ts_ModuleBlock [@@js.global "updateModuleBlock"]
+    (** @deprecated Use `factory.createCaseBlock` or the factory supplied by your transformation context instead. *)
     val createCaseBlock: clauses:ts_CaseOrDefaultClause list -> ts_CaseBlock [@@js.global "createCaseBlock"]
+    (** @deprecated Use `factory.updateCaseBlock` or the factory supplied by your transformation context instead. *)
     val updateCaseBlock: node:ts_CaseBlock -> clauses:ts_CaseOrDefaultClause list -> ts_CaseBlock [@@js.global "updateCaseBlock"]
+    (** @deprecated Use `factory.createNamespaceExportDeclaration` or the factory supplied by your transformation context instead. *)
     val createNamespaceExportDeclaration: name:ts_Identifier or_string -> ts_NamespaceExportDeclaration [@@js.global "createNamespaceExportDeclaration"]
+    (** @deprecated Use `factory.updateNamespaceExportDeclaration` or the factory supplied by your transformation context instead. *)
     val updateNamespaceExportDeclaration: node:ts_NamespaceExportDeclaration -> name:ts_Identifier -> ts_NamespaceExportDeclaration [@@js.global "updateNamespaceExportDeclaration"]
+    (** @deprecated Use `factory.createImportEqualsDeclaration` or the factory supplied by your transformation context instead. *)
     val createImportEqualsDeclaration: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> isTypeOnly:bool -> name:ts_Identifier or_string -> moduleReference:ts_ModuleReference -> ts_ImportEqualsDeclaration [@@js.global "createImportEqualsDeclaration"]
+    (** @deprecated Use `factory.updateImportEqualsDeclaration` or the factory supplied by your transformation context instead. *)
     val updateImportEqualsDeclaration: node:ts_ImportEqualsDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> isTypeOnly:bool -> name:ts_Identifier -> moduleReference:ts_ModuleReference -> ts_ImportEqualsDeclaration [@@js.global "updateImportEqualsDeclaration"]
+    (** @deprecated Use `factory.createImportDeclaration` or the factory supplied by your transformation context instead. *)
     val createImportDeclaration: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> importClause:ts_ImportClause or_undefined -> moduleSpecifier:ts_Expression -> ts_ImportDeclaration [@@js.global "createImportDeclaration"]
+    (** @deprecated Use `factory.updateImportDeclaration` or the factory supplied by your transformation context instead. *)
     val updateImportDeclaration: node:ts_ImportDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> importClause:ts_ImportClause or_undefined -> moduleSpecifier:ts_Expression -> ts_ImportDeclaration [@@js.global "updateImportDeclaration"]
+    (** @deprecated Use `factory.createNamespaceImport` or the factory supplied by your transformation context instead. *)
     val createNamespaceImport: name:ts_Identifier -> ts_NamespaceImport [@@js.global "createNamespaceImport"]
+    (** @deprecated Use `factory.updateNamespaceImport` or the factory supplied by your transformation context instead. *)
     val updateNamespaceImport: node:ts_NamespaceImport -> name:ts_Identifier -> ts_NamespaceImport [@@js.global "updateNamespaceImport"]
+    (** @deprecated Use `factory.createNamedImports` or the factory supplied by your transformation context instead. *)
     val createNamedImports: elements:ts_ImportSpecifier list -> ts_NamedImports [@@js.global "createNamedImports"]
+    (** @deprecated Use `factory.updateNamedImports` or the factory supplied by your transformation context instead. *)
     val updateNamedImports: node:ts_NamedImports -> elements:ts_ImportSpecifier list -> ts_NamedImports [@@js.global "updateNamedImports"]
+    (** @deprecated Use `factory.createImportSpecifier` or the factory supplied by your transformation context instead. *)
     val createImportSpecifier: propertyName:ts_Identifier or_undefined -> name:ts_Identifier -> ts_ImportSpecifier [@@js.global "createImportSpecifier"]
+    (** @deprecated Use `factory.updateImportSpecifier` or the factory supplied by your transformation context instead. *)
     val updateImportSpecifier: node:ts_ImportSpecifier -> propertyName:ts_Identifier or_undefined -> name:ts_Identifier -> ts_ImportSpecifier [@@js.global "updateImportSpecifier"]
+    (** @deprecated Use `factory.createExportAssignment` or the factory supplied by your transformation context instead. *)
     val createExportAssignment: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> isExportEquals:bool or_undefined -> expression:ts_Expression -> ts_ExportAssignment [@@js.global "createExportAssignment"]
+    (** @deprecated Use `factory.updateExportAssignment` or the factory supplied by your transformation context instead. *)
     val updateExportAssignment: node:ts_ExportAssignment -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> expression:ts_Expression -> ts_ExportAssignment [@@js.global "updateExportAssignment"]
+    (** @deprecated Use `factory.createNamedExports` or the factory supplied by your transformation context instead. *)
     val createNamedExports: elements:ts_ExportSpecifier list -> ts_NamedExports [@@js.global "createNamedExports"]
+    (** @deprecated Use `factory.updateNamedExports` or the factory supplied by your transformation context instead. *)
     val updateNamedExports: node:ts_NamedExports -> elements:ts_ExportSpecifier list -> ts_NamedExports [@@js.global "updateNamedExports"]
+    (** @deprecated Use `factory.createExportSpecifier` or the factory supplied by your transformation context instead. *)
     val createExportSpecifier: propertyName:ts_Identifier or_string or_undefined -> name:ts_Identifier or_string -> ts_ExportSpecifier [@@js.global "createExportSpecifier"]
+    (** @deprecated Use `factory.updateExportSpecifier` or the factory supplied by your transformation context instead. *)
     val updateExportSpecifier: node:ts_ExportSpecifier -> propertyName:ts_Identifier or_undefined -> name:ts_Identifier -> ts_ExportSpecifier [@@js.global "updateExportSpecifier"]
+    (** @deprecated Use `factory.createExternalModuleReference` or the factory supplied by your transformation context instead. *)
     val createExternalModuleReference: expression:ts_Expression -> ts_ExternalModuleReference [@@js.global "createExternalModuleReference"]
+    (** @deprecated Use `factory.updateExternalModuleReference` or the factory supplied by your transformation context instead. *)
     val updateExternalModuleReference: node:ts_ExternalModuleReference -> expression:ts_Expression -> ts_ExternalModuleReference [@@js.global "updateExternalModuleReference"]
+    (** @deprecated Use `factory.createJSDocTypeExpression` or the factory supplied by your transformation context instead. *)
     val createJSDocTypeExpression: type_:ts_TypeNode -> ts_JSDocTypeExpression [@@js.global "createJSDocTypeExpression"]
+    (** @deprecated Use `factory.createJSDocTypeTag` or the factory supplied by your transformation context instead. *)
     val createJSDocTypeTag: tagName:ts_Identifier or_undefined -> typeExpression:ts_JSDocTypeExpression -> ?comment:string or_undefined -> unit -> ts_JSDocTypeTag [@@js.global "createJSDocTypeTag"]
+    (** @deprecated Use `factory.createJSDocReturnTag` or the factory supplied by your transformation context instead. *)
     val createJSDocReturnTag: tagName:ts_Identifier or_undefined -> ?typeExpression:ts_JSDocTypeExpression or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocReturnTag [@@js.global "createJSDocReturnTag"]
+    (** @deprecated Use `factory.createJSDocThisTag` or the factory supplied by your transformation context instead. *)
     val createJSDocThisTag: tagName:ts_Identifier or_undefined -> typeExpression:ts_JSDocTypeExpression -> ?comment:string or_undefined -> unit -> ts_JSDocThisTag [@@js.global "createJSDocThisTag"]
+    (** @deprecated Use `factory.createJSDocComment` or the factory supplied by your transformation context instead. *)
     val createJSDocComment: ?comment:string or_undefined -> ?tags:ts_JSDocTag list or_undefined -> unit -> ts_JSDoc [@@js.global "createJSDocComment"]
+    (** @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead. *)
     val createJSDocParameterTag: tagName:ts_Identifier or_undefined -> name:ts_EntityName -> isBracketed:bool -> ?typeExpression:ts_JSDocTypeExpression or_undefined -> ?isNameFirst:bool or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocParameterTag [@@js.global "createJSDocParameterTag"]
+    (** @deprecated Use `factory.createJSDocClassTag` or the factory supplied by your transformation context instead. *)
     val createJSDocClassTag: tagName:ts_Identifier or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocClassTag [@@js.global "createJSDocClassTag"]
+    (** @deprecated Use `factory.createJSDocAugmentsTag` or the factory supplied by your transformation context instead. *)
     val createJSDocAugmentsTag: tagName:ts_Identifier or_undefined -> className:(ts_ExpressionWithTypeArguments, anonymous_interface_7) intersection2 -> ?comment:string or_undefined -> unit -> ts_JSDocAugmentsTag [@@js.global "createJSDocAugmentsTag"]
+    (** @deprecated Use `factory.createJSDocEnumTag` or the factory supplied by your transformation context instead. *)
     val createJSDocEnumTag: tagName:ts_Identifier or_undefined -> typeExpression:ts_JSDocTypeExpression -> ?comment:string or_undefined -> unit -> ts_JSDocEnumTag [@@js.global "createJSDocEnumTag"]
+    (** @deprecated Use `factory.createJSDocTemplateTag` or the factory supplied by your transformation context instead. *)
     val createJSDocTemplateTag: tagName:ts_Identifier or_undefined -> constraint_:ts_JSDocTypeExpression or_undefined -> typeParameters:ts_TypeParameterDeclaration list -> ?comment:string or_undefined -> unit -> ts_JSDocTemplateTag [@@js.global "createJSDocTemplateTag"]
+    (** @deprecated Use `factory.createJSDocTypedefTag` or the factory supplied by your transformation context instead. *)
     val createJSDocTypedefTag: tagName:ts_Identifier or_undefined -> ?typeExpression:([`U_n_301 of ts_JSDocTypeExpression  | `U_n_312 of ts_JSDocTypeLiteral ] [@js.union on_field "kind"]) or_undefined -> ?fullName:([`U_n_78 of ts_Identifier  | `U_n_256 of ts_JSDocNamespaceDeclaration ] [@js.union on_field "kind"]) or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocTypedefTag [@@js.global "createJSDocTypedefTag"]
+    (** @deprecated Use `factory.createJSDocCallbackTag` or the factory supplied by your transformation context instead. *)
     val createJSDocCallbackTag: tagName:ts_Identifier or_undefined -> typeExpression:ts_JSDocSignature -> ?fullName:([`U_n_78 of ts_Identifier  | `U_n_256 of ts_JSDocNamespaceDeclaration ] [@js.union on_field "kind"]) or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocCallbackTag [@@js.global "createJSDocCallbackTag"]
+    (** @deprecated Use `factory.createJSDocSignature` or the factory supplied by your transformation context instead. *)
     val createJSDocSignature: typeParameters:ts_JSDocTemplateTag list or_undefined -> parameters:ts_JSDocParameterTag list -> ?type_:ts_JSDocReturnTag or_undefined -> unit -> ts_JSDocSignature [@@js.global "createJSDocSignature"]
+    (** @deprecated Use `factory.createJSDocPropertyTag` or the factory supplied by your transformation context instead. *)
     val createJSDocPropertyTag: tagName:ts_Identifier or_undefined -> name:ts_EntityName -> isBracketed:bool -> ?typeExpression:ts_JSDocTypeExpression or_undefined -> ?isNameFirst:bool or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocPropertyTag [@@js.global "createJSDocPropertyTag"]
+    (** @deprecated Use `factory.createJSDocTypeLiteral` or the factory supplied by your transformation context instead. *)
     val createJSDocTypeLiteral: ?jsDocPropertyTags:ts_JSDocPropertyLikeTag list or_undefined -> ?isArrayType:bool or_undefined -> unit -> ts_JSDocTypeLiteral [@@js.global "createJSDocTypeLiteral"]
+    (** @deprecated Use `factory.createJSDocImplementsTag` or the factory supplied by your transformation context instead. *)
     val createJSDocImplementsTag: tagName:ts_Identifier or_undefined -> className:(ts_ExpressionWithTypeArguments, anonymous_interface_7) intersection2 -> ?comment:string or_undefined -> unit -> ts_JSDocImplementsTag [@@js.global "createJSDocImplementsTag"]
+    (** @deprecated Use `factory.createJSDocAuthorTag` or the factory supplied by your transformation context instead. *)
     val createJSDocAuthorTag: tagName:ts_Identifier or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocAuthorTag [@@js.global "createJSDocAuthorTag"]
+    (** @deprecated Use `factory.createJSDocPublicTag` or the factory supplied by your transformation context instead. *)
     val createJSDocPublicTag: tagName:ts_Identifier or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocPublicTag [@@js.global "createJSDocPublicTag"]
+    (** @deprecated Use `factory.createJSDocPrivateTag` or the factory supplied by your transformation context instead. *)
     val createJSDocPrivateTag: tagName:ts_Identifier or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocPrivateTag [@@js.global "createJSDocPrivateTag"]
+    (** @deprecated Use `factory.createJSDocProtectedTag` or the factory supplied by your transformation context instead. *)
     val createJSDocProtectedTag: tagName:ts_Identifier or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocProtectedTag [@@js.global "createJSDocProtectedTag"]
+    (** @deprecated Use `factory.createJSDocReadonlyTag` or the factory supplied by your transformation context instead. *)
     val createJSDocReadonlyTag: tagName:ts_Identifier or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocReadonlyTag [@@js.global "createJSDocReadonlyTag"]
+    (** @deprecated Use `factory.createJSDocUnknownTag` or the factory supplied by your transformation context instead. *)
     val createJSDocTag: tagName:ts_Identifier -> ?comment:string or_undefined -> unit -> ts_JSDocUnknownTag [@@js.global "createJSDocTag"]
+    (** @deprecated Use `factory.createJsxElement` or the factory supplied by your transformation context instead. *)
     val createJsxElement: openingElement:ts_JsxOpeningElement -> children:ts_JsxChild list -> closingElement:ts_JsxClosingElement -> ts_JsxElement [@@js.global "createJsxElement"]
+    (** @deprecated Use `factory.updateJsxElement` or the factory supplied by your transformation context instead. *)
     val updateJsxElement: node:ts_JsxElement -> openingElement:ts_JsxOpeningElement -> children:ts_JsxChild list -> closingElement:ts_JsxClosingElement -> ts_JsxElement [@@js.global "updateJsxElement"]
+    (** @deprecated Use `factory.createJsxSelfClosingElement` or the factory supplied by your transformation context instead. *)
     val createJsxSelfClosingElement: tagName:ts_JsxTagNameExpression -> typeArguments:ts_TypeNode list or_undefined -> attributes:ts_JsxAttributes -> ts_JsxSelfClosingElement [@@js.global "createJsxSelfClosingElement"]
+    (** @deprecated Use `factory.updateJsxSelfClosingElement` or the factory supplied by your transformation context instead. *)
     val updateJsxSelfClosingElement: node:ts_JsxSelfClosingElement -> tagName:ts_JsxTagNameExpression -> typeArguments:ts_TypeNode list or_undefined -> attributes:ts_JsxAttributes -> ts_JsxSelfClosingElement [@@js.global "updateJsxSelfClosingElement"]
+    (** @deprecated Use `factory.createJsxOpeningElement` or the factory supplied by your transformation context instead. *)
     val createJsxOpeningElement: tagName:ts_JsxTagNameExpression -> typeArguments:ts_TypeNode list or_undefined -> attributes:ts_JsxAttributes -> ts_JsxOpeningElement [@@js.global "createJsxOpeningElement"]
+    (** @deprecated Use `factory.updateJsxOpeningElement` or the factory supplied by your transformation context instead. *)
     val updateJsxOpeningElement: node:ts_JsxOpeningElement -> tagName:ts_JsxTagNameExpression -> typeArguments:ts_TypeNode list or_undefined -> attributes:ts_JsxAttributes -> ts_JsxOpeningElement [@@js.global "updateJsxOpeningElement"]
+    (** @deprecated Use `factory.createJsxClosingElement` or the factory supplied by your transformation context instead. *)
     val createJsxClosingElement: tagName:ts_JsxTagNameExpression -> ts_JsxClosingElement [@@js.global "createJsxClosingElement"]
+    (** @deprecated Use `factory.updateJsxClosingElement` or the factory supplied by your transformation context instead. *)
     val updateJsxClosingElement: node:ts_JsxClosingElement -> tagName:ts_JsxTagNameExpression -> ts_JsxClosingElement [@@js.global "updateJsxClosingElement"]
+    (** @deprecated Use `factory.createJsxFragment` or the factory supplied by your transformation context instead. *)
     val createJsxFragment: openingFragment:ts_JsxOpeningFragment -> children:ts_JsxChild list -> closingFragment:ts_JsxClosingFragment -> ts_JsxFragment [@@js.global "createJsxFragment"]
+    (** @deprecated Use `factory.createJsxText` or the factory supplied by your transformation context instead. *)
     val createJsxText: text:string -> ?containsOnlyTriviaWhiteSpaces:bool or_undefined -> unit -> ts_JsxText [@@js.global "createJsxText"]
+    (** @deprecated Use `factory.updateJsxText` or the factory supplied by your transformation context instead. *)
     val updateJsxText: node:ts_JsxText -> text:string -> ?containsOnlyTriviaWhiteSpaces:bool or_undefined -> unit -> ts_JsxText [@@js.global "updateJsxText"]
+    (** @deprecated Use `factory.createJsxOpeningFragment` or the factory supplied by your transformation context instead. *)
     val createJsxOpeningFragment: unit -> ts_JsxOpeningFragment [@@js.global "createJsxOpeningFragment"]
+    (** @deprecated Use `factory.createJsxJsxClosingFragment` or the factory supplied by your transformation context instead. *)
     val createJsxJsxClosingFragment: unit -> ts_JsxClosingFragment [@@js.global "createJsxJsxClosingFragment"]
+    (** @deprecated Use `factory.updateJsxFragment` or the factory supplied by your transformation context instead. *)
     val updateJsxFragment: node:ts_JsxFragment -> openingFragment:ts_JsxOpeningFragment -> children:ts_JsxChild list -> closingFragment:ts_JsxClosingFragment -> ts_JsxFragment [@@js.global "updateJsxFragment"]
+    (** @deprecated Use `factory.createJsxAttribute` or the factory supplied by your transformation context instead. *)
     val createJsxAttribute: name:ts_Identifier -> initializer_:([`U_n_10 of ts_StringLiteral  | `U_n_283 of ts_JsxExpression ] [@js.union on_field "kind"]) or_undefined -> ts_JsxAttribute [@@js.global "createJsxAttribute"]
+    (** @deprecated Use `factory.updateJsxAttribute` or the factory supplied by your transformation context instead. *)
     val updateJsxAttribute: node:ts_JsxAttribute -> name:ts_Identifier -> initializer_:([`U_n_10 of ts_StringLiteral  | `U_n_283 of ts_JsxExpression ] [@js.union on_field "kind"]) or_undefined -> ts_JsxAttribute [@@js.global "updateJsxAttribute"]
+    (** @deprecated Use `factory.createJsxAttributes` or the factory supplied by your transformation context instead. *)
     val createJsxAttributes: properties:ts_JsxAttributeLike list -> ts_JsxAttributes [@@js.global "createJsxAttributes"]
+    (** @deprecated Use `factory.updateJsxAttributes` or the factory supplied by your transformation context instead. *)
     val updateJsxAttributes: node:ts_JsxAttributes -> properties:ts_JsxAttributeLike list -> ts_JsxAttributes [@@js.global "updateJsxAttributes"]
+    (** @deprecated Use `factory.createJsxSpreadAttribute` or the factory supplied by your transformation context instead. *)
     val createJsxSpreadAttribute: expression:ts_Expression -> ts_JsxSpreadAttribute [@@js.global "createJsxSpreadAttribute"]
+    (** @deprecated Use `factory.updateJsxSpreadAttribute` or the factory supplied by your transformation context instead. *)
     val updateJsxSpreadAttribute: node:ts_JsxSpreadAttribute -> expression:ts_Expression -> ts_JsxSpreadAttribute [@@js.global "updateJsxSpreadAttribute"]
+    (** @deprecated Use `factory.createJsxExpression` or the factory supplied by your transformation context instead. *)
     val createJsxExpression: dotDotDotToken:ts_DotDotDotToken or_undefined -> expression:ts_Expression or_undefined -> ts_JsxExpression [@@js.global "createJsxExpression"]
+    (** @deprecated Use `factory.updateJsxExpression` or the factory supplied by your transformation context instead. *)
     val updateJsxExpression: node:ts_JsxExpression -> expression:ts_Expression or_undefined -> ts_JsxExpression [@@js.global "updateJsxExpression"]
+    (** @deprecated Use `factory.createCaseClause` or the factory supplied by your transformation context instead. *)
     val createCaseClause: expression:ts_Expression -> statements:ts_Statement list -> ts_CaseClause [@@js.global "createCaseClause"]
+    (** @deprecated Use `factory.updateCaseClause` or the factory supplied by your transformation context instead. *)
     val updateCaseClause: node:ts_CaseClause -> expression:ts_Expression -> statements:ts_Statement list -> ts_CaseClause [@@js.global "updateCaseClause"]
+    (** @deprecated Use `factory.createDefaultClause` or the factory supplied by your transformation context instead. *)
     val createDefaultClause: statements:ts_Statement list -> ts_DefaultClause [@@js.global "createDefaultClause"]
+    (** @deprecated Use `factory.updateDefaultClause` or the factory supplied by your transformation context instead. *)
     val updateDefaultClause: node:ts_DefaultClause -> statements:ts_Statement list -> ts_DefaultClause [@@js.global "updateDefaultClause"]
+    (** @deprecated Use `factory.createHeritageClause` or the factory supplied by your transformation context instead. *)
     val createHeritageClause: token:((ts_SyntaxKind_ExtendsKeyword, ts_SyntaxKind_ImplementsKeyword) union2, ([`ExtendsKeyword | `ImplementsKeyword] [@js.enum])) or_enum -> types:ts_ExpressionWithTypeArguments list -> ts_HeritageClause [@@js.global "createHeritageClause"]
+    (** @deprecated Use `factory.updateHeritageClause` or the factory supplied by your transformation context instead. *)
     val updateHeritageClause: node:ts_HeritageClause -> types:ts_ExpressionWithTypeArguments list -> ts_HeritageClause [@@js.global "updateHeritageClause"]
+    (** @deprecated Use `factory.createCatchClause` or the factory supplied by your transformation context instead. *)
     val createCatchClause: variableDeclaration:ts_VariableDeclaration or_string or_undefined -> block:ts_Block -> ts_CatchClause [@@js.global "createCatchClause"]
+    (** @deprecated Use `factory.updateCatchClause` or the factory supplied by your transformation context instead. *)
     val updateCatchClause: node:ts_CatchClause -> variableDeclaration:ts_VariableDeclaration or_undefined -> block:ts_Block -> ts_CatchClause [@@js.global "updateCatchClause"]
+    (** @deprecated Use `factory.createPropertyAssignment` or the factory supplied by your transformation context instead. *)
     val createPropertyAssignment: name:ts_PropertyName or_string -> initializer_:ts_Expression -> ts_PropertyAssignment [@@js.global "createPropertyAssignment"]
+    (** @deprecated Use `factory.updatePropertyAssignment` or the factory supplied by your transformation context instead. *)
     val updatePropertyAssignment: node:ts_PropertyAssignment -> name:ts_PropertyName -> initializer_:ts_Expression -> ts_PropertyAssignment [@@js.global "updatePropertyAssignment"]
+    (** @deprecated Use `factory.createShorthandPropertyAssignment` or the factory supplied by your transformation context instead. *)
     val createShorthandPropertyAssignment: name:ts_Identifier or_string -> ?objectAssignmentInitializer:ts_Expression or_undefined -> unit -> ts_ShorthandPropertyAssignment [@@js.global "createShorthandPropertyAssignment"]
+    (** @deprecated Use `factory.updateShorthandPropertyAssignment` or the factory supplied by your transformation context instead. *)
     val updateShorthandPropertyAssignment: node:ts_ShorthandPropertyAssignment -> name:ts_Identifier -> objectAssignmentInitializer:ts_Expression or_undefined -> ts_ShorthandPropertyAssignment [@@js.global "updateShorthandPropertyAssignment"]
+    (** @deprecated Use `factory.createSpreadAssignment` or the factory supplied by your transformation context instead. *)
     val createSpreadAssignment: expression:ts_Expression -> ts_SpreadAssignment [@@js.global "createSpreadAssignment"]
+    (** @deprecated Use `factory.updateSpreadAssignment` or the factory supplied by your transformation context instead. *)
     val updateSpreadAssignment: node:ts_SpreadAssignment -> expression:ts_Expression -> ts_SpreadAssignment [@@js.global "updateSpreadAssignment"]
+    (** @deprecated Use `factory.createEnumMember` or the factory supplied by your transformation context instead. *)
     val createEnumMember: name:ts_PropertyName or_string -> ?initializer_:ts_Expression or_undefined -> unit -> ts_EnumMember [@@js.global "createEnumMember"]
+    (** @deprecated Use `factory.updateEnumMember` or the factory supplied by your transformation context instead. *)
     val updateEnumMember: node:ts_EnumMember -> name:ts_PropertyName -> initializer_:ts_Expression or_undefined -> ts_EnumMember [@@js.global "updateEnumMember"]
+    (** @deprecated Use `factory.updateSourceFile` or the factory supplied by your transformation context instead. *)
     val updateSourceFileNode: node:ts_SourceFile -> statements:ts_Statement list -> ?isDeclarationFile:bool or_undefined -> ?referencedFiles:ts_FileReference list or_undefined -> ?typeReferences:ts_FileReference list or_undefined -> ?hasNoDefaultLib:bool or_undefined -> ?libReferences:ts_FileReference list or_undefined -> unit -> ts_SourceFile [@@js.global "updateSourceFileNode"]
+    (** @deprecated Use `factory.createNotEmittedStatement` or the factory supplied by your transformation context instead. *)
     val createNotEmittedStatement: original:ts_Node -> ts_NotEmittedStatement [@@js.global "createNotEmittedStatement"]
+    (** @deprecated Use `factory.createPartiallyEmittedExpression` or the factory supplied by your transformation context instead. *)
     val createPartiallyEmittedExpression: expression:ts_Expression -> ?original:ts_Node or_undefined -> unit -> ts_PartiallyEmittedExpression [@@js.global "createPartiallyEmittedExpression"]
+    (** @deprecated Use `factory.updatePartiallyEmittedExpression` or the factory supplied by your transformation context instead. *)
     val updatePartiallyEmittedExpression: node:ts_PartiallyEmittedExpression -> expression:ts_Expression -> ts_PartiallyEmittedExpression [@@js.global "updatePartiallyEmittedExpression"]
+    (** @deprecated Use `factory.createCommaListExpression` or the factory supplied by your transformation context instead. *)
     val createCommaList: elements:ts_Expression list -> ts_CommaListExpression [@@js.global "createCommaList"]
+    (** @deprecated Use `factory.updateCommaListExpression` or the factory supplied by your transformation context instead. *)
     val updateCommaList: node:ts_CommaListExpression -> elements:ts_Expression list -> ts_CommaListExpression [@@js.global "updateCommaList"]
+    (** @deprecated Use `factory.createBundle` or the factory supplied by your transformation context instead. *)
     val createBundle: sourceFiles:ts_SourceFile list -> ?prepends:([`U_n_299 of ts_UnparsedSource  | `U_n_300 of ts_InputFiles ] [@js.union on_field "kind"]) list or_undefined -> unit -> ts_Bundle [@@js.global "createBundle"]
+    (** @deprecated Use `factory.updateBundle` or the factory supplied by your transformation context instead. *)
     val updateBundle: node:ts_Bundle -> sourceFiles:ts_SourceFile list -> ?prepends:([`U_n_299 of ts_UnparsedSource  | `U_n_300 of ts_InputFiles ] [@js.union on_field "kind"]) list or_undefined -> unit -> ts_Bundle [@@js.global "updateBundle"]
+    (** @deprecated Use `factory.createImmediatelyInvokedFunctionExpression` or the factory supplied by your transformation context instead. *)
     val createImmediatelyInvokedFunctionExpression: anonymous_interface_25 [@@js.global "createImmediatelyInvokedFunctionExpression"]
+    (** @deprecated Use `factory.createImmediatelyInvokedArrowFunction` or the factory supplied by your transformation context instead. *)
     val createImmediatelyInvokedArrowFunction: anonymous_interface_25 [@@js.global "createImmediatelyInvokedArrowFunction"]
+    (** @deprecated Use `factory.createVoidZero` or the factory supplied by your transformation context instead. *)
     val createVoidZero: unit -> ts_VoidExpression [@@js.global "createVoidZero"]
+    (** @deprecated Use `factory.createExportDefault` or the factory supplied by your transformation context instead. *)
     val createExportDefault: expression:ts_Expression -> ts_ExportAssignment [@@js.global "createExportDefault"]
+    (** @deprecated Use `factory.createExternalModuleExport` or the factory supplied by your transformation context instead. *)
     val createExternalModuleExport: exportName:ts_Identifier -> ts_ExportDeclaration [@@js.global "createExternalModuleExport"]
+    (** @deprecated Use `factory.createNamespaceExport` or the factory supplied by your transformation context instead. *)
     val createNamespaceExport: name:ts_Identifier -> ts_NamespaceExport [@@js.global "createNamespaceExport"]
+    (** @deprecated Use `factory.updateNamespaceExport` or the factory supplied by your transformation context instead. *)
     val updateNamespaceExport: node:ts_NamespaceExport -> name:ts_Identifier -> ts_NamespaceExport [@@js.global "updateNamespaceExport"]
+    (** @deprecated Use `factory.createToken` or the factory supplied by your transformation context instead. *)
     val createToken: kind:'TKind -> 'TKind ts_Token [@@js.global "createToken"]
+    (** @deprecated Use `factory.createIdentifier` or the factory supplied by your transformation context instead. *)
     val createIdentifier: text:string -> ts_Identifier [@@js.global "createIdentifier"]
+    (** @deprecated Use `factory.createTempVariable` or the factory supplied by your transformation context instead. *)
     val createTempVariable: recordTempVariable:(node:ts_Identifier -> unit) or_undefined -> ts_Identifier [@@js.global "createTempVariable"]
+    (** @deprecated Use `factory.getGeneratedNameForNode` or the factory supplied by your transformation context instead. *)
     val getGeneratedNameForNode: node:ts_Node or_undefined -> ts_Identifier [@@js.global "getGeneratedNameForNode"]
+    (** @deprecated Use `factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic)` or the factory supplied by your transformation context instead. *)
     val createOptimisticUniqueName: text:string -> ts_Identifier [@@js.global "createOptimisticUniqueName"]
+    (** @deprecated Use `factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)` or the factory supplied by your transformation context instead. *)
     val createFileLevelUniqueName: text:string -> ts_Identifier [@@js.global "createFileLevelUniqueName"]
+    (** @deprecated Use `factory.createIndexSignature` or the factory supplied by your transformation context instead. *)
     val createIndexSignature: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode -> ts_IndexSignatureDeclaration [@@js.global "createIndexSignature"]
+    (** @deprecated Use `factory.createTypePredicateNode` or the factory supplied by your transformation context instead. *)
     val createTypePredicateNode: parameterName:([`U_n_78 of ts_Identifier  | `U_n_187 of ts_ThisTypeNode ] [@js.union on_field "kind"]) or_string -> type_:ts_TypeNode -> ts_TypePredicateNode [@@js.global "createTypePredicateNode"]
+    (** @deprecated Use `factory.updateTypePredicateNode` or the factory supplied by your transformation context instead. *)
     val updateTypePredicateNode: node:ts_TypePredicateNode -> parameterName:([`U_n_78 of ts_Identifier  | `U_n_187 of ts_ThisTypeNode ] [@js.union on_field "kind"]) -> type_:ts_TypeNode -> ts_TypePredicateNode [@@js.global "updateTypePredicateNode"]
+    (** @deprecated Use `factory.createStringLiteral`, `factory.createStringLiteralFromNode`, `factory.createNumericLiteral`, `factory.createBigIntLiteral`, `factory.createTrue`, `factory.createFalse`, or the factory supplied by your transformation context instead. *)
     val createLiteral: anonymous_interface_33 [@@js.global "createLiteral"]
+    (** @deprecated Use `factory.createMethodSignature` or the factory supplied by your transformation context instead. *)
     val createMethodSignature: typeParameters:ts_TypeParameterDeclaration list or_undefined -> parameters:ts_ParameterDeclaration list -> type_:ts_TypeNode or_undefined -> name:ts_PropertyName or_string -> questionToken:ts_QuestionToken or_undefined -> ts_MethodSignature [@@js.global "createMethodSignature"]
+    (** @deprecated Use `factory.updateMethodSignature` or the factory supplied by your transformation context instead. *)
     val updateMethodSignature: node:ts_MethodSignature -> typeParameters:ts_TypeParameterDeclaration ts_NodeArray or_undefined -> parameters:ts_ParameterDeclaration ts_NodeArray -> type_:ts_TypeNode or_undefined -> name:ts_PropertyName -> questionToken:ts_QuestionToken or_undefined -> ts_MethodSignature [@@js.global "updateMethodSignature"]
+    (** @deprecated Use `factory.createTypeOperatorNode` or the factory supplied by your transformation context instead. *)
     val createTypeOperatorNode: anonymous_interface_32 [@@js.global "createTypeOperatorNode"]
+    (** @deprecated Use `factory.createTaggedTemplate` or the factory supplied by your transformation context instead. *)
     val createTaggedTemplate: anonymous_interface_26 [@@js.global "createTaggedTemplate"]
+    (** @deprecated Use `factory.updateTaggedTemplate` or the factory supplied by your transformation context instead. *)
     val updateTaggedTemplate: anonymous_interface_22 [@@js.global "updateTaggedTemplate"]
+    (** @deprecated Use `factory.updateBinary` or the factory supplied by your transformation context instead. *)
     val updateBinary: node:ts_BinaryExpression -> left:ts_Expression -> right:ts_Expression -> ?operator:((((((((((((((((((((((((((((((((((((((((((((((((((((((((ts_SyntaxKind_PercentEqualsToken, ts_SyntaxKind_PercentToken, ts_SyntaxKind_PlusEqualsToken, ts_SyntaxKind_PlusToken, ts_SyntaxKind_QuestionQuestionEqualsToken, ts_SyntaxKind_QuestionQuestionToken, ts_SyntaxKind_SlashEqualsToken, ts_SyntaxKind_SlashToken) union8, ts_SyntaxKind_MinusToken) or_, ts_SyntaxKind_MinusEqualsToken) or_, ts_SyntaxKind_LessThanToken) or_, ts_SyntaxKind_LessThanLessThanToken) or_, ts_SyntaxKind_LessThanLessThanEqualsToken) or_, ts_SyntaxKind_LessThanEqualsToken) or_, ts_SyntaxKind_InstanceOfKeyword) or_, ts_SyntaxKind_InKeyword) or_, ts_SyntaxKind_GreaterThanToken) or_, ts_SyntaxKind_GreaterThanGreaterThanToken) or_, ts_SyntaxKind_GreaterThanGreaterThanGreaterThanToken) or_, ts_SyntaxKind_GreaterThanGreaterThanGreaterThanEqualsToken) or_, ts_SyntaxKind_GreaterThanGreaterThanEqualsToken) or_, ts_SyntaxKind_GreaterThanEqualsToken) or_, ts_SyntaxKind_ExclamationEqualsToken) or_, ts_SyntaxKind_ExclamationEqualsEqualsToken) or_, ts_SyntaxKind_EqualsToken) or_, ts_SyntaxKind_EqualsEqualsToken) or_, ts_SyntaxKind_EqualsEqualsEqualsToken) or_, ts_SyntaxKind_CommaToken) or_, ts_SyntaxKind_CaretToken) or_, ts_SyntaxKind_CaretEqualsToken) or_, ts_SyntaxKind_BarToken) or_, ts_SyntaxKind_BarEqualsToken) or_, ts_SyntaxKind_BarBarToken) or_, ts_SyntaxKind_BarBarEqualsToken) or_, ts_SyntaxKind_AsteriskToken) or_, ts_SyntaxKind_AsteriskEqualsToken) or_, ts_SyntaxKind_AsteriskAsteriskToken) or_, ts_SyntaxKind_AsteriskAsteriskEqualsToken) or_, ts_SyntaxKind_AmpersandToken) or_, ts_SyntaxKind_AmpersandEqualsToken) or_, ts_SyntaxKind_AmpersandAmpersandToken) or_, ts_SyntaxKind_AmpersandAmpersandEqualsToken) or_, ts_ShiftOperatorOrHigher) or_, ts_ShiftOperator) or_, ts_RelationalOperatorOrHigher) or_, ts_RelationalOperator) or_, ts_MultiplicativeOperatorOrHigher) or_, ts_MultiplicativeOperator) or_, ts_LogicalOperatorOrHigher) or_, ts_LogicalOperator) or_, ts_ExponentiationOperator) or_, ts_EqualityOperatorOrHigher) or_, ts_EqualityOperator) or_, ts_CompoundAssignmentOperator) or_, ts_BitwiseOperatorOrHigher) or_, ts_BitwiseOperator) or_, ts_BinaryOperatorToken) or_, ts_BinaryOperator) or_, ts_AssignmentOperatorOrHigher) or_, ts_AssignmentOperator) or_, ts_AdditiveOperatorOrHigher) or_, ts_AdditiveOperator) or_, ([`AmpersandAmpersandEqualsToken | `AmpersandAmpersandToken | `AmpersandEqualsToken | `AmpersandToken | `AsteriskAsteriskEqualsToken | `AsteriskAsteriskToken | `AsteriskEqualsToken | `AsteriskToken | `BarBarEqualsToken | `BarBarToken | `BarEqualsToken | `BarToken | `CaretEqualsToken | `CaretToken | `CommaToken | `EqualsEqualsEqualsToken | `EqualsEqualsToken | `EqualsToken | `ExclamationEqualsEqualsToken | `ExclamationEqualsToken | `GreaterThanEqualsToken | `GreaterThanGreaterThanEqualsToken | `GreaterThanGreaterThanGreaterThanEqualsToken | `GreaterThanGreaterThanGreaterThanToken | `GreaterThanGreaterThanToken | `GreaterThanToken | `InKeyword | `InstanceOfKeyword | `LessThanEqualsToken | `LessThanLessThanEqualsToken | `LessThanLessThanToken | `LessThanToken | `MinusEqualsToken | `MinusToken | `PercentEqualsToken | `PercentToken | `PlusEqualsToken | `PlusToken | `QuestionQuestionEqualsToken | `QuestionQuestionToken | `SlashEqualsToken | `SlashToken] [@js.enum])) or_enum -> unit -> ts_BinaryExpression [@@js.global "updateBinary"]
+    (** @deprecated Use `factory.createConditional` or the factory supplied by your transformation context instead. *)
     val createConditional: anonymous_interface_17 [@@js.global "createConditional"]
+    (** @deprecated Use `factory.createYield` or the factory supplied by your transformation context instead. *)
     val createYield: anonymous_interface_18 [@@js.global "createYield"]
+    (** @deprecated Use `factory.createClassExpression` or the factory supplied by your transformation context instead. *)
     val createClassExpression: modifiers:ts_Modifier list or_undefined -> name:ts_Identifier or_string or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> heritageClauses:ts_HeritageClause list or_undefined -> members:ts_ClassElement list -> ts_ClassExpression [@@js.global "createClassExpression"]
+    (** @deprecated Use `factory.updateClassExpression` or the factory supplied by your transformation context instead. *)
     val updateClassExpression: node:ts_ClassExpression -> modifiers:ts_Modifier list or_undefined -> name:ts_Identifier or_undefined -> typeParameters:ts_TypeParameterDeclaration list or_undefined -> heritageClauses:ts_HeritageClause list or_undefined -> members:ts_ClassElement list -> ts_ClassExpression [@@js.global "updateClassExpression"]
+    (** @deprecated Use `factory.createPropertySignature` or the factory supplied by your transformation context instead. *)
     val createPropertySignature: modifiers:ts_Modifier list or_undefined -> name:ts_PropertyName or_string -> questionToken:ts_QuestionToken or_undefined -> type_:ts_TypeNode or_undefined -> ?initializer_:ts_Expression or_undefined -> unit -> ts_PropertySignature [@@js.global "createPropertySignature"]
+    (** @deprecated Use `factory.updatePropertySignature` or the factory supplied by your transformation context instead. *)
     val updatePropertySignature: node:ts_PropertySignature -> modifiers:ts_Modifier list or_undefined -> name:ts_PropertyName -> questionToken:ts_QuestionToken or_undefined -> type_:ts_TypeNode or_undefined -> initializer_:ts_Expression or_undefined -> ts_PropertySignature [@@js.global "updatePropertySignature"]
+    (** @deprecated Use `factory.createExpressionWithTypeArguments` or the factory supplied by your transformation context instead. *)
     val createExpressionWithTypeArguments: typeArguments:ts_TypeNode list or_undefined -> expression:ts_Expression -> ts_ExpressionWithTypeArguments [@@js.global "createExpressionWithTypeArguments"]
+    (** @deprecated Use `factory.updateExpressionWithTypeArguments` or the factory supplied by your transformation context instead. *)
     val updateExpressionWithTypeArguments: node:ts_ExpressionWithTypeArguments -> typeArguments:ts_TypeNode list or_undefined -> expression:ts_Expression -> ts_ExpressionWithTypeArguments [@@js.global "updateExpressionWithTypeArguments"]
+    (** @deprecated Use `factory.createArrowFunction` or the factory supplied by your transformation context instead. *)
     val createArrowFunction: anonymous_interface_19 [@@js.global "createArrowFunction"]
+    (** @deprecated Use `factory.updateArrowFunction` or the factory supplied by your transformation context instead. *)
     val updateArrowFunction: anonymous_interface_21 [@@js.global "updateArrowFunction"]
+    (** @deprecated Use `factory.createVariableDeclaration` or the factory supplied by your transformation context instead. *)
     val createVariableDeclaration: anonymous_interface_20 [@@js.global "createVariableDeclaration"]
+    (** @deprecated Use `factory.updateVariableDeclaration` or the factory supplied by your transformation context instead. *)
     val updateVariableDeclaration: anonymous_interface_23 [@@js.global "updateVariableDeclaration"]
+    (** @deprecated Use `factory.createImportClause` or the factory supplied by your transformation context instead. *)
     val createImportClause: name:ts_Identifier or_undefined -> namedBindings:ts_NamedImportBindings or_undefined -> ?isTypeOnly:any -> unit -> ts_ImportClause [@@js.global "createImportClause"]
+    (** @deprecated Use `factory.updateImportClause` or the factory supplied by your transformation context instead. *)
     val updateImportClause: node:ts_ImportClause -> name:ts_Identifier or_undefined -> namedBindings:ts_NamedImportBindings or_undefined -> isTypeOnly:bool -> ts_ImportClause [@@js.global "updateImportClause"]
+    (** @deprecated Use `factory.createExportDeclaration` or the factory supplied by your transformation context instead. *)
     val createExportDeclaration: decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> exportClause:ts_NamedExportBindings or_undefined -> ?moduleSpecifier:ts_Expression or_undefined -> ?isTypeOnly:any -> unit -> ts_ExportDeclaration [@@js.global "createExportDeclaration"]
+    (** @deprecated Use `factory.updateExportDeclaration` or the factory supplied by your transformation context instead. *)
     val updateExportDeclaration: node:ts_ExportDeclaration -> decorators:ts_Decorator list or_undefined -> modifiers:ts_Modifier list or_undefined -> exportClause:ts_NamedExportBindings or_undefined -> moduleSpecifier:ts_Expression or_undefined -> isTypeOnly:bool -> ts_ExportDeclaration [@@js.global "updateExportDeclaration"]
+    (** @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead. *)
     val createJSDocParamTag: name:ts_EntityName -> isBracketed:bool -> ?typeExpression:ts_JSDocTypeExpression or_undefined -> ?comment:string or_undefined -> unit -> ts_JSDocParameterTag [@@js.global "createJSDocParamTag"]
+    (** @deprecated Use `factory.createComma` or the factory supplied by your transformation context instead. *)
     val createComma: left:ts_Expression -> right:ts_Expression -> ts_Expression [@@js.global "createComma"]
+    (** @deprecated Use `factory.createLessThan` or the factory supplied by your transformation context instead. *)
     val createLessThan: left:ts_Expression -> right:ts_Expression -> ts_Expression [@@js.global "createLessThan"]
+    (** @deprecated Use `factory.createAssignment` or the factory supplied by your transformation context instead. *)
     val createAssignment: left:ts_Expression -> right:ts_Expression -> ts_BinaryExpression [@@js.global "createAssignment"]
+    (** @deprecated Use `factory.createStrictEquality` or the factory supplied by your transformation context instead. *)
     val createStrictEquality: left:ts_Expression -> right:ts_Expression -> ts_BinaryExpression [@@js.global "createStrictEquality"]
+    (** @deprecated Use `factory.createStrictInequality` or the factory supplied by your transformation context instead. *)
     val createStrictInequality: left:ts_Expression -> right:ts_Expression -> ts_BinaryExpression [@@js.global "createStrictInequality"]
+    (** @deprecated Use `factory.createAdd` or the factory supplied by your transformation context instead. *)
     val createAdd: left:ts_Expression -> right:ts_Expression -> ts_BinaryExpression [@@js.global "createAdd"]
+    (** @deprecated Use `factory.createSubtract` or the factory supplied by your transformation context instead. *)
     val createSubtract: left:ts_Expression -> right:ts_Expression -> ts_BinaryExpression [@@js.global "createSubtract"]
+    (** @deprecated Use `factory.createLogicalAnd` or the factory supplied by your transformation context instead. *)
     val createLogicalAnd: left:ts_Expression -> right:ts_Expression -> ts_BinaryExpression [@@js.global "createLogicalAnd"]
+    (** @deprecated Use `factory.createLogicalOr` or the factory supplied by your transformation context instead. *)
     val createLogicalOr: left:ts_Expression -> right:ts_Expression -> ts_BinaryExpression [@@js.global "createLogicalOr"]
+    (** @deprecated Use `factory.createPostfixIncrement` or the factory supplied by your transformation context instead. *)
     val createPostfixIncrement: operand:ts_Expression -> ts_PostfixUnaryExpression [@@js.global "createPostfixIncrement"]
+    (** @deprecated Use `factory.createLogicalNot` or the factory supplied by your transformation context instead. *)
     val createLogicalNot: operand:ts_Expression -> ts_PrefixUnaryExpression [@@js.global "createLogicalNot"]
+    (** @deprecated Use an appropriate `factory` method instead. *)
     val createNode: kind:ts_SyntaxKind -> ?pos:any -> ?end_:any -> unit -> ts_Node [@@js.global "createNode"]
+    (**
+      Creates a shallow, memberwise clone of a node ~for mutation~ with its `pos`, `end`, and `parent` set.
+      
+      NOTE: It is unsafe to change any properties of a `Node` that relate to its AST children, as those changes won't be
+      captured with respect to transformations.
+      @deprecated Use an appropriate `factory.update...` method instead, use `setCommentRange` or `setSourceMapRange`, and avoid setting `parent`.
+    *)
     val getMutableClone: node:'T -> 'T [@@js.global "getMutableClone"]
+    (** @deprecated Use `isTypeAssertionExpression` instead. *)
     val isTypeAssertion: node:ts_Node -> bool [@@js.global "isTypeAssertion"]
   end
   val setTimeout: handler:(args:(any list [@js.variadic]) -> unit) -> timeout:float -> any [@@js.global "setTimeout"]
   val clearTimeout: handle:any -> unit [@@js.global "clearTimeout"]
-  
+  (* CommonJsExport ({ name = [ts]
+    fullName = [ts]
+    loc = line 7222, col 10 of node_modules/typescript/lib/typescript.d.ts }) *)
 end

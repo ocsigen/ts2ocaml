@@ -23,5 +23,7 @@ ts2ocaml "./node_modules/typescript/lib/lib.es2020*.d.ts" es2020
 ts2ocaml "./node_modules/typescript/lib/lib.esnext*.d.ts" esnext
 ts2ocaml "./node_modules/@types/node/*.d.ts" node
 ts2ocaml ./node_modules/typescript/lib/typescript.d.ts typescript
-ts2ocaml ./monaco.d.ts monaco
+ts2ocaml ./node_modules/monaco-editor/monaco.d.ts monaco
+ts2ocaml ./node_modules/@types/react/index.d.ts react
+ts2ocaml ./node_modules/@types/react-modal/index.d.ts react_modal
 

@@ -887,6 +887,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           // TODO: emit extends of type parameters
         | Value _
         | Module _
+        | Import _
         | TypeAlias { erased = true } -> None
         | Export _
         | UnknownStatement _
@@ -952,7 +953,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
             go renamer ({ ctx with currentNamespace = m.name :: ctx.currentNamespace}) stmt
           )
         )
-      if m.statements |> List.forall (function Export _ | UnknownStatement _ -> true | _ -> false) then
+      if m.statements |> List.forall (function Import _ | Export _ | UnknownStatement _ -> true | _ -> false) then
         moduleSig
           (Naming.moduleName m.name |> renamer.Rename "module")
           content
@@ -961,7 +962,10 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
           m.name
           (Naming.moduleName m.name |> renamer.Rename "module")
           content
-    | Export (_, _) -> empty // TODO
+    | Import i ->
+      commentStr (sprintf "%A" i) // TODO
+    | Export (e, _) ->
+      commentStr (sprintf "%A" e) // TODO
     | UnknownStatement (Some s, _) -> commentStr s
     | UnknownStatement (None, _) -> commentStr "unknown statement"
     | FloatingComment xs -> xs |> List.map emitComment |> concat newline |> comment

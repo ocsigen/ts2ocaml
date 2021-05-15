@@ -34,7 +34,7 @@ module FullName =
     let onFail () =
       match Context.ofParentNamespace ctx with Some ctx -> ofIdent ctx ident | None -> None
     match ctx.definitionsMap |> Trie.tryFind fullName with
-    | Some ((TypeAlias _ | ClassDef _ | EnumDef _ | Module _ | Value _) :: _) -> Some fullName
+    | Some ((TypeAlias _ | ClassDef _ | EnumDef _ | Module _ | Value _ | Import _) :: _) -> Some fullName
     | None when List.length ident.name > 1 ->
       let possibleEnumName = nsRev @ (ident.name |> List.take (List.length ident.name - 1))
       let possibleEnumCaseName = ident.name |> List.last
@@ -49,7 +49,7 @@ module FullName =
     | _ -> onFail ()
 
   let lookup (ctx: Context) (fullName: string list) : FullNameLookupResult list =
-    let conv = function
+    let conv name = function
       | TypeAlias a -> AliasName a |> Some
       | ClassDef c -> ClassName c |> Some
       | EnumDef e -> EnumName e |> Some
@@ -58,11 +58,11 @@ module FullName =
       | _ -> None
     let result = ctx.definitionsMap |> Trie.tryFind fullName
     [
+      let itemName = List.last fullName
       match result with
-      | Some xs -> yield! List.choose conv xs
+      | Some xs -> yield! List.choose (conv itemName) xs
       | None -> ()
       let containerName = fullName |> List.take (List.length fullName - 1)
-      let itemName = List.last fullName
       let containerResult = ctx.definitionsMap |> Trie.tryFind containerName
       let notFound fmt =
         Printf.ksprintf (fun s -> NotFound (Some s)) fmt
@@ -610,6 +610,7 @@ module Statement =
       | Value     { name = name } ->
         trie |> Trie.addOrUpdate (ns @ [name]) [s] List.append
       | ClassDef  { name = None } -> failwith "impossible_extractNamedDefinitions"
+      | Import _ -> trie // TODO: treat imported definitions
       | Module m ->
         let ns' = ns @ [m.name]
         m.statements |> List.fold (go ns') trie |> Trie.addOrUpdate ns' [Module m] List.append
@@ -635,7 +636,7 @@ module Statement =
       | EnumDef e ->
         e.cases |> Seq.choose (fun c -> c.value)
                 |> Seq.collect (fun l -> Type.findTypes pred (TypeLiteral l))
-      | Export _ | UnknownStatement _ | FloatingComment _ -> Seq.empty
+      | Import _ | Export _ | UnknownStatement _ | FloatingComment _ -> Seq.empty
     stmts |> Seq.collect go
 
   let getTypeLiterals stmts =
@@ -670,6 +671,7 @@ module Statement =
       | ClassDef c ->
         ClassDef (Type.mapInClass mapping ctx c)
       | EnumDef e -> EnumDef e
+      | Import i -> Import i
       | Export (e, c) -> Export (e, c)
       | Value v ->
         Value {
@@ -740,6 +742,7 @@ module Ident =
       | ClassDef c ->
         ClassDef (Type.mapInClass (mapInType mapType) ctx c)
       | EnumDef e -> EnumDef e
+      | Import i -> Import i
       | Export (e, c) -> Export (mapExport ctx e, c)
       | Value v ->
         Value {
@@ -774,7 +777,7 @@ module Ident =
         | CommonJsExport i -> CommonJsExport (resolve ctx i)
         | ES6DefaultExport i -> ES6DefaultExport (resolve ctx i)
         | ES6Export xs -> ES6Export (xs |> List.map (fun x -> {| x with target = resolve ctx x.target |}))
-        | ExportAsNamespace ns -> ExportAsNamespace ns
+        | NamespaceExport ns -> NamespaceExport ns
       ) ctx stmts
 
 type TypeofableType = TNumber | TString | TBoolean | TSymbol | TBigInt

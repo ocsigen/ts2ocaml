@@ -21,7 +21,7 @@ type ICompilerHost =
 
 let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
     let options = jsOptions<Ts.CompilerOptions>(fun o ->
-      o.target <- Some Ts.ScriptTarget.ES2015
+      o.target <- Some Ts.ScriptTarget.ESNext
       o.``module`` <- Some Ts.ModuleKind.CommonJS
       o.incremental <- Some false
       o.checkJs <- Some true
@@ -105,6 +105,7 @@ let main argv =
           hasNoDefaultLib = src.hasNoDefaultLib
           references = references })
 
+    // srcs |> List.iter (fun x -> eprintfn "refs: %A" x.references)
     let ctx, result = Typer.runAll srcs
     Writer.emitAll ctx result |> Text.toString 2 |> printfn "%s"
 

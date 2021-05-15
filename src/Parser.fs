@@ -621,7 +621,7 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
     match kind with
     | Kind.NamespaceExport ->
       let ne = bindings |> box :?> Ts.NamespaceExport
-      Some (Export (ExportAsNamespace ne.name.text, comments))
+      Some (Export (NamespaceExport ne.name.text, comments))
     | Kind.NamedExports ->
       let nes = bindings |> box :?> Ts.NamedExports
       let elems =
@@ -635,6 +635,60 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
       Some (Export (ES6Export elems, comments))
     | _ ->
       nodeWarn e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
+
+let readNamespaceExportDeclaration (ctx: ParserContext) (e: Ts.NamespaceExportDeclaration) : Statement =
+  Export (NamespaceExport e.name.text, readCommentsForNamedDeclaration ctx e)
+
+let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclaration) : Statement option =
+  let comments = readCommentsForNamedDeclaration ctx i
+  match (!!i.moduleReference : Ts.Node).kind with
+  | Kind.Identifier | Kind.QualifiedName ->
+    nodeWarn i "import assignment to an identifier is not supported"; None
+  | Kind.ExternalModuleReference ->
+    let m : Ts.ExternalModuleReference = !!i.moduleReference
+    match (!!m.expression : Ts.Node).kind with
+    | Kind.StringLiteral ->
+      let moduleSpecifier = (!!m.expression : Ts.StringLiteral).text
+      Import {
+        comments = comments;
+        isTypeOnly = i.isTypeOnly;
+        isExported = getExported i.modifiers;
+        moduleSpecifier = moduleSpecifier;
+        clause = NamespaceImport (false, i.name.text)
+      } |> Some
+    | kind ->
+      nodeWarn i "invalid kind '%s' for module specifier" (Enum.pp kind); None
+  | kind ->
+    nodeWarn i "invalid kind '%s' for import" (Enum.pp kind); None
+
+let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : Statement option =
+  match i.importClause with
+  | None -> nodeWarn i "side-effect only import will be ignored"; None
+  | Some c ->
+    match i.moduleSpecifier.kind with
+    | Kind.StringLiteral ->
+      let comments = readCommentsForNamedDeclaration ctx c
+      let moduleSpecifier = (!!i.moduleSpecifier : Ts.StringLiteral).text
+      let inline create clause =
+        Some (Import { comments = comments; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; moduleSpecifier = moduleSpecifier; clause = clause })
+      match c.name, c.namedBindings with
+      | None, None -> create ES6WildcardImport
+      | None, Some b when (!!b : Ts.Node).kind = Kind.NamespaceImport ->
+        let n = (!!c.namedBindings : Ts.NamespaceImport)
+        create (NamespaceImport (true, n.name.text))
+      | _, Some b when (!!b : Ts.Node).kind = Kind.NamedImports ->
+        let n = (!!c.namedBindings : Ts.NamedImports)
+        let defaultName = c.name |> Option.map (fun i -> i.text)
+        let bindings =
+          n.elements
+          |> Seq.toList
+          |> List.map (fun e -> {| name = e.name.text; renameAs = e.propertyName |> Option.map (fun i -> i.text) |})
+        create (ES6Import (defaultName, bindings))
+      | _, _ ->
+        nodeWarn i "invalid import statement"; None
+    | kind ->
+      nodeWarn i "invalid kind '%s' for module specifier" (Enum.pp kind); None
+
 
 let readJSDocImpl (ctx: ParserContext) (doc: Ts.JSDoc) : Comment list =
   let desc =
@@ -695,6 +749,9 @@ and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
   | Kind.FunctionDeclaration -> [readFunction ctx (stmt :?> _) |> Option.map Value |> Option.defaultWith onError]
   | Kind.ExportAssignment -> [readExportAssignment ctx (stmt :?> _) |> Option.defaultWith onError]
   | Kind.ExportDeclaration -> [readExportDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
+  | Kind.NamespaceExportDeclaration -> [readNamespaceExportDeclaration ctx (stmt :?> _)]
+  | Kind.ImportEqualsDeclaration -> [readImportEqualsDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
+  | Kind.ImportDeclaration -> [readImportDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
   | _ ->
     nodeWarn stmt "skipping unsupported Statement kind: %s" (Enum.pp stmt.kind)
     [onError ()]

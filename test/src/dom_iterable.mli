@@ -3,70 +3,72 @@
   [@@@ocaml.warning "-7-11-32-33-39"]
 ]
 open Ts2ocaml_baselib
-(* 
-  unknown identifiers:
-  - Account
-  - ArrayBuffer
-  - Attr
-  - BufferSource
-  - CSSRule
-  - CSSStyleSheet
-  - ClientRect
-  - DOMPoint
-  - DOMRect
-  - DataTransferItem
-  - DataView
-  - Element
-  - File
-  - Float32Array
-  - Float64Array
-  - FormDataEntryValue
-  - GLboolean
-  - GLenum
-  - GLfloat
-  - GLint
-  - GLsizei
-  - GLuint
-  - IDBIndex
-  - IDBIndexParameters
-  - IDBTransaction
-  - IDBTransactionMode
-  - IIRFilterNode
-  - Int16Array
-  - Int32Array
-  - Int8Array
-  - Iterable<T1>
-  - IterableIterator<T1>
-  - MediaKeyStatus
-  - MediaKeySystemAccess
-  - MediaKeySystemConfiguration
-  - MimeType
-  - Node
-  - PeriodicWave
-  - PeriodicWaveConstraints
-  - Promise<T1>
-  - RTCRtpCodecCapability
-  - ReadonlyMap<T1, T2>
-  - RequestInfo
-  - SVGLength
-  - SVGNumber
-  - ScopedCredentialInfo
-  - ScopedCredentialOptions
-  - ScopedCredentialParameters
-  - SourceBuffer
-  - SpeechGrammar
-  - SpeechRecognitionAlternative
-  - TextTrack
-  - TextTrackCue
-  - Touch
-  - Uint16Array
-  - Uint32Array
-  - Uint8Array
-  - Uint8ClampedArray
-  - VRLayer
-  - WebGLProgram
-  - WebGLUniformLocation
- *)
+(*
+  
+    unknown identifiers:
+    - Account
+    - ArrayBuffer
+    - Attr
+    - BufferSource
+    - CSSRule
+    - CSSStyleSheet
+    - ClientRect
+    - DOMPoint
+    - DOMRect
+    - DataTransferItem
+    - DataView
+    - Element
+    - File
+    - Float32Array
+    - Float64Array
+    - FormDataEntryValue
+    - GLboolean
+    - GLenum
+    - GLfloat
+    - GLint
+    - GLsizei
+    - GLuint
+    - IDBIndex
+    - IDBIndexParameters
+    - IDBTransaction
+    - IDBTransactionMode
+    - IIRFilterNode
+    - Int16Array
+    - Int32Array
+    - Int8Array
+    - Iterable<T1>
+    - IterableIterator<T1>
+    - MediaKeyStatus
+    - MediaKeySystemAccess
+    - MediaKeySystemConfiguration
+    - MimeType
+    - Node
+    - PeriodicWave
+    - PeriodicWaveConstraints
+    - Promise<T1>
+    - RTCRtpCodecCapability
+    - ReadonlyMap<T1, T2>
+    - RequestInfo
+    - SVGLength
+    - SVGNumber
+    - ScopedCredentialInfo
+    - ScopedCredentialOptions
+    - ScopedCredentialParameters
+    - SourceBuffer
+    - SpeechGrammar
+    - SpeechRecognitionAlternative
+    - TextTrack
+    - TextTrackCue
+    - Touch
+    - Uint16Array
+    - Uint32Array
+    - Uint8Array
+    - Uint8ClampedArray
+    - VRLayer
+    - WebGLProgram
+    - WebGLUniformLocation
+
+*)
 [@@@js.stop]
 module type Missing = sig
   module Account : sig
@@ -934,8 +936,11 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val _Symbol_iterator_: t -> (string * FormDataEntryValue.t_0) IterableIterator.t_1 [@@js.call "[Symbol.iterator]"]
+    (** Returns an array of key, value pairs for every entry in the list. *)
     val entries: t -> (string * FormDataEntryValue.t_0) IterableIterator.t_1 [@@js.call "entries"]
+    (** Returns a list of keys in the list. *)
     val keys: t -> string IterableIterator.t_1 [@@js.call "keys"]
+    (** Returns a list of values in the list. *)
     val values: t -> FormDataEntryValue.t_0 IterableIterator.t_1 [@@js.call "values"]
   end
   module[@js.scope "HTMLAllCollection"] HTMLAllCollection : sig
@@ -991,8 +996,11 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val _Symbol_iterator_: t -> (string * string) IterableIterator.t_1 [@@js.call "[Symbol.iterator]"]
+    (** Returns an iterator allowing to go through all key/value pairs contained in this object. *)
     val entries: t -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
+    (** Returns an iterator allowing to go through all keys of the key/value pairs contained in this object. *)
     val keys: t -> string IterableIterator.t_1 [@@js.call "keys"]
+    (** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. *)
     val values: t -> string IterableIterator.t_1 [@@js.call "values"]
   end
   module[@js.scope "IDBDatabase"] IDBDatabase : sig
@@ -1002,6 +1010,7 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
     val transaction: t -> storeNames:string Iterable.t_1 or_string -> ?mode:IDBTransactionMode.t_0 -> unit -> IDBTransaction.t_0 [@@js.call "transaction"]
   end
   module[@js.scope "IDBObjectStore"] IDBObjectStore : sig
@@ -1011,6 +1020,11 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (**
+      Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
+      
+      Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
+    *)
     val createIndex: t -> name:string -> keyPath:string Iterable.t_1 or_string -> ?options:IDBIndexParameters.t_0 -> unit -> IDBIndex.t_0 [@@js.call "createIndex"]
   end
   module[@js.scope "MediaKeyStatusMap"] MediaKeyStatusMap : sig
@@ -1069,8 +1083,11 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val _Symbol_iterator_: t -> Node.t_0 IterableIterator.t_1 [@@js.call "[Symbol.iterator]"]
+    (** Returns an array of key, value pairs for every entry in the list. *)
     val entries: t -> (float * Node.t_0) IterableIterator.t_1 [@@js.call "entries"]
+    (** Returns an list of keys in the list. *)
     val keys: t -> float IterableIterator.t_1 [@@js.call "keys"]
+    (** Returns an list of values in the list. *)
     val values: t -> Node.t_0 IterableIterator.t_1 [@@js.call "values"]
   end
   module[@js.scope "NodeListOf"] NodeListOf : sig
@@ -1081,8 +1098,11 @@ module Make (M: Missing) : sig
     val t_1_to_js: ('TNode -> Ojs.t) -> 'TNode t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'TNode) -> Ojs.t -> 'TNode t_1
     val _Symbol_iterator_: 'TNode t -> 'TNode IterableIterator.t_1 [@@js.call "[Symbol.iterator]"]
+    (** Returns an array of key, value pairs for every entry in the list. *)
     val entries: 'TNode t -> (float * 'TNode) IterableIterator.t_1 [@@js.call "entries"]
+    (** Returns an list of keys in the list. *)
     val keys: 'TNode t -> float IterableIterator.t_1 [@@js.call "keys"]
+    (** Returns an list of values in the list. *)
     val values: 'TNode t -> 'TNode IterableIterator.t_1 [@@js.call "values"]
   end
   module[@js.scope "Plugin"] Plugin : sig
@@ -1237,8 +1257,11 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val _Symbol_iterator_: t -> (string * string) IterableIterator.t_1 [@@js.call "[Symbol.iterator]"]
+    (** Returns an array of key, value pairs for every entry in the search params. *)
     val entries: t -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
+    (** Returns a list of keys in the search params. *)
     val keys: t -> string IterableIterator.t_1 [@@js.call "keys"]
+    (** Returns a list of values in the search params. *)
     val values: t -> string IterableIterator.t_1 [@@js.call "values"]
   end
   module[@js.scope "VRDisplay"] VRDisplay : sig

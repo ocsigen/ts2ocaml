@@ -45,6 +45,11 @@ module[@js.scope "Array"] Array : sig
   type 'T t_1 = 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: 'T t -> searchElement:'T -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
   val to_ml: 'T t -> 'T list [@@js.cast]
   val of_ml: 'T list -> 'T t [@@js.cast]
@@ -56,6 +61,11 @@ module[@js.scope "ReadonlyArray"] ReadonlyArray : sig
   type 'T t_1 = 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: 'T t -> searchElement:'T -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
   val to_ml: 'T t -> 'T list [@@js.cast]
   val of_ml: 'T list -> 'T t [@@js.cast]
@@ -67,6 +77,11 @@ module[@js.scope "Int8Array"] Int8Array : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: t -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
 end
 module[@js.scope "Uint8Array"] Uint8Array : sig
@@ -76,6 +91,11 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: t -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
 end
 module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
@@ -85,6 +105,11 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: t -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
 end
 module[@js.scope "Int16Array"] Int16Array : sig
@@ -94,6 +119,11 @@ module[@js.scope "Int16Array"] Int16Array : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: t -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
 end
 module[@js.scope "Uint16Array"] Uint16Array : sig
@@ -103,6 +133,11 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: t -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
 end
 module[@js.scope "Int32Array"] Int32Array : sig
@@ -112,6 +147,11 @@ module[@js.scope "Int32Array"] Int32Array : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: t -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
 end
 module[@js.scope "Uint32Array"] Uint32Array : sig
@@ -121,6 +161,11 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: t -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
 end
 module[@js.scope "Float32Array"] Float32Array : sig
@@ -130,6 +175,11 @@ module[@js.scope "Float32Array"] Float32Array : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: t -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
 end
 module[@js.scope "Float64Array"] Float64Array : sig
@@ -139,5 +189,10 @@ module[@js.scope "Float64Array"] Float64Array : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (**
+    Determines whether an array includes a certain element, returning true or false as appropriate.
+    @param searchElement The element to search for.
+    @param fromIndex The position in this array at which to begin searching for searchElement.
+  *)
   val includes: t -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
 end

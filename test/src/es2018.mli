@@ -3,11 +3,13 @@
   [@@@ocaml.warning "-7-11-32-33-39"]
 ]
 open Ts2ocaml_baselib
-(* 
-  unknown identifiers:
-  - IteratorResult<T1, T2>
-  - PromiseLike<T1>
- *)
+(*
+  
+    unknown identifiers:
+    - IteratorResult<T1, T2>
+    - PromiseLike<T1>
+
+*)
 [@@@js.stop]
 module type Missing = sig
   module IteratorResult : sig
@@ -132,10 +134,21 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (**
+      Creates a new AsyncGenerator object.
+      @param args A list of arguments the function accepts.
+    *)
     val create: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _AsyncGenerator [@@js.apply_newable]
+    (**
+      Creates a new AsyncGenerator object.
+      @param args A list of arguments the function accepts.
+    *)
     val apply: t -> args:(any list [@js.variadic]) -> (unknown, any, unknown) _AsyncGenerator [@@js.apply]
+    (** The length of the arguments. *)
     val get_length: t -> float [@@js.get "length"]
+    (** Returns the name of the function. *)
     val get_name: t -> string [@@js.get "name"]
+    (** A reference to the prototype. *)
     val get_prototype: t -> (unknown, any, unknown) _AsyncGenerator [@@js.get "prototype"]
   end
   module[@js.scope "AsyncGeneratorFunctionConstructor"] AsyncGeneratorFunctionConstructor : sig
@@ -145,10 +158,21 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (**
+      Creates a new AsyncGenerator function.
+      @param args A list of arguments the function accepts.
+    *)
     val create: t -> args:(string list [@js.variadic]) -> _AsyncGeneratorFunction [@@js.apply_newable]
+    (**
+      Creates a new AsyncGenerator function.
+      @param args A list of arguments the function accepts.
+    *)
     val apply: t -> args:(string list [@js.variadic]) -> _AsyncGeneratorFunction [@@js.apply]
+    (** The length of the arguments. *)
     val get_length: t -> float [@@js.get "length"]
+    (** Returns the name of the function. *)
     val get_name: t -> string [@@js.get "name"]
+    (** A reference to the prototype. *)
     val get_prototype: t -> _AsyncGeneratorFunction [@@js.get "prototype"]
   end
   module[@js.scope "SymbolConstructor"] SymbolConstructor : sig
@@ -158,6 +182,10 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (**
+      A method that returns the default async iterator for an object. Called by the semantics of
+      the for-await-of statement.
+    *)
     val get_asyncIterator: t -> symbol [@@js.get "asyncIterator"]
   end
   module[@js.scope "AsyncIterator"] AsyncIterator : sig
@@ -265,6 +293,7 @@ module Make (M: Missing) : sig
     end
     val pluralRules: anonymous_interface_1 [@@js.global "PluralRules"]
   end
+  (** Represents the completion of an asynchronous operation *)
   module[@js.scope "Promise"] Promise : sig
     type 'T t = 'T _Promise
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
@@ -272,6 +301,12 @@ module Make (M: Missing) : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    (**
+      Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+      resolved value cannot be modified from the callback.
+      @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+      @return A Promise for the completion of the callback.
+    *)
     val finally: 'T t -> ?onfinally:(unit -> unit) or_null_or_undefined -> unit -> 'T t [@@js.call "finally"]
   end
   module[@js.scope "RegExpMatchArray"] RegExpMatchArray : sig
@@ -301,6 +336,10 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (**
+      Returns a Boolean value indicating the state of the dotAll flag (s) used with a regular expression.
+      Default is false. Read-only.
+    *)
     val get_dotAll: t -> bool [@@js.get "dotAll"]
   end
 end

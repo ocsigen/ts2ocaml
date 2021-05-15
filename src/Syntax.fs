@@ -203,6 +203,7 @@ and Statement =
   | EnumDef of Enum
   | Module of Module
   | Value of Value
+  | Import of Import
   | Export of Export * Comment list
   | UnknownStatement of string option * Comment list
   | FloatingComment of Comment list
@@ -213,6 +214,7 @@ and Statement =
       | TypeAlias ta -> ta.comments | ClassDef c -> c.comments
       | EnumDef e -> e.comments | Module m -> m.comments
       | Value v -> v.comments
+      | Import i -> i.comments
       | Export (_, c) | UnknownStatement (_, c) | FloatingComment c -> c
 
 and Module = {
@@ -275,7 +277,9 @@ and Export =
   /// ```ts
   /// export as namespace ns;
   /// ```
-  /// use the followings to import:
+  /// this form of export is only meant to be used from script files, in which you can access to it as a global variable `ns`.
+  ///
+  /// use the followings to import if you absolutely need:
   ///
   /// ES6:
   /// ```js
@@ -286,7 +290,7 @@ and Export =
   /// ```js
   ///   const whatever = require("path");
   /// ```
-  | ExportAsNamespace of ns:string
+  | NamespaceExport of ns:string
 
 and [<RequireQualifiedAccess>] Exported =
   | No
@@ -302,6 +306,34 @@ and [<RequireQualifiedAccess>] Exported =
   /// declare class Foo { .. }
   /// ```
   | Declared
+
+and Import = {
+  comments: Comment list
+  isTypeOnly: bool
+  isExported: Exported
+  moduleSpecifier: string
+  clause: ImportClause
+} with
+  interface ICommented with
+    member this.getComments() = this.comments
+
+and ImportClause =
+  /// one of:
+  /// ```ts
+  /// import name = require("moduleSpecifier");
+  ///
+  /// import * as name from 'moduleSpecifier'
+  /// ```
+  | NamespaceImport of isES6Import:bool * name:string
+  /// ES6 namespace import but without a name.
+  /// ```ts
+  /// import * from 'moduleSpecifier'
+  /// ```
+  | ES6WildcardImport
+  /// ```ts
+  /// import defaultName, { name1, name2 as renameAs, .. } from 'moduleSpecifier'
+  /// ```
+  | ES6Import of defaultName:string option * bindings: {| name: string; renameAs: string option |} list
 
 type Reference =
   | FileReference of string

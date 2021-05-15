@@ -3,13 +3,15 @@
   [@@@ocaml.warning "-7-11-32-33-39"]
 ]
 open Ts2ocaml_baselib
-(* 
-  unknown identifiers:
-  - Error
-  - Iterable<T1>
-  - Promise<T1>
-  - PromiseLike<T1>
- *)
+(*
+  
+    unknown identifiers:
+    - Error
+    - Iterable<T1>
+    - Promise<T1>
+    - PromiseLike<T1>
+
+*)
 [@@@js.stop]
 module type Missing = sig
   module Error : sig
@@ -147,6 +149,7 @@ module Make (M: Missing) : sig
     val get_prototype: t -> _AggregateError [@@js.get "prototype"]
   end
   val aggregateError: _AggregateErrorConstructor [@@js.global "AggregateError"]
+  (** Represents the completion of an asynchronous operation *)
   module[@js.scope "PromiseConstructor"] PromiseConstructor : sig
     type t = _PromiseConstructor
     val t_to_js: t -> Ojs.t
@@ -154,6 +157,11 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (**
+      The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+      @param values An array or iterable of Promises.
+      @return A new Promise.
+    *)
     val any: t -> values:(('T, 'T PromiseLike.t_1) union2 Iterable.t_1, ('T, 'T PromiseLike.t_1) union2) or_array -> 'T Promise.t_1 [@@js.call "any"]
   end
   module[@js.scope "String"] String : sig
@@ -163,7 +171,17 @@ module Make (M: Missing) : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    (**
+      Replace all instances of a substring in a string, using a regular expression or search string.
+      @param searchValue A string to search for.
+      @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+    *)
     val replaceAll: t -> searchValue:regexp or_string -> replaceValue:string -> string [@@js.call "replaceAll"]
+    (**
+      Replace all instances of a substring in a string, using a regular expression or search string.
+      @param searchValue A string to search for.
+      @param replacer A function that returns the replacement text.
+    *)
     val replaceAll': t -> searchValue:regexp or_string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replaceAll"]
     val to_ml: t -> string [@@js.cast]
     val of_ml: string -> t [@@js.cast]
@@ -176,6 +194,10 @@ module Make (M: Missing) : sig
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
     val get__Symbol_toStringTag_: 'T t -> ([`L_s1_WeakRef[@js "WeakRef"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
+    (**
+      Returns the WeakRef instance's target object, or undefined if the target object has been
+      reclaimed.
+    *)
     val deref: 'T t -> 'T or_undefined [@@js.call "deref"]
   end
   module[@js.scope "WeakRefConstructor"] WeakRefConstructor : sig
@@ -186,6 +208,10 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> any _WeakRef [@@js.get "prototype"]
+    (**
+      Creates a WeakRef instance for the given target object.
+      @param target The target object for the WeakRef instance.
+    *)
     val create: t -> ?target:'T -> unit -> 'T _WeakRef [@@js.apply_newable]
   end
   val weakRef: _WeakRefConstructor [@@js.global "WeakRef"]
@@ -197,7 +223,21 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get__Symbol_toStringTag_: t -> ([`L_s0_FinalizationRegistry[@js "FinalizationRegistry"]] [@js.enum]) [@@js.get "[Symbol.toStringTag]"]
+    (**
+      Registers an object with the registry.
+      @param target The target object to register.
+      @param heldValue The value to pass to the finalizer for this object. This cannot be the
+      target object.
+      @param unregisterToken The token to pass to the unregister method to unregister the target
+      object. If provided (and not undefined), this must be an object. If not provided, the target
+      cannot be unregistered.
+    *)
     val register: t -> target:untyped_object -> heldValue:any -> ?unregisterToken:untyped_object -> unit -> unit [@@js.call "register"]
+    (**
+      Unregisters an object from the registry.
+      @param unregisterToken The token that was used as the unregisterToken argument when calling
+      register to register the target object.
+    *)
     val unregister: t -> unregisterToken:untyped_object -> unit [@@js.call "unregister"]
   end
   module[@js.scope "FinalizationRegistryConstructor"] FinalizationRegistryConstructor : sig
@@ -208,6 +248,10 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get_prototype: t -> _FinalizationRegistry [@@js.get "prototype"]
+    (**
+      Creates a finalization registry with an associated cleanup callback
+      @param cleanupCallback The callback to call after an object in the registry has been reclaimed.
+    *)
     val create: t -> cleanupCallback:(heldValue:any -> unit) -> _FinalizationRegistry [@@js.apply_newable]
   end
   val finalizationRegistry: _FinalizationRegistryConstructor [@@js.global "FinalizationRegistry"]

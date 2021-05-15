@@ -61,7 +61,7 @@
   (targets esnext.ml)
   (deps esnext.mli)
   (action (run %{bin:gen_js_api} %{deps})))
- 
+
 (rule
   (targets dom.ml)
   (deps dom.mli)
@@ -73,8 +73,23 @@
   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule
+  (targets node.ml)
+  (deps node.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
   (targets monaco.ml)
   (deps monaco.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets react.ml)
+  (deps react.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets react_modal.ml)
+  (deps react_modal.mli)
   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule

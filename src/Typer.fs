@@ -25,6 +25,7 @@ type FullNameLookupResult =
   | ModuleName of Module
   | ValueName of Value
   | MemberName of MemberAttribute * Member
+  | ImportedName of string * Set<Kind> option * Import
   | NotFound of string option
 
 module FullName =
@@ -55,6 +56,20 @@ module FullName =
       | EnumDef e -> EnumName e |> Some
       | Module m -> ModuleName m |> Some
       | Value v -> ValueName v |> Some
+      | Import i ->
+        match i.clause with
+        | NamespaceImport ni when ni.name = name -> ImportedName (ni.name, ni.kind, i) |> Some
+        | ES6Import x ->
+          match x.defaultImport with
+          | Some di when di.name = name -> ImportedName (name, di.kind, i) |> Some
+          | _ ->
+            x.bindings
+            |> List.tryFind (fun b ->
+              match b.renameAs with
+              | Some renamed -> renamed = name
+              | None -> b.name = name)
+            |> Option.map (fun b -> ImportedName (name, b.kind, i))
+        | _ -> None
       | _ -> None
     let result = ctx.definitionsMap |> Trie.tryFind fullName
     [
@@ -115,7 +130,17 @@ module FullName =
     lookup ctx fullName
     |> List.exists (function
       | AliasName _ | ClassName _ | EnumName _ | EnumCaseName _ -> true
-      | ModuleName _ | ValueName _ | MemberName _ | NotFound _ -> false)
+      | ModuleName _ | ValueName _ | MemberName _ | NotFound _ -> false
+      | ImportedName (n, kind, i) ->
+        if i.isTypeOnly then true
+        else
+          match kind with
+          | Some k -> k |> Set.contains Kind.Type
+          | None ->
+            match i.clause with
+            | NamespaceImport _ -> false
+            | _ -> n |> Naming.isCase Naming.PascalCase
+      )
 
 module Type =
   let rec mapInTypeParam mapping (ctx: 'Context) (tp: TypeParam) =
@@ -610,7 +635,23 @@ module Statement =
       | Value     { name = name } ->
         trie |> Trie.addOrUpdate (ns @ [name]) [s] List.append
       | ClassDef  { name = None } -> failwith "impossible_extractNamedDefinitions"
-      | Import _ -> trie // TODO: treat imported definitions
+      | Import i ->
+        (*
+        match i.clause with
+        | NamespaceImport i -> trie |> Trie.addOrUpdate (ns @ [i.name]) [s] List.append
+        | ES6WildcardImport -> trie
+        | ES6Import i ->
+          let trie =
+            match i.defaultImport with
+            | Some x -> trie |> Trie.addOrUpdate (ns @ [x.name]) [s] List.append
+            | None -> trie
+          i.bindings |> List.fold (fun state b ->
+            match b.renameAs with
+            | Some name -> state |> Trie.addOrUpdate (ns @ [name]) [s] List.append
+            | None -> state |> Trie.addOrUpdate (ns @ [b.name]) [s] List.append
+          ) trie
+        *)
+        trie
       | Module m ->
         let ns' = ns @ [m.name]
         m.statements |> List.fold (go ns') trie |> Trie.addOrUpdate ns' [Module m] List.append

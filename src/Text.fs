@@ -1,28 +1,5 @@
 module Text
 
-#if FABLE_COMPILER
-type StringBuilder (s: string) =
-  let mutable s = s
-  new () = StringBuilder ("")
-  member __.Length = s.Length
-  member sb.Append (s': string) = s <- s + s'; sb
-  member inline sb.Append (c: char) = sb.Append (string c)
-  member inline sb.Append (num: ^n) = sb.Append (sprintf "%d" num)
-  member inline sb.Append (o: obj) = sb.Append (string o)
-  member inline sb.AppendLine () = sb.Append System.Environment.NewLine
-  member inline sb.AppendLine (s: string) = (sb.Append (s)).AppendLine()
-  member sb.Remove (startIndex: int, length: int) =
-    if startIndex + length >= s.Length
-    then s <- s.Substring (0, startIndex)
-    else s <- s.Substring (0, startIndex) + s.Substring (startIndex + length)
-    sb
-  member inline __.ToString (startIndex: int, length: int) =
-    s.Substring (startIndex, length)
-  override __.ToString() = s
-#else
-type StringBuilder = System.Text.StringBuilder
-#endif
-
 [<StructuredFormatDisplay("{AsString}")>]
 type text =
   private

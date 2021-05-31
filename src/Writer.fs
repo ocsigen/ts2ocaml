@@ -244,7 +244,9 @@ module Naming =
   let valueName (name: string) =
     let name = removeInvalidChars name
     let result =
-      if Char.IsUpper name.[0] then
+      if String.forall (fun c -> Char.IsLower c |> not) name then
+        name.ToLowerInvariant()
+      else if Char.IsUpper name.[0] then
         sprintf "%c%s" (Char.ToLower name.[0]) name.[1..]
       else name
     if reservedNames |> Set.contains result then result + "_" else result
@@ -885,9 +887,9 @@ let emitFlattenedDefinitions (ctx: Context) : text =
           let typrm = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
           tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ ctx target |> Some
           // TODO: emit extends of type parameters
+        | Import _
         | Value _
         | Module _
-        | Import _
         | TypeAlias { erased = true } -> None
         | Export _
         | UnknownStatement _

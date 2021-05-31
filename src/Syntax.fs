@@ -61,6 +61,13 @@ type Comment =
 type ICommented =
   abstract getComments: unit -> Comment list
 
+type [<RequireQualifiedAccess>] Kind =
+  | Value
+  | Type
+  | ClassLike
+  | Module
+  | Enum
+
 type PrimType =
   | String | Bool | Number
   | Any | Void | Unknown
@@ -316,6 +323,15 @@ and Import = {
 } with
   interface ICommented with
     member this.getComments() = this.comments
+  member this.Identifiers =
+    match this.clause with
+    | NamespaceImport i -> [{| name = i.name; kind = i.kind |}]
+    | ES6WildcardImport -> []
+    | ES6Import i ->
+      let xs = i.bindings |> List.map (fun x -> {| name = (match x.renameAs with Some name -> name | None -> x.name); kind = x.kind |})
+      match i.defaultImport with
+      | None -> xs
+      | Some x -> x :: xs
 
 and ImportClause =
   /// one of:
@@ -324,16 +340,20 @@ and ImportClause =
   ///
   /// import * as name from 'moduleSpecifier'
   /// ```
-  | NamespaceImport of isES6Import:bool * name:string
+  | NamespaceImport of {| name: string; kind: Set<Kind> option; isES6Import: bool |}
   /// ES6 namespace import but without a name.
   /// ```ts
   /// import * from 'moduleSpecifier'
   /// ```
   | ES6WildcardImport
   /// ```ts
-  /// import defaultName, { name1, name2 as renameAs, .. } from 'moduleSpecifier'
+  /// import defaultImport, { name1, name2 as renameAs, .. } from 'moduleSpecifier'
   /// ```
-  | ES6Import of defaultName:string option * bindings: {| name: string; renameAs: string option |} list
+  | ES6Import of
+    {|
+      defaultImport: {| name: string; kind: Set<Kind> option |} option
+      bindings:      {| name: string; kind: Set<Kind> option; renameAs: string option |} list
+    |}
 
 type Reference =
   | FileReference of string

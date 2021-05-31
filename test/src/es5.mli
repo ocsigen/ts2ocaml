@@ -1382,7 +1382,7 @@ module[@js.scope "DateConstructor"] DateConstructor : sig
     @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
     @param ms A number from 0 to 999 that specifies the milliseconds.
   *)
-  val uTC: t -> year:float -> month:float -> ?date:float -> ?hours:float -> ?minutes:float -> ?seconds:float -> ?ms:float -> unit -> float [@@js.call "UTC"]
+  val utc: t -> year:float -> month:float -> ?date:float -> ?hours:float -> ?minutes:float -> ?seconds:float -> ?ms:float -> unit -> float [@@js.call "UTC"]
   val now: t -> float [@@js.call "now"]
 end
 (** Enables basic storage and retrieval of dates and times. *)
@@ -1665,7 +1665,7 @@ module[@js.scope "JSON"] JSON : sig
   val stringify': t -> value:any -> ?replacer:string or_number list or_null -> ?space:string or_number -> unit -> string [@@js.call "stringify"]
 end
 (** An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format. *)
-val jSON: _JSON [@@js.global "JSON"]
+val json: _JSON [@@js.global "JSON"]
 module[@js.scope "ReadonlyArray"] ReadonlyArray : sig
   type 'T t = 'T _ReadonlyArray
   val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t

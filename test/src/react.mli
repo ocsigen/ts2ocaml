@@ -2232,17 +2232,17 @@ module Make (M: Missing) : sig
     isTypeOnly = false
     isExported = No
     moduleSpecifier = csstype
-    clause = NamespaceImport (true, CSS) } *)
+    clause = NamespaceImport ([object Object]) } *)
   (* { comments = []
     isTypeOnly = false
     isExported = No
     moduleSpecifier = prop-types
-    clause = NamespaceImport (true, PropTypes) } *)
+    clause = NamespaceImport ([object Object]) } *)
   (* { comments = []
     isTypeOnly = false
     isExported = No
     moduleSpecifier = scheduler/tracing
-    clause = ES6Import (undefined, [[object Object]]) } *)
+    clause = ES6Import ([object Object]) } *)
   module NativeAnimationEvent : sig
     type t = _NativeAnimationEvent
     val t_to_js: t -> Ojs.t
@@ -2347,7 +2347,7 @@ module Make (M: Missing) : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
   end
-  val uNDEFINED_VOID_ONLY: (* FIXME: unknown type 'unique symbol' *)any [@@js.global "UNDEFINED_VOID_ONLY"]
+  val undefined_void_only: (* FIXME: unknown type 'unique symbol' *)any [@@js.global "UNDEFINED_VOID_ONLY"]
   module[@js.scope "Destructor"] Destructor : sig
     type t = _Destructor
     val t_to_js: t -> Ojs.t

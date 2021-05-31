@@ -10,7 +10,9 @@ let inline (|NullOrUndefined|_|) x =
   else None
 
 module Char =
-  let isAlphabetOrDigit c =
+  let inline isAlphabet c =
+    ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')
+  let inline isAlphabetOrDigit c =
     ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9')
 
 module String =
@@ -31,6 +33,31 @@ module String =
     escaped |> Seq.fold (fun (state: string) e ->
       state.Replace(e, "\\" + e)
     ) s
+
+#if FABLE_COMPILER
+type StringBuilder (s: string) =
+  let mutable s = s
+  new () = StringBuilder ("")
+  member __.Length = s.Length
+  member sb.Append (s': string) = s <- s + s'; sb
+  member inline sb.Append (c: char) = sb.Append (string c)
+  member inline sb.Append (num: ^n) = sb.Append (sprintf "%d" num)
+  member inline sb.Append (o: obj) = sb.Append (string o)
+  member inline sb.AppendLine () = sb.Append System.Environment.NewLine
+  member inline sb.AppendLine (s: string) = (sb.Append (s)).AppendLine()
+  member sb.Remove (startIndex: int, length: int) =
+    if startIndex + length >= s.Length
+    then s <- s.Substring (0, startIndex)
+    else s <- s.Substring (0, startIndex) + s.Substring (startIndex + length)
+    sb
+  member __.ToString (startIndex: int, length: int) =
+    s.Substring (startIndex, length)
+  member sb.Clear () =
+    s <- ""; sb
+  override __.ToString() = s
+#else
+type StringBuilder = System.Text.StringBuilder
+#endif
 
 type OverloadRenamer(?rename: string -> int -> string, ?used: Set<string * string>) =
   let rename =

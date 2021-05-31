@@ -185,7 +185,7 @@ module Make (M: Missing) : sig
     isTypeOnly = false
     isExported = No
     moduleSpecifier = react
-    clause = NamespaceImport (true, React) } *)
+    clause = NamespaceImport ([object Object]) } *)
   (* CommonJsExport ({ name = [ReactModal]
     fullName = [ReactModal]
     loc = line 17, col 10 of node_modules/@types/react-modal/index.d.ts }) *)

@@ -102,6 +102,34 @@ let rec extractNestedName (node: Node) =
         yield! extractNestedName child
   }
 
+let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.Kind> option =
+  match ctx.checker.getSymbolAtLocation i with
+  | None ->
+    eprintfn "warn: failed to get the kind of an imported identifier '%s'" i.text
+    None
+  | Some s ->
+    let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
+    let rec go (symbol: Ts.Symbol) =
+      let flags = symbol.getFlags()
+      if flags = Ts.SymbolFlags.Alias then
+        try
+          let symbol = ctx.checker.getAliasedSymbol symbol
+          if isNullOrUndefined symbol then None
+          else
+            go symbol
+        with _ -> None
+      else if check Ts.SymbolFlags.Transient flags then None
+      else
+        let kinds = [
+          if flags |> check Ts.SymbolFlags.Type then Kind.Type
+          if flags |> check Ts.SymbolFlags.Value then Kind.Value
+          if flags |> check (Ts.SymbolFlags.Class ||| Ts.SymbolFlags.Interface) then Kind.ClassLike
+          if flags |> check Ts.SymbolFlags.Enum then Kind.Enum
+          if flags |> check Ts.SymbolFlags.Module then Kind.Module
+        ]
+        Some (Set.ofList kinds)
+    go s
+
 let readCommentText (str: string) : string list =
   str.Replace("\r\n","\n").Replace("\r","\n").Split [|'\n'|] |> List.ofArray
 
@@ -649,12 +677,13 @@ let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclarat
     match (!!m.expression : Ts.Node).kind with
     | Kind.StringLiteral ->
       let moduleSpecifier = (!!m.expression : Ts.StringLiteral).text
+      let kind = getKindFromIdentifier ctx i.name
       Import {
         comments = comments;
         isTypeOnly = i.isTypeOnly;
         isExported = getExported i.modifiers;
         moduleSpecifier = moduleSpecifier;
-        clause = NamespaceImport (false, i.name.text)
+        clause = NamespaceImport {| name = i.name.text; isES6Import = false; kind = kind |}
       } |> Some
     | kind ->
       nodeWarn i "invalid kind '%s' for module specifier" (Enum.pp kind); None
@@ -675,15 +704,18 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
       | None, None -> create ES6WildcardImport
       | None, Some b when (!!b : Ts.Node).kind = Kind.NamespaceImport ->
         let n = (!!c.namedBindings : Ts.NamespaceImport)
-        create (NamespaceImport (true, n.name.text))
+        let kind = getKindFromIdentifier ctx n.name
+        create (NamespaceImport {| name = n.name.text; kind = kind; isES6Import = true |})
       | _, Some b when (!!b : Ts.Node).kind = Kind.NamedImports ->
         let n = (!!c.namedBindings : Ts.NamedImports)
-        let defaultName = c.name |> Option.map (fun i -> i.text)
+        let defaultImport = c.name |> Option.map (fun i -> {| name = i.text; kind = getKindFromIdentifier ctx i |})
         let bindings =
           n.elements
           |> Seq.toList
-          |> List.map (fun e -> {| name = e.name.text; renameAs = e.propertyName |> Option.map (fun i -> i.text) |})
-        create (ES6Import (defaultName, bindings))
+          |> List.map (fun e ->
+            let kind = getKindFromIdentifier ctx e.name
+            {| name = e.name.text; kind = kind; renameAs = e.propertyName |> Option.map (fun i -> i.text) |})
+        create (ES6Import {| defaultImport = defaultImport; bindings = bindings |})
       | _, _ ->
         nodeWarn i "invalid import statement"; None
     | kind ->

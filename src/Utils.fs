@@ -146,3 +146,67 @@ module Trie =
 
   let ofSeq (xs: seq<'k list * 'v>) =
     xs |> Seq.fold (fun state (ks, v) -> add ks v state) empty
+
+open Fable.Core
+open Fable.Core.JsInterop
+
+[<Emit("typeof $0")>]
+let jsTypeof (x: 'a) : string = jsNative
+
+let stringify (x: obj) =
+  let objSet = JS.Constructors.Set.Create()
+  Fable.Core.JS.JSON.stringify(x, space=2, replacer=(fun _key value ->
+    if not (isNullOrUndefined value) && jsTypeof value = "object" then
+      if objSet.has(value) then box "<circular object>"
+      else
+        objSet.add value |> ignore
+        value
+    else
+      value
+  ))
+
+open Yargs
+
+type Argv<'T> with
+  member private argv.addImpl<'a> (key: string, descr: string option, ?demand: bool, ?missingMsg: string, ?dv:'a, ?dd:string) =
+    let argv = match descr with None -> argv | Some d -> argv.describe(!^key, d)
+    let argv =
+      match dv with
+      | None ->
+        match demand with
+        | Some true -> argv.demandOption(key, ?msg=missingMsg)
+        | _ -> argv
+      | Some v -> argv.``default``(key, v, ?description=dd)
+    argv
+  member this.addOption (key: string, f: string -> 'T -> 'U, ?descr, ?defaultValue, ?defaultDescr, ?missingMsg) =
+    this.string(!^key)
+        .addImpl<string>(key, descr, demand=true, ?missingMsg=missingMsg, ?dv=defaultValue, ?dd=defaultDescr)
+        :> Argv<'U>
+  member this.addOption (key: string, f: string option -> 'T -> 'U, ?descr) =
+    this.string(!^key)
+        .addImpl(key, descr)
+        :> Argv<'U>
+  member this.addOption (key: string, f: float -> 'T -> 'U, ?descr, ?defaultValue, ?defaultDescr, ?missingMsg) =
+    this.number(!^key)
+        .addImpl<float>(key, descr, demand=true, ?missingMsg=missingMsg, ?dv=defaultValue, ?dd=defaultDescr)
+        :> Argv<'U>
+  member this.addOption (key: string, f: float option -> 'T -> 'U, ?descr) =
+    this.string(!^key)
+        .addImpl(key, descr)
+        :> Argv<'U>
+  member this.addOption (key: string, f: int -> 'T -> 'U, ?descr, ?defaultValue, ?defaultDescr, ?missingMsg) =
+    this.number(!^key)
+        .addImpl<int>(key, descr, demand=true, ?missingMsg=missingMsg, ?dv=defaultValue, ?dd=defaultDescr)
+        :> Argv<'U>
+  member this.addOption (key: string, f: int option -> 'T -> 'U, ?descr) =
+    this.string(!^key)
+        .addImpl(key, descr)
+        :> Argv<'U>
+  member this.addFlag (key: string, f: bool -> 'T -> 'U, ?descr, ?defaultValue, ?defaultDescr) =
+    this.boolean(!^key)
+        .addImpl<bool>(key, descr, dv=(defaultValue |> Option.defaultValue false), ?dd=defaultDescr)
+        :> Argv<'U>
+  member this.addCounter (key: string, f: int -> 'T -> 'U, ?descr) =
+    this.count(!^key)
+        .addImpl<int>(key, descr)
+        :> Argv<'U>

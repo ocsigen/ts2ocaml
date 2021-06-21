@@ -50,76 +50,53 @@ let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
       }
     ts.createProgram(ResizeArray tsPaths, options, !!host)
 
-open Fable.Core
+let parse (argv: string[]) =
+  let program =
+    let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))
+    let srcs =
+      inputs |> Seq.map (fun (a, i) ->
+        ts.createSourceFile (a, i, Ts.ScriptTarget.Latest, setParentNodes=true))
+    createProgram argv (Seq.toList srcs)
 
-[<Emit("typeof $0")>]
-let jsTypeof (x: 'a) : string = jsNative
+  let srcs = program.getSourceFiles()
+  let checker = program.getTypeChecker()
+  let rec display (node: Ts.Node) depth =
+    let indent = String.replicate depth "  "
+    System.Enum.GetName(typeof<Ts.SyntaxKind>, node.kind) |> printfn "%s%A" indent
+    node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
-let stringify (x: obj) =
-  let objSet = JS.Constructors.Set.Create()
-  Fable.Core.JS.JSON.stringify(x, space=2, replacer=(fun _key value ->
-    if not (isNullOrUndefined value) && jsTypeof value = "object" then
-      if objSet.has(value) then box "<circular object>"
-      else
-        objSet.add value |> ignore
-        value
-    else
-      value
-  ))
+  let srcs =
+    srcs
+    |> Seq.toList
+    |> List.map (fun src ->
+      let references =
+        Seq.concat [
+          src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
+          src.typeReferenceDirectives |> Seq.map (fun x -> TypeReference x.fileName)
+          src.libReferenceDirectives |> Seq.map (fun x -> LibReference x.fileName)
+        ] |> Seq.toList
+      let statements =
+        src.statements
+        |> Seq.collect (Parser.readStatement {| checker = checker; sourceFile = src |})
+        |> Seq.toList
+      { statements = statements
+        fileName = src.fileName
+        moduleName = src.moduleName
+        hasNoDefaultLib = src.hasNoDefaultLib
+        references = references })
+
+  Typer.runAll srcs
+
+open Yargs
 
 [<EntryPoint>]
 let main argv =
-  if argv.Length < 1 then 0
-  else
-    let program =
-      let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))
-      let srcs =
-        inputs |> Seq.map (fun (a, i) ->
-          ts.createSourceFile (a, i, Ts.ScriptTarget.Latest, setParentNodes=true))
-      createProgram argv (Seq.toList srcs)
-
-    let srcs = program.getSourceFiles()
-    let checker = program.getTypeChecker()
-    let rec display (node: Ts.Node) depth =
-      let indent = String.replicate depth "  "
-      System.Enum.GetName(typeof<Ts.SyntaxKind>, node.kind) |> printfn "%s%A" indent
-      node.forEachChild(fun child -> display child (depth+1); None) |> ignore
-
-    let srcs =
-      srcs
-      |> Seq.toList
-      |> List.map (fun src ->
-        let references =
-          Seq.concat [
-            src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
-            src.typeReferenceDirectives |> Seq.map (fun x -> TypeReference x.fileName)
-            src.libReferenceDirectives |> Seq.map (fun x -> LibReference x.fileName)
-          ] |> Seq.toList
-        let statements =
-          src.statements
-          |> Seq.collect (Parser.readStatement {| checker = checker; sourceFile = src |})
-          |> Seq.toList
-        { statements = statements
-          fileName = src.fileName
-          moduleName = src.moduleName
-          hasNoDefaultLib = src.hasNoDefaultLib
-          references = references })
-
-    // srcs |> List.iter (fun x -> eprintfn "refs: %A" x.references)
-    let ctx, result = Typer.runAll srcs
-    Writer.emitAll ctx result |> Text.toString 2 |> printfn "%s"
-
-    (*
-    for _, v in Map.toSeq ctx.definitionsMap do
-      match v with
-      | Syntax.TypeAlias { target = Syntax.Union u } ->
-        Syntax.Union u |> Syntax.Type.pp |> printfn "%s"
-        let ru = Typer.resolveUnion ctx u
-        { ru with otherTypes = Set.empty } |> Typer.ResolvedUnion.pp |> printfn "%s"
-        ru.otherTypes |> Set.toList |> List.map (Syntax.Type.pp) |> String.concat " | " |> printfn "%s"
-        Writer.emitResolvedUnion Writer.noOverride ctx ru |> Text.toString 2 |> printfn "%s"
-        printfn "------------------------------------------------"
-        printfn ""
-      | _ -> ()
-    *)
-    0
+  let yargs =
+    yargs
+         .Invoke(argv)
+         .parserConfiguration({| ``parse-positional-numbers`` = false |})
+         .addFlag("verbose", (fun v _ -> {| verbose = v |}), descr = "show verbose log")
+         .alias(!^"v", !^"verbose")
+    |> Target.register parse Target.JsOfOCaml.target
+  yargs.demandCommand(1.0).help().argv |> ignore
+  0

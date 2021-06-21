@@ -1,9 +1,15 @@
-module Writer
+module Target.JsOfOCaml
 
 open System
 open Syntax
 open Typer
 open Text
+
+type Options = {|
+  verbose: bool
+  generateStdlib: bool
+  treatNumberAsInt: bool
+|}
 
 module Utils =
   let comment text =
@@ -746,60 +752,6 @@ let emitMappers ctx emitType tName (typrms: TypeParam list) =
     val_ (sprintf "%s_of_js" tName) (emitType_ ctx (funTy false))
   ]
 
-let emitUnknownIdentifiers ctx =
-  let mergeTrie (t: Trie<string, Set<int>>) =
-    t |> Trie.toSeq
-      |> Seq.map (fun (k, v) -> (k |> List.map Naming.moduleName, v))
-      |> Seq.fold (fun state (k, v) -> state |> Trie.addOrUpdate k v Set.union) Trie.empty
-
-  let unknownIdentTypes = mergeTrie ctx.unknownIdentTypes
-
-  let missingModule =
-    let rec f ko (t: Trie<string, Set<int>>) =
-      let content =
-        concat newline [
-          match t.value with
-          | None -> ()
-          | Some arities ->
-            let emit arity =
-              let name = Naming.createTypeNameOfArity arity None "t"
-              let typrm : TypeParam list = [ for i in 1 .. arity do yield { name = sprintf "T%d" i; extends = None; defaultType = None } ]
-              [
-                yield abstractType name (typrm |> List.map (fun tp -> tprintf "'%s" tp.name))
-                yield! emitMappers ctx (emitTypeImpl EmitTypeFlags.defaultValue) name typrm
-              ]
-            for arity in arities do yield! emit arity
-          for k, t in t.childs |> Map.toSeq do
-            yield f (Some k) t
-        ]
-      match ko with
-      | None -> content
-      | Some k -> moduleSig k content
-
-    moduleType "Missing" (f None unknownIdentTypes)
-
-  if unknownIdentTypes |> Trie.isEmpty then empty
-  else
-    concat newline [
-      comment (newline + indent (concat newline [
-        yield str "unknown identifiers:"
-        for name, arities in unknownIdentTypes |> Trie.toSeq do
-          if Set.forall ((=) 0) arities then
-            yield (tprintf "- %s" (String.concat "." name))
-          else
-            let tyargs =
-              let minArity = Set.minElement arities
-              let maxArity = Set.maxElement arities
-              [
-                for i = 1 to maxArity do
-                  if i <= minArity then yield sprintf "T%d" i
-                  else yield sprintf "T%d?" i
-              ]
-            yield (tprintf "- %s<%s>" (String.concat "." name) (String.concat ", " tyargs))
-      ]) + newline)
-      Attr.js_stop_start_implem missingModule missingModule
-    ]
-
 let emitHeader =
   concat newline [
     str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
@@ -1153,7 +1105,6 @@ let emitAll ctx (srcs: SourceFile list) =
   concat newline [
     yield emitHeader
     yield open_ [ "Ts2ocaml_baselib" ]
-    yield emitUnknownIdentifiers ctx
 
     let defs = [
       emitFlattenedDefinitions ctx
@@ -1169,3 +1120,21 @@ let emitAll ctx (srcs: SourceFile list) =
         ])
   ]
 
+open Fable.Core.JsInterop
+
+let private builder (argv: Yargs.Argv<Target.GlobalOptions>) : Yargs.Argv<Options> =
+  argv
+      .addFlag("stdlib", (fun x o -> {| o with generateStdlib = x |}), descr = "internal. used to generate Ts2ocaml.mli from typescript/lib/lib.*.d.ts")
+      .hide("stdlib")
+      .addFlag("number-as-int", (fun x o -> {| o with treatNumberAsInt = x |}), descr="treat number types as int")
+      .alias(!^"int", !^"number-as-int")
+
+let private run (ctx: Context) (srcs: SourceFile list) (options: Options) =
+  emitAll ctx srcs |> Text.toString 2 |> printfn "%s"
+
+let target =
+  { new ITarget<Options> with
+      member __.Command = "jsoo"
+      member __.Description = "Generate binding for js_of_ocaml"
+      member __.Builder = builder
+      member __.Run (ctx, srcs, options) = run ctx srcs options }

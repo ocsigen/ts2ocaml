@@ -1208,6 +1208,32 @@ let createRootContext (internalModuleName: string) (srcs: SourceFile list) (opts
       anonymousInterfacesMap = aim
       unknownIdentTypes = uit |}
 
+let mergeLibESDefinitions (srcs: SourceFile list) =
+  let esVersions =
+    Map.ofList [
+      "lib.es5",    (0, "ES5")
+      "lib.es6",    (1, "ES6")
+      "lib.es2015", (2, "ES2015")
+      "lib.es2016", (3, "ES2016")
+      "lib.es2017", (4, "ES2017")
+      "lib.es2018", (5, "ES2018")
+      "lib.es2019", (6, "ES2019")
+      "lib.es2020", (7, "ES2020")
+      "lib.esnext", (System.Int32.MaxValue, "ESNext")
+    ]
+
+  let srcGroups =
+    srcs
+    |> List.groupBy (fun x ->
+      match esVersions |> Map.tryFindKey (fun key _ -> x.fileName.Contains(key)) with
+      | Some key -> esVersions |> Map.find key
+      | None -> -1, "")
+    |> List.filter (fun ((i, _), _) -> i >= 0)
+    |> List.sortBy (fun ((i, _), _) -> i)
+    |> List.map (fun ((i, v), ss) -> i, v, ss)
+
+  failwith ""
+
 let runAll (srcs: SourceFile list) (opts: GlobalOptions) =
   // TODO: handle SourceFile-specific things
 

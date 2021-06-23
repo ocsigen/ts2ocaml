@@ -1077,19 +1077,6 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
   ]
 
 let emitStdlib (srcs: SourceFile list) (opts: Options) =
-  let esVersions =
-    Map.ofList [
-      // "lib.es5", "ES5"
-      "lib.es6", "ES6"
-      "lib.es2015", "ES2015"
-      "lib.es2016", "ES2016"
-      "lib.es2017", "ES2017"
-      "lib.es2018", "ES2018"
-      "lib.es2019", "ES2019"
-      "lib.es2020", "ES2020"
-      "lib.esnext", "ESNext"
-    ]
-
   let jsSrcs =
     srcs |> List.filter (fun src -> src.fileName.Contains("lib.es") && src.fileName.EndsWith(".d.ts"))
 

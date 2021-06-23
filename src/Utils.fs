@@ -133,6 +133,28 @@ module Trie =
       | None -> None
       | Some child -> getSubTrie ks child
 
+  let keys (t: Trie<'k, 'v>) =
+    let rec go ks t =
+      seq {
+        match t.value with
+        | None -> ()
+        | Some _ -> yield List.rev ks
+        for k, child in Map.toSeq t.childs do
+          yield! go (k :: ks) child
+      }
+    go [] t
+
+  let values (t: Trie<'k, 'v>) =
+    let rec go ks t =
+      seq {
+        match t.value with
+        | None -> ()
+        | Some v -> yield v
+        for k, child in Map.toSeq t.childs do
+          yield! go (k :: ks) child
+      }
+    go [] t
+
   let toSeq (t: Trie<'k, 'v>) =
     let rec go ks t =
       seq {

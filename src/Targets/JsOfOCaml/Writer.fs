@@ -385,7 +385,7 @@ let emitComment (c: Comment) : text =
   | Other (("throws" | "exception"), lines, _) -> "@raise exn " @+ strLines (escape lines)
   | Other (tag, lines, _) -> tprintf "%s: " tag + strLines (escape lines)
 
-let literalToIdentifier (ctx: Context) (l: Literal) : text =
+let literalToIdentifier (ctx: Context<Options>) (l: Literal) : text =
   let formatString (s: string) =
     (s :> char seq)
     |> Seq.map (fun c ->
@@ -408,7 +408,7 @@ let literalToIdentifier (ctx: Context) (l: Literal) : text =
   | LFloat l -> tprintf "n_%s" (formatNumber l)
   | LBool true -> str "b_true" | LBool false -> str "b_false"
 
-let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
+let anonymousInterfaceToIdentifier (ctx: Context<Options>) (c: Class) : text =
   match ctx.anonymousInterfacesMap |> Map.tryFind c, c.name with
   | Some i, None -> tprintf "anonymous_interface_%i" i
   | None, None -> failwithf "the anonymous interface '%A' is not found in the context" c
@@ -460,7 +460,7 @@ let treatEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<EnumCase, Literal>>)
       yield pv_head @+ name + attr
   ]) +@ " [@js.enum]" |> between "(" ")"
 
-let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context -> Type -> text) -> Context -> Type -> text option) (ctx: Context) (ty: Type) : text =
+let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context<Options> -> Type -> text) -> Context<Options> -> Type -> text option) (ctx: Context<Options>) (ty: Type) : text =
   match overrideFunc (emitTypeImpl flags overrideFunc) ctx ty with
   | Some t -> t
   | None ->
@@ -678,44 +678,6 @@ let emitTypeName name args =
   if List.isEmpty args then str (Naming.flattenedTypeName name)
   else tyApp (str (Naming.flattenedTypeName name)) args
 
-let getSafeLabels ctx ty =
-  let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
-
-  let rec getLabel = function
-    | Ident { fullName = Some fn } ->
-      seq {
-        yield tprintf "%s%s" pv_head (fn |> Naming.constructorName)
-        for e in getAllInheritancesFromName ctx fn do
-          match e with
-          | Ident { fullName = Some fn } ->
-            yield tprintf "%s%s" pv_head (fn |> Naming.constructorName)
-          | App (AIdent { fullName = Some fn }, ts, _) ->
-            yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
-          | _ -> ()
-      } |> Set.ofSeq
-    | App (AIdent { fullName = Some fn }, ts, loc) ->
-      seq {
-        yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
-        let typrms =
-          FullName.tryLookupWith ctx fn (function
-            | ClassName c -> Some c.typeParams
-            | AliasName a -> Some a.typeParams
-            | _ -> None
-          ) |> Option.defaultValue []
-        let subst = createBindings fn loc typrms ts
-        for e in getAllInheritancesFromName ctx fn do
-          match e with
-          | Ident { fullName = Some fn } ->
-            yield tprintf "%s%s" pv_head (fn |> Naming.constructorName)
-          | App (AIdent { fullName = Some fn }, ts, _) ->
-            yield str pv_head + emitCase fn (ts |> List.map (substTypeVar subst ctx >> emitType_ ctx))
-          | _ -> ()
-      } |> Set.ofSeq
-    | Union ts -> ts.types |> List.map getLabel |> Set.intersectMany
-    | Intersection ts -> ts.types |> List.map getLabel |> Set.unionMany
-    | _ -> Set.empty
-  getLabel ty
-
 let emitMappers ctx emitType tName (typrms: TypeParam list) =
   let t_ty =
     let t_ident =
@@ -735,14 +697,14 @@ let emitMappers ctx emitType tName (typrms: TypeParam list) =
     let mapperArgs =
       typrms |> List.map (fun typrm ->
         if toJs then
-          Function { args = [Choice2Of2 (TypeVar typrm.name)]; returnType = ojs_t_ty; isVariadic = false } |> Choice2Of2
+          Function { args = [Choice2Of2 (TypeVar typrm.name)]; returnType = ojs_t_ty; isVariadic = false; loc = UnknownLocation } |> Choice2Of2
         else
-          Function { args = [Choice2Of2 ojs_t_ty]; returnType = TypeVar typrm.name; isVariadic = false } |> Choice2Of2
+          Function { args = [Choice2Of2 ojs_t_ty]; returnType = TypeVar typrm.name; isVariadic = false; loc = UnknownLocation } |> Choice2Of2
       )
     if toJs then
-      Function { args = mapperArgs @ [Choice2Of2 t_ty]; returnType = ojs_t_ty; isVariadic = false }
+      Function { args = mapperArgs @ [Choice2Of2 t_ty]; returnType = ojs_t_ty; isVariadic = false; loc = UnknownLocation }
     else
-      Function { args = mapperArgs @ [Choice2Of2 ojs_t_ty]; returnType = t_ty; isVariadic = false }
+      Function { args = mapperArgs @ [Choice2Of2 ojs_t_ty]; returnType = t_ty; isVariadic = false; loc = UnknownLocation }
   [
     val_ (sprintf "%s_to_js" tName) (emitType_ ctx (funTy true))
     val_ (sprintf "%s_of_js" tName) (emitType_ ctx (funTy false))
@@ -754,7 +716,39 @@ let emitHeader =
     Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]")
   ]
 
-let emitFlattenedDefinitions (ctx: Context) : text =
+/// `Choice2Of2` when it is an alias to a non-JSable prim type.
+let getLabelsOfFullName (ctx: Context<Options>) (fullName: string list) (c: Class) =
+  let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
+  let normalClass () =
+    [
+      for e in getAllInheritancesAndSelfFromName ctx fullName do
+        match e with
+        | InheritingType.KnownIdent i ->
+          if i.tyargs |> List.isEmpty then
+            yield tprintf "%s%s" pv_head (Naming.constructorName i.fullName)
+          else
+            yield str pv_head + emitCase i.fullName (i.tyargs |> List.map (emitType_ ctx))
+        | InheritingType.ImportedIdent i ->
+          yield str (Naming.structuredTypeName (i.name @ ["tags"]))
+        | InheritingType.UnknownIdent i ->
+          yield str (Naming.structuredTypeName (i.name @ ["tags"]))
+        | InheritingType.Prim (p, ts) ->
+          match p.AsJSClassName with
+          | Some name ->
+            if List.isEmpty ts then
+              yield tprintf "%s%s" pv_head name
+            else
+              yield str pv_head + emitCase [name] (ts |> List.map (emitType_ ctx))
+          | None -> ()
+        | InheritingType.Other _ -> ()
+    ]
+  match fullName with
+  | [name] when ctx.options.generateStdlib && Map.containsKey name nonJsablePrimTypeInterfaces && c.typeParams |> List.isEmpty ->
+    let prim = nonJsablePrimTypeInterfaces |> Map.find name
+    Choice2Of2 (prim, tprintf "%s%s" pv_head name)
+  | _ -> Choice1Of2 (normalClass ())
+
+let emitFlattenedDefinitions (ctx: Context<Options>) : text =
   let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
 
   moduleSig ctx.internalModuleName (
@@ -776,6 +770,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
         match v with
         | EnumDef e ->
           concat newline [
+            yield commentStr e.loc.AsString
             let treatEnum (cases: EnumCase list) =
               between "[" "]" (concat (str " | ") [
                 for c in cases do
@@ -793,47 +788,33 @@ let emitFlattenedDefinitions (ctx: Context) : text =
               yield tprintf "and %s = %A" (Naming.flattenedTypeName (k @ [c.name])) (treatEnum [c])
           ] |> Some
         | ClassDef c ->
-          let normalClass () =
-            let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-            let labels = [
-              for e in getAllInheritancesFromName ctx k do
-                match e with
-                | Ident { fullName = Some fn } ->
-                  yield tprintf "%s%s" pv_head (Naming.constructorName fn)
-                | App (AIdent { fullName = Some fn }, ts, _) ->
-                  yield str pv_head + emitCase fn (ts |> List.map (emitType_ ctx))
-                | _ -> ()
-            ]
+          let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
+          match getLabelsOfFullName ctx k c with
+          | Choice1Of2 labels ->
             concat newline [
+              yield commentStr c.loc.AsString
               let def =
                 tprintf "%s %A = " prefix (emitTypeName k typrm)
                 + tyApp intf [
                   between "[" "]" (
-                    concat (str " | ") [
-                      yield  tprintf "%s%A" pv_head (emitCase k typrm)
-                      yield! labels
-                    ]
+                    concat (str " | ") labels
                   )
                 ]
               yield def + newline + Attr.js_custom_typ (genJsCustomMapper c.typeParams)
             ] |> Some
-          match k with
-          | [name] when Map.containsKey name nonJsablePrimTypeInterfaces ->
-            let prim =
-              match k with
-              | [name] -> Map.find name nonJsablePrimTypeInterfaces
-              | _ -> failwith "impossible_emitFlattenedDefinitions_f_ClassDef_prim"
-            let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
+          | Choice2Of2 (prim, _) ->
             let target =
               match c.typeParams with
               | [] -> Prim prim
               | _  -> App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
             tprintf "%s %A = " prefix (emitTypeName k typrm) + (emitType_ ctx target) |> Some
-          | _ -> normalClass ()
           // TODO: emit extends of type parameters
-        | TypeAlias { erased = false; typeParams = typeParams; target = target } ->
+        | TypeAlias { erased = false; typeParams = typeParams; target = target; loc = loc } ->
           let typrm = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-          tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ ctx target |> Some
+          concat newline [
+            commentStr loc.AsString
+            tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ ctx target
+          ] |> Some
           // TODO: emit extends of type parameters
         | Import _
         | Value _
@@ -859,7 +840,7 @@ let emitFlattenedDefinitions (ctx: Context) : text =
     ]
   ) + newline
 
-let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
+let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
   let (|Dummy|) _ = []
   let emitType = emitTypeImpl { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
   let emitType_ = emitType noOverride
@@ -888,9 +869,9 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         yield! emitMappers ctx emitType name typrms'
     ]
 
-  let rec go (renamer: OverloadRenamer) (ctx: Context) (s: Statement) : text =
+  let rec go (renamer: OverloadRenamer) (ctx: Context<Options>) (s: Statement) : text =
     let comments =
-      match (s :> ICommented).getComments() with
+      match (s :> ICommented<_>).getComments() with
       | [] -> empty
       | xs -> docComment (xs |> List.map emitComment |> concat newline) + newline
     comments +
@@ -900,7 +881,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         concat newline (
           m.statements |> List.map (fun stmt ->
             let renamer = new OverloadRenamer()
-            go renamer ({ ctx with currentNamespace = m.name :: ctx.currentNamespace}) stmt
+            go renamer ({| ctx with currentNamespace = m.name :: ctx.currentNamespace |}) stmt
           )
         )
       if m.statements |> List.forall (function Import _ | Export _ | UnknownStatement _ -> true | _ -> false) then
@@ -986,7 +967,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         let rename s = renamer.Rename "value" s
         match m with
         | Constructor (ft, typrm) ->
-          let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy }
+          let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy; loc = ft.loc }
           yield val_ (rename "create") (emitType_ ctx ty) + str " " + Attr.js_create
         | New (ft, typrm) ->
           let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
@@ -1012,7 +993,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
             let ret =
               if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
               else fl.value
-            Function { isVariadic = false; args = args; returnType = ret }
+            Function { isVariadic = false; args = args; returnType = ret; loc = UnknownLocation }
           yield val_ ("get_" + Naming.removeInvalidChars fl.name |> rename) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
         | Setter fl | Field (fl, WriteOnly, _) ->
           let fl =
@@ -1024,7 +1005,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
             let args =
               if ma.isStatic then [Choice2Of2 fl.value]
               else [Choice2Of2 selfTy; Choice2Of2 fl.value]
-            Function { isVariadic = false; args = args; returnType = Prim Void }
+            Function { isVariadic = false; args = args; returnType = Prim Void; loc = UnknownLocation }
           yield val_ ("set_" + Naming.removeInvalidChars fl.name |> rename) (emitType_ ctx ty) + str " " + Attr.js_set fl.name
         | Field (fl, Mutable, _) ->
           yield! emitMember renamer ma (Getter fl)
@@ -1039,7 +1020,8 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
           let ft =
             { args = Choice2Of2 selfTy :: removeLabels ft.args @ [ Choice2Of2 ft.returnType ]
               isVariadic = false;
-              returnType = Prim Void }
+              returnType = Prim Void;
+              loc = ft.loc }
           yield val_ (rename "set") (emitType_ ctx (Function ft)) + str " " + Attr.js_index_set
         | Indexer (ft, Mutable) ->
           yield! emitMember renamer ma (Indexer (ft, ReadOnly))
@@ -1050,7 +1032,7 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
         let renamer = new OverloadRenamer()
         for ma, m in c.members do yield! emitMember renamer ma m
         for parent in c.implements do
-          let ty = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = parent }
+          let ty = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = parent; loc = UnknownLocation }
           yield val_ ("cast" |> renamer.Rename "value") (emitType_ ctx ty) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
         match c.name with
         | None -> ()
@@ -1061,8 +1043,8 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
             let targetTy =
               if List.isEmpty c.typeParams then Prim prim
               else App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
-            let toMlTy = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = targetTy }
-            let ofMlTy = Function { isVariadic = false; args = [Choice2Of2 targetTy]; returnType = selfTy }
+            let toMlTy = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = targetTy; loc = UnknownLocation }
+            let ofMlTy = Function { isVariadic = false; args = [Choice2Of2 targetTy]; returnType = selfTy; loc = UnknownLocation }
             yield val_ ("to_ml" |> renamer.Rename "value") (emitType_ ctx toMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
             yield val_ ("of_ml" |> renamer.Rename "value") (emitType_ ctx ofMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
       ]
@@ -1094,10 +1076,58 @@ let emitStructuredDefinitions (ctx: Context) (stmts: Statement list) =
       yield go renamer ctx stmt
   ]
 
-let emitAll ctx (srcs: SourceFile list) =
-  // TODO: handle all the stuffs
+let emitStdlib (srcs: SourceFile list) (opts: Options) =
+  let esVersions =
+    Map.ofList [
+      // "lib.es5", "ES5"
+      "lib.es6", "ES6"
+      "lib.es2015", "ES2015"
+      "lib.es2016", "ES2016"
+      "lib.es2017", "ES2017"
+      "lib.es2018", "ES2018"
+      "lib.es2019", "ES2019"
+      "lib.es2020", "ES2020"
+      "lib.esnext", "ESNext"
+    ]
+
+  let jsSrcs =
+    srcs |> List.filter (fun src -> src.fileName.Contains("lib.es") && src.fileName.EndsWith(".d.ts"))
+
+  let domSrcs =
+    srcs
+    |> List.filter (fun src -> src.fileName.Contains("lib.dom") && src.fileName.EndsWith(".d.ts"))
+    |> List.map (fun src ->
+        { src with statements = [ Module { name = "dom"; isExported = Exported.No; isNamespace = false; statements = src.statements; comments = [] } ]})
+
+  failwith "TODO"
+
+let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
+  let srcs =
+    match srcs with
+    | [] | _ :: [] -> srcs
+    | _ ->
+      let combinedName, moduleName =
+        match srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts") with
+        | Some index ->
+          eprintfn "info: using index.d.ts as an entrypoint"
+          index.fileName, index.moduleName
+        | None ->
+          eprintfn "info: treating everything as combined into lib.d.ts"
+          "lib.d.ts", None
+      [
+        { fileName = combinedName
+          statements = srcs |> List.collect (fun src -> src.statements)
+          references = srcs |> List.collect (fun src -> src.references) |> List.distinct
+          hasNoDefaultLib = srcs |> List.exists (fun src -> src.hasNoDefaultLib)
+          moduleName = moduleName }
+      ]
+
+  eprintf "* running typer..."
+  let ctx, srcs = Typer.runAll srcs {| verbose = opts.verbose |}
+  let ctx = ctx |> Context.mapOptions (fun _ -> opts)
   let stmts = srcs |> List.collect (fun x -> x.statements)
 
+  eprintf "* emitting a binding for js_of_ocaml..."
   concat newline [
     yield emitHeader
     yield open_ [ "Ts2ocaml_baselib" ]
@@ -1115,4 +1145,3 @@ let emitAll ctx (srcs: SourceFile list) =
           yield! defs
         ])
   ]
-

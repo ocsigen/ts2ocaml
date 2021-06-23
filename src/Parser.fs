@@ -293,13 +293,13 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     let typrms = readTypeParameters typrm ctx t.typeParameters
     let typrm = Set.union typrm (typrms |> List.map (fun x -> x.name) |> Set.ofList)
     let retTy = readTypeNode typrm ctx t.``type``
-    Function (readParameters typrm ctx t.parameters retTy)
+    Function (readParameters typrm ctx t.parameters t retTy)
   | Kind.ConstructorType ->
     let t = t :?> Ts.ConstructorTypeNode
     let typrms = readTypeParameters typrm ctx t.typeParameters
     let typrm' = Set.union typrm (typrms |> List.map (fun x -> x.name) |> Set.ofList)
     let retTy = readTypeNode typrm' ctx t.``type``
-    Erased (NewableFunction (readParameters typrm' ctx t.parameters retTy, typrms), Node.location t)
+    Erased (NewableFunction (readParameters typrm' ctx t.parameters t retTy, typrms), Node.location t)
   | Kind.LiteralType ->
     let t = t :?> Ts.LiteralTypeNode
     if t.getText() = "null" then Prim Null // handle NullLiteral
@@ -316,7 +316,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     AnonymousInterface {
       name = None; isInterface = true; isExported = Exported.No
       comments = []; implements = []; typeParams = []; accessibility = Public
-      members = members
+      members = members; loc = Node.location t
     }
   // readonly types
   | Kind.TypeOperator ->
@@ -369,7 +369,7 @@ and readTupleTypeNode (typrm: Set<string>) (ctx: ParserContext) (tuple: Ts.Tuple
       {| value = readTypeNode typrm ctx (xNode :?> Ts.TypeNode); name = None |}
   Tuple { types = Seq.map f tuple.elements |> List.ofSeq; isReadOnly = isReadOnly }
 
-and readParameters<'retType> (typrm: Set<string>) (ctx: ParserContext) (ps: Ts.ParameterDeclaration seq) (retType: 'retType) : FuncType<'retType> =
+and readParameters<'retType> (typrm: Set<string>) (ctx: ParserContext) (ps: Ts.ParameterDeclaration seq) (parent: Ts.Node) (retType: 'retType) : FuncType<'retType> =
   let isVariadic =
     ps |> Seq.exists (fun p -> p.dotDotDotToken |> Option.isSome)
   let args =
@@ -395,7 +395,7 @@ and readParameters<'retType> (typrm: Set<string>) (ctx: ParserContext) (ps: Ts.P
         Choice2Of2 ty
     )
     |> Seq.toList
-  { args = args; isVariadic = isVariadic; returnType = retType }
+  { args = args; isVariadic = isVariadic; returnType = retType; loc = Node.location parent }
 
 and readMemberAttribute (ctx: ParserContext) (nd: Ts.NamedDeclaration) : MemberAttribute =
   let accessibility = getAccessibility nd.modifiers |> Option.defaultValue Public
@@ -450,32 +450,32 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
     let nd = nd :?> Ts.CallSignatureDeclaration
     let localTyprm, ty = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
-    Some (attr, FunctionInterface (readParameters typrm ctx nd.parameters ty, localTyprm))
+    Some (attr, FunctionInterface (readParameters typrm ctx nd.parameters nd ty, localTyprm))
   | Kind.MethodSignature | Kind.MethodDeclaration ->
     let nd = nd :?> Ts.SignatureDeclarationBase
     let localTyprm, retTy = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
-    let func = readParameters typrm ctx nd.parameters retTy
+    let func = readParameters typrm ctx nd.parameters nd retTy
     Some (attr, Method (nameToString nd.name, func, localTyprm))
   | Kind.IndexSignature ->
     let nd = nd :?> Ts.IndexSignatureDeclaration
     let localTyprm, ty = extractType nd
     if not (List.isEmpty localTyprm) then nodeWarn ctx nd "indexer with type argument is not supported"
     Some (attr,
-      Indexer (readParameters typrm ctx nd.parameters ty,
+      Indexer (readParameters typrm ctx nd.parameters nd ty,
                if isReadOnly nd.modifiers then ReadOnly else Mutable))
   | Kind.ConstructSignature ->
     let nd = nd :?> Ts.ConstructSignatureDeclaration
     let localTyprm, retTy = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
-    let ty = readParameters typrm ctx nd.parameters retTy
+    let ty = readParameters typrm ctx nd.parameters nd retTy
     Some (attr, New (ty, localTyprm))
   | Kind.Constructor ->
     let nd = nd :?> Ts.ConstructorDeclaration
     let localTyprm, retTy = extractType nd
     assert (match retTy with UnknownType _ -> true | _ -> false)
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
-    let ty = readParameters typrm ctx nd.parameters ()
+    let ty = readParameters typrm ctx nd.parameters nd ()
     Some (attr, Constructor (ty, localTyprm))
   | Kind.GetAccessor ->
     let nd = nd :?> Ts.GetAccessorDeclaration
@@ -488,7 +488,7 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
     let localTyprm, retTy = extractType nd
     assert (match retTy with UnknownType _ -> true | _ -> false)
     if not (List.isEmpty localTyprm) then nodeWarn ctx nd "setter with type argument is not supported"
-    match readParameters typrm ctx nd.parameters () with
+    match readParameters typrm ctx nd.parameters nd () with
     | { args = [ty]; isVariadic = false } ->
       match ty with
       | Choice1Of2 named ->
@@ -535,6 +535,7 @@ let readInterface (ctx: ParserContext) (i: Ts.InterfaceDeclaration) : Class =
     isInterface = true
     isExported = getExported i.modifiers
     members = i.members |> List.ofSeq |> List.choose (readNamedDeclaration typrmsSet ctx)
+    loc = Node.location i
   }
 
 let readClass (ctx: ParserContext) (i: Ts.ClassDeclaration) : Class =
@@ -549,6 +550,7 @@ let readClass (ctx: ParserContext) (i: Ts.ClassDeclaration) : Class =
     isInterface = false
     isExported = getExported i.modifiers
     members = i.members |> List.ofSeq |> List.choose (readNamedDeclaration typrmsSet ctx)
+    loc = Node.location i
   }
 
 let readEnumCase (ctx: ParserContext) (em: Ts.EnumMember) : EnumCase =
@@ -569,13 +571,14 @@ let readEnum (ctx: ParserContext) (ed: Ts.EnumDeclaration) : Enum =
     comments = readCommentsForNamedDeclaration ctx ed
     cases = ed.members |> List.ofSeq |> List.map (readEnumCase ctx)
     isExported = getExported ed.modifiers
+    loc = Node.location ed
   }
 
 let readTypeAlias (ctx: ParserContext) (a: Ts.TypeAliasDeclaration) : TypeAlias =
   let typrm = readTypeParameters Set.empty ctx a.typeParameters
   let ty = readTypeNode (typrm |> List.map (fun x -> x.name) |> Set.ofList) ctx a.``type``
   let comments = readCommentsForNamedDeclaration ctx a
-  { name = nameToString a.name; typeParams = typrm; target = ty; erased = false; comments = comments }
+  { name = nameToString a.name; typeParams = typrm; target = ty; erased = false; comments = comments; loc = Node.location a }
 
 let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list =
   v.declarationList.declarations |> List.ofSeq |> List.map (fun vd ->
@@ -626,7 +629,7 @@ let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option
         | None ->
           nodeWarn ctx f "return type missing for function '%s'" name
           UnknownType None
-      Function (readParameters typrm ctx f.parameters retTy)
+      Function (readParameters typrm ctx f.parameters f retTy)
     Some { comments = comments; name = name; typ = ty; typeParams = typrm; isConst = false; isExported = isExported; accessibility = accessibility }
 
 let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Statement option =

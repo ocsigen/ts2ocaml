@@ -2,26 +2,28 @@ module Typer
 
 open Syntax
 
-type Context = {
+type Context<'Options> = {|
   internalModuleName: string
   currentNamespace: string list
   definitionsMap: Trie<string, Statement list>
   typeLiteralsMap: Map<Literal, int>
   anonymousInterfacesMap: Map<Class, int>
   unknownIdentTypes: Trie<string, Set<int>>
-  verbose: bool
-}
+  options: 'Options
+|}
 
-let inline private warn (ctx: Context) (loc: Location) fmt =
+let inline private warn (ctx: Context<GlobalOptions>) (loc: Location) fmt =
   Printf.kprintf (fun s ->
-    if ctx.verbose then eprintfn "warn: %s at %s" s loc.AsString
+    if ctx.options.verbose then eprintfn "warn: %s at %s" s loc.AsString
   ) fmt
 
 module Context =
-  let ofParentNamespace (ctx: Context) : Context option =
+  let mapOptions (f: 'a -> 'b) (ctx: Context<'a>) : Context<'b> =
+    {| ctx with options = f ctx.options |}
+  let ofParentNamespace (ctx: Context<'a>) : Context<'a> option =
     match ctx.currentNamespace with
     | [] -> None
-    | _ :: ns -> Some { ctx with currentNamespace = ns }
+    | _ :: ns -> Some {| ctx with currentNamespace = ns |}
 
 type FullNameLookupResult =
   | AliasName of TypeAlias
@@ -35,7 +37,7 @@ type FullNameLookupResult =
   | NotFound of string option
 
 module FullName =
-  let rec ofIdent (ctx: Context) (ident: IdentType) : string list option =
+  let rec ofIdent (ctx: Context<'a>) (ident: IdentType) : string list option =
     let nsRev = List.rev ctx.currentNamespace
     let fullName = nsRev @ ident.name
     let onFail () =
@@ -55,7 +57,7 @@ module FullName =
       | _ -> onFail ()
     | _ -> onFail ()
 
-  let lookup (ctx: Context) (fullName: string list) : FullNameLookupResult list =
+  let lookup (ctx: Context<'a>) (fullName: string list) : FullNameLookupResult list =
     let conv name = function
       | TypeAlias a -> AliasName a |> Some
       | ClassDef c -> ClassName c |> Some
@@ -337,46 +339,102 @@ module Type =
       | _ -> []
     maxArity :: go maxArity typrms |> Set.ofList
 
-  let mutable private inheritMap: Map<string list, Set<Type>> = Map.empty
+  type [<RequireQualifiedAccess>] InheritingType =
+    | KnownIdent of {| fullName: string list; tyargs: Type list |}
+    | Prim of PrimType * tyargs:Type list
+    | Other of Type
+    | ImportedIdent of {| name: string list; fullName: string list; tyargs: Type list |}
+    | UnknownIdent of {| name: string list; tyargs: Type list |}
 
-  let rec getAllInheritances (ctx: Context) (ty: Type) : Set<Type> =
-    let rec go t =
-      seq {
-        match t with
-        | Ident { fullName = Some fn } ->
-          yield! getAllInheritancesFromName ctx fn
-        | App (AIdent { fullName = Some fn }, ts, loc) ->
+  let substTypeVarInInheritingType subst ctx = function
+    | InheritingType.KnownIdent x ->
+      InheritingType.KnownIdent {| x with tyargs = x.tyargs |> List.map (substTypeVar subst ctx) |}
+    | InheritingType.ImportedIdent x ->
+      InheritingType.ImportedIdent {| x with tyargs = x.tyargs |> List.map (substTypeVar subst ctx) |}
+    | InheritingType.UnknownIdent x ->
+      InheritingType.UnknownIdent {| x with tyargs = x.tyargs |> List.map (substTypeVar subst ctx) |}
+    | InheritingType.Prim (p, ts) ->
+      InheritingType.Prim (p, ts |> List.map (substTypeVar subst ctx))
+    | InheritingType.Other t ->
+      InheritingType.Other (substTypeVar subst ctx t)
+
+  let inline private (|Dummy|) _ = []
+  let mutable private inheritCache: Map<string list, Set<InheritingType> * InheritingType option> = Map.empty
+  let mutable private hasNoInherits: Set<string list> = Set.empty
+
+  let rec private getAllInheritancesImpl (includeSelf: bool) (ctx: Context<'a>) (ty: Type) : Set<InheritingType> =
+    seq {
+      match ty with
+      | Ident { name = name; fullName = Some fn; loc = loc } & Dummy ts
+      | App (AIdent { name = name; fullName = Some fn }, ts, loc) ->
           yield!
             FullName.lookup ctx fn
             |> List.tryPick (function
-              | AliasName { typeParams = typrms; erased = false } | ClassName { typeParams = typrms } ->
+              | AliasName { typeParams = typrms } | ClassName { typeParams = typrms } ->
                 let subst = createBindings fn loc typrms ts
-                getAllInheritancesFromName ctx fn |> Seq.map (substTypeVar subst ctx) |> Some
+                getAllInheritancesFromNameImpl includeSelf ctx fn |> Seq.map (substTypeVarInInheritingType subst ctx) |> Some
+              | ImportedName _ ->
+                if includeSelf then
+                  Some (Seq.singleton (InheritingType.ImportedIdent {| name = name; fullName = fn; tyargs = ts |}))
+                else None
               | _ -> None
             ) |> Option.defaultValue Seq.empty
-        | Union u -> yield! Set.intersectMany (List.map go u.types)
-        | Intersection i -> yield! Set.unionMany (List.map go i.types)
-        | _ -> ()
-      } |> Set.ofSeq
-    in go ty
+      | Ident { name = name; fullName = None } & Dummy ts
+      | App (AIdent { name = name; fullName = None }, ts, _) ->
+        if includeSelf then
+          yield InheritingType.UnknownIdent {| name = name; tyargs = ts |}
+      | Prim p & Dummy ts
+      | App (APrim p, ts, _) ->
+        if includeSelf then
+          yield InheritingType.Prim (p, ts)
+      | _ ->
+        if includeSelf then
+          yield InheritingType.Other ty
+    } |> Set.ofSeq
 
-  and getAllInheritancesFromName (ctx: Context) (className: string list) : Set<Type> =
-    match inheritMap |> Map.tryFind className with
-    | Some s -> s
-    | None ->
-      let result =
-        FullName.lookup ctx className |> Seq.collect (function
-          | ClassName c ->
-            seq {
-              for t in c.implements do
-                yield t
-                yield! getAllInheritances ctx t
-            }
-          | AliasName t when not t.erased -> getAllInheritances ctx t.target |> Set.toSeq
-          | _ -> Seq.empty
-        ) |> Set.ofSeq
-      inheritMap <- inheritMap |> Map.add className result
-      result
+  and private getAllInheritancesFromNameImpl (includeSelf: bool) (ctx: Context<'a>) (fn: string list) : Set<InheritingType> =
+    if hasNoInherits |> Set.contains fn then Set.empty
+    else
+      match inheritCache |> Map.tryFind fn with
+      | Some (s, selfo) ->
+        if includeSelf then
+          match selfo with
+          | None -> s
+          | Some self -> Set.add self s
+        else s
+      | None ->
+        let result =
+          FullName.lookup ctx fn |> Seq.tryPick (function
+            | ClassName c ->
+              let self =
+                InheritingType.KnownIdent {| fullName = fn; tyargs = c.typeParams |> List.map (fun tp -> TypeVar tp.name) |}
+              let s = c.implements |> List.map (getAllInheritancesImpl true ctx) |> Set.unionMany
+              Some (s, Some self)
+            | AliasName a ->
+              let tyargs =
+                a.typeParams |> List.map (fun tp -> TypeVar tp.name)
+              let s =
+                let subst = createBindings fn UnknownLocation a.typeParams tyargs
+                getAllInheritancesImpl true ctx a.target |> Set.map (substTypeVarInInheritingType subst ctx)
+              Some (s, None)
+            | _ -> None
+          )
+        match result with
+        | None ->
+          hasNoInherits <- hasNoInherits |> Set.add fn
+          Set.empty
+        | Some (s, selfo) ->
+          inheritCache <- inheritCache |> Map.add fn (s, selfo)
+          if includeSelf then
+            match selfo with
+            | None -> s
+            | Some self -> Set.add self s
+          else s
+
+  let getAllInheritances ctx ty = getAllInheritancesImpl false ctx ty
+  let getAllInheritancesFromName ctx fn = getAllInheritancesFromNameImpl false ctx fn
+  let getAllInheritancesAndSelf ctx ty = getAllInheritancesImpl true ctx ty
+  let getAllInheritancesAndSelfFromName ctx fn = getAllInheritancesFromNameImpl true ctx fn
 
   let private createFunctionInterfaceBase isNewable (typrms: TypeParam list) ft loc =
     let usedTyprms =
@@ -401,6 +459,7 @@ module Type =
           if isNewable then New (ft, typrms)
           else FunctionInterface (ft, typrms)
         ]
+        loc = ft.loc
       }
     if List.isEmpty boundTyprms then AnonymousInterface ai
     else
@@ -409,7 +468,6 @@ module Type =
   let createFunctionInterface = createFunctionInterfaceBase false
   let createNewableFunctionInterface = createFunctionInterfaceBase true
 
-  let inline private (|Dummy|) _ = []
   let rec resolveErasedTypeImpl typeQueries ctx = function
     | PolymorphicThis -> PolymorphicThis | Intrinsic -> Intrinsic
     | Ident i -> Ident i | TypeVar v -> TypeVar v | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
@@ -562,12 +620,14 @@ module Statement =
             { comments = []; accessibility = Public; isStatic = false },
             FunctionInterface (f, [])
           ]
+          loc = f.loc
         }
       | _ -> TypeAlias ta
     | x -> x
 
   let rec merge (stmts: Statement list) =
     let mutable result : Choice<Statement, Class ref, Module ref> list = []
+
     let mutable intfMap = Map.empty
     let mutable nsMap = Map.empty
     let mergeTypeParams tps1 tps2 =
@@ -707,7 +767,7 @@ module Statement =
       | _ -> Choice1Of2 true, None
     ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
-  let rec mapType mapping ctx stmts =
+  let rec mapType mapping (ctx: Context<_>) stmts =
     let f = function
       | TypeAlias a ->
         TypeAlias {
@@ -732,18 +792,18 @@ module Statement =
             statements =
               mapType
                 mapping
-                { ctx with currentNamespace = m.name :: ctx.currentNamespace }
+                {| ctx with currentNamespace = m.name :: ctx.currentNamespace |}
                 m.statements
         }
       | UnknownStatement (msgo, c) -> UnknownStatement (msgo, c)
       | FloatingComment c -> FloatingComment c
     stmts |> List.map f
 
-  let resolveErasedTypes (ctx: Context) (stmts: Statement list) =
+  let resolveErasedTypes (ctx: Context<GlobalOptions>) (stmts: Statement list) =
     mapType Type.resolveErasedType ctx stmts
 
 module Ident =
-  let rec mapInType (mapping: Context -> IdentType -> IdentType) (ctx: Context) = function
+  let rec mapInType (mapping: Context<'a> -> IdentType -> IdentType) (ctx: Context<'a>) = function
     | Ident i -> Ident (mapping ctx i)
     | Union u -> Union { types = u.types |> List.map (mapInType mapping ctx) }
     | Intersection i -> Intersection { types = i.types |> List.map (mapInType mapping ctx) }
@@ -778,7 +838,7 @@ module Ident =
     | AIdent i -> AIdent (mapping ctx i)
     | AAnonymousInterface i -> AAnonymousInterface (Type.mapInClass (mapInType mapping) ctx i)
 
-  let rec mapInStatements mapType mapExport (ctx: Context) (stmts: Statement list) : Statement list =
+  let rec mapInStatements mapType mapExport (ctx: Context<'a>) (stmts: Statement list) : Statement list =
     let f = function
       | TypeAlias a ->
         TypeAlias {
@@ -803,13 +863,13 @@ module Ident =
             statements =
               mapInStatements
                 mapType mapExport
-                { ctx with currentNamespace = m.name :: ctx.currentNamespace }
+                {| ctx with currentNamespace = m.name :: ctx.currentNamespace |}
                 m.statements
         }
       | UnknownStatement (msgo, c) -> UnknownStatement (msgo, c) | FloatingComment c -> FloatingComment c
     stmts |> List.map f
 
-  let resolve (ctx: Context) (i: IdentType) : IdentType =
+  let resolve (ctx: Context<'a>) (i: IdentType) : IdentType =
     match i.fullName with
     | Some _ -> i
     | None ->
@@ -817,7 +877,7 @@ module Ident =
       | Some fn -> { i with fullName = Some fn }
       | None -> i
 
-  let resolveInStatements (ctx: Context) (stmts: Statement list) : Statement list =
+  let resolveInStatements (ctx: Context<'a>) (stmts: Statement list) : Statement list =
     mapInStatements
       (fun ctx i -> resolve ctx i)
       (fun ctx -> function
@@ -909,7 +969,7 @@ module ResolvedUnion =
     let cases, types = u.types |> List.fold f (Set.empty, [])
     cases, { types = types }
 
-  let private getDiscriminatedFromUnion ctx (u: UnionType) : Map<string, Map<Literal, Type>> * UnionType =
+  let private getDiscriminatedFromUnion (ctx: Context<'a>) (u: UnionType) : Map<string, Map<Literal, Type>> * UnionType =
     let (|Dummy|) _ = []
 
     let rec getLiteralFieldsFromType (ty: Type) : Map<string, Set<Literal>> =
@@ -1061,7 +1121,7 @@ module ResolvedUnion =
 
   let mutable private resolveUnionMap: Map<UnionType, ResolvedUnion> = Map.empty
 
-  let rec resolve (ctx: Context) (u: UnionType) : ResolvedUnion =
+  let rec resolve (ctx: Context<'a>) (u: UnionType) : ResolvedUnion =
     match resolveUnionMap |> Map.tryFind u with
     | Some t -> t
     | None ->
@@ -1106,12 +1166,12 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
-let private createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: GlobalOptions) =
+let private createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: GlobalOptions) : Context<GlobalOptions> =
   // TODO: handle SourceFile-specific things
   let add name ty m =
     if m |> Trie.containsKey [name] then m
     else
-      m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true; comments = [] }]
+      m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true; comments = []; loc = UnknownLocation }]
   let m =
     srcs
     |> List.collect (fun src -> src.statements)
@@ -1126,27 +1186,27 @@ let private createRootContextForTyper internalModuleName (srcs: SourceFile list)
     |> add "Array" (Prim Array)
     |> add "ReadonlyArray" (Prim ReadonlyArray)
     |> add "BigInt" (Prim BigInt)
-  {
-    verbose = opts.verbose
+  {|
     internalModuleName = internalModuleName
     currentNamespace = []
     definitionsMap = m
     typeLiteralsMap = Map.empty
     anonymousInterfacesMap = Map.empty
     unknownIdentTypes = Trie.empty
-  }
+    options = opts
+  |}
 
-let createRootContext (internalModuleName: string) (srcs: SourceFile list) (opts: GlobalOptions) : Context =
+let createRootContext (internalModuleName: string) (srcs: SourceFile list) (opts: GlobalOptions) : Context<GlobalOptions> =
   // TODO: handle SourceFile-specific things
   let ctx = createRootContextForTyper internalModuleName srcs opts
   let stmts = srcs |> List.collect (fun src -> src.statements)
   let tlm = Statement.getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
   let aim = Statement.getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
   let uit = Statement.getUnknownIdentTypes ctx stmts
-  { ctx with
+  {| ctx with
       typeLiteralsMap = tlm
       anonymousInterfacesMap = aim
-      unknownIdentTypes = uit }
+      unknownIdentTypes = uit |}
 
 let runAll (srcs: SourceFile list) (opts: GlobalOptions) =
   // TODO: handle SourceFile-specific things
@@ -1158,8 +1218,9 @@ let runAll (srcs: SourceFile list) (opts: GlobalOptions) =
     srcs
     |> List.map (
       mapStatements (fun stmts ->
-        stmts |> List.map Statement.replaceAliasToFunctionWithInterface // replace alias to function type with a function interface
+        stmts
               |> Statement.merge // merge modules, interfaces, etc
+              |> List.map Statement.replaceAliasToFunctionWithInterface // replace alias to function type with a function interface
       )
     )
   // build a context

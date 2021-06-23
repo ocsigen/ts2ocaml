@@ -15,31 +15,36 @@ with
     | _, _ -> Concat (x, y)
   override this.ToString() = this.ToString(2)
   member this.AsString = this.ToString(0)
-  member this.ToString(indentLength: int) =
-    let sb = StringBuilder()
+
+  static member inline private WriteImpl (write: string -> unit, writeLine: unit -> unit, indentLength: int, text: text) =
     let rec go indent rhs = function
       | Empty ->
         match rhs with
-        | [] -> sb.ToString()
+        | [] -> ()
         | (t, indent) :: rest -> go indent rest t
       | Str s ->
-        sb.Append s |> ignore;
+        write(s)
         match rhs with
-        | [] -> sb.ToString()
+        | [] -> ()
         | (t, indent) :: rest -> go indent rest t
       | Concat (l, r) ->
         go indent ((r, indent) :: rhs) l
       | Newline ->
-        sb.AppendLine() |> ignore;
+        writeLine()
         match rhs with
-        | [] -> sb.ToString()
+        | [] -> ()
         | (t, indent) :: rest ->
-          sb.Append(String.replicate (indent * indentLength) " ") |> ignore;
+          write(String.replicate (indent * indentLength) " ")
           go indent rest t
       | Indent t ->
-        sb.Append(String.replicate indentLength " ") |> ignore;
+        write(String.replicate indentLength " ")
         go (indent + 1) rhs t
-    go 0 [] this
+    go 0 [] text
+
+  member this.ToString(indentLength: int) =
+    let sb = StringBuilder()
+    text.WriteImpl(sb.Append >> ignore, sb.AppendLine >> ignore, indentLength, this)
+    sb.ToString()
 
 let toString indentLength (t: text) = t.ToString(indentLength)
 

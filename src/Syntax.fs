@@ -58,8 +58,9 @@ type Comment =
       | :? Comment as y -> 0
       | _ -> invalidArg "yo" "cannot compare values"
 
-type ICommented =
+type ICommented<'a> =
   abstract getComments: unit -> Comment list
+  abstract mapComments: (Comment list -> Comment list) -> 'a
 
 type [<RequireQualifiedAccess>] Kind =
   | Value
@@ -67,6 +68,7 @@ type [<RequireQualifiedAccess>] Kind =
   | ClassLike
   | Module
   | Enum
+  | Any
 
 type PrimType =
   | String | Bool | Number
@@ -76,23 +78,43 @@ type PrimType =
   | Symbol | RegExp
   | Array | ReadonlyArray
   | BigInt
+with
+  member this.AsJSClassName =
+    match this with
+    | String -> Some "String"
+    | Bool -> Some "Boolean"
+    | Number -> Some "Number"
+    | Object -> Some "Object"
+    | UntypedFunction -> Some "Function"
+    | Symbol -> Some "Symbol"
+    | RegExp -> Some "RegExp"
+    | BigInt -> Some "BigInt"
+    | Array -> Some "Array"
+    | ReadonlyArray -> Some "ReadonlyArray"
+    // TS-specific
+    | Any | Void | Unknown | Never -> None
+    // invalid types
+    | Null | Undefined -> None
 
 type Enum = {
   name: string
   isExported: Exported
   cases: EnumCase list
   comments: Comment list
+  loc: Location
 } with
-  interface ICommented with
+  interface ICommented<Enum> with
     member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
 
 and EnumCase = {
   name: string
   value: Literal option
   comments: Comment list
 } with
-  interface ICommented with
+  interface ICommented<EnumCase> with
     member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
 
 and Type =
   | Intrinsic
@@ -141,7 +163,7 @@ and IdentType = {
 
 and FieldLike = { name:string; isOptional:bool; value:Type }
 
-and FuncType<'returnType> = { args:Choice<FieldLike, Type> list; isVariadic:bool; returnType:'returnType }
+and FuncType<'returnType> = { args:Choice<FieldLike, Type> list; isVariadic:bool; returnType:'returnType; loc: Location }
 
 and Accessibility = Public | Protected | Private
 and Mutability = ReadOnly | WriteOnly | Mutable
@@ -161,9 +183,11 @@ and Class = {
   typeParams: TypeParam list
   members: (MemberAttribute * Member) list
   comments: Comment list
+  loc: Location
 } with
-  interface ICommented with
+  interface ICommented<Class> with
     member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
 
 and Member =
   | Field of FieldLike * Mutability * TypeParam list
@@ -179,8 +203,9 @@ and MemberAttribute = {
   isStatic: bool
   accessibility: Accessibility
 } with
-  interface ICommented with
+  interface ICommented<MemberAttribute> with
     member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
 
 and Value = {
   name: string
@@ -191,8 +216,9 @@ and Value = {
   accessibility : Accessibility option
   comments: Comment list
 } with
-  interface ICommented with
+  interface ICommented<Value> with
     member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
 
 and TypeAlias = {
   name: string
@@ -200,9 +226,11 @@ and TypeAlias = {
   target: Type
   erased: bool
   comments: Comment list
+  loc: Location
 } with
-  interface ICommented with
+  interface ICommented<TypeAlias> with
     member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
 
 and Statement =
   | TypeAlias of TypeAlias
@@ -215,7 +243,7 @@ and Statement =
   | UnknownStatement of string option * Comment list
   | FloatingComment of Comment list
   with
-  interface ICommented with
+  interface ICommented<Statement> with
     member this.getComments() =
       match this with
       | TypeAlias ta -> ta.comments | ClassDef c -> c.comments
@@ -223,6 +251,18 @@ and Statement =
       | Value v -> v.comments
       | Import i -> i.comments
       | Export (_, c) | UnknownStatement (_, c) | FloatingComment c -> c
+    member this.mapComments f =
+      let inline map f (x: #ICommented<'a>) = x.mapComments f
+      match this with
+      | TypeAlias ta -> TypeAlias (map f ta)
+      | ClassDef c -> ClassDef (map f c)
+      | EnumDef e -> EnumDef (map f e)
+      | Module m -> Module (map f m)
+      | Value v -> Value (map f v)
+      | Import i -> Import (map f i)
+      | Export (e, c) -> Export (e, f c)
+      | UnknownStatement (u, c) -> UnknownStatement (u, f c)
+      | FloatingComment c -> FloatingComment (f c)
 
 and Module = {
   name: string
@@ -231,8 +271,9 @@ and Module = {
   statements: Statement list
   comments: Comment list
 } with
-  interface ICommented with
+  interface ICommented<Module> with
     member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
 
 and Export =
   /// ```ts
@@ -321,8 +362,9 @@ and Import = {
   moduleSpecifier: string
   clause: ImportClause
 } with
-  interface ICommented with
+  interface ICommented<Import> with
     member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
   member this.Identifiers =
     match this.clause with
     | NamespaceImport i -> [{| name = i.name; kind = i.kind |}]

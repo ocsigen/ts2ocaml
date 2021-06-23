@@ -65,29 +65,25 @@ let parse (opts: GlobalOptions) (argv: string[]) =
     System.Enum.GetName(typeof<Ts.SyntaxKind>, node.kind) |> printfn "%s%A" indent
     node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
-  let srcs =
-    srcs
-    |> Seq.toList
-    |> List.map (fun src ->
-      eprintfn "* parsing %s..." src.fileName
-      let references =
-        Seq.concat [
-          src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
-          src.typeReferenceDirectives |> Seq.map (fun x -> TypeReference x.fileName)
-          src.libReferenceDirectives |> Seq.map (fun x -> LibReference x.fileName)
-        ] |> Seq.toList
-      let statements =
-        src.statements
-        |> Seq.collect (Parser.readStatement {| opts with checker = checker; sourceFile = src |})
-        |> Seq.toList
-      { statements = statements
-        fileName = src.fileName
-        moduleName = src.moduleName
-        hasNoDefaultLib = src.hasNoDefaultLib
-        references = references })
-
-  eprintfn "* running typer..."
-  Typer.runAll srcs opts
+  srcs
+  |> Seq.toList
+  |> List.map (fun src ->
+    eprintfn "* parsing %s..." src.fileName
+    let references =
+      Seq.concat [
+        src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
+        src.typeReferenceDirectives |> Seq.map (fun x -> TypeReference x.fileName)
+        src.libReferenceDirectives |> Seq.map (fun x -> LibReference x.fileName)
+      ] |> Seq.toList
+    let statements =
+      src.statements
+      |> Seq.collect (Parser.readStatement {| opts with checker = checker; sourceFile = src |})
+      |> Seq.toList
+    { statements = statements
+      fileName = src.fileName
+      moduleName = src.moduleName
+      hasNoDefaultLib = src.hasNoDefaultLib
+      references = references })
 
 open Yargs
 

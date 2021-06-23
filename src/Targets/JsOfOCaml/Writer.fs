@@ -1,15 +1,11 @@
-module Target.JsOfOCaml
+module Target.JsOfOCaml.Writer
 
 open System
 open Syntax
 open Typer
 open Text
 
-type Options = {|
-  verbose: bool
-  generateStdlib: bool
-  treatNumberAsInt: bool
-|}
+open Target.JsOfOCaml.Common
 
 module Utils =
   let comment text =
@@ -1120,21 +1116,3 @@ let emitAll ctx (srcs: SourceFile list) =
         ])
   ]
 
-open Fable.Core.JsInterop
-
-let private builder (argv: Yargs.Argv<Target.GlobalOptions>) : Yargs.Argv<Options> =
-  argv
-      .addFlag("stdlib", (fun x o -> {| o with generateStdlib = x |}), descr = "internal. used to generate Ts2ocaml.mli from typescript/lib/lib.*.d.ts")
-      .hide("stdlib")
-      .addFlag("number-as-int", (fun x o -> {| o with treatNumberAsInt = x |}), descr="treat number types as int")
-      .alias(!^"int", !^"number-as-int")
-
-let private run (ctx: Context) (srcs: SourceFile list) (options: Options) =
-  emitAll ctx srcs |> Text.toString 2 |> printfn "%s"
-
-let target =
-  { new ITarget<Options> with
-      member __.Command = "jsoo"
-      member __.Description = "Generate binding for js_of_ocaml"
-      member __.Builder = builder
-      member __.Run (ctx, srcs, options) = run ctx srcs options }

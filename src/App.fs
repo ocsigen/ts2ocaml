@@ -50,7 +50,7 @@ let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
       }
     ts.createProgram(ResizeArray tsPaths, options, !!host)
 
-let parse (argv: string[]) =
+let parse (opts: GlobalOptions) (argv: string[]) =
   let program =
     let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))
     let srcs =
@@ -69,6 +69,7 @@ let parse (argv: string[]) =
     srcs
     |> Seq.toList
     |> List.map (fun src ->
+      eprintfn "* parsing %s..." src.fileName
       let references =
         Seq.concat [
           src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
@@ -77,7 +78,7 @@ let parse (argv: string[]) =
         ] |> Seq.toList
       let statements =
         src.statements
-        |> Seq.collect (Parser.readStatement {| checker = checker; sourceFile = src |})
+        |> Seq.collect (Parser.readStatement {| opts with checker = checker; sourceFile = src |})
         |> Seq.toList
       { statements = statements
         fileName = src.fileName
@@ -85,7 +86,8 @@ let parse (argv: string[]) =
         hasNoDefaultLib = src.hasNoDefaultLib
         references = references })
 
-  Typer.runAll srcs
+  eprintfn "* running typer..."
+  Typer.runAll srcs opts
 
 open Yargs
 
@@ -95,7 +97,7 @@ let main argv =
     yargs
          .Invoke(argv)
          .parserConfiguration({| ``parse-positional-numbers`` = false |})
-         .addFlag("verbose", (fun v _ -> {| verbose = v |}), descr = "show verbose log")
+         .addFlag("verbose", (fun v _ -> {| verbose = v |}), descr = "Show verbose log")
          .alias(!^"v", !^"verbose")
     |> Target.register parse Target.JsOfOCaml.target
   yargs.demandCommand(1.0).help().argv |> ignore

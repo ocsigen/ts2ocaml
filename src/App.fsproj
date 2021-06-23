@@ -6,6 +6,7 @@
     <Compile Include="Bindings/TypeScript.fs" />
     <Compile Include="Bindings/YargsParser.fs" />
     <Compile Include="Bindings/Yargs.fs" />
+    <Compile Include="Common.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Text.fs" />
     <Compile Include="Syntax.fs" />
@@ -13,7 +14,9 @@
     <Compile Include="Typer.fs" />
     <Compile Include="Parser.fs" />
     <Compile Include="Target.fs" />
-    <Compile Include="Targets/JsOfOCaml.fs" />
+    <Compile Include="Targets/JsOfOCaml/Common.fs" />
+    <Compile Include="Targets/JsOfOCaml/Writer.fs" />
+    <Compile Include="Targets/JsOfOCaml/Target.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
   <ItemGroup>

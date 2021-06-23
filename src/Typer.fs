@@ -9,7 +9,13 @@ type Context = {
   typeLiteralsMap: Map<Literal, int>
   anonymousInterfacesMap: Map<Class, int>
   unknownIdentTypes: Trie<string, Set<int>>
+  verbose: bool
 }
+
+let inline private warn (ctx: Context) (loc: Location) fmt =
+  Printf.kprintf (fun s ->
+    if ctx.verbose then eprintfn "warn: %s at %s" s loc.AsString
+  ) fmt
 
 module Context =
   let ofParentNamespace (ctx: Context) : Context option =
@@ -431,7 +437,7 @@ module Type =
         let rec go t1 t2 =
           let onFail () =
             let tyText = Type.pp (Erased (IndexedAccess (t1, t2), loc))
-            eprintfn "warn: cannot resolve an indexed access type '%s' at %s" tyText loc.AsString
+            warn ctx loc "cannot resolve an indexed access type '%s'" tyText
             UnknownType (Some tyText)
           match t1, t2 with
           | Union { types = ts }, _ -> Union { types = List.map (fun t1 -> go t1 t2) ts }
@@ -466,13 +472,13 @@ module Type =
       | TypeQuery i ->
         let onFail () =
           let tyText = Type.pp (Erased (TypeQuery i, loc))
-          eprintfn "warn: cannot resolve a type query '%s' at %s" tyText loc.AsString
+          warn ctx loc "cannot resolve a type query '%s'" tyText
           UnknownType (Some tyText)
         match i.fullName with
         | None -> onFail ()
         | Some fn when typeQueries |> Set.contains fn ->
           let tyText = Type.pp (Erased (TypeQuery i, loc))
-          eprintfn "warn: a recursive type query '%s' is detected and is ignored at %s" tyText loc.AsString
+          warn ctx loc "a recursive type query '%s' is detected and is ignored" tyText
           UnknownType (Some tyText)
         | Some fn ->
           let result typrms ty =
@@ -500,7 +506,7 @@ module Type =
         let t = resolveErasedTypeImpl typeQueries ctx t
         let onFail () =
           let tyText = Type.pp t
-          eprintfn "warn: cannot resolve a type operator 'keyof %s' at %s" tyText loc.AsString
+          warn ctx loc "cannot resolve a type operator 'keyof %s'" tyText
           UnknownType (Some tyText)
         let memberChooser = function
           | Field (fl, _, _) | Getter fl | Setter fl -> Set.singleton (TypeLiteral (LString fl.name))
@@ -1100,7 +1106,7 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
-let private createRootContextForTyper internalModuleName (srcs: SourceFile list) =
+let private createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: GlobalOptions) =
   // TODO: handle SourceFile-specific things
   let add name ty m =
     if m |> Trie.containsKey [name] then m
@@ -1121,6 +1127,7 @@ let private createRootContextForTyper internalModuleName (srcs: SourceFile list)
     |> add "ReadonlyArray" (Prim ReadonlyArray)
     |> add "BigInt" (Prim BigInt)
   {
+    verbose = opts.verbose
     internalModuleName = internalModuleName
     currentNamespace = []
     definitionsMap = m
@@ -1129,9 +1136,9 @@ let private createRootContextForTyper internalModuleName (srcs: SourceFile list)
     unknownIdentTypes = Trie.empty
   }
 
-let createRootContext (internalModuleName: string) (srcs: SourceFile list) : Context =
+let createRootContext (internalModuleName: string) (srcs: SourceFile list) (opts: GlobalOptions) : Context =
   // TODO: handle SourceFile-specific things
-  let ctx = createRootContextForTyper internalModuleName srcs
+  let ctx = createRootContextForTyper internalModuleName srcs opts
   let stmts = srcs |> List.collect (fun src -> src.statements)
   let tlm = Statement.getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
   let aim = Statement.getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
@@ -1141,7 +1148,7 @@ let createRootContext (internalModuleName: string) (srcs: SourceFile list) : Con
       anonymousInterfacesMap = aim
       unknownIdentTypes = uit }
 
-let runAll (srcs: SourceFile list) =
+let runAll (srcs: SourceFile list) (opts: GlobalOptions) =
   // TODO: handle SourceFile-specific things
 
   let inline mapStatements f (src: SourceFile) =
@@ -1157,17 +1164,17 @@ let runAll (srcs: SourceFile list) =
     )
   // build a context
 
-  let ctx = createRootContextForTyper "Internal" result
+  let ctx = createRootContextForTyper "Internal" result opts
 
   // resolve every identifier into its full name
   let result =
     result |> List.map (mapStatements (Ident.resolveInStatements ctx))
   // rebuild the context with the identifiers resolved to full name
-  let ctx = createRootContextForTyper "Internal" result
+  let ctx = createRootContextForTyper "Internal" result opts
 
   // resolve every indexed access type and type query
   let result = result |> List.map (mapStatements (Statement.resolveErasedTypes ctx))
   // rebuild the context because resolbeIndexedAccessAndTypeQuery may introduce additional anonymous function interfaces
-  let ctx = createRootContext "Internal" result
+  let ctx = createRootContext "Internal" result opts
 
   ctx, result

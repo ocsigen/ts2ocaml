@@ -11,7 +11,7 @@ type Node = Ts.Node
 type TypeChecker = Ts.TypeChecker
 type Kind = Ts.SyntaxKind
 
-type ParserContext = {| checker: TypeChecker; sourceFile: Ts.SourceFile |}
+type ParserContext = {| checker: TypeChecker; sourceFile: Ts.SourceFile; verbose: bool |}
 
 module Enum =
   let inline pp (e: 'enum when 'enum: enum<_>) =
@@ -37,10 +37,11 @@ module Node =
     let lines = text.Split('\n')
     lines |> Array.map (sprintf "> %s") |> String.concat System.Environment.NewLine
 
-let nodeWarn (node: Node) format =
+let nodeWarn (ctx: ParserContext) (node: Node) format =
   Printf.kprintf (fun s ->
-    eprintfn "warn: %s at %s" s (Node.ppLocation node)
-    eprintfn "%s" (Node.ppLine node)
+    if ctx.verbose then
+      eprintfn "warn: %s at %s" s (Node.ppLocation node)
+      eprintfn "%s" (Node.ppLine node)
   ) format
 
 let nodeError node format =
@@ -306,7 +307,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
       match readLiteral (!!t.literal) with
       | Some l -> TypeLiteral l
       | None ->
-        nodeWarn t "unsupported literal type '%s'" (t.getText());
+        nodeWarn ctx t "unsupported literal type '%s'" (t.getText());
         UnknownType (Some (t.getText()))
   // anonymous interface
   | Kind.TypeLiteral ->
@@ -332,12 +333,12 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
         let t' = t' :?> Ts.TupleTypeNode
         readTupleTypeNode typrm ctx t' true
       | _ ->
-        nodeWarn t "unsupported 'readonly' modifier for type '%s'" (t.getText())
+        nodeWarn ctx t "unsupported 'readonly' modifier for type '%s'" (t.getText())
         UnknownType (Some (t.getText()))
     | Kind.KeyOfKeyword ->
       Erased (Keyof (readTypeNode typrm ctx t.``type``), Node.location t)
     | _ ->
-      nodeWarn t "unsupported type operator '%s'" (Enum.pp t.operator)
+      nodeWarn ctx t "unsupported type operator '%s'" (Enum.pp t.operator)
       UnknownType (Some (t.getText()))
   | Kind.IndexedAccessType ->
     let t = t :?> Ts.IndexedAccessTypeNode
@@ -351,10 +352,10 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     Erased (TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }), Node.location t)
   // fallbacks
   | Kind.TypePredicate ->
-    nodeWarn t "type predicate is not supported and treated as boolean"
+    nodeWarn ctx t "type predicate is not supported and treated as boolean"
     Prim Bool
   | _ ->
-    nodeWarn t "unsupported TypeNode kind: %s" (Enum.pp t.kind);
+    nodeWarn ctx t "unsupported TypeNode kind: %s" (Enum.pp t.kind);
     UnknownType (Some (t.getText()))
 
 and readTupleTypeNode (typrm: Set<string>) (ctx: ParserContext) (tuple: Ts.TupleTypeNode) isReadOnly : Type =
@@ -382,9 +383,9 @@ and readParameters<'retType> (typrm: Set<string>) (ctx: ParserContext) (ps: Ts.P
         | None ->
           match nameOpt with
           | Some name ->
-            nodeWarn p "type not specified for param '%s'" name
+            nodeWarn ctx p "type not specified for param '%s'" name
           | None ->
-            nodeWarn p "type not specified for param %i" i
+            nodeWarn ctx p "type not specified for param %i" i
           UnknownType None
       match nameOpt with
       | Some name ->
@@ -414,9 +415,9 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
       if nd.kind <> Kind.Constructor && nd.kind <> Kind.SetAccessor then
         match sdb.name with
         | Some name ->
-          nodeWarn sdb "type not specified for '%s' (%s)" (nameToString name) (Enum.pp nd.kind)
+          nodeWarn ctx sdb "type not specified for '%s' (%s)" (nameToString name) (Enum.pp nd.kind)
         | None ->
-          nodeWarn sdb "type not specified (%s)" (Enum.pp nd.kind)
+          nodeWarn ctx sdb "type not specified (%s)" (Enum.pp nd.kind)
       localTyprm, UnknownType None
   match nd.kind with
   | Kind.PropertySignature ->
@@ -428,7 +429,7 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
         UnknownType None
     match ty with
     | UnknownType None ->
-      nodeWarn nd "type not specified for field '%s'" (nameToString nd.name)
+      nodeWarn ctx nd "type not specified for field '%s'" (nameToString nd.name)
     | _ -> ()
     let fl = { name = nameToString nd.name; isOptional = false; value = ty }
     Some (attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), []))
@@ -441,7 +442,7 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
         UnknownType None
     match ty with
     | UnknownType None ->
-      nodeWarn nd "type not specified for field '%s'" (nameToString nd.name)
+      nodeWarn ctx nd "type not specified for field '%s'" (nameToString nd.name)
     | _ -> ()
     let fl = { name = nameToString nd.name; isOptional = false; value = ty }
     Some (attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), []))
@@ -459,7 +460,7 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
   | Kind.IndexSignature ->
     let nd = nd :?> Ts.IndexSignatureDeclaration
     let localTyprm, ty = extractType nd
-    if not (List.isEmpty localTyprm) then nodeWarn nd "indexer with type argument is not supported"
+    if not (List.isEmpty localTyprm) then nodeWarn ctx nd "indexer with type argument is not supported"
     Some (attr,
       Indexer (readParameters typrm ctx nd.parameters ty,
                if isReadOnly nd.modifiers then ReadOnly else Mutable))
@@ -479,14 +480,14 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
   | Kind.GetAccessor ->
     let nd = nd :?> Ts.GetAccessorDeclaration
     let localTyprm, ty = extractType nd
-    if not (List.isEmpty localTyprm) then nodeWarn nd "getter with type argument is not supported"
+    if not (List.isEmpty localTyprm) then nodeWarn ctx nd "getter with type argument is not supported"
     let fl = { name = nameToString nd.name; isOptional = false; value = ty }
     Some (attr, Getter fl)
   | Kind.SetAccessor ->
     let nd = nd :?> Ts.SetAccessorDeclaration
     let localTyprm, retTy = extractType nd
     assert (match retTy with UnknownType _ -> true | _ -> false)
-    if not (List.isEmpty localTyprm) then nodeWarn nd "setter with type argument is not supported"
+    if not (List.isEmpty localTyprm) then nodeWarn ctx nd "setter with type argument is not supported"
     match readParameters typrm ctx nd.parameters () with
     | { args = [ty]; isVariadic = false } ->
       match ty with
@@ -495,10 +496,10 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
       | Choice2Of2 ty ->
         Some (attr, Setter { name = nameToString nd.name; isOptional = false; value = ty })
     | _ ->
-      nodeWarn nd "invalid setter for '%s'" (nameToString nd.name)
+      nodeWarn ctx nd "invalid setter for '%s'" (nameToString nd.name)
       None
   | _ ->
-    nodeWarn nd "unsupported NamedDeclaration kind: '%s'" (Enum.pp nd.kind)
+    nodeWarn ctx nd "unsupported NamedDeclaration kind: '%s'" (Enum.pp nd.kind)
     None
 
 and readTypeParameters (typrm: Set<string>) (ctx: ParserContext) (tps: Ts.TypeParameterDeclaration ResizeArray option) : TypeParam list =
@@ -581,7 +582,7 @@ let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list
     let comments = readCommentsForNamedDeclaration ctx vd
     match getBindingName vd.name with
     | None ->
-      nodeWarn vd "name is not defined for variable"
+      nodeWarn ctx vd "name is not defined for variable"
       UnknownStatement (Some (vd.getText()), comments)
     | Some name ->
       let ty =
@@ -596,10 +597,10 @@ let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list
             | Kind.NumericLiteral | Kind.BigIntLiteral -> Prim Number
             | Kind.TrueKeyword | Kind.FalseKeyword -> Prim Bool
             | _ ->
-              nodeWarn vd "type missing for variable '%s'" name
+              nodeWarn ctx vd "type missing for variable '%s'" name
               UnknownType None
           | None ->
-            nodeWarn vd "type missing for variable '%s'" name
+            nodeWarn ctx vd "type missing for variable '%s'" name
             UnknownType None
       let isConst = (int vd.flags) ||| (int Ts.NodeFlags.Const) <> 0
       let isExported = getExported vd.modifiers
@@ -610,7 +611,7 @@ let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list
 let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option =
   match f.name with
   | None ->
-    nodeWarn f "name is not defined for function"; None
+    nodeWarn ctx f "name is not defined for function"; None
   | Some name ->
     let name = nameToString name
     let comments = readCommentsForNamedDeclaration ctx f
@@ -623,7 +624,7 @@ let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option
         match f.``type`` with
         | Some tn -> readTypeNode typrm ctx tn
         | None ->
-          nodeWarn f "return type missing for function '%s'" name
+          nodeWarn ctx f "return type missing for function '%s'" name
           UnknownType None
       Function (readParameters typrm ctx f.parameters retTy)
     Some { comments = comments; name = name; typ = ty; typeParams = typrm; isConst = false; isExported = isExported; accessibility = accessibility }
@@ -631,7 +632,7 @@ let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option
 let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx e
   match extractNestedName e.expression |> Seq.toList with
-  | [] -> nodeWarn e.expression "cannot parse node '%s' as identifier" (e.expression.getText()); None
+  | [] -> nodeWarn ctx e.expression "cannot parse node '%s' as identifier" (e.expression.getText()); None
   | ts ->
     let ident = { name = ts; fullName = None; loc = Node.location e.expression }
     match e.isExportEquals with
@@ -643,7 +644,7 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
   match e.exportClause, e.moduleSpecifier with
   | None, _
   | _, Some _ ->
-    nodeWarn e "re-exporting an external module is not supported."; None
+    nodeWarn ctx e "re-exporting an external module is not supported."; None
   | Some bindings, None ->
     let kind = (bindings |> box :?> Ts.Node).kind
     match kind with
@@ -662,7 +663,7 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
         |> Seq.toList
       Some (Export (ES6Export elems, comments))
     | _ ->
-      nodeWarn e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
+      nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
 
 let readNamespaceExportDeclaration (ctx: ParserContext) (e: Ts.NamespaceExportDeclaration) : Statement =
   Export (NamespaceExport e.name.text, readCommentsForNamedDeclaration ctx e)
@@ -671,7 +672,7 @@ let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclarat
   let comments = readCommentsForNamedDeclaration ctx i
   match (!!i.moduleReference : Ts.Node).kind with
   | Kind.Identifier | Kind.QualifiedName ->
-    nodeWarn i "import assignment to an identifier is not supported"; None
+    nodeWarn ctx i "import assignment to an identifier is not supported"; None
   | Kind.ExternalModuleReference ->
     let m : Ts.ExternalModuleReference = !!i.moduleReference
     match (!!m.expression : Ts.Node).kind with
@@ -686,13 +687,13 @@ let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclarat
         clause = NamespaceImport {| name = i.name.text; isES6Import = false; kind = kind |}
       } |> Some
     | kind ->
-      nodeWarn i "invalid kind '%s' for module specifier" (Enum.pp kind); None
+      nodeWarn ctx i "invalid kind '%s' for module specifier" (Enum.pp kind); None
   | kind ->
-    nodeWarn i "invalid kind '%s' for import" (Enum.pp kind); None
+    nodeWarn ctx i "invalid kind '%s' for import" (Enum.pp kind); None
 
 let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : Statement option =
   match i.importClause with
-  | None -> nodeWarn i "side-effect only import will be ignored"; None
+  | None -> nodeWarn ctx i "side-effect only import will be ignored"; None
   | Some c ->
     match i.moduleSpecifier.kind with
     | Kind.StringLiteral ->
@@ -717,9 +718,9 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
             {| name = e.name.text; kind = kind; renameAs = e.propertyName |> Option.map (fun i -> i.text) |})
         create (ES6Import {| defaultImport = defaultImport; bindings = bindings |})
       | _, _ ->
-        nodeWarn i "invalid import statement"; None
+        nodeWarn ctx i "invalid import statement"; None
     | kind ->
-      nodeWarn i "invalid kind '%s' for module specifier" (Enum.pp kind); None
+      nodeWarn ctx i "invalid kind '%s' for module specifier" (Enum.pp kind); None
 
 
 let readJSDocImpl (ctx: ParserContext) (doc: Ts.JSDoc) : Comment list =
@@ -758,7 +759,7 @@ let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Module =
       | Kind.ModuleDeclaration ->
         [ Module (readModule ctx (nd :?> Ts.ModuleDeclaration)) ]
       | _ ->
-        nodeWarn nd "unknown kind in ModuleDeclaration: %s" (Enum.pp nd.kind)
+        nodeWarn ctx nd "unknown kind in ModuleDeclaration: %s" (Enum.pp nd.kind)
         [])
   let comments =
     md.getChildren()
@@ -785,6 +786,6 @@ and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
   | Kind.ImportEqualsDeclaration -> [readImportEqualsDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
   | Kind.ImportDeclaration -> [readImportDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
   | _ ->
-    nodeWarn stmt "skipping unsupported Statement kind: %s" (Enum.pp stmt.kind)
+    nodeWarn ctx stmt "skipping unsupported Statement kind: %s" (Enum.pp stmt.kind)
     [onError ()]
 

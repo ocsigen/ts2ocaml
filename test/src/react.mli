@@ -636,6 +636,12 @@ module NativeAnimationEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeAnimationEvent | AnimationEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeAnimationEvent | AnimationEvent.tags]
+  ]
 end
 module NativeClipboardEvent : sig
   type t = _NativeClipboardEvent
@@ -644,6 +650,12 @@ module NativeClipboardEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeClipboardEvent | ClipboardEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeClipboardEvent | ClipboardEvent.tags]
+  ]
 end
 module NativeCompositionEvent : sig
   type t = _NativeCompositionEvent
@@ -652,6 +664,12 @@ module NativeCompositionEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeCompositionEvent | CompositionEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeCompositionEvent | CompositionEvent.tags]
+  ]
 end
 module NativeDragEvent : sig
   type t = _NativeDragEvent
@@ -660,6 +678,12 @@ module NativeDragEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeDragEvent | DragEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeDragEvent | DragEvent.tags]
+  ]
 end
 module NativeFocusEvent : sig
   type t = _NativeFocusEvent
@@ -668,6 +692,12 @@ module NativeFocusEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeFocusEvent | FocusEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeFocusEvent | FocusEvent.tags]
+  ]
 end
 module NativeKeyboardEvent : sig
   type t = _NativeKeyboardEvent
@@ -676,6 +706,12 @@ module NativeKeyboardEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeKeyboardEvent | KeyboardEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeKeyboardEvent | KeyboardEvent.tags]
+  ]
 end
 module NativeMouseEvent : sig
   type t = _NativeMouseEvent
@@ -684,6 +720,12 @@ module NativeMouseEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeMouseEvent | MouseEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeMouseEvent | MouseEvent.tags]
+  ]
 end
 module NativeTouchEvent : sig
   type t = _NativeTouchEvent
@@ -692,6 +734,12 @@ module NativeTouchEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeTouchEvent | TouchEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeTouchEvent | TouchEvent.tags]
+  ]
 end
 module NativePointerEvent : sig
   type t = _NativePointerEvent
@@ -700,6 +748,12 @@ module NativePointerEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativePointerEvent | PointerEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativePointerEvent | PointerEvent.tags]
+  ]
 end
 module NativeTransitionEvent : sig
   type t = _NativeTransitionEvent
@@ -708,6 +762,12 @@ module NativeTransitionEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeTransitionEvent | TransitionEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeTransitionEvent | TransitionEvent.tags]
+  ]
 end
 module NativeUIEvent : sig
   type t = _NativeUIEvent
@@ -716,6 +776,12 @@ module NativeUIEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeUIEvent | UIEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeUIEvent | UIEvent.tags]
+  ]
 end
 module NativeWheelEvent : sig
   type t = _NativeWheelEvent
@@ -724,6 +790,12 @@ module NativeWheelEvent : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NativeWheelEvent | WheelEvent.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NativeWheelEvent | WheelEvent.tags]
+  ]
 end
 module Booleanish : sig
   type t = _Booleanish
@@ -732,6 +804,12 @@ module Booleanish : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`Booleanish]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Booleanish]
+  ]
 end
 val undefined_void_only: (* FIXME: unknown type 'unique symbol' *)any [@@js.global "UNDEFINED_VOID_ONLY"]
 module[@js.scope "Destructor"] Destructor : sig
@@ -741,6 +819,12 @@ module[@js.scope "Destructor"] Destructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`Destructor]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Destructor]
+  ]
   val apply: t -> (unit, anonymous_interface_1) union2 [@@js.apply]
 end
 (**
@@ -762,6 +846,12 @@ module[@js.scope "React"] React : sig
     type t_0 = any t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_ElementType of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_ElementType of 'P]
+    ]
   end
   (** @deprecated Please use `ElementType` *)
   module ReactType : sig
@@ -774,6 +864,12 @@ module[@js.scope "React"] React : sig
     type t_0 = any t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_ElementType of 'P | `React_ReactType of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_ElementType of 'P | `React_ReactType of 'P]
+    ]
   end
   module ComponentType : sig
     type 'P t = 'P _React_ComponentType
@@ -785,6 +881,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_ComponentType of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_ComponentType of 'P]
+    ]
   end
   module JSXElementConstructor : sig
     type 'P t = 'P _React_JSXElementConstructor
@@ -793,6 +895,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_JSXElementConstructor of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_JSXElementConstructor of 'P]
+    ]
   end
   module[@js.scope "RefObject"] RefObject : sig
     type 'T t = 'T _React_RefObject
@@ -801,6 +909,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_RefObject of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_RefObject of 'T]
+    ]
     val get_current: 'T t -> 'T or_null [@@js.get "current"]
   end
   module RefCallback : sig
@@ -810,6 +924,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_RefCallback of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_RefCallback of 'T]
+    ]
   end
   module Ref : sig
     type 'T t = 'T _React_Ref
@@ -818,6 +938,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_Ref of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_Ref of 'T]
+    ]
   end
   module LegacyRef : sig
     type 'T t = 'T _React_LegacyRef
@@ -826,6 +952,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_LegacyRef of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_LegacyRef of 'T]
+    ]
   end
   (**
     Gets the instance type for a React element. The instance will be different for various component types:
@@ -850,6 +982,12 @@ module[@js.scope "React"] React : sig
     type 'C t_1 = 'C t
     val t_1_to_js: ('C -> Ojs.t) -> 'C t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'C) -> Ojs.t -> 'C t_1
+    [@@@js.stop]
+    type 'C tags = [`React_ElementRef of 'C]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'C tags = [`React_ElementRef of 'C]
+    ]
   end
   module ComponentState : sig
     type t = _React_ComponentState
@@ -858,6 +996,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ComponentState]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ComponentState]
+    ]
   end
   module Key : sig
     type t = _React_Key
@@ -866,6 +1010,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_Key]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_Key]
+    ]
   end
   (**
     internal: You shouldn't need to use this type since you never see these attributes
@@ -878,6 +1028,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_Attributes]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_Attributes]
+    ]
     val get_key: t -> _React_Key or_null [@@js.get "key"]
     val set_key: t -> _React_Key or_null -> unit [@@js.set "key"]
   end
@@ -888,6 +1044,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_Attributes | `React_RefAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_Attributes | `React_RefAttributes of 'T]
+    ]
     val get_ref: 'T t -> 'T _React_Ref [@@js.get "ref"]
     val set_ref: 'T t -> 'T _React_Ref -> unit [@@js.set "ref"]
     val cast: 'T t -> _React_Attributes [@@js.cast]
@@ -899,6 +1061,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_Attributes | `React_ClassAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_Attributes | `React_ClassAttributes of 'T]
+    ]
     val get_ref: 'T t -> 'T _React_LegacyRef [@@js.get "ref"]
     val set_ref: 'T t -> 'T _React_LegacyRef -> unit [@@js.set "ref"]
     val cast: 'T t -> _React_Attributes [@@js.cast]
@@ -916,6 +1084,12 @@ module[@js.scope "React"] React : sig
     type t_0 = (any, any _React_JSXElementConstructor or_string) t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type ('P, 'T) tags = [`React_ReactElement of ('P * 'T)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T) tags = [`React_ReactElement of ('P * 'T)]
+    ]
     val get_type: ('P, 'T) t -> 'T [@@js.get "type"]
     val set_type: ('P, 'T) t -> 'T -> unit [@@js.set "type"]
     val get_props: ('P, 'T) t -> 'P [@@js.get "props"]
@@ -930,6 +1104,12 @@ module[@js.scope "React"] React : sig
     type ('T, 'P) t_2 = ('T, 'P) t
     val t_2_to_js: ('T -> Ojs.t) -> ('P -> Ojs.t) -> ('T, 'P) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'T) -> (Ojs.t -> 'P) -> Ojs.t -> ('T, 'P) t_2
+    [@@@js.stop]
+    type ('T, 'P) tags = [`React_ReactComponentElement of ('T * 'P) | `React_ReactElement of ('P * ('T, float) Exclude.t_2)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('T, 'P) tags = [`React_ReactComponentElement of ('T * 'P) | `React_ReactElement of ('P * ('T, float) Exclude.t_2)]
+    ]
     val cast: ('T, 'P) t -> ('P, ('T, float) Exclude.t_2) _React_ReactElement [@@js.cast]
   end
   (** @deprecated Please use `FunctionComponentElement` *)
@@ -940,6 +1120,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_FunctionComponentElement of 'P | `React_ReactElement of ('P * 'P _React_FunctionComponent) | `React_SFCElement of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_FunctionComponentElement of 'P | `React_ReactElement of ('P * 'P _React_FunctionComponent) | `React_SFCElement of 'P]
+    ]
   end
   module[@js.scope "FunctionComponentElement"] FunctionComponentElement : sig
     type 'P t = 'P _React_FunctionComponentElement
@@ -948,6 +1134,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_FunctionComponentElement of 'P | `React_ReactElement of ('P * 'P _React_FunctionComponent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_FunctionComponentElement of 'P | `React_ReactElement of ('P * 'P _React_FunctionComponent)]
+    ]
     val get_ref: 'P t -> (* FIXME: unknown type ''ref' extends keyof P ? P extends { ref?: infer R } ? R : never : never' *)any [@@js.get "ref"]
     val set_ref: 'P t -> (* FIXME: unknown type ''ref' extends keyof P ? P extends { ref?: infer R } ? R : never : never' *)any -> unit [@@js.set "ref"]
     val cast: 'P t -> ('P, 'P _React_FunctionComponent) _React_ReactElement [@@js.cast]
@@ -959,6 +1151,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'T) t_2 = ('P, 'T) t
     val t_2_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('P, 'T) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> Ojs.t -> ('P, 'T) t_2
+    [@@@js.stop]
+    type ('P, 'T) tags = [`React_CElement of ('P * 'T) | `React_ComponentElement of ('P * 'T) | `React_ReactElement of ('P * ('P, _React_ComponentState) _React_ComponentClass)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T) tags = [`React_CElement of ('P * 'T) | `React_ComponentElement of ('P * 'T) | `React_ReactElement of ('P * ('P, _React_ComponentState) _React_ComponentClass)]
+    ]
   end
   module[@js.scope "ComponentElement"] ComponentElement : sig
     type ('P, 'T) t = ('P, 'T) _React_ComponentElement
@@ -967,6 +1165,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'T) t_2 = ('P, 'T) t
     val t_2_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('P, 'T) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> Ojs.t -> ('P, 'T) t_2
+    [@@@js.stop]
+    type ('P, 'T) tags = [`React_ComponentElement of ('P * 'T) | `React_ReactElement of ('P * ('P, _React_ComponentState) _React_ComponentClass)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T) tags = [`React_ComponentElement of ('P * 'T) | `React_ReactElement of ('P * ('P, _React_ComponentState) _React_ComponentClass)]
+    ]
     val get_ref: ('P, 'T) t -> 'T _React_LegacyRef [@@js.get "ref"]
     val set_ref: ('P, 'T) t -> 'T _React_LegacyRef -> unit [@@js.set "ref"]
     val cast: ('P, 'T) t -> ('P, ('P, _React_ComponentState) _React_ComponentClass) _React_ReactElement [@@js.cast]
@@ -978,6 +1182,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_CElement of ('P * ('P, _React_ComponentState) _React_ClassicComponent) | `React_ClassicElement of 'P | `React_ComponentElement of ('P * ('P, _React_ComponentState) _React_ClassicComponent) | `React_ReactElement of ('P * ('P, _React_ComponentState) _React_ComponentClass)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_CElement of ('P * ('P, _React_ComponentState) _React_ClassicComponent) | `React_ClassicElement of 'P | `React_ComponentElement of ('P * ('P, _React_ComponentState) _React_ClassicComponent) | `React_ReactElement of ('P * ('P, _React_ComponentState) _React_ComponentClass)]
+    ]
   end
   module[@js.scope "DOMElement"] DOMElement : sig
     type ('P, 'T) t = ('P, 'T) _React_DOMElement
@@ -986,6 +1196,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'T) t_2 = ('P, 'T) t
     val t_2_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('P, 'T) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> Ojs.t -> ('P, 'T) t_2
+    [@@@js.stop]
+    type ('P, 'T) tags = [`React_DOMElement of ('P * 'T) | `React_ReactElement of ('P * string)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T) tags = [`React_DOMElement of ('P * 'T) | `React_ReactElement of ('P * string)]
+    ]
     val get_ref: ('P, 'T) t -> 'T _React_LegacyRef [@@js.get "ref"]
     val set_ref: ('P, 'T) t -> 'T _React_LegacyRef -> unit [@@js.set "ref"]
     val cast: ('P, 'T) t -> ('P, string) _React_ReactElement [@@js.cast]
@@ -997,6 +1213,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_DOMElement of ('T _React_AllHTMLAttributes * 'T) | `React_DetailedReactHTMLElement of ('T _React_AllHTMLAttributes * 'T) | `React_ReactElement of ('T _React_AllHTMLAttributes * string) | `React_ReactHTMLElement of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_DOMElement of ('T _React_AllHTMLAttributes * 'T) | `React_DetailedReactHTMLElement of ('T _React_AllHTMLAttributes * 'T) | `React_ReactElement of ('T _React_AllHTMLAttributes * string) | `React_ReactHTMLElement of 'T]
+    ]
     val cast: 'T t -> ('T _React_AllHTMLAttributes, 'T) _React_DetailedReactHTMLElement [@@js.cast]
   end
   module[@js.scope "DetailedReactHTMLElement"] DetailedReactHTMLElement : sig
@@ -1006,6 +1228,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'T) t_2 = ('P, 'T) t
     val t_2_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('P, 'T) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> Ojs.t -> ('P, 'T) t_2
+    [@@@js.stop]
+    type ('P, 'T) tags = [`React_DOMElement of ('P * 'T) | `React_DetailedReactHTMLElement of ('P * 'T) | `React_ReactElement of ('P * string)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T) tags = [`React_DOMElement of ('P * 'T) | `React_DetailedReactHTMLElement of ('P * 'T) | `React_ReactElement of ('P * string)]
+    ]
     val get_type: ('P, 'T) t -> ([`L_s4_a[@js "a"] | `L_s5_abbr[@js "abbr"] | `L_s9_address[@js "address"] | `L_s15_area[@js "area"] | `L_s16_article[@js "article"] | `L_s18_aside[@js "aside"] | `L_s21_audio[@js "audio"] | `L_s23_b[@js "b"] | `L_s24_base[@js "base"] | `L_s26_bdi[@js "bdi"] | `L_s27_bdo[@js "bdo"] | `L_s30_big[@js "big"] | `L_s31_blockquote[@js "blockquote"] | `L_s32_body[@js "body"] | `L_s35_br[@js "br"] | `L_s37_button[@js "button"] | `L_s38_canvas[@js "canvas"] | `L_s39_caption[@js "caption"] | `L_s44_cite[@js "cite"] | `L_s46_code[@js "code"] | `L_s47_col[@js "col"] | `L_s48_colgroup[@js "colgroup"] | `L_s50_data[@js "data"] | `L_s51_datalist[@js "datalist"] | `L_s53_dd[@js "dd"] | `L_s56_del[@js "del"] | `L_s59_details[@js "details"] | `L_s60_dfn[@js "dfn"] | `L_s61_dialog[@js "dialog"] | `L_s62_div[@js "div"] | `L_s63_dl[@js "dl"] | `L_s65_dt[@js "dt"] | `L_s68_em[@js "em"] | `L_s70_embed[@js "embed"] | `L_s100_fieldset[@js "fieldset"] | `L_s101_figcaption[@js "figcaption"] | `L_s102_figure[@js "figure"] | `L_s104_footer[@js "footer"] | `L_s106_form[@js "form"] | `L_s111_h1[@js "h1"] | `L_s112_h2[@js "h2"] | `L_s113_h3[@js "h3"] | `L_s114_h4[@js "h4"] | `L_s115_h5[@js "h5"] | `L_s116_h6[@js "h6"] | `L_s118_head[@js "head"] | `L_s119_header[@js "header"] | `L_s120_hgroup[@js "hgroup"] | `L_s122_hr[@js "hr"] | `L_s123_html[@js "html"] | `L_s124_i[@js "i"] | `L_s126_iframe[@js "iframe"] | `L_s128_img[@js "img"] | `L_s132_input[@js "input"] | `L_s133_ins[@js "ins"] | `L_s136_kbd[@js "kbd"] | `L_s138_keygen[@js "keygen"] | `L_s139_label[@js "label"] | `L_s142_legend[@js "legend"] | `L_s143_li[@js "li"] | `L_s147_link[@js "link"] | `L_s151_main[@js "main"] | `L_s152_map[@js "map"] | `L_s153_mark[@js "mark"] | `L_s158_menu[@js "menu"] | `L_s159_menuitem[@js "menuitem"] | `L_s160_meta[@js "meta"] | `L_s162_meter[@js "meter"] | `L_s169_nav[@js "nav"] | `L_s176_noscript[@js "noscript"] | `L_s178_object[@js "object"] | `L_s180_ol[@js "ol"] | `L_s182_optgroup[@js "optgroup"] | `L_s183_option[@js "option"] | `L_s187_output[@js "output"] | `L_s188_p[@js "p"] | `L_s190_param[@js "param"] | `L_s194_picture[@js "picture"] | `L_s199_pre[@js "pre"] | `L_s201_progress[@js "progress"] | `L_s202_q[@js "q"] | `L_s213_rp[@js "rp"] | `L_s214_rt[@js "rt"] | `L_s215_ruby[@js "ruby"] | `L_s216_s[@js "s"] | `L_s219_samp[@js "samp"] | `L_s220_script[@js "script"] | `L_s222_section[@js "section"] | `L_s223_select[@js "select"] | `L_s225_slot[@js "slot"] | `L_s226_small[@js "small"] | `L_s227_source[@js "source"] | `L_s228_span[@js "span"] | `L_s235_strong[@js "strong"] | `L_s236_style[@js "style"] | `L_s237_sub[@js "sub"] | `L_s240_summary[@js "summary"] | `L_s241_sup[@js "sup"] | `L_s246_table[@js "table"] | `L_s247_tbody[@js "tbody"] | `L_s248_td[@js "td"] | `L_s250_template[@js "template"] | `L_s258_textarea[@js "textarea"] | `L_s259_tfoot[@js "tfoot"] | `L_s260_th[@js "th"] | `L_s261_thead[@js "thead"] | `L_s262_time[@js "time"] | `L_s263_title[@js "title"] | `L_s266_tr[@js "tr"] | `L_s267_track[@js "track"] | `L_s271_u[@js "u"] | `L_s272_ul[@js "ul"] | `L_s278_var[@js "var"] | `L_s280_video[@js "video"] | `L_s282_wbr[@js "wbr"] | `L_s283_webview[@js "webview"]] [@js.enum]) [@@js.get "type"]
     val set_type: ('P, 'T) t -> ([`L_s4_a | `L_s5_abbr | `L_s9_address | `L_s15_area | `L_s16_article | `L_s18_aside | `L_s21_audio | `L_s23_b | `L_s24_base | `L_s26_bdi | `L_s27_bdo | `L_s30_big | `L_s31_blockquote | `L_s32_body | `L_s35_br | `L_s37_button | `L_s38_canvas | `L_s39_caption | `L_s44_cite | `L_s46_code | `L_s47_col | `L_s48_colgroup | `L_s50_data | `L_s51_datalist | `L_s53_dd | `L_s56_del | `L_s59_details | `L_s60_dfn | `L_s61_dialog | `L_s62_div | `L_s63_dl | `L_s65_dt | `L_s68_em | `L_s70_embed | `L_s100_fieldset | `L_s101_figcaption | `L_s102_figure | `L_s104_footer | `L_s106_form | `L_s111_h1 | `L_s112_h2 | `L_s113_h3 | `L_s114_h4 | `L_s115_h5 | `L_s116_h6 | `L_s118_head | `L_s119_header | `L_s120_hgroup | `L_s122_hr | `L_s123_html | `L_s124_i | `L_s126_iframe | `L_s128_img | `L_s132_input | `L_s133_ins | `L_s136_kbd | `L_s138_keygen | `L_s139_label | `L_s142_legend | `L_s143_li | `L_s147_link | `L_s151_main | `L_s152_map | `L_s153_mark | `L_s158_menu | `L_s159_menuitem | `L_s160_meta | `L_s162_meter | `L_s169_nav | `L_s176_noscript | `L_s178_object | `L_s180_ol | `L_s182_optgroup | `L_s183_option | `L_s187_output | `L_s188_p | `L_s190_param | `L_s194_picture | `L_s199_pre | `L_s201_progress | `L_s202_q | `L_s213_rp | `L_s214_rt | `L_s215_ruby | `L_s216_s | `L_s219_samp | `L_s220_script | `L_s222_section | `L_s223_select | `L_s225_slot | `L_s226_small | `L_s227_source | `L_s228_span | `L_s235_strong | `L_s236_style | `L_s237_sub | `L_s240_summary | `L_s241_sup | `L_s246_table | `L_s247_tbody | `L_s248_td | `L_s250_template | `L_s258_textarea | `L_s259_tfoot | `L_s260_th | `L_s261_thead | `L_s262_time | `L_s263_title | `L_s266_tr | `L_s267_track | `L_s271_u | `L_s272_ul | `L_s278_var | `L_s280_video | `L_s282_wbr | `L_s283_webview] [@js.enum]) -> unit [@@js.set "type"]
     val cast: ('P, 'T) t -> ('P, 'T) _React_DOMElement [@@js.cast]
@@ -1017,6 +1245,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_DOMElement of (SVGElement.t_0 _React_SVGAttributes * SVGElement.t_0) | `React_ReactElement of (SVGElement.t_0 _React_SVGAttributes * string) | `React_ReactSVGElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_DOMElement of (SVGElement.t_0 _React_SVGAttributes * SVGElement.t_0) | `React_ReactElement of (SVGElement.t_0 _React_SVGAttributes * string) | `React_ReactSVGElement]
+    ]
     val get_type: t -> ([`L_s13_animate[@js "animate"] | `L_s43_circle[@js "circle"] | `L_s45_clipPath[@js "clipPath"] | `L_s55_defs[@js "defs"] | `L_s57_desc[@js "desc"] | `L_s67_ellipse[@js "ellipse"] | `L_s75_feBlend[@js "feBlend"] | `L_s76_feColorMatrix[@js "feColorMatrix"] | `L_s77_feComponentTransfer[@js "feComponentTransfer"] | `L_s78_feComposite[@js "feComposite"] | `L_s79_feConvolveMatrix[@js "feConvolveMatrix"] | `L_s80_feDiffuseLighting[@js "feDiffuseLighting"] | `L_s81_feDisplacementMap[@js "feDisplacementMap"] | `L_s82_feDistantLight[@js "feDistantLight"] | `L_s83_feDropShadow[@js "feDropShadow"] | `L_s84_feFlood[@js "feFlood"] | `L_s85_feFuncA[@js "feFuncA"] | `L_s86_feFuncB[@js "feFuncB"] | `L_s87_feFuncG[@js "feFuncG"] | `L_s88_feFuncR[@js "feFuncR"] | `L_s89_feGaussianBlur[@js "feGaussianBlur"] | `L_s90_feImage[@js "feImage"] | `L_s91_feMerge[@js "feMerge"] | `L_s92_feMergeNode[@js "feMergeNode"] | `L_s93_feMorphology[@js "feMorphology"] | `L_s94_feOffset[@js "feOffset"] | `L_s95_fePointLight[@js "fePointLight"] | `L_s96_feSpecularLighting[@js "feSpecularLighting"] | `L_s97_feSpotLight[@js "feSpotLight"] | `L_s98_feTile[@js "feTile"] | `L_s99_feTurbulence[@js "feTurbulence"] | `L_s103_filter[@js "filter"] | `L_s105_foreignObject[@js "foreignObject"] | `L_s107_g[@js "g"] | `L_s127_image[@js "image"] | `L_s144_line[@js "line"] | `L_s145_linearGradient[@js "linearGradient"] | `L_s154_marker[@js "marker"] | `L_s155_mask[@js "mask"] | `L_s161_metadata[@js "metadata"] | `L_s191_path[@js "path"] | `L_s192_pattern[@js "pattern"] | `L_s196_polygon[@js "polygon"] | `L_s197_polyline[@js "polyline"] | `L_s203_radialGradient[@js "radialGradient"] | `L_s204_rect[@js "rect"] | `L_s232_stop[@js "stop"] | `L_s242_svg[@js "svg"] | `L_s243_switch[@js "switch"] | `L_s244_symbol[@js "symbol"] | `L_s252_text[@js "text"] | `L_s257_textPath[@js "textPath"] | `L_s270_tspan[@js "tspan"] | `L_s276_use[@js "use"] | `L_s281_view[@js "view"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s13_animate | `L_s43_circle | `L_s45_clipPath | `L_s55_defs | `L_s57_desc | `L_s67_ellipse | `L_s75_feBlend | `L_s76_feColorMatrix | `L_s77_feComponentTransfer | `L_s78_feComposite | `L_s79_feConvolveMatrix | `L_s80_feDiffuseLighting | `L_s81_feDisplacementMap | `L_s82_feDistantLight | `L_s83_feDropShadow | `L_s84_feFlood | `L_s85_feFuncA | `L_s86_feFuncB | `L_s87_feFuncG | `L_s88_feFuncR | `L_s89_feGaussianBlur | `L_s90_feImage | `L_s91_feMerge | `L_s92_feMergeNode | `L_s93_feMorphology | `L_s94_feOffset | `L_s95_fePointLight | `L_s96_feSpecularLighting | `L_s97_feSpotLight | `L_s98_feTile | `L_s99_feTurbulence | `L_s103_filter | `L_s105_foreignObject | `L_s107_g | `L_s127_image | `L_s144_line | `L_s145_linearGradient | `L_s154_marker | `L_s155_mask | `L_s161_metadata | `L_s191_path | `L_s192_pattern | `L_s196_polygon | `L_s197_polyline | `L_s203_radialGradient | `L_s204_rect | `L_s232_stop | `L_s242_svg | `L_s243_switch | `L_s244_symbol | `L_s252_text | `L_s257_textPath | `L_s270_tspan | `L_s276_use | `L_s281_view] [@js.enum]) -> unit [@@js.set "type"]
     val cast: t -> (SVGElement.t_0 _React_SVGAttributes, SVGElement.t_0) _React_DOMElement [@@js.cast]
@@ -1028,6 +1262,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactElement of (any * any _React_JSXElementConstructor or_string) | `React_ReactPortal]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactElement of (any * any _React_JSXElementConstructor or_string) | `React_ReactPortal]
+    ]
     val get_key: t -> _React_Key or_null [@@js.get "key"]
     val set_key: t -> _React_Key or_null -> unit [@@js.set "key"]
     val get_children: t -> _React_ReactNode [@@js.get "children"]
@@ -1041,6 +1281,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_Factory of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_Factory of 'P]
+    ]
     val apply: 'P t -> ?props:(_React_Attributes, 'P) intersection2 -> children:(_React_ReactNode list [@js.variadic]) -> ('P, any _React_JSXElementConstructor or_string) _React_ReactElement [@@js.apply]
   end
   (** @deprecated Please use `FunctionComponentFactory` *)
@@ -1051,6 +1297,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_FunctionComponentFactory of 'P | `React_SFCFactory of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_FunctionComponentFactory of 'P | `React_SFCFactory of 'P]
+    ]
   end
   module[@js.scope "FunctionComponentFactory"] FunctionComponentFactory : sig
     type 'P t = 'P _React_FunctionComponentFactory
@@ -1059,6 +1311,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_FunctionComponentFactory of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_FunctionComponentFactory of 'P]
+    ]
     val apply: 'P t -> ?props:(_React_Attributes, 'P) intersection2 -> children:(_React_ReactNode list [@js.variadic]) -> 'P _React_FunctionComponentElement [@@js.apply]
   end
   module[@js.scope "ComponentFactory"] ComponentFactory : sig
@@ -1068,6 +1326,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'T) t_2 = ('P, 'T) t
     val t_2_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('P, 'T) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> Ojs.t -> ('P, 'T) t_2
+    [@@@js.stop]
+    type ('P, 'T) tags = [`React_ComponentFactory of ('P * 'T)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T) tags = [`React_ComponentFactory of ('P * 'T)]
+    ]
     val apply: ('P, 'T) t -> ?props:('T _React_ClassAttributes, 'P) intersection2 -> children:(_React_ReactNode list [@js.variadic]) -> ('P, 'T) _React_CElement [@@js.apply]
   end
   module CFactory : sig
@@ -1077,6 +1341,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'T) t_2 = ('P, 'T) t
     val t_2_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('P, 'T) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> Ojs.t -> ('P, 'T) t_2
+    [@@@js.stop]
+    type ('P, 'T) tags = [`React_CFactory of ('P * 'T) | `React_ComponentFactory of ('P * 'T)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T) tags = [`React_CFactory of ('P * 'T) | `React_ComponentFactory of ('P * 'T)]
+    ]
   end
   module ClassicFactory : sig
     type 'P t = 'P _React_ClassicFactory
@@ -1085,6 +1355,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_CFactory of ('P * ('P, _React_ComponentState) _React_ClassicComponent) | `React_ClassicFactory of 'P | `React_ComponentFactory of ('P * ('P, _React_ComponentState) _React_ClassicComponent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_CFactory of ('P * ('P, _React_ComponentState) _React_ClassicComponent) | `React_ClassicFactory of 'P | `React_ComponentFactory of ('P * ('P, _React_ComponentState) _React_ClassicComponent)]
+    ]
   end
   module[@js.scope "DOMFactory"] DOMFactory : sig
     type ('P, 'T) t = ('P, 'T) _React_DOMFactory
@@ -1093,6 +1369,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'T) t_2 = ('P, 'T) t
     val t_2_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('P, 'T) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> Ojs.t -> ('P, 'T) t_2
+    [@@@js.stop]
+    type ('P, 'T) tags = [`React_DOMFactory of ('P * 'T)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T) tags = [`React_DOMFactory of ('P * 'T)]
+    ]
     val apply: ('P, 'T) t -> ?props:('T _React_ClassAttributes, 'P) intersection2 or_null -> children:(_React_ReactNode list [@js.variadic]) -> ('P, 'T) _React_DOMElement [@@js.apply]
   end
   module[@js.scope "HTMLFactory"] HTMLFactory : sig
@@ -1102,6 +1384,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_DOMFactory of ('T _React_AllHTMLAttributes * 'T) | `React_DetailedHTMLFactory of ('T _React_AllHTMLAttributes * 'T) | `React_HTMLFactory of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_DOMFactory of ('T _React_AllHTMLAttributes * 'T) | `React_DetailedHTMLFactory of ('T _React_AllHTMLAttributes * 'T) | `React_HTMLFactory of 'T]
+    ]
     val cast: 'T t -> ('T _React_AllHTMLAttributes, 'T) _React_DetailedHTMLFactory [@@js.cast]
   end
   module[@js.scope "DetailedHTMLFactory"] DetailedHTMLFactory : sig
@@ -1111,6 +1399,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'T) t_2 = ('P, 'T) t
     val t_2_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('P, 'T) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> Ojs.t -> ('P, 'T) t_2
+    [@@@js.stop]
+    type ('P, 'T) tags = [`React_DOMFactory of ('P * 'T) | `React_DetailedHTMLFactory of ('P * 'T)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T) tags = [`React_DOMFactory of ('P * 'T) | `React_DetailedHTMLFactory of ('P * 'T)]
+    ]
     val apply: ('P, 'T) t -> ?props:('T _React_ClassAttributes, 'P) intersection2 or_null -> children:(_React_ReactNode list [@js.variadic]) -> ('P, 'T) _React_DetailedReactHTMLElement [@@js.apply]
     val cast: ('P, 'T) t -> ('P, 'T) _React_DOMFactory [@@js.cast]
   end
@@ -1121,6 +1415,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_DOMFactory of (SVGElement.t_0 _React_SVGAttributes * SVGElement.t_0) | `React_SVGFactory]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_DOMFactory of (SVGElement.t_0 _React_SVGAttributes * SVGElement.t_0) | `React_SVGFactory]
+    ]
     val apply: t -> ?props:(SVGElement.t_0 _React_ClassAttributes, SVGElement.t_0 _React_SVGAttributes) intersection2 or_null -> children:(_React_ReactNode list [@js.variadic]) -> _React_ReactSVGElement [@@js.apply]
     val cast: t -> (SVGElement.t_0 _React_SVGAttributes, SVGElement.t_0) _React_DOMFactory [@@js.cast]
   end
@@ -1131,6 +1431,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactText]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactText]
+    ]
   end
   module ReactChild : sig
     type t = _React_ReactChild
@@ -1139,6 +1445,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactChild]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactChild]
+    ]
   end
   module[@js.scope "ReactNodeArray"] ReactNodeArray : sig
     type t = _React_ReactNodeArray
@@ -1147,6 +1459,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactNodeArray | `Array of _React_ReactNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactNodeArray | `Array of _React_ReactNode]
+    ]
     val cast: t -> _React_ReactNode list [@@js.cast]
   end
   module ReactFragment : sig
@@ -1156,6 +1474,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactFragment]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactFragment]
+    ]
   end
   module ReactNode : sig
     type t = _React_ReactNode
@@ -1164,6 +1488,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactNode]
+    ]
   end
   val createFactory: type_:([`L_s4_a | `L_s5_abbr | `L_s9_address | `L_s15_area | `L_s16_article | `L_s18_aside | `L_s21_audio | `L_s23_b | `L_s24_base | `L_s26_bdi | `L_s27_bdo | `L_s30_big | `L_s31_blockquote | `L_s32_body | `L_s35_br | `L_s37_button | `L_s38_canvas | `L_s39_caption | `L_s44_cite | `L_s46_code | `L_s47_col | `L_s48_colgroup | `L_s50_data | `L_s51_datalist | `L_s53_dd | `L_s56_del | `L_s59_details | `L_s60_dfn | `L_s61_dialog | `L_s62_div | `L_s63_dl | `L_s65_dt | `L_s68_em | `L_s70_embed | `L_s100_fieldset | `L_s101_figcaption | `L_s102_figure | `L_s104_footer | `L_s106_form | `L_s111_h1 | `L_s112_h2 | `L_s113_h3 | `L_s114_h4 | `L_s115_h5 | `L_s116_h6 | `L_s118_head | `L_s119_header | `L_s120_hgroup | `L_s122_hr | `L_s123_html | `L_s124_i | `L_s126_iframe | `L_s128_img | `L_s132_input | `L_s133_ins | `L_s136_kbd | `L_s138_keygen | `L_s139_label | `L_s142_legend | `L_s143_li | `L_s147_link | `L_s151_main | `L_s152_map | `L_s153_mark | `L_s158_menu | `L_s159_menuitem | `L_s160_meta | `L_s162_meter | `L_s169_nav | `L_s176_noscript | `L_s178_object | `L_s180_ol | `L_s182_optgroup | `L_s183_option | `L_s187_output | `L_s188_p | `L_s190_param | `L_s194_picture | `L_s199_pre | `L_s201_progress | `L_s202_q | `L_s213_rp | `L_s214_rt | `L_s215_ruby | `L_s216_s | `L_s219_samp | `L_s220_script | `L_s222_section | `L_s223_select | `L_s225_slot | `L_s226_small | `L_s227_source | `L_s228_span | `L_s235_strong | `L_s236_style | `L_s237_sub | `L_s240_summary | `L_s241_sup | `L_s246_table | `L_s247_tbody | `L_s248_td | `L_s250_template | `L_s258_textarea | `L_s259_tfoot | `L_s260_th | `L_s261_thead | `L_s262_time | `L_s263_title | `L_s266_tr | `L_s267_track | `L_s271_u | `L_s272_ul | `L_s278_var | `L_s280_video | `L_s282_wbr | `L_s283_webview] [@js.enum]) -> 'T _React_HTMLFactory [@@js.global "createFactory"]
   val createFactory: type_:([`L_s13_animate | `L_s43_circle | `L_s45_clipPath | `L_s55_defs | `L_s57_desc | `L_s67_ellipse | `L_s75_feBlend | `L_s76_feColorMatrix | `L_s77_feComponentTransfer | `L_s78_feComposite | `L_s79_feConvolveMatrix | `L_s80_feDiffuseLighting | `L_s81_feDisplacementMap | `L_s82_feDistantLight | `L_s83_feDropShadow | `L_s84_feFlood | `L_s85_feFuncA | `L_s86_feFuncB | `L_s87_feFuncG | `L_s88_feFuncR | `L_s89_feGaussianBlur | `L_s90_feImage | `L_s91_feMerge | `L_s92_feMergeNode | `L_s93_feMorphology | `L_s94_feOffset | `L_s95_fePointLight | `L_s96_feSpecularLighting | `L_s97_feSpotLight | `L_s98_feTile | `L_s99_feTurbulence | `L_s103_filter | `L_s105_foreignObject | `L_s107_g | `L_s127_image | `L_s144_line | `L_s145_linearGradient | `L_s154_marker | `L_s155_mask | `L_s161_metadata | `L_s191_path | `L_s192_pattern | `L_s196_polygon | `L_s197_polyline | `L_s203_radialGradient | `L_s204_rect | `L_s232_stop | `L_s242_svg | `L_s243_switch | `L_s244_symbol | `L_s252_text | `L_s257_textPath | `L_s270_tspan | `L_s276_use | `L_s281_view] [@js.enum]) -> _React_SVGFactory [@@js.global "createFactory"]
@@ -1194,6 +1524,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_ProviderProps of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ProviderProps of 'T]
+    ]
     val get_value: 'T t -> 'T [@@js.get "value"]
     val set_value: 'T t -> 'T -> unit [@@js.set "value"]
     val get_children: 'T t -> _React_ReactNode [@@js.get "children"]
@@ -1206,6 +1542,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_ConsumerProps of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ConsumerProps of 'T]
+    ]
     val children: 'T t -> value:'T -> _React_ReactNode [@@js.call "children"]
   end
   module[@js.scope "ExoticComponent"] ExoticComponent : sig
@@ -1218,6 +1560,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_ExoticComponent of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_ExoticComponent of 'P]
+    ]
     (** **NOTE**: Exotic components are not callable. *)
     val apply: 'P t -> props:'P -> (any, any _React_JSXElementConstructor or_string) _React_ReactElement or_null [@@js.apply]
     val get___typeof: 'P t -> symbol [@@js.get "$$typeof"]
@@ -1232,6 +1580,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_ExoticComponent of 'P | `React_NamedExoticComponent of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_ExoticComponent of 'P | `React_NamedExoticComponent of 'P]
+    ]
     val get_displayName: 'P t -> string [@@js.get "displayName"]
     val set_displayName: 'P t -> string -> unit [@@js.set "displayName"]
     val cast: 'P t -> 'P _React_ExoticComponent [@@js.cast]
@@ -1243,6 +1597,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_ExoticComponent of 'P | `React_ProviderExoticComponent of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_ExoticComponent of 'P | `React_ProviderExoticComponent of 'P]
+    ]
     val get_propTypes: 'P t -> 'P _React_WeakValidationMap [@@js.get "propTypes"]
     val set_propTypes: 'P t -> 'P _React_WeakValidationMap -> unit [@@js.set "propTypes"]
     val cast: 'P t -> 'P _React_ExoticComponent [@@js.cast]
@@ -1254,6 +1614,12 @@ module[@js.scope "React"] React : sig
     type 'C t_1 = 'C t
     val t_1_to_js: ('C -> Ojs.t) -> 'C t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'C) -> Ojs.t -> 'C t_1
+    [@@@js.stop]
+    type 'C tags = [`React_ContextType of 'C]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'C tags = [`React_ContextType of 'C]
+    ]
   end
   module Provider : sig
     type 'T t = 'T _React_Provider
@@ -1262,6 +1628,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_ExoticComponent of 'T _React_ProviderProps | `React_Provider of 'T | `React_ProviderExoticComponent of 'T _React_ProviderProps]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ExoticComponent of 'T _React_ProviderProps | `React_Provider of 'T | `React_ProviderExoticComponent of 'T _React_ProviderProps]
+    ]
   end
   module Consumer : sig
     type 'T t = 'T _React_Consumer
@@ -1270,6 +1642,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_Consumer of 'T | `React_ExoticComponent of 'T _React_ConsumerProps]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_Consumer of 'T | `React_ExoticComponent of 'T _React_ConsumerProps]
+    ]
   end
   module[@js.scope "Context"] Context : sig
     type 'T t = 'T _React_Context
@@ -1278,6 +1656,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_Context of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_Context of 'T]
+    ]
     val get_Provider: 'T t -> 'T _React_Provider [@@js.get "Provider"]
     val set_Provider: 'T t -> 'T _React_Provider -> unit [@@js.set "Provider"]
     val get_Consumer: 'T t -> 'T _React_Consumer [@@js.get "Consumer"]
@@ -1297,6 +1681,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_SuspenseProps]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_SuspenseProps]
+    ]
     val get_children: t -> _React_ReactNode [@@js.get "children"]
     val set_children: t -> _React_ReactNode -> unit [@@js.set "children"]
     (** A fallback react tree to show when a Suspense child (like React.lazy) suspends *)
@@ -1319,6 +1709,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ProfilerOnRenderCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ProfilerOnRenderCallback]
+    ]
     val apply: t -> id:string -> phase:([`L_s166_mount | `L_s274_update] [@js.enum]) -> actualDuration:float -> baseDuration:float -> startTime:float -> commitTime:float -> interactions:SchedulerInteraction.t_0 Set.t_1 -> unit [@@js.apply]
   end
   module[@js.scope "ProfilerProps"] ProfilerProps : sig
@@ -1328,6 +1724,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ProfilerProps]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ProfilerProps]
+    ]
     val get_children: t -> _React_ReactNode [@@js.get "children"]
     val set_children: t -> _React_ReactNode -> unit [@@js.set "children"]
     val get_id: t -> string [@@js.get "id"]
@@ -1343,6 +1745,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactInstance]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactInstance]
+    ]
   end
   module[@js.scope "Component"] Component : sig
     type ('P, 'S, 'SS) t = ('P, 'S, 'SS) _React_Component
@@ -1360,6 +1768,12 @@ module[@js.scope "React"] React : sig
     type t_0 = (anonymous_interface_0, anonymous_interface_0, any) t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type ('P, 'S, 'SS) tags = [`React_Component of ('P * 'S * 'SS) | `React_ComponentLifecycle of ('P * 'S * 'SS) | `React_DeprecatedLifecycle of ('P * 'S) | `React_NewLifecycle of ('P * 'S * 'SS)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S, 'SS) tags = [`React_Component of ('P * 'S * 'SS) | `React_ComponentLifecycle of ('P * 'S * 'SS) | `React_DeprecatedLifecycle of ('P * 'S) | `React_NewLifecycle of ('P * 'S * 'SS)]
+    ]
     (**
       If set, `this.context` will be set at runtime to the current value of the given Context.
       
@@ -1498,6 +1912,12 @@ module[@js.scope "React"] React : sig
     type t_0 = (anonymous_interface_0, anonymous_interface_0, any) t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type ('P, 'S, 'SS) tags = [`React_Component of ('P * 'S * 'SS) | `React_ComponentLifecycle of ('P * 'S * 'SS) | `React_DeprecatedLifecycle of ('P * 'S) | `React_NewLifecycle of ('P * 'S * 'SS) | `React_PureComponent of ('P * 'S * 'SS)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S, 'SS) tags = [`React_Component of ('P * 'S * 'SS) | `React_ComponentLifecycle of ('P * 'S * 'SS) | `React_DeprecatedLifecycle of ('P * 'S) | `React_NewLifecycle of ('P * 'S * 'SS) | `React_PureComponent of ('P * 'S * 'SS)]
+    ]
     val cast: ('P, 'S, 'SS) t -> ('P, 'S, 'SS) _React_Component [@@js.cast]
   end
   module[@js.scope "ClassicComponent"] ClassicComponent : sig
@@ -1513,6 +1933,12 @@ module[@js.scope "React"] React : sig
     type t_0 = (anonymous_interface_0, anonymous_interface_0) t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type ('P, 'S) tags = [`React_ClassicComponent of ('P * 'S) | `React_Component of ('P * 'S * any) | `React_ComponentLifecycle of ('P * 'S * any) | `React_DeprecatedLifecycle of ('P * 'S) | `React_NewLifecycle of ('P * 'S * any)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S) tags = [`React_ClassicComponent of ('P * 'S) | `React_Component of ('P * 'S * any) | `React_ComponentLifecycle of ('P * 'S * any) | `React_DeprecatedLifecycle of ('P * 'S) | `React_NewLifecycle of ('P * 'S * any)]
+    ]
     val replaceState: ('P, 'S) t -> nextState:'S -> ?callback:(unit -> unit) -> unit -> unit [@@js.call "replaceState"]
     val isMounted: ('P, 'S) t -> bool [@@js.call "isMounted"]
     val getInitialState: ('P, 'S) t -> 'S [@@js.call "getInitialState"]
@@ -1525,6 +1951,12 @@ module[@js.scope "React"] React : sig
     type 'CC t_1 = 'CC t
     val t_1_to_js: ('CC -> Ojs.t) -> 'CC t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'CC) -> Ojs.t -> 'CC t_1
+    [@@@js.stop]
+    type 'CC tags = [`React_ChildContextProvider of 'CC]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'CC tags = [`React_ChildContextProvider of 'CC]
+    ]
     val getChildContext: 'CC t -> 'CC [@@js.call "getChildContext"]
   end
   (**
@@ -1542,6 +1974,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_FunctionComponent of 'P | `React_SFC of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_FunctionComponent of 'P | `React_SFC of 'P]
+    ]
   end
   (**
     @deprecated as of recent React versions, function components can no
@@ -1558,6 +1996,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_FunctionComponent of 'P | `React_StatelessComponent of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_FunctionComponent of 'P | `React_StatelessComponent of 'P]
+    ]
   end
   module FC : sig
     type 'P t = 'P _React_FC
@@ -1569,6 +2013,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_FC of 'P | `React_FunctionComponent of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_FC of 'P | `React_FunctionComponent of 'P]
+    ]
   end
   module[@js.scope "FunctionComponent"] FunctionComponent : sig
     type 'P t = 'P _React_FunctionComponent
@@ -1580,6 +2030,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_FunctionComponent of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_FunctionComponent of 'P]
+    ]
     val apply: 'P t -> props:'P _React_PropsWithChildren -> ?context:any -> unit -> (any, any) _React_ReactElement or_null [@@js.apply]
     val get_propTypes: 'P t -> 'P _React_WeakValidationMap [@@js.get "propTypes"]
     val set_propTypes: 'P t -> 'P _React_WeakValidationMap -> unit [@@js.set "propTypes"]
@@ -1600,6 +2056,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_VFC of 'P | `React_VoidFunctionComponent of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_VFC of 'P | `React_VoidFunctionComponent of 'P]
+    ]
   end
   module[@js.scope "VoidFunctionComponent"] VoidFunctionComponent : sig
     type 'P t = 'P _React_VoidFunctionComponent
@@ -1611,6 +2073,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_VoidFunctionComponent of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_VoidFunctionComponent of 'P]
+    ]
     val apply: 'P t -> props:'P -> ?context:any -> unit -> (any, any) _React_ReactElement or_null [@@js.apply]
     val get_propTypes: 'P t -> 'P _React_WeakValidationMap [@@js.get "propTypes"]
     val set_propTypes: 'P t -> 'P _React_WeakValidationMap -> unit [@@js.set "propTypes"]
@@ -1628,6 +2096,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_ForwardedRef of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ForwardedRef of 'T]
+    ]
   end
   module[@js.scope "ForwardRefRenderFunction"] ForwardRefRenderFunction : sig
     type ('T, 'P) t = ('T, 'P) _React_ForwardRefRenderFunction
@@ -1636,6 +2110,12 @@ module[@js.scope "React"] React : sig
     type ('T, 'P) t_2 = ('T, 'P) t
     val t_2_to_js: ('T -> Ojs.t) -> ('P -> Ojs.t) -> ('T, 'P) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'T) -> (Ojs.t -> 'P) -> Ojs.t -> ('T, 'P) t_2
+    [@@@js.stop]
+    type ('T, 'P) tags = [`React_ForwardRefRenderFunction of ('T * 'P)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('T, 'P) tags = [`React_ForwardRefRenderFunction of ('T * 'P)]
+    ]
     val apply: ('T, 'P) t -> props:'P _React_PropsWithChildren -> ref:'T _React_ForwardedRef -> (any, any _React_JSXElementConstructor or_string) _React_ReactElement or_null [@@js.apply]
     val get_displayName: ('T, 'P) t -> string [@@js.get "displayName"]
     val set_displayName: ('T, 'P) t -> string -> unit [@@js.set "displayName"]
@@ -1661,6 +2141,12 @@ module[@js.scope "React"] React : sig
     type ('T, 'P) t_2 = ('T, 'P) t
     val t_2_to_js: ('T -> Ojs.t) -> ('P -> Ojs.t) -> ('T, 'P) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'T) -> (Ojs.t -> 'P) -> Ojs.t -> ('T, 'P) t_2
+    [@@@js.stop]
+    type ('T, 'P) tags = [`React_ForwardRefRenderFunction of ('T * 'P) | `React_RefForwardingComponent of ('T * 'P)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('T, 'P) tags = [`React_ForwardRefRenderFunction of ('T * 'P) | `React_RefForwardingComponent of ('T * 'P)]
+    ]
     val cast: ('T, 'P) t -> ('T, 'P) _React_ForwardRefRenderFunction [@@js.cast]
   end
   module[@js.scope "ComponentClass"] ComponentClass : sig
@@ -1676,6 +2162,12 @@ module[@js.scope "React"] React : sig
     type t_0 = (anonymous_interface_0, _React_ComponentState) t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type ('P, 'S) tags = [`React_ComponentClass of ('P * 'S) | `React_StaticLifecycle of ('P * 'S)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S) tags = [`React_ComponentClass of ('P * 'S) | `React_StaticLifecycle of ('P * 'S)]
+    ]
     val create: ('P, 'S) t -> props:'P -> ?context:any -> unit -> ('P, 'S, any) _React_Component [@@js.apply_newable]
     val get_propTypes: ('P, 'S) t -> 'P _React_WeakValidationMap [@@js.get "propTypes"]
     val set_propTypes: ('P, 'S) t -> 'P _React_WeakValidationMap -> unit [@@js.set "propTypes"]
@@ -1701,6 +2193,12 @@ module[@js.scope "React"] React : sig
     type t_0 = anonymous_interface_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'P tags = [`React_ClassicComponentClass of 'P | `React_ComponentClass of ('P * _React_ComponentState) | `React_StaticLifecycle of ('P * _React_ComponentState)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_ClassicComponentClass of 'P | `React_ComponentClass of ('P * _React_ComponentState) | `React_StaticLifecycle of ('P * _React_ComponentState)]
+    ]
     val create: 'P t -> props:'P -> ?context:any -> unit -> ('P, _React_ComponentState) _React_ClassicComponent [@@js.apply_newable]
     val getDefaultProps: 'P t -> 'P [@@js.call "getDefaultProps"]
     val cast: 'P t -> ('P, _React_ComponentState) _React_ComponentClass [@@js.cast]
@@ -1717,6 +2215,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'T, 'C) t_3 = ('P, 'T, 'C) t
     val t_3_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('C -> Ojs.t) -> ('P, 'T, 'C) t_3 -> Ojs.t
     val t_3_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> (Ojs.t -> 'C) -> Ojs.t -> ('P, 'T, 'C) t_3
+    [@@@js.stop]
+    type ('P, 'T, 'C) tags = [`React_ClassType of ('P * 'T * 'C)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'T, 'C) tags = [`React_ClassType of ('P * 'T * 'C)]
+    ]
   end
   module[@js.scope "ComponentLifecycle"] ComponentLifecycle : sig
     type ('P, 'S, 'SS) t = ('P, 'S, 'SS) _React_ComponentLifecycle
@@ -1725,6 +2229,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'S, 'SS) t_3 = ('P, 'S, 'SS) t
     val t_3_to_js: ('P -> Ojs.t) -> ('S -> Ojs.t) -> ('SS -> Ojs.t) -> ('P, 'S, 'SS) t_3 -> Ojs.t
     val t_3_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'S) -> (Ojs.t -> 'SS) -> Ojs.t -> ('P, 'S, 'SS) t_3
+    [@@@js.stop]
+    type ('P, 'S, 'SS) tags = [`React_ComponentLifecycle of ('P * 'S * 'SS) | `React_DeprecatedLifecycle of ('P * 'S) | `React_NewLifecycle of ('P * 'S * 'SS)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S, 'SS) tags = [`React_ComponentLifecycle of ('P * 'S * 'SS) | `React_DeprecatedLifecycle of ('P * 'S) | `React_NewLifecycle of ('P * 'S * 'SS)]
+    ]
     (** Called immediately after a component is mounted. Setting state here will trigger re-rendering. *)
     val componentDidMount: ('P, 'S, 'SS) t -> unit [@@js.call "componentDidMount"]
     (**
@@ -1758,6 +2268,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'S) t_2 = ('P, 'S) t
     val t_2_to_js: ('P -> Ojs.t) -> ('S -> Ojs.t) -> ('P, 'S) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'S) -> Ojs.t -> ('P, 'S) t_2
+    [@@@js.stop]
+    type ('P, 'S) tags = [`React_StaticLifecycle of ('P * 'S)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S) tags = [`React_StaticLifecycle of ('P * 'S)]
+    ]
     val get_getDerivedStateFromProps: ('P, 'S) t -> ('P, 'S) _React_GetDerivedStateFromProps [@@js.get "getDerivedStateFromProps"]
     val set_getDerivedStateFromProps: ('P, 'S) t -> ('P, 'S) _React_GetDerivedStateFromProps -> unit [@@js.set "getDerivedStateFromProps"]
     val get_getDerivedStateFromError: ('P, 'S) t -> ('P, 'S) _React_GetDerivedStateFromError [@@js.get "getDerivedStateFromError"]
@@ -1770,6 +2286,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'S) t_2 = ('P, 'S) t
     val t_2_to_js: ('P -> Ojs.t) -> ('S -> Ojs.t) -> ('P, 'S) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'S) -> Ojs.t -> ('P, 'S) t_2
+    [@@@js.stop]
+    type ('P, 'S) tags = [`React_GetDerivedStateFromProps of ('P * 'S)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S) tags = [`React_GetDerivedStateFromProps of ('P * 'S)]
+    ]
     val apply: ('P, 'S) t -> nextProps:'P Readonly.t_1 -> prevState:'S -> 'S Partial.t_1 or_null [@@js.apply]
   end
   module[@js.scope "GetDerivedStateFromError"] GetDerivedStateFromError : sig
@@ -1779,6 +2301,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'S) t_2 = ('P, 'S) t
     val t_2_to_js: ('P -> Ojs.t) -> ('S -> Ojs.t) -> ('P, 'S) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'S) -> Ojs.t -> ('P, 'S) t_2
+    [@@@js.stop]
+    type ('P, 'S) tags = [`React_GetDerivedStateFromError of ('P * 'S)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S) tags = [`React_GetDerivedStateFromError of ('P * 'S)]
+    ]
     val apply: ('P, 'S) t -> error:any -> 'S Partial.t_1 or_null [@@js.apply]
   end
   module[@js.scope "NewLifecycle"] NewLifecycle : sig
@@ -1788,6 +2316,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'S, 'SS) t_3 = ('P, 'S, 'SS) t
     val t_3_to_js: ('P -> Ojs.t) -> ('S -> Ojs.t) -> ('SS -> Ojs.t) -> ('P, 'S, 'SS) t_3 -> Ojs.t
     val t_3_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'S) -> (Ojs.t -> 'SS) -> Ojs.t -> ('P, 'S, 'SS) t_3
+    [@@@js.stop]
+    type ('P, 'S, 'SS) tags = [`React_NewLifecycle of ('P * 'S * 'SS)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S, 'SS) tags = [`React_NewLifecycle of ('P * 'S * 'SS)]
+    ]
     (**
       Runs before React applies the result of `render` to the document, and
       returns an object to be given to componentDidUpdate. Useful for saving
@@ -1811,6 +2345,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'S) t_2 = ('P, 'S) t
     val t_2_to_js: ('P -> Ojs.t) -> ('S -> Ojs.t) -> ('P, 'S) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'S) -> Ojs.t -> ('P, 'S) t_2
+    [@@@js.stop]
+    type ('P, 'S) tags = [`React_DeprecatedLifecycle of ('P * 'S)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S) tags = [`React_DeprecatedLifecycle of ('P * 'S)]
+    ]
     (**
       Called immediately before mounting occurs, and before `Component#render`.
       Avoid introducing any side-effects or subscriptions in this method.
@@ -1899,6 +2439,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'S) t_2 = ('P, 'S) t
     val t_2_to_js: ('P -> Ojs.t) -> ('S -> Ojs.t) -> ('P, 'S) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'S) -> Ojs.t -> ('P, 'S) t_2
+    [@@@js.stop]
+    type ('P, 'S) tags = [`React_ComponentLifecycle of ('P * 'S * any) | `React_DeprecatedLifecycle of ('P * 'S) | `React_Mixin of ('P * 'S) | `React_NewLifecycle of ('P * 'S * any)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S) tags = [`React_ComponentLifecycle of ('P * 'S * any) | `React_DeprecatedLifecycle of ('P * 'S) | `React_Mixin of ('P * 'S) | `React_NewLifecycle of ('P * 'S * any)]
+    ]
     val get_mixins: ('P, 'S) t -> ('P, 'S) t list [@@js.get "mixins"]
     val set_mixins: ('P, 'S) t -> ('P, 'S) t list -> unit [@@js.set "mixins"]
     val get_statics: ('P, 'S) t -> anonymous_interface_8 [@@js.get "statics"]
@@ -1922,6 +2468,12 @@ module[@js.scope "React"] React : sig
     type ('P, 'S) t_2 = ('P, 'S) t
     val t_2_to_js: ('P -> Ojs.t) -> ('S -> Ojs.t) -> ('P, 'S) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'S) -> Ojs.t -> ('P, 'S) t_2
+    [@@@js.stop]
+    type ('P, 'S) tags = [`React_ComponentLifecycle of ('P * 'S * any) | `React_ComponentSpec of ('P * 'S) | `React_DeprecatedLifecycle of ('P * 'S) | `React_Mixin of ('P * 'S) | `React_NewLifecycle of ('P * 'S * any)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('P, 'S) tags = [`React_ComponentLifecycle of ('P * 'S * any) | `React_ComponentSpec of ('P * 'S) | `React_DeprecatedLifecycle of ('P * 'S) | `React_Mixin of ('P * 'S) | `React_NewLifecycle of ('P * 'S * any)]
+    ]
     val render: ('P, 'S) t -> _React_ReactNode [@@js.call "render"]
     val get: ('P, 'S) t -> string -> any [@@js.index_get]
     val set: ('P, 'S) t -> string -> any -> unit [@@js.index_set]
@@ -1935,6 +2487,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_ExoticComponent of 'P | `React_ForwardRefExoticComponent of 'P | `React_NamedExoticComponent of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_ExoticComponent of 'P | `React_ForwardRefExoticComponent of 'P | `React_NamedExoticComponent of 'P]
+    ]
     val get_defaultProps: 'P t -> 'P Partial.t_1 [@@js.get "defaultProps"]
     val set_defaultProps: 'P t -> 'P Partial.t_1 -> unit [@@js.set "defaultProps"]
     val get_propTypes: 'P t -> 'P _React_WeakValidationMap [@@js.get "propTypes"]
@@ -1950,6 +2508,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_PropsWithoutRef of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_PropsWithoutRef of 'P]
+    ]
   end
   (** Ensures that the props do not include string ref, which cannot be forwarded *)
   module PropsWithRef : sig
@@ -1959,6 +2523,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_PropsWithRef of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_PropsWithRef of 'P]
+    ]
   end
   module PropsWithChildren : sig
     type 'P t = 'P _React_PropsWithChildren
@@ -1967,6 +2537,12 @@ module[@js.scope "React"] React : sig
     type 'P t_1 = 'P t
     val t_1_to_js: ('P -> Ojs.t) -> 'P t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'P) -> Ojs.t -> 'P t_1
+    [@@@js.stop]
+    type 'P tags = [`React_PropsWithChildren of 'P]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'P tags = [`React_PropsWithChildren of 'P]
+    ]
   end
   (**
     NOTE: prefer ComponentPropsWithRef, if the ref is forwarded,
@@ -1979,6 +2555,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_ComponentProps of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ComponentProps of 'T]
+    ]
   end
   module ComponentPropsWithRef : sig
     type 'T t = 'T _React_ComponentPropsWithRef
@@ -1987,6 +2569,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_ComponentPropsWithRef of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ComponentPropsWithRef of 'T]
+    ]
   end
   module ComponentPropsWithoutRef : sig
     type 'T t = 'T _React_ComponentPropsWithoutRef
@@ -1995,6 +2583,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_ComponentPropsWithoutRef of 'T | `React_PropsWithoutRef of 'T _React_ComponentProps]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ComponentPropsWithoutRef of 'T | `React_PropsWithoutRef of 'T _React_ComponentProps]
+    ]
   end
   module MemoExoticComponent : sig
     type 'T t = 'T _React_MemoExoticComponent
@@ -2003,6 +2597,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_MemoExoticComponent of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_MemoExoticComponent of 'T]
+    ]
   end
   val memo: component:'P _React_SFC -> ?propsAreEqual:(prevProps:'P _React_PropsWithChildren Readonly.t_1 -> nextProps:'P _React_PropsWithChildren Readonly.t_1 -> bool) -> unit -> 'P _React_NamedExoticComponent [@@js.global "memo"]
   val memo: component:'T -> ?propsAreEqual:(prevProps:'T _React_ComponentProps Readonly.t_1 -> nextProps:'T _React_ComponentProps Readonly.t_1 -> bool) -> unit -> 'T _React_MemoExoticComponent [@@js.global "memo"]
@@ -2013,6 +2613,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_LazyExoticComponent of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_LazyExoticComponent of 'T]
+    ]
   end
   val lazy_: factory:(unit -> anonymous_interface_5 Promise.t_1) -> 'T _React_LazyExoticComponent [@@js.global "lazy"]
   module SetStateAction : sig
@@ -2022,6 +2628,12 @@ module[@js.scope "React"] React : sig
     type 'S t_1 = 'S t
     val t_1_to_js: ('S -> Ojs.t) -> 'S t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t_1
+    [@@@js.stop]
+    type 'S tags = [`React_SetStateAction of 'S]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'S tags = [`React_SetStateAction of 'S]
+    ]
   end
   module[@js.scope "Dispatch"] Dispatch : sig
     type 'A t = 'A _React_Dispatch
@@ -2030,6 +2642,12 @@ module[@js.scope "React"] React : sig
     type 'A t_1 = 'A t
     val t_1_to_js: ('A -> Ojs.t) -> 'A t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'A) -> Ojs.t -> 'A t_1
+    [@@@js.stop]
+    type 'A tags = [`React_Dispatch of 'A]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'A tags = [`React_Dispatch of 'A]
+    ]
     val apply: 'A t -> value:'A -> unit [@@js.apply]
   end
   module[@js.scope "DispatchWithoutAction"] DispatchWithoutAction : sig
@@ -2039,6 +2657,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_DispatchWithoutAction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_DispatchWithoutAction]
+    ]
     val apply: t -> unit [@@js.apply]
   end
   module[@js.scope "Reducer"] Reducer : sig
@@ -2048,6 +2672,12 @@ module[@js.scope "React"] React : sig
     type ('S, 'A) t_2 = ('S, 'A) t
     val t_2_to_js: ('S -> Ojs.t) -> ('A -> Ojs.t) -> ('S, 'A) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'S) -> (Ojs.t -> 'A) -> Ojs.t -> ('S, 'A) t_2
+    [@@@js.stop]
+    type ('S, 'A) tags = [`React_Reducer of ('S * 'A)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('S, 'A) tags = [`React_Reducer of ('S * 'A)]
+    ]
     val apply: ('S, 'A) t -> prevState:'S -> action:'A -> 'S [@@js.apply]
   end
   module[@js.scope "ReducerWithoutAction"] ReducerWithoutAction : sig
@@ -2057,6 +2687,12 @@ module[@js.scope "React"] React : sig
     type 'S t_1 = 'S t
     val t_1_to_js: ('S -> Ojs.t) -> 'S t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t_1
+    [@@@js.stop]
+    type 'S tags = [`React_ReducerWithoutAction of 'S]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'S tags = [`React_ReducerWithoutAction of 'S]
+    ]
     val apply: 'S t -> prevState:'S -> 'S [@@js.apply]
   end
   module ReducerState : sig
@@ -2066,6 +2702,12 @@ module[@js.scope "React"] React : sig
     type 'R t_1 = 'R t
     val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+    [@@@js.stop]
+    type 'R tags = [`React_ReducerState of 'R]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'R tags = [`React_ReducerState of 'R]
+    ]
   end
   module ReducerAction : sig
     type 'R t = 'R _React_ReducerAction
@@ -2074,6 +2716,12 @@ module[@js.scope "React"] React : sig
     type 'R t_1 = 'R t
     val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+    [@@@js.stop]
+    type 'R tags = [`React_ReducerAction of 'R]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'R tags = [`React_ReducerAction of 'R]
+    ]
   end
   module ReducerStateWithoutAction : sig
     type 'R t = 'R _React_ReducerStateWithoutAction
@@ -2082,6 +2730,12 @@ module[@js.scope "React"] React : sig
     type 'R t_1 = 'R t
     val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+    [@@@js.stop]
+    type 'R tags = [`React_ReducerStateWithoutAction of 'R]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'R tags = [`React_ReducerStateWithoutAction of 'R]
+    ]
   end
   module DependencyList : sig
     type t = _React_DependencyList
@@ -2090,6 +2744,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_DependencyList | `Array of any]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_DependencyList | `Array of any]
+    ]
   end
   module[@js.scope "EffectCallback"] EffectCallback : sig
     type t = _React_EffectCallback
@@ -2098,6 +2758,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_EffectCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_EffectCallback]
+    ]
     val apply: t -> (_Destructor, unit) union2 [@@js.apply]
   end
   module[@js.scope "MutableRefObject"] MutableRefObject : sig
@@ -2107,6 +2773,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_MutableRefObject of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_MutableRefObject of 'T]
+    ]
     val get_current: 'T t -> 'T [@@js.get "current"]
     val set_current: 'T t -> 'T -> unit [@@js.set "current"]
   end
@@ -2292,6 +2964,12 @@ module[@js.scope "React"] React : sig
     type t_0 = (untyped_object, any, any) t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type ('E, 'C, 'T) tags = [`React_BaseSyntheticEvent of ('E * 'C * 'T)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('E, 'C, 'T) tags = [`React_BaseSyntheticEvent of ('E * 'C * 'T)]
+    ]
     val get_nativeEvent: ('E, 'C, 'T) t -> 'E [@@js.get "nativeEvent"]
     val set_nativeEvent: ('E, 'C, 'T) t -> 'E -> unit [@@js.set "nativeEvent"]
     val get_currentTarget: ('E, 'C, 'T) t -> 'C [@@js.get "currentTarget"]
@@ -2338,6 +3016,12 @@ module[@js.scope "React"] React : sig
     type t_0 = (Element.t_0, Event.t_0) t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type ('T, 'E) tags = [`React_BaseSyntheticEvent of ('E * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * 'E)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('T, 'E) tags = [`React_BaseSyntheticEvent of ('E * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * 'E)]
+    ]
     val cast: ('T, 'E) t -> ('E, (EventTarget.t_0, 'T) intersection2, EventTarget.t_0) _React_BaseSyntheticEvent [@@js.cast]
   end
   module[@js.scope "ClipboardEvent"] ClipboardEvent : sig
@@ -2350,6 +3034,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (_NativeClipboardEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_ClipboardEvent of 'T | `React_SyntheticEvent of ('T * _NativeClipboardEvent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (_NativeClipboardEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_ClipboardEvent of 'T | `React_SyntheticEvent of ('T * _NativeClipboardEvent)]
+    ]
     val get_clipboardData: 'T t -> DataTransfer.t_0 [@@js.get "clipboardData"]
     val set_clipboardData: 'T t -> DataTransfer.t_0 -> unit [@@js.set "clipboardData"]
     val cast: 'T t -> ('T, _NativeClipboardEvent) _React_SyntheticEvent [@@js.cast]
@@ -2364,6 +3054,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (_NativeCompositionEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_CompositionEvent of 'T | `React_SyntheticEvent of ('T * _NativeCompositionEvent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (_NativeCompositionEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_CompositionEvent of 'T | `React_SyntheticEvent of ('T * _NativeCompositionEvent)]
+    ]
     val get_data: 'T t -> string [@@js.get "data"]
     val set_data: 'T t -> string -> unit [@@js.set "data"]
     val cast: 'T t -> ('T, _NativeCompositionEvent) _React_SyntheticEvent [@@js.cast]
@@ -2378,6 +3074,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (_NativeDragEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_DragEvent of 'T | `React_MouseEvent of ('T * _NativeDragEvent) | `React_SyntheticEvent of ('T * _NativeDragEvent) | `React_UIEvent of ('T * _NativeDragEvent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (_NativeDragEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_DragEvent of 'T | `React_MouseEvent of ('T * _NativeDragEvent) | `React_SyntheticEvent of ('T * _NativeDragEvent) | `React_UIEvent of ('T * _NativeDragEvent)]
+    ]
     val get_dataTransfer: 'T t -> DataTransfer.t_0 [@@js.get "dataTransfer"]
     val set_dataTransfer: 'T t -> DataTransfer.t_0 -> unit [@@js.set "dataTransfer"]
     val cast: 'T t -> ('T, _NativeDragEvent) _React_MouseEvent [@@js.cast]
@@ -2392,6 +3094,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (_NativePointerEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_MouseEvent of ('T * _NativePointerEvent) | `React_PointerEvent of 'T | `React_SyntheticEvent of ('T * _NativePointerEvent) | `React_UIEvent of ('T * _NativePointerEvent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (_NativePointerEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_MouseEvent of ('T * _NativePointerEvent) | `React_PointerEvent of 'T | `React_SyntheticEvent of ('T * _NativePointerEvent) | `React_UIEvent of ('T * _NativePointerEvent)]
+    ]
     val get_pointerId: 'T t -> float [@@js.get "pointerId"]
     val set_pointerId: 'T t -> float -> unit [@@js.set "pointerId"]
     val get_pressure: 'T t -> float [@@js.get "pressure"]
@@ -2424,6 +3132,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (_NativeFocusEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_FocusEvent of 'T | `React_SyntheticEvent of ('T * _NativeFocusEvent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (_NativeFocusEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_FocusEvent of 'T | `React_SyntheticEvent of ('T * _NativeFocusEvent)]
+    ]
     val get_relatedTarget: 'T t -> EventTarget.t_0 or_null [@@js.get "relatedTarget"]
     val set_relatedTarget: 'T t -> EventTarget.t_0 or_null -> unit [@@js.set "relatedTarget"]
     val get_target: 'T t -> (EventTarget.t_0, 'T) intersection2 [@@js.get "target"]
@@ -2440,6 +3154,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (Event.t_0 * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_FormEvent of 'T | `React_SyntheticEvent of ('T * Event.t_0)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (Event.t_0 * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_FormEvent of 'T | `React_SyntheticEvent of ('T * Event.t_0)]
+    ]
     val cast: 'T t -> ('T, Event.t_0) _React_SyntheticEvent [@@js.cast]
   end
   module[@js.scope "InvalidEvent"] InvalidEvent : sig
@@ -2452,6 +3172,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (Event.t_0 * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_InvalidEvent of 'T | `React_SyntheticEvent of ('T * Event.t_0)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (Event.t_0 * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_InvalidEvent of 'T | `React_SyntheticEvent of ('T * Event.t_0)]
+    ]
     val get_target: 'T t -> (EventTarget.t_0, 'T) intersection2 [@@js.get "target"]
     val set_target: 'T t -> (EventTarget.t_0, 'T) intersection2 -> unit [@@js.set "target"]
     val cast: 'T t -> ('T, Event.t_0) _React_SyntheticEvent [@@js.cast]
@@ -2466,6 +3192,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (Event.t_0 * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_ChangeEvent of 'T | `React_SyntheticEvent of ('T * Event.t_0)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (Event.t_0 * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_ChangeEvent of 'T | `React_SyntheticEvent of ('T * Event.t_0)]
+    ]
     val get_target: 'T t -> (EventTarget.t_0, 'T) intersection2 [@@js.get "target"]
     val set_target: 'T t -> (EventTarget.t_0, 'T) intersection2 -> unit [@@js.set "target"]
     val cast: 'T t -> ('T, Event.t_0) _React_SyntheticEvent [@@js.cast]
@@ -2480,6 +3212,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (_NativeKeyboardEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_KeyboardEvent of 'T | `React_SyntheticEvent of ('T * _NativeKeyboardEvent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (_NativeKeyboardEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_KeyboardEvent of 'T | `React_SyntheticEvent of ('T * _NativeKeyboardEvent)]
+    ]
     val get_altKey: 'T t -> bool [@@js.get "altKey"]
     val set_altKey: 'T t -> bool -> unit [@@js.set "altKey"]
     (** @deprecated  *)
@@ -2533,6 +3271,12 @@ module[@js.scope "React"] React : sig
     type t_0 = (Element.t_0, _NativeMouseEvent) t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type ('T, 'E) tags = [`React_BaseSyntheticEvent of ('E * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_MouseEvent of ('T * 'E) | `React_SyntheticEvent of ('T * 'E) | `React_UIEvent of ('T * 'E)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('T, 'E) tags = [`React_BaseSyntheticEvent of ('E * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_MouseEvent of ('T * 'E) | `React_SyntheticEvent of ('T * 'E) | `React_UIEvent of ('T * 'E)]
+    ]
     val get_altKey: ('T, 'E) t -> bool [@@js.get "altKey"]
     val set_altKey: ('T, 'E) t -> bool -> unit [@@js.set "altKey"]
     val get_button: ('T, 'E) t -> float [@@js.get "button"]
@@ -2577,6 +3321,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (_NativeTouchEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * _NativeTouchEvent) | `React_TouchEvent of 'T | `React_UIEvent of ('T * _NativeTouchEvent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (_NativeTouchEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * _NativeTouchEvent) | `React_TouchEvent of 'T | `React_UIEvent of ('T * _NativeTouchEvent)]
+    ]
     val get_altKey: 'T t -> bool [@@js.get "altKey"]
     val set_altKey: 'T t -> bool -> unit [@@js.set "altKey"]
     val get_changedTouches: 'T t -> _React_TouchList [@@js.get "changedTouches"]
@@ -2608,6 +3358,12 @@ module[@js.scope "React"] React : sig
     type t_0 = (Element.t_0, _NativeUIEvent) t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type ('T, 'E) tags = [`React_BaseSyntheticEvent of ('E * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * 'E) | `React_UIEvent of ('T * 'E)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('T, 'E) tags = [`React_BaseSyntheticEvent of ('E * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * 'E) | `React_UIEvent of ('T * 'E)]
+    ]
     val get_detail: ('T, 'E) t -> float [@@js.get "detail"]
     val set_detail: ('T, 'E) t -> float -> unit [@@js.set "detail"]
     val get_view: ('T, 'E) t -> _React_AbstractView [@@js.get "view"]
@@ -2624,6 +3380,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (_NativeWheelEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_MouseEvent of ('T * _NativeWheelEvent) | `React_SyntheticEvent of ('T * _NativeWheelEvent) | `React_UIEvent of ('T * _NativeWheelEvent) | `React_WheelEvent of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (_NativeWheelEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_MouseEvent of ('T * _NativeWheelEvent) | `React_SyntheticEvent of ('T * _NativeWheelEvent) | `React_UIEvent of ('T * _NativeWheelEvent) | `React_WheelEvent of 'T]
+    ]
     val get_deltaMode: 'T t -> float [@@js.get "deltaMode"]
     val set_deltaMode: 'T t -> float -> unit [@@js.set "deltaMode"]
     val get_deltaX: 'T t -> float [@@js.get "deltaX"]
@@ -2644,6 +3406,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_AnimationEvent of 'T | `React_BaseSyntheticEvent of (_NativeAnimationEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * _NativeAnimationEvent)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AnimationEvent of 'T | `React_BaseSyntheticEvent of (_NativeAnimationEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * _NativeAnimationEvent)]
+    ]
     val get_animationName: 'T t -> string [@@js.get "animationName"]
     val set_animationName: 'T t -> string -> unit [@@js.set "animationName"]
     val get_elapsedTime: 'T t -> float [@@js.get "elapsedTime"]
@@ -2662,6 +3430,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_BaseSyntheticEvent of (_NativeTransitionEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * _NativeTransitionEvent) | `React_TransitionEvent of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_BaseSyntheticEvent of (_NativeTransitionEvent * (EventTarget.t_0, 'T) intersection2 * EventTarget.t_0) | `React_SyntheticEvent of ('T * _NativeTransitionEvent) | `React_TransitionEvent of 'T]
+    ]
     val get_elapsedTime: 'T t -> float [@@js.get "elapsedTime"]
     val set_elapsedTime: 'T t -> float -> unit [@@js.set "elapsedTime"]
     val get_propertyName: 'T t -> string [@@js.get "propertyName"]
@@ -2677,6 +3451,12 @@ module[@js.scope "React"] React : sig
     type 'E t_1 = 'E t
     val t_1_to_js: ('E -> Ojs.t) -> 'E t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'E) -> Ojs.t -> 'E t_1
+    [@@@js.stop]
+    type 'E tags = [`React_EventHandler of 'E]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'E tags = [`React_EventHandler of 'E]
+    ]
   end
   module ReactEventHandler : sig
     type 'T t = 'T _React_ReactEventHandler
@@ -2688,6 +3468,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of ('T, Event.t_0) _React_SyntheticEvent | `React_ReactEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of ('T, Event.t_0) _React_SyntheticEvent | `React_ReactEventHandler of 'T]
+    ]
   end
   module ClipboardEventHandler : sig
     type 'T t = 'T _React_ClipboardEventHandler
@@ -2699,6 +3485,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_ClipboardEventHandler of 'T | `React_EventHandler of 'T _React_ClipboardEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ClipboardEventHandler of 'T | `React_EventHandler of 'T _React_ClipboardEvent]
+    ]
   end
   module CompositionEventHandler : sig
     type 'T t = 'T _React_CompositionEventHandler
@@ -2710,6 +3502,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_CompositionEventHandler of 'T | `React_EventHandler of 'T _React_CompositionEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_CompositionEventHandler of 'T | `React_EventHandler of 'T _React_CompositionEvent]
+    ]
   end
   module DragEventHandler : sig
     type 'T t = 'T _React_DragEventHandler
@@ -2721,6 +3519,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_DragEventHandler of 'T | `React_EventHandler of 'T _React_DragEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_DragEventHandler of 'T | `React_EventHandler of 'T _React_DragEvent]
+    ]
   end
   module FocusEventHandler : sig
     type 'T t = 'T _React_FocusEventHandler
@@ -2732,6 +3536,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of 'T _React_FocusEvent | `React_FocusEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of 'T _React_FocusEvent | `React_FocusEventHandler of 'T]
+    ]
   end
   module FormEventHandler : sig
     type 'T t = 'T _React_FormEventHandler
@@ -2743,6 +3553,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of 'T _React_FormEvent | `React_FormEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of 'T _React_FormEvent | `React_FormEventHandler of 'T]
+    ]
   end
   module ChangeEventHandler : sig
     type 'T t = 'T _React_ChangeEventHandler
@@ -2754,6 +3570,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_ChangeEventHandler of 'T | `React_EventHandler of 'T _React_ChangeEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ChangeEventHandler of 'T | `React_EventHandler of 'T _React_ChangeEvent]
+    ]
   end
   module KeyboardEventHandler : sig
     type 'T t = 'T _React_KeyboardEventHandler
@@ -2765,6 +3587,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of 'T _React_KeyboardEvent | `React_KeyboardEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of 'T _React_KeyboardEvent | `React_KeyboardEventHandler of 'T]
+    ]
   end
   module MouseEventHandler : sig
     type 'T t = 'T _React_MouseEventHandler
@@ -2776,6 +3604,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of ('T, _NativeMouseEvent) _React_MouseEvent | `React_MouseEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of ('T, _NativeMouseEvent) _React_MouseEvent | `React_MouseEventHandler of 'T]
+    ]
   end
   module TouchEventHandler : sig
     type 'T t = 'T _React_TouchEventHandler
@@ -2787,6 +3621,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of 'T _React_TouchEvent | `React_TouchEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of 'T _React_TouchEvent | `React_TouchEventHandler of 'T]
+    ]
   end
   module PointerEventHandler : sig
     type 'T t = 'T _React_PointerEventHandler
@@ -2798,6 +3638,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of 'T _React_PointerEvent | `React_PointerEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of 'T _React_PointerEvent | `React_PointerEventHandler of 'T]
+    ]
   end
   module UIEventHandler : sig
     type 'T t = 'T _React_UIEventHandler
@@ -2809,6 +3655,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of ('T, _NativeUIEvent) _React_UIEvent | `React_UIEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of ('T, _NativeUIEvent) _React_UIEvent | `React_UIEventHandler of 'T]
+    ]
   end
   module WheelEventHandler : sig
     type 'T t = 'T _React_WheelEventHandler
@@ -2820,6 +3672,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of 'T _React_WheelEvent | `React_WheelEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of 'T _React_WheelEvent | `React_WheelEventHandler of 'T]
+    ]
   end
   module AnimationEventHandler : sig
     type 'T t = 'T _React_AnimationEventHandler
@@ -2831,6 +3689,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_AnimationEventHandler of 'T | `React_EventHandler of 'T _React_AnimationEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AnimationEventHandler of 'T | `React_EventHandler of 'T _React_AnimationEvent]
+    ]
   end
   module TransitionEventHandler : sig
     type 'T t = 'T _React_TransitionEventHandler
@@ -2842,6 +3706,12 @@ module[@js.scope "React"] React : sig
     type t_0 = Element.t_0 t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'T tags = [`React_EventHandler of 'T _React_TransitionEvent | `React_TransitionEventHandler of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_EventHandler of 'T _React_TransitionEvent | `React_TransitionEventHandler of 'T]
+    ]
   end
   (**
     @deprecated . This was used to allow clients to pass `ref` and `key`
@@ -2864,6 +3734,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_Props of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_Props of 'T]
+    ]
     val get_children: 'T t -> _React_ReactNode [@@js.get "children"]
     val set_children: 'T t -> _React_ReactNode -> unit [@@js.set "children"]
     val get_key: 'T t -> _React_Key [@@js.get "key"]
@@ -2878,6 +3754,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AllHTMLAttributes of 'T | `React_AriaAttributes | `React_Attributes | `React_ClassAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_HTMLProps of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AllHTMLAttributes of 'T | `React_AriaAttributes | `React_Attributes | `React_ClassAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_HTMLProps of 'T]
+    ]
     val cast: 'T t -> 'T _React_AllHTMLAttributes [@@js.cast]
     val cast': 'T t -> 'T _React_ClassAttributes [@@js.cast]
   end
@@ -2888,6 +3770,12 @@ module[@js.scope "React"] React : sig
     type ('E, 'T) t_2 = ('E, 'T) t
     val t_2_to_js: ('E -> Ojs.t) -> ('T -> Ojs.t) -> ('E, 'T) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'E) -> (Ojs.t -> 'T) -> Ojs.t -> ('E, 'T) t_2
+    [@@@js.stop]
+    type ('E, 'T) tags = [`React_DetailedHTMLProps of ('E * 'T)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('E, 'T) tags = [`React_DetailedHTMLProps of ('E * 'T)]
+    ]
   end
   module[@js.scope "SVGProps"] SVGProps : sig
     type 'T t = 'T _React_SVGProps
@@ -2896,6 +3784,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_Attributes | `React_ClassAttributes of 'T | `React_DOMAttributes of 'T | `React_SVGAttributes of 'T | `React_SVGProps of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_Attributes | `React_ClassAttributes of 'T | `React_DOMAttributes of 'T | `React_SVGAttributes of 'T | `React_SVGProps of 'T]
+    ]
     val cast: 'T t -> 'T _React_SVGAttributes [@@js.cast]
     val cast': 'T t -> 'T _React_ClassAttributes [@@js.cast]
   end
@@ -2906,6 +3800,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_DOMAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_DOMAttributes of 'T]
+    ]
     val get_children: 'T t -> _React_ReactNode [@@js.get "children"]
     val set_children: 'T t -> _React_ReactNode -> unit [@@js.set "children"]
     val get_dangerouslySetInnerHTML: 'T t -> anonymous_interface_2 [@@js.get "dangerouslySetInnerHTML"]
@@ -3238,6 +4138,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_CSSProperties | CSS.Properties.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_CSSProperties | CSS.Properties.tags]
+    ]
     val cast: t -> string or_number CSS.Properties.t_1 [@@js.cast]
   end
   module[@js.scope "AriaAttributes"] AriaAttributes : sig
@@ -3247,6 +4153,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_AriaAttributes]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_AriaAttributes]
+    ]
     (** Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or application. *)
     (** Identifies the currently active element when DOM focus is on a composite widget, textbox, group, or application. *)
     val get_aria_activedescendant: t -> string [@@js.get "aria-activedescendant"]
@@ -3786,6 +4698,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_defaultChecked: 'T t -> bool [@@js.get "defaultChecked"]
     val set_defaultChecked: 'T t -> bool -> unit [@@js.set "defaultChecked"]
     val get_defaultValue: 'T t -> string list or_string or_number [@@js.get "defaultValue"]
@@ -3908,6 +4826,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AllHTMLAttributes of 'T | `React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AllHTMLAttributes of 'T | `React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_accept: 'T t -> string [@@js.get "accept"]
     val set_accept: 'T t -> string -> unit [@@js.set "accept"]
     val get_acceptCharset: 'T t -> string [@@js.get "acceptCharset"]
@@ -4129,6 +5053,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_HTMLAttributeReferrerPolicy]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_HTMLAttributeReferrerPolicy]
+    ]
   end
   module[@js.scope "AnchorHTMLAttributes"] AnchorHTMLAttributes : sig
     type 'T t = 'T _React_AnchorHTMLAttributes
@@ -4137,6 +5067,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AnchorHTMLAttributes of 'T | `React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AnchorHTMLAttributes of 'T | `React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_download: 'T t -> any [@@js.get "download"]
     val set_download: 'T t -> any -> unit [@@js.set "download"]
     val get_href: 'T t -> string [@@js.get "href"]
@@ -4164,6 +5100,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_AudioHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MediaHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_AudioHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MediaHTMLAttributes of 'T]
+    ]
     val cast: 'T t -> 'T _React_MediaHTMLAttributes [@@js.cast]
   end
   module[@js.scope "AreaHTMLAttributes"] AreaHTMLAttributes : sig
@@ -4173,6 +5115,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AreaHTMLAttributes of 'T | `React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AreaHTMLAttributes of 'T | `React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_alt: 'T t -> string [@@js.get "alt"]
     val set_alt: 'T t -> string -> unit [@@js.set "alt"]
     val get_coords: 'T t -> string [@@js.get "coords"]
@@ -4202,6 +5150,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_BaseHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_BaseHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_href: 'T t -> string [@@js.get "href"]
     val set_href: 'T t -> string -> unit [@@js.set "href"]
     val get_target: 'T t -> string [@@js.get "target"]
@@ -4215,6 +5169,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_BlockquoteHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_BlockquoteHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_cite: 'T t -> string [@@js.get "cite"]
     val set_cite: 'T t -> string -> unit [@@js.set "cite"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4226,6 +5186,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_ButtonHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_ButtonHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_autoFocus: 'T t -> bool [@@js.get "autoFocus"]
     val set_autoFocus: 'T t -> bool -> unit [@@js.set "autoFocus"]
     val get_disabled: 'T t -> bool [@@js.get "disabled"]
@@ -4257,6 +5223,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_CanvasHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_CanvasHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_height: 'T t -> string or_number [@@js.get "height"]
     val set_height: 'T t -> string or_number -> unit [@@js.set "height"]
     val get_width: 'T t -> string or_number [@@js.get "width"]
@@ -4270,6 +5242,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_ColHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_ColHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_span: 'T t -> float [@@js.get "span"]
     val set_span: 'T t -> float -> unit [@@js.set "span"]
     val get_width: 'T t -> string or_number [@@js.get "width"]
@@ -4283,6 +5261,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_ColgroupHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_ColgroupHTMLAttributes of 'T | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_span: 'T t -> float [@@js.get "span"]
     val set_span: 'T t -> float -> unit [@@js.set "span"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4294,6 +5278,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_DataHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_DataHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_value: 'T t -> string list or_string or_number [@@js.get "value"]
     val set_value: 'T t -> string list or_string or_number -> unit [@@js.set "value"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4305,6 +5295,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_DetailsHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_DetailsHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_open: 'T t -> bool [@@js.get "open"]
     val set_open: 'T t -> bool -> unit [@@js.set "open"]
     val get_onToggle: 'T t -> 'T _React_ReactEventHandler [@@js.get "onToggle"]
@@ -4318,6 +5314,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_DelHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_DelHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_cite: 'T t -> string [@@js.get "cite"]
     val set_cite: 'T t -> string -> unit [@@js.set "cite"]
     val get_dateTime: 'T t -> string [@@js.get "dateTime"]
@@ -4331,6 +5333,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_DialogHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_DialogHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_open: 'T t -> bool [@@js.get "open"]
     val set_open: 'T t -> bool -> unit [@@js.set "open"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4342,6 +5350,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_EmbedHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_EmbedHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_height: 'T t -> string or_number [@@js.get "height"]
     val set_height: 'T t -> string or_number -> unit [@@js.set "height"]
     val get_src: 'T t -> string [@@js.get "src"]
@@ -4359,6 +5373,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_FieldsetHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_FieldsetHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_disabled: 'T t -> bool [@@js.get "disabled"]
     val set_disabled: 'T t -> bool -> unit [@@js.set "disabled"]
     val get_form: 'T t -> string [@@js.get "form"]
@@ -4374,6 +5394,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_FormHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_FormHTMLAttributes of 'T | `React_HTMLAttributes of 'T]
+    ]
     val get_acceptCharset: 'T t -> string [@@js.get "acceptCharset"]
     val set_acceptCharset: 'T t -> string -> unit [@@js.set "acceptCharset"]
     val get_action: 'T t -> string [@@js.get "action"]
@@ -4399,6 +5425,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_HtmlHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_HtmlHTMLAttributes of 'T]
+    ]
     val get_manifest: 'T t -> string [@@js.get "manifest"]
     val set_manifest: 'T t -> string -> unit [@@js.set "manifest"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4410,6 +5442,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_IframeHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_IframeHTMLAttributes of 'T]
+    ]
     val get_allow: 'T t -> string [@@js.get "allow"]
     val set_allow: 'T t -> string -> unit [@@js.set "allow"]
     val get_allowFullScreen: 'T t -> bool [@@js.get "allowFullScreen"]
@@ -4463,6 +5501,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ImgHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ImgHTMLAttributes of 'T]
+    ]
     val get_alt: 'T t -> string [@@js.get "alt"]
     val set_alt: 'T t -> string -> unit [@@js.set "alt"]
     val get_crossOrigin: 'T t -> ([`L_s0[@js ""] | `L_s14_anonymous[@js "anonymous"] | `L_s277_use_credentials[@js "use-credentials"]] [@js.enum]) [@@js.get "crossOrigin"]
@@ -4494,6 +5538,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_InsHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_InsHTMLAttributes of 'T]
+    ]
     val get_cite: 'T t -> string [@@js.get "cite"]
     val set_cite: 'T t -> string -> unit [@@js.set "cite"]
     val get_dateTime: 'T t -> string [@@js.get "dateTime"]
@@ -4507,6 +5557,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_InputHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_InputHTMLAttributes of 'T]
+    ]
     val get_accept: 'T t -> string [@@js.get "accept"]
     val set_accept: 'T t -> string -> unit [@@js.set "accept"]
     val get_alt: 'T t -> string [@@js.get "alt"]
@@ -4584,6 +5640,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_KeygenHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_KeygenHTMLAttributes of 'T]
+    ]
     val get_autoFocus: 'T t -> bool [@@js.get "autoFocus"]
     val set_autoFocus: 'T t -> bool -> unit [@@js.set "autoFocus"]
     val get_challenge: 'T t -> string [@@js.get "challenge"]
@@ -4607,6 +5669,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_LabelHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_LabelHTMLAttributes of 'T]
+    ]
     val get_form: 'T t -> string [@@js.get "form"]
     val set_form: 'T t -> string -> unit [@@js.set "form"]
     val get_htmlFor: 'T t -> string [@@js.get "htmlFor"]
@@ -4620,6 +5688,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_LiHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_LiHTMLAttributes of 'T]
+    ]
     val get_value: 'T t -> string list or_string or_number [@@js.get "value"]
     val set_value: 'T t -> string list or_string or_number -> unit [@@js.set "value"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4631,6 +5705,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_LinkHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_LinkHTMLAttributes of 'T]
+    ]
     val get_as: 'T t -> string [@@js.get "as"]
     val set_as: 'T t -> string -> unit [@@js.set "as"]
     val get_crossOrigin: 'T t -> string [@@js.get "crossOrigin"]
@@ -4662,6 +5742,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MapHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MapHTMLAttributes of 'T]
+    ]
     val get_name: 'T t -> string [@@js.get "name"]
     val set_name: 'T t -> string -> unit [@@js.set "name"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4673,6 +5759,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MenuHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MenuHTMLAttributes of 'T]
+    ]
     val get_type: 'T t -> string [@@js.get "type"]
     val set_type: 'T t -> string -> unit [@@js.set "type"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4684,6 +5776,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MediaHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MediaHTMLAttributes of 'T]
+    ]
     val get_autoPlay: 'T t -> bool [@@js.get "autoPlay"]
     val set_autoPlay: 'T t -> bool -> unit [@@js.set "autoPlay"]
     val get_controls: 'T t -> bool [@@js.get "controls"]
@@ -4713,6 +5811,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MetaHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MetaHTMLAttributes of 'T]
+    ]
     val get_charSet: 'T t -> string [@@js.get "charSet"]
     val set_charSet: 'T t -> string -> unit [@@js.set "charSet"]
     val get_content: 'T t -> string [@@js.get "content"]
@@ -4730,6 +5834,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MeterHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MeterHTMLAttributes of 'T]
+    ]
     val get_form: 'T t -> string [@@js.get "form"]
     val set_form: 'T t -> string -> unit [@@js.set "form"]
     val get_high: 'T t -> float [@@js.get "high"]
@@ -4753,6 +5863,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_QuoteHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_QuoteHTMLAttributes of 'T]
+    ]
     val get_cite: 'T t -> string [@@js.get "cite"]
     val set_cite: 'T t -> string -> unit [@@js.set "cite"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4764,6 +5880,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ObjectHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ObjectHTMLAttributes of 'T]
+    ]
     val get_classID: 'T t -> string [@@js.get "classID"]
     val set_classID: 'T t -> string -> unit [@@js.set "classID"]
     val get_data: 'T t -> string [@@js.get "data"]
@@ -4791,6 +5913,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_OlHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_OlHTMLAttributes of 'T]
+    ]
     val get_reversed: 'T t -> bool [@@js.get "reversed"]
     val set_reversed: 'T t -> bool -> unit [@@js.set "reversed"]
     val get_start: 'T t -> float [@@js.get "start"]
@@ -4806,6 +5934,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_OptgroupHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_OptgroupHTMLAttributes of 'T]
+    ]
     val get_disabled: 'T t -> bool [@@js.get "disabled"]
     val set_disabled: 'T t -> bool -> unit [@@js.set "disabled"]
     val get_label: 'T t -> string [@@js.get "label"]
@@ -4819,6 +5953,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_OptionHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_OptionHTMLAttributes of 'T]
+    ]
     val get_disabled: 'T t -> bool [@@js.get "disabled"]
     val set_disabled: 'T t -> bool -> unit [@@js.set "disabled"]
     val get_label: 'T t -> string [@@js.get "label"]
@@ -4836,6 +5976,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_OutputHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_OutputHTMLAttributes of 'T]
+    ]
     val get_form: 'T t -> string [@@js.get "form"]
     val set_form: 'T t -> string -> unit [@@js.set "form"]
     val get_htmlFor: 'T t -> string [@@js.get "htmlFor"]
@@ -4851,6 +5997,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ParamHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ParamHTMLAttributes of 'T]
+    ]
     val get_name: 'T t -> string [@@js.get "name"]
     val set_name: 'T t -> string -> unit [@@js.set "name"]
     val get_value: 'T t -> string list or_string or_number [@@js.get "value"]
@@ -4864,6 +6016,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ProgressHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ProgressHTMLAttributes of 'T]
+    ]
     val get_max: 'T t -> string or_number [@@js.get "max"]
     val set_max: 'T t -> string or_number -> unit [@@js.set "max"]
     val get_value: 'T t -> string list or_string or_number [@@js.get "value"]
@@ -4877,6 +6035,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_SlotHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_SlotHTMLAttributes of 'T]
+    ]
     val get_name: 'T t -> string [@@js.get "name"]
     val set_name: 'T t -> string -> unit [@@js.set "name"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -4888,6 +6052,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ScriptHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ScriptHTMLAttributes of 'T]
+    ]
     val get_async: 'T t -> bool [@@js.get "async"]
     val set_async: 'T t -> bool -> unit [@@js.set "async"]
     (** @deprecated  *)
@@ -4920,6 +6090,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_SelectHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_SelectHTMLAttributes of 'T]
+    ]
     val get_autoComplete: 'T t -> string [@@js.get "autoComplete"]
     val set_autoComplete: 'T t -> string -> unit [@@js.set "autoComplete"]
     val get_autoFocus: 'T t -> bool [@@js.get "autoFocus"]
@@ -4949,6 +6125,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_SourceHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_SourceHTMLAttributes of 'T]
+    ]
     val get_media: 'T t -> string [@@js.get "media"]
     val set_media: 'T t -> string -> unit [@@js.set "media"]
     val get_sizes: 'T t -> string [@@js.get "sizes"]
@@ -4968,6 +6150,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_StyleHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_StyleHTMLAttributes of 'T]
+    ]
     val get_media: 'T t -> string [@@js.get "media"]
     val set_media: 'T t -> string -> unit [@@js.set "media"]
     val get_nonce: 'T t -> string [@@js.get "nonce"]
@@ -4985,6 +6173,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TableHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TableHTMLAttributes of 'T]
+    ]
     val get_cellPadding: 'T t -> string or_number [@@js.get "cellPadding"]
     val set_cellPadding: 'T t -> string or_number -> unit [@@js.set "cellPadding"]
     val get_cellSpacing: 'T t -> string or_number [@@js.get "cellSpacing"]
@@ -5002,6 +6196,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TextareaHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TextareaHTMLAttributes of 'T]
+    ]
     val get_autoComplete: 'T t -> string [@@js.get "autoComplete"]
     val set_autoComplete: 'T t -> string -> unit [@@js.set "autoComplete"]
     val get_autoFocus: 'T t -> bool [@@js.get "autoFocus"]
@@ -5043,6 +6243,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TdHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TdHTMLAttributes of 'T]
+    ]
     val get_align: 'T t -> ([`L_s40_center[@js "center"] | `L_s42_char[@js "char"] | `L_s135_justify[@js "justify"] | `L_s141_left[@js "left"] | `L_s211_right[@js "right"]] [@js.enum]) [@@js.get "align"]
     val set_align: 'T t -> ([`L_s40_center | `L_s42_char | `L_s135_justify | `L_s141_left | `L_s211_right] [@js.enum]) -> unit [@@js.set "align"]
     val get_colSpan: 'T t -> float [@@js.get "colSpan"]
@@ -5070,6 +6276,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ThHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_ThHTMLAttributes of 'T]
+    ]
     val get_align: 'T t -> ([`L_s40_center[@js "center"] | `L_s42_char[@js "char"] | `L_s135_justify[@js "justify"] | `L_s141_left[@js "left"] | `L_s211_right[@js "right"]] [@js.enum]) [@@js.get "align"]
     val set_align: 'T t -> ([`L_s40_center | `L_s42_char | `L_s135_justify | `L_s141_left | `L_s211_right] [@js.enum]) -> unit [@@js.set "align"]
     val get_colSpan: 'T t -> float [@@js.get "colSpan"]
@@ -5091,6 +6303,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TimeHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TimeHTMLAttributes of 'T]
+    ]
     val get_dateTime: 'T t -> string [@@js.get "dateTime"]
     val set_dateTime: 'T t -> string -> unit [@@js.set "dateTime"]
     val cast: 'T t -> 'T _React_HTMLAttributes [@@js.cast]
@@ -5102,6 +6320,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TrackHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_TrackHTMLAttributes of 'T]
+    ]
     val get_default: 'T t -> bool [@@js.get "default"]
     val set_default: 'T t -> bool -> unit [@@js.set "default"]
     val get_kind: 'T t -> string [@@js.get "kind"]
@@ -5121,6 +6345,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MediaHTMLAttributes of 'T | `React_VideoHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_MediaHTMLAttributes of 'T | `React_VideoHTMLAttributes of 'T]
+    ]
     val get_height: 'T t -> string or_number [@@js.get "height"]
     val set_height: 'T t -> string or_number -> unit [@@js.set "height"]
     val get_playsInline: 'T t -> bool [@@js.get "playsInline"]
@@ -5142,6 +6372,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_SVGAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_SVGAttributes of 'T]
+    ]
     val get_className: 'T t -> string [@@js.get "className"]
     val set_className: 'T t -> string -> unit [@@js.set "className"]
     val get_color: 'T t -> string [@@js.get "color"]
@@ -5668,6 +6904,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_WebViewHTMLAttributes of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_AriaAttributes | `React_DOMAttributes of 'T | `React_HTMLAttributes of 'T | `React_WebViewHTMLAttributes of 'T]
+    ]
     val get_allowFullScreen: 'T t -> bool [@@js.get "allowFullScreen"]
     val set_allowFullScreen: 'T t -> bool -> unit [@@js.set "allowFullScreen"]
     val get_allowpopups: 'T t -> bool [@@js.get "allowpopups"]
@@ -5711,6 +6953,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactHTML]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactHTML]
+    ]
     val get_a: t -> (HTMLAnchorElement.t_0 _React_AnchorHTMLAttributes, HTMLAnchorElement.t_0) _React_DetailedHTMLFactory [@@js.get "a"]
     val set_a: t -> (HTMLAnchorElement.t_0 _React_AnchorHTMLAttributes, HTMLAnchorElement.t_0) _React_DetailedHTMLFactory -> unit [@@js.set "a"]
     val get_abbr: t -> (HTMLElement.t_0 _React_HTMLAttributes, HTMLElement.t_0) _React_DetailedHTMLFactory [@@js.get "abbr"]
@@ -5951,6 +7199,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactSVG]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactSVG]
+    ]
     val get_animate: t -> _React_SVGFactory [@@js.get "animate"]
     val set_animate: t -> _React_SVGFactory -> unit [@@js.set "animate"]
     val get_circle: t -> _React_SVGFactory [@@js.get "circle"]
@@ -6069,6 +7323,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactDOM | `React_ReactHTML | `React_ReactSVG]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactDOM | `React_ReactHTML | `React_ReactSVG]
+    ]
     val cast: t -> _React_ReactHTML [@@js.cast]
     val cast': t -> _React_ReactSVG [@@js.cast]
   end
@@ -6079,6 +7339,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_Validator of 'T | PropTypes.Validator.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_Validator of 'T | PropTypes.Validator.tags]
+    ]
   end
   module Requireable : sig
     type 'T t = 'T _React_Requireable
@@ -6087,6 +7353,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_Requireable of 'T | PropTypes.Requireable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_Requireable of 'T | PropTypes.Requireable.tags]
+    ]
   end
   module ValidationMap : sig
     type 'T t = 'T _React_ValidationMap
@@ -6095,6 +7367,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_ValidationMap of 'T | PropTypes.ValidationMap.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_ValidationMap of 'T | PropTypes.ValidationMap.tags]
+    ]
   end
   module WeakValidationMap : sig
     type 'T t = 'T _React_WeakValidationMap
@@ -6103,6 +7381,12 @@ module[@js.scope "React"] React : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`React_WeakValidationMap of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`React_WeakValidationMap of 'T]
+    ]
   end
   module[@js.scope "ReactPropTypes"] ReactPropTypes : sig
     type t = _React_ReactPropTypes
@@ -6111,6 +7395,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactPropTypes]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactPropTypes]
+    ]
     val get_any: t -> (* FIXME: unknown type 'typeof PropTypes.any' *)any [@@js.get "any"]
     val set_any: t -> (* FIXME: unknown type 'typeof PropTypes.any' *)any -> unit [@@js.set "any"]
     val get_array: t -> (* FIXME: unknown type 'typeof PropTypes.array' *)any [@@js.get "array"]
@@ -6151,6 +7441,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ReactChildren]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ReactChildren]
+    ]
     val map: t -> children:('C, 'C) or_array -> fn:(child:'C -> index:float -> 'T) -> (* FIXME: unknown type 'C extends null | undefined ? C : Array<Exclude<T, boolean | null | undefined>>' *)any [@@js.call "map"]
     val forEach: t -> children:('C, 'C) or_array -> fn:(child:'C -> index:float -> unit) -> unit [@@js.call "forEach"]
     val count: t -> children:any -> float [@@js.call "count"]
@@ -6164,6 +7460,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_AbstractView]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_AbstractView]
+    ]
     val get_styleMedia: t -> StyleMedia.t_0 [@@js.get "styleMedia"]
     val set_styleMedia: t -> StyleMedia.t_0 -> unit [@@js.set "styleMedia"]
     val get_document: t -> Document.t_0 [@@js.get "document"]
@@ -6176,6 +7478,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_Touch]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_Touch]
+    ]
     val get_identifier: t -> float [@@js.get "identifier"]
     val set_identifier: t -> float -> unit [@@js.set "identifier"]
     val get_target: t -> EventTarget.t_0 [@@js.get "target"]
@@ -6200,6 +7508,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_TouchList]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_TouchList]
+    ]
     val get: t -> float -> _React_Touch [@@js.index_get]
     val set: t -> float -> _React_Touch -> unit [@@js.index_set]
     val get_length: t -> float [@@js.get "length"]
@@ -6214,6 +7528,12 @@ module[@js.scope "React"] React : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`React_ErrorInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`React_ErrorInfo]
+    ]
     (** Captures which component contained the exception, and its ancestors. *)
     (** Captures which component contained the exception, and its ancestors. *)
     val get_componentStack: t -> string [@@js.get "componentStack"]
@@ -6228,6 +7548,12 @@ module IsExactlyAny : sig
   type 'T t_1 = 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  [@@@js.stop]
+  type 'T tags = [`IsExactlyAny of 'T]
+  [@@@js.start]
+  [@@@js.implem 
+    type 'T tags = [`IsExactlyAny of 'T]
+  ]
 end
 module ExactlyAnyPropertyKeys : sig
   type 'T t = 'T _ExactlyAnyPropertyKeys
@@ -6236,6 +7562,12 @@ module ExactlyAnyPropertyKeys : sig
   type 'T t_1 = 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  [@@@js.stop]
+  type 'T tags = [`ExactlyAnyPropertyKeys of 'T]
+  [@@@js.start]
+  [@@@js.implem 
+    type 'T tags = [`ExactlyAnyPropertyKeys of 'T]
+  ]
 end
 module NotExactlyAnyPropertyKeys : sig
   type 'T t = 'T _NotExactlyAnyPropertyKeys
@@ -6244,6 +7576,12 @@ module NotExactlyAnyPropertyKeys : sig
   type 'T t_1 = 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  [@@@js.stop]
+  type 'T tags = [`NotExactlyAnyPropertyKeys of 'T | Exclude.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type 'T tags = [`NotExactlyAnyPropertyKeys of 'T | Exclude.tags]
+  ]
 end
 module MergePropTypes : sig
   type ('P, 'T) t = ('P, 'T) _MergePropTypes
@@ -6252,6 +7590,12 @@ module MergePropTypes : sig
   type ('P, 'T) t_2 = ('P, 'T) t
   val t_2_to_js: ('P -> Ojs.t) -> ('T -> Ojs.t) -> ('P, 'T) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'T) -> Ojs.t -> ('P, 'T) t_2
+  [@@@js.stop]
+  type ('P, 'T) tags = [`MergePropTypes of ('P * 'T)]
+  [@@@js.start]
+  [@@@js.implem 
+    type ('P, 'T) tags = [`MergePropTypes of ('P * 'T)]
+  ]
 end
 module Defaultize : sig
   type ('P, 'D) t = ('P, 'D) _Defaultize
@@ -6260,6 +7604,12 @@ module Defaultize : sig
   type ('P, 'D) t_2 = ('P, 'D) t
   val t_2_to_js: ('P -> Ojs.t) -> ('D -> Ojs.t) -> ('P, 'D) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'P) -> (Ojs.t -> 'D) -> Ojs.t -> ('P, 'D) t_2
+  [@@@js.stop]
+  type ('P, 'D) tags = [`Defaultize of ('P * 'D)]
+  [@@@js.start]
+  [@@@js.implem 
+    type ('P, 'D) tags = [`Defaultize of ('P * 'D)]
+  ]
 end
 module ReactManagedAttributes : sig
   type ('C, 'P) t = ('C, 'P) _ReactManagedAttributes
@@ -6268,6 +7618,12 @@ module ReactManagedAttributes : sig
   type ('C, 'P) t_2 = ('C, 'P) t
   val t_2_to_js: ('C -> Ojs.t) -> ('P -> Ojs.t) -> ('C, 'P) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'C) -> (Ojs.t -> 'P) -> Ojs.t -> ('C, 'P) t_2
+  [@@@js.stop]
+  type ('C, 'P) tags = [`ReactManagedAttributes of ('C * 'P)]
+  [@@@js.start]
+  [@@@js.implem 
+    type ('C, 'P) tags = [`ReactManagedAttributes of ('C * 'P)]
+  ]
 end
 module[@js.scope "global"] Global : sig
   module[@js.scope "JSX"] JSX : sig
@@ -6278,6 +7634,12 @@ module[@js.scope "global"] Global : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`React_ReactElement of (any * any) | `Global_JSX_Element]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`React_ReactElement of (any * any) | `Global_JSX_Element]
+      ]
       val cast: t -> (any, any) _React_ReactElement [@@js.cast]
     end
     module[@js.scope "ElementClass"] ElementClass : sig
@@ -6287,6 +7649,12 @@ module[@js.scope "global"] Global : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`React_Component of (any * anonymous_interface_0 * any) | `React_ComponentLifecycle of (any * anonymous_interface_0 * any) | `React_DeprecatedLifecycle of (any * anonymous_interface_0) | `React_NewLifecycle of (any * anonymous_interface_0 * any) | `Global_JSX_ElementClass]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`React_Component of (any * anonymous_interface_0 * any) | `React_ComponentLifecycle of (any * anonymous_interface_0 * any) | `React_DeprecatedLifecycle of (any * anonymous_interface_0) | `React_NewLifecycle of (any * anonymous_interface_0 * any) | `Global_JSX_ElementClass]
+      ]
       val render: t -> _React_ReactNode [@@js.call "render"]
       val cast: t -> (any, anonymous_interface_0, any) _React_Component [@@js.cast]
     end
@@ -6297,6 +7665,12 @@ module[@js.scope "global"] Global : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Global_JSX_ElementAttributesProperty]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Global_JSX_ElementAttributesProperty]
+      ]
       val get_props: t -> anonymous_interface_0 [@@js.get "props"]
       val set_props: t -> anonymous_interface_0 -> unit [@@js.set "props"]
     end
@@ -6307,6 +7681,12 @@ module[@js.scope "global"] Global : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Global_JSX_ElementChildrenAttribute]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Global_JSX_ElementChildrenAttribute]
+      ]
       val get_children: t -> anonymous_interface_0 [@@js.get "children"]
       val set_children: t -> anonymous_interface_0 -> unit [@@js.set "children"]
     end
@@ -6317,6 +7697,12 @@ module[@js.scope "global"] Global : sig
       type ('C, 'P) t_2 = ('C, 'P) t
       val t_2_to_js: ('C -> Ojs.t) -> ('P -> Ojs.t) -> ('C, 'P) t_2 -> Ojs.t
       val t_2_of_js: (Ojs.t -> 'C) -> (Ojs.t -> 'P) -> Ojs.t -> ('C, 'P) t_2
+      [@@@js.stop]
+      type ('C, 'P) tags = [`Global_JSX_LibraryManagedAttributes of ('C * 'P)]
+      [@@@js.start]
+      [@@@js.implem 
+        type ('C, 'P) tags = [`Global_JSX_LibraryManagedAttributes of ('C * 'P)]
+      ]
     end
     module[@js.scope "IntrinsicAttributes"] IntrinsicAttributes : sig
       type t = global_JSX_IntrinsicAttributes
@@ -6325,6 +7711,12 @@ module[@js.scope "global"] Global : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`React_Attributes | `Global_JSX_IntrinsicAttributes]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`React_Attributes | `Global_JSX_IntrinsicAttributes]
+      ]
       val cast: t -> _React_Attributes [@@js.cast]
     end
     module[@js.scope "IntrinsicClassAttributes"] IntrinsicClassAttributes : sig
@@ -6334,6 +7726,12 @@ module[@js.scope "global"] Global : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`React_Attributes | `React_ClassAttributes of 'T | `Global_JSX_IntrinsicClassAttributes of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`React_Attributes | `React_ClassAttributes of 'T | `Global_JSX_IntrinsicClassAttributes of 'T]
+      ]
       val cast: 'T t -> 'T _React_ClassAttributes [@@js.cast]
     end
     module[@js.scope "IntrinsicElements"] IntrinsicElements : sig
@@ -6343,6 +7741,12 @@ module[@js.scope "global"] Global : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Global_JSX_IntrinsicElements]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Global_JSX_IntrinsicElements]
+      ]
       val get_a: t -> (HTMLAnchorElement.t_0 _React_AnchorHTMLAttributes, HTMLAnchorElement.t_0) _React_DetailedHTMLProps [@@js.get "a"]
       val set_a: t -> (HTMLAnchorElement.t_0 _React_AnchorHTMLAttributes, HTMLAnchorElement.t_0) _React_DetailedHTMLProps -> unit [@@js.set "a"]
       val get_abbr: t -> (HTMLElement.t_0 _React_HTMLAttributes, HTMLElement.t_0) _React_DetailedHTMLProps [@@js.get "abbr"]

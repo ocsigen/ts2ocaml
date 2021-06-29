@@ -2739,6 +2739,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_MapLike of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_MapLike of 'T]
+    ]
     val get: 'T t -> string -> 'T [@@js.index_get]
     val set: 'T t -> string -> 'T -> unit [@@js.index_set]
   end
@@ -2749,6 +2755,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_SortedReadonlyArray of 'T | `Array of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_SortedReadonlyArray of 'T | `Array of 'T]
+    ]
     val get___sortedArrayBrand: 'T t -> any [@@js.get "__sortedArrayBrand"]
     val set___sortedArrayBrand: 'T t -> any -> unit [@@js.set "__sortedArrayBrand"]
     val cast: 'T t -> 'T list [@@js.cast]
@@ -2760,6 +2772,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_SortedArray of 'T | `Array of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_SortedArray of 'T | `Array of 'T]
+    ]
     val get___sortedArrayBrand: 'T t -> any [@@js.get "__sortedArrayBrand"]
     val set___sortedArrayBrand: 'T t -> any -> unit [@@js.set "__sortedArrayBrand"]
     val cast: 'T t -> 'T list [@@js.cast]
@@ -2772,6 +2790,12 @@ module[@js.scope "ts"] Ts : sig
     type 'K t_1 = 'K t
     val t_1_to_js: ('K -> Ojs.t) -> 'K t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'K) -> Ojs.t -> 'K t_1
+    [@@@js.stop]
+    type 'K tags = [`Ts_ReadonlyCollection of 'K]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'K tags = [`Ts_ReadonlyCollection of 'K]
+    ]
     val get_size: 'K t -> float [@@js.get "size"]
     val has: 'K t -> key:'K -> bool [@@js.call "has"]
     val keys: 'K t -> 'K ts_Iterator [@@js.call "keys"]
@@ -2784,6 +2808,12 @@ module[@js.scope "ts"] Ts : sig
     type 'K t_1 = 'K t
     val t_1_to_js: ('K -> Ojs.t) -> 'K t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'K) -> Ojs.t -> 'K t_1
+    [@@@js.stop]
+    type 'K tags = [`Ts_Collection of 'K | `Ts_ReadonlyCollection of 'K]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'K tags = [`Ts_Collection of 'K | `Ts_ReadonlyCollection of 'K]
+    ]
     val delete: 'K t -> key:'K -> bool [@@js.call "delete"]
     val clear: 'K t -> unit [@@js.call "clear"]
     val cast: 'K t -> 'K ts_ReadonlyCollection [@@js.cast]
@@ -2796,6 +2826,12 @@ module[@js.scope "ts"] Ts : sig
     type ('K, 'V) t_2 = ('K, 'V) t
     val t_2_to_js: ('K -> Ojs.t) -> ('V -> Ojs.t) -> ('K, 'V) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t_2
+    [@@@js.stop]
+    type ('K, 'V) tags = [`Ts_ReadonlyCollection of 'K | `Ts_ReadonlyESMap of ('K * 'V)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('K, 'V) tags = [`Ts_ReadonlyCollection of 'K | `Ts_ReadonlyESMap of ('K * 'V)]
+    ]
     val get_: ('K, 'V) t -> key:'K -> 'V or_undefined [@@js.call "get"]
     val values: ('K, 'V) t -> 'V ts_Iterator [@@js.call "values"]
     val entries: ('K, 'V) t -> ('K * 'V) ts_Iterator [@@js.call "entries"]
@@ -2810,6 +2846,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ReadonlyCollection of string | `Ts_ReadonlyESMap of (string * 'T) | `Ts_ReadonlyMap of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ReadonlyCollection of string | `Ts_ReadonlyESMap of (string * 'T) | `Ts_ReadonlyMap of 'T]
+    ]
     val cast: 'T t -> (string, 'T) ts_ReadonlyESMap [@@js.cast]
   end
   (** ES6 Map interface. *)
@@ -2820,6 +2862,12 @@ module[@js.scope "ts"] Ts : sig
     type ('K, 'V) t_2 = ('K, 'V) t
     val t_2_to_js: ('K -> Ojs.t) -> ('V -> Ojs.t) -> ('K, 'V) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t_2
+    [@@@js.stop]
+    type ('K, 'V) tags = [`Ts_Collection of 'K | `Ts_ESMap of ('K * 'V) | `Ts_ReadonlyCollection of 'K | `Ts_ReadonlyESMap of ('K * 'V)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('K, 'V) tags = [`Ts_Collection of 'K | `Ts_ESMap of ('K * 'V) | `Ts_ReadonlyCollection of 'K | `Ts_ReadonlyESMap of ('K * 'V)]
+    ]
     val set_: ('K, 'V) t -> key:'K -> value:'V -> ('K, 'V) t [@@js.call "set"]
     val cast: ('K, 'V) t -> ('K, 'V) ts_ReadonlyESMap [@@js.cast]
     val cast': ('K, 'V) t -> 'K ts_Collection [@@js.cast]
@@ -2832,6 +2880,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Collection of string | `Ts_ESMap of (string * 'T) | `Ts_Map of 'T | `Ts_ReadonlyCollection of string | `Ts_ReadonlyESMap of (string * 'T)]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Collection of string | `Ts_ESMap of (string * 'T) | `Ts_Map of 'T | `Ts_ReadonlyCollection of string | `Ts_ReadonlyESMap of (string * 'T)]
+    ]
     val cast: 'T t -> (string, 'T) ts_ESMap [@@js.cast]
   end
   (** ES6 Set interface, only read methods included. *)
@@ -2842,6 +2896,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ReadonlyCollection of 'T | `Ts_ReadonlySet of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ReadonlyCollection of 'T | `Ts_ReadonlySet of 'T]
+    ]
     val has: 'T t -> value:'T -> bool [@@js.call "has"]
     val values: 'T t -> 'T ts_Iterator [@@js.call "values"]
     val entries: 'T t -> ('T * 'T) ts_Iterator [@@js.call "entries"]
@@ -2856,6 +2916,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Collection of 'T | `Ts_ReadonlyCollection of 'T | `Ts_ReadonlySet of 'T | `Ts_Set of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Collection of 'T | `Ts_ReadonlyCollection of 'T | `Ts_ReadonlySet of 'T | `Ts_Set of 'T]
+    ]
     val add: 'T t -> value:'T -> 'T t [@@js.call "add"]
     val delete: 'T t -> value:'T -> bool [@@js.call "delete"]
     val cast: 'T t -> 'T ts_ReadonlySet [@@js.cast]
@@ -2869,6 +2935,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Iterator of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Iterator of 'T]
+    ]
     val next: 'T t -> ([`U_b_false of anonymous_interface_14 [@js false] | `U_b_true of anonymous_interface_15 [@js true]] [@js.union on_field "done"]) [@@js.call "next"]
   end
   (** Array that is only intended to be pushed to, never read. *)
@@ -2879,6 +2951,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Push of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Push of 'T]
+    ]
     val push: 'T t -> values:('T list [@js.variadic]) -> unit [@@js.call "push"]
   end
   module Path : sig
@@ -2888,6 +2966,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Path]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Path]
+    ]
   end
   module[@js.scope "TextRange"] TextRange : sig
     type t = ts_TextRange
@@ -2896,6 +2980,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TextRange]
+    ]
     val get_pos: t -> float [@@js.get "pos"]
     val set_pos: t -> float -> unit [@@js.set "pos"]
     val get_end: t -> float [@@js.get "end"]
@@ -2908,6 +2998,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ReadonlyTextRange]
+    ]
     val get_pos: t -> float [@@js.get "pos"]
     val get_end: t -> float [@@js.get "end"]
   end
@@ -2926,6 +3022,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TriviaSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TriviaSyntaxKind]
+    ]
   end
   module LiteralSyntaxKind : sig
     type t = ts_LiteralSyntaxKind
@@ -2934,6 +3036,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralSyntaxKind]
+    ]
   end
   module PseudoLiteralSyntaxKind : sig
     type t = ts_PseudoLiteralSyntaxKind
@@ -2942,6 +3050,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PseudoLiteralSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PseudoLiteralSyntaxKind]
+    ]
   end
   module PunctuationSyntaxKind : sig
     type t = ts_PunctuationSyntaxKind
@@ -2950,6 +3064,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PunctuationSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PunctuationSyntaxKind]
+    ]
   end
   module KeywordSyntaxKind : sig
     type t = ts_KeywordSyntaxKind
@@ -2958,6 +3078,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_KeywordSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_KeywordSyntaxKind]
+    ]
   end
   module ModifierSyntaxKind : sig
     type t = ts_ModifierSyntaxKind
@@ -2966,6 +3092,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ModifierSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ModifierSyntaxKind]
+    ]
   end
   module KeywordTypeSyntaxKind : sig
     type t = ts_KeywordTypeSyntaxKind
@@ -2974,6 +3106,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_KeywordTypeSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_KeywordTypeSyntaxKind]
+    ]
   end
   module TokenSyntaxKind : sig
     type t = ts_TokenSyntaxKind
@@ -2982,6 +3120,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TokenSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TokenSyntaxKind]
+    ]
   end
   module JsxTokenSyntaxKind : sig
     type t = ts_JsxTokenSyntaxKind
@@ -2990,6 +3134,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JsxTokenSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JsxTokenSyntaxKind]
+    ]
   end
   module JSDocSyntaxKind : sig
     type t = ts_JSDocSyntaxKind
@@ -2998,6 +3148,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocSyntaxKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocSyntaxKind]
+    ]
   end
   module NodeFlags : sig
     type t = ts_NodeFlags
@@ -3030,6 +3186,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val getSourceFile: t -> ts_SourceFile [@@js.call "getSourceFile"]
     val getChildCount: t -> ?sourceFile:ts_SourceFile -> unit -> float [@@js.call "getChildCount"]
     val getChildAt: t -> index:float -> ?sourceFile:ts_SourceFile -> unit -> t [@@js.call "getChildAt"]
@@ -3059,6 +3221,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocContainer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocContainer]
+    ]
   end
   module HasJSDoc : sig
     type t = ts_HasJSDoc
@@ -3067,6 +3235,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_HasJSDoc]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_HasJSDoc]
+    ]
   end
   module HasType : sig
     type t = ts_HasType
@@ -3075,6 +3249,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_HasType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_HasType]
+    ]
   end
   module HasTypeArguments : sig
     type t = ts_HasTypeArguments
@@ -3083,6 +3263,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_HasTypeArguments]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_HasTypeArguments]
+    ]
   end
   module HasInitializer : sig
     type t = ts_HasInitializer
@@ -3091,6 +3277,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_HasInitializer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_HasInitializer]
+    ]
   end
   module HasExpressionInitializer : sig
     type t = ts_HasExpressionInitializer
@@ -3099,6 +3291,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_HasExpressionInitializer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_HasExpressionInitializer]
+    ]
   end
   module[@js.scope "NodeArray"] NodeArray : sig
     type 'T t = 'T ts_NodeArray
@@ -3107,6 +3305,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_NodeArray of 'T | `Ts_ReadonlyTextRange | `Array of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_NodeArray of 'T | `Ts_ReadonlyTextRange | `Array of 'T]
+    ]
     val get_hasTrailingComma: 'T t -> bool [@@js.get "hasTrailingComma"]
     val set_hasTrailingComma: 'T t -> bool -> unit [@@js.set "hasTrailingComma"]
     val cast: 'T t -> 'T list [@@js.cast]
@@ -3119,6 +3323,12 @@ module[@js.scope "ts"] Ts : sig
     type 'TKind t_1 = 'TKind t
     val t_1_to_js: ('TKind -> Ojs.t) -> 'TKind t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'TKind) -> Ojs.t -> 'TKind t_1
+    [@@@js.stop]
+    type 'TKind tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'TKind tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind]
+    ]
     val get_kind: 'TKind t -> 'TKind [@@js.get "kind"]
     val cast: 'TKind t -> ts_Node [@@js.cast]
   end
@@ -3129,6 +3339,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EndOfFileToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EndOfFileToken]
+    ]
   end
   module[@js.scope "PunctuationToken"] PunctuationToken : sig
     type 'TKind t = 'TKind ts_PunctuationToken
@@ -3137,6 +3353,12 @@ module[@js.scope "ts"] Ts : sig
     type 'TKind t_1 = 'TKind t
     val t_1_to_js: ('TKind -> Ojs.t) -> 'TKind t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'TKind) -> Ojs.t -> 'TKind t_1
+    [@@@js.stop]
+    type 'TKind tags = [`Ts_Node | `Ts_PunctuationToken of 'TKind | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'TKind tags = [`Ts_Node | `Ts_PunctuationToken of 'TKind | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind]
+    ]
     val cast: 'TKind t -> 'TKind ts_Token [@@js.cast]
   end
   module DotToken : sig
@@ -3146,6 +3368,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DotToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_DotToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_DotToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DotToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_DotToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_DotToken]
+    ]
   end
   module DotDotDotToken : sig
     type t = ts_DotDotDotToken
@@ -3154,6 +3382,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DotDotDotToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_DotDotDotToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_DotDotDotToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DotDotDotToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_DotDotDotToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_DotDotDotToken]
+    ]
   end
   module QuestionToken : sig
     type t = ts_QuestionToken
@@ -3162,6 +3396,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_QuestionToken | `Ts_QuestionToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_QuestionToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_QuestionToken | `Ts_QuestionToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_QuestionToken]
+    ]
   end
   module ExclamationToken : sig
     type t = ts_ExclamationToken
@@ -3170,6 +3410,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ExclamationToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_ExclamationToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ExclamationToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ExclamationToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_ExclamationToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ExclamationToken]
+    ]
   end
   module ColonToken : sig
     type t = ts_ColonToken
@@ -3178,6 +3424,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ColonToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_ColonToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ColonToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ColonToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_ColonToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ColonToken]
+    ]
   end
   module EqualsToken : sig
     type t = ts_EqualsToken
@@ -3186,6 +3438,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EqualsToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_EqualsToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_EqualsToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EqualsToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_EqualsToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_EqualsToken]
+    ]
   end
   module AsteriskToken : sig
     type t = ts_AsteriskToken
@@ -3194,6 +3452,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AsteriskToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_AsteriskToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AsteriskToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AsteriskToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_AsteriskToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AsteriskToken]
+    ]
   end
   module EqualsGreaterThanToken : sig
     type t = ts_EqualsGreaterThanToken
@@ -3202,6 +3466,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EqualsGreaterThanToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_EqualsGreaterThanToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_EqualsGreaterThanToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EqualsGreaterThanToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_EqualsGreaterThanToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_EqualsGreaterThanToken]
+    ]
   end
   module PlusToken : sig
     type t = ts_PlusToken
@@ -3210,6 +3480,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_PlusToken | `Ts_PunctuationToken of ts_SyntaxKind_PlusToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_PlusToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_PlusToken | `Ts_PunctuationToken of ts_SyntaxKind_PlusToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_PlusToken]
+    ]
   end
   module MinusToken : sig
     type t = ts_MinusToken
@@ -3218,6 +3494,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_MinusToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_MinusToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_MinusToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_MinusToken | `Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_MinusToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_MinusToken]
+    ]
   end
   module QuestionDotToken : sig
     type t = ts_QuestionDotToken
@@ -3226,6 +3508,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_QuestionDotToken | `Ts_QuestionDotToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_QuestionDotToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_PunctuationToken of ts_SyntaxKind_QuestionDotToken | `Ts_QuestionDotToken | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_QuestionDotToken]
+    ]
   end
   module[@js.scope "KeywordToken"] KeywordToken : sig
     type 'TKind t = 'TKind ts_KeywordToken
@@ -3234,6 +3522,12 @@ module[@js.scope "ts"] Ts : sig
     type 'TKind t_1 = 'TKind t
     val t_1_to_js: ('TKind -> Ojs.t) -> 'TKind t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'TKind) -> Ojs.t -> 'TKind t_1
+    [@@@js.stop]
+    type 'TKind tags = [`Ts_KeywordToken of 'TKind | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'TKind tags = [`Ts_KeywordToken of 'TKind | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind]
+    ]
     val cast: 'TKind t -> 'TKind ts_Token [@@js.cast]
   end
   module AssertsKeyword : sig
@@ -3243,6 +3537,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssertsKeyword | `Ts_KeywordToken of ts_SyntaxKind_AssertsKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AssertsKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssertsKeyword | `Ts_KeywordToken of ts_SyntaxKind_AssertsKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AssertsKeyword]
+    ]
   end
   module AwaitKeyword : sig
     type t = ts_AwaitKeyword
@@ -3251,6 +3551,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AwaitKeyword | `Ts_KeywordToken of ts_SyntaxKind_AwaitKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AwaitKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AwaitKeyword | `Ts_KeywordToken of ts_SyntaxKind_AwaitKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AwaitKeyword]
+    ]
   end
   (** @deprecated Use `AwaitKeyword` instead. *)
   module AwaitKeywordToken : sig
@@ -3260,6 +3566,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AwaitKeyword | `Ts_AwaitKeywordToken | `Ts_KeywordToken of ts_SyntaxKind_AwaitKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AwaitKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AwaitKeyword | `Ts_AwaitKeywordToken | `Ts_KeywordToken of ts_SyntaxKind_AwaitKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AwaitKeyword]
+    ]
   end
   (** @deprecated Use `AssertsKeyword` instead. *)
   module AssertsToken : sig
@@ -3269,6 +3581,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssertsKeyword | `Ts_AssertsToken | `Ts_KeywordToken of ts_SyntaxKind_AssertsKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AssertsKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssertsKeyword | `Ts_AssertsToken | `Ts_KeywordToken of ts_SyntaxKind_AssertsKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AssertsKeyword]
+    ]
   end
   module[@js.scope "ModifierToken"] ModifierToken : sig
     type 'TKind t = 'TKind ts_ModifierToken
@@ -3277,6 +3595,12 @@ module[@js.scope "ts"] Ts : sig
     type 'TKind t_1 = 'TKind t
     val t_1_to_js: ('TKind -> Ojs.t) -> 'TKind t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'TKind) -> Ojs.t -> 'TKind t_1
+    [@@@js.stop]
+    type 'TKind tags = [`Ts_KeywordToken of 'TKind | `Ts_ModifierToken of 'TKind | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'TKind tags = [`Ts_KeywordToken of 'TKind | `Ts_ModifierToken of 'TKind | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind]
+    ]
     val cast: 'TKind t -> 'TKind ts_KeywordToken [@@js.cast]
   end
   module AbstractKeyword : sig
@@ -3286,6 +3610,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AbstractKeyword | `Ts_KeywordToken of ts_SyntaxKind_AbstractKeyword | `Ts_ModifierToken of ts_SyntaxKind_AbstractKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AbstractKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AbstractKeyword | `Ts_KeywordToken of ts_SyntaxKind_AbstractKeyword | `Ts_ModifierToken of ts_SyntaxKind_AbstractKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AbstractKeyword]
+    ]
   end
   module AsyncKeyword : sig
     type t = ts_AsyncKeyword
@@ -3294,6 +3624,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AsyncKeyword | `Ts_KeywordToken of ts_SyntaxKind_AsyncKeyword | `Ts_ModifierToken of ts_SyntaxKind_AsyncKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AsyncKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AsyncKeyword | `Ts_KeywordToken of ts_SyntaxKind_AsyncKeyword | `Ts_ModifierToken of ts_SyntaxKind_AsyncKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_AsyncKeyword]
+    ]
   end
   module ConstKeyword : sig
     type t = ts_ConstKeyword
@@ -3302,6 +3638,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConstKeyword | `Ts_KeywordToken of ts_SyntaxKind_ConstKeyword | `Ts_ModifierToken of ts_SyntaxKind_ConstKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ConstKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConstKeyword | `Ts_KeywordToken of ts_SyntaxKind_ConstKeyword | `Ts_ModifierToken of ts_SyntaxKind_ConstKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ConstKeyword]
+    ]
   end
   module DeclareKeyword : sig
     type t = ts_DeclareKeyword
@@ -3310,6 +3652,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DeclareKeyword | `Ts_KeywordToken of ts_SyntaxKind_DeclareKeyword | `Ts_ModifierToken of ts_SyntaxKind_DeclareKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_DeclareKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DeclareKeyword | `Ts_KeywordToken of ts_SyntaxKind_DeclareKeyword | `Ts_ModifierToken of ts_SyntaxKind_DeclareKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_DeclareKeyword]
+    ]
   end
   module DefaultKeyword : sig
     type t = ts_DefaultKeyword
@@ -3318,6 +3666,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DefaultKeyword | `Ts_KeywordToken of ts_SyntaxKind_DefaultKeyword | `Ts_ModifierToken of ts_SyntaxKind_DefaultKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_DefaultKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DefaultKeyword | `Ts_KeywordToken of ts_SyntaxKind_DefaultKeyword | `Ts_ModifierToken of ts_SyntaxKind_DefaultKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_DefaultKeyword]
+    ]
   end
   module ExportKeyword : sig
     type t = ts_ExportKeyword
@@ -3326,6 +3680,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ExportKeyword | `Ts_KeywordToken of ts_SyntaxKind_ExportKeyword | `Ts_ModifierToken of ts_SyntaxKind_ExportKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ExportKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ExportKeyword | `Ts_KeywordToken of ts_SyntaxKind_ExportKeyword | `Ts_ModifierToken of ts_SyntaxKind_ExportKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ExportKeyword]
+    ]
   end
   module PrivateKeyword : sig
     type t = ts_PrivateKeyword
@@ -3334,6 +3694,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_KeywordToken of ts_SyntaxKind_PrivateKeyword | `Ts_ModifierToken of ts_SyntaxKind_PrivateKeyword | `Ts_Node | `Ts_PrivateKeyword | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_PrivateKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_KeywordToken of ts_SyntaxKind_PrivateKeyword | `Ts_ModifierToken of ts_SyntaxKind_PrivateKeyword | `Ts_Node | `Ts_PrivateKeyword | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_PrivateKeyword]
+    ]
   end
   module ProtectedKeyword : sig
     type t = ts_ProtectedKeyword
@@ -3342,6 +3708,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_KeywordToken of ts_SyntaxKind_ProtectedKeyword | `Ts_ModifierToken of ts_SyntaxKind_ProtectedKeyword | `Ts_Node | `Ts_ProtectedKeyword | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ProtectedKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_KeywordToken of ts_SyntaxKind_ProtectedKeyword | `Ts_ModifierToken of ts_SyntaxKind_ProtectedKeyword | `Ts_Node | `Ts_ProtectedKeyword | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ProtectedKeyword]
+    ]
   end
   module PublicKeyword : sig
     type t = ts_PublicKeyword
@@ -3350,6 +3722,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_KeywordToken of ts_SyntaxKind_PublicKeyword | `Ts_ModifierToken of ts_SyntaxKind_PublicKeyword | `Ts_Node | `Ts_PublicKeyword | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_PublicKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_KeywordToken of ts_SyntaxKind_PublicKeyword | `Ts_ModifierToken of ts_SyntaxKind_PublicKeyword | `Ts_Node | `Ts_PublicKeyword | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_PublicKeyword]
+    ]
   end
   module ReadonlyKeyword : sig
     type t = ts_ReadonlyKeyword
@@ -3358,6 +3736,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_KeywordToken of ts_SyntaxKind_ReadonlyKeyword | `Ts_ModifierToken of ts_SyntaxKind_ReadonlyKeyword | `Ts_Node | `Ts_ReadonlyKeyword | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ReadonlyKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_KeywordToken of ts_SyntaxKind_ReadonlyKeyword | `Ts_ModifierToken of ts_SyntaxKind_ReadonlyKeyword | `Ts_Node | `Ts_ReadonlyKeyword | `Ts_ReadonlyTextRange | `Ts_Token of ts_SyntaxKind_ReadonlyKeyword]
+    ]
   end
   module StaticKeyword : sig
     type t = ts_StaticKeyword
@@ -3366,6 +3750,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_KeywordToken of ts_SyntaxKind_StaticKeyword | `Ts_ModifierToken of ts_SyntaxKind_StaticKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_StaticKeyword | `Ts_Token of ts_SyntaxKind_StaticKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_KeywordToken of ts_SyntaxKind_StaticKeyword | `Ts_ModifierToken of ts_SyntaxKind_StaticKeyword | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_StaticKeyword | `Ts_Token of ts_SyntaxKind_StaticKeyword]
+    ]
   end
   (** @deprecated Use `ReadonlyKeyword` instead. *)
   module ReadonlyToken : sig
@@ -3375,6 +3765,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_KeywordToken of ts_SyntaxKind_ReadonlyKeyword | `Ts_ModifierToken of ts_SyntaxKind_ReadonlyKeyword | `Ts_Node | `Ts_ReadonlyKeyword | `Ts_ReadonlyTextRange | `Ts_ReadonlyToken | `Ts_Token of ts_SyntaxKind_ReadonlyKeyword]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_KeywordToken of ts_SyntaxKind_ReadonlyKeyword | `Ts_ModifierToken of ts_SyntaxKind_ReadonlyKeyword | `Ts_Node | `Ts_ReadonlyKeyword | `Ts_ReadonlyTextRange | `Ts_ReadonlyToken | `Ts_Token of ts_SyntaxKind_ReadonlyKeyword]
+    ]
   end
   module Modifier : sig
     type t = ts_Modifier
@@ -3383,6 +3779,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Modifier]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Modifier]
+    ]
   end
   module AccessibilityModifier : sig
     type t = ts_AccessibilityModifier
@@ -3391,6 +3793,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AccessibilityModifier]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AccessibilityModifier]
+    ]
   end
   module ParameterPropertyModifier : sig
     type t = ts_ParameterPropertyModifier
@@ -3399,6 +3807,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ParameterPropertyModifier]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ParameterPropertyModifier]
+    ]
   end
   module ClassMemberModifier : sig
     type t = ts_ClassMemberModifier
@@ -3407,6 +3821,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassMemberModifier]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassMemberModifier]
+    ]
   end
   module ModifiersArray : sig
     type t = ts_ModifiersArray
@@ -3415,6 +3835,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ModifiersArray | `Ts_NodeArray of ts_Modifier | `Ts_ReadonlyTextRange | `Array of ts_Modifier]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ModifiersArray | `Ts_NodeArray of ts_Modifier | `Ts_ReadonlyTextRange | `Array of ts_Modifier]
+    ]
   end
   module GeneratedIdentifierFlags : sig
     type t = ts_GeneratedIdentifierFlags
@@ -3431,6 +3857,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_Identifier | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_Identifier | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_text: t -> string [@@js.get "text"]
     val get_kind: t -> ts_SyntaxKind_Identifier [@@js.get "kind"]
     (**
@@ -3451,6 +3883,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_Identifier | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_TransientIdentifier | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_Identifier | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_TransientIdentifier | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_resolvedSymbol: t -> ts_Symbol [@@js.get "resolvedSymbol"]
     val set_resolvedSymbol: t -> ts_Symbol -> unit [@@js.set "resolvedSymbol"]
     val cast: t -> ts_Identifier [@@js.cast]
@@ -3462,6 +3900,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_QualifiedName | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_QualifiedName | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_QualifiedName [@@js.get "kind"]
     val get_left: t -> ts_EntityName [@@js.get "left"]
     val get_right: t -> ts_Identifier [@@js.get "right"]
@@ -3474,6 +3918,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EntityName]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EntityName]
+    ]
   end
   module PropertyName : sig
     type t = ts_PropertyName
@@ -3482,6 +3932,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PropertyName]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PropertyName]
+    ]
   end
   module DeclarationName : sig
     type t = ts_DeclarationName
@@ -3490,6 +3946,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DeclarationName]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DeclarationName]
+    ]
   end
   module[@js.scope "Declaration"] Declaration : sig
     type t = ts_Declaration
@@ -3498,6 +3960,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get__declarationBrand: t -> any [@@js.get "_declarationBrand"]
     val set__declarationBrand: t -> any -> unit [@@js.set "_declarationBrand"]
     val cast: t -> ts_Node [@@js.cast]
@@ -3509,6 +3977,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_name: t -> ts_DeclarationName [@@js.get "name"]
     val cast: t -> ts_Declaration [@@js.cast]
   end
@@ -3519,6 +3993,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_name: t -> ([`U_n_8 of ts_NumericLiteral [@js 8] | `U_n_10 of ts_StringLiteral [@js 10] | `U_n_78 of ts_Identifier [@js 78]] [@js.union on_field "kind"]) [@@js.get "name"]
     val cast: t -> ts_NamedDeclaration [@@js.cast]
     val cast': t -> ts_Statement [@@js.cast]
@@ -3530,6 +4010,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ComputedPropertyName | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ComputedPropertyName | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_ComputedPropertyName [@@js.get "kind"]
     val get_parent: t -> ts_Declaration [@@js.get "parent"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -3542,6 +4028,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_PrivateIdentifier | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_PrivateIdentifier | `Ts_ReadonlyTextRange]
+    ]
     val get_text: t -> string [@@js.get "text"]
     val get_kind: t -> ts_SyntaxKind_PrivateIdentifier [@@js.get "kind"]
     val get_escapedText: t -> ts___String [@@js.get "escapedText"]
@@ -3554,6 +4046,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Decorator | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Decorator | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_Decorator [@@js.get "kind"]
     val get_parent: t -> ts_NamedDeclaration [@@js.get "parent"]
     val get_expression: t -> ts_LeftHandSideExpression [@@js.get "expression"]
@@ -3566,6 +4064,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeParameterDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeParameterDeclaration]
+    ]
     val get_kind: t -> ts_SyntaxKind_TypeParameter [@@js.get "kind"]
     val get_parent: t -> ([`U_n_164 of ts_DeclarationWithTypeParameterChildren [@js 164] | `U_n_165 of ts_DeclarationWithTypeParameterChildren [@js 165] | `U_n_166 of ts_DeclarationWithTypeParameterChildren [@js 166] | `U_n_167 of ts_DeclarationWithTypeParameterChildren [@js 167] | `U_n_168 of ts_DeclarationWithTypeParameterChildren [@js 168] | `U_n_169 of ts_DeclarationWithTypeParameterChildren [@js 169] | `U_n_170 of ts_DeclarationWithTypeParameterChildren [@js 170] | `U_n_171 of ts_DeclarationWithTypeParameterChildren [@js 171] | `U_n_174 of ts_DeclarationWithTypeParameterChildren [@js 174] | `U_n_175 of ts_DeclarationWithTypeParameterChildren [@js 175] | `U_n_185 of ts_InferTypeNode [@js 185] | `U_n_208 of ts_DeclarationWithTypeParameterChildren [@js 208] | `U_n_209 of ts_DeclarationWithTypeParameterChildren [@js 209] | `U_n_221 of ts_DeclarationWithTypeParameterChildren [@js 221] | `U_n_251 of ts_DeclarationWithTypeParameterChildren [@js 251] | `U_n_252 of ts_DeclarationWithTypeParameterChildren [@js 252] | `U_n_253 of ts_DeclarationWithTypeParameterChildren [@js 253] | `U_n_254 of ts_DeclarationWithTypeParameterChildren [@js 254] | `U_n_308 of ts_DeclarationWithTypeParameterChildren [@js 308] | `U_n_330 of ts_DeclarationWithTypeParameterChildren [@js 330]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
@@ -3583,6 +4087,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    ]
     val get_kind: t -> ((((((((ts_SyntaxKind_FunctionExpression, ts_SyntaxKind_FunctionType, ts_SyntaxKind_GetAccessor, ts_SyntaxKind_IndexSignature, ts_SyntaxKind_JSDocFunctionType, ts_SyntaxKind_MethodDeclaration, ts_SyntaxKind_MethodSignature, ts_SyntaxKind_SetAccessor) union8, ts_SyntaxKind_FunctionDeclaration) or_, ts_SyntaxKind_ConstructorType) or_, ts_SyntaxKind_Constructor) or_, ts_SyntaxKind_ConstructSignature) or_, ts_SyntaxKind_CallSignature) or_, ts_SyntaxKind_ArrowFunction) or_, ([`ArrowFunction[@js 209] | `CallSignature[@js 169] | `ConstructSignature[@js 170] | `Constructor[@js 166] | `ConstructorType[@js 175] | `FunctionDeclaration[@js 251] | `FunctionExpression[@js 208] | `FunctionType[@js 174] | `GetAccessor[@js 167] | `IndexSignature[@js 171] | `JSDocFunctionType[@js 308] | `MethodDeclaration[@js 165] | `MethodSignature[@js 164] | `SetAccessor[@js 168]] [@js.enum])) or_enum [@@js.get "kind"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
     val get_typeParameters: t -> ts_TypeParameterDeclaration ts_NodeArray [@@js.get "typeParameters"]
@@ -3598,6 +4108,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureDeclaration]
+    ]
   end
   module[@js.scope "CallSignatureDeclaration"] CallSignatureDeclaration : sig
     type t = ts_CallSignatureDeclaration
@@ -3606,6 +4122,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CallSignatureDeclaration | `Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CallSignatureDeclaration | `Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeElement]
+    ]
     val get_kind: t -> ts_SyntaxKind_CallSignature [@@js.get "kind"]
     val cast: t -> ts_SignatureDeclarationBase [@@js.cast]
     val cast': t -> ts_TypeElement [@@js.cast]
@@ -3617,6 +4139,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConstructSignatureDeclaration | `Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConstructSignatureDeclaration | `Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeElement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ConstructSignature [@@js.get "kind"]
     val cast: t -> ts_SignatureDeclarationBase [@@js.cast]
     val cast': t -> ts_TypeElement [@@js.cast]
@@ -3628,6 +4156,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BindingName]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BindingName]
+    ]
   end
   module[@js.scope "VariableDeclaration"] VariableDeclaration : sig
     type t = ts_VariableDeclaration
@@ -3636,6 +4170,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_VariableDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_VariableDeclaration]
+    ]
     val get_kind: t -> ts_SyntaxKind_VariableDeclaration [@@js.get "kind"]
     val get_parent: t -> ([`U_n_250 of ts_VariableDeclarationList [@js 250] | `U_n_287 of ts_CatchClause [@js 287]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_name: t -> ts_BindingName [@@js.get "name"]
@@ -3651,6 +4191,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_VariableDeclarationList]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_VariableDeclarationList]
+    ]
     val get_kind: t -> ts_SyntaxKind_VariableDeclarationList [@@js.get "kind"]
     val get_parent: t -> ([`U_n_232 of ts_VariableStatement [@js 232] | `U_n_237 of ts_ForStatement [@js 237] | `U_n_238 of ts_ForInStatement [@js 238] | `U_n_239 of ts_ForOfStatement [@js 239]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_declarations: t -> ts_VariableDeclaration ts_NodeArray [@@js.get "declarations"]
@@ -3663,6 +4209,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ParameterDeclaration | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ParameterDeclaration | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_Parameter [@@js.get "kind"]
     val get_parent: t -> ts_SignatureDeclaration [@@js.get "parent"]
     val get_dotDotDotToken: t -> ts_DotDotDotToken [@@js.get "dotDotDotToken"]
@@ -3680,6 +4232,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BindingElement | `Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BindingElement | `Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_BindingElement [@@js.get "kind"]
     val get_parent: t -> ts_BindingPattern [@@js.get "parent"]
     val get_propertyName: t -> ts_PropertyName [@@js.get "propertyName"]
@@ -3695,6 +4253,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertySignature | `Ts_ReadonlyTextRange | `Ts_TypeElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertySignature | `Ts_ReadonlyTextRange | `Ts_TypeElement]
+    ]
     val get_kind: t -> ts_SyntaxKind_PropertySignature [@@js.get "kind"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
     val get_questionToken: t -> ts_QuestionToken [@@js.get "questionToken"]
@@ -3711,6 +4275,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyDeclaration | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyDeclaration | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_PropertyDeclaration [@@js.get "kind"]
     val get_parent: t -> ts_ClassLikeDeclaration [@@js.get "parent"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -3728,6 +4298,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange]
+    ]
     val get__objectLiteralBrand: t -> any [@@js.get "_objectLiteralBrand"]
     val set__objectLiteralBrand: t -> any -> unit [@@js.set "_objectLiteralBrand"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -3741,6 +4317,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ObjectLiteralElementLike]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ObjectLiteralElementLike]
+    ]
   end
   module[@js.scope "PropertyAssignment"] PropertyAssignment : sig
     type t = ts_PropertyAssignment
@@ -3749,6 +4331,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_PropertyAssignment | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_PropertyAssignment | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_PropertyAssignment [@@js.get "kind"]
     val get_parent: t -> ts_ObjectLiteralExpression [@@js.get "parent"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -3765,6 +4353,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_ShorthandPropertyAssignment]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_ShorthandPropertyAssignment]
+    ]
     val get_kind: t -> ts_SyntaxKind_ShorthandPropertyAssignment [@@js.get "kind"]
     val get_parent: t -> ts_ObjectLiteralExpression [@@js.get "parent"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
@@ -3782,6 +4376,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_SpreadAssignment]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_SpreadAssignment]
+    ]
     val get_kind: t -> ts_SyntaxKind_SpreadAssignment [@@js.get "kind"]
     val get_parent: t -> ts_ObjectLiteralExpression [@@js.get "parent"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -3795,6 +4395,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_VariableLikeDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_VariableLikeDeclaration]
+    ]
   end
   module[@js.scope "PropertyLikeDeclaration"] PropertyLikeDeclaration : sig
     type t = ts_PropertyLikeDeclaration
@@ -3803,6 +4409,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyLikeDeclaration | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyLikeDeclaration | `Ts_ReadonlyTextRange]
+    ]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
     val cast: t -> ts_NamedDeclaration [@@js.cast]
   end
@@ -3813,6 +4425,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ObjectBindingPattern | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ObjectBindingPattern | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_ObjectBindingPattern [@@js.get "kind"]
     val get_parent: t -> ([`U_n_160 of ts_ParameterDeclaration [@js 160] | `U_n_198 of ts_BindingElement [@js 198] | `U_n_249 of ts_VariableDeclaration [@js 249]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_elements: t -> ts_BindingElement ts_NodeArray [@@js.get "elements"]
@@ -3825,6 +4443,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ArrayBindingPattern | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ArrayBindingPattern | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_ArrayBindingPattern [@@js.get "kind"]
     val get_parent: t -> ([`U_n_160 of ts_ParameterDeclaration [@js 160] | `U_n_198 of ts_BindingElement [@js 198] | `U_n_249 of ts_VariableDeclaration [@js 249]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_elements: t -> ts_ArrayBindingElement ts_NodeArray [@@js.get "elements"]
@@ -3837,6 +4461,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BindingPattern]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BindingPattern]
+    ]
   end
   module ArrayBindingElement : sig
     type t = ts_ArrayBindingElement
@@ -3845,6 +4475,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ArrayBindingElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ArrayBindingElement]
+    ]
   end
   (**
     Several node kinds share function-like features such as a signature,
@@ -3861,6 +4497,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    ]
     val get__functionLikeDeclarationBrand: t -> any [@@js.get "_functionLikeDeclarationBrand"]
     val set__functionLikeDeclarationBrand: t -> any -> unit [@@js.set "_functionLikeDeclarationBrand"]
     val get_asteriskToken: t -> ts_AsteriskToken [@@js.get "asteriskToken"]
@@ -3876,6 +4518,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FunctionLikeDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FunctionLikeDeclaration]
+    ]
   end
   (** @deprecated Use SignatureDeclaration *)
   module FunctionLike : sig
@@ -3885,6 +4533,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FunctionLike | `Ts_SignatureDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FunctionLike | `Ts_SignatureDeclaration]
+    ]
   end
   module[@js.scope "FunctionDeclaration"] FunctionDeclaration : sig
     type t = ts_FunctionDeclaration
@@ -3893,6 +4547,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_FunctionDeclaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_FunctionDeclaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_FunctionDeclaration [@@js.get "kind"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val get_body: t -> ts_FunctionBody [@@js.get "body"]
@@ -3906,6 +4566,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_MethodSignature | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_MethodSignature | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeElement]
+    ]
     val get_kind: t -> ts_SyntaxKind_MethodSignature [@@js.get "kind"]
     val get_parent: t -> ts_ObjectTypeDeclaration [@@js.get "parent"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -3919,6 +4585,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_MethodDeclaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_MethodDeclaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    ]
     val get_kind: t -> ts_SyntaxKind_MethodDeclaration [@@js.get "kind"]
     val get_parent: t -> ([`U_n_200 of ts_ObjectLiteralExpression [@js 200] | `U_n_221 of ts_ClassLikeDeclaration [@js 221] | `U_n_252 of ts_ClassLikeDeclaration [@js 252]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -3935,6 +4607,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassElement | `Ts_ConstructorDeclaration | `Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassElement | `Ts_ConstructorDeclaration | `Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    ]
     val get_kind: t -> ts_SyntaxKind_Constructor [@@js.get "kind"]
     val get_parent: t -> ts_ClassLikeDeclaration [@@js.get "parent"]
     val get_body: t -> ts_FunctionBody [@@js.get "body"]
@@ -3950,6 +4628,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SemicolonClassElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SemicolonClassElement]
+    ]
     val get_kind: t -> ts_SyntaxKind_SemicolonClassElement [@@js.get "kind"]
     val get_parent: t -> ts_ClassLikeDeclaration [@@js.get "parent"]
     val cast: t -> ts_ClassElement [@@js.cast]
@@ -3961,6 +4645,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_GetAccessorDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_GetAccessorDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    ]
     val get_kind: t -> ts_SyntaxKind_GetAccessor [@@js.get "kind"]
     val get_parent: t -> ([`U_n_200 of ts_ObjectLiteralExpression [@js 200] | `U_n_221 of ts_ClassLikeDeclaration [@js 221] | `U_n_252 of ts_ClassLikeDeclaration [@js 252]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -3977,6 +4667,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_SetAccessorDeclaration | `Ts_SignatureDeclarationBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange | `Ts_SetAccessorDeclaration | `Ts_SignatureDeclarationBase]
+    ]
     val get_kind: t -> ts_SyntaxKind_SetAccessor [@@js.get "kind"]
     val get_parent: t -> ([`U_n_200 of ts_ObjectLiteralExpression [@js 200] | `U_n_221 of ts_ClassLikeDeclaration [@js 221] | `U_n_252 of ts_ClassLikeDeclaration [@js 252]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -3993,6 +4689,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AccessorDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AccessorDeclaration]
+    ]
   end
   module[@js.scope "IndexSignatureDeclaration"] IndexSignatureDeclaration : sig
     type t = ts_IndexSignatureDeclaration
@@ -4001,6 +4703,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_IndexSignatureDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_IndexSignatureDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeElement]
+    ]
     val get_kind: t -> ts_SyntaxKind_IndexSignature [@@js.get "kind"]
     val get_parent: t -> ts_ObjectTypeDeclaration [@@js.get "parent"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
@@ -4015,6 +4723,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get__typeNodeBrand: t -> any [@@js.get "_typeNodeBrand"]
     val set__typeNodeBrand: t -> any -> unit [@@js.set "_typeNodeBrand"]
     val cast: t -> ts_Node [@@js.cast]
@@ -4029,6 +4743,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = ts_KeywordTypeSyntaxKind t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type 'TKind tags = [`Ts_KeywordToken of 'TKind | `Ts_KeywordTypeNode of 'TKind | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'TKind tags = [`Ts_KeywordToken of 'TKind | `Ts_KeywordTypeNode of 'TKind | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of 'TKind | `Ts_TypeNode]
+    ]
     val get_kind: 'TKind t -> 'TKind [@@js.get "kind"]
     val cast: 'TKind t -> 'TKind ts_KeywordToken [@@js.cast]
     val cast': 'TKind t -> ts_TypeNode [@@js.cast]
@@ -4040,6 +4760,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ImportTypeNode | `Ts_Node | `Ts_NodeWithTypeArguments | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ImportTypeNode | `Ts_Node | `Ts_NodeWithTypeArguments | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_ImportType [@@js.get "kind"]
     val get_isTypeOf: t -> bool [@@js.get "isTypeOf"]
     val get_argument: t -> ts_TypeNode [@@js.get "argument"]
@@ -4053,6 +4779,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_ThisTypeNode | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_ThisTypeNode | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_ThisType [@@js.get "kind"]
     val cast: t -> ts_TypeNode [@@js.cast]
   end
@@ -4063,6 +4795,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FunctionOrConstructorTypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FunctionOrConstructorTypeNode]
+    ]
   end
   module[@js.scope "FunctionOrConstructorTypeNodeBase"] FunctionOrConstructorTypeNodeBase : sig
     type t = ts_FunctionOrConstructorTypeNodeBase
@@ -4071,6 +4809,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_FunctionOrConstructorTypeNodeBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_FunctionOrConstructorTypeNodeBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeNode]
+    ]
     val get_kind: t -> ((ts_SyntaxKind_ConstructorType, ts_SyntaxKind_FunctionType) union2, ([`ConstructorType[@js 175] | `FunctionType[@js 174]] [@js.enum])) or_enum [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4083,6 +4827,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_FunctionOrConstructorTypeNodeBase | `Ts_FunctionTypeNode | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_FunctionOrConstructorTypeNodeBase | `Ts_FunctionTypeNode | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_FunctionType [@@js.get "kind"]
     val cast: t -> ts_FunctionOrConstructorTypeNodeBase [@@js.cast]
   end
@@ -4093,6 +4843,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConstructorTypeNode | `Ts_Declaration | `Ts_FunctionOrConstructorTypeNodeBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConstructorTypeNode | `Ts_Declaration | `Ts_FunctionOrConstructorTypeNodeBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_ConstructorType [@@js.get "kind"]
     val cast: t -> ts_FunctionOrConstructorTypeNodeBase [@@js.cast]
   end
@@ -4103,6 +4859,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_NodeWithTypeArguments | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_NodeWithTypeArguments | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_typeArguments: t -> ts_TypeNode ts_NodeArray [@@js.get "typeArguments"]
     val cast: t -> ts_TypeNode [@@js.cast]
   end
@@ -4113,6 +4875,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TypeReferenceType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TypeReferenceType]
+    ]
   end
   module[@js.scope "TypeReferenceNode"] TypeReferenceNode : sig
     type t = ts_TypeReferenceNode
@@ -4121,6 +4889,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_NodeWithTypeArguments | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_TypeReferenceNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_NodeWithTypeArguments | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_TypeReferenceNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_TypeReference [@@js.get "kind"]
     val get_typeName: t -> ts_EntityName [@@js.get "typeName"]
     val cast: t -> ts_NodeWithTypeArguments [@@js.cast]
@@ -4132,6 +4906,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_TypePredicateNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_TypePredicateNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_TypePredicate [@@js.get "kind"]
     val get_parent: t -> ([`U_n_164 of ts_SignatureDeclaration [@js 164] | `U_n_165 of ts_SignatureDeclaration [@js 165] | `U_n_166 of ts_SignatureDeclaration [@js 166] | `U_n_167 of ts_SignatureDeclaration [@js 167] | `U_n_168 of ts_SignatureDeclaration [@js 168] | `U_n_169 of ts_SignatureDeclaration [@js 169] | `U_n_170 of ts_SignatureDeclaration [@js 170] | `U_n_171 of ts_SignatureDeclaration [@js 171] | `U_n_174 of ts_SignatureDeclaration [@js 174] | `U_n_175 of ts_SignatureDeclaration [@js 175] | `U_n_208 of ts_SignatureDeclaration [@js 208] | `U_n_209 of ts_SignatureDeclaration [@js 209] | `U_n_251 of ts_SignatureDeclaration [@js 251] | `U_n_301 of ts_JSDocTypeExpression [@js 301] | `U_n_308 of ts_SignatureDeclaration [@js 308]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_assertsModifier: t -> ts_AssertsToken [@@js.get "assertsModifier"]
@@ -4146,6 +4926,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_TypeQueryNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_TypeQueryNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_TypeQuery [@@js.get "kind"]
     val get_exprName: t -> ts_EntityName [@@js.get "exprName"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4157,6 +4943,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeLiteralNode | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeLiteralNode | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_TypeLiteral [@@js.get "kind"]
     val get_members: t -> ts_TypeElement ts_NodeArray [@@js.get "members"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4169,6 +4961,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ArrayTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ArrayTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_ArrayType [@@js.get "kind"]
     val get_elementType: t -> ts_TypeNode [@@js.get "elementType"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4180,6 +4978,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TupleTypeNode | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TupleTypeNode | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_TupleType [@@js.get "kind"]
     val get_elements: t -> ([`U_n_0 of ts_TypeNode [@js 0] | `U_n_1 of ts_TypeNode [@js 1] | `U_n_2 of ts_TypeNode [@js 2] | `U_n_3 of ts_TypeNode [@js 3] | `U_n_4 of ts_TypeNode [@js 4] | `U_n_5 of ts_TypeNode [@js 5] | `U_n_6 of ts_TypeNode [@js 6] | `U_n_7 of ts_TypeNode [@js 7] | `U_n_8 of ts_TypeNode [@js 8] | `U_n_9 of ts_TypeNode [@js 9] | `U_n_10 of ts_TypeNode [@js 10] | `U_n_11 of ts_TypeNode [@js 11] | `U_n_12 of ts_TypeNode [@js 12] | `U_n_13 of ts_TypeNode [@js 13] | `U_n_14 of ts_TypeNode [@js 14] | `U_n_15 of ts_TypeNode [@js 15] | `U_n_16 of ts_TypeNode [@js 16] | `U_n_17 of ts_TypeNode [@js 17] | `U_n_18 of ts_TypeNode [@js 18] | `U_n_19 of ts_TypeNode [@js 19] | `U_n_20 of ts_TypeNode [@js 20] | `U_n_21 of ts_TypeNode [@js 21] | `U_n_22 of ts_TypeNode [@js 22] | `U_n_23 of ts_TypeNode [@js 23] | `U_n_24 of ts_TypeNode [@js 24] | `U_n_25 of ts_TypeNode [@js 25] | `U_n_26 of ts_TypeNode [@js 26] | `U_n_27 of ts_TypeNode [@js 27] | `U_n_28 of ts_TypeNode [@js 28] | `U_n_29 of ts_TypeNode [@js 29] | `U_n_30 of ts_TypeNode [@js 30] | `U_n_31 of ts_TypeNode [@js 31] | `U_n_32 of ts_TypeNode [@js 32] | `U_n_33 of ts_TypeNode [@js 33] | `U_n_34 of ts_TypeNode [@js 34] | `U_n_35 of ts_TypeNode [@js 35] | `U_n_36 of ts_TypeNode [@js 36] | `U_n_37 of ts_TypeNode [@js 37] | `U_n_38 of ts_TypeNode [@js 38] | `U_n_39 of ts_TypeNode [@js 39] | `U_n_40 of ts_TypeNode [@js 40] | `U_n_41 of ts_TypeNode [@js 41] | `U_n_42 of ts_TypeNode [@js 42] | `U_n_43 of ts_TypeNode [@js 43] | `U_n_44 of ts_TypeNode [@js 44] | `U_n_45 of ts_TypeNode [@js 45] | `U_n_46 of ts_TypeNode [@js 46] | `U_n_47 of ts_TypeNode [@js 47] | `U_n_48 of ts_TypeNode [@js 48] | `U_n_49 of ts_TypeNode [@js 49] | `U_n_50 of ts_TypeNode [@js 50] | `U_n_51 of ts_TypeNode [@js 51] | `U_n_52 of ts_TypeNode [@js 52] | `U_n_53 of ts_TypeNode [@js 53] | `U_n_54 of ts_TypeNode [@js 54] | `U_n_55 of ts_TypeNode [@js 55] | `U_n_56 of ts_TypeNode [@js 56] | `U_n_57 of ts_TypeNode [@js 57] | `U_n_58 of ts_TypeNode [@js 58] | `U_n_59 of ts_TypeNode [@js 59] | `U_n_60 of ts_TypeNode [@js 60] | `U_n_61 of ts_TypeNode [@js 61] | `U_n_62 of ts_TypeNode [@js 62] | `U_n_63 of ts_TypeNode [@js 63] | `U_n_64 of ts_TypeNode [@js 64] | `U_n_65 of ts_TypeNode [@js 65] | `U_n_66 of ts_TypeNode [@js 66] | `U_n_67 of ts_TypeNode [@js 67] | `U_n_68 of ts_TypeNode [@js 68] | `U_n_69 of ts_TypeNode [@js 69] | `U_n_70 of ts_TypeNode [@js 70] | `U_n_71 of ts_TypeNode [@js 71] | `U_n_72 of ts_TypeNode [@js 72] | `U_n_73 of ts_TypeNode [@js 73] | `U_n_74 of ts_TypeNode [@js 74] | `U_n_75 of ts_TypeNode [@js 75] | `U_n_76 of ts_TypeNode [@js 76] | `U_n_77 of ts_TypeNode [@js 77] | `U_n_78 of ts_TypeNode [@js 78] | `U_n_79 of ts_TypeNode [@js 79] | `U_n_80 of ts_TypeNode [@js 80] | `U_n_81 of ts_TypeNode [@js 81] | `U_n_82 of ts_TypeNode [@js 82] | `U_n_83 of ts_TypeNode [@js 83] | `U_n_84 of ts_TypeNode [@js 84] | `U_n_85 of ts_TypeNode [@js 85] | `U_n_86 of ts_TypeNode [@js 86] | `U_n_87 of ts_TypeNode [@js 87] | `U_n_88 of ts_TypeNode [@js 88] | `U_n_89 of ts_TypeNode [@js 89] | `U_n_90 of ts_TypeNode [@js 90] | `U_n_91 of ts_TypeNode [@js 91] | `U_n_92 of ts_TypeNode [@js 92] | `U_n_93 of ts_TypeNode [@js 93] | `U_n_94 of ts_TypeNode [@js 94] | `U_n_95 of ts_TypeNode [@js 95] | `U_n_96 of ts_TypeNode [@js 96] | `U_n_97 of ts_TypeNode [@js 97] | `U_n_98 of ts_TypeNode [@js 98] | `U_n_99 of ts_TypeNode [@js 99] | `U_n_100 of ts_TypeNode [@js 100] | `U_n_101 of ts_TypeNode [@js 101] | `U_n_102 of ts_TypeNode [@js 102] | `U_n_103 of ts_TypeNode [@js 103] | `U_n_104 of ts_TypeNode [@js 104] | `U_n_105 of ts_TypeNode [@js 105] | `U_n_106 of ts_TypeNode [@js 106] | `U_n_107 of ts_TypeNode [@js 107] | `U_n_108 of ts_TypeNode [@js 108] | `U_n_109 of ts_TypeNode [@js 109] | `U_n_110 of ts_TypeNode [@js 110] | `U_n_111 of ts_TypeNode [@js 111] | `U_n_112 of ts_TypeNode [@js 112] | `U_n_113 of ts_TypeNode [@js 113] | `U_n_114 of ts_TypeNode [@js 114] | `U_n_115 of ts_TypeNode [@js 115] | `U_n_116 of ts_TypeNode [@js 116] | `U_n_117 of ts_TypeNode [@js 117] | `U_n_118 of ts_TypeNode [@js 118] | `U_n_119 of ts_TypeNode [@js 119] | `U_n_120 of ts_TypeNode [@js 120] | `U_n_121 of ts_TypeNode [@js 121] | `U_n_122 of ts_TypeNode [@js 122] | `U_n_123 of ts_TypeNode [@js 123] | `U_n_124 of ts_TypeNode [@js 124] | `U_n_125 of ts_TypeNode [@js 125] | `U_n_126 of ts_TypeNode [@js 126] | `U_n_127 of ts_TypeNode [@js 127] | `U_n_128 of ts_TypeNode [@js 128] | `U_n_129 of ts_TypeNode [@js 129] | `U_n_130 of ts_TypeNode [@js 130] | `U_n_131 of ts_TypeNode [@js 131] | `U_n_132 of ts_TypeNode [@js 132] | `U_n_133 of ts_TypeNode [@js 133] | `U_n_134 of ts_TypeNode [@js 134] | `U_n_135 of ts_TypeNode [@js 135] | `U_n_136 of ts_TypeNode [@js 136] | `U_n_137 of ts_TypeNode [@js 137] | `U_n_138 of ts_TypeNode [@js 138] | `U_n_139 of ts_TypeNode [@js 139] | `U_n_140 of ts_TypeNode [@js 140] | `U_n_141 of ts_TypeNode [@js 141] | `U_n_142 of ts_TypeNode [@js 142] | `U_n_143 of ts_TypeNode [@js 143] | `U_n_144 of ts_TypeNode [@js 144] | `U_n_145 of ts_TypeNode [@js 145] | `U_n_146 of ts_TypeNode [@js 146] | `U_n_147 of ts_TypeNode [@js 147] | `U_n_148 of ts_TypeNode [@js 148] | `U_n_149 of ts_TypeNode [@js 149] | `U_n_150 of ts_TypeNode [@js 150] | `U_n_151 of ts_TypeNode [@js 151] | `U_n_152 of ts_TypeNode [@js 152] | `U_n_153 of ts_TypeNode [@js 153] | `U_n_154 of ts_TypeNode [@js 154] | `U_n_155 of ts_TypeNode [@js 155] | `U_n_156 of ts_TypeNode [@js 156] | `U_n_157 of ts_TypeNode [@js 157] | `U_n_158 of ts_TypeNode [@js 158] | `U_n_159 of ts_TypeNode [@js 159] | `U_n_160 of ts_TypeNode [@js 160] | `U_n_161 of ts_TypeNode [@js 161] | `U_n_162 of ts_TypeNode [@js 162] | `U_n_163 of ts_TypeNode [@js 163] | `U_n_164 of ts_TypeNode [@js 164] | `U_n_165 of ts_TypeNode [@js 165] | `U_n_166 of ts_TypeNode [@js 166] | `U_n_167 of ts_TypeNode [@js 167] | `U_n_168 of ts_TypeNode [@js 168] | `U_n_169 of ts_TypeNode [@js 169] | `U_n_170 of ts_TypeNode [@js 170] | `U_n_171 of ts_TypeNode [@js 171] | `U_n_172 of ts_TypeNode [@js 172] | `U_n_173 of ts_TypeNode [@js 173] | `U_n_174 of ts_TypeNode [@js 174] | `U_n_175 of ts_TypeNode [@js 175] | `U_n_176 of ts_TypeNode [@js 176] | `U_n_177 of ts_TypeNode [@js 177] | `U_n_178 of ts_TypeNode [@js 178] | `U_n_179 of ts_TypeNode [@js 179] | `U_n_180 of ts_TypeNode [@js 180] | `U_n_181 of ts_TypeNode [@js 181] | `U_n_182 of ts_TypeNode [@js 182] | `U_n_183 of ts_TypeNode [@js 183] | `U_n_184 of ts_TypeNode [@js 184] | `U_n_185 of ts_TypeNode [@js 185] | `U_n_186 of ts_TypeNode [@js 186] | `U_n_187 of ts_TypeNode [@js 187] | `U_n_188 of ts_TypeNode [@js 188] | `U_n_189 of ts_TypeNode [@js 189] | `U_n_190 of ts_TypeNode [@js 190] | `U_n_191 of ts_TypeNode [@js 191] | `U_n_192 of (ts_TypeNode, ts_NamedTupleMember) union2 [@js 192] | `U_n_193 of ts_TypeNode [@js 193] | `U_n_194 of ts_TypeNode [@js 194] | `U_n_195 of ts_TypeNode [@js 195] | `U_n_196 of ts_TypeNode [@js 196] | `U_n_197 of ts_TypeNode [@js 197] | `U_n_198 of ts_TypeNode [@js 198] | `U_n_199 of ts_TypeNode [@js 199] | `U_n_200 of ts_TypeNode [@js 200] | `U_n_201 of ts_TypeNode [@js 201] | `U_n_202 of ts_TypeNode [@js 202] | `U_n_203 of ts_TypeNode [@js 203] | `U_n_204 of ts_TypeNode [@js 204] | `U_n_205 of ts_TypeNode [@js 205] | `U_n_206 of ts_TypeNode [@js 206] | `U_n_207 of ts_TypeNode [@js 207] | `U_n_208 of ts_TypeNode [@js 208] | `U_n_209 of ts_TypeNode [@js 209] | `U_n_210 of ts_TypeNode [@js 210] | `U_n_211 of ts_TypeNode [@js 211] | `U_n_212 of ts_TypeNode [@js 212] | `U_n_213 of ts_TypeNode [@js 213] | `U_n_214 of ts_TypeNode [@js 214] | `U_n_215 of ts_TypeNode [@js 215] | `U_n_216 of ts_TypeNode [@js 216] | `U_n_217 of ts_TypeNode [@js 217] | `U_n_218 of ts_TypeNode [@js 218] | `U_n_219 of ts_TypeNode [@js 219] | `U_n_220 of ts_TypeNode [@js 220] | `U_n_221 of ts_TypeNode [@js 221] | `U_n_222 of ts_TypeNode [@js 222] | `U_n_223 of ts_TypeNode [@js 223] | `U_n_224 of ts_TypeNode [@js 224] | `U_n_225 of ts_TypeNode [@js 225] | `U_n_226 of ts_TypeNode [@js 226] | `U_n_227 of ts_TypeNode [@js 227] | `U_n_228 of ts_TypeNode [@js 228] | `U_n_229 of ts_TypeNode [@js 229] | `U_n_230 of ts_TypeNode [@js 230] | `U_n_231 of ts_TypeNode [@js 231] | `U_n_232 of ts_TypeNode [@js 232] | `U_n_233 of ts_TypeNode [@js 233] | `U_n_234 of ts_TypeNode [@js 234] | `U_n_235 of ts_TypeNode [@js 235] | `U_n_236 of ts_TypeNode [@js 236] | `U_n_237 of ts_TypeNode [@js 237] | `U_n_238 of ts_TypeNode [@js 238] | `U_n_239 of ts_TypeNode [@js 239] | `U_n_240 of ts_TypeNode [@js 240] | `U_n_241 of ts_TypeNode [@js 241] | `U_n_242 of ts_TypeNode [@js 242] | `U_n_243 of ts_TypeNode [@js 243] | `U_n_244 of ts_TypeNode [@js 244] | `U_n_245 of ts_TypeNode [@js 245] | `U_n_246 of ts_TypeNode [@js 246] | `U_n_247 of ts_TypeNode [@js 247] | `U_n_248 of ts_TypeNode [@js 248] | `U_n_249 of ts_TypeNode [@js 249] | `U_n_250 of ts_TypeNode [@js 250] | `U_n_251 of ts_TypeNode [@js 251] | `U_n_252 of ts_TypeNode [@js 252] | `U_n_253 of ts_TypeNode [@js 253] | `U_n_254 of ts_TypeNode [@js 254] | `U_n_255 of ts_TypeNode [@js 255] | `U_n_256 of ts_TypeNode [@js 256] | `U_n_257 of ts_TypeNode [@js 257] | `U_n_258 of ts_TypeNode [@js 258] | `U_n_259 of ts_TypeNode [@js 259] | `U_n_260 of ts_TypeNode [@js 260] | `U_n_261 of ts_TypeNode [@js 261] | `U_n_262 of ts_TypeNode [@js 262] | `U_n_263 of ts_TypeNode [@js 263] | `U_n_264 of ts_TypeNode [@js 264] | `U_n_265 of ts_TypeNode [@js 265] | `U_n_266 of ts_TypeNode [@js 266] | `U_n_267 of ts_TypeNode [@js 267] | `U_n_268 of ts_TypeNode [@js 268] | `U_n_269 of ts_TypeNode [@js 269] | `U_n_270 of ts_TypeNode [@js 270] | `U_n_271 of ts_TypeNode [@js 271] | `U_n_272 of ts_TypeNode [@js 272] | `U_n_273 of ts_TypeNode [@js 273] | `U_n_274 of ts_TypeNode [@js 274] | `U_n_275 of ts_TypeNode [@js 275] | `U_n_276 of ts_TypeNode [@js 276] | `U_n_277 of ts_TypeNode [@js 277] | `U_n_278 of ts_TypeNode [@js 278] | `U_n_279 of ts_TypeNode [@js 279] | `U_n_280 of ts_TypeNode [@js 280] | `U_n_281 of ts_TypeNode [@js 281] | `U_n_282 of ts_TypeNode [@js 282] | `U_n_283 of ts_TypeNode [@js 283] | `U_n_284 of ts_TypeNode [@js 284] | `U_n_285 of ts_TypeNode [@js 285] | `U_n_286 of ts_TypeNode [@js 286] | `U_n_287 of ts_TypeNode [@js 287] | `U_n_288 of ts_TypeNode [@js 288] | `U_n_289 of ts_TypeNode [@js 289] | `U_n_290 of ts_TypeNode [@js 290] | `U_n_291 of ts_TypeNode [@js 291] | `U_n_292 of ts_TypeNode [@js 292] | `U_n_293 of ts_TypeNode [@js 293] | `U_n_294 of ts_TypeNode [@js 294] | `U_n_295 of ts_TypeNode [@js 295] | `U_n_296 of ts_TypeNode [@js 296] | `U_n_297 of ts_TypeNode [@js 297] | `U_n_298 of ts_TypeNode [@js 298] | `U_n_299 of ts_TypeNode [@js 299] | `U_n_300 of ts_TypeNode [@js 300] | `U_n_301 of ts_TypeNode [@js 301] | `U_n_302 of ts_TypeNode [@js 302] | `U_n_303 of ts_TypeNode [@js 303] | `U_n_304 of ts_TypeNode [@js 304] | `U_n_305 of ts_TypeNode [@js 305] | `U_n_306 of ts_TypeNode [@js 306] | `U_n_307 of ts_TypeNode [@js 307] | `U_n_308 of ts_TypeNode [@js 308] | `U_n_309 of ts_TypeNode [@js 309] | `U_n_310 of ts_TypeNode [@js 310] | `U_n_311 of ts_TypeNode [@js 311] | `U_n_312 of ts_TypeNode [@js 312] | `U_n_313 of ts_TypeNode [@js 313] | `U_n_314 of ts_TypeNode [@js 314] | `U_n_315 of ts_TypeNode [@js 315] | `U_n_316 of ts_TypeNode [@js 316] | `U_n_317 of ts_TypeNode [@js 317] | `U_n_318 of ts_TypeNode [@js 318] | `U_n_319 of ts_TypeNode [@js 319] | `U_n_320 of ts_TypeNode [@js 320] | `U_n_321 of ts_TypeNode [@js 321] | `U_n_322 of ts_TypeNode [@js 322] | `U_n_323 of ts_TypeNode [@js 323] | `U_n_324 of ts_TypeNode [@js 324] | `U_n_325 of ts_TypeNode [@js 325] | `U_n_326 of ts_TypeNode [@js 326] | `U_n_327 of ts_TypeNode [@js 327] | `U_n_328 of ts_TypeNode [@js 328] | `U_n_329 of ts_TypeNode [@js 329] | `U_n_330 of ts_TypeNode [@js 330] | `U_n_331 of ts_TypeNode [@js 331] | `U_n_332 of ts_TypeNode [@js 332] | `U_n_333 of ts_TypeNode [@js 333] | `U_n_334 of ts_TypeNode [@js 334] | `U_n_335 of ts_TypeNode [@js 335] | `U_n_336 of ts_TypeNode [@js 336] | `U_n_337 of ts_TypeNode [@js 337] | `U_n_338 of ts_TypeNode [@js 338] | `U_n_339 of ts_TypeNode [@js 339] | `U_n_340 of ts_TypeNode [@js 340] | `U_n_341 of ts_TypeNode [@js 341]] [@js.union on_field "kind"]) ts_NodeArray [@@js.get "elements"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4191,6 +4995,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedTupleMember | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedTupleMember | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_NamedTupleMember [@@js.get "kind"]
     val get_dotDotDotToken: t -> ts_SyntaxKind_DotDotDotToken ts_Token [@@js.get "dotDotDotToken"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
@@ -4207,6 +5017,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_OptionalTypeNode | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_OptionalTypeNode | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_OptionalType [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4218,6 +5034,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_RestTypeNode | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_RestTypeNode | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_RestType [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4229,6 +5051,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_UnionOrIntersectionTypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_UnionOrIntersectionTypeNode]
+    ]
   end
   module[@js.scope "UnionTypeNode"] UnionTypeNode : sig
     type t = ts_UnionTypeNode
@@ -4237,6 +5065,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_UnionTypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_UnionTypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_UnionType [@@js.get "kind"]
     val get_types: t -> ts_TypeNode ts_NodeArray [@@js.get "types"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4248,6 +5082,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IntersectionTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IntersectionTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_IntersectionType [@@js.get "kind"]
     val get_types: t -> ts_TypeNode ts_NodeArray [@@js.get "types"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4259,6 +5099,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConditionalTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConditionalTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_ConditionalType [@@js.get "kind"]
     val get_checkType: t -> ts_TypeNode [@@js.get "checkType"]
     val get_extendsType: t -> ts_TypeNode [@@js.get "extendsType"]
@@ -4273,6 +5119,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InferTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InferTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_InferType [@@js.get "kind"]
     val get_typeParameter: t -> ts_TypeParameterDeclaration [@@js.get "typeParameter"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4284,6 +5136,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ParenthesizedTypeNode | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ParenthesizedTypeNode | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_ParenthesizedType [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4295,6 +5153,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_TypeOperatorNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode | `Ts_TypeOperatorNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_TypeOperator [@@js.get "kind"]
     val get_operator: t -> ((ts_SyntaxKind_KeyOfKeyword, ts_SyntaxKind_ReadonlyKeyword, ts_SyntaxKind_UniqueKeyword) union3, ([`KeyOfKeyword[@js 138] | `ReadonlyKeyword[@js 142] | `UniqueKeyword[@js 151]] [@js.enum])) or_enum [@@js.get "operator"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
@@ -4307,6 +5171,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IndexedAccessTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IndexedAccessTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_IndexedAccessType [@@js.get "kind"]
     val get_objectType: t -> ts_TypeNode [@@js.get "objectType"]
     val get_indexType: t -> ts_TypeNode [@@js.get "indexType"]
@@ -4319,6 +5189,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_MappedTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_MappedTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_MappedType [@@js.get "kind"]
     val get_readonlyToken: t -> ([`U_n_39 of ts_PlusToken [@js 39] | `U_n_40 of ts_MinusToken [@js 40] | `U_n_142 of ts_ReadonlyToken [@js 142]] [@js.union on_field "kind"]) [@@js.get "readonlyToken"]
     val get_typeParameter: t -> ts_TypeParameterDeclaration [@@js.get "typeParameter"]
@@ -4335,6 +5211,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralTypeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_LiteralType [@@js.get "kind"]
     val get_literal: t -> ([`U_n_0 of ts_LiteralExpression [@js 0] | `U_n_1 of ts_LiteralExpression [@js 1] | `U_n_2 of ts_LiteralExpression [@js 2] | `U_n_3 of ts_LiteralExpression [@js 3] | `U_n_4 of ts_LiteralExpression [@js 4] | `U_n_5 of ts_LiteralExpression [@js 5] | `U_n_6 of ts_LiteralExpression [@js 6] | `U_n_7 of ts_LiteralExpression [@js 7] | `U_n_8 of ts_LiteralExpression [@js 8] | `U_n_9 of ts_LiteralExpression [@js 9] | `U_n_10 of ts_LiteralExpression [@js 10] | `U_n_11 of ts_LiteralExpression [@js 11] | `U_n_12 of ts_LiteralExpression [@js 12] | `U_n_13 of ts_LiteralExpression [@js 13] | `U_n_14 of ts_LiteralExpression [@js 14] | `U_n_15 of ts_LiteralExpression [@js 15] | `U_n_16 of ts_LiteralExpression [@js 16] | `U_n_17 of ts_LiteralExpression [@js 17] | `U_n_18 of ts_LiteralExpression [@js 18] | `U_n_19 of ts_LiteralExpression [@js 19] | `U_n_20 of ts_LiteralExpression [@js 20] | `U_n_21 of ts_LiteralExpression [@js 21] | `U_n_22 of ts_LiteralExpression [@js 22] | `U_n_23 of ts_LiteralExpression [@js 23] | `U_n_24 of ts_LiteralExpression [@js 24] | `U_n_25 of ts_LiteralExpression [@js 25] | `U_n_26 of ts_LiteralExpression [@js 26] | `U_n_27 of ts_LiteralExpression [@js 27] | `U_n_28 of ts_LiteralExpression [@js 28] | `U_n_29 of ts_LiteralExpression [@js 29] | `U_n_30 of ts_LiteralExpression [@js 30] | `U_n_31 of ts_LiteralExpression [@js 31] | `U_n_32 of ts_LiteralExpression [@js 32] | `U_n_33 of ts_LiteralExpression [@js 33] | `U_n_34 of ts_LiteralExpression [@js 34] | `U_n_35 of ts_LiteralExpression [@js 35] | `U_n_36 of ts_LiteralExpression [@js 36] | `U_n_37 of ts_LiteralExpression [@js 37] | `U_n_38 of ts_LiteralExpression [@js 38] | `U_n_39 of ts_LiteralExpression [@js 39] | `U_n_40 of ts_LiteralExpression [@js 40] | `U_n_41 of ts_LiteralExpression [@js 41] | `U_n_42 of ts_LiteralExpression [@js 42] | `U_n_43 of ts_LiteralExpression [@js 43] | `U_n_44 of ts_LiteralExpression [@js 44] | `U_n_45 of ts_LiteralExpression [@js 45] | `U_n_46 of ts_LiteralExpression [@js 46] | `U_n_47 of ts_LiteralExpression [@js 47] | `U_n_48 of ts_LiteralExpression [@js 48] | `U_n_49 of ts_LiteralExpression [@js 49] | `U_n_50 of ts_LiteralExpression [@js 50] | `U_n_51 of ts_LiteralExpression [@js 51] | `U_n_52 of ts_LiteralExpression [@js 52] | `U_n_53 of ts_LiteralExpression [@js 53] | `U_n_54 of ts_LiteralExpression [@js 54] | `U_n_55 of ts_LiteralExpression [@js 55] | `U_n_56 of ts_LiteralExpression [@js 56] | `U_n_57 of ts_LiteralExpression [@js 57] | `U_n_58 of ts_LiteralExpression [@js 58] | `U_n_59 of ts_LiteralExpression [@js 59] | `U_n_60 of ts_LiteralExpression [@js 60] | `U_n_61 of ts_LiteralExpression [@js 61] | `U_n_62 of ts_LiteralExpression [@js 62] | `U_n_63 of ts_LiteralExpression [@js 63] | `U_n_64 of ts_LiteralExpression [@js 64] | `U_n_65 of ts_LiteralExpression [@js 65] | `U_n_66 of ts_LiteralExpression [@js 66] | `U_n_67 of ts_LiteralExpression [@js 67] | `U_n_68 of ts_LiteralExpression [@js 68] | `U_n_69 of ts_LiteralExpression [@js 69] | `U_n_70 of ts_LiteralExpression [@js 70] | `U_n_71 of ts_LiteralExpression [@js 71] | `U_n_72 of ts_LiteralExpression [@js 72] | `U_n_73 of ts_LiteralExpression [@js 73] | `U_n_74 of ts_LiteralExpression [@js 74] | `U_n_75 of ts_LiteralExpression [@js 75] | `U_n_76 of ts_LiteralExpression [@js 76] | `U_n_77 of ts_LiteralExpression [@js 77] | `U_n_78 of ts_LiteralExpression [@js 78] | `U_n_79 of ts_LiteralExpression [@js 79] | `U_n_80 of ts_LiteralExpression [@js 80] | `U_n_81 of ts_LiteralExpression [@js 81] | `U_n_82 of ts_LiteralExpression [@js 82] | `U_n_83 of ts_LiteralExpression [@js 83] | `U_n_84 of ts_LiteralExpression [@js 84] | `U_n_85 of ts_LiteralExpression [@js 85] | `U_n_86 of ts_LiteralExpression [@js 86] | `U_n_87 of ts_LiteralExpression [@js 87] | `U_n_88 of ts_LiteralExpression [@js 88] | `U_n_89 of ts_LiteralExpression [@js 89] | `U_n_90 of ts_LiteralExpression [@js 90] | `U_n_91 of ts_LiteralExpression [@js 91] | `U_n_92 of ts_LiteralExpression [@js 92] | `U_n_93 of ts_LiteralExpression [@js 93] | `U_n_94 of (ts_BooleanLiteral, ts_LiteralExpression) union2 [@js 94] | `U_n_95 of ts_LiteralExpression [@js 95] | `U_n_96 of ts_LiteralExpression [@js 96] | `U_n_97 of ts_LiteralExpression [@js 97] | `U_n_98 of ts_LiteralExpression [@js 98] | `U_n_99 of ts_LiteralExpression [@js 99] | `U_n_100 of ts_LiteralExpression [@js 100] | `U_n_101 of ts_LiteralExpression [@js 101] | `U_n_102 of ts_LiteralExpression [@js 102] | `U_n_103 of (ts_NullLiteral, ts_LiteralExpression) union2 [@js 103] | `U_n_104 of ts_LiteralExpression [@js 104] | `U_n_105 of ts_LiteralExpression [@js 105] | `U_n_106 of ts_LiteralExpression [@js 106] | `U_n_107 of ts_LiteralExpression [@js 107] | `U_n_108 of ts_LiteralExpression [@js 108] | `U_n_109 of (ts_BooleanLiteral, ts_LiteralExpression) union2 [@js 109] | `U_n_110 of ts_LiteralExpression [@js 110] | `U_n_111 of ts_LiteralExpression [@js 111] | `U_n_112 of ts_LiteralExpression [@js 112] | `U_n_113 of ts_LiteralExpression [@js 113] | `U_n_114 of ts_LiteralExpression [@js 114] | `U_n_115 of ts_LiteralExpression [@js 115] | `U_n_116 of ts_LiteralExpression [@js 116] | `U_n_117 of ts_LiteralExpression [@js 117] | `U_n_118 of ts_LiteralExpression [@js 118] | `U_n_119 of ts_LiteralExpression [@js 119] | `U_n_120 of ts_LiteralExpression [@js 120] | `U_n_121 of ts_LiteralExpression [@js 121] | `U_n_122 of ts_LiteralExpression [@js 122] | `U_n_123 of ts_LiteralExpression [@js 123] | `U_n_124 of ts_LiteralExpression [@js 124] | `U_n_125 of ts_LiteralExpression [@js 125] | `U_n_126 of ts_LiteralExpression [@js 126] | `U_n_127 of ts_LiteralExpression [@js 127] | `U_n_128 of ts_LiteralExpression [@js 128] | `U_n_129 of ts_LiteralExpression [@js 129] | `U_n_130 of ts_LiteralExpression [@js 130] | `U_n_131 of ts_LiteralExpression [@js 131] | `U_n_132 of ts_LiteralExpression [@js 132] | `U_n_133 of ts_LiteralExpression [@js 133] | `U_n_134 of ts_LiteralExpression [@js 134] | `U_n_135 of ts_LiteralExpression [@js 135] | `U_n_136 of ts_LiteralExpression [@js 136] | `U_n_137 of ts_LiteralExpression [@js 137] | `U_n_138 of ts_LiteralExpression [@js 138] | `U_n_139 of ts_LiteralExpression [@js 139] | `U_n_140 of ts_LiteralExpression [@js 140] | `U_n_141 of ts_LiteralExpression [@js 141] | `U_n_142 of ts_LiteralExpression [@js 142] | `U_n_143 of ts_LiteralExpression [@js 143] | `U_n_144 of ts_LiteralExpression [@js 144] | `U_n_145 of ts_LiteralExpression [@js 145] | `U_n_146 of ts_LiteralExpression [@js 146] | `U_n_147 of ts_LiteralExpression [@js 147] | `U_n_148 of ts_LiteralExpression [@js 148] | `U_n_149 of ts_LiteralExpression [@js 149] | `U_n_150 of ts_LiteralExpression [@js 150] | `U_n_151 of ts_LiteralExpression [@js 151] | `U_n_152 of ts_LiteralExpression [@js 152] | `U_n_153 of ts_LiteralExpression [@js 153] | `U_n_154 of ts_LiteralExpression [@js 154] | `U_n_155 of ts_LiteralExpression [@js 155] | `U_n_156 of ts_LiteralExpression [@js 156] | `U_n_157 of ts_LiteralExpression [@js 157] | `U_n_158 of ts_LiteralExpression [@js 158] | `U_n_159 of ts_LiteralExpression [@js 159] | `U_n_160 of ts_LiteralExpression [@js 160] | `U_n_161 of ts_LiteralExpression [@js 161] | `U_n_162 of ts_LiteralExpression [@js 162] | `U_n_163 of ts_LiteralExpression [@js 163] | `U_n_164 of ts_LiteralExpression [@js 164] | `U_n_165 of ts_LiteralExpression [@js 165] | `U_n_166 of ts_LiteralExpression [@js 166] | `U_n_167 of ts_LiteralExpression [@js 167] | `U_n_168 of ts_LiteralExpression [@js 168] | `U_n_169 of ts_LiteralExpression [@js 169] | `U_n_170 of ts_LiteralExpression [@js 170] | `U_n_171 of ts_LiteralExpression [@js 171] | `U_n_172 of ts_LiteralExpression [@js 172] | `U_n_173 of ts_LiteralExpression [@js 173] | `U_n_174 of ts_LiteralExpression [@js 174] | `U_n_175 of ts_LiteralExpression [@js 175] | `U_n_176 of ts_LiteralExpression [@js 176] | `U_n_177 of ts_LiteralExpression [@js 177] | `U_n_178 of ts_LiteralExpression [@js 178] | `U_n_179 of ts_LiteralExpression [@js 179] | `U_n_180 of ts_LiteralExpression [@js 180] | `U_n_181 of ts_LiteralExpression [@js 181] | `U_n_182 of ts_LiteralExpression [@js 182] | `U_n_183 of ts_LiteralExpression [@js 183] | `U_n_184 of ts_LiteralExpression [@js 184] | `U_n_185 of ts_LiteralExpression [@js 185] | `U_n_186 of ts_LiteralExpression [@js 186] | `U_n_187 of ts_LiteralExpression [@js 187] | `U_n_188 of ts_LiteralExpression [@js 188] | `U_n_189 of ts_LiteralExpression [@js 189] | `U_n_190 of ts_LiteralExpression [@js 190] | `U_n_191 of ts_LiteralExpression [@js 191] | `U_n_192 of ts_LiteralExpression [@js 192] | `U_n_193 of ts_LiteralExpression [@js 193] | `U_n_194 of ts_LiteralExpression [@js 194] | `U_n_195 of ts_LiteralExpression [@js 195] | `U_n_196 of ts_LiteralExpression [@js 196] | `U_n_197 of ts_LiteralExpression [@js 197] | `U_n_198 of ts_LiteralExpression [@js 198] | `U_n_199 of ts_LiteralExpression [@js 199] | `U_n_200 of ts_LiteralExpression [@js 200] | `U_n_201 of ts_LiteralExpression [@js 201] | `U_n_202 of ts_LiteralExpression [@js 202] | `U_n_203 of ts_LiteralExpression [@js 203] | `U_n_204 of ts_LiteralExpression [@js 204] | `U_n_205 of ts_LiteralExpression [@js 205] | `U_n_206 of ts_LiteralExpression [@js 206] | `U_n_207 of ts_LiteralExpression [@js 207] | `U_n_208 of ts_LiteralExpression [@js 208] | `U_n_209 of ts_LiteralExpression [@js 209] | `U_n_210 of ts_LiteralExpression [@js 210] | `U_n_211 of ts_LiteralExpression [@js 211] | `U_n_212 of ts_LiteralExpression [@js 212] | `U_n_213 of ts_LiteralExpression [@js 213] | `U_n_214 of (ts_LiteralExpression, ts_PrefixUnaryExpression) union2 [@js 214] | `U_n_215 of ts_LiteralExpression [@js 215] | `U_n_216 of ts_LiteralExpression [@js 216] | `U_n_217 of ts_LiteralExpression [@js 217] | `U_n_218 of ts_LiteralExpression [@js 218] | `U_n_219 of ts_LiteralExpression [@js 219] | `U_n_220 of ts_LiteralExpression [@js 220] | `U_n_221 of ts_LiteralExpression [@js 221] | `U_n_222 of ts_LiteralExpression [@js 222] | `U_n_223 of ts_LiteralExpression [@js 223] | `U_n_224 of ts_LiteralExpression [@js 224] | `U_n_225 of ts_LiteralExpression [@js 225] | `U_n_226 of ts_LiteralExpression [@js 226] | `U_n_227 of ts_LiteralExpression [@js 227] | `U_n_228 of ts_LiteralExpression [@js 228] | `U_n_229 of ts_LiteralExpression [@js 229] | `U_n_230 of ts_LiteralExpression [@js 230] | `U_n_231 of ts_LiteralExpression [@js 231] | `U_n_232 of ts_LiteralExpression [@js 232] | `U_n_233 of ts_LiteralExpression [@js 233] | `U_n_234 of ts_LiteralExpression [@js 234] | `U_n_235 of ts_LiteralExpression [@js 235] | `U_n_236 of ts_LiteralExpression [@js 236] | `U_n_237 of ts_LiteralExpression [@js 237] | `U_n_238 of ts_LiteralExpression [@js 238] | `U_n_239 of ts_LiteralExpression [@js 239] | `U_n_240 of ts_LiteralExpression [@js 240] | `U_n_241 of ts_LiteralExpression [@js 241] | `U_n_242 of ts_LiteralExpression [@js 242] | `U_n_243 of ts_LiteralExpression [@js 243] | `U_n_244 of ts_LiteralExpression [@js 244] | `U_n_245 of ts_LiteralExpression [@js 245] | `U_n_246 of ts_LiteralExpression [@js 246] | `U_n_247 of ts_LiteralExpression [@js 247] | `U_n_248 of ts_LiteralExpression [@js 248] | `U_n_249 of ts_LiteralExpression [@js 249] | `U_n_250 of ts_LiteralExpression [@js 250] | `U_n_251 of ts_LiteralExpression [@js 251] | `U_n_252 of ts_LiteralExpression [@js 252] | `U_n_253 of ts_LiteralExpression [@js 253] | `U_n_254 of ts_LiteralExpression [@js 254] | `U_n_255 of ts_LiteralExpression [@js 255] | `U_n_256 of ts_LiteralExpression [@js 256] | `U_n_257 of ts_LiteralExpression [@js 257] | `U_n_258 of ts_LiteralExpression [@js 258] | `U_n_259 of ts_LiteralExpression [@js 259] | `U_n_260 of ts_LiteralExpression [@js 260] | `U_n_261 of ts_LiteralExpression [@js 261] | `U_n_262 of ts_LiteralExpression [@js 262] | `U_n_263 of ts_LiteralExpression [@js 263] | `U_n_264 of ts_LiteralExpression [@js 264] | `U_n_265 of ts_LiteralExpression [@js 265] | `U_n_266 of ts_LiteralExpression [@js 266] | `U_n_267 of ts_LiteralExpression [@js 267] | `U_n_268 of ts_LiteralExpression [@js 268] | `U_n_269 of ts_LiteralExpression [@js 269] | `U_n_270 of ts_LiteralExpression [@js 270] | `U_n_271 of ts_LiteralExpression [@js 271] | `U_n_272 of ts_LiteralExpression [@js 272] | `U_n_273 of ts_LiteralExpression [@js 273] | `U_n_274 of ts_LiteralExpression [@js 274] | `U_n_275 of ts_LiteralExpression [@js 275] | `U_n_276 of ts_LiteralExpression [@js 276] | `U_n_277 of ts_LiteralExpression [@js 277] | `U_n_278 of ts_LiteralExpression [@js 278] | `U_n_279 of ts_LiteralExpression [@js 279] | `U_n_280 of ts_LiteralExpression [@js 280] | `U_n_281 of ts_LiteralExpression [@js 281] | `U_n_282 of ts_LiteralExpression [@js 282] | `U_n_283 of ts_LiteralExpression [@js 283] | `U_n_284 of ts_LiteralExpression [@js 284] | `U_n_285 of ts_LiteralExpression [@js 285] | `U_n_286 of ts_LiteralExpression [@js 286] | `U_n_287 of ts_LiteralExpression [@js 287] | `U_n_288 of ts_LiteralExpression [@js 288] | `U_n_289 of ts_LiteralExpression [@js 289] | `U_n_290 of ts_LiteralExpression [@js 290] | `U_n_291 of ts_LiteralExpression [@js 291] | `U_n_292 of ts_LiteralExpression [@js 292] | `U_n_293 of ts_LiteralExpression [@js 293] | `U_n_294 of ts_LiteralExpression [@js 294] | `U_n_295 of ts_LiteralExpression [@js 295] | `U_n_296 of ts_LiteralExpression [@js 296] | `U_n_297 of ts_LiteralExpression [@js 297] | `U_n_298 of ts_LiteralExpression [@js 298] | `U_n_299 of ts_LiteralExpression [@js 299] | `U_n_300 of ts_LiteralExpression [@js 300] | `U_n_301 of ts_LiteralExpression [@js 301] | `U_n_302 of ts_LiteralExpression [@js 302] | `U_n_303 of ts_LiteralExpression [@js 303] | `U_n_304 of ts_LiteralExpression [@js 304] | `U_n_305 of ts_LiteralExpression [@js 305] | `U_n_306 of ts_LiteralExpression [@js 306] | `U_n_307 of ts_LiteralExpression [@js 307] | `U_n_308 of ts_LiteralExpression [@js 308] | `U_n_309 of ts_LiteralExpression [@js 309] | `U_n_310 of ts_LiteralExpression [@js 310] | `U_n_311 of ts_LiteralExpression [@js 311] | `U_n_312 of ts_LiteralExpression [@js 312] | `U_n_313 of ts_LiteralExpression [@js 313] | `U_n_314 of ts_LiteralExpression [@js 314] | `U_n_315 of ts_LiteralExpression [@js 315] | `U_n_316 of ts_LiteralExpression [@js 316] | `U_n_317 of ts_LiteralExpression [@js 317] | `U_n_318 of ts_LiteralExpression [@js 318] | `U_n_319 of ts_LiteralExpression [@js 319] | `U_n_320 of ts_LiteralExpression [@js 320] | `U_n_321 of ts_LiteralExpression [@js 321] | `U_n_322 of ts_LiteralExpression [@js 322] | `U_n_323 of ts_LiteralExpression [@js 323] | `U_n_324 of ts_LiteralExpression [@js 324] | `U_n_325 of ts_LiteralExpression [@js 325] | `U_n_326 of ts_LiteralExpression [@js 326] | `U_n_327 of ts_LiteralExpression [@js 327] | `U_n_328 of ts_LiteralExpression [@js 328] | `U_n_329 of ts_LiteralExpression [@js 329] | `U_n_330 of ts_LiteralExpression [@js 330] | `U_n_331 of ts_LiteralExpression [@js 331] | `U_n_332 of ts_LiteralExpression [@js 332] | `U_n_333 of ts_LiteralExpression [@js 333] | `U_n_334 of ts_LiteralExpression [@js 334] | `U_n_335 of ts_LiteralExpression [@js 335] | `U_n_336 of ts_LiteralExpression [@js 336] | `U_n_337 of ts_LiteralExpression [@js 337] | `U_n_338 of ts_LiteralExpression [@js 338] | `U_n_339 of ts_LiteralExpression [@js 339] | `U_n_340 of ts_LiteralExpression [@js 340] | `U_n_341 of ts_LiteralExpression [@js 341]] [@js.union on_field "kind"]) [@@js.get "literal"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -4346,6 +5228,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_StringLiteral | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_StringLiteral | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_StringLiteral [@@js.get "kind"]
     val cast: t -> ts_LiteralExpression [@@js.cast]
     val cast': t -> ts_Declaration [@@js.cast]
@@ -4357,6 +5245,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_StringLiteralLike]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_StringLiteralLike]
+    ]
   end
   module PropertyNameLiteral : sig
     type t = ts_PropertyNameLiteral
@@ -4365,6 +5259,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PropertyNameLiteral]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PropertyNameLiteral]
+    ]
   end
   module[@js.scope "TemplateLiteralTypeNode"] TemplateLiteralTypeNode : sig
     type t = ts_TemplateLiteralTypeNode
@@ -4373,6 +5273,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralTypeNode | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralTypeNode | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_TemplateLiteralType [@@js.get "kind"]
     val set_kind: t -> ts_SyntaxKind_TemplateLiteralType -> unit [@@js.set "kind"]
     val get_head: t -> ts_TemplateHead [@@js.get "head"]
@@ -4386,6 +5292,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralTypeSpan | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralTypeSpan | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_TemplateLiteralTypeSpan [@@js.get "kind"]
     val get_parent: t -> ts_TemplateLiteralTypeNode [@@js.get "parent"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
@@ -4399,6 +5311,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get__expressionBrand: t -> any [@@js.get "_expressionBrand"]
     val set__expressionBrand: t -> any -> unit [@@js.set "_expressionBrand"]
     val cast: t -> ts_Node [@@js.cast]
@@ -4410,6 +5328,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_OmittedExpression | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_OmittedExpression | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_OmittedExpression [@@js.get "kind"]
     val cast: t -> ts_Expression [@@js.cast]
   end
@@ -4420,6 +5344,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_PartiallyEmittedExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_PartiallyEmittedExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_PartiallyEmittedExpression [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val cast: t -> ts_LeftHandSideExpression [@@js.cast]
@@ -4431,6 +5361,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression]
+    ]
     val get__unaryExpressionBrand: t -> any [@@js.get "_unaryExpressionBrand"]
     val set__unaryExpressionBrand: t -> any -> unit [@@js.set "_unaryExpressionBrand"]
     val cast: t -> ts_Expression [@@js.cast]
@@ -4443,6 +5379,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_IncrementExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_IncrementExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
   end
   module[@js.scope "UpdateExpression"] UpdateExpression : sig
     type t = ts_UpdateExpression
@@ -4451,6 +5393,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__updateExpressionBrand: t -> any [@@js.get "_updateExpressionBrand"]
     val set__updateExpressionBrand: t -> any -> unit [@@js.set "_updateExpressionBrand"]
     val cast: t -> ts_UnaryExpression [@@js.cast]
@@ -4462,6 +5410,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PrefixUnaryOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PrefixUnaryOperator]
+    ]
   end
   module[@js.scope "PrefixUnaryExpression"] PrefixUnaryExpression : sig
     type t = ts_PrefixUnaryExpression
@@ -4470,6 +5424,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_PrefixUnaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_PrefixUnaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_PrefixUnaryExpression [@@js.get "kind"]
     val get_operator: t -> ts_PrefixUnaryOperator [@@js.get "operator"]
     val get_operand: t -> ts_UnaryExpression [@@js.get "operand"]
@@ -4482,6 +5442,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PostfixUnaryOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PostfixUnaryOperator]
+    ]
   end
   module[@js.scope "PostfixUnaryExpression"] PostfixUnaryExpression : sig
     type t = ts_PostfixUnaryExpression
@@ -4490,6 +5456,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_PostfixUnaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_PostfixUnaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_PostfixUnaryExpression [@@js.get "kind"]
     val get_operand: t -> ts_LeftHandSideExpression [@@js.get "operand"]
     val get_operator: t -> ts_PostfixUnaryOperator [@@js.get "operator"]
@@ -4502,6 +5474,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__leftHandSideExpressionBrand: t -> any [@@js.get "_leftHandSideExpressionBrand"]
     val set__leftHandSideExpressionBrand: t -> any -> unit [@@js.set "_leftHandSideExpressionBrand"]
     val cast: t -> ts_UpdateExpression [@@js.cast]
@@ -4513,6 +5491,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__memberExpressionBrand: t -> any [@@js.get "_memberExpressionBrand"]
     val set__memberExpressionBrand: t -> any -> unit [@@js.set "_memberExpressionBrand"]
     val cast: t -> ts_LeftHandSideExpression [@@js.cast]
@@ -4524,6 +5508,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__primaryExpressionBrand: t -> any [@@js.get "_primaryExpressionBrand"]
     val set__primaryExpressionBrand: t -> any -> unit [@@js.set "_primaryExpressionBrand"]
     val cast: t -> ts_MemberExpression [@@js.cast]
@@ -4535,6 +5525,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_NullLiteral | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_NullLiteral | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_NullKeyword [@@js.get "kind"]
     val cast: t -> ts_PrimaryExpression [@@js.cast]
   end
@@ -4545,6 +5541,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_TrueLiteral | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_TrueLiteral | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_TrueKeyword [@@js.get "kind"]
     val cast: t -> ts_PrimaryExpression [@@js.cast]
   end
@@ -4555,6 +5557,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_FalseLiteral | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_FalseLiteral | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_FalseKeyword [@@js.get "kind"]
     val cast: t -> ts_PrimaryExpression [@@js.cast]
   end
@@ -4565,6 +5573,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BooleanLiteral]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BooleanLiteral]
+    ]
   end
   module[@js.scope "ThisExpression"] ThisExpression : sig
     type t = ts_ThisExpression
@@ -4573,6 +5587,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_ThisExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_ThisExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_ThisKeyword [@@js.get "kind"]
     val cast: t -> ts_PrimaryExpression [@@js.cast]
   end
@@ -4583,6 +5603,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_SuperExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_SuperExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_SuperKeyword [@@js.get "kind"]
     val cast: t -> ts_PrimaryExpression [@@js.cast]
   end
@@ -4593,6 +5619,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_ImportExpression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_ImportExpression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_ImportKeyword [@@js.get "kind"]
     val cast: t -> ts_PrimaryExpression [@@js.cast]
   end
@@ -4603,6 +5635,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DeleteExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DeleteExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_DeleteExpression [@@js.get "kind"]
     val get_expression: t -> ts_UnaryExpression [@@js.get "expression"]
     val cast: t -> ts_UnaryExpression [@@js.cast]
@@ -4614,6 +5652,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeOfExpression | `Ts_UnaryExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeOfExpression | `Ts_UnaryExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_TypeOfExpression [@@js.get "kind"]
     val get_expression: t -> ts_UnaryExpression [@@js.get "expression"]
     val cast: t -> ts_UnaryExpression [@@js.cast]
@@ -4625,6 +5669,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_VoidExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_VoidExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_VoidExpression [@@js.get "kind"]
     val get_expression: t -> ts_UnaryExpression [@@js.get "expression"]
     val cast: t -> ts_UnaryExpression [@@js.cast]
@@ -4636,6 +5686,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AwaitExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AwaitExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_AwaitExpression [@@js.get "kind"]
     val get_expression: t -> ts_UnaryExpression [@@js.get "expression"]
     val cast: t -> ts_UnaryExpression [@@js.cast]
@@ -4647,6 +5703,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_YieldExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_YieldExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_YieldExpression [@@js.get "kind"]
     val get_asteriskToken: t -> ts_AsteriskToken [@@js.get "asteriskToken"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -4659,6 +5721,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SyntheticExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SyntheticExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_SyntheticExpression [@@js.get "kind"]
     val get_isSpread: t -> bool [@@js.get "isSpread"]
     val get_type: t -> ts_Type [@@js.get "type"]
@@ -4672,6 +5740,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ExponentiationOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ExponentiationOperator]
+    ]
   end
   module MultiplicativeOperator : sig
     type t = ts_MultiplicativeOperator
@@ -4680,6 +5754,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_MultiplicativeOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_MultiplicativeOperator]
+    ]
   end
   module MultiplicativeOperatorOrHigher : sig
     type t = ts_MultiplicativeOperatorOrHigher
@@ -4688,6 +5768,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_MultiplicativeOperatorOrHigher]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_MultiplicativeOperatorOrHigher]
+    ]
   end
   module AdditiveOperator : sig
     type t = ts_AdditiveOperator
@@ -4696,6 +5782,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AdditiveOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AdditiveOperator]
+    ]
   end
   module AdditiveOperatorOrHigher : sig
     type t = ts_AdditiveOperatorOrHigher
@@ -4704,6 +5796,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AdditiveOperatorOrHigher]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AdditiveOperatorOrHigher]
+    ]
   end
   module ShiftOperator : sig
     type t = ts_ShiftOperator
@@ -4712,6 +5810,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ShiftOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ShiftOperator]
+    ]
   end
   module ShiftOperatorOrHigher : sig
     type t = ts_ShiftOperatorOrHigher
@@ -4720,6 +5824,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ShiftOperatorOrHigher]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ShiftOperatorOrHigher]
+    ]
   end
   module RelationalOperator : sig
     type t = ts_RelationalOperator
@@ -4728,6 +5838,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_RelationalOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_RelationalOperator]
+    ]
   end
   module RelationalOperatorOrHigher : sig
     type t = ts_RelationalOperatorOrHigher
@@ -4736,6 +5852,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_RelationalOperatorOrHigher]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_RelationalOperatorOrHigher]
+    ]
   end
   module EqualityOperator : sig
     type t = ts_EqualityOperator
@@ -4744,6 +5866,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EqualityOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EqualityOperator]
+    ]
   end
   module EqualityOperatorOrHigher : sig
     type t = ts_EqualityOperatorOrHigher
@@ -4752,6 +5880,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EqualityOperatorOrHigher]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EqualityOperatorOrHigher]
+    ]
   end
   module BitwiseOperator : sig
     type t = ts_BitwiseOperator
@@ -4760,6 +5894,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BitwiseOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BitwiseOperator]
+    ]
   end
   module BitwiseOperatorOrHigher : sig
     type t = ts_BitwiseOperatorOrHigher
@@ -4768,6 +5908,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BitwiseOperatorOrHigher]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BitwiseOperatorOrHigher]
+    ]
   end
   module LogicalOperator : sig
     type t = ts_LogicalOperator
@@ -4776,6 +5922,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LogicalOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LogicalOperator]
+    ]
   end
   module LogicalOperatorOrHigher : sig
     type t = ts_LogicalOperatorOrHigher
@@ -4784,6 +5936,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LogicalOperatorOrHigher]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LogicalOperatorOrHigher]
+    ]
   end
   module CompoundAssignmentOperator : sig
     type t = ts_CompoundAssignmentOperator
@@ -4792,6 +5950,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CompoundAssignmentOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CompoundAssignmentOperator]
+    ]
   end
   module AssignmentOperator : sig
     type t = ts_AssignmentOperator
@@ -4800,6 +5964,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssignmentOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssignmentOperator]
+    ]
   end
   module AssignmentOperatorOrHigher : sig
     type t = ts_AssignmentOperatorOrHigher
@@ -4808,6 +5978,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssignmentOperatorOrHigher]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssignmentOperatorOrHigher]
+    ]
   end
   module BinaryOperator : sig
     type t = ts_BinaryOperator
@@ -4816,6 +5992,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BinaryOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BinaryOperator]
+    ]
   end
   module LogicalOrCoalescingAssignmentOperator : sig
     type t = ts_LogicalOrCoalescingAssignmentOperator
@@ -4824,6 +6006,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LogicalOrCoalescingAssignmentOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LogicalOrCoalescingAssignmentOperator]
+    ]
   end
   module BinaryOperatorToken : sig
     type t = ts_BinaryOperatorToken
@@ -4832,6 +6020,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BinaryOperatorToken | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_BinaryOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BinaryOperatorToken | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_BinaryOperator]
+    ]
   end
   module[@js.scope "BinaryExpression"] BinaryExpression : sig
     type t = ts_BinaryExpression
@@ -4840,6 +6034,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BinaryExpression | `Ts_Declaration | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BinaryExpression | `Ts_Declaration | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_BinaryExpression [@@js.get "kind"]
     val get_left: t -> ts_Expression [@@js.get "left"]
     val get_operatorToken: t -> ts_BinaryOperatorToken [@@js.get "operatorToken"]
@@ -4854,6 +6054,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssignmentOperatorToken | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_AssignmentOperator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssignmentOperatorToken | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Token of ts_AssignmentOperator]
+    ]
   end
   module[@js.scope "AssignmentExpression"] AssignmentExpression : sig
     type 'TOperator t = 'TOperator ts_AssignmentExpression
@@ -4862,6 +6068,12 @@ module[@js.scope "ts"] Ts : sig
     type 'TOperator t_1 = 'TOperator t
     val t_1_to_js: ('TOperator -> Ojs.t) -> 'TOperator t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'TOperator) -> Ojs.t -> 'TOperator t_1
+    [@@@js.stop]
+    type 'TOperator tags = [`Ts_AssignmentExpression of 'TOperator | `Ts_BinaryExpression | `Ts_Declaration | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'TOperator tags = [`Ts_AssignmentExpression of 'TOperator | `Ts_BinaryExpression | `Ts_Declaration | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_left: 'TOperator t -> ts_LeftHandSideExpression [@@js.get "left"]
     val get_operatorToken: 'TOperator t -> 'TOperator [@@js.get "operatorToken"]
     val cast: 'TOperator t -> ts_BinaryExpression [@@js.cast]
@@ -4873,6 +6085,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssignmentExpression of ts_EqualsToken | `Ts_BinaryExpression | `Ts_Declaration | `Ts_Expression | `Ts_Node | `Ts_ObjectDestructuringAssignment | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssignmentExpression of ts_EqualsToken | `Ts_BinaryExpression | `Ts_Declaration | `Ts_Expression | `Ts_Node | `Ts_ObjectDestructuringAssignment | `Ts_ReadonlyTextRange]
+    ]
     val get_left: t -> ts_ObjectLiteralExpression [@@js.get "left"]
     val cast: t -> ts_EqualsToken ts_AssignmentExpression [@@js.cast]
   end
@@ -4883,6 +6101,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ArrayDestructuringAssignment | `Ts_AssignmentExpression of ts_EqualsToken | `Ts_BinaryExpression | `Ts_Declaration | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ArrayDestructuringAssignment | `Ts_AssignmentExpression of ts_EqualsToken | `Ts_BinaryExpression | `Ts_Declaration | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_left: t -> ts_ArrayLiteralExpression [@@js.get "left"]
     val cast: t -> ts_EqualsToken ts_AssignmentExpression [@@js.cast]
   end
@@ -4893,6 +6117,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DestructuringAssignment]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DestructuringAssignment]
+    ]
   end
   module BindingOrAssignmentElement : sig
     type t = ts_BindingOrAssignmentElement
@@ -4901,6 +6131,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BindingOrAssignmentElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BindingOrAssignmentElement]
+    ]
   end
   module ObjectBindingOrAssignmentElement : sig
     type t = ts_ObjectBindingOrAssignmentElement
@@ -4909,6 +6145,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ObjectBindingOrAssignmentElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ObjectBindingOrAssignmentElement]
+    ]
   end
   module ArrayBindingOrAssignmentElement : sig
     type t = ts_ArrayBindingOrAssignmentElement
@@ -4917,6 +6159,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ArrayBindingOrAssignmentElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ArrayBindingOrAssignmentElement]
+    ]
   end
   module BindingOrAssignmentElementRestIndicator : sig
     type t = ts_BindingOrAssignmentElementRestIndicator
@@ -4925,6 +6173,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BindingOrAssignmentElementRestIndicator]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BindingOrAssignmentElementRestIndicator]
+    ]
   end
   module BindingOrAssignmentElementTarget : sig
     type t = ts_BindingOrAssignmentElementTarget
@@ -4933,6 +6187,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BindingOrAssignmentElementTarget]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BindingOrAssignmentElementTarget]
+    ]
   end
   module ObjectBindingOrAssignmentPattern : sig
     type t = ts_ObjectBindingOrAssignmentPattern
@@ -4941,6 +6201,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ObjectBindingOrAssignmentPattern]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ObjectBindingOrAssignmentPattern]
+    ]
   end
   module ArrayBindingOrAssignmentPattern : sig
     type t = ts_ArrayBindingOrAssignmentPattern
@@ -4949,6 +6215,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ArrayBindingOrAssignmentPattern]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ArrayBindingOrAssignmentPattern]
+    ]
   end
   module AssignmentPattern : sig
     type t = ts_AssignmentPattern
@@ -4957,6 +6229,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssignmentPattern]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssignmentPattern]
+    ]
   end
   module BindingOrAssignmentPattern : sig
     type t = ts_BindingOrAssignmentPattern
@@ -4965,6 +6243,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BindingOrAssignmentPattern]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BindingOrAssignmentPattern]
+    ]
   end
   module[@js.scope "ConditionalExpression"] ConditionalExpression : sig
     type t = ts_ConditionalExpression
@@ -4973,6 +6257,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConditionalExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConditionalExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_ConditionalExpression [@@js.get "kind"]
     val get_condition: t -> ts_Expression [@@js.get "condition"]
     val get_questionToken: t -> ts_QuestionToken [@@js.get "questionToken"]
@@ -4988,6 +6278,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Block | `Ts_FunctionBody | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Block | `Ts_FunctionBody | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
   end
   module ConciseBody : sig
     type t = ts_ConciseBody
@@ -4996,6 +6292,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConciseBody]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConciseBody]
+    ]
   end
   module[@js.scope "FunctionExpression"] FunctionExpression : sig
     type t = ts_FunctionExpression
@@ -5004,6 +6306,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_FunctionExpression | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_FunctionExpression | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_FunctionExpression [@@js.get "kind"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val get_body: t -> ts_FunctionBody [@@js.get "body"]
@@ -5018,6 +6326,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ArrowFunction | `Ts_Declaration | `Ts_Expression | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ArrowFunction | `Ts_Declaration | `Ts_Expression | `Ts_FunctionLikeDeclarationBase | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase]
+    ]
     val get_kind: t -> ts_SyntaxKind_ArrowFunction [@@js.get "kind"]
     val get_equalsGreaterThanToken: t -> ts_EqualsGreaterThanToken [@@js.get "equalsGreaterThanToken"]
     val get_body: t -> ts_ConciseBody [@@js.get "body"]
@@ -5033,6 +6347,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_text: t -> string [@@js.get "text"]
     val set_text: t -> string -> unit [@@js.set "text"]
     val get_isUnterminated: t -> bool [@@js.get "isUnterminated"]
@@ -5048,6 +6368,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralLikeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralLikeNode]
+    ]
     val get_rawText: t -> string [@@js.get "rawText"]
     val set_rawText: t -> string -> unit [@@js.set "rawText"]
     val cast: t -> ts_LiteralLikeNode [@@js.cast]
@@ -5059,6 +6385,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__literalExpressionBrand: t -> any [@@js.get "_literalExpressionBrand"]
     val set__literalExpressionBrand: t -> any -> unit [@@js.set "_literalExpressionBrand"]
     val cast: t -> ts_LiteralLikeNode [@@js.cast]
@@ -5071,6 +6403,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_RegularExpressionLiteral | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_RegularExpressionLiteral | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_RegularExpressionLiteral [@@js.get "kind"]
     val cast: t -> ts_LiteralExpression [@@js.cast]
   end
@@ -5081,6 +6419,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_NoSubstitutionTemplateLiteral | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralLikeNode | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_NoSubstitutionTemplateLiteral | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralLikeNode | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_NoSubstitutionTemplateLiteral [@@js.get "kind"]
     val cast: t -> ts_LiteralExpression [@@js.cast]
     val cast': t -> ts_TemplateLiteralLikeNode [@@js.cast]
@@ -5101,6 +6445,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_NumericLiteral | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_NumericLiteral | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_NumericLiteral [@@js.get "kind"]
     val cast: t -> ts_LiteralExpression [@@js.cast]
     val cast': t -> ts_Declaration [@@js.cast]
@@ -5112,6 +6462,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BigIntLiteral | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BigIntLiteral | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_LiteralExpression | `Ts_LiteralLikeNode | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_BigIntLiteral [@@js.get "kind"]
     val cast: t -> ts_LiteralExpression [@@js.cast]
   end
@@ -5122,6 +6478,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralToken]
+    ]
   end
   module[@js.scope "TemplateHead"] TemplateHead : sig
     type t = ts_TemplateHead
@@ -5130,6 +6492,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateHead | `Ts_TemplateLiteralLikeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateHead | `Ts_TemplateLiteralLikeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_TemplateHead [@@js.get "kind"]
     val get_parent: t -> ([`U_n_193 of ts_TemplateLiteralTypeNode [@js 193] | `U_n_218 of ts_TemplateExpression [@js 218]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val cast: t -> ts_TemplateLiteralLikeNode [@@js.cast]
@@ -5141,6 +6509,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralLikeNode | `Ts_TemplateMiddle]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralLikeNode | `Ts_TemplateMiddle]
+    ]
     val get_kind: t -> ts_SyntaxKind_TemplateMiddle [@@js.get "kind"]
     val get_parent: t -> ([`U_n_194 of ts_TemplateLiteralTypeSpan [@js 194] | `U_n_228 of ts_TemplateSpan [@js 228]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val cast: t -> ts_TemplateLiteralLikeNode [@@js.cast]
@@ -5152,6 +6526,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralLikeNode | `Ts_TemplateTail]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateLiteralLikeNode | `Ts_TemplateTail]
+    ]
     val get_kind: t -> ts_SyntaxKind_TemplateTail [@@js.get "kind"]
     val get_parent: t -> ([`U_n_194 of ts_TemplateLiteralTypeSpan [@js 194] | `U_n_228 of ts_TemplateSpan [@js 228]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val cast: t -> ts_TemplateLiteralLikeNode [@@js.cast]
@@ -5163,6 +6543,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PseudoLiteralToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PseudoLiteralToken]
+    ]
   end
   module TemplateLiteralToken : sig
     type t = ts_TemplateLiteralToken
@@ -5171,6 +6557,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TemplateLiteralToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TemplateLiteralToken]
+    ]
   end
   module[@js.scope "TemplateExpression"] TemplateExpression : sig
     type t = ts_TemplateExpression
@@ -5179,6 +6571,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_TemplateExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_TemplateExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_TemplateExpression [@@js.get "kind"]
     val get_head: t -> ts_TemplateHead [@@js.get "head"]
     val get_templateSpans: t -> ts_TemplateSpan ts_NodeArray [@@js.get "templateSpans"]
@@ -5191,6 +6589,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TemplateLiteral]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TemplateLiteral]
+    ]
   end
   module[@js.scope "TemplateSpan"] TemplateSpan : sig
     type t = ts_TemplateSpan
@@ -5199,6 +6603,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateSpan]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_TemplateSpan]
+    ]
     val get_kind: t -> ts_SyntaxKind_TemplateSpan [@@js.get "kind"]
     val get_parent: t -> ts_TemplateExpression [@@js.get "parent"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -5212,6 +6622,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_JSDocContainer | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ParenthesizedExpression | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_JSDocContainer | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ParenthesizedExpression | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_ParenthesizedExpression [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val cast: t -> ts_PrimaryExpression [@@js.cast]
@@ -5224,6 +6640,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ArrayLiteralExpression | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ArrayLiteralExpression | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_ArrayLiteralExpression [@@js.get "kind"]
     val get_elements: t -> ts_Expression ts_NodeArray [@@js.get "elements"]
     val cast: t -> ts_PrimaryExpression [@@js.cast]
@@ -5235,6 +6657,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SpreadElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SpreadElement]
+    ]
     val get_kind: t -> ts_SyntaxKind_SpreadElement [@@js.get "kind"]
     val get_parent: t -> ([`U_n_199 of ts_ArrayLiteralExpression [@js 199] | `U_n_203 of ts_CallExpression [@js 203] | `U_n_204 of ts_NewExpression [@js 204]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -5253,6 +6681,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ObjectLiteralExpressionBase of 'T | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ObjectLiteralExpressionBase of 'T | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_properties: 'T t -> 'T ts_NodeArray [@@js.get "properties"]
     val cast: 'T t -> ts_PrimaryExpression [@@js.cast]
     val cast': 'T t -> ts_Declaration [@@js.cast]
@@ -5264,6 +6698,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ObjectLiteralExpression | `Ts_ObjectLiteralExpressionBase of ts_ObjectLiteralElementLike | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ObjectLiteralExpression | `Ts_ObjectLiteralExpressionBase of ts_ObjectLiteralElementLike | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_ObjectLiteralExpression [@@js.get "kind"]
     val cast: t -> ts_ObjectLiteralElementLike ts_ObjectLiteralExpressionBase [@@js.cast]
   end
@@ -5274,6 +6714,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EntityNameExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EntityNameExpression]
+    ]
   end
   module EntityNameOrEntityNameExpression : sig
     type t = ts_EntityNameOrEntityNameExpression
@@ -5282,6 +6728,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EntityNameOrEntityNameExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EntityNameOrEntityNameExpression]
+    ]
   end
   module AccessExpression : sig
     type t = ts_AccessExpression
@@ -5290,6 +6742,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AccessExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AccessExpression]
+    ]
   end
   module[@js.scope "PropertyAccessExpression"] PropertyAccessExpression : sig
     type t = ts_PropertyAccessExpression
@@ -5298,6 +6756,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_PropertyAccessExpression [@@js.get "kind"]
     val get_expression: t -> ts_LeftHandSideExpression [@@js.get "expression"]
     val get_questionDotToken: t -> ts_QuestionDotToken [@@js.get "questionDotToken"]
@@ -5312,6 +6776,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessChain | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessChain | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__optionalChainBrand: t -> any [@@js.get "_optionalChainBrand"]
     val set__optionalChainBrand: t -> any -> unit [@@js.set "_optionalChainBrand"]
     val get_name: t -> ([`U_n_78 of ts_Identifier [@js 78] | `U_n_79 of ts_PrivateIdentifier [@js 79]] [@js.union on_field "kind"]) [@@js.get "name"]
@@ -5324,6 +6794,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_SuperPropertyAccessExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_SuperPropertyAccessExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_expression: t -> ts_SuperExpression [@@js.get "expression"]
     val cast: t -> ts_PropertyAccessExpression [@@js.cast]
   end
@@ -5335,6 +6811,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessEntityNameExpression | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessEntityNameExpression | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__propertyAccessExpressionLikeQualifiedNameBrand: t -> any [@@js.get "_propertyAccessExpressionLikeQualifiedNameBrand"]
     val set__propertyAccessExpressionLikeQualifiedNameBrand: t -> any -> unit [@@js.set "_propertyAccessExpressionLikeQualifiedNameBrand"]
     val get_expression: t -> ts_EntityNameExpression [@@js.get "expression"]
@@ -5348,6 +6830,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ElementAccessExpression | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ElementAccessExpression | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_ElementAccessExpression [@@js.get "kind"]
     val get_expression: t -> ts_LeftHandSideExpression [@@js.get "expression"]
     val get_questionDotToken: t -> ts_QuestionDotToken [@@js.get "questionDotToken"]
@@ -5361,6 +6849,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ElementAccessChain | `Ts_ElementAccessExpression | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ElementAccessChain | `Ts_ElementAccessExpression | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__optionalChainBrand: t -> any [@@js.get "_optionalChainBrand"]
     val set__optionalChainBrand: t -> any -> unit [@@js.set "_optionalChainBrand"]
     val cast: t -> ts_ElementAccessExpression [@@js.cast]
@@ -5372,6 +6866,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ElementAccessExpression | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SuperElementAccessExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ElementAccessExpression | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SuperElementAccessExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_expression: t -> ts_SuperExpression [@@js.get "expression"]
     val cast: t -> ts_ElementAccessExpression [@@js.cast]
   end
@@ -5382,6 +6882,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SuperProperty]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SuperProperty]
+    ]
   end
   module[@js.scope "CallExpression"] CallExpression : sig
     type t = ts_CallExpression
@@ -5390,6 +6896,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CallExpression | `Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CallExpression | `Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_CallExpression [@@js.get "kind"]
     val get_expression: t -> ts_LeftHandSideExpression [@@js.get "expression"]
     val get_questionDotToken: t -> ts_QuestionDotToken [@@js.get "questionDotToken"]
@@ -5405,6 +6917,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CallChain | `Ts_CallExpression | `Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CallChain | `Ts_CallExpression | `Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__optionalChainBrand: t -> any [@@js.get "_optionalChainBrand"]
     val set__optionalChainBrand: t -> any -> unit [@@js.set "_optionalChainBrand"]
     val cast: t -> ts_CallExpression [@@js.cast]
@@ -5416,6 +6934,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_OptionalChain]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_OptionalChain]
+    ]
   end
   module[@js.scope "SuperCall"] SuperCall : sig
     type t = ts_SuperCall
@@ -5424,6 +6948,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CallExpression | `Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SuperCall | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CallExpression | `Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SuperCall | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_expression: t -> ts_SuperExpression [@@js.get "expression"]
     val cast: t -> ts_CallExpression [@@js.cast]
   end
@@ -5434,6 +6964,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CallExpression | `Ts_Declaration | `Ts_Expression | `Ts_ImportCall | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CallExpression | `Ts_Declaration | `Ts_Expression | `Ts_ImportCall | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_expression: t -> ts_ImportExpression [@@js.get "expression"]
     val cast: t -> ts_CallExpression [@@js.cast]
   end
@@ -5444,6 +6980,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ExpressionWithTypeArguments | `Ts_Node | `Ts_NodeWithTypeArguments | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ExpressionWithTypeArguments | `Ts_Node | `Ts_NodeWithTypeArguments | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_ExpressionWithTypeArguments [@@js.get "kind"]
     val get_parent: t -> ([`U_n_286 of ts_HeritageClause [@js 286] | `U_n_315 of ts_JSDocAugmentsTag [@js 315] | `U_n_316 of ts_JSDocImplementsTag [@js 316]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_expression: t -> ts_LeftHandSideExpression [@@js.get "expression"]
@@ -5456,6 +6998,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NewExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NewExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_NewExpression [@@js.get "kind"]
     val get_expression: t -> ts_LeftHandSideExpression [@@js.get "expression"]
     val get_typeArguments: t -> ts_TypeNode ts_NodeArray [@@js.get "typeArguments"]
@@ -5470,6 +7018,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TaggedTemplateExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TaggedTemplateExpression | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_TaggedTemplateExpression [@@js.get "kind"]
     val get_tag: t -> ts_LeftHandSideExpression [@@js.get "tag"]
     val get_typeArguments: t -> ts_TypeNode ts_NodeArray [@@js.get "typeArguments"]
@@ -5483,6 +7037,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CallLikeExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CallLikeExpression]
+    ]
   end
   module[@js.scope "AsExpression"] AsExpression : sig
     type t = ts_AsExpression
@@ -5491,6 +7051,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AsExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AsExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_AsExpression [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
@@ -5503,6 +7069,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeAssertion | `Ts_UnaryExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeAssertion | `Ts_UnaryExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_TypeAssertionExpression [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val get_expression: t -> ts_UnaryExpression [@@js.get "expression"]
@@ -5515,6 +7087,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssertionExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssertionExpression]
+    ]
   end
   module[@js.scope "NonNullExpression"] NonNullExpression : sig
     type t = ts_NonNullExpression
@@ -5523,6 +7101,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_NonNullExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_NonNullExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_NonNullExpression [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val cast: t -> ts_LeftHandSideExpression [@@js.cast]
@@ -5534,6 +7118,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_NonNullChain | `Ts_NonNullExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_Node | `Ts_NonNullChain | `Ts_NonNullExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get__optionalChainBrand: t -> any [@@js.get "_optionalChainBrand"]
     val set__optionalChainBrand: t -> any -> unit [@@js.set "_optionalChainBrand"]
     val cast: t -> ts_NonNullExpression [@@js.cast]
@@ -5545,6 +7135,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_MetaProperty | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_MetaProperty | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_MetaProperty [@@js.get "kind"]
     val get_keywordToken: t -> ((ts_SyntaxKind_ImportKeyword, ts_SyntaxKind_NewKeyword) union2, ([`ImportKeyword[@js 99] | `NewKeyword[@js 102]] [@js.enum])) or_enum [@@js.get "keywordToken"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
@@ -5557,6 +7153,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_JsxElement | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_JsxElement | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxElement [@@js.get "kind"]
     val get_openingElement: t -> ts_JsxOpeningElement [@@js.get "openingElement"]
     val get_children: t -> ts_JsxChild ts_NodeArray [@@js.get "children"]
@@ -5570,6 +7172,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JsxOpeningLikeElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JsxOpeningLikeElement]
+    ]
   end
   module JsxAttributeLike : sig
     type t = ts_JsxAttributeLike
@@ -5578,6 +7186,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JsxAttributeLike]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JsxAttributeLike]
+    ]
   end
   module JsxTagNameExpression : sig
     type t = ts_JsxTagNameExpression
@@ -5586,6 +7200,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JsxTagNameExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JsxTagNameExpression]
+    ]
   end
   module[@js.scope "JsxTagNamePropertyAccess"] JsxTagNamePropertyAccess : sig
     type t = ts_JsxTagNamePropertyAccess
@@ -5594,6 +7214,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_JsxTagNamePropertyAccess | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_JsxTagNamePropertyAccess | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PropertyAccessExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_expression: t -> ts_JsxTagNameExpression [@@js.get "expression"]
     val cast: t -> ts_PropertyAccessExpression [@@js.cast]
   end
@@ -5604,6 +7230,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Expression | `Ts_JsxAttributes | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ObjectLiteralExpressionBase of ts_JsxAttributeLike | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Expression | `Ts_JsxAttributes | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_ObjectLiteralExpressionBase of ts_JsxAttributeLike | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxAttributes [@@js.get "kind"]
     val get_parent: t -> ts_JsxOpeningLikeElement [@@js.get "parent"]
     val cast: t -> ts_JsxAttributeLike ts_ObjectLiteralExpressionBase [@@js.cast]
@@ -5615,6 +7247,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_JsxOpeningElement | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_JsxOpeningElement | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxOpeningElement [@@js.get "kind"]
     val get_parent: t -> ts_JsxElement [@@js.get "parent"]
     val get_tagName: t -> ts_JsxTagNameExpression [@@js.get "tagName"]
@@ -5629,6 +7267,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_JsxSelfClosingElement | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_JsxSelfClosingElement | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxSelfClosingElement [@@js.get "kind"]
     val get_tagName: t -> ts_JsxTagNameExpression [@@js.get "tagName"]
     val get_typeArguments: t -> ts_TypeNode ts_NodeArray [@@js.get "typeArguments"]
@@ -5642,6 +7286,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_JsxFragment | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_JsxFragment | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxFragment [@@js.get "kind"]
     val get_openingFragment: t -> ts_JsxOpeningFragment [@@js.get "openingFragment"]
     val get_children: t -> ts_JsxChild ts_NodeArray [@@js.get "children"]
@@ -5655,6 +7305,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_JsxOpeningFragment | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_JsxOpeningFragment | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxOpeningFragment [@@js.get "kind"]
     val get_parent: t -> ts_JsxFragment [@@js.get "parent"]
     val cast: t -> ts_Expression [@@js.cast]
@@ -5666,6 +7322,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_JsxClosingFragment | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_JsxClosingFragment | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxClosingFragment [@@js.get "kind"]
     val get_parent: t -> ts_JsxFragment [@@js.get "parent"]
     val cast: t -> ts_Expression [@@js.cast]
@@ -5677,6 +7339,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JsxAttribute | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JsxAttribute | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxAttribute [@@js.get "kind"]
     val get_parent: t -> ts_JsxAttributes [@@js.get "parent"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
@@ -5690,6 +7358,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JsxSpreadAttribute | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JsxSpreadAttribute | `Ts_NamedDeclaration | `Ts_Node | `Ts_ObjectLiteralElement | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxSpreadAttribute [@@js.get "kind"]
     val get_parent: t -> ts_JsxAttributes [@@js.get "parent"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -5702,6 +7376,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JsxClosingElement | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JsxClosingElement | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxClosingElement [@@js.get "kind"]
     val get_parent: t -> ts_JsxElement [@@js.get "parent"]
     val get_tagName: t -> ts_JsxTagNameExpression [@@js.get "tagName"]
@@ -5714,6 +7394,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_JsxExpression | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_JsxExpression | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxExpression [@@js.get "kind"]
     val get_parent: t -> ([`U_n_273 of ts_JsxElement [@js 273] | `U_n_280 of ts_JsxAttributeLike [@js 280] | `U_n_282 of ts_JsxAttributeLike [@js 282]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_dotDotDotToken: t -> ts_SyntaxKind_DotDotDotToken ts_Token [@@js.get "dotDotDotToken"]
@@ -5727,6 +7413,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JsxText | `Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JsxText | `Ts_LiteralLikeNode | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JsxText [@@js.get "kind"]
     val get_parent: t -> ts_JsxElement [@@js.get "parent"]
     val get_containsOnlyTriviaWhiteSpaces: t -> bool [@@js.get "containsOnlyTriviaWhiteSpaces"]
@@ -5739,6 +7431,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JsxChild]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JsxChild]
+    ]
   end
   module[@js.scope "Statement"] Statement : sig
     type t = ts_Statement
@@ -5747,6 +7445,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get__statementBrand: t -> any [@@js.get "_statementBrand"]
     val set__statementBrand: t -> any -> unit [@@js.set "_statementBrand"]
     val cast: t -> ts_Node [@@js.cast]
@@ -5758,6 +7462,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_NotEmittedStatement | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_NotEmittedStatement | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_NotEmittedStatement [@@js.get "kind"]
     val cast: t -> ts_Statement [@@js.cast]
   end
@@ -5769,6 +7479,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CommaListExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CommaListExpression | `Ts_Expression | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_CommaListExpression [@@js.get "kind"]
     val get_elements: t -> ts_Expression ts_NodeArray [@@js.get "elements"]
     val cast: t -> ts_Expression [@@js.cast]
@@ -5780,6 +7496,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EmptyStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EmptyStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_EmptyStatement [@@js.get "kind"]
     val cast: t -> ts_Statement [@@js.cast]
   end
@@ -5790,6 +7512,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DebuggerStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DebuggerStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_DebuggerStatement [@@js.get "kind"]
     val cast: t -> ts_Statement [@@js.cast]
   end
@@ -5800,6 +7528,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_MissingDeclaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_MissingDeclaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_MissingDeclaration [@@js.get "kind"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val cast: t -> ts_DeclarationStatement [@@js.cast]
@@ -5811,6 +7545,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BlockLike]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BlockLike]
+    ]
   end
   module[@js.scope "Block"] Block : sig
     type t = ts_Block
@@ -5819,6 +7559,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Block | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Block | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_Block [@@js.get "kind"]
     val get_statements: t -> ts_Statement ts_NodeArray [@@js.get "statements"]
     val cast: t -> ts_Statement [@@js.cast]
@@ -5830,6 +7576,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocContainer | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_VariableStatement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocContainer | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_VariableStatement]
+    ]
     val get_kind: t -> ts_SyntaxKind_VariableStatement [@@js.get "kind"]
     val get_declarationList: t -> ts_VariableDeclarationList [@@js.get "declarationList"]
     val cast: t -> ts_Statement [@@js.cast]
@@ -5842,6 +7594,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ExpressionStatement | `Ts_JSDocContainer | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ExpressionStatement | `Ts_JSDocContainer | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ExpressionStatement [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val cast: t -> ts_Statement [@@js.cast]
@@ -5854,6 +7612,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IfStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IfStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_IfStatement [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val get_thenStatement: t -> ts_Statement [@@js.get "thenStatement"]
@@ -5867,6 +7631,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_statement: t -> ts_Statement [@@js.get "statement"]
     val cast: t -> ts_Statement [@@js.cast]
   end
@@ -5877,6 +7647,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DoStatement | `Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DoStatement | `Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_DoStatement [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val cast: t -> ts_IterationStatement [@@js.cast]
@@ -5888,6 +7664,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_WhileStatement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_WhileStatement]
+    ]
     val get_kind: t -> ts_SyntaxKind_WhileStatement [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val cast: t -> ts_IterationStatement [@@js.cast]
@@ -5899,6 +7681,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ForInitializer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ForInitializer]
+    ]
   end
   module[@js.scope "ForStatement"] ForStatement : sig
     type t = ts_ForStatement
@@ -5907,6 +7695,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ForStatement | `Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ForStatement | `Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ForStatement [@@js.get "kind"]
     val get_initializer: t -> ts_ForInitializer [@@js.get "initializer"]
     val get_condition: t -> ts_Expression [@@js.get "condition"]
@@ -5920,6 +7714,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ForInOrOfStatement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ForInOrOfStatement]
+    ]
   end
   module[@js.scope "ForInStatement"] ForInStatement : sig
     type t = ts_ForInStatement
@@ -5928,6 +7728,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ForInStatement | `Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ForInStatement | `Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ForInStatement [@@js.get "kind"]
     val get_initializer: t -> ts_ForInitializer [@@js.get "initializer"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -5940,6 +7746,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ForOfStatement | `Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ForOfStatement | `Ts_IterationStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ForOfStatement [@@js.get "kind"]
     val get_awaitModifier: t -> ts_AwaitKeywordToken [@@js.get "awaitModifier"]
     val get_initializer: t -> ts_ForInitializer [@@js.get "initializer"]
@@ -5953,6 +7765,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BreakStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BreakStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_BreakStatement [@@js.get "kind"]
     val get_label: t -> ts_Identifier [@@js.get "label"]
     val cast: t -> ts_Statement [@@js.cast]
@@ -5964,6 +7782,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ContinueStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ContinueStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ContinueStatement [@@js.get "kind"]
     val get_label: t -> ts_Identifier [@@js.get "label"]
     val cast: t -> ts_Statement [@@js.cast]
@@ -5975,6 +7799,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BreakOrContinueStatement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BreakOrContinueStatement]
+    ]
   end
   module[@js.scope "ReturnStatement"] ReturnStatement : sig
     type t = ts_ReturnStatement
@@ -5983,6 +7813,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_ReturnStatement | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_ReturnStatement | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ReturnStatement [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val cast: t -> ts_Statement [@@js.cast]
@@ -5994,6 +7830,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_WithStatement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_WithStatement]
+    ]
     val get_kind: t -> ts_SyntaxKind_WithStatement [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val get_statement: t -> ts_Statement [@@js.get "statement"]
@@ -6006,6 +7848,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_SwitchStatement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_SwitchStatement]
+    ]
     val get_kind: t -> ts_SyntaxKind_SwitchStatement [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val get_caseBlock: t -> ts_CaseBlock [@@js.get "caseBlock"]
@@ -6020,6 +7868,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CaseBlock | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CaseBlock | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_CaseBlock [@@js.get "kind"]
     val get_parent: t -> ts_SwitchStatement [@@js.get "parent"]
     val get_clauses: t -> ts_CaseOrDefaultClause ts_NodeArray [@@js.get "clauses"]
@@ -6032,6 +7886,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CaseClause | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CaseClause | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_CaseClause [@@js.get "kind"]
     val get_parent: t -> ts_CaseBlock [@@js.get "parent"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -6045,6 +7905,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DefaultClause | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DefaultClause | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_DefaultClause [@@js.get "kind"]
     val get_parent: t -> ts_CaseBlock [@@js.get "parent"]
     val get_statements: t -> ts_Statement ts_NodeArray [@@js.get "statements"]
@@ -6057,6 +7923,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CaseOrDefaultClause]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CaseOrDefaultClause]
+    ]
   end
   module[@js.scope "LabeledStatement"] LabeledStatement : sig
     type t = ts_LabeledStatement
@@ -6065,6 +7937,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocContainer | `Ts_LabeledStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocContainer | `Ts_LabeledStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_LabeledStatement [@@js.get "kind"]
     val get_label: t -> ts_Identifier [@@js.get "label"]
     val get_statement: t -> ts_Statement [@@js.get "statement"]
@@ -6078,6 +7956,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_ThrowStatement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_ThrowStatement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ThrowStatement [@@js.get "kind"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
     val cast: t -> ts_Statement [@@js.cast]
@@ -6089,6 +7973,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_TryStatement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_TryStatement]
+    ]
     val get_kind: t -> ts_SyntaxKind_TryStatement [@@js.get "kind"]
     val get_tryBlock: t -> ts_Block [@@js.get "tryBlock"]
     val get_catchClause: t -> ts_CatchClause [@@js.get "catchClause"]
@@ -6102,6 +7992,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CatchClause | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CatchClause | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_CatchClause [@@js.get "kind"]
     val get_parent: t -> ts_TryStatement [@@js.get "parent"]
     val get_variableDeclaration: t -> ts_VariableDeclaration [@@js.get "variableDeclaration"]
@@ -6115,6 +8011,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ObjectTypeDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ObjectTypeDeclaration]
+    ]
   end
   module DeclarationWithTypeParameters : sig
     type t = ts_DeclarationWithTypeParameters
@@ -6123,6 +8025,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DeclarationWithTypeParameters]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DeclarationWithTypeParameters]
+    ]
   end
   module DeclarationWithTypeParameterChildren : sig
     type t = ts_DeclarationWithTypeParameterChildren
@@ -6131,6 +8039,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DeclarationWithTypeParameterChildren]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DeclarationWithTypeParameterChildren]
+    ]
   end
   module[@js.scope "ClassLikeDeclarationBase"] ClassLikeDeclarationBase : sig
     type t = ts_ClassLikeDeclarationBase
@@ -6139,6 +8053,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassLikeDeclarationBase | `Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassLikeDeclarationBase | `Ts_Declaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ((ts_SyntaxKind_ClassDeclaration, ts_SyntaxKind_ClassExpression) union2, ([`ClassDeclaration[@js 252] | `ClassExpression[@js 221]] [@js.enum])) or_enum [@@js.get "kind"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val get_typeParameters: t -> ts_TypeParameterDeclaration ts_NodeArray [@@js.get "typeParameters"]
@@ -6154,6 +8074,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassDeclaration | `Ts_ClassLikeDeclarationBase | `Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassDeclaration | `Ts_ClassLikeDeclarationBase | `Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ClassDeclaration [@@js.get "kind"]
     (** May be undefined in `export default class \{ ... \}`. *)
     val get_name: t -> ts_Identifier [@@js.get "name"]
@@ -6167,6 +8093,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassExpression | `Ts_ClassLikeDeclarationBase | `Ts_Declaration | `Ts_Expression | `Ts_JSDocContainer | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassExpression | `Ts_ClassLikeDeclarationBase | `Ts_Declaration | `Ts_Expression | `Ts_JSDocContainer | `Ts_LeftHandSideExpression | `Ts_MemberExpression | `Ts_NamedDeclaration | `Ts_Node | `Ts_PrimaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_ClassExpression [@@js.get "kind"]
     val cast: t -> ts_ClassLikeDeclarationBase [@@js.cast]
     val cast': t -> ts_PrimaryExpression [@@js.cast]
@@ -6178,6 +8110,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassLikeDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassLikeDeclaration]
+    ]
   end
   module[@js.scope "ClassElement"] ClassElement : sig
     type t = ts_ClassElement
@@ -6186,6 +8124,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassElement | `Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get__classElementBrand: t -> any [@@js.get "_classElementBrand"]
     val set__classElementBrand: t -> any -> unit [@@js.set "_classElementBrand"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -6198,6 +8142,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeElement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeElement]
+    ]
     val get__typeElementBrand: t -> any [@@js.get "_typeElementBrand"]
     val set__typeElementBrand: t -> any -> unit [@@js.set "_typeElementBrand"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -6211,6 +8161,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_InterfaceDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_InterfaceDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_InterfaceDeclaration [@@js.get "kind"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val get_typeParameters: t -> ts_TypeParameterDeclaration ts_NodeArray [@@js.get "typeParameters"]
@@ -6226,6 +8182,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_HeritageClause | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_HeritageClause | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_HeritageClause [@@js.get "kind"]
     val get_parent: t -> ([`U_n_221 of ts_ClassLikeDeclaration [@js 221] | `U_n_252 of ts_ClassLikeDeclaration [@js 252] | `U_n_253 of ts_InterfaceDeclaration [@js 253]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_token: t -> ((ts_SyntaxKind_ExtendsKeyword, ts_SyntaxKind_ImplementsKeyword) union2, ([`ExtendsKeyword[@js 93] | `ImplementsKeyword[@js 116]] [@js.enum])) or_enum [@@js.get "token"]
@@ -6239,6 +8201,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_TypeAliasDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement | `Ts_TypeAliasDeclaration]
+    ]
     val get_kind: t -> ts_SyntaxKind_TypeAliasDeclaration [@@js.get "kind"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val get_typeParameters: t -> ts_TypeParameterDeclaration ts_NodeArray [@@js.get "typeParameters"]
@@ -6253,6 +8221,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_EnumMember | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_EnumMember | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_EnumMember [@@js.get "kind"]
     val get_parent: t -> ts_EnumDeclaration [@@js.get "parent"]
     val get_name: t -> ts_PropertyName [@@js.get "name"]
@@ -6267,6 +8241,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_EnumDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_EnumDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_EnumDeclaration [@@js.get "kind"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val get_members: t -> ts_EnumMember ts_NodeArray [@@js.get "members"]
@@ -6280,6 +8260,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ModuleName]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ModuleName]
+    ]
   end
   module ModuleBody : sig
     type t = ts_ModuleBody
@@ -6288,6 +8274,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ModuleBody]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ModuleBody]
+    ]
   end
   module[@js.scope "ModuleDeclaration"] ModuleDeclaration : sig
     type t = ts_ModuleDeclaration
@@ -6296,6 +8288,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_ModuleDeclaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_ModuleDeclaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ModuleDeclaration [@@js.get "kind"]
     val get_parent: t -> ([`U_n_78 of ts_ModuleBody [@js 78] | `U_n_256 of ts_ModuleBody [@js 256] | `U_n_257 of ts_ModuleBody [@js 257] | `U_n_297 of ts_SourceFile [@js 297]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_name: t -> ts_ModuleName [@@js.get "name"]
@@ -6310,6 +8308,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NamespaceBody]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NamespaceBody]
+    ]
   end
   module[@js.scope "NamespaceDeclaration"] NamespaceDeclaration : sig
     type t = ts_NamespaceDeclaration
@@ -6318,6 +8322,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_ModuleDeclaration | `Ts_NamedDeclaration | `Ts_NamespaceDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_ModuleDeclaration | `Ts_NamedDeclaration | `Ts_NamespaceDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val get_body: t -> ts_NamespaceBody [@@js.get "body"]
     val cast: t -> ts_ModuleDeclaration [@@js.cast]
@@ -6329,6 +8339,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocNamespaceBody]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocNamespaceBody]
+    ]
   end
   module[@js.scope "JSDocNamespaceDeclaration"] JSDocNamespaceDeclaration : sig
     type t = ts_JSDocNamespaceDeclaration
@@ -6337,6 +8353,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_JSDocNamespaceDeclaration | `Ts_ModuleDeclaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_JSDocNamespaceDeclaration | `Ts_ModuleDeclaration | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val get_body: t -> ts_JSDocNamespaceBody [@@js.get "body"]
     val cast: t -> ts_ModuleDeclaration [@@js.cast]
@@ -6348,6 +8370,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ModuleBlock | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ModuleBlock | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ModuleBlock [@@js.get "kind"]
     val get_parent: t -> ts_ModuleDeclaration [@@js.get "parent"]
     val get_statements: t -> ts_Statement ts_NodeArray [@@js.get "statements"]
@@ -6361,6 +8389,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ModuleReference]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ModuleReference]
+    ]
   end
   (**
     One of:
@@ -6374,6 +8408,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_ImportEqualsDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_ImportEqualsDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ImportEqualsDeclaration [@@js.get "kind"]
     val get_parent: t -> ([`U_n_257 of ts_ModuleBlock [@js 257] | `U_n_297 of ts_SourceFile [@js 297]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
@@ -6389,6 +8429,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ExternalModuleReference | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ExternalModuleReference | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_ExternalModuleReference [@@js.get "kind"]
     val get_parent: t -> ts_ImportEqualsDeclaration [@@js.get "parent"]
     val get_expression: t -> ts_Expression [@@js.get "expression"]
@@ -6401,6 +8447,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ImportDeclaration | `Ts_JSDocContainer | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ImportDeclaration | `Ts_JSDocContainer | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ImportDeclaration [@@js.get "kind"]
     val get_parent: t -> ([`U_n_257 of ts_ModuleBlock [@js 257] | `U_n_297 of ts_SourceFile [@js 297]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_importClause: t -> ts_ImportClause [@@js.get "importClause"]
@@ -6416,6 +8468,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NamedImportBindings]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NamedImportBindings]
+    ]
   end
   module NamedExportBindings : sig
     type t = ts_NamedExportBindings
@@ -6424,6 +8482,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NamedExportBindings]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NamedExportBindings]
+    ]
   end
   module[@js.scope "ImportClause"] ImportClause : sig
     type t = ts_ImportClause
@@ -6432,6 +8496,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_ImportClause | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_ImportClause | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_ImportClause [@@js.get "kind"]
     val get_parent: t -> ts_ImportDeclaration [@@js.get "parent"]
     val get_isTypeOnly: t -> bool [@@js.get "isTypeOnly"]
@@ -6446,6 +8516,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_NamespaceImport | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_NamespaceImport | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_NamespaceImport [@@js.get "kind"]
     val get_parent: t -> ts_ImportClause [@@js.get "parent"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
@@ -6458,6 +8534,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_NamespaceExport | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_NamedDeclaration | `Ts_NamespaceExport | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_NamespaceExport [@@js.get "kind"]
     val get_parent: t -> ts_ExportDeclaration [@@js.get "parent"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
@@ -6470,6 +8552,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_NamespaceExportDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_NamespaceExportDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_NamespaceExportDeclaration [@@js.get "kind"]
     val get_name: t -> ts_Identifier [@@js.get "name"]
     val cast: t -> ts_DeclarationStatement [@@js.cast]
@@ -6482,6 +8570,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_ExportDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_ExportDeclaration | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ExportDeclaration [@@js.get "kind"]
     val get_parent: t -> ([`U_n_257 of ts_ModuleBlock [@js 257] | `U_n_297 of ts_SourceFile [@js 297]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_isTypeOnly: t -> bool [@@js.get "isTypeOnly"]
@@ -6499,6 +8593,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NamedImports | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NamedImports | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_NamedImports [@@js.get "kind"]
     val get_parent: t -> ts_ImportClause [@@js.get "parent"]
     val get_elements: t -> ts_ImportSpecifier ts_NodeArray [@@js.get "elements"]
@@ -6511,6 +8611,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NamedExports | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NamedExports | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_NamedExports [@@js.get "kind"]
     val get_parent: t -> ts_ExportDeclaration [@@js.get "parent"]
     val get_elements: t -> ts_ExportSpecifier ts_NodeArray [@@js.get "elements"]
@@ -6523,6 +8629,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NamedImportsOrExports]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NamedImportsOrExports]
+    ]
   end
   module[@js.scope "ImportSpecifier"] ImportSpecifier : sig
     type t = ts_ImportSpecifier
@@ -6531,6 +8643,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_ImportSpecifier | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_ImportSpecifier | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_ImportSpecifier [@@js.get "kind"]
     val get_parent: t -> ts_NamedImports [@@js.get "parent"]
     val get_propertyName: t -> ts_Identifier [@@js.get "propertyName"]
@@ -6544,6 +8662,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_ExportSpecifier | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_ExportSpecifier | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_ExportSpecifier [@@js.get "kind"]
     val get_parent: t -> ts_NamedExports [@@js.get "parent"]
     val get_propertyName: t -> ts_Identifier [@@js.get "propertyName"]
@@ -6557,6 +8681,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ImportOrExportSpecifier]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ImportOrExportSpecifier]
+    ]
   end
   module TypeOnlyCompatibleAliasDeclaration : sig
     type t = ts_TypeOnlyCompatibleAliasDeclaration
@@ -6565,6 +8695,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TypeOnlyCompatibleAliasDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TypeOnlyCompatibleAliasDeclaration]
+    ]
   end
   (**
     This is either an `export =` or an `export default` declaration.
@@ -6577,6 +8713,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_ExportAssignment | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_DeclarationStatement | `Ts_ExportAssignment | `Ts_JSDocContainer | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_kind: t -> ts_SyntaxKind_ExportAssignment [@@js.get "kind"]
     val get_parent: t -> ts_SourceFile [@@js.get "parent"]
     val get_isExportEquals: t -> bool [@@js.get "isExportEquals"]
@@ -6591,6 +8733,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FileReference | `Ts_TextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FileReference | `Ts_TextRange]
+    ]
     val get_fileName: t -> string [@@js.get "fileName"]
     val set_fileName: t -> string -> unit [@@js.set "fileName"]
     val cast: t -> ts_TextRange [@@js.cast]
@@ -6602,6 +8750,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CheckJsDirective | `Ts_TextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CheckJsDirective | `Ts_TextRange]
+    ]
     val get_enabled: t -> bool [@@js.get "enabled"]
     val set_enabled: t -> bool -> unit [@@js.set "enabled"]
     val cast: t -> ts_TextRange [@@js.cast]
@@ -6613,6 +8767,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CommentKind]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CommentKind]
+    ]
   end
   module[@js.scope "CommentRange"] CommentRange : sig
     type t = ts_CommentRange
@@ -6621,6 +8781,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CommentRange | `Ts_TextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CommentRange | `Ts_TextRange]
+    ]
     val get_hasTrailingNewLine: t -> bool [@@js.get "hasTrailingNewLine"]
     val set_hasTrailingNewLine: t -> bool -> unit [@@js.set "hasTrailingNewLine"]
     val get_kind: t -> ts_CommentKind [@@js.get "kind"]
@@ -6634,6 +8800,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CommentRange | `Ts_SynthesizedComment | `Ts_TextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CommentRange | `Ts_SynthesizedComment | `Ts_TextRange]
+    ]
     val get_text: t -> string [@@js.get "text"]
     val set_text: t -> string -> unit [@@js.set "text"]
     val get_pos: t -> ([`L_n_minus1[@js -1]] [@js.enum]) [@@js.get "pos"]
@@ -6651,6 +8823,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocTypeExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocTypeExpression | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocTypeExpression [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -6662,6 +8840,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocNameReference | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocNameReference | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocNameReference [@@js.get "kind"]
     val get_name: t -> ts_EntityName [@@js.get "name"]
     val cast: t -> ts_Node [@@js.cast]
@@ -6673,6 +8857,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get__jsDocTypeBrand: t -> any [@@js.get "_jsDocTypeBrand"]
     val set__jsDocTypeBrand: t -> any -> unit [@@js.set "_jsDocTypeBrand"]
     val cast: t -> ts_TypeNode [@@js.cast]
@@ -6684,6 +8874,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocAllType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocAllType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocAllType [@@js.get "kind"]
     val cast: t -> ts_JSDocType [@@js.cast]
   end
@@ -6694,6 +8890,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocType | `Ts_JSDocUnknownType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocType | `Ts_JSDocUnknownType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocUnknownType [@@js.get "kind"]
     val cast: t -> ts_JSDocType [@@js.cast]
   end
@@ -6704,6 +8906,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocNonNullableType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocNonNullableType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocNonNullableType [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_JSDocType [@@js.cast]
@@ -6715,6 +8923,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocNullableType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocNullableType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocNullableType [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_JSDocType [@@js.cast]
@@ -6726,6 +8940,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocOptionalType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocOptionalType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocOptionalType [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_JSDocType [@@js.cast]
@@ -6737,6 +8957,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_JSDocFunctionType | `Ts_JSDocType | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocContainer | `Ts_JSDocFunctionType | `Ts_JSDocType | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SignatureDeclarationBase | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocFunctionType [@@js.get "kind"]
     val cast: t -> ts_JSDocType [@@js.cast]
     val cast': t -> ts_SignatureDeclarationBase [@@js.cast]
@@ -6748,6 +8974,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocType | `Ts_JSDocVariadicType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocType | `Ts_JSDocVariadicType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocVariadicType [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_JSDocType [@@js.cast]
@@ -6759,6 +8991,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocNamepathType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocNamepathType | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocNamepathType [@@js.get "kind"]
     val get_type: t -> ts_TypeNode [@@js.get "type"]
     val cast: t -> ts_JSDocType [@@js.cast]
@@ -6770,6 +9008,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocTypeReferencingNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocTypeReferencingNode]
+    ]
   end
   module[@js.scope "JSDoc"] JSDoc : sig
     type t = ts_JSDoc
@@ -6778,6 +9022,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDoc | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDoc | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocComment [@@js.get "kind"]
     val get_parent: t -> ts_HasJSDoc [@@js.get "parent"]
     val get_tags: t -> ts_JSDocTag ts_NodeArray [@@js.get "tags"]
@@ -6791,6 +9041,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_parent: t -> ([`U_n_311 of ts_JSDoc [@js 311] | `U_n_312 of ts_JSDocTypeLiteral [@js 312]] [@js.union on_field "kind"]) [@@js.get "parent"]
     val get_tagName: t -> ts_Identifier [@@js.get "tagName"]
     val get_comment: t -> string [@@js.get "comment"]
@@ -6803,6 +9059,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocTag | `Ts_JSDocUnknownTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocTag | `Ts_JSDocUnknownTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocTag [@@js.get "kind"]
     val cast: t -> ts_JSDocTag [@@js.cast]
   end
@@ -6817,6 +9079,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocAugmentsTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocAugmentsTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocAugmentsTag [@@js.get "kind"]
     val get_class: t -> (ts_ExpressionWithTypeArguments, anonymous_interface_7) intersection2 [@@js.get "class"]
     val cast: t -> ts_JSDocTag [@@js.cast]
@@ -6828,6 +9096,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocImplementsTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocImplementsTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocImplementsTag [@@js.get "kind"]
     val get_class: t -> (ts_ExpressionWithTypeArguments, anonymous_interface_7) intersection2 [@@js.get "class"]
     val cast: t -> ts_JSDocTag [@@js.cast]
@@ -6839,6 +9113,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocAuthorTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocAuthorTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocAuthorTag [@@js.get "kind"]
     val cast: t -> ts_JSDocTag [@@js.cast]
   end
@@ -6849,6 +9129,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocDeprecatedTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocDeprecatedTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocDeprecatedTag [@@js.get "kind"]
     val set_kind: t -> ts_SyntaxKind_JSDocDeprecatedTag -> unit [@@js.set "kind"]
     val cast: t -> ts_JSDocTag [@@js.cast]
@@ -6860,6 +9146,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocClassTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocClassTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocClassTag [@@js.get "kind"]
     val cast: t -> ts_JSDocTag [@@js.cast]
   end
@@ -6870,6 +9162,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocPublicTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocPublicTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocPublicTag [@@js.get "kind"]
     val cast: t -> ts_JSDocTag [@@js.cast]
   end
@@ -6880,6 +9178,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocPrivateTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocPrivateTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocPrivateTag [@@js.get "kind"]
     val cast: t -> ts_JSDocTag [@@js.cast]
   end
@@ -6890,6 +9194,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocProtectedTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocProtectedTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocProtectedTag [@@js.get "kind"]
     val cast: t -> ts_JSDocTag [@@js.cast]
   end
@@ -6900,6 +9210,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocReadonlyTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocReadonlyTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocReadonlyTag [@@js.get "kind"]
     val cast: t -> ts_JSDocTag [@@js.cast]
   end
@@ -6910,6 +9226,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocEnumTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocEnumTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocEnumTag [@@js.get "kind"]
     val get_parent: t -> ts_JSDoc [@@js.get "parent"]
     val get_typeExpression: t -> ts_JSDocTypeExpression [@@js.get "typeExpression"]
@@ -6923,6 +9245,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocTag | `Ts_JSDocThisTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocTag | `Ts_JSDocThisTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocThisTag [@@js.get "kind"]
     val get_typeExpression: t -> ts_JSDocTypeExpression [@@js.get "typeExpression"]
     val cast: t -> ts_JSDocTag [@@js.cast]
@@ -6934,6 +9262,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocTag | `Ts_JSDocTemplateTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocTag | `Ts_JSDocTemplateTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocTemplateTag [@@js.get "kind"]
     val get_constraint: t -> ts_JSDocTypeExpression or_undefined [@@js.get "constraint"]
     val get_typeParameters: t -> ts_TypeParameterDeclaration ts_NodeArray [@@js.get "typeParameters"]
@@ -6946,6 +9280,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocSeeTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocSeeTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocSeeTag [@@js.get "kind"]
     val get_name: t -> ts_JSDocNameReference [@@js.get "name"]
     val cast: t -> ts_JSDocTag [@@js.cast]
@@ -6957,6 +9297,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocReturnTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocReturnTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocReturnTag [@@js.get "kind"]
     val get_typeExpression: t -> ts_JSDocTypeExpression [@@js.get "typeExpression"]
     val cast: t -> ts_JSDocTag [@@js.cast]
@@ -6968,6 +9314,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocTag | `Ts_JSDocTypeTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocTag | `Ts_JSDocTypeTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocTypeTag [@@js.get "kind"]
     val get_typeExpression: t -> ts_JSDocTypeExpression [@@js.get "typeExpression"]
     val cast: t -> ts_JSDocTag [@@js.cast]
@@ -6979,6 +9331,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocTag | `Ts_JSDocTypedefTag | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocTag | `Ts_JSDocTypedefTag | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocTypedefTag [@@js.get "kind"]
     val get_parent: t -> ts_JSDoc [@@js.get "parent"]
     val get_fullName: t -> ([`U_n_78 of ts_Identifier [@js 78] | `U_n_256 of ts_JSDocNamespaceDeclaration [@js 256]] [@js.union on_field "kind"]) [@@js.get "fullName"]
@@ -6994,6 +9352,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocCallbackTag | `Ts_JSDocTag | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocCallbackTag | `Ts_JSDocTag | `Ts_NamedDeclaration | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocCallbackTag [@@js.get "kind"]
     val get_parent: t -> ts_JSDoc [@@js.get "parent"]
     val get_fullName: t -> ([`U_n_78 of ts_Identifier [@js 78] | `U_n_256 of ts_JSDocNamespaceDeclaration [@js 256]] [@js.union on_field "kind"]) [@@js.get "fullName"]
@@ -7009,6 +9373,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocSignature | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocSignature | `Ts_JSDocType | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocSignature [@@js.get "kind"]
     val get_typeParameters: t -> ts_JSDocTemplateTag list [@@js.get "typeParameters"]
     val get_parameters: t -> ts_JSDocParameterTag list [@@js.get "parameters"]
@@ -7023,6 +9393,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocPropertyLikeTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocPropertyLikeTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_parent: t -> ts_JSDoc [@@js.get "parent"]
     val get_name: t -> ts_EntityName [@@js.get "name"]
     val get_typeExpression: t -> ts_JSDocTypeExpression [@@js.get "typeExpression"]
@@ -7039,6 +9415,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocPropertyLikeTag | `Ts_JSDocPropertyTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocPropertyLikeTag | `Ts_JSDocPropertyTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocPropertyTag [@@js.get "kind"]
     val cast: t -> ts_JSDocPropertyLikeTag [@@js.cast]
   end
@@ -7049,6 +9431,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JSDocParameterTag | `Ts_JSDocPropertyLikeTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JSDocParameterTag | `Ts_JSDocPropertyLikeTag | `Ts_JSDocTag | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocParameterTag [@@js.get "kind"]
     val cast: t -> ts_JSDocPropertyLikeTag [@@js.cast]
   end
@@ -7059,6 +9447,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocType | `Ts_JSDocTypeLiteral | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocType | `Ts_JSDocTypeLiteral | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_TypeNode]
+    ]
     val get_kind: t -> ts_SyntaxKind_JSDocTypeLiteral [@@js.get "kind"]
     val get_jsDocPropertyTags: t -> ts_JSDocPropertyLikeTag list [@@js.get "jsDocPropertyTags"]
     (** If true, then this type literal represents an *array* of its type. *)
@@ -7080,6 +9474,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowNode]
+    ]
   end
   module[@js.scope "FlowNodeBase"] FlowNodeBase : sig
     type t = ts_FlowNodeBase
@@ -7088,6 +9488,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowNodeBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowNodeBase]
+    ]
     val get_flags: t -> ts_FlowFlags [@@js.get "flags"]
     val set_flags: t -> ts_FlowFlags -> unit [@@js.set "flags"]
     val get_id: t -> float [@@js.get "id"]
@@ -7100,6 +9506,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowNodeBase | `Ts_FlowStart]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowNodeBase | `Ts_FlowStart]
+    ]
     val get_node: t -> ([`U_n_165 of ts_MethodDeclaration [@js 165] | `U_n_208 of ts_FunctionExpression [@js 208] | `U_n_209 of ts_ArrowFunction [@js 209]] [@js.union on_field "kind"]) [@@js.get "node"]
     val set_node: t -> ([`U_n_165 of ts_MethodDeclaration  | `U_n_208 of ts_FunctionExpression  | `U_n_209 of ts_ArrowFunction ] [@js.union on_field "kind"]) -> unit [@@js.set "node"]
     val cast: t -> ts_FlowNodeBase [@@js.cast]
@@ -7111,6 +9523,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowLabel | `Ts_FlowNodeBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowLabel | `Ts_FlowNodeBase]
+    ]
     val get_antecedents: t -> ts_FlowNode list or_undefined [@@js.get "antecedents"]
     val set_antecedents: t -> ts_FlowNode list or_undefined -> unit [@@js.set "antecedents"]
     val cast: t -> ts_FlowNodeBase [@@js.cast]
@@ -7122,6 +9540,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowAssignment | `Ts_FlowNodeBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowAssignment | `Ts_FlowNodeBase]
+    ]
     val get_node: t -> ([`U_n_0 of ts_Expression [@js 0] | `U_n_1 of ts_Expression [@js 1] | `U_n_2 of ts_Expression [@js 2] | `U_n_3 of ts_Expression [@js 3] | `U_n_4 of ts_Expression [@js 4] | `U_n_5 of ts_Expression [@js 5] | `U_n_6 of ts_Expression [@js 6] | `U_n_7 of ts_Expression [@js 7] | `U_n_8 of ts_Expression [@js 8] | `U_n_9 of ts_Expression [@js 9] | `U_n_10 of ts_Expression [@js 10] | `U_n_11 of ts_Expression [@js 11] | `U_n_12 of ts_Expression [@js 12] | `U_n_13 of ts_Expression [@js 13] | `U_n_14 of ts_Expression [@js 14] | `U_n_15 of ts_Expression [@js 15] | `U_n_16 of ts_Expression [@js 16] | `U_n_17 of ts_Expression [@js 17] | `U_n_18 of ts_Expression [@js 18] | `U_n_19 of ts_Expression [@js 19] | `U_n_20 of ts_Expression [@js 20] | `U_n_21 of ts_Expression [@js 21] | `U_n_22 of ts_Expression [@js 22] | `U_n_23 of ts_Expression [@js 23] | `U_n_24 of ts_Expression [@js 24] | `U_n_25 of ts_Expression [@js 25] | `U_n_26 of ts_Expression [@js 26] | `U_n_27 of ts_Expression [@js 27] | `U_n_28 of ts_Expression [@js 28] | `U_n_29 of ts_Expression [@js 29] | `U_n_30 of ts_Expression [@js 30] | `U_n_31 of ts_Expression [@js 31] | `U_n_32 of ts_Expression [@js 32] | `U_n_33 of ts_Expression [@js 33] | `U_n_34 of ts_Expression [@js 34] | `U_n_35 of ts_Expression [@js 35] | `U_n_36 of ts_Expression [@js 36] | `U_n_37 of ts_Expression [@js 37] | `U_n_38 of ts_Expression [@js 38] | `U_n_39 of ts_Expression [@js 39] | `U_n_40 of ts_Expression [@js 40] | `U_n_41 of ts_Expression [@js 41] | `U_n_42 of ts_Expression [@js 42] | `U_n_43 of ts_Expression [@js 43] | `U_n_44 of ts_Expression [@js 44] | `U_n_45 of ts_Expression [@js 45] | `U_n_46 of ts_Expression [@js 46] | `U_n_47 of ts_Expression [@js 47] | `U_n_48 of ts_Expression [@js 48] | `U_n_49 of ts_Expression [@js 49] | `U_n_50 of ts_Expression [@js 50] | `U_n_51 of ts_Expression [@js 51] | `U_n_52 of ts_Expression [@js 52] | `U_n_53 of ts_Expression [@js 53] | `U_n_54 of ts_Expression [@js 54] | `U_n_55 of ts_Expression [@js 55] | `U_n_56 of ts_Expression [@js 56] | `U_n_57 of ts_Expression [@js 57] | `U_n_58 of ts_Expression [@js 58] | `U_n_59 of ts_Expression [@js 59] | `U_n_60 of ts_Expression [@js 60] | `U_n_61 of ts_Expression [@js 61] | `U_n_62 of ts_Expression [@js 62] | `U_n_63 of ts_Expression [@js 63] | `U_n_64 of ts_Expression [@js 64] | `U_n_65 of ts_Expression [@js 65] | `U_n_66 of ts_Expression [@js 66] | `U_n_67 of ts_Expression [@js 67] | `U_n_68 of ts_Expression [@js 68] | `U_n_69 of ts_Expression [@js 69] | `U_n_70 of ts_Expression [@js 70] | `U_n_71 of ts_Expression [@js 71] | `U_n_72 of ts_Expression [@js 72] | `U_n_73 of ts_Expression [@js 73] | `U_n_74 of ts_Expression [@js 74] | `U_n_75 of ts_Expression [@js 75] | `U_n_76 of ts_Expression [@js 76] | `U_n_77 of ts_Expression [@js 77] | `U_n_78 of ts_Expression [@js 78] | `U_n_79 of ts_Expression [@js 79] | `U_n_80 of ts_Expression [@js 80] | `U_n_81 of ts_Expression [@js 81] | `U_n_82 of ts_Expression [@js 82] | `U_n_83 of ts_Expression [@js 83] | `U_n_84 of ts_Expression [@js 84] | `U_n_85 of ts_Expression [@js 85] | `U_n_86 of ts_Expression [@js 86] | `U_n_87 of ts_Expression [@js 87] | `U_n_88 of ts_Expression [@js 88] | `U_n_89 of ts_Expression [@js 89] | `U_n_90 of ts_Expression [@js 90] | `U_n_91 of ts_Expression [@js 91] | `U_n_92 of ts_Expression [@js 92] | `U_n_93 of ts_Expression [@js 93] | `U_n_94 of ts_Expression [@js 94] | `U_n_95 of ts_Expression [@js 95] | `U_n_96 of ts_Expression [@js 96] | `U_n_97 of ts_Expression [@js 97] | `U_n_98 of ts_Expression [@js 98] | `U_n_99 of ts_Expression [@js 99] | `U_n_100 of ts_Expression [@js 100] | `U_n_101 of ts_Expression [@js 101] | `U_n_102 of ts_Expression [@js 102] | `U_n_103 of ts_Expression [@js 103] | `U_n_104 of ts_Expression [@js 104] | `U_n_105 of ts_Expression [@js 105] | `U_n_106 of ts_Expression [@js 106] | `U_n_107 of ts_Expression [@js 107] | `U_n_108 of ts_Expression [@js 108] | `U_n_109 of ts_Expression [@js 109] | `U_n_110 of ts_Expression [@js 110] | `U_n_111 of ts_Expression [@js 111] | `U_n_112 of ts_Expression [@js 112] | `U_n_113 of ts_Expression [@js 113] | `U_n_114 of ts_Expression [@js 114] | `U_n_115 of ts_Expression [@js 115] | `U_n_116 of ts_Expression [@js 116] | `U_n_117 of ts_Expression [@js 117] | `U_n_118 of ts_Expression [@js 118] | `U_n_119 of ts_Expression [@js 119] | `U_n_120 of ts_Expression [@js 120] | `U_n_121 of ts_Expression [@js 121] | `U_n_122 of ts_Expression [@js 122] | `U_n_123 of ts_Expression [@js 123] | `U_n_124 of ts_Expression [@js 124] | `U_n_125 of ts_Expression [@js 125] | `U_n_126 of ts_Expression [@js 126] | `U_n_127 of ts_Expression [@js 127] | `U_n_128 of ts_Expression [@js 128] | `U_n_129 of ts_Expression [@js 129] | `U_n_130 of ts_Expression [@js 130] | `U_n_131 of ts_Expression [@js 131] | `U_n_132 of ts_Expression [@js 132] | `U_n_133 of ts_Expression [@js 133] | `U_n_134 of ts_Expression [@js 134] | `U_n_135 of ts_Expression [@js 135] | `U_n_136 of ts_Expression [@js 136] | `U_n_137 of ts_Expression [@js 137] | `U_n_138 of ts_Expression [@js 138] | `U_n_139 of ts_Expression [@js 139] | `U_n_140 of ts_Expression [@js 140] | `U_n_141 of ts_Expression [@js 141] | `U_n_142 of ts_Expression [@js 142] | `U_n_143 of ts_Expression [@js 143] | `U_n_144 of ts_Expression [@js 144] | `U_n_145 of ts_Expression [@js 145] | `U_n_146 of ts_Expression [@js 146] | `U_n_147 of ts_Expression [@js 147] | `U_n_148 of ts_Expression [@js 148] | `U_n_149 of ts_Expression [@js 149] | `U_n_150 of ts_Expression [@js 150] | `U_n_151 of ts_Expression [@js 151] | `U_n_152 of ts_Expression [@js 152] | `U_n_153 of ts_Expression [@js 153] | `U_n_154 of ts_Expression [@js 154] | `U_n_155 of ts_Expression [@js 155] | `U_n_156 of ts_Expression [@js 156] | `U_n_157 of ts_Expression [@js 157] | `U_n_158 of ts_Expression [@js 158] | `U_n_159 of ts_Expression [@js 159] | `U_n_160 of ts_Expression [@js 160] | `U_n_161 of ts_Expression [@js 161] | `U_n_162 of ts_Expression [@js 162] | `U_n_163 of ts_Expression [@js 163] | `U_n_164 of ts_Expression [@js 164] | `U_n_165 of ts_Expression [@js 165] | `U_n_166 of ts_Expression [@js 166] | `U_n_167 of ts_Expression [@js 167] | `U_n_168 of ts_Expression [@js 168] | `U_n_169 of ts_Expression [@js 169] | `U_n_170 of ts_Expression [@js 170] | `U_n_171 of ts_Expression [@js 171] | `U_n_172 of ts_Expression [@js 172] | `U_n_173 of ts_Expression [@js 173] | `U_n_174 of ts_Expression [@js 174] | `U_n_175 of ts_Expression [@js 175] | `U_n_176 of ts_Expression [@js 176] | `U_n_177 of ts_Expression [@js 177] | `U_n_178 of ts_Expression [@js 178] | `U_n_179 of ts_Expression [@js 179] | `U_n_180 of ts_Expression [@js 180] | `U_n_181 of ts_Expression [@js 181] | `U_n_182 of ts_Expression [@js 182] | `U_n_183 of ts_Expression [@js 183] | `U_n_184 of ts_Expression [@js 184] | `U_n_185 of ts_Expression [@js 185] | `U_n_186 of ts_Expression [@js 186] | `U_n_187 of ts_Expression [@js 187] | `U_n_188 of ts_Expression [@js 188] | `U_n_189 of ts_Expression [@js 189] | `U_n_190 of ts_Expression [@js 190] | `U_n_191 of ts_Expression [@js 191] | `U_n_192 of ts_Expression [@js 192] | `U_n_193 of ts_Expression [@js 193] | `U_n_194 of ts_Expression [@js 194] | `U_n_195 of ts_Expression [@js 195] | `U_n_196 of ts_Expression [@js 196] | `U_n_197 of ts_Expression [@js 197] | `U_n_198 of (ts_Expression, ts_BindingElement) union2 [@js 198] | `U_n_199 of ts_Expression [@js 199] | `U_n_200 of ts_Expression [@js 200] | `U_n_201 of ts_Expression [@js 201] | `U_n_202 of ts_Expression [@js 202] | `U_n_203 of ts_Expression [@js 203] | `U_n_204 of ts_Expression [@js 204] | `U_n_205 of ts_Expression [@js 205] | `U_n_206 of ts_Expression [@js 206] | `U_n_207 of ts_Expression [@js 207] | `U_n_208 of ts_Expression [@js 208] | `U_n_209 of ts_Expression [@js 209] | `U_n_210 of ts_Expression [@js 210] | `U_n_211 of ts_Expression [@js 211] | `U_n_212 of ts_Expression [@js 212] | `U_n_213 of ts_Expression [@js 213] | `U_n_214 of ts_Expression [@js 214] | `U_n_215 of ts_Expression [@js 215] | `U_n_216 of ts_Expression [@js 216] | `U_n_217 of ts_Expression [@js 217] | `U_n_218 of ts_Expression [@js 218] | `U_n_219 of ts_Expression [@js 219] | `U_n_220 of ts_Expression [@js 220] | `U_n_221 of ts_Expression [@js 221] | `U_n_222 of ts_Expression [@js 222] | `U_n_223 of ts_Expression [@js 223] | `U_n_224 of ts_Expression [@js 224] | `U_n_225 of ts_Expression [@js 225] | `U_n_226 of ts_Expression [@js 226] | `U_n_227 of ts_Expression [@js 227] | `U_n_228 of ts_Expression [@js 228] | `U_n_229 of ts_Expression [@js 229] | `U_n_230 of ts_Expression [@js 230] | `U_n_231 of ts_Expression [@js 231] | `U_n_232 of ts_Expression [@js 232] | `U_n_233 of ts_Expression [@js 233] | `U_n_234 of ts_Expression [@js 234] | `U_n_235 of ts_Expression [@js 235] | `U_n_236 of ts_Expression [@js 236] | `U_n_237 of ts_Expression [@js 237] | `U_n_238 of ts_Expression [@js 238] | `U_n_239 of ts_Expression [@js 239] | `U_n_240 of ts_Expression [@js 240] | `U_n_241 of ts_Expression [@js 241] | `U_n_242 of ts_Expression [@js 242] | `U_n_243 of ts_Expression [@js 243] | `U_n_244 of ts_Expression [@js 244] | `U_n_245 of ts_Expression [@js 245] | `U_n_246 of ts_Expression [@js 246] | `U_n_247 of ts_Expression [@js 247] | `U_n_248 of ts_Expression [@js 248] | `U_n_249 of (ts_Expression, ts_VariableDeclaration) union2 [@js 249] | `U_n_250 of ts_Expression [@js 250] | `U_n_251 of ts_Expression [@js 251] | `U_n_252 of ts_Expression [@js 252] | `U_n_253 of ts_Expression [@js 253] | `U_n_254 of ts_Expression [@js 254] | `U_n_255 of ts_Expression [@js 255] | `U_n_256 of ts_Expression [@js 256] | `U_n_257 of ts_Expression [@js 257] | `U_n_258 of ts_Expression [@js 258] | `U_n_259 of ts_Expression [@js 259] | `U_n_260 of ts_Expression [@js 260] | `U_n_261 of ts_Expression [@js 261] | `U_n_262 of ts_Expression [@js 262] | `U_n_263 of ts_Expression [@js 263] | `U_n_264 of ts_Expression [@js 264] | `U_n_265 of ts_Expression [@js 265] | `U_n_266 of ts_Expression [@js 266] | `U_n_267 of ts_Expression [@js 267] | `U_n_268 of ts_Expression [@js 268] | `U_n_269 of ts_Expression [@js 269] | `U_n_270 of ts_Expression [@js 270] | `U_n_271 of ts_Expression [@js 271] | `U_n_272 of ts_Expression [@js 272] | `U_n_273 of ts_Expression [@js 273] | `U_n_274 of ts_Expression [@js 274] | `U_n_275 of ts_Expression [@js 275] | `U_n_276 of ts_Expression [@js 276] | `U_n_277 of ts_Expression [@js 277] | `U_n_278 of ts_Expression [@js 278] | `U_n_279 of ts_Expression [@js 279] | `U_n_280 of ts_Expression [@js 280] | `U_n_281 of ts_Expression [@js 281] | `U_n_282 of ts_Expression [@js 282] | `U_n_283 of ts_Expression [@js 283] | `U_n_284 of ts_Expression [@js 284] | `U_n_285 of ts_Expression [@js 285] | `U_n_286 of ts_Expression [@js 286] | `U_n_287 of ts_Expression [@js 287] | `U_n_288 of ts_Expression [@js 288] | `U_n_289 of ts_Expression [@js 289] | `U_n_290 of ts_Expression [@js 290] | `U_n_291 of ts_Expression [@js 291] | `U_n_292 of ts_Expression [@js 292] | `U_n_293 of ts_Expression [@js 293] | `U_n_294 of ts_Expression [@js 294] | `U_n_295 of ts_Expression [@js 295] | `U_n_296 of ts_Expression [@js 296] | `U_n_297 of ts_Expression [@js 297] | `U_n_298 of ts_Expression [@js 298] | `U_n_299 of ts_Expression [@js 299] | `U_n_300 of ts_Expression [@js 300] | `U_n_301 of ts_Expression [@js 301] | `U_n_302 of ts_Expression [@js 302] | `U_n_303 of ts_Expression [@js 303] | `U_n_304 of ts_Expression [@js 304] | `U_n_305 of ts_Expression [@js 305] | `U_n_306 of ts_Expression [@js 306] | `U_n_307 of ts_Expression [@js 307] | `U_n_308 of ts_Expression [@js 308] | `U_n_309 of ts_Expression [@js 309] | `U_n_310 of ts_Expression [@js 310] | `U_n_311 of ts_Expression [@js 311] | `U_n_312 of ts_Expression [@js 312] | `U_n_313 of ts_Expression [@js 313] | `U_n_314 of ts_Expression [@js 314] | `U_n_315 of ts_Expression [@js 315] | `U_n_316 of ts_Expression [@js 316] | `U_n_317 of ts_Expression [@js 317] | `U_n_318 of ts_Expression [@js 318] | `U_n_319 of ts_Expression [@js 319] | `U_n_320 of ts_Expression [@js 320] | `U_n_321 of ts_Expression [@js 321] | `U_n_322 of ts_Expression [@js 322] | `U_n_323 of ts_Expression [@js 323] | `U_n_324 of ts_Expression [@js 324] | `U_n_325 of ts_Expression [@js 325] | `U_n_326 of ts_Expression [@js 326] | `U_n_327 of ts_Expression [@js 327] | `U_n_328 of ts_Expression [@js 328] | `U_n_329 of ts_Expression [@js 329] | `U_n_330 of ts_Expression [@js 330] | `U_n_331 of ts_Expression [@js 331] | `U_n_332 of ts_Expression [@js 332] | `U_n_333 of ts_Expression [@js 333] | `U_n_334 of ts_Expression [@js 334] | `U_n_335 of ts_Expression [@js 335] | `U_n_336 of ts_Expression [@js 336] | `U_n_337 of ts_Expression [@js 337] | `U_n_338 of ts_Expression [@js 338] | `U_n_339 of ts_Expression [@js 339] | `U_n_340 of ts_Expression [@js 340] | `U_n_341 of ts_Expression [@js 341]] [@js.union on_field "kind"]) [@@js.get "node"]
     val set_node: t -> ([`U_n_0 of ts_Expression  | `U_n_1 of ts_Expression  | `U_n_2 of ts_Expression  | `U_n_3 of ts_Expression  | `U_n_4 of ts_Expression  | `U_n_5 of ts_Expression  | `U_n_6 of ts_Expression  | `U_n_7 of ts_Expression  | `U_n_8 of ts_Expression  | `U_n_9 of ts_Expression  | `U_n_10 of ts_Expression  | `U_n_11 of ts_Expression  | `U_n_12 of ts_Expression  | `U_n_13 of ts_Expression  | `U_n_14 of ts_Expression  | `U_n_15 of ts_Expression  | `U_n_16 of ts_Expression  | `U_n_17 of ts_Expression  | `U_n_18 of ts_Expression  | `U_n_19 of ts_Expression  | `U_n_20 of ts_Expression  | `U_n_21 of ts_Expression  | `U_n_22 of ts_Expression  | `U_n_23 of ts_Expression  | `U_n_24 of ts_Expression  | `U_n_25 of ts_Expression  | `U_n_26 of ts_Expression  | `U_n_27 of ts_Expression  | `U_n_28 of ts_Expression  | `U_n_29 of ts_Expression  | `U_n_30 of ts_Expression  | `U_n_31 of ts_Expression  | `U_n_32 of ts_Expression  | `U_n_33 of ts_Expression  | `U_n_34 of ts_Expression  | `U_n_35 of ts_Expression  | `U_n_36 of ts_Expression  | `U_n_37 of ts_Expression  | `U_n_38 of ts_Expression  | `U_n_39 of ts_Expression  | `U_n_40 of ts_Expression  | `U_n_41 of ts_Expression  | `U_n_42 of ts_Expression  | `U_n_43 of ts_Expression  | `U_n_44 of ts_Expression  | `U_n_45 of ts_Expression  | `U_n_46 of ts_Expression  | `U_n_47 of ts_Expression  | `U_n_48 of ts_Expression  | `U_n_49 of ts_Expression  | `U_n_50 of ts_Expression  | `U_n_51 of ts_Expression  | `U_n_52 of ts_Expression  | `U_n_53 of ts_Expression  | `U_n_54 of ts_Expression  | `U_n_55 of ts_Expression  | `U_n_56 of ts_Expression  | `U_n_57 of ts_Expression  | `U_n_58 of ts_Expression  | `U_n_59 of ts_Expression  | `U_n_60 of ts_Expression  | `U_n_61 of ts_Expression  | `U_n_62 of ts_Expression  | `U_n_63 of ts_Expression  | `U_n_64 of ts_Expression  | `U_n_65 of ts_Expression  | `U_n_66 of ts_Expression  | `U_n_67 of ts_Expression  | `U_n_68 of ts_Expression  | `U_n_69 of ts_Expression  | `U_n_70 of ts_Expression  | `U_n_71 of ts_Expression  | `U_n_72 of ts_Expression  | `U_n_73 of ts_Expression  | `U_n_74 of ts_Expression  | `U_n_75 of ts_Expression  | `U_n_76 of ts_Expression  | `U_n_77 of ts_Expression  | `U_n_78 of ts_Expression  | `U_n_79 of ts_Expression  | `U_n_80 of ts_Expression  | `U_n_81 of ts_Expression  | `U_n_82 of ts_Expression  | `U_n_83 of ts_Expression  | `U_n_84 of ts_Expression  | `U_n_85 of ts_Expression  | `U_n_86 of ts_Expression  | `U_n_87 of ts_Expression  | `U_n_88 of ts_Expression  | `U_n_89 of ts_Expression  | `U_n_90 of ts_Expression  | `U_n_91 of ts_Expression  | `U_n_92 of ts_Expression  | `U_n_93 of ts_Expression  | `U_n_94 of ts_Expression  | `U_n_95 of ts_Expression  | `U_n_96 of ts_Expression  | `U_n_97 of ts_Expression  | `U_n_98 of ts_Expression  | `U_n_99 of ts_Expression  | `U_n_100 of ts_Expression  | `U_n_101 of ts_Expression  | `U_n_102 of ts_Expression  | `U_n_103 of ts_Expression  | `U_n_104 of ts_Expression  | `U_n_105 of ts_Expression  | `U_n_106 of ts_Expression  | `U_n_107 of ts_Expression  | `U_n_108 of ts_Expression  | `U_n_109 of ts_Expression  | `U_n_110 of ts_Expression  | `U_n_111 of ts_Expression  | `U_n_112 of ts_Expression  | `U_n_113 of ts_Expression  | `U_n_114 of ts_Expression  | `U_n_115 of ts_Expression  | `U_n_116 of ts_Expression  | `U_n_117 of ts_Expression  | `U_n_118 of ts_Expression  | `U_n_119 of ts_Expression  | `U_n_120 of ts_Expression  | `U_n_121 of ts_Expression  | `U_n_122 of ts_Expression  | `U_n_123 of ts_Expression  | `U_n_124 of ts_Expression  | `U_n_125 of ts_Expression  | `U_n_126 of ts_Expression  | `U_n_127 of ts_Expression  | `U_n_128 of ts_Expression  | `U_n_129 of ts_Expression  | `U_n_130 of ts_Expression  | `U_n_131 of ts_Expression  | `U_n_132 of ts_Expression  | `U_n_133 of ts_Expression  | `U_n_134 of ts_Expression  | `U_n_135 of ts_Expression  | `U_n_136 of ts_Expression  | `U_n_137 of ts_Expression  | `U_n_138 of ts_Expression  | `U_n_139 of ts_Expression  | `U_n_140 of ts_Expression  | `U_n_141 of ts_Expression  | `U_n_142 of ts_Expression  | `U_n_143 of ts_Expression  | `U_n_144 of ts_Expression  | `U_n_145 of ts_Expression  | `U_n_146 of ts_Expression  | `U_n_147 of ts_Expression  | `U_n_148 of ts_Expression  | `U_n_149 of ts_Expression  | `U_n_150 of ts_Expression  | `U_n_151 of ts_Expression  | `U_n_152 of ts_Expression  | `U_n_153 of ts_Expression  | `U_n_154 of ts_Expression  | `U_n_155 of ts_Expression  | `U_n_156 of ts_Expression  | `U_n_157 of ts_Expression  | `U_n_158 of ts_Expression  | `U_n_159 of ts_Expression  | `U_n_160 of ts_Expression  | `U_n_161 of ts_Expression  | `U_n_162 of ts_Expression  | `U_n_163 of ts_Expression  | `U_n_164 of ts_Expression  | `U_n_165 of ts_Expression  | `U_n_166 of ts_Expression  | `U_n_167 of ts_Expression  | `U_n_168 of ts_Expression  | `U_n_169 of ts_Expression  | `U_n_170 of ts_Expression  | `U_n_171 of ts_Expression  | `U_n_172 of ts_Expression  | `U_n_173 of ts_Expression  | `U_n_174 of ts_Expression  | `U_n_175 of ts_Expression  | `U_n_176 of ts_Expression  | `U_n_177 of ts_Expression  | `U_n_178 of ts_Expression  | `U_n_179 of ts_Expression  | `U_n_180 of ts_Expression  | `U_n_181 of ts_Expression  | `U_n_182 of ts_Expression  | `U_n_183 of ts_Expression  | `U_n_184 of ts_Expression  | `U_n_185 of ts_Expression  | `U_n_186 of ts_Expression  | `U_n_187 of ts_Expression  | `U_n_188 of ts_Expression  | `U_n_189 of ts_Expression  | `U_n_190 of ts_Expression  | `U_n_191 of ts_Expression  | `U_n_192 of ts_Expression  | `U_n_193 of ts_Expression  | `U_n_194 of ts_Expression  | `U_n_195 of ts_Expression  | `U_n_196 of ts_Expression  | `U_n_197 of ts_Expression  | `U_n_198 of (ts_Expression, ts_BindingElement) union2  | `U_n_199 of ts_Expression  | `U_n_200 of ts_Expression  | `U_n_201 of ts_Expression  | `U_n_202 of ts_Expression  | `U_n_203 of ts_Expression  | `U_n_204 of ts_Expression  | `U_n_205 of ts_Expression  | `U_n_206 of ts_Expression  | `U_n_207 of ts_Expression  | `U_n_208 of ts_Expression  | `U_n_209 of ts_Expression  | `U_n_210 of ts_Expression  | `U_n_211 of ts_Expression  | `U_n_212 of ts_Expression  | `U_n_213 of ts_Expression  | `U_n_214 of ts_Expression  | `U_n_215 of ts_Expression  | `U_n_216 of ts_Expression  | `U_n_217 of ts_Expression  | `U_n_218 of ts_Expression  | `U_n_219 of ts_Expression  | `U_n_220 of ts_Expression  | `U_n_221 of ts_Expression  | `U_n_222 of ts_Expression  | `U_n_223 of ts_Expression  | `U_n_224 of ts_Expression  | `U_n_225 of ts_Expression  | `U_n_226 of ts_Expression  | `U_n_227 of ts_Expression  | `U_n_228 of ts_Expression  | `U_n_229 of ts_Expression  | `U_n_230 of ts_Expression  | `U_n_231 of ts_Expression  | `U_n_232 of ts_Expression  | `U_n_233 of ts_Expression  | `U_n_234 of ts_Expression  | `U_n_235 of ts_Expression  | `U_n_236 of ts_Expression  | `U_n_237 of ts_Expression  | `U_n_238 of ts_Expression  | `U_n_239 of ts_Expression  | `U_n_240 of ts_Expression  | `U_n_241 of ts_Expression  | `U_n_242 of ts_Expression  | `U_n_243 of ts_Expression  | `U_n_244 of ts_Expression  | `U_n_245 of ts_Expression  | `U_n_246 of ts_Expression  | `U_n_247 of ts_Expression  | `U_n_248 of ts_Expression  | `U_n_249 of (ts_Expression, ts_VariableDeclaration) union2  | `U_n_250 of ts_Expression  | `U_n_251 of ts_Expression  | `U_n_252 of ts_Expression  | `U_n_253 of ts_Expression  | `U_n_254 of ts_Expression  | `U_n_255 of ts_Expression  | `U_n_256 of ts_Expression  | `U_n_257 of ts_Expression  | `U_n_258 of ts_Expression  | `U_n_259 of ts_Expression  | `U_n_260 of ts_Expression  | `U_n_261 of ts_Expression  | `U_n_262 of ts_Expression  | `U_n_263 of ts_Expression  | `U_n_264 of ts_Expression  | `U_n_265 of ts_Expression  | `U_n_266 of ts_Expression  | `U_n_267 of ts_Expression  | `U_n_268 of ts_Expression  | `U_n_269 of ts_Expression  | `U_n_270 of ts_Expression  | `U_n_271 of ts_Expression  | `U_n_272 of ts_Expression  | `U_n_273 of ts_Expression  | `U_n_274 of ts_Expression  | `U_n_275 of ts_Expression  | `U_n_276 of ts_Expression  | `U_n_277 of ts_Expression  | `U_n_278 of ts_Expression  | `U_n_279 of ts_Expression  | `U_n_280 of ts_Expression  | `U_n_281 of ts_Expression  | `U_n_282 of ts_Expression  | `U_n_283 of ts_Expression  | `U_n_284 of ts_Expression  | `U_n_285 of ts_Expression  | `U_n_286 of ts_Expression  | `U_n_287 of ts_Expression  | `U_n_288 of ts_Expression  | `U_n_289 of ts_Expression  | `U_n_290 of ts_Expression  | `U_n_291 of ts_Expression  | `U_n_292 of ts_Expression  | `U_n_293 of ts_Expression  | `U_n_294 of ts_Expression  | `U_n_295 of ts_Expression  | `U_n_296 of ts_Expression  | `U_n_297 of ts_Expression  | `U_n_298 of ts_Expression  | `U_n_299 of ts_Expression  | `U_n_300 of ts_Expression  | `U_n_301 of ts_Expression  | `U_n_302 of ts_Expression  | `U_n_303 of ts_Expression  | `U_n_304 of ts_Expression  | `U_n_305 of ts_Expression  | `U_n_306 of ts_Expression  | `U_n_307 of ts_Expression  | `U_n_308 of ts_Expression  | `U_n_309 of ts_Expression  | `U_n_310 of ts_Expression  | `U_n_311 of ts_Expression  | `U_n_312 of ts_Expression  | `U_n_313 of ts_Expression  | `U_n_314 of ts_Expression  | `U_n_315 of ts_Expression  | `U_n_316 of ts_Expression  | `U_n_317 of ts_Expression  | `U_n_318 of ts_Expression  | `U_n_319 of ts_Expression  | `U_n_320 of ts_Expression  | `U_n_321 of ts_Expression  | `U_n_322 of ts_Expression  | `U_n_323 of ts_Expression  | `U_n_324 of ts_Expression  | `U_n_325 of ts_Expression  | `U_n_326 of ts_Expression  | `U_n_327 of ts_Expression  | `U_n_328 of ts_Expression  | `U_n_329 of ts_Expression  | `U_n_330 of ts_Expression  | `U_n_331 of ts_Expression  | `U_n_332 of ts_Expression  | `U_n_333 of ts_Expression  | `U_n_334 of ts_Expression  | `U_n_335 of ts_Expression  | `U_n_336 of ts_Expression  | `U_n_337 of ts_Expression  | `U_n_338 of ts_Expression  | `U_n_339 of ts_Expression  | `U_n_340 of ts_Expression  | `U_n_341 of ts_Expression ] [@js.union on_field "kind"]) -> unit [@@js.set "node"]
     val get_antecedent: t -> ts_FlowNode [@@js.get "antecedent"]
@@ -7135,6 +9559,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowCall | `Ts_FlowNodeBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowCall | `Ts_FlowNodeBase]
+    ]
     val get_node: t -> ts_CallExpression [@@js.get "node"]
     val set_node: t -> ts_CallExpression -> unit [@@js.set "node"]
     val get_antecedent: t -> ts_FlowNode [@@js.get "antecedent"]
@@ -7148,6 +9578,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowCondition | `Ts_FlowNodeBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowCondition | `Ts_FlowNodeBase]
+    ]
     val get_node: t -> ts_Expression [@@js.get "node"]
     val set_node: t -> ts_Expression -> unit [@@js.set "node"]
     val get_antecedent: t -> ts_FlowNode [@@js.get "antecedent"]
@@ -7161,6 +9597,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowNodeBase | `Ts_FlowSwitchClause]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowNodeBase | `Ts_FlowSwitchClause]
+    ]
     val get_switchStatement: t -> ts_SwitchStatement [@@js.get "switchStatement"]
     val set_switchStatement: t -> ts_SwitchStatement -> unit [@@js.set "switchStatement"]
     val get_clauseStart: t -> float [@@js.get "clauseStart"]
@@ -7178,6 +9620,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowArrayMutation | `Ts_FlowNodeBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowArrayMutation | `Ts_FlowNodeBase]
+    ]
     val get_node: t -> ([`U_n_203 of ts_CallExpression [@js 203] | `U_n_216 of ts_BinaryExpression [@js 216]] [@js.union on_field "kind"]) [@@js.get "node"]
     val set_node: t -> ([`U_n_203 of ts_CallExpression  | `U_n_216 of ts_BinaryExpression ] [@js.union on_field "kind"]) -> unit [@@js.set "node"]
     val get_antecedent: t -> ts_FlowNode [@@js.get "antecedent"]
@@ -7191,6 +9639,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowNodeBase | `Ts_FlowReduceLabel]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowNodeBase | `Ts_FlowReduceLabel]
+    ]
     val get_target: t -> ts_FlowLabel [@@js.get "target"]
     val set_target: t -> ts_FlowLabel -> unit [@@js.set "target"]
     val get_antecedents: t -> ts_FlowNode list [@@js.get "antecedents"]
@@ -7206,6 +9660,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FlowType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FlowType]
+    ]
   end
   module[@js.scope "IncompleteType"] IncompleteType : sig
     type t = ts_IncompleteType
@@ -7214,6 +9674,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IncompleteType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IncompleteType]
+    ]
     val get_flags: t -> ts_TypeFlags [@@js.get "flags"]
     val set_flags: t -> ts_TypeFlags -> unit [@@js.set "flags"]
     val get_type: t -> ts_Type [@@js.get "type"]
@@ -7226,6 +9692,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AmdDependency]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AmdDependency]
+    ]
     val get_path: t -> string [@@js.get "path"]
     val set_path: t -> string -> unit [@@js.set "path"]
     val get_name: t -> string [@@js.get "name"]
@@ -7238,6 +9710,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SourceFile]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SourceFile]
+    ]
     val getLineAndCharacterOfPosition: t -> pos:float -> ts_LineAndCharacter [@@js.call "getLineAndCharacterOfPosition"]
     val getLineEndOfPosition: t -> pos:float -> float [@@js.call "getLineEndOfPosition"]
     val getLineStarts: t -> float list [@@js.call "getLineStarts"]
@@ -7301,6 +9779,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Bundle | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Bundle | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_Bundle [@@js.get "kind"]
     val get_prepends: t -> ([`U_n_299 of ts_UnparsedSource [@js 299] | `U_n_300 of ts_InputFiles [@js 300]] [@js.union on_field "kind"]) list [@@js.get "prepends"]
     val get_sourceFiles: t -> ts_SourceFile list [@@js.get "sourceFiles"]
@@ -7313,6 +9797,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InputFiles | `Ts_Node | `Ts_ReadonlyTextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InputFiles | `Ts_Node | `Ts_ReadonlyTextRange]
+    ]
     val get_kind: t -> ts_SyntaxKind_InputFiles [@@js.get "kind"]
     val get_javascriptPath: t -> string [@@js.get "javascriptPath"]
     val set_javascriptPath: t -> string -> unit [@@js.set "javascriptPath"]
@@ -7339,6 +9829,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedSource]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedSource]
+    ]
     val get_kind: t -> ts_SyntaxKind_UnparsedSource [@@js.get "kind"]
     val get_fileName: t -> string [@@js.get "fileName"]
     val set_fileName: t -> string -> unit [@@js.set "fileName"]
@@ -7370,6 +9866,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_UnparsedSourceText]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_UnparsedSourceText]
+    ]
   end
   module UnparsedNode : sig
     type t = ts_UnparsedNode
@@ -7378,6 +9880,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_UnparsedNode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_UnparsedNode]
+    ]
   end
   module[@js.scope "UnparsedSection"] UnparsedSection : sig
     type t = ts_UnparsedSection
@@ -7386,6 +9894,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedSection]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedSection]
+    ]
     val get_kind: t -> ts_SyntaxKind [@@js.get "kind"]
     val get_parent: t -> ts_UnparsedSource [@@js.get "parent"]
     val get_data: t -> string [@@js.get "data"]
@@ -7398,6 +9912,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedPrologue | `Ts_UnparsedSection]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedPrologue | `Ts_UnparsedSection]
+    ]
     val get_kind: t -> ts_SyntaxKind_UnparsedPrologue [@@js.get "kind"]
     val get_parent: t -> ts_UnparsedSource [@@js.get "parent"]
     val get_data: t -> string [@@js.get "data"]
@@ -7410,6 +9930,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedPrepend | `Ts_UnparsedSection]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedPrepend | `Ts_UnparsedSection]
+    ]
     val get_kind: t -> ts_SyntaxKind_UnparsedPrepend [@@js.get "kind"]
     val get_parent: t -> ts_UnparsedSource [@@js.get "parent"]
     val get_data: t -> string [@@js.get "data"]
@@ -7423,6 +9949,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedSection | `Ts_UnparsedTextLike]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedSection | `Ts_UnparsedTextLike]
+    ]
     val get_kind: t -> ((ts_SyntaxKind_UnparsedInternalText, ts_SyntaxKind_UnparsedText) union2, ([`UnparsedInternalText[@js 295] | `UnparsedText[@js 294]] [@js.enum])) or_enum [@@js.get "kind"]
     val get_parent: t -> ts_UnparsedSource [@@js.get "parent"]
     val cast: t -> ts_UnparsedSection [@@js.cast]
@@ -7434,6 +9966,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedSection | `Ts_UnparsedSyntheticReference]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_UnparsedSection | `Ts_UnparsedSyntheticReference]
+    ]
     val get_kind: t -> ts_SyntaxKind_UnparsedSyntheticReference [@@js.get "kind"]
     val get_parent: t -> ts_UnparsedSource [@@js.get "parent"]
     val cast: t -> ts_UnparsedSection [@@js.cast]
@@ -7445,6 +9983,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JsonSourceFile | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SourceFile]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JsonSourceFile | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SourceFile]
+    ]
     val get_statements: t -> ts_JsonObjectExpressionStatement ts_NodeArray [@@js.get "statements"]
     val cast: t -> ts_SourceFile [@@js.cast]
   end
@@ -7455,6 +9999,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Declaration | `Ts_JsonSourceFile | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SourceFile | `Ts_TsConfigSourceFile]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Declaration | `Ts_JsonSourceFile | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_SourceFile | `Ts_TsConfigSourceFile]
+    ]
     val get_extendedSourceFiles: t -> string list [@@js.get "extendedSourceFiles"]
     val set_extendedSourceFiles: t -> string list -> unit [@@js.set "extendedSourceFiles"]
     val cast: t -> ts_JsonSourceFile [@@js.cast]
@@ -7466,6 +10016,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Expression | `Ts_JsonMinusNumericLiteral | `Ts_Node | `Ts_PrefixUnaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Expression | `Ts_JsonMinusNumericLiteral | `Ts_Node | `Ts_PrefixUnaryExpression | `Ts_ReadonlyTextRange | `Ts_UnaryExpression | `Ts_UpdateExpression]
+    ]
     val get_kind: t -> ts_SyntaxKind_PrefixUnaryExpression [@@js.get "kind"]
     val get_operator: t -> ts_SyntaxKind_MinusToken [@@js.get "operator"]
     val get_operand: t -> ts_NumericLiteral [@@js.get "operand"]
@@ -7478,6 +10034,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JsonObjectExpression]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JsonObjectExpression]
+    ]
   end
   module[@js.scope "JsonObjectExpressionStatement"] JsonObjectExpressionStatement : sig
     type t = ts_JsonObjectExpressionStatement
@@ -7486,6 +10048,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ExpressionStatement | `Ts_JSDocContainer | `Ts_JsonObjectExpressionStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ExpressionStatement | `Ts_JSDocContainer | `Ts_JsonObjectExpressionStatement | `Ts_Node | `Ts_ReadonlyTextRange | `Ts_Statement]
+    ]
     val get_expression: t -> ts_JsonObjectExpression [@@js.get "expression"]
     val cast: t -> ts_ExpressionStatement [@@js.cast]
   end
@@ -7496,6 +10064,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ScriptReferenceHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ScriptReferenceHost]
+    ]
     val getCompilerOptions: t -> ts_CompilerOptions [@@js.call "getCompilerOptions"]
     val getSourceFile: t -> fileName:string -> ts_SourceFile or_undefined [@@js.call "getSourceFile"]
     val getSourceFileByPath: t -> path:ts_Path -> ts_SourceFile or_undefined [@@js.call "getSourceFileByPath"]
@@ -7508,6 +10082,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ParseConfigHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ParseConfigHost]
+    ]
     val get_useCaseSensitiveFileNames: t -> bool [@@js.get "useCaseSensitiveFileNames"]
     val set_useCaseSensitiveFileNames: t -> bool -> unit [@@js.set "useCaseSensitiveFileNames"]
     val readDirectory: t -> rootDir:string -> extensions:string list -> excludes:string list or_undefined -> includes:string list -> ?depth:float -> unit -> string list [@@js.call "readDirectory"]
@@ -7531,6 +10111,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ResolvedConfigFileName]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ResolvedConfigFileName]
+    ]
   end
   module[@js.scope "WriteFileCallback"] WriteFileCallback : sig
     type t = ts_WriteFileCallback
@@ -7539,6 +10125,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_WriteFileCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_WriteFileCallback]
+    ]
     val apply: t -> fileName:string -> data:string -> writeByteOrderMark:bool -> ?onError:(message:string -> unit) -> ?sourceFiles:ts_SourceFile list -> unit -> unit [@@js.apply]
   end
   module OperationCanceledException : sig
@@ -7548,6 +10140,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_OperationCanceledException]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_OperationCanceledException]
+    ]
   end
   module[@js.scope "CancellationToken"] CancellationToken : sig
     type t = ts_CancellationToken
@@ -7556,6 +10154,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CancellationToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CancellationToken]
+    ]
     val isCancellationRequested: t -> bool [@@js.call "isCancellationRequested"]
     (** @raise exn OperationCanceledException if isCancellationRequested is true *)
     val throwIfCancellationRequested: t -> unit [@@js.call "throwIfCancellationRequested"]
@@ -7567,6 +10171,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Program | `Ts_ScriptReferenceHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Program | `Ts_ScriptReferenceHost]
+    ]
     val getCurrentDirectory: t -> string [@@js.call "getCurrentDirectory"]
     (** Get a list of root file names that were passed to a 'createProgram' *)
     val getRootFileNames: t -> string list [@@js.call "getRootFileNames"]
@@ -7612,6 +10222,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ResolvedProjectReference]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ResolvedProjectReference]
+    ]
     val get_commandLine: t -> ts_ParsedCommandLine [@@js.get "commandLine"]
     val set_commandLine: t -> ts_ParsedCommandLine -> unit [@@js.set "commandLine"]
     val get_sourceFile: t -> ts_SourceFile [@@js.get "sourceFile"]
@@ -7626,6 +10242,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CustomTransformerFactory]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CustomTransformerFactory]
+    ]
     val apply: t -> context:ts_TransformationContext -> ts_CustomTransformer [@@js.apply]
   end
   module[@js.scope "CustomTransformer"] CustomTransformer : sig
@@ -7635,6 +10257,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CustomTransformer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CustomTransformer]
+    ]
     val transformSourceFile: t -> node:ts_SourceFile -> ts_SourceFile [@@js.call "transformSourceFile"]
     val transformBundle: t -> node:ts_Bundle -> ts_Bundle [@@js.call "transformBundle"]
   end
@@ -7645,6 +10273,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CustomTransformers]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CustomTransformers]
+    ]
     (** Custom transformers to evaluate before built-in .js transformations. *)
     (** Custom transformers to evaluate before built-in .js transformations. *)
     val get_before: t -> (ts_CustomTransformerFactory, ts_SourceFile ts_TransformerFactory) union2 list [@@js.get "before"]
@@ -7668,6 +10302,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SourceMapSpan]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SourceMapSpan]
+    ]
     (** Line number in the .js file. *)
     (** Line number in the .js file. *)
     val get_emittedLine: t -> float [@@js.get "emittedLine"]
@@ -7715,6 +10355,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EmitResult]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EmitResult]
+    ]
     val get_emitSkipped: t -> bool [@@js.get "emitSkipped"]
     val set_emitSkipped: t -> bool -> unit [@@js.set "emitSkipped"]
     (** Contains declaration emit diagnostics *)
@@ -7732,6 +10378,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TypeChecker]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TypeChecker]
+    ]
     val getTypeOfSymbolAtLocation: t -> symbol:ts_Symbol -> node:ts_Node -> ts_Type [@@js.call "getTypeOfSymbolAtLocation"]
     val getDeclaredTypeOfSymbol: t -> symbol:ts_Symbol -> ts_Type [@@js.call "getDeclaredTypeOfSymbol"]
     val getPropertiesOfType: t -> type_:ts_Type -> ts_Symbol list [@@js.call "getPropertiesOfType"]
@@ -7863,6 +10515,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TypePredicateBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TypePredicateBase]
+    ]
     val get_kind: t -> ts_TypePredicateKind [@@js.get "kind"]
     val set_kind: t -> ts_TypePredicateKind -> unit [@@js.set "kind"]
     val get_type: t -> ts_Type or_undefined [@@js.get "type"]
@@ -7875,6 +10533,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ThisTypePredicate | `Ts_TypePredicateBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ThisTypePredicate | `Ts_TypePredicateBase]
+    ]
     val get_kind: t -> ts_TypePredicateKind_This [@@js.get "kind"]
     val set_kind: t -> ts_TypePredicateKind_This -> unit [@@js.set "kind"]
     val get_parameterName: t -> never or_undefined [@@js.get "parameterName"]
@@ -7892,6 +10556,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IdentifierTypePredicate | `Ts_TypePredicateBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IdentifierTypePredicate | `Ts_TypePredicateBase]
+    ]
     val get_kind: t -> ts_TypePredicateKind_Identifier [@@js.get "kind"]
     val set_kind: t -> ts_TypePredicateKind_Identifier -> unit [@@js.set "kind"]
     val get_parameterName: t -> string [@@js.get "parameterName"]
@@ -7909,6 +10579,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssertsThisTypePredicate | `Ts_TypePredicateBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssertsThisTypePredicate | `Ts_TypePredicateBase]
+    ]
     val get_kind: t -> ts_TypePredicateKind_AssertsThis [@@js.get "kind"]
     val set_kind: t -> ts_TypePredicateKind_AssertsThis -> unit [@@js.set "kind"]
     val get_parameterName: t -> never or_undefined [@@js.get "parameterName"]
@@ -7926,6 +10602,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_AssertsIdentifierTypePredicate | `Ts_TypePredicateBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_AssertsIdentifierTypePredicate | `Ts_TypePredicateBase]
+    ]
     val get_kind: t -> ts_TypePredicateKind_AssertsIdentifier [@@js.get "kind"]
     val set_kind: t -> ts_TypePredicateKind_AssertsIdentifier -> unit [@@js.set "kind"]
     val get_parameterName: t -> string [@@js.get "parameterName"]
@@ -7943,6 +10625,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TypePredicate]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TypePredicate]
+    ]
   end
   module SymbolFlags : sig
     type t = ts_SymbolFlags
@@ -7959,6 +10647,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Symbol]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Symbol]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val getFlags: t -> ts_SymbolFlags [@@js.call "getFlags"]
     val getEscapedName: t -> ts___String [@@js.call "getEscapedName"]
@@ -8004,6 +10698,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts___String]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts___String]
+    ]
   end
   (** ReadonlyMap where keys are `__String`s. *)
   module[@js.scope "ReadonlyUnderscoreEscapedMap"] ReadonlyUnderscoreEscapedMap : sig
@@ -8013,6 +10713,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ReadonlyCollection of ts___String | `Ts_ReadonlyESMap of (ts___String * 'T) | `Ts_ReadonlyUnderscoreEscapedMap of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ReadonlyCollection of ts___String | `Ts_ReadonlyESMap of (ts___String * 'T) | `Ts_ReadonlyUnderscoreEscapedMap of 'T]
+    ]
     val cast: 'T t -> (ts___String, 'T) ts_ReadonlyESMap [@@js.cast]
   end
   (** Map where keys are `__String`s. *)
@@ -8023,6 +10729,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Collection of ts___String | `Ts_ESMap of (ts___String * 'T) | `Ts_ReadonlyCollection of ts___String | `Ts_ReadonlyESMap of (ts___String * 'T) | `Ts_ReadonlyUnderscoreEscapedMap of 'T | `Ts_UnderscoreEscapedMap of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Collection of ts___String | `Ts_ESMap of (ts___String * 'T) | `Ts_ReadonlyCollection of ts___String | `Ts_ReadonlyESMap of (ts___String * 'T) | `Ts_ReadonlyUnderscoreEscapedMap of 'T | `Ts_UnderscoreEscapedMap of 'T]
+    ]
     val cast: 'T t -> (ts___String, 'T) ts_ESMap [@@js.cast]
     val cast': 'T t -> 'T ts_ReadonlyUnderscoreEscapedMap [@@js.cast]
   end
@@ -8034,6 +10746,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Collection of ts___String | `Ts_ESMap of (ts___String * ts_Symbol) | `Ts_ReadonlyCollection of ts___String | `Ts_ReadonlyESMap of (ts___String * ts_Symbol) | `Ts_ReadonlyUnderscoreEscapedMap of ts_Symbol | `Ts_SymbolTable | `Ts_UnderscoreEscapedMap of ts_Symbol]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Collection of ts___String | `Ts_ESMap of (ts___String * ts_Symbol) | `Ts_ReadonlyCollection of ts___String | `Ts_ReadonlyESMap of (ts___String * ts_Symbol) | `Ts_ReadonlyUnderscoreEscapedMap of ts_Symbol | `Ts_SymbolTable | `Ts_UnderscoreEscapedMap of ts_Symbol]
+    ]
   end
   module TypeFlags : sig
     type t = ts_TypeFlags
@@ -8050,6 +10768,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DestructuringPattern]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DestructuringPattern]
+    ]
   end
   module[@js.scope "Type"] Type : sig
     type t = ts_Type
@@ -8058,6 +10782,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Type]
+    ]
     val getFlags: t -> ts_TypeFlags [@@js.call "getFlags"]
     val getSymbol: t -> ts_Symbol or_undefined [@@js.call "getSymbol"]
     val getProperties: t -> ts_Symbol list [@@js.call "getProperties"]
@@ -8098,6 +10828,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralType | `Ts_Type]
+    ]
     val get_value: t -> ts_PseudoBigInt or_string or_number [@@js.get "value"]
     val set_value: t -> ts_PseudoBigInt or_string or_number -> unit [@@js.set "value"]
     val get_freshType: t -> t [@@js.get "freshType"]
@@ -8113,6 +10849,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Type | `Ts_UniqueESSymbolType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Type | `Ts_UniqueESSymbolType]
+    ]
     val get_symbol: t -> ts_Symbol [@@js.get "symbol"]
     val set_symbol: t -> ts_Symbol -> unit [@@js.set "symbol"]
     val get_escapedName: t -> ts___String [@@js.get "escapedName"]
@@ -8126,6 +10868,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralType | `Ts_StringLiteralType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralType | `Ts_StringLiteralType | `Ts_Type]
+    ]
     val get_value: t -> string [@@js.get "value"]
     val set_value: t -> string -> unit [@@js.set "value"]
     val cast: t -> ts_LiteralType [@@js.cast]
@@ -8137,6 +10885,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LiteralType | `Ts_NumberLiteralType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LiteralType | `Ts_NumberLiteralType | `Ts_Type]
+    ]
     val get_value: t -> float [@@js.get "value"]
     val set_value: t -> float -> unit [@@js.set "value"]
     val cast: t -> ts_LiteralType [@@js.cast]
@@ -8148,6 +10902,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BigIntLiteralType | `Ts_LiteralType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BigIntLiteralType | `Ts_LiteralType | `Ts_Type]
+    ]
     val get_value: t -> ts_PseudoBigInt [@@js.get "value"]
     val set_value: t -> ts_PseudoBigInt -> unit [@@js.set "value"]
     val cast: t -> ts_LiteralType [@@js.cast]
@@ -8159,6 +10919,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EnumType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EnumType | `Ts_Type]
+    ]
     val cast: t -> ts_Type [@@js.cast]
   end
   module ObjectFlags : sig
@@ -8176,6 +10942,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ObjectType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ObjectType | `Ts_Type]
+    ]
     val get_objectFlags: t -> ts_ObjectFlags [@@js.get "objectFlags"]
     val set_objectFlags: t -> ts_ObjectFlags -> unit [@@js.set "objectFlags"]
     val cast: t -> ts_Type [@@js.cast]
@@ -8188,6 +10960,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InterfaceType | `Ts_ObjectType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InterfaceType | `Ts_ObjectType | `Ts_Type]
+    ]
     val get_typeParameters: t -> ts_TypeParameter list or_undefined [@@js.get "typeParameters"]
     val set_typeParameters: t -> ts_TypeParameter list or_undefined -> unit [@@js.set "typeParameters"]
     val get_outerTypeParameters: t -> ts_TypeParameter list or_undefined [@@js.get "outerTypeParameters"]
@@ -8205,6 +10983,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BaseType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BaseType]
+    ]
   end
   module[@js.scope "InterfaceTypeWithDeclaredMembers"] InterfaceTypeWithDeclaredMembers : sig
     type t = ts_InterfaceTypeWithDeclaredMembers
@@ -8213,6 +10997,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InterfaceType | `Ts_InterfaceTypeWithDeclaredMembers | `Ts_ObjectType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InterfaceType | `Ts_InterfaceTypeWithDeclaredMembers | `Ts_ObjectType | `Ts_Type]
+    ]
     val get_declaredProperties: t -> ts_Symbol list [@@js.get "declaredProperties"]
     val set_declaredProperties: t -> ts_Symbol list -> unit [@@js.set "declaredProperties"]
     val get_declaredCallSignatures: t -> ts_Signature list [@@js.get "declaredCallSignatures"]
@@ -8242,6 +11032,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ObjectType | `Ts_Type | `Ts_TypeReference]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ObjectType | `Ts_Type | `Ts_TypeReference]
+    ]
     val get_typeArguments: t -> ts_Type list [@@js.get "typeArguments"]
     val set_typeArguments: t -> ts_Type list -> unit [@@js.set "typeArguments"]
     val get_target: t -> ts_GenericType [@@js.get "target"]
@@ -8257,6 +11053,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DeferredTypeReference | `Ts_ObjectType | `Ts_Type | `Ts_TypeReference]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DeferredTypeReference | `Ts_ObjectType | `Ts_Type | `Ts_TypeReference]
+    ]
     val cast: t -> ts_TypeReference [@@js.cast]
   end
   module[@js.scope "GenericType"] GenericType : sig
@@ -8266,6 +11068,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_GenericType | `Ts_InterfaceType | `Ts_ObjectType | `Ts_Type | `Ts_TypeReference]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_GenericType | `Ts_InterfaceType | `Ts_ObjectType | `Ts_Type | `Ts_TypeReference]
+    ]
     val cast: t -> ts_InterfaceType [@@js.cast]
     val cast': t -> ts_TypeReference [@@js.cast]
   end
@@ -8284,6 +11092,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_GenericType | `Ts_InterfaceType | `Ts_ObjectType | `Ts_TupleType | `Ts_Type | `Ts_TypeReference]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_GenericType | `Ts_InterfaceType | `Ts_ObjectType | `Ts_TupleType | `Ts_Type | `Ts_TypeReference]
+    ]
     val get_elementFlags: t -> ts_ElementFlags list [@@js.get "elementFlags"]
     val set_elementFlags: t -> ts_ElementFlags list -> unit [@@js.set "elementFlags"]
     val get_minLength: t -> float [@@js.get "minLength"]
@@ -8307,6 +11121,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ObjectType | `Ts_TupleTypeReference | `Ts_Type | `Ts_TypeReference]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ObjectType | `Ts_TupleTypeReference | `Ts_Type | `Ts_TypeReference]
+    ]
     val get_target: t -> ts_TupleType [@@js.get "target"]
     val set_target: t -> ts_TupleType -> unit [@@js.set "target"]
     val cast: t -> ts_TypeReference [@@js.cast]
@@ -8318,6 +11138,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Type | `Ts_UnionOrIntersectionType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Type | `Ts_UnionOrIntersectionType]
+    ]
     val get_types: t -> ts_Type list [@@js.get "types"]
     val set_types: t -> ts_Type list -> unit [@@js.set "types"]
     val cast: t -> ts_Type [@@js.cast]
@@ -8329,6 +11155,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Type | `Ts_UnionOrIntersectionType | `Ts_UnionType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Type | `Ts_UnionOrIntersectionType | `Ts_UnionType]
+    ]
     val cast: t -> ts_UnionOrIntersectionType [@@js.cast]
   end
   module[@js.scope "IntersectionType"] IntersectionType : sig
@@ -8338,6 +11170,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IntersectionType | `Ts_Type | `Ts_UnionOrIntersectionType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IntersectionType | `Ts_Type | `Ts_UnionOrIntersectionType]
+    ]
     val cast: t -> ts_UnionOrIntersectionType [@@js.cast]
   end
   module StructuredType : sig
@@ -8347,6 +11185,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_StructuredType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_StructuredType]
+    ]
   end
   module[@js.scope "EvolvingArrayType"] EvolvingArrayType : sig
     type t = ts_EvolvingArrayType
@@ -8355,6 +11199,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EvolvingArrayType | `Ts_ObjectType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EvolvingArrayType | `Ts_ObjectType | `Ts_Type]
+    ]
     val get_elementType: t -> ts_Type [@@js.get "elementType"]
     val set_elementType: t -> ts_Type -> unit [@@js.set "elementType"]
     val get_finalArrayType: t -> ts_Type [@@js.get "finalArrayType"]
@@ -8368,6 +11218,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InstantiableType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InstantiableType | `Ts_Type]
+    ]
     val cast: t -> ts_Type [@@js.cast]
   end
   module[@js.scope "TypeParameter"] TypeParameter : sig
@@ -8377,6 +11233,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InstantiableType | `Ts_Type | `Ts_TypeParameter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InstantiableType | `Ts_Type | `Ts_TypeParameter]
+    ]
     val cast: t -> ts_InstantiableType [@@js.cast]
   end
   module[@js.scope "IndexedAccessType"] IndexedAccessType : sig
@@ -8386,6 +11248,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IndexedAccessType | `Ts_InstantiableType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IndexedAccessType | `Ts_InstantiableType | `Ts_Type]
+    ]
     val get_objectType: t -> ts_Type [@@js.get "objectType"]
     val set_objectType: t -> ts_Type -> unit [@@js.set "objectType"]
     val get_indexType: t -> ts_Type [@@js.get "indexType"]
@@ -8405,6 +11273,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TypeVariable]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TypeVariable]
+    ]
   end
   module[@js.scope "IndexType"] IndexType : sig
     type t = ts_IndexType
@@ -8413,6 +11287,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IndexType | `Ts_InstantiableType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IndexType | `Ts_InstantiableType | `Ts_Type]
+    ]
     val get_type: t -> ([`U_n_1 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 1] | `U_n_2 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 2] | `U_n_4 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 4] | `U_n_8 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 8] | `U_n_16 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 16] | `U_n_32 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 32] | `U_n_64 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 64] | `U_n_128 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 128] | `U_n_256 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 256] | `U_n_296 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 296] | `U_n_384 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 384] | `U_n_512 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 512] | `U_n_528 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 528] | `U_n_1024 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 1024] | `U_n_1056 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 1056] | `U_n_2048 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 2048] | `U_n_2112 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 2112] | `U_n_2944 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 2944] | `U_n_4096 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 4096] | `U_n_8192 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 8192] | `U_n_12288 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 12288] | `U_n_16384 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 16384] | `U_n_32768 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 32768] | `U_n_49152 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 49152] | `U_n_65536 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 65536] | `U_n_109440 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 109440] | `U_n_117724 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 117724] | `U_n_131072 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 131072] | `U_n_262144 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 262144] | `U_n_524288 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 524288] | `U_n_1048576 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 1048576] | `U_n_2097152 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 2097152] | `U_n_3145728 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 3145728] | `U_n_3670016 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 3670016] | `U_n_4194304 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 4194304] | `U_n_8388608 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 8388608] | `U_n_8650752 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 8650752] | `U_n_16777216 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 16777216] | `U_n_33554432 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 33554432] | `U_n_58982400 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 58982400] | `U_n_67108864 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 67108864] | `U_n_134217728 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 134217728] | `U_n_268435456 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 268435456] | `U_n_402653316 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 402653316] | `U_n_406847488 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 406847488] | `U_n_465829888 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 465829888] | `U_n_469499904 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 469499904] | `U_n_536624127 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 [@js 536624127]] [@js.union on_field "flags"]) [@@js.get "type"]
     val set_type: t -> ([`U_n_1 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_2 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_4 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_8 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_16 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_32 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_64 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_128 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_256 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_296 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_384 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_512 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_528 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_1024 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_1056 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_2048 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_2112 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_2944 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_4096 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_8192 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_12288 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_16384 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_32768 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_49152 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_65536 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_109440 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_117724 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_131072 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_262144 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_524288 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_1048576 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_2097152 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_3145728 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_3670016 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_4194304 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_8388608 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_8650752 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_16777216 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_33554432 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_58982400 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_67108864 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_134217728 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_268435456 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_402653316 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_406847488 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_465829888 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_469499904 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2  | `U_n_536624127 of (ts_InstantiableType, ts_UnionOrIntersectionType) union2 ] [@js.union on_field "flags"]) -> unit [@@js.set "type"]
     val cast: t -> ts_InstantiableType [@@js.cast]
@@ -8424,6 +11304,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConditionalRoot]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConditionalRoot]
+    ]
     val get_node: t -> ts_ConditionalTypeNode [@@js.get "node"]
     val set_node: t -> ts_ConditionalTypeNode -> unit [@@js.set "node"]
     val get_checkType: t -> ts_Type [@@js.get "checkType"]
@@ -8450,6 +11336,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConditionalType | `Ts_InstantiableType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConditionalType | `Ts_InstantiableType | `Ts_Type]
+    ]
     val get_root: t -> ts_ConditionalRoot [@@js.get "root"]
     val set_root: t -> ts_ConditionalRoot -> unit [@@js.set "root"]
     val get_checkType: t -> ts_Type [@@js.get "checkType"]
@@ -8469,6 +11361,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InstantiableType | `Ts_TemplateLiteralType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InstantiableType | `Ts_TemplateLiteralType | `Ts_Type]
+    ]
     val get_texts: t -> string list [@@js.get "texts"]
     val set_texts: t -> string list -> unit [@@js.set "texts"]
     val get_types: t -> ts_Type list [@@js.get "types"]
@@ -8482,6 +11380,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InstantiableType | `Ts_StringMappingType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InstantiableType | `Ts_StringMappingType | `Ts_Type]
+    ]
     val get_symbol: t -> ts_Symbol [@@js.get "symbol"]
     val set_symbol: t -> ts_Symbol -> unit [@@js.set "symbol"]
     val get_type: t -> ts_Type [@@js.get "type"]
@@ -8495,6 +11399,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InstantiableType | `Ts_SubstitutionType | `Ts_Type]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InstantiableType | `Ts_SubstitutionType | `Ts_Type]
+    ]
     val get_baseType: t -> ts_Type [@@js.get "baseType"]
     val set_baseType: t -> ts_Type -> unit [@@js.set "baseType"]
     val get_substitute: t -> ts_Type [@@js.get "substitute"]
@@ -8516,6 +11426,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Signature]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Signature]
+    ]
     val getDeclaration: t -> ts_SignatureDeclaration [@@js.call "getDeclaration"]
     val getTypeParameters: t -> ts_TypeParameter list or_undefined [@@js.call "getTypeParameters"]
     val getParameters: t -> ts_Symbol list [@@js.call "getParameters"]
@@ -8544,6 +11460,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IndexInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IndexInfo]
+    ]
     val get_type: t -> ts_Type [@@js.get "type"]
     val set_type: t -> ts_Type -> unit [@@js.set "type"]
     val get_isReadonly: t -> bool [@@js.get "isReadonly"]
@@ -8567,6 +11489,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FileExtensionInfo | `Ts_JsFileExtensionInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FileExtensionInfo | `Ts_JsFileExtensionInfo]
+    ]
   end
   module[@js.scope "FileExtensionInfo"] FileExtensionInfo : sig
     type t = ts_FileExtensionInfo
@@ -8575,6 +11503,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FileExtensionInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FileExtensionInfo]
+    ]
     val get_extension: t -> string [@@js.get "extension"]
     val set_extension: t -> string -> unit [@@js.set "extension"]
     val get_isMixedContent: t -> bool [@@js.get "isMixedContent"]
@@ -8589,6 +11523,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DiagnosticMessage]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DiagnosticMessage]
+    ]
     val get_key: t -> string [@@js.get "key"]
     val set_key: t -> string -> unit [@@js.set "key"]
     val get_category: t -> ts_DiagnosticCategory [@@js.get "category"]
@@ -8615,6 +11555,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DiagnosticMessageChain]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DiagnosticMessageChain]
+    ]
     val get_messageText: t -> string [@@js.get "messageText"]
     val set_messageText: t -> string -> unit [@@js.set "messageText"]
     val get_category: t -> ts_DiagnosticCategory [@@js.get "category"]
@@ -8631,6 +11577,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Diagnostic | `Ts_DiagnosticRelatedInformation]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Diagnostic | `Ts_DiagnosticRelatedInformation]
+    ]
     (** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. *)
     (** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. *)
     val get_reportsUnnecessary: t -> anonymous_interface_0 [@@js.get "reportsUnnecessary"]
@@ -8651,6 +11603,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DiagnosticRelatedInformation]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DiagnosticRelatedInformation]
+    ]
     val get_category: t -> ts_DiagnosticCategory [@@js.get "category"]
     val set_category: t -> ts_DiagnosticCategory -> unit [@@js.set "category"]
     val get_code: t -> float [@@js.get "code"]
@@ -8671,6 +11629,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Diagnostic | `Ts_DiagnosticRelatedInformation | `Ts_DiagnosticWithLocation]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Diagnostic | `Ts_DiagnosticRelatedInformation | `Ts_DiagnosticWithLocation]
+    ]
     val get_file: t -> ts_SourceFile [@@js.get "file"]
     val set_file: t -> ts_SourceFile -> unit [@@js.set "file"]
     val get_start: t -> float [@@js.get "start"]
@@ -8702,6 +11666,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PluginImport]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PluginImport]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val set_name: t -> string -> unit [@@js.set "name"]
   end
@@ -8712,6 +11682,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ProjectReference]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ProjectReference]
+    ]
     (** A normalized path on disk *)
     (** A normalized path on disk *)
     val get_path: t -> string [@@js.get "path"]
@@ -8764,6 +11740,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CompilerOptionsValue]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CompilerOptionsValue]
+    ]
   end
   module[@js.scope "CompilerOptions"] CompilerOptions : sig
     type t = ts_CompilerOptions
@@ -8772,6 +11754,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CompilerOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CompilerOptions]
+    ]
     val get_allowJs: t -> bool [@@js.get "allowJs"]
     val set_allowJs: t -> bool -> unit [@@js.set "allowJs"]
     val get_allowSyntheticDefaultImports: t -> bool [@@js.get "allowSyntheticDefaultImports"]
@@ -8963,6 +11951,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_WatchOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_WatchOptions]
+    ]
     val get_watchFile: t -> ts_WatchFileKind [@@js.get "watchFile"]
     val set_watchFile: t -> ts_WatchFileKind -> unit [@@js.set "watchFile"]
     val get_watchDirectory: t -> ts_WatchDirectoryKind [@@js.get "watchDirectory"]
@@ -8985,6 +11979,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TypeAcquisition]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TypeAcquisition]
+    ]
     (**
       @deprecated typingOptions.enableAutoDiscovery
       Use typeAcquisition.enable instead.
@@ -9049,6 +12049,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LineAndCharacter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LineAndCharacter]
+    ]
     (** 0-based. *)
     (** 0-based. *)
     val get_line: t -> float [@@js.get "line"]
@@ -9089,6 +12095,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ParsedCommandLine]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ParsedCommandLine]
+    ]
     val get_options: t -> ts_CompilerOptions [@@js.get "options"]
     val set_options: t -> ts_CompilerOptions -> unit [@@js.set "options"]
     val get_typeAcquisition: t -> ts_TypeAcquisition [@@js.get "typeAcquisition"]
@@ -9123,6 +12135,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CreateProgramOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CreateProgramOptions]
+    ]
     val get_rootNames: t -> string list [@@js.get "rootNames"]
     val set_rootNames: t -> string list -> unit [@@js.set "rootNames"]
     val get_options: t -> ts_CompilerOptions [@@js.get "options"]
@@ -9143,6 +12161,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ModuleResolutionHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ModuleResolutionHost]
+    ]
     val fileExists: t -> fileName:string -> bool [@@js.call "fileExists"]
     val readFile: t -> fileName:string -> string or_undefined [@@js.call "readFile"]
     val trace: t -> s:string -> unit [@@js.call "trace"]
@@ -9169,6 +12193,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ResolvedModule]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ResolvedModule]
+    ]
     (** Path of the file the module was resolved to. *)
     (** Path of the file the module was resolved to. *)
     val get_resolvedFileName: t -> string [@@js.get "resolvedFileName"]
@@ -9192,6 +12222,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ResolvedModule | `Ts_ResolvedModuleFull]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ResolvedModule | `Ts_ResolvedModuleFull]
+    ]
     (**
       Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
       This is optional for backwards-compatibility, but will be added if not provided.
@@ -9221,6 +12257,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PackageId]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PackageId]
+    ]
     (**
       Name of the package.
       Should not include `\@types`.
@@ -9273,6 +12315,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ResolvedModuleWithFailedLookupLocations]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ResolvedModuleWithFailedLookupLocations]
+    ]
     val get_resolvedModule: t -> ts_ResolvedModuleFull or_undefined [@@js.get "resolvedModule"]
   end
   module[@js.scope "ResolvedTypeReferenceDirective"] ResolvedTypeReferenceDirective : sig
@@ -9282,6 +12330,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ResolvedTypeReferenceDirective]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ResolvedTypeReferenceDirective]
+    ]
     val get_primary: t -> bool [@@js.get "primary"]
     val set_primary: t -> bool -> unit [@@js.set "primary"]
     val get_resolvedFileName: t -> string or_undefined [@@js.get "resolvedFileName"]
@@ -9301,6 +12355,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ResolvedTypeReferenceDirectiveWithFailedLookupLocations]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ResolvedTypeReferenceDirectiveWithFailedLookupLocations]
+    ]
     val get_resolvedTypeReferenceDirective: t -> ts_ResolvedTypeReferenceDirective or_undefined [@@js.get "resolvedTypeReferenceDirective"]
     val get_failedLookupLocations: t -> string list [@@js.get "failedLookupLocations"]
   end
@@ -9311,6 +12371,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CompilerHost | `Ts_ModuleResolutionHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CompilerHost | `Ts_ModuleResolutionHost]
+    ]
     val getSourceFile: t -> fileName:string -> languageVersion:ts_ScriptTarget -> ?onError:(message:string -> unit) -> ?shouldCreateNewSourceFile:bool -> unit -> ts_SourceFile or_undefined [@@js.call "getSourceFile"]
     val getSourceFileByPath: t -> fileName:string -> path:ts_Path -> languageVersion:ts_ScriptTarget -> ?onError:(message:string -> unit) -> ?shouldCreateNewSourceFile:bool -> unit -> ts_SourceFile or_undefined [@@js.call "getSourceFileByPath"]
     val getCancellationToken: t -> ts_CancellationToken [@@js.call "getCancellationToken"]
@@ -9338,6 +12404,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SourceMapRange | `Ts_TextRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SourceMapRange | `Ts_TextRange]
+    ]
     val get_source: t -> ts_SourceMapSource [@@js.get "source"]
     val set_source: t -> ts_SourceMapSource -> unit [@@js.set "source"]
     val cast: t -> ts_TextRange [@@js.cast]
@@ -9349,6 +12421,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SourceMapSource]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SourceMapSource]
+    ]
     val getLineAndCharacterOfPosition: t -> pos:float -> ts_LineAndCharacter [@@js.call "getLineAndCharacterOfPosition"]
     val get_fileName: t -> string [@@js.get "fileName"]
     val set_fileName: t -> string -> unit [@@js.set "fileName"]
@@ -9371,6 +12449,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EmitHelper]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EmitHelper]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val get_scoped: t -> bool [@@js.get "scoped"]
     val get_text: t -> (node:ts_EmitHelperUniqueNameCallback -> string) or_string [@@js.get "text"]
@@ -9384,6 +12468,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EmitHelper | `Ts_UnscopedEmitHelper]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EmitHelper | `Ts_UnscopedEmitHelper]
+    ]
     val get_scoped: t -> ([`L_b_false[@js false]] [@js.enum]) [@@js.get "scoped"]
     val get_text: t -> string [@@js.get "text"]
     val cast: t -> ts_EmitHelper [@@js.cast]
@@ -9395,6 +12485,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EmitHelperUniqueNameCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EmitHelperUniqueNameCallback]
+    ]
     val apply: t -> name:string -> string [@@js.apply]
   end
   module EmitHint : sig
@@ -9420,6 +12516,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TypeOfTag]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TypeOfTag]
+    ]
   end
   module[@js.scope "NodeFactory"] NodeFactory : sig
     type t = ts_NodeFactory
@@ -9428,6 +12530,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NodeFactory]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NodeFactory]
+    ]
     val createNodeArray: t -> ?elements:'T list -> ?hasTrailingComma:bool -> unit -> 'T ts_NodeArray [@@js.call "createNodeArray"]
     val createNumericLiteral: t -> value:string or_number -> ?numericLiteralFlags:ts_TokenFlags -> unit -> ts_NumericLiteral [@@js.call "createNumericLiteral"]
     val createBigIntLiteral: t -> value:ts_PseudoBigInt or_string -> ts_BigIntLiteral [@@js.call "createBigIntLiteral"]
@@ -9866,6 +12974,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CoreTransformationContext]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CoreTransformationContext]
+    ]
     val get_factory: t -> ts_NodeFactory [@@js.get "factory"]
     (** Gets the compiler options supplied to the transformer. *)
     val getCompilerOptions: t -> ts_CompilerOptions [@@js.call "getCompilerOptions"]
@@ -9889,6 +13003,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CoreTransformationContext | `Ts_TransformationContext]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CoreTransformationContext | `Ts_TransformationContext]
+    ]
     (** Records a request for a non-scoped emit helper in the current context. *)
     val requestEmitHelper: t -> helper:ts_EmitHelper -> unit [@@js.call "requestEmitHelper"]
     (** Gets and resets the requested non-scoped emit helpers. *)
@@ -9932,6 +13052,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_TransformationResult of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_TransformationResult of 'T]
+    ]
     (** Gets the transformed source files. *)
     (** Gets the transformed source files. *)
     val get_transformed: 'T t -> 'T list [@@js.get "transformed"]
@@ -9974,6 +13100,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_TransformerFactory of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_TransformerFactory of 'T]
+    ]
     val apply: 'T t -> context:ts_TransformationContext -> 'T ts_Transformer [@@js.apply]
   end
   (** A function that transforms a node. *)
@@ -9984,6 +13116,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Transformer of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Transformer of 'T]
+    ]
     val apply: 'T t -> node:'T -> 'T [@@js.apply]
   end
   (** A function that accepts and possibly transforms a node. *)
@@ -9994,6 +13132,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Visitor]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Visitor]
+    ]
     val apply: t -> node:ts_Node -> ts_Node ts_VisitResult [@@js.apply]
   end
   module[@js.scope "NodeVisitor"] NodeVisitor : sig
@@ -10003,6 +13147,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NodeVisitor]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NodeVisitor]
+    ]
     val apply: t -> nodes:'T -> visitor:ts_Visitor or_undefined -> ?test:(node:ts_Node -> bool) -> ?lift:(node:ts_Node list -> 'T) -> unit -> 'T [@@js.apply]
     val apply': t -> nodes:'T or_undefined -> visitor:ts_Visitor or_undefined -> ?test:(node:ts_Node -> bool) -> ?lift:(node:ts_Node list -> 'T) -> unit -> 'T or_undefined [@@js.apply]
   end
@@ -10013,6 +13163,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NodesVisitor]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NodesVisitor]
+    ]
     val apply: t -> nodes:'T ts_NodeArray -> visitor:ts_Visitor or_undefined -> ?test:(node:ts_Node -> bool) -> ?start:float -> ?count:float -> unit -> 'T ts_NodeArray [@@js.apply]
     val apply': t -> nodes:'T ts_NodeArray or_undefined -> visitor:ts_Visitor or_undefined -> ?test:(node:ts_Node -> bool) -> ?start:float -> ?count:float -> unit -> 'T ts_NodeArray or_undefined [@@js.apply]
   end
@@ -10023,6 +13179,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_VisitResult of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_VisitResult of 'T]
+    ]
   end
   module[@js.scope "Printer"] Printer : sig
     type t = ts_Printer
@@ -10031,6 +13193,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Printer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Printer]
+    ]
     (**
       Print a node and its subtree as-is, without any emit transformations.
       @param hint A value indicating the purpose of a node. This is primarily used to
@@ -10059,6 +13227,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PrintHandlers]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PrintHandlers]
+    ]
     (**
       A hook used by the Printer when generating unique names to avoid collisions with
       globally defined names that exist outside of the current source file.
@@ -10113,6 +13287,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PrinterOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PrinterOptions]
+    ]
     val get_removeComments: t -> bool [@@js.get "removeComments"]
     val set_removeComments: t -> bool -> unit [@@js.set "removeComments"]
     val get_newLine: t -> ts_NewLineKind [@@js.get "newLine"]
@@ -10129,6 +13309,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_GetEffectiveTypeRootsHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_GetEffectiveTypeRootsHost]
+    ]
     val directoryExists: t -> directoryName:string -> bool [@@js.call "directoryExists"]
     val getCurrentDirectory: t -> string [@@js.call "getCurrentDirectory"]
   end
@@ -10139,6 +13325,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TextSpan]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TextSpan]
+    ]
     val get_start: t -> float [@@js.get "start"]
     val set_start: t -> float -> unit [@@js.set "start"]
     val get_length: t -> float [@@js.get "length"]
@@ -10151,6 +13343,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TextChangeRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TextChangeRange]
+    ]
     val get_span: t -> ts_TextSpan [@@js.get "span"]
     val set_span: t -> ts_TextSpan -> unit [@@js.set "span"]
     val get_newLength: t -> float [@@js.get "newLength"]
@@ -10163,6 +13361,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_SyntaxList]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Node | `Ts_ReadonlyTextRange | `Ts_SyntaxList]
+    ]
     val get_kind: t -> ts_SyntaxKind_SyntaxList [@@js.get "kind"]
     val set_kind: t -> ts_SyntaxKind_SyntaxList -> unit [@@js.set "kind"]
     val get__children: t -> ts_Node list [@@js.get "_children"]
@@ -10184,6 +13388,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_UserPreferences]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_UserPreferences]
+    ]
     val get_disableSuggestions: t -> bool [@@js.get "disableSuggestions"]
     val get_quotePreference: t -> ([`L_s42_auto[@js "auto"] | `L_s63_double[@js "double"] | `L_s134_single[@js "single"]] [@js.enum]) [@@js.get "quotePreference"]
     val get_includeCompletionsForModuleExports: t -> bool [@@js.get "includeCompletionsForModuleExports"]
@@ -10205,6 +13415,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PseudoBigInt]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PseudoBigInt]
+    ]
     val get_negative: t -> bool [@@js.get "negative"]
     val set_negative: t -> bool -> unit [@@js.set "negative"]
     val get_base10Value: t -> string [@@js.get "base10Value"]
@@ -10226,6 +13442,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FileWatcherCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FileWatcherCallback]
+    ]
     val apply: t -> fileName:string -> eventKind:ts_FileWatcherEventKind -> unit [@@js.apply]
   end
   module[@js.scope "DirectoryWatcherCallback"] DirectoryWatcherCallback : sig
@@ -10235,6 +13457,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DirectoryWatcherCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DirectoryWatcherCallback]
+    ]
     val apply: t -> fileName:string -> unit [@@js.apply]
   end
   module[@js.scope "System"] System : sig
@@ -10244,6 +13472,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_System]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_System]
+    ]
     val get_args: t -> string list [@@js.get "args"]
     val set_args: t -> string list -> unit [@@js.set "args"]
     val get_newLine: t -> string [@@js.get "newLine"]
@@ -10292,6 +13526,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FileWatcher]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FileWatcher]
+    ]
     val close: t -> unit [@@js.call "close"]
   end
   val getNodeMajorVersion: unit -> float or_undefined [@@js.global "getNodeMajorVersion"]
@@ -10304,6 +13544,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ErrorCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ErrorCallback]
+    ]
     val apply: t -> message:ts_DiagnosticMessage -> length:float -> unit [@@js.apply]
   end
   module[@js.scope "Scanner"] Scanner : sig
@@ -10313,6 +13559,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Scanner]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Scanner]
+    ]
     val getStartPos: t -> float [@@js.call "getStartPos"]
     val getToken: t -> ts_SyntaxKind [@@js.call "getToken"]
     val getTextPos: t -> float [@@js.call "getTextPos"]
@@ -10408,6 +13660,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ParameterPropertyDeclaration]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ParameterPropertyDeclaration]
+    ]
   end
   val isParameterPropertyDeclaration: node:ts_Node -> parent:ts_Node -> bool [@@js.global "isParameterPropertyDeclaration"]
   val isEmptyBindingPattern: node:ts_BindingName -> bool [@@js.global "isEmptyBindingPattern"]
@@ -10881,6 +14139,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DiagnosticReporter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DiagnosticReporter]
+    ]
     val apply: t -> diagnostic:ts_Diagnostic -> unit [@@js.apply]
   end
   (** Reports config file diagnostics *)
@@ -10891,6 +14155,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConfigFileDiagnosticsReporter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConfigFileDiagnosticsReporter]
+    ]
     (** Reports unrecoverable error when parsing config file *)
     (** Reports unrecoverable error when parsing config file *)
     val get_onUnRecoverableConfigFileDiagnostic: t -> ts_DiagnosticReporter [@@js.get "onUnRecoverableConfigFileDiagnostic"]
@@ -10905,6 +14175,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ConfigFileDiagnosticsReporter | `Ts_ParseConfigFileHost | `Ts_ParseConfigHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ConfigFileDiagnosticsReporter | `Ts_ParseConfigFileHost | `Ts_ParseConfigHost]
+    ]
     val getCurrentDirectory: t -> string [@@js.call "getCurrentDirectory"]
     val cast: t -> ts_ParseConfigHost [@@js.cast]
     val cast': t -> ts_ConfigFileDiagnosticsReporter [@@js.cast]
@@ -10952,6 +14228,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ParsedTsconfig]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ParsedTsconfig]
+    ]
     val get_raw: t -> any [@@js.get "raw"]
     val set_raw: t -> any -> unit [@@js.set "raw"]
     val get_options: t -> ts_CompilerOptions [@@js.get "options"]
@@ -10973,6 +14255,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ExtendedConfigCacheEntry]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ExtendedConfigCacheEntry]
+    ]
     val get_extendedResult: t -> ts_TsConfigSourceFile [@@js.get "extendedResult"]
     val set_extendedResult: t -> ts_TsConfigSourceFile -> unit [@@js.set "extendedResult"]
     val get_extendedConfig: t -> ts_ParsedTsconfig or_undefined [@@js.get "extendedConfig"]
@@ -11008,6 +14296,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ModuleResolutionCache | `Ts_NonRelativeModuleNameResolutionCache]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ModuleResolutionCache | `Ts_NonRelativeModuleNameResolutionCache]
+    ]
     val getOrCreateCacheForDirectory: t -> directoryName:string -> ?redirectedReference:ts_ResolvedProjectReference -> unit -> ts_ResolvedModuleWithFailedLookupLocations ts_Map [@@js.call "getOrCreateCacheForDirectory"]
     val cast: t -> ts_NonRelativeModuleNameResolutionCache [@@js.cast]
   end
@@ -11022,6 +14316,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NonRelativeModuleNameResolutionCache]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NonRelativeModuleNameResolutionCache]
+    ]
     val getOrCreateCacheForModuleName: t -> nonRelativeModuleName:string -> ?redirectedReference:ts_ResolvedProjectReference -> unit -> ts_PerModuleNameCache [@@js.call "getOrCreateCacheForModuleName"]
   end
   module[@js.scope "PerModuleNameCache"] PerModuleNameCache : sig
@@ -11031,6 +14331,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PerModuleNameCache]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PerModuleNameCache]
+    ]
     val get_: t -> directory:string -> ts_ResolvedModuleWithFailedLookupLocations or_undefined [@@js.call "get"]
     val set_: t -> directory:string -> result:ts_ResolvedModuleWithFailedLookupLocations -> unit [@@js.call "set"]
   end
@@ -11131,6 +14437,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FormatDiagnosticsHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FormatDiagnosticsHost]
+    ]
     val getCurrentDirectory: t -> string [@@js.call "getCurrentDirectory"]
     val getCanonicalFileName: t -> fileName:string -> string [@@js.call "getCanonicalFileName"]
     val getNewLine: t -> string [@@js.call "getNewLine"]
@@ -11172,6 +14484,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ResolveProjectReferencePathHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ResolveProjectReferencePathHost]
+    ]
     val fileExists: t -> fileName:string -> bool [@@js.call "fileExists"]
   end
   (**
@@ -11189,6 +14507,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EmitOutput]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EmitOutput]
+    ]
     val get_outputFiles: t -> ts_OutputFile list [@@js.get "outputFiles"]
     val set_outputFiles: t -> ts_OutputFile list -> unit [@@js.set "outputFiles"]
     val get_emitSkipped: t -> bool [@@js.get "emitSkipped"]
@@ -11201,6 +14525,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_OutputFile]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_OutputFile]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val set_name: t -> string -> unit [@@js.set "name"]
     val get_writeByteOrderMark: t -> bool [@@js.get "writeByteOrderMark"]
@@ -11215,6 +14545,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_AffectedFileResult of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_AffectedFileResult of 'T]
+    ]
   end
   module[@js.scope "BuilderProgramHost"] BuilderProgramHost : sig
     type t = ts_BuilderProgramHost
@@ -11223,6 +14559,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BuilderProgramHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BuilderProgramHost]
+    ]
     (** return true if file names are treated with case sensitivity *)
     val useCaseSensitiveFileNames: t -> bool [@@js.call "useCaseSensitiveFileNames"]
     (** If provided this would be used this hash instead of actual file shape text for detecting changes *)
@@ -11250,6 +14592,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BuilderProgram]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BuilderProgram]
+    ]
     (** Returns current program *)
     val getProgram: t -> ts_Program [@@js.call "getProgram"]
     (** Get compiler options of the program *)
@@ -11302,6 +14650,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BuilderProgram | `Ts_SemanticDiagnosticsBuilderProgram]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BuilderProgram | `Ts_SemanticDiagnosticsBuilderProgram]
+    ]
     (**
       Gets the semantic diagnostics from the program for the next affected file and caches it
       Returns undefined if the iteration is complete
@@ -11320,6 +14674,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BuilderProgram | `Ts_EmitAndSemanticDiagnosticsBuilderProgram | `Ts_SemanticDiagnosticsBuilderProgram]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BuilderProgram | `Ts_EmitAndSemanticDiagnosticsBuilderProgram | `Ts_SemanticDiagnosticsBuilderProgram]
+    ]
     (**
       Emits the next affected file's emit result (EmitResult and sourceFiles emitted) or returns undefined if iteration is complete
       The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
@@ -11353,6 +14713,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ReadBuildProgramHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ReadBuildProgramHost]
+    ]
     val useCaseSensitiveFileNames: t -> bool [@@js.call "useCaseSensitiveFileNames"]
     val getCurrentDirectory: t -> string [@@js.call "getCurrentDirectory"]
     val readFile: t -> fileName:string -> string or_undefined [@@js.call "readFile"]
@@ -11366,6 +14732,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_IncrementalProgramOptions of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_IncrementalProgramOptions of 'T]
+    ]
     val get_rootNames: 'T t -> string list [@@js.get "rootNames"]
     val set_rootNames: 'T t -> string list -> unit [@@js.set "rootNames"]
     val get_options: 'T t -> ts_CompilerOptions [@@js.get "options"]
@@ -11387,6 +14759,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_WatchStatusReporter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_WatchStatusReporter]
+    ]
     val apply: t -> diagnostic:ts_Diagnostic -> newLine:string -> options:ts_CompilerOptions -> ?errorCount:float -> unit -> unit [@@js.apply]
   end
   (** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program *)
@@ -11397,6 +14775,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_CreateProgram of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_CreateProgram of 'T]
+    ]
     val apply: 'T t -> rootNames:string list or_undefined -> options:ts_CompilerOptions or_undefined -> ?host:ts_CompilerHost -> ?oldProgram:'T -> ?configFileParsingDiagnostics:ts_Diagnostic list -> ?projectReferences:ts_ProjectReference list or_undefined -> unit -> 'T [@@js.apply]
   end
   (** Host that has watch functionality used in --watch mode *)
@@ -11407,6 +14791,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_WatchHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_WatchHost]
+    ]
     (** If provided, called with Diagnostic message that informs about change in watch status *)
     val onWatchStatusChange: t -> diagnostic:ts_Diagnostic -> newLine:string -> options:ts_CompilerOptions -> ?errorCount:float -> unit -> unit [@@js.call "onWatchStatusChange"]
     (** Used to watch changes in source files, missing files needed to update the program or config file *)
@@ -11425,6 +14815,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ProgramHost of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ProgramHost of 'T]
+    ]
     (** Used to create the program when need for program creation or recreation detected *)
     (** Used to create the program when need for program creation or recreation detected *)
     val get_createProgram: 'T t -> 'T ts_CreateProgram [@@js.get "createProgram"]
@@ -11470,6 +14866,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ProgramHost of 'T | `Ts_WatchCompilerHost of 'T | `Ts_WatchHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ProgramHost of 'T | `Ts_WatchCompilerHost of 'T | `Ts_WatchHost]
+    ]
     (** Instead of using output d.ts file from project reference, use its source file *)
     val useSourceOfProjectReferenceRedirect: 'T t -> bool [@@js.call "useSourceOfProjectReferenceRedirect"]
     (** If provided, callback to invoke after every new program creation *)
@@ -11485,6 +14887,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ProgramHost of 'T | `Ts_WatchCompilerHost of 'T | `Ts_WatchCompilerHostOfFilesAndCompilerOptions of 'T | `Ts_WatchHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ProgramHost of 'T | `Ts_WatchCompilerHost of 'T | `Ts_WatchCompilerHostOfFilesAndCompilerOptions of 'T | `Ts_WatchHost]
+    ]
     (** root files to use to generate program *)
     (** root files to use to generate program *)
     val get_rootFiles: 'T t -> string list [@@js.get "rootFiles"]
@@ -11512,6 +14920,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ConfigFileDiagnosticsReporter | `Ts_ProgramHost of 'T | `Ts_WatchCompilerHost of 'T | `Ts_WatchCompilerHostOfConfigFile of 'T | `Ts_WatchHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ConfigFileDiagnosticsReporter | `Ts_ProgramHost of 'T | `Ts_WatchCompilerHost of 'T | `Ts_WatchCompilerHostOfConfigFile of 'T | `Ts_WatchHost]
+    ]
     (** Name of the config file to compile *)
     (** Name of the config file to compile *)
     val get_configFileName: 'T t -> string [@@js.get "configFileName"]
@@ -11541,6 +14955,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Watch of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Watch of 'T]
+    ]
     (** Synchronize with host and get updated program *)
     val getProgram: 'T t -> 'T [@@js.call "getProgram"]
     (** Closes the watch *)
@@ -11554,6 +14974,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Watch of 'T | `Ts_WatchOfConfigFile of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Watch of 'T | `Ts_WatchOfConfigFile of 'T]
+    ]
     val cast: 'T t -> 'T ts_Watch [@@js.cast]
   end
   (** Creates the watch that generates program using the root files and compiler options *)
@@ -11564,6 +14990,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_Watch of 'T | `Ts_WatchOfFilesAndCompilerOptions of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_Watch of 'T | `Ts_WatchOfFilesAndCompilerOptions of 'T]
+    ]
     (** Updates the root files in the program, only if this is not config file compilation *)
     val updateRootFileNames: 'T t -> fileNames:string list -> unit [@@js.call "updateRootFileNames"]
     val cast: 'T t -> 'T ts_Watch [@@js.cast]
@@ -11583,6 +15015,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_BuildOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_BuildOptions]
+    ]
     val get_dry: t -> bool [@@js.get "dry"]
     val set_dry: t -> bool -> unit [@@js.set "dry"]
     val get_force: t -> bool [@@js.get "force"]
@@ -11605,6 +15043,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ReportEmitErrorSummary]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ReportEmitErrorSummary]
+    ]
     val apply: t -> errorCount:float -> unit [@@js.apply]
   end
   module[@js.scope "SolutionBuilderHostBase"] SolutionBuilderHostBase : sig
@@ -11614,6 +15058,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ProgramHost of 'T | `Ts_SolutionBuilderHostBase of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ProgramHost of 'T | `Ts_SolutionBuilderHostBase of 'T]
+    ]
     val createDirectory: 'T t -> path:string -> unit [@@js.call "createDirectory"]
     (**
       Should provide create directory and writeFile if done of invalidatedProjects is not invoked with
@@ -11638,6 +15088,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ProgramHost of 'T | `Ts_SolutionBuilderHost of 'T | `Ts_SolutionBuilderHostBase of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ProgramHost of 'T | `Ts_SolutionBuilderHost of 'T | `Ts_SolutionBuilderHostBase of 'T]
+    ]
     val get_reportErrorSummary: 'T t -> ts_ReportEmitErrorSummary [@@js.get "reportErrorSummary"]
     val set_reportErrorSummary: 'T t -> ts_ReportEmitErrorSummary -> unit [@@js.set "reportErrorSummary"]
     val cast: 'T t -> 'T ts_SolutionBuilderHostBase [@@js.cast]
@@ -11649,6 +15105,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_ProgramHost of 'T | `Ts_SolutionBuilderHostBase of 'T | `Ts_SolutionBuilderWithWatchHost of 'T | `Ts_WatchHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_ProgramHost of 'T | `Ts_SolutionBuilderHostBase of 'T | `Ts_SolutionBuilderWithWatchHost of 'T | `Ts_WatchHost]
+    ]
     val cast: 'T t -> 'T ts_SolutionBuilderHostBase [@@js.cast]
     val cast': 'T t -> ts_WatchHost [@@js.cast]
   end
@@ -11659,6 +15121,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_SolutionBuilder of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_SolutionBuilder of 'T]
+    ]
     val build: 'T t -> ?project:string -> ?cancellationToken:ts_CancellationToken -> unit -> ts_ExitStatus [@@js.call "build"]
     val clean: 'T t -> ?project:string -> unit -> ts_ExitStatus [@@js.call "clean"]
     val buildReferences: 'T t -> project:string -> ?cancellationToken:ts_CancellationToken -> unit -> ts_ExitStatus [@@js.call "buildReferences"]
@@ -11686,6 +15154,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InvalidatedProjectBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InvalidatedProjectBase]
+    ]
     val get_kind: t -> ts_InvalidatedProjectKind [@@js.get "kind"]
     val get_project: t -> ts_ResolvedConfigFileName [@@js.get "project"]
     (** To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly *)
@@ -11700,6 +15174,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InvalidatedProjectBase | `Ts_UpdateOutputFileStampsProject]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InvalidatedProjectBase | `Ts_UpdateOutputFileStampsProject]
+    ]
     val get_kind: t -> ts_InvalidatedProjectKind_UpdateOutputFileStamps [@@js.get "kind"]
     val updateOutputFileStatmps: t -> unit [@@js.call "updateOutputFileStatmps"]
     val cast: t -> ts_InvalidatedProjectBase [@@js.cast]
@@ -11711,6 +15191,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_BuildInvalidedProject of 'T | `Ts_InvalidatedProjectBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_BuildInvalidedProject of 'T | `Ts_InvalidatedProjectBase]
+    ]
     val get_kind: 'T t -> ts_InvalidatedProjectKind_Build [@@js.get "kind"]
     val getBuilderProgram: 'T t -> 'T or_undefined [@@js.call "getBuilderProgram"]
     val getProgram: 'T t -> ts_Program or_undefined [@@js.call "getProgram"]
@@ -11733,6 +15219,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_InvalidatedProjectBase | `Ts_UpdateBundleProject of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_InvalidatedProjectBase | `Ts_UpdateBundleProject of 'T]
+    ]
     val get_kind: 'T t -> ts_InvalidatedProjectKind_UpdateBundle [@@js.get "kind"]
     val emit: 'T t -> ?writeFile:ts_WriteFileCallback -> ?customTransformers:ts_CustomTransformers -> unit -> (ts_EmitResult, 'T ts_BuildInvalidedProject) union2 or_undefined [@@js.call "emit"]
     val cast: 'T t -> ts_InvalidatedProjectBase [@@js.cast]
@@ -11744,6 +15236,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_InvalidatedProject of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_InvalidatedProject of 'T]
+    ]
   end
   module[@js.scope "server"] Server : sig
     module ActionSet : sig
@@ -11753,6 +15251,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_ActionSet]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_ActionSet]
+      ]
     end
     module ActionInvalidate : sig
       type t = ts_server_ActionInvalidate
@@ -11761,6 +15265,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_ActionInvalidate]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_ActionInvalidate]
+      ]
     end
     module ActionPackageInstalled : sig
       type t = ts_server_ActionPackageInstalled
@@ -11769,6 +15279,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_ActionPackageInstalled]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_ActionPackageInstalled]
+      ]
     end
     module EventTypesRegistry : sig
       type t = ts_server_EventTypesRegistry
@@ -11777,6 +15293,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_EventTypesRegistry]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_EventTypesRegistry]
+      ]
     end
     module EventBeginInstallTypes : sig
       type t = ts_server_EventBeginInstallTypes
@@ -11785,6 +15307,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_EventBeginInstallTypes]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_EventBeginInstallTypes]
+      ]
     end
     module EventEndInstallTypes : sig
       type t = ts_server_EventEndInstallTypes
@@ -11793,6 +15321,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_EventEndInstallTypes]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_EventEndInstallTypes]
+      ]
     end
     module EventInitializationFailed : sig
       type t = ts_server_EventInitializationFailed
@@ -11801,6 +15335,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_EventInitializationFailed]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_EventInitializationFailed]
+      ]
     end
     module[@js.scope "TypingInstallerResponse"] TypingInstallerResponse : sig
       type t = ts_server_TypingInstallerResponse
@@ -11809,6 +15349,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_TypingInstallerResponse]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_TypingInstallerResponse]
+      ]
       val get_kind: t -> ((ts_server_ActionInvalidate, ts_server_ActionPackageInstalled, ts_server_ActionSet, ts_server_EventBeginInstallTypes, ts_server_EventEndInstallTypes, ts_server_EventInitializationFailed, ts_server_EventTypesRegistry) union7, ([`L_s38_action__invalidate[@js "action::invalidate"] | `L_s39_action__packageInstalled[@js "action::packageInstalled"] | `L_s40_action__set[@js "action::set"] | `L_s68_event__beginInstallTypes[@js "event::beginInstallTypes"] | `L_s69_event__endInstallTypes[@js "event::endInstallTypes"] | `L_s70_event__initializationFailed[@js "event::initializationFailed"] | `L_s71_event__typesRegistry[@js "event::typesRegistry"]] [@js.enum])) or_enum [@@js.get "kind"]
     end
     module[@js.scope "TypingInstallerRequestWithProjectName"] TypingInstallerRequestWithProjectName : sig
@@ -11818,6 +15364,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_TypingInstallerRequestWithProjectName]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_TypingInstallerRequestWithProjectName]
+      ]
       val get_projectName: t -> string [@@js.get "projectName"]
     end
     module[@js.scope "DiscoverTypings"] DiscoverTypings : sig
@@ -11827,6 +15379,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_DiscoverTypings | `Ts_server_TypingInstallerRequestWithProjectName]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_DiscoverTypings | `Ts_server_TypingInstallerRequestWithProjectName]
+      ]
       val get_fileNames: t -> string list [@@js.get "fileNames"]
       val get_projectRootPath: t -> ts_Path [@@js.get "projectRootPath"]
       val get_compilerOptions: t -> ts_CompilerOptions [@@js.get "compilerOptions"]
@@ -11844,6 +15402,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_CloseProject | `Ts_server_TypingInstallerRequestWithProjectName]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_CloseProject | `Ts_server_TypingInstallerRequestWithProjectName]
+      ]
       val get_kind: t -> ([`L_s50_closeProject[@js "closeProject"]] [@js.enum]) [@@js.get "kind"]
       val cast: t -> ts_server_TypingInstallerRequestWithProjectName [@@js.cast]
     end
@@ -11854,6 +15418,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_TypesRegistryRequest]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_TypesRegistryRequest]
+      ]
       val get_kind: t -> ([`L_s145_typesRegistry[@js "typesRegistry"]] [@js.enum]) [@@js.get "kind"]
     end
     module[@js.scope "InstallPackageRequest"] InstallPackageRequest : sig
@@ -11863,6 +15433,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_InstallPackageRequest | `Ts_server_TypingInstallerRequestWithProjectName]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_InstallPackageRequest | `Ts_server_TypingInstallerRequestWithProjectName]
+      ]
       val get_kind: t -> ([`L_s85_installPackage[@js "installPackage"]] [@js.enum]) [@@js.get "kind"]
       val get_fileName: t -> ts_Path [@@js.get "fileName"]
       val get_packageName: t -> string [@@js.get "packageName"]
@@ -11876,6 +15452,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_PackageInstalledResponse | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_PackageInstalledResponse | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      ]
       val get_kind: t -> ts_server_ActionPackageInstalled [@@js.get "kind"]
       val get_success: t -> bool [@@js.get "success"]
       val get_message: t -> string [@@js.get "message"]
@@ -11888,6 +15470,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_InitializationFailedResponse | `Ts_server_TypingInstallerResponse]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_InitializationFailedResponse | `Ts_server_TypingInstallerResponse]
+      ]
       val get_kind: t -> ts_server_EventInitializationFailed [@@js.get "kind"]
       val get_message: t -> string [@@js.get "message"]
       val get_stack: t -> string [@@js.get "stack"]
@@ -11900,6 +15488,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      ]
       val get_projectName: t -> string [@@js.get "projectName"]
       val cast: t -> ts_server_TypingInstallerResponse [@@js.cast]
     end
@@ -11910,6 +15504,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_InvalidateCachedTypings | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_InvalidateCachedTypings | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      ]
       val get_kind: t -> ts_server_ActionInvalidate [@@js.get "kind"]
       val cast: t -> ts_server_ProjectResponse [@@js.cast]
     end
@@ -11920,6 +15520,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_InstallTypes | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_InstallTypes | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      ]
       val get_kind: t -> ((ts_server_EventBeginInstallTypes, ts_server_EventEndInstallTypes) union2, ([`L_s68_event__beginInstallTypes[@js "event::beginInstallTypes"] | `L_s69_event__endInstallTypes[@js "event::endInstallTypes"]] [@js.enum])) or_enum [@@js.get "kind"]
       val get_eventId: t -> float [@@js.get "eventId"]
       val get_typingsInstallerVersion: t -> string [@@js.get "typingsInstallerVersion"]
@@ -11933,6 +15539,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_BeginInstallTypes | `Ts_server_InstallTypes | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_BeginInstallTypes | `Ts_server_InstallTypes | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      ]
       val get_kind: t -> ts_server_EventBeginInstallTypes [@@js.get "kind"]
       val cast: t -> ts_server_InstallTypes [@@js.cast]
     end
@@ -11943,6 +15555,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_EndInstallTypes | `Ts_server_InstallTypes | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_EndInstallTypes | `Ts_server_InstallTypes | `Ts_server_ProjectResponse | `Ts_server_TypingInstallerResponse]
+      ]
       val get_kind: t -> ts_server_EventEndInstallTypes [@@js.get "kind"]
       val get_installSuccess: t -> bool [@@js.get "installSuccess"]
       val cast: t -> ts_server_InstallTypes [@@js.cast]
@@ -11954,6 +15572,12 @@ module[@js.scope "ts"] Ts : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Ts_server_ProjectResponse | `Ts_server_SetTypings | `Ts_server_TypingInstallerResponse]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Ts_server_ProjectResponse | `Ts_server_SetTypings | `Ts_server_TypingInstallerResponse]
+      ]
       val get_typeAcquisition: t -> ts_TypeAcquisition [@@js.get "typeAcquisition"]
       val get_compilerOptions: t -> ts_CompilerOptions [@@js.get "compilerOptions"]
       val get_typings: t -> string list [@@js.get "typings"]
@@ -11969,6 +15593,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SourceFileLike]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SourceFileLike]
+    ]
     val getLineAndCharacterOfPosition: t -> pos:float -> ts_LineAndCharacter [@@js.call "getLineAndCharacterOfPosition"]
   end
   (**
@@ -11983,6 +15613,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_IScriptSnapshot]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_IScriptSnapshot]
+    ]
     (** Gets a portion of the script snapshot specified by \[start, end). *)
     val getText: t -> start:float -> end_:float -> string [@@js.call "getText"]
     (** Gets the length of this script snapshot. *)
@@ -12008,6 +15644,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PreProcessedFileInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PreProcessedFileInfo]
+    ]
     val get_referencedFiles: t -> ts_FileReference list [@@js.get "referencedFiles"]
     val set_referencedFiles: t -> ts_FileReference list -> unit [@@js.set "referencedFiles"]
     val get_typeReferenceDirectives: t -> ts_FileReference list [@@js.get "typeReferenceDirectives"]
@@ -12028,6 +15670,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_HostCancellationToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_HostCancellationToken]
+    ]
     val isCancellationRequested: t -> bool [@@js.call "isCancellationRequested"]
   end
   module[@js.scope "InstallPackageOptions"] InstallPackageOptions : sig
@@ -12037,6 +15685,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InstallPackageOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InstallPackageOptions]
+    ]
     val get_fileName: t -> ts_Path [@@js.get "fileName"]
     val set_fileName: t -> ts_Path -> unit [@@js.set "fileName"]
     val get_packageName: t -> string [@@js.get "packageName"]
@@ -12049,6 +15703,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_PerformanceEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_PerformanceEvent]
+    ]
     val get_kind: t -> ([`L_s19_CreatePackageJsonAutoImportProvider[@js "CreatePackageJsonAutoImportProvider"] | `L_s21_UpdateGraph[@js "UpdateGraph"]] [@js.enum]) [@@js.get "kind"]
     val set_kind: t -> ([`L_s19_CreatePackageJsonAutoImportProvider | `L_s21_UpdateGraph] [@js.enum]) -> unit [@@js.set "kind"]
     val get_durationMs: t -> float [@@js.get "durationMs"]
@@ -12069,6 +15729,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_GetEffectiveTypeRootsHost | `Ts_LanguageServiceHost]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_GetEffectiveTypeRootsHost | `Ts_LanguageServiceHost]
+    ]
     val getCompilationSettings: t -> ts_CompilerOptions [@@js.call "getCompilationSettings"]
     val getNewLine: t -> string [@@js.call "getNewLine"]
     val getProjectVersion: t -> string [@@js.call "getProjectVersion"]
@@ -12108,6 +15774,12 @@ module[@js.scope "ts"] Ts : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Ts_WithMetadata of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Ts_WithMetadata of 'T]
+    ]
   end
   module SemanticClassificationFormat : sig
     type t = ts_SemanticClassificationFormat
@@ -12124,6 +15796,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_LanguageService]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_LanguageService]
+    ]
     (** This is used as a part of restarting the language service. *)
     val cleanupSemanticCache: t -> unit [@@js.call "cleanupSemanticCache"]
     (**
@@ -12278,6 +15956,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JsxClosingTagInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JsxClosingTagInfo]
+    ]
     val get_newText: t -> string [@@js.get "newText"]
   end
   module[@js.scope "CombinedCodeFixScope"] CombinedCodeFixScope : sig
@@ -12287,6 +15971,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CombinedCodeFixScope]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CombinedCodeFixScope]
+    ]
     val get_type: t -> ([`L_s76_file[@js "file"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s76_file] [@js.enum]) -> unit [@@js.set "type"]
     val get_fileName: t -> string [@@js.get "fileName"]
@@ -12299,6 +15989,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CombinedCodeFixScope | `Ts_OrganizeImportsScope]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CombinedCodeFixScope | `Ts_OrganizeImportsScope]
+    ]
   end
   module CompletionsTriggerCharacter : sig
     type t = ts_CompletionsTriggerCharacter
@@ -12307,6 +16003,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CompletionsTriggerCharacter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CompletionsTriggerCharacter]
+    ]
   end
   module[@js.scope "GetCompletionsAtPositionOptions"] GetCompletionsAtPositionOptions : sig
     type t = ts_GetCompletionsAtPositionOptions
@@ -12315,6 +16017,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_GetCompletionsAtPositionOptions | `Ts_UserPreferences]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_GetCompletionsAtPositionOptions | `Ts_UserPreferences]
+    ]
     (**
       If the editor is asking for completions because a certain character was typed
       (as opposed to when the user explicitly requested them) this should be set.
@@ -12348,6 +16056,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpTriggerCharacter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpTriggerCharacter]
+    ]
   end
   module SignatureHelpRetriggerCharacter : sig
     type t = ts_SignatureHelpRetriggerCharacter
@@ -12356,6 +16070,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpRetriggerCharacter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpRetriggerCharacter]
+    ]
   end
   module[@js.scope "SignatureHelpItemsOptions"] SignatureHelpItemsOptions : sig
     type t = ts_SignatureHelpItemsOptions
@@ -12364,6 +16084,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpItemsOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpItemsOptions]
+    ]
     val get_triggerReason: t -> ts_SignatureHelpTriggerReason [@@js.get "triggerReason"]
     val set_triggerReason: t -> ts_SignatureHelpTriggerReason -> unit [@@js.set "triggerReason"]
   end
@@ -12374,6 +16100,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpTriggerReason]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpTriggerReason]
+    ]
   end
   (**
     Signals that the user manually requested signature help.
@@ -12386,6 +16118,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpInvokedReason]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpInvokedReason]
+    ]
     val get_kind: t -> ([`L_s88_invoked[@js "invoked"]] [@js.enum]) [@@js.get "kind"]
     val set_kind: t -> ([`L_s88_invoked] [@js.enum]) -> unit [@@js.set "kind"]
     val get_triggerCharacter: t -> never or_undefined [@@js.get "triggerCharacter"]
@@ -12402,6 +16140,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpCharacterTypedReason]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpCharacterTypedReason]
+    ]
     val get_kind: t -> ([`L_s47_characterTyped[@js "characterTyped"]] [@js.enum]) [@@js.get "kind"]
     val set_kind: t -> ([`L_s47_characterTyped] [@js.enum]) -> unit [@@js.set "kind"]
     (** Character that was responsible for triggering signature help. *)
@@ -12423,6 +16167,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpRetriggeredReason]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpRetriggeredReason]
+    ]
     val get_kind: t -> ([`L_s130_retrigger[@js "retrigger"]] [@js.enum]) [@@js.get "kind"]
     val set_kind: t -> ([`L_s130_retrigger] [@js.enum]) -> unit [@@js.set "kind"]
     (** Character that was responsible for triggering signature help. *)
@@ -12438,6 +16188,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ApplyCodeActionCommandResult]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ApplyCodeActionCommandResult]
+    ]
     val get_successMessage: t -> string [@@js.get "successMessage"]
     val set_successMessage: t -> string -> unit [@@js.set "successMessage"]
   end
@@ -12448,6 +16204,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Classifications]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Classifications]
+    ]
     val get_spans: t -> float list [@@js.get "spans"]
     val set_spans: t -> float list -> unit [@@js.set "spans"]
     val get_endOfLineState: t -> ts_EndOfLineState [@@js.get "endOfLineState"]
@@ -12460,6 +16222,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassifiedSpan]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassifiedSpan]
+    ]
     val get_textSpan: t -> ts_TextSpan [@@js.get "textSpan"]
     val set_textSpan: t -> ts_TextSpan -> unit [@@js.set "textSpan"]
     val get_classificationType: t -> ts_ClassificationTypeNames [@@js.get "classificationType"]
@@ -12472,6 +16240,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassifiedSpan2020]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassifiedSpan2020]
+    ]
     val get_textSpan: t -> ts_TextSpan [@@js.get "textSpan"]
     val set_textSpan: t -> ts_TextSpan -> unit [@@js.set "textSpan"]
     val get_classificationType: t -> float [@@js.get "classificationType"]
@@ -12490,6 +16264,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NavigationBarItem]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NavigationBarItem]
+    ]
     val get_text: t -> string [@@js.get "text"]
     val set_text: t -> string -> unit [@@js.set "text"]
     val get_kind: t -> ts_ScriptElementKind [@@js.get "kind"]
@@ -12518,6 +16298,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NavigationTree]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NavigationTree]
+    ]
     (** Name of the declaration, or a short description, e.g. "<class>". *)
     (** Name of the declaration, or a short description, e.g. "<class>". *)
     val get_text: t -> string [@@js.get "text"]
@@ -12559,6 +16345,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CallHierarchyItem]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CallHierarchyItem]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val set_name: t -> string -> unit [@@js.set "name"]
     val get_kind: t -> ts_ScriptElementKind [@@js.get "kind"]
@@ -12581,6 +16373,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CallHierarchyIncomingCall]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CallHierarchyIncomingCall]
+    ]
     val get_from: t -> ts_CallHierarchyItem [@@js.get "from"]
     val set_from: t -> ts_CallHierarchyItem -> unit [@@js.set "from"]
     val get_fromSpans: t -> ts_TextSpan list [@@js.get "fromSpans"]
@@ -12593,6 +16391,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CallHierarchyOutgoingCall]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CallHierarchyOutgoingCall]
+    ]
     val get_to: t -> ts_CallHierarchyItem [@@js.get "to"]
     val set_to: t -> ts_CallHierarchyItem -> unit [@@js.set "to"]
     val get_fromSpans: t -> ts_TextSpan list [@@js.get "fromSpans"]
@@ -12605,6 +16409,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TodoCommentDescriptor]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TodoCommentDescriptor]
+    ]
     val get_text: t -> string [@@js.get "text"]
     val set_text: t -> string -> unit [@@js.set "text"]
     val get_priority: t -> float [@@js.get "priority"]
@@ -12617,6 +16427,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TodoComment]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TodoComment]
+    ]
     val get_descriptor: t -> ts_TodoCommentDescriptor [@@js.get "descriptor"]
     val set_descriptor: t -> ts_TodoCommentDescriptor -> unit [@@js.set "descriptor"]
     val get_message: t -> string [@@js.get "message"]
@@ -12631,6 +16447,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TextChange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TextChange]
+    ]
     val get_span: t -> ts_TextSpan [@@js.get "span"]
     val set_span: t -> ts_TextSpan -> unit [@@js.set "span"]
     val get_newText: t -> string [@@js.get "newText"]
@@ -12643,6 +16465,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_FileTextChanges]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_FileTextChanges]
+    ]
     val get_fileName: t -> string [@@js.get "fileName"]
     val set_fileName: t -> string -> unit [@@js.set "fileName"]
     val get_textChanges: t -> ts_TextChange list [@@js.get "textChanges"]
@@ -12657,6 +16485,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CodeAction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CodeAction]
+    ]
     (** Description of the code action to display in the UI of the editor *)
     (** Description of the code action to display in the UI of the editor *)
     val get_description: t -> string [@@js.get "description"]
@@ -12689,6 +16523,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CodeAction | `Ts_CodeFixAction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CodeAction | `Ts_CodeFixAction]
+    ]
     (** Short name to identify the fix, for use by telemetry. *)
     (** Short name to identify the fix, for use by telemetry. *)
     val get_fixName: t -> string [@@js.get "fixName"]
@@ -12719,6 +16559,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CombinedCodeActions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CombinedCodeActions]
+    ]
     val get_changes: t -> ts_FileTextChanges list [@@js.get "changes"]
     val set_changes: t -> ts_FileTextChanges list -> unit [@@js.set "changes"]
     val get_commands: t -> ts_CodeActionCommand list [@@js.get "commands"]
@@ -12731,6 +16577,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CodeActionCommand | `Ts_InstallPackageAction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CodeActionCommand | `Ts_InstallPackageAction]
+    ]
   end
   module InstallPackageAction : sig
     type t = ts_InstallPackageAction
@@ -12739,6 +16591,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_InstallPackageAction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_InstallPackageAction]
+    ]
   end
   (** A set of one or more available refactoring actions, grouped under a parent refactoring. *)
   module[@js.scope "ApplicableRefactorInfo"] ApplicableRefactorInfo : sig
@@ -12748,6 +16606,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ApplicableRefactorInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ApplicableRefactorInfo]
+    ]
     (** The programmatic name of the refactoring *)
     (** The programmatic name of the refactoring *)
     val get_name: t -> string [@@js.get "name"]
@@ -12804,6 +16668,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_RefactorActionInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_RefactorActionInfo]
+    ]
     (** The programmatic name of the refactoring action *)
     (** The programmatic name of the refactoring action *)
     val get_name: t -> string [@@js.get "name"]
@@ -12857,6 +16727,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_RefactorEditInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_RefactorEditInfo]
+    ]
     val get_edits: t -> ts_FileTextChanges list [@@js.get "edits"]
     val set_edits: t -> ts_FileTextChanges list -> unit [@@js.set "edits"]
     val get_renameFilename: t -> string [@@js.get "renameFilename"]
@@ -12873,6 +16749,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_RefactorTriggerReason]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_RefactorTriggerReason]
+    ]
   end
   module[@js.scope "TextInsertion"] TextInsertion : sig
     type t = ts_TextInsertion
@@ -12881,6 +16763,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TextInsertion]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TextInsertion]
+    ]
     val get_newText: t -> string [@@js.get "newText"]
     val set_newText: t -> string -> unit [@@js.set "newText"]
     (** The position in newText the caret should point to after the insertion. *)
@@ -12896,6 +16784,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DocumentSpan]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DocumentSpan]
+    ]
     val get_textSpan: t -> ts_TextSpan [@@js.get "textSpan"]
     val set_textSpan: t -> ts_TextSpan -> unit [@@js.set "textSpan"]
     val get_fileName: t -> string [@@js.get "fileName"]
@@ -12940,6 +16834,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DocumentSpan | `Ts_RenameLocation]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DocumentSpan | `Ts_RenameLocation]
+    ]
     val get_prefixText: t -> string [@@js.get "prefixText"]
     val get_suffixText: t -> string [@@js.get "suffixText"]
     val cast: t -> ts_DocumentSpan [@@js.cast]
@@ -12951,6 +16851,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DocumentSpan | `Ts_ReferenceEntry]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DocumentSpan | `Ts_ReferenceEntry]
+    ]
     val get_isWriteAccess: t -> bool [@@js.get "isWriteAccess"]
     val set_isWriteAccess: t -> bool -> unit [@@js.set "isWriteAccess"]
     val get_isDefinition: t -> bool [@@js.get "isDefinition"]
@@ -12966,6 +16872,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DocumentSpan | `Ts_ImplementationLocation]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DocumentSpan | `Ts_ImplementationLocation]
+    ]
     val get_kind: t -> ts_ScriptElementKind [@@js.get "kind"]
     val set_kind: t -> ts_ScriptElementKind -> unit [@@js.set "kind"]
     val get_displayParts: t -> ts_SymbolDisplayPart list [@@js.get "displayParts"]
@@ -12987,6 +16899,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_HighlightSpan]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_HighlightSpan]
+    ]
     val get_fileName: t -> string [@@js.get "fileName"]
     val set_fileName: t -> string -> unit [@@js.set "fileName"]
     val get_isInString: t -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "isInString"]
@@ -13005,6 +16923,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_NavigateToItem]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_NavigateToItem]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val set_name: t -> string -> unit [@@js.set "name"]
     val get_kind: t -> ts_ScriptElementKind [@@js.get "kind"]
@@ -13047,6 +16971,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EditorOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EditorOptions]
+    ]
     val get_BaseIndentSize: t -> float [@@js.get "BaseIndentSize"]
     val set_BaseIndentSize: t -> float -> unit [@@js.set "BaseIndentSize"]
     val get_IndentSize: t -> float [@@js.get "IndentSize"]
@@ -13067,6 +16997,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EditorSettings]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EditorSettings]
+    ]
     val get_baseIndentSize: t -> float [@@js.get "baseIndentSize"]
     val set_baseIndentSize: t -> float -> unit [@@js.set "baseIndentSize"]
     val get_indentSize: t -> float [@@js.get "indentSize"]
@@ -13089,6 +17025,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EditorOptions | `Ts_FormatCodeOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EditorOptions | `Ts_FormatCodeOptions]
+    ]
     val get_InsertSpaceAfterCommaDelimiter: t -> bool [@@js.get "InsertSpaceAfterCommaDelimiter"]
     val set_InsertSpaceAfterCommaDelimiter: t -> bool -> unit [@@js.set "InsertSpaceAfterCommaDelimiter"]
     val get_InsertSpaceAfterSemicolonInForStatements: t -> bool [@@js.get "InsertSpaceAfterSemicolonInForStatements"]
@@ -13130,6 +17072,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_EditorSettings | `Ts_FormatCodeSettings]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_EditorSettings | `Ts_FormatCodeSettings]
+    ]
     val get_insertSpaceAfterCommaDelimiter: t -> bool [@@js.get "insertSpaceAfterCommaDelimiter"]
     val get_insertSpaceAfterSemicolonInForStatements: t -> bool [@@js.get "insertSpaceAfterSemicolonInForStatements"]
     val get_insertSpaceBeforeAndAfterBinaryOperators: t -> bool [@@js.get "insertSpaceBeforeAndAfterBinaryOperators"]
@@ -13159,6 +17107,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DefinitionInfo | `Ts_DocumentSpan]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DefinitionInfo | `Ts_DocumentSpan]
+    ]
     val get_kind: t -> ts_ScriptElementKind [@@js.get "kind"]
     val set_kind: t -> ts_ScriptElementKind -> unit [@@js.set "kind"]
     val get_name: t -> string [@@js.get "name"]
@@ -13176,6 +17130,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DefinitionInfoAndBoundSpan]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DefinitionInfoAndBoundSpan]
+    ]
     val get_definitions: t -> ts_DefinitionInfo list [@@js.get "definitions"]
     val set_definitions: t -> ts_DefinitionInfo list -> unit [@@js.set "definitions"]
     val get_textSpan: t -> ts_TextSpan [@@js.get "textSpan"]
@@ -13188,6 +17148,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DefinitionInfo | `Ts_DocumentSpan | `Ts_ReferencedSymbolDefinitionInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DefinitionInfo | `Ts_DocumentSpan | `Ts_ReferencedSymbolDefinitionInfo]
+    ]
     val get_displayParts: t -> ts_SymbolDisplayPart list [@@js.get "displayParts"]
     val set_displayParts: t -> ts_SymbolDisplayPart list -> unit [@@js.set "displayParts"]
     val cast: t -> ts_DefinitionInfo [@@js.cast]
@@ -13199,6 +17165,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ReferencedSymbol]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ReferencedSymbol]
+    ]
     val get_definition: t -> ts_ReferencedSymbolDefinitionInfo [@@js.get "definition"]
     val set_definition: t -> ts_ReferencedSymbolDefinitionInfo -> unit [@@js.set "definition"]
     val get_references: t -> ts_ReferenceEntry list [@@js.get "references"]
@@ -13219,6 +17191,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SymbolDisplayPart]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SymbolDisplayPart]
+    ]
     val get_text: t -> string [@@js.get "text"]
     val set_text: t -> string -> unit [@@js.set "text"]
     val get_kind: t -> string [@@js.get "kind"]
@@ -13231,6 +17209,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_JSDocTagInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_JSDocTagInfo]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val set_name: t -> string -> unit [@@js.set "name"]
     val get_text: t -> string [@@js.get "text"]
@@ -13243,6 +17227,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_QuickInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_QuickInfo]
+    ]
     val get_kind: t -> ts_ScriptElementKind [@@js.get "kind"]
     val set_kind: t -> ts_ScriptElementKind -> unit [@@js.set "kind"]
     val get_kindModifiers: t -> string [@@js.get "kindModifiers"]
@@ -13263,6 +17253,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_RenameInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_RenameInfo]
+    ]
   end
   module[@js.scope "RenameInfoSuccess"] RenameInfoSuccess : sig
     type t = ts_RenameInfoSuccess
@@ -13271,6 +17267,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_RenameInfoSuccess]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_RenameInfoSuccess]
+    ]
     val get_canRename: t -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "canRename"]
     val set_canRename: t -> ([`L_b_true] [@js.enum]) -> unit [@@js.set "canRename"]
     (**
@@ -13305,6 +17307,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_RenameInfoFailure]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_RenameInfoFailure]
+    ]
     val get_canRename: t -> ([`L_b_false[@js false]] [@js.enum]) [@@js.get "canRename"]
     val set_canRename: t -> ([`L_b_false] [@js.enum]) -> unit [@@js.set "canRename"]
     val get_localizedErrorMessage: t -> string [@@js.get "localizedErrorMessage"]
@@ -13317,6 +17325,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_RenameInfoOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_RenameInfoOptions]
+    ]
     val get_allowRenameOfImportPath: t -> bool [@@js.get "allowRenameOfImportPath"]
   end
   module[@js.scope "DocCommentTemplateOptions"] DocCommentTemplateOptions : sig
@@ -13326,6 +17340,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DocCommentTemplateOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DocCommentTemplateOptions]
+    ]
     val get_generateReturnInDocTemplate: t -> bool [@@js.get "generateReturnInDocTemplate"]
   end
   module[@js.scope "SignatureHelpParameter"] SignatureHelpParameter : sig
@@ -13335,6 +17355,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpParameter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpParameter]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val set_name: t -> string -> unit [@@js.set "name"]
     val get_documentation: t -> ts_SymbolDisplayPart list [@@js.get "documentation"]
@@ -13353,6 +17379,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SelectionRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SelectionRange]
+    ]
     val get_textSpan: t -> ts_TextSpan [@@js.get "textSpan"]
     val set_textSpan: t -> ts_TextSpan -> unit [@@js.set "textSpan"]
     val get_parent: t -> t [@@js.get "parent"]
@@ -13372,6 +17404,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpItem]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpItem]
+    ]
     val get_isVariadic: t -> bool [@@js.get "isVariadic"]
     val set_isVariadic: t -> bool -> unit [@@js.set "isVariadic"]
     val get_prefixDisplayParts: t -> ts_SymbolDisplayPart list [@@js.get "prefixDisplayParts"]
@@ -13395,6 +17433,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_SignatureHelpItems]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_SignatureHelpItems]
+    ]
     val get_items: t -> ts_SignatureHelpItem list [@@js.get "items"]
     val set_items: t -> ts_SignatureHelpItem list -> unit [@@js.set "items"]
     val get_applicableSpan: t -> ts_TextSpan [@@js.get "applicableSpan"]
@@ -13413,6 +17457,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CompletionInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CompletionInfo]
+    ]
     (** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. *)
     (** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. *)
     val get_isGlobalCompletion: t -> bool [@@js.get "isGlobalCompletion"]
@@ -13452,6 +17502,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CompletionEntry]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CompletionEntry]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val set_name: t -> string -> unit [@@js.set "name"]
     val get_kind: t -> ts_ScriptElementKind [@@js.get "kind"]
@@ -13497,6 +17553,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_CompletionEntryDetails]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_CompletionEntryDetails]
+    ]
     val get_name: t -> string [@@js.get "name"]
     val set_name: t -> string -> unit [@@js.set "name"]
     val get_kind: t -> ts_ScriptElementKind [@@js.get "kind"]
@@ -13521,6 +17583,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_OutliningSpan]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_OutliningSpan]
+    ]
     (** The span of the document to actually collapse. *)
     (** The span of the document to actually collapse. *)
     val get_textSpan: t -> ts_TextSpan [@@js.get "textSpan"]
@@ -13595,6 +17663,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassificationResult]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassificationResult]
+    ]
     val get_finalLexState: t -> ts_EndOfLineState [@@js.get "finalLexState"]
     val set_finalLexState: t -> ts_EndOfLineState -> unit [@@js.set "finalLexState"]
     val get_entries: t -> ts_ClassificationInfo list [@@js.get "entries"]
@@ -13607,6 +17681,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_ClassificationInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_ClassificationInfo]
+    ]
     val get_length: t -> float [@@js.get "length"]
     val set_length: t -> float -> unit [@@js.set "length"]
     val get_classification: t -> ts_TokenClass [@@js.get "classification"]
@@ -13619,6 +17699,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_Classifier]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_Classifier]
+    ]
     (**
       Gives lexical classifications of tokens on a line without any syntactic context.
       For instance, a token consisting of the text 'string' can be either an identifier
@@ -13682,6 +17768,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DocumentHighlights]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DocumentHighlights]
+    ]
     val get_fileName: t -> string [@@js.get "fileName"]
     val set_fileName: t -> string -> unit [@@js.set "fileName"]
     val get_highlightSpans: t -> ts_HighlightSpan list [@@js.get "highlightSpans"]
@@ -13709,6 +17801,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DocumentRegistry]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DocumentRegistry]
+    ]
     (**
       Request a stored SourceFile with a given fileName and compilationSettings.
       The first call to acquire will call createLanguageServiceSourceFile to generate
@@ -13757,6 +17855,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_DocumentRegistryBucketKey]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_DocumentRegistryBucketKey]
+    ]
   end
   val createDocumentRegistry: ?useCaseSensitiveFileNames:bool -> ?currentDirectory:string -> unit -> ts_DocumentRegistry [@@js.global "createDocumentRegistry"]
   val preProcessFile: sourceText:string -> ?readImportFiles:bool -> ?detectJavaScriptImports:bool -> unit -> ts_PreProcessedFileInfo [@@js.global "preProcessFile"]
@@ -13767,6 +17871,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TranspileOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TranspileOptions]
+    ]
     val get_compilerOptions: t -> ts_CompilerOptions [@@js.get "compilerOptions"]
     val set_compilerOptions: t -> ts_CompilerOptions -> unit [@@js.set "compilerOptions"]
     val get_fileName: t -> string [@@js.get "fileName"]
@@ -13787,6 +17897,12 @@ module[@js.scope "ts"] Ts : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Ts_TranspileOutput]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Ts_TranspileOutput]
+    ]
     val get_outputText: t -> string [@@js.get "outputText"]
     val set_outputText: t -> string -> unit [@@js.set "outputText"]
     val get_diagnostics: t -> ts_Diagnostic list [@@js.get "diagnostics"]

@@ -1586,6 +1586,12 @@ module[@js.scope "monaco"] Monaco : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Monaco_Thenable of 'T | PromiseLike.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Monaco_Thenable of 'T | PromiseLike.tags]
+    ]
   end
   module[@js.scope "Environment"] Environment : sig
     type t = monaco_Environment
@@ -1594,6 +1600,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_Environment]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_Environment]
+    ]
     val get_globalAPI: t -> bool [@@js.get "globalAPI"]
     val set_globalAPI: t -> bool -> unit [@@js.set "globalAPI"]
     val get_baseUrl: t -> string [@@js.get "baseUrl"]
@@ -1608,6 +1620,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_IDisposable]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_IDisposable]
+    ]
     val dispose: t -> unit [@@js.call "dispose"]
   end
   module[@js.scope "IEvent"] IEvent : sig
@@ -1617,6 +1635,12 @@ module[@js.scope "monaco"] Monaco : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Monaco_IEvent of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Monaco_IEvent of 'T]
+    ]
     val apply: 'T t -> listener:(e:'T -> any) -> ?thisArg:any -> unit -> monaco_IDisposable [@@js.apply]
   end
   (** A helper that allows to emit and listen to typed events *)
@@ -1627,6 +1651,12 @@ module[@js.scope "monaco"] Monaco : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Monaco_Emitter of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Monaco_Emitter of 'T]
+    ]
     val create: unit -> 'T t [@@js.create]
     val get_event: 'T t -> 'T monaco_IEvent [@@js.get "event"]
     val fire: 'T t -> event:'T -> unit [@@js.call "fire"]
@@ -1655,6 +1685,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_CancellationTokenSource]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_CancellationTokenSource]
+    ]
     val create: ?parent:monaco_CancellationToken -> unit -> t [@@js.create]
     val get_token: t -> monaco_CancellationToken [@@js.get "token"]
     val cancel: t -> unit [@@js.call "cancel"]
@@ -1667,6 +1703,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_CancellationToken]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_CancellationToken]
+    ]
     (** A flag signalling is cancellation has been requested. *)
     val get_isCancellationRequested: t -> bool [@@js.get "isCancellationRequested"]
     (**
@@ -1701,6 +1743,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_Uri | `Monaco_UriComponents]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_Uri | `Monaco_UriComponents]
+    ]
     val isUri: thing:any -> bool [@@js.global "isUri"]
     (**
       scheme is the 'http' part of 'http://www.msft.com/some/path?query#fragment'.
@@ -1804,6 +1852,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_UriComponents]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_UriComponents]
+    ]
     val get_scheme: t -> string [@@js.get "scheme"]
     val set_scheme: t -> string -> unit [@@js.set "scheme"]
     val get_authority: t -> string [@@js.get "authority"]
@@ -1835,6 +1889,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_KeyMod]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_KeyMod]
+    ]
     val get_CtrlCmd: unit -> float [@@js.get "CtrlCmd"]
     val get_Shift: unit -> float [@@js.get "Shift"]
     val get_Alt: unit -> float [@@js.get "Alt"]
@@ -1848,6 +1908,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_IMarkdownString]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_IMarkdownString]
+    ]
     val get_value: t -> string [@@js.get "value"]
     val get_isTrusted: t -> bool [@@js.get "isTrusted"]
     val get_supportThemeIcons: t -> bool [@@js.get "supportThemeIcons"]
@@ -1861,6 +1927,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_IKeyboardEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_IKeyboardEvent]
+    ]
     val get__standardKeyboardEventBrand: t -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "_standardKeyboardEventBrand"]
     val get_browserEvent: t -> KeyboardEvent.t_0 [@@js.get "browserEvent"]
     val get_target: t -> HTMLElement.t_0 [@@js.get "target"]
@@ -1881,6 +1953,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_IMouseEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_IMouseEvent]
+    ]
     val get_browserEvent: t -> MouseEvent.t_0 [@@js.get "browserEvent"]
     val get_leftButton: t -> bool [@@js.get "leftButton"]
     val get_middleButton: t -> bool [@@js.get "middleButton"]
@@ -1905,6 +1983,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_IScrollEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_IScrollEvent]
+    ]
     val get_scrollTop: t -> float [@@js.get "scrollTop"]
     val get_scrollLeft: t -> float [@@js.get "scrollLeft"]
     val get_scrollWidth: t -> float [@@js.get "scrollWidth"]
@@ -1922,6 +2006,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_IPosition]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_IPosition]
+    ]
     (** line number (starts at 1) *)
     val get_lineNumber: t -> float [@@js.get "lineNumber"]
     (** column (the first character in a line is between column 1 and column 2) *)
@@ -1935,6 +2025,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_Position]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_Position]
+    ]
     (** line number (starts at 1) *)
     val get_lineNumber: t -> float [@@js.get "lineNumber"]
     (** column (the first character in a line is between column 1 and column 2) *)
@@ -1995,6 +2091,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_IRange]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_IRange]
+    ]
     (** Line number on which the range starts (starts at 1). *)
     val get_startLineNumber: t -> float [@@js.get "startLineNumber"]
     (** Column on which the range starts in line `startLineNumber` (starts at 1). *)
@@ -2012,6 +2114,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_Range]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_Range]
+    ]
     (** Line number on which the range starts (starts at 1). *)
     val get_startLineNumber: t -> float [@@js.get "startLineNumber"]
     (** Column on which the range starts in line `startLineNumber` (starts at 1). *)
@@ -2108,6 +2216,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_ISelection]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_ISelection]
+    ]
     (** The line number on which the selection has started. *)
     val get_selectionStartLineNumber: t -> float [@@js.get "selectionStartLineNumber"]
     (** The column on `selectionStartLineNumber` where the selection has started. *)
@@ -2128,6 +2242,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_Range | `Monaco_Selection]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_Range | `Monaco_Selection]
+    ]
     (** The line number on which the selection has started. *)
     val get_selectionStartLineNumber: t -> float [@@js.get "selectionStartLineNumber"]
     (** The column on `selectionStartLineNumber` where the selection has started. *)
@@ -2179,6 +2299,12 @@ module[@js.scope "monaco"] Monaco : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Monaco_Token]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Monaco_Token]
+    ]
     val get__tokenBrand: t -> unknown [@@js.get "_tokenBrand"]
     val set__tokenBrand: t -> unknown -> unit [@@js.set "_tokenBrand"]
     val get_offset: t -> float [@@js.get "offset"]
@@ -2195,6 +2321,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDiffNavigator]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDiffNavigator]
+      ]
       val canNavigate: t -> bool [@@js.call "canNavigate"]
       val next: t -> unit [@@js.call "next"]
       val previous: t -> unit [@@js.call "previous"]
@@ -2225,6 +2357,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDiffNavigatorOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDiffNavigatorOptions]
+      ]
       val get_followsCaret: t -> bool [@@js.get "followsCaret"]
       val get_ignoreCharChanges: t -> bool [@@js.get "ignoreCharChanges"]
       val get_alwaysRevealFirst: t -> bool [@@js.get "alwaysRevealFirst"]
@@ -2296,6 +2434,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_BuiltinTheme]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_BuiltinTheme]
+      ]
     end
     module[@js.scope "IStandaloneThemeData"] IStandaloneThemeData : sig
       type t = monaco_editor_IStandaloneThemeData
@@ -2304,6 +2448,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IStandaloneThemeData]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IStandaloneThemeData]
+      ]
       val get_base: t -> monaco_editor_BuiltinTheme [@@js.get "base"]
       val set_base: t -> monaco_editor_BuiltinTheme -> unit [@@js.set "base"]
       val get_inherit: t -> bool [@@js.get "inherit"]
@@ -2322,6 +2472,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IColors]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IColors]
+      ]
     end
     module[@js.scope "ITokenThemeRule"] ITokenThemeRule : sig
       type t = monaco_editor_ITokenThemeRule
@@ -2330,6 +2486,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ITokenThemeRule]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ITokenThemeRule]
+      ]
       val get_token: t -> string [@@js.get "token"]
       val set_token: t -> string -> unit [@@js.set "token"]
       val get_foreground: t -> string [@@js.get "foreground"]
@@ -2347,6 +2509,12 @@ module[@js.scope "monaco"] Monaco : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Monaco_editor_MonacoWebWorker of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Monaco_editor_MonacoWebWorker of 'T]
+      ]
       (** Terminate the web worker, thus invalidating the returned proxy. *)
       val dispose: 'T t -> unit [@@js.call "dispose"]
       (** Get a proxy to the arbitrary loaded code. *)
@@ -2364,6 +2532,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IWebWorkerOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IWebWorkerOptions]
+      ]
       (**
         The AMD moduleId to load.
         It should export a function `create` that should return the exported proxy.
@@ -2416,6 +2590,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IActionDescriptor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IActionDescriptor]
+      ]
       (** An unique identifier of the contributed action. *)
       (** An unique identifier of the contributed action. *)
       val get_id: t -> string [@@js.get "id"]
@@ -2489,6 +2669,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IGlobalEditorOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IGlobalEditorOptions]
+      ]
       (**
         The number of spaces a tab is equal to.
         This setting is overridden based on the file contents when `detectIndentation` is on.
@@ -2681,6 +2867,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorConstructionOptions | `Monaco_editor_IEditorOptions | `Monaco_editor_IGlobalEditorOptions | `Monaco_editor_IStandaloneEditorConstructionOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorConstructionOptions | `Monaco_editor_IEditorOptions | `Monaco_editor_IGlobalEditorOptions | `Monaco_editor_IStandaloneEditorConstructionOptions]
+      ]
       (** The initial model associated with this code editor. *)
       (** The initial model associated with this code editor. *)
       val get_model: t -> monaco_editor_ITextModel or_null [@@js.get "model"]
@@ -2782,6 +2974,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDiffEditorConstructionOptions | `Monaco_editor_IDiffEditorOptions | `Monaco_editor_IEditorOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDiffEditorConstructionOptions | `Monaco_editor_IDiffEditorOptions | `Monaco_editor_IEditorOptions]
+      ]
       (** The initial editor dimension (to avoid measuring the container). *)
       (** The initial editor dimension (to avoid measuring the container). *)
       val get_dimension: t -> monaco_editor_IDimension [@@js.get "dimension"]
@@ -2847,6 +3045,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICodeEditor | `Monaco_editor_IEditor | `Monaco_editor_IStandaloneCodeEditor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICodeEditor | `Monaco_editor_IEditor | `Monaco_editor_IStandaloneCodeEditor]
+      ]
       (** Update the editor's options after the editor has been created. *)
       val updateOptions: t -> newOptions:(monaco_editor_IEditorOptions, monaco_editor_IGlobalEditorOptions) intersection2 -> unit [@@js.call "updateOptions"]
       val addCommand: t -> keybinding:float -> handler:monaco_editor_ICommandHandler -> ?context:string -> unit -> string or_null [@@js.call "addCommand"]
@@ -2861,6 +3065,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDiffEditor | `Monaco_editor_IEditor | `Monaco_editor_IStandaloneDiffEditor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDiffEditor | `Monaco_editor_IEditor | `Monaco_editor_IStandaloneDiffEditor]
+      ]
       val addCommand: t -> keybinding:float -> handler:monaco_editor_ICommandHandler -> ?context:string -> unit -> string or_null [@@js.call "addCommand"]
       val createContextKey: t -> key:string -> defaultValue:'T -> 'T monaco_editor_IContextKey [@@js.call "createContextKey"]
       val addAction: t -> descriptor:monaco_editor_IActionDescriptor -> monaco_IDisposable [@@js.call "addAction"]
@@ -2877,6 +3087,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICommandHandler]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICommandHandler]
+      ]
       val apply: t -> args:(any list [@js.variadic]) -> unit [@@js.apply]
     end
     module[@js.scope "IContextKey"] IContextKey : sig
@@ -2886,6 +3102,12 @@ module[@js.scope "monaco"] Monaco : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Monaco_editor_IContextKey of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Monaco_editor_IContextKey of 'T]
+      ]
       val set_: 'T t -> value:'T -> unit [@@js.call "set"]
       val reset: 'T t -> unit [@@js.call "reset"]
       val get_: 'T t -> 'T or_undefined [@@js.call "get"]
@@ -2897,6 +3119,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorOverrideServices]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorOverrideServices]
+      ]
       val get: t -> string -> any [@@js.index_get]
       val set: t -> string -> any -> unit [@@js.index_set]
     end
@@ -2907,6 +3135,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IMarker]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IMarker]
+      ]
       val get_owner: t -> string [@@js.get "owner"]
       val set_owner: t -> string -> unit [@@js.set "owner"]
       val get_resource: t -> monaco_Uri [@@js.get "resource"]
@@ -2940,6 +3174,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IMarkerData]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IMarkerData]
+      ]
       val get_code: t -> anonymous_interface_15 or_string [@@js.get "code"]
       val set_code: t -> anonymous_interface_15 or_string -> unit [@@js.set "code"]
       val get_severity: t -> monaco_MarkerSeverity [@@js.get "severity"]
@@ -2968,6 +3208,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IRelatedInformation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IRelatedInformation]
+      ]
       val get_resource: t -> monaco_Uri [@@js.get "resource"]
       val set_resource: t -> monaco_Uri -> unit [@@js.set "resource"]
       val get_message: t -> string [@@js.get "message"]
@@ -2988,6 +3234,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IColorizerOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IColorizerOptions]
+      ]
       val get_tabSize: t -> float [@@js.get "tabSize"]
       val set_tabSize: t -> float -> unit [@@js.set "tabSize"]
     end
@@ -2998,6 +3250,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IColorizerElementOptions | `Monaco_editor_IColorizerOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IColorizerElementOptions | `Monaco_editor_IColorizerOptions]
+      ]
       val get_theme: t -> string [@@js.get "theme"]
       val set_theme: t -> string -> unit [@@js.set "theme"]
       val get_mimeType: t -> string [@@js.get "mimeType"]
@@ -3019,6 +3277,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ThemeColor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ThemeColor]
+      ]
       val get_id: t -> string [@@js.get "id"]
       val set_id: t -> string -> unit [@@js.set "id"]
     end
@@ -3047,6 +3311,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDecorationOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDecorationOptions]
+      ]
       (**
         CSS color to render.
         e.g.: rgba(100, 100, 100, 0.5) or a color from the color registry
@@ -3084,6 +3354,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDecorationOptions | `Monaco_editor_IModelDecorationOverviewRulerOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDecorationOptions | `Monaco_editor_IModelDecorationOverviewRulerOptions]
+      ]
       (** The position in the overview ruler. *)
       (** The position in the overview ruler. *)
       val get_position: t -> monaco_editor_OverviewRulerLane [@@js.get "position"]
@@ -3099,6 +3375,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDecorationOptions | `Monaco_editor_IModelDecorationMinimapOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDecorationOptions | `Monaco_editor_IModelDecorationMinimapOptions]
+      ]
       (** The position in the overview ruler. *)
       (** The position in the overview ruler. *)
       val get_position: t -> monaco_editor_MinimapPosition [@@js.get "position"]
@@ -3114,6 +3396,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelDecorationOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelDecorationOptions]
+      ]
       (**
         Customize the growing behavior of the decoration when typing at the edges of the decoration.
         Defaults to TrackedRangeStickiness.AlwaysGrowsWhenTypingAtEdges
@@ -3233,6 +3521,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelDeltaDecoration]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelDeltaDecoration]
+      ]
       (** Range that this decoration covers. *)
       (** Range that this decoration covers. *)
       val get_range: t -> monaco_IRange [@@js.get "range"]
@@ -3252,6 +3546,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelDecoration]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelDecoration]
+      ]
       (** Identifier for a decoration. *)
       val get_id: t -> string [@@js.get "id"]
       (** Identifier for a decoration's owner. *)
@@ -3269,6 +3569,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IWordAtPosition]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IWordAtPosition]
+      ]
       (** The word. *)
       val get_word: t -> string [@@js.get "word"]
       (** The column where the word starts. *)
@@ -3314,6 +3620,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ISingleEditOperation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ISingleEditOperation]
+      ]
       (** The range to replace. This can be empty to emulate a simple insert. *)
       (** The range to replace. This can be empty to emulate a simple insert. *)
       val get_range: t -> monaco_IRange [@@js.get "range"]
@@ -3347,6 +3659,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IIdentifiedSingleEditOperation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IIdentifiedSingleEditOperation]
+      ]
       (** The range to replace. This can be empty to emulate a simple insert. *)
       (** The range to replace. This can be empty to emulate a simple insert. *)
       val get_range: t -> monaco_IRange [@@js.get "range"]
@@ -3379,6 +3697,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IValidEditOperation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IValidEditOperation]
+      ]
       (** The range to replace. This can be empty to emulate a simple insert. *)
       (** The range to replace. This can be empty to emulate a simple insert. *)
       val get_range: t -> monaco_Range [@@js.get "range"]
@@ -3398,6 +3722,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICursorStateComputer]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICursorStateComputer]
+      ]
       (** A callback that can compute the resulting cursors state after some edit operations have been executed. *)
       val apply: t -> inverseEditOperations:monaco_editor_IValidEditOperation list -> monaco_Selection list or_null [@@js.apply]
     end
@@ -3408,6 +3738,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_TextModelResolvedOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_TextModelResolvedOptions]
+      ]
       val get__textModelResolvedOptionsBrand: t -> unknown [@@js.get "_textModelResolvedOptionsBrand"]
       val set__textModelResolvedOptionsBrand: t -> unknown -> unit [@@js.set "_textModelResolvedOptionsBrand"]
       val get_tabSize: t -> float [@@js.get "tabSize"]
@@ -3423,6 +3759,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ITextModelUpdateOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ITextModelUpdateOptions]
+      ]
       val get_tabSize: t -> float [@@js.get "tabSize"]
       val set_tabSize: t -> float -> unit [@@js.set "tabSize"]
       val get_indentSize: t -> float [@@js.get "indentSize"]
@@ -3439,6 +3781,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_FindMatch]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_FindMatch]
+      ]
       val get__findMatchBrand: t -> unknown [@@js.get "_findMatchBrand"]
       val set__findMatchBrand: t -> unknown -> unit [@@js.set "_findMatchBrand"]
       val get_range: t -> monaco_Range [@@js.get "range"]
@@ -3464,6 +3812,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ITextModel]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ITextModel]
+      ]
       (** Gets the resource associated with this editor model. *)
       val get_uri: t -> monaco_Uri [@@js.get "uri"]
       (** A unique identifier associated with this model. *)
@@ -3796,6 +4150,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditOperationBuilder]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditOperationBuilder]
+      ]
       (**
         Add a new edit operation (a replace operation).
         @param range The range to replace (delete). May be empty to represent a simple insert.
@@ -3828,6 +4188,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICursorStateComputerData]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICursorStateComputerData]
+      ]
       (** Get the inverse edit operations of the added edit operations. *)
       val getInverseEditOperations: t -> monaco_editor_IValidEditOperation list [@@js.call "getInverseEditOperations"]
       (**
@@ -3845,6 +4211,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICommand]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICommand]
+      ]
       (**
         Get the edit operations needed to execute this command.
         @param model The model the command will execute on.
@@ -3867,6 +4239,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDiffEditorModel]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDiffEditorModel]
+      ]
       (** Original model. *)
       (** Original model. *)
       val get_original: t -> monaco_editor_ITextModel [@@js.get "original"]
@@ -3886,6 +4264,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelChangedEvent]
+      ]
       (** The `uri` of the previous model or null. *)
       val get_oldModelUrl: t -> monaco_Uri or_null [@@js.get "oldModelUrl"]
       (** The `uri` of the new model or null. *)
@@ -3898,6 +4282,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDimension]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDimension]
+      ]
       val get_width: t -> float [@@js.get "width"]
       val set_width: t -> float -> unit [@@js.set "width"]
       val get_height: t -> float [@@js.get "height"]
@@ -3911,6 +4301,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IChange]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IChange]
+      ]
       val get_originalStartLineNumber: t -> float [@@js.get "originalStartLineNumber"]
       val get_originalEndLineNumber: t -> float [@@js.get "originalEndLineNumber"]
       val get_modifiedStartLineNumber: t -> float [@@js.get "modifiedStartLineNumber"]
@@ -3924,6 +4320,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IChange | `Monaco_editor_ICharChange]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IChange | `Monaco_editor_ICharChange]
+      ]
       val get_originalStartColumn: t -> float [@@js.get "originalStartColumn"]
       val get_originalEndColumn: t -> float [@@js.get "originalEndColumn"]
       val get_modifiedStartColumn: t -> float [@@js.get "modifiedStartColumn"]
@@ -3938,6 +4340,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IChange | `Monaco_editor_ILineChange]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IChange | `Monaco_editor_ILineChange]
+      ]
       val get_charChanges: t -> monaco_editor_ICharChange list or_undefined [@@js.get "charChanges"]
       val cast: t -> monaco_editor_IChange [@@js.cast]
     end
@@ -3948,6 +4356,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IContentSizeChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IContentSizeChangedEvent]
+      ]
       val get_contentWidth: t -> float [@@js.get "contentWidth"]
       val get_contentHeight: t -> float [@@js.get "contentHeight"]
       val get_contentWidthChanged: t -> bool [@@js.get "contentWidthChanged"]
@@ -3960,6 +4374,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_INewScrollPosition]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_INewScrollPosition]
+      ]
       val get_scrollLeft: t -> float [@@js.get "scrollLeft"]
       val set_scrollLeft: t -> float -> unit [@@js.set "scrollLeft"]
       val get_scrollTop: t -> float [@@js.get "scrollTop"]
@@ -3972,6 +4392,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorAction]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorAction]
+      ]
       val get_id: t -> string [@@js.get "id"]
       val get_label: t -> string [@@js.get "label"]
       val get_alias: t -> string [@@js.get "alias"]
@@ -3985,6 +4411,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorModel]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorModel]
+      ]
     end
     (** A (serializable) state of the cursors. *)
     module[@js.scope "ICursorState"] ICursorState : sig
@@ -3994,6 +4426,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICursorState]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICursorState]
+      ]
       val get_inSelectionMode: t -> bool [@@js.get "inSelectionMode"]
       val set_inSelectionMode: t -> bool -> unit [@@js.set "inSelectionMode"]
       val get_selectionStart: t -> monaco_IPosition [@@js.get "selectionStart"]
@@ -4009,6 +4447,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IViewState]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IViewState]
+      ]
       (** written by previous versions *)
       (** written by previous versions *)
       val get_scrollTop: t -> float [@@js.get "scrollTop"]
@@ -4034,6 +4478,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICodeEditorViewState]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICodeEditorViewState]
+      ]
       val get_cursorState: t -> monaco_editor_ICursorState list [@@js.get "cursorState"]
       val set_cursorState: t -> monaco_editor_ICursorState list -> unit [@@js.set "cursorState"]
       val get_viewState: t -> monaco_editor_IViewState [@@js.get "viewState"]
@@ -4049,6 +4499,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDiffEditorViewState]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDiffEditorViewState]
+      ]
       val get_original: t -> monaco_editor_ICodeEditorViewState or_null [@@js.get "original"]
       val set_original: t -> monaco_editor_ICodeEditorViewState or_null -> unit [@@js.set "original"]
       val get_modified: t -> monaco_editor_ICodeEditorViewState or_null [@@js.get "modified"]
@@ -4062,6 +4518,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorViewState]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorViewState]
+      ]
     end
     module ScrollType : sig
       type t = monaco_editor_ScrollType
@@ -4079,6 +4541,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditor]
+      ]
       (**
         An event emitted when the editor has been disposed.
         event: 
@@ -4228,6 +4696,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorContribution]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorContribution]
+      ]
       (** Dispose this contribution. *)
       val dispose: t -> unit [@@js.call "dispose"]
       (** Store view state. *)
@@ -4245,6 +4719,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelLanguageChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelLanguageChangedEvent]
+      ]
       (** Previous language *)
       val get_oldLanguage: t -> string [@@js.get "oldLanguage"]
       (** New language *)
@@ -4258,6 +4738,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelLanguageConfigurationChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelLanguageConfigurationChangedEvent]
+      ]
     end
     module[@js.scope "IModelContentChange"] IModelContentChange : sig
       type t = monaco_editor_IModelContentChange
@@ -4266,6 +4752,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelContentChange]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelContentChange]
+      ]
       (** The range that got replaced. *)
       val get_range: t -> monaco_IRange [@@js.get "range"]
       (** The offset of the range that got replaced. *)
@@ -4283,6 +4775,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelContentChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelContentChangedEvent]
+      ]
       val get_changes: t -> monaco_editor_IModelContentChange list [@@js.get "changes"]
       (** The (new) end-of-line character. *)
       val get_eol: t -> string [@@js.get "eol"]
@@ -4306,6 +4804,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelDecorationsChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelDecorationsChangedEvent]
+      ]
       val get_affectsMinimap: t -> bool [@@js.get "affectsMinimap"]
       val get_affectsOverviewRuler: t -> bool [@@js.get "affectsOverviewRuler"]
     end
@@ -4316,6 +4820,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModelOptionsChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModelOptionsChangedEvent]
+      ]
       val get_tabSize: t -> bool [@@js.get "tabSize"]
       val get_indentSize: t -> bool [@@js.get "indentSize"]
       val get_insertSpaces: t -> bool [@@js.get "insertSpaces"]
@@ -4338,6 +4848,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICursorPositionChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICursorPositionChangedEvent]
+      ]
       (** Primary cursor's position. *)
       val get_position: t -> monaco_Position [@@js.get "position"]
       (** Secondary cursors' position. *)
@@ -4355,6 +4871,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICursorSelectionChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICursorSelectionChangedEvent]
+      ]
       (** The primary selection. *)
       val get_selection: t -> monaco_Selection [@@js.get "selection"]
       (** The secondary selections. *)
@@ -4386,6 +4908,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorAutoClosingStrategy]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorAutoClosingStrategy]
+      ]
     end
     (** Configuration options for auto wrapping quotes and brackets *)
     module EditorAutoSurroundStrategy : sig
@@ -4395,6 +4923,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorAutoSurroundStrategy]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorAutoSurroundStrategy]
+      ]
     end
     (** Configuration options for typing over closing quotes or brackets *)
     module EditorAutoClosingEditStrategy : sig
@@ -4404,6 +4938,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorAutoClosingEditStrategy]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorAutoClosingEditStrategy]
+      ]
     end
     (** Configuration options for auto indentation in the editor *)
     module EditorAutoIndentStrategy : sig
@@ -4422,6 +4962,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorOptions]
+      ]
       (** This editor is used inside a diff editor. *)
       (** This editor is used inside a diff editor. *)
       val get_inDiffEditor: t -> bool [@@js.get "inDiffEditor"]
@@ -5852,6 +6398,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDiffEditorOptions | `Monaco_editor_IEditorOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDiffEditorOptions | `Monaco_editor_IEditorOptions]
+      ]
       (**
         Allow the user to resize the diff editor split view.
         Defaults to true.
@@ -6003,6 +6555,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ConfigurationChangedEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ConfigurationChangedEvent]
+      ]
       val hasChanged: t -> id:monaco_editor_EditorOption -> bool [@@js.call "hasChanged"]
     end
     (** All computed editor options. *)
@@ -6013,6 +6571,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IComputedEditorOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IComputedEditorOptions]
+      ]
       val get_: t -> id:'T -> 'T monaco_editor_FindComputedEditorOptionValueById [@@js.call "get"]
     end
     module[@js.scope "IEditorOption"] IEditorOption : sig
@@ -6022,6 +6586,12 @@ module[@js.scope "monaco"] Monaco : sig
       type ('K1, 'V) t_2 = ('K1, 'V) t
       val t_2_to_js: ('K1 -> Ojs.t) -> ('V -> Ojs.t) -> ('K1, 'V) t_2 -> Ojs.t
       val t_2_of_js: (Ojs.t -> 'K1) -> (Ojs.t -> 'V) -> Ojs.t -> ('K1, 'V) t_2
+      [@@@js.stop]
+      type ('K1, 'V) tags = [`Monaco_editor_IEditorOption of ('K1 * 'V)]
+      [@@@js.start]
+      [@@@js.implem 
+        type ('K1, 'V) tags = [`Monaco_editor_IEditorOption of ('K1 * 'V)]
+      ]
       val get_id: ('K1, 'V) t -> 'K1 [@@js.get "id"]
       val get_name: ('K1, 'V) t -> string [@@js.get "name"]
       val get_defaultValue: ('K1, 'V) t -> 'V [@@js.get "defaultValue"]
@@ -6035,6 +6605,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorCommentsOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorCommentsOptions]
+      ]
       (**
         Insert a space after the line comment token and inside the block comments tokens.
         Defaults to true.
@@ -6071,6 +6647,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorCommentsOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorCommentsOptions | Readonly.tags]
+      ]
     end
     (** The kind of animation in which the editor's cursor should be rendered. *)
     module TextEditorCursorBlinkingStyle : sig
@@ -6098,6 +6680,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorFindOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorFindOptions]
+      ]
       (** Controls whether the cursor should move to find matches while typing. *)
       (** Controls whether the cursor should move to find matches while typing. *)
       val get_cursorMoveOnType: t -> bool [@@js.get "cursorMoveOnType"]
@@ -6128,6 +6716,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorFindOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorFindOptions | Readonly.tags]
+      ]
     end
     module GoToLocationValues : sig
       type t = monaco_editor_GoToLocationValues
@@ -6136,6 +6730,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_GoToLocationValues]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_GoToLocationValues]
+      ]
     end
     (** Configuration options for go to location *)
     module[@js.scope "IGotoLocationOptions"] IGotoLocationOptions : sig
@@ -6145,6 +6745,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IGotoLocationOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IGotoLocationOptions]
+      ]
       val get_multiple: t -> monaco_editor_GoToLocationValues [@@js.get "multiple"]
       val set_multiple: t -> monaco_editor_GoToLocationValues -> unit [@@js.set "multiple"]
       val get_multipleDefinitions: t -> monaco_editor_GoToLocationValues [@@js.get "multipleDefinitions"]
@@ -6175,6 +6781,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_GoToLocationOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_GoToLocationOptions | Readonly.tags]
+      ]
     end
     (** Configuration options for editor hover *)
     module[@js.scope "IEditorHoverOptions"] IEditorHoverOptions : sig
@@ -6184,6 +6796,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorHoverOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorHoverOptions]
+      ]
       (**
         Enable the hover.
         Defaults to true.
@@ -6234,6 +6852,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorHoverOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorHoverOptions | Readonly.tags]
+      ]
     end
     (** A description for the overview ruler position. *)
     module[@js.scope "OverviewRulerPosition"] OverviewRulerPosition : sig
@@ -6243,6 +6867,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_OverviewRulerPosition]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_OverviewRulerPosition]
+      ]
       (** Width of the overview ruler *)
       val get_width: t -> float [@@js.get "width"]
       (** Height of the overview ruler *)
@@ -6268,6 +6898,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorLayoutInfo]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorLayoutInfo]
+      ]
       (** Full editor width. *)
       val get_width: t -> float [@@js.get "width"]
       (** Full editor height. *)
@@ -6310,6 +6946,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorMinimapLayoutInfo]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorMinimapLayoutInfo]
+      ]
       val get_renderMinimap: t -> monaco_editor_RenderMinimap [@@js.get "renderMinimap"]
       val get_minimapLeft: t -> float [@@js.get "minimapLeft"]
       val get_minimapWidth: t -> float [@@js.get "minimapWidth"]
@@ -6330,6 +6972,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorLightbulbOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorLightbulbOptions]
+      ]
       (**
         Enable the lightbulb code action.
         Defaults to true.
@@ -6352,6 +7000,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorLightbulbOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorLightbulbOptions | Readonly.tags]
+      ]
     end
     (** Configuration options for editor inlineHints *)
     module[@js.scope "IEditorInlineHintsOptions"] IEditorInlineHintsOptions : sig
@@ -6361,6 +7015,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorInlineHintsOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorInlineHintsOptions]
+      ]
       (**
         Enable the inline hints.
         Defaults to true.
@@ -6411,6 +7071,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorInlineHintsOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorInlineHintsOptions | Readonly.tags]
+      ]
     end
     (** Configuration options for editor minimap *)
     module[@js.scope "IEditorMinimapOptions"] IEditorMinimapOptions : sig
@@ -6420,6 +7086,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorMinimapOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorMinimapOptions]
+      ]
       (**
         Enable the rendering of the minimap.
         Defaults to true.
@@ -6517,6 +7189,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorMinimapOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorMinimapOptions | Readonly.tags]
+      ]
     end
     (** Configuration options for editor padding *)
     module[@js.scope "IEditorPaddingOptions"] IEditorPaddingOptions : sig
@@ -6526,6 +7204,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorPaddingOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorPaddingOptions]
+      ]
       (** Spacing between top edge of editor and first line. *)
       (** Spacing between top edge of editor and first line. *)
       val get_top: t -> float [@@js.get "top"]
@@ -6544,6 +7228,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_InternalEditorPaddingOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_InternalEditorPaddingOptions]
+      ]
       val get_top: t -> float [@@js.get "top"]
       val get_bottom: t -> float [@@js.get "bottom"]
     end
@@ -6555,6 +7245,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorParameterHintOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorParameterHintOptions]
+      ]
       (**
         Enable parameter hints.
         Defaults to true.
@@ -6591,6 +7287,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_InternalParameterHintOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_InternalParameterHintOptions | Readonly.tags]
+      ]
     end
     (** Configuration options for quick suggestions *)
     module[@js.scope "IQuickSuggestionsOptions"] IQuickSuggestionsOptions : sig
@@ -6600,6 +7302,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IQuickSuggestionsOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IQuickSuggestionsOptions]
+      ]
       val get_other: t -> bool [@@js.get "other"]
       val set_other: t -> bool -> unit [@@js.set "other"]
       val get_comments: t -> bool [@@js.get "comments"]
@@ -6614,6 +7322,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ValidQuickSuggestionsOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ValidQuickSuggestionsOptions]
+      ]
     end
     module LineNumbersType : sig
       type t = monaco_editor_LineNumbersType
@@ -6622,6 +7336,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_LineNumbersType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_LineNumbersType]
+      ]
     end
     module RenderLineNumbersType : sig
       type t = monaco_editor_RenderLineNumbersType
@@ -6638,6 +7358,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_InternalEditorRenderLineNumbersOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_InternalEditorRenderLineNumbersOptions]
+      ]
       val get_renderType: t -> monaco_editor_RenderLineNumbersType [@@js.get "renderType"]
       val get_renderFn: t -> (lineNumber:float -> string) or_null [@@js.get "renderFn"]
     end
@@ -6648,6 +7374,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IRulerOption]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IRulerOption]
+      ]
       val get_column: t -> float [@@js.get "column"]
       val get_color: t -> string or_null [@@js.get "color"]
     end
@@ -6659,6 +7391,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorScrollbarOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorScrollbarOptions]
+      ]
       (**
         The size of arrows (if displayed).
         Defaults to 11.
@@ -6849,6 +7587,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_InternalEditorScrollbarOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_InternalEditorScrollbarOptions]
+      ]
       val get_arrowSize: t -> float [@@js.get "arrowSize"]
       val get_vertical: t -> monaco_editor_ScrollbarVisibility [@@js.get "vertical"]
       val get_horizontal: t -> monaco_editor_ScrollbarVisibility [@@js.get "horizontal"]
@@ -6871,6 +7615,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ISuggestOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ISuggestOptions]
+      ]
       (** Overwrite word ends on accept. Default to false. *)
       (** Overwrite word ends on accept. Default to false. *)
       val get_insertMode: t -> ([`L_s41_insert[@js "insert"] | `L_s65_replace[@js "replace"]] [@js.enum]) [@@js.get "insertMode"]
@@ -7054,6 +7804,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_InternalSuggestOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_InternalSuggestOptions | Readonly.tags]
+      ]
     end
     module[@js.scope "ISmartSelectOptions"] ISmartSelectOptions : sig
       type t = monaco_editor_ISmartSelectOptions
@@ -7062,6 +7818,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ISmartSelectOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ISmartSelectOptions]
+      ]
       val get_selectLeadingAndTrailingWhitespace: t -> bool [@@js.get "selectLeadingAndTrailingWhitespace"]
       val set_selectLeadingAndTrailingWhitespace: t -> bool -> unit [@@js.set "selectLeadingAndTrailingWhitespace"]
     end
@@ -7072,6 +7834,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_SmartSelectOptions | Readonly.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_SmartSelectOptions | Readonly.tags]
+      ]
     end
     (** Describes how to indent wrapped lines. *)
     module WrappingIndent : sig
@@ -7089,6 +7857,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorWrappingInfo]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorWrappingInfo]
+      ]
       val get_isDominatedByLongLines: t -> bool [@@js.get "isDominatedByLongLines"]
       val get_isWordWrapMinified: t -> bool [@@js.get "isWordWrapMinified"]
       val get_isViewportWrapping: t -> bool [@@js.get "isViewportWrapping"]
@@ -7110,6 +7884,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_EditorOptionsType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_EditorOptionsType]
+      ]
     end
     module FindEditorOptionsKeyById : sig
       type 'T t = 'T monaco_editor_FindEditorOptionsKeyById
@@ -7118,6 +7898,12 @@ module[@js.scope "monaco"] Monaco : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Monaco_editor_FindEditorOptionsKeyById of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Monaco_editor_FindEditorOptionsKeyById of 'T]
+      ]
     end
     module ComputedEditorOptionValue : sig
       type 'T t = 'T monaco_editor_ComputedEditorOptionValue
@@ -7126,6 +7912,12 @@ module[@js.scope "monaco"] Monaco : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Monaco_editor_ComputedEditorOptionValue of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Monaco_editor_ComputedEditorOptionValue of 'T]
+      ]
     end
     module FindComputedEditorOptionValueById : sig
       type 'T t = 'T monaco_editor_FindComputedEditorOptionValueById
@@ -7134,6 +7926,12 @@ module[@js.scope "monaco"] Monaco : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Monaco_editor_FindComputedEditorOptionValueById of 'T | NonNullable.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Monaco_editor_FindComputedEditorOptionValueById of 'T | NonNullable.tags]
+      ]
     end
     (**
       A view zone is a full horizontal rectangle that 'pushes' text down.
@@ -7146,6 +7944,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IViewZone]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IViewZone]
+      ]
       (**
         The line number after which this zone should appear.
         Use 0 to place a view zone before the first line number.
@@ -7262,6 +8066,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IViewZoneChangeAccessor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IViewZoneChangeAccessor]
+      ]
       (**
         Create a new view zone.
         @param zone Zone to create
@@ -7296,6 +8106,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IContentWidgetPosition]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IContentWidgetPosition]
+      ]
       (**
         Desired position for the content widget.
         `preference` will also affect the placement.
@@ -7338,6 +8154,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IContentWidget]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IContentWidget]
+      ]
       (** Render this content widget in a location where it could overflow the editor's view dom node. *)
       (** Render this content widget in a location where it could overflow the editor's view dom node. *)
       val get_allowEditorOverflow: t -> bool [@@js.get "allowEditorOverflow"]
@@ -7384,6 +8206,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IOverlayWidgetPosition]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IOverlayWidgetPosition]
+      ]
       (** The position preference for the overlay widget. *)
       (** The position preference for the overlay widget. *)
       val get_preference: t -> monaco_editor_OverlayWidgetPositionPreference or_null [@@js.get "preference"]
@@ -7398,6 +8226,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IOverlayWidget]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IOverlayWidget]
+      ]
       (** Get a unique identifier of the overlay widget. *)
       val getId: t -> string [@@js.call "getId"]
       (** Get the dom node of the overlay widget. *)
@@ -7425,6 +8259,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IMouseTarget]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IMouseTarget]
+      ]
       (** The target element *)
       val get_element: t -> Element.t_0 or_null [@@js.get "element"]
       (** The target type *)
@@ -7446,6 +8286,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorMouseEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorMouseEvent]
+      ]
       val get_event: t -> monaco_IMouseEvent [@@js.get "event"]
       val get_target: t -> monaco_editor_IMouseTarget [@@js.get "target"]
     end
@@ -7456,6 +8302,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IPartialEditorMouseEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IPartialEditorMouseEvent]
+      ]
       val get_event: t -> monaco_IMouseEvent [@@js.get "event"]
       val get_target: t -> monaco_editor_IMouseTarget or_null [@@js.get "target"]
     end
@@ -7467,6 +8319,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IPasteEvent]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IPasteEvent]
+      ]
       val get_range: t -> monaco_Range [@@js.get "range"]
       val get_mode: t -> string or_null [@@js.get "mode"]
     end
@@ -7477,6 +8335,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IEditorConstructionOptions | `Monaco_editor_IEditorOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IEditorConstructionOptions | `Monaco_editor_IEditorOptions]
+      ]
       (** The initial editor dimension (to avoid measuring the container). *)
       (** The initial editor dimension (to avoid measuring the container). *)
       val get_dimension: t -> monaco_editor_IDimension [@@js.get "dimension"]
@@ -7506,6 +8370,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_ICodeEditor | `Monaco_editor_IEditor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_ICodeEditor | `Monaco_editor_IEditor]
+      ]
       (**
         An event emitted when the content of the current model has changed.
         event: 
@@ -7805,6 +8675,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDiffLineInformation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDiffLineInformation]
+      ]
       val get_equivalentLineNumber: t -> float [@@js.get "equivalentLineNumber"]
     end
     (** A rich diff editor. *)
@@ -7815,6 +8691,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IDiffEditor | `Monaco_editor_IEditor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IDiffEditor | `Monaco_editor_IEditor]
+      ]
       (** @see "ICodeEditor.getDomNode"  *)
       val getDomNode: t -> HTMLElement.t_0 [@@js.call "getDomNode"]
       (**
@@ -7864,6 +8746,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_BareFontInfo | `Monaco_editor_FontInfo]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_BareFontInfo | `Monaco_editor_FontInfo]
+      ]
       val get__editorStylingBrand: t -> unknown [@@js.get "_editorStylingBrand"]
       val get_version: t -> float [@@js.get "version"]
       val get_isTrusted: t -> bool [@@js.get "isTrusted"]
@@ -7884,6 +8772,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_BareFontInfo]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_BareFontInfo]
+      ]
       val get__bareFontInfoBrand: t -> unknown [@@js.get "_bareFontInfoBrand"]
       val get_zoomLevel: t -> float [@@js.get "zoomLevel"]
       val get_pixelRatio: t -> float [@@js.get "pixelRatio"]
@@ -7901,6 +8795,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IReadOnlyModel | `Monaco_editor_ITextModel]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IReadOnlyModel | `Monaco_editor_ITextModel]
+      ]
     end
     module IModel : sig
       type t = monaco_editor_IModel
@@ -7909,6 +8809,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_editor_IModel | `Monaco_editor_ITextModel]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_editor_IModel | `Monaco_editor_ITextModel]
+      ]
     end
   end
   module[@js.scope "languages"] Languages : sig
@@ -7932,6 +8838,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IToken]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IToken]
+      ]
       val get_startIndex: t -> float [@@js.get "startIndex"]
       val set_startIndex: t -> float -> unit [@@js.set "startIndex"]
       val get_scopes: t -> string [@@js.get "scopes"]
@@ -7945,6 +8857,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_ILineTokens]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_ILineTokens]
+      ]
       (** The list of tokens on the line. *)
       (** The list of tokens on the line. *)
       val get_tokens: t -> monaco_languages_IToken list [@@js.get "tokens"]
@@ -7973,6 +8891,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IEncodedLineTokens]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IEncodedLineTokens]
+      ]
       (**
         The tokens on the line in a binary, encoded format. Each token occupies two array indices. For token i:
          - at offset 2*i => startIndex
@@ -8058,6 +8982,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_TokensProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_TokensProvider]
+      ]
       (** The initial state of a language. Will be the state passed in to tokenize the first line. *)
       val getInitialState: t -> monaco_languages_IState [@@js.call "getInitialState"]
       (** Tokenize a line given the state at the beginning of the line. *)
@@ -8071,6 +9001,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_EncodedTokensProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_EncodedTokensProvider]
+      ]
       (** The initial state of a language. Will be the state passed in to tokenize the first line. *)
       val getInitialState: t -> monaco_languages_IState [@@js.call "getInitialState"]
       (** Tokenize a line given the state at the beginning of the line. *)
@@ -8144,6 +9080,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CodeActionContext]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CodeActionContext]
+      ]
       (** An array of diagnostics. *)
       val get_markers: t -> monaco_editor_IMarkerData list [@@js.get "markers"]
       (** Requested kind of actions to return. *)
@@ -8160,6 +9102,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CodeActionProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CodeActionProvider]
+      ]
       (** Provide commands for the given document and range. *)
       val provideCodeActions: t -> model:monaco_editor_ITextModel -> range:monaco_Range -> context:monaco_languages_CodeActionContext -> token:monaco_CancellationToken -> monaco_languages_CodeActionList monaco_languages_ProviderResult [@@js.call "provideCodeActions"]
     end
@@ -8171,6 +9119,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CommentRule]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CommentRule]
+      ]
       (** The line comment token, like `// this is a comment` *)
       (** The line comment token, like `// this is a comment` *)
       val get_lineComment: t -> string or_null [@@js.get "lineComment"]
@@ -8193,6 +9147,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_LanguageConfiguration]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_LanguageConfiguration]
+      ]
       (** The language's comment settings. *)
       (** The language's comment settings. *)
       val get_comments: t -> monaco_languages_CommentRule [@@js.get "comments"]
@@ -8324,6 +9284,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IndentationRule]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IndentationRule]
+      ]
       (** If a line matches this pattern, then all the lines after it should be unindented once (until another rule matches). *)
       (** If a line matches this pattern, then all the lines after it should be unindented once (until another rule matches). *)
       val get_decreaseIndentPattern: t -> regexp [@@js.get "decreaseIndentPattern"]
@@ -8358,6 +9324,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_FoldingMarkers]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_FoldingMarkers]
+      ]
       val get_start: t -> regexp [@@js.get "start"]
       val set_start: t -> regexp -> unit [@@js.set "start"]
       val get_end: t -> regexp [@@js.get "end"]
@@ -8371,6 +9343,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_FoldingRules]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_FoldingRules]
+      ]
       (**
         Used by the indentation based strategy to decide whether empty lines belong to the previous or the next block.
         A language adheres to the off-side rule if blocks in that language are expressed by their indentation.
@@ -8405,6 +9383,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_OnEnterRule]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_OnEnterRule]
+      ]
       (** This rule will only execute if the text before the cursor matches this regular expression. *)
       (** This rule will only execute if the text before the cursor matches this regular expression. *)
       val get_beforeText: t -> regexp [@@js.get "beforeText"]
@@ -8434,6 +9418,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IDocComment]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IDocComment]
+      ]
       (** The string that starts a doc comment (e.g. '/**') *)
       (** The string that starts a doc comment (e.g. '/**') *)
       val get_open: t -> string [@@js.get "open"]
@@ -8456,6 +9446,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CharacterPair]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CharacterPair]
+      ]
     end
     module[@js.scope "IAutoClosingPair"] IAutoClosingPair : sig
       type t = monaco_languages_IAutoClosingPair
@@ -8464,6 +9460,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IAutoClosingPair]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IAutoClosingPair]
+      ]
       val get_open: t -> string [@@js.get "open"]
       val set_open: t -> string -> unit [@@js.set "open"]
       val get_close: t -> string [@@js.get "close"]
@@ -8476,6 +9478,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IAutoClosingPair | `Monaco_languages_IAutoClosingPairConditional]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IAutoClosingPair | `Monaco_languages_IAutoClosingPairConditional]
+      ]
       val get_notIn: t -> string list [@@js.get "notIn"]
       val set_notIn: t -> string list -> unit [@@js.set "notIn"]
       val cast: t -> monaco_languages_IAutoClosingPair [@@js.cast]
@@ -8497,6 +9505,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_EnterAction]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_EnterAction]
+      ]
       (** Describe what to do with the indentation. *)
       (** Describe what to do with the indentation. *)
       val get_indentAction: t -> monaco_languages_IndentAction [@@js.get "indentAction"]
@@ -8525,6 +9539,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IState]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IState]
+      ]
       val clone: t -> t [@@js.call "clone"]
       val equals: t -> other:t -> bool [@@js.call "equals"]
     end
@@ -8541,6 +9561,12 @@ module[@js.scope "monaco"] Monaco : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Monaco_languages_ProviderResult of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Monaco_languages_ProviderResult of 'T]
+      ]
     end
     (**
       A hover represents additional information for a symbol or word. Hovers are
@@ -8553,6 +9579,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_Hover]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_Hover]
+      ]
       (** The contents of this hover. *)
       (** The contents of this hover. *)
       val get_contents: t -> monaco_IMarkdownString list [@@js.get "contents"]
@@ -8587,6 +9619,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_HoverProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_HoverProvider]
+      ]
       (**
         Provide a hover for the given position and document. Multiple hovers at the same
         position will be merged by the editor. A hover can have a range which defaults
@@ -8609,6 +9647,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CompletionItemLabel]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CompletionItemLabel]
+      ]
       (** The function or variable. Rendered leftmost. *)
       (** The function or variable. Rendered leftmost. *)
       val get_name: t -> string [@@js.get "name"]
@@ -8657,6 +9701,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CompletionItem]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CompletionItem]
+      ]
       (**
         The label of this completion item. By default
         this is also the text that is inserted when selecting
@@ -8879,6 +9929,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CompletionList]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CompletionList]
+      ]
       val get_suggestions: t -> monaco_languages_CompletionItem list [@@js.get "suggestions"]
       val set_suggestions: t -> monaco_languages_CompletionItem list -> unit [@@js.set "suggestions"]
       val get_incomplete: t -> bool [@@js.get "incomplete"]
@@ -8905,6 +9961,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CompletionContext]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CompletionContext]
+      ]
       (** How the completion was triggered. *)
       (** How the completion was triggered. *)
       val get_triggerKind: t -> monaco_languages_CompletionTriggerKind [@@js.get "triggerKind"]
@@ -8946,6 +10008,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CompletionItemProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CompletionItemProvider]
+      ]
       val get_triggerCharacters: t -> string list [@@js.get "triggerCharacters"]
       val set_triggerCharacters: t -> string list -> unit [@@js.set "triggerCharacters"]
       (** Provide completion items for the given position and document. *)
@@ -8965,6 +10033,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CodeAction]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CodeAction]
+      ]
       val get_title: t -> string [@@js.get "title"]
       val set_title: t -> string -> unit [@@js.set "title"]
       val get_command: t -> monaco_languages_Command [@@js.get "command"]
@@ -8987,6 +10061,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_IDisposable | `Monaco_languages_CodeActionList]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_IDisposable | `Monaco_languages_CodeActionList]
+      ]
       val get_actions: t -> monaco_languages_CodeAction list [@@js.get "actions"]
       val cast: t -> monaco_IDisposable [@@js.cast]
     end
@@ -9001,6 +10081,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_ParameterInformation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_ParameterInformation]
+      ]
       (**
         The label of this signature. Will be shown in
         the UI.
@@ -9042,6 +10128,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SignatureInformation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SignatureInformation]
+      ]
       (**
         The label of this signature. Will be shown in
         the UI.
@@ -9105,6 +10197,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SignatureHelp]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SignatureHelp]
+      ]
       (** One or more signatures. *)
       (** One or more signatures. *)
       val get_signatures: t -> monaco_languages_SignatureInformation list [@@js.get "signatures"]
@@ -9128,6 +10226,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_IDisposable | `Monaco_languages_SignatureHelpResult]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_IDisposable | `Monaco_languages_SignatureHelpResult]
+      ]
       val get_value: t -> monaco_languages_SignatureHelp [@@js.get "value"]
       val set_value: t -> monaco_languages_SignatureHelp -> unit [@@js.set "value"]
       val cast: t -> monaco_IDisposable [@@js.cast]
@@ -9147,6 +10251,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SignatureHelpContext]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SignatureHelpContext]
+      ]
       val get_triggerKind: t -> monaco_languages_SignatureHelpTriggerKind [@@js.get "triggerKind"]
       val get_triggerCharacter: t -> string [@@js.get "triggerCharacter"]
       val get_isRetrigger: t -> bool [@@js.get "isRetrigger"]
@@ -9163,6 +10273,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SignatureHelpProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SignatureHelpProvider]
+      ]
       val get_signatureHelpTriggerCharacters: t -> string list [@@js.get "signatureHelpTriggerCharacters"]
       val get_signatureHelpRetriggerCharacters: t -> string list [@@js.get "signatureHelpRetriggerCharacters"]
       (** Provide help for the signature at the given position and document. *)
@@ -9189,6 +10305,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DocumentHighlight]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DocumentHighlight]
+      ]
       (** The range this highlight applies to. *)
       (** The range this highlight applies to. *)
       val get_range: t -> monaco_IRange [@@js.get "range"]
@@ -9211,6 +10333,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DocumentHighlightProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DocumentHighlightProvider]
+      ]
       (**
         Provide a set of document highlights, like all occurrences of a variable or
         all exit-points of a function.
@@ -9228,6 +10356,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_LinkedEditingRangeProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_LinkedEditingRangeProvider]
+      ]
       (** Provide a list of ranges that can be edited together. *)
       val provideLinkedEditingRanges: t -> model:monaco_editor_ITextModel -> position:monaco_Position -> token:monaco_CancellationToken -> monaco_languages_LinkedEditingRanges monaco_languages_ProviderResult [@@js.call "provideLinkedEditingRanges"]
     end
@@ -9239,6 +10373,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_LinkedEditingRanges]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_LinkedEditingRanges]
+      ]
       (**
         A list of ranges that can be edited together. The ranges must have
         identical length and text content. The ranges cannot overlap
@@ -9279,6 +10419,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_ReferenceContext]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_ReferenceContext]
+      ]
       (** Include the declaration of the current symbol. *)
       (** Include the declaration of the current symbol. *)
       val get_includeDeclaration: t -> bool [@@js.get "includeDeclaration"]
@@ -9296,6 +10442,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_ReferenceProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_ReferenceProvider]
+      ]
       (** Provide a set of project-wide references for the given position and document. *)
       val provideReferences: t -> model:monaco_editor_ITextModel -> position:monaco_Position -> context:monaco_languages_ReferenceContext -> token:monaco_CancellationToken -> monaco_languages_Location list monaco_languages_ProviderResult [@@js.call "provideReferences"]
     end
@@ -9310,6 +10462,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_Location]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_Location]
+      ]
       (** The resource identifier of this location. *)
       (** The resource identifier of this location. *)
       val get_uri: t -> monaco_Uri [@@js.get "uri"]
@@ -9328,6 +10486,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_LocationLink]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_LocationLink]
+      ]
       (** A range to select where this link originates from. *)
       (** A range to select where this link originates from. *)
       val get_originSelectionRange: t -> monaco_IRange [@@js.get "originSelectionRange"]
@@ -9365,6 +10529,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_Definition]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_Definition]
+      ]
     end
     (**
       The definition provider interface defines the contract between extensions and
@@ -9378,6 +10548,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DefinitionProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DefinitionProvider]
+      ]
       (** Provide the definition of the symbol at the given position and document. *)
       val provideDefinition: t -> model:monaco_editor_ITextModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, monaco_languages_LocationLink) or_array monaco_languages_ProviderResult [@@js.call "provideDefinition"]
     end
@@ -9393,6 +10569,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DeclarationProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DeclarationProvider]
+      ]
       (** Provide the declaration of the symbol at the given position and document. *)
       val provideDeclaration: t -> model:monaco_editor_ITextModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, monaco_languages_LocationLink) or_array monaco_languages_ProviderResult [@@js.call "provideDeclaration"]
     end
@@ -9407,6 +10589,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_ImplementationProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_ImplementationProvider]
+      ]
       (** Provide the implementation of the symbol at the given position and document. *)
       val provideImplementation: t -> model:monaco_editor_ITextModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, monaco_languages_LocationLink) or_array monaco_languages_ProviderResult [@@js.call "provideImplementation"]
     end
@@ -9421,6 +10609,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_TypeDefinitionProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_TypeDefinitionProvider]
+      ]
       (** Provide the type definition of the symbol at the given position and document. *)
       val provideTypeDefinition: t -> model:monaco_editor_ITextModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_Definition, monaco_languages_LocationLink) or_array monaco_languages_ProviderResult [@@js.call "provideTypeDefinition"]
     end
@@ -9448,6 +10642,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DocumentSymbol]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DocumentSymbol]
+      ]
       val get_name: t -> string [@@js.get "name"]
       val set_name: t -> string -> unit [@@js.set "name"]
       val get_detail: t -> string [@@js.get "detail"]
@@ -9476,6 +10676,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DocumentSymbolProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DocumentSymbolProvider]
+      ]
       val get_displayName: t -> string [@@js.get "displayName"]
       val set_displayName: t -> string -> unit [@@js.set "displayName"]
       (** Provide symbol information for the given document. *)
@@ -9488,6 +10694,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_TextEdit]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_TextEdit]
+      ]
     end
     (** Interface used to format a model *)
     module[@js.scope "FormattingOptions"] FormattingOptions : sig
@@ -9497,6 +10709,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_FormattingOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_FormattingOptions]
+      ]
       (** Size of a tab in spaces. *)
       (** Size of a tab in spaces. *)
       val get_tabSize: t -> float [@@js.get "tabSize"]
@@ -9519,6 +10737,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DocumentFormattingEditProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DocumentFormattingEditProvider]
+      ]
       val get_displayName: t -> string [@@js.get "displayName"]
       (** Provide formatting edits for a whole document. *)
       val provideDocumentFormattingEdits: t -> model:monaco_editor_ITextModel -> options:monaco_languages_FormattingOptions -> token:monaco_CancellationToken -> monaco_languages_TextEdit list monaco_languages_ProviderResult [@@js.call "provideDocumentFormattingEdits"]
@@ -9534,6 +10758,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DocumentRangeFormattingEditProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DocumentRangeFormattingEditProvider]
+      ]
       val get_displayName: t -> string [@@js.get "displayName"]
       (**
         Provide formatting edits for a range in a document.
@@ -9555,6 +10785,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_OnTypeFormattingEditProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_OnTypeFormattingEditProvider]
+      ]
       val get_autoFormatTriggerCharacters: t -> string list [@@js.get "autoFormatTriggerCharacters"]
       val set_autoFormatTriggerCharacters: t -> string list -> unit [@@js.set "autoFormatTriggerCharacters"]
       (**
@@ -9574,6 +10810,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_ILink]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_ILink]
+      ]
       val get_range: t -> monaco_IRange [@@js.get "range"]
       val set_range: t -> monaco_IRange -> unit [@@js.set "range"]
       val get_url: t -> monaco_Uri or_string [@@js.get "url"]
@@ -9588,6 +10830,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_ILinksList]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_ILinksList]
+      ]
       val get_links: t -> monaco_languages_ILink list [@@js.get "links"]
       val set_links: t -> monaco_languages_ILink list -> unit [@@js.set "links"]
       val dispose: t -> unit [@@js.call "dispose"]
@@ -9600,6 +10848,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_LinkProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_LinkProvider]
+      ]
       val provideLinks: t -> model:monaco_editor_ITextModel -> token:monaco_CancellationToken -> monaco_languages_ILinksList monaco_languages_ProviderResult [@@js.call "provideLinks"]
       val resolveLink: t -> link:monaco_languages_ILink -> token:monaco_CancellationToken -> monaco_languages_ILink monaco_languages_ProviderResult [@@js.call "resolveLink"]
     end
@@ -9611,6 +10865,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IColor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IColor]
+      ]
       (** The red component in the range \[0-1\]. *)
       val get_red: t -> float [@@js.get "red"]
       (** The green component in the range \[0-1\]. *)
@@ -9628,6 +10888,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IColorPresentation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IColorPresentation]
+      ]
       (**
         The label of this color presentation. It will be shown on the color
         picker header. By default this is also the text that is inserted when selecting
@@ -9682,6 +10948,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IColorInformation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IColorInformation]
+      ]
       (** The range within the model. *)
       (** The range within the model. *)
       val get_range: t -> monaco_IRange [@@js.get "range"]
@@ -9701,6 +10973,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DocumentColorProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DocumentColorProvider]
+      ]
       (** Provides the color ranges for a specific model. *)
       val provideDocumentColors: t -> model:monaco_editor_ITextModel -> token:monaco_CancellationToken -> monaco_languages_IColorInformation list monaco_languages_ProviderResult [@@js.call "provideDocumentColors"]
       (** Provide the string representations for a color. *)
@@ -9713,6 +10991,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SelectionRange]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SelectionRange]
+      ]
       val get_range: t -> monaco_IRange [@@js.get "range"]
       val set_range: t -> monaco_IRange -> unit [@@js.set "range"]
     end
@@ -9723,6 +11007,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SelectionRangeProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SelectionRangeProvider]
+      ]
       (** Provide ranges that should be selected from the given position. *)
       val provideSelectionRanges: t -> model:monaco_editor_ITextModel -> positions:monaco_Position list -> token:monaco_CancellationToken -> monaco_languages_SelectionRange list list monaco_languages_ProviderResult [@@js.call "provideSelectionRanges"]
     end
@@ -9733,6 +11023,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_FoldingContext]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_FoldingContext]
+      ]
     end
     (** A provider of folding ranges for editor models. *)
     module[@js.scope "FoldingRangeProvider"] FoldingRangeProvider : sig
@@ -9742,6 +11038,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_FoldingRangeProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_FoldingRangeProvider]
+      ]
       (** An optional event to signal that the folding ranges from this provider have changed. *)
       (** An optional event to signal that the folding ranges from this provider have changed. *)
       val get_onDidChange: t -> t monaco_IEvent [@@js.get "onDidChange"]
@@ -9757,6 +11059,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_FoldingRange]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_FoldingRange]
+      ]
       (** The one-based start line of the range to fold. The folded area starts after the line's last character. *)
       (** The one-based start line of the range to fold. The folded area starts after the line's last character. *)
       val get_start: t -> float [@@js.get "start"]
@@ -9795,6 +11103,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_FoldingRangeKind]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_FoldingRangeKind]
+      ]
       val get_value: t -> string [@@js.get "value"]
       val set_value: t -> string -> unit [@@js.set "value"]
       (** Kind for folding range representing a comment. The value of the kind is 'comment'. *)
@@ -9819,6 +11133,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_WorkspaceEditMetadata]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_WorkspaceEditMetadata]
+      ]
       val get_needsConfirmation: t -> bool [@@js.get "needsConfirmation"]
       val set_needsConfirmation: t -> bool -> unit [@@js.set "needsConfirmation"]
       val get_label: t -> string [@@js.get "label"]
@@ -9833,6 +11153,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_WorkspaceFileEditOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_WorkspaceFileEditOptions]
+      ]
       val get_overwrite: t -> bool [@@js.get "overwrite"]
       val set_overwrite: t -> bool -> unit [@@js.set "overwrite"]
       val get_ignoreIfNotExists: t -> bool [@@js.get "ignoreIfNotExists"]
@@ -9857,6 +11183,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_WorkspaceFileEdit]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_WorkspaceFileEdit]
+      ]
       val get_oldUri: t -> monaco_Uri [@@js.get "oldUri"]
       val set_oldUri: t -> monaco_Uri -> unit [@@js.set "oldUri"]
       val get_newUri: t -> monaco_Uri [@@js.get "newUri"]
@@ -9873,6 +11205,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_WorkspaceTextEdit]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_WorkspaceTextEdit]
+      ]
       val get_resource: t -> monaco_Uri [@@js.get "resource"]
       val set_resource: t -> monaco_Uri -> unit [@@js.set "resource"]
       val get_edit: t -> monaco_languages_TextEdit [@@js.get "edit"]
@@ -9889,6 +11227,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_WorkspaceEdit]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_WorkspaceEdit]
+      ]
       val get_edits: t -> (monaco_languages_WorkspaceFileEdit, monaco_languages_WorkspaceTextEdit) union2 list [@@js.get "edits"]
       val set_edits: t -> (monaco_languages_WorkspaceFileEdit, monaco_languages_WorkspaceTextEdit) union2 list -> unit [@@js.set "edits"]
     end
@@ -9899,6 +11243,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_Rejection]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_Rejection]
+      ]
       val get_rejectReason: t -> string [@@js.get "rejectReason"]
       val set_rejectReason: t -> string -> unit [@@js.set "rejectReason"]
     end
@@ -9909,6 +11259,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_RenameLocation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_RenameLocation]
+      ]
       val get_range: t -> monaco_IRange [@@js.get "range"]
       val set_range: t -> monaco_IRange -> unit [@@js.set "range"]
       val get_text: t -> string [@@js.get "text"]
@@ -9921,6 +11277,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_RenameProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_RenameProvider]
+      ]
       val provideRenameEdits: t -> model:monaco_editor_ITextModel -> position:monaco_Position -> newName:string -> token:monaco_CancellationToken -> (monaco_languages_WorkspaceEdit, monaco_languages_Rejection) intersection2 monaco_languages_ProviderResult [@@js.call "provideRenameEdits"]
       val resolveRenameLocation: t -> model:monaco_editor_ITextModel -> position:monaco_Position -> token:monaco_CancellationToken -> (monaco_languages_RenameLocation, monaco_languages_Rejection) intersection2 monaco_languages_ProviderResult [@@js.call "resolveRenameLocation"]
     end
@@ -9931,6 +11293,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_Command]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_Command]
+      ]
       val get_id: t -> string [@@js.get "id"]
       val set_id: t -> string -> unit [@@js.set "id"]
       val get_title: t -> string [@@js.get "title"]
@@ -9947,6 +11315,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CodeLens]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CodeLens]
+      ]
       val get_range: t -> monaco_IRange [@@js.get "range"]
       val set_range: t -> monaco_IRange -> unit [@@js.set "range"]
       val get_id: t -> string [@@js.get "id"]
@@ -9961,6 +11335,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CodeLensList]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CodeLensList]
+      ]
       val get_lenses: t -> monaco_languages_CodeLens list [@@js.get "lenses"]
       val set_lenses: t -> monaco_languages_CodeLens list -> unit [@@js.set "lenses"]
       val dispose: t -> unit [@@js.call "dispose"]
@@ -9972,6 +11352,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_CodeLensProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_CodeLensProvider]
+      ]
       val get_onDidChange: t -> t monaco_IEvent [@@js.get "onDidChange"]
       val set_onDidChange: t -> t monaco_IEvent -> unit [@@js.set "onDidChange"]
       val provideCodeLenses: t -> model:monaco_editor_ITextModel -> token:monaco_CancellationToken -> monaco_languages_CodeLensList monaco_languages_ProviderResult [@@js.call "provideCodeLenses"]
@@ -9992,6 +11378,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_InlineHint]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_InlineHint]
+      ]
       val get_text: t -> string [@@js.get "text"]
       val set_text: t -> string -> unit [@@js.set "text"]
       val get_range: t -> monaco_IRange [@@js.get "range"]
@@ -10012,6 +11404,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_InlineHintsProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_InlineHintsProvider]
+      ]
       val get_onDidChangeInlineHints: t -> unit monaco_IEvent or_undefined [@@js.get "onDidChangeInlineHints"]
       val set_onDidChangeInlineHints: t -> unit monaco_IEvent or_undefined -> unit [@@js.set "onDidChangeInlineHints"]
       val provideInlineHints: t -> model:monaco_editor_ITextModel -> range:monaco_Range -> token:monaco_CancellationToken -> monaco_languages_InlineHint list monaco_languages_ProviderResult [@@js.call "provideInlineHints"]
@@ -10023,6 +11421,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SemanticTokensLegend]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SemanticTokensLegend]
+      ]
       val get_tokenTypes: t -> string list [@@js.get "tokenTypes"]
       val get_tokenModifiers: t -> string list [@@js.get "tokenModifiers"]
     end
@@ -10033,6 +11437,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SemanticTokens]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SemanticTokens]
+      ]
       val get_resultId: t -> string [@@js.get "resultId"]
       val get_data: t -> Uint32Array.t_0 [@@js.get "data"]
     end
@@ -10043,6 +11453,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SemanticTokensEdit]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SemanticTokensEdit]
+      ]
       val get_start: t -> float [@@js.get "start"]
       val get_deleteCount: t -> float [@@js.get "deleteCount"]
       val get_data: t -> Uint32Array.t_0 [@@js.get "data"]
@@ -10054,6 +11470,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_SemanticTokensEdits]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_SemanticTokensEdits]
+      ]
       val get_resultId: t -> string [@@js.get "resultId"]
       val get_edits: t -> monaco_languages_SemanticTokensEdit list [@@js.get "edits"]
     end
@@ -10064,6 +11486,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DocumentSemanticTokensProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DocumentSemanticTokensProvider]
+      ]
       val get_onDidChange: t -> unit monaco_IEvent [@@js.get "onDidChange"]
       val set_onDidChange: t -> unit monaco_IEvent -> unit [@@js.set "onDidChange"]
       val getLegend: t -> monaco_languages_SemanticTokensLegend [@@js.call "getLegend"]
@@ -10077,6 +11505,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_DocumentRangeSemanticTokensProvider]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_DocumentRangeSemanticTokensProvider]
+      ]
       val getLegend: t -> monaco_languages_SemanticTokensLegend [@@js.call "getLegend"]
       val provideDocumentRangeSemanticTokens: t -> model:monaco_editor_ITextModel -> range:monaco_Range -> token:monaco_CancellationToken -> monaco_languages_SemanticTokens monaco_languages_ProviderResult [@@js.call "provideDocumentRangeSemanticTokens"]
     end
@@ -10087,6 +11521,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_ILanguageExtensionPoint]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_ILanguageExtensionPoint]
+      ]
       val get_id: t -> string [@@js.get "id"]
       val set_id: t -> string -> unit [@@js.set "id"]
       val get_extensions: t -> string list [@@js.get "extensions"]
@@ -10112,6 +11552,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IMonarchLanguage]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IMonarchLanguage]
+      ]
       (** map from string to ILanguageRule\[\] *)
       (** map from string to ILanguageRule\[\] *)
       val get_tokenizer: t -> anonymous_interface_19 [@@js.get "tokenizer"]
@@ -10179,6 +11625,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IShortMonarchLanguageRule1]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IShortMonarchLanguageRule1]
+      ]
     end
     module IShortMonarchLanguageRule2 : sig
       type t = monaco_languages_IShortMonarchLanguageRule2
@@ -10187,6 +11639,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IShortMonarchLanguageRule2]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IShortMonarchLanguageRule2]
+      ]
     end
     module[@js.scope "IExpandedMonarchLanguageRule"] IExpandedMonarchLanguageRule : sig
       type t = monaco_languages_IExpandedMonarchLanguageRule
@@ -10195,6 +11653,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IExpandedMonarchLanguageRule]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IExpandedMonarchLanguageRule]
+      ]
       (** match tokens *)
       (** match tokens *)
       val get_regex: t -> regexp or_string [@@js.get "regex"]
@@ -10218,6 +11682,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IMonarchLanguageRule]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IMonarchLanguageRule]
+      ]
     end
     (**
       An action is either an array of actions...
@@ -10231,6 +11701,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IShortMonarchLanguageAction | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IShortMonarchLanguageAction | `String]
+      ]
     end
     module[@js.scope "IExpandedMonarchLanguageAction"] IExpandedMonarchLanguageAction : sig
       type t = monaco_languages_IExpandedMonarchLanguageAction
@@ -10239,6 +11715,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IExpandedMonarchLanguageAction]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IExpandedMonarchLanguageAction]
+      ]
       (** array of actions for each parenthesized match group *)
       (** array of actions for each parenthesized match group *)
       val get_group: t -> monaco_languages_IMonarchLanguageAction list [@@js.get "group"]
@@ -10301,6 +11783,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IMonarchLanguageAction]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IMonarchLanguageAction]
+      ]
     end
     (** This interface can be shortened as an array, ie. \['\{','\}','delimiter.curly'\] *)
     module[@js.scope "IMonarchLanguageBracket"] IMonarchLanguageBracket : sig
@@ -10310,6 +11798,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_languages_IMonarchLanguageBracket]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_languages_IMonarchLanguageBracket]
+      ]
       (** open bracket *)
       (** open bracket *)
       val get_open: t -> string [@@js.get "open"]
@@ -10374,6 +11868,12 @@ module[@js.scope "monaco"] Monaco : sig
         type 'T t_1 = 'T t
         val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
         val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+        [@@@js.stop]
+        type 'T tags = [`Monaco_languages_typescript_MapLike of 'T]
+        [@@@js.start]
+        [@@@js.implem 
+          type 'T tags = [`Monaco_languages_typescript_MapLike of 'T]
+        ]
         val get: 'T t -> string -> 'T [@@js.index_get]
         val set: 'T t -> string -> 'T -> unit [@@js.index_set]
       end
@@ -10384,6 +11884,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_CompilerOptionsValue]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_CompilerOptionsValue]
+        ]
       end
       module[@js.scope "CompilerOptions"] CompilerOptions : sig
         type t = monaco_languages_typescript_CompilerOptions
@@ -10392,6 +11898,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_CompilerOptions]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_CompilerOptions]
+        ]
         val get_allowJs: t -> bool [@@js.get "allowJs"]
         val set_allowJs: t -> bool -> unit [@@js.set "allowJs"]
         val get_allowSyntheticDefaultImports: t -> bool [@@js.get "allowSyntheticDefaultImports"]
@@ -10563,6 +12075,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_DiagnosticsOptions]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_DiagnosticsOptions]
+        ]
         val get_noSemanticValidation: t -> bool [@@js.get "noSemanticValidation"]
         val set_noSemanticValidation: t -> bool -> unit [@@js.set "noSemanticValidation"]
         val get_noSyntaxValidation: t -> bool [@@js.get "noSyntaxValidation"]
@@ -10593,6 +12111,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_WorkerOptions]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_WorkerOptions]
+        ]
         (** A full HTTP path to a JavaScript file which adds a function `customTSWorkerFactory` to the self inside a web-worker *)
         (** A full HTTP path to a JavaScript file which adds a function `customTSWorkerFactory` to the self inside a web-worker *)
         val get_customWorkerPath: t -> string [@@js.get "customWorkerPath"]
@@ -10606,6 +12130,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_IExtraLib]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_IExtraLib]
+        ]
         val get_content: t -> string [@@js.get "content"]
         val set_content: t -> string -> unit [@@js.set "content"]
         val get_version: t -> float [@@js.get "version"]
@@ -10618,6 +12148,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_IExtraLibs]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_IExtraLibs]
+        ]
         val get: t -> string -> monaco_languages_typescript_IExtraLib [@@js.index_get]
         val set: t -> string -> monaco_languages_typescript_IExtraLib -> unit [@@js.index_set]
       end
@@ -10632,6 +12168,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_DiagnosticMessageChain]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_DiagnosticMessageChain]
+        ]
         val get_messageText: t -> string [@@js.get "messageText"]
         val set_messageText: t -> string -> unit [@@js.set "messageText"]
         (** Diagnostic category: warning = 0, error = 1, suggestion = 2, message = 3 *)
@@ -10651,6 +12193,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_Diagnostic | `Monaco_languages_typescript_DiagnosticRelatedInformation]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_Diagnostic | `Monaco_languages_typescript_DiagnosticRelatedInformation]
+        ]
         (** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. *)
         (** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. *)
         val get_reportsUnnecessary: t -> anonymous_interface_0 [@@js.get "reportsUnnecessary"]
@@ -10671,6 +12219,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_DiagnosticRelatedInformation]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_DiagnosticRelatedInformation]
+        ]
         (** Diagnostic category: warning = 0, error = 1, suggestion = 2, message = 3 *)
         (** Diagnostic category: warning = 0, error = 1, suggestion = 2, message = 3 *)
         val get_category: t -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3]] [@js.enum]) [@@js.get "category"]
@@ -10697,6 +12251,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_EmitOutput]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_EmitOutput]
+        ]
         val get_outputFiles: t -> monaco_languages_typescript_OutputFile list [@@js.get "outputFiles"]
         val set_outputFiles: t -> monaco_languages_typescript_OutputFile list -> unit [@@js.set "outputFiles"]
         val get_emitSkipped: t -> bool [@@js.get "emitSkipped"]
@@ -10709,6 +12269,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_OutputFile]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_OutputFile]
+        ]
         val get_name: t -> string [@@js.get "name"]
         val set_name: t -> string -> unit [@@js.set "name"]
         val get_writeByteOrderMark: t -> bool [@@js.get "writeByteOrderMark"]
@@ -10723,6 +12289,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_LanguageServiceDefaults]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_LanguageServiceDefaults]
+        ]
         (** Event fired when compiler options or diagnostics options are changed. *)
         val get_onDidChange: t -> unit monaco_IEvent [@@js.get "onDidChange"]
         (** Event fired when extra libraries registered with the language service change. *)
@@ -10780,6 +12352,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_typescript_TypeScriptWorker]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_typescript_TypeScriptWorker]
+        ]
         (** Get diagnostic messages for any syntax issues in the given file. *)
         val getSyntacticDiagnostics: t -> fileName:string -> monaco_languages_typescript_Diagnostic list Promise.t_1 [@@js.call "getSyntacticDiagnostics"]
         (** Get diagnostic messages for any semantic issues in the given file. *)
@@ -10888,6 +12466,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_css_DiagnosticsOptions]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_css_DiagnosticsOptions]
+        ]
         val get_validate: t -> bool [@@js.get "validate"]
         val get_lint: t -> anonymous_interface_3 [@@js.get "lint"]
       end
@@ -10898,6 +12482,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_css_ModeConfiguration]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_css_ModeConfiguration]
+        ]
         (** Defines whether the built-in completionItemProvider is enabled. *)
         val get_completionItems: t -> bool [@@js.get "completionItems"]
         (** Defines whether the built-in hoverProvider is enabled. *)
@@ -10928,6 +12518,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_css_LanguageServiceDefaults]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_css_LanguageServiceDefaults]
+        ]
         val get_languageId: t -> string [@@js.get "languageId"]
         val get_onDidChange: t -> t monaco_IEvent [@@js.get "onDidChange"]
         val get_diagnosticsOptions: t -> monaco_languages_css_DiagnosticsOptions [@@js.get "diagnosticsOptions"]
@@ -10947,6 +12543,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_json_DiagnosticsOptions]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_json_DiagnosticsOptions]
+        ]
         (**
           If set, the validator will be enabled and perform syntax and schema based validation,
           unless `DiagnosticsOptions.schemaValidation` is set to `ignore`.
@@ -10977,6 +12579,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_json_SeverityLevel]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_json_SeverityLevel]
+        ]
       end
       module[@js.scope "ModeConfiguration"] ModeConfiguration : sig
         type t = monaco_languages_json_ModeConfiguration
@@ -10985,6 +12593,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_json_ModeConfiguration]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_json_ModeConfiguration]
+        ]
         (** Defines whether the built-in documentFormattingEdit provider is enabled. *)
         val get_documentFormattingEdits: t -> bool [@@js.get "documentFormattingEdits"]
         (** Defines whether the built-in documentRangeFormattingEdit provider is enabled. *)
@@ -11013,6 +12627,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_json_LanguageServiceDefaults]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_json_LanguageServiceDefaults]
+        ]
         val get_languageId: t -> string [@@js.get "languageId"]
         val get_onDidChange: t -> t monaco_IEvent [@@js.get "onDidChange"]
         val get_diagnosticsOptions: t -> monaco_languages_json_DiagnosticsOptions [@@js.get "diagnosticsOptions"]
@@ -11030,6 +12650,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_html_HTMLFormatConfiguration]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_html_HTMLFormatConfiguration]
+        ]
         val get_tabSize: t -> float [@@js.get "tabSize"]
         val get_insertSpaces: t -> bool [@@js.get "insertSpaces"]
         val get_wrapLineLength: t -> float [@@js.get "wrapLineLength"]
@@ -11050,6 +12676,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_html_CompletionConfiguration]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_html_CompletionConfiguration]
+        ]
         val get: t -> string -> bool [@@js.index_get]
         val set: t -> string -> bool -> unit [@@js.index_set]
       end
@@ -11060,6 +12692,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_html_Options]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_html_Options]
+        ]
         (** If set, comments are tolerated. If set to false, syntax errors will be emitted for comments. *)
         val get_format: t -> monaco_languages_html_HTMLFormatConfiguration [@@js.get "format"]
         (** A list of known schemas and/or associations of schemas to file names. *)
@@ -11072,6 +12710,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_html_ModeConfiguration]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_html_ModeConfiguration]
+        ]
         (** Defines whether the built-in completionItemProvider is enabled. *)
         val get_completionItems: t -> bool [@@js.get "completionItems"]
         (** Defines whether the built-in hoverProvider is enabled. *)
@@ -11104,6 +12748,12 @@ module[@js.scope "monaco"] Monaco : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Monaco_languages_html_LanguageServiceDefaults]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Monaco_languages_html_LanguageServiceDefaults]
+        ]
         val get_languageId: t -> string [@@js.get "languageId"]
         val get_modeConfiguration: t -> monaco_languages_html_ModeConfiguration [@@js.get "modeConfiguration"]
         val get_onDidChange: t -> t monaco_IEvent [@@js.get "onDidChange"]
@@ -11123,6 +12773,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_worker_IMirrorTextModel]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_worker_IMirrorTextModel]
+      ]
       val get_version: t -> float [@@js.get "version"]
     end
     module[@js.scope "IMirrorModel"] IMirrorModel : sig
@@ -11132,6 +12788,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Monaco_worker_IMirrorModel | `Monaco_worker_IMirrorTextModel]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Monaco_worker_IMirrorModel | `Monaco_worker_IMirrorTextModel]
+      ]
       val get_uri: t -> monaco_Uri [@@js.get "uri"]
       val get_version: t -> float [@@js.get "version"]
       val getValue: t -> string [@@js.call "getValue"]
@@ -11147,6 +12809,12 @@ module[@js.scope "monaco"] Monaco : sig
       type t_0 = never or_undefined t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type 'H tags = [`Monaco_worker_IWorkerContext of 'H]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'H tags = [`Monaco_worker_IWorkerContext of 'H]
+      ]
       (** A proxy to the main thread host object. *)
       (** A proxy to the main thread host object. *)
       val get_host: 'H t -> 'H [@@js.get "host"]

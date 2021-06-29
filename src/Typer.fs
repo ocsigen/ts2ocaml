@@ -413,12 +413,14 @@ module Type =
               let s = c.implements |> List.map (getAllInheritancesImpl true ctx) |> Set.unionMany
               Some (s, Some self)
             | AliasName a ->
+              let self =
+                InheritingType.KnownIdent {| fullName = fn; tyargs = a.typeParams |> List.map (fun tp -> TypeVar tp.name) |}
               let tyargs =
                 a.typeParams |> List.map (fun tp -> TypeVar tp.name)
               let s =
                 let subst = createBindings fn a.loc a.typeParams tyargs
                 getAllInheritancesImpl true ctx a.target |> Set.map (substTypeVarInInheritingType subst ctx)
-              Some (s, None)
+              Some (s, Some self)
             | _ -> None
           )
         match result with

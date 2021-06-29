@@ -722,7 +722,7 @@ let emitHeader =
   ]
 
 /// `Choice2Of2` when it is an alias to a non-JSable prim type.
-let getLabelsOfFullName (ctx: Context<Options>) (fullName: string list) (c: Class) =
+let getLabelsOfFullName (ctx: Context<Options>) (fullName: string list) (typeParams: TypeParam list) =
   let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } noOverride
   let normalClass () =
     [
@@ -748,7 +748,7 @@ let getLabelsOfFullName (ctx: Context<Options>) (fullName: string list) (c: Clas
         | InheritingType.Other _ -> ()
     ]
   match fullName with
-  | [name] when ctx.options.stdlib && Map.containsKey name nonJsablePrimTypeInterfaces && c.typeParams |> List.isEmpty ->
+  | [name] when ctx.options.stdlib && Map.containsKey name nonJsablePrimTypeInterfaces && typeParams |> List.isEmpty ->
     let prim = nonJsablePrimTypeInterfaces |> Map.find name
     Choice2Of2 (prim, tprintf "%s%s" pv_head name)
   | _ -> Choice1Of2 (normalClass ())
@@ -794,7 +794,7 @@ let emitFlattenedDefinitions (ctx: Context<Options>) : text =
           ] |> Some
         | ClassDef c ->
           let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-          match getLabelsOfFullName ctx k c with
+          match getLabelsOfFullName ctx k c.typeParams with
           | Choice1Of2 labels ->
             concat newline [
               // yield commentStr c.loc.AsString
@@ -874,6 +874,20 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
         yield! emitMappers ctx emitType name typrms'
     ]
 
+  let emitTags (typrms: TypeParam list) (fullName: string list) =
+    let labels =
+      match getLabelsOfFullName ctx fullName typrms with
+      | Choice1Of2 xs -> xs
+      | Choice2Of2 (_, x) -> [x]
+    match labels with
+    | [] -> []
+    | _ ->
+      let tyargs = typrms |> List.map (fun x -> tprintf "'%s" x.name)
+      let body = typeAlias "tags" tyargs (between "[" "]" (labels |> concat (str " | ")))
+      [
+        Attr.js_stop_start_implem body body
+      ]
+
   let rec go (renamer: OverloadRenamer) (ctx: Context<Options>) (s: Statement) : text =
     let comments =
       match (s :> ICommented<_>).getComments() with
@@ -915,6 +929,7 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
           moduleSig (Naming.moduleName name |> renamer.Rename "module") (
             concat newline [
               yield! emitTypeAliases typeParams (emitTypeName k tyargs)
+              yield! emitTags typeParams k
             ]
           )
       ]
@@ -1056,9 +1071,12 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
             yield val_ ("of_ml" |> renamer.Rename "value") (emitType_ ctx ofMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
       ]
 
+      let k = List.rev (name :: ctx.currentNamespace)
       if List.isEmpty members || isAnonymous then
         moduleSig (Naming.moduleName name |> renamer.Rename "module") (concat newline [
           yield! emitTypeAliases c.typeParams selfTyText
+          if not isAnonymous then
+            yield! emitTags c.typeParams k
           yield! members
         ])
       else
@@ -1066,6 +1084,7 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
           yield
             moduleScopeSig name (Naming.moduleName name |> renamer.Rename "module") (concat newline [
               yield! emitTypeAliases c.typeParams selfTyText
+              yield! emitTags c.typeParams k
               yield! members
             ])
         ]

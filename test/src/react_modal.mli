@@ -71,6 +71,12 @@ module[@js.scope "ReactModal"] ReactModal : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`ReactModal_Styles]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`ReactModal_Styles]
+    ]
     val get_content: t -> React.CSSProperties.t_0 [@@js.get "content"]
     val set_content: t -> React.CSSProperties.t_0 -> unit [@@js.set "content"]
     val get_overlay: t -> React.CSSProperties.t_0 [@@js.get "overlay"]
@@ -83,6 +89,12 @@ module[@js.scope "ReactModal"] ReactModal : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`ReactModal_Classes]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`ReactModal_Classes]
+    ]
     val get_base: t -> string [@@js.get "base"]
     val set_base: t -> string -> unit [@@js.set "base"]
     val get_afterOpen: t -> string [@@js.get "afterOpen"]
@@ -97,6 +109,12 @@ module[@js.scope "ReactModal"] ReactModal : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`ReactModal_Aria]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`ReactModal_Aria]
+    ]
     (** Defines a string value that labels the current element. *)
     (** Defines a string value that labels the current element. *)
     val get_labelledby: t -> string [@@js.get "labelledby"]
@@ -121,6 +139,12 @@ module[@js.scope "ReactModal"] ReactModal : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`ReactModal_OnAfterOpenCallbackOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`ReactModal_OnAfterOpenCallbackOptions]
+    ]
     (** overlay element reference *)
     (** overlay element reference *)
     val get_overlayEl: t -> Element.t_0 [@@js.get "overlayEl"]
@@ -140,6 +164,12 @@ module[@js.scope "ReactModal"] ReactModal : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`ReactModal_OnAfterOpenCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`ReactModal_OnAfterOpenCallback]
+    ]
     val apply: t -> ?obj:_ReactModal_OnAfterOpenCallbackOptions -> unit -> unit [@@js.apply]
   end
   module[@js.scope "Props"] Props : sig
@@ -149,6 +179,12 @@ module[@js.scope "ReactModal"] ReactModal : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`ReactModal_Props]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`ReactModal_Props]
+    ]
     val get_isOpen: t -> bool [@@js.get "isOpen"]
     val set_isOpen: t -> bool -> unit [@@js.set "isOpen"]
     val get_style: t -> _ReactModal_Styles [@@js.get "style"]
@@ -209,6 +245,12 @@ module[@js.scope "ReactModal"] ReactModal : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`ReactModal | React.Component.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ReactModal | React.Component.tags]
+  ]
   val get_defaultStyles: unit -> _ReactModal_Styles [@@js.get "defaultStyles"]
   val set_defaultStyles: _ReactModal_Styles -> unit [@@js.set "defaultStyles"]
   (**

@@ -2303,6 +2303,12 @@ module[@js.scope "assert"] Assert : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Assert_assert_AssertionError | Error.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Assert_assert_AssertionError | Error.tags]
+      ]
       val get_actual: t -> any [@@js.get "actual"]
       val set_actual: t -> any -> unit [@@js.set "actual"]
       val get_expected: t -> any [@@js.get "expected"]
@@ -2323,6 +2329,12 @@ module[@js.scope "assert"] Assert : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Assert_assert_CallTracker]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Assert_assert_CallTracker]
+      ]
       val calls: t -> ?exact:float -> unit -> (unit -> unit [@js.dummy]) [@@js.call "calls"]
       val calls': t -> ?fn:'Func -> ?exact:float -> unit -> 'Func [@@js.call "calls"]
       val report: t -> assert_assert_CallTrackerReportInformation list [@@js.call "report"]
@@ -2335,6 +2347,12 @@ module[@js.scope "assert"] Assert : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Assert_assert_CallTrackerReportInformation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Assert_assert_CallTrackerReportInformation]
+      ]
       val get_message: t -> string [@@js.get "message"]
       val set_message: t -> string -> unit [@@js.set "message"]
       (** The actual number of times the function was called. *)
@@ -2365,6 +2383,12 @@ module[@js.scope "assert"] Assert : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Assert_assert_AssertPredicate]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Assert_assert_AssertPredicate]
+      ]
     end
     val fail: ?message:Error.t_0 or_string -> unit -> never [@@js.global "fail"]
     (** @deprecated since v10.0.0 - use fail(\[message\]) or other assert functions instead. *)
@@ -2429,6 +2453,12 @@ module[@js.scope "async_hooks"] Async_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Async_hooks_HookCallbacks]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Async_hooks_HookCallbacks]
+    ]
     (**
       Called when a class is constructed that has the possibility to emit an asynchronous event.
       @param asyncId a unique ID for the async resource
@@ -2467,6 +2497,12 @@ module[@js.scope "async_hooks"] Async_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Async_hooks_AsyncHook]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Async_hooks_AsyncHook]
+    ]
     (** Enable the callbacks for a given AsyncHook instance. If no callbacks are provided enabling is a noop. *)
     val enable: t -> t [@@js.call "enable"]
     (** Disable the callbacks for a given AsyncHook instance from the global pool of AsyncHook callbacks to be executed. Once a hook has been disabled it will not be called again until enabled. *)
@@ -2485,6 +2521,12 @@ module[@js.scope "async_hooks"] Async_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Async_hooks_AsyncResourceOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Async_hooks_AsyncResourceOptions]
+    ]
     (**
       The ID of the execution context that created this async event.
       Default: `executionAsyncId()`
@@ -2534,6 +2576,12 @@ module[@js.scope "async_hooks"] Async_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Async_hooks_AsyncResource]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Async_hooks_AsyncResource]
+    ]
     (**
       AsyncResource() is meant to be extended. Instantiating a
       new AsyncResource() also triggers init. If triggerAsyncId is omitted then
@@ -2585,6 +2633,12 @@ module[@js.scope "async_hooks"] Async_hooks : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Async_hooks_AsyncLocalStorage of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Async_hooks_AsyncLocalStorage of 'T]
+    ]
     (**
       This method disables the instance of `AsyncLocalStorage`. All subsequent calls
       to `asyncLocalStorage.getStore()` will return `undefined` until
@@ -2657,6 +2711,12 @@ module[@js.scope "buffer"] Buffer : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Buffer_TranscodeEncoding]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Buffer_TranscodeEncoding]
+    ]
   end
   val transcode: source:Uint8Array.t_0 -> fromEnc:buffer_TranscodeEncoding -> toEnc:buffer_TranscodeEncoding -> _Buffer [@@js.global "transcode"]
   val slowBuffer: anonymous_interface_74 [@@js.global "SlowBuffer"]
@@ -2697,6 +2757,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_Serializable]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_Serializable]
+    ]
   end
   module SendHandle : sig
     type t = child_process_SendHandle
@@ -2705,6 +2771,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_SendHandle]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_SendHandle]
+    ]
   end
   module[@js.scope "ChildProcess"] ChildProcess : sig
     type t = child_process_ChildProcess
@@ -2713,6 +2785,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_ChildProcess | `Events_EventEmitter | NodeJS.EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_ChildProcess | `Events_EventEmitter | NodeJS.EventEmitter.tags]
+    ]
     val get_stdin: t -> Writable.t_0 or_null [@@js.get "stdin"]
     val set_stdin: t -> Writable.t_0 or_null -> unit [@@js.set "stdin"]
     val get_stdout: t -> Readable.t_0 or_null [@@js.get "stdout"]
@@ -2828,6 +2906,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_ChildProcess | `Child_process_ChildProcessWithoutNullStreams | `Events_EventEmitter | NodeJS.EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_ChildProcess | `Child_process_ChildProcessWithoutNullStreams | `Events_EventEmitter | NodeJS.EventEmitter.tags]
+    ]
     val get_stdin: t -> Writable.t_0 [@@js.get "stdin"]
     val set_stdin: t -> Writable.t_0 -> unit [@@js.set "stdin"]
     val get_stdout: t -> Readable.t_0 [@@js.get "stdout"]
@@ -2844,6 +2928,12 @@ module[@js.scope "child_process"] Child_process : sig
     type ('I, 'O, 'E) t_3 = ('I, 'O, 'E) t
     val t_3_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('E -> Ojs.t) -> ('I, 'O, 'E) t_3 -> Ojs.t
     val t_3_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> (Ojs.t -> 'E) -> Ojs.t -> ('I, 'O, 'E) t_3
+    [@@@js.stop]
+    type ('I, 'O, 'E) tags = [`Child_process_ChildProcess | `Child_process_ChildProcessByStdio of ('I * 'O * 'E) | `Events_EventEmitter | NodeJS.EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('I, 'O, 'E) tags = [`Child_process_ChildProcess | `Child_process_ChildProcessByStdio of ('I * 'O * 'E) | `Events_EventEmitter | NodeJS.EventEmitter.tags]
+    ]
     val get_stdin: ('I, 'O, 'E) t -> 'I [@@js.get "stdin"]
     val set_stdin: ('I, 'O, 'E) t -> 'I -> unit [@@js.set "stdin"]
     val get_stdout: ('I, 'O, 'E) t -> 'O [@@js.get "stdout"]
@@ -2860,6 +2950,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_MessageOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_MessageOptions]
+    ]
     val get_keepOpen: t -> bool [@@js.get "keepOpen"]
     val set_keepOpen: t -> bool -> unit [@@js.set "keepOpen"]
   end
@@ -2870,6 +2966,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_StdioOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_StdioOptions]
+    ]
   end
   module SerializationType : sig
     type t = child_process_SerializationType
@@ -2878,6 +2980,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_SerializationType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_SerializationType]
+    ]
   end
   module[@js.scope "MessagingOptions"] MessagingOptions : sig
     type t = child_process_MessagingOptions
@@ -2886,6 +2994,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_MessagingOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_MessagingOptions]
+    ]
     (**
       Specify the kind of serialization used for sending messages between processes.
       default: 'json'
@@ -2908,6 +3022,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_ProcessEnvOptions]
+    ]
     val get_uid: t -> float [@@js.get "uid"]
     val set_uid: t -> float -> unit [@@js.set "uid"]
     val get_gid: t -> float [@@js.get "gid"]
@@ -2924,6 +3044,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ProcessEnvOptions]
+    ]
     (** default: true *)
     (** default: true *)
     val get_windowsHide: t -> bool [@@js.get "windowsHide"]
@@ -2943,6 +3069,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions]
+    ]
     val get_argv0: t -> string [@@js.get "argv0"]
     val set_argv0: t -> string -> unit [@@js.set "argv0"]
     val get_stdio: t -> child_process_StdioOptions [@@js.get "stdio"]
@@ -2961,6 +3093,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnOptions]
+    ]
     val get_detached: t -> bool [@@js.get "detached"]
     val set_detached: t -> bool -> unit [@@js.set "detached"]
     val cast: t -> child_process_CommonSpawnOptions [@@js.cast]
@@ -2972,6 +3110,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnOptions | `Child_process_SpawnOptionsWithoutStdio]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnOptions | `Child_process_SpawnOptionsWithoutStdio]
+    ]
     val get_stdio: t -> (([`L_s271_pipe[@js "pipe"]] [@js.enum]) or_null_or_undefined list, ([`L_s271_pipe[@js "pipe"]] [@js.enum])) or_enum [@@js.get "stdio"]
     val set_stdio: t -> (([`L_s271_pipe] [@js.enum]) or_null_or_undefined list, ([`L_s271_pipe] [@js.enum])) or_enum -> unit [@@js.set "stdio"]
     val cast: t -> child_process_SpawnOptions [@@js.cast]
@@ -2983,6 +3127,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_StdioNull]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_StdioNull]
+    ]
   end
   module StdioPipe : sig
     type t = child_process_StdioPipe
@@ -2991,6 +3141,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_StdioPipe]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_StdioPipe]
+    ]
   end
   module[@js.scope "SpawnOptionsWithStdioTuple"] SpawnOptionsWithStdioTuple : sig
     type ('Stdin, 'Stdout, 'Stderr) t = ('Stdin, 'Stdout, 'Stderr) child_process_SpawnOptionsWithStdioTuple
@@ -2999,6 +3155,12 @@ module[@js.scope "child_process"] Child_process : sig
     type ('Stdin, 'Stdout, 'Stderr) t_3 = ('Stdin, 'Stdout, 'Stderr) t
     val t_3_to_js: ('Stdin -> Ojs.t) -> ('Stdout -> Ojs.t) -> ('Stderr -> Ojs.t) -> ('Stdin, 'Stdout, 'Stderr) t_3 -> Ojs.t
     val t_3_of_js: (Ojs.t -> 'Stdin) -> (Ojs.t -> 'Stdout) -> (Ojs.t -> 'Stderr) -> Ojs.t -> ('Stdin, 'Stdout, 'Stderr) t_3
+    [@@@js.stop]
+    type ('Stdin, 'Stdout, 'Stderr) tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnOptions | `Child_process_SpawnOptionsWithStdioTuple of ('Stdin * 'Stdout * 'Stderr)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('Stdin, 'Stdout, 'Stderr) tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnOptions | `Child_process_SpawnOptionsWithStdioTuple of ('Stdin * 'Stdout * 'Stderr)]
+    ]
     val get_stdio: ('Stdin, 'Stdout, 'Stderr) t -> ('Stdin * 'Stdout * 'Stderr) [@@js.get "stdio"]
     val set_stdio: ('Stdin, 'Stdout, 'Stderr) t -> ('Stdin * 'Stdout * 'Stderr) -> unit [@@js.set "stdio"]
     val cast: ('Stdin, 'Stdout, 'Stderr) t -> child_process_SpawnOptions [@@js.cast]
@@ -3030,6 +3192,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecOptions | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecOptions | `Child_process_ProcessEnvOptions]
+    ]
     val get_shell: t -> string [@@js.get "shell"]
     val set_shell: t -> string -> unit [@@js.set "shell"]
     val get_maxBuffer: t -> float [@@js.get "maxBuffer"]
@@ -3045,6 +3213,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecOptions | `Child_process_ExecOptionsWithStringEncoding | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecOptions | `Child_process_ExecOptionsWithStringEncoding | `Child_process_ProcessEnvOptions]
+    ]
     val get_encoding: t -> _BufferEncoding [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding -> unit [@@js.set "encoding"]
     val cast: t -> child_process_ExecOptions [@@js.cast]
@@ -3056,6 +3230,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecOptions | `Child_process_ExecOptionsWithBufferEncoding | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecOptions | `Child_process_ExecOptionsWithBufferEncoding | `Child_process_ProcessEnvOptions]
+    ]
     val get_encoding: t -> _BufferEncoding or_null [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding or_null -> unit [@@js.set "encoding"]
     val cast: t -> child_process_ExecOptions [@@js.cast]
@@ -3067,6 +3247,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_ExecException | Error.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_ExecException | Error.tags]
+    ]
     val get_cmd: t -> string [@@js.get "cmd"]
     val set_cmd: t -> string -> unit [@@js.set "cmd"]
     val get_killed: t -> bool [@@js.get "killed"]
@@ -3090,6 +3276,12 @@ module[@js.scope "child_process"] Child_process : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Child_process_PromiseWithChild of 'T | Promise.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Child_process_PromiseWithChild of 'T | Promise.tags]
+    ]
     val get_child: 'T t -> child_process_ChildProcess [@@js.get "child"]
     val set_child: 'T t -> child_process_ChildProcess -> unit [@@js.set "child"]
     val cast: 'T t -> 'T Promise.t_1 [@@js.cast]
@@ -3108,6 +3300,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecFileOptions | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecFileOptions | `Child_process_ProcessEnvOptions]
+    ]
     val get_maxBuffer: t -> float [@@js.get "maxBuffer"]
     val set_maxBuffer: t -> float -> unit [@@js.set "maxBuffer"]
     val get_killSignal: t -> NodeJS.Signals.t_0 or_number [@@js.get "killSignal"]
@@ -3125,6 +3323,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecFileOptions | `Child_process_ExecFileOptionsWithStringEncoding | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecFileOptions | `Child_process_ExecFileOptionsWithStringEncoding | `Child_process_ProcessEnvOptions]
+    ]
     val get_encoding: t -> _BufferEncoding [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding -> unit [@@js.set "encoding"]
     val cast: t -> child_process_ExecFileOptions [@@js.cast]
@@ -3136,6 +3340,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecFileOptions | `Child_process_ExecFileOptionsWithBufferEncoding | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecFileOptions | `Child_process_ExecFileOptionsWithBufferEncoding | `Child_process_ProcessEnvOptions]
+    ]
     val get_encoding: t -> ([`L_s187_buffer[@js "buffer"]] [@js.enum]) or_null [@@js.get "encoding"]
     val set_encoding: t -> ([`L_s187_buffer] [@js.enum]) or_null -> unit [@@js.set "encoding"]
     val cast: t -> child_process_ExecFileOptions [@@js.cast]
@@ -3147,6 +3357,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecFileOptions | `Child_process_ExecFileOptionsWithOtherEncoding | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecFileOptions | `Child_process_ExecFileOptionsWithOtherEncoding | `Child_process_ProcessEnvOptions]
+    ]
     val get_encoding: t -> _BufferEncoding [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding -> unit [@@js.set "encoding"]
     val cast: t -> child_process_ExecFileOptions [@@js.cast]
@@ -3158,6 +3374,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_ExecFileException]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_ExecFileException]
+    ]
   end
   val execFile: file:string -> child_process_ChildProcess [@@js.global "execFile"]
   val execFile: file:string -> options:(BaseEncodingOptions.t_0, child_process_ExecFileOptions) intersection2 or_null_or_undefined -> child_process_ChildProcess [@@js.global "execFile"]
@@ -3196,6 +3418,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_ForkOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_ForkOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions]
+    ]
     val get_execPath: t -> string [@@js.get "execPath"]
     val set_execPath: t -> string -> unit [@@js.set "execPath"]
     val get_execArgv: t -> string list [@@js.get "execArgv"]
@@ -3220,6 +3448,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnSyncOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnSyncOptions]
+    ]
     val get_input: t -> _NodeJS_ArrayBufferView or_string [@@js.get "input"]
     val set_input: t -> _NodeJS_ArrayBufferView or_string -> unit [@@js.set "input"]
     val get_killSignal: t -> NodeJS.Signals.t_0 or_number [@@js.get "killSignal"]
@@ -3237,6 +3471,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnSyncOptions | `Child_process_SpawnSyncOptionsWithStringEncoding]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnSyncOptions | `Child_process_SpawnSyncOptionsWithStringEncoding]
+    ]
     val get_encoding: t -> _BufferEncoding [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding -> unit [@@js.set "encoding"]
     val cast: t -> child_process_SpawnSyncOptions [@@js.cast]
@@ -3248,6 +3488,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnSyncOptions | `Child_process_SpawnSyncOptionsWithBufferEncoding]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_CommonSpawnOptions | `Child_process_MessagingOptions | `Child_process_ProcessEnvOptions | `Child_process_SpawnSyncOptions | `Child_process_SpawnSyncOptionsWithBufferEncoding]
+    ]
     val get_encoding: t -> ([`L_s187_buffer[@js "buffer"]] [@js.enum]) or_null [@@js.get "encoding"]
     val set_encoding: t -> ([`L_s187_buffer] [@js.enum]) or_null -> unit [@@js.set "encoding"]
     val cast: t -> child_process_SpawnSyncOptions [@@js.cast]
@@ -3259,6 +3505,12 @@ module[@js.scope "child_process"] Child_process : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Child_process_SpawnSyncReturns of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Child_process_SpawnSyncReturns of 'T]
+    ]
     val get_pid: 'T t -> float [@@js.get "pid"]
     val set_pid: 'T t -> float -> unit [@@js.set "pid"]
     val get_output: 'T t -> string list [@@js.get "output"]
@@ -3288,6 +3540,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecSyncOptions | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecSyncOptions | `Child_process_ProcessEnvOptions]
+    ]
     val get_input: t -> Uint8Array.t_0 or_string [@@js.get "input"]
     val set_input: t -> Uint8Array.t_0 or_string -> unit [@@js.set "input"]
     val get_stdio: t -> child_process_StdioOptions [@@js.get "stdio"]
@@ -3309,6 +3567,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecSyncOptions | `Child_process_ExecSyncOptionsWithStringEncoding | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecSyncOptions | `Child_process_ExecSyncOptionsWithStringEncoding | `Child_process_ProcessEnvOptions]
+    ]
     val get_encoding: t -> _BufferEncoding [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding -> unit [@@js.set "encoding"]
     val cast: t -> child_process_ExecSyncOptions [@@js.cast]
@@ -3320,6 +3584,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecSyncOptions | `Child_process_ExecSyncOptionsWithBufferEncoding | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecSyncOptions | `Child_process_ExecSyncOptionsWithBufferEncoding | `Child_process_ProcessEnvOptions]
+    ]
     val get_encoding: t -> ([`L_s187_buffer[@js "buffer"]] [@js.enum]) or_null [@@js.get "encoding"]
     val set_encoding: t -> ([`L_s187_buffer] [@js.enum]) or_null -> unit [@@js.set "encoding"]
     val cast: t -> child_process_ExecSyncOptions [@@js.cast]
@@ -3335,6 +3605,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecFileSyncOptions | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecFileSyncOptions | `Child_process_ProcessEnvOptions]
+    ]
     val get_input: t -> _NodeJS_ArrayBufferView or_string [@@js.get "input"]
     val set_input: t -> _NodeJS_ArrayBufferView or_string -> unit [@@js.set "input"]
     val get_stdio: t -> child_process_StdioOptions [@@js.get "stdio"]
@@ -3356,6 +3632,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecFileSyncOptions | `Child_process_ExecFileSyncOptionsWithStringEncoding | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecFileSyncOptions | `Child_process_ExecFileSyncOptionsWithStringEncoding | `Child_process_ProcessEnvOptions]
+    ]
     val get_encoding: t -> _BufferEncoding [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding -> unit [@@js.set "encoding"]
     val cast: t -> child_process_ExecFileSyncOptions [@@js.cast]
@@ -3367,6 +3649,12 @@ module[@js.scope "child_process"] Child_process : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Child_process_CommonOptions | `Child_process_ExecFileSyncOptions | `Child_process_ExecFileSyncOptionsWithBufferEncoding | `Child_process_ProcessEnvOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Child_process_CommonOptions | `Child_process_ExecFileSyncOptions | `Child_process_ExecFileSyncOptionsWithBufferEncoding | `Child_process_ProcessEnvOptions]
+    ]
     val get_encoding: t -> _BufferEncoding [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding -> unit [@@js.set "encoding"]
     val cast: t -> child_process_ExecFileSyncOptions [@@js.cast]
@@ -3408,6 +3696,12 @@ module[@js.scope "cluster"] Cluster : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Cluster_ClusterSettings]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Cluster_ClusterSettings]
+    ]
     val get_execArgv: t -> string list [@@js.get "execArgv"]
     val set_execArgv: t -> string list -> unit [@@js.set "execArgv"]
     val get_exec: t -> string [@@js.get "exec"]
@@ -3432,6 +3726,12 @@ module[@js.scope "cluster"] Cluster : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Cluster_Address]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Cluster_Address]
+    ]
     val get_address: t -> string [@@js.get "address"]
     val set_address: t -> string -> unit [@@js.set "address"]
     val get_port: t -> float [@@js.get "port"]
@@ -3446,6 +3746,12 @@ module[@js.scope "cluster"] Cluster : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Cluster_Worker | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Cluster_Worker | EventEmitter.tags]
+    ]
     val get_id: t -> float [@@js.get "id"]
     val set_id: t -> float -> unit [@@js.set "id"]
     val get_process: t -> Child.ChildProcess.t_0 [@@js.get "process"]
@@ -3572,6 +3878,12 @@ module[@js.scope "cluster"] Cluster : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Cluster_Cluster | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Cluster_Cluster | EventEmitter.tags]
+    ]
     val get_Worker: t -> cluster_Worker [@@js.get "Worker"]
     val set_Worker: t -> cluster_Worker -> unit [@@js.set "Worker"]
     val disconnect: t -> ?callback:(unit -> unit) -> unit -> unit [@@js.call "disconnect"]
@@ -3888,6 +4200,12 @@ module[@js.scope "console"] Console : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Console_global_Console]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Console_global_Console]
+      ]
       val get_Console: t -> console_global_NodeJS_ConsoleConstructor [@@js.get "Console"]
       val set_Console: t -> console_global_NodeJS_ConsoleConstructor -> unit [@@js.set "Console"]
       (**
@@ -3969,6 +4287,12 @@ module[@js.scope "console"] Console : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Console_global_NodeJS_ConsoleConstructorOptions]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Console_global_NodeJS_ConsoleConstructorOptions]
+        ]
         val get_stdout: t -> WritableStream.t_0 [@@js.get "stdout"]
         val set_stdout: t -> WritableStream.t_0 -> unit [@@js.set "stdout"]
         val get_stderr: t -> WritableStream.t_0 [@@js.get "stderr"]
@@ -3987,6 +4311,12 @@ module[@js.scope "console"] Console : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Console_global_NodeJS_ConsoleConstructor]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Console_global_NodeJS_ConsoleConstructor]
+        ]
         val get_prototype: t -> console_global_Console [@@js.get "prototype"]
         val set_prototype: t -> console_global_Console -> unit [@@js.set "prototype"]
         val create: t -> stdout:WritableStream.t_0 -> ?stderr:WritableStream.t_0 -> ?ignoreErrors:bool -> unit -> console_global_Console [@@js.apply_newable]
@@ -3999,6 +4329,12 @@ module[@js.scope "console"] Console : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Console_global_NodeJS_Global]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Console_global_NodeJS_Global]
+        ]
         val get_console: t -> console_global_Console [@@js.get "console"]
         val set_console: t -> console_global_Console -> unit [@@js.set "console"]
       end
@@ -4062,6 +4398,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Certificate]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Certificate]
+    ]
     (**
       @param spkac 
       @return The challenge component of the `spkac` data structure,
@@ -4177,6 +4519,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_HashOptions | Stream.TransformOptions.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_HashOptions | Stream.TransformOptions.tags]
+    ]
     (**
       For XOF hash functions such as `shake256`, the
       outputLength option can be used to specify the desired output length in bytes.
@@ -4204,6 +4552,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_BinaryToTextEncoding]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_BinaryToTextEncoding]
+    ]
   end
   module CharacterEncoding : sig
     type t = crypto_CharacterEncoding
@@ -4212,6 +4566,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_CharacterEncoding]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_CharacterEncoding]
+    ]
   end
   module LegacyCharacterEncoding : sig
     type t = crypto_LegacyCharacterEncoding
@@ -4220,6 +4580,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_LegacyCharacterEncoding]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_LegacyCharacterEncoding]
+    ]
   end
   module Encoding : sig
     type t = crypto_Encoding
@@ -4228,6 +4594,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Encoding]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Encoding]
+    ]
   end
   module ECDHKeyFormat : sig
     type t = crypto_ECDHKeyFormat
@@ -4236,6 +4608,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_ECDHKeyFormat]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_ECDHKeyFormat]
+    ]
   end
   module[@js.scope "Hash"] Hash : sig
     type t = crypto_Hash
@@ -4244,6 +4622,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Hash | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Hash | Stream.Transform.tags]
+    ]
     val create: unit -> t [@@js.create]
     val copy: t -> t [@@js.call "copy"]
     val update: t -> data:crypto_BinaryLike -> t [@@js.call "update"]
@@ -4259,6 +4643,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Hmac | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Hmac | Stream.Transform.tags]
+    ]
     val create: unit -> t [@@js.create]
     val update: t -> data:crypto_BinaryLike -> t [@@js.call "update"]
     val update': t -> data:string -> input_encoding:crypto_Encoding -> t [@@js.call "update"]
@@ -4273,6 +4663,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_KeyObjectType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_KeyObjectType]
+    ]
   end
   module[@js.scope "KeyExportOptions"] KeyExportOptions : sig
     type 'T t = 'T crypto_KeyExportOptions
@@ -4281,6 +4677,12 @@ module[@js.scope "crypto"] Crypto : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Crypto_KeyExportOptions of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Crypto_KeyExportOptions of 'T]
+    ]
     val get_type: 'T t -> ([`L_s272_pkcs1[@js "pkcs1"] | `L_s273_pkcs8[@js "pkcs8"] | `L_s293_sec1[@js "sec1"] | `L_s303_spki[@js "spki"]] [@js.enum]) [@@js.get "type"]
     val set_type: 'T t -> ([`L_s272_pkcs1 | `L_s273_pkcs8 | `L_s293_sec1 | `L_s303_spki] [@js.enum]) -> unit [@@js.set "type"]
     val get_format: 'T t -> 'T [@@js.get "format"]
@@ -4297,6 +4699,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_KeyObject]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_KeyObject]
+    ]
     val create: unit -> t [@@js.create]
     val get_asymmetricKeyType: t -> crypto_KeyType [@@js.get "asymmetricKeyType"]
     val set_asymmetricKeyType: t -> crypto_KeyType -> unit [@@js.set "asymmetricKeyType"]
@@ -4328,6 +4736,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_CipherCCMTypes]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_CipherCCMTypes]
+    ]
   end
   module CipherGCMTypes : sig
     type t = crypto_CipherGCMTypes
@@ -4336,6 +4750,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_CipherGCMTypes]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_CipherGCMTypes]
+    ]
   end
   module BinaryLike : sig
     type t = crypto_BinaryLike
@@ -4344,6 +4764,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_BinaryLike]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_BinaryLike]
+    ]
   end
   module CipherKey : sig
     type t = crypto_CipherKey
@@ -4352,6 +4778,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_CipherKey]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_CipherKey]
+    ]
   end
   module[@js.scope "CipherCCMOptions"] CipherCCMOptions : sig
     type t = crypto_CipherCCMOptions
@@ -4360,6 +4792,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_CipherCCMOptions | Stream.TransformOptions.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_CipherCCMOptions | Stream.TransformOptions.tags]
+    ]
     val get_authTagLength: t -> float [@@js.get "authTagLength"]
     val set_authTagLength: t -> float -> unit [@@js.set "authTagLength"]
     val cast: t -> Stream.TransformOptions.t_0 [@@js.cast]
@@ -4371,6 +4809,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_CipherGCMOptions | Stream.TransformOptions.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_CipherGCMOptions | Stream.TransformOptions.tags]
+    ]
     val get_authTagLength: t -> float [@@js.get "authTagLength"]
     val set_authTagLength: t -> float -> unit [@@js.set "authTagLength"]
     val cast: t -> Stream.TransformOptions.t_0 [@@js.cast]
@@ -4391,6 +4835,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Cipher | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Cipher | Stream.Transform.tags]
+    ]
     val create: unit -> t [@@js.create]
     val update: t -> data:crypto_BinaryLike -> _Buffer [@@js.call "update"]
     val update': t -> data:string -> input_encoding:crypto_Encoding -> _Buffer [@@js.call "update"]
@@ -4408,6 +4858,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Cipher | `Crypto_CipherCCM | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Cipher | `Crypto_CipherCCM | Stream.Transform.tags]
+    ]
     val setAAD: t -> buffer:_NodeJS_ArrayBufferView -> options:anonymous_interface_39 -> t [@@js.call "setAAD"]
     val getAuthTag: t -> _Buffer [@@js.call "getAuthTag"]
     val cast: t -> crypto_Cipher [@@js.cast]
@@ -4419,6 +4875,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Cipher | `Crypto_CipherGCM | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Cipher | `Crypto_CipherGCM | Stream.Transform.tags]
+    ]
     val setAAD: t -> buffer:_NodeJS_ArrayBufferView -> ?options:anonymous_interface_39 -> unit -> t [@@js.call "setAAD"]
     val getAuthTag: t -> _Buffer [@@js.call "getAuthTag"]
     val cast: t -> crypto_Cipher [@@js.cast]
@@ -4439,6 +4901,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Decipher | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Decipher | Stream.Transform.tags]
+    ]
     val create: unit -> t [@@js.create]
     val update: t -> data:_NodeJS_ArrayBufferView -> _Buffer [@@js.call "update"]
     val update': t -> data:string -> input_encoding:crypto_Encoding -> _Buffer [@@js.call "update"]
@@ -4456,6 +4924,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Decipher | `Crypto_DecipherCCM | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Decipher | `Crypto_DecipherCCM | Stream.Transform.tags]
+    ]
     val setAuthTag: t -> buffer:_NodeJS_ArrayBufferView -> t [@@js.call "setAuthTag"]
     val setAAD: t -> buffer:_NodeJS_ArrayBufferView -> options:anonymous_interface_39 -> t [@@js.call "setAAD"]
     val cast: t -> crypto_Decipher [@@js.cast]
@@ -4467,6 +4941,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Decipher | `Crypto_DecipherGCM | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Decipher | `Crypto_DecipherGCM | Stream.Transform.tags]
+    ]
     val setAuthTag: t -> buffer:_NodeJS_ArrayBufferView -> t [@@js.call "setAuthTag"]
     val setAAD: t -> buffer:_NodeJS_ArrayBufferView -> ?options:anonymous_interface_39 -> unit -> t [@@js.call "setAAD"]
     val cast: t -> crypto_Decipher [@@js.cast]
@@ -4478,6 +4958,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_PrivateKeyInput]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_PrivateKeyInput]
+    ]
     val get_key: t -> _Buffer or_string [@@js.get "key"]
     val set_key: t -> _Buffer or_string -> unit [@@js.set "key"]
     val get_format: t -> crypto_KeyFormat [@@js.get "format"]
@@ -4494,6 +4980,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_PublicKeyInput]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_PublicKeyInput]
+    ]
     val get_key: t -> _Buffer or_string [@@js.get "key"]
     val set_key: t -> _Buffer or_string -> unit [@@js.set "key"]
     val get_format: t -> crypto_KeyFormat [@@js.get "format"]
@@ -4512,6 +5004,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_DSAEncoding]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_DSAEncoding]
+    ]
   end
   module[@js.scope "SigningOptions"] SigningOptions : sig
     type t = crypto_SigningOptions
@@ -4520,6 +5018,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_SigningOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_SigningOptions]
+    ]
     (** See: crypto.constants.RSA_PKCS1_PADDING *)
     (** See: crypto.constants.RSA_PKCS1_PADDING *)
     val get_padding: t -> float [@@js.get "padding"]
@@ -4537,6 +5041,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_PrivateKeyInput | `Crypto_SignPrivateKeyInput | `Crypto_SigningOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_PrivateKeyInput | `Crypto_SignPrivateKeyInput | `Crypto_SigningOptions]
+    ]
     val cast: t -> crypto_PrivateKeyInput [@@js.cast]
     val cast': t -> crypto_SigningOptions [@@js.cast]
   end
@@ -4547,6 +5057,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_SignKeyObjectInput | `Crypto_SigningOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_SignKeyObjectInput | `Crypto_SigningOptions]
+    ]
     val get_key: t -> crypto_KeyObject [@@js.get "key"]
     val set_key: t -> crypto_KeyObject -> unit [@@js.set "key"]
     val cast: t -> crypto_SigningOptions [@@js.cast]
@@ -4558,6 +5074,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_PublicKeyInput | `Crypto_SigningOptions | `Crypto_VerifyPublicKeyInput]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_PublicKeyInput | `Crypto_SigningOptions | `Crypto_VerifyPublicKeyInput]
+    ]
     val cast: t -> crypto_PublicKeyInput [@@js.cast]
     val cast': t -> crypto_SigningOptions [@@js.cast]
   end
@@ -4568,6 +5090,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_SigningOptions | `Crypto_VerifyKeyObjectInput]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_SigningOptions | `Crypto_VerifyKeyObjectInput]
+    ]
     val get_key: t -> crypto_KeyObject [@@js.get "key"]
     val set_key: t -> crypto_KeyObject -> unit [@@js.set "key"]
     val cast: t -> crypto_SigningOptions [@@js.cast]
@@ -4579,6 +5107,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_KeyLike]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_KeyLike]
+    ]
   end
   module[@js.scope "Signer"] Signer : sig
     type t = crypto_Signer
@@ -4587,6 +5121,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Signer | Stream.Writable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Signer | Stream.Writable.tags]
+    ]
     val create: unit -> t [@@js.create]
     val update: t -> data:crypto_BinaryLike -> t [@@js.call "update"]
     val update': t -> data:string -> input_encoding:crypto_Encoding -> t [@@js.call "update"]
@@ -4602,6 +5142,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_Verify | Stream.Writable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_Verify | Stream.Writable.tags]
+    ]
     val create: unit -> t [@@js.create]
     val update: t -> data:crypto_BinaryLike -> t [@@js.call "update"]
     val update': t -> data:string -> input_encoding:crypto_Encoding -> t [@@js.call "update"]
@@ -4621,6 +5167,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_DiffieHellman]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_DiffieHellman]
+    ]
     val create: unit -> t [@@js.create]
     val generateKeys: t -> _Buffer [@@js.call "generateKeys"]
     val generateKeys': t -> encoding:crypto_BinaryToTextEncoding -> string [@@js.call "generateKeys"]
@@ -4665,6 +5217,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_ScryptOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_ScryptOptions]
+    ]
     val get_cost: t -> float [@@js.get "cost"]
     val set_cost: t -> float -> unit [@@js.set "cost"]
     val get_blockSize: t -> float [@@js.get "blockSize"]
@@ -4690,6 +5248,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_RsaPublicKey]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_RsaPublicKey]
+    ]
     val get_key: t -> crypto_KeyLike [@@js.get "key"]
     val set_key: t -> crypto_KeyLike -> unit [@@js.set "key"]
     val get_padding: t -> float [@@js.get "padding"]
@@ -4702,6 +5266,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_RsaPrivateKey]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_RsaPrivateKey]
+    ]
     val get_key: t -> crypto_KeyLike [@@js.get "key"]
     val set_key: t -> crypto_KeyLike -> unit [@@js.set "key"]
     val get_passphrase: t -> string [@@js.get "passphrase"]
@@ -4731,6 +5301,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_ECDH]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_ECDH]
+    ]
     val create: unit -> t [@@js.create]
     val convertKey: key:crypto_BinaryLike -> curve:string -> ?inputEncoding:crypto_BinaryToTextEncoding -> ?outputEncoding:([`L_s181_base64 | `L_s226_hex | `L_s242_latin1] [@js.enum]) -> ?format:([`L_s192_compressed | `L_s231_hybrid | `L_s321_uncompressed] [@js.enum]) -> unit -> _Buffer or_string [@@js.global "convertKey"]
     val generateKeys: t -> _Buffer [@@js.call "generateKeys"]
@@ -4757,6 +5333,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_KeyType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_KeyType]
+    ]
   end
   module KeyFormat : sig
     type t = crypto_KeyFormat
@@ -4765,6 +5347,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_KeyFormat]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_KeyFormat]
+    ]
   end
   module[@js.scope "BasePrivateKeyEncodingOptions"] BasePrivateKeyEncodingOptions : sig
     type 'T t = 'T crypto_BasePrivateKeyEncodingOptions
@@ -4773,6 +5361,12 @@ module[@js.scope "crypto"] Crypto : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Crypto_BasePrivateKeyEncodingOptions of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Crypto_BasePrivateKeyEncodingOptions of 'T]
+    ]
     val get_format: 'T t -> 'T [@@js.get "format"]
     val set_format: 'T t -> 'T -> unit [@@js.set "format"]
     val get_cipher: 'T t -> string [@@js.get "cipher"]
@@ -4787,6 +5381,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_KeyPairKeyObjectResult]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_KeyPairKeyObjectResult]
+    ]
     val get_publicKey: t -> crypto_KeyObject [@@js.get "publicKey"]
     val set_publicKey: t -> crypto_KeyObject -> unit [@@js.set "publicKey"]
     val get_privateKey: t -> crypto_KeyObject [@@js.get "privateKey"]
@@ -4799,6 +5399,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_ED25519KeyPairKeyObjectOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_ED25519KeyPairKeyObjectOptions]
+    ]
   end
   module ED448KeyPairKeyObjectOptions : sig
     type t = crypto_ED448KeyPairKeyObjectOptions
@@ -4807,6 +5413,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_ED448KeyPairKeyObjectOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_ED448KeyPairKeyObjectOptions]
+    ]
   end
   module X25519KeyPairKeyObjectOptions : sig
     type t = crypto_X25519KeyPairKeyObjectOptions
@@ -4815,6 +5427,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_X25519KeyPairKeyObjectOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_X25519KeyPairKeyObjectOptions]
+    ]
   end
   module X448KeyPairKeyObjectOptions : sig
     type t = crypto_X448KeyPairKeyObjectOptions
@@ -4823,6 +5441,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_X448KeyPairKeyObjectOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_X448KeyPairKeyObjectOptions]
+    ]
   end
   module[@js.scope "ECKeyPairKeyObjectOptions"] ECKeyPairKeyObjectOptions : sig
     type t = crypto_ECKeyPairKeyObjectOptions
@@ -4831,6 +5455,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_ECKeyPairKeyObjectOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_ECKeyPairKeyObjectOptions]
+    ]
     (** Name of the curve to use. *)
     (** Name of the curve to use. *)
     val get_namedCurve: t -> string [@@js.get "namedCurve"]
@@ -4844,6 +5474,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_RSAKeyPairKeyObjectOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_RSAKeyPairKeyObjectOptions]
+    ]
     (** Key size in bits *)
     (** Key size in bits *)
     val get_modulusLength: t -> float [@@js.get "modulusLength"]
@@ -4862,6 +5498,12 @@ module[@js.scope "crypto"] Crypto : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Crypto_DSAKeyPairKeyObjectOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Crypto_DSAKeyPairKeyObjectOptions]
+    ]
     (** Key size in bits *)
     (** Key size in bits *)
     val get_modulusLength: t -> float [@@js.get "modulusLength"]
@@ -4880,6 +5522,12 @@ module[@js.scope "crypto"] Crypto : sig
     type ('PubF, 'PrivF) t_2 = ('PubF, 'PrivF) t
     val t_2_to_js: ('PubF -> Ojs.t) -> ('PrivF -> Ojs.t) -> ('PubF, 'PrivF) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'PubF) -> (Ojs.t -> 'PrivF) -> Ojs.t -> ('PubF, 'PrivF) t_2
+    [@@@js.stop]
+    type ('PubF, 'PrivF) tags = [`Crypto_RSAKeyPairOptions of ('PubF * 'PrivF)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('PubF, 'PrivF) tags = [`Crypto_RSAKeyPairOptions of ('PubF * 'PrivF)]
+    ]
     (** Key size in bits *)
     (** Key size in bits *)
     val get_modulusLength: ('PubF, 'PrivF) t -> float [@@js.get "modulusLength"]
@@ -4902,6 +5550,12 @@ module[@js.scope "crypto"] Crypto : sig
     type ('PubF, 'PrivF) t_2 = ('PubF, 'PrivF) t
     val t_2_to_js: ('PubF -> Ojs.t) -> ('PrivF -> Ojs.t) -> ('PubF, 'PrivF) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'PubF) -> (Ojs.t -> 'PrivF) -> Ojs.t -> ('PubF, 'PrivF) t_2
+    [@@@js.stop]
+    type ('PubF, 'PrivF) tags = [`Crypto_DSAKeyPairOptions of ('PubF * 'PrivF)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('PubF, 'PrivF) tags = [`Crypto_DSAKeyPairOptions of ('PubF * 'PrivF)]
+    ]
     (** Key size in bits *)
     (** Key size in bits *)
     val get_modulusLength: ('PubF, 'PrivF) t -> float [@@js.get "modulusLength"]
@@ -4924,6 +5578,12 @@ module[@js.scope "crypto"] Crypto : sig
     type ('PubF, 'PrivF) t_2 = ('PubF, 'PrivF) t
     val t_2_to_js: ('PubF -> Ojs.t) -> ('PrivF -> Ojs.t) -> ('PubF, 'PrivF) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'PubF) -> (Ojs.t -> 'PrivF) -> Ojs.t -> ('PubF, 'PrivF) t_2
+    [@@@js.stop]
+    type ('PubF, 'PrivF) tags = [`Crypto_ECKeyPairOptions of ('PubF * 'PrivF)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('PubF, 'PrivF) tags = [`Crypto_ECKeyPairOptions of ('PubF * 'PrivF)]
+    ]
     (** Name of the curve to use. *)
     (** Name of the curve to use. *)
     val get_namedCurve: ('PubF, 'PrivF) t -> string [@@js.get "namedCurve"]
@@ -4941,6 +5601,12 @@ module[@js.scope "crypto"] Crypto : sig
     type ('PubF, 'PrivF) t_2 = ('PubF, 'PrivF) t
     val t_2_to_js: ('PubF -> Ojs.t) -> ('PrivF -> Ojs.t) -> ('PubF, 'PrivF) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'PubF) -> (Ojs.t -> 'PrivF) -> Ojs.t -> ('PubF, 'PrivF) t_2
+    [@@@js.stop]
+    type ('PubF, 'PrivF) tags = [`Crypto_ED25519KeyPairOptions of ('PubF * 'PrivF)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('PubF, 'PrivF) tags = [`Crypto_ED25519KeyPairOptions of ('PubF * 'PrivF)]
+    ]
     val get_publicKeyEncoding: ('PubF, 'PrivF) t -> anonymous_interface_57 [@@js.get "publicKeyEncoding"]
     val set_publicKeyEncoding: ('PubF, 'PrivF) t -> anonymous_interface_57 -> unit [@@js.set "publicKeyEncoding"]
     val get_privateKeyEncoding: ('PubF, 'PrivF) t -> ('PrivF crypto_BasePrivateKeyEncodingOptions, anonymous_interface_56) intersection2 [@@js.get "privateKeyEncoding"]
@@ -4953,6 +5619,12 @@ module[@js.scope "crypto"] Crypto : sig
     type ('PubF, 'PrivF) t_2 = ('PubF, 'PrivF) t
     val t_2_to_js: ('PubF -> Ojs.t) -> ('PrivF -> Ojs.t) -> ('PubF, 'PrivF) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'PubF) -> (Ojs.t -> 'PrivF) -> Ojs.t -> ('PubF, 'PrivF) t_2
+    [@@@js.stop]
+    type ('PubF, 'PrivF) tags = [`Crypto_ED448KeyPairOptions of ('PubF * 'PrivF)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('PubF, 'PrivF) tags = [`Crypto_ED448KeyPairOptions of ('PubF * 'PrivF)]
+    ]
     val get_publicKeyEncoding: ('PubF, 'PrivF) t -> anonymous_interface_57 [@@js.get "publicKeyEncoding"]
     val set_publicKeyEncoding: ('PubF, 'PrivF) t -> anonymous_interface_57 -> unit [@@js.set "publicKeyEncoding"]
     val get_privateKeyEncoding: ('PubF, 'PrivF) t -> ('PrivF crypto_BasePrivateKeyEncodingOptions, anonymous_interface_56) intersection2 [@@js.get "privateKeyEncoding"]
@@ -4965,6 +5637,12 @@ module[@js.scope "crypto"] Crypto : sig
     type ('PubF, 'PrivF) t_2 = ('PubF, 'PrivF) t
     val t_2_to_js: ('PubF -> Ojs.t) -> ('PrivF -> Ojs.t) -> ('PubF, 'PrivF) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'PubF) -> (Ojs.t -> 'PrivF) -> Ojs.t -> ('PubF, 'PrivF) t_2
+    [@@@js.stop]
+    type ('PubF, 'PrivF) tags = [`Crypto_X25519KeyPairOptions of ('PubF * 'PrivF)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('PubF, 'PrivF) tags = [`Crypto_X25519KeyPairOptions of ('PubF * 'PrivF)]
+    ]
     val get_publicKeyEncoding: ('PubF, 'PrivF) t -> anonymous_interface_57 [@@js.get "publicKeyEncoding"]
     val set_publicKeyEncoding: ('PubF, 'PrivF) t -> anonymous_interface_57 -> unit [@@js.set "publicKeyEncoding"]
     val get_privateKeyEncoding: ('PubF, 'PrivF) t -> ('PrivF crypto_BasePrivateKeyEncodingOptions, anonymous_interface_56) intersection2 [@@js.get "privateKeyEncoding"]
@@ -4977,6 +5655,12 @@ module[@js.scope "crypto"] Crypto : sig
     type ('PubF, 'PrivF) t_2 = ('PubF, 'PrivF) t
     val t_2_to_js: ('PubF -> Ojs.t) -> ('PrivF -> Ojs.t) -> ('PubF, 'PrivF) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'PubF) -> (Ojs.t -> 'PrivF) -> Ojs.t -> ('PubF, 'PrivF) t_2
+    [@@@js.stop]
+    type ('PubF, 'PrivF) tags = [`Crypto_X448KeyPairOptions of ('PubF * 'PrivF)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('PubF, 'PrivF) tags = [`Crypto_X448KeyPairOptions of ('PubF * 'PrivF)]
+    ]
     val get_publicKeyEncoding: ('PubF, 'PrivF) t -> anonymous_interface_57 [@@js.get "publicKeyEncoding"]
     val set_publicKeyEncoding: ('PubF, 'PrivF) t -> anonymous_interface_57 -> unit [@@js.set "publicKeyEncoding"]
     val get_privateKeyEncoding: ('PubF, 'PrivF) t -> ('PrivF crypto_BasePrivateKeyEncodingOptions, anonymous_interface_56) intersection2 [@@js.get "privateKeyEncoding"]
@@ -4989,6 +5673,12 @@ module[@js.scope "crypto"] Crypto : sig
     type ('T1, 'T2) t_2 = ('T1, 'T2) t
     val t_2_to_js: ('T1 -> Ojs.t) -> ('T2 -> Ojs.t) -> ('T1, 'T2) t_2 -> Ojs.t
     val t_2_of_js: (Ojs.t -> 'T1) -> (Ojs.t -> 'T2) -> Ojs.t -> ('T1, 'T2) t_2
+    [@@@js.stop]
+    type ('T1, 'T2) tags = [`Crypto_KeyPairSyncResult of ('T1 * 'T2)]
+    [@@@js.start]
+    [@@@js.implem 
+      type ('T1, 'T2) tags = [`Crypto_KeyPairSyncResult of ('T1 * 'T2)]
+    ]
     val get_publicKey: ('T1, 'T2) t -> 'T1 [@@js.get "publicKey"]
     val set_publicKey: ('T1, 'T2) t -> 'T1 -> unit [@@js.set "publicKey"]
     val get_privateKey: ('T1, 'T2) t -> 'T2 [@@js.get "privateKey"]
@@ -5155,6 +5845,12 @@ module[@js.scope "dgram"] Dgram : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dgram_RemoteInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dgram_RemoteInfo]
+    ]
     val get_address: t -> string [@@js.get "address"]
     val set_address: t -> string -> unit [@@js.set "address"]
     val get_family: t -> ([`L_s62_IPv4[@js "IPv4"] | `L_s63_IPv6[@js "IPv6"]] [@js.enum]) [@@js.get "family"]
@@ -5171,6 +5867,12 @@ module[@js.scope "dgram"] Dgram : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dgram_BindOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dgram_BindOptions]
+    ]
     val get_port: t -> float [@@js.get "port"]
     val set_port: t -> float -> unit [@@js.set "port"]
     val get_address: t -> string [@@js.get "address"]
@@ -5187,6 +5889,12 @@ module[@js.scope "dgram"] Dgram : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dgram_SocketType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dgram_SocketType]
+    ]
   end
   module[@js.scope "SocketOptions"] SocketOptions : sig
     type t = dgram_SocketOptions
@@ -5195,6 +5903,12 @@ module[@js.scope "dgram"] Dgram : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dgram_SocketOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dgram_SocketOptions]
+    ]
     val get_type: t -> dgram_SocketType [@@js.get "type"]
     val set_type: t -> dgram_SocketType -> unit [@@js.set "type"]
     val get_reuseAddr: t -> bool [@@js.get "reuseAddr"]
@@ -5219,6 +5933,12 @@ module[@js.scope "dgram"] Dgram : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dgram_Socket | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dgram_Socket | EventEmitter.tags]
+    ]
     val addMembership: t -> multicastAddress:string -> ?multicastInterface:string -> unit -> unit [@@js.call "addMembership"]
     val address: t -> AddressInfo.t_0 [@@js.call "address"]
     val bind: t -> ?port:float -> ?address:string -> ?callback:(unit -> unit) -> unit -> unit [@@js.call "bind"]
@@ -5375,6 +6095,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_LookupOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_LookupOptions]
+    ]
     val get_family: t -> float [@@js.get "family"]
     val set_family: t -> float -> unit [@@js.set "family"]
     val get_hints: t -> float [@@js.get "hints"]
@@ -5391,6 +6117,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_LookupOneOptions | `Dns_LookupOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_LookupOneOptions | `Dns_LookupOptions]
+    ]
     val get_all: t -> ([`L_b_false[@js false]] [@js.enum]) [@@js.get "all"]
     val set_all: t -> ([`L_b_false] [@js.enum]) -> unit [@@js.set "all"]
     val cast: t -> dns_LookupOptions [@@js.cast]
@@ -5402,6 +6134,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_LookupAllOptions | `Dns_LookupOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_LookupAllOptions | `Dns_LookupOptions]
+    ]
     val get_all: t -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "all"]
     val set_all: t -> ([`L_b_true] [@js.enum]) -> unit [@@js.set "all"]
     val cast: t -> dns_LookupOptions [@@js.cast]
@@ -5413,6 +6151,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_LookupAddress]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_LookupAddress]
+    ]
     val get_address: t -> string [@@js.get "address"]
     val set_address: t -> string -> unit [@@js.set "address"]
     val get_family: t -> float [@@js.get "family"]
@@ -5439,6 +6183,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_ResolveOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_ResolveOptions]
+    ]
     val get_ttl: t -> bool [@@js.get "ttl"]
     val set_ttl: t -> bool -> unit [@@js.set "ttl"]
   end
@@ -5449,6 +6199,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_ResolveOptions | `Dns_ResolveWithTtlOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_ResolveOptions | `Dns_ResolveWithTtlOptions]
+    ]
     val get_ttl: t -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "ttl"]
     val set_ttl: t -> ([`L_b_true] [@js.enum]) -> unit [@@js.set "ttl"]
     val cast: t -> dns_ResolveOptions [@@js.cast]
@@ -5460,6 +6216,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_RecordWithTtl]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_RecordWithTtl]
+    ]
     val get_address: t -> string [@@js.get "address"]
     val set_address: t -> string -> unit [@@js.set "address"]
     val get_ttl: t -> float [@@js.get "ttl"]
@@ -5473,6 +6235,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyRecordWithTtl]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyRecordWithTtl]
+    ]
   end
   module[@js.scope "AnyARecord"] AnyARecord : sig
     type t = dns_AnyARecord
@@ -5481,6 +6249,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyARecord | `Dns_RecordWithTtl]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyARecord | `Dns_RecordWithTtl]
+    ]
     val get_type: t -> ([`L_s1_A[@js "A"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s1_A] [@js.enum]) -> unit [@@js.set "type"]
     val cast: t -> dns_RecordWithTtl [@@js.cast]
@@ -5492,6 +6266,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyAaaaRecord | `Dns_RecordWithTtl]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyAaaaRecord | `Dns_RecordWithTtl]
+    ]
     val get_type: t -> ([`L_s2_AAAA[@js "AAAA"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s2_AAAA] [@js.enum]) -> unit [@@js.set "type"]
     val cast: t -> dns_RecordWithTtl [@@js.cast]
@@ -5503,6 +6283,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_MxRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_MxRecord]
+    ]
     val get_priority: t -> float [@@js.get "priority"]
     val set_priority: t -> float -> unit [@@js.set "priority"]
     val get_exchange: t -> string [@@js.get "exchange"]
@@ -5515,6 +6301,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyMxRecord | `Dns_MxRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyMxRecord | `Dns_MxRecord]
+    ]
     val get_type: t -> ([`L_s65_MX[@js "MX"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s65_MX] [@js.enum]) -> unit [@@js.set "type"]
     val cast: t -> dns_MxRecord [@@js.cast]
@@ -5526,6 +6318,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_NaptrRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_NaptrRecord]
+    ]
     val get_flags: t -> string [@@js.get "flags"]
     val set_flags: t -> string -> unit [@@js.set "flags"]
     val get_service: t -> string [@@js.get "service"]
@@ -5546,6 +6344,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyNaptrRecord | `Dns_NaptrRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyNaptrRecord | `Dns_NaptrRecord]
+    ]
     val get_type: t -> ([`L_s66_NAPTR[@js "NAPTR"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s66_NAPTR] [@js.enum]) -> unit [@@js.set "type"]
     val cast: t -> dns_NaptrRecord [@@js.cast]
@@ -5557,6 +6361,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_SoaRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_SoaRecord]
+    ]
     val get_nsname: t -> string [@@js.get "nsname"]
     val set_nsname: t -> string -> unit [@@js.set "nsname"]
     val get_hostmaster: t -> string [@@js.get "hostmaster"]
@@ -5579,6 +6389,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnySoaRecord | `Dns_SoaRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnySoaRecord | `Dns_SoaRecord]
+    ]
     val get_type: t -> ([`L_s158_SOA[@js "SOA"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s158_SOA] [@js.enum]) -> unit [@@js.set "type"]
     val cast: t -> dns_SoaRecord [@@js.cast]
@@ -5590,6 +6406,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_SrvRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_SrvRecord]
+    ]
     val get_priority: t -> float [@@js.get "priority"]
     val set_priority: t -> float -> unit [@@js.set "priority"]
     val get_weight: t -> float [@@js.get "weight"]
@@ -5606,6 +6428,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnySrvRecord | `Dns_SrvRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnySrvRecord | `Dns_SrvRecord]
+    ]
     val get_type: t -> ([`L_s159_SRV[@js "SRV"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s159_SRV] [@js.enum]) -> unit [@@js.set "type"]
     val cast: t -> dns_SrvRecord [@@js.cast]
@@ -5617,6 +6445,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyTxtRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyTxtRecord]
+    ]
     val get_type: t -> ([`L_s165_TXT[@js "TXT"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s165_TXT] [@js.enum]) -> unit [@@js.set "type"]
     val get_entries: t -> string list [@@js.get "entries"]
@@ -5629,6 +6463,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyNsRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyNsRecord]
+    ]
     val get_type: t -> ([`L_s67_NS[@js "NS"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s67_NS] [@js.enum]) -> unit [@@js.set "type"]
     val get_value: t -> string [@@js.get "value"]
@@ -5641,6 +6481,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyPtrRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyPtrRecord]
+    ]
     val get_type: t -> ([`L_s84_PTR[@js "PTR"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s84_PTR] [@js.enum]) -> unit [@@js.set "type"]
     val get_value: t -> string [@@js.get "value"]
@@ -5653,6 +6499,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyCnameRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyCnameRecord]
+    ]
     val get_type: t -> ([`L_s6_CNAME[@js "CNAME"]] [@js.enum]) [@@js.get "type"]
     val set_type: t -> ([`L_s6_CNAME] [@js.enum]) -> unit [@@js.set "type"]
     val get_value: t -> string [@@js.get "value"]
@@ -5665,6 +6517,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_AnyRecord]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_AnyRecord]
+    ]
   end
   val resolve: hostname:string -> callback:(err:_NodeJS_ErrnoException or_null -> addresses:string list -> unit) -> unit [@@js.global "resolve"]
   val resolve: hostname:string -> rrtype:([`L_s1_A] [@js.enum]) -> callback:(err:_NodeJS_ErrnoException or_null -> addresses:string list -> unit) -> unit [@@js.global "resolve"]
@@ -5775,6 +6633,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_ResolverOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_ResolverOptions]
+    ]
     val get_timeout: t -> float [@@js.get "timeout"]
     val set_timeout: t -> float -> unit [@@js.set "timeout"]
   end
@@ -5785,6 +6649,12 @@ module[@js.scope "dns"] Dns : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Dns_Resolver]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Dns_Resolver]
+    ]
     val create: ?options:dns_ResolverOptions -> unit -> t [@@js.create]
     val cancel: t -> unit [@@js.call "cancel"]
     val getServers: t -> string list [@@js.call "getServers"]
@@ -5849,6 +6719,12 @@ module[@js.scope "dns"] Dns : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Dns_promises_Resolver]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Dns_promises_Resolver]
+      ]
       val create: ?options:dns_ResolverOptions -> unit -> t [@@js.create]
       val cancel: t -> unit [@@js.call "cancel"]
       val getServers: t -> string list [@@js.call "getServers"]
@@ -5889,6 +6765,12 @@ module[@js.scope "domain"] Domain : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Domain_global_NodeJS_Domain | EventEmitter.tags]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Domain_global_NodeJS_Domain | EventEmitter.tags]
+        ]
         val run: t -> fn:(args:(any list [@js.variadic]) -> 'T) -> args:(any list [@js.variadic]) -> 'T [@@js.call "run"]
         val add: t -> emitter:(EventEmitter.t_0, Timer.t_0) union2 -> unit [@@js.call "add"]
         val remove: t -> emitter:(EventEmitter.t_0, Timer.t_0) union2 -> unit [@@js.call "remove"]
@@ -5905,6 +6787,12 @@ module[@js.scope "domain"] Domain : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Domain_Domain | EventEmitter.tags | NodeJS.Domain.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Domain_Domain | EventEmitter.tags | NodeJS.Domain.tags]
+    ]
     val get_members: t -> (EventEmitter.t_0, _NodeJS_Timer) union2 list [@@js.get "members"]
     val set_members: t -> (EventEmitter.t_0, _NodeJS_Timer) union2 list -> unit [@@js.set "members"]
     val enter: t -> unit [@@js.call "enter"]
@@ -5933,6 +6821,12 @@ module[@js.scope "events"] Events : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Events_EventEmitterOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Events_EventEmitterOptions]
+    ]
     (** Enables automatic capturing of promise rejection. *)
     (** Enables automatic capturing of promise rejection. *)
     val get_captureRejections: t -> bool [@@js.get "captureRejections"]
@@ -5946,6 +6840,12 @@ module[@js.scope "events"] Events : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Events_NodeEventTarget]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Events_NodeEventTarget]
+    ]
     val once: t -> event:symbol or_string -> listener:(args:(any list [@js.variadic]) -> unit) -> t [@@js.call "once"]
   end
   module[@js.scope "DOMEventTarget"] DOMEventTarget : sig
@@ -5955,6 +6855,12 @@ module[@js.scope "events"] Events : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Events_DOMEventTarget]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Events_DOMEventTarget]
+    ]
     val addEventListener: t -> event:string -> listener:(args:(any list [@js.variadic]) -> unit) -> ?opts:anonymous_interface_34 -> unit -> any [@@js.call "addEventListener"]
   end
   module[@js.scope "EventEmitter"] EventEmitter : sig
@@ -5964,6 +6870,12 @@ module[@js.scope "events"] Events : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Events_EventEmitter | NodeJS.EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Events_EventEmitter | NodeJS.EventEmitter.tags]
+    ]
     val create: ?options:events_EventEmitterOptions -> unit -> t [@@js.create]
     val once: emitter:events_NodeEventTarget -> event:symbol or_string -> any list Promise.t_1 [@@js.global "once"]
     val once': emitter:events_DOMEventTarget -> event:string -> any list Promise.t_1 [@@js.global "once"]
@@ -6012,6 +6924,12 @@ module[@js.scope "events"] Events : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Events_global_NodeJS_EventEmitter]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Events_global_NodeJS_EventEmitter]
+        ]
         val addListener: t -> event:symbol or_string -> listener:(args:(any list [@js.variadic]) -> unit) -> t [@@js.call "addListener"]
         val on: t -> event:symbol or_string -> listener:(args:(any list [@js.variadic]) -> unit) -> t [@@js.call "on"]
         val once: t -> event:symbol or_string -> listener:(args:(any list [@js.variadic]) -> unit) -> t [@@js.call "once"]
@@ -6071,6 +6989,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_PathLike]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_PathLike]
+    ]
   end
   module[@js.scope "NoParamCallback"] NoParamCallback : sig
     type t = fs_NoParamCallback
@@ -6079,6 +7003,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_NoParamCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_NoParamCallback]
+    ]
     val apply: t -> err:_NodeJS_ErrnoException or_null -> unit [@@js.apply]
   end
   module BufferEncodingOption : sig
@@ -6088,6 +7018,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_BufferEncodingOption]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_BufferEncodingOption]
+    ]
   end
   module[@js.scope "BaseEncodingOptions"] BaseEncodingOptions : sig
     type t = fs_BaseEncodingOptions
@@ -6096,6 +7032,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_BaseEncodingOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_BaseEncodingOptions]
+    ]
     val get_encoding: t -> _BufferEncoding or_null [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding or_null -> unit [@@js.set "encoding"]
   end
@@ -6106,6 +7048,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_OpenMode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_OpenMode]
+    ]
   end
   module Mode : sig
     type t = fs_Mode
@@ -6114,6 +7062,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_Mode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_Mode]
+    ]
   end
   module[@js.scope "StatsBase"] StatsBase : sig
     type 'T t = 'T fs_StatsBase
@@ -6122,6 +7076,12 @@ module[@js.scope "fs"] Fs : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Fs_StatsBase of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Fs_StatsBase of 'T]
+    ]
     val isFile: 'T t -> bool [@@js.call "isFile"]
     val isDirectory: 'T t -> bool [@@js.call "isDirectory"]
     val isBlockDevice: 'T t -> bool [@@js.call "isBlockDevice"]
@@ -6173,6 +7133,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_Stats | `Fs_StatsBase of float]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_Stats | `Fs_StatsBase of float]
+    ]
     val cast: t -> float fs_StatsBase [@@js.cast]
   end
   module[@js.scope "Dirent"] Dirent : sig
@@ -6182,6 +7148,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_Dirent]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_Dirent]
+    ]
     val isFile: t -> bool [@@js.call "isFile"]
     val isDirectory: t -> bool [@@js.call "isDirectory"]
     val isBlockDevice: t -> bool [@@js.call "isBlockDevice"]
@@ -6200,6 +7172,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_Dir]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_Dir]
+    ]
     val get_path: t -> string [@@js.get "path"]
     (** Asynchronously iterates over the directory via `readdir(3)` until all entries have been read. *)
     val _Symbol_asyncIterator_: t -> fs_Dirent AsyncIterableIterator.t_1 [@@js.call "[Symbol.asyncIterator]"]
@@ -6244,6 +7222,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_FSWatcher | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_FSWatcher | EventEmitter.tags]
+    ]
     val close: t -> unit [@@js.call "close"]
     (**
       events.EventEmitter
@@ -6294,6 +7278,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_ReadStream | Stream.Readable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_ReadStream | Stream.Readable.tags]
+    ]
     val close: t -> unit [@@js.call "close"]
     val get_bytesRead: t -> float [@@js.get "bytesRead"]
     val set_bytesRead: t -> float -> unit [@@js.set "bytesRead"]
@@ -6465,6 +7455,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_WriteStream | Stream.Writable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_WriteStream | Stream.Writable.tags]
+    ]
     val close: t -> unit [@@js.call "close"]
     val get_bytesWritten: t -> float [@@js.get "bytesWritten"]
     val set_bytesWritten: t -> float -> unit [@@js.set "bytesWritten"]
@@ -6965,6 +7961,12 @@ module[@js.scope "fs"] Fs : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Fs_symlink_Type]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Fs_symlink_Type]
+      ]
     end
   end
   (**
@@ -7130,6 +8132,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_RmDirOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_RmDirOptions]
+    ]
     (**
       If an `EBUSY`, `EMFILE`, `ENFILE`, `ENOTEMPTY`, or
       `EPERM` error is encountered, Node.js will retry the operation with a linear
@@ -7235,6 +8243,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_RmOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_RmOptions]
+    ]
     (**
       When `true`, exceptions will be ignored if `path` does not exist.
       default: false
@@ -7330,6 +8344,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_MakeDirectoryOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_MakeDirectoryOptions]
+    ]
     (**
       Indicates whether parent folders should be created.
       If a folder was created, the path to the first created folder will be returned.
@@ -7784,6 +8804,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_ReadSyncOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_ReadSyncOptions]
+    ]
     (** default: 0 *)
     (** default: 0 *)
     val get_offset: t -> float [@@js.get "offset"]
@@ -7907,6 +8933,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_WriteFileOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_WriteFileOptions]
+    ]
   end
   (**
     Asynchronously writes data to a file, replacing the file if it already exists.
@@ -8310,6 +9342,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_WriteVResult]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_WriteVResult]
+    ]
     val get_bytesWritten: t -> float [@@js.get "bytesWritten"]
     val set_bytesWritten: t -> float -> unit [@@js.set "bytesWritten"]
     val get_buffers: t -> _NodeJS_ArrayBufferView list [@@js.get "buffers"]
@@ -8329,6 +9367,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_ReadVResult]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_ReadVResult]
+    ]
     val get_bytesRead: t -> float [@@js.get "bytesRead"]
     val set_bytesRead: t -> float -> unit [@@js.set "bytesRead"]
     val get_buffers: t -> _NodeJS_ArrayBufferView list [@@js.get "buffers"]
@@ -8346,6 +9390,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_OpenDirOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_OpenDirOptions]
+    ]
     val get_encoding: t -> _BufferEncoding [@@js.get "encoding"]
     val set_encoding: t -> _BufferEncoding -> unit [@@js.set "encoding"]
     (**
@@ -8382,6 +9432,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_BigIntStats | `Fs_StatsBase of bigint]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_BigIntStats | `Fs_StatsBase of bigint]
+    ]
     val get_atimeNs: t -> bigint [@@js.get "atimeNs"]
     val set_atimeNs: t -> bigint -> unit [@@js.set "atimeNs"]
     val get_mtimeNs: t -> bigint [@@js.get "mtimeNs"]
@@ -8399,6 +9455,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_BigIntOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_BigIntOptions]
+    ]
     val get_bigint: t -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "bigint"]
     val set_bigint: t -> ([`L_b_true] [@js.enum]) -> unit [@@js.set "bigint"]
   end
@@ -8409,6 +9471,12 @@ module[@js.scope "fs"] Fs : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Fs_StatOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Fs_StatOptions]
+    ]
     val get_bigint: t -> bool [@@js.get "bigint"]
     val set_bigint: t -> bool -> unit [@@js.set "bigint"]
   end
@@ -8420,6 +9488,12 @@ module[@js.scope "ErrorConstructor"] ErrorConstructor : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`ErrorConstructor]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ErrorConstructor]
+  ]
   (** Create .stack property on a target object *)
   val captureStackTrace: t -> targetObject:untyped_object -> ?constructorOpt:untyped_function -> unit -> unit [@@js.call "captureStackTrace"]
   (**
@@ -8437,6 +9511,12 @@ module[@js.scope "String"] String : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`String]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`String]
+  ]
   (** Removes whitespace from the left end of a string. *)
   val trimLeft: t -> string [@@js.call "trimLeft"]
   (** Removes whitespace from the right end of a string. *)
@@ -8455,6 +9535,12 @@ module[@js.scope "ImportMeta"] ImportMeta : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`ImportMeta]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ImportMeta]
+  ]
   val get_url: t -> string [@@js.get "url"]
   val set_url: t -> string -> unit [@@js.set "url"]
 end
@@ -8465,6 +9551,12 @@ module[@js.scope "NodeRequire"] NodeRequire : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NodeJS_Require | `NodeRequire]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NodeJS_Require | `NodeRequire]
+  ]
   val cast: t -> _NodeJS_Require [@@js.cast]
 end
 module[@js.scope "RequireResolve"] RequireResolve : sig
@@ -8474,6 +9566,12 @@ module[@js.scope "RequireResolve"] RequireResolve : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NodeJS_RequireResolve | `RequireResolve]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NodeJS_RequireResolve | `RequireResolve]
+  ]
   val cast: t -> _NodeJS_RequireResolve [@@js.cast]
 end
 module[@js.scope "NodeModule"] NodeModule : sig
@@ -8483,6 +9581,12 @@ module[@js.scope "NodeModule"] NodeModule : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`NodeJS_Module | `NodeModule]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`NodeJS_Module | `NodeModule]
+  ]
   val cast: t -> _NodeJS_Module [@@js.cast]
 end
 val process: NodeJS.Process.t_0 [@@js.global "process"]
@@ -8514,6 +9618,12 @@ module BufferEncoding : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`BufferEncoding]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`BufferEncoding]
+  ]
 end
 module WithImplicitCoercion : sig
   type 'T t = 'T _WithImplicitCoercion
@@ -8522,6 +9632,12 @@ module WithImplicitCoercion : sig
   type 'T t_1 = 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  [@@@js.stop]
+  type 'T tags = [`WithImplicitCoercion of 'T]
+  [@@@js.start]
+  [@@@js.implem 
+    type 'T tags = [`WithImplicitCoercion of 'T]
+  ]
 end
 (**
   Raw data is stored in instances of the Buffer class.
@@ -8535,6 +9651,12 @@ module[@js.scope "Buffer"] Buffer : sig
   type t_0 = t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  [@@@js.stop]
+  type tags = [`Buffer | Uint8Array.tags]
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Buffer | Uint8Array.tags]
+  ]
   (**
     Allocates a new buffer containing the given \{str\}.
     @param str String to store in buffer.
@@ -8757,6 +9879,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_InspectOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_InspectOptions]
+    ]
     (**
       If set to `true`, getters are going to be
       inspected as well. If set to `'get'` only getters without setter are going
@@ -8862,6 +9990,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_CallSite]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_CallSite]
+    ]
     (** Value of "this" *)
     val getThis: t -> any [@@js.call "getThis"]
     (**
@@ -8911,6 +10045,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_ErrnoException | Error.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_ErrnoException | Error.tags]
+    ]
     val get_errno: t -> float [@@js.get "errno"]
     val set_errno: t -> float -> unit [@@js.set "errno"]
     val get_code: t -> string [@@js.get "code"]
@@ -8930,6 +10070,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_ReadableStream | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_ReadableStream | EventEmitter.tags]
+    ]
     val get_readable: t -> bool [@@js.get "readable"]
     val set_readable: t -> bool -> unit [@@js.set "readable"]
     val read: t -> ?size:float -> unit -> _Buffer or_string [@@js.call "read"]
@@ -8951,6 +10097,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_WritableStream | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_WritableStream | EventEmitter.tags]
+    ]
     val get_writable: t -> bool [@@js.get "writable"]
     val set_writable: t -> bool -> unit [@@js.set "writable"]
     val write: t -> buffer:Uint8Array.t_0 or_string -> ?cb:(?err:Error.t_0 or_null -> unit -> unit) -> unit -> bool [@@js.call "write"]
@@ -8967,6 +10119,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_ReadWriteStream | `NodeJS_ReadableStream | `NodeJS_WritableStream | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_ReadWriteStream | `NodeJS_ReadableStream | `NodeJS_WritableStream | EventEmitter.tags]
+    ]
     val cast: t -> _NodeJS_ReadableStream [@@js.cast]
     val cast': t -> _NodeJS_WritableStream [@@js.cast]
   end
@@ -8977,6 +10135,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Global]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Global]
+    ]
     val get_Array: t -> (* FIXME: unknown type 'typeof Array' *)any [@@js.get "Array"]
     val set_Array: t -> (* FIXME: unknown type 'typeof Array' *)any -> unit [@@js.set "Array"]
     val get_ArrayBuffer: t -> (* FIXME: unknown type 'typeof ArrayBuffer' *)any [@@js.get "ArrayBuffer"]
@@ -9095,6 +10259,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_RefCounted]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_RefCounted]
+    ]
     val ref: t -> t [@@js.call "ref"]
     val unref: t -> t [@@js.call "unref"]
   end
@@ -9105,6 +10275,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_RefCounted | `NodeJS_Timer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_RefCounted | `NodeJS_Timer]
+    ]
     val hasRef: t -> bool [@@js.call "hasRef"]
     val refresh: t -> t [@@js.call "refresh"]
     val _Symbol_toPrimitive_: t -> float [@@js.call "[Symbol.toPrimitive]"]
@@ -9117,6 +10293,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Immediate | `NodeJS_RefCounted]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Immediate | `NodeJS_RefCounted]
+    ]
     val hasRef: t -> bool [@@js.call "hasRef"]
     val get__onImmediate: t -> untyped_function [@@js.get "_onImmediate"]
     val set__onImmediate: t -> untyped_function -> unit [@@js.set "_onImmediate"]
@@ -9129,6 +10311,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_RefCounted | `NodeJS_Timeout | `NodeJS_Timer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_RefCounted | `NodeJS_Timeout | `NodeJS_Timer]
+    ]
     val hasRef: t -> bool [@@js.call "hasRef"]
     val refresh: t -> t [@@js.call "refresh"]
     val _Symbol_toPrimitive_: t -> float [@@js.call "[Symbol.toPrimitive]"]
@@ -9141,6 +10329,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_TypedArray]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_TypedArray]
+    ]
   end
   module ArrayBufferView : sig
     type t = _NodeJS_ArrayBufferView
@@ -9149,6 +10343,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_ArrayBufferView]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_ArrayBufferView]
+    ]
   end
   module[@js.scope "Require"] Require : sig
     type t = _NodeJS_Require
@@ -9157,6 +10357,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Require]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Require]
+    ]
     val apply: t -> id:string -> any [@@js.apply]
     val get_resolve: t -> _NodeJS_RequireResolve [@@js.get "resolve"]
     val set_resolve: t -> _NodeJS_RequireResolve -> unit [@@js.set "resolve"]
@@ -9177,6 +10383,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_RequireResolve]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_RequireResolve]
+    ]
     val apply: t -> id:string -> ?options:anonymous_interface_37 -> unit -> string [@@js.apply]
     val paths: t -> request:string -> string list or_null [@@js.call "paths"]
   end
@@ -9187,6 +10399,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Dict of m:_NodeJS_Module -> filename:string -> any | `NodeJS_RequireExtensions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Dict of m:_NodeJS_Module -> filename:string -> any | `NodeJS_RequireExtensions]
+    ]
     val _js: t -> m:_NodeJS_Module -> filename:string -> any [@@js.call ".js"]
     val _json: t -> m:_NodeJS_Module -> filename:string -> any [@@js.call ".json"]
     val _node: t -> m:_NodeJS_Module -> filename:string -> any [@@js.call ".node"]
@@ -9199,6 +10417,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Module]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Module]
+    ]
     val get_exports: t -> any [@@js.get "exports"]
     val set_exports: t -> any -> unit [@@js.set "exports"]
     val get_require: t -> _NodeJS_Require [@@js.get "require"]
@@ -9243,6 +10467,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`NodeJS_Dict of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`NodeJS_Dict of 'T]
+    ]
     val get: 'T t -> string -> 'T or_undefined [@@js.index_get]
     val set: 'T t -> string -> 'T or_undefined -> unit [@@js.index_set]
   end
@@ -9253,6 +10483,12 @@ module[@js.scope "NodeJS"] NodeJS : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`NodeJS_ReadOnlyDict of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`NodeJS_ReadOnlyDict of 'T]
+    ]
     val get: 'T t -> string -> 'T or_undefined [@@js.index_get]
   end
 end
@@ -9311,6 +10547,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_IncomingHttpStatusHeader]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_IncomingHttpStatusHeader]
+    ]
     val get__status: t -> float [@@js.get ":status"]
     val set__status: t -> float -> unit [@@js.set ":status"]
   end
@@ -9321,6 +10563,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_IncomingHttpHeaders | Http1IncomingHttpHeaders.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_IncomingHttpHeaders | Http1IncomingHttpHeaders.tags]
+    ]
     val get__path: t -> string [@@js.get ":path"]
     val set__path: t -> string -> unit [@@js.set ":path"]
     val get__method: t -> string [@@js.get ":method"]
@@ -9338,6 +10586,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_StreamPriorityOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_StreamPriorityOptions]
+    ]
     val get_exclusive: t -> bool [@@js.get "exclusive"]
     val set_exclusive: t -> bool -> unit [@@js.set "exclusive"]
     val get_parent: t -> float [@@js.get "parent"]
@@ -9354,6 +10608,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_StreamState]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_StreamState]
+    ]
     val get_localWindowSize: t -> float [@@js.get "localWindowSize"]
     val set_localWindowSize: t -> float -> unit [@@js.set "localWindowSize"]
     val get_state: t -> float [@@js.get "state"]
@@ -9374,6 +10634,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ServerStreamResponseOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ServerStreamResponseOptions]
+    ]
     val get_endStream: t -> bool [@@js.get "endStream"]
     val set_endStream: t -> bool -> unit [@@js.set "endStream"]
     val get_waitForTrailers: t -> bool [@@js.get "waitForTrailers"]
@@ -9386,6 +10652,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_StatOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_StatOptions]
+    ]
     val get_offset: t -> float [@@js.get "offset"]
     val set_offset: t -> float -> unit [@@js.set "offset"]
     val get_length: t -> float [@@js.get "length"]
@@ -9398,6 +10670,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ServerStreamFileResponseOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ServerStreamFileResponseOptions]
+    ]
     val statCheck: t -> stats:fs_Stats -> headers:OutgoingHttpHeaders.t_0 -> statOptions:http2_StatOptions -> unit or_boolean [@@js.call "statCheck"]
     val get_waitForTrailers: t -> bool [@@js.get "waitForTrailers"]
     val set_waitForTrailers: t -> bool -> unit [@@js.set "waitForTrailers"]
@@ -9413,6 +10691,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ServerStreamFileResponseOptions | `Http2_ServerStreamFileResponseOptionsWithError]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ServerStreamFileResponseOptions | `Http2_ServerStreamFileResponseOptionsWithError]
+    ]
     val onError: t -> err:_NodeJS_ErrnoException -> unit [@@js.call "onError"]
     val cast: t -> http2_ServerStreamFileResponseOptions [@@js.cast]
   end
@@ -9423,6 +10707,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_Http2Stream | Stream.Duplex.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_Http2Stream | Stream.Duplex.tags]
+    ]
     val get_aborted: t -> bool [@@js.get "aborted"]
     val get_bufferSize: t -> float [@@js.get "bufferSize"]
     val get_closed: t -> bool [@@js.get "closed"]
@@ -9708,6 +10998,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ClientHttp2Stream | `Http2_Http2Stream | Stream.Duplex.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ClientHttp2Stream | `Http2_Http2Stream | Stream.Duplex.tags]
+    ]
     (**
       Event emitter
       The defined events on documents including:
@@ -10572,6 +11868,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_Http2Stream | `Http2_ServerHttp2Stream | Stream.Duplex.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_Http2Stream | `Http2_ServerHttp2Stream | Stream.Duplex.tags]
+    ]
     val get_headersSent: t -> bool [@@js.get "headersSent"]
     val get_pushAllowed: t -> bool [@@js.get "pushAllowed"]
     val additionalHeaders: t -> headers:OutgoingHttpHeaders.t_0 -> unit [@@js.call "additionalHeaders"]
@@ -10589,6 +11891,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_Settings]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_Settings]
+    ]
     val get_headerTableSize: t -> float [@@js.get "headerTableSize"]
     val set_headerTableSize: t -> float -> unit [@@js.set "headerTableSize"]
     val get_enablePush: t -> bool [@@js.get "enablePush"]
@@ -10611,6 +11919,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ClientSessionRequestOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ClientSessionRequestOptions]
+    ]
     val get_endStream: t -> bool [@@js.get "endStream"]
     val set_endStream: t -> bool -> unit [@@js.set "endStream"]
     val get_exclusive: t -> bool [@@js.get "exclusive"]
@@ -10629,6 +11943,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_SessionState]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_SessionState]
+    ]
     val get_effectiveLocalWindowSize: t -> float [@@js.get "effectiveLocalWindowSize"]
     val set_effectiveLocalWindowSize: t -> float -> unit [@@js.set "effectiveLocalWindowSize"]
     val get_effectiveRecvDataLength: t -> float [@@js.get "effectiveRecvDataLength"]
@@ -10655,6 +11975,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_Http2Session | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_Http2Session | EventEmitter.tags]
+    ]
     val get_alpnProtocol: t -> string [@@js.get "alpnProtocol"]
     val get_closed: t -> bool [@@js.get "closed"]
     val get_connecting: t -> bool [@@js.get "connecting"]
@@ -10740,6 +12066,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ClientHttp2Session | `Http2_Http2Session | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ClientHttp2Session | `Http2_Http2Session | EventEmitter.tags]
+    ]
     val request: t -> ?headers:OutgoingHttpHeaders.t_0 -> ?options:http2_ClientSessionRequestOptions -> unit -> http2_ClientHttp2Stream [@@js.call "request"]
     val addListener: t -> event:([`L_s177_altsvc] [@js.enum]) -> listener:(alt:string -> origin:string -> stream:float -> unit) -> t [@@js.call "addListener"]
     val addListener': t -> event:([`L_s267_origin] [@js.enum]) -> listener:(origins:string list -> unit) -> t [@@js.call "addListener"]
@@ -10780,6 +12112,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_AlternativeServiceOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_AlternativeServiceOptions]
+    ]
     val get_origin: t -> url_URL or_string or_number [@@js.get "origin"]
     val set_origin: t -> url_URL or_string or_number -> unit [@@js.set "origin"]
   end
@@ -10790,6 +12128,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_Http2Session | `Http2_ServerHttp2Session | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_Http2Session | `Http2_ServerHttp2Session | EventEmitter.tags]
+    ]
     val get_server: t -> (http2_Http2SecureServer, http2_Http2Server) union2 [@@js.get "server"]
     val altsvc: t -> alt:string -> originOrStream:(http2_AlternativeServiceOptions, url_URL) union2 or_string or_number -> unit [@@js.call "altsvc"]
     val origin: t -> args:((* FIXME: type 'Array<union<String | url.URL | {..}>>' cannot be used for variadic argument *)any list [@js.variadic]) -> unit [@@js.call "origin"]
@@ -10820,6 +12164,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_SessionOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_SessionOptions]
+    ]
     val get_maxDeflateDynamicTableSize: t -> float [@@js.get "maxDeflateDynamicTableSize"]
     val set_maxDeflateDynamicTableSize: t -> float -> unit [@@js.set "maxDeflateDynamicTableSize"]
     val get_maxSessionMemory: t -> float [@@js.get "maxSessionMemory"]
@@ -10846,6 +12196,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ClientSessionOptions | `Http2_SessionOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ClientSessionOptions | `Http2_SessionOptions]
+    ]
     val get_maxReservedRemoteStreams: t -> float [@@js.get "maxReservedRemoteStreams"]
     val set_maxReservedRemoteStreams: t -> float -> unit [@@js.set "maxReservedRemoteStreams"]
     val createConnection: t -> authority:url_URL -> option:http2_SessionOptions -> Stream.Duplex.t_0 [@@js.call "createConnection"]
@@ -10860,6 +12216,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ServerSessionOptions | `Http2_SessionOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ServerSessionOptions | `Http2_SessionOptions]
+    ]
     val get_Http1IncomingMessage: t -> (* FIXME: unknown type 'typeof IncomingMessage' *)any [@@js.get "Http1IncomingMessage"]
     val set_Http1IncomingMessage: t -> (* FIXME: unknown type 'typeof IncomingMessage' *)any -> unit [@@js.set "Http1IncomingMessage"]
     val get_Http1ServerResponse: t -> (* FIXME: unknown type 'typeof ServerResponse' *)any [@@js.get "Http1ServerResponse"]
@@ -10877,6 +12239,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ClientSessionOptions | `Http2_SecureClientSessionOptions | `Http2_SessionOptions | `Tls_CommonConnectionOptions | `Tls_ConnectionOptions | `Tls_SecureContextOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ClientSessionOptions | `Http2_SecureClientSessionOptions | `Http2_SessionOptions | `Tls_CommonConnectionOptions | `Tls_ConnectionOptions | `Tls_SecureContextOptions]
+    ]
     val cast: t -> http2_ClientSessionOptions [@@js.cast]
     val cast': t -> tls_ConnectionOptions [@@js.cast]
   end
@@ -10887,6 +12255,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_SecureServerSessionOptions | `Http2_ServerSessionOptions | `Http2_SessionOptions | `Net_ServerOpts | `Tls_CommonConnectionOptions | `Tls_SecureContextOptions | `Tls_TlsOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_SecureServerSessionOptions | `Http2_ServerSessionOptions | `Http2_SessionOptions | `Net_ServerOpts | `Tls_CommonConnectionOptions | `Tls_SecureContextOptions | `Tls_TlsOptions]
+    ]
     val cast: t -> http2_ServerSessionOptions [@@js.cast]
     val cast': t -> tls_TlsOptions [@@js.cast]
   end
@@ -10897,6 +12271,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_ServerOptions | `Http2_ServerSessionOptions | `Http2_SessionOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_ServerOptions | `Http2_ServerSessionOptions | `Http2_SessionOptions]
+    ]
     val cast: t -> http2_ServerSessionOptions [@@js.cast]
   end
   module[@js.scope "SecureServerOptions"] SecureServerOptions : sig
@@ -10906,6 +12286,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_SecureServerOptions | `Http2_SecureServerSessionOptions | `Http2_ServerSessionOptions | `Http2_SessionOptions | `Net_ServerOpts | `Tls_CommonConnectionOptions | `Tls_SecureContextOptions | `Tls_TlsOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_SecureServerOptions | `Http2_SecureServerSessionOptions | `Http2_ServerSessionOptions | `Http2_SessionOptions | `Net_ServerOpts | `Tls_CommonConnectionOptions | `Tls_SecureContextOptions | `Tls_TlsOptions]
+    ]
     val get_allowHTTP1: t -> bool [@@js.get "allowHTTP1"]
     val set_allowHTTP1: t -> bool -> unit [@@js.set "allowHTTP1"]
     val get_origins: t -> string list [@@js.get "origins"]
@@ -10919,6 +12305,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_Http2Server | `Net_Server | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_Http2Server | `Net_Server | EventEmitter.tags]
+    ]
     (**
       events.EventEmitter
         1. close
@@ -11020,6 +12412,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_Http2SecureServer | `Net_Server | `Tls_Server | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_Http2SecureServer | `Net_Server | `Tls_Server | EventEmitter.tags]
+    ]
     (**
       events.EventEmitter
       1. tlsClientError
@@ -11150,6 +12548,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_Http2ServerRequest | Stream.Readable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_Http2ServerRequest | Stream.Readable.tags]
+    ]
     val create: stream:http2_ServerHttp2Stream -> headers:http2_IncomingHttpHeaders -> options:Stream.ReadableOptions.t_0 -> rawHeaders:string list -> t [@@js.create]
     val get_aborted: t -> bool [@@js.get "aborted"]
     val get_authority: t -> string [@@js.get "authority"]
@@ -11297,6 +12701,12 @@ module[@js.scope "http2"] Http2 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http2_Http2ServerResponse | Stream.Writable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http2_Http2ServerResponse | Stream.Writable.tags]
+    ]
     val create: stream:http2_ServerHttp2Stream -> t [@@js.create]
     val get_connection: t -> (net_Socket, tls_TLSSocket) union2 [@@js.get "connection"]
     val get_finished: t -> bool [@@js.get "finished"]
@@ -11689,6 +13099,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Dict of string list or_string | `Http_IncomingHttpHeaders]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Dict of string list or_string | `Http_IncomingHttpHeaders]
+    ]
     val get_accept: t -> string [@@js.get "accept"]
     val set_accept: t -> string -> unit [@@js.set "accept"]
     val get_accept_language: t -> string [@@js.get "accept-language"]
@@ -11824,6 +13240,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_OutgoingHttpHeader]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_OutgoingHttpHeader]
+    ]
   end
   module[@js.scope "OutgoingHttpHeaders"] OutgoingHttpHeaders : sig
     type t = http_OutgoingHttpHeaders
@@ -11832,6 +13254,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Dict of http_OutgoingHttpHeader | `Http_OutgoingHttpHeaders]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Dict of http_OutgoingHttpHeader | `Http_OutgoingHttpHeaders]
+    ]
     val cast: t -> http_OutgoingHttpHeader _NodeJS_Dict [@@js.cast]
   end
   module[@js.scope "ClientRequestArgs"] ClientRequestArgs : sig
@@ -11841,6 +13269,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_ClientRequestArgs]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_ClientRequestArgs]
+    ]
     val get_protocol: t -> string or_null [@@js.get "protocol"]
     val set_protocol: t -> string or_null -> unit [@@js.set "protocol"]
     val get_host: t -> string or_null [@@js.get "host"]
@@ -11887,6 +13321,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_ServerOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_ServerOptions]
+    ]
     val get_IncomingMessage: t -> (* FIXME: unknown type 'typeof IncomingMessage' *)any [@@js.get "IncomingMessage"]
     val set_IncomingMessage: t -> (* FIXME: unknown type 'typeof IncomingMessage' *)any -> unit [@@js.set "IncomingMessage"]
     val get_ServerResponse: t -> (* FIXME: unknown type 'typeof ServerResponse' *)any [@@js.get "ServerResponse"]
@@ -11939,6 +13379,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_RequestListener]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_RequestListener]
+    ]
     val apply: t -> req:http_IncomingMessage -> res:http_ServerResponse -> unit [@@js.apply]
   end
   module[@js.scope "HttpBase"] HttpBase : sig
@@ -11948,6 +13394,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_HttpBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_HttpBase]
+    ]
     val setTimeout: t -> ?msecs:float -> ?callback:(unit -> unit) -> unit -> t [@@js.call "setTimeout"]
     val setTimeout': t -> callback:(unit -> unit) -> t [@@js.call "setTimeout"]
     (**
@@ -12013,6 +13465,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_HttpBase | `Http_Server | NetServer.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_HttpBase | `Http_Server | NetServer.tags]
+    ]
     val create: ?requestListener:http_RequestListener -> unit -> t [@@js.create]
     val create': options:http_ServerOptions -> ?requestListener:http_RequestListener -> unit -> t [@@js.create]
     val cast: t -> NetServer.t_0 [@@js.cast]
@@ -12025,6 +13483,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_OutgoingMessage | Stream.Writable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_OutgoingMessage | Stream.Writable.tags]
+    ]
     val get_upgrading: t -> bool [@@js.get "upgrading"]
     val set_upgrading: t -> bool -> unit [@@js.set "upgrading"]
     val get_chunkedEncoding: t -> bool [@@js.get "chunkedEncoding"]
@@ -12068,6 +13532,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_OutgoingMessage | `Http_ServerResponse | Stream.Writable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_OutgoingMessage | `Http_ServerResponse | Stream.Writable.tags]
+    ]
     val get_statusCode: t -> float [@@js.get "statusCode"]
     val set_statusCode: t -> float -> unit [@@js.set "statusCode"]
     val get_statusMessage: t -> string [@@js.get "statusMessage"]
@@ -12088,6 +13558,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_InformationEvent]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_InformationEvent]
+    ]
     val get_statusCode: t -> float [@@js.get "statusCode"]
     val set_statusCode: t -> float -> unit [@@js.set "statusCode"]
     val get_statusMessage: t -> string [@@js.get "statusMessage"]
@@ -12110,6 +13586,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_ClientRequest | `Http_OutgoingMessage | Stream.Writable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_ClientRequest | `Http_OutgoingMessage | Stream.Writable.tags]
+    ]
     val get_aborted: t -> bool [@@js.get "aborted"]
     val set_aborted: t -> bool -> unit [@@js.set "aborted"]
     val get_host: t -> string [@@js.get "host"]
@@ -12361,6 +13843,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_IncomingMessage | Stream.Readable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_IncomingMessage | Stream.Readable.tags]
+    ]
     val create: socket:Socket.t_0 -> t [@@js.create]
     val get_aborted: t -> bool [@@js.get "aborted"]
     val set_aborted: t -> bool -> unit [@@js.set "aborted"]
@@ -12418,6 +13906,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_AgentOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_AgentOptions]
+    ]
     (** Keep sockets around in a pool to be used by other requests in the future. Default = false *)
     (** Keep sockets around in a pool to be used by other requests in the future. Default = false *)
     val get_keepAlive: t -> bool [@@js.get "keepAlive"]
@@ -12470,6 +13964,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_Agent]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_Agent]
+    ]
     val get_maxFreeSockets: t -> float [@@js.get "maxFreeSockets"]
     val set_maxFreeSockets: t -> float -> unit [@@js.set "maxFreeSockets"]
     val get_maxSockets: t -> float [@@js.get "maxSockets"]
@@ -12499,6 +13999,12 @@ module[@js.scope "http"] Http : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_ClientRequestArgs | `Http_RequestOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_ClientRequestArgs | `Http_RequestOptions]
+    ]
     val cast: t -> http_ClientRequestArgs [@@js.cast]
   end
   val request: options:(http_RequestOptions, URL.t_0) union2 or_string -> ?callback:(res:http_IncomingMessage -> unit) -> unit -> http_ClientRequest [@@js.global "request"]
@@ -12541,6 +14047,12 @@ module[@js.scope "https"] Https : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Https_ServerOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Https_ServerOptions]
+    ]
   end
   module RequestOptions : sig
     type t = https_RequestOptions
@@ -12549,6 +14061,12 @@ module[@js.scope "https"] Https : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Https_RequestOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Https_RequestOptions]
+    ]
   end
   module[@js.scope "AgentOptions"] AgentOptions : sig
     type t = https_AgentOptions
@@ -12557,6 +14075,12 @@ module[@js.scope "https"] Https : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_AgentOptions | `Https_AgentOptions | `Tls_CommonConnectionOptions | `Tls_ConnectionOptions | `Tls_SecureContextOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_AgentOptions | `Https_AgentOptions | `Tls_CommonConnectionOptions | `Tls_ConnectionOptions | `Tls_SecureContextOptions]
+    ]
     (**
       If true the server will reject any connection which is not
       authorized with the list of supplied CAs. This option only has an
@@ -12586,6 +14110,12 @@ module[@js.scope "https"] Https : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_Agent | `Https_Agent]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_Agent | `Https_Agent]
+    ]
     val create: ?options:https_AgentOptions -> unit -> t [@@js.create]
     val get_options: t -> https_AgentOptions [@@js.get "options"]
     val set_options: t -> https_AgentOptions -> unit [@@js.set "options"]
@@ -12598,6 +14128,12 @@ module[@js.scope "https"] Https : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Http_HttpBase | `Https_Server | `Net_Server | `Tls_Server | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Http_HttpBase | `Https_Server | `Net_Server | `Tls_Server | EventEmitter.tags]
+    ]
     val create: ?requestListener:http_RequestListener -> unit -> t [@@js.create]
     val create': options:https_ServerOptions -> ?requestListener:http_RequestListener -> unit -> t [@@js.create]
     val cast: t -> tls_Server [@@js.cast]
@@ -12630,6 +14166,12 @@ module[@js.scope "inspector"] Inspector : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Inspector_InspectorNotification of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Inspector_InspectorNotification of 'T]
+    ]
     val get_method: 'T t -> string [@@js.get "method"]
     val set_method: 'T t -> string -> unit [@@js.set "method"]
     val get_params: 'T t -> 'T [@@js.get "params"]
@@ -12644,6 +14186,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Schema_Domain]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Schema_Domain]
+      ]
       (** Domain name. *)
       (** Domain name. *)
       val get_name: t -> string [@@js.get "name"]
@@ -12662,6 +14210,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Schema_GetDomainsReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Schema_GetDomainsReturnType]
+      ]
       (** List of supported domains. *)
       (** List of supported domains. *)
       val get_domains: t -> inspector_Schema_Domain list [@@js.get "domains"]
@@ -12678,6 +14232,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ScriptId | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ScriptId | `String]
+      ]
     end
     (** Unique object identifier. *)
     module RemoteObjectId : sig
@@ -12687,6 +14247,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_RemoteObjectId | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_RemoteObjectId | `String]
+      ]
     end
     (** Primitive value which cannot be JSON-stringified. *)
     module UnserializableValue : sig
@@ -12696,6 +14262,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_UnserializableValue | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_UnserializableValue | `String]
+      ]
     end
     (** Mirror object referencing original JavaScript object. *)
     module[@js.scope "RemoteObject"] RemoteObject : sig
@@ -12705,6 +14277,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_RemoteObject]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_RemoteObject]
+      ]
       (** Object type. *)
       (** Object type. *)
       val get_type: t -> string [@@js.get "type"]
@@ -12768,6 +14346,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_CustomPreview]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_CustomPreview]
+      ]
       val get_header: t -> string [@@js.get "header"]
       val set_header: t -> string -> unit [@@js.set "header"]
       val get_hasBody: t -> bool [@@js.get "hasBody"]
@@ -12790,6 +14374,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ObjectPreview]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ObjectPreview]
+      ]
       (** Object type. *)
       (** Object type. *)
       val get_type: t -> string [@@js.get "type"]
@@ -12829,6 +14419,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_PropertyPreview]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_PropertyPreview]
+      ]
       (** Property name. *)
       (** Property name. *)
       val get_name: t -> string [@@js.get "name"]
@@ -12863,6 +14459,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_EntryPreview]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_EntryPreview]
+      ]
       (** Preview of the key. Specified for map-like collection entries. *)
       (** Preview of the key. Specified for map-like collection entries. *)
       val get_key: t -> inspector_Runtime_ObjectPreview [@@js.get "key"]
@@ -12882,6 +14484,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_PropertyDescriptor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_PropertyDescriptor]
+      ]
       (** Property name or symbol description. *)
       (** Property name or symbol description. *)
       val get_name: t -> string [@@js.get "name"]
@@ -12941,6 +14549,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_InternalPropertyDescriptor]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_InternalPropertyDescriptor]
+      ]
       (** Conventional property name. *)
       (** Conventional property name. *)
       val get_name: t -> string [@@js.get "name"]
@@ -12960,6 +14574,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_CallArgument]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_CallArgument]
+      ]
       (** Primitive value or serializable javascript object. *)
       (** Primitive value or serializable javascript object. *)
       val get_value: t -> any [@@js.get "value"]
@@ -12984,6 +14604,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ExecutionContextId | `Number]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ExecutionContextId | `Number]
+      ]
     end
     (** Description of an isolated world. *)
     module[@js.scope "ExecutionContextDescription"] ExecutionContextDescription : sig
@@ -12993,6 +14619,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ExecutionContextDescription]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ExecutionContextDescription]
+      ]
       (** Unique id of the execution context. It can be used to specify in which execution context script evaluation should be performed. *)
       (** Unique id of the execution context. It can be used to specify in which execution context script evaluation should be performed. *)
       val get_id: t -> inspector_Runtime_ExecutionContextId [@@js.get "id"]
@@ -13022,6 +14654,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ExceptionDetails]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ExceptionDetails]
+      ]
       (** Exception id. *)
       (** Exception id. *)
       val get_exceptionId: t -> float [@@js.get "exceptionId"]
@@ -13076,6 +14714,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_Timestamp | `Number]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_Timestamp | `Number]
+      ]
     end
     (** Stack entry for runtime errors and assertions. *)
     module[@js.scope "CallFrame"] CallFrame : sig
@@ -13085,6 +14729,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_CallFrame]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_CallFrame]
+      ]
       (** JavaScript function name. *)
       (** JavaScript function name. *)
       val get_functionName: t -> string [@@js.get "functionName"]
@@ -13119,6 +14769,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_StackTrace]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_StackTrace]
+      ]
       (** String label of this stack trace. For async traces this may be a name of the function that initiated the async call. *)
       (** String label of this stack trace. For async traces this may be a name of the function that initiated the async call. *)
       val get_description: t -> string [@@js.get "description"]
@@ -13160,6 +14816,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_UniqueDebuggerId | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_UniqueDebuggerId | `String]
+      ]
     end
     (**
       If <code>debuggerId</code> is set stack trace comes from another debugger and can be resolved there. This allows to track cross-debugger calls. See <code>Runtime.StackTrace</code> and <code>Debugger.paused</code> for usages.
@@ -13172,6 +14834,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_StackTraceId]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_StackTraceId]
+      ]
       val get_id: t -> string [@@js.get "id"]
       val set_id: t -> string -> unit [@@js.set "id"]
       val get_debuggerId: t -> inspector_Runtime_UniqueDebuggerId [@@js.get "debuggerId"]
@@ -13184,6 +14852,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_EvaluateParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_EvaluateParameterType]
+      ]
       (** Expression to evaluate. *)
       (** Expression to evaluate. *)
       val get_expression: t -> string [@@js.get "expression"]
@@ -13246,6 +14920,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_AwaitPromiseParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_AwaitPromiseParameterType]
+      ]
       (** Identifier of the promise. *)
       (** Identifier of the promise. *)
       val get_promiseObjectId: t -> inspector_Runtime_RemoteObjectId [@@js.get "promiseObjectId"]
@@ -13269,6 +14949,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_CallFunctionOnParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_CallFunctionOnParameterType]
+      ]
       (** Declaration of the function to call. *)
       (** Declaration of the function to call. *)
       val get_functionDeclaration: t -> string [@@js.get "functionDeclaration"]
@@ -13336,6 +15022,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_GetPropertiesParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_GetPropertiesParameterType]
+      ]
       (** Identifier of the object to return properties for. *)
       (** Identifier of the object to return properties for. *)
       val get_objectId: t -> inspector_Runtime_RemoteObjectId [@@js.get "objectId"]
@@ -13382,6 +15074,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ReleaseObjectParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ReleaseObjectParameterType]
+      ]
       (** Identifier of the object to release. *)
       (** Identifier of the object to release. *)
       val get_objectId: t -> inspector_Runtime_RemoteObjectId [@@js.get "objectId"]
@@ -13395,6 +15093,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ReleaseObjectGroupParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ReleaseObjectGroupParameterType]
+      ]
       (** Symbolic object group name. *)
       (** Symbolic object group name. *)
       val get_objectGroup: t -> string [@@js.get "objectGroup"]
@@ -13408,6 +15112,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_SetCustomObjectFormatterEnabledParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_SetCustomObjectFormatterEnabledParameterType]
+      ]
       val get_enabled: t -> bool [@@js.get "enabled"]
       val set_enabled: t -> bool -> unit [@@js.set "enabled"]
     end
@@ -13418,6 +15128,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_CompileScriptParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_CompileScriptParameterType]
+      ]
       (** Expression to compile. *)
       (** Expression to compile. *)
       val get_expression: t -> string [@@js.get "expression"]
@@ -13446,6 +15162,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_RunScriptParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_RunScriptParameterType]
+      ]
       (** Id of the script to run. *)
       (** Id of the script to run. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -13494,6 +15216,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_QueryObjectsParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_QueryObjectsParameterType]
+      ]
       (** Identifier of the prototype to return objects for. *)
       (** Identifier of the prototype to return objects for. *)
       val get_prototypeObjectId: t -> inspector_Runtime_RemoteObjectId [@@js.get "prototypeObjectId"]
@@ -13507,6 +15235,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_GlobalLexicalScopeNamesParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_GlobalLexicalScopeNamesParameterType]
+      ]
       (** Specifies in which execution context to lookup global scope variables. *)
       (** Specifies in which execution context to lookup global scope variables. *)
       val get_executionContextId: t -> inspector_Runtime_ExecutionContextId [@@js.get "executionContextId"]
@@ -13520,6 +15254,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_EvaluateReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_EvaluateReturnType]
+      ]
       (** Evaluation result. *)
       (** Evaluation result. *)
       val get_result: t -> inspector_Runtime_RemoteObject [@@js.get "result"]
@@ -13538,6 +15278,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_AwaitPromiseReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_AwaitPromiseReturnType]
+      ]
       (** Promise result. Will contain rejected value if promise was rejected. *)
       (** Promise result. Will contain rejected value if promise was rejected. *)
       val get_result: t -> inspector_Runtime_RemoteObject [@@js.get "result"]
@@ -13556,6 +15302,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_CallFunctionOnReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_CallFunctionOnReturnType]
+      ]
       (** Call result. *)
       (** Call result. *)
       val get_result: t -> inspector_Runtime_RemoteObject [@@js.get "result"]
@@ -13574,6 +15326,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_GetPropertiesReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_GetPropertiesReturnType]
+      ]
       (** Object properties. *)
       (** Object properties. *)
       val get_result: t -> inspector_Runtime_PropertyDescriptor list [@@js.get "result"]
@@ -13597,6 +15355,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_CompileScriptReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_CompileScriptReturnType]
+      ]
       (** Id of the script. *)
       (** Id of the script. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -13615,6 +15379,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_RunScriptReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_RunScriptReturnType]
+      ]
       (** Run result. *)
       (** Run result. *)
       val get_result: t -> inspector_Runtime_RemoteObject [@@js.get "result"]
@@ -13633,6 +15403,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_QueryObjectsReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_QueryObjectsReturnType]
+      ]
       (** Array with objects. *)
       (** Array with objects. *)
       val get_objects: t -> inspector_Runtime_RemoteObject [@@js.get "objects"]
@@ -13646,6 +15422,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_GlobalLexicalScopeNamesReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_GlobalLexicalScopeNamesReturnType]
+      ]
       val get_names: t -> string list [@@js.get "names"]
       val set_names: t -> string list -> unit [@@js.set "names"]
     end
@@ -13656,6 +15438,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ExecutionContextCreatedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ExecutionContextCreatedEventDataType]
+      ]
       (** A newly created execution context. *)
       (** A newly created execution context. *)
       val get_context: t -> inspector_Runtime_ExecutionContextDescription [@@js.get "context"]
@@ -13669,6 +15457,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ExecutionContextDestroyedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ExecutionContextDestroyedEventDataType]
+      ]
       (** Id of the destroyed context *)
       (** Id of the destroyed context *)
       val get_executionContextId: t -> inspector_Runtime_ExecutionContextId [@@js.get "executionContextId"]
@@ -13682,6 +15476,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ExceptionThrownEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ExceptionThrownEventDataType]
+      ]
       (** Timestamp of the exception. *)
       (** Timestamp of the exception. *)
       val get_timestamp: t -> inspector_Runtime_Timestamp [@@js.get "timestamp"]
@@ -13697,6 +15497,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ExceptionRevokedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ExceptionRevokedEventDataType]
+      ]
       (** Reason describing why exception was revoked. *)
       (** Reason describing why exception was revoked. *)
       val get_reason: t -> string [@@js.get "reason"]
@@ -13715,6 +15521,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_ConsoleAPICalledEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_ConsoleAPICalledEventDataType]
+      ]
       (** Type of the call. *)
       (** Type of the call. *)
       val get_type: t -> string [@@js.get "type"]
@@ -13762,6 +15574,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Runtime_InspectRequestedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Runtime_InspectRequestedEventDataType]
+      ]
       val get_object: t -> inspector_Runtime_RemoteObject [@@js.get "object"]
       val set_object: t -> inspector_Runtime_RemoteObject -> unit [@@js.set "object"]
       val get_hints: t -> anonymous_interface_0 [@@js.get "hints"]
@@ -13777,6 +15595,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_BreakpointId | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_BreakpointId | `String]
+      ]
     end
     (** Call frame identifier. *)
     module CallFrameId : sig
@@ -13786,6 +15610,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_CallFrameId | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_CallFrameId | `String]
+      ]
     end
     (** Location in the source code. *)
     module[@js.scope "Location"] Location : sig
@@ -13795,6 +15625,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_Location]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_Location]
+      ]
       (** Script identifier as reported in the <code>Debugger.scriptParsed</code>. *)
       (** Script identifier as reported in the <code>Debugger.scriptParsed</code>. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -13822,6 +15658,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_ScriptPosition]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_ScriptPosition]
+      ]
       val get_lineNumber: t -> float [@@js.get "lineNumber"]
       val set_lineNumber: t -> float -> unit [@@js.set "lineNumber"]
       val get_columnNumber: t -> float [@@js.get "columnNumber"]
@@ -13835,6 +15677,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_CallFrame]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_CallFrame]
+      ]
       (** Call frame identifier. This identifier is only valid while the virtual machine is paused. *)
       (** Call frame identifier. This identifier is only valid while the virtual machine is paused. *)
       val get_callFrameId: t -> inspector_Debugger_CallFrameId [@@js.get "callFrameId"]
@@ -13884,6 +15732,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_Scope]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_Scope]
+      ]
       (** Scope type. *)
       (** Scope type. *)
       val get_type: t -> string [@@js.get "type"]
@@ -13915,6 +15769,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SearchMatch]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SearchMatch]
+      ]
       (** Line number in resource content. *)
       (** Line number in resource content. *)
       val get_lineNumber: t -> float [@@js.get "lineNumber"]
@@ -13933,6 +15793,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_BreakLocation]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_BreakLocation]
+      ]
       (** Script identifier as reported in the <code>Debugger.scriptParsed</code>. *)
       (** Script identifier as reported in the <code>Debugger.scriptParsed</code>. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -13958,6 +15824,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetBreakpointsActiveParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetBreakpointsActiveParameterType]
+      ]
       (** New value for breakpoints active state. *)
       (** New value for breakpoints active state. *)
       val get_active: t -> bool [@@js.get "active"]
@@ -13971,6 +15843,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetSkipAllPausesParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetSkipAllPausesParameterType]
+      ]
       (** New value for skip pauses state. *)
       (** New value for skip pauses state. *)
       val get_skip: t -> bool [@@js.get "skip"]
@@ -13984,6 +15862,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetBreakpointByUrlParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetBreakpointByUrlParameterType]
+      ]
       (** Line number to set breakpoint at. *)
       (** Line number to set breakpoint at. *)
       val get_lineNumber: t -> float [@@js.get "lineNumber"]
@@ -14022,6 +15906,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetBreakpointParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetBreakpointParameterType]
+      ]
       (** Location to set breakpoint in. *)
       (** Location to set breakpoint in. *)
       val get_location: t -> inspector_Debugger_Location [@@js.get "location"]
@@ -14040,6 +15930,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_RemoveBreakpointParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_RemoveBreakpointParameterType]
+      ]
       val get_breakpointId: t -> inspector_Debugger_BreakpointId [@@js.get "breakpointId"]
       val set_breakpointId: t -> inspector_Debugger_BreakpointId -> unit [@@js.set "breakpointId"]
     end
@@ -14050,6 +15946,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_GetPossibleBreakpointsParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_GetPossibleBreakpointsParameterType]
+      ]
       (** Start of range to search possible breakpoint locations in. *)
       (** Start of range to search possible breakpoint locations in. *)
       val get_start: t -> inspector_Debugger_Location [@@js.get "start"]
@@ -14073,6 +15975,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_ContinueToLocationParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_ContinueToLocationParameterType]
+      ]
       (** Location to continue to. *)
       (** Location to continue to. *)
       val get_location: t -> inspector_Debugger_Location [@@js.get "location"]
@@ -14088,6 +15996,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_PauseOnAsyncCallParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_PauseOnAsyncCallParameterType]
+      ]
       (** Debugger will pause when async call with given stack trace is started. *)
       (** Debugger will pause when async call with given stack trace is started. *)
       val get_parentStackTraceId: t -> inspector_Runtime_StackTraceId [@@js.get "parentStackTraceId"]
@@ -14101,6 +16015,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_StepIntoParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_StepIntoParameterType]
+      ]
       (**
         Debugger will issue additional Debugger.paused notification if any async task is scheduled before next pause.
         experimental: 
@@ -14123,6 +16043,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_GetStackTraceParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_GetStackTraceParameterType]
+      ]
       val get_stackTraceId: t -> inspector_Runtime_StackTraceId [@@js.get "stackTraceId"]
       val set_stackTraceId: t -> inspector_Runtime_StackTraceId -> unit [@@js.set "stackTraceId"]
     end
@@ -14133,6 +16059,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SearchInContentParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SearchInContentParameterType]
+      ]
       (** Id of the script to search in. *)
       (** Id of the script to search in. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -14161,6 +16093,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetScriptSourceParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetScriptSourceParameterType]
+      ]
       (** Id of the script to edit. *)
       (** Id of the script to edit. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -14184,6 +16122,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_RestartFrameParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_RestartFrameParameterType]
+      ]
       (** Call frame identifier to evaluate on. *)
       (** Call frame identifier to evaluate on. *)
       val get_callFrameId: t -> inspector_Debugger_CallFrameId [@@js.get "callFrameId"]
@@ -14197,6 +16141,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_GetScriptSourceParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_GetScriptSourceParameterType]
+      ]
       (** Id of the script to get source for. *)
       (** Id of the script to get source for. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -14210,6 +16160,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetPauseOnExceptionsParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetPauseOnExceptionsParameterType]
+      ]
       (** Pause on exceptions mode. *)
       (** Pause on exceptions mode. *)
       val get_state: t -> string [@@js.get "state"]
@@ -14223,6 +16179,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_EvaluateOnCallFrameParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_EvaluateOnCallFrameParameterType]
+      ]
       (** Call frame identifier to evaluate on. *)
       (** Call frame identifier to evaluate on. *)
       val get_callFrameId: t -> inspector_Debugger_CallFrameId [@@js.get "callFrameId"]
@@ -14280,6 +16242,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetVariableValueParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetVariableValueParameterType]
+      ]
       (** 0-based number of scope as was listed in scope chain. Only 'local', 'closure' and 'catch' scope types are allowed. Other scopes could be manipulated manually. *)
       (** 0-based number of scope as was listed in scope chain. Only 'local', 'closure' and 'catch' scope types are allowed. Other scopes could be manipulated manually. *)
       val get_scopeNumber: t -> float [@@js.get "scopeNumber"]
@@ -14308,6 +16276,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetReturnValueParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetReturnValueParameterType]
+      ]
       (** New return value. *)
       (** New return value. *)
       val get_newValue: t -> inspector_Runtime_CallArgument [@@js.get "newValue"]
@@ -14321,6 +16295,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetAsyncCallStackDepthParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetAsyncCallStackDepthParameterType]
+      ]
       (** Maximum depth of async call stacks. Setting to <code>0</code> will effectively disable collecting async call stacks (default). *)
       (** Maximum depth of async call stacks. Setting to <code>0</code> will effectively disable collecting async call stacks (default). *)
       val get_maxDepth: t -> float [@@js.get "maxDepth"]
@@ -14334,6 +16314,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetBlackboxPatternsParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetBlackboxPatternsParameterType]
+      ]
       (** Array of regexps that will be used to check script url for blackbox state. *)
       (** Array of regexps that will be used to check script url for blackbox state. *)
       val get_patterns: t -> string list [@@js.get "patterns"]
@@ -14347,6 +16333,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetBlackboxedRangesParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetBlackboxedRangesParameterType]
+      ]
       (** Id of the script. *)
       (** Id of the script. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -14362,6 +16354,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_EnableReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_EnableReturnType]
+      ]
       (**
         Unique identifier of the debugger.
         experimental: 
@@ -14384,6 +16382,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetBreakpointByUrlReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetBreakpointByUrlReturnType]
+      ]
       (** Id of the created breakpoint for further reference. *)
       (** Id of the created breakpoint for further reference. *)
       val get_breakpointId: t -> inspector_Debugger_BreakpointId [@@js.get "breakpointId"]
@@ -14402,6 +16406,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetBreakpointReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetBreakpointReturnType]
+      ]
       (** Id of the created breakpoint for further reference. *)
       (** Id of the created breakpoint for further reference. *)
       val get_breakpointId: t -> inspector_Debugger_BreakpointId [@@js.get "breakpointId"]
@@ -14420,6 +16430,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_GetPossibleBreakpointsReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_GetPossibleBreakpointsReturnType]
+      ]
       (** List of the possible breakpoint locations. *)
       (** List of the possible breakpoint locations. *)
       val get_locations: t -> inspector_Debugger_BreakLocation list [@@js.get "locations"]
@@ -14433,6 +16449,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_GetStackTraceReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_GetStackTraceReturnType]
+      ]
       val get_stackTrace: t -> inspector_Runtime_StackTrace [@@js.get "stackTrace"]
       val set_stackTrace: t -> inspector_Runtime_StackTrace -> unit [@@js.set "stackTrace"]
     end
@@ -14443,6 +16465,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SearchInContentReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SearchInContentReturnType]
+      ]
       (** List of search matches. *)
       (** List of search matches. *)
       val get_result: t -> inspector_Debugger_SearchMatch list [@@js.get "result"]
@@ -14456,6 +16484,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_SetScriptSourceReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_SetScriptSourceReturnType]
+      ]
       (** New stack trace in case editing has happened while VM was stopped. *)
       (** New stack trace in case editing has happened while VM was stopped. *)
       val get_callFrames: t -> inspector_Debugger_CallFrame list [@@js.get "callFrames"]
@@ -14498,6 +16532,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_RestartFrameReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_RestartFrameReturnType]
+      ]
       (** New stack trace. *)
       (** New stack trace. *)
       val get_callFrames: t -> inspector_Debugger_CallFrame list [@@js.get "callFrames"]
@@ -14530,6 +16570,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_GetScriptSourceReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_GetScriptSourceReturnType]
+      ]
       (** Script source. *)
       (** Script source. *)
       val get_scriptSource: t -> string [@@js.get "scriptSource"]
@@ -14543,6 +16589,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_EvaluateOnCallFrameReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_EvaluateOnCallFrameReturnType]
+      ]
       (** Object wrapper for the evaluation result. *)
       (** Object wrapper for the evaluation result. *)
       val get_result: t -> inspector_Runtime_RemoteObject [@@js.get "result"]
@@ -14561,6 +16613,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_ScriptParsedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_ScriptParsedEventDataType]
+      ]
       (** Identifier of the script parsed. *)
       (** Identifier of the script parsed. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -14662,6 +16720,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_ScriptFailedToParseEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_ScriptFailedToParseEventDataType]
+      ]
       (** Identifier of the script parsed. *)
       (** Identifier of the script parsed. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -14749,6 +16813,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_BreakpointResolvedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_BreakpointResolvedEventDataType]
+      ]
       (** Breakpoint unique identifier. *)
       (** Breakpoint unique identifier. *)
       val get_breakpointId: t -> inspector_Debugger_BreakpointId [@@js.get "breakpointId"]
@@ -14767,6 +16837,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Debugger_PausedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Debugger_PausedEventDataType]
+      ]
       (** Call stack the virtual machine stopped on. *)
       (** Call stack the virtual machine stopped on. *)
       val get_callFrames: t -> inspector_Debugger_CallFrame list [@@js.get "callFrames"]
@@ -14831,6 +16907,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Console_ConsoleMessage]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Console_ConsoleMessage]
+      ]
       (** Message source. *)
       (** Message source. *)
       val get_source: t -> string [@@js.get "source"]
@@ -14869,6 +16951,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Console_MessageAddedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Console_MessageAddedEventDataType]
+      ]
       (** Console message that has been added. *)
       (** Console message that has been added. *)
       val get_message: t -> inspector_Console_ConsoleMessage [@@js.get "message"]
@@ -14885,6 +16973,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_ProfileNode]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_ProfileNode]
+      ]
       (** Unique id of the node. *)
       (** Unique id of the node. *)
       val get_id: t -> float [@@js.get "id"]
@@ -14924,6 +17018,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_Profile]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_Profile]
+      ]
       (** The list of profile nodes. First item is the root node. *)
       (** The list of profile nodes. First item is the root node. *)
       val get_nodes: t -> inspector_Profiler_ProfileNode list [@@js.get "nodes"]
@@ -14958,6 +17058,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_PositionTickInfo]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_PositionTickInfo]
+      ]
       (** Source line number (1-based). *)
       (** Source line number (1-based). *)
       val get_line: t -> float [@@js.get "line"]
@@ -14977,6 +17083,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_CoverageRange]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_CoverageRange]
+      ]
       (** JavaScript script source offset for the range start. *)
       (** JavaScript script source offset for the range start. *)
       val get_startOffset: t -> float [@@js.get "startOffset"]
@@ -15001,6 +17113,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_FunctionCoverage]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_FunctionCoverage]
+      ]
       (** JavaScript function name. *)
       (** JavaScript function name. *)
       val get_functionName: t -> string [@@js.get "functionName"]
@@ -15025,6 +17143,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_ScriptCoverage]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_ScriptCoverage]
+      ]
       (** JavaScript script id. *)
       (** JavaScript script id. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -15052,6 +17176,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_TypeObject]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_TypeObject]
+      ]
       (** Name of a type collected with type profiling. *)
       (** Name of a type collected with type profiling. *)
       val get_name: t -> string [@@js.get "name"]
@@ -15069,6 +17199,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_TypeProfileEntry]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_TypeProfileEntry]
+      ]
       (** Source offset of the parameter or end of function for return values. *)
       (** Source offset of the parameter or end of function for return values. *)
       val get_offset: t -> float [@@js.get "offset"]
@@ -15091,6 +17227,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_ScriptTypeProfile]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_ScriptTypeProfile]
+      ]
       (** JavaScript script id. *)
       (** JavaScript script id. *)
       val get_scriptId: t -> inspector_Runtime_ScriptId [@@js.get "scriptId"]
@@ -15114,6 +17256,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_SetSamplingIntervalParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_SetSamplingIntervalParameterType]
+      ]
       (** New sampling interval in microseconds. *)
       (** New sampling interval in microseconds. *)
       val get_interval: t -> float [@@js.get "interval"]
@@ -15127,6 +17275,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_StartPreciseCoverageParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_StartPreciseCoverageParameterType]
+      ]
       (** Collect accurate call counts beyond simple 'covered' or 'not covered'. *)
       (** Collect accurate call counts beyond simple 'covered' or 'not covered'. *)
       val get_callCount: t -> bool [@@js.get "callCount"]
@@ -15145,6 +17299,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_StopReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_StopReturnType]
+      ]
       (** Recorded profile. *)
       (** Recorded profile. *)
       val get_profile: t -> inspector_Profiler_Profile [@@js.get "profile"]
@@ -15158,6 +17318,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_TakePreciseCoverageReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_TakePreciseCoverageReturnType]
+      ]
       (** Coverage data for the current isolate. *)
       (** Coverage data for the current isolate. *)
       val get_result: t -> inspector_Profiler_ScriptCoverage list [@@js.get "result"]
@@ -15171,6 +17337,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_GetBestEffortCoverageReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_GetBestEffortCoverageReturnType]
+      ]
       (** Coverage data for the current isolate. *)
       (** Coverage data for the current isolate. *)
       val get_result: t -> inspector_Profiler_ScriptCoverage list [@@js.get "result"]
@@ -15184,6 +17356,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_TakeTypeProfileReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_TakeTypeProfileReturnType]
+      ]
       (** Type profile for all scripts since startTypeProfile() was turned on. *)
       (** Type profile for all scripts since startTypeProfile() was turned on. *)
       val get_result: t -> inspector_Profiler_ScriptTypeProfile list [@@js.get "result"]
@@ -15197,6 +17375,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_ConsoleProfileStartedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_ConsoleProfileStartedEventDataType]
+      ]
       val get_id: t -> string [@@js.get "id"]
       val set_id: t -> string -> unit [@@js.set "id"]
       (** Location of console.profile(). *)
@@ -15217,6 +17401,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_Profiler_ConsoleProfileFinishedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_Profiler_ConsoleProfileFinishedEventDataType]
+      ]
       val get_id: t -> string [@@js.get "id"]
       val set_id: t -> string -> unit [@@js.set "id"]
       (** Location of console.profileEnd(). *)
@@ -15242,6 +17432,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_HeapSnapshotObjectId | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_HeapSnapshotObjectId | `String]
+      ]
     end
     (** Sampling Heap Profile node. Holds callsite information, allocation statistics and child nodes. *)
     module[@js.scope "SamplingHeapProfileNode"] SamplingHeapProfileNode : sig
@@ -15251,6 +17447,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_SamplingHeapProfileNode]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_SamplingHeapProfileNode]
+      ]
       (** Function location. *)
       (** Function location. *)
       val get_callFrame: t -> inspector_Runtime_CallFrame [@@js.get "callFrame"]
@@ -15275,6 +17477,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_SamplingHeapProfile]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_SamplingHeapProfile]
+      ]
       val get_head: t -> inspector_HeapProfiler_SamplingHeapProfileNode [@@js.get "head"]
       val set_head: t -> inspector_HeapProfiler_SamplingHeapProfileNode -> unit [@@js.set "head"]
     end
@@ -15285,6 +17493,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_StartTrackingHeapObjectsParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_StartTrackingHeapObjectsParameterType]
+      ]
       val get_trackAllocations: t -> bool [@@js.get "trackAllocations"]
       val set_trackAllocations: t -> bool -> unit [@@js.set "trackAllocations"]
     end
@@ -15295,6 +17509,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_StopTrackingHeapObjectsParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_StopTrackingHeapObjectsParameterType]
+      ]
       (** If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken when the tracking is stopped. *)
       (** If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken when the tracking is stopped. *)
       val get_reportProgress: t -> bool [@@js.get "reportProgress"]
@@ -15308,6 +17528,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_TakeHeapSnapshotParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_TakeHeapSnapshotParameterType]
+      ]
       (** If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken. *)
       (** If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken. *)
       val get_reportProgress: t -> bool [@@js.get "reportProgress"]
@@ -15321,6 +17547,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_GetObjectByHeapObjectIdParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_GetObjectByHeapObjectIdParameterType]
+      ]
       val get_objectId: t -> inspector_HeapProfiler_HeapSnapshotObjectId [@@js.get "objectId"]
       val set_objectId: t -> inspector_HeapProfiler_HeapSnapshotObjectId -> unit [@@js.set "objectId"]
       (** Symbolic group name that can be used to release multiple objects. *)
@@ -15336,6 +17568,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_AddInspectedHeapObjectParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_AddInspectedHeapObjectParameterType]
+      ]
       (** Heap snapshot object id to be accessible by means of $x command line API. *)
       (** Heap snapshot object id to be accessible by means of $x command line API. *)
       val get_heapObjectId: t -> inspector_HeapProfiler_HeapSnapshotObjectId [@@js.get "heapObjectId"]
@@ -15349,6 +17587,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_GetHeapObjectIdParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_GetHeapObjectIdParameterType]
+      ]
       (** Identifier of the object to get heap object id for. *)
       (** Identifier of the object to get heap object id for. *)
       val get_objectId: t -> inspector_Runtime_RemoteObjectId [@@js.get "objectId"]
@@ -15362,6 +17606,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_StartSamplingParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_StartSamplingParameterType]
+      ]
       (** Average sample interval in bytes. Poisson distribution is used for the intervals. The default value is 32768 bytes. *)
       (** Average sample interval in bytes. Poisson distribution is used for the intervals. The default value is 32768 bytes. *)
       val get_samplingInterval: t -> float [@@js.get "samplingInterval"]
@@ -15375,6 +17625,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_GetObjectByHeapObjectIdReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_GetObjectByHeapObjectIdReturnType]
+      ]
       (** Evaluation result. *)
       (** Evaluation result. *)
       val get_result: t -> inspector_Runtime_RemoteObject [@@js.get "result"]
@@ -15388,6 +17644,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_GetHeapObjectIdReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_GetHeapObjectIdReturnType]
+      ]
       (** Id of the heap snapshot object corresponding to the passed remote object id. *)
       (** Id of the heap snapshot object corresponding to the passed remote object id. *)
       val get_heapSnapshotObjectId: t -> inspector_HeapProfiler_HeapSnapshotObjectId [@@js.get "heapSnapshotObjectId"]
@@ -15401,6 +17663,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_StopSamplingReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_StopSamplingReturnType]
+      ]
       (** Recorded sampling heap profile. *)
       (** Recorded sampling heap profile. *)
       val get_profile: t -> inspector_HeapProfiler_SamplingHeapProfile [@@js.get "profile"]
@@ -15414,6 +17682,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_GetSamplingProfileReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_GetSamplingProfileReturnType]
+      ]
       (** Return the sampling profile being collected. *)
       (** Return the sampling profile being collected. *)
       val get_profile: t -> inspector_HeapProfiler_SamplingHeapProfile [@@js.get "profile"]
@@ -15427,6 +17701,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_AddHeapSnapshotChunkEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_AddHeapSnapshotChunkEventDataType]
+      ]
       val get_chunk: t -> string [@@js.get "chunk"]
       val set_chunk: t -> string -> unit [@@js.set "chunk"]
     end
@@ -15437,6 +17717,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_ReportHeapSnapshotProgressEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_ReportHeapSnapshotProgressEventDataType]
+      ]
       val get_done: t -> float [@@js.get "done"]
       val set_done: t -> float -> unit [@@js.set "done"]
       val get_total: t -> float [@@js.get "total"]
@@ -15451,6 +17737,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_LastSeenObjectIdEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_LastSeenObjectIdEventDataType]
+      ]
       val get_lastSeenObjectId: t -> float [@@js.get "lastSeenObjectId"]
       val set_lastSeenObjectId: t -> float -> unit [@@js.set "lastSeenObjectId"]
       val get_timestamp: t -> float [@@js.get "timestamp"]
@@ -15463,6 +17755,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_HeapProfiler_HeapStatsUpdateEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_HeapProfiler_HeapStatsUpdateEventDataType]
+      ]
       (** An array of triplets. Each triplet describes a fragment. The first integer is the fragment index, the second integer is a total count of objects for the fragment, the third integer is a total size of the objects for the fragment. *)
       (** An array of triplets. Each triplet describes a fragment. The first integer is the fragment index, the second integer is a total count of objects for the fragment, the third integer is a total size of the objects for the fragment. *)
       val get_statsUpdate: t -> float list [@@js.get "statsUpdate"]
@@ -15478,6 +17776,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeTracing_TraceConfig]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeTracing_TraceConfig]
+      ]
       (** Controls how the trace buffer stores data. *)
       (** Controls how the trace buffer stores data. *)
       val get_recordMode: t -> string [@@js.get "recordMode"]
@@ -15496,6 +17800,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeTracing_StartParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeTracing_StartParameterType]
+      ]
       val get_traceConfig: t -> inspector_NodeTracing_TraceConfig [@@js.get "traceConfig"]
       val set_traceConfig: t -> inspector_NodeTracing_TraceConfig -> unit [@@js.set "traceConfig"]
     end
@@ -15506,6 +17816,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeTracing_GetCategoriesReturnType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeTracing_GetCategoriesReturnType]
+      ]
       (** A list of supported tracing categories. *)
       (** A list of supported tracing categories. *)
       val get_categories: t -> string list [@@js.get "categories"]
@@ -15519,6 +17835,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeTracing_DataCollectedEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeTracing_DataCollectedEventDataType]
+      ]
       val get_value: t -> anonymous_interface_0 list [@@js.get "value"]
       val set_value: t -> anonymous_interface_0 list -> unit [@@js.set "value"]
     end
@@ -15531,6 +17853,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeWorker_WorkerID | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeWorker_WorkerID | `String]
+      ]
     end
     (** Unique identifier of attached debugging session. *)
     module SessionID : sig
@@ -15540,6 +17868,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeWorker_SessionID | `String]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeWorker_SessionID | `String]
+      ]
     end
     module[@js.scope "WorkerInfo"] WorkerInfo : sig
       type t = inspector_NodeWorker_WorkerInfo
@@ -15548,6 +17882,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeWorker_WorkerInfo]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeWorker_WorkerInfo]
+      ]
       val get_workerId: t -> inspector_NodeWorker_WorkerID [@@js.get "workerId"]
       val set_workerId: t -> inspector_NodeWorker_WorkerID -> unit [@@js.set "workerId"]
       val get_type: t -> string [@@js.get "type"]
@@ -15564,6 +17904,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeWorker_SendMessageToWorkerParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeWorker_SendMessageToWorkerParameterType]
+      ]
       val get_message: t -> string [@@js.get "message"]
       val set_message: t -> string -> unit [@@js.set "message"]
       (** Identifier of the session. *)
@@ -15579,6 +17925,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeWorker_EnableParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeWorker_EnableParameterType]
+      ]
       (**
         Whether to new workers should be paused until the frontend sends `Runtime.runIfWaitingForDebugger`
         message to run them.
@@ -15601,6 +17953,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeWorker_DetachParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeWorker_DetachParameterType]
+      ]
       val get_sessionId: t -> inspector_NodeWorker_SessionID [@@js.get "sessionId"]
       val set_sessionId: t -> inspector_NodeWorker_SessionID -> unit [@@js.set "sessionId"]
     end
@@ -15611,6 +17969,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeWorker_AttachedToWorkerEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeWorker_AttachedToWorkerEventDataType]
+      ]
       (** Identifier assigned to the session used to send/receive messages. *)
       (** Identifier assigned to the session used to send/receive messages. *)
       val get_sessionId: t -> inspector_NodeWorker_SessionID [@@js.get "sessionId"]
@@ -15628,6 +17992,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeWorker_DetachedFromWorkerEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeWorker_DetachedFromWorkerEventDataType]
+      ]
       (** Detached session identifier. *)
       (** Detached session identifier. *)
       val get_sessionId: t -> inspector_NodeWorker_SessionID [@@js.get "sessionId"]
@@ -15641,6 +18011,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeWorker_ReceivedMessageFromWorkerEventDataType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeWorker_ReceivedMessageFromWorkerEventDataType]
+      ]
       (** Identifier of a session which sends a message. *)
       (** Identifier of a session which sends a message. *)
       val get_sessionId: t -> inspector_NodeWorker_SessionID [@@js.get "sessionId"]
@@ -15658,6 +18034,12 @@ module[@js.scope "inspector"] Inspector : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Inspector_NodeRuntime_NotifyWhenWaitingForDisconnectParameterType]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Inspector_NodeRuntime_NotifyWhenWaitingForDisconnectParameterType]
+      ]
       val get_enabled: t -> bool [@@js.get "enabled"]
       val set_enabled: t -> bool -> unit [@@js.set "enabled"]
     end
@@ -15670,6 +18052,12 @@ module[@js.scope "inspector"] Inspector : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Inspector_Session | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Inspector_Session | EventEmitter.tags]
+    ]
     (**
       Create a new instance of the inspector.Session class.
       The inspector session needs to be connected through session.connect() before the messages can be dispatched to the inspector backend.
@@ -30059,6 +32447,12 @@ module[@js.scope "module"] Module : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Module_Module_SourceMapPayload]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Module_Module_SourceMapPayload]
+      ]
       val get_file: t -> string [@@js.get "file"]
       val set_file: t -> string -> unit [@@js.set "file"]
       val get_version: t -> float [@@js.get "version"]
@@ -30081,6 +32475,12 @@ module[@js.scope "module"] Module : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Module_Module_SourceMapping]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Module_Module_SourceMapping]
+      ]
       val get_generatedLine: t -> float [@@js.get "generatedLine"]
       val set_generatedLine: t -> float -> unit [@@js.set "generatedLine"]
       val get_generatedColumn: t -> float [@@js.get "generatedColumn"]
@@ -30099,6 +32499,12 @@ module[@js.scope "module"] Module : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Module_Module_SourceMap]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Module_Module_SourceMap]
+      ]
       val get_payload: t -> module_Module_SourceMapPayload [@@js.get "payload"]
       val create: payload:module_Module_SourceMapPayload -> t [@@js.create]
       val findEntry: t -> line:float -> column:float -> module_Module_SourceMapping [@@js.call "findEntry"]
@@ -30111,6 +32517,12 @@ module[@js.scope "module"] Module : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Module | `NodeModule | `Module_Module]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Module | `NodeModule | `Module_Module]
+    ]
     val runMain: unit -> unit [@@js.global "runMain"]
     val wrap: code:string -> string [@@js.global "wrap"]
     (** @deprecated Deprecated since: v12.2.0. Please use createRequire() instead. *)
@@ -30156,6 +32568,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_LookupFunction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_LookupFunction]
+    ]
     val apply: t -> hostname:string -> options:dns_LookupOneOptions -> callback:(err:_NodeJS_ErrnoException or_null -> address:string -> family:float -> unit) -> unit [@@js.apply]
   end
   module[@js.scope "AddressInfo"] AddressInfo : sig
@@ -30165,6 +32583,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_AddressInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_AddressInfo]
+    ]
     val get_address: t -> string [@@js.get "address"]
     val set_address: t -> string -> unit [@@js.set "address"]
     val get_family: t -> string [@@js.get "family"]
@@ -30179,6 +32603,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_SocketConstructorOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_SocketConstructorOpts]
+    ]
     val get_fd: t -> float [@@js.get "fd"]
     val set_fd: t -> float -> unit [@@js.set "fd"]
     val get_allowHalfOpen: t -> bool [@@js.get "allowHalfOpen"]
@@ -30195,6 +32625,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_OnReadOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_OnReadOpts]
+    ]
     val get_buffer: t -> (Uint8Array.t_0, (unit -> Uint8Array.t_0)) union2 [@@js.get "buffer"]
     val set_buffer: t -> (Uint8Array.t_0, (unit -> Uint8Array.t_0)) union2 -> unit [@@js.set "buffer"]
     (**
@@ -30211,6 +32647,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_ConnectOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_ConnectOpts]
+    ]
     (**
       If specified, incoming data is stored in a single buffer and passed to the supplied callback when data arrives on the socket.
       Note: this will cause the streaming functionality to not provide any data, however events like 'error', 'end', and 'close' will
@@ -30236,6 +32678,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_ConnectOpts | `Net_TcpSocketConnectOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_ConnectOpts | `Net_TcpSocketConnectOpts]
+    ]
     val get_port: t -> float [@@js.get "port"]
     val set_port: t -> float -> unit [@@js.set "port"]
     val get_host: t -> string [@@js.get "host"]
@@ -30259,6 +32707,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_ConnectOpts | `Net_IpcSocketConnectOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_ConnectOpts | `Net_IpcSocketConnectOpts]
+    ]
     val get_path: t -> string [@@js.get "path"]
     val set_path: t -> string -> unit [@@js.set "path"]
     val cast: t -> net_ConnectOpts [@@js.cast]
@@ -30270,6 +32724,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_SocketConnectOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_SocketConnectOpts]
+    ]
   end
   module[@js.scope "Socket"] Socket : sig
     type t = net_Socket
@@ -30278,6 +32738,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_Socket | Stream.Duplex.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_Socket | Stream.Duplex.tags]
+    ]
     val create: ?options:net_SocketConstructorOpts -> unit -> t [@@js.create]
     val write: t -> buffer:Uint8Array.t_0 or_string -> ?cb:(?err:Error.t_0 -> unit -> unit) -> unit -> bool [@@js.call "write"]
     val write': t -> str:Uint8Array.t_0 or_string -> ?encoding:_BufferEncoding -> ?cb:(?err:Error.t_0 -> unit -> unit) -> unit -> bool [@@js.call "write"]
@@ -30470,6 +32936,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_ListenOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_ListenOptions]
+    ]
     val get_port: t -> float [@@js.get "port"]
     val set_port: t -> float -> unit [@@js.set "port"]
     val get_host: t -> string [@@js.get "host"]
@@ -30497,6 +32969,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_ServerOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_ServerOpts]
+    ]
     (** Indicates whether half-opened TCP connections are allowed. __Default:__ `false`. *)
     (** Indicates whether half-opened TCP connections are allowed. __Default:__ `false`. *)
     val get_allowHalfOpen: t -> bool [@@js.get "allowHalfOpen"]
@@ -30515,6 +32993,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_Server | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_Server | EventEmitter.tags]
+    ]
     val create: ?connectionListener:(socket:net_Socket -> unit) -> unit -> t [@@js.create]
     val create': ?options:net_ServerOpts -> ?connectionListener:(socket:net_Socket -> unit) -> unit -> t [@@js.create]
     val listen: t -> ?port:float -> ?hostname:string -> ?backlog:float -> ?listeningListener:(unit -> unit) -> unit -> t [@@js.call "listen"]
@@ -30611,6 +33095,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_ConnectOpts | `Net_SocketConstructorOpts | `Net_TcpNetConnectOpts | `Net_TcpSocketConnectOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_ConnectOpts | `Net_SocketConstructorOpts | `Net_TcpNetConnectOpts | `Net_TcpSocketConnectOpts]
+    ]
     val get_timeout: t -> float [@@js.get "timeout"]
     val set_timeout: t -> float -> unit [@@js.set "timeout"]
     val cast: t -> net_TcpSocketConnectOpts [@@js.cast]
@@ -30623,6 +33113,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_ConnectOpts | `Net_IpcNetConnectOpts | `Net_IpcSocketConnectOpts | `Net_SocketConstructorOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_ConnectOpts | `Net_IpcNetConnectOpts | `Net_IpcSocketConnectOpts | `Net_SocketConstructorOpts]
+    ]
     val get_timeout: t -> float [@@js.get "timeout"]
     val set_timeout: t -> float -> unit [@@js.set "timeout"]
     val cast: t -> net_IpcSocketConnectOpts [@@js.cast]
@@ -30635,6 +33131,12 @@ module[@js.scope "net"] Net : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_NetConnectOpts]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_NetConnectOpts]
+    ]
   end
   val createServer: ?connectionListener:(socket:net_Socket -> unit) -> unit -> net_Server [@@js.global "createServer"]
   val createServer: ?options:net_ServerOpts -> ?connectionListener:(socket:net_Socket -> unit) -> unit -> net_Server [@@js.global "createServer"]
@@ -30659,6 +33161,12 @@ module[@js.scope "os"] Os : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Os_CpuInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Os_CpuInfo]
+    ]
     val get_model: t -> string [@@js.get "model"]
     val set_model: t -> string -> unit [@@js.set "model"]
     val get_speed: t -> float [@@js.get "speed"]
@@ -30673,6 +33181,12 @@ module[@js.scope "os"] Os : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Os_NetworkInterfaceBase]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Os_NetworkInterfaceBase]
+    ]
     val get_address: t -> string [@@js.get "address"]
     val set_address: t -> string -> unit [@@js.set "address"]
     val get_netmask: t -> string [@@js.get "netmask"]
@@ -30691,6 +33205,12 @@ module[@js.scope "os"] Os : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Os_NetworkInterfaceBase | `Os_NetworkInterfaceInfoIPv4]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Os_NetworkInterfaceBase | `Os_NetworkInterfaceInfoIPv4]
+    ]
     val get_family: t -> ([`L_s62_IPv4[@js "IPv4"]] [@js.enum]) [@@js.get "family"]
     val set_family: t -> ([`L_s62_IPv4] [@js.enum]) -> unit [@@js.set "family"]
     val cast: t -> os_NetworkInterfaceBase [@@js.cast]
@@ -30702,6 +33222,12 @@ module[@js.scope "os"] Os : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Os_NetworkInterfaceBase | `Os_NetworkInterfaceInfoIPv6]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Os_NetworkInterfaceBase | `Os_NetworkInterfaceInfoIPv6]
+    ]
     val get_family: t -> ([`L_s63_IPv6[@js "IPv6"]] [@js.enum]) [@@js.get "family"]
     val set_family: t -> ([`L_s63_IPv6] [@js.enum]) -> unit [@@js.set "family"]
     val get_scopeid: t -> float [@@js.get "scopeid"]
@@ -30715,6 +33241,12 @@ module[@js.scope "os"] Os : sig
     type 'T t_1 = 'T t
     val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+    [@@@js.stop]
+    type 'T tags = [`Os_UserInfo of 'T]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'T tags = [`Os_UserInfo of 'T]
+    ]
     val get_username: 'T t -> 'T [@@js.get "username"]
     val set_username: 'T t -> 'T -> unit [@@js.set "username"]
     val get_uid: 'T t -> float [@@js.get "uid"]
@@ -30733,6 +33265,12 @@ module[@js.scope "os"] Os : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Os_NetworkInterfaceInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Os_NetworkInterfaceInfo]
+    ]
   end
   val hostname: unit -> string [@@js.global "hostname"]
   val loadavg: unit -> float list [@@js.global "loadavg"]
@@ -30753,6 +33291,12 @@ module[@js.scope "os"] Os : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Os_SignalConstants]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Os_SignalConstants]
+    ]
   end
   module[@js.scope "constants"] Constants : sig
     val uv_udp_reuseaddr: float [@@js.global "UV_UDP_REUSEADDR"]
@@ -30958,6 +33502,12 @@ module[@js.scope "path"] Path : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Path_path_ParsedPath]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Path_path_ParsedPath]
+      ]
       (** The root of the path such as '/' or 'c:\' *)
       (** The root of the path such as '/' or 'c:\' *)
       val get_root: t -> string [@@js.get "root"]
@@ -30991,6 +33541,12 @@ module[@js.scope "path"] Path : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Path_path_FormatInputPathObject]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Path_path_FormatInputPathObject]
+      ]
       (** The root of the path such as '/' or 'c:\' *)
       (** The root of the path such as '/' or 'c:\' *)
       val get_root: t -> string [@@js.get "root"]
@@ -31024,6 +33580,12 @@ module[@js.scope "path"] Path : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Path_path_PlatformPath]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Path_path_PlatformPath]
+      ]
       (**
         Normalize a string path, reducing '..' and '.' parts.
         When multiple slashes are found, they're replaced by a single one; when the path contains a trailing slash, it is preserved. On Windows backslashes are used.
@@ -31131,6 +33693,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_EntryType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_EntryType]
+    ]
   end
   module[@js.scope "PerformanceEntry"] PerformanceEntry : sig
     type t = perf_hooks_PerformanceEntry
@@ -31139,6 +33707,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_PerformanceEntry]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_PerformanceEntry]
+    ]
     (**
       The total number of milliseconds elapsed for this entry.
       This value will not be meaningful for all Performance Entry types.
@@ -31173,6 +33747,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_PerformanceEntry | `Perf_hooks_PerformanceNodeTiming]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_PerformanceEntry | `Perf_hooks_PerformanceNodeTiming]
+    ]
     (** The high resolution millisecond timestamp at which the Node.js process completed bootstrap. *)
     val get_bootstrapComplete: t -> float [@@js.get "bootstrapComplete"]
     (**
@@ -31205,6 +33785,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_EventLoopUtilization]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_EventLoopUtilization]
+    ]
     val get_idle: t -> float [@@js.get "idle"]
     val set_idle: t -> float -> unit [@@js.set "idle"]
     val get_active: t -> float [@@js.get "active"]
@@ -31219,6 +33805,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_Performance]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_Performance]
+    ]
     (**
       If name is not provided, removes all PerformanceMark objects from the Performance Timeline.
       If name is provided, removes only the named mark.
@@ -31277,6 +33869,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_PerformanceObserverEntryList]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_PerformanceObserverEntryList]
+    ]
     (** @return a list of PerformanceEntry objects in chronological order with respect to performanceEntry.startTime. *)
     val getEntries: t -> perf_hooks_PerformanceEntry list [@@js.call "getEntries"]
     (**
@@ -31297,6 +33895,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_PerformanceObserverCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_PerformanceObserverCallback]
+    ]
     val apply: t -> list:perf_hooks_PerformanceObserverEntryList -> observer:perf_hooks_PerformanceObserver -> unit [@@js.apply]
   end
   module[@js.scope "PerformanceObserver"] PerformanceObserver : sig
@@ -31306,6 +33910,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_PerformanceObserver | AsyncResource.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_PerformanceObserver | AsyncResource.tags]
+    ]
     val create: callback:perf_hooks_PerformanceObserverCallback -> t [@@js.create]
     (** Disconnects the PerformanceObserver instance from all notifications. *)
     val disconnect: t -> unit [@@js.call "disconnect"]
@@ -31339,6 +33949,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_EventLoopMonitorOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_EventLoopMonitorOptions]
+    ]
     (**
       The sampling rate in milliseconds.
       Must be greater than zero.
@@ -31364,6 +33980,12 @@ module[@js.scope "perf_hooks"] Perf_hooks : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Perf_hooks_EventLoopDelayMonitor]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Perf_hooks_EventLoopDelayMonitor]
+    ]
     (** Enables the event loop delay sample timer. Returns `true` if the timer was started, `false` if it was already started. *)
     val enable: t -> bool [@@js.call "enable"]
     (** Disables the event loop delay sample timer. Returns `true` if the timer was stopped, `false` if it was already stopped. *)
@@ -31412,6 +34034,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Net_Socket | `Process_global_NodeJS_ReadStream | `Tty_ReadStream | Stream.Duplex.tags]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Net_Socket | `Process_global_NodeJS_ReadStream | `Tty_ReadStream | Stream.Duplex.tags]
+        ]
         val cast: t -> tty_ReadStream [@@js.cast]
       end
       module[@js.scope "WriteStream"] WriteStream : sig
@@ -31421,6 +34049,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Net_Socket | `Process_global_NodeJS_WriteStream | `Tty_WriteStream | Stream.Duplex.tags]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Net_Socket | `Process_global_NodeJS_WriteStream | `Tty_WriteStream | Stream.Duplex.tags]
+        ]
         val cast: t -> tty_WriteStream [@@js.cast]
       end
       module[@js.scope "MemoryUsage"] MemoryUsage : sig
@@ -31430,6 +34064,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_MemoryUsage]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_MemoryUsage]
+        ]
         val get_rss: t -> float [@@js.get "rss"]
         val set_rss: t -> float -> unit [@@js.set "rss"]
         val get_heapTotal: t -> float [@@js.get "heapTotal"]
@@ -31448,6 +34088,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_CpuUsage]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_CpuUsage]
+        ]
         val get_user: t -> float [@@js.get "user"]
         val set_user: t -> float -> unit [@@js.set "user"]
         val get_system: t -> float [@@js.get "system"]
@@ -31460,6 +34106,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_ProcessRelease]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_ProcessRelease]
+        ]
         val get_name: t -> string [@@js.get "name"]
         val set_name: t -> string -> unit [@@js.set "name"]
         val get_sourceUrl: t -> string [@@js.get "sourceUrl"]
@@ -31478,6 +34130,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_ProcessVersions | Dict.tags]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_ProcessVersions | Dict.tags]
+        ]
         val get_http_parser: t -> string [@@js.get "http_parser"]
         val set_http_parser: t -> string -> unit [@@js.set "http_parser"]
         val get_node: t -> string [@@js.get "node"]
@@ -31503,6 +34161,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_Platform]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_Platform]
+        ]
       end
       module Signals : sig
         type t = process_global_NodeJS_Signals
@@ -31511,6 +34175,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_Signals]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_Signals]
+        ]
       end
       module MultipleResolveType : sig
         type t = process_global_NodeJS_MultipleResolveType
@@ -31519,6 +34189,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_MultipleResolveType]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_MultipleResolveType]
+        ]
       end
       module[@js.scope "BeforeExitListener"] BeforeExitListener : sig
         type t = process_global_NodeJS_BeforeExitListener
@@ -31527,6 +34203,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_BeforeExitListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_BeforeExitListener]
+        ]
         val apply: t -> code:float -> unit [@@js.apply]
       end
       module[@js.scope "DisconnectListener"] DisconnectListener : sig
@@ -31536,6 +34218,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_DisconnectListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_DisconnectListener]
+        ]
         val apply: t -> unit [@@js.apply]
       end
       module[@js.scope "ExitListener"] ExitListener : sig
@@ -31545,6 +34233,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_ExitListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_ExitListener]
+        ]
         val apply: t -> code:float -> unit [@@js.apply]
       end
       module[@js.scope "RejectionHandledListener"] RejectionHandledListener : sig
@@ -31554,6 +34248,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_RejectionHandledListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_RejectionHandledListener]
+        ]
         val apply: t -> promise:any Promise.t_1 -> unit [@@js.apply]
       end
       module[@js.scope "UncaughtExceptionListener"] UncaughtExceptionListener : sig
@@ -31563,6 +34263,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_UncaughtExceptionListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_UncaughtExceptionListener]
+        ]
         val apply: t -> error:Error.t_0 -> unit [@@js.apply]
       end
       module[@js.scope "UnhandledRejectionListener"] UnhandledRejectionListener : sig
@@ -31572,6 +34278,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_UnhandledRejectionListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_UnhandledRejectionListener]
+        ]
         val apply: t -> reason:anonymous_interface_0 or_null_or_undefined -> promise:any Promise.t_1 -> unit [@@js.apply]
       end
       module[@js.scope "WarningListener"] WarningListener : sig
@@ -31581,6 +34293,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_WarningListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_WarningListener]
+        ]
         val apply: t -> warning:Error.t_0 -> unit [@@js.apply]
       end
       module[@js.scope "MessageListener"] MessageListener : sig
@@ -31590,6 +34308,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_MessageListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_MessageListener]
+        ]
         val apply: t -> message:any -> sendHandle:any -> unit [@@js.apply]
       end
       module[@js.scope "SignalsListener"] SignalsListener : sig
@@ -31599,6 +34323,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_SignalsListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_SignalsListener]
+        ]
         val apply: t -> signal:process_global_NodeJS_Signals -> unit [@@js.apply]
       end
       module[@js.scope "NewListenerListener"] NewListenerListener : sig
@@ -31608,6 +34338,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_NewListenerListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_NewListenerListener]
+        ]
         val apply: t -> type_:symbol or_string -> listener:(args:(any list [@js.variadic]) -> unit) -> unit [@@js.apply]
       end
       module[@js.scope "RemoveListenerListener"] RemoveListenerListener : sig
@@ -31617,6 +34353,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_RemoveListenerListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_RemoveListenerListener]
+        ]
         val apply: t -> type_:symbol or_string -> listener:(args:(any list [@js.variadic]) -> unit) -> unit [@@js.apply]
       end
       module[@js.scope "MultipleResolveListener"] MultipleResolveListener : sig
@@ -31626,6 +34368,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_MultipleResolveListener]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_MultipleResolveListener]
+        ]
         val apply: t -> type_:process_global_NodeJS_MultipleResolveType -> promise:any Promise.t_1 -> value:any -> unit [@@js.apply]
       end
       module[@js.scope "Socket"] Socket : sig
@@ -31635,6 +34383,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_Socket | ReadWriteStream.tags]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_Socket | ReadWriteStream.tags]
+        ]
         val get_isTTY: t -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "isTTY"]
         val set_isTTY: t -> ([`L_b_true] [@js.enum]) -> unit [@@js.set "isTTY"]
         val cast: t -> ReadWriteStream.t_0 [@@js.cast]
@@ -31646,6 +34400,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_ProcessEnv | Dict.tags]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_ProcessEnv | Dict.tags]
+        ]
         val cast: t -> string Dict.t_1 [@@js.cast]
       end
       module[@js.scope "HRTime"] HRTime : sig
@@ -31655,6 +34415,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_HRTime]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_HRTime]
+        ]
         val apply: t -> ?time:(float * float) -> unit -> (float * float) [@@js.apply]
         val bigint: t -> bigint [@@js.call "bigint"]
       end
@@ -31665,6 +34431,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_ProcessReport]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_ProcessReport]
+        ]
         (**
           Directory where the report is written.
           working directory of the Node.js process.
@@ -31801,6 +34573,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_ResourceUsage]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_ResourceUsage]
+        ]
         val get_fsRead: t -> float [@@js.get "fsRead"]
         val set_fsRead: t -> float -> unit [@@js.set "fsRead"]
         val get_fsWrite: t -> float [@@js.get "fsWrite"]
@@ -31841,6 +34619,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_EmitWarningOptions]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_EmitWarningOptions]
+        ]
         (**
           When `warning` is a `string`, `type` is the name to use for the _type_ of warning being emitted.
           default: 'Warning'
@@ -31887,6 +34671,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_Process | EventEmitter.tags]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_Process | EventEmitter.tags]
+        ]
         (** Can also be a tty.WriteStream, not typed due to limitations. *)
         (** Can also be a tty.WriteStream, not typed due to limitations. *)
         val get_stdout: t -> (process_global_NodeJS_WriteStream, anonymous_interface_24) intersection2 [@@js.get "stdout"]
@@ -32130,6 +34920,12 @@ module[@js.scope "process"] Process : sig
         type t_0 = t
         val t_0_to_js: t_0 -> Ojs.t
         val t_0_of_js: Ojs.t -> t_0
+        [@@@js.stop]
+        type tags = [`Process_global_NodeJS_Global]
+        [@@@js.start]
+        [@@@js.implem 
+          type tags = [`Process_global_NodeJS_Global]
+        ]
         val get_process: t -> process_global_NodeJS_Process [@@js.get "process"]
         val set_process: t -> process_global_NodeJS_Process -> unit [@@js.set "process"]
       end
@@ -32204,6 +35000,12 @@ module[@js.scope "punycode"] Punycode : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Punycode_ucs2]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Punycode_ucs2]
+    ]
     (**
       @deprecated since v7.0.0
       The version of the punycode module bundled in Node.js is being deprecated.
@@ -32241,6 +35043,12 @@ module[@js.scope "querystring"] Querystring : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Querystring_StringifyOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Querystring_StringifyOptions]
+    ]
     val encodeURIComponent: t -> str:string -> string [@@js.call "encodeURIComponent"]
   end
   module[@js.scope "ParseOptions"] ParseOptions : sig
@@ -32250,6 +35058,12 @@ module[@js.scope "querystring"] Querystring : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Querystring_ParseOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Querystring_ParseOptions]
+    ]
     val get_maxKeys: t -> float [@@js.get "maxKeys"]
     val set_maxKeys: t -> float -> unit [@@js.set "maxKeys"]
     val decodeURIComponent: t -> str:string -> string [@@js.call "decodeURIComponent"]
@@ -32261,6 +35075,12 @@ module[@js.scope "querystring"] Querystring : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Dict of string list or_string | `Querystring_ParsedUrlQuery]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Dict of string list or_string | `Querystring_ParsedUrlQuery]
+    ]
     val cast: t -> string list or_string _NodeJS_Dict [@@js.cast]
   end
   module[@js.scope "ParsedUrlQueryInput"] ParsedUrlQueryInput : sig
@@ -32270,6 +35090,12 @@ module[@js.scope "querystring"] Querystring : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Dict of (string list, bool list, float list) union3 or_boolean or_string or_number or_null | `Querystring_ParsedUrlQueryInput]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Dict of (string list, bool list, float list) union3 or_boolean or_string or_number or_null | `Querystring_ParsedUrlQueryInput]
+    ]
     val cast: t -> (string list, bool list, float list) union3 or_boolean or_string or_number or_null _NodeJS_Dict [@@js.cast]
   end
   val stringify: ?obj:querystring_ParsedUrlQueryInput -> ?sep:string -> ?eq:string -> ?options:querystring_StringifyOptions -> unit -> string [@@js.global "stringify"]
@@ -32298,6 +35124,12 @@ module[@js.scope "readline"] Readline : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Readline_Key]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Readline_Key]
+    ]
     val get_sequence: t -> string [@@js.get "sequence"]
     val set_sequence: t -> string -> unit [@@js.set "sequence"]
     val get_name: t -> string [@@js.get "name"]
@@ -32316,6 +35148,12 @@ module[@js.scope "readline"] Readline : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Readline_Interface | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Readline_Interface | EventEmitter.tags]
+    ]
     val get_terminal: t -> bool [@@js.get "terminal"]
     (** The current input data *)
     val get_line: t -> string [@@js.get "line"]
@@ -32488,6 +35326,12 @@ module[@js.scope "readline"] Readline : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Readline_Interface | `Readline_ReadLine | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Readline_Interface | `Readline_ReadLine | EventEmitter.tags]
+    ]
   end
   module[@js.scope "Completer"] Completer : sig
     type t = readline_Completer
@@ -32496,6 +35340,12 @@ module[@js.scope "readline"] Readline : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Readline_Completer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Readline_Completer]
+    ]
     val apply: t -> line:string -> readline_CompleterResult [@@js.apply]
   end
   module[@js.scope "AsyncCompleter"] AsyncCompleter : sig
@@ -32505,6 +35355,12 @@ module[@js.scope "readline"] Readline : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Readline_AsyncCompleter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Readline_AsyncCompleter]
+    ]
     val apply: t -> line:string -> callback:(?err:Error.t_0 or_null -> ?result:readline_CompleterResult -> unit -> unit) -> any [@@js.apply]
   end
   module CompleterResult : sig
@@ -32514,6 +35370,12 @@ module[@js.scope "readline"] Readline : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Readline_CompleterResult]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Readline_CompleterResult]
+    ]
   end
   module[@js.scope "ReadLineOptions"] ReadLineOptions : sig
     type t = readline_ReadLineOptions
@@ -32522,6 +35384,12 @@ module[@js.scope "readline"] Readline : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Readline_ReadLineOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Readline_ReadLineOptions]
+    ]
     val get_input: t -> _NodeJS_ReadableStream [@@js.get "input"]
     val set_input: t -> _NodeJS_ReadableStream -> unit [@@js.set "input"]
     val get_output: t -> _NodeJS_WritableStream [@@js.get "output"]
@@ -32553,6 +35421,12 @@ module[@js.scope "readline"] Readline : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Readline_Direction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Readline_Direction]
+    ]
   end
   module[@js.scope "CursorPos"] CursorPos : sig
     type t = readline_CursorPos
@@ -32561,6 +35435,12 @@ module[@js.scope "readline"] Readline : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Readline_CursorPos]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Readline_CursorPos]
+    ]
     val get_rows: t -> float [@@js.get "rows"]
     val set_rows: t -> float -> unit [@@js.set "rows"]
     val get_cols: t -> float [@@js.get "cols"]
@@ -32604,6 +35484,12 @@ module[@js.scope "repl"] Repl : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Repl_ReplOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Repl_ReplOptions]
+    ]
     (**
       The input prompt to display.
       Default: `"> "`
@@ -32845,6 +35731,12 @@ module[@js.scope "repl"] Repl : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Repl_REPLEval]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Repl_REPLEval]
+    ]
     val apply: t -> this:repl_REPLServer -> evalCmd:string -> context:Context.t_0 -> file:string -> cb:(err:Error.t_0 or_null -> result:any -> unit) -> unit [@@js.apply]
   end
   module[@js.scope "REPLWriter"] REPLWriter : sig
@@ -32854,6 +35746,12 @@ module[@js.scope "repl"] Repl : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Repl_REPLWriter]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Repl_REPLWriter]
+    ]
     val apply: t -> this:repl_REPLServer -> obj:any -> string [@@js.apply]
   end
   (**
@@ -32868,6 +35766,12 @@ module[@js.scope "repl"] Repl : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Repl_REPLCommandAction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Repl_REPLCommandAction]
+    ]
     val apply: t -> this:repl_REPLServer -> text:string -> unit [@@js.apply]
   end
   module[@js.scope "REPLCommand"] REPLCommand : sig
@@ -32877,6 +35781,12 @@ module[@js.scope "repl"] Repl : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Repl_REPLCommand]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Repl_REPLCommand]
+    ]
     (** Help text to be displayed when `.help` is entered. *)
     (** Help text to be displayed when `.help` is entered. *)
     val get_help: t -> string [@@js.get "help"]
@@ -32910,6 +35820,12 @@ module[@js.scope "repl"] Repl : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Repl_REPLServer | Interface.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Repl_REPLServer | Interface.tags]
+    ]
     (**
       The `vm.Context` provided to the `eval` function to be used for JavaScript
       evaluation.
@@ -33225,6 +36141,12 @@ module[@js.scope "repl"] Repl : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Repl_Recoverable | SyntaxError.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Repl_Recoverable | SyntaxError.tags]
+    ]
     val get_err: t -> Error.t_0 [@@js.get "err"]
     val set_err: t -> Error.t_0 -> unit [@@js.set "err"]
     val create: err:Error.t_0 -> t [@@js.create]
@@ -33256,6 +36178,12 @@ module[@js.scope "stream"] Stream : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Stream_internal | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Stream_internal | EventEmitter.tags]
+    ]
     val pipe: t -> destination:'T -> ?options:anonymous_interface_20 -> unit -> 'T [@@js.call "pipe"]
     val cast: t -> EventEmitter.t_0 [@@js.cast]
   end
@@ -33267,6 +36195,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Stream_internal | `Stream_internal_Stream | EventEmitter.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Stream_internal | `Stream_internal_Stream | EventEmitter.tags]
+      ]
       val create: ?opts:stream_internal_ReadableOptions -> unit -> t [@@js.create]
       val cast: t -> stream_internal [@@js.cast]
     end
@@ -33277,6 +36211,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Stream_internal_ReadableOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Stream_internal_ReadableOptions]
+      ]
       val get_highWaterMark: t -> float [@@js.get "highWaterMark"]
       val set_highWaterMark: t -> float -> unit [@@js.set "highWaterMark"]
       val get_encoding: t -> _BufferEncoding [@@js.get "encoding"]
@@ -33295,6 +36235,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`NodeJS_ReadableStream | `Stream_internal | `Stream_internal_Readable | `Stream_internal_Stream | EventEmitter.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`NodeJS_ReadableStream | `Stream_internal | `Stream_internal_Readable | `Stream_internal_Stream | EventEmitter.tags]
+      ]
       (** A utility method for creating Readable Streams out of iterators. *)
       val from: iterable:(any AsyncIterable.t_1, any Iterable.t_1) union2 -> ?options:stream_internal_ReadableOptions -> unit -> t [@@js.global "from"]
       val get_readable: t -> bool [@@js.get "readable"]
@@ -33475,6 +36421,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Stream_internal_WritableOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Stream_internal_WritableOptions]
+      ]
       val get_highWaterMark: t -> float [@@js.get "highWaterMark"]
       val set_highWaterMark: t -> float -> unit [@@js.set "highWaterMark"]
       val get_decodeStrings: t -> bool [@@js.get "decodeStrings"]
@@ -33499,6 +36451,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`NodeJS_WritableStream | `Stream_internal | `Stream_internal_Stream | `Stream_internal_Writable | EventEmitter.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`NodeJS_WritableStream | `Stream_internal | `Stream_internal_Stream | `Stream_internal_Writable | EventEmitter.tags]
+      ]
       val get_writable: t -> bool [@@js.get "writable"]
       val get_writableEnded: t -> bool [@@js.get "writableEnded"]
       val get_writableFinished: t -> bool [@@js.get "writableFinished"]
@@ -33651,6 +36609,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Stream_internal_DuplexOptions | `Stream_internal_ReadableOptions | `Stream_internal_WritableOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Stream_internal_DuplexOptions | `Stream_internal_ReadableOptions | `Stream_internal_WritableOptions]
+      ]
       val get_allowHalfOpen: t -> bool [@@js.get "allowHalfOpen"]
       val set_allowHalfOpen: t -> bool -> unit [@@js.set "allowHalfOpen"]
       val get_readableObjectMode: t -> bool [@@js.get "readableObjectMode"]
@@ -33678,6 +36642,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`NodeJS_ReadableStream | `NodeJS_WritableStream | `Stream_internal | `Stream_internal_Duplex | `Stream_internal_Readable | `Stream_internal_Stream | `Stream_internal_Writable | EventEmitter.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`NodeJS_ReadableStream | `NodeJS_WritableStream | `Stream_internal | `Stream_internal_Duplex | `Stream_internal_Readable | `Stream_internal_Stream | `Stream_internal_Writable | EventEmitter.tags]
+      ]
       val get_writable: t -> bool [@@js.get "writable"]
       val get_writableEnded: t -> bool [@@js.get "writableEnded"]
       val get_writableFinished: t -> bool [@@js.get "writableFinished"]
@@ -33708,6 +36678,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Stream_internal_TransformCallback]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Stream_internal_TransformCallback]
+      ]
       val apply: t -> ?error:Error.t_0 or_null -> ?data:any -> unit -> unit [@@js.apply]
     end
     module[@js.scope "TransformOptions"] TransformOptions : sig
@@ -33717,6 +36693,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Stream_internal_DuplexOptions | `Stream_internal_ReadableOptions | `Stream_internal_TransformOptions | `Stream_internal_WritableOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Stream_internal_DuplexOptions | `Stream_internal_ReadableOptions | `Stream_internal_TransformOptions | `Stream_internal_WritableOptions]
+      ]
       val read: t -> this:stream_internal_Transform -> size:float -> unit [@@js.call "read"]
       val write: t -> this:stream_internal_Transform -> chunk:any -> encoding:_BufferEncoding -> callback:(?error:Error.t_0 or_null -> unit -> unit) -> unit [@@js.call "write"]
       val writev: t -> this:stream_internal_Transform -> chunks:anonymous_interface_9 list -> callback:(?error:Error.t_0 or_null -> unit -> unit) -> unit [@@js.call "writev"]
@@ -33733,6 +36715,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`NodeJS_ReadableStream | `NodeJS_WritableStream | `Stream_internal | `Stream_internal_Duplex | `Stream_internal_Readable | `Stream_internal_Stream | `Stream_internal_Transform | `Stream_internal_Writable | EventEmitter.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`NodeJS_ReadableStream | `NodeJS_WritableStream | `Stream_internal | `Stream_internal_Duplex | `Stream_internal_Readable | `Stream_internal_Stream | `Stream_internal_Transform | `Stream_internal_Writable | EventEmitter.tags]
+      ]
       val create: ?opts:stream_internal_TransformOptions -> unit -> t [@@js.create]
       val _transform: t -> chunk:any -> encoding:_BufferEncoding -> callback:stream_internal_TransformCallback -> unit [@@js.call "_transform"]
       val _flush: t -> callback:stream_internal_TransformCallback -> unit [@@js.call "_flush"]
@@ -33745,6 +36733,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`NodeJS_ReadableStream | `NodeJS_WritableStream | `Stream_internal | `Stream_internal_Duplex | `Stream_internal_PassThrough | `Stream_internal_Readable | `Stream_internal_Stream | `Stream_internal_Transform | `Stream_internal_Writable | EventEmitter.tags]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`NodeJS_ReadableStream | `NodeJS_WritableStream | `Stream_internal | `Stream_internal_Duplex | `Stream_internal_PassThrough | `Stream_internal_Readable | `Stream_internal_Stream | `Stream_internal_Transform | `Stream_internal_Writable | EventEmitter.tags]
+      ]
       val cast: t -> stream_internal_Transform [@@js.cast]
     end
     module[@js.scope "FinishedOptions"] FinishedOptions : sig
@@ -33754,6 +36748,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Stream_internal_FinishedOptions]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Stream_internal_FinishedOptions]
+      ]
       val get_error: t -> bool [@@js.get "error"]
       val set_error: t -> bool -> unit [@@js.set "error"]
       val get_readable: t -> bool [@@js.get "readable"]
@@ -33773,6 +36773,12 @@ module[@js.scope "stream"] Stream : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Stream_internal_PipelineSourceFunction of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Stream_internal_PipelineSourceFunction of 'T]
+      ]
       val apply: 'T t -> ('T AsyncIterable.t_1, 'T Iterable.t_1) union2 [@@js.apply]
     end
     module PipelineSource : sig
@@ -33782,6 +36788,12 @@ module[@js.scope "stream"] Stream : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Stream_internal_PipelineSource of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Stream_internal_PipelineSource of 'T]
+      ]
     end
     module PipelineTransform : sig
       type ('S, 'U) t = ('S, 'U) stream_internal_PipelineTransform
@@ -33790,6 +36802,12 @@ module[@js.scope "stream"] Stream : sig
       type ('S, 'U) t_2 = ('S, 'U) t
       val t_2_to_js: ('S -> Ojs.t) -> ('U -> Ojs.t) -> ('S, 'U) t_2 -> Ojs.t
       val t_2_of_js: (Ojs.t -> 'S) -> (Ojs.t -> 'U) -> Ojs.t -> ('S, 'U) t_2
+      [@@@js.stop]
+      type ('S, 'U) tags = [`Stream_internal_PipelineTransform of ('S * 'U)]
+      [@@@js.start]
+      [@@@js.implem 
+        type ('S, 'U) tags = [`Stream_internal_PipelineTransform of ('S * 'U)]
+      ]
     end
     module PipelineTransformSource : sig
       type 'T t = 'T stream_internal_PipelineTransformSource
@@ -33798,6 +36816,12 @@ module[@js.scope "stream"] Stream : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Stream_internal_PipelineTransformSource of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Stream_internal_PipelineTransformSource of 'T]
+      ]
     end
     module[@js.scope "PipelineDestinationIterableFunction"] PipelineDestinationIterableFunction : sig
       type 'T t = 'T stream_internal_PipelineDestinationIterableFunction
@@ -33806,6 +36830,12 @@ module[@js.scope "stream"] Stream : sig
       type 'T t_1 = 'T t
       val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+      [@@@js.stop]
+      type 'T tags = [`Stream_internal_PipelineDestinationIterableFunction of 'T]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'T tags = [`Stream_internal_PipelineDestinationIterableFunction of 'T]
+      ]
       val apply: 'T t -> source:'T AsyncIterable.t_1 -> any AsyncIterable.t_1 [@@js.apply]
     end
     module[@js.scope "PipelineDestinationPromiseFunction"] PipelineDestinationPromiseFunction : sig
@@ -33815,6 +36845,12 @@ module[@js.scope "stream"] Stream : sig
       type ('T, 'P) t_2 = ('T, 'P) t
       val t_2_to_js: ('T -> Ojs.t) -> ('P -> Ojs.t) -> ('T, 'P) t_2 -> Ojs.t
       val t_2_of_js: (Ojs.t -> 'T) -> (Ojs.t -> 'P) -> Ojs.t -> ('T, 'P) t_2
+      [@@@js.stop]
+      type ('T, 'P) tags = [`Stream_internal_PipelineDestinationPromiseFunction of ('T * 'P)]
+      [@@@js.start]
+      [@@@js.implem 
+        type ('T, 'P) tags = [`Stream_internal_PipelineDestinationPromiseFunction of ('T * 'P)]
+      ]
       val apply: ('T, 'P) t -> source:'T AsyncIterable.t_1 -> 'P Promise.t_1 [@@js.apply]
     end
     module PipelineDestination : sig
@@ -33824,6 +36860,12 @@ module[@js.scope "stream"] Stream : sig
       type ('S, 'P) t_2 = ('S, 'P) t
       val t_2_to_js: ('S -> Ojs.t) -> ('P -> Ojs.t) -> ('S, 'P) t_2 -> Ojs.t
       val t_2_of_js: (Ojs.t -> 'S) -> (Ojs.t -> 'P) -> Ojs.t -> ('S, 'P) t_2
+      [@@@js.stop]
+      type ('S, 'P) tags = [`Stream_internal_PipelineDestination of ('S * 'P)]
+      [@@@js.start]
+      [@@@js.implem 
+        type ('S, 'P) tags = [`Stream_internal_PipelineDestination of ('S * 'P)]
+      ]
     end
     module PipelineCallback : sig
       type 'S t = 'S stream_internal_PipelineCallback
@@ -33832,6 +36874,12 @@ module[@js.scope "stream"] Stream : sig
       type 'S t_1 = 'S t
       val t_1_to_js: ('S -> Ojs.t) -> 'S t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t_1
+      [@@@js.stop]
+      type 'S tags = [`Stream_internal_PipelineCallback of 'S]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'S tags = [`Stream_internal_PipelineCallback of 'S]
+      ]
     end
     module PipelinePromise : sig
       type 'S t = 'S stream_internal_PipelinePromise
@@ -33840,6 +36888,12 @@ module[@js.scope "stream"] Stream : sig
       type 'S t_1 = 'S t
       val t_1_to_js: ('S -> Ojs.t) -> 'S t_1 -> Ojs.t
       val t_1_of_js: (Ojs.t -> 'S) -> Ojs.t -> 'S t_1
+      [@@@js.stop]
+      type 'S tags = [`Stream_internal_PipelinePromise of 'S]
+      [@@@js.start]
+      [@@@js.implem 
+        type 'S tags = [`Stream_internal_PipelinePromise of 'S]
+      ]
     end
     val pipeline: source:'A -> destination:'B -> ?callback:'B stream_internal_PipelineCallback -> unit -> (* FIXME: unknown type 'B extends NodeJS.WritableStream ? B : NodeJS.WritableStream' *)any [@@js.global "pipeline"]
     val pipeline: source:'A -> transform1:'T1 -> destination:'B -> ?callback:'B stream_internal_PipelineCallback -> unit -> (* FIXME: unknown type 'B extends NodeJS.WritableStream ? B : NodeJS.WritableStream' *)any [@@js.global "pipeline"]
@@ -33864,6 +36918,12 @@ module[@js.scope "stream"] Stream : sig
       type t_0 = t
       val t_0_to_js: t_0 -> Ojs.t
       val t_0_of_js: Ojs.t -> t_0
+      [@@@js.stop]
+      type tags = [`Stream_internal_Pipe]
+      [@@@js.start]
+      [@@@js.implem 
+        type tags = [`Stream_internal_Pipe]
+      ]
       val close: t -> unit [@@js.call "close"]
       val hasRef: t -> bool [@@js.call "hasRef"]
       val ref: t -> unit [@@js.call "ref"]
@@ -33885,6 +36945,12 @@ module[@js.scope "string_decoder"] String_decoder : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`String_decoder_StringDecoder]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`String_decoder_StringDecoder]
+    ]
     val create: ?encoding:_BufferEncoding -> unit -> t [@@js.create]
     val write: t -> buffer:_Buffer -> string [@@js.call "write"]
     val end_: t -> ?buffer:_Buffer -> unit -> string [@@js.call "end"]
@@ -33928,6 +36994,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_Certificate]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_Certificate]
+    ]
     (** Country code. *)
     (** Country code. *)
     val get_C: t -> string [@@js.get "C"]
@@ -33966,6 +37038,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_PeerCertificate]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_PeerCertificate]
+    ]
     val get_subject: t -> tls_Certificate [@@js.get "subject"]
     val set_subject: t -> tls_Certificate -> unit [@@js.set "subject"]
     val get_issuer: t -> tls_Certificate [@@js.get "issuer"]
@@ -34000,6 +37078,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_DetailedPeerCertificate | `Tls_PeerCertificate]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_DetailedPeerCertificate | `Tls_PeerCertificate]
+    ]
     val get_issuerCertificate: t -> t [@@js.get "issuerCertificate"]
     val set_issuerCertificate: t -> t -> unit [@@js.set "issuerCertificate"]
     val cast: t -> tls_PeerCertificate [@@js.cast]
@@ -34011,6 +37095,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_CipherNameAndProtocol]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_CipherNameAndProtocol]
+    ]
     (** The cipher name. *)
     (** The cipher name. *)
     val get_name: t -> string [@@js.get "name"]
@@ -34034,6 +37124,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_EphemeralKeyInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_EphemeralKeyInfo]
+    ]
     (** The supported types are 'DH' and 'ECDH'. *)
     (** The supported types are 'DH' and 'ECDH'. *)
     val get_type: t -> string [@@js.get "type"]
@@ -34057,6 +37153,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_KeyObject]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_KeyObject]
+    ]
     (** Private keys in PEM format. *)
     (** Private keys in PEM format. *)
     val get_pem: t -> _Buffer or_string [@@js.get "pem"]
@@ -34075,6 +37177,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_PxfObject]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_PxfObject]
+    ]
     (** PFX or PKCS12 encoded private key and certificate chain. *)
     (** PFX or PKCS12 encoded private key and certificate chain. *)
     val get_buf: t -> _Buffer or_string [@@js.get "buf"]
@@ -34093,6 +37201,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_CommonConnectionOptions | `Tls_SecureContextOptions | `Tls_TLSSocketOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_CommonConnectionOptions | `Tls_SecureContextOptions | `Tls_TLSSocketOptions]
+    ]
     (**
       If true the TLS socket will be instantiated in server-mode.
       Defaults to false.
@@ -34144,6 +37258,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_Socket | `Tls_TLSSocket | Stream.Duplex.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_Socket | `Tls_TLSSocket | Stream.Duplex.tags]
+    ]
     (** Construct a new tls.TLSSocket object from an existing TCP socket. *)
     val create: socket:net_Socket -> ?options:tls_TLSSocketOptions -> unit -> t [@@js.create]
     (** A boolean that is true if the peer certificate was signed by one of the specified CAs, otherwise false. *)
@@ -34444,6 +37564,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_CommonConnectionOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_CommonConnectionOptions]
+    ]
     (** An optional TLS context object from tls.createSecureContext() *)
     (** An optional TLS context object from tls.createSecureContext() *)
     val get_secureContext: t -> tls_SecureContext [@@js.get "secureContext"]
@@ -34535,6 +37661,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_ServerOpts | `Tls_CommonConnectionOptions | `Tls_SecureContextOptions | `Tls_TlsOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_ServerOpts | `Tls_CommonConnectionOptions | `Tls_SecureContextOptions | `Tls_TlsOptions]
+    ]
     (**
       Abort the connection if the SSL/TLS handshake does not finish in the
       specified number of milliseconds. A 'tlsClientError' is emitted on
@@ -34627,6 +37759,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_PSKCallbackNegotation]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_PSKCallbackNegotation]
+    ]
     val get_psk: t -> (DataView.t_0, _NodeJS_TypedArray) union2 [@@js.get "psk"]
     val set_psk: t -> (DataView.t_0, _NodeJS_TypedArray) union2 -> unit [@@js.set "psk"]
     val get_identity: t -> string [@@js.get "identity"]
@@ -34639,6 +37777,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_CommonConnectionOptions | `Tls_ConnectionOptions | `Tls_SecureContextOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_CommonConnectionOptions | `Tls_ConnectionOptions | `Tls_SecureContextOptions]
+    ]
     val get_host: t -> string [@@js.get "host"]
     val set_host: t -> string -> unit [@@js.set "host"]
     val get_port: t -> float [@@js.get "port"]
@@ -34685,6 +37829,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_Server | `Tls_Server | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_Server | `Tls_Server | EventEmitter.tags]
+    ]
     val create: ?secureConnectionListener:(socket:tls_TLSSocket -> unit) -> unit -> t [@@js.create]
     val create': options:tls_TlsOptions -> ?secureConnectionListener:(socket:tls_TLSSocket -> unit) -> unit -> t [@@js.create]
     (**
@@ -34809,6 +37959,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_SecurePair]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_SecurePair]
+    ]
     val get_encrypted: t -> tls_TLSSocket [@@js.get "encrypted"]
     val set_encrypted: t -> tls_TLSSocket -> unit [@@js.set "encrypted"]
     val get_cleartext: t -> tls_TLSSocket [@@js.get "cleartext"]
@@ -34821,6 +37977,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_SecureVersion]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_SecureVersion]
+    ]
   end
   module[@js.scope "SecureContextOptions"] SecureContextOptions : sig
     type t = tls_SecureContextOptions
@@ -34829,6 +37991,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_SecureContextOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_SecureContextOptions]
+    ]
     (**
       Optionally override the trusted CA certificates. Default is to trust
       the well-known CAs curated by Mozilla. Mozilla's CAs are completely
@@ -35266,6 +38434,12 @@ module[@js.scope "tls"] Tls : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tls_SecureContext]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tls_SecureContext]
+    ]
     val get_context: t -> any [@@js.get "context"]
     val set_context: t -> any -> unit [@@js.set "context"]
   end
@@ -35333,6 +38507,12 @@ module[@js.scope "trace_events"] Trace_events : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Trace_events_Tracing]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Trace_events_Tracing]
+    ]
     (**
       A comma-separated list of the trace event categories covered by this
       `Tracing` object.
@@ -35361,6 +38541,12 @@ module[@js.scope "trace_events"] Trace_events : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Trace_events_CreateTracingOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Trace_events_CreateTracingOptions]
+    ]
     (**
       An array of trace category names. Values included in the array are
       coerced to a string when possible. An error will be thrown if the
@@ -35407,6 +38593,12 @@ module[@js.scope "tty"] Tty : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_Socket | `Tty_ReadStream | Stream.Duplex.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_Socket | `Tty_ReadStream | Stream.Duplex.tags]
+    ]
     val create: fd:float -> ?options:net_SocketConstructorOpts -> unit -> t [@@js.create]
     val get_isRaw: t -> bool [@@js.get "isRaw"]
     val set_isRaw: t -> bool -> unit [@@js.set "isRaw"]
@@ -35427,6 +38619,12 @@ module[@js.scope "tty"] Tty : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Tty_Direction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Tty_Direction]
+    ]
   end
   module[@js.scope "WriteStream"] WriteStream : sig
     type t = tty_WriteStream
@@ -35435,6 +38633,12 @@ module[@js.scope "tty"] Tty : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Net_Socket | `Tty_WriteStream | Stream.Duplex.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Net_Socket | `Tty_WriteStream | Stream.Duplex.tags]
+    ]
     val create: fd:float -> t [@@js.create]
     (**
       events.EventEmitter
@@ -35512,6 +38716,12 @@ module[@js.scope "url"] Url : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Url_UrlObject]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Url_UrlObject]
+    ]
     val get_auth: t -> string or_null [@@js.get "auth"]
     val set_auth: t -> string or_null -> unit [@@js.set "auth"]
     val get_hash: t -> string or_null [@@js.get "hash"]
@@ -35542,6 +38752,12 @@ module[@js.scope "url"] Url : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Url_Url]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Url_Url]
+    ]
     val get_auth: t -> string or_null [@@js.get "auth"]
     val set_auth: t -> string or_null -> unit [@@js.set "auth"]
     val get_hash: t -> string or_null [@@js.get "hash"]
@@ -35574,6 +38790,12 @@ module[@js.scope "url"] Url : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Url_Url | `Url_UrlWithParsedQuery]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Url_Url | `Url_UrlWithParsedQuery]
+    ]
     val get_query: t -> ParsedUrlQuery.t_0 [@@js.get "query"]
     val set_query: t -> ParsedUrlQuery.t_0 -> unit [@@js.set "query"]
     val cast: t -> url_Url [@@js.cast]
@@ -35585,6 +38807,12 @@ module[@js.scope "url"] Url : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Url_Url | `Url_UrlWithStringQuery]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Url_Url | `Url_UrlWithStringQuery]
+    ]
     val get_query: t -> string or_null [@@js.get "query"]
     val set_query: t -> string or_null -> unit [@@js.set "query"]
     val cast: t -> url_Url [@@js.cast]
@@ -35623,6 +38851,12 @@ module[@js.scope "url"] Url : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Url_URLFormatOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Url_URLFormatOptions]
+    ]
     val get_auth: t -> bool [@@js.get "auth"]
     val set_auth: t -> bool -> unit [@@js.set "auth"]
     val get_fragment: t -> bool [@@js.get "fragment"]
@@ -35639,6 +38873,12 @@ module[@js.scope "url"] Url : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Url_URL]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Url_URL]
+    ]
     val create: input:string -> ?base:t or_string -> unit -> t [@@js.create]
     val get_hash: t -> string [@@js.get "hash"]
     val set_hash: t -> string -> unit [@@js.set "hash"]
@@ -35672,6 +38912,12 @@ module[@js.scope "url"] Url : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Url_URLSearchParams | Iterable.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Url_URLSearchParams | Iterable.tags]
+    ]
     val create: ?init:(t, (string * string) Iterable.t_1, string list or_string _NodeJS_Dict, (string * string) list) union4 or_string -> unit -> t [@@js.create]
     val append: t -> name:string -> value:string -> unit [@@js.call "append"]
     val delete: t -> name:string -> unit [@@js.call "delete"]
@@ -35700,6 +38946,12 @@ module[@js.scope "util"] Util : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_InspectOptions | `Util_InspectOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_InspectOptions | `Util_InspectOptions]
+    ]
     val cast: t -> _NodeJS_InspectOptions [@@js.cast]
   end
   module Style : sig
@@ -35709,6 +38961,12 @@ module[@js.scope "util"] Util : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Util_Style]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Util_Style]
+    ]
   end
   module[@js.scope "CustomInspectFunction"] CustomInspectFunction : sig
     type t = util_CustomInspectFunction
@@ -35717,6 +38975,12 @@ module[@js.scope "util"] Util : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Util_CustomInspectFunction]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Util_CustomInspectFunction]
+    ]
     val apply: t -> depth:float -> options:util_InspectOptionsStylized -> string [@@js.apply]
   end
   module[@js.scope "InspectOptionsStylized"] InspectOptionsStylized : sig
@@ -35726,6 +38990,12 @@ module[@js.scope "util"] Util : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_InspectOptions | `Util_InspectOptions | `Util_InspectOptionsStylized]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_InspectOptions | `Util_InspectOptions | `Util_InspectOptionsStylized]
+    ]
     val stylize: t -> text:string -> styleType:util_Style -> string [@@js.call "stylize"]
     val cast: t -> util_InspectOptions [@@js.cast]
   end
@@ -35800,6 +39070,12 @@ module[@js.scope "util"] Util : sig
     type 'TCustom t_1 = 'TCustom t
     val t_1_to_js: ('TCustom -> Ojs.t) -> 'TCustom t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'TCustom) -> Ojs.t -> 'TCustom t_1
+    [@@@js.stop]
+    type 'TCustom tags = [`Util_CustomPromisifyLegacy of 'TCustom | `Function]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'TCustom tags = [`Util_CustomPromisifyLegacy of 'TCustom | `Function]
+    ]
     val get___promisify__: 'TCustom t -> 'TCustom [@@js.get "__promisify__"]
     val set___promisify__: 'TCustom t -> 'TCustom -> unit [@@js.set "__promisify__"]
     val cast: 'TCustom t -> untyped_function [@@js.cast]
@@ -35811,6 +39087,12 @@ module[@js.scope "util"] Util : sig
     type 'TCustom t_1 = 'TCustom t
     val t_1_to_js: ('TCustom -> Ojs.t) -> 'TCustom t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'TCustom) -> Ojs.t -> 'TCustom t_1
+    [@@@js.stop]
+    type 'TCustom tags = [`Util_CustomPromisifySymbol of 'TCustom | `Function]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'TCustom tags = [`Util_CustomPromisifySymbol of 'TCustom | `Function]
+    ]
     val get__promisify_custom_: 'TCustom t -> 'TCustom [@@js.get "[promisify.custom]"]
     val set__promisify_custom_: 'TCustom t -> 'TCustom -> unit [@@js.set "[promisify.custom]"]
     val cast: 'TCustom t -> untyped_function [@@js.cast]
@@ -35822,6 +39104,12 @@ module[@js.scope "util"] Util : sig
     type 'TCustom t_1 = 'TCustom t
     val t_1_to_js: ('TCustom -> Ojs.t) -> 'TCustom t_1 -> Ojs.t
     val t_1_of_js: (Ojs.t -> 'TCustom) -> Ojs.t -> 'TCustom t_1
+    [@@@js.stop]
+    type 'TCustom tags = [`Util_CustomPromisify of 'TCustom]
+    [@@@js.start]
+    [@@@js.implem 
+      type 'TCustom tags = [`Util_CustomPromisify of 'TCustom]
+    ]
   end
   val promisify: fn:'TCustom util_CustomPromisify -> 'TCustom [@@js.global "promisify"]
   val promisify: fn:(callback:(err:any -> result:'TResult -> unit) -> unit) -> (unit -> 'TResult Promise.t_1 [@js.dummy]) [@@js.global "promisify"]
@@ -35888,6 +39176,12 @@ module[@js.scope "util"] Util : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Util_TextDecoder]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Util_TextDecoder]
+    ]
     val get_encoding: t -> string [@@js.get "encoding"]
     val get_fatal: t -> bool [@@js.get "fatal"]
     val get_ignoreBOM: t -> bool [@@js.get "ignoreBOM"]
@@ -35901,6 +39195,12 @@ module[@js.scope "util"] Util : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Util_EncodeIntoResult]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Util_EncodeIntoResult]
+    ]
     (** The read Unicode code units of input. *)
     (** The read Unicode code units of input. *)
     val get_read: t -> float [@@js.get "read"]
@@ -35919,6 +39219,12 @@ module[@js.scope "util"] Util : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Util_TextEncoder]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Util_TextEncoder]
+    ]
     val get_encoding: t -> string [@@js.get "encoding"]
     val encode: t -> ?input:string -> unit -> Uint8Array.t_0 [@@js.call "encode"]
     val encodeInto: t -> input:string -> output:Uint8Array.t_0 -> util_EncodeIntoResult [@@js.call "encodeInto"]
@@ -35941,6 +39247,12 @@ module[@js.scope "v8"] V8 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`V8_HeapSpaceInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`V8_HeapSpaceInfo]
+    ]
     val get_space_name: t -> string [@@js.get "space_name"]
     val set_space_name: t -> string -> unit [@@js.set "space_name"]
     val get_space_size: t -> float [@@js.get "space_size"]
@@ -35959,6 +39271,12 @@ module[@js.scope "v8"] V8 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`V8_DoesZapCodeSpaceFlag]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`V8_DoesZapCodeSpaceFlag]
+    ]
   end
   module[@js.scope "HeapInfo"] HeapInfo : sig
     type t = v8_HeapInfo
@@ -35967,6 +39285,12 @@ module[@js.scope "v8"] V8 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`V8_HeapInfo]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`V8_HeapInfo]
+    ]
     val get_total_heap_size: t -> float [@@js.get "total_heap_size"]
     val set_total_heap_size: t -> float -> unit [@@js.set "total_heap_size"]
     val get_total_heap_size_executable: t -> float [@@js.get "total_heap_size_executable"]
@@ -35997,6 +39321,12 @@ module[@js.scope "v8"] V8 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`V8_HeapCodeStatistics]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`V8_HeapCodeStatistics]
+    ]
     val get_code_and_metadata_size: t -> float [@@js.get "code_and_metadata_size"]
     val set_code_and_metadata_size: t -> float -> unit [@@js.set "code_and_metadata_size"]
     val get_bytecode_and_metadata_size: t -> float [@@js.get "bytecode_and_metadata_size"]
@@ -36038,6 +39368,12 @@ module[@js.scope "v8"] V8 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`V8_Serializer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`V8_Serializer]
+    ]
     (** Writes out a header, which includes the serialization format version. *)
     val writeHeader: t -> unit [@@js.call "writeHeader"]
     (**
@@ -36079,6 +39415,12 @@ module[@js.scope "v8"] V8 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`V8_DefaultSerializer | `V8_Serializer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`V8_DefaultSerializer | `V8_Serializer]
+    ]
     val cast: t -> v8_Serializer [@@js.cast]
   end
   module[@js.scope "Deserializer"] Deserializer : sig
@@ -36088,6 +39430,12 @@ module[@js.scope "v8"] V8 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`V8_Deserializer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`V8_Deserializer]
+    ]
     val create: data:_NodeJS_TypedArray -> t [@@js.create]
     (**
       Reads and validates a header (including the format version).
@@ -36132,6 +39480,12 @@ module[@js.scope "v8"] V8 : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`V8_DefaultDeserializer | `V8_Deserializer]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`V8_DefaultDeserializer | `V8_Deserializer]
+    ]
     val cast: t -> v8_Deserializer [@@js.cast]
   end
   (** Uses a `DefaultSerializer` to serialize value into a buffer. *)
@@ -36150,6 +39504,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`NodeJS_Dict of any | `Vm_Context]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`NodeJS_Dict of any | `Vm_Context]
+    ]
     val cast: t -> any _NodeJS_Dict [@@js.cast]
   end
   module[@js.scope "BaseOptions"] BaseOptions : sig
@@ -36159,6 +39519,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Vm_BaseOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Vm_BaseOptions]
+    ]
     (**
       Specifies the filename used in stack traces produced by this script.
       Default: `''`.
@@ -36209,6 +39575,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Vm_BaseOptions | `Vm_ScriptOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Vm_BaseOptions | `Vm_ScriptOptions]
+    ]
     val get_displayErrors: t -> bool [@@js.get "displayErrors"]
     val set_displayErrors: t -> bool -> unit [@@js.set "displayErrors"]
     val get_timeout: t -> float [@@js.get "timeout"]
@@ -36229,6 +39601,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Vm_BaseOptions | `Vm_RunningScriptOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Vm_BaseOptions | `Vm_RunningScriptOptions]
+    ]
     (**
       When `true`, if an `Error` occurs while compiling the `code`, the line of code causing the error is attached to the stack trace.
       Default: `true`.
@@ -36291,6 +39669,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Vm_BaseOptions | `Vm_CompileFunctionOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Vm_BaseOptions | `Vm_CompileFunctionOptions]
+    ]
     (** Provides an optional data with V8's code cache data for the supplied source. *)
     (** Provides an optional data with V8's code cache data for the supplied source. *)
     val get_cachedData: t -> _Buffer [@@js.get "cachedData"]
@@ -36329,6 +39713,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Vm_CreateContextOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Vm_CreateContextOptions]
+    ]
     (**
       Human-readable name of the newly created context.
       default: 'VM Context i' Where i is an ascending numerical index of the created context.
@@ -36381,6 +39771,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Vm_MeasureMemoryMode]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Vm_MeasureMemoryMode]
+    ]
   end
   module[@js.scope "MeasureMemoryOptions"] MeasureMemoryOptions : sig
     type t = vm_MeasureMemoryOptions
@@ -36389,6 +39785,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Vm_MeasureMemoryOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Vm_MeasureMemoryOptions]
+    ]
     (** default: 'summary' *)
     (** default: 'summary' *)
     val get_mode: t -> vm_MeasureMemoryMode [@@js.get "mode"]
@@ -36404,6 +39806,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Vm_MemoryMeasurement]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Vm_MemoryMeasurement]
+    ]
     val get_total: t -> anonymous_interface_31 [@@js.get "total"]
     val set_total: t -> anonymous_interface_31 -> unit [@@js.set "total"]
   end
@@ -36414,6 +39822,12 @@ module[@js.scope "vm"] Vm : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Vm_Script]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Vm_Script]
+    ]
     val create: code:string -> ?options:vm_ScriptOptions -> unit -> t [@@js.create]
     val runInContext: t -> contextifiedSandbox:vm_Context -> ?options:vm_RunningScriptOptions -> unit -> any [@@js.call "runInContext"]
     val runInNewContext: t -> ?sandbox:vm_Context -> ?options:vm_RunningScriptOptions -> unit -> any [@@js.call "runInNewContext"]
@@ -36455,6 +39869,12 @@ module[@js.scope "wasi"] Wasi : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Wasi_WASIOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Wasi_WASIOptions]
+    ]
     (**
       An array of strings that the WebAssembly application will
       see as command line arguments. The first argument is the virtual path to the
@@ -36579,6 +39999,12 @@ module[@js.scope "wasi"] Wasi : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Wasi_WASI]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Wasi_WASI]
+    ]
     val create: ?options:wasi_WASIOptions -> unit -> t [@@js.create]
     (**
       Attempt to begin execution of `instance` by invoking its `_start()` export.
@@ -36657,6 +40083,12 @@ module[@js.scope "worker_threads"] Worker_threads : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Worker_threads_MessageChannel]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Worker_threads_MessageChannel]
+    ]
     val get_port1: t -> worker_threads_MessagePort [@@js.get "port1"]
     val get_port2: t -> worker_threads_MessagePort [@@js.get "port2"]
   end
@@ -36667,6 +40099,12 @@ module[@js.scope "worker_threads"] Worker_threads : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Worker_threads_TransferListItem]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Worker_threads_TransferListItem]
+    ]
   end
   module[@js.scope "MessagePort"] MessagePort : sig
     type t = worker_threads_MessagePort
@@ -36675,6 +40113,12 @@ module[@js.scope "worker_threads"] Worker_threads : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Worker_threads_MessagePort | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Worker_threads_MessagePort | EventEmitter.tags]
+    ]
     val close: t -> unit [@@js.call "close"]
     val postMessage: t -> value:any -> ?transferList:worker_threads_TransferListItem list -> unit -> unit [@@js.call "postMessage"]
     val ref: t -> unit [@@js.call "ref"]
@@ -36721,6 +40165,12 @@ module[@js.scope "worker_threads"] Worker_threads : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Worker_threads_WorkerOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Worker_threads_WorkerOptions]
+    ]
     (**
       List of arguments which would be stringified and appended to
       `process.argv` in the worker. This is mostly similar to the `workerData`
@@ -36772,6 +40222,12 @@ module[@js.scope "worker_threads"] Worker_threads : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Worker_threads_ResourceLimits]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Worker_threads_ResourceLimits]
+    ]
     (** The maximum size of a heap space for recently created objects. *)
     (** The maximum size of a heap space for recently created objects. *)
     val get_maxYoungGenerationSizeMb: t -> float [@@js.get "maxYoungGenerationSizeMb"]
@@ -36809,6 +40265,12 @@ module[@js.scope "worker_threads"] Worker_threads : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Worker_threads_Worker | EventEmitter.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Worker_threads_Worker | EventEmitter.tags]
+    ]
     val get_stdin: t -> Writable.t_0 or_null [@@js.get "stdin"]
     val get_stdout: t -> Readable.t_0 [@@js.get "stdout"]
     val get_stderr: t -> Readable.t_0 [@@js.get "stderr"]
@@ -36938,6 +40400,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_ZlibOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_ZlibOptions]
+    ]
     (** default: constants.Z_NO_FLUSH *)
     (** default: constants.Z_NO_FLUSH *)
     val get_flush: t -> float [@@js.get "flush"]
@@ -36975,6 +40443,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_BrotliOptions]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_BrotliOptions]
+    ]
     (** default: constants.BROTLI_OPERATION_PROCESS *)
     (** default: constants.BROTLI_OPERATION_PROCESS *)
     val get_flush: t -> float [@@js.get "flush"]
@@ -37002,6 +40476,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_Zlib]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_Zlib]
+    ]
     (** @deprecated Use bytesWritten instead. *)
     val get_bytesRead: t -> float [@@js.get "bytesRead"]
     val get_bytesWritten: t -> float [@@js.get "bytesWritten"]
@@ -37018,6 +40498,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_ZlibParams]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_ZlibParams]
+    ]
     val params: t -> level:float -> strategy:float -> callback:(unit -> unit) -> unit [@@js.call "params"]
   end
   module[@js.scope "ZlibReset"] ZlibReset : sig
@@ -37027,6 +40513,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_ZlibReset]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_ZlibReset]
+    ]
     val reset: t -> unit [@@js.call "reset"]
   end
   module[@js.scope "BrotliCompress"] BrotliCompress : sig
@@ -37036,6 +40528,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_BrotliCompress | `Zlib_Zlib | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_BrotliCompress | `Zlib_Zlib | Stream.Transform.tags]
+    ]
     val cast: t -> Stream.Transform.t_0 [@@js.cast]
     val cast': t -> zlib_Zlib [@@js.cast]
   end
@@ -37046,6 +40544,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_BrotliDecompress | `Zlib_Zlib | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_BrotliDecompress | `Zlib_Zlib | Stream.Transform.tags]
+    ]
     val cast: t -> Stream.Transform.t_0 [@@js.cast]
     val cast': t -> zlib_Zlib [@@js.cast]
   end
@@ -37056,6 +40560,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_Gzip | `Zlib_Zlib | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_Gzip | `Zlib_Zlib | Stream.Transform.tags]
+    ]
     val cast: t -> Stream.Transform.t_0 [@@js.cast]
     val cast': t -> zlib_Zlib [@@js.cast]
   end
@@ -37066,6 +40576,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_Gunzip | `Zlib_Zlib | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_Gunzip | `Zlib_Zlib | Stream.Transform.tags]
+    ]
     val cast: t -> Stream.Transform.t_0 [@@js.cast]
     val cast': t -> zlib_Zlib [@@js.cast]
   end
@@ -37076,6 +40592,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_Deflate | `Zlib_Zlib | `Zlib_ZlibParams | `Zlib_ZlibReset | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_Deflate | `Zlib_Zlib | `Zlib_ZlibParams | `Zlib_ZlibReset | Stream.Transform.tags]
+    ]
     val cast: t -> Stream.Transform.t_0 [@@js.cast]
     val cast': t -> zlib_Zlib [@@js.cast]
     val cast'': t -> zlib_ZlibReset [@@js.cast]
@@ -37088,6 +40610,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_Inflate | `Zlib_Zlib | `Zlib_ZlibReset | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_Inflate | `Zlib_Zlib | `Zlib_ZlibReset | Stream.Transform.tags]
+    ]
     val cast: t -> Stream.Transform.t_0 [@@js.cast]
     val cast': t -> zlib_Zlib [@@js.cast]
     val cast'': t -> zlib_ZlibReset [@@js.cast]
@@ -37099,6 +40627,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_DeflateRaw | `Zlib_Zlib | `Zlib_ZlibParams | `Zlib_ZlibReset | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_DeflateRaw | `Zlib_Zlib | `Zlib_ZlibParams | `Zlib_ZlibReset | Stream.Transform.tags]
+    ]
     val cast: t -> Stream.Transform.t_0 [@@js.cast]
     val cast': t -> zlib_Zlib [@@js.cast]
     val cast'': t -> zlib_ZlibReset [@@js.cast]
@@ -37111,6 +40645,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_InflateRaw | `Zlib_Zlib | `Zlib_ZlibReset | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_InflateRaw | `Zlib_Zlib | `Zlib_ZlibReset | Stream.Transform.tags]
+    ]
     val cast: t -> Stream.Transform.t_0 [@@js.cast]
     val cast': t -> zlib_Zlib [@@js.cast]
     val cast'': t -> zlib_ZlibReset [@@js.cast]
@@ -37122,6 +40662,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_Unzip | `Zlib_Zlib | Stream.Transform.tags]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_Unzip | `Zlib_Zlib | Stream.Transform.tags]
+    ]
     val cast: t -> Stream.Transform.t_0 [@@js.cast]
     val cast': t -> zlib_Zlib [@@js.cast]
   end
@@ -37141,6 +40687,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_InputType]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_InputType]
+    ]
   end
   module[@js.scope "CompressCallback"] CompressCallback : sig
     type t = zlib_CompressCallback
@@ -37149,6 +40701,12 @@ module[@js.scope "zlib"] Zlib : sig
     type t_0 = t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
+    [@@@js.stop]
+    type tags = [`Zlib_CompressCallback]
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`Zlib_CompressCallback]
+    ]
     val apply: t -> error:Error.t_0 or_null -> result:_Buffer -> unit [@@js.apply]
   end
   val brotliCompress: buf:zlib_InputType -> options:zlib_BrotliOptions -> callback:zlib_CompressCallback -> unit [@@js.global "brotliCompress"]

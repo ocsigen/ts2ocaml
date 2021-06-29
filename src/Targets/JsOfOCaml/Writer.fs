@@ -353,6 +353,7 @@ module Definition =
     tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
 
 open Definition
+type ScriptTarget = TypeScript.Ts.ScriptTarget
 
 let emitComment (c: Comment) : text =
   // https://github.com/ocaml/ocaml/issues/5745
@@ -379,6 +380,10 @@ let emitComment (c: Comment) : text =
       between "[" "]" (strLines (escape lines))
     ]
   | See (link, lines) -> tprintf "@see \"%s\" " link + strLines (escape lines)
+  | ESVersion target ->
+    match target with
+    | ScriptTarget.ES3 | ScriptTarget.ES5 -> empty
+    | _ -> tprintf "language version: %s" (Enum.pp target)
   | Other ("author", lines, _) -> "@author " @+ strLines (escape lines)
   | Other ("since", lines, _) -> "@since " @+ strLines (escape lines)
   | Other ("version", lines, _) -> "@version " @+ strLines (escape lines)
@@ -478,9 +483,9 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: (Context<Options> -> 
       | AIdent { fullName = Some fn } ->
         let ts =
           FullName.tryLookupWith ctx fn (function
-            | AliasName { typeParams = typrms; erased = false }
-            | ClassName { typeParams = typrms } ->
-              assignTypeParams fn loc typrms ts
+            | AliasName { typeParams = typrms; erased = false; loc = loc' }
+            | ClassName { typeParams = typrms; loc = loc' } ->
+              assignTypeParams fn (loc ++ loc') typrms ts
                 (fun _ t -> t)
                 (fun tv ->
                   match tv.defaultType with
@@ -729,9 +734,9 @@ let getLabelsOfFullName (ctx: Context<Options>) (fullName: string list) (c: Clas
           else
             yield str pv_head + emitCase i.fullName (i.tyargs |> List.map (emitType_ ctx))
         | InheritingType.ImportedIdent i ->
-          yield str (Naming.structuredTypeName (i.name @ ["tags"]))
+          yield str (Naming.structuredTypeName i.name + ".tags")
         | InheritingType.UnknownIdent i ->
-          yield str (Naming.structuredTypeName (i.name @ ["tags"]))
+          yield str (Naming.structuredTypeName i.name + ".tags")
         | InheritingType.Prim (p, ts) ->
           match p.AsJSClassName with
           | Some name ->
@@ -743,7 +748,7 @@ let getLabelsOfFullName (ctx: Context<Options>) (fullName: string list) (c: Clas
         | InheritingType.Other _ -> ()
     ]
   match fullName with
-  | [name] when ctx.options.generateStdlib && Map.containsKey name nonJsablePrimTypeInterfaces && c.typeParams |> List.isEmpty ->
+  | [name] when ctx.options.stdlib && Map.containsKey name nonJsablePrimTypeInterfaces && c.typeParams |> List.isEmpty ->
     let prim = nonJsablePrimTypeInterfaces |> Map.find name
     Choice2Of2 (prim, tprintf "%s%s" pv_head name)
   | _ -> Choice1Of2 (normalClass ())
@@ -770,7 +775,7 @@ let emitFlattenedDefinitions (ctx: Context<Options>) : text =
         match v with
         | EnumDef e ->
           concat newline [
-            yield commentStr e.loc.AsString
+            // yield commentStr e.loc.AsString
             let treatEnum (cases: EnumCase list) =
               between "[" "]" (concat (str " | ") [
                 for c in cases do
@@ -792,7 +797,7 @@ let emitFlattenedDefinitions (ctx: Context<Options>) : text =
           match getLabelsOfFullName ctx k c with
           | Choice1Of2 labels ->
             concat newline [
-              yield commentStr c.loc.AsString
+              // yield commentStr c.loc.AsString
               let def =
                 tprintf "%s %A = " prefix (emitTypeName k typrm)
                 + tyApp intf [
@@ -812,7 +817,7 @@ let emitFlattenedDefinitions (ctx: Context<Options>) : text =
         | TypeAlias { erased = false; typeParams = typeParams; target = target; loc = loc } ->
           let typrm = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
           concat newline [
-            commentStr loc.AsString
+            // commentStr loc.AsString
             tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ ctx target
           ] |> Some
           // TODO: emit extends of type parameters
@@ -895,11 +900,13 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
           content
     | Import i ->
       commentStr (sprintf "%A" i) // TODO
-    | Export (e, _) ->
+    | Export (e, _, _) ->
       commentStr (sprintf "%A" e) // TODO
-    | UnknownStatement (Some s, _) -> commentStr s
-    | UnknownStatement (None, _) -> commentStr "unknown statement"
-    | FloatingComment xs -> xs |> List.map emitComment |> concat newline |> comment
+    | UnknownStatement u ->
+      match u.msg with
+      | Some s -> commentStr s
+      | None -> commentStr "unknown statement"
+    | FloatingComment c -> c.comments |> List.map emitComment |> concat newline |> comment
     | TypeAlias { name = name; typeParams = typeParams } | (EnumDef { name = name } & Dummy typeParams) ->
       let k = List.rev (name :: ctx.currentNamespace)
       let tyargs = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
@@ -993,7 +1000,7 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
             let ret =
               if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
               else fl.value
-            Function { isVariadic = false; args = args; returnType = ret; loc = UnknownLocation }
+            Function { isVariadic = false; args = args; returnType = ret; loc = ma.loc }
           yield val_ ("get_" + Naming.removeInvalidChars fl.name |> rename) (emitType_ ctx ty) + str " " + Attr.js_get fl.name
         | Setter fl | Field (fl, WriteOnly, _) ->
           let fl =
@@ -1005,7 +1012,7 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
             let args =
               if ma.isStatic then [Choice2Of2 fl.value]
               else [Choice2Of2 selfTy; Choice2Of2 fl.value]
-            Function { isVariadic = false; args = args; returnType = Prim Void; loc = UnknownLocation }
+            Function { isVariadic = false; args = args; returnType = Prim Void; loc = ma.loc }
           yield val_ ("set_" + Naming.removeInvalidChars fl.name |> rename) (emitType_ ctx ty) + str " " + Attr.js_set fl.name
         | Field (fl, Mutable, _) ->
           yield! emitMember renamer ma (Getter fl)
@@ -1077,16 +1084,40 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
   ]
 
 let emitStdlib (srcs: SourceFile list) (opts: Options) =
-  let jsSrcs =
-    srcs |> List.filter (fun src -> src.fileName.Contains("lib.es") && src.fileName.EndsWith(".d.ts"))
-
-  let domSrcs =
+  eprintf "* looking up the minimal supported ES version for each definition..."
+  let esSrc =
     srcs
-    |> List.filter (fun src -> src.fileName.Contains("lib.dom") && src.fileName.EndsWith(".d.ts"))
-    |> List.map (fun src ->
-        { src with statements = [ Module { name = "dom"; isExported = Exported.No; isNamespace = false; statements = src.statements; comments = [] } ]})
+    |> List.filter (fun src -> src.fileName.Contains("lib.es") && src.fileName.EndsWith(".d.ts"))
+    |> mergeLibESDefinitions
 
-  failwith "TODO"
+  let domSrc =
+    let stmts =
+      srcs
+      |> List.filter (fun src -> src.fileName.Contains("lib.dom") && src.fileName.EndsWith(".d.ts"))
+      |> List.collect (fun src -> src.statements)
+      |> Statement.merge
+    { fileName = "lib.dom.d.ts"; statements = stmts; references = []; hasNoDefaultLib = false; moduleName = None }
+
+  let srcs = [esSrc; domSrc]
+
+  eprintf "* running typer..."
+  let ctx, srcs = runAll srcs {| verbose = opts.verbose |}
+
+  let esSrc = srcs |> List.find (fun src -> src.fileName = "lib.es.d.ts")
+  let domSrc = srcs |> List.find (fun src -> src.fileName = "lib.dom.d.ts")
+
+  let ctx = ctx |> Context.mapOptions (fun _ -> opts)
+
+  eprintf "* emitting baselib..."
+  concat newline [
+    yield str stdlib
+    yield newline
+    yield emitFlattenedDefinitions ctx
+    yield newline
+    yield emitStructuredDefinitions ctx esSrc.statements
+    yield newline
+    yield moduleSig "Dom" (emitStructuredDefinitions ctx domSrc.statements)
+  ]
 
 let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
   let srcs =
@@ -1110,25 +1141,18 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
       ]
 
   eprintf "* running typer..."
-  let ctx, srcs = Typer.runAll srcs {| verbose = opts.verbose |}
+  let ctx, srcs = runAll srcs {| verbose = opts.verbose |}
   let ctx = ctx |> Context.mapOptions (fun _ -> opts)
   let stmts = srcs |> List.collect (fun x -> x.statements)
 
   eprintf "* emitting a binding for js_of_ocaml..."
   concat newline [
     yield emitHeader
-    yield open_ [ "Ts2ocaml_baselib" ]
+    yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom" ]
 
     let defs = [
       emitFlattenedDefinitions ctx
       emitStructuredDefinitions ctx stmts
     ]
-    if Trie.isEmpty ctx.unknownIdentTypes then
-      yield! defs
-    else
-      yield
-        functor_ "Make" "M" (str "Missing") (concat newline [
-          yield  open_ ["M"]
-          yield! defs
-        ])
+    yield! defs
   ]

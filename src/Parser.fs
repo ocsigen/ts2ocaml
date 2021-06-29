@@ -13,15 +13,11 @@ type Kind = Ts.SyntaxKind
 
 type ParserContext = {| checker: TypeChecker; sourceFile: Ts.SourceFile; verbose: bool |}
 
-module Enum =
-  let inline pp (e: 'enum when 'enum: enum<_>) =
-    System.Enum.GetName(typeof<'enum>, e)
-
 module Node =
   let location (n: Node) =
     let src = n.getSourceFile()
     let pos = src.getLineAndCharacterOfPosition (n.getStart())
-    Location (src, pos)
+    LocationTs (src, pos)
 
   let ppLocation (n: Node) =
     let src = n.getSourceFile()
@@ -401,7 +397,7 @@ and readMemberAttribute (ctx: ParserContext) (nd: Ts.NamedDeclaration) : MemberA
   let accessibility = getAccessibility nd.modifiers |> Option.defaultValue Public
   let isStatic = hasModifier Kind.StaticKeyword nd.modifiers
   let comments = readCommentsForNamedDeclaration ctx nd
-  { accessibility = accessibility; isStatic = isStatic; comments = comments }
+  { accessibility = accessibility; isStatic = isStatic; comments = comments; loc = Node.location nd }
 
 and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.NamedDeclaration) : (MemberAttribute * Member) option =
   let attr = readMemberAttribute ctx nd
@@ -563,7 +559,7 @@ let readEnumCase (ctx: ParserContext) (em: Ts.EnumMember) : EnumCase =
       | Some ((LInt _ | LString _) as l) -> Some l
       | _ -> nodeError ep "enum value '%s' for case '%s' not supported" (ep.getText()) name
   let comments = readCommentsForNamedDeclaration ctx em
-  { comments = comments; name = name; value = value }
+  { comments = comments; loc = Node.location em; name = name; value = value }
 
 let readEnum (ctx: ParserContext) (ed: Ts.EnumDeclaration) : Enum =
   {
@@ -586,7 +582,7 @@ let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list
     match getBindingName vd.name with
     | None ->
       nodeWarn ctx vd "name is not defined for variable"
-      UnknownStatement (Some (vd.getText()), comments)
+      UnknownStatement {| msg = Some (vd.getText()); loc = Node.location vd; comments = comments |}
     | Some name ->
       let ty =
         match vd.``type`` with
@@ -608,7 +604,7 @@ let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list
       let isConst = (int vd.flags) ||| (int Ts.NodeFlags.Const) <> 0
       let isExported = getExported vd.modifiers
       let accessibility = getAccessibility vd.modifiers
-      Value { comments = comments; name = name; typ = ty; typeParams = []; isConst = isConst; isExported = isExported; accessibility = accessibility }
+      Value { comments = comments; loc = Node.location vd; name = name; typ = ty; typeParams = []; isConst = isConst; isExported = isExported; accessibility = accessibility }
   )
 
 let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option =
@@ -630,7 +626,7 @@ let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option
           nodeWarn ctx f "return type missing for function '%s'" name
           UnknownType None
       Function (readParameters typrm ctx f.parameters f retTy)
-    Some { comments = comments; name = name; typ = ty; typeParams = typrm; isConst = false; isExported = isExported; accessibility = accessibility }
+    Some { comments = comments; loc = Node.location f; name = name; typ = ty; typeParams = typrm; isConst = false; isExported = isExported; accessibility = accessibility }
 
 let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx e
@@ -639,8 +635,8 @@ let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Stateme
   | ts ->
     let ident = { name = ts; fullName = None; loc = Node.location e.expression }
     match e.isExportEquals with
-    | Some true -> Export (CommonJsExport ident, comments) |> Some
-    | _ -> Export (ES6DefaultExport ident, comments) |> Some
+    | Some true -> Export (CommonJsExport ident, Node.location e, comments) |> Some
+    | _ -> Export (ES6DefaultExport ident, Node.location e, comments) |> Some
 
 let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx e
@@ -653,7 +649,7 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
     match kind with
     | Kind.NamespaceExport ->
       let ne = bindings |> box :?> Ts.NamespaceExport
-      Some (Export (NamespaceExport ne.name.text, comments))
+      Some (Export (NamespaceExport ne.name.text, Node.location ne, comments))
     | Kind.NamedExports ->
       let nes = bindings |> box :?> Ts.NamedExports
       let elems =
@@ -664,12 +660,12 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
           | None -> {| target = ident; renameAs = None |}
           | Some propertyName -> {| target = ident; renameAs = Some propertyName.text  |})
         |> Seq.toList
-      Some (Export (ES6Export elems, comments))
+      Some (Export (ES6Export elems, Node.location nes, comments))
     | _ ->
       nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
 
 let readNamespaceExportDeclaration (ctx: ParserContext) (e: Ts.NamespaceExportDeclaration) : Statement =
-  Export (NamespaceExport e.name.text, readCommentsForNamedDeclaration ctx e)
+  Export (NamespaceExport e.name.text, Node.location e, readCommentsForNamedDeclaration ctx e)
 
 let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclaration) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx i
@@ -684,6 +680,7 @@ let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclarat
       let kind = getKindFromIdentifier ctx i.name
       Import {
         comments = comments;
+        loc = Node.location i;
         isTypeOnly = i.isTypeOnly;
         isExported = getExported i.modifiers;
         moduleSpecifier = moduleSpecifier;
@@ -703,7 +700,7 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
       let comments = readCommentsForNamedDeclaration ctx c
       let moduleSpecifier = (!!i.moduleSpecifier : Ts.StringLiteral).text
       let inline create clause =
-        Some (Import { comments = comments; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; moduleSpecifier = moduleSpecifier; clause = clause })
+        Some (Import { comments = comments; loc = Node.location i; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; moduleSpecifier = moduleSpecifier; clause = clause })
       match c.name, c.namedBindings with
       | None, None -> create ES6WildcardImport
       | None, Some b when (!!b : Ts.Node).kind = Kind.NamespaceImport ->
@@ -740,7 +737,7 @@ let readJSDocImpl (ctx: ParserContext) (doc: Ts.JSDoc) : Comment list =
 let readJSDoc (ctx: ParserContext) (doc: Ts.JSDoc) : Statement option =
   match readJSDocImpl ctx doc with
   | [] -> None
-  | xs -> FloatingComment xs |> Some
+  | xs -> FloatingComment {| comments = xs; loc = Node.location doc |} |> Some
 
 let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Module =
   let name = nameToString md.name
@@ -769,12 +766,12 @@ let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Module =
     |> Seq.filter (fun nd -> nd.kind = Kind.JSDocComment)
     |> List.ofSeq
     |> List.collect (fun nd -> nd :?> Ts.JSDoc |> readJSDocImpl ctx)
-  { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements; comments = comments }
+  { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements; comments = comments; loc = Node.location md }
 
 and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
   let onError () =
     let comments = readCommentsForNamedDeclaration ctx (stmt :?> Ts.DeclarationStatement)
-    UnknownStatement (Some (stmt.getText()), comments)
+    UnknownStatement {| msg = Some (stmt.getText()); loc = Node.location stmt; comments = comments |}
   match stmt.kind with
   | Kind.TypeAliasDeclaration -> [readTypeAlias ctx (stmt :?> _) |> TypeAlias]
   | Kind.InterfaceDeclaration -> [readInterface ctx (stmt :?> _) |> ClassDef]

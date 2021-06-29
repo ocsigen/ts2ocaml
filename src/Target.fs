@@ -23,6 +23,10 @@ let register (parse: GlobalOptions -> string[] -> SourceFile list) (target: ITar
     handler = (fun (argv: Arguments<'Options>) ->
       let inputs = argv.["inputs"] :?> string[]
       let srcs = parse !!argv.Options inputs
-      target.Run(srcs, argv.Options)))
+      try
+        target.Run(srcs, argv.Options)
+      with
+        e -> eprintfn "error: %s" e.Message
+      ))
   |> box
   :?> Argv<GlobalOptions>

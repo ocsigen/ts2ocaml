@@ -8,11 +8,8 @@
 
 [@@@ocaml.warning "-7-32-33-39"]
 
-open Es5
-
-open Ts2ocaml_baselib
-
-module Typescript = Typescript.Make(struct include Es5 end)
+open Ts2ocaml
+open Typescript
 
 include [%js:
   val console_log: 'a -> unit [@@js.global "console.log"]
@@ -41,7 +38,7 @@ module Foo = struct
     include A
   end
 
-  let b : B.t = B.create "test" 
+  let b : B.t = B.create "test"
 
   let () =
     A.pp b
@@ -50,6 +47,11 @@ end
 module Baz = struct
   type -'inherits intf
 
+  module Internal_tags = struct
+    type _A = [ `A ]
+    and  _B = [ `B | `A ]
+  end
+
   module Internal_types = struct
     type _A = [ `A ] intf
     type _B = [ `A | `B ] intf
@@ -57,17 +59,28 @@ module Baz = struct
 
   module A = struct
     type t = Internal_types._A
-    type 't t_inherited = 't intf constraint [> `A ] = 't
+    type tags = Internal_tags._A
     let create () : t = Obj.magic ()
   end
 
   module B = struct
     type t = Internal_types._B
-    type 't t_inherited = 't intf constraint [> `B ] = 't
+    type tags = Internal_tags._B
     let create () : t = Obj.magic ()
   end
 
-  let someFunctionUsingA (_a: _ A.t_inherited) = ()
+  module C = struct
+    type 'a t = [ `C of 'a | A.tags | B.tags ] intf
+    type 'a tags = [ `C of 'a | A.tags | B.tags ]
+  end
+
+  module D = struct
+    type t = [ int C.tags | `D ] intf
+    type tags = [ `D | int C.tags ]
+  end
+
+  let someFunctionUsingA (_a: [> A.tags] intf) = ()
+  let someFunctionUsingB (_b: [> B.tags] intf) = ()
 
   let a = A.create ()
   let b = B.create ()
@@ -75,12 +88,14 @@ module Baz = struct
   let test () =
     someFunctionUsingA a;
     someFunctionUsingA b;
+    (* someFunctionUsingB a; *)
+    someFunctionUsingB b;
     ()
 end
 
 
 let () =
-  Printf.printf "%f\n" (Es5.Math.get_PI math);
-  Printf.printf "%s\n" (Typescript.Ts.version);
+  Printf.printf "%f\n" (Math.get_PI math);
+  Printf.printf "%s\n" (Ts.version);
   Printf.printf "%b\n" (is_array (Ojs.list_to_js Ojs.int_to_js [1;2;3]));
 ;;

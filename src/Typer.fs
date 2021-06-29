@@ -370,9 +370,11 @@ module Type =
           yield!
             FullName.lookup ctx fn
             |> List.tryPick (function
-              | AliasName { typeParams = typrms } | ClassName { typeParams = typrms } ->
+              | AliasName { typeParams = typrms; erased = false } | ClassName { typeParams = typrms } ->
                 let subst = createBindings fn loc typrms ts
                 getAllInheritancesFromNameImpl includeSelf ctx fn |> Seq.map (substTypeVarInInheritingType subst ctx) |> Some
+              | AliasName { target = Prim p; erased = true } ->
+                getAllInheritancesImpl includeSelf ctx (App (APrim p, ts, loc)) |> Set.toSeq |> Some
               | ImportedName _ ->
                 if includeSelf then
                   Some (Seq.singleton (InheritingType.ImportedIdent {| name = name; fullName = fn; tyargs = ts |}))
@@ -414,7 +416,7 @@ module Type =
               let tyargs =
                 a.typeParams |> List.map (fun tp -> TypeVar tp.name)
               let s =
-                let subst = createBindings fn UnknownLocation a.typeParams tyargs
+                let subst = createBindings fn a.loc a.typeParams tyargs
                 getAllInheritancesImpl true ctx a.target |> Set.map (substTypeVarInInheritingType subst ctx)
               Some (s, None)
             | _ -> None
@@ -455,11 +457,11 @@ module Type =
         implements = []
         typeParams = boundTyprms
         members = [
-          { comments = []; isStatic = false; accessibility = Public },
+          { comments = []; loc = ft.loc; isStatic = false; accessibility = Public },
           if isNewable then New (ft, typrms)
           else FunctionInterface (ft, typrms)
         ]
-        loc = ft.loc
+        loc = loc
       }
     if List.isEmpty boundTyprms then AnonymousInterface ai
     else
@@ -611,13 +613,13 @@ module Statement =
         ClassDef {
           name = Some ta.name
           isInterface = true
-          comments = []
+          comments = ta.comments
           accessibility = Protected
           isExported = Exported.No
           implements = []
           typeParams = ta.typeParams
           members = [
-            { comments = []; accessibility = Public; isStatic = false },
+            { comments = []; loc = f.loc; accessibility = Public; isStatic = false },
             FunctionInterface (f, [])
           ]
           loc = f.loc
@@ -664,7 +666,8 @@ module Statement =
           let i =
             { i with
                 isInterface = i.isInterface && i'.isInterface
-                comments = i.comments @ i'.comments
+                comments = i.comments @ i'.comments |> List.distinct
+                loc = i.loc ++ i'.loc
                 typeParams = mergeTypeParams i.typeParams i'.typeParams
                 implements = List.distinct (i.implements @ i'.implements)
                 members = i.members @ i'.members }
@@ -676,7 +679,12 @@ module Statement =
           nsMap <- (nsMap |> Map.add n.name nref)
           result <- Choice3Of3 nref :: result
         | Some nref' ->
-          nref' := { n with statements = (!nref').statements @ n.statements }
+          let n' = !nref'
+          nref' :=
+            { n with
+                loc = n.loc ++ n'.loc
+                comments = n.comments @ n'.comments |> List.distinct
+                statements = n'.statements @ n.statements }
       | stmt ->
         result <- Choice1Of3 stmt :: result
     result
@@ -691,11 +699,10 @@ module Statement =
   let extractNamedDefinitions (stmts: Statement list) : Trie<string, Statement list> =
     let rec go (ns: string list) trie s =
       match s with
-      | TypeAlias { erased = true }
       | Export _
       | UnknownStatement _
       | FloatingComment _ -> trie
-      | TypeAlias { name = name; erased = false }
+      | TypeAlias { name = name }
       | ClassDef  { name = Some name }
       | EnumDef   { name = name }
       | Value     { name = name } ->
@@ -779,7 +786,7 @@ module Statement =
         ClassDef (Type.mapInClass mapping ctx c)
       | EnumDef e -> EnumDef e
       | Import i -> Import i
-      | Export (e, c) -> Export (e, c)
+      | Export (e, l, c) -> Export (e, l, c)
       | Value v ->
         Value {
           v with
@@ -795,7 +802,7 @@ module Statement =
                 {| ctx with currentNamespace = m.name :: ctx.currentNamespace |}
                 m.statements
         }
-      | UnknownStatement (msgo, c) -> UnknownStatement (msgo, c)
+      | UnknownStatement u -> UnknownStatement u
       | FloatingComment c -> FloatingComment c
     stmts |> List.map f
 
@@ -850,7 +857,7 @@ module Ident =
         ClassDef (Type.mapInClass (mapInType mapType) ctx c)
       | EnumDef e -> EnumDef e
       | Import i -> Import i
-      | Export (e, c) -> Export (mapExport ctx e, c)
+      | Export (e, l, c) -> Export (mapExport ctx e, l, c)
       | Value v ->
         Value {
           v with
@@ -866,7 +873,7 @@ module Ident =
                 {| ctx with currentNamespace = m.name :: ctx.currentNamespace |}
                 m.statements
         }
-      | UnknownStatement (msgo, c) -> UnknownStatement (msgo, c) | FloatingComment c -> FloatingComment c
+      | UnknownStatement u -> UnknownStatement u | FloatingComment c -> FloatingComment c
     stmts |> List.map f
 
   let resolve (ctx: Context<'a>) (i: IdentType) : IdentType =
@@ -1172,6 +1179,10 @@ let private createRootContextForTyper internalModuleName (srcs: SourceFile list)
     if m |> Trie.containsKey [name] then m
     else
       m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true; comments = []; loc = UnknownLocation }]
+  let addPoly name ty typeParams m =
+    if m |> Trie.containsKey [name] then m
+    else
+      m |> Trie.add [name] [TypeAlias { name = name; typeParams = typeParams; target = ty; erased = true; comments = []; loc = UnknownLocation }]
   let m =
     srcs
     |> List.collect (fun src -> src.statements)
@@ -1183,8 +1194,8 @@ let private createRootContextForTyper internalModuleName (srcs: SourceFile list)
     |> add "Function" (Prim UntypedFunction)
     |> add "Symbol" (Prim Symbol)
     |> add "RegExp" (Prim RegExp)
-    |> add "Array" (Prim Array)
-    |> add "ReadonlyArray" (Prim ReadonlyArray)
+    |> addPoly "Array" (Prim Array) [{ name = "T"; extends = None; defaultType = None }]
+    |> addPoly "ReadonlyArray" (Prim Array) [{ name = "T"; extends = None; defaultType = None }]
     |> add "BigInt" (Prim BigInt)
   {|
     internalModuleName = internalModuleName
@@ -1208,31 +1219,60 @@ let createRootContext (internalModuleName: string) (srcs: SourceFile list) (opts
       anonymousInterfacesMap = aim
       unknownIdentTypes = uit |}
 
+open TypeScript
 let mergeLibESDefinitions (srcs: SourceFile list) =
-  let esVersions =
-    Map.ofList [
-      "lib.es5",    (0, "ES5")
-      "lib.es6",    (1, "ES6")
-      "lib.es2015", (2, "ES2015")
-      "lib.es2016", (3, "ES2016")
-      "lib.es2017", (4, "ES2017")
-      "lib.es2018", (5, "ES2018")
-      "lib.es2019", (6, "ES2019")
-      "lib.es2020", (7, "ES2020")
-      "lib.esnext", (System.Int32.MaxValue, "ESNext")
-    ]
+  let getESVersionFromFileName (s: string) =
+    let es = s.Split '.' |> Array.tryFind (fun s -> s.StartsWith "es")
+    match es with
+    | None -> Ts.ScriptTarget.ESNext
+    | Some "es3" -> Ts.ScriptTarget.ES3
+    | Some "es5" -> Ts.ScriptTarget.ES5
+    | Some "es6" | Some "es2015" -> Ts.ScriptTarget.ES2015
+    | Some "es2016" -> Ts.ScriptTarget.ES2016
+    | Some "es2017" -> Ts.ScriptTarget.ES2017
+    | Some "es2018" -> Ts.ScriptTarget.ES2018
+    | Some "es2019" -> Ts.ScriptTarget.ES2019
+    | Some "es2020" -> Ts.ScriptTarget.ES2020
+    | Some _ -> Ts.ScriptTarget.ESNext
 
-  let srcGroups =
+  let map (parentVersion: Ts.ScriptTarget option) (loc: Location) (x: ICommented<_>) =
+    let esVersion =
+      let rec go = function
+      | UnknownLocation -> None
+      | LocationTs (sf, _) -> getESVersionFromFileName sf.fileName |> Some
+      | Location x -> getESVersionFromFileName x.src.fileName |> Some
+      | MultipleLocation ls ->
+        match ls |> List.choose go with
+        | [] -> None
+        | xs -> List.min xs |> Some
+      go loc
+    match esVersion with
+    | None ->
+      None, x.mapComments id
+    | Some v ->
+      match parentVersion with
+      | Some v' when v = v' -> Some v, x.mapComments id
+      | _ -> Some v, x.mapComments (fun cs -> ESVersion v :: cs)
+
+  let rec mapStmt (s: Statement) =
+    let vo, s = map None s.loc s
+    match s with
+    | Module m -> Module { m with statements = List.map mapStmt m.statements }
+    | EnumDef e -> EnumDef { e with cases = e.cases |> List.map (fun c -> map vo c.loc c |> snd) }
+    | ClassDef c -> ClassDef { c with members = c.members |> List.map (fun (a, m) -> map vo a.loc a |> snd, m) }
+    | _ -> s
+
+  let stmts =
     srcs
-    |> List.groupBy (fun x ->
-      match esVersions |> Map.tryFindKey (fun key _ -> x.fileName.Contains(key)) with
-      | Some key -> esVersions |> Map.find key
-      | None -> -1, "")
-    |> List.filter (fun ((i, _), _) -> i >= 0)
-    |> List.sortBy (fun ((i, _), _) -> i)
-    |> List.map (fun ((i, v), ss) -> i, v, ss)
+    |> List.collect (fun src -> src.statements)
+    |> Statement.merge
+    |> List.map mapStmt
 
-  failwith ""
+  { fileName = "lib.es.d.ts"
+    statements = stmts
+    references = []
+    hasNoDefaultLib = true
+    moduleName = None }
 
 let runAll (srcs: SourceFile list) (opts: GlobalOptions) =
   // TODO: handle SourceFile-specific things

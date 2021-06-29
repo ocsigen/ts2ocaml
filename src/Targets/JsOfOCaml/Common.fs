@@ -2,8 +2,8 @@ module Target.JsOfOCaml.Common
 
 type Options = {|
   verbose: bool
-  generateStdlib: bool
-  treatNumberAsInt: bool
+  stdlib: bool
+  numberAsInt: bool
 |}
 
 let stdlib = """[@@@ocaml.warning "-7-11-32-33-39"]

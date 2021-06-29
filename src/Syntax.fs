@@ -3,22 +3,41 @@ open TypeScript
 
 [<CustomEquality; CustomComparison; StructuredFormatDisplay("{AsString}")>]
 type Location =
-  | Location of Ts.SourceFile * Ts.LineAndCharacter
+  | LocationTs of Ts.SourceFile * Ts.LineAndCharacter
+  | Location of {| src: SourceFile; line: int; character: int |}
+  | MultipleLocation of Location list
   | UnknownLocation
 with
+  static member (++) (x: Location, y: Location) =
+    match x, y with
+    | UnknownLocation, x | x, UnknownLocation -> x
+    | MultipleLocation xs, MultipleLocation ys -> MultipleLocation (List.distinct (xs @ ys))
+    | MultipleLocation ls, l | l, MultipleLocation ls -> MultipleLocation (l :: ls)
+    | _, _ -> MultipleLocation [x; y]
   member x.AsString =
     match x with
-    | Location (src, pos) ->
+    | LocationTs (src, pos) ->
       sprintf "line %i, col %i of %s"
         (int pos.line + 1)
         (int pos.character + 1)
         src.fileName
+    | Location l ->
+      sprintf "line %i, col %i of %s"
+        (int l.line + 1)
+        (int l.character + 1)
+        l.src.fileName
+    | MultipleLocation l ->
+      l |> List.map (fun x -> x.AsString) |> String.concat " and "
     | UnknownLocation -> "<unknown>"
   member x.AsComparable =
     match x with
-    | UnknownLocation -> None
-    | Location (src, pos) ->
-      Some (src.fileName, pos.line, pos.character)
+    | UnknownLocation -> Set.empty
+    | Location l ->
+      Set.singleton (l.src.fileName, l.line, l.character)
+    | LocationTs (src, pos) ->
+      Set.singleton (src.fileName, int pos.line, int pos.character)
+    | MultipleLocation xs ->
+      xs |> List.map (fun x -> x.AsComparable) |> Set.unionMany
   override x.ToString() = x.AsString
   override x.Equals(yo) =
     match yo with
@@ -31,14 +50,13 @@ with
       | :? Location as y -> 0
       | _ -> invalidArg "yo" "cannot compare values"
 
-type Literal =
+and Literal =
   | LString of string
   | LInt of int
   | LFloat of float
   | LBool of bool
 
-[<CustomEquality; CustomComparison>]
-type Comment =
+and [<CustomEquality; CustomComparison>] Comment =
   | Description of string list
   | Summary of string list
   | Param of name:string * string list
@@ -46,6 +64,7 @@ type Comment =
   | Deprecated of string list
   | Example of string list
   | See of link:string * text:string list
+  | ESVersion of Ts.ScriptTarget
   | Other of tag:string * text:string list * orig:Ts.JSDocTag
   override x.Equals(yo) =
     match yo with
@@ -58,11 +77,11 @@ type Comment =
       | :? Comment as y -> 0
       | _ -> invalidArg "yo" "cannot compare values"
 
-type ICommented<'a> =
+and ICommented<'a> =
   abstract getComments: unit -> Comment list
   abstract mapComments: (Comment list -> Comment list) -> 'a
 
-type [<RequireQualifiedAccess>] Kind =
+and [<RequireQualifiedAccess>] Kind =
   | Value
   | Type
   | ClassLike
@@ -70,7 +89,7 @@ type [<RequireQualifiedAccess>] Kind =
   | Enum
   | Any
 
-type PrimType =
+and PrimType =
   | String | Bool | Number
   | Any | Void | Unknown
   | Null | Never | Undefined
@@ -96,7 +115,7 @@ with
     // invalid types
     | Null | Undefined -> None
 
-type Enum = {
+and Enum = {
   name: string
   isExported: Exported
   cases: EnumCase list
@@ -111,6 +130,7 @@ and EnumCase = {
   name: string
   value: Literal option
   comments: Comment list
+  loc: Location
 } with
   interface ICommented<EnumCase> with
     member this.getComments() = this.comments
@@ -202,6 +222,7 @@ and MemberAttribute = {
   comments: Comment list
   isStatic: bool
   accessibility: Accessibility
+  loc: Location
 } with
   interface ICommented<MemberAttribute> with
     member this.getComments() = this.comments
@@ -215,6 +236,7 @@ and Value = {
   isExported: Exported
   accessibility : Accessibility option
   comments: Comment list
+  loc: Location
 } with
   interface ICommented<Value> with
     member this.getComments() = this.comments
@@ -239,10 +261,16 @@ and Statement =
   | Module of Module
   | Value of Value
   | Import of Import
-  | Export of Export * Comment list
-  | UnknownStatement of string option * Comment list
-  | FloatingComment of Comment list
+  | Export of Export * Location * Comment list
+  | UnknownStatement of {| msg: string option; comments: Comment list; loc: Location |}
+  | FloatingComment of {| comments: Comment list; loc: Location |}
   with
+  member this.loc =
+    match this with
+    | TypeAlias ta -> ta.loc | ClassDef c -> c.loc | EnumDef e -> e.loc
+    | Module m -> m.loc | Value v -> v.loc | Import i -> i.loc
+    | Export (_, loc, _) -> loc
+    | UnknownStatement u -> u.loc | FloatingComment c -> c.loc
   interface ICommented<Statement> with
     member this.getComments() =
       match this with
@@ -250,7 +278,9 @@ and Statement =
       | EnumDef e -> e.comments | Module m -> m.comments
       | Value v -> v.comments
       | Import i -> i.comments
-      | Export (_, c) | UnknownStatement (_, c) | FloatingComment c -> c
+      | UnknownStatement s -> s.comments
+      | Export (_, _, c) -> c
+      | FloatingComment c -> c.comments
     member this.mapComments f =
       let inline map f (x: #ICommented<'a>) = x.mapComments f
       match this with
@@ -260,9 +290,9 @@ and Statement =
       | Module m -> Module (map f m)
       | Value v -> Value (map f v)
       | Import i -> Import (map f i)
-      | Export (e, c) -> Export (e, f c)
-      | UnknownStatement (u, c) -> UnknownStatement (u, f c)
-      | FloatingComment c -> FloatingComment (f c)
+      | Export (e, l, c) -> Export (e, l, f c)
+      | UnknownStatement s -> UnknownStatement {| s with comments = f s.comments |}
+      | FloatingComment c -> FloatingComment {| c with comments = f c.comments |}
 
 and Module = {
   name: string
@@ -270,6 +300,7 @@ and Module = {
   isNamespace: bool
   statements: Statement list
   comments: Comment list
+  loc: Location
 } with
   interface ICommented<Module> with
     member this.getComments() = this.comments
@@ -361,6 +392,7 @@ and Import = {
   isExported: Exported
   moduleSpecifier: string
   clause: ImportClause
+  loc: Location
 } with
   interface ICommented<Import> with
     member this.getComments() = this.comments
@@ -397,12 +429,12 @@ and ImportClause =
       bindings:      {| name: string; kind: Set<Kind> option; renameAs: string option |} list
     |}
 
-type Reference =
+and Reference =
   | FileReference of string
   | TypeReference of string
   | LibReference of string
 
-type SourceFile = {
+and SourceFile = {
   fileName: string
   statements: Statement list
   references: Reference list

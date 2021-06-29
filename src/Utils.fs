@@ -9,6 +9,10 @@ let inline (|NullOrUndefined|_|) x =
   if Fable.Core.JsInterop.isNullOrUndefined x then Some ()
   else None
 
+module Enum =
+  let inline pp (e: 'enum when 'enum: enum<_>) =
+    Enum.GetName(typeof<'enum>, e)
+
 module Char =
   let inline isAlphabet c =
     ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z')

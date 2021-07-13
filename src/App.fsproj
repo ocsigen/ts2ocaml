@@ -14,6 +14,7 @@
     <Compile Include="Typer.fs" />
     <Compile Include="Parser.fs" />
     <Compile Include="Target.fs" />
+    <Compile Include="Targets/ParserTest.fs" />
     <Compile Include="Targets/JsOfOCaml/Common.fs" />
     <Compile Include="Targets/JsOfOCaml/Writer.fs" />
     <Compile Include="Targets/JsOfOCaml/Target.fs" />

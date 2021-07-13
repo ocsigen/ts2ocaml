@@ -935,8 +935,9 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
       ]
     | EnumDef _ -> failwith "impossible_emitStructuredDefinitions_EnumDef"
     | Value v ->
+      let tyAsGetter = Function { args = [Choice2Of2 (Prim Void)]; isVariadic = false; returnType = v.typ; loc = v.loc }
       concat newline [
-        yield val_ (Naming.valueName v.name |> renamer.Rename "value") (emitType_ ctx v.typ) + str " " + Attr.js_global v.name
+        yield val_ (Naming.valueName v.name |> renamer.Rename "value") (emitType_ ctx tyAsGetter) + str " " + Attr.js_get v.name
       ]
     | ClassDef c ->
       let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
@@ -1048,6 +1049,11 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
         | Indexer (ft, Mutable) ->
           yield! emitMember renamer ma (Indexer (ft, ReadOnly))
           yield! emitMember renamer ma (Indexer (ft, WriteOnly))
+        | UnknownMember msgo ->
+          match msgo with
+          | Some msg ->
+            yield commentStr msg
+          | None -> ()
       ]
 
       let members = [
@@ -1071,8 +1077,9 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
             yield val_ ("of_ml" |> renamer.Rename "value") (emitType_ ctx ofMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
       ]
 
+      let hasActualMember = c.members |> List.exists (function (_, UnknownMember _) -> false | _ -> true)
       let k = List.rev (name :: ctx.currentNamespace)
-      if List.isEmpty members || isAnonymous then
+      if List.isEmpty members || not hasActualMember || isAnonymous then
         moduleSig (Naming.moduleName name |> renamer.Rename "module") (concat newline [
           yield! emitTypeAliases c.typeParams selfTyText
           if not isAnonymous then

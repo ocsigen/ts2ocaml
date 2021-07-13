@@ -217,6 +217,7 @@ and Member =
   | Getter of FieldLike | Setter of FieldLike
   | Constructor of FuncType<unit> * TypeParam list
   | New of FuncType<Type> * TypeParam list
+  | UnknownMember of string option
 
 and MemberAttribute = {
   comments: Comment list

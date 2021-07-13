@@ -73,15 +73,24 @@ let getExported (modifiersOpt: Ts.ModifiersArray option) : Exported =
 let isReadOnly (m: Ts.ModifiersArray option) : bool =
   m |> hasModifier Kind.ReadonlyKeyword
 
-let nameToString (pn: 'a): string =
-  !!pn?getText() |> removeQuotesAndTrim
+let getText (x: 'a) : string =
+  (!!x : Ts.Node).getText() |> removeQuotesAndTrim
+
+let getPropertyName (pn: Ts.PropertyName) : string option =
+  let node : Node = !!pn
+  match node.kind with
+  | Kind.Identifier -> Some (!!pn : Ts.Identifier).text
+  | Kind.PrivateIdentifier -> Some (!!pn : Ts.PrivateIdentifier).text
+  | Kind.StringLiteral -> Some (!!pn : Ts.StringLiteral).text
+  | Kind.NumericLiteral -> Some (!!pn : Ts.NumericLiteral).text
+  | _ -> None
 
 let getBindingName (bn: Ts.BindingName): string option =
   let syntaxNode : Node = !! bn
   match syntaxNode.kind with
   | Kind.Identifier ->
     let id : Ts.Identifier = !! bn
-    Some (id.getText())
+    Some id.text
   | Kind.ObjectBindingPattern
   | Kind.ArrayBindingPattern -> None
   | _ -> nodeError syntaxNode "unknown Binding Name kind: %s" (Enum.pp syntaxNode.kind)
@@ -308,7 +317,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
   // anonymous interface
   | Kind.TypeLiteral ->
     let t = t :?> Ts.TypeLiteralNode
-    let members = t.members |> List.ofSeq |> List.choose (readNamedDeclaration typrm ctx)
+    let members = t.members |> List.ofSeq |> List.map (readNamedDeclaration typrm ctx)
     AnonymousInterface {
       name = None; isInterface = true; isExported = Exported.No
       comments = []; implements = []; typeParams = []; accessibility = Public
@@ -399,7 +408,7 @@ and readMemberAttribute (ctx: ParserContext) (nd: Ts.NamedDeclaration) : MemberA
   let comments = readCommentsForNamedDeclaration ctx nd
   { accessibility = accessibility; isStatic = isStatic; comments = comments; loc = Node.location nd }
 
-and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.NamedDeclaration) : (MemberAttribute * Member) option =
+and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.NamedDeclaration) : MemberAttribute * Member =
   let attr = readMemberAttribute ctx nd
   let extractType (sdb: Ts.SignatureDeclarationBase) =
     let localTyprm = readTypeParameters typrm ctx sdb.typeParameters
@@ -411,53 +420,62 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
       if nd.kind <> Kind.Constructor && nd.kind <> Kind.SetAccessor then
         match sdb.name with
         | Some name ->
-          nodeWarn ctx sdb "type not specified for '%s' (%s)" (nameToString name) (Enum.pp nd.kind)
+          nodeWarn ctx sdb "type not specified for '%s' (%s)" (getText name) (Enum.pp nd.kind)
         | None ->
           nodeWarn ctx sdb "type not specified (%s)" (Enum.pp nd.kind)
       localTyprm, UnknownType None
   match nd.kind with
   | Kind.PropertySignature ->
     let nd = nd :?> Ts.PropertySignature
-    let ty =
-      match nd.``type`` with
-      | Some t -> readTypeNode typrm ctx t
-      | None ->
-        UnknownType None
-    match ty with
-    | UnknownType None ->
-      nodeWarn ctx nd "type not specified for field '%s'" (nameToString nd.name)
-    | _ -> ()
-    let fl = { name = nameToString nd.name; isOptional = false; value = ty }
-    Some (attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), []))
+    match getPropertyName nd.name with
+    | Some name ->
+      let ty =
+        match nd.``type`` with
+        | Some t -> readTypeNode typrm ctx t
+        | None ->
+          UnknownType None
+      match ty with
+      | UnknownType None ->
+        nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
+      | _ -> ()
+      let fl = { name = name; isOptional = false; value = ty }
+      attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), [])
+    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
   | Kind.PropertyDeclaration ->
     let nd = nd :?> Ts.PropertyDeclaration
-    let ty =
-      match nd.``type`` with
-      | Some t -> readTypeNode typrm ctx t
-      | None ->
-        UnknownType None
-    match ty with
-    | UnknownType None ->
-      nodeWarn ctx nd "type not specified for field '%s'" (nameToString nd.name)
-    | _ -> ()
-    let fl = { name = nameToString nd.name; isOptional = false; value = ty }
-    Some (attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), []))
+    match getPropertyName nd.name with
+    | Some name ->
+      let ty =
+        match nd.``type`` with
+        | Some t -> readTypeNode typrm ctx t
+        | None ->
+          UnknownType None
+      match ty with
+      | UnknownType None ->
+        nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
+      | _ -> ()
+      let fl = { name = name; isOptional = false; value = ty }
+      attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), [])
+    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
   | Kind.CallSignature ->
     let nd = nd :?> Ts.CallSignatureDeclaration
     let localTyprm, ty = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
-    Some (attr, FunctionInterface (readParameters typrm ctx nd.parameters nd ty, localTyprm))
+    (attr, FunctionInterface (readParameters typrm ctx nd.parameters nd ty, localTyprm))
   | Kind.MethodSignature | Kind.MethodDeclaration ->
     let nd = nd :?> Ts.SignatureDeclarationBase
-    let localTyprm, retTy = extractType nd
-    let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
-    let func = readParameters typrm ctx nd.parameters nd retTy
-    Some (attr, Method (nameToString nd.name, func, localTyprm))
+    match nd.name |> Option.bind getPropertyName with
+    | Some name ->
+      let localTyprm, retTy = extractType nd
+      let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
+      let func = readParameters typrm ctx nd.parameters nd retTy
+      attr, Method (name, func, localTyprm)
+    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
   | Kind.IndexSignature ->
     let nd = nd :?> Ts.IndexSignatureDeclaration
     let localTyprm, ty = extractType nd
     if not (List.isEmpty localTyprm) then nodeWarn ctx nd "indexer with type argument is not supported"
-    Some (attr,
+    (attr,
       Indexer (readParameters typrm ctx nd.parameters nd ty,
                if isReadOnly nd.modifiers then ReadOnly else Mutable))
   | Kind.ConstructSignature ->
@@ -465,38 +483,44 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
     let localTyprm, retTy = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
     let ty = readParameters typrm ctx nd.parameters nd retTy
-    Some (attr, New (ty, localTyprm))
+    attr, New (ty, localTyprm)
   | Kind.Constructor ->
     let nd = nd :?> Ts.ConstructorDeclaration
     let localTyprm, retTy = extractType nd
     assert (match retTy with UnknownType _ -> true | _ -> false)
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
     let ty = readParameters typrm ctx nd.parameters nd ()
-    Some (attr, Constructor (ty, localTyprm))
+    attr, Constructor (ty, localTyprm)
   | Kind.GetAccessor ->
     let nd = nd :?> Ts.GetAccessorDeclaration
-    let localTyprm, ty = extractType nd
-    if not (List.isEmpty localTyprm) then nodeWarn ctx nd "getter with type argument is not supported"
-    let fl = { name = nameToString nd.name; isOptional = false; value = ty }
-    Some (attr, Getter fl)
+    match getPropertyName nd.name with
+    | Some name ->
+      let localTyprm, ty = extractType nd
+      if not (List.isEmpty localTyprm) then nodeWarn ctx nd "getter with type argument is not supported"
+      let fl = { name = name; isOptional = false; value = ty }
+      attr, Getter fl
+    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
   | Kind.SetAccessor ->
     let nd = nd :?> Ts.SetAccessorDeclaration
-    let localTyprm, retTy = extractType nd
-    assert (match retTy with UnknownType _ -> true | _ -> false)
-    if not (List.isEmpty localTyprm) then nodeWarn ctx nd "setter with type argument is not supported"
-    match readParameters typrm ctx nd.parameters nd () with
-    | { args = [ty]; isVariadic = false } ->
-      match ty with
-      | Choice1Of2 named ->
-        Some (attr, Setter { named with name = nameToString nd.name })
-      | Choice2Of2 ty ->
-        Some (attr, Setter { name = nameToString nd.name; isOptional = false; value = ty })
-    | _ ->
-      nodeWarn ctx nd "invalid setter for '%s'" (nameToString nd.name)
-      None
+    match getPropertyName nd.name with
+    | Some name ->
+      let localTyprm, retTy = extractType nd
+      assert (match retTy with UnknownType _ -> true | _ -> false)
+      if not (List.isEmpty localTyprm) then nodeWarn ctx nd "setter with type argument is not supported"
+      match readParameters typrm ctx nd.parameters nd () with
+      | { args = [ty]; isVariadic = false } ->
+        match ty with
+        | Choice1Of2 named ->
+          attr, Setter { named with name = name }
+        | Choice2Of2 ty ->
+          attr, Setter { name = name; isOptional = false; value = ty }
+      | _ ->
+        nodeWarn ctx nd "invalid setter for '%s'" (getText nd.name)
+        attr, UnknownMember (Some (getText nd))
+    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
   | _ ->
     nodeWarn ctx nd "unsupported NamedDeclaration kind: '%s'" (Enum.pp nd.kind)
-    None
+    attr, UnknownMember (Some (getText nd))
 
 and readTypeParameters (typrm: Set<string>) (ctx: ParserContext) (tps: Ts.TypeParameterDeclaration ResizeArray option) : TypeParam list =
   match tps with
@@ -530,7 +554,7 @@ let readInterface (ctx: ParserContext) (i: Ts.InterfaceDeclaration) : Class =
     implements = readInherits typrmsSet ctx i.heritageClauses
     isInterface = true
     isExported = getExported i.modifiers
-    members = i.members |> List.ofSeq |> List.choose (readNamedDeclaration typrmsSet ctx)
+    members = i.members |> List.ofSeq |> List.map (readNamedDeclaration typrmsSet ctx)
     loc = Node.location i
   }
 
@@ -545,27 +569,29 @@ let readClass (ctx: ParserContext) (i: Ts.ClassDeclaration) : Class =
     implements = readInherits typrmsSet ctx i.heritageClauses
     isInterface = false
     isExported = getExported i.modifiers
-    members = i.members |> List.ofSeq |> List.choose (readNamedDeclaration typrmsSet ctx)
+    members = i.members |> List.ofSeq |> List.map (readNamedDeclaration typrmsSet ctx)
     loc = Node.location i
   }
 
-let readEnumCase (ctx: ParserContext) (em: Ts.EnumMember) : EnumCase =
-  let name = em.name |> nameToString
-  let value =
-    match em.initializer with
-    | None -> None
-    | Some ep ->
-      match readLiteral ep with
-      | Some ((LInt _ | LString _) as l) -> Some l
-      | _ -> nodeError ep "enum value '%s' for case '%s' not supported" (ep.getText()) name
-  let comments = readCommentsForNamedDeclaration ctx em
-  { comments = comments; loc = Node.location em; name = name; value = value }
+let readEnumCase (ctx: ParserContext) (em: Ts.EnumMember) : EnumCase option =
+  match getPropertyName em.name with
+  | Some name ->
+    let value =
+      match em.initializer with
+      | None -> None
+      | Some ep ->
+        match readLiteral ep with
+        | Some ((LInt _ | LString _) as l) -> Some l
+        | _ -> nodeError ep "enum value '%s' for case '%s' not supported" (ep.getText()) name
+    let comments = readCommentsForNamedDeclaration ctx em
+    Some { comments = comments; loc = Node.location em; name = name; value = value }
+  | None -> nodeWarn ctx em "unsupported enum case name '%s'" (getText em.name); None
 
 let readEnum (ctx: ParserContext) (ed: Ts.EnumDeclaration) : Enum =
   {
-    name = ed.name |> nameToString
+    name = ed.name.text
     comments = readCommentsForNamedDeclaration ctx ed
-    cases = ed.members |> List.ofSeq |> List.map (readEnumCase ctx)
+    cases = ed.members |> List.ofSeq |> List.choose (readEnumCase ctx)
     isExported = getExported ed.modifiers
     loc = Node.location ed
   }
@@ -574,7 +600,7 @@ let readTypeAlias (ctx: ParserContext) (a: Ts.TypeAliasDeclaration) : TypeAlias 
   let typrm = readTypeParameters Set.empty ctx a.typeParameters
   let ty = readTypeNode (typrm |> List.map (fun x -> x.name) |> Set.ofList) ctx a.``type``
   let comments = readCommentsForNamedDeclaration ctx a
-  { name = nameToString a.name; typeParams = typrm; target = ty; erased = false; comments = comments; loc = Node.location a }
+  { name = a.name.text; typeParams = typrm; target = ty; erased = false; comments = comments; loc = Node.location a }
 
 let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list =
   v.declarationList.declarations |> List.ofSeq |> List.map (fun vd ->
@@ -612,7 +638,7 @@ let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option
   | None ->
     nodeWarn ctx f "name is not defined for function"; None
   | Some name ->
-    let name = nameToString name
+    let name = name.text
     let comments = readCommentsForNamedDeclaration ctx f
     let isExported = getExported f.modifiers
     let accessibility = getAccessibility f.modifiers
@@ -740,7 +766,11 @@ let readJSDoc (ctx: ParserContext) (doc: Ts.JSDoc) : Statement option =
   | xs -> FloatingComment {| comments = xs; loc = Node.location doc |} |> Some
 
 let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Module =
-  let name = nameToString md.name
+  let name =
+    match (!!md.name : Ts.Node).kind with
+    | Kind.Identifier -> (!!md.name : Ts.Identifier).text
+    | Kind.StringLiteral -> (!!md.name : Ts.StringLiteral).text
+    | _ -> nodeError !!md.name "unsupported module name '%s'" (getText md.name)
   let check kind =
     md.getChildren() |> Seq.exists (fun nd -> nd.kind = kind)
   let isNamespace = check Kind.NamespaceKeyword

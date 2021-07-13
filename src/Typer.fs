@@ -176,6 +176,7 @@ module Type =
       | Setter f -> Setter (mapInFieldLike mapping ctx f)
       | New (f, tps) -> New (mapInFuncType mapping ctx f, List.map (mapInTypeParam mapping ctx) tps)
       | Method (name, f, tps) -> Method (name, mapInFuncType mapping ctx f, List.map (mapInTypeParam mapping ctx) tps)
+      | UnknownMember msgo -> UnknownMember msgo
     { c with
         implements = c.implements |> List.map (mapping ctx)
         members = c.members |> List.map (fun (a, m) -> a, mapMember m)

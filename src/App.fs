@@ -96,5 +96,6 @@ let main argv =
          .addFlag("verbose", (fun v _ -> {| verbose = v |}), descr = "Show verbose log")
          .alias(!^"v", !^"verbose")
     |> Target.register parse Target.JsOfOCaml.target
+    |> Target.register parse Target.ParserTest.target
   yargs.demandCommand(1.0).help().argv |> ignore
   0

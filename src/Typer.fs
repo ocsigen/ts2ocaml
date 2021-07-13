@@ -812,6 +812,93 @@ module Statement =
   let resolveErasedTypes (ctx: Context<GlobalOptions>) (stmts: Statement list) =
     mapType Type.resolveErasedType ctx stmts
 
+  /// simplify
+  /// ```typescript
+  ///   interface Math {
+  ///     readonly E: number;
+  ///     ...
+  ///   }
+  ///   declare var Math: Math;
+  /// ```
+  /// to
+  /// ```typescript
+  ///   declare namespace Math {
+  ///     val E: number
+  ///   }
+  /// ```
+  /// if it only has readonly fields, getters, or instance methods.
+  let simplifyImmediateInstanceToModule (ctx: Context<GlobalOptions>) (stmts: Statement list) : Statement list =
+    eprintfn "simplifyImmediateInstanceToModule"
+    let canConvertToNamespace (c: Class) =
+      c.isInterface
+      && c.members |> List.forall (fun (attr, m) ->
+        if attr.isStatic then false
+        else
+          match m with
+          | Field (_, _, _)
+          | Method (_, _, _)
+          | Getter _
+          | UnknownMember _ -> true
+          | _ -> false
+      )
+    let convertToNamespace name (c: Class) : Module =
+      let conv (attr: MemberAttribute) = function
+        | Field (fl, mt, tps) ->
+          Value {
+            name = fl.name; typ = fl.value; typeParams = tps;
+            isConst = (mt = ReadOnly); isExported = Exported.No; accessibility = Some attr.accessibility;
+            comments = attr.comments; loc = attr.loc
+          } |> Some
+        | Getter fl ->
+          Value {
+            name = fl.name; typ = fl.value; typeParams = [];
+            isConst = true; isExported = Exported.No; accessibility = Some attr.accessibility;
+            comments = attr.comments; loc = attr.loc
+          } |> Some
+        | Method (name, ft, tps) ->
+          Value {
+            name = name; typ = Function ft; typeParams = tps;
+            isConst = true; isExported = Exported.No; accessibility = Some attr.accessibility;
+            comments = attr.comments; loc = attr.loc
+          } |> Some
+        | UnknownMember msgo -> UnknownStatement {| msg = msgo; comments = attr.comments; loc = attr.loc |} |> Some
+        | _ -> None
+      let stmts = c.members |> List.choose (fun (ma, m) -> conv ma m)
+      { name = name; isExported = c.isExported; isNamespace = true; statements = stmts; comments = c.comments; loc = c.loc }
+
+    let rec go ctx stmts =
+      let values =
+        stmts |> List.fold (fun vs -> function
+          | Value { name = name; typ = Ident { name = [className]; fullName = Some fn }; loc = loc } ->
+            let intf =
+              FullName.lookup ctx fn
+              |> List.tryPick (function
+                | ClassName c when c.isInterface && c.name = Some className && canConvertToNamespace c -> Some c
+                | _ -> None)
+            match intf with
+            | None -> vs
+            | Some i -> vs |> Map.add name (loc, i)
+          | _ -> vs
+        ) Map.empty
+      stmts |> List.choose (function
+        | Value v ->
+          match values |> Map.tryFind v.name with
+          | Some (loc, _) when loc.AsComparable = v.loc.AsComparable ->
+            eprintfn "erasing value '%s'" v.name
+            None
+          | _ -> Some (Value v)
+        | ClassDef (intf & { name = Some name }) when intf.isInterface ->
+          match values |> Map.tryFind name with
+          | Some (_, _intf') when intf = _intf' ->
+            eprintfn "converting interface '%s'" name
+            Some (Module (convertToNamespace name intf))
+          | _ -> Some (ClassDef intf)
+        | Module m ->
+          Some (Module { m with statements = go ctx m.statements })
+        | x -> Some x
+      )
+    go ctx stmts
+
 module Ident =
   let rec mapInType (mapping: Context<'a> -> IdentType -> IdentType) (ctx: Context<'a>) = function
     | Ident i -> Ident (mapping ctx i)
@@ -1176,7 +1263,7 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
-let private createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: GlobalOptions) : Context<GlobalOptions> =
+let createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: GlobalOptions) : Context<GlobalOptions> =
   // TODO: handle SourceFile-specific things
   let add name ty m =
     if m |> Trie.containsKey [name] then m

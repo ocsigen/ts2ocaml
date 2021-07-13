@@ -68,7 +68,7 @@ module Ts =
         /// Called to merge all the changes that occurred across several versions of a script snapshot
         /// into a single change.  i.e. if a user keeps making successive edits to a script we will
         /// have a text change from V1 to V2, V2 to V3, ..., Vn.
-        /// 
+        ///
         /// This function will then merge those changes into a single change range valid between V1 and
         /// Vn.
         abstract collapseTextChangeRangesAcrossMultipleVersions: changes: ResizeArray<TextChangeRange> -> TextChangeRange
@@ -575,14 +575,14 @@ module Ts =
         abstract getConfigFileParsingDiagnostics: configFileParseResult: ParsedCommandLine -> ResizeArray<Diagnostic>
         /// <summary>Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
         /// that represent a compilation unit.
-        /// 
+        ///
         /// Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
         /// triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.</summary>
         /// <param name="createProgramOptions">- The options for creating a program.</param>
         abstract createProgram: createProgramOptions: CreateProgramOptions -> Program
         /// <summary>Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
         /// that represent a compilation unit.
-        /// 
+        ///
         /// Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
         /// triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.</summary>
         /// <param name="rootNames">- A set of root files.</param>
@@ -3529,9 +3529,9 @@ module Ts =
         abstract languageVariant: LanguageVariant with get, set
         abstract isDeclarationFile: bool with get, set
         /// lib.d.ts should have a reference comment like
-        /// 
+        ///
         ///   /// <reference no-default-lib="true"/>
-        /// 
+        ///
         /// If any other file has this comment, it signals not to include lib.d.ts
         /// because this containing file is intended to act as a default library.
         abstract hasNoDefaultLib: bool with get, set
@@ -3674,7 +3674,7 @@ module Ts =
         /// the JavaScript and declaration files will be produced for all the files in this program.
         /// If targetSourceFile is specified, then only the JavaScript and declaration for that
         /// specific file will be generated.
-        /// 
+        ///
         /// If writeFile is not specified then the writeFile callback from the compiler host will be
         /// used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
         /// will be invoked when writing the JavaScript and declaration files.
@@ -4663,7 +4663,7 @@ module Ts =
     /// Represents the result of module resolution.
     /// Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
     /// The Program will then filter results based on these flags.
-    /// 
+    ///
     /// Prefer to return a `ResolvedModuleFull` so that the file type does not have to be inferred.
     type [<AllowNullLiteral>] ResolvedModule =
         /// Path of the file the module was resolved to.
@@ -5271,7 +5271,7 @@ module Ts =
         abstract isSubstitutionEnabled: node: Node -> bool
         /// Hook used by transformers to substitute expressions just before they
         /// are emitted by the pretty printer.
-        /// 
+        ///
         /// NOTE: Transformation hooks should only be modified during `Transformer` initialization,
         /// before returning the `NodeTransformer` callback.
         abstract onSubstituteNode: (EmitHint -> Node -> Node) with get, set
@@ -5283,7 +5283,7 @@ module Ts =
         abstract isEmitNotificationEnabled: node: Node -> bool
         /// Hook used to allow transformers to capture state before or after
         /// the printer emits a node.
-        /// 
+        ///
         /// NOTE: Transformation hooks should only be modified during `Transformer` initialization,
         /// before returning the `NodeTransformer` callback.
         abstract onEmitNode: (EmitHint -> Node -> (EmitHint -> Node -> unit) -> unit) with get, set
@@ -5678,7 +5678,7 @@ module Ts =
         /// In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
         /// it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
         /// it will only emit all the affected files instead of whole program
-        /// 
+        ///
         /// The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
         /// in that order would be used to write the files
         abstract emit: ?targetSourceFile: SourceFile * ?writeFile: WriteFileCallback * ?cancellationToken: CancellationToken * ?emitOnlyDtsFiles: bool * ?customTransformers: CustomTransformers -> EmitResult
@@ -6088,16 +6088,16 @@ module Ts =
         /// This is used as a part of restarting the language service.
         abstract cleanupSemanticCache: unit -> unit
         /// <summary>Gets errors indicating invalid syntax in a file.
-        /// 
+        ///
         /// In English, "this cdeo have, erorrs" is syntactically invalid because it has typos,
         /// grammatical errors, and misplaced punctuation. Likewise, examples of syntax
         /// errors in TypeScript are missing parentheses in an `if` statement, mismatched
         /// curly braces, and using a reserved keyword as a variable name.
-        /// 
+        ///
         /// These diagnostics are inexpensive to compute and don't require knowledge of
         /// other files. Note that a non-empty result increases the likelihood of false positives
         /// from `getSemanticDiagnostics`.
-        /// 
+        ///
         /// While these represent the majority of syntax-related diagnostics, there are some
         /// that require the type system, which will be present in `getSemanticDiagnostics`.</summary>
         /// <param name="fileName">A path to the file you want syntactic diagnostics for</param>
@@ -6105,11 +6105,11 @@ module Ts =
         /// <summary>Gets warnings or errors indicating type system issues in a given file.
         /// Requesting semantic diagnostics may start up the type system and
         /// run deferred work, so the first call may take longer than subsequent calls.
-        /// 
+        ///
         /// Unlike the other get*Diagnostics functions, these diagnostics can potentially not
         /// include a reference to a source file. Specifically, the first time this is called,
         /// it will return global diagnostics with no associated location.
-        /// 
+        ///
         /// To contrast the differences between semantic and syntactic diagnostics, consider the
         /// sentence: "The sun is green." is syntactically correct; those are real English words with
         /// correct sentence structure. However, it is semantically invalid, because it is not true.</summary>
@@ -6392,7 +6392,7 @@ module Ts =
         /// Inlineable refactorings can have their actions hoisted out to the top level
         /// of a context menu. Non-inlineanable refactorings should always be shown inside
         /// their parent grouping.
-        /// 
+        ///
         /// If not specified, this value is assumed to be 'true'
         abstract inlineable: bool option with get, set
         abstract actions: ResizeArray<RefactorActionInfo> with get, set
@@ -6894,10 +6894,10 @@ module Ts =
     /// the same DocumentRegistry instance between different instances of LanguageService allow
     /// for more efficient memory utilization since all projects will share at least the library
     /// file (lib.d.ts).
-    /// 
+    ///
     /// A more advanced use of the document registry is to serialize sourceFile objects to disk
     /// and re-hydrate them when needed.
-    /// 
+    ///
     /// To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
     /// to all subsequent createLanguageService calls.
     type [<AllowNullLiteral>] DocumentRegistry =
@@ -6927,7 +6927,7 @@ module Ts =
         abstract updateDocumentWithKey: fileName: string * path: Path * compilationSettings: CompilerOptions * key: DocumentRegistryBucketKey * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind -> SourceFile
         abstract getKeyForCompilationSettings: settings: CompilerOptions -> DocumentRegistryBucketKey
         /// <summary>Informs the DocumentRegistry that a file is not needed any longer.
-        /// 
+        ///
         /// Note: It is not allowed to call release on a SourceFile that was not acquired from
         /// this registry originally.</summary>
         /// <param name="fileName">The name of the file to be released</param>

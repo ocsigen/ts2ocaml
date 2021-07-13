@@ -1127,6 +1127,8 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) =
   let srcs = [esSrc; domSrc]
 
   eprintf "* running typer..."
+  let ctx = createRootContextForTyper "Internal" srcs {| verbose = opts.verbose |}
+  let srcs = srcs |> List.map (fun src -> { src with statements = Statement.simplifyImmediateInstanceToModule ctx src.statements })
   let ctx, srcs = runAll srcs {| verbose = opts.verbose |}
 
   let esSrc = srcs |> List.find (fun src -> src.fileName = "lib.es.d.ts")

@@ -1,18 +1,18 @@
 module Target.ParserTest
 open Syntax
 
-type Options = {|
-  verbose: bool
-  typing: bool
-|}
+type Options =
+  inherit GlobalOptions
+  inherit Typer.TyperOptions
+  abstract typing: bool with get
 
-let private builder (argv: Yargs.Argv<GlobalOptions>) : Yargs.Argv<Options> =
-  argv.addFlag("typing", (fun x o -> {| o with typing = x |}), descr="Apply typer")
+let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
+  argv.addFlag("typing", (fun (o: Options) -> o.typing), descr="Apply typer")
 
 let private run (srcs: SourceFile list) (options: Options) =
   let srcs =
     if options.typing then
-      Typer.runAll srcs {| verbose = options.verbose |} |> snd
+      Typer.runAll srcs options |> snd
     else
       srcs
   for src in srcs do

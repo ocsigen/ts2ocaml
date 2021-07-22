@@ -77,7 +77,7 @@ let parse (opts: GlobalOptions) (argv: string[]) =
       ] |> Seq.toList
     let statements =
       src.statements
-      |> Seq.collect (Parser.readStatement {| opts with checker = checker; sourceFile = src |})
+      |> Seq.collect (Parser.readStatement !!{| verbose = opts.verbose; checker = checker; sourceFile = src |})
       |> Seq.toList
     { statements = statements
       fileName = src.fileName
@@ -93,8 +93,9 @@ let main argv =
     yargs
          .Invoke(argv)
          .parserConfiguration({| ``parse-positional-numbers`` = false |})
-         .addFlag("verbose", (fun v _ -> {| verbose = v |}), descr = "Show verbose log")
+         .addFlag("verbose", (fun (o: GlobalOptions) -> o.verbose), descr = "Show verbose log")
          .alias(!^"v", !^"verbose")
+    |> Typer.TyperOptions.add
     |> Target.register parse Target.JsOfOCaml.target
     |> Target.register parse Target.ParserTest.target
   yargs.demandCommand(1.0).help().argv |> ignore

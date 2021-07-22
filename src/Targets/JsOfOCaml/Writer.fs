@@ -827,6 +827,7 @@ let emitFlattenedDefinitions (ctx: Context<Options>) : text =
         | TypeAlias { erased = true } -> None
         | Export _
         | UnknownStatement _
+        | Pattern _
         | FloatingComment _ -> failwithf "impossible_emitFlattenedDefinitions(%A)" v
 
       moduleSig "Types" (
@@ -934,11 +935,32 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
           )
       ]
     | EnumDef _ -> failwith "impossible_emitStructuredDefinitions_EnumDef"
+    | Pattern p ->
+      let fallback () =
+        p.underlyingStatements |> List.map (go renamer ctx) |> concat newline
+      match p with
+      | ImmediateInstance (i, v) ->
+        if not ctx.options.simplifyImmediateInstance then fallback ()
+        else
+          if Statement.isPOJO i then
+            eprintfn "immediate instance detected: %s" v.name
+            Statement.convertClassToNamespace v.name i |> Module |> go renamer ctx
+          else fallback ()
+      | ImmediateConstructor (bi, ci, v) ->
+        if not ctx.options.simplifyImmediateConstructor then fallback ()
+        else
+          eprintfn "immediate constructor detected: %s" v.name
+          // TODO
+          fallback ()
     | Value v ->
-      let tyAsGetter = Function { args = [Choice2Of2 (Prim Void)]; isVariadic = false; returnType = v.typ; loc = v.loc }
-      concat newline [
-        yield val_ (Naming.valueName v.name |> renamer.Rename "value") (emitType_ ctx tyAsGetter) + str " " + Attr.js_get v.name
-      ]
+      let ty, attr =
+        match v.typ with
+        | Function _ ->
+          v.typ, Attr.js_global v.name
+        | _ ->
+          let tyAsGetter = Function { args = [Choice2Of2 (Prim Void)]; isVariadic = false; returnType = v.typ; loc = v.loc }
+          tyAsGetter, Attr.js_get v.name
+      val_ (Naming.valueName v.name |> renamer.Rename "value") (emitType_ ctx ty) + str " " + attr
     | ClassDef c ->
       let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
       let name, selfTy, selfTyText, isSelfTy, isAnonymous =
@@ -993,8 +1015,8 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
           let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy; loc = ft.loc }
           yield val_ (rename "create") (emitType_ ctx ty) + str " " + Attr.js_create
         | New (ft, typrm) ->
-          let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
-          yield val_ (rename "create") (emitType_ ctx (Function ft)) + str " " + Attr.js_apply true
+          let ft = Function { ft with args = Choice2Of2 selfTy :: ft.args }
+          yield val_ (rename "create") (emitType_ ctx ft) + str " " + Attr.js_apply true
         | Field ({ name = name; value = Function ft }, _, typrm)
         | Method (name, ft, typrm) ->
           let ty, attr =
@@ -1127,9 +1149,9 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) =
   let srcs = [esSrc; domSrc]
 
   eprintf "* running typer..."
-  let ctx = createRootContextForTyper "Internal" srcs {| verbose = opts.verbose |}
-  let srcs = srcs |> List.map (fun src -> { src with statements = Statement.simplifyImmediateInstanceToModule ctx src.statements })
-  let ctx, srcs = runAll srcs {| verbose = opts.verbose |}
+  opts.simplifyImmediateInstance <- true
+  opts.simplifyImmediateConstructor <- true
+  let ctx, srcs = runAll srcs opts
 
   let esSrc = srcs |> List.find (fun src -> src.fileName = "lib.es.d.ts")
   let domSrc = srcs |> List.find (fun src -> src.fileName = "lib.dom.d.ts")
@@ -1169,7 +1191,7 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
       ]
 
   eprintf "* running typer..."
-  let ctx, srcs = runAll srcs {| verbose = opts.verbose |}
+  let ctx, srcs = runAll srcs opts
   let ctx = ctx |> Context.mapOptions (fun _ -> opts)
   let stmts = srcs |> List.collect (fun x -> x.statements)
 

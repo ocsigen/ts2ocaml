@@ -1,6 +1,5 @@
 [<AutoOpen>]
 module Common
 
-type GlobalOptions = {|
-  verbose: bool
-|}
+type GlobalOptions =
+  abstract verbose: bool with get

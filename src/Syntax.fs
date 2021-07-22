@@ -263,6 +263,7 @@ and Statement =
   | Value of Value
   | Import of Import
   | Export of Export * Location * Comment list
+  | Pattern of Pattern
   | UnknownStatement of {| msg: string option; comments: Comment list; loc: Location |}
   | FloatingComment of {| comments: Comment list; loc: Location |}
   with
@@ -271,6 +272,7 @@ and Statement =
     | TypeAlias ta -> ta.loc | ClassDef c -> c.loc | EnumDef e -> e.loc
     | Module m -> m.loc | Value v -> v.loc | Import i -> i.loc
     | Export (_, loc, _) -> loc
+    | Pattern p -> p.loc
     | UnknownStatement u -> u.loc | FloatingComment c -> c.loc
   interface ICommented<Statement> with
     member this.getComments() =
@@ -280,6 +282,7 @@ and Statement =
       | Value v -> v.comments
       | Import i -> i.comments
       | UnknownStatement s -> s.comments
+      | Pattern p -> (p :> ICommented<_>).getComments()
       | Export (_, _, c) -> c
       | FloatingComment c -> c.comments
     member this.mapComments f =
@@ -292,8 +295,49 @@ and Statement =
       | Value v -> Value (map f v)
       | Import i -> Import (map f i)
       | Export (e, l, c) -> Export (e, l, f c)
+      | Pattern p -> Pattern ((p :> ICommented<_>).mapComments f)
       | UnknownStatement s -> UnknownStatement {| s with comments = f s.comments |}
       | FloatingComment c -> FloatingComment {| c with comments = f c.comments |}
+
+and Pattern =
+  /// ```typescript
+  ///   interface Foo {
+  ///     ...
+  ///   }
+  ///   declare var Foo: Foo;
+  /// ```
+  | ImmediateInstance of intf:Class * value:Value
+  /// ```typescript
+  /// interface Foo {
+  ///   ...
+  /// }
+  /// interface FooConstructor {
+  ///   new(...): Foo;
+  ///   ...
+  /// }
+  /// declare var Foo: FooConstructor;
+  /// ```
+  | ImmediateConstructor of baseIntf:Class * ctorIntf:Class * ctorValue:Value
+  with
+  member this.loc =
+    match this with
+    | ImmediateInstance (intf, value) -> MultipleLocation [intf.loc; value.loc]
+    | ImmediateConstructor (bi, ci, v) -> MultipleLocation [bi.loc; ci.loc; v.loc]
+  member this.underlyingStatements =
+    match this with
+    | ImmediateInstance (intf, value) -> [ClassDef intf; Value value]
+    | ImmediateConstructor (bi, ci, v) -> [ClassDef bi; ClassDef ci; Value v]
+  interface ICommented<Pattern> with
+    member this.getComments() =
+      match this with
+      | ImmediateInstance (intf, value) -> (intf :> ICommented<_>).getComments() @ (value :> ICommented<_>).getComments()
+      | ImmediateConstructor (bi, ci, v) ->
+        (bi :> ICommented<_>).getComments() @ (ci :> ICommented<_>).getComments() @ (v :> ICommented<_>).getComments()
+    member this.mapComments f =
+      match this with
+      | ImmediateInstance (i, v) -> ImmediateInstance ((i :> ICommented<_>).mapComments f, (v :> ICommented<_>).mapComments f)
+      | ImmediateConstructor (bi, ci, v) ->
+        ImmediateConstructor ((bi :> ICommented<_>).mapComments f, (ci :> ICommented<_>).mapComments f, (v :> ICommented<_>).mapComments f)
 
 and Module = {
   name: string

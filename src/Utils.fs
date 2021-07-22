@@ -204,35 +204,35 @@ type Argv<'T> with
         | _ -> argv
       | Some v -> argv.``default``(key, v, ?description=dd)
     argv
-  member this.addOption (key: string, f: string -> 'T -> 'U, ?descr, ?defaultValue, ?defaultDescr, ?missingMsg) =
+  member this.addOption (key: string, f: 'U -> string, ?descr, ?defaultValue, ?defaultDescr, ?missingMsg) =
     this.string(!^key)
         .addImpl<string>(key, descr, demand=true, ?missingMsg=missingMsg, ?dv=defaultValue, ?dd=defaultDescr)
         :> Argv<'U>
-  member this.addOption (key: string, f: string option -> 'T -> 'U, ?descr) =
+  member this.addOption (key: string, f: 'U -> string option, ?descr) =
     this.string(!^key)
         .addImpl(key, descr)
         :> Argv<'U>
-  member this.addOption (key: string, f: float -> 'T -> 'U, ?descr, ?defaultValue, ?defaultDescr, ?missingMsg) =
+  member this.addOption (key: string, f: 'U -> float, ?descr, ?defaultValue, ?defaultDescr, ?missingMsg) =
     this.number(!^key)
         .addImpl<float>(key, descr, demand=true, ?missingMsg=missingMsg, ?dv=defaultValue, ?dd=defaultDescr)
         :> Argv<'U>
-  member this.addOption (key: string, f: float option -> 'T -> 'U, ?descr) =
+  member this.addOption (key: string, f: 'U -> float option, ?descr) =
     this.string(!^key)
         .addImpl(key, descr)
         :> Argv<'U>
-  member this.addOption (key: string, f: int -> 'T -> 'U, ?descr, ?defaultValue, ?defaultDescr, ?missingMsg) =
+  member this.addOption (key: string, f: 'U -> int, ?descr, ?defaultValue, ?defaultDescr, ?missingMsg) =
     this.number(!^key)
         .addImpl<int>(key, descr, demand=true, ?missingMsg=missingMsg, ?dv=defaultValue, ?dd=defaultDescr)
         :> Argv<'U>
-  member this.addOption (key: string, f: int option -> 'T -> 'U, ?descr) =
+  member this.addOption (key: string, f: 'U -> int option, ?descr) =
     this.string(!^key)
         .addImpl(key, descr)
         :> Argv<'U>
-  member this.addFlag (key: string, f: bool -> 'T -> 'U, ?descr, ?defaultValue, ?defaultDescr) =
+  member this.addFlag (key: string, f: 'U -> bool, ?descr, ?defaultValue, ?defaultDescr) =
     this.boolean(!^key)
         .addImpl<bool>(key, descr, dv=(defaultValue |> Option.defaultValue false), ?dd=defaultDescr)
         :> Argv<'U>
-  member this.addCounter (key: string, f: int -> 'T -> 'U, ?descr) =
+  member this.addCounter (key: string, f: 'U -> int, ?descr) =
     this.count(!^key)
         .addImpl<int>(key, descr)
         :> Argv<'U>

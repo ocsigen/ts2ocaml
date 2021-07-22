@@ -2,6 +2,13 @@ module Typer
 
 open Syntax
 
+type TyperOptions =
+  inherit GlobalOptions
+
+module TyperOptions =
+  let add (yargs: Yargs.Argv<_>) =
+    yargs
+
 type Context<'Options> = {|
   internalModuleName: string
   currentNamespace: string list
@@ -12,7 +19,7 @@ type Context<'Options> = {|
   options: 'Options
 |}
 
-let inline private warn (ctx: Context<GlobalOptions>) (loc: Location) fmt =
+let inline private warn (ctx: Context<TyperOptions>) (loc: Location) fmt =
   Printf.kprintf (fun s ->
     if ctx.options.verbose then eprintfn "warn: %s at %s" s loc.AsString
   ) fmt
@@ -728,6 +735,7 @@ module Statement =
           ) trie
         *)
         trie
+      | Pattern p -> p.underlyingStatements |> List.fold (go ns) trie
       | Module m ->
         let ns' = ns @ [m.name]
         m.statements |> List.fold (go ns') trie |> Trie.addOrUpdate ns' [Module m] List.append
@@ -754,6 +762,11 @@ module Statement =
         e.cases |> Seq.choose (fun c -> c.value)
                 |> Seq.collect (fun l -> Type.findTypes pred (TypeLiteral l))
       | Import _ | Export _ | UnknownStatement _ | FloatingComment _ -> Seq.empty
+      | Pattern p ->
+        seq {
+          for stmt in p.underlyingStatements do
+            yield! go stmt
+        }
     stmts |> Seq.collect go
 
   let getTypeLiterals stmts =
@@ -778,6 +791,10 @@ module Statement =
     ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
   let rec mapType mapping (ctx: Context<_>) stmts =
+    let mapValue v =
+      { v with
+          typ = mapping ctx v.typ
+          typeParams = v.typeParams |> List.map (Type.mapInTypeParam mapping ctx) }
     let f = function
       | TypeAlias a ->
         TypeAlias {
@@ -785,17 +802,11 @@ module Statement =
             target = mapping ctx a.target
             typeParams = a.typeParams |> List.map (Type.mapInTypeParam mapping ctx)
         }
-      | ClassDef c ->
-        ClassDef (Type.mapInClass mapping ctx c)
+      | ClassDef c -> ClassDef (Type.mapInClass mapping ctx c)
       | EnumDef e -> EnumDef e
       | Import i -> Import i
       | Export (e, l, c) -> Export (e, l, c)
-      | Value v ->
-        Value {
-          v with
-            typ = mapping ctx v.typ
-            typeParams = v.typeParams |> List.map (Type.mapInTypeParam mapping ctx)
-        }
+      | Value v -> Value (mapValue v)
       | Module m ->
         Module {
           m with
@@ -807,97 +818,103 @@ module Statement =
         }
       | UnknownStatement u -> UnknownStatement u
       | FloatingComment c -> FloatingComment c
+      | Pattern (ImmediateInstance (i, v)) -> Pattern (ImmediateInstance (Type.mapInClass mapping ctx i, mapValue v))
+      | Pattern (ImmediateConstructor (bi, ci, v)) ->
+        Pattern (ImmediateConstructor (Type.mapInClass mapping ctx bi, Type.mapInClass mapping ctx ci, mapValue v))
     stmts |> List.map f
 
-  let resolveErasedTypes (ctx: Context<GlobalOptions>) (stmts: Statement list) =
+  let resolveErasedTypes (ctx: Context<TyperOptions>) (stmts: Statement list) =
     mapType Type.resolveErasedType ctx stmts
 
-  /// simplify
-  /// ```typescript
-  ///   interface Math {
-  ///     readonly E: number;
-  ///     ...
-  ///   }
-  ///   declare var Math: Math;
-  /// ```
-  /// to
-  /// ```typescript
-  ///   declare namespace Math {
-  ///     val E: number
-  ///   }
-  /// ```
-  /// if it only has readonly fields, getters, or instance methods.
-  let simplifyImmediateInstanceToModule (ctx: Context<GlobalOptions>) (stmts: Statement list) : Statement list =
-    eprintfn "simplifyImmediateInstanceToModule"
-    let canConvertToNamespace (c: Class) =
-      c.isInterface
-      && c.members |> List.forall (fun (attr, m) ->
-        if attr.isStatic then false
-        else
-          match m with
-          | Field (_, _, _)
-          | Method (_, _, _)
-          | Getter _
-          | UnknownMember _ -> true
-          | _ -> false
-      )
-    let convertToNamespace name (c: Class) : Module =
-      let conv (attr: MemberAttribute) = function
-        | Field (fl, mt, tps) ->
-          Value {
-            name = fl.name; typ = fl.value; typeParams = tps;
-            isConst = (mt = ReadOnly); isExported = Exported.No; accessibility = Some attr.accessibility;
-            comments = attr.comments; loc = attr.loc
-          } |> Some
-        | Getter fl ->
-          Value {
-            name = fl.name; typ = fl.value; typeParams = [];
-            isConst = true; isExported = Exported.No; accessibility = Some attr.accessibility;
-            comments = attr.comments; loc = attr.loc
-          } |> Some
-        | Method (name, ft, tps) ->
-          Value {
-            name = name; typ = Function ft; typeParams = tps;
-            isConst = true; isExported = Exported.No; accessibility = Some attr.accessibility;
-            comments = attr.comments; loc = attr.loc
-          } |> Some
-        | UnknownMember msgo -> UnknownStatement {| msg = msgo; comments = attr.comments; loc = attr.loc |} |> Some
-        | _ -> None
-      let stmts = c.members |> List.choose (fun (ma, m) -> conv ma m)
-      { name = name; isExported = c.isExported; isNamespace = true; statements = stmts; comments = c.comments; loc = c.loc }
+  let isPOJO (c: Class) =
+    c.isInterface
+    && c.members |> List.forall (fun (attr, m) ->
+      if attr.isStatic then false
+      else
+        match m with
+        | Field (_, _, _)
+        | Method (_, _, _)
+        | Getter _ | Setter _
+        | UnknownMember _ -> true
+        | _ -> false
+    )
 
-    let rec go ctx stmts =
-      let values =
-        stmts |> List.fold (fun vs -> function
-          | Value { name = name; typ = Ident { name = [className]; fullName = Some fn }; loc = loc } ->
-            let intf =
-              FullName.lookup ctx fn
-              |> List.tryPick (function
-                | ClassName c when c.isInterface && c.name = Some className && canConvertToNamespace c -> Some c
-                | _ -> None)
-            match intf with
-            | None -> vs
-            | Some i -> vs |> Map.add name (loc, i)
-          | _ -> vs
-        ) Map.empty
+  let convertClassToNamespace name (c: Class) : Module =
+    let conv (attr: MemberAttribute) = function
+      | Field (fl, mt, tps) ->
+        Value {
+          name = fl.name; typ = fl.value; typeParams = tps;
+          isConst = (mt = ReadOnly); isExported = Exported.No; accessibility = Some attr.accessibility;
+          comments = attr.comments; loc = attr.loc
+        } |> Some
+      | Getter fl ->
+        Value {
+          name = fl.name; typ = fl.value; typeParams = [];
+          isConst = true; isExported = Exported.No; accessibility = Some attr.accessibility;
+          comments = attr.comments; loc = attr.loc
+        } |> Some
+      | Method (name, ft, tps) ->
+        Value {
+          name = name; typ = Function ft; typeParams = tps;
+          isConst = true; isExported = Exported.No; accessibility = Some attr.accessibility;
+          comments = attr.comments; loc = attr.loc
+        } |> Some
+      | UnknownMember msgo -> UnknownStatement {| msg = msgo; comments = attr.comments; loc = attr.loc |} |> Some
+      | _ -> None
+    let stmts = c.members |> List.choose (fun (ma, m) -> conv ma m)
+    { name = name; isExported = c.isExported; isNamespace = true; statements = stmts; comments = c.comments; loc = c.loc }
+
+  type Dict<'k, 'v> = System.Collections.Generic.Dictionary<'k, 'v>
+  let detectPatterns (stmts: Statement list) : Statement list =
+    let rec go stmts =
+      // declare var Foo: Foo
+      let valDict = new Dict<string, Value>()
+      // interface Foo { .. }
+      let intfDict = new Dict<string, Class>()
+      // declare var Foo: FooConstructor
+      let ctorValDict = new Dict<string, Value>()
+      // interface FooConstructor { .. }
+      let ctorIntfDict = new Dict<string, Class>()
+
+      for stmt in stmts do
+        match stmt with
+        | Value (v & { name = name; typ = Ident { name = [intfName] } }) ->
+          if name = intfName then valDict.Add(name, v)
+          else if name + "Constructor" = intfName then ctorValDict.Add(name, v)
+        | ClassDef (intf & { name = Some name; isInterface = true }) ->
+          if name <> "Constructor" && name.EndsWith("Constructor") then
+            let origName = name.Substring(0, name.Length - "Constructor".Length)
+            ctorIntfDict.Add(origName, intf)
+          else
+            intfDict.Add(name, intf)
+        | _ -> ()
+
+      let immediateInstances = Set.intersectMany [Set.ofSeq valDict.Keys; Set.ofSeq intfDict.Keys]
+      let immediateCtors = Set.intersectMany [Set.ofSeq intfDict.Keys; Set.ofSeq ctorValDict.Keys; Set.ofSeq ctorIntfDict.Keys]
+
       stmts |> List.choose (function
-        | Value v ->
-          match values |> Map.tryFind v.name with
-          | Some (loc, _) when loc.AsComparable = v.loc.AsComparable ->
-            eprintfn "erasing value '%s'" v.name
-            None
-          | _ -> Some (Value v)
-        | ClassDef (intf & { name = Some name }) when intf.isInterface ->
-          match values |> Map.tryFind name with
-          | Some (_, _intf') when intf = _intf' ->
-            eprintfn "converting interface '%s'" name
-            Some (Module (convertToNamespace name intf))
-          | _ -> Some (ClassDef intf)
-        | Module m ->
-          Some (Module { m with statements = go ctx m.statements })
+        | Value (v & { name = name; typ = Ident { name = [intfName] } }) ->
+          if name = intfName && immediateInstances |> Set.contains name && valDict.[name] = v then
+            let intf = intfDict.[name]
+            Some (Pattern (ImmediateInstance (intf, v)))
+          else if name + "Constructor" = intfName && immediateCtors |> Set.contains name && ctorValDict.[name] = v then
+            let baseIntf = intfDict.[name]
+            let ctorIntf = ctorIntfDict.[name]
+            Some (Pattern (ImmediateConstructor (baseIntf, ctorIntf, v)))
+          else
+            Some (Value v)
+        | ClassDef (intf & { name = Some name; isInterface = true }) ->
+          if   (immediateInstances |> Set.contains name || immediateCtors |> Set.contains name)
+            && intfDict.[name] = intf then None
+          else if name <> "Constructor" && name.EndsWith("Constructor") then
+            let origName = name.Substring(0, name.Length - "Constructor".Length)
+            if immediateCtors |> Set.contains origName && ctorIntfDict.[origName] = intf then None
+            else Some (ClassDef intf)
+          else Some (ClassDef intf)
+        | Module m -> Some (Module { m with statements = go m.statements })
         | x -> Some x
       )
-    go ctx stmts
+    go stmts
 
 module Ident =
   let rec mapInType (mapping: Context<'a> -> IdentType -> IdentType) (ctx: Context<'a>) = function
@@ -936,6 +953,10 @@ module Ident =
     | AAnonymousInterface i -> AAnonymousInterface (Type.mapInClass (mapInType mapping) ctx i)
 
   let rec mapInStatements mapType mapExport (ctx: Context<'a>) (stmts: Statement list) : Statement list =
+    let mapValue v =
+      { v with
+          typ = mapInType mapType ctx v.typ
+          typeParams = v.typeParams |> List.map (Type.mapInTypeParam (mapInType mapType) ctx) }
     let f = function
       | TypeAlias a ->
         TypeAlias {
@@ -948,12 +969,7 @@ module Ident =
       | EnumDef e -> EnumDef e
       | Import i -> Import i
       | Export (e, l, c) -> Export (mapExport ctx e, l, c)
-      | Value v ->
-        Value {
-          v with
-            typ = mapInType mapType ctx v.typ
-            typeParams = v.typeParams |> List.map (Type.mapInTypeParam (mapInType mapType) ctx)
-        }
+      | Value v -> Value (mapValue v)
       | Module m ->
         Module {
           m with
@@ -964,6 +980,9 @@ module Ident =
                 m.statements
         }
       | UnknownStatement u -> UnknownStatement u | FloatingComment c -> FloatingComment c
+      | Pattern (ImmediateInstance (i, v)) -> Pattern (ImmediateInstance (Type.mapInClass (mapInType mapType) ctx i, mapValue v))
+      | Pattern (ImmediateConstructor (bi, ci, v)) ->
+        Pattern (ImmediateConstructor (Type.mapInClass (mapInType mapType) ctx bi, Type.mapInClass (mapInType mapType) ctx ci, mapValue v))
     stmts |> List.map f
 
   let resolve (ctx: Context<'a>) (i: IdentType) : IdentType =
@@ -1263,7 +1282,7 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
-let createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: GlobalOptions) : Context<GlobalOptions> =
+let createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: TyperOptions) : Context<TyperOptions> =
   // TODO: handle SourceFile-specific things
   let add name ty m =
     if m |> Trie.containsKey [name] then m
@@ -1297,7 +1316,7 @@ let createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: 
     options = opts
   |}
 
-let createRootContext (internalModuleName: string) (srcs: SourceFile list) (opts: GlobalOptions) : Context<GlobalOptions> =
+let createRootContext (internalModuleName: string) (srcs: SourceFile list) (opts: TyperOptions) : Context<TyperOptions> =
   // TODO: handle SourceFile-specific things
   let ctx = createRootContextForTyper internalModuleName srcs opts
   let stmts = srcs |> List.collect (fun src -> src.statements)
@@ -1364,7 +1383,7 @@ let mergeLibESDefinitions (srcs: SourceFile list) =
     hasNoDefaultLib = true
     moduleName = None }
 
-let runAll (srcs: SourceFile list) (opts: GlobalOptions) =
+let runAll (srcs: SourceFile list) (opts: TyperOptions) =
   // TODO: handle SourceFile-specific things
 
   let inline mapStatements f (src: SourceFile) =
@@ -1376,6 +1395,7 @@ let runAll (srcs: SourceFile list) (opts: GlobalOptions) =
       mapStatements (fun stmts ->
         stmts
               |> Statement.merge // merge modules, interfaces, etc
+              |> Statement.detectPatterns // group statements with pattern
               |> List.map Statement.replaceAliasToFunctionWithInterface // replace alias to function type with a function interface
       )
     )

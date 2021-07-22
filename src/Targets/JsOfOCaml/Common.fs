@@ -1,10 +1,12 @@
 module Target.JsOfOCaml.Common
 
-type Options = {|
-  verbose: bool
-  stdlib: bool
-  numberAsInt: bool
-|}
+type Options =
+  inherit GlobalOptions
+  inherit Typer.TyperOptions
+  abstract stdlib: bool with get
+  abstract numberAsInt: bool with get
+  abstract simplifyImmediateInstance: bool with get, set
+  abstract simplifyImmediateConstructor: bool with get, set
 
 let stdlib = """[@@@ocaml.warning "-7-11-32-33-39"]
 [@@@js.implem

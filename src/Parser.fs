@@ -11,7 +11,10 @@ type Node = Ts.Node
 type TypeChecker = Ts.TypeChecker
 type Kind = Ts.SyntaxKind
 
-type ParserContext = {| checker: TypeChecker; sourceFile: Ts.SourceFile; verbose: bool |}
+type ParserContext =
+  inherit GlobalOptions
+  abstract checker: TypeChecker with get
+  abstract sourceFile: Ts.SourceFile with get
 
 module Node =
   let location (n: Node) =
@@ -483,14 +486,14 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
     let localTyprm, retTy = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
     let ty = readParameters typrm ctx nd.parameters nd retTy
-    attr, New (ty, localTyprm)
+    { attr with isStatic = false }, New (ty, localTyprm)
   | Kind.Constructor ->
     let nd = nd :?> Ts.ConstructorDeclaration
     let localTyprm, retTy = extractType nd
     assert (match retTy with UnknownType _ -> true | _ -> false)
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
     let ty = readParameters typrm ctx nd.parameters nd ()
-    attr, Constructor (ty, localTyprm)
+    { attr with isStatic = true }, Constructor (ty, localTyprm)
   | Kind.GetAccessor ->
     let nd = nd :?> Ts.GetAccessorDeclaration
     match getPropertyName nd.name with

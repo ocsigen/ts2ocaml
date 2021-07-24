@@ -826,44 +826,6 @@ module Statement =
   let resolveErasedTypes (ctx: Context<TyperOptions>) (stmts: Statement list) =
     mapType Type.resolveErasedType ctx stmts
 
-  let isPOJO (c: Class) =
-    c.isInterface
-    && c.members |> List.forall (fun (attr, m) ->
-      if attr.isStatic then false
-      else
-        match m with
-        | Field (_, _, _)
-        | Method (_, _, _)
-        | Getter _ | Setter _
-        | UnknownMember _ -> true
-        | _ -> false
-    )
-
-  let convertClassToNamespace name (c: Class) : Module =
-    let conv (attr: MemberAttribute) = function
-      | Field (fl, mt, tps) ->
-        Value {
-          name = fl.name; typ = fl.value; typeParams = tps;
-          isConst = (mt = ReadOnly); isExported = Exported.No; accessibility = Some attr.accessibility;
-          comments = attr.comments; loc = attr.loc
-        } |> Some
-      | Getter fl ->
-        Value {
-          name = fl.name; typ = fl.value; typeParams = [];
-          isConst = true; isExported = Exported.No; accessibility = Some attr.accessibility;
-          comments = attr.comments; loc = attr.loc
-        } |> Some
-      | Method (name, ft, tps) ->
-        Value {
-          name = name; typ = Function ft; typeParams = tps;
-          isConst = true; isExported = Exported.No; accessibility = Some attr.accessibility;
-          comments = attr.comments; loc = attr.loc
-        } |> Some
-      | UnknownMember msgo -> UnknownStatement {| msg = msgo; comments = attr.comments; loc = attr.loc |} |> Some
-      | _ -> None
-    let stmts = c.members |> List.choose (fun (ma, m) -> conv ma m)
-    { name = name; isExported = c.isExported; isNamespace = true; statements = stmts; comments = c.comments; loc = c.loc }
-
   type Dict<'k, 'v> = System.Collections.Generic.Dictionary<'k, 'v>
   let detectPatterns (stmts: Statement list) : Statement list =
     let rec go stmts =

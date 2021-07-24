@@ -898,9 +898,9 @@ let emitStructuredDefinitions (ctx: Context<Options>) (stmts: Statement list) =
     match s with
     | Module m ->
       let content =
+        let renamer = new OverloadRenamer()
         concat newline (
           m.statements |> List.map (fun stmt ->
-            let renamer = new OverloadRenamer()
             go renamer ({| ctx with currentNamespace = m.name :: ctx.currentNamespace |}) stmt
           )
         )

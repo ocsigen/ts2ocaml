@@ -114,7 +114,9 @@ module Type =
   let void_t = str "unit"
   let string_t  = str "string"
   let boolean_t = str "bool"
-  let number_t  = str "float"
+  let number_t (opt: Options) =
+    if opt.numberAsInt then str "int"
+    else str "float"
   let array_t   = str "list"
   let readonlyArray_t = str "list"
 
@@ -536,7 +538,8 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     | Prim p ->
       match p with
       | Null -> tyApp null_t [never_t] | Undefined -> tyApp undefined_t [never_t]
-      | String -> string_t | Bool -> boolean_t | Number -> number_t
+      | String -> string_t | Bool -> boolean_t
+      | Number -> number_t ctx.options
       | Object -> object_t | UntypedFunction -> function_t
       | RegExp -> regexp_t | Symbol -> symbol_t
       | Never -> never_t | Any -> any_t | Unknown -> unknown_t | Void -> void_t

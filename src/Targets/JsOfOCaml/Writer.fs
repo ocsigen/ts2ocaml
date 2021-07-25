@@ -642,13 +642,13 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
         let flags = { flags with variance = -flags.variance }
         match args with
         | [] -> acc + void_t
+        | Choice1Of2 x :: [] when acc = empty && not x.isOptional ->
+          go acc [Choice2Of2 x.value] // do not generate label if it is the only argument and is not optional
         | Choice1Of2 x :: [] when f.isVariadic ->
           assert (not x.isOptional)
           acc + tprintf "%s:" (Naming.valueName x.name |> rename) + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx x.value +@ " [@js.variadic]")
         | Choice2Of2 t :: [] | Choice1Of2 { value = t } :: [] when f.isVariadic ->
           acc + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx t +@ " [@js.variadic]")
-        | Choice1Of2 x :: [] when not x.isOptional ->
-          go acc [Choice2Of2 x.value] // do not generate label if it is the only argument and is not optional
         | Choice1Of2 x :: xs ->
           let prefix =
             if x.isOptional then "?" else ""

@@ -256,17 +256,21 @@ module Naming =
 
   let moduleName (name: string) =
     let name = removeInvalidChars name
-    if Char.IsLower name.[0] then
-      sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
-    else if name.[0] = '_' then
-      "M" + name
-    else name
+    let result =
+      if Char.IsLower name.[0] then
+        sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
+      else if name.[0] = '_' then
+        "M" + name
+      else name
+    if reservedNames |> Set.contains result then result + "_" else result
 
   let constructorName (name: string list) =
     let s = String.concat "_" name |> removeInvalidChars
-    if Char.IsLower s.[0] then
-      sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]
-    else s
+    let result =
+      if Char.IsLower s.[0] then
+        sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]
+      else s
+    if reservedNames |> Set.contains result then result + "_" else result
 
   let flattenedTypeName (name: string list) =
     let s = String.concat "_" name |> removeInvalidChars
@@ -278,7 +282,7 @@ module Naming =
   let structuredTypeName (name: string list) =
     name
     |> List.map removeInvalidChars
-    |> List.map (fun s -> sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..])
+    |> List.map moduleName
     |> String.concat "."
 
   let createTypeNameOfArity arity maxArityOpt name =
@@ -456,7 +460,7 @@ let treatEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<EnumCase, Literal>>)
     for c in Set.toSeq cases do
       let name, value =
         match c with
-        | Choice1Of2 e -> str e.name, e.value
+        | Choice1Of2 e -> str (Naming.constructorName [e.name]), e.value
         | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l
       let attr =
         match value with
@@ -624,7 +628,6 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
             let t = treatDUMany ru.discriminatedUnions
             let t = if hasOther then or_ t (treatOther ru.otherTypes) else t
             t |> treatEnumOr ru.caseEnum |> Some
-
         baseType |> treatArray ru.caseArray
                  |> treatTypeofableTypes ru.typeofableTypes
                  |> Option.defaultValue never_t
@@ -741,10 +744,7 @@ let getLabelsOfFullName (ctx: Context<Options>) (fullName: string list) (typePar
       for e in getAllInheritancesAndSelfFromName ctx fullName do
         match e with
         | InheritingType.KnownIdent i ->
-          if i.tyargs |> List.isEmpty then
-            yield tprintf "%s%s" pv_head (Naming.constructorName i.fullName)
-          else
-            yield str pv_head + emitCase i.fullName (i.tyargs |> List.map (emitType_ ctx))
+          yield str pv_head + emitCase i.fullName (i.tyargs |> List.map (emitType_ ctx))
         | InheritingType.ImportedIdent i ->
           yield str (Naming.structuredTypeName i.name + ".tags")
         | InheritingType.UnknownIdent i ->
@@ -791,7 +791,7 @@ let emitFlattenedDefinitions (ctx: Context<Options>) : text =
             let treatEnum (cases: EnumCase list) =
               between "[" "]" (concat (str " | ") [
                 for c in cases do
-                  let name, value = str c.name, c.value
+                  let name, value = str (Naming.constructorName [c.name]), c.value
                   let attr =
                     match value with
                     | Some v -> Attr.js (literal v)
@@ -1026,17 +1026,17 @@ let emitStructuredDefinitions (rootCtx: Context<Options>) (stmts: Statement list
         | _ -> None
     let emitType_ ctx ty = emitType orf ctx ty
 
+    let childRenamer = new OverloadRenamer()
     let members = [
       for ma, m in c.members do
-        yield! emitMember emitType_ ctx renamer name selfTy ma m
-      yield! additionalMembers emitType_ renamer
+        yield! emitMember emitType_ ctx childRenamer name selfTy ma m
+      yield! additionalMembers emitType_ childRenamer
     ]
     let stmts = [
-      let renamer = new OverloadRenamer()
       yield! members |> List.map (function Ok x | Error x -> x)
       for parent in c.implements do
         let ty = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = parent; loc = UnknownLocation }
-        yield val_ ("cast" |> renamer.Rename "value") (emitType_ ctx ty) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
+        yield val_ ("cast" |> childRenamer.Rename "value") (emitType_ ctx ty) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
       match c.name with
       | None -> ()
       | Some name ->
@@ -1048,8 +1048,8 @@ let emitStructuredDefinitions (rootCtx: Context<Options>) (stmts: Statement list
             else App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
           let toMlTy = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = targetTy; loc = UnknownLocation }
           let ofMlTy = Function { isVariadic = false; args = [Choice2Of2 targetTy]; returnType = selfTy; loc = UnknownLocation }
-          yield val_ ("to_ml" |> renamer.Rename "value") (emitType_ ctx toMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
-          yield val_ ("of_ml" |> renamer.Rename "value") (emitType_ ctx ofMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
+          yield val_ ("to_ml" |> childRenamer.Rename "value") (emitType_ ctx toMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
+          yield val_ ("of_ml" |> childRenamer.Rename "value") (emitType_ ctx ofMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
     ]
 
     let hasActualMember = members |> List.exists (function Ok _ -> true | Error _ -> false)

@@ -1167,7 +1167,6 @@ let emitStructuredDefinitions (rootCtx: Context<Options>) (stmts: Statement list
       | ImmediateInstance (i, v) ->
         if not ctx.options.simplifyImmediateInstance then fallback ()
         else
-          eprintfn "immediate instance detected: %s" v.name
           let moduleName = Naming.moduleName v.name |> renamer.Rename "module"
           let renamer = new OverloadRenamer()
           let stmts = intfToStmts i emitType_ renamer
@@ -1180,7 +1179,6 @@ let emitStructuredDefinitions (rootCtx: Context<Options>) (stmts: Statement list
       | ImmediateConstructor (bi, ci, v) ->
         if not ctx.options.simplifyImmediateConstructor then fallback ()
         else
-          eprintfn "immediate constructor detected: %s" v.name
           emitClass ctx renamer bi (intfToStmts ci)
     | Value v -> emitValue emitType_ renamer ctx v
     | ClassDef c -> emitClass ctx renamer c (fun _ _ -> [])

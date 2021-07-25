@@ -22,8 +22,8 @@ module Utils =
       let inner =
         if isMultiLine text then newline + indent text + newline
         else between " " " " text
-      between "(**" "*)" inner
-  let docCommentStr text = tprintf "(** %s *)" text
+      newline + between "(**" "*)" inner
+  let docCommentStr text = newline + tprintf "(** %s *)" text
 
   let [<Literal>] pv_head = "`"
 
@@ -851,6 +851,7 @@ let emitFlattenedDefinitions (ctx: Context<Options>) : text =
             |> Seq.skipWhile (fun t -> f "type" t |> Option.isNone)
             |> Seq.map2 (fun prefix t -> f prefix t) prefix
             |> Seq.choose id
+            |> Seq.distinct
         ]
       )
     ]
@@ -1068,6 +1069,16 @@ let emitStructuredDefinitions (rootCtx: Context<Options>) (stmts: Statement list
           ])
       ]
 
+  let emitValue (emitType_: TypeEmitter) (renamer: OverloadRenamer) ctx v =
+    let ty, attr =
+      match v.typ with
+      | Function _ ->
+        v.typ, Attr.js_global v.name
+      | _ ->
+        let tyAsGetter = Function { args = [Choice2Of2 (Prim Void)]; isVariadic = false; returnType = v.typ; loc = v.loc }
+        tyAsGetter, Attr.js_get v.name
+    val_ (Naming.valueName v.name |> renamer.Rename "value") (emitType_ ctx ty) + str " " + attr
+
   let emitType_ = emitType OverrideFunc.noOverride
   let rec go (renamer: OverloadRenamer) (ctx: Context<Options>) (s: Statement) : text =
     let comments =
@@ -1118,22 +1129,28 @@ let emitStructuredDefinitions (rootCtx: Context<Options>) (stmts: Statement list
     | Pattern p ->
       let fallback () =
         p.underlyingStatements |> List.map (go renamer ctx) |> concat newline
-      let value name typ typrms isConst (memberAttr : MemberAttribute) =
-        Value {
-          name = name; typ = typ; typeParams = typrms;
-          isConst = isConst; isExported = Exported.No; accessibility = Some memberAttr.accessibility;
-          comments = memberAttr.comments; loc = memberAttr.loc
-        }
+
       let intfToStmts (moduleIntf: Class) emitType_ (renamer: OverloadRenamer) =
+        let emitAsValue name typ typrms isConst (memberAttr: MemberAttribute) =
+          let v =
+            { name = name; typ = typ; typeParams = typrms;
+              isConst = isConst; isExported = Exported.No; accessibility = Some memberAttr.accessibility;
+              comments = memberAttr.comments; loc = memberAttr.loc }
+          [
+            match v.comments with
+            | [] -> ()
+            | xs -> yield docComment (xs |> List.map emitComment |> concat newline) |> Error
+            yield emitValue emitType_ renamer ctx v |> Ok
+          ]
         [ for ma, m in moduleIntf.members do
             match m with
             | Field (fl, mt, tps) ->
-              yield value fl.name fl.value tps (mt = ReadOnly) ma |> go renamer ctx |> Ok
+              yield! emitAsValue fl.name fl.value tps (mt = ReadOnly) ma
             | Getter fl ->
-              yield value fl.name fl.value [] true ma |> go renamer ctx |> Ok
+              yield! emitAsValue fl.name fl.value [] true ma
             | Setter _ -> ()
             | Method (name, ft, tps) ->
-              yield value name (Function ft) tps true ma |> go renamer ctx |> Ok
+              yield! emitAsValue name (Function ft) tps true ma
             | New (ft, _tps) ->
               yield val_ (renamer.Rename "value" "create") (emitType_ ctx (Function ft)) + str " " + Attr.js_create |> Ok
             | FunctionInterface (ft, _tps) ->
@@ -1163,15 +1180,7 @@ let emitStructuredDefinitions (rootCtx: Context<Options>) (stmts: Statement list
         else
           eprintfn "immediate constructor detected: %s" v.name
           emitClass ctx renamer bi (intfToStmts ci)
-    | Value v ->
-      let ty, attr =
-        match v.typ with
-        | Function _ ->
-          v.typ, Attr.js_global v.name
-        | _ ->
-          let tyAsGetter = Function { args = [Choice2Of2 (Prim Void)]; isVariadic = false; returnType = v.typ; loc = v.loc }
-          tyAsGetter, Attr.js_get v.name
-      val_ (Naming.valueName v.name |> renamer.Rename "value") (emitType_ ctx ty) + str " " + attr
+    | Value v -> emitValue emitType_ renamer ctx v
     | ClassDef c -> emitClass ctx renamer c (fun _ _ -> [])
 
   concat newline [

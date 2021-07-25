@@ -232,7 +232,7 @@ open Term
 module Naming =
   let ourReservedNames =
     set [
-      "create"; "apply"; "get"; "set"; "cast"
+      "create"; "apply"; "invoke"; "get"; "set"; "cast";
     ]
 
   let reservedNames =

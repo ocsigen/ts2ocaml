@@ -45,6 +45,11 @@ with
     let sb = StringBuilder()
     text.WriteImpl(sb.Append >> ignore, sb.AppendLine >> ignore, indentLength, this)
     sb.ToString()
+  interface IText with
+    member this.getText() = this
+
+and IText =
+  abstract getText: unit -> text
 
 let toString indentLength (t: text) = t.ToString(indentLength)
 

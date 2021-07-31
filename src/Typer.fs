@@ -31,6 +31,13 @@ module Context =
     match ctx.currentNamespace with
     | [] -> None
     | _ :: ns -> Some {| ctx with currentNamespace = ns |}
+  let getRelativeNameTo (name: string list) (ctx: Context<'a>) =
+    let rec go name selfPos =
+      match name, selfPos with
+      | x :: [], _ :: _ -> [x]
+      | x :: xs, y :: ys when x = y -> go xs ys
+      | xs, _ -> xs
+    go name (List.rev ctx.currentNamespace)
 
 type FullNameLookupResult =
   | AliasName of TypeAlias

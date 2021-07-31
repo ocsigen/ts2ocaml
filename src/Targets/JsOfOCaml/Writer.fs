@@ -3,363 +3,12 @@ module Target.JsOfOCaml.Writer
 open System
 open Syntax
 open Typer
+open Typer.Type
 open Text
 
 open Target.JsOfOCaml.Common
+open Target.JsOfOCaml.OCamlHelper
 
-module Utils =
-  let comment text =
-    if text = empty then empty
-    else
-      let inner =
-        if isMultiLine text then newline + indent text + newline
-        else between " " " " text
-      between "(*" "*)" inner
-  let commentStr text = tprintf "(* %s *)" text
-  let docComment text =
-    if text = empty then empty
-    else
-      let inner =
-        if isMultiLine text then newline + indent text + newline
-        else between " " " " text
-      newline + between "(**" "*)" inner
-  let docCommentStr text = newline + tprintf "(** %s *)" text
-
-  let [<Literal>] pv_head = "`"
-
-  [<Obsolete("TODO")>]
-  let inline TODO<'a> = failwith "TODO"
-
-open Utils
-
-[<RequireQualifiedAccess>]
-module Attr =
-  type Category = Normal | Block | Floating
-
-  let attr (c: Category) name payload =
-    let at = String.replicate (match c with Normal -> 1 | Block -> 2 | Floating -> 3) "@"
-    if payload <> empty then tprintf "[%s%s " at name + payload +@ "]"
-    else tprintf "[%s%s]" at name
-
-  let js payload = attr Normal "js" payload
-
-  let js_stop = attr Floating "js.stop" empty
-  let js_start = attr Floating "js.start" empty
-
-  let js_stop_start_implem sigContent implContent =
-    concat newline [
-      js_stop
-      sigContent
-      js_start
-      attr Floating "js.implem" (newline + indent implContent + newline)
-    ]
-
-  let js_custom_val content =
-    if content = empty then attr Block "js.custom" empty
-    else attr Block "js.custom" (newline + indent content + newline)
-
-  let js_implem_floating content = attr Floating "js.implem" (newline + indent content + newline)
-  let js_implem_val content = attr Block "js.implem" (newline + indent content + newline)
-
-  let js_custom_typ content = attr Block "js.custom" content
-
-  let js_create = attr Block "js.create" empty
-  let js_invoke = attr Block "js.invoke" empty
-
-  let private str' s = between "\"" "\"" (str s)
-
-  let js_get name = attr Block "js.get" (str' name)
-
-  let js_set name = attr Block "js.set" (str' name)
-
-  let js_index_get = attr Block "js.index_get" empty
-
-  let js_index_set = attr Block "js.index_set" empty
-
-  let js_call name = attr Block "js.call" (str' name)
-
-  let js_apply is_newable = attr Block (if is_newable then "js.apply_newable" else "js.apply") empty
-
-  let js_global name = attr Block "js.global" (str' name)
-
-[<RequireQualifiedAccess>]
-module Ppx =
-  let js body = "[%js: " @+ newline + indent body + newline +@ "]"
-
-  let include_ body = "include " @+ js body
-
-  let module_  name body = tprintf "module %s = " name + js body
-
-module Type =
-  // prim types that are JS-able and defined as interface in typescript/lib/lib.*.d.ts
-  let jsablePrimTypeInterfaces =
-    Map.ofList [
-      "String",  String
-      "Boolean", Bool
-      "Number",  Number
-      "Array",   Array
-      "ReadonlyArray", Array
-    ]
-
-  let nonJsablePrimTypeInterfaces =
-    Map.ofList [
-      "Object", Object
-      "Function", UntypedFunction
-      "Symbol", Symbol
-      "RegExp", RegExp
-      "BigInt", BigInt
-    ]
-
-  // JS-able OCaml types
-  let void_t = str "unit"
-  let string_t  = str "string"
-  let boolean_t = str "bool"
-  let number_t (opt: Options) =
-    if opt.numberAsInt then str "int"
-    else str "float"
-  let array_t   = str "list"
-  let readonlyArray_t = str "list"
-
-  // JS only types
-  // ES5
-  let object_t  = str "untyped_object"
-  let function_t = str "untyped_function"
-  let symbol_t  = str "symbol"
-  let regexp_t  = str "regexp"
-  // ES2020
-  let bigint_t = str "bigint"
-
-  // TS types
-  let never_t   = str "never"
-  let any_t     = str "any"
-  let unknown_t = str "unknown"
-  let null_t           = str "or_null"
-  let undefined_t      = str "or_undefined"
-  let null_undefined_t = str "or_null_or_undefined"
-
-  // gen_js_api types
-  let ojs_t = str "Ojs.t"
-
-  // our types
-  let tyVar s = tprintf "'%s" s
-
-  let tyMany sep = function
-    | [] -> failwith "empty tuple"
-    | _ :: [] -> failwith "1-ary tuple"
-    | xs -> concat sep xs |> between "(" ")"
-
-  let tyTuple = tyMany (str " * ")
-
-  let tyApp t = function
-    | [] -> failwith "type application with empty arguments"
-    | [u] -> u +@ " " + t
-    | us -> tyMany (str ", ") us +@ " " + t
-
-  let tyAppOpt t args =
-    if List.isEmpty args then t
-    else tyApp t args
-
-  let intf  = str "intf"
-  let enum baseType cases = tyApp (str "enum") [baseType; cases]
-
-  let and_ a b = tyApp (str "and_") [a; b]
-  let or_  a b = tyApp (str "or_")  [a; b]
-
-  let string_or t  = tyApp (str "or_string") [t]
-  let number_or t  = tyApp (str "or_number") [t]
-  let boolean_or t = tyApp (str "or_boolean") [t]
-  let symbol_or t  = tyApp (str "or_symbol") [t]
-  let bigint_or t  = tyApp (str "or_bigint") [t]
-
-  let array_or elemT t = tyApp (str "or_array") [t; elemT]
-  let enum_or cases t = tyApp (str "or_enum") [t; cases]
-
-  let union_t types =
-    let l = List.length types
-    if l < 1 then failwith "union type with only zero or one type"
-    else
-      let rec go i = function
-        | h :: t when i > 8 -> or_ (go (i-1) t) h
-        | xs -> tyApp (tprintf "union%i" i) xs
-      go l types
-
-  let intersection_t types =
-    let l = List.length types
-    if l < 1 then failwith "union type with only zero or one type"
-    else
-      let rec go i = function
-        | h :: t when i > 8 -> and_ (go (i-1) t) h
-        | xs -> tyApp (tprintf "intersection%i" i) xs
-      go l types
-
-module Term =
-  let termTuple = function
-    | [] -> failwith "empty tuple"
-    | _ :: [] -> failwith "1-ary tuple"
-    | xs -> concat (str ", ") xs |> between "(" ")"
-
-  let termApp t = function
-    | [] -> failwith "term application with empty arguments"
-    | us ->
-      (t :: us) |> concat (str " ") |> between "(" ")"
-
-  let typeAssert term ty = between "(" ")" (term +@ ":" + ty)
-
-  let literal (l: Literal) =
-    match l with
-    | LBool true -> str "true" | LBool false -> str "false"
-    | LInt i -> string i |> str
-    | LFloat f -> tprintf "%f" f
-    | LString s -> tprintf "\"%s\"" (String.escape s)
-
-  let record (fields: (string * text) list) =
-    if List.isEmpty fields then failwith "empty fields of record"
-    else
-      List.map (fun (name, body) -> name + "=" @+ body) fields
-      |> concat (str "; ")
-      |> between "{ " " }"
-
-  let termFun (args: text list) (body: text) =
-    if List.isEmpty args then failwith "empty args of fun"
-    else "fun " @+ concat (str " ") args +@ " -> " + body
-
-  let pureJSExpr (js: string) =
-    termApp (str "Ts2ocaml_baselib.pure_js_expr") [literal (LString js)]
-
-open Type
-open Term
-
-module Naming =
-  let ourReservedNames =
-    set [
-      "create"; "apply"; "invoke"; "get"; "set"; "cast";
-    ]
-
-  let reservedNames =
-    Set.unionMany [
-      Naming.Keywords.keywords
-      ourReservedNames
-    ]
-
-  let removeInvalidChars (s: string) =
-    s.ToCharArray()
-    |> Array.map (fun c -> if Char.isAlphabetOrDigit c || c = '_' then c else '_')
-    |> System.String
-
-  let valueName (name: string) =
-    let name = removeInvalidChars name
-    let result =
-      if String.forall (fun c -> Char.IsLower c |> not) name then
-        name.ToLowerInvariant()
-      else if Char.IsUpper name.[0] then
-        sprintf "%c%s" (Char.ToLower name.[0]) name.[1..]
-      else name
-    if reservedNames |> Set.contains result then result + "_" else result
-
-  let moduleName (name: string) =
-    let name = removeInvalidChars name
-    let result =
-      if Char.IsLower name.[0] then
-        sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
-      else if name.[0] = '_' then
-        "M" + name
-      else name
-    if reservedNames |> Set.contains result then result + "_" else result
-
-  let constructorName (name: string list) =
-    let s = String.concat "_" name |> removeInvalidChars
-    let result =
-      if Char.IsLower s.[0] then
-        sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]
-      else s
-    if reservedNames |> Set.contains result then result + "_" else result
-
-  let flattenedTypeName (name: string list) =
-    let s = String.concat "_" name |> removeInvalidChars
-    let result =
-      if Char.IsUpper s.[0] then "_" + s
-      else s
-    if reservedNames |> Set.contains result then result + "_" else result
-
-  let structuredTypeName (name: string list) =
-    name
-    |> List.map removeInvalidChars
-    |> List.map moduleName
-    |> String.concat "."
-
-  let createTypeNameOfArity arity maxArityOpt name =
-    match maxArityOpt with
-    | Some maxArity ->
-      if arity = maxArity then name
-      else sprintf "%s_%d" name arity
-    | None -> sprintf "%s_%d" name arity
-
-module Definition =
-  let open_ names = names |> List.map (tprintf "open %s") |> concat newline
-
-  let include_ names = names |> List.map (tprintf "include %s") |> concat newline
-
-  let module_ name content =
-    concat newline [
-      tprintf "module %s = struct" name
-      indent content
-      str "end"
-    ]
-
-  let moduleSig name content =
-    concat newline [
-      tprintf "module %s : sig" name
-      indent content
-      str "end"
-    ]
-
-  let moduleScopeSig scope name content =
-    concat newline [
-      tprintf "module[@js.scope \"%s\"] %s : sig" scope name
-      indent content
-      str "end"
-    ]
-
-  let moduleType name content =
-    concat newline [
-      tprintf "module type %s = sig" name
-      indent content
-      str "end"
-    ]
-
-  let functor_ name moduleName moduleType content =
-    concat newline [
-      tprintf "module %s (%s: " name moduleName + moduleType +@ ") : sig"
-      indent content
-      str "end"
-    ]
-
-  let abstractType name tyargs =
-    str "type "
-    + (if List.isEmpty tyargs then str name else tyApp (str name) tyargs)
-
-  let abstractTypeOjs name tyargs =
-    abstractType name tyargs +@ " = private Ojs.t"
-
-  let typeAlias name tyargs ty =
-    str "type "
-    + (if List.isEmpty tyargs then str name else tyApp (str name) tyargs)
-    +@ " = " + ty
-
-  let val_ name ty =
-    tprintf "val %s: " name + ty
-
-  let let_ name args retTyOpt value =
-    let retTy =
-      match retTyOpt with
-      | None -> empty
-      | Some t -> " : " @+ t
-    tprintf "let %s " name + concat (str " ") args + retTy +@ " = " + value
-
-  let external_ name tyarg tyret extName =
-    tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
-
-open Definition
 type ScriptTarget = TypeScript.Ts.ScriptTarget
 
 let emitComment (c: Comment) : text =
@@ -479,83 +128,71 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
         let attr =
           match value with
           | _ when flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant -> empty
-          | Some v -> Attr.js (literal v)
+          | Some v -> Attr.js (Term.literal v)
           | None -> empty
         yield pv_head @+ name + attr
     ]) +@ " [@js.enum]" |> between "(" ")"
+
+  let treatIdent { name = name; fullName = fno } (arity: int) (loc: Location) =
+    let relativeName, maxArity =
+      match fno with
+      | None -> name, None
+      | Some fn ->
+        let relativeName = ctx |> Context.getRelativeNameTo fn
+        let maxArity =
+          FullName.tryLookupWith ctx fn (function
+            | AliasName { typeParams = tps; erased = false }
+            | ClassName { typeParams = tps } -> List.length tps |> Some
+            | _ -> None
+          )
+        assert (relativeName = name)
+        relativeName, maxArity
+    let tyName = Naming.createTypeNameOfArity arity maxArity "t"
+    str (Naming.structured Naming.moduleName relativeName + "." + tyName)
 
   match overrideFunc (emitTypeImpl flags overrideFunc) ctx ty with
   | Some t -> t
   | None ->
     match ty with
     | App (APrim Array, ts, _) when flags.forceVariadic ->
-      tyApp array_t (List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx) ts)
+      Type.app Type.array (List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx) ts)
     | App (APrim ReadonlyArray, ts, _) when flags.forceVariadic ->
-      tyApp readonlyArray_t (List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx) ts)
+      Type.app Type.readonlyArray (List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx) ts)
     | _ when flags.forceVariadic ->
-      commentStr (sprintf "FIXME: type '%s' cannot be used for variadic argument" (Type.pp ty)) + tyApp array_t [any_t]
+      commentStr (sprintf "FIXME: type '%s' cannot be used for variadic argument" (Type.pp ty)) + Type.app Type.array [Type.any]
     | App (t, ts, loc) ->
       let emit t ts =
-        tyAppOpt (emitTypeImpl { flags with hasTypeArgumentsHandled = true } overrideFunc ctx t) (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
+        Type.appOpt (emitTypeImpl { flags with hasTypeArgumentsHandled = true } overrideFunc ctx t) (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
       match t with
-      | AIdent { fullName = Some fn } ->
-        let ts =
-          FullName.tryLookupWith ctx fn (function
-            | AliasName { typeParams = typrms; erased = false; loc = loc' }
-            | ClassName { typeParams = typrms; loc = loc' } ->
-              assignTypeParams fn (loc ++ loc') typrms ts
-                (fun _ t -> t)
-                (fun tv ->
-                  match tv.defaultType with
-                  | Some t -> t
-                  | None -> failwithf "emitTypeImpl: insufficient type params for type '%s'" (String.concat "." fn))
-              |> Some
-            | _ -> None
-          ) |> Option.defaultValue ts
-        emit (Type.ofAppLeftHandSide t) ts
-      | AIdent { name = name; fullName = None } ->
-        let lhs =
-          str (Naming.structuredTypeName name + "." + Naming.createTypeNameOfArity (List.length ts) None "t")
-        tyAppOpt lhs (List.map (emitTypeImpl { flags with needParen = true } overrideFunc ctx) ts)
+      | AIdent i -> treatIdent i (List.length ts) loc
       | APrim _ | AAnonymousInterface _ -> emit (Type.ofAppLeftHandSide t) ts
-    | Ident i ->
-      match i.fullName with
-      | Some fn ->
-        FullName.tryLookupWith ctx fn (function
-          | AliasName { target = target; erased = true } -> emitTypeImpl flags overrideFunc ctx target |> Some
-          | AliasName { typeParams = typrms; erased = false }
-          | ClassName { typeParams = typrms } when not (List.isEmpty typrms) && not flags.hasTypeArgumentsHandled ->
-            emitTypeImpl flags overrideFunc ctx (App (AIdent i, [], i.loc)) |> Some
-          | _ -> None
-        ) |> Option.defaultWith (fun () -> str (Naming.flattenedTypeName fn))
-      | None ->
-        str (Naming.structuredTypeName i.name + "." + Naming.createTypeNameOfArity 0 None "t")
+    | Ident i -> treatIdent i 0 i.loc
     | TypeVar v ->
       if flags.failContravariantTypeVar && flags.variance = Contravariant then
-        commentStr (sprintf "FIXME: contravariant type variable '%s'" v) + any_t
+        commentStr (sprintf "FIXME: contravariant type variable '%s'" v) + Type.any
       else
         tprintf "'%s" v
     | Prim p ->
       match p with
-      | Null -> tyApp null_t [never_t] | Undefined -> tyApp undefined_t [never_t]
-      | String -> string_t | Bool -> boolean_t
-      | Number -> number_t ctx.options
-      | Object -> object_t | UntypedFunction -> function_t
-      | RegExp -> regexp_t | Symbol -> symbol_t
-      | Never -> never_t | Any -> any_t | Unknown -> unknown_t | Void -> void_t
-      | Array -> array_t | ReadonlyArray -> readonlyArray_t
-      | BigInt -> bigint_t
+      | Null -> Type.app Type.null_ [Type.never] | Undefined -> Type.app Type.undefined [Type.never]
+      | String -> Type.string | Bool -> Type.boolean
+      | Number -> Type.number ctx.options
+      | Object -> Type.object | UntypedFunction -> Type.function_
+      | RegExp -> Type.regexp | Symbol -> Type.symbol
+      | Never -> Type.never | Any -> Type.any | Unknown -> Type.unknown | Void -> Type.void_
+      | Array -> Type.array | ReadonlyArray -> Type.readonlyArray
+      | BigInt -> Type.bigint
     | TypeLiteral l ->
       treatEnum flags ctx (Set.singleton (Choice2Of2 l))
     | Intersection i ->
       let flags = { flags with needParen = true }
-      intersection_t (i.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
+      Type.intersection (i.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
     | Union u ->
       let flags = { flags with needParen = true }
       let safe_union_t = function
         | [] -> failwith "union type with only zero types"
         | [t] -> t
-        | ts -> union_t ts
+        | ts -> Type.union ts
       if not flags.resolveUnion then
         safe_union_t (u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
       else
@@ -565,18 +202,18 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
           else text
         let treatNullUndefined t =
           match ru.caseNull, ru.caseUndefined with
-          | true, true -> tyApp null_undefined_t [t]
-          | true, false -> tyApp null_t [t]
-          | false, true -> tyApp undefined_t [t]
+          | true, true -> Type.app Type.null_undefined [t]
+          | true, false -> Type.app Type.null_ [t]
+          | false, true -> Type.app Type.undefined [t]
           | false, false -> t
         let treatTypeofableTypes (ts: Set<TypeofableType>) t =
           let emitOr tt t =
             match tt with
-            | TNumber -> number_or t
-            | TString -> string_or t
-            | TBoolean -> boolean_or t
-            | TSymbol -> symbol_or t
-            | TBigInt -> bigint_or t
+            | TNumber -> Type.number_or t
+            | TString -> Type.string_or t
+            | TBoolean -> Type.boolean_or t
+            | TSymbol -> Type.symbol_or t
+            | TBigInt -> Type.bigint_or t
           let rec go = function
             | [] -> t
             | [x] ->
@@ -592,15 +229,15 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
             // TODO: think how to map multiple array cases properly
             let elemT = emitTypeImpl flags overrideFunc ctx (Union { types = Set.toList ts })
             match t with
-            | None -> Some (tyApp array_t [elemT])
-            | Some t -> Some (array_or elemT t)
+            | None -> Some (Type.app Type.array [elemT])
+            | Some t -> Some (Type.array_or elemT t)
         let treatDU (tagName: string) (cases: Map<Literal, Type>) =
           between "[" "]" (concat (str " | ") [
             for (l, t) in Map.toSeq cases do
               let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
               let ty = emitTypeImpl { flags with resolveUnion = false } overrideFunc ctx t
               let body = tprintf "%A of %A " name ty
-              yield body + skipOnContravariant (Attr.js (literal l))
+              yield body + skipOnContravariant (Attr.js (Term.literal l))
           ]) + tprintf " [@js.union on_field \"%s\"]" tagName |> between "(" ")"
         let treatOther otherTypes =
           if Set.isEmpty otherTypes then
@@ -609,7 +246,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
             otherTypes |> Set.toList |> List.map (emitTypeImpl flags overrideFunc ctx) |> safe_union_t
         let treatEnumOr (cases: Set<Choice<EnumCase, Literal>>) t =
           if Set.isEmpty cases then t
-          else enum_or (treatEnum flags ctx cases) t
+          else Type.enum_or (treatEnum flags ctx cases) t
         let treatDUMany du =
           if Map.isEmpty du then
             failwith "impossible_emitResolvedUnion_baseType_go"
@@ -623,28 +260,28 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
           | true, false, false -> Some (treatEnum flags ctx ru.caseEnum)
           | false, true, hasOther ->
             let t = treatDUMany ru.discriminatedUnions
-            if hasOther then or_ t (treatOther ru.otherTypes) |> Some
+            if hasOther then Type.or_ t (treatOther ru.otherTypes) |> Some
             else Some t
           | false, false, true -> treatOther ru.otherTypes |> Some
           | true, false, true -> treatOther ru.otherTypes |> treatEnumOr ru.caseEnum |> Some
           | true, true, hasOther ->
             let t = treatDUMany ru.discriminatedUnions
-            let t = if hasOther then or_ t (treatOther ru.otherTypes) else t
+            let t = if hasOther then Type.or_ t (treatOther ru.otherTypes) else t
             t |> treatEnumOr ru.caseEnum |> Some
         baseType |> treatArray ru.caseArray
                  |> treatTypeofableTypes ru.typeofableTypes
-                 |> Option.defaultValue never_t
+                 |> Option.defaultValue Type.never
                  |> treatNullUndefined
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
-    | PolymorphicThis -> commentStr "FIXME: polymorphic this" + any_t
-    | Intrinsic -> ojs_t
+    | PolymorphicThis -> commentStr "FIXME: polymorphic this" + Type.any
+    | Intrinsic -> Type.ojs_t
     | Function f ->
       let renamer = new OverloadRenamer(used=(flags.avoidTheseArgumentNames |> Set.map (fun s -> "value", s)))
       let inline rename x = renamer.Rename "value" x
       let rec go acc (args: Choice<FieldLike, Type> list) =
         let flags = { flags with variance = -flags.variance }
         match args with
-        | [] -> acc + void_t
+        | [] -> acc + Type.void_
         | Choice1Of2 x :: [] when acc = empty && not x.isOptional ->
           go acc [Choice2Of2 x.value] // do not generate label if it is the only argument and is not optional
         | Choice1Of2 x :: [] when f.isVariadic ->
@@ -659,7 +296,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
           let t = tprintf "%s%s:" prefix (Naming.valueName x.name |> rename) + ty
           if not x.isOptional && List.isEmpty xs then acc + t
           else go (acc + t +@ " -> ") xs
-        | Choice2Of2 t :: xs | Choice1Of2 { value = t } :: xs ->
+        | Choice2Of2 t :: xs ->
           let t = emitTypeImpl { flags with needParen = true } overrideFunc ctx t
           if List.isEmpty xs then acc + t
           else go (acc + t +@ " -> ") xs
@@ -676,16 +313,16 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     | Tuple ts ->
       // TODO: emit label
       match ts.types with
-      | []  -> void_t
+      | []  -> Type.void_
       | [t] -> emitTypeImpl flags overrideFunc ctx t.value
-      | ts  -> tyTuple (ts |> List.map (fun x -> emitTypeImpl flags overrideFunc ctx x.value))
+      | ts  -> Type.tuple (ts |> List.map (fun x -> emitTypeImpl flags overrideFunc ctx x.value))
     | Erased (_, loc) -> failwithf "impossible_emitTypeImpl_erased: %s" loc.AsString
     | UnknownType msgo ->
-      match msgo with None -> commentStr "FIXME: unknown type" + any_t | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + any_t
+      match msgo with None -> commentStr "FIXME: unknown type" + Type.any | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + Type.any
 
-let emitTypeName name args =
-  if List.isEmpty args then str (Naming.flattenedTypeName name)
-  else tyApp (str (Naming.flattenedTypeName name)) args
+type Label =
+  | Case of text
+  | TagType of text
 
 /// `Choice2Of2` when it is an alias to a non-JSable prim type.
 let getLabelsOfFullName (ctx: Context<Options>) (fullName: string list) (typeParams: TypeParam list) =
@@ -695,135 +332,33 @@ let getLabelsOfFullName (ctx: Context<Options>) (fullName: string list) (typePar
     match args with
     | [] -> str (Naming.constructorName name)
     | [arg] -> tprintf "%s of %A" (Naming.constructorName name) arg
-    | _ -> tprintf "%s of %A" (Naming.constructorName name) (tyTuple args)
+    | _ -> tprintf "%s of %A" (Naming.constructorName name) (Type.tuple args)
 
   let normalClass () =
     [
       for e in getAllInheritancesAndSelfFromName ctx fullName do
         match e with
         | InheritingType.KnownIdent i ->
-          yield str pv_head + emitCase i.fullName (i.tyargs |> List.map (emitType_ ctx))
+          yield str pv_head + emitCase i.fullName (i.tyargs |> List.map (emitType_ ctx)) |> Case
         | InheritingType.ImportedIdent i ->
-          yield str (Naming.structuredTypeName i.name + ".tags")
+          yield str (Naming.structured Naming.moduleName i.name + ".tags") |> TagType
         | InheritingType.UnknownIdent i ->
-          yield str (Naming.structuredTypeName i.name + ".tags")
+          yield str (Naming.structured Naming.moduleName i.name + ".tags") |> TagType
         | InheritingType.Prim (p, ts) ->
           match p.AsJSClassName with
           | Some name ->
             if List.isEmpty ts then
-              yield tprintf "%s%s" pv_head name
+              yield tprintf "%s%s" pv_head name |> Case
             else
-              yield str pv_head + emitCase [name] (ts |> List.map (emitType_ ctx))
+              yield str pv_head + emitCase [name] (ts |> List.map (emitType_ ctx)) |> Case
           | None -> ()
         | InheritingType.Other _ -> ()
     ]
   match fullName with
-  | [name] when ctx.options.stdlib && Map.containsKey name nonJsablePrimTypeInterfaces && typeParams |> List.isEmpty ->
-    let prim = nonJsablePrimTypeInterfaces |> Map.find name
-    Choice2Of2 (prim, tprintf "%s%s" pv_head name)
+  | [name] when ctx.options.stdlib && Map.containsKey name Type.nonJsablePrimTypeInterfaces && typeParams |> List.isEmpty ->
+    let prim = Type.nonJsablePrimTypeInterfaces |> Map.find name
+    Choice2Of2 (prim, Case (tprintf "%s%s" pv_head name))
   | _ -> Choice1Of2 (normalClass ())
-
-let emitFlattenedDefinitions (ctx: Context<Options>) : text =
-  let emitType_ = emitTypeImpl { EmitTypeFlags.defaultValue with failContravariantTypeVar = true } OverrideFunc.noOverride
-
-  let genJsCustomMapper (typrms: TypeParam list) =
-    let body =
-      if List.isEmpty typrms then str "Obj.magic"
-      else
-        let args = typrms |> List.map (fun tp -> tprintf "_%s" tp.name)
-        between "(" ")" (termFun args (str "Obj.magic"))
-    record [ "of_js", body; "to_js", body ]
-
-  moduleSig ctx.internalModuleName (
-    concat newline [
-      moduleSig "AnonymousInterfaces" (
-        concat newline [
-          for (a, _) in ctx.anonymousInterfacesMap |> Map.toSeq do
-            let i = anonymousInterfaceToIdentifier ctx a
-            let def =
-              typeAlias
-                (Text.toString 0 i)
-                (a.typeParams |> List.map (fun x -> tprintf "'%s" x.name))
-                (tyApp intf [between "[" "]" (str pv_head + i)])
-            yield def + newline + Attr.js_custom_typ (genJsCustomMapper a.typeParams)
-        ]
-      )
-
-      let f prefix (k: string list, v: Statement) =
-        match v with
-        | EnumDef e ->
-          concat newline [
-            // yield commentStr e.loc.AsString
-            let treatEnum (cases: EnumCase list) =
-              between "[" "]" (concat (str " | ") [
-                for c in cases do
-                  let name, value = str (Naming.constructorName [c.name]), c.value
-                  let attr =
-                    match value with
-                    | Some v -> Attr.js (literal v)
-                    | None -> empty
-                  yield pv_head @+ name + attr
-              ]) +@ " [@js.enum]"
-            yield
-              tprintf "%s %s = " prefix (Naming.flattenedTypeName k)
-                + treatEnum e.cases
-            for c in e.cases do
-              yield tprintf "and %s = %A" (Naming.flattenedTypeName (k @ [c.name])) (treatEnum [c])
-          ] |> Some
-        | ClassDef c ->
-          let typrm = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-          match getLabelsOfFullName ctx k c.typeParams with
-          | Choice1Of2 labels ->
-            concat newline [
-              // yield commentStr c.loc.AsString
-              let def =
-                tprintf "%s %A = " prefix (emitTypeName k typrm)
-                + tyApp intf [
-                  between "[" "]" (
-                    concat (str " | ") labels
-                  )
-                ]
-              yield def + newline + Attr.js_custom_typ (genJsCustomMapper c.typeParams)
-            ] |> Some
-          | Choice2Of2 (prim, _) ->
-            let target =
-              match c.typeParams with
-              | [] -> Prim prim
-              | _  -> App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
-            tprintf "%s %A = " prefix (emitTypeName k typrm) + (emitType_ ctx target) |> Some
-          // TODO: emit extends of type parameters
-        | TypeAlias { erased = false; typeParams = typeParams; target = target; loc = loc } ->
-          let typrm = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-          concat newline [
-            // commentStr loc.AsString
-            tprintf "%s %A = " prefix (emitTypeName k typrm) + emitType_ ctx target
-          ] |> Some
-          // TODO: emit extends of type parameters
-        | Import _
-        | Value _
-        | Module _
-        | TypeAlias { erased = true } -> None
-        | Export _
-        | UnknownStatement _
-        | Pattern _
-        | FloatingComment _ -> failwithf "impossible_emitFlattenedDefinitions(%A)" v
-
-      moduleSig "Types" (
-        concat newline [
-          yield open_ ["AnonymousInterfaces"]
-          let prefix = seq { yield "type"; while true do yield "and" }
-          yield!
-            ctx.definitionsMap
-            |> Trie.toSeq
-            |> Seq.collect (fun (k, vs) -> vs |> Seq.map (fun v -> k, v))
-            |> Seq.skipWhile (fun t -> f "type" t |> Option.isNone)
-            |> Seq.map2 (fun prefix t -> f prefix t) prefix
-            |> Seq.choose id
-            |> Seq.distinct
-        ]
-      )
-    ]
-  ) + newline
 
 let emitMappers ctx emitType tName (typrms: TypeParam list) =
   let t_ty =
@@ -835,7 +370,7 @@ let emitMappers ctx emitType tName (typrms: TypeParam list) =
   let orf _emitType _ctx ty =
     match ty with
     | App (AIdent { name = [n] }, ts, _) when n = tName ->
-      tyApp (str tName) (List.map (_emitType _ctx) ts) |> Some
+      Type.app (str tName) (List.map (_emitType _ctx) ts) |> Some
     | Ident { name = [n] } when n = tName -> Some (str tName)
     | Ident { name = ["Ojs"; "t"] } -> Some (str "Ojs.t")
     | _ -> None
@@ -863,13 +398,13 @@ let emitTypeAliases emitType_ ctx (typrms: TypeParam list) target =
   [
     yield typeAlias "t" tyargs target
     yield! emitMappers ctx emitType "t" typrms
-    let arities = getPossibleArity typrms
-    for arity in arities |> Set.toSeq |> Seq.sortDescending do
+    let otherArities = getPossibleArity typrms |> Set.remove (List.length typrms)
+    for arity in otherArities |> Set.toSeq |> Seq.sortDescending do
       let name = Naming.createTypeNameOfArity arity None "t"
       let tyargs' = List.take arity tyargs
       let typrms' = List.take arity typrms
       let target =
-        tyAppOpt
+        Type.appOpt
           (str "t")
           [
             for tyarg in tyargs' do yield tyarg
@@ -880,391 +415,4 @@ let emitTypeAliases emitType_ ctx (typrms: TypeParam list) target =
           ]
       yield typeAlias name tyargs' target
       yield! emitMappers ctx emitType name typrms'
-  ]
-
-let emitTags ctx (typrms: TypeParam list) (fullName: string list) =
-  let labels =
-    match getLabelsOfFullName ctx fullName typrms with
-    | Choice1Of2 xs -> xs
-    | Choice2Of2 (_, x) -> [x]
-  match labels with
-  | [] -> []
-  | _ ->
-    let tyargs = typrms |> List.map (fun x -> tprintf "'%s" x.name)
-    let body = typeAlias "tags" tyargs (between "[" "]" (labels |> concat (str " | ")))
-    [
-      Attr.js_stop_start_implem body body
-    ]
-
-let removeLabels (xs: Choice<FieldLike, Type> list) =
-    xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
-
-let rec emitMember emitType_ ctx (renamer: OverloadRenamer) (name: string) (selfTy: Type) (ma: MemberAttribute) m = [
-  match ma.comments with
-  | [] -> ()
-  | xs ->
-    yield docComment (xs |> List.map emitComment |> concat newline) |> Error
-  let rename s = renamer.Rename "value" s
-  match m with
-  | Constructor (ft, typrm) ->
-    let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy; loc = ft.loc }
-    yield val_ (rename "create") (emitType_ ctx ty) + str " " + Attr.js_create |> Ok
-  | New (ft, typrm) ->
-    let ft = Function { ft with args = Choice2Of2 selfTy :: ft.args }
-    yield val_ (rename "create") (emitType_ ctx ft) + str " " + Attr.js_apply true |> Ok
-  | Field ({ name = name; value = Function ft }, _, typrm)
-  | Method (name, ft, typrm) ->
-    let ty, attr =
-      if ma.isStatic then Function ft, Attr.js_global name
-      else
-        let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
-        Function ft, Attr.js_call name
-    yield val_ (Naming.valueName name |> rename) (emitType_ ctx ty) + str " " + attr |> Ok
-  | Getter fl | Field (fl, ReadOnly, _) ->
-    let fl =
-      if fl.value <> Prim Void then fl
-      else
-        eprintf "warn: the field/getter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
-        { fl with value = Prim Unknown }
-    let ty =
-      let args =
-        if ma.isStatic then [Choice2Of2 (Prim Void)]
-        else [Choice2Of2 selfTy]
-      let ret =
-        if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
-        else fl.value
-      Function { isVariadic = false; args = args; returnType = ret; loc = ma.loc }
-    yield val_ ("get_" + Naming.removeInvalidChars fl.name |> rename) (emitType_ ctx ty) + str " " + Attr.js_get fl.name |> Ok
-  | Setter fl | Field (fl, WriteOnly, _) ->
-    let fl =
-      if fl.value <> Prim Void then fl
-      else
-        eprintf "warn: the field/setter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
-        { fl with value = Prim Unknown }
-    let ty =
-      let args =
-        if ma.isStatic then [Choice2Of2 fl.value]
-        else [Choice2Of2 selfTy; Choice2Of2 fl.value]
-      Function { isVariadic = false; args = args; returnType = Prim Void; loc = ma.loc }
-    yield val_ ("set_" + Naming.removeInvalidChars fl.name |> rename) (emitType_ ctx ty) + str " " + Attr.js_set fl.name |> Ok
-  | Field (fl, Mutable, _) ->
-    yield! emitMember emitType_ ctx renamer name selfTy ma (Getter fl)
-    yield! emitMember emitType_ ctx renamer name selfTy ma (Setter fl)
-  | FunctionInterface (ft, _) ->
-    let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
-    yield val_ (rename "apply") (emitType_ ctx (Function ft)) + str " " + Attr.js_apply false |> Ok
-  | Indexer (ft, ReadOnly) ->
-    let ft = { ft with args = Choice2Of2 selfTy :: removeLabels ft.args }
-    yield val_ (rename "get") (emitType_ ctx (Function ft)) + str " " + Attr.js_index_get |> Ok
-  | Indexer (ft, WriteOnly) ->
-    let ft =
-      { args = Choice2Of2 selfTy :: removeLabels ft.args @ [ Choice2Of2 ft.returnType ]
-        isVariadic = false;
-        returnType = Prim Void;
-        loc = ft.loc }
-    yield val_ (rename "set") (emitType_ ctx (Function ft)) + str " " + Attr.js_index_set |> Ok
-  | Indexer (ft, Mutable) ->
-    yield! emitMember emitType_ ctx renamer name selfTy ma (Indexer (ft, ReadOnly))
-    yield! emitMember emitType_ ctx renamer name selfTy ma (Indexer (ft, WriteOnly))
-  | UnknownMember msgo ->
-    match msgo with
-    | Some msg ->
-      yield commentStr msg |> Error
-    | None -> ()
-]
-
-let emitStructuredDefinitions (rootCtx: Context<Options>) (stmts: Statement list) =
-  let (|Dummy|) _ = []
-  let emitType = emitTypeImpl { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
-
-  let emitClass (ctx: Context<_>) (renamer: OverloadRenamer) (c: Class) (additionalMembers: TypeEmitter -> OverloadRenamer -> list<Result<text, text>>) =
-    let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-    let name, selfTy, selfTyText, emitSelfTy, isAnonymous =
-      let typrms = List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams
-      match c.name with
-      | Some n ->
-        let k = List.rev (n :: ctx.currentNamespace)
-        let ident = { name = [n]; fullName = Some k; loc = UnknownLocation }
-        let selfTy =
-          if List.isEmpty c.typeParams then Ident ident
-          else App (AIdent ident, typrms, UnknownLocation)
-        n,
-        selfTy,
-        emitTypeName k tyargs,
-        (fun _emitType _ctx -> function
-          | Ident { fullName = Some fn } when k = fn -> Some (str "t")
-          | App (AIdent { fullName = Some fn }, ts, _) when k = fn ->
-            Some (tyApp (str "t") (ts |> List.map (_emitType _ctx)))
-          | _ -> None),
-        false
-      | None ->
-        match ctx.anonymousInterfacesMap |> Map.tryFind c with
-        | Some i ->
-          let n = sprintf "AnonymousInterface%d" i
-          let k = [sprintf "anonymous_interface_%d" i]
-          let selfTy =
-            if List.isEmpty c.typeParams then AnonymousInterface c
-            else App (AAnonymousInterface c, typrms, UnknownLocation)
-          n,
-          selfTy,
-          emitTypeName k tyargs,
-          (fun _emitType _ctx -> function
-            | AnonymousInterface a when a = c -> Some (str "t")
-            | App (AAnonymousInterface a, ts, _) when a = c ->
-              Some (tyApp (str "t") (ts |> List.map (_emitType _ctx)))
-            | _ -> None),
-          true
-        | None -> failwith "impossible_emitStructuredDefinitions_ClassDef"
-
-    let rec orf (_emitType: Context<_> -> Type -> text) _ctx ty : text option =
-      match emitSelfTy _emitType _ctx ty with
-      | Some text -> Some text
-      | None ->
-        match ty with
-        | PolymorphicThis -> orf _emitType _ctx selfTy
-        | _ -> None
-    let emitType_ ctx ty = emitType orf ctx ty
-
-    let childRenamer = new OverloadRenamer()
-    let members = [
-      for ma, m in c.members do
-        yield! emitMember emitType_ ctx childRenamer name selfTy ma m
-      yield! additionalMembers emitType_ childRenamer
-    ]
-    let stmts = [
-      yield! members |> List.map (function Ok x | Error x -> x)
-      for parent in c.implements do
-        let ty = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = parent; loc = UnknownLocation }
-        yield val_ ("cast" |> childRenamer.Rename "value") (emitType_ ctx ty) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
-      match c.name with
-      | None -> ()
-      | Some name ->
-        match jsablePrimTypeInterfaces |> Map.tryFind name with
-        | None -> ()
-        | Some prim ->
-          let targetTy =
-            if List.isEmpty c.typeParams then Prim prim
-            else App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
-          let toMlTy = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = targetTy; loc = UnknownLocation }
-          let ofMlTy = Function { isVariadic = false; args = [Choice2Of2 targetTy]; returnType = selfTy; loc = UnknownLocation }
-          yield val_ ("to_ml" |> childRenamer.Rename "value") (emitType_ ctx toMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
-          yield val_ ("of_ml" |> childRenamer.Rename "value") (emitType_ ctx ofMlTy) + str " " + Attr.attr Attr.Category.Block "js.cast" empty
-    ]
-
-    let hasActualMember = members |> List.exists (function Ok _ -> true | Error _ -> false)
-    let k = List.rev (name :: ctx.currentNamespace)
-    if List.isEmpty stmts || not hasActualMember || isAnonymous then
-      moduleSig (Naming.moduleName name |> renamer.Rename "module") (concat newline [
-        yield! emitTypeAliases emitType_ ctx c.typeParams selfTyText
-        if not isAnonymous then
-          yield! emitTags ctx c.typeParams k
-        yield! stmts
-      ])
-    else
-      concat newline [
-        yield
-          moduleScopeSig name (Naming.moduleName name |> renamer.Rename "module") (concat newline [
-            yield! emitTypeAliases emitType_ ctx c.typeParams selfTyText
-            yield! emitTags ctx c.typeParams k
-            yield! stmts
-          ])
-      ]
-
-  let emitValue (emitType_: TypeEmitter) (renamer: OverloadRenamer) ctx v =
-    let ty, attr =
-      match v.typ with
-      | Function _ ->
-        v.typ, Attr.js_global v.name
-      | _ ->
-        let tyAsGetter = Function { args = [Choice2Of2 (Prim Void)]; isVariadic = false; returnType = v.typ; loc = v.loc }
-        tyAsGetter, Attr.js_get v.name
-    val_ (Naming.valueName v.name |> renamer.Rename "value") (emitType_ ctx ty) + str " " + attr
-
-  let emitType_ = emitType OverrideFunc.noOverride
-  let rec go (renamer: OverloadRenamer) (ctx: Context<Options>) (s: Statement) : text =
-    let comments =
-      match (s :> ICommented<_>).getComments() with
-      | [] -> empty
-      | xs -> docComment (xs |> List.map emitComment |> concat newline) + newline
-    comments +
-    match s with
-    | Module m ->
-      let content =
-        let renamer = new OverloadRenamer()
-        concat newline (
-          m.statements |> List.map (fun stmt ->
-            go renamer ({| ctx with currentNamespace = m.name :: ctx.currentNamespace |}) stmt
-          )
-        )
-      if m.statements |> List.forall (function Import _ | Export _ | UnknownStatement _ -> true | _ -> false) then
-        moduleSig
-          (Naming.moduleName m.name |> renamer.Rename "module")
-          content
-      else
-        moduleScopeSig
-          m.name
-          (Naming.moduleName m.name |> renamer.Rename "module")
-          content
-    | Import i ->
-      commentStr (sprintf "%A" i) // TODO
-    | Export (e, _, _) ->
-      commentStr (sprintf "%A" e) // TODO
-    | UnknownStatement u ->
-      match u.msg with
-      | Some s -> commentStr s
-      | None -> commentStr "unknown statement"
-    | FloatingComment c -> c.comments |> List.map emitComment |> concat newline |> comment
-    | TypeAlias { name = name; typeParams = typeParams } | (EnumDef { name = name } & Dummy typeParams) ->
-      let k = List.rev (name :: ctx.currentNamespace)
-      let tyargs = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-      concat newline [
-        yield
-          moduleSig (Naming.moduleName name |> renamer.Rename "module") (
-            concat newline [
-              yield! emitTypeAliases emitType_ ctx typeParams (emitTypeName k tyargs)
-              yield! emitTags ctx typeParams k
-            ]
-          )
-      ]
-    | EnumDef _ -> failwith "impossible_emitStructuredDefinitions_EnumDef"
-    | Pattern p ->
-      let fallback () =
-        p.underlyingStatements |> List.map (go renamer ctx) |> concat newline
-      let intfToStmts (moduleIntf: Class) emitType_ (renamer: OverloadRenamer) =
-        let emitAsValue name typ typrms isConst (memberAttr: MemberAttribute) =
-          let v =
-            { name = name; typ = typ; typeParams = typrms;
-              isConst = isConst; isExported = Exported.No; accessibility = Some memberAttr.accessibility;
-              comments = memberAttr.comments; loc = memberAttr.loc }
-          [
-            match v.comments with
-            | [] -> ()
-            | xs -> yield docComment (xs |> List.map emitComment |> concat newline) |> Error
-            yield emitValue emitType_ renamer ctx v |> Ok
-          ]
-        [ for ma, m in moduleIntf.members do
-            match m with
-            | Field (fl, mt, tps) ->
-              yield! emitAsValue fl.name fl.value tps (mt = ReadOnly) ma
-            | Getter fl ->
-              yield! emitAsValue fl.name fl.value [] true ma
-            | Setter _ -> ()
-            | Method (name, ft, tps) ->
-              yield! emitAsValue name (Function ft) tps true ma
-            | New (ft, _tps) ->
-              yield val_ (renamer.Rename "value" "create") (emitType_ ctx (Function ft)) + str " " + Attr.js_create |> Ok
-            | FunctionInterface (ft, _tps) ->
-              yield val_ (renamer.Rename "value" "invoke") (emitType_ ctx (Function ft)) + str " " + Attr.js_invoke |> Ok
-            | Constructor _ -> failwith "impossible_emitStructuredDefinition_Pattern_intfToModule_Constructor" // because interface!
-            | Indexer (ft, _) -> yield Error (comment (tprintf "unsupported indexer of type: %s" (pp (Function ft))))
-            | UnknownMember (Some msg) -> yield Error (commentStr msg)
-            | UnknownMember None -> () ]
-      match p with
-      | ImmediateInstance (i, v) ->
-        if not ctx.options.simplifyImmediateInstance then fallback ()
-        else
-          let moduleName = Naming.moduleName v.name |> renamer.Rename "module"
-          let renamer = new OverloadRenamer()
-          let stmts = intfToStmts i emitType_ renamer
-          if stmts |> List.exists (function Ok _ -> true | Error _ -> false) then
-            moduleScopeSig v.name moduleName (concat newline [
-              yield! stmts |> List.map (function Ok x | Error x -> x)
-            ])
-          else
-            moduleSig v.name (concat newline (stmts |> List.map (function Ok x | Error x -> x)))
-      | ImmediateConstructor (bi, ci, v) ->
-        if not ctx.options.simplifyImmediateConstructor then fallback ()
-        else
-          emitClass ctx renamer bi (intfToStmts ci)
-    | Value v -> emitValue emitType_ renamer ctx v
-    | ClassDef c -> emitClass ctx renamer c (fun _ _ -> [])
-
-  concat newline [
-    yield open_ [ rootCtx.internalModuleName ]
-    yield open_ [ "AnonymousInterfaces"; "Types" ]
-
-    for c, _ in rootCtx.anonymousInterfacesMap |> Map.toSeq do
-      let renamer = new OverloadRenamer()
-      yield go renamer rootCtx (ClassDef c)
-
-    for stmt in stmts do
-      let renamer = new OverloadRenamer()
-      yield go renamer rootCtx stmt
-  ]
-
-let emitStdlib (srcs: SourceFile list) (opts: Options) =
-  eprintf "* looking up the minimal supported ES version for each definition..."
-  let esSrc =
-    srcs
-    |> List.filter (fun src -> src.fileName.Contains("lib.es") && src.fileName.EndsWith(".d.ts"))
-    |> mergeLibESDefinitions
-
-  let domSrc =
-    let stmts =
-      srcs
-      |> List.filter (fun src -> src.fileName.Contains("lib.dom") && src.fileName.EndsWith(".d.ts"))
-      |> List.collect (fun src -> src.statements)
-      |> Statement.merge
-    { fileName = "lib.dom.d.ts"; statements = stmts; references = []; hasNoDefaultLib = false; moduleName = None }
-
-  let srcs = [esSrc; domSrc]
-
-  eprintf "* running typer..."
-  opts.simplifyImmediateInstance <- true
-  opts.simplifyImmediateConstructor <- true
-  let ctx, srcs = runAll srcs opts
-
-  let esSrc = srcs |> List.find (fun src -> src.fileName = "lib.es.d.ts")
-  let domSrc = srcs |> List.find (fun src -> src.fileName = "lib.dom.d.ts")
-
-  let ctx = ctx |> Context.mapOptions (fun _ -> opts)
-
-  eprintf "* emitting baselib..."
-  concat newline [
-    yield str stdlib
-    yield newline
-    yield emitFlattenedDefinitions ctx
-    yield newline
-    yield emitStructuredDefinitions ctx esSrc.statements
-    yield newline
-    yield moduleSig "Dom" (emitStructuredDefinitions ctx domSrc.statements)
-  ]
-
-let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
-  let srcs =
-    match srcs with
-    | [] | _ :: [] -> srcs
-    | _ ->
-      let combinedName, moduleName =
-        match srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts") with
-        | Some index ->
-          eprintfn "info: using index.d.ts as an entrypoint"
-          index.fileName, index.moduleName
-        | None ->
-          eprintfn "info: treating everything as combined into lib.d.ts"
-          "lib.d.ts", None
-      [
-        { fileName = combinedName
-          statements = srcs |> List.collect (fun src -> src.statements)
-          references = srcs |> List.collect (fun src -> src.references) |> List.distinct
-          hasNoDefaultLib = srcs |> List.exists (fun src -> src.hasNoDefaultLib)
-          moduleName = moduleName }
-      ]
-
-  eprintf "* running typer..."
-  let ctx, srcs = runAll srcs opts
-  let ctx = ctx |> Context.mapOptions (fun _ -> opts)
-  let stmts = srcs |> List.collect (fun x -> x.statements)
-
-  eprintf "* emitting a binding for js_of_ocaml..."
-  concat newline [
-    yield str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
-    yield Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]")
-    yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom" ]
-
-    let defs = [
-      emitFlattenedDefinitions ctx
-      emitStructuredDefinitions ctx stmts
-    ]
-    yield! defs
   ]

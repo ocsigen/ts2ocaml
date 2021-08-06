@@ -98,12 +98,14 @@ module Trie =
   let isEmpty (t: Trie<_, _>) =
     t.value.IsNone && Map.isEmpty t.childs
 
+  let setOrUpdate (v: 'v) (update: 'v -> 'v -> 'v) (t: Trie<'k, 'v>) =
+    match t.value with
+    | Some v' -> { t with value = Some (update v' v) }
+    | None -> { t with value = Some v }
+
   let rec addOrUpdate (ks: 'k list) (v: 'v) (update: 'v -> 'v -> 'v) (t: Trie<'k, 'v>) =
     match ks with
-    | [] ->
-      match t.value with
-      | Some v' -> { t with value = Some (update v' v)}
-      | None -> { t with value = Some v }
+    | [] -> setOrUpdate v update t
     | k :: ks ->
       let child =
         match Map.tryFind k t.childs with
@@ -136,6 +138,14 @@ module Trie =
       match Map.tryFind k t.childs with
       | None -> None
       | Some child -> getSubTrie ks child
+
+  let rec replaceSubTrie (ks: 'k list) (subTrie: Trie<'k, 'v>) (t: Trie<'k, 'v>) =
+    match ks with
+    | [] -> subTrie
+    | k :: ks ->
+      match Map.tryFind k t.childs with
+      | Some child -> { t with childs = t.childs |> Map.add k (replaceSubTrie ks subTrie child) }
+      | None -> { t with childs = t.childs |> Map.add k (replaceSubTrie ks subTrie empty) }
 
   let keys (t: Trie<'k, 'v>) =
     let rec go ks t =

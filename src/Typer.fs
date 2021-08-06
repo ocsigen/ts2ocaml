@@ -27,17 +27,24 @@ let inline private warn (ctx: Context<TyperOptions>) (loc: Location) fmt =
 module Context =
   let mapOptions (f: 'a -> 'b) (ctx: Context<'a>) : Context<'b> =
     {| ctx with options = f ctx.options |}
+
   let ofParentNamespace (ctx: Context<'a>) : Context<'a> option =
     match ctx.currentNamespace with
     | [] -> None
     | _ :: ns -> Some {| ctx with currentNamespace = ns |}
-  let getRelativeNameTo (name: string list) (ctx: Context<'a>) =
+
+  let ofChildNamespace childName (ctx: Context<'a>) : Context<'a> =
+    {| ctx with currentNamespace = childName :: ctx.currentNamespace |}
+
+  /// `Error relativeNameOfCurrentNamespace` when `fullName` is a parent of current namespace.
+  /// `Ok name` otherwise.
+  let getRelativeNameTo (fullName: string list) (ctx: Context<'a>) =
     let rec go name selfPos =
       match name, selfPos with
-      | x :: [], _ :: _ -> [x]
+      | x :: [], y :: ys  when x = y -> Error ys
       | x :: xs, y :: ys when x = y -> go xs ys
-      | xs, _ -> xs
-    go name (List.rev ctx.currentNamespace)
+      | xs, _ -> Ok xs
+    go fullName (List.rev ctx.currentNamespace)
 
 type FullNameLookupResult =
   | AliasName of TypeAlias

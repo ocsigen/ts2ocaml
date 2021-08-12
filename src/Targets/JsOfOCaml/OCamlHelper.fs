@@ -315,13 +315,10 @@ let moduleSig (module_: TextModuleSig) = moduleSigImpl "module" false module_
 
 let moduleSigRec (modules: TextModuleSig list) =
   match modules with
-  | [] -> empty
-  | [x] -> moduleSigImpl "module" false x
+  | [] -> []
+  | [x] -> [moduleSigImpl "module" false x]
   | x :: xs ->
-    concat newline [
-      yield moduleSigImpl "module" true x
-      yield! xs |> List.map (moduleSigImpl "and" false)
-    ]
+    moduleSigImpl "module" true x :: (xs |> List.map (moduleSigImpl "and" false))
 
 let abstractType name tyargs =
   str "type "

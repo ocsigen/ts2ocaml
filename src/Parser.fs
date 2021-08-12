@@ -139,8 +139,17 @@ let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.K
         Some (Set.ofList kinds)
     go s
 
-let readCommentText (str: string) : string list =
+let sanitizeCommentText (str: string) : string list =
   str.Replace("\r\n","\n").Replace("\r","\n").Split [|'\n'|] |> List.ofArray
+
+let readCommentText (comment: U2<string, ResizeArray<U2<Ts.JSDocText, Ts.JSDocLink>>>) : string list =
+  let str =
+    if jsTypeof comment = "string" then
+      box comment :?> string
+    else
+      let texts = box comment :?> ResizeArray<Ts.JSDocText> // TODO: do not ignore links
+      texts |> Seq.map (fun x -> x.text) |> String.concat ""
+  sanitizeCommentText str
 
 let readNonJSDocComments (ctx: ParserContext) (node: Node) : Comment list =
   let fullText = ctx.sourceFile.getFullText()
@@ -151,7 +160,7 @@ let readNonJSDocComments (ctx: ParserContext) (node: Node) : Comment list =
     ranges
     |> Seq.map (fun range ->
       fullText.[int range.pos .. int range.``end``]
-      |> readCommentText |> Summary)
+      |> sanitizeCommentText |> Summary)
     |> Seq.toList
 
 let readJSDocTag (tag: Ts.JSDocTag) : Comment =
@@ -179,7 +188,7 @@ let readJSDocComments (docComment: ResizeArray<Ts.SymbolDisplayPart>) (tags: Ts.
     let text =
       docComment
       |> List.ofSeq
-      |> List.collect (fun sdp -> sdp.text |> readCommentText)
+      |> List.collect (fun sdp -> sdp.text |> sanitizeCommentText)
     if List.isEmpty text then []
     else [Description text]
   let tags =
@@ -805,20 +814,26 @@ and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
   let onError () =
     let comments = readCommentsForNamedDeclaration ctx (stmt :?> Ts.DeclarationStatement)
     UnknownStatement {| msg = Some (stmt.getText()); loc = Node.location stmt; comments = comments |}
-  match stmt.kind with
-  | Kind.TypeAliasDeclaration -> [readTypeAlias ctx (stmt :?> _) |> TypeAlias]
-  | Kind.InterfaceDeclaration -> [readInterface ctx (stmt :?> _) |> ClassDef]
-  | Kind.ClassDeclaration -> [readClass ctx (stmt :?> _) |> ClassDef]
-  | Kind.EnumDeclaration -> [readEnum ctx (stmt :?> _) |> EnumDef]
-  | Kind.ModuleDeclaration -> [readModule ctx (stmt :?> _) |> Module]
-  | Kind.VariableStatement -> readVariable ctx (stmt :?> _)
-  | Kind.FunctionDeclaration -> [readFunction ctx (stmt :?> _) |> Option.map Value |> Option.defaultWith onError]
-  | Kind.ExportAssignment -> [readExportAssignment ctx (stmt :?> _) |> Option.defaultWith onError]
-  | Kind.ExportDeclaration -> [readExportDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
-  | Kind.NamespaceExportDeclaration -> [readNamespaceExportDeclaration ctx (stmt :?> _)]
-  | Kind.ImportEqualsDeclaration -> [readImportEqualsDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
-  | Kind.ImportDeclaration -> [readImportDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
-  | _ ->
-    nodeWarn ctx stmt "skipping unsupported Statement kind: %s" (Enum.pp stmt.kind)
-    [onError ()]
+  try
+    match stmt.kind with
+    | Kind.TypeAliasDeclaration -> [readTypeAlias ctx (stmt :?> _) |> TypeAlias]
+    | Kind.InterfaceDeclaration -> [readInterface ctx (stmt :?> _) |> ClassDef]
+    | Kind.ClassDeclaration -> [readClass ctx (stmt :?> _) |> ClassDef]
+    | Kind.EnumDeclaration -> [readEnum ctx (stmt :?> _) |> EnumDef]
+    | Kind.ModuleDeclaration -> [readModule ctx (stmt :?> _) |> Module]
+    | Kind.VariableStatement -> readVariable ctx (stmt :?> _)
+    | Kind.FunctionDeclaration -> [readFunction ctx (stmt :?> _) |> Option.map Value |> Option.defaultWith onError]
+    | Kind.ExportAssignment -> [readExportAssignment ctx (stmt :?> _) |> Option.defaultWith onError]
+    | Kind.ExportDeclaration -> [readExportDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
+    | Kind.NamespaceExportDeclaration -> [readNamespaceExportDeclaration ctx (stmt :?> _)]
+    | Kind.ImportEqualsDeclaration -> [readImportEqualsDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
+    | Kind.ImportDeclaration -> [readImportDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
+    | _ ->
+      nodeWarn ctx stmt "skipping unsupported Statement kind: %s" (Enum.pp stmt.kind)
+      [onError ()]
+  with
+    | e ->
+      eprintfn "%s" (stmt.getText())
+      eprintfn "error at %s" (Node.ppLocation stmt)
+      reraise ()
 

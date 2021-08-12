@@ -358,7 +358,8 @@ module Type =
     let maxArity = List.length typrms
     let rec go i = function
       | { defaultType = Some _ } :: rest -> (i-1) :: go (i-1) rest
-      | _ -> []
+      | { defaultType = None } :: rest -> go i rest
+      | [] -> []
     maxArity :: go maxArity typrms |> Set.ofList
 
   type [<RequireQualifiedAccess>] InheritingType =
@@ -656,6 +657,7 @@ module Statement =
 
     let mutable intfMap = Map.empty
     let mutable nsMap = Map.empty
+    let mutable otherStmtSet = Set.empty
     let mergeTypeParams tps1 tps2 =
       let rec go acc = function
         | [], [] -> List.rev acc
@@ -673,7 +675,12 @@ module Statement =
           let tp = { name = tp1.name; extends = extends; defaultType = defaultType }
           go (tp :: acc) (rest1, rest2)
         | tp :: rest1, rest2
-        | rest1, tp :: rest2 -> go (tp :: acc) (rest1, rest2)
+        | rest1, tp :: rest2 ->
+          let tp =
+            match tp.defaultType with
+            | Some _ -> tp
+            | None -> { tp with defaultType = Some (Prim Any) }
+          go (tp :: acc) (rest1, rest2)
       go [] (tps1, tps2)
 
     for stmt in stmts do
@@ -710,7 +717,9 @@ module Statement =
                 comments = n.comments @ n'.comments |> List.distinct
                 statements = n'.statements @ n.statements }
       | stmt ->
-        result <- Choice1Of3 stmt :: result
+        if otherStmtSet |> Set.contains stmt |> not then
+          otherStmtSet <- otherStmtSet |> Set.add stmt
+          result <- Choice1Of3 stmt :: result
     result
     |> List.rev
     |> List.map (function

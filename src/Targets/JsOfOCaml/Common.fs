@@ -5,8 +5,11 @@ type Options =
   inherit Typer.TyperOptions
   abstract stdlib: bool with get
   abstract numberAsInt: bool with get
+  abstract useRecursiveModules: bool with get, set
   abstract simplifyImmediateInstance: bool with get, set
   abstract simplifyImmediateConstructor: bool with get, set
+  abstract useTagsToInheritUnknownTypes: bool with get, set
+  abstract useExactArityForUnknownTypes: bool with get, set
 
 let stdlib = """[@@@ocaml.warning "-7-11-32-33-39"]
 [@@@js.implem

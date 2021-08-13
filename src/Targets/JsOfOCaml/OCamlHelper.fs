@@ -278,6 +278,13 @@ module Naming =
       | x :: xs -> moduleName x + "." + prettify xs
     prettify name
 
+  let flattenedTypeName (name: string list) =
+    let s = String.concat "_" name |> removeInvalidChars
+    let result =
+      if Char.IsUpper s.[0] then "_" + s
+      else s
+    if Naming.Keywords.keywords |> Set.contains result then result + "_" else result
+
   let createTypeNameOfArity arity maxArityOpt name =
     match maxArityOpt with
     | Some maxArity ->
@@ -289,13 +296,12 @@ let open_ names = names |> List.map (tprintf "open %s") |> concat newline
 
 let include_ names = names |> List.map (tprintf "include %s") |> concat newline
 
-type TextModuleSig = {| name: string; scope: string option; content: text list; docCommentBody: text option |}
+type TextModuleSig = {| name: string; scope: string option; content: text list; docCommentBody: text list |}
 
 let private moduleSigImpl (prefix: string) (isRec: bool) (module_: TextModuleSig) =
   concat newline [
-    match module_.docCommentBody with
-    | Some c -> yield docComment c
-    | None -> ()
+    if List.isEmpty module_.docCommentBody |> not then
+      yield docComment (concat newline module_.docCommentBody)
     let isEmpty = List.isEmpty module_.content
     let head =
       tprintf "%s%s %s%s : sig"
@@ -319,6 +325,9 @@ let moduleSigRec (modules: TextModuleSig list) =
   | [x] -> [moduleSigImpl "module" false x]
   | x :: xs ->
     moduleSigImpl "module" true x :: (xs |> List.map (moduleSigImpl "and" false))
+
+let moduleSigNonRec (modules: TextModuleSig list) =
+  modules |> List.map (moduleSigImpl "module" false)
 
 let abstractType name tyargs =
   str "type "

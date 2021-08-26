@@ -9,36 +9,39 @@ module TyperOptions =
   let add (yargs: Yargs.Argv<_>) =
     yargs
 
-type Context<'Options> = {|
-  internalModuleName: string
+type Context<'Options, 'State> = {|
   currentNamespace: string list
   definitionsMap: Trie<string, Statement list>
   typeLiteralsMap: Map<Literal, int>
   anonymousInterfacesMap: Map<Class, int>
   unknownIdentTypes: Trie<string, Set<int>>
   options: 'Options
+  state: 'State
 |}
 
-let inline private warn (ctx: Context<TyperOptions>) (loc: Location) fmt =
+let inline private warn (ctx: Context<TyperOptions, _>) (loc: Location) fmt =
   Printf.kprintf (fun s ->
     if ctx.options.verbose then eprintfn "warn: %s at %s" s loc.AsString
   ) fmt
 
 module Context =
-  let mapOptions (f: 'a -> 'b) (ctx: Context<'a>) : Context<'b> =
+  let mapOptions (f: 'a -> 'b) (ctx: Context<'a, 's>) : Context<'b, 's> =
     {| ctx with options = f ctx.options |}
 
-  let ofParentNamespace (ctx: Context<'a>) : Context<'a> option =
+  let mapState (f: 's -> 't) (ctx: Context<'a, 's>) : Context<'a, 't> =
+    {| ctx with state = f ctx.state |}
+
+  let ofParentNamespace (ctx: Context<'a, 's>) : Context<'a, 's> option =
     match ctx.currentNamespace with
     | [] -> None
     | _ :: ns -> Some {| ctx with currentNamespace = ns |}
 
-  let ofChildNamespace childName (ctx: Context<'a>) : Context<'a> =
+  let ofChildNamespace childName (ctx: Context<'a, 's>) : Context<'a, 's> =
     {| ctx with currentNamespace = childName :: ctx.currentNamespace |}
 
   /// `Error relativeNameOfCurrentNamespace` when `fullName` is a parent of current namespace.
   /// `Ok name` otherwise.
-  let getRelativeNameTo (fullName: string list) (ctx: Context<'a>) =
+  let getRelativeNameTo (fullName: string list) (ctx: Context<'a, 's>) =
     let rec go name selfPos =
       match name, selfPos with
       | x :: [], y :: ys  when x = y -> Error ys
@@ -58,7 +61,7 @@ type FullNameLookupResult =
   | NotFound of string option
 
 module FullName =
-  let rec ofIdent (ctx: Context<'a>) (ident: IdentType) : string list option =
+  let rec ofIdent (ctx: Context<'a, 's>) (ident: IdentType) : string list option =
     let nsRev = List.rev ctx.currentNamespace
     let fullName = nsRev @ ident.name
     let onFail () =
@@ -78,7 +81,7 @@ module FullName =
       | _ -> onFail ()
     | _ -> onFail ()
 
-  let lookup (ctx: Context<'a>) (fullName: string list) : FullNameLookupResult list =
+  let lookup (ctx: Context<'a, 's>) (fullName: string list) : FullNameLookupResult list =
     let conv name = function
       | TypeAlias a -> AliasName a |> Some
       | ClassDef c -> ClassName c |> Some
@@ -248,84 +251,77 @@ module Type =
         returnType = substTypeVar subst _ctx f.returnType;
         args = List.map (mapInArg (substTypeVar subst) _ctx) f.args }
 
-  let findTypes (pred: Type -> Choice<bool, Type list> * 'a option) (t: Type) : 'a seq =
+  let rec findTypesInFieldLike pred (fl: FieldLike) = findTypes pred fl.value
+  and findTypesInTypeParam pred (tp: TypeParam) =
+    seq {
+      yield! tp.extends |> Option.map (findTypes pred) |> Option.defaultValue Seq.empty
+      yield! tp.defaultType |> Option.map (findTypes pred) |> Option.defaultValue Seq.empty
+    }
+  and findTypesInFuncType pred (ft: FuncType<Type>) =
+    seq {
+      for arg in ft.args do
+        match arg with
+        | Choice1Of2 fl -> yield! findTypesInFieldLike pred fl
+        | Choice2Of2 t -> yield! findTypes pred t
+      yield! findTypes pred ft.returnType
+    }
+  and findTypesInClassMember pred (m: Member) : 'a seq =
+    match m with
+    | Field (fl, _, tps) ->
+      seq { yield! findTypesInFieldLike pred fl; for tp in tps do yield! findTypesInTypeParam pred tp }
+    | Method (_, ft, tps)
+    | FunctionInterface (ft, tps)
+    | New (ft, tps) ->
+      seq { yield! findTypesInFuncType pred ft; for tp in tps do yield! findTypesInTypeParam pred tp }
+    | Indexer (ft, _) ->
+      seq { yield! findTypesInFuncType pred ft }
+    | Getter fl | Setter fl -> seq { yield! findTypesInFieldLike pred fl }
+    | Constructor (ft, tps) ->
+      seq {
+        for arg in ft.args do
+          match arg with
+          | Choice1Of2 fl -> yield! findTypesInFieldLike pred fl
+          | Choice2Of2 t -> yield! findTypes pred t
+        for tp in tps do yield! findTypesInTypeParam pred tp
+      }
+    | UnknownMember _ -> Seq.empty
+  and findTypes (pred: Type -> Choice<bool, Type list> * 'a option) (t: Type) : 'a seq =
     let rec go_t x =
-      match x with
-      | App (t, ts, _) ->
-        seq {
-          let cont, y = pred x
-          match y with Some v -> yield v | None -> ()
-          match cont with
-          | Choice1Of2 false -> ()
-          | Choice1Of2 true ->
+      seq {
+        let cont, y = pred x
+        match y with Some v -> yield v | None -> ()
+        match cont with
+        | Choice1Of2 false -> ()
+        | Choice2Of2 ts -> for t in ts do yield! go_t t
+        | Choice1Of2 true ->
+          match x with
+          | App (t, ts, _) ->
             yield! go_t (Type.ofAppLeftHandSide t)
             for t in ts do yield! go_t t
-          | Choice2Of2 ts -> for t in ts do yield! go_t t
-        }
-      | Union { types = ts } | Intersection { types = ts } ->
-        seq {
-          let cont, y = pred x
-          match y with Some v -> yield v | None -> ()
-          match cont with
-          | Choice1Of2 false -> ()
-          | Choice1Of2 true ->
+          | Union { types = ts } | Intersection { types = ts } ->
             for t in ts do yield! go_t t
-          | Choice2Of2 ts -> for t in ts do yield! go_t t
-        }
-      | Tuple { types = ts } ->
-        seq {
-          let cont, y = pred x
-          match y with Some v -> yield v | None -> ()
-          match cont with
-          | Choice1Of2 false -> ()
-          | Choice1Of2 true -> for t in ts do yield! go_t t.value
-          | Choice2Of2 ts -> for t in ts do yield! go_t t
-        }
-      | Function f ->
-        seq {
-          let cont, y = pred x
-          match y with Some v -> yield v | None -> ()
-          match cont with
-          | Choice1Of2 false -> ()
-          | Choice1Of2 true ->
-            yield! go_t f.returnType
-            for a in f.args do
-              match a with
-              | Choice1Of2 { value = t }
-              | Choice2Of2 t ->
-                yield! go_t t
-          | Choice2Of2 ts -> for t in ts do yield! go_t t
-        }
-      | Erased (IndexedAccess (t1, t2), _) ->
-        seq {
-          let cont, y = pred x
-          match y with Some v -> yield v | None -> ()
-          match cont with
-          | Choice1Of2 false -> ()
-          | Choice1Of2 true ->
-            yield! go_t t1
-            yield! go_t t2
-          | Choice2Of2 ts -> for t in ts do yield! go_t t
-        }
-      | AnonymousInterface c ->
-        let cont, y = pred x
-        let xs =
-          match cont with
-          | Choice1Of2 false -> Seq.empty
-          | Choice1Of2 true ->
-            let ra = ResizeArray()
-            mapInClass (fun () t -> ra.Add(t); t) () c |> ignore;
-            ra |> Seq.collect go_t
-          | Choice2Of2 ts -> ts |> Seq.collect go_t
-        Seq.append (Option.toList y) xs
-      | x ->
-        seq {
-          let cont, y = pred x
-          match y with Some v -> yield v | None -> ()
-          match cont with
-          | Choice1Of2 _ -> ()
-          | Choice2Of2 ts -> for t in ts do yield! go_t t
-        }
+          | Tuple { types = ts } ->
+            for t in ts do yield! go_t t.value
+          | Function f -> yield! findTypesInFuncType pred f
+          | Erased (e, _) ->
+            match e with
+            | IndexedAccess (t1, t2) ->
+              yield! go_t t1
+              yield! go_t t2
+            | TypeQuery i ->
+              yield! findTypes pred (Ident i)
+            | Keyof t ->
+              yield! findTypes pred t
+            | NewableFunction (ft, tps) ->
+              yield! findTypesInFuncType pred ft
+              for tp in tps do
+                yield! findTypesInTypeParam pred tp
+          | AnonymousInterface c ->
+            for impl in c.implements do yield! findTypes pred impl
+            for tp in c.typeParams do yield! findTypesInTypeParam pred tp
+            for _, m in c.members do yield! findTypesInClassMember pred m
+          | Intrinsic | PolymorphicThis | Ident _ | TypeVar _ | Prim _ | TypeLiteral _ | UnknownType _ -> ()
+      }
     go_t t
 
   let getTypeVars ty =
@@ -385,7 +381,7 @@ module Type =
   let mutable private inheritCache: Map<string list, Set<InheritingType> * InheritingType option> = Map.empty
   let mutable private hasNoInherits: Set<string list> = Set.empty
 
-  let rec private getAllInheritancesImpl (includeSelf: bool) (ctx: Context<'a>) (ty: Type) : Set<InheritingType> =
+  let rec private getAllInheritancesImpl (includeSelf: bool) (ctx: Context<'a, 's>) (ty: Type) : Set<InheritingType> =
     seq {
       match ty with
       | Ident { name = name; fullName = Some fn; loc = loc } & Dummy ts
@@ -417,7 +413,7 @@ module Type =
           yield InheritingType.Other ty
     } |> Set.ofSeq
 
-  and private getAllInheritancesFromNameImpl (includeSelf: bool) (ctx: Context<'a>) (fn: string list) : Set<InheritingType> =
+  and private getAllInheritancesFromNameImpl (includeSelf: bool) (ctx: Context<'a, 's>) (fn: string list) : Set<InheritingType> =
     if hasNoInherits |> Set.contains fn then Set.empty
     else
       match inheritCache |> Map.tryFind fn with
@@ -628,6 +624,10 @@ module Type =
 
   let resolveErasedType ctx ty = resolveErasedTypeImpl Set.empty ctx ty
 
+type [<RequireQualifiedAccess>] KnownType =
+  | Ident of fullName:string list
+  | AnonymousInterface of int
+
 module Statement =
   let rec replaceAliasToFunctionWithInterface = function
     | Module m ->
@@ -764,26 +764,36 @@ module Statement =
         m.statements |> List.fold (go ns') trie |> Trie.addOrUpdate ns' [Module m] List.append
     stmts |> List.fold (go []) Trie.empty
 
+  open Type
+
   let findTypesInStatements pred (stmts: Statement list) : 'a seq =
     let rec go = function
       | TypeAlias ta ->
         seq {
-          yield! Type.findTypes pred ta.target;
+          yield! findTypes pred ta.target;
           for tp in ta.typeParams do
-            yield! [tp.defaultType; tp.extends] |> List.choose id |> Seq.collect (Type.findTypes pred)
+            yield! findTypesInTypeParam pred tp
         }
-      | ClassDef c -> Type.findTypes pred (AnonymousInterface c)
+      | ClassDef c ->
+        seq {
+          for impl in c.implements do
+            yield! findTypes pred impl
+          for tp in c.typeParams do
+            yield! findTypesInTypeParam pred tp
+          for _, m in c.members do
+            yield! findTypesInClassMember pred m
+        }
       | Module m ->
         m.statements |> Seq.collect go
       | Value v ->
         seq {
-          yield! Type.findTypes pred v.typ
+          yield! findTypes pred v.typ
           for tp in v.typeParams do
-            yield! [tp.defaultType; tp.extends] |> List.choose id |> Seq.collect (Type.findTypes pred)
+            yield! findTypesInTypeParam pred tp
         }
       | EnumDef e ->
         e.cases |> Seq.choose (fun c -> c.value)
-                |> Seq.collect (fun l -> Type.findTypes pred (TypeLiteral l))
+                |> Seq.collect (fun l -> findTypes pred (TypeLiteral l))
       | Import _ | Export _ | UnknownStatement _ | FloatingComment _ -> Seq.empty
       | Pattern p ->
         seq {
@@ -813,7 +823,21 @@ module Statement =
       | _ -> Choice1Of2 true, None
     ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
-  let rec mapType mapping (ctx: Context<_>) stmts =
+  let getKnownTypes (ctx: Context<_, _>) stmts =
+    let (|Dummy|) _ = []
+    findTypesInStatements (function
+      | App (AIdent { fullName = Some fn }, ts, _) ->
+        Choice2Of2 ts, Some (KnownType.Ident fn)
+      | Ident { fullName = Some fn } ->
+        Choice1Of2 true, Some (KnownType.Ident fn)
+      | AnonymousInterface a ->
+        let index = ctx.anonymousInterfacesMap |> Map.tryFind a
+        Choice1Of2 true, Option.map KnownType.AnonymousInterface index
+      | _ ->
+        Choice1Of2 true, None
+    ) stmts |> Set.ofSeq
+
+  let rec mapType mapping (ctx: Context<_, _>) stmts =
     let mapValue v =
       { v with
           typ = mapping ctx v.typ
@@ -846,7 +870,7 @@ module Statement =
         Pattern (ImmediateConstructor (Type.mapInClass mapping ctx bi, Type.mapInClass mapping ctx ci, mapValue v))
     stmts |> List.map f
 
-  let resolveErasedTypes (ctx: Context<TyperOptions>) (stmts: Statement list) =
+  let resolveErasedTypes (ctx: Context<TyperOptions, _>) (stmts: Statement list) =
     mapType Type.resolveErasedType ctx stmts
 
   type Dict<'k, 'v> = System.Collections.Generic.Dictionary<'k, 'v>
@@ -902,7 +926,7 @@ module Statement =
     go stmts
 
 module Ident =
-  let rec mapInType (mapping: Context<'a> -> IdentType -> IdentType) (ctx: Context<'a>) = function
+  let rec mapInType (mapping: Context<'a, 's> -> IdentType -> IdentType) (ctx: Context<'a, 's>) = function
     | Ident i -> Ident (mapping ctx i)
     | Union u -> Union { types = u.types |> List.map (mapInType mapping ctx) }
     | Intersection i -> Intersection { types = i.types |> List.map (mapInType mapping ctx) }
@@ -937,7 +961,7 @@ module Ident =
     | AIdent i -> AIdent (mapping ctx i)
     | AAnonymousInterface i -> AAnonymousInterface (Type.mapInClass (mapInType mapping) ctx i)
 
-  let rec mapInStatements mapType mapExport (ctx: Context<'a>) (stmts: Statement list) : Statement list =
+  let rec mapInStatements mapType mapExport (ctx: Context<'a, 's>) (stmts: Statement list) : Statement list =
     let mapValue v =
       { v with
           typ = mapInType mapType ctx v.typ
@@ -961,7 +985,7 @@ module Ident =
             statements =
               mapInStatements
                 mapType mapExport
-                {| ctx with currentNamespace = m.name :: ctx.currentNamespace |}
+                (ctx |> Context.ofChildNamespace m.name)
                 m.statements
         }
       | UnknownStatement u -> UnknownStatement u | FloatingComment c -> FloatingComment c
@@ -970,7 +994,7 @@ module Ident =
         Pattern (ImmediateConstructor (Type.mapInClass (mapInType mapType) ctx bi, Type.mapInClass (mapInType mapType) ctx ci, mapValue v))
     stmts |> List.map f
 
-  let resolve (ctx: Context<'a>) (i: IdentType) : IdentType =
+  let resolve (ctx: Context<'a, 's>) (i: IdentType) : IdentType =
     match i.fullName with
     | Some _ -> i
     | None ->
@@ -978,7 +1002,7 @@ module Ident =
       | Some fn -> { i with fullName = Some fn }
       | None -> i
 
-  let resolveInStatements (ctx: Context<'a>) (stmts: Statement list) : Statement list =
+  let resolveInStatements (ctx: Context<'a, 's>) (stmts: Statement list) : Statement list =
     mapInStatements
       (fun ctx i -> resolve ctx i)
       (fun ctx -> function
@@ -1070,7 +1094,7 @@ module ResolvedUnion =
     let cases, types = u.types |> List.fold f (Set.empty, [])
     cases, { types = types }
 
-  let private getDiscriminatedFromUnion (ctx: Context<'a>) (u: UnionType) : Map<string, Map<Literal, Type>> * UnionType =
+  let private getDiscriminatedFromUnion (ctx: Context<'a, 's>) (u: UnionType) : Map<string, Map<Literal, Type>> * UnionType =
     let (|Dummy|) _ = []
 
     let rec getLiteralFieldsFromType (ty: Type) : Map<string, Set<Literal>> =
@@ -1222,7 +1246,7 @@ module ResolvedUnion =
 
   let mutable private resolveUnionMap: Map<UnionType, ResolvedUnion> = Map.empty
 
-  let rec resolve (ctx: Context<'a>) (u: UnionType) : ResolvedUnion =
+  let rec resolve (ctx: Context<'a, 's>) (u: UnionType) : ResolvedUnion =
     match resolveUnionMap |> Map.tryFind u with
     | Some t -> t
     | None ->
@@ -1267,7 +1291,7 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
-let createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: TyperOptions) : Context<TyperOptions> =
+let createRootContextForTyper (srcs: SourceFile list) (opts: TyperOptions) : Context<TyperOptions, unit> =
   // TODO: handle SourceFile-specific things
   let add name ty m =
     if m |> Trie.containsKey [name] then m
@@ -1292,18 +1316,18 @@ let createRootContextForTyper internalModuleName (srcs: SourceFile list) (opts: 
     |> addPoly "ReadonlyArray" (Prim Array) [{ name = "T"; extends = None; defaultType = None }]
     |> add "BigInt" (Prim BigInt)
   {|
-    internalModuleName = internalModuleName
     currentNamespace = []
     definitionsMap = m
     typeLiteralsMap = Map.empty
     anonymousInterfacesMap = Map.empty
     unknownIdentTypes = Trie.empty
     options = opts
+    state = ()
   |}
 
-let createRootContext (internalModuleName: string) (srcs: SourceFile list) (opts: TyperOptions) : Context<TyperOptions> =
+let createRootContext (srcs: SourceFile list) (opts: TyperOptions) : Context<TyperOptions, unit> =
   // TODO: handle SourceFile-specific things
-  let ctx = createRootContextForTyper internalModuleName srcs opts
+  let ctx = createRootContextForTyper srcs opts
   let stmts = srcs |> List.collect (fun src -> src.statements)
   let tlm = Statement.getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
   let aim = Statement.getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
@@ -1386,17 +1410,17 @@ let runAll (srcs: SourceFile list) (opts: TyperOptions) =
     )
   // build a context
 
-  let ctx = createRootContextForTyper "Internal" result opts
+  let ctx = createRootContextForTyper result opts
 
   // resolve every identifier into its full name
   let result =
     result |> List.map (mapStatements (Ident.resolveInStatements ctx))
   // rebuild the context with the identifiers resolved to full name
-  let ctx = createRootContextForTyper "Internal" result opts
+  let ctx = createRootContextForTyper result opts
 
   // resolve every indexed access type and type query
   let result = result |> List.map (mapStatements (Statement.resolveErasedTypes ctx))
-  // rebuild the context because resolbeIndexedAccessAndTypeQuery may introduce additional anonymous function interfaces
-  let ctx = createRootContext "Internal" result opts
+  // rebuild the context because resolveErasedTypes may introduce additional anonymous function interfaces
+  let ctx = createRootContext result opts
 
   ctx, result

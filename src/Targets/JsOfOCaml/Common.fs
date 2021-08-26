@@ -1,11 +1,19 @@
 module Target.JsOfOCaml.Common
 
+open Fable.Core
+
+[<StringEnum>]
+type UseRecursiveModules =
+  | [<CompiledName("optimized")>] Optimized
+  | [<CompiledName("naive")>] Naive
+  | [<CompiledName("off")>] Off
+
 type Options =
   inherit GlobalOptions
   inherit Typer.TyperOptions
   abstract stdlib: bool with get
   abstract numberAsInt: bool with get
-  abstract useRecursiveModules: bool with get, set
+  abstract useRecursiveModules: UseRecursiveModules with get, set
   abstract simplifyImmediateInstance: bool with get, set
   abstract simplifyImmediateConstructor: bool with get, set
   abstract useTagsToInheritUnknownTypes: bool with get, set

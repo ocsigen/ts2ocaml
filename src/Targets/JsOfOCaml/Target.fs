@@ -17,7 +17,7 @@ let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
       .alias(!^"tags", !^"use-tags-to-inherit-unknown-types")
       .addFlag("use-exact-arity-for-unknown-types", (fun (o: Options) -> o.useExactArityForUnknownTypes), descr="Use `TypeName.t_n` for an N-ary unknown type.")
       .alias(!^"exact-arity", !^"use-exact-arity-for-unknown-types")
-      .addFlag("use-recursive-modules", (fun (o: Options) -> o.useRecursiveModules), descr="Use recursive modules to simplify the output. Can impact the compilation time.")
+      .addChoice("use-recursive-modules", [|Optimized; Naive; Off|], (fun (o: Options) -> o.useRecursiveModules), descr="Use recursive modules to simplify the output. Can impact the compilation time.", defaultValue=Optimized)
       .alias(!^"use-recursive-modules", !^"rec-module")
       .addFlag(
         "simplify-immediate-instance",

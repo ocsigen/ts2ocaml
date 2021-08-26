@@ -296,7 +296,7 @@ let open_ names = names |> List.map (tprintf "open %s") |> concat newline
 
 let include_ names = names |> List.map (tprintf "include %s") |> concat newline
 
-type TextModuleSig = {| name: string; scope: string option; content: text list; docCommentBody: text list |}
+type TextModuleSig = {| name: string; origName: string; scope: string option; content: text list; docCommentBody: text list |}
 
 let private moduleSigImpl (prefix: string) (isRec: bool) (module_: TextModuleSig) =
   concat newline [

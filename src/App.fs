@@ -18,7 +18,6 @@ type ICompilerHost =
   abstract directoryExists: directoryName: string -> bool
   abstract getDirectories: path: string -> ResizeArray<string>
 
-
 let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
     let options = jsOptions<Ts.CompilerOptions>(fun o ->
       o.target <- Some Ts.ScriptTarget.ESNext

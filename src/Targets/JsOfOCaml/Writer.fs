@@ -572,11 +572,14 @@ let removeLabels (xs: Choice<FieldLike, Type> list) =
     xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
 
 let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (ma: MemberAttribute) m = [
-  match ma.comments with
-  | [] -> ()
-  | xs ->
-    yield ScopeIndependent empty
-    yield docComment (xs |> List.map emitComment |> concat newline) |> ScopeIndependent
+  let inline comments () =
+    match ma.comments with
+    | [] -> Seq.empty
+    | xs ->
+      seq {
+        yield ScopeIndependent empty
+        yield docComment (xs |> List.map emitComment |> concat newline) |> ScopeIndependent
+      }
 
   let inline overloaded (f: (string -> string) -> text list) =
     OverloadedText (fun renamer -> f (renamer.Rename "value"))
@@ -584,9 +587,11 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
   match m with
   | Constructor (ft, typrm) ->
     let ty = Function { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy; loc = ft.loc } |> emitType_ ctx
+    yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "create") ty + str " " + Attr.js_create])
   | New (ft, typrm) ->
     let ft = Function { ft with args = Choice2Of2 selfTy :: ft.args } |> emitType_ ctx
+    yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "create") ft + str " " + Attr.js_apply true])
   | Field ({ name = name; value = Function ft }, _, typrm)
   | Method (name, ft, typrm) ->
@@ -596,6 +601,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
         let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
         Function ft, Attr.js_call name
     let ty = emitType_ ctx ty
+    yield! comments ()
     yield overloaded (fun rename -> [val_ (Naming.valueName name |> rename) ty + str " " + attr])
   | Getter fl | Field (fl, ReadOnly, _) ->
     let fl =
@@ -611,6 +617,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
         if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
         else fl.value
       Function { isVariadic = false; args = args; returnType = ret; loc = ma.loc } |> emitType_ ctx
+    yield! comments ()
     yield overloaded (fun rename -> [val_ ("get_" + Naming.removeInvalidChars fl.name |> rename) ty + str " " + Attr.js_get fl.name])
   | Setter fl | Field (fl, WriteOnly, _) ->
     let fl =
@@ -623,15 +630,18 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
         if ma.isStatic then [Choice2Of2 fl.value]
         else [Choice2Of2 selfTy; Choice2Of2 fl.value]
       Function { isVariadic = false; args = args; returnType = Prim Void; loc = ma.loc } |> emitType_ ctx
+    yield! comments ()
     yield overloaded (fun rename -> [val_ ("set_" + Naming.removeInvalidChars fl.name |> rename) ty + str " " + Attr.js_set fl.name])
   | Field (fl, Mutable, _) ->
     yield! emitMembers emitType_ ctx name selfTy ma (Getter fl)
     yield! emitMembers emitType_ ctx name selfTy ma (Setter fl)
   | FunctionInterface (ft, _) ->
     let ft = Function { ft with args = Choice2Of2 selfTy :: ft.args } |> emitType_ ctx
+    yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "apply") ft + str " " + Attr.js_apply false])
   | Indexer (ft, ReadOnly) ->
     let ft = Function { ft with args = Choice2Of2 selfTy :: removeLabels ft.args } |> emitType_ ctx
+    yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "get") ft + str " " + Attr.js_index_get])
   | Indexer (ft, WriteOnly) ->
     let ft =
@@ -641,11 +651,13 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
         returnType = Prim Void;
         loc = ft.loc
       } |> emitType_ ctx
+    yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "set") ft + str " " + Attr.js_index_set])
   | Indexer (ft, Mutable) ->
     yield! emitMembers emitType_ ctx name selfTy ma (Indexer (ft, ReadOnly))
     yield! emitMembers emitType_ ctx name selfTy ma (Indexer (ft, WriteOnly))
   | UnknownMember msgo ->
+    yield! comments ()
     match msgo with
     | Some msg ->
       yield commentStr msg |> ScopeIndependent
@@ -853,6 +865,28 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
 
   getModule name |> Trie.setOrUpdate node StructuredTextNode.union |> setModule name
 
+let emitValue ctx v =
+  let emitTypeFlags = { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
+  let emitType = emitTypeImpl emitTypeFlags
+  let emitType_ = emitType OverrideFunc.noOverride
+
+  let ty, attr =
+    match v.typ with
+    | Function _ ->
+      v.typ, Attr.js_global v.name
+    | _ ->
+      let tyAsGetter = Function { args = [Choice2Of2 (Prim Void)]; isVariadic = false; returnType = v.typ; loc = v.loc }
+      tyAsGetter, Attr.js_get v.name
+  let comments =
+    if List.isEmpty v.comments then []
+    else ScopeIndependent empty :: [v.comments |> List.map emitComment |> concat newline |> docComment |> ScopeIndependent]
+  let item =
+    let ty = emitType_ ctx ty
+    overloaded (fun rename -> [
+      val_ (Naming.valueName v.name |> rename) ty + str " " + attr
+    ])
+  comments @ [item]
+
 let createStructuredText (rootCtx: Context) (stmts: Statement list) : StructuredText =
   let emitTypeFlags = { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
   let emitType = emitTypeImpl emitTypeFlags
@@ -865,23 +899,6 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       | None -> Trie.empty
     let setModule name trie = current |> Trie.replaceSubTrie [name] trie
     let setNode node = current |> Trie.setOrUpdate node StructuredTextNode.union
-
-    let emitValue ctx v =
-      let ty, attr =
-        match v.typ with
-        | Function _ ->
-          v.typ, Attr.js_global v.name
-        | _ ->
-          let tyAsGetter = Function { args = [Choice2Of2 (Prim Void)]; isVariadic = false; returnType = v.typ; loc = v.loc }
-          tyAsGetter, Attr.js_get v.name
-      let comments =
-        ScopeIndependent empty :: [v.comments |> List.map emitComment |> concat newline |> docComment |> ScopeIndependent]
-      let item =
-        let ty = emitType_ ctx ty
-        overloaded (fun rename -> [
-          val_ (Naming.valueName v.name |> rename) ty + str " " + attr
-        ])
-      comments @ [item]
 
     let comments =
       match (s :> ICommented<_>).getComments() with
@@ -936,7 +953,9 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
               comments = memberAttr.comments; loc = memberAttr.loc }
           emitValue ctx v
         [ for ma, m in moduleIntf.members do
-            let cmt = ScopeIndependent empty :: [ma.comments |> List.map emitComment |> concat newline |> docComment |> ScopeIndependent]
+            let cmt =
+              if List.isEmpty ma.comments then []
+              else ScopeIndependent empty :: [ma.comments |> List.map emitComment |> concat newline |> docComment |> ScopeIndependent]
             match m with
             | Field (fl, mt, tps) ->
               yield! emitAsValue fl.name fl.value tps (mt = ReadOnly) ma

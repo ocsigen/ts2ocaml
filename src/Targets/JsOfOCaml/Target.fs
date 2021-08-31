@@ -15,9 +15,9 @@ let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
       .alias(!^"int", !^"number-as-int")
       .addFlag("use-tags-to-inherit-unknown-types", (fun (o: Options) -> o.useTagsToInheritUnknownTypes), descr="Use `TypeName.tags` to inherit an unknown type.")
       .alias(!^"tags", !^"use-tags-to-inherit-unknown-types")
-      .addFlag("use-exact-arity-for-unknown-types", (fun (o: Options) -> o.useExactArityForUnknownTypes), descr="Use `TypeName.t_n` for an N-ary unknown type.")
-      .alias(!^"exact-arity", !^"use-exact-arity-for-unknown-types")
-      .addChoice("use-recursive-modules", [|Optimized; Naive; Off|], (fun (o: Options) -> o.useRecursiveModules), descr="Use recursive modules to simplify the output. Can impact the compilation time.", defaultValue=Optimized)
+      .addChoice("use-arity-safe-type-names", [|UseAritySafeTypeNames.Full; UseAritySafeTypeNames.Provide; UseAritySafeTypeNames.Consume; UseAritySafeTypeNames.Off|], (fun (o: Options) -> o.useAritySafeTypeNames), descr="Use `TypeName.t_n` type names to safely use overloaded types.", defaultValue=UseAritySafeTypeNames.Full)
+      .alias(!^"use-arity-safe-type-names", !^"safe-arity")
+      .addChoice("use-recursive-modules", [|UseRecursiveModules.Optimized; UseRecursiveModules.Naive; UseRecursiveModules.Off|], (fun (o: Options) -> o.useRecursiveModules), descr="Use recursive modules to simplify the output. Can impact the compilation time.", defaultValue=UseRecursiveModules.Optimized)
       .alias(!^"use-recursive-modules", !^"rec-module")
       .addFlag(
         "simplify-immediate-instance",

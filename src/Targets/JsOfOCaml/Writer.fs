@@ -34,6 +34,7 @@ let emitComment (c: Comment) : text =
   let escape (lines: string list) =
     lines
     |> List.map (String.escapeWith ["{"; "}"; "["; "]"; "@"])
+    |> List.map (String.replace "(*" "( *")
     |> List.map (String.replace "*)" "* )")
     |> escapeDoubleQuote
 
@@ -86,7 +87,7 @@ let anonymousInterfaceModuleName (index: int) = sprintf "AnonymousInterface%d" i
 let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
   match ctx.anonymousInterfacesMap |> Map.tryFind c, c.name with
   | Some i, None ->
-    if ctx.options.useRecursiveModules <> Off then
+    if ctx.options.useRecursiveModules <> UseRecursiveModules.Off then
       tprintf "%s.t" (anonymousInterfaceModuleName i)
     else
       tprintf "anonymous_interface_%d" i
@@ -162,13 +163,13 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     match fno with
     | None ->
       let tyName =
-        if ctx.options.useExactArityForUnknownTypes then
+        match ctx.options.useAritySafeTypeNames with
+        | UseAritySafeTypeNames.Full | UseAritySafeTypeNames.Consume ->
           Naming.createTypeNameOfArity arity None "t"
-        else
-          "t"
-      (Naming.structured Naming.moduleName name + "." + tyName |> withTyargs) + commentStr "?"
+        | _ -> "t"
+      Naming.structured Naming.moduleName name + "." + tyName |> withTyargs
     | Some fn ->
-      if ctx.options.useRecursiveModules <> Off then
+      if ctx.options.useRecursiveModules <> UseRecursiveModules.Off then
         let maxArity =
           FullName.tryLookupWith ctx fn (function
             | AliasName { typeParams = tps; erased = false }
@@ -445,19 +446,30 @@ type StructuredTextItem =
   | OverloadedText of (OverloadRenamer -> text list)
 
 type StructuredTextNode = {|
+  shouldBeScoped: bool
   items: StructuredTextItem list
   docCommentLines: text list
   knownTypes: Set<KnownType>
 |}
 module StructuredTextNode =
   let union (a: StructuredTextNode) (b: StructuredTextNode) : StructuredTextNode =
-    {| items = List.append a.items b.items
+    {| shouldBeScoped = a.shouldBeScoped || b.shouldBeScoped
+       items = List.append a.items b.items
        docCommentLines = List.append a.docCommentLines b.docCommentLines
        knownTypes = Set.union a.knownTypes b.knownTypes |}
 
 type StructuredText = Trie<string, StructuredTextNode>
 
 module StructuredText =
+  let pp (x: StructuredText) =
+    let rec go (x: StructuredText) =
+      concat newline [
+        for k, v in x.children |> Map.toArray do
+          tprintf "- %s" k
+          indent (go v)
+      ]
+    go x
+
   let rec getReferences (ctx: Context) (x: StructuredText) : WeakTrie<string> =
     match ctx.state.referencesCache.TryGetValue(ctx.currentNamespace) with
     | true, ts -> ts
@@ -703,23 +715,26 @@ let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
   [
     yield typeAlias "t" tyargs target |> TypeDef
     yield! emitMappers ctx emitType "t" typrms
-    let arities = getPossibleArity typrms
-    for arity in arities |> Set.toSeq |> Seq.sortDescending do
-      let name = Naming.createTypeNameOfArity arity None "t"
-      let tyargs' = List.take arity tyargs
-      let typrms' = List.take arity typrms
-      let target =
-        Type.appOpt
-          (str "t")
-          [
-            for tyarg in tyargs' do yield tyarg
-            for t in typrms |> List.skip arity do
-              match t.defaultType with
-              | None -> failwith "impossible_emitTypeAliases"
-              | Some t -> yield emitType_ ctx t
-          ]
-      yield typeAlias name tyargs' target |> TypeDef
-      yield! emitMappers ctx emitType name typrms'
+    match ctx.options.useAritySafeTypeNames with
+    | UseAritySafeTypeNames.Full | UseAritySafeTypeNames.Provide ->
+      let arities = getPossibleArity typrms
+      for arity in arities |> Set.toSeq |> Seq.sortDescending do
+        let name = Naming.createTypeNameOfArity arity None "t"
+        let tyargs' = List.take arity tyargs
+        let typrms' = List.take arity typrms
+        let target =
+          Type.appOpt
+            (str "t")
+            [
+              for tyarg in tyargs' do yield tyarg
+              for t in typrms |> List.skip arity do
+                match t.defaultType with
+                | None -> failwith "impossible_emitTypeAliases"
+                | Some t -> yield emitType_ ctx t
+            ]
+        yield typeAlias name tyargs' target |> TypeDef
+        yield! emitMappers ctx emitType name typrms'
+    | _ -> ()
   ]
 
 let inline private overloaded (f: (string -> string) -> text list) =
@@ -762,12 +777,6 @@ module GetSelfTyText =
       ]) +@ " [@js.enum]"
 
 let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Class) (additionalMembers: list<StructuredTextItem>, additionalKnownTypes: Set<KnownType>) =
-  let getModule name =
-    match current |> Trie.getSubTrie [name] with
-    | Some t -> t
-    | None -> Trie.empty
-  let setModule name trie = current |> Trie.replaceSubTrie [name] trie
-
   let typrms = List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams
   let name, isAnonymous, selfTy, overrideFunc =
     match c.name with
@@ -778,7 +787,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
         if List.isEmpty c.typeParams then Ident ident
         else App (AIdent ident, typrms, UnknownLocation)
       let overrideFunc =
-        if ctx.options.useRecursiveModules <> Off then overrideFunc
+        if ctx.options.useRecursiveModules <> UseRecursiveModules.Off then overrideFunc
         else
           let orf _emitType _ctx = function
             | Ident { name = [n']; fullName = Some k' } when n = n' && k = k' -> Some (str "t")
@@ -811,7 +820,13 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
         | _ -> None
 
   let knownTypes = Statement.getKnownTypes ctx [ClassDef c] |> Set.union additionalKnownTypes
-  let ctx, innerCtx = (), ctx |> Context.ofChildNamespace name
+  let ctx, innerCtx =
+    (),
+    {| (ctx |> Context.ofChildNamespace name) with
+        options =
+          if not isAnonymous then ctx.options
+          else
+            ctx.options |> jsWith (fun o -> o.useAritySafeTypeNames <- UseAritySafeTypeNames.Consume) |}
 
   let emitType = emitTypeImpl flags
   let emitType_ = emitType overrideFunc
@@ -827,6 +842,9 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
       yield! emitMembers emitType_ innerCtx name selfTy ma m
     yield! additionalMembers
   ]
+  let shouldBeScoped =
+    (c.members |> List.exists (fun (ma, _) -> ma.isStatic))
+    || (additionalMembers |> List.exists (function OverloadedText _ -> true | _ -> false))
 
   let docCommentLines =
     c.comments |> List.distinct |> List.map emitComment
@@ -861,9 +879,10 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
           ])
   ]
 
-  let node = {| items = items; docCommentLines = docCommentLines; knownTypes = knownTypes |}
-
-  getModule name |> Trie.setOrUpdate node StructuredTextNode.union |> setModule name
+  let node = {| items = items; docCommentLines = docCommentLines; knownTypes = knownTypes; shouldBeScoped = shouldBeScoped |}
+  current
+  |> Trie.addOrUpdate [name] node StructuredTextNode.union
+  |> Trie.setOrUpdate {| items = []; docCommentLines = []; knownTypes = Set.empty; shouldBeScoped = shouldBeScoped |} StructuredTextNode.union
 
 let emitValue ctx v =
   let emitTypeFlags = { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
@@ -897,7 +916,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       match current |> Trie.getSubTrie [name] with
       | Some t -> t
       | None -> Trie.empty
-    let setModule name trie = current |> Trie.replaceSubTrie [name] trie
+    let setModule name trie = current |> Trie.setSubTrie [name] trie
     let setNode node = current |> Trie.setOrUpdate node StructuredTextNode.union
 
     let comments =
@@ -910,7 +929,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     match s with
     | Module m ->
       let module' =
-        let node = {| items = []; docCommentLines = comments; knownTypes = knownTypes () |}
+        let node = {| items = []; docCommentLines = comments; knownTypes = knownTypes (); shouldBeScoped = false |}
         let module' = getModule m.name |> Trie.setOrUpdate node StructuredTextNode.union
         let ctx = ctx |> Context.ofChildNamespace m.name
         m.statements |> List.fold (folder ctx) module'
@@ -918,26 +937,28 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | ClassDef c ->
       emitClass emitTypeFlags OverrideFunc.noOverride ctx current c ([], Set.empty)
     | EnumDef e ->
-      let ctx = ctx |> Context.ofChildNamespace e.name
-      let items = emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e.cases)
-      let node = {| items = items; docCommentLines = comments; knownTypes = knownTypes () |}
       let module' =
-        getModule e.name |> Trie.setOrUpdate node StructuredTextNode.union
-      e.cases |> List.fold (fun state c ->
-        let ctx = ctx |> Context.ofChildNamespace c.name
-        let comments = List.map emitComment c.comments
-        let items =
-          emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases [c])
-        let node = {| items = items; docCommentLines = comments; knownTypes = knownTypes () |}
-        state |> Trie.addOrUpdate [c.name] node StructuredTextNode.union
-      ) module'
+        let ctx = ctx |> Context.ofChildNamespace e.name
+        let items = emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e.cases)
+        let node = {| items = items; docCommentLines = comments; knownTypes = knownTypes (); shouldBeScoped = false |}
+        let module' =
+          getModule e.name |> Trie.setOrUpdate node StructuredTextNode.union
+        e.cases |> List.fold (fun state c ->
+          let ctx = ctx |> Context.ofChildNamespace c.name
+          let comments = List.map emitComment c.comments
+          let items =
+            emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases [c])
+          let node = {| items = items; docCommentLines = comments; knownTypes = knownTypes (); shouldBeScoped = false |}
+          state |> Trie.addOrUpdate [c.name] node StructuredTextNode.union
+        ) module'
+      setModule e.name module'
     | TypeAlias ta ->
       if ta.erased then current
       else
         let ctx = ctx |> Context.ofChildNamespace ta.name
         let items =
           emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitType_ ctx ta.target)
-        let node = {| items = items; docCommentLines = comments; knownTypes = knownTypes () |}
+        let node = {| items = items; docCommentLines = comments; knownTypes = knownTypes (); shouldBeScoped = false |}
         let module' =
           getModule ta.name |> Trie.setOrUpdate node StructuredTextNode.union
         setModule ta.name module'
@@ -981,23 +1002,24 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         let module' =
           let items = intfToStmts value.name intf
           getModule value.name
-          |> Trie.setOrUpdate {| items = items; docCommentLines = []; knownTypes = knownTypes () |} StructuredTextNode.union
+          |> Trie.setOrUpdate {| items = items; docCommentLines = []; knownTypes = knownTypes (); shouldBeScoped = true |} StructuredTextNode.union
         setModule value.name module'
       | ImmediateConstructor (baseIntf, ctorIntf, ctorValue) when ctx.options.simplifyImmediateConstructor ->
         emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts ctorValue.name ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf])
       | _ -> fallback ()
-    | Value v -> setNode {| items = emitValue ctx v; docCommentLines = []; knownTypes = knownTypes () |}
+    | Value v ->
+      setNode {| items = emitValue ctx v; docCommentLines = []; knownTypes = knownTypes (); shouldBeScoped = true |}
     | Import i -> // TODO
-      setNode {| items = [commentStr (sprintf "%A" i) |> ImportText]; docCommentLines = []; knownTypes = Set.empty |}
+      setNode {| items = [commentStr (sprintf "%A" i) |> ImportText]; docCommentLines = []; knownTypes = Set.empty; shouldBeScoped = false |}
     | Export _ -> current // nop
     | UnknownStatement u ->
       let cmt =
         match u.msg with
         | Some s -> commentStr s | None -> commentStr "unknown statement"
-      setNode {| items = [ScopeIndependent cmt]; docCommentLines = []; knownTypes = Set.empty |}
+      setNode {| items = [ScopeIndependent cmt]; docCommentLines = []; knownTypes = Set.empty; shouldBeScoped = false |}
     | FloatingComment c ->
       let cmt = ScopeIndependent empty :: (c.comments |> List.map (emitComment >> comment >> ScopeIndependent))
-      setNode {| items = ScopeIndependent empty :: cmt; docCommentLines = []; knownTypes = Set.empty |}
+      setNode {| items = ScopeIndependent empty :: cmt; docCommentLines = []; knownTypes = Set.empty; shouldBeScoped = false |}
 
   let anonymousInterfaces =
     rootCtx.anonymousInterfacesMap
@@ -1023,9 +1045,9 @@ module ModuleEmitter =
         |> List.concat
   let fromOption (opt: Options) =
     match opt.useRecursiveModules with
-    | Off -> nonRec
-    | Naive -> recAll
-    | Optimized -> recOptimized
+    | UseRecursiveModules.Off -> nonRec
+    | UseRecursiveModules.Naive -> recAll
+    | UseRecursiveModules.Optimized -> recOptimized
 
 let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context) (st: StructuredText) : {| shouldBeScoped: bool; content: text list; docCommentBody: text list |} =
   let renamer = new OverloadRenamer()
@@ -1057,7 +1079,10 @@ let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context)
           | OverloadedText f -> (imports, typedefs, Choice2Of2 f :: items)
         ) ([], [], []) node.items
       List.rev imports, List.rev typedefs, List.rev items, node.docCommentLines
-  let shouldBeScoped = not (List.isEmpty modules) || List.exists (function Choice2Of2 _ -> true | _ -> false) items
+  let shouldBeScoped =
+    match st.value with
+    | Some v -> v.shouldBeScoped
+    | None -> false
   let content =
     [
       yield! imports
@@ -1153,13 +1178,14 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
 
 let emitStatements (ctx: Context) (stmts: Statement list) =
   let moduleEmitter = ModuleEmitter.fromOption ctx.options
-  let result = createStructuredText ctx stmts |> emitStructuredText moduleEmitter ctx
+  let result =
+    createStructuredText ctx stmts |> emitStructuredText moduleEmitter ctx
   let content =
     if List.isEmpty result.docCommentBody then result.content
     else
       docComment (concat newline result.docCommentBody) :: result.content
   [
-    if ctx.options.useRecursiveModules = Off then
+    if ctx.options.useRecursiveModules = UseRecursiveModules.Off then
       yield! emitFlattenedDefinitions ctx stmts
       yield empty
     yield! content
@@ -1184,8 +1210,8 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) =
   opts.simplifyImmediateInstance <- true
   opts.simplifyImmediateConstructor <- true
   opts.useTagsToInheritUnknownTypes <- true
-  opts.useExactArityForUnknownTypes <- true
-  opts.useRecursiveModules <- Optimized
+  opts.useAritySafeTypeNames <- UseAritySafeTypeNames.Full
+  opts.useRecursiveModules <- UseRecursiveModules.Optimized
 
   let esCtx, esSrc = runAll [esSrc] opts
   let domCtx, domSrc = runAll [domSrc] opts

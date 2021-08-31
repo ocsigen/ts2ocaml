@@ -39,6 +39,9 @@ module Context =
   let ofChildNamespace childName (ctx: Context<'a, 's>) : Context<'a, 's> =
     {| ctx with currentNamespace = childName :: ctx.currentNamespace |}
 
+  let getFullName (name: string list) (ctx: Context<'a, 's>) =
+    (List.rev ctx.currentNamespace @ name) |> String.concat "."
+
   /// `Error relativeNameOfCurrentNamespace` when `fullName` is a parent of current namespace.
   /// `Ok name` otherwise.
   let getRelativeNameTo (fullName: string list) (ctx: Context<'a, 's>) =

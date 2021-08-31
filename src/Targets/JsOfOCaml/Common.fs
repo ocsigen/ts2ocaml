@@ -2,10 +2,17 @@ module Target.JsOfOCaml.Common
 
 open Fable.Core
 
-[<StringEnum>]
+[<StringEnum; RequireQualifiedAccess>]
 type UseRecursiveModules =
   | [<CompiledName("optimized")>] Optimized
   | [<CompiledName("naive")>] Naive
+  | [<CompiledName("off")>] Off
+
+[<StringEnum; RequireQualifiedAccess>]
+type UseAritySafeTypeNames =
+  | [<CompiledName("full")>] Full
+  | [<CompiledName("provide")>] Provide
+  | [<CompiledName("consume")>] Consume
   | [<CompiledName("off")>] Off
 
 type Options =
@@ -14,10 +21,10 @@ type Options =
   abstract stdlib: bool with get
   abstract numberAsInt: bool with get
   abstract useRecursiveModules: UseRecursiveModules with get, set
+  abstract useAritySafeTypeNames: UseAritySafeTypeNames with get, set
   abstract simplifyImmediateInstance: bool with get, set
   abstract simplifyImmediateConstructor: bool with get, set
   abstract useTagsToInheritUnknownTypes: bool with get, set
-  abstract useExactArityForUnknownTypes: bool with get, set
 
 let stdlib = """[@@@ocaml.warning "-7-11-32-33-39"]
 [@@@js.implem

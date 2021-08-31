@@ -101,6 +101,8 @@ module Trie =
   let empty<'k, 'v when 'k: comparison> : Trie<'k, 'v> =
     { value = None; children = Map.empty }
 
+  let singleton v : Trie<'k, 'v> = { value = Some v; children = Map.empty }
+
   let rec isEmpty (t: Trie<_, _>) =
     t.value.IsNone && Map.forall (fun _ -> isEmpty) t.children
 
@@ -167,13 +169,13 @@ module Trie =
       | None -> None
       | Some child -> getSubTrie ks child
 
-  let rec replaceSubTrie (ks: 'k list) (subTrie: Trie<'k, 'v>) (t: Trie<'k, 'v>) =
+  let rec setSubTrie (ks: 'k list) (subTrie: Trie<'k, 'v>) (t: Trie<'k, 'v>) =
     match ks with
     | [] -> subTrie
     | k :: ks ->
       match Map.tryFind k t.children with
-      | Some child -> { t with children = t.children |> Map.add k (replaceSubTrie ks subTrie child) }
-      | None -> { t with children = t.children |> Map.add k (replaceSubTrie ks subTrie empty) }
+      | Some child -> { t with children = t.children |> Map.add k (setSubTrie ks subTrie child) }
+      | None -> { t with children = t.children |> Map.add k (setSubTrie ks subTrie empty) }
 
   let fold (f: 'state -> 'k list -> 'v -> 'state) (s: 'state) (t: Trie<'k, 'v>) =
     let rec go ksRev state t =
@@ -340,6 +342,11 @@ open Fable.Core.JsInterop
 
 [<Emit("typeof $0")>]
 let jsTypeof (x: 'a) : string = jsNative
+
+let jsWith (f: 'a -> unit) (x: 'a) =
+  let newX = JS.Constructors.Object.assign(!!{||}, x) :?> 'a
+  f newX
+  newX
 
 let stringify (x: obj) =
   let objSet = JS.Constructors.Set.Create()

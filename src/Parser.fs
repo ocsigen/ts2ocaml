@@ -316,7 +316,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     let typrms = readTypeParameters typrm ctx t.typeParameters
     let typrm' = Set.union typrm (typrms |> List.map (fun x -> x.name) |> Set.ofList)
     let retTy = readTypeNode typrm' ctx t.``type``
-    Erased (NewableFunction (readParameters typrm' ctx t.parameters t retTy, typrms), Node.location t)
+    Erased (NewableFunction (readParameters typrm' ctx t.parameters t retTy, typrms), Node.location t, t.getText())
   | Kind.LiteralType ->
     let t = t :?> Ts.LiteralTypeNode
     if t.getText() = "null" then Prim Null // handle NullLiteral
@@ -330,11 +330,19 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
   | Kind.TypeLiteral ->
     let t = t :?> Ts.TypeLiteralNode
     let members = t.members |> List.ofSeq |> List.map (readNamedDeclaration typrm ctx)
-    AnonymousInterface {
-      name = None; isInterface = true; isExported = Exported.No
-      comments = []; implements = []; typeParams = []; accessibility = Public
-      members = members; loc = Node.location t
-    }
+    let temp =
+      { name = None; isInterface = true; isExported = Exported.No
+        comments = []; implements = []; typeParams = []; accessibility = Public
+        members = members; loc = Node.location t }
+    let freeTypeVars = Typer.Type.getFreeTypeVars (AnonymousInterface temp)
+    let usedTyprms = Set.intersect typrm freeTypeVars
+    if Set.isEmpty usedTyprms then AnonymousInterface temp
+    else
+      let usedTyprms = usedTyprms |> Set.toList
+      let typeParams = usedTyprms |> List.map (fun name -> { name = name; extends = None; defaultType = None })
+      let typeArgs = usedTyprms |> List.map TypeVar
+      let ai = { temp with typeParams = typeParams }
+      App (AAnonymousInterface ai, typeArgs, Node.location t)
   // readonly types
   | Kind.TypeOperator ->
     let t = t :?> Ts.TypeOperatorNode
@@ -353,7 +361,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
         nodeWarn ctx t "unsupported 'readonly' modifier for type '%s'" (t.getText())
         UnknownType (Some (t.getText()))
     | Kind.KeyOfKeyword ->
-      Erased (Keyof (readTypeNode typrm ctx t.``type``), Node.location t)
+      Erased (Keyof (readTypeNode typrm ctx t.``type``), Node.location t, t.getText())
     | _ ->
       nodeWarn ctx t "unsupported type operator '%s'" (Enum.pp t.operator)
       UnknownType (Some (t.getText()))
@@ -361,12 +369,12 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     let t = t :?> Ts.IndexedAccessTypeNode
     let lhs = readTypeNode typrm ctx t.objectType
     let rhs = readTypeNode typrm ctx t.indexType
-    Erased (IndexedAccess (lhs, rhs), Node.location t)
+    Erased (IndexedAccess (lhs, rhs), Node.location t, t.getText())
   | Kind.TypeQuery ->
     let t = t :?> Ts.TypeQueryNode
     let nameNode = box t.exprName :?> Node
     let name = extractNestedName nameNode
-    Erased (TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }), Node.location t)
+    Erased (TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }), Node.location t, t.getText())
   // fallbacks
   | Kind.TypePredicate ->
     nodeWarn ctx t "type predicate is not supported and treated as boolean"

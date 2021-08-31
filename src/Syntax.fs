@@ -148,7 +148,7 @@ and Type =
   | Tuple of TupleType
   | Function of FuncType<Type>
   | App of AppLeftHandSide * Type list * Location
-  | Erased of ErasedType * Location
+  | Erased of ErasedType * Location * origText:string
   | UnknownType of string option
 
 and AppLeftHandSide =
@@ -503,6 +503,10 @@ module Enum =
   let isStringEnum (e: Enum) =
     e.cases |> List.exists (function { value = Some (LString _ ) } -> true | _ -> false)
 
+module FuncType =
+  let map (f: 'a -> 'b) (ft: FuncType<'a>) =
+    { args = ft.args; isVariadic = ft.isVariadic; loc = ft.loc; returnType = f ft.returnType }
+
 module Type =
   let ofAppLeftHandSide = function
     | AIdent i -> Ident i
@@ -533,7 +537,7 @@ module Type =
           | Choice2Of2 t -> pp t)
       "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"
     | App (t, ts, _) -> pp (ofAppLeftHandSide t) + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
-    | Erased (e, _) ->
+    | Erased (e, _, _) ->
       match e with
       | IndexedAccess (t, u) -> sprintf "%s[%s]" (pp t) (pp u)
       | TypeQuery i -> sprintf "typeof %s" (String.concat "." i.name)

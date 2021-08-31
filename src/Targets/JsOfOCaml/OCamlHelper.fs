@@ -301,6 +301,7 @@ type TextModuleSig = {| name: string; origName: string; scope: string option; co
 let private moduleSigImpl (prefix: string) (isRec: bool) (module_: TextModuleSig) =
   concat newline [
     if List.isEmpty module_.docCommentBody |> not then
+      yield empty
       yield docComment (concat newline module_.docCommentBody)
     let isEmpty = List.isEmpty module_.content
     let head =

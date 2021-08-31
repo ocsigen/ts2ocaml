@@ -234,7 +234,7 @@ module Type =
     | App (t, ts, loc) -> App (t, ts |> List.map (substTypeVar subst _ctx), loc)
     | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
     | PolymorphicThis -> PolymorphicThis | Intrinsic -> Intrinsic
-    | Erased (e, loc) ->
+    | Erased (e, loc, origText) ->
       let e' =
         match e with
         | IndexedAccess (t1, t2) -> IndexedAccess (substTypeVar subst _ctx t1, substTypeVar subst _ctx t2)
@@ -246,7 +246,7 @@ module Type =
                 extends = Option.map (substTypeVar subst _ctx) tp.extends
                 defaultType = Option.map (substTypeVar subst _ctx) tp.defaultType }
           NewableFunction (substTypeVarInFunction subst _ctx f, List.map mapTyprm typrms)
-      Erased (e', loc)
+      Erased (e', loc, origText)
     | UnknownType msgo -> UnknownType msgo
 
   and substTypeVarInFunction subst _ctx f =
@@ -306,7 +306,7 @@ module Type =
           | Tuple { types = ts } ->
             for t in ts do yield! go_t t.value
           | Function f -> yield! findTypesInFuncType pred f
-          | Erased (e, _) ->
+          | Erased (e, _, _) ->
             match e with
             | IndexedAccess (t1, t2) ->
               yield! go_t t1
@@ -332,6 +332,30 @@ module Type =
       | TypeVar s -> Choice1Of2 false, Some s
       | _ -> Choice1Of2 true, None
     ) ty
+
+  let rec getFreeTypeVarsPredicate t =
+    match t with
+    | TypeVar s -> Choice1Of2 true, Some (Set.singleton s)
+    | AnonymousInterface a ->
+      let memberFvs =
+        a.members |> List.map (fun (_, m) ->
+          match m with
+          | Field (fl, _, tps) ->
+            Set.difference (findTypesInFieldLike getFreeTypeVarsPredicate fl |> Set.unionMany) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
+          | Method (_, ft, tps) | FunctionInterface (ft, tps) | New (ft, tps) ->
+            Set.difference (findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
+          | Constructor (ft, tps) ->
+            let ft = ft |> FuncType.map (fun _ -> PolymorphicThis)
+            Set.difference (findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
+          | Indexer (ft, _) -> findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany
+          | Getter fl | Setter fl -> findTypesInFieldLike getFreeTypeVarsPredicate fl |> Set.unionMany
+          | UnknownMember _ -> Set.empty
+          ) |> Set.unionMany
+      let fvs = Set.difference memberFvs (a.typeParams |> List.map (fun tp -> tp.name) |> Set.ofList)
+      Choice1Of2 false, Some fvs
+    | _ -> Choice1Of2 true, None
+
+  let getFreeTypeVars ty = findTypes getFreeTypeVarsPredicate ty |> Set.unionMany
 
   let rec assignTypeParams fn (loc: Location) (typrms: TypeParam list) (xs: 'a list) (f: TypeParam -> 'a -> 'b) (g: TypeParam -> 'b) : 'b list =
     match typrms, xs with
@@ -462,7 +486,7 @@ module Type =
   let getAllInheritancesAndSelf ctx ty = getAllInheritancesImpl true ctx ty
   let getAllInheritancesAndSelfFromName ctx fn = getAllInheritancesFromNameImpl true ctx fn
 
-  let private createFunctionInterfaceBase isNewable (typrms: TypeParam list) ft loc =
+  let private createFunctionInterfaceBase isNewable (typrms: TypeParam list) ft comments loc =
     let usedTyprms =
       getTypeVars (Function ft)
       |> Set.ofSeq
@@ -473,7 +497,7 @@ module Type =
       |> List.map (fun name -> { name = name; extends = None; defaultType = None })
     let ai =
       {
-        comments = []
+        comments = comments
         name = None
         accessibility = Public
         isInterface = true
@@ -503,7 +527,8 @@ module Type =
     | Tuple ts -> Tuple (mapInTupleType (resolveErasedTypeImpl typeQueries ctx) ts)
     | Function ft -> mapInFuncType (resolveErasedTypeImpl typeQueries) ctx ft |> Function
     | App (t, ts, loc) -> App (t, List.map (resolveErasedTypeImpl typeQueries ctx) ts, loc)
-    | Erased (e, loc) ->
+    | Erased (e, loc, origText) ->
+      let comments = [Description [origText]]
       match e with
       | IndexedAccess (tobj, tindex) ->
         let rec memberChooser m t2 =
@@ -516,13 +541,12 @@ module Type =
             Some (Prim UntypedFunction)
           | Indexer (ft, _), (Prim Number | TypeLiteral (LInt _)) -> Some ft.returnType
           | Method (name', ft, typrms), TypeLiteral (LString name) when name = name' ->
-            Some (createFunctionInterface typrms ft loc)
+            Some (createFunctionInterface typrms ft comments loc)
           | _, _ -> None
         let rec go t1 t2 =
           let onFail () =
-            let tyText = Type.pp (Erased (IndexedAccess (t1, t2), loc))
-            warn ctx loc "cannot resolve an indexed access type '%s'" tyText
-            UnknownType (Some tyText)
+            warn ctx loc "cannot resolve an indexed access type '%s'" origText
+            UnknownType (Some origText)
           match t1, t2 with
           | Union { types = ts }, _ -> Union { types = List.map (fun t1 -> go t1 t2) ts }
           | Intersection { types = ts }, _ -> Intersection { types = List.map (fun t1 -> go t1 t2) ts }
@@ -555,22 +579,20 @@ module Type =
         go (resolveErasedTypeImpl typeQueries ctx tobj) (resolveErasedTypeImpl typeQueries ctx tindex)
       | TypeQuery i ->
         let onFail () =
-          let tyText = Type.pp (Erased (TypeQuery i, loc))
-          warn ctx loc "cannot resolve a type query '%s'" tyText
-          UnknownType (Some tyText)
+          warn ctx loc "cannot resolve a type query '%s'" origText
+          UnknownType (Some origText)
         match i.fullName with
         | None -> onFail ()
         | Some fn when typeQueries |> Set.contains fn ->
-          let tyText = Type.pp (Erased (TypeQuery i, loc))
-          warn ctx loc "a recursive type query '%s' is detected and is ignored" tyText
-          UnknownType (Some tyText)
+          warn ctx loc "a recursive type query '%s' is detected and is ignored" origText
+          UnknownType (Some origText)
         | Some fn ->
           let result typrms ty =
             let typeQueries = Set.add fn typeQueries
             let typrms = List.map (mapInTypeParam (resolveErasedTypeImpl typeQueries) ctx) typrms
             let ty = resolveErasedTypeImpl typeQueries ctx ty
             match typrms, ty with
-            | _ :: _, Function ft -> createFunctionInterface typrms ft loc
+            | _ :: _, Function ft -> createFunctionInterface typrms ft comments loc
             | _ :: _, _ -> onFail ()
             | [], _ -> ty
           FullName.tryLookupWith ctx fn (function
@@ -622,7 +644,7 @@ module Type =
       | NewableFunction (f, tyargs) ->
         let f = mapInFuncType (resolveErasedTypeImpl typeQueries) ctx f
         let tyargs = List.map (mapInTypeParam (resolveErasedTypeImpl typeQueries) ctx) tyargs
-        createNewableFunctionInterface tyargs f loc
+        createNewableFunctionInterface tyargs f comments loc
     | UnknownType msgo -> UnknownType msgo
 
   let resolveErasedType ctx ty = resolveErasedTypeImpl Set.empty ctx ty
@@ -939,7 +961,7 @@ module Ident =
     | App (t, ts, loc) -> App (mapInAppLHS mapping ctx t, ts |> List.map (mapInType mapping ctx), loc)
     | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l | TypeVar v -> TypeVar v
     | PolymorphicThis -> PolymorphicThis | Intrinsic -> Intrinsic
-    | Erased (e, loc) ->
+    | Erased (e, loc, origText) ->
       let e' =
         match e with
         | IndexedAccess (t1, t2) -> IndexedAccess (mapInType mapping ctx t1, mapInType mapping ctx t2)
@@ -951,7 +973,7 @@ module Ident =
                 extends = Option.map (mapInType mapping ctx) tp.extends
                 defaultType = Option.map (mapInType mapping ctx) tp.defaultType }
           NewableFunction (mapInFunction mapping ctx f, List.map mapTyprm typrms)
-      Erased (e', loc)
+      Erased (e', loc, origText)
     | UnknownType msg -> UnknownType msg
 
   and mapInFunction mapping ctx f =

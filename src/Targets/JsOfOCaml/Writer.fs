@@ -835,7 +835,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     getLabelsOfFullName emitType_ innerCtx (List.rev innerCtx.currentNamespace) c.typeParams
     |> function Choice1Of2 xs -> xs | Choice2Of2 (_, x) -> [x]
   let selfTyText =
-    GetSelfTyText.class_ flags overrideFunc innerCtx c
+    GetSelfTyText.class_ { flags with failContravariantTypeVar = true } overrideFunc innerCtx c
 
   let members = [
     for ma, m in c.members do
@@ -884,10 +884,9 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
   |> Trie.addOrUpdate [name] node StructuredTextNode.union
   |> Trie.setOrUpdate {| items = []; docCommentLines = []; knownTypes = Set.empty; shouldBeScoped = shouldBeScoped |} StructuredTextNode.union
 
-let emitValue ctx v =
-  let emitTypeFlags = { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
-  let emitType = emitTypeImpl emitTypeFlags
-  let emitType_ = emitType OverrideFunc.noOverride
+let emitValue flags overrideFunc ctx v =
+  let emitType = emitTypeImpl flags
+  let emitType_ = emitType overrideFunc
 
   let ty, attr =
     match v.typ with
@@ -908,8 +907,10 @@ let emitValue ctx v =
 
 let createStructuredText (rootCtx: Context) (stmts: Statement list) : StructuredText =
   let emitTypeFlags = { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
+  let overrideFunc = OverrideFunc.noOverride
   let emitType = emitTypeImpl emitTypeFlags
-  let emitType_ = emitType OverrideFunc.noOverride
+  let emitType_ = emitType overrideFunc
+  let emitSelfType = emitTypeImpl { emitTypeFlags with failContravariantTypeVar = true } overrideFunc
 
   let rec folder ctx (current: StructuredText) (s: Statement) : StructuredText =
     let getModule name =
@@ -957,7 +958,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       else
         let ctx = ctx |> Context.ofChildNamespace ta.name
         let items =
-          emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitType_ ctx ta.target)
+          emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target)
         let node = {| items = items; docCommentLines = comments; knownTypes = knownTypes (); shouldBeScoped = false |}
         let module' =
           getModule ta.name |> Trie.setOrUpdate node StructuredTextNode.union
@@ -972,7 +973,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
             { name = name; typ = typ; typeParams = typrms;
               isConst = isConst; isExported = Exported.No; accessibility = Some memberAttr.accessibility;
               comments = memberAttr.comments; loc = memberAttr.loc }
-          emitValue ctx v
+          emitValue emitTypeFlags overrideFunc ctx v
         [ for ma, m in moduleIntf.members do
             let cmt =
               if List.isEmpty ma.comments then []
@@ -1008,7 +1009,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts ctorValue.name ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf])
       | _ -> fallback ()
     | Value v ->
-      setNode {| items = emitValue ctx v; docCommentLines = []; knownTypes = knownTypes (); shouldBeScoped = true |}
+      setNode {| items = emitValue emitTypeFlags overrideFunc ctx v; docCommentLines = []; knownTypes = knownTypes (); shouldBeScoped = true |}
     | Import i -> // TODO
       setNode {| items = [commentStr (sprintf "%A" i) |> ImportText]; docCommentLines = []; knownTypes = Set.empty; shouldBeScoped = false |}
     | Export _ -> current // nop

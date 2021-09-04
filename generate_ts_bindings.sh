@@ -13,7 +13,7 @@ function ts2ocaml () {
   cp ./output/$2.mli ./test/src/$2.mli
 }
 
-ts2ocaml "./node_modules/@types/node/*.d.ts" node
+# ts2ocaml "./node_modules/@types/node/*.d.ts" node
 ts2ocaml ./node_modules/typescript/lib/typescript.d.ts typescript
 ts2ocaml ./node_modules/monaco-editor/monaco.d.ts monaco
 ts2ocaml ./node_modules/@types/react/index.d.ts react

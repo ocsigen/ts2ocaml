@@ -1207,6 +1207,14 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) =
       |> Statement.merge
     { fileName = "lib.dom.d.ts"; statements = stmts; references = []; hasNoDefaultLib = false; moduleName = None }
 
+  let webworkerSrc =
+    let stmts =
+      srcs
+      |> List.filter (fun src -> src.fileName.Contains("lib.webworker") && src.fileName.EndsWith(".d.ts"))
+      |> List.collect (fun src -> src.statements)
+      |> Statement.merge
+    { fileName = "lib.webworker.d.ts"; statements = stmts; references = []; hasNoDefaultLib = false; moduleName = None }
+
   eprintf "* running typer..."
   opts.simplifyImmediateInstance <- true
   opts.simplifyImmediateConstructor <- true
@@ -1216,8 +1224,10 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) =
 
   let esCtx, esSrc = runAll [esSrc] opts
   let domCtx, domSrc = runAll [domSrc] opts
+  let webworkerCtx, webworkerSrc = runAll [webworkerSrc] opts
   assert (esCtx.unknownIdentTypes |> Trie.isEmpty)
   assert (domCtx.unknownIdentTypes |> Trie.keys |> Seq.forall (fun fn -> Trie.containsKey fn esCtx.definitionsMap))
+  assert (webworkerCtx.unknownIdentTypes |> Trie.keys |> Seq.forall (fun fn -> Trie.containsKey fn esCtx.definitionsMap || Trie.containsKey fn domCtx.definitionsMap))
 
   let writerCtx ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
@@ -1230,6 +1240,7 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) =
     yield! emitStatements (writerCtx esCtx) (esSrc |> List.collect (fun x -> x.statements))
     yield newline
     yield moduleSig {| name = "Dom"; origName = "Dom"; scope = None; content = emitStatements (writerCtx domCtx) (domSrc |> List.collect (fun x -> x.statements)); docCommentBody = [] |}
+    yield moduleSig {| name = "WebWorker"; origName = "WebWorker"; scope = None; content = emitStatements (writerCtx webworkerCtx) (webworkerSrc |> List.collect (fun x -> x.statements)); docCommentBody = [] |}
   ]
 
 let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
@@ -1264,6 +1275,6 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
   concat newline [
     yield str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
     yield Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]")
-    yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom" ]
+    yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; "Ts2ocaml.WebWorker" ]
     yield! emitStatements ctx stmts
   ]

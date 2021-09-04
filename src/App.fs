@@ -91,6 +91,7 @@ let main argv =
   let yargs =
     yargs
          .Invoke(argv)
+         .wrap(yargs.terminalWidth() |> Some)
          .parserConfiguration({| ``parse-positional-numbers`` = false |})
          .addFlag("verbose", (fun (o: GlobalOptions) -> o.verbose), descr = "Show verbose log")
          .alias(!^"v", !^"verbose")

@@ -292,6 +292,16 @@ module Naming =
       else sprintf "%s_%d" name arity
     | None -> sprintf "%s_%d" name arity
 
+  let jsModuleNameToFileName (jsModuleName: string) =
+    jsModuleName
+    |> Naming.toCase Naming.Case.LowerSnakeCase
+    |> sprintf "%s.mli"
+
+  let jsModuleNameToOCamlModuleName (jsModuleName: string) =
+    jsModuleName
+    |> Naming.toCase Naming.Case.LowerSnakeCase
+    |> moduleName
+
 let open_ names = names |> List.map (tprintf "open %s") |> concat newline
 
 let include_ names = names |> List.map (tprintf "include %s") |> concat newline

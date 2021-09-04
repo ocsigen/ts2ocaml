@@ -29,5 +29,6 @@ let register (parse: GlobalOptions -> string[] -> SourceFile list) (target: ITar
         target.Run(srcs, !!argv.Options)
       with
         e ->
+          eprintfn "%s" e.Message
           eprintfn "%s" e.StackTrace
       ))

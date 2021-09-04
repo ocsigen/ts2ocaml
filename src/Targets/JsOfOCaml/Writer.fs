@@ -87,7 +87,7 @@ let anonymousInterfaceModuleName (index: int) = sprintf "AnonymousInterface%d" i
 let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
   match ctx.anonymousInterfacesMap |> Map.tryFind c, c.name with
   | Some i, None ->
-    if ctx.options.useRecursiveModules <> UseRecursiveModules.Off then
+    if ctx.options.recModule <> RecModule.Off then
       tprintf "%s.t" (anonymousInterfaceModuleName i)
     else
       tprintf "anonymous_interface_%d" i
@@ -163,13 +163,13 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     match fno with
     | None ->
       let tyName =
-        match ctx.options.useAritySafeTypeNames with
-        | UseAritySafeTypeNames.Full | UseAritySafeTypeNames.Consume ->
+        match ctx.options.safeArity with
+        | SafeArity.Full | SafeArity.Consume ->
           Naming.createTypeNameOfArity arity None "t"
         | _ -> "t"
       Naming.structured Naming.moduleName name + "." + tyName |> withTyargs
     | Some fn ->
-      if ctx.options.useRecursiveModules <> UseRecursiveModules.Off then
+      if ctx.options.recModule <> RecModule.Off then
         let maxArity =
           FullName.tryLookupWith ctx fn (function
             | AliasName { typeParams = tps; erased = false }
@@ -387,7 +387,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
 /// ``[ `A | `B | ... ]``
 and emitLabels (ctx: Context) labels =
   let inline commentTags t =
-    if ctx.options.useTagsToInheritUnknownTypes then t
+    if ctx.options.inheritWithTags then t
     else comment t
   let rec go firstCaseEmitted acc = function
     | [] -> acc
@@ -715,8 +715,8 @@ let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
   [
     yield typeAlias "t" tyargs target |> TypeDef
     yield! emitMappers ctx emitType "t" typrms
-    match ctx.options.useAritySafeTypeNames with
-    | UseAritySafeTypeNames.Full | UseAritySafeTypeNames.Provide ->
+    match ctx.options.safeArity with
+    | SafeArity.Full | SafeArity.Provide ->
       let arities = getPossibleArity typrms
       for arity in arities |> Set.toSeq |> Seq.sortDescending do
         let name = Naming.createTypeNameOfArity arity None "t"
@@ -787,7 +787,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
         if List.isEmpty c.typeParams then Ident ident
         else App (AIdent ident, typrms, UnknownLocation)
       let overrideFunc =
-        if ctx.options.useRecursiveModules <> UseRecursiveModules.Off then overrideFunc
+        if ctx.options.recModule <> RecModule.Off then overrideFunc
         else
           let orf _emitType _ctx = function
             | Ident { name = [n']; fullName = Some k' } when n = n' && k = k' -> Some (str "t")
@@ -826,7 +826,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
         options =
           if not isAnonymous then ctx.options
           else
-            ctx.options |> jsWith (fun o -> o.useAritySafeTypeNames <- UseAritySafeTypeNames.Consume) |}
+            ctx.options |> jsWith (fun o -> o.safeArity <- SafeArity.Consume) |}
 
   let emitType = emitTypeImpl flags
   let emitType_ = emitType overrideFunc
@@ -1045,10 +1045,10 @@ module ModuleEmitter =
           group |> List.map (fun name -> modules |> Map.find name) |> moduleSigRec)
         |> List.concat
   let fromOption (opt: Options) =
-    match opt.useRecursiveModules with
-    | UseRecursiveModules.Off -> nonRec
-    | UseRecursiveModules.Naive -> recAll
-    | UseRecursiveModules.Optimized -> recOptimized
+    match opt.recModule with
+    | RecModule.Off -> nonRec
+    | RecModule.Naive -> recAll
+    | RecModule.Optimized -> recOptimized
 
 let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context) (st: StructuredText) : {| shouldBeScoped: bool; content: text list; docCommentBody: text list |} =
   let renamer = new OverloadRenamer()
@@ -1186,13 +1186,13 @@ let emitStatements (ctx: Context) (stmts: Statement list) =
     else
       docComment (concat newline result.docCommentBody) :: result.content
   [
-    if ctx.options.useRecursiveModules = UseRecursiveModules.Off then
+    if ctx.options.recModule = RecModule.Off then
       yield! emitFlattenedDefinitions ctx stmts
       yield empty
     yield! content
   ]
 
-let emitStdlib (srcs: SourceFile list) (opts: Options) =
+let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
   eprintf "* looking up the minimal supported ES version for each definition..."
   let esSrc =
     srcs
@@ -1218,9 +1218,9 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) =
   eprintf "* running typer..."
   opts.simplifyImmediateInstance <- true
   opts.simplifyImmediateConstructor <- true
-  opts.useTagsToInheritUnknownTypes <- true
-  opts.useAritySafeTypeNames <- UseAritySafeTypeNames.Full
-  opts.useRecursiveModules <- UseRecursiveModules.Optimized
+  opts.inheritWithTags <- true
+  opts.safeArity <- SafeArity.Full
+  opts.recModule <- RecModule.Optimized
 
   let esCtx, esSrc = runAll [esSrc] opts
   let domCtx, domSrc = runAll [domSrc] opts
@@ -1234,16 +1234,21 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) =
         |> Context.mapState (fun _ -> State.defaultValue ())
 
   eprintf "* emitting baselib..."
-  concat newline [
-    yield str stdlib
-    yield newline
-    yield! emitStatements (writerCtx esCtx) (esSrc |> List.collect (fun x -> x.statements))
-    yield newline
-    yield moduleSig {| name = "Dom"; origName = "Dom"; scope = None; content = emitStatements (writerCtx domCtx) (domSrc |> List.collect (fun x -> x.statements)); docCommentBody = [] |}
-    yield moduleSig {| name = "WebWorker"; origName = "WebWorker"; scope = None; content = emitStatements (writerCtx webworkerCtx) (webworkerSrc |> List.collect (fun x -> x.statements)); docCommentBody = [] |}
-  ]
+  let content =
+    concat newline [
+      yield str stdlib
+      yield newline
+      yield! emitStatements (writerCtx esCtx) (esSrc |> List.collect (fun x -> x.statements))
+      yield newline
+      yield moduleSig {| name = "Dom"; origName = "Dom"; scope = None; content = emitStatements (writerCtx domCtx) (domSrc |> List.collect (fun x -> x.statements)); docCommentBody = [] |}
+      yield moduleSig {| name = "WebWorker"; origName = "WebWorker"; scope = None; content = emitStatements (writerCtx webworkerCtx) (webworkerSrc |> List.collect (fun x -> x.statements)); docCommentBody = [] |}
+    ]
 
-let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
+  { fileName = "ts2ocaml.mli"; content = content; stubLines = [] }
+
+let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
+  if srcs = [] then failwith "no input files were given"
+
   let srcs =
     match srcs with
     | [] | _ :: [] -> srcs
@@ -1264,6 +1269,15 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
           moduleName = moduleName }
       ]
 
+  let derivedOutputFileName =
+    let indexFile =
+      srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts")
+           |> Option.defaultWith (fun () -> List.head srcs)
+    Naming.getJsModuleName indexFile.fileName
+    |> Naming.jsModuleNameToFileName
+
+  eprintf "* the inferred output file name is '%s'" derivedOutputFileName
+
   eprintf "* running typer..."
   let ctx, srcs = runAll srcs opts
   let ctx =
@@ -1272,9 +1286,12 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) =
   let stmts = srcs |> List.collect (fun x -> x.statements)
 
   eprintf "* emitting a binding for js_of_ocaml..."
-  concat newline [
-    yield str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
-    yield Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]")
-    yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; "Ts2ocaml.WebWorker" ]
-    yield! emitStatements ctx stmts
-  ]
+  let content =
+    concat newline [
+      yield str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
+      yield Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]")
+      yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; "Ts2ocaml.WebWorker" ]
+      yield! emitStatements ctx stmts
+    ]
+
+  { fileName = derivedOutputFileName; content = content; stubLines = [] }

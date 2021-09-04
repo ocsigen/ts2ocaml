@@ -3,13 +3,13 @@ module Target.JsOfOCaml.Common
 open Fable.Core
 
 [<StringEnum; RequireQualifiedAccess>]
-type UseRecursiveModules =
+type RecModule =
   | [<CompiledName("optimized")>] Optimized
   | [<CompiledName("naive")>] Naive
   | [<CompiledName("off")>] Off
 
 [<StringEnum; RequireQualifiedAccess>]
-type UseAritySafeTypeNames =
+type SafeArity =
   | [<CompiledName("full")>] Full
   | [<CompiledName("provide")>] Provide
   | [<CompiledName("consume")>] Consume
@@ -18,13 +18,24 @@ type UseAritySafeTypeNames =
 type Options =
   inherit GlobalOptions
   inherit Typer.TyperOptions
-  abstract stdlib: bool with get
+  // output options
+  abstract outputDir: string option with get
+  abstract stubFile: string with get
+  // generator options
   abstract numberAsInt: bool with get
-  abstract useRecursiveModules: UseRecursiveModules with get, set
-  abstract useAritySafeTypeNames: UseAritySafeTypeNames with get, set
+  abstract inheritWithTags: bool with get, set
+  abstract recModule: RecModule with get, set
+  abstract safeArity: SafeArity with get, set
   abstract simplifyImmediateInstance: bool with get, set
   abstract simplifyImmediateConstructor: bool with get, set
-  abstract useTagsToInheritUnknownTypes: bool with get, set
+  // hidden options
+  abstract stdlib: bool with get
+
+type Output = {
+  fileName: string
+  content: Text.text
+  stubLines: string list
+}
 
 let stdlib = """[@@@ocaml.warning "-7-11-32-33-39"]
 [@@@js.implem

@@ -67,7 +67,7 @@ let parse (opts: GlobalOptions) (argv: string[]) =
   srcs
   |> Seq.toList
   |> List.map (fun src ->
-    eprintfn "* parsing %s..." src.fileName
+    Log.tracef opts "* parsing %s..." src.fileName
     let references =
       Seq.concat [
         src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
@@ -93,8 +93,8 @@ let main argv =
          .Invoke(argv)
          .wrap(yargs.terminalWidth() |> Some)
          .parserConfiguration({| ``parse-positional-numbers`` = false |})
-         .addFlag("verbose", (fun (o: GlobalOptions) -> o.verbose), descr = "Show verbose log")
-         .alias(!^"v", !^"verbose")
+         .addFlag("verbose", (fun (o: GlobalOptions) -> o.verbose), descr="Show verbose log", alias="v")
+         .addFlag("nowarn", (fun (o: GlobalOptions) -> o.nowarn), descr="Do not show warnings")
     |> Typer.TyperOptions.add
     |> Target.register parse Target.JsOfOCaml.target
     |> Target.register parse Target.ParserTest.target

@@ -21,7 +21,7 @@ type Context<'Options, 'State> = {|
 
 let inline private warn (ctx: Context<TyperOptions, _>) (loc: Location) fmt =
   Printf.kprintf (fun s ->
-    if ctx.options.verbose then eprintfn "warn: %s at %s" s loc.AsString
+    Log.warnf ctx.options "%s at %s" s loc.AsString
   ) fmt
 
 module Context =
@@ -1423,6 +1423,7 @@ let runAll (srcs: SourceFile list) (opts: TyperOptions) =
   let inline mapStatements f (src: SourceFile) =
     { src with statements = f src.statements }
 
+  Log.tracef opts "* normalizing syntax trees..."
   let result =
     srcs
     |> List.map (
@@ -1438,12 +1439,14 @@ let runAll (srcs: SourceFile list) (opts: TyperOptions) =
   let ctx = createRootContextForTyper result opts
 
   // resolve every identifier into its full name
+  Log.tracef opts "* resolving identifiers..."
   let result =
     result |> List.map (mapStatements (Ident.resolveInStatements ctx))
   // rebuild the context with the identifiers resolved to full name
   let ctx = createRootContextForTyper result opts
 
-  // resolve every indexed access type and type query
+  // resolve every erased types
+  Log.tracef opts "* evaluating type expressions..."
   let result = result |> List.map (mapStatements (Statement.resolveErasedTypes ctx))
   // rebuild the context because resolveErasedTypes may introduce additional anonymous function interfaces
   let ctx = createRootContext result opts

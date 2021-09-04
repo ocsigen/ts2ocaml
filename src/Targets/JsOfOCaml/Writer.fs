@@ -511,74 +511,10 @@ module StructuredText =
     |> List.concat
 
   let calculateSCCOfChildren (ctx: Context) (x: StructuredText) : string list list =
-    let g, gR =
+    let g =
       let deps = getDependenciesOfChildren ctx x
-      deps |> List.groupBy fst |> List.fold (fun state (k, xs) -> state |> Map.add k (xs |> List.map snd)) Map.empty,
-      deps |> List.groupBy snd |> List.fold (fun state (k, xs) -> state |> Map.add k (xs |> List.map fst)) Map.empty
-    let children = x.children |> Map.toList |> List.map fst
-
-    let rec dfs' g (used, ordRev) v =
-      let used = used |> Set.add v
-      let used, ordRev =
-        match g |> Map.tryFind v with
-        | None -> used, ordRev
-        | Some xs ->
-          xs |> List.fold (dfs g) (used, ordRev)
-      (used, v :: ordRev)
-    and dfs g (used, ordRev) v =
-      if used |> Set.contains v then
-        used, ordRev
-      else dfs' g (used, ordRev) v
-
-    let rec rdfs k cmps v =
-      let cmps = cmps |> Map.add v k
-      match gR |> Map.tryFind v with
-      | None -> cmps
-      | Some xs -> xs |> List.fold (rdfs' k) cmps
-    and rdfs' k cmps v =
-      if cmps |> Map.containsKey v then cmps
-      else rdfs k cmps v
-
-    let _, dfsReversed =
-      children |> List.fold (dfs g) (Set.empty, [])
-
-    let _, cmps =
-      dfsReversed |> List.fold (fun (k, cmps) child ->
-        if cmps |> Map.containsKey child then (k, cmps)
-        else (k+1, rdfs k cmps child)
-      ) (0, Map.empty)
-    let groups = [0 .. Map.fold (fun state _ v -> max v state) 0 cmps]
-
-    let cmpsGraph =
-      children
-      |> List.fold (fun acc orig ->
-        match g |> Map.tryFind orig with
-        | None -> acc
-        | Some dests ->
-          let origGroup = cmps |> Map.find orig
-          dests |> List.fold (fun acc dest ->
-            let destGroup = cmps |> Map.find dest
-            if origGroup <> destGroup then
-              acc |> Set.add (origGroup, destGroup)
-            else acc
-          ) acc
-      ) Set.empty
-      |> Set.toList
-      |> List.groupBy fst |> List.fold (fun state (k, xs) -> state |> Map.add k (xs |> List.map snd)) Map.empty
-
-    let sortedGroups =
-      groups
-      |> List.fold (dfs cmpsGraph) (Set.empty, [])
-      |> snd |> List.rev
-      |> List.indexed
-      |> List.fold (fun (ordering: int[]) (order, group) ->
-          ordering.[group] <- order; ordering
-        ) (Array.zeroCreate (List.length groups))
-
-    children
-    |> List.groupBy (fun s -> Map.find s cmps)
-    |> List.sortBy (fun (i, _) -> sortedGroups.[i])
-    |> List.map (snd >> List.sort)
+      Graph.ofList deps
+    Graph.stronglyConnectedComponents g (x.children |> Map.toList |> List.map fst)
 
 let removeLabels (xs: Choice<FieldLike, Type> list) =
     xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
@@ -619,7 +555,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
     let fl =
       if fl.value <> Prim Void then fl
       else
-        eprintf "warn: the field/getter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
+        Log.warnf ctx.options "the field/getter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
         { fl with value = Prim Unknown }
     let ty =
       let args =
@@ -635,7 +571,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
     let fl =
       if fl.value <> Prim Void then fl
       else
-        eprintf "warn: the field/setter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
+        Log.warnf ctx.options "the field/setter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
         { fl with value = Prim Unknown }
     let ty =
       let args =
@@ -1193,7 +1129,7 @@ let emitStatements (ctx: Context) (stmts: Statement list) =
   ]
 
 let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
-  eprintf "* looking up the minimal supported ES version for each definition..."
+  Log.tracef opts "* looking up the minimal supported ES version for each definition..."
   let esSrc =
     srcs
     |> List.filter (fun src -> src.fileName.Contains("lib.es") && src.fileName.EndsWith(".d.ts"))
@@ -1215,7 +1151,7 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
       |> Statement.merge
     { fileName = "lib.webworker.d.ts"; statements = stmts; references = []; hasNoDefaultLib = false; moduleName = None }
 
-  eprintf "* running typer..."
+  Log.tracef opts "* running typer..."
   opts.simplifyImmediateInstance <- true
   opts.simplifyImmediateConstructor <- true
   opts.inheritWithTags <- true
@@ -1233,7 +1169,7 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
     ctx |> Context.mapOptions (fun _ -> opts)
         |> Context.mapState (fun _ -> State.defaultValue ())
 
-  eprintf "* emitting baselib..."
+  Log.tracef opts "* emitting baselib..."
   let content =
     concat newline [
       yield str stdlib
@@ -1256,10 +1192,10 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
       let combinedName, moduleName =
         match srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts") with
         | Some index ->
-          eprintfn "info: using index.d.ts as an entrypoint"
+          Log.tracef opts "* using index.d.ts as an entrypoint"
           index.fileName, index.moduleName
         | None ->
-          eprintfn "info: treating everything as combined into lib.d.ts"
+          Log.tracef opts "* treating everything as combined into lib.d.ts"
           "lib.d.ts", None
       [
         { fileName = combinedName
@@ -1276,16 +1212,16 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
     Naming.getJsModuleName indexFile.fileName
     |> Naming.jsModuleNameToFileName
 
-  eprintf "* the inferred output file name is '%s'" derivedOutputFileName
+  Log.tracef opts "* the inferred output file name is '%s'" derivedOutputFileName
 
-  eprintf "* running typer..."
+  Log.tracef opts "* running typer..."
   let ctx, srcs = runAll srcs opts
   let ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
         |> Context.mapState (fun _ -> State.defaultValue ())
   let stmts = srcs |> List.collect (fun x -> x.statements)
 
-  eprintf "* emitting a binding for js_of_ocaml..."
+  Log.tracef opts "* emitting a binding for js_of_ocaml..."
   let content =
     concat newline [
       yield str "[@@@ocaml.warning \"-7-11-32-33-39\"]"

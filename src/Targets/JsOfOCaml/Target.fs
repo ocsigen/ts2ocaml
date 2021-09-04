@@ -94,7 +94,7 @@ let private run (srcs: SourceFile list) (options: Options) =
       emitEverythingCombined srcs options
 
   let fullPath = Node.Api.path.join[|outputDir; result.fileName|]
-  eprintfn "* writing to %s..." fullPath
+  Log.tracef options "* writing to %s..." fullPath
   Node.Api.fs.writeFileSync(fullPath, Text.toString 2 result.content)
 
   if not (List.isEmpty result.stubLines) then

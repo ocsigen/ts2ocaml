@@ -38,7 +38,7 @@ module Node =
 
 let nodeWarn (ctx: ParserContext) (node: Node) format =
   Printf.kprintf (fun s ->
-    if ctx.verbose then
+    if not ctx.nowarn then
       eprintfn "warn: %s at %s" s (Node.ppLocation node)
       eprintfn "%s" (Node.ppLine node)
   ) format
@@ -114,7 +114,7 @@ let rec extractNestedName (node: Node) =
 let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.Kind> option =
   match ctx.checker.getSymbolAtLocation i with
   | None ->
-    eprintfn "warn: failed to get the kind of an imported identifier '%s'" i.text
+    nodeWarn ctx i "warn: failed to get the kind of an imported identifier '%s'" i.text
     None
   | Some s ->
     let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
@@ -180,7 +180,6 @@ let readJSDocTag (tag: Ts.JSDocTag) : Comment =
     | "summary" -> Summary text
     | "example" -> Example text
     | tagName ->
-      // eprintfn "unsupported tag name: '%s'" tagName
       Other (tagName, text, tag)
 
 let readJSDocComments (docComment: ResizeArray<Ts.SymbolDisplayPart>) (tags: Ts.JSDocTag seq) : Comment list =
@@ -225,7 +224,7 @@ let readCommentsForNamedDeclaration (ctx: ParserContext) (nd: Ts.NamedDeclaratio
           fallback ()
         | xs -> xs
     with e ->
-      eprintfn "exception while trying to read comments from a signature declaration at %s: %s" (Node.ppLocation nd) (e.ToString())
+      nodeWarn ctx nd "exception while trying to read comments from a signature declaration"
       eprintfn "%s" (e.StackTrace)
       fallback ()
   | _ ->
@@ -840,8 +839,7 @@ and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
       nodeWarn ctx stmt "skipping unsupported Statement kind: %s" (Enum.pp stmt.kind)
       [onError ()]
   with
-    | e ->
-      eprintfn "%s" (stmt.getText())
-      eprintfn "error at %s" (Node.ppLocation stmt)
+    | _ ->
+      eprintfn "%s" (Node.ppLine stmt)
       reraise ()
 

@@ -513,7 +513,7 @@ module StructuredText =
   let calculateSCCOfChildren (ctx: Context) (x: StructuredText) : string list list =
     let g =
       let deps = getDependenciesOfChildren ctx x
-      Graph.ofList deps
+      Graph.ofEdges deps
     Graph.stronglyConnectedComponents g (x.children |> Map.toList |> List.map fst)
 
 let removeLabels (xs: Choice<FieldLike, Type> list) =
@@ -1182,6 +1182,34 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
 
   { fileName = "ts2ocaml.mli"; content = content; stubLines = [] }
 
+let createStubLines path (ctx: Context) (stmts: Statement list) : string list =
+  let rec go = function
+    | TypeAlias _ | Import _ | UnknownStatement _ | FloatingComment _ -> []
+    | Export (e, _, _) -> Export.require path e
+    | Pattern p -> p.underlyingStatements |> List.collect go
+    | ClassDef { name = Some name; isInterface = false; isExported = e; loc = loc }
+    | EnumDef { name = name; isExported = e; loc = loc }
+    | Value { name = name; isExported = e; loc = loc }
+    | Module { name = name; isExported = e; loc = loc } ->
+      e.AsExport({ name = [name]; fullName = Some (ctx |> Context.getFullName [name]); loc = loc })
+      |> Option.map (Export.require path)
+      |> Option.toList
+      |> List.concat
+    | ClassDef { name = None } | ClassDef { isInterface = true } -> []
+  stmts
+  |> List.collect go
+  |> List.groupBy (fun x -> x.target)
+  |> List.map (fun (_, xs) ->
+    xs |> List.tryFind (fun x -> not x.needBabel) |> Option.defaultWith (fun () -> List.head xs))
+  |> List.choose (fun x ->
+    match x.target.fullName with
+    | None ->
+      Log.warnf ctx.options "cannot generate stub for importing '%s' at %s" (x.target.name |> String.concat ".") (x.target.loc.AsString)
+      None
+    | Some fn ->
+      let specifier = fn |> List.map (fun n -> sprintf "[\"%s\"]" (String.escape n)) |> String.concat ""
+      sprintf "joo_global_object%s = %s" specifier x.expr |> Some)
+
 let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
   if srcs = [] then failwith "no input files were given"
 
@@ -1205,12 +1233,12 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
           moduleName = moduleName }
       ]
 
-  let derivedOutputFileName =
+  let moduleName =
     let indexFile =
       srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts")
            |> Option.defaultWith (fun () -> List.head srcs)
     Naming.getJsModuleName indexFile.fileName
-    |> Naming.jsModuleNameToFileName
+  let derivedOutputFileName = moduleName |> Naming.jsModuleNameToFileName
 
   Log.tracef opts "* the inferred output file name is '%s'" derivedOutputFileName
 
@@ -1230,4 +1258,4 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
       yield! emitStatements ctx stmts
     ]
 
-  { fileName = derivedOutputFileName; content = content; stubLines = [] }
+  { fileName = derivedOutputFileName; content = content; stubLines = createStubLines moduleName ctx stmts }

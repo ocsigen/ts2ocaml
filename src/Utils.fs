@@ -354,12 +354,12 @@ module Graph =
       used, ordRev
     else dfsImpl' g (used, ordRev) v
 
-  let ofList (edges: ('a * 'a) list) : Graph<_> =
+  let ofEdges (edges: ('a * 'a) list) : Graph<_> =
     edges
     |> List.groupBy fst
     |> List.fold (fun state (k, xs) -> state |> Map.add k (xs |> List.map snd)) Map.empty
 
-  let ofListRev (edges: ('a * 'a) list) : Graph<_> =
+  let ofEdgesRev (edges: ('a * 'a) list) : Graph<_> =
     edges
     |> List.groupBy snd
     |> List.fold (fun state (k, xs) -> state |> Map.add k (xs |> List.map fst)) Map.empty
@@ -374,7 +374,7 @@ module Graph =
     g
     |> Map.toList
     |> List.collect (fun (k, vs) -> vs |> List.map (fun v -> v, k))
-    |> ofList
+    |> ofEdges
 
   let topologicalSort (g: Graph<'a>) (xs: 'a list) : 'a list =
     xs |> List.fold (dfsImpl g) (Set.empty, [])

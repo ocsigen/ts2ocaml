@@ -430,6 +430,12 @@ and [<RequireQualifiedAccess>] Exported =
   /// declare class Foo { .. }
   /// ```
   | Declared
+with
+  member this.AsExport(ident: IdentType) =
+    match this with
+    | No | Declared -> None
+    | Yes -> ES6Export [{| target = ident; renameAs = None |}] |> Some
+    | Default -> ES6DefaultExport ident |> Some
 
 and Import = {
   comments: Comment list
@@ -552,3 +558,20 @@ module Type =
         sprintf "new %s%s" typrms (pp (Function f))
     | UnknownType None -> "?"
     | UnknownType (Some msg) -> sprintf "?(%s)" msg
+
+module Export =
+  /// Generate ``require(..)`` JS expression from `Export`.
+  let require path = function
+    | CommonJsExport ident ->
+      [{| target = ident; expr = sprintf "require('%s')" path; needBabel = false |}]
+    | ES6DefaultExport ident ->
+      [{| target = ident; expr = sprintf "require('%s').default /* need Babel */" path; needBabel = true |}]
+    | ES6Export xs ->
+      xs |> List.map (fun x ->
+        let name =
+          match x.renameAs with
+          | Some name -> name
+          | None -> x.target.name |> List.last
+        {| target = x.target; expr = sprintf "require('%s').%s /* need Babel */" path name; needBabel = true |}
+      )
+    | NamespaceExport _ -> []

@@ -114,7 +114,7 @@ let rec extractNestedName (node: Node) =
 let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.Kind> option =
   match ctx.checker.getSymbolAtLocation i with
   | None ->
-    nodeWarn ctx i "warn: failed to get the kind of an imported identifier '%s'" i.text
+    nodeWarn ctx i "failed to get the kind of an imported identifier '%s'" i.text
     None
   | Some s ->
     let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
@@ -619,7 +619,7 @@ let readTypeAlias (ctx: ParserContext) (a: Ts.TypeAliasDeclaration) : TypeAlias 
   let typrm = readTypeParameters Set.empty ctx a.typeParameters
   let ty = readTypeNode (typrm |> List.map (fun x -> x.name) |> Set.ofList) ctx a.``type``
   let comments = readCommentsForNamedDeclaration ctx a
-  { name = a.name.text; typeParams = typrm; target = ty; erased = false; comments = comments; loc = Node.location a }
+  { name = a.name.text; typeParams = typrm; target = ty; erased = false; comments = comments; isExported = getExported a.modifiers; loc = Node.location a }
 
 let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list =
   v.declarationList.declarations |> List.ofSeq |> List.map (fun vd ->
@@ -680,8 +680,8 @@ let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Stateme
   | ts ->
     let ident = { name = ts; fullName = None; loc = Node.location e.expression }
     match e.isExportEquals with
-    | Some true -> Export (CommonJsExport ident, Node.location e, comments) |> Some
-    | _ -> Export (ES6DefaultExport ident, Node.location e, comments) |> Some
+    | Some true -> Export { clause = CommonJsExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
+    | _ -> Export { clause = ES6DefaultExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
 
 let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx e
@@ -694,29 +694,29 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
     match kind with
     | Kind.NamespaceExport ->
       let ne = bindings |> box :?> Ts.NamespaceExport
-      Some (Export (NamespaceExport ne.name.text, Node.location ne, comments))
+      Some (Export { clause = NamespaceExport ne.name.text; loc = Node.location ne; comments = comments; origText = e.getText() })
     | Kind.NamedExports ->
       let nes = bindings |> box :?> Ts.NamedExports
       let elems =
         nes.elements
         |> Seq.map (fun x ->
-          let ident = { name = [x.name.text]; fullName = None; loc = Node.location x.name }
+          let ident (name: Ts.Identifier) = { name = [name.text]; fullName = None; loc = Node.location name }
           match x.propertyName with
-          | None -> {| target = ident; renameAs = None |}
-          | Some propertyName -> {| target = ident; renameAs = Some propertyName.text  |})
+          | None -> {| target = ident x.name; renameAs = None |}
+          | Some propertyName -> {| target = ident propertyName; renameAs = Some x.name.text  |})
         |> Seq.toList
-      Some (Export (ES6Export elems, Node.location nes, comments))
+      Some (Export { clause = ES6Export elems; loc = Node.location nes; comments = comments; origText = e.getText() })
     | _ ->
       nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
 
 let readNamespaceExportDeclaration (ctx: ParserContext) (e: Ts.NamespaceExportDeclaration) : Statement =
-  Export (NamespaceExport e.name.text, Node.location e, readCommentsForNamedDeclaration ctx e)
+  Export { clause = NamespaceExport e.name.text; loc = Node.location e; comments = readCommentsForNamedDeclaration ctx e; origText = e.getText() }
 
 let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclaration) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx i
   match (!!i.moduleReference : Ts.Node).kind with
   | Kind.Identifier | Kind.QualifiedName ->
-    nodeWarn ctx i "import assignment to an identifier is not supported"; None
+    nodeWarn ctx i "importing an identifier is not supported"; None
   | Kind.ExternalModuleReference ->
     let m : Ts.ExternalModuleReference = !!i.moduleReference
     match (!!m.expression : Ts.Node).kind with
@@ -730,6 +730,7 @@ let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclarat
         isExported = getExported i.modifiers;
         moduleSpecifier = moduleSpecifier;
         clause = NamespaceImport {| name = i.name.text; isES6Import = false; kind = kind |}
+        origText = i.getText()
       } |> Some
     | kind ->
       nodeWarn ctx i "invalid kind '%s' for module specifier" (Enum.pp kind); None
@@ -745,7 +746,7 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
       let comments = readCommentsForNamedDeclaration ctx c
       let moduleSpecifier = (!!i.moduleSpecifier : Ts.StringLiteral).text
       let inline create clause =
-        Some (Import { comments = comments; loc = Node.location i; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; moduleSpecifier = moduleSpecifier; clause = clause })
+        Some (Import { comments = comments; loc = Node.location i; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; moduleSpecifier = moduleSpecifier; clause = clause; origText = i.getText() })
       match c.name, c.namedBindings with
       | None, None -> create ES6WildcardImport
       | None, Some b when (!!b : Ts.Node).kind = Kind.NamespaceImport ->
@@ -760,7 +761,11 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
           |> Seq.toList
           |> List.map (fun e ->
             let kind = getKindFromIdentifier ctx e.name
-            {| name = e.name.text; kind = kind; renameAs = e.propertyName |> Option.map (fun i -> i.text) |})
+            let name, renameAs =
+              match e.propertyName with
+              | Some i -> i.text, Some e.name.text
+              | None -> e.name.text, None
+            {| name = name; kind = kind; renameAs = renameAs |})
         create (ES6Import {| defaultImport = defaultImport; bindings = bindings |})
       | _, _ ->
         nodeWarn ctx i "invalid import statement"; None

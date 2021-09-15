@@ -70,16 +70,16 @@ type FullNameLookupResult =
   | NotFound of string option
 
 module FullName =
-  let rec ofIdent (ctx: Context<'a, 's>) (ident: IdentType) : string list option =
+  let rec resolve (ctx: Context<'a, 's>) (name: string list) : string list option =
     let nsRev = List.rev ctx.currentNamespace
-    let fullName = nsRev @ ident.name
+    let fullName = nsRev @ name
     let onFail () =
-      match Context.ofParentNamespace ctx with Some ctx -> ofIdent ctx ident | None -> None
+      match Context.ofParentNamespace ctx with Some ctx -> resolve ctx name | None -> None
     match ctx.definitionsMap |> Trie.tryFind fullName with
     | Some ((TypeAlias _ | ClassDef _ | EnumDef _ | Module _ | Value _ | Import _) :: _) -> Some fullName
-    | None when List.length ident.name > 1 ->
-      let possibleEnumName = nsRev @ (ident.name |> List.take (List.length ident.name - 1))
-      let possibleEnumCaseName = ident.name |> List.last
+    | None when List.length name > 1 ->
+      let possibleEnumName = nsRev @ (name |> List.take (List.length name - 1))
+      let possibleEnumCaseName = name |> List.last
       let rec find = function
         | EnumDef e :: _ when e.cases |> List.exists (fun c -> c.name = possibleEnumCaseName) ->
           Some (possibleEnumName @ [possibleEnumCaseName])
@@ -167,21 +167,35 @@ module FullName =
   let tryLookupWith ctx fullName picker =
     lookup ctx fullName |> List.tryPick picker
 
-  let isType ctx fullName =
+  let hasKind ctx kind fullName =
     lookup ctx fullName
     |> List.exists (function
-      | AliasName _ | ClassName _ | EnumName _ | EnumCaseName _ -> true
-      | ModuleName _ | ValueName _ | MemberName _ | NotFound _ -> false
-      | ImportedName (n, kind, i) ->
-        if i.isTypeOnly then true
+      | AliasName _ -> kind = Kind.Type
+      | EnumName _ | EnumCaseName _ -> kind = Kind.Type || kind = Kind.Enum
+      | ClassName _ -> kind = Kind.Type || kind = Kind.ClassLike
+      | ModuleName _ -> kind = Kind.Module
+      | ValueName _ | MemberName _ -> kind = Kind.Value
+      | NotFound _ -> false
+      | ImportedName (_, kinds, i) ->
+        if i.isTypeOnly then kind = Kind.Type
         else
-          match kind with
-          | Some k -> k |> Set.contains Kind.Type
-          | None ->
-            match i.clause with
-            | NamespaceImport _ -> false
-            | _ -> n |> Naming.isCase Naming.PascalCase
-      )
+          match kinds with
+          | None -> false
+          | Some kinds -> kinds |> Set.contains kind)
+
+  let getKind ctx fullName =
+    lookup ctx fullName
+    |> List.map (function
+      | AliasName _ -> Set.singleton Kind.Type
+      | EnumName _ | EnumCaseName _ -> Set.ofList [Kind.Type; Kind.Enum]
+      | ClassName _ -> Set.ofList [Kind.Type; Kind.ClassLike]
+      | ModuleName _ -> Set.singleton Kind.Module
+      | ValueName _ | MemberName _ -> Set.singleton Kind.Value
+      | NotFound _ -> Set.empty
+      | ImportedName (_, kind, i) ->
+        let dv = if i.isTypeOnly then Set.singleton Kind.Type else Set.empty
+        kind |> Option.defaultValue dv)
+    |> Set.unionMany
 
 module Type =
   let rec mapInTypeParam mapping (ctx: 'Context) (tp: TypeParam) =
@@ -849,7 +863,7 @@ module Statement =
       | (Ident { name = name; fullName = None } & Dummy ts) ->
         Choice2Of2 ts, Some (name, Set.singleton (List.length ts))
       | App (AIdent {name = name; fullName = Some fn}, ts, _)
-      | (Ident { name = name; fullName = Some fn} & Dummy ts) when not (FullName.isType ctx fn) ->
+      | (Ident { name = name; fullName = Some fn} & Dummy ts) when not (FullName.hasKind ctx Kind.Type fn) ->
         Choice2Of2 ts, Some (name, Set.singleton (List.length ts))
       | _ -> Choice1Of2 true, None
     ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
@@ -883,7 +897,7 @@ module Statement =
       | ClassDef c -> ClassDef (Type.mapInClass mapping ctx c)
       | EnumDef e -> EnumDef e
       | Import i -> Import i
-      | Export (e, l, c) -> Export (e, l, c)
+      | Export e -> Export e
       | Value v -> Value (mapValue v)
       | Module m ->
         Module {
@@ -1008,7 +1022,7 @@ module Ident =
         ClassDef (Type.mapInClass (mapInType mapType) ctx c)
       | EnumDef e -> EnumDef e
       | Import i -> Import i
-      | Export (e, l, c) -> Export (mapExport ctx e, l, c)
+      | Export e -> Export (mapExport ctx e)
       | Value v -> Value (mapValue v)
       | Module m ->
         Module {
@@ -1029,18 +1043,21 @@ module Ident =
     match i.fullName with
     | Some _ -> i
     | None ->
-      match FullName.ofIdent ctx i with
+      match FullName.resolve ctx i.name with
       | Some fn -> { i with fullName = Some fn }
       | None -> i
 
   let resolveInStatements (ctx: Context<'a, 's>) (stmts: Statement list) : Statement list =
     mapInStatements
       (fun ctx i -> resolve ctx i)
-      (fun ctx -> function
-        | CommonJsExport i -> CommonJsExport (resolve ctx i)
-        | ES6DefaultExport i -> ES6DefaultExport (resolve ctx i)
-        | ES6Export xs -> ES6Export (xs |> List.map (fun x -> {| x with target = resolve ctx x.target |}))
-        | NamespaceExport ns -> NamespaceExport ns
+      (fun ctx e ->
+        let clause =
+          match e.clause with
+          | CommonJsExport i -> CommonJsExport (resolve ctx i)
+          | ES6DefaultExport i -> ES6DefaultExport (resolve ctx i)
+          | ES6Export xs -> ES6Export (xs |> List.map (fun x -> {| x with target = resolve ctx x.target |}))
+          | NamespaceExport ns -> NamespaceExport ns
+        { e with clause = clause }
       ) ctx stmts
 
 type TypeofableType = TNumber | TString | TBoolean | TSymbol | TBigInt
@@ -1327,11 +1344,11 @@ let createRootContextForTyper (srcs: SourceFile list) (opts: TyperOptions) : Con
   let add name ty m =
     if m |> Trie.containsKey [name] then m
     else
-      m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true; comments = []; loc = UnknownLocation }]
+      m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true; comments = []; isExported = Exported.No; loc = UnknownLocation }]
   let addPoly name ty typeParams m =
     if m |> Trie.containsKey [name] then m
     else
-      m |> Trie.add [name] [TypeAlias { name = name; typeParams = typeParams; target = ty; erased = true; comments = []; loc = UnknownLocation }]
+      m |> Trie.add [name] [TypeAlias { name = name; typeParams = typeParams; target = ty; erased = true; comments = []; isExported = Exported.No; loc = UnknownLocation }]
   let m =
     srcs
     |> List.collect (fun src -> src.statements)

@@ -49,6 +49,14 @@ module Attr =
       attr Floating "js.implem" (newline + indent implContent + newline)
     ]
 
+  let js_stop_start_implem_oneliner sigContent implContent =
+    concat (str " ") [
+      js_stop
+      sigContent
+      js_start
+      attr Floating "js.implem" implContent
+    ]
+
   let js_custom_val content =
     if content = empty then attr Block "js.custom" empty
     else attr Block "js.custom" (newline + indent content + newline)
@@ -215,6 +223,71 @@ module Term =
   let jsExpr (js: string) =
     app (str "Ts2ocaml_baselib.pure_js_expr") [literal (LString js)]
 
+let open_ names = names |> List.map (tprintf "open %s") |> concat newline
+
+let include_ names = names |> List.map (tprintf "include %s") |> concat newline
+
+type TextModuleSig = {| name: string; origName: string; scope: string option; content: text list; docCommentBody: text list |}
+
+let private moduleSigImplLines (prefix: string) (isRec: bool) (module_: TextModuleSig) =
+  [ if List.isEmpty module_.docCommentBody |> not then
+      yield empty
+      yield docComment (concat newline module_.docCommentBody)
+    let isEmpty = List.isEmpty module_.content
+    let head =
+      tprintf "%s%s %s%s : sig"
+        prefix
+        (match module_.scope with Some s when not isEmpty -> sprintf "[@js.scope \"%s\"]" s | _ -> "")
+        (if isRec then "rec " else "")
+        module_.name
+    if isEmpty then
+      yield head +@ " end"
+    else
+      yield head
+      yield indent (concat newline module_.content)
+      yield str "end" ]
+
+let private moduleSigImpl (prefix: string) (isRec: bool) (module_: TextModuleSig) =
+  moduleSigImplLines prefix isRec module_ |> concat newline
+
+let moduleSig (module_: TextModuleSig) = moduleSigImpl "module" false module_
+
+let moduleSigRec (modules: TextModuleSig list) =
+  match modules with
+  | [] -> []
+  | [x] -> [moduleSigImpl "module" false x]
+  | x :: xs ->
+    moduleSigImpl "module" true x :: (xs |> List.map (moduleSigImpl "and" false))
+
+let moduleSigNonRec (modules: TextModuleSig list) =
+  modules |> List.map (moduleSigImpl "module" false)
+
+let abstractType name tyargs =
+  str "type "
+  + (if List.isEmpty tyargs then str name else Type.app (str name) tyargs)
+
+let abstractTypeOjs name tyargs =
+  abstractType name tyargs +@ " = private Ojs.t"
+
+let typeAlias name tyargs ty =
+  str "type "
+  + (if List.isEmpty tyargs then str name else Type.app (str name) tyargs)
+  +@ " = " + ty
+
+let val_ name ty =
+  tprintf "val %s: " name + ty
+
+let let_ name args retTyOpt value =
+  let retTy =
+    match retTyOpt with
+    | None -> empty
+    | Some t -> " : " @+ t
+  tprintf "let %s " name + concat (str " ") args + retTy +@ " = " + value
+
+let external_ name tyarg tyret extName =
+  tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
+
+// we don't sanitize names in OCamlHelper; callers should do it themselves
 module Naming =
   let ourReservedNames =
     set [
@@ -253,6 +326,11 @@ module Naming =
       else name
     if Naming.Keywords.keywords |> Set.contains result then result + "_" else result
 
+  let reservedModuleNames =
+    Set.ofList [
+      "Export"; "Default"
+    ] |> Set.union Naming.Keywords.keywords
+
   let moduleName (name: string) =
     let name = removeInvalidChars name
     let result =
@@ -261,7 +339,7 @@ module Naming =
       else if name.[0] = '_' then
         "M" + name
       else name
-    if Naming.Keywords.keywords |> Set.contains result then result + "_" else result
+    if reservedModuleNames |> Set.contains result then result + "_" else result
 
   let constructorName (name: string list) =
     let s = String.concat "_" name |> removeInvalidChars
@@ -293,74 +371,15 @@ module Naming =
     | None -> sprintf "%s_%d" name arity
 
   let jsModuleNameToFileName (jsModuleName: string) =
-    jsModuleName
-    |> Naming.toCase Naming.Case.LowerSnakeCase
+    jsModuleName.Split('/')
+    |> Array.map (fun n ->
+      n |> Naming.toCase Naming.Case.LowerSnakeCase)
+    |> String.concat "__"
     |> sprintf "%s.mli"
 
   let jsModuleNameToOCamlModuleName (jsModuleName: string) =
-    jsModuleName
-    |> Naming.toCase Naming.Case.LowerSnakeCase
-    |> moduleName
-
-let open_ names = names |> List.map (tprintf "open %s") |> concat newline
-
-let include_ names = names |> List.map (tprintf "include %s") |> concat newline
-
-type TextModuleSig = {| name: string; origName: string; scope: string option; content: text list; docCommentBody: text list |}
-
-let private moduleSigImpl (prefix: string) (isRec: bool) (module_: TextModuleSig) =
-  concat newline [
-    if List.isEmpty module_.docCommentBody |> not then
-      yield empty
-      yield docComment (concat newline module_.docCommentBody)
-    let isEmpty = List.isEmpty module_.content
-    let head =
-      tprintf "%s%s %s%s : sig"
-        prefix
-        (match module_.scope with Some s when not isEmpty -> sprintf "[@js.scope \"%s\"]" s | _ -> "")
-        (if isRec then "rec " else "")
-        module_.name
-    if isEmpty then
-      yield head +@ " end"
-    else
-      yield head
-      yield indent (concat newline module_.content)
-      yield str "end"
-  ]
-
-let moduleSig (module_: TextModuleSig) = moduleSigImpl "module" false module_
-
-let moduleSigRec (modules: TextModuleSig list) =
-  match modules with
-  | [] -> []
-  | [x] -> [moduleSigImpl "module" false x]
-  | x :: xs ->
-    moduleSigImpl "module" true x :: (xs |> List.map (moduleSigImpl "and" false))
-
-let moduleSigNonRec (modules: TextModuleSig list) =
-  modules |> List.map (moduleSigImpl "module" false)
-
-let abstractType name tyargs =
-  str "type "
-  + (if List.isEmpty tyargs then str name else Type.app (str name) tyargs)
-
-let abstractTypeOjs name tyargs =
-  abstractType name tyargs +@ " = private Ojs.t"
-
-let typeAlias name tyargs ty =
-  str "type "
-  + (if List.isEmpty tyargs then str name else Type.app (str name) tyargs)
-  +@ " = " + ty
-
-let val_ name ty =
-  tprintf "val %s: " name + ty
-
-let let_ name args retTyOpt value =
-  let retTy =
-    match retTyOpt with
-    | None -> empty
-    | Some t -> " : " @+ t
-  tprintf "let %s " name + concat (str " ") args + retTy +@ " = " + value
-
-let external_ name tyarg tyret extName =
-  tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
+    jsModuleName.Split('/')
+    |> Array.map (fun n ->
+      n |> Naming.toCase Naming.Case.LowerSnakeCase
+        |> moduleName)
+    |> String.concat "__"

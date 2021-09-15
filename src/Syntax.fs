@@ -87,7 +87,6 @@ and [<RequireQualifiedAccess>] Kind =
   | ClassLike
   | Module
   | Enum
-  | Any
 
 and PrimType =
   | String | Bool | Number
@@ -249,6 +248,7 @@ and TypeAlias = {
   target: Type
   erased: bool
   comments: Comment list
+  isExported: Exported
   loc: Location
 } with
   interface ICommented<TypeAlias> with
@@ -262,7 +262,7 @@ and Statement =
   | Module of Module
   | Value of Value
   | Import of Import
-  | Export of Export * Location * Comment list
+  | Export of Export
   | Pattern of Pattern
   | UnknownStatement of {| msg: string option; comments: Comment list; loc: Location |}
   | FloatingComment of {| comments: Comment list; loc: Location |}
@@ -270,10 +270,17 @@ and Statement =
   member this.loc =
     match this with
     | TypeAlias ta -> ta.loc | ClassDef c -> c.loc | EnumDef e -> e.loc
-    | Module m -> m.loc | Value v -> v.loc | Import i -> i.loc
-    | Export (_, loc, _) -> loc
+    | Module m -> m.loc | Value v -> v.loc
+    | Import i -> i.loc | Export e -> e.loc
     | Pattern p -> p.loc
     | UnknownStatement u -> u.loc | FloatingComment c -> c.loc
+  member this.isExported =
+    match this with
+    | TypeAlias { isExported = i } | ClassDef { isExported = i }
+    | EnumDef { isExported = i } | Module { isExported = i }
+    | Value { isExported = i } | Import { isExported = i } -> i
+    | Pattern p -> p.isExported
+    | Export _ | UnknownStatement _ | FloatingComment _ -> Exported.No
   interface ICommented<Statement> with
     member this.getComments() =
       match this with
@@ -281,9 +288,9 @@ and Statement =
       | EnumDef e -> e.comments | Module m -> m.comments
       | Value v -> v.comments
       | Import i -> i.comments
+      | Export e -> e.comments
       | UnknownStatement s -> s.comments
       | Pattern p -> (p :> ICommented<_>).getComments()
-      | Export (_, _, c) -> c
       | FloatingComment c -> c.comments
     member this.mapComments f =
       let inline map f (x: #ICommented<'a>) = x.mapComments f
@@ -294,7 +301,7 @@ and Statement =
       | Module m -> Module (map f m)
       | Value v -> Value (map f v)
       | Import i -> Import (map f i)
-      | Export (e, l, c) -> Export (e, l, f c)
+      | Export e -> Export (map f e)
       | Pattern p -> Pattern ((p :> ICommented<_>).mapComments f)
       | UnknownStatement s -> UnknownStatement {| s with comments = f s.comments |}
       | FloatingComment c -> FloatingComment {| c with comments = f c.comments |}
@@ -323,6 +330,10 @@ and Pattern =
     match this with
     | ImmediateInstance (intf, value) -> MultipleLocation [intf.loc; value.loc]
     | ImmediateConstructor (bi, ci, v) -> MultipleLocation [bi.loc; ci.loc; v.loc]
+  member this.isExported =
+    match this with
+    | ImmediateInstance (_, value)
+    | ImmediateConstructor (_, _, value) -> value.isExported
   member this.underlyingStatements =
     match this with
     | ImmediateInstance (intf, value) -> [ClassDef intf; Value value]
@@ -351,7 +362,7 @@ and Module = {
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
 
-and Export =
+and ExportClause =
   /// ```ts
   /// export = ident;
   /// ```
@@ -416,6 +427,16 @@ and Export =
   /// ```
   | NamespaceExport of ns:string
 
+and Export = {
+  comments: Comment list
+  clause: ExportClause
+  loc: Location
+  origText: string
+} with
+  interface ICommented<Export> with
+    member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
+
 and [<RequireQualifiedAccess>] Exported =
   | No
   /// ```ts
@@ -444,6 +465,7 @@ and Import = {
   moduleSpecifier: string
   clause: ImportClause
   loc: Location
+  origText: string
 } with
   interface ICommented<Import> with
     member this.getComments() = this.comments
@@ -559,7 +581,7 @@ module Type =
     | UnknownType None -> "?"
     | UnknownType (Some msg) -> sprintf "?(%s)" msg
 
-module Export =
+module ExportClause =
   /// Generate ``require(..)`` JS expression from `Export`.
   let require path = function
     | CommonJsExport ident ->

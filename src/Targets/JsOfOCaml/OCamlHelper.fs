@@ -380,6 +380,6 @@ module Naming =
   let jsModuleNameToOCamlModuleName (jsModuleName: string) =
     jsModuleName.Split('/')
     |> Array.map (fun n ->
-      n |> Naming.toCase Naming.Case.LowerSnakeCase
-        |> moduleName)
+      n |> Naming.toCase Naming.Case.LowerSnakeCase)
     |> String.concat "__"
+    |> moduleName

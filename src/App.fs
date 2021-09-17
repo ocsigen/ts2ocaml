@@ -76,7 +76,7 @@ let parse (opts: GlobalOptions) (argv: string[]) =
       ] |> Seq.toList
     let statements =
       src.statements
-      |> Seq.collect (Parser.readStatement !!{| verbose = opts.verbose; checker = checker; sourceFile = src |})
+      |> Seq.collect (Parser.readStatement !!{| verbose = opts.verbose; checker = checker; sourceFile = src; nowarn = opts.nowarn |})
       |> Seq.toList
     { statements = statements
       fileName = src.fileName

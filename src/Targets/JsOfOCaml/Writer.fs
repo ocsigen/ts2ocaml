@@ -447,11 +447,19 @@ type StructuredTextItem =
   | ScopeIndependent of text
   | OverloadedText of (OverloadRenamer -> text list)
 
+type ExportWithKind = {|
+  comments: Comment list
+  clause: ExportClause
+  loc: Location
+  origText: string
+  kind: Set<Kind>
+|}
+
 type StructuredTextNode = {|
   shouldBeScoped: bool
   items: StructuredTextItem list
   docCommentLines: text list
-  exports: Export list
+  exports: ExportWithKind list
   knownTypes: Set<KnownType>
 |}
 module StructuredTextNode =
@@ -718,15 +726,15 @@ module GetSelfTyText =
         yield pv_head @+ name + attr
       ]) +@ " [@js.enum]"
 
-let getExportFromStatement (ctx: Context) (name: string) (kind: string) (s: Statement) =
+let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kindString: string) (s: Statement) : ExportWithKind option =
   let fn = ctx |> Context.getFullName [name]
   let ident = { name = [name]; fullName = Some fn; loc = s.loc }
   match s.isExported.AsExport ident with
   | None -> None
   | Some clause ->
-    Some { comments = []; clause = clause; loc = s.loc; origText = sprintf "export %s %s" kind name }
+    Some {| comments = []; clause = clause; loc = s.loc; origText = sprintf "export %s %s" kindString name; kind = Set.ofList kind |}
 
-let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Class) (additionalMembers: list<StructuredTextItem>, additionalKnownTypes: Set<KnownType>) =
+let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Class) (additionalMembers: list<StructuredTextItem>, additionalKnownTypes: Set<KnownType>, forceScoped) =
   let typrms = List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams
   let name, isAnonymous, selfTy, overrideFunc =
     match c.name with
@@ -794,8 +802,10 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
       yield! additionalMembers
     ]
     let shouldBeScoped =
-      (c.members |> List.exists (fun (ma, _) -> ma.isStatic))
-      || (additionalMembers |> List.exists (function OverloadedText _ -> true | _ -> false))
+      forceScoped
+      || (c.members |> List.exists (fun (ma, m) ->
+        if ma.isStatic then true
+        else match m with Constructor _ -> true | _ -> false)) // constructor generates global value
 
     let docCommentLines =
       c.comments |> List.distinct |> List.map emitCommentBody
@@ -837,7 +847,10 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     match c.name with
     | None -> None
     | Some name ->
-      getExportFromStatement ctx name (if c.isInterface then "interface" else "class") (ClassDef c)
+      let kind =
+        if shouldBeScoped then [Kind.Type; Kind.ClassLike; Kind.Value]
+        else [Kind.Type; Kind.ClassLike]
+      getExportFromStatement ctx name kind (if c.isInterface then "interface" else "class") (ClassDef c)
   current
   |> Trie.addOrUpdate [name] node StructuredTextNode.union
   |> Trie.setOrUpdate {| StructuredTextNode.empty with shouldBeScoped = shouldBeScoped; exports = Option.toList export |} StructuredTextNode.union
@@ -884,8 +897,8 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       | xs -> xs |> List.distinct |> List.map emitCommentBody
 
     let knownTypes () = Statement.getKnownTypes ctx [s]
-    let addExport name kind current =
-      match getExportFromStatement ctx name kind s with
+    let addExport name kind kindString current =
+      match getExportFromStatement ctx name kind kindString s with
       | None -> current
       | Some e -> current |> Trie.setOrUpdate {| StructuredTextNode.empty with exports = [e] |} StructuredTextNode.union
 
@@ -896,9 +909,16 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         let module' = getModule m.name |> Trie.setOrUpdate node StructuredTextNode.union
         let ctx = ctx |> Context.ofChildNamespace m.name
         m.statements |> List.fold (folder ctx) module'
-      setModule m.name module' |> addExport m.name (if m.isNamespace then "namespace" else "module")
+      let result = setModule m.name module'
+      match module'.value with
+      | None -> result
+      | Some v ->
+        let kind =
+          if v.shouldBeScoped then [Kind.Module; Kind.Value]
+          else [Kind.Module]
+        result |> addExport m.name kind (if m.isNamespace then "namespace" else "module")
     | ClassDef c ->
-      emitClass emitTypeFlags OverrideFunc.noOverride ctx current c ([], Set.empty)
+      emitClass emitTypeFlags OverrideFunc.noOverride ctx current c ([], Set.empty, false)
     | EnumDef e ->
       let module' =
         let ctx = ctx |> Context.ofChildNamespace e.name
@@ -914,7 +934,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
           state |> Trie.addOrUpdate [c.name] node StructuredTextNode.union
         ) module'
-      setModule e.name module' |> addExport e.name "enum"
+      setModule e.name module' |> addExport e.name [Kind.Type; Kind.Enum] "enum"
     | TypeAlias ta ->
       if ta.erased then current
       else
@@ -924,7 +944,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
         let module' =
           getModule ta.name |> Trie.setOrUpdate node StructuredTextNode.union
-        setModule ta.name module' |> addExport ta.name "type"
+        setModule ta.name module' |> addExport ta.name [Kind.Type] "type"
     | Pattern p ->
       let fallback () =
         p.underlyingStatements |> List.fold (folder ctx) current
@@ -966,9 +986,11 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           let items = intfToStmts value.name intf
           getModule value.name
           |> Trie.setOrUpdate {| StructuredTextNode.empty with items = items; knownTypes = knownTypes (); shouldBeScoped = true |} StructuredTextNode.union
-        setModule value.name module' |> addExport value.name "interface"
+        setModule value.name module'
+        |> Trie.setOrUpdate {| StructuredTextNode.empty with shouldBeScoped = true |} StructuredTextNode.union
+        |> addExport value.name [Kind.Type; Kind.ClassLike; Kind.Value] "interface"
       | ImmediateConstructor (baseIntf, ctorIntf, ctorValue) when ctx.options.simplifyImmediateConstructor ->
-        emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts ctorValue.name ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf])
+        emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts ctorValue.name ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf], true)
       | _ -> fallback ()
     | Value v ->
       setNode
@@ -976,8 +998,15 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
             items = emitValue emitTypeFlags overrideFunc ctx v
             knownTypes = knownTypes ()
             shouldBeScoped = true |}
+      |> addExport v.name [Kind.Value] (if v.isConst then "const" else "let")
     | Import _ -> current // nop
-    | Export e -> setNode {| StructuredTextNode.empty with exports = [e] |}
+    | Export e ->
+      let kind =
+        match e.clause with
+        | CommonJsExport i | ES6DefaultExport i -> i |> Ident.getKind ctx
+        | ES6Export x -> x.target |> Ident.getKind ctx
+        | NamespaceExport _ -> Set.empty
+      setNode {| StructuredTextNode.empty with exports = [{| e with kind = kind |}] |}
     | UnknownStatement u ->
       let cmt =
         match u.msg with
@@ -1015,60 +1044,64 @@ module ModuleEmitter =
     | RecModule.Naive -> recAll
     | RecModule.Optimized -> recOptimized
 
-let emitExports (ctx: Context) (exports: Export list) : text list =
+let emitExportModule (ctx: Context) (exports: ExportWithKind list) : text list =
   let stopStartImplem text =
     Attr.js_stop_start_implem_oneliner text text
 
-  let getComments commentOut (e: Export) = [
-    yield empty
+  let getComments isFirst commentOut (e: ExportWithKind) = [
+    let hasDocComment = not (List.isEmpty e.comments)
+    if not isFirst && hasDocComment then yield empty
     yield commentStr e.origText
-    if not (List.isEmpty e.comments) then
+    if hasDocComment then
       yield e.comments |> List.map emitCommentBody |> concat newline |> commentOut
   ]
 
-  let fail (e: Export) = getComments comment e
+  let fail isFirst (e: ExportWithKind) = getComments isFirst comment e
 
   let isModule fn =
     Set.intersect (FullName.getKind ctx fn) (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not
 
-  let emitModuleAlias name (i: IdentType) (e: Export) =
+  let emitModuleAlias isFirst name (i: IdentType) (e: ExportWithKind) =
     match i.fullName with
     | Some fn ->
       if isModule fn then
-        [ yield! getComments docComment e
+        [ yield! getComments isFirst docComment e
           yield tprintf "module %s = %s" name (i.name |> Naming.structured Naming.moduleName) |> stopStartImplem ]
-      else fail e
-    | None -> fail e
+      else fail isFirst e
+    | None -> fail isFirst e
 
-  let rec go acc (exports: Export list) =
+  let rec go isFirst acc (exports: ExportWithKind list) =
     match exports with
     | [] -> acc
-    | ({ clause = NamespaceExport _} & e) :: rest ->
-      go (acc @ fail e) rest
-    | ({ clause = CommonJsExport i } & e) :: rest ->
-      let body = emitModuleAlias "Export" i e
-      [ yield! acc
-        yield! body
-        for e in rest do yield! fail e ]
-    | xs ->
-      let emit (e: Export) =
-        match e.clause with
-        | CommonJsExport _ (* `export = something;` should not appear with other export elements *)
-        | NamespaceExport _ -> fail e
-        | ES6DefaultExport i -> emitModuleAlias (i.name |> List.last |> Naming.moduleName) i e
-        | ES6Export xs ->
-          xs
-          |> List.collect (fun x ->
+    | export :: rest ->
+      match export.clause with
+      | NamespaceExport _ -> go false (acc @ fail isFirst export) rest
+      | CommonJsExport i -> // CommonJS export
+        let body = emitModuleAlias true "Export" i export
+        [ yield! acc
+          yield! body
+          for e in rest do yield! fail false e ]
+      | _ -> // ES6 exports
+        let emit isFirst (e: ExportWithKind) =
+          match e.clause with
+          | CommonJsExport _ // `export = something;` should not appear with other export elements
+          | NamespaceExport _ -> fail isFirst e
+          | ES6DefaultExport i -> emitModuleAlias isFirst (i.name |> List.last |> Naming.moduleName) i e
+          | ES6Export x ->
             let name =
               match x.renameAs with
               | Some name -> name |> Naming.moduleName
               | None -> x.target.name |> List.last |> Naming.moduleName
-            emitModuleAlias name x.target e)
-      let content = xs |> List.collect emit
-      let m : TextModuleSig = {| name = "Export"; origName = "Export"; scope = None; content = content; docCommentBody = [] |}
-      [ yield! acc
-        yield moduleSig m ]
-  go [] exports
+            emitModuleAlias isFirst name x.target e
+        let content =
+          emit isFirst export @ List.collect (emit false) rest
+        let m : TextModuleSig = {| name = "Export"; origName = "Export"; scope = None; content = content; docCommentBody = [] |}
+        [ yield! acc
+          yield moduleSig m ]
+
+  let moduleGeneratingExports =
+    exports |> List.filter (fun e -> Set.intersect e.kind (Set.ofList [Kind.Type; Kind.Module]) |> Set.isEmpty |> not)
+  go true [] moduleGeneratingExports
 
 let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context) (st: StructuredText) : {| shouldBeScoped: bool; content: text list; docCommentBody: text list |} =
   let renamer = new OverloadRenamer()
@@ -1115,7 +1148,7 @@ let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context)
         | Choice2Of2 overloaded -> yield! overloaded renamer
       match st.value with
       | None -> ()
-      | Some v -> yield! emitExports ctx v.exports
+      | Some v -> yield! emitExportModule ctx v.exports
     ]
   {| shouldBeScoped = shouldBeScoped; content = content; docCommentBody = docCommentBody |}
 
@@ -1313,33 +1346,45 @@ let emitImports (stmts: Statement list) : text list =
 
   stmts |> List.collect (function Import i -> emitImport i | _ -> [])
 
-let createStubLines path (ctx: Context) (stmts: Statement list) : string list =
-  let rec go = function
-    | TypeAlias _ | Import _ | UnknownStatement _ | FloatingComment _ -> []
-    | Export e -> ExportClause.require path e.clause
-    | Pattern p -> p.underlyingStatements |> List.collect go
-    | ClassDef { name = Some name; isInterface = false; isExported = e; loc = loc }
-    | EnumDef { name = name; isExported = e; loc = loc }
-    | Value { name = name; isExported = e; loc = loc }
-    | Module { name = name; isExported = e; loc = loc } ->
-      e.AsExport({ name = [name]; fullName = Some (ctx |> Context.getFullName [name]); loc = loc })
-      |> Option.map (ExportClause.require path)
-      |> Option.toList
-      |> List.concat
-    | ClassDef { name = None } | ClassDef { isInterface = true } -> []
-  stmts
-  |> List.collect go
-  |> List.groupBy (fun x -> x.target)
-  |> List.map (fun (_, xs) ->
-    xs |> List.tryFind (fun x -> not x.needBabel) |> Option.defaultWith (fun () -> List.head xs))
-  |> List.choose (fun x ->
+let handleExports moduleName (ctx: Context) (str: StructuredText) : {| stubLines: string list; topLevelScope: string option |} =
+  let stubBinding xs expr =
+    let specifier = xs |> List.map (fun n -> sprintf "[\"%s\"]" (String.escape n)) |> String.concat ""
+    sprintf "joo_global_object%s = %s" specifier expr
+
+  let createStubLine prefix (x: {| expr: string; needBabel: bool; target: IdentType |}) =
     match x.target.fullName with
     | None ->
       Log.warnf ctx.options "cannot generate stub for importing '%s' at %s" (x.target.name |> String.concat ".") (x.target.loc.AsString)
       None
-    | Some fn ->
-      let specifier = fn |> List.map (fun n -> sprintf "[\"%s\"]" (String.escape n)) |> String.concat ""
-      sprintf "joo_global_object%s = %s" specifier x.expr |> Some)
+    | Some fn -> Some (stubBinding (prefix @ fn) x.expr)
+
+  match str.value with
+  | None -> {| stubLines = []; topLevelScope = None |}
+  | Some v ->
+    let stubLines, topLevelScope =
+      match v.exports |> List.tryFind (fun e -> match e.clause with CommonJsExport _ -> true | _ -> false) with
+      | Some commonJsExport ->
+        ExportClause.require moduleName commonJsExport.clause |> List.choose (createStubLine []), None
+      | None ->
+        let boundExports =
+          v.exports |> List.filter (fun e -> e.kind |> Set.contains Kind.Value)
+        let es6Exports = boundExports |> List.filter (fun e -> match e.clause with ES6Export _ | ES6DefaultExport _ -> true | _ -> false)
+        if List.isEmpty es6Exports then [], None
+        else
+          let defaultExport =
+            es6Exports |> List.tryFind (fun e -> match e.clause with ES6DefaultExport _ -> true | _ -> false)
+          let stubLines = [
+            yield stubBinding [moduleName] (sprintf "require('%s')" moduleName)
+            match defaultExport with
+            | None -> ()
+            | Some e ->
+              yield!
+                e.clause
+                |> ExportClause.require moduleName
+                |> List.choose (createStubLine [moduleName])
+          ]
+          stubLines, Some moduleName
+    {| stubLines = stubLines; topLevelScope = topLevelScope |}
 
 let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
   if srcs = [] then failwith "no input files were given"
@@ -1381,15 +1426,21 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
   let stmts = srcs |> List.collect (fun x -> x.statements)
   let structuredText = createStructuredText ctx stmts
 
+  let exported = handleExports moduleName ctx structuredText
+
   Log.tracef opts "* emitting a binding for js_of_ocaml..."
   let content =
     concat newline [
       yield str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
       yield Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]")
+      match exported.topLevelScope with
+      | None -> ()
+      | Some scope ->
+        yield tprintf "[@@@js.scope \"%s\"]" scope
       yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; "Ts2ocaml.WebWorker" ]
       yield! emitImports stmts
       yield empty
       yield! emitStatementsWithStructuredText ctx stmts structuredText
     ]
 
-  { fileName = derivedOutputFileName; content = content; stubLines = createStubLines moduleName ctx stmts }
+  { fileName = derivedOutputFileName; content = content; stubLines = exported.stubLines }

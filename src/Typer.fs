@@ -172,7 +172,7 @@ module FullName =
     |> List.exists (function
       | AliasName _ -> kind = Kind.Type
       | EnumName _ | EnumCaseName _ -> kind = Kind.Type || kind = Kind.Enum
-      | ClassName _ -> kind = Kind.Type || kind = Kind.ClassLike
+      | ClassName c -> kind = Kind.Type || kind = Kind.ClassLike || (not c.isInterface && kind = Kind.Value)
       | ModuleName _ -> kind = Kind.Module
       | ValueName _ | MemberName _ -> kind = Kind.Value
       | NotFound _ -> false
@@ -188,7 +188,9 @@ module FullName =
     |> List.map (function
       | AliasName _ -> Set.singleton Kind.Type
       | EnumName _ | EnumCaseName _ -> Set.ofList [Kind.Type; Kind.Enum]
-      | ClassName _ -> Set.ofList [Kind.Type; Kind.ClassLike]
+      | ClassName c ->
+        if c.isInterface then Set.ofList [Kind.Type; Kind.ClassLike]
+        else Set.ofList [Kind.Type; Kind.ClassLike; Kind.Value]
       | ModuleName _ -> Set.singleton Kind.Module
       | ValueName _ | MemberName _ -> Set.singleton Kind.Value
       | NotFound _ -> Set.empty
@@ -1055,10 +1057,18 @@ module Ident =
           match e.clause with
           | CommonJsExport i -> CommonJsExport (resolve ctx i)
           | ES6DefaultExport i -> ES6DefaultExport (resolve ctx i)
-          | ES6Export xs -> ES6Export (xs |> List.map (fun x -> {| x with target = resolve ctx x.target |}))
+          | ES6Export x -> ES6Export {| x with target = resolve ctx x.target |}
           | NamespaceExport ns -> NamespaceExport ns
         { e with clause = clause }
       ) ctx stmts
+
+  let getKind (ctx: Context<'a, 's>) (i: IdentType) =
+    match i.fullName with
+    | None -> Set.empty
+    | Some fn -> FullName.getKind ctx fn
+
+  let hasKind (ctx: Context<'a, 's>) kind (i: IdentType) =
+    i.fullName |> Option.map (FullName.hasKind ctx kind)
 
 type TypeofableType = TNumber | TString | TBoolean | TSymbol | TBigInt
 

@@ -408,7 +408,7 @@ and ExportClause =
   /// ```js
   ///   const whatever = require("path").name;
   /// ```
-  | ES6Export of {| target: IdentType; renameAs: string option |} list
+  | ES6Export of {| target: IdentType; renameAs: string option |}
   /// ```ts
   /// export as namespace ns;
   /// ```
@@ -455,7 +455,7 @@ with
   member this.AsExport(ident: IdentType) =
     match this with
     | No | Declared -> None
-    | Yes -> ES6Export [{| target = ident; renameAs = None |}] |> Some
+    | Yes -> ES6Export {| target = ident; renameAs = None |} |> Some
     | Default -> ES6DefaultExport ident |> Some
 
 and Import = {
@@ -588,12 +588,10 @@ module ExportClause =
       [{| target = ident; expr = sprintf "require('%s')" path; needBabel = false |}]
     | ES6DefaultExport ident ->
       [{| target = ident; expr = sprintf "require('%s').default /* need Babel */" path; needBabel = true |}]
-    | ES6Export xs ->
-      xs |> List.map (fun x ->
-        let name =
-          match x.renameAs with
-          | Some name -> name
-          | None -> x.target.name |> List.last
-        {| target = x.target; expr = sprintf "require('%s').%s /* need Babel */" path name; needBabel = true |}
-      )
+    | ES6Export x ->
+      let name =
+        match x.renameAs with
+        | Some name -> name
+        | None -> x.target.name |> List.last
+      [{| target = x.target; expr = sprintf "require('%s').%s /* need Babel */" path name; needBabel = true |}]
     | NamespaceExport _ -> []

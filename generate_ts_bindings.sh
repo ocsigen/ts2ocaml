@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm output/stub.js 2> /dev/null
+
 node --stack-trace-limit=100000 ./output/ts2ocaml.js jsoo -v --stdlib node_modules/typescript/lib/lib.*.d.ts -o output
 cp ./output/ts2ocaml.mli ./test/src/ts2ocaml.mli
 

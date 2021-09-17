@@ -683,7 +683,7 @@ let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Stateme
     | Some true -> Export { clause = CommonJsExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
     | _ -> Export { clause = ES6DefaultExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
 
-let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : Statement option =
+let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : Statement list option =
   let comments = readCommentsForNamedDeclaration ctx e
   match e.exportClause, e.moduleSpecifier with
   | None, _
@@ -694,18 +694,18 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
     match kind with
     | Kind.NamespaceExport ->
       let ne = bindings |> box :?> Ts.NamespaceExport
-      Some (Export { clause = NamespaceExport ne.name.text; loc = Node.location ne; comments = comments; origText = e.getText() })
+      Some [Export { clause = NamespaceExport ne.name.text; loc = Node.location ne; comments = comments; origText = e.getText() }]
     | Kind.NamedExports ->
       let nes = bindings |> box :?> Ts.NamedExports
-      let elems =
-        nes.elements
-        |> Seq.map (fun x ->
-          let ident (name: Ts.Identifier) = { name = [name.text]; fullName = None; loc = Node.location name }
-          match x.propertyName with
-          | None -> {| target = ident x.name; renameAs = None |}
-          | Some propertyName -> {| target = ident propertyName; renameAs = Some x.name.text  |})
-        |> Seq.toList
-      Some (Export { clause = ES6Export elems; loc = Node.location nes; comments = comments; origText = e.getText() })
+      nes.elements
+      |> Seq.map (fun x ->
+        let ident (name: Ts.Identifier) = { name = [name.text]; fullName = None; loc = Node.location name }
+        match x.propertyName with
+        | None -> {| target = ident x.name; renameAs = None |}
+        | Some propertyName -> {| target = ident propertyName; renameAs = Some x.name.text  |})
+      |> Seq.toList
+      |> List.map (fun elem -> Export { clause = ES6Export elem; loc = Node.location nes; comments = comments; origText = e.getText() })
+      |> Some
     | _ ->
       nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
 
@@ -836,7 +836,7 @@ and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
     | Kind.VariableStatement -> readVariable ctx (stmt :?> _)
     | Kind.FunctionDeclaration -> [readFunction ctx (stmt :?> _) |> Option.map Value |> Option.defaultWith onError]
     | Kind.ExportAssignment -> [readExportAssignment ctx (stmt :?> _) |> Option.defaultWith onError]
-    | Kind.ExportDeclaration -> [readExportDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
+    | Kind.ExportDeclaration -> readExportDeclaration ctx (stmt :?> _) |> Option.defaultWith (onError >> List.singleton)
     | Kind.NamespaceExportDeclaration -> [readNamespaceExportDeclaration ctx (stmt :?> _)]
     | Kind.ImportEqualsDeclaration -> [readImportEqualsDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]
     | Kind.ImportDeclaration -> [readImportDeclaration ctx (stmt :?> _) |> Option.defaultWith onError]

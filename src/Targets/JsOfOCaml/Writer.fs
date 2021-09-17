@@ -665,10 +665,10 @@ let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
   [
     yield typeAlias "t" tyargs target |> TypeDef
     yield! emitMappers ctx emitType "t" typrms
-    match ctx.options.safeArity with
-    | SafeArity.Full | SafeArity.Provide ->
-      let arities = getPossibleArity typrms
-      for arity in arities |> Set.toSeq |> Seq.sortDescending do
+    let arities = getPossibleArity typrms
+    let maxArity = List.length tyargs
+    for arity in arities |> Set.toSeq |> Seq.sortDescending do
+      if arity <> maxArity || ctx.options.safeArity.HasProvide then
         let name = Naming.createTypeNameOfArity arity None "t"
         let tyargs' = List.take arity tyargs
         let typrms' = List.take arity typrms
@@ -684,7 +684,6 @@ let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
             ]
         yield typeAlias name tyargs' target |> TypeDef
         yield! emitMappers ctx emitType name typrms'
-    | _ -> ()
   ]
 
 let inline private overloaded (f: (string -> string) -> text list) =
@@ -785,7 +784,8 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
           options =
             if not isAnonymous then ctx.options
             else
-              ctx.options |> jsWith (fun o -> o.safeArity <- SafeArity.Consume) |}
+              // no need to generate t_n types for anonymous interfaces
+              ctx.options |> jsWith (fun o -> o.safeArity <- o.safeArity.WithProvide(false)) |}
 
     let emitType = emitTypeImpl flags
     let emitType_ = emitType overrideFunc

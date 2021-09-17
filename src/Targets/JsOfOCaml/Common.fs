@@ -14,6 +14,19 @@ type SafeArity =
   | [<CompiledName("provide")>] Provide
   | [<CompiledName("consume")>] Consume
   | [<CompiledName("off")>] Off
+with
+  member this.HasProvide = match this with Full | Provide -> true | _ -> false
+  member this.HasConsume = match this with Full | Consume -> true | _ -> false
+
+  member this.WithProvide(b: bool) =
+    match this with
+    | Provide | Off -> if b then Provide else Off
+    | Full | Consume -> if b then Full else Consume
+
+  member this.WithConsume(b: bool) =
+    match this with
+    | Consume | Off -> if b then Consume else Off
+    | Full | Provide -> if b then Full else Provide
 
 type Options =
   inherit GlobalOptions

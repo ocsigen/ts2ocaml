@@ -18,14 +18,29 @@
   (deps typescript.mli)
   (action (run %{bin:gen_js_api} %{deps})))
 
+; (rule
+;   (targets node.ml)
+;   (deps node.mli)
+;   (action (run %{bin:gen_js_api} %{deps})))
+
 (rule
-  (targets node.ml)
-  (deps node.mli)
+  (targets monaco_editor.ml)
+  (deps monaco_editor.mli)
   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule
-  (targets monaco.ml)
-  (deps monaco.mli)
+  (targets csstype.ml)
+  (deps csstype.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets prop_types.ml)
+  (deps prop_types.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets scheduler__tracing.ml)
+  (deps scheduler__tracing.mli)
   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule
@@ -36,6 +51,21 @@
 (rule
   (targets react_modal.ml)
   (deps react_modal.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets yargs_parser.ml)
+  (deps yargs_parser.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets yargs.ml)
+  (deps yargs.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets test.ml)
+  (deps test.mli)
   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule

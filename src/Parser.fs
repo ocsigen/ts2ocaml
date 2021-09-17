@@ -142,7 +142,7 @@ let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.K
 let sanitizeCommentText (str: string) : string list =
   str.Replace("\r\n","\n").Replace("\r","\n").Split [|'\n'|] |> List.ofArray
 
-let readCommentText (comment: U2<string, ResizeArray<U2<Ts.JSDocText, Ts.JSDocLink>>>) : string list =
+let readCommentText (comment: U2<string, ResizeArray<Ts.JSDocComment>>) : string list =
   let str =
     if jsTypeof comment = "string" then
       box comment :?> string

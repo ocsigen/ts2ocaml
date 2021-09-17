@@ -294,3 +294,7 @@ __pycache__/
 output/
 
 *.fs.js*
+
+# Test artifacts
+test/src/*.mli
+test/src/stub.js

@@ -1374,7 +1374,7 @@ let handleExports moduleName (ctx: Context) (str: StructuredText) : {| stubLines
           let defaultExport =
             es6Exports |> List.tryFind (fun e -> match e.clause with ES6DefaultExport _ -> true | _ -> false)
           let stubLines = [
-            yield stubBinding [moduleName] (sprintf "require('%s')" moduleName)
+            yield stubBinding [moduleName] (sprintf "require('%s') /* need Babel */" moduleName)
             match defaultExport with
             | None -> ()
             | Some e ->

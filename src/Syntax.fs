@@ -370,7 +370,7 @@ and ExportClause =
   ///
   /// ES6 (through Babel):
   /// ```js
-  ///   import whatever from "path";
+  ///   import * as whatever from "path";
   /// ```
   ///
   /// CJS:

@@ -19,7 +19,7 @@
     <Compile Include="Targets/JsOfOCaml/OCamlHelper.fs" />
     <Compile Include="Targets/JsOfOCaml/Writer.fs" />
     <Compile Include="Targets/JsOfOCaml/Target.fs" />
-    <Compile Include="App.fs" />
+    <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fable.Browser.Dom" Version="1.1.0" />

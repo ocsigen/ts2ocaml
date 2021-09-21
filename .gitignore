@@ -288,11 +288,15 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# Fable & Ionide directory
 .fable
 .ionide
 .ignored
-output/
 
+# Outputs
+dist
+output
 *.fs.js*
 
 # Test artifacts

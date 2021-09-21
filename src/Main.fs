@@ -1,4 +1,4 @@
-module App
+module Main
 
 open Fable.Core.JsInterop
 open TypeScript

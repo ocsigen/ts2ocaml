@@ -3,8 +3,8 @@
 // https://github.com/fable-compiler/webpack-config-template
 
 var CONFIG = {
-  fsharpEntry: './src/App.fs.js',
-  outputDir: './output',
+  fsharpEntry: './src/Main.fs.js',
+  outputDir: './dist',
 }
 
 var path = require("path");

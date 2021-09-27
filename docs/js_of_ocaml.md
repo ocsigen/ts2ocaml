@@ -200,8 +200,10 @@ module Foo : sig
   module B : sig
     type 'T t = [`B of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
 
-    (* The followings will be generated regardless of the option, since B contains optional type parameters *)
+    (* The following will be generated if --full or --provide is set *)
     type 'T t_1 =  'T t  (* for arity 1 *)
+
+    (* The following will be generated regardless of the option, since B contains an optional type parameter *)
     type    t_0 = any t  (* for arity 0 *)
 
     ...

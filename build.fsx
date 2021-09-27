@@ -38,12 +38,32 @@ let platformTool tool =
     ProcessUtils.tryFindFileOnPath tool
     |> function Some t -> t | _ -> failwithf "%s not found" tool
 
-let duneTool = platformTool "dune"
+// let duneTool = platformTool "dune"
 
 let dotnetExec cmd args =
     let result = DotNet.exec id cmd args
     if not result.OK then
         failwithf "Error while running 'dotnet %s %s'" cmd args
+
+let testCompile () =
+    let ts2ocaml args files =
+        Yarn.exec (sprintf "ts2ocaml %s" (String.concat " " (Seq.append args files))) id
+
+    ts2ocaml ["jsoo"; "-v"; "--nowarn"; "--stdlib"; $"-o {outputDir}"] <|
+        !! "node_modules/typescript/lib/lib.*.d.ts"
+
+    let packages = [
+        !! "node_modules/typescript/lib/typescript.d.ts";
+        !! "node_modules/@types/scheduler/tracing.d.ts";
+        !! "node_modules/csstype/index.d.ts";
+        !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts";
+        !! "node_modules/@types/react-modal/index.d.ts";
+        !! "node_modules/@types/yargs-parser/index.d.ts";
+        !! "node_modules/@types/yargs/index.d.ts";
+    ]
+
+    for package in packages do
+        ts2ocaml ["jsoo"; "-v"; "--nowarn"; $"-o {outputDir}"; "--simplify-immediate-instance"; "--simplify-immediate-constructor"] package
 
 Target.create "Clean" <| fun _ ->
     !! "src/bin"
@@ -72,25 +92,8 @@ Target.create "Build" <| fun _ ->
 Target.create "Watch" <| fun _ ->
     dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w"
 
-Target.create "TestCompile" <| fun _ ->
-    let ts2ocaml args files =
-        Yarn.exec (sprintf "ts2ocaml %s" (String.concat " " (Seq.append args files))) id
-
-    ts2ocaml ["jsoo"; "-v"; "--nowarn"; "--stdlib"; $"-o {outputDir}"] <|
-        !! "node_modules/typescript/lib/lib.*.d.ts"
-
-    let packages = [
-        !! "node_modules/typescript/lib/typescript.d.ts"
-        !! "node_modules/@types/scheduler/tracing.d.ts"
-        !! "node_modules/csstype/index.d.ts"
-        !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts"
-        !! "node_modules/@types/react-modal/index.d.ts"
-        !! "node_modules/@types/yargs-parser/index.d.ts"
-        !! "node_modules/@types/yargs/index.d.ts"
-    ]
-
-    for package in packages do
-        ts2ocaml ["jsoo"; "-v"; "--nowarn"; $"-o {outputDir}"; "--simplify-immediate-instance"; "--simplify-immediate-constructor"] package
+Target.create "TestCompile" <| fun _ -> testCompile ()
+Target.create "TestCompileOnly" <| fun _ -> testCompile ()
 
 // Build order
 

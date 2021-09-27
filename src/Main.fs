@@ -49,6 +49,20 @@ let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
       }
     ts.createProgram(ResizeArray tsPaths, options, !!host)
 
+let expandSourceFiles (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq) =
+  let sourceFilesMap =
+    sourceFiles
+    |> Seq.map (fun sf -> sf.fileName, sf)
+    |> Map.ofSeq
+
+  let expanded =
+    sourceFiles
+    |> Seq.fold (fun sfMap sf ->
+
+      sfMap) sourceFilesMap
+
+  expanded |> Map.toArray |> Array.map snd
+
 let parse (opts: GlobalOptions) (argv: string[]) =
   let program =
     let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))

@@ -1386,6 +1386,25 @@ let handleExports moduleName (ctx: Context) (str: StructuredText) : {| stubLines
           stubLines, Some moduleName
     {| stubLines = stubLines; topLevelScope = topLevelScope |}
 
+let emitReferenceTypeDirectives (src: SourceFile) : text list =
+  let refs =
+    src.references
+    |> List.choose (function TypeReference r -> Some r | _ -> None)
+
+  if List.isEmpty refs then []
+  else
+    let comments =
+      refs
+      |> List.map (sprintf "<reference types=\"%s\">")
+      |> List.map commentStr
+
+    let openRefs =
+      refs
+      |> List.map Naming.jsModuleNameToOCamlModuleName
+      |> open_
+
+    empty :: comments @ [openRefs]
+
 let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
   if srcs = [] then failwith "no input files were given"
 
@@ -1437,8 +1456,12 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
       | None -> ()
       | Some scope ->
         yield tprintf "[@@@js.scope \"%s\"]" scope
+
       yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; "Ts2ocaml.WebWorker" ]
       yield! emitImports stmts
+      for src in srcs do
+        yield! emitReferenceTypeDirectives src
+
       yield empty
       yield! emitStatementsWithStructuredText ctx stmts structuredText
     ]

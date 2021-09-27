@@ -119,7 +119,7 @@ module Bar : sig
     [@@js.stop] type tags =  [`B (* | Foo.A.tags *)] [@@js.start] [@@js.implem type tags = [`B]]
 
     (* the following will be generated regardless of the option *)
-    val cast: t -> Foo.t [@@js.cast]
+    val cast: t -> Foo.A.t [@@js.cast]
   end
 end
 

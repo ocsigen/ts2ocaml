@@ -9,7 +9,7 @@ type RecModule =
   | [<CompiledName("off")>] Off
 
 [<StringEnum; RequireQualifiedAccess>]
-type SafeArity =
+type FeatureFlag =
   | [<CompiledName("full")>] Full
   | [<CompiledName("provide")>] Provide
   | [<CompiledName("consume")>] Consume
@@ -36,9 +36,9 @@ type Options =
   abstract stubFile: string with get
   // generator options
   abstract numberAsInt: bool with get
-  abstract inheritWithTags: bool with get, set
+  abstract inheritWithTags: FeatureFlag with get, set
   abstract recModule: RecModule with get, set
-  abstract safeArity: SafeArity with get, set
+  abstract safeArity: FeatureFlag with get, set
   abstract simplifyImmediateInstance: bool with get, set
   abstract simplifyImmediateConstructor: bool with get, set
   // hidden options

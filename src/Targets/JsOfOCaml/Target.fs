@@ -41,18 +41,18 @@ let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
         descr="Treat number types as int.\nIf not set, float will be used.",
         defaultValue=false,
         alias="int")
-      .addFlag(
+      .addChoice(
         "inherit-with-tags",
-        (fun (o: Options) -> o.inheritWithTags),
-        descr="Use `TypeName.tags` to inherit an unknown type.\nIf not set, it will be commented out.",
-        defaultValue=false,
-        alias="tags")
+        [|FeatureFlag.Full; FeatureFlag.Provide; FeatureFlag.Consume; FeatureFlag.Off|],
+        (fun (o: Options) -> o.safeArity),
+        descr="Use `TypeName.tags` type names to inherit types from other packages.",
+        defaultValue=FeatureFlag.Full)
       .addChoice(
         "safe-arity",
-        [|SafeArity.Full; SafeArity.Provide; SafeArity.Consume; SafeArity.Off|],
+        [|FeatureFlag.Full; FeatureFlag.Provide; FeatureFlag.Consume; FeatureFlag.Off|],
         (fun (o: Options) -> o.safeArity),
-        descr="Use `TypeName.t_n` type names to safely use overloaded types.",
-        defaultValue=SafeArity.Full)
+        descr="Use `TypeName.t_n` type names to safely use overloaded types from other packages.",
+        defaultValue=FeatureFlag.Full)
       .addChoice(
         "rec-module",
         [|RecModule.Optimized; RecModule.Naive; RecModule.Off|],

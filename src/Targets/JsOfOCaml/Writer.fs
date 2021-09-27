@@ -116,6 +116,7 @@ type EmitTypeFlags = {
   avoidTheseArgumentNames: Set<string>
   forceVariadic: bool
   hasTypeArgumentsHandled: bool
+  forceSkipAttributes: bool
 }
 
 module EmitTypeFlags =
@@ -129,6 +130,7 @@ module EmitTypeFlags =
       avoidTheseArgumentNames = Set.empty
       forceVariadic = false
       hasTypeArgumentsHandled = false
+      forceSkipAttributes = false
     }
 
 type TypeEmitter = Context -> Type -> text
@@ -143,6 +145,8 @@ module OverrideFunc =
       | None -> f2 _emitType _ctx ty
 
 let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (ty: Type) : text =
+  let forceSkipAttr text =
+    if flags.forceSkipAttributes then empty else text
   let treatEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<EnumCase, Literal>>) =
     between "[" "]" (concat (str " | ") [
       for c in Set.toSeq cases do
@@ -152,11 +156,12 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
           | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l
         let attr =
           match value with
+          | _ when flags.forceSkipAttributes -> empty
           | _ when flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant -> empty
           | Some v -> Attr.js (Term.literal v)
           | None -> empty
         yield pv_head @+ name + attr
-    ]) +@ " [@js.enum]" |> between "(" ")"
+    ]) + forceSkipAttr (str " [@js.enum]") |> between "(" ")"
 
   let treatIdent { name = name; fullName = fno; loc = identLoc } (tyargs: Type list) (loc: Location) =
     let arity = List.length tyargs
@@ -166,7 +171,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     | None ->
       let tyName =
         match ctx.options.safeArity with
-        | SafeArity.Full | SafeArity.Consume ->
+        | FeatureFlag.Full | FeatureFlag.Consume ->
           Naming.createTypeNameOfArity arity None "t"
         | _ -> "t"
       Naming.structured Naming.moduleName name + "." + tyName |> withTyargs
@@ -264,7 +269,8 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
       else
         let ru = ResolvedUnion.resolve ctx u
         let skipOnContravariant text =
-          if flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant then empty
+          if flags.forceSkipAttributes then empty
+          else if flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant then empty
           else text
         let treatNullUndefined t =
           match ru.caseNull, ru.caseUndefined with
@@ -304,7 +310,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
               let ty = emitTypeImpl { flags with resolveUnion = false } overrideFunc ctx t
               let body = tprintf "%A of %A " name ty
               yield body + skipOnContravariant (Attr.js (Term.literal l))
-          ]) + tprintf " [@js.union on_field \"%s\"]" tagName |> between "(" ")"
+          ]) + forceSkipAttr (tprintf " [@js.union on_field \"%s\"]" tagName) |> between "(" ")"
         let treatOther otherTypes =
           if Set.isEmpty otherTypes then
             failwith "impossible_emitResolvedUnion_treatOther_go"
@@ -352,9 +358,9 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
           go acc [Choice2Of2 x.value] // do not generate label if it is the only argument and is not optional
         | Choice1Of2 x :: [] when f.isVariadic ->
           assert (not x.isOptional)
-          acc + tprintf "%s:" (Naming.valueName x.name |> rename) + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx x.value +@ " [@js.variadic]")
+          acc + tprintf "%s:" (Naming.valueName x.name |> rename) + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx x.value + forceSkipAttr (str " [@js.variadic]"))
         | Choice2Of2 t :: [] | Choice1Of2 { value = t } :: [] when f.isVariadic ->
-          acc + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx t +@ " [@js.variadic]")
+          acc + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx t + forceSkipAttr (str " [@js.variadic]"))
         | Choice1Of2 x :: xs ->
           let prefix =
             if x.isOptional then "?" else ""
@@ -372,7 +378,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
           f.args |> List.choose (function Choice1Of2 x -> Some x.name | Choice2Of2 _ -> None) |> Set.ofList
         let x = emitTypeImpl { flags with needParen = false; avoidTheseArgumentNames = argNames } overrideFunc ctx f.returnType
         match f.returnType with
-        | Function _ -> between "(" ")" (x +@ " [@js.dummy]")
+        | Function _ -> between "(" ")" (x + forceSkipAttr (str " [@js.dummy]"))
         | _ -> x
       let result = lhs +@ " -> " + rhs
       if flags.needParen then result |> between "(" ")" else result
@@ -389,7 +395,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
 /// ``[ `A | `B | ... ]``
 and emitLabels (ctx: Context) labels =
   let inline commentTags t =
-    if ctx.options.inheritWithTags then t
+    if ctx.options.inheritWithTags.HasConsume then t
     else comment t
   let rec go firstCaseEmitted acc = function
     | [] -> acc
@@ -412,7 +418,13 @@ and getLabelsFromInheritingTypes (emitType_: TypeEmitter) (ctx: Context) (inheri
     | [arg] -> tprintf "%s of %A" (Naming.constructorName name) arg
     | _ -> tprintf "%s of %A" (Naming.constructorName name) (Type.tuple args)
   let emitTagType name args =
-    let ty = Naming.structured Naming.moduleName name + ".tags"
+    let arity = List.length args
+    let tagTypeName =
+      if ctx.options.safeArity.HasConsume then
+        sprintf ".tags_%d" arity
+      else
+        ".tags"
+    let ty = Naming.structured Naming.moduleName name + tagTypeName
     let args = args |> List.map (emitType_ ctx)
     Type.appOpt (str ty) args
   [
@@ -658,23 +670,28 @@ let emitMappers ctx emitType tName (typrms: TypeParam list) =
     val_ (sprintf "%s_of_js" tName) (emitType_ ctx (funTy false)) |> ScopeIndependent
   ]
 
-let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
-  let emitType = emitTypeImpl flags
-  let emitType_ = emitType overrideFunc
+
+let emitTypeAliasesImpl
+    (baseName: string)
+    flags overrideFunc
+    (ctx: Context)
+    (typrms: TypeParam list)
+    (target: text)
+    (lines: string -> (TypeParam * text) list -> text -> 'a list) =
+  let emitType_ = emitTypeImpl flags overrideFunc
   let tyargs = typrms |> List.map (fun x -> tprintf "'%s" x.name)
   [
-    yield typeAlias "t" tyargs target |> TypeDef
-    yield! emitMappers ctx emitType "t" typrms
+    yield! lines baseName (List.zip typrms tyargs) target
     let arities = getPossibleArity typrms
     let maxArity = List.length tyargs
     for arity in arities |> Set.toSeq |> Seq.sortDescending do
       if arity <> maxArity || ctx.options.safeArity.HasProvide then
-        let name = Naming.createTypeNameOfArity arity None "t"
+        let name = Naming.createTypeNameOfArity arity None baseName
         let tyargs' = List.take arity tyargs
         let typrms' = List.take arity typrms
         let target =
           Type.appOpt
-            (str "t")
+            (str baseName)
             [
               for tyarg in tyargs' do yield tyarg
               for t in typrms |> List.skip arity do
@@ -682,9 +699,17 @@ let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
                 | None -> failwith "impossible_emitTypeAliases"
                 | Some t -> yield emitType_ ctx t
             ]
-        yield typeAlias name tyargs' target |> TypeDef
-        yield! emitMappers ctx emitType name typrms'
+        yield! lines name (List.zip typrms' tyargs') target
   ]
+
+let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
+  let emitType = emitTypeImpl flags
+  emitTypeAliasesImpl "t" flags overrideFunc ctx typrms target (
+    fun name tyargs target -> [
+      yield  typeAlias name (tyargs |> List.map snd) target |> TypeDef
+      yield! emitMappers ctx emitType name (tyargs |> List.map fst)
+    ]
+  )
 
 let inline private overloaded (f: (string -> string) -> text list) =
   OverloadedText (fun renamer -> f (renamer.Rename "value"))
@@ -813,10 +838,13 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     let items = [
       yield! emitTypeAliases flags overrideFunc innerCtx c.typeParams selfTyText
 
-      if not isAnonymous && not (List.isEmpty labels) then
-        let typrmsText = typrms |> List.map (emitType_ innerCtx)
-        let alias = typeAlias "tags" typrmsText (emitLabels innerCtx labels)
-        yield Attr.js_stop_start_implem_oneliner alias alias |> TypeDef
+      if not isAnonymous && not (List.isEmpty labels) && innerCtx.options.inheritWithTags.HasProvide then
+        let alias =
+          emitTypeAliasesImpl
+            "tags" { flags with forceSkipAttributes = true } overrideFunc innerCtx c.typeParams (emitLabels innerCtx labels)
+            (fun name typrms target -> [typeAlias name (typrms |> List.map snd) target])
+          |> concat newline
+        yield Attr.js_stop_start_implem alias alias |> TypeDef
 
       yield! members
       for parent in c.implements do
@@ -1275,8 +1303,8 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
   Log.tracef opts "* running typer..."
   opts.simplifyImmediateInstance <- true
   opts.simplifyImmediateConstructor <- true
-  opts.inheritWithTags <- true
-  opts.safeArity <- SafeArity.Full
+  opts.inheritWithTags <- FeatureFlag.Full
+  opts.safeArity <- FeatureFlag.Full
   opts.recModule <- RecModule.Optimized
 
   let esCtx, esSrc = runAll [esSrc] opts

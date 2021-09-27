@@ -112,5 +112,5 @@ let main argv =
     |> Typer.TyperOptions.add
     |> Target.register parse Target.JsOfOCaml.target
     |> Target.register parse Target.ParserTest.target
-  yargs.demandCommand(1.0).help().argv |> ignore
+  yargs.demandCommand(1.0).scriptName("ts2ocaml").help().argv |> ignore
   0

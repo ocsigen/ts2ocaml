@@ -11,6 +11,8 @@
 open Ts2ocaml
 module TypeScript = Typescript.Export
 module Yargs = Yargs.Export
+module React = React.Export
+module React_modal = React_modal.Export
 
 let () =
   Printf.printf "%f\n" (Math.pi ());

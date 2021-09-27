@@ -25,6 +25,7 @@ let srcDir = "./src"
 let outputDir = "./output"
 let distDir = "./dist"
 let testDir = "./test"
+let testSrcDir = Path.combine testDir "src"
 
 let run cmd dir args =
     let result =
@@ -65,6 +66,10 @@ let testCompile () =
     for package in packages do
         ts2ocaml ["jsoo"; "-v"; "--nowarn"; $"-o {outputDir}"; "--simplify-immediate-instance"; "--simplify-immediate-constructor"] package
 
+let prepareTest () =
+    for file in outputDir |> Shell.copyRecursiveTo true testSrcDir do
+        printfn "* copied to %s" file
+
 Target.create "Clean" <| fun _ ->
     !! "src/bin"
     ++ "src/obj"
@@ -95,6 +100,9 @@ Target.create "Watch" <| fun _ ->
 Target.create "TestCompile" <| fun _ -> testCompile ()
 Target.create "TestCompileOnly" <| fun _ -> testCompile ()
 
+Target.create "PrepareTest" <| fun _ -> prepareTest ()
+Target.create "PrepareTestOnly" <| fun _ -> prepareTest ()
+
 // Build order
 
 "Clean"
@@ -108,6 +116,10 @@ Target.create "TestCompileOnly" <| fun _ -> testCompile ()
 "Prepare"
     ==> "Build"
     ==> "TestCompile"
+    ==> "PrepareTest"
+
+"TestCompileOnly"
+    ==> "PrepareTestOnly"
 
 "Prepare"
     ==> "Watch"

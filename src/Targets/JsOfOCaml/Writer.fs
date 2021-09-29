@@ -157,7 +157,6 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
         let attr =
           match value with
           | _ when flags.forceSkipAttributes -> empty
-          | _ when flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant -> empty
           | Some v -> Attr.js (Term.literal v)
           | None -> empty
         yield pv_head @+ name + attr

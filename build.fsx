@@ -39,41 +39,14 @@ let platformTool tool =
     ProcessUtils.tryFindFileOnPath tool
     |> function Some t -> t | _ -> failwithf "%s not found" tool
 
-// let duneTool = platformTool "dune"
-
 let dotnetExec cmd args =
     let result = DotNet.exec id cmd args
     if not result.OK then
         failwithf "Error while running 'dotnet %s %s'" cmd args
 
-let testCompile () =
-    let ts2ocaml args files =
-        Yarn.exec (sprintf "ts2ocaml %s" (String.concat " " (Seq.append args files))) id
-
-    ts2ocaml ["jsoo"; "-v"; "--nowarn"; "--stdlib"; $"-o {outputDir}"] <|
-        !! "node_modules/typescript/lib/lib.*.d.ts"
-
-    let packages = [
-        !! "node_modules/typescript/lib/typescript.d.ts";
-        !! "node_modules/@types/scheduler/tracing.d.ts";
-        !! "node_modules/csstype/index.d.ts";
-        !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts";
-        !! "node_modules/@types/react-modal/index.d.ts";
-        !! "node_modules/@types/yargs-parser/index.d.ts";
-        !! "node_modules/@types/yargs/index.d.ts";
-    ]
-
-    for package in packages do
-        ts2ocaml ["jsoo"; "-v"; "--nowarn"; $"-o {outputDir}"; "--simplify-immediate-instance"; "--simplify-immediate-constructor"] package
-
-let prepareTest () =
-    for file in outputDir |> Shell.copyRecursiveTo true testSrcDir do
-        printfn "* copied to %s" file
-
 Target.create "Clean" <| fun _ ->
     !! "src/bin"
     ++ "src/obj"
-    ++ outputDir
     ++ distDir
     ++ "src/.fable"
     |> Seq.iter Shell.cleanDir
@@ -97,11 +70,42 @@ Target.create "Build" <| fun _ ->
 Target.create "Watch" <| fun _ ->
     dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w"
 
-Target.create "TestCompile" <| fun _ -> testCompile ()
-Target.create "TestCompileOnly" <| fun _ -> testCompile ()
+module Test =
+    let duneTool = platformTool "dune"
+    let dune args = run duneTool "./" args
 
-Target.create "PrepareTest" <| fun _ -> prepareTest ()
-Target.create "PrepareTestOnly" <| fun _ -> prepareTest ()
+    let generateBindings () =
+        let ts2ocaml args files =
+            Yarn.exec (sprintf "ts2ocaml %s" (String.concat " " (Seq.append args files))) id
+
+        ts2ocaml ["jsoo"; "-v"; "--nowarn"; "--stdlib"; $"-o {outputDir}"] <|
+            !! "node_modules/typescript/lib/lib.*.d.ts"
+
+        let packages = [
+            !! "node_modules/typescript/lib/typescript.d.ts";
+            !! "node_modules/@types/scheduler/tracing.d.ts";
+            !! "node_modules/csstype/index.d.ts";
+            !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts";
+            !! "node_modules/@types/react-modal/index.d.ts";
+            !! "node_modules/@types/yargs-parser/index.d.ts";
+            !! "node_modules/@types/yargs/index.d.ts";
+        ]
+
+        for package in packages do
+            ts2ocaml ["jsoo"; "-v"; "--nowarn"; $"-o {outputDir}"; "--simplify-immediate-instance"; "--simplify-immediate-constructor"] package
+
+    let prepare () =
+        for file in outputDir |> Shell.copyRecursiveTo true testSrcDir do
+            printfn "* copied to %s" file
+
+    let build () =
+        Shell.cd testDir
+        dune "build"
+
+Target.create "TestClean" <| fun _ -> Shell.cleanDir outputDir
+Target.create "TestGenerateBindings" <| fun _ -> Test.generateBindings ()
+Target.create "TestPrepare" <| fun _ -> Test.prepare ()
+Target.create "TestBuild" <| fun _ -> Test.build ()
 
 // Build order
 
@@ -115,14 +119,15 @@ Target.create "PrepareTestOnly" <| fun _ -> prepareTest ()
 
 "Prepare"
     ==> "Build"
-    ==> "TestCompile"
-    ==> "PrepareTest"
-
-"TestCompileOnly"
-    ==> "PrepareTestOnly"
+    ==> "TestGenerateBindings"
 
 "Prepare"
     ==> "Watch"
+
+"TestClean"
+    ==> "TestGenerateBindings"
+    ==> "TestPrepare"
+    ==> "TestBuild"
 
 // start build
 Target.runOrDefault "Build"

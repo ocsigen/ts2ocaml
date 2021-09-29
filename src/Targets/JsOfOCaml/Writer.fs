@@ -633,6 +633,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
   | Indexer (ft, Mutable) ->
     yield! emitMembers emitType_ ctx name selfTy ma (Indexer (ft, ReadOnly))
     yield! emitMembers emitType_ ctx name selfTy ma (Indexer (ft, WriteOnly))
+  | SymbolIndexer _ -> ()
   | UnknownMember msgo ->
     yield! comments ()
     match msgo with
@@ -1017,7 +1018,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
             | Constructor _ -> failwith "impossible_emitStructuredDefinition_Pattern_intfToModule_Constructor" // because interface!
             | Indexer (ft, _) -> yield ScopeIndependent (comment (tprintf "unsupported indexer of type: %s" (Type.pp (Function ft))))
             | UnknownMember (Some msg) -> yield ScopeIndependent (commentStr msg)
-            | UnknownMember None -> () ]
+            | SymbolIndexer _ | UnknownMember None -> () ]
       match p with
       | ImmediateInstance (intf, value) when ctx.options.simplifyImmediateInstance ->
         let module' =

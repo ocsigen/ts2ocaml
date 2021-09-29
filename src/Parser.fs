@@ -88,6 +88,12 @@ let getPropertyName (pn: Ts.PropertyName) : string option =
   | Kind.NumericLiteral -> Some (!!pn : Ts.NumericLiteral).text
   | _ -> None
 
+let getPropertyExpression (pn: Ts.PropertyName) : Ts.Expression option =
+  let node : Node = !!pn
+  match node.kind with
+  | Kind.ComputedPropertyName -> Some (!!pn : Ts.ComputedPropertyName).expression
+  | _ -> None
+
 let getBindingName (bn: Ts.BindingName): string option =
   let syntaxNode : Node = !! bn
   match syntaxNode.kind with
@@ -443,23 +449,43 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
         | None ->
           nodeWarn ctx sdb "type not specified (%s)" (Enum.pp nd.kind)
       localTyprm, UnknownType None
+
+  let readSymbolIndexer (e: Ts.Expression) (ty: Choice<Type, FuncType<Type>>) (fail: unit -> _) =
+    match e.kind with
+    | Kind.PropertyAccessExpression ->
+      let e = !!e : Ts.PropertyAccessExpression
+      let name = e.getText().Split('.') |> List.ofArray
+      match name with
+      | ["Symbol"; symbolName] ->
+        let ft =
+          match ty with
+          | Choice1Of2 t -> { args = []; isVariadic = false; returnType = t; loc = Node.location nd }
+          | Choice2Of2 ft -> ft
+        attr, SymbolIndexer (symbolName, ft, if isReadOnly nd.modifiers then ReadOnly else Mutable)
+      | _ -> fail ()
+    | _ -> fail ()
+
   match nd.kind with
   | Kind.PropertySignature ->
+    let fail () =
+      nodeWarn ctx nd "unsupported property name '%s' in PropertySignature" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
     let nd = nd :?> Ts.PropertySignature
+    let ty =
+      match nd.``type`` with
+      | Some t -> readTypeNode typrm ctx t
+      | None -> UnknownType None
     match getPropertyName nd.name with
     | Some name ->
-      let ty =
-        match nd.``type`` with
-        | Some t -> readTypeNode typrm ctx t
-        | None ->
-          UnknownType None
       match ty with
       | UnknownType None ->
         nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
       | _ -> ()
       let fl = { name = name; isOptional = false; value = ty }
       attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), [])
-    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
+    | None ->
+      match getPropertyExpression nd.name with
+      | Some expr -> readSymbolIndexer expr (Choice1Of2 ty) fail
+      | None -> fail ()
   | Kind.PropertyDeclaration ->
     let nd = nd :?> Ts.PropertyDeclaration
     match getPropertyName nd.name with
@@ -475,21 +501,26 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
       | _ -> ()
       let fl = { name = name; isOptional = false; value = ty }
       attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), [])
-    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
+    | None -> nodeWarn ctx nd "unsupported property name '%s' in PropertyDeclaration" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
   | Kind.CallSignature ->
     let nd = nd :?> Ts.CallSignatureDeclaration
     let localTyprm, ty = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
     (attr, FunctionInterface (readParameters typrm ctx nd.parameters nd ty, localTyprm))
   | Kind.MethodSignature | Kind.MethodDeclaration ->
-    let nd = nd :?> Ts.SignatureDeclarationBase
-    match nd.name |> Option.bind getPropertyName with
+    let sdb = nd :?> Ts.SignatureDeclarationBase
+    let fail () =
+      nodeWarn ctx sdb "unsupported method name '%s' in %s" (getText sdb.name) (Enum.pp nd.kind); (attr, UnknownMember (Some (getText sdb)))
+    let localTyprm, retTy = extractType sdb
+    let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
+    let func = readParameters typrm ctx sdb.parameters sdb retTy
+    match sdb.name |> Option.bind getPropertyName with
     | Some name ->
-      let localTyprm, retTy = extractType nd
-      let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
-      let func = readParameters typrm ctx nd.parameters nd retTy
       attr, Method (name, func, localTyprm)
-    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
+    | None ->
+      match sdb.name |> Option.bind getPropertyExpression with
+      | Some expr -> readSymbolIndexer expr (Choice2Of2 func) fail
+      | None -> fail ()
   | Kind.IndexSignature ->
     let nd = nd :?> Ts.IndexSignatureDeclaration
     let localTyprm, ty = extractType nd
@@ -518,7 +549,7 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
       if not (List.isEmpty localTyprm) then nodeWarn ctx nd "getter with type argument is not supported"
       let fl = { name = name; isOptional = false; value = ty }
       attr, Getter fl
-    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
+    | None -> nodeWarn ctx nd "unsupported property name '%s' in GetAccessor" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
   | Kind.SetAccessor ->
     let nd = nd :?> Ts.SetAccessorDeclaration
     match getPropertyName nd.name with
@@ -536,7 +567,7 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
       | _ ->
         nodeWarn ctx nd "invalid setter for '%s'" (getText nd.name)
         attr, UnknownMember (Some (getText nd))
-    | None -> nodeWarn ctx nd "unsupported property name '%s'" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
+    | None -> nodeWarn ctx nd "unsupported property name '%s' in SetAccessor" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
   | _ ->
     nodeWarn ctx nd "unsupported NamedDeclaration kind: '%s'" (Enum.pp nd.kind)
     attr, UnknownMember (Some (getText nd))

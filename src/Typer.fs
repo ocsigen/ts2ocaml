@@ -225,6 +225,7 @@ module Type =
       | Setter f -> Setter (mapInFieldLike mapping ctx f)
       | New (f, tps) -> New (mapInFuncType mapping ctx f, List.map (mapInTypeParam mapping ctx) tps)
       | Method (name, f, tps) -> Method (name, mapInFuncType mapping ctx f, List.map (mapInTypeParam mapping ctx) tps)
+      | SymbolIndexer (sn, ft, m) -> SymbolIndexer (sn, mapInFuncType mapping ctx ft, m)
       | UnknownMember msgo -> UnknownMember msgo
     { c with
         implements = c.implements |> List.map (mapping ctx)
@@ -298,7 +299,7 @@ module Type =
     | FunctionInterface (ft, tps)
     | New (ft, tps) ->
       seq { yield! findTypesInFuncType pred ft; for tp in tps do yield! findTypesInTypeParam pred tp }
-    | Indexer (ft, _) ->
+    | Indexer (ft, _) | SymbolIndexer (_, ft, _) ->
       seq { yield! findTypesInFuncType pred ft }
     | Getter fl | Setter fl -> seq { yield! findTypesInFieldLike pred fl }
     | Constructor (ft, tps) ->
@@ -369,7 +370,7 @@ module Type =
           | Constructor (ft, tps) ->
             let ft = ft |> FuncType.map (fun _ -> PolymorphicThis)
             Set.difference (findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
-          | Indexer (ft, _) -> findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany
+          | Indexer (ft, _) | SymbolIndexer (_, ft, _) -> findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany
           | Getter fl | Setter fl -> findTypesInFieldLike getFreeTypeVarsPredicate fl |> Set.unionMany
           | UnknownMember _ -> Set.empty
           ) |> Set.unionMany

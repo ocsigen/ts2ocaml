@@ -424,10 +424,10 @@ and getLabelsFromInheritingTypes (emitType_: TypeEmitter) (ctx: Context) (inheri
     let arity = List.length args
     let tagTypeName =
       if ctx.options.safeArity.HasConsume then
-        sprintf ".tags_%d" arity
+        Naming.createTypeNameOfArity arity None "tags"
       else
-        ".tags"
-    let ty = Naming.structured Naming.moduleName name + tagTypeName
+        "tags"
+    let ty = Naming.structured Naming.moduleName name + "." + tagTypeName
     let args = args |> List.map (emitType_ ctx)
     Type.appOpt (str ty) args
   [
@@ -575,7 +575,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
     let ty, attr =
       if ma.isStatic then Function ft, Attr.js_global name
       else
-        let ft = { ft with args = Choice2Of2 selfTy :: ft.args }
+        let ft = { ft with args = Choice2Of2 PolymorphicThis :: ft.args }
         Function ft, Attr.js_call name
     let ty = emitType_ ctx ty
     yield! comments ()
@@ -589,7 +589,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
     let ty =
       let args =
         if ma.isStatic then [Choice2Of2 (Prim Void)]
-        else [Choice2Of2 selfTy]
+        else [Choice2Of2 PolymorphicThis]
       let ret =
         if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
         else fl.value
@@ -605,7 +605,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
     let ty =
       let args =
         if ma.isStatic then [Choice2Of2 fl.value]
-        else [Choice2Of2 selfTy; Choice2Of2 fl.value]
+        else [Choice2Of2 PolymorphicThis; Choice2Of2 fl.value]
       Function { isVariadic = false; args = args; returnType = Prim Void; loc = ma.loc } |> emitType_ ctx
     yield! comments ()
     yield overloaded (fun rename -> [val_ ("set_" + Naming.removeInvalidChars fl.name |> rename) ty + str " " + Attr.js_set fl.name])
@@ -613,17 +613,17 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
     yield! emitMembers emitType_ ctx name selfTy ma (Getter fl)
     yield! emitMembers emitType_ ctx name selfTy ma (Setter fl)
   | FunctionInterface (ft, _) ->
-    let ft = Function { ft with args = Choice2Of2 selfTy :: ft.args } |> emitType_ ctx
+    let ft = Function { ft with args = Choice2Of2 PolymorphicThis :: ft.args } |> emitType_ ctx
     yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "apply") ft + str " " + Attr.js_apply false])
   | Indexer (ft, ReadOnly) ->
-    let ft = Function { ft with args = Choice2Of2 selfTy :: removeLabels ft.args } |> emitType_ ctx
+    let ft = Function { ft with args = Choice2Of2 PolymorphicThis :: removeLabels ft.args } |> emitType_ ctx
     yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "get") ft + str " " + Attr.js_index_get])
   | Indexer (ft, WriteOnly) ->
     let ft =
       Function {
-        args = Choice2Of2 selfTy :: removeLabels ft.args @ [ Choice2Of2 ft.returnType ]
+        args = Choice2Of2 PolymorphicThis :: removeLabels ft.args @ [ Choice2Of2 ft.returnType ]
         isVariadic = false;
         returnType = Prim Void;
         loc = ft.loc
@@ -680,11 +680,11 @@ let emitTypeAliasesImpl
     (ctx: Context)
     (typrms: TypeParam list)
     (target: text)
-    (lines: string -> (TypeParam * text) list -> text -> 'a list) =
+    (lines: {| name: string; tyargs:(TypeParam * text) list; target: text; isOverload: bool |} -> 'a list) =
   let emitType_ = emitTypeImpl flags overrideFunc
   let tyargs = typrms |> List.map (fun x -> tprintf "'%s" x.name)
   [
-    yield! lines baseName (List.zip typrms tyargs) target
+    yield! lines {| name = baseName; tyargs = List.zip typrms tyargs; target = target; isOverload = false |}
     let arities = getPossibleArity typrms
     let maxArity = List.length tyargs
     for arity in arities |> Set.toSeq |> Seq.sortDescending do
@@ -702,15 +702,15 @@ let emitTypeAliasesImpl
                 | None -> failwith "impossible_emitTypeAliases"
                 | Some t -> yield emitType_ ctx t
             ]
-        yield! lines name (List.zip typrms' tyargs') target
+        yield! lines {| name = name; tyargs = List.zip typrms' tyargs'; target = target; isOverload = true |}
   ]
 
 let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target =
   let emitType = emitTypeImpl flags
   emitTypeAliasesImpl "t" flags overrideFunc ctx typrms target (
-    fun name tyargs target -> [
-      yield  typeAlias name (tyargs |> List.map snd) target |> TypeDef
-      yield! emitMappers ctx emitType name (tyargs |> List.map fst)
+    fun x -> [
+      yield  typeAlias x.name (x.tyargs |> List.map snd) x.target |> TypeDef
+      yield! emitMappers ctx emitType x.name (x.tyargs |> List.map fst)
     ]
   )
 
@@ -845,7 +845,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
         let alias =
           emitTypeAliasesImpl
             "tags" { flags with forceSkipAttributes = true } overrideFunc innerCtx c.typeParams (emitLabels innerCtx labels)
-            (fun name typrms target -> [typeAlias name (typrms |> List.map snd) target])
+            (fun x -> [typeAlias x.name (x.tyargs |> List.map snd) x.target])
           |> concat newline
         yield Attr.js_stop_start_implem alias alias |> TypeDef
 

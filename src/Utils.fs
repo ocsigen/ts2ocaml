@@ -38,6 +38,15 @@ module String =
       state.Replace(e, "\\" + e)
     ) s
 
+module List =
+  let splitChoice2 (xs: Choice<'t1, 't2> list) : 't1 list * 't2 list =
+    let xs1, xs2 =
+      xs |> List.fold (fun (xs1, xs2) -> function
+        | Choice1Of2 x -> x :: xs1, xs2
+        | Choice2Of2 x -> xs1, x :: xs2
+      ) ([], [])
+    List.rev xs1, List.rev xs2
+
 #if FABLE_COMPILER
 type StringBuilder (s: string) =
   let mutable s = s

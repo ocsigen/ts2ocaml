@@ -109,54 +109,23 @@ val intf_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a intf
   let intf_of_js _ x : _ intf = x
 ]
 
-[@@@js.stop]
-type ('t, +'a) enum
-val enum_to_js: ('t -> Ojs.t) -> ('a -> Ojs.t) -> ('t, 'a) enum -> Ojs.t
-val enum_of_js: (Ojs.t -> 't) -> (Ojs.t -> 'a) -> Ojs.t -> ('t, 'a) enum
-[@@@js.start]
-[@@@js.implem
-  type ('t, +'a) enum = 'a
-  let enum_to_js (_: 't -> Ojs.t) (f: 'a -> Ojs.t) (e: ('t, 'a) enum) : Ojs.t = (f e)
-  let enum_of_js (_: Ojs.t -> 't) (f: Ojs.t -> 'a) (e: Ojs.t) : ('t, 'a) enum = (f e)
-]
-
-module Enum: sig
-  [@@@js.stop]
-  type ('t, +'a) t = ('t, 'a) enum
-  val t_to_js: ('t -> Ojs.t) -> ('a -> Ojs.t) -> ('t, 'a) t -> Ojs.t
-  val t_of_js: (Ojs.t -> 't) -> (Ojs.t -> 'a) -> Ojs.t -> ('t, 'a) t
-  [@@@js.start]
-  [@@@js.implem
-    type ('t, +'a) t = ('t, 'a) enum
-    let t_to_js = enum_to_js
-    let t_of_js = enum_of_js
-  ]
-  val get_value: ('t, 'a) t -> 'a
-  [@@js.custom let get_value x = x]
-end
-
-type untyped_object = [`Object] intf
-[@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+type untyped_object = [`Object] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val untyped_object_of_js: Ojs.t -> untyped_object
 val untyped_object_to_js: untyped_object -> Ojs.t
 
-type untyped_function = [`Function] intf
-[@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+type untyped_function = [`Function] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val untyped_function_of_js: Ojs.t -> untyped_function
 val untyped_function_to_js: untyped_function -> Ojs.t
 
-type symbol = [`Symbol] intf
-[@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+type symbol = [`Symbol] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val symbol_of_js: Ojs.t -> symbol
 val symbol_to_js: symbol -> Ojs.t
 
-type regexp = [`RegExp] intf
-[@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+type regexp = [`RegExp] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val regexp_of_js: Ojs.t -> regexp
 val regexp_to_js: regexp -> Ojs.t
 
-type bigint = [`BigInt] intf
-[@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+type bigint = [`BigInt] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val bigint_of_js: Ojs.t -> bigint
 val bigint_to_js: bigint -> Ojs.t
 

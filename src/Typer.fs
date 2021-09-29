@@ -481,14 +481,12 @@ module Type =
               let s = c.implements |> List.map (getAllInheritancesImpl true ctx) |> Set.unionMany
               Some (s, Some self)
             | AliasName a ->
-              let self =
-                InheritingType.KnownIdent {| fullName = fn; tyargs = a.typeParams |> List.map (fun tp -> TypeVar tp.name) |}
               let tyargs =
                 a.typeParams |> List.map (fun tp -> TypeVar tp.name)
               let s =
                 let subst = createBindings fn a.loc a.typeParams tyargs
                 getAllInheritancesImpl true ctx a.target |> Set.map (substTypeVarInInheritingType subst ctx)
-              Some (s, Some self)
+              Some (s, None)
             | _ -> None
           )
         match result with
@@ -1124,7 +1122,8 @@ module ResolvedUnion =
         match t with
         | Union { types = types } -> yield! Seq.collect go types
         | Intersection { types = types } -> yield! types |> List.map (go >> Set.ofSeq) |> Set.intersectMany |> Set.toSeq
-        | (Ident { fullName = Some fn; loc = loc } & Dummy tyargs) | App (AIdent { fullName = Some fn }, tyargs, loc) ->
+        | (Ident { fullName = Some fn; loc = loc } & Dummy tyargs)
+        | App (AIdent { fullName = Some fn }, tyargs, loc) ->
           for x in fn |> FullName.lookup ctx do
             match x with
             | AliasName a when not a.erased ->
@@ -1136,7 +1135,8 @@ module ResolvedUnion =
               match e.cases |> List.tryFind (fun c -> c.name = name) with
               | Some c -> yield Choice1Of2 (Choice1Of2 c)
               | None -> yield Choice2Of2 t
-            | _ -> yield Choice2Of2 t
+            | ClassName _ -> yield Choice2Of2 t
+            | _ -> ()
         | TypeLiteral l -> yield Choice1Of2 (Choice2Of2 l)
         | _ -> yield Choice2Of2 t
       }

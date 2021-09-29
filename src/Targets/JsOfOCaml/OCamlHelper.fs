@@ -156,7 +156,6 @@ module Type =
     else app t args
 
   let intf  = str "intf"
-  let enum baseType cases = app (str "enum") [baseType; cases]
 
   let and_ a b = app (str "and_") [a; b]
   let or_  a b = app (str "or_")  [a; b]

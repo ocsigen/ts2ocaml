@@ -1,5 +1,13 @@
+## Build
+
 `dotnet tool install -g fake`
 
-`fake build target watch`
+`fake build target Build`
 
-`node dist/ts2ocaml.js jsoo <input.d.ts> -o <output dir>`
+## Run
+
+`yarn ts2ocaml jsoo <input.d.ts> -o <output dir>`
+
+## Test
+
+`fake build target TestBuild`

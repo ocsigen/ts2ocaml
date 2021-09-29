@@ -57,9 +57,7 @@ module Attr =
       attr Floating "js.implem" implContent
     ]
 
-  let js_custom_val content =
-    if content = empty then attr Block "js.custom" empty
-    else attr Block "js.custom" (newline + indent content + newline)
+  let js_custom_val content = attr Block "js.custom" content
 
   let js_implem_floating content = attr Floating "js.implem" (newline + indent content + newline)
   let js_implem_val content = attr Block "js.implem" (newline + indent content + newline)
@@ -145,6 +143,7 @@ module Type =
     | xs -> concat sep xs |> between "(" ")"
 
   let tuple = many (str " * ")
+  let arrow = many (str " -> ")
 
   let app t = function
     | [] -> failwith "type application with empty arguments"
@@ -281,7 +280,7 @@ let let_ name args retTyOpt value =
     match retTyOpt with
     | None -> empty
     | Some t -> " : " @+ t
-  tprintf "let %s " name + concat (str " ") args + retTy +@ " = " + value
+  tprintf "let %s" name + concat empty (args |> List.map ((@+) " ")) + retTy +@ " = " + value
 
 let external_ name tyarg tyret extName =
   tprintf "external %s: " name + tyarg +@ " -> " + tyret + tprintf " = \"%s\"" extName
@@ -290,7 +289,7 @@ let external_ name tyarg tyret extName =
 module Naming =
   let ourReservedNames =
     set [
-      "create"; "apply"; "invoke"; "get"; "set"; "cast";
+      "create"; "apply"; "invoke"; "get"; "set"; "cast_from"
     ]
 
   let reservedValueNames =

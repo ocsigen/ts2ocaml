@@ -392,8 +392,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     | UnknownType msgo ->
       match msgo with None -> commentStr "FIXME: unknown type" + Type.any | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + Type.any
 
-/// ``[ `A | `B | ... ]``
-and emitLabels (ctx: Context) labels =
+and emitLabelsBody (ctx: Context) labels =
   let inline commentTags t =
     if ctx.options.inheritWithTags.HasConsume then t
     else comment t
@@ -409,7 +408,11 @@ and emitLabels (ctx: Context) labels =
         go firstCaseEmitted (acc + commentTags (" | " @+ t)) rest
       else
         go true (acc + commentTags t) rest
-  go false empty labels |> between "[" "]"
+  go false empty labels
+
+/// ``[ `A | `B | ... ]``
+and emitLabels (ctx: Context) labels =
+  emitLabelsBody ctx labels |> between "[" "]"
 
 and getLabelsFromInheritingTypes (emitType_: TypeEmitter) (ctx: Context) (inheritingTypes: Set<InheritingType>) =
   let emitCase name args =
@@ -847,9 +850,16 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
         yield Attr.js_stop_start_implem alias alias |> TypeDef
 
       yield! members
-      for parent in c.implements do
-        let ty = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = parent; loc = UnknownLocation } |> emitType_ innerCtx
-        yield overloaded (fun rename -> [val_ (rename "cast") ty + str " " + Attr.attr Attr.Category.Block "js.cast" empty])
+
+      if not isAnonymous && not (List.isEmpty labels) then
+        let labelsBody = emitLabelsBody innerCtx labels
+        let castTy =
+          Type.arrow [
+            Type.app Type.intf [between "[> " " ]" labelsBody]
+            Type.appOpt (str "t") (typrms |> List.map (emitType_ innerCtx));
+          ]
+        yield ScopeIndependent (val_ "cast_from" castTy +@ " " + Attr.js_custom_val (let_ "cast_from" [] None (str "Obj.magic")))
+
       match c.name with
       | None -> ()
       | Some name ->

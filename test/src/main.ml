@@ -11,6 +11,10 @@
 open Ts2ocaml
 module TypeScript = Typescript.Export
 module Yargs = Yargs.Export
+
+module CSS = Csstype.Export
+module PropTypes = Prop_types.Export
+module SchedulerInteraction = Scheduler__tracing.Export.Interaction
 module React = React.Export
 module React_modal = React_modal.Export
 

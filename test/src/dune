@@ -5,6 +5,7 @@
   (preprocess (pps gen_js_api.ppx))
   (modes js)
   (js_of_ocaml
+    (flags)
     (javascript_files stub.js))
 )
 

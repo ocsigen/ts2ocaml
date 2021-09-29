@@ -1086,7 +1086,7 @@ module TypeofableType =
     | TNumber -> Prim Number
     | TString -> Prim String
     | TBoolean -> Prim Bool
-    | TSymbol -> Prim Symbol
+    | TSymbol -> Prim (Symbol false)
     | TBigInt -> Prim BigInt
 
 module ResolvedUnion =
@@ -1319,7 +1319,7 @@ module ResolvedUnion =
           | Prim Number -> TNumber  :: prims, ats, rest
           | Prim String -> TString  :: prims, ats, rest
           | Prim Bool   -> TBoolean :: prims, ats, rest
-          | Prim Symbol -> TSymbol  :: prims, ats, rest
+          | Prim (Symbol _) -> TSymbol  :: prims, ats, rest
           | Prim BigInt -> TBigInt  :: prims, ats, rest
           | App (APrim Array, [t], _) -> prims, t :: ats, rest
           | t -> prims, ats, t :: rest
@@ -1369,7 +1369,7 @@ let createRootContextForTyper (srcs: SourceFile list) (opts: TyperOptions) : Con
     |> add "Number" (Prim Number)
     |> add "Object" (Prim Object)
     |> add "Function" (Prim UntypedFunction)
-    |> add "Symbol" (Prim Symbol)
+    |> add "Symbol" (Prim (Symbol false))
     |> add "RegExp" (Prim RegExp)
     |> addPoly "Array" (Prim Array) [{ name = "T"; extends = None; defaultType = None }]
     |> addPoly "ReadonlyArray" (Prim Array) [{ name = "T"; extends = None; defaultType = None }]

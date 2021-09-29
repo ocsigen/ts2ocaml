@@ -99,7 +99,7 @@ module Type =
     Map.ofList [
       "Object", Object
       "Function", UntypedFunction
-      "Symbol", Symbol
+      "Symbol", Symbol false
       "RegExp", RegExp
       "BigInt", BigInt
     ]

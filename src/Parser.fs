@@ -268,7 +268,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
   | Kind.NeverKeyword -> Prim Never
   | Kind.UndefinedKeyword -> Prim Undefined
   | Kind.ObjectKeyword -> Prim Object
-  | Kind.SymbolKeyword -> Prim PrimType.Symbol
+  | Kind.SymbolKeyword -> Prim (PrimType.Symbol false)
   | Kind.BigIntKeyword -> Prim BigInt
   | Kind.ArrayType ->
     let t = t :?> Ts.ArrayTypeNode
@@ -367,6 +367,13 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
         UnknownType (Some (t.getText()))
     | Kind.KeyOfKeyword ->
       Erased (Keyof (readTypeNode typrm ctx t.``type``), Node.location t, t.getText())
+    | Kind.UniqueKeyword ->
+      let t' = t.``type``
+      match t'.kind with
+      | Kind.SymbolKeyword -> Prim (PrimType.Symbol true)
+      | _ ->
+        nodeWarn ctx t "unsupported 'unique' modifier for type '%s'" (t.getText())
+        UnknownType (Some (t.getText()))
     | _ ->
       nodeWarn ctx t "unsupported type operator '%s'" (Enum.pp t.operator)
       UnknownType (Some (t.getText()))

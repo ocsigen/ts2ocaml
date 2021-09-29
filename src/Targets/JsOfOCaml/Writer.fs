@@ -249,7 +249,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
       | String -> Type.string | Bool -> Type.boolean
       | Number -> Type.number ctx.options
       | Object -> Type.object | UntypedFunction -> Type.function_
-      | RegExp -> Type.regexp | Symbol -> Type.symbol
+      | RegExp -> Type.regexp | Symbol _ -> Type.symbol
       | Never -> Type.never | Any -> Type.any | Unknown -> Type.unknown | Void -> Type.void_
       | Array -> Type.array | ReadonlyArray -> Type.readonlyArray
       | BigInt -> Type.bigint

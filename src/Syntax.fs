@@ -93,7 +93,8 @@ and PrimType =
   | Any | Void | Unknown
   | Null | Never | Undefined
   | Object | UntypedFunction
-  | Symbol | RegExp
+  | Symbol of isUnique:bool
+  | RegExp
   | Array | ReadonlyArray
   | BigInt
 with
@@ -104,7 +105,7 @@ with
     | Number -> Some "Number"
     | Object -> Some "Object"
     | UntypedFunction -> Some "Function"
-    | Symbol -> Some "Symbol"
+    | Symbol _ -> Some "Symbol"
     | RegExp -> Some "RegExp"
     | BigInt -> Some "BigInt"
     | Array -> Some "Array"

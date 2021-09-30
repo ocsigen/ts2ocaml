@@ -1,6 +1,6 @@
 ## Build
 
-`dotnet tool install -g fake`
+`dotnet tool install -g fake-cli`
 
 `fake build target Build`
 

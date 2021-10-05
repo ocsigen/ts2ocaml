@@ -4,10 +4,41 @@ open Syntax
 
 type TyperOptions =
   inherit GlobalOptions
+  abstract inheritIterable: bool with get,set
+  abstract inheritArraylike: bool with get,set
+  abstract inheritPromiselike: bool with get,set
+
 
 module TyperOptions =
+  open Fable.Core.JsInterop
+
   let add (yargs: Yargs.Argv<_>) =
     yargs
+      .group(
+        !^ResizeArray[
+           "inherit-iterable"
+           "inherit-arraylike"
+           "inherit-promiselike"
+        ],
+        "Typer Options:")
+      .addFlag(
+        "inherit-iterable",
+        (fun (o: TyperOptions) -> o.inheritIterable),
+        descr="Treat a type as inheriting Iterable<T> if it has an iterator as a member.",
+        defaultValue = false
+      )
+      .addFlag(
+        "inherit-arraylike",
+        (fun (o: TyperOptions) -> o.inheritArraylike),
+        descr="Treat a type as inheriting ArrayLike<T> if it has a number-indexed indexer.",
+        defaultValue = false
+      )
+      .addFlag(
+        "inherit-promiselike",
+        (fun (o: TyperOptions) -> o.inheritPromiselike),
+        descr="Treat a type as inheriting PromiseLike<T> if it has `then` as a member.",
+        defaultValue = false
+      )
 
 type Context<'Options, 'State> = {|
   currentNamespace: string list
@@ -984,7 +1015,7 @@ module Statement =
 
   type Dict<'k, 'v> = System.Collections.Generic.Dictionary<'k, 'v>
 
-  let introduceAdditionalInheritance (stmts: Statement list) : Statement list =
+  let introduceAdditionalInheritance (opts: TyperOptions) (stmts: Statement list) : Statement list =
     let rec go stmts =
       stmts |> List.map (function
         | ClassDef (c & { name = Some name }) ->
@@ -1004,7 +1035,7 @@ module Statement =
           for ma, m in c.members do
             match m with
             // iterator & iterable iterator
-            | SymbolIndexer ("iterator", { returnType = ty }, _) ->
+            | SymbolIndexer ("iterator", { returnType = ty }, _) when opts.inheritIterable ->
               match ty with
               | App (AIdent { name = ["Iterator"] }, [argTy], _) when not (has "Iterable") ->
                 inherits.Add(app "Iterable" [argTy] ma.loc)
@@ -1013,7 +1044,7 @@ module Statement =
               | _ -> ()
 
             // async iterator & iterable iterator
-            | SymbolIndexer ("asyncIterator", { returnType = ty }, _) ->
+            | SymbolIndexer ("asyncIterator", { returnType = ty }, _) when opts.inheritIterable ->
               match ty with
               | App (AIdent { name = ["AsyncIterator"] }, [argTy], _) when not (has "AsyncIterable") ->
                 inherits.Add(app "AsyncIterable" [argTy] ma.loc)
@@ -1023,11 +1054,11 @@ module Statement =
 
             // ArrayLike
             | Indexer ({ args = [Choice1Of2 { value = Prim Number } | Choice2Of2 (Prim Number)]; returnType = retTy }, _)
-              when not (has "ArrayLike") -> inherits.Add(app "ArrayLike" [retTy] ma.loc)
+              when opts.inheritArraylike && not (has "ArrayLike") -> inherits.Add(app "ArrayLike" [retTy] ma.loc)
 
             // PromiseLike
             | Method ("then", { args = [Choice1Of2 { name = "onfulfilled"; value = onfulfilled }; Choice1Of2 { name = "onrejected" }] }, _)
-              when not (has "PromiseLike") ->
+              when opts.inheritPromiselike && not (has "PromiseLike") ->
               match onfulfilled with
               | Function { args = [Choice1Of2 { value = t } | Choice2Of2 t] } ->
                 inherits.Add(app "PromiseLike" [t] ma.loc)
@@ -1589,7 +1620,7 @@ let runAll (srcs: SourceFile list) (opts: TyperOptions) =
       mapStatements (fun stmts ->
         stmts
               |> Statement.merge // merge modules, interfaces, etc
-              |> Statement.introduceAdditionalInheritance // add common inheritances which tends not to be defined by `extends` or `implements`
+              |> Statement.introduceAdditionalInheritance opts // add common inheritances which tends not to be defined by `extends` or `implements`
               |> Statement.detectPatterns // group statements with pattern
               |> Statement.replaceAliasToFunctionWithInterface // replace alias to function type with a function interface
       )

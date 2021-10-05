@@ -1331,6 +1331,9 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
   opts.inheritWithTags <- FeatureFlag.Full
   opts.safeArity <- FeatureFlag.Full
   opts.recModule <- RecModule.Optimized
+  opts.inheritArraylike <- true
+  opts.inheritIterable <- true
+  opts.inheritPromiselike <- true
 
   let esCtx, esSrc = runAll [esSrc] opts
   let domCtx, domSrc = runAll [domSrc] opts

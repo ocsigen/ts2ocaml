@@ -455,6 +455,15 @@ and getLabelsOfFullName emitType_ (ctx: Context) (fullName: string list) (typePa
     Choice2Of2 (prim, Case (tprintf "%s%s" pv_head name))
   | _ -> Choice1Of2 (normalClass () |> List.sort)
 
+and getLabelOfFullName emitType_ (ctx: Context) fullName (typeParams: TypeParam list) =
+  match fullName with
+  | [name] when ctx.options.stdlib && Map.containsKey name Type.nonJsablePrimTypeInterfaces && typeParams |> List.isEmpty ->
+    let prim = Type.nonJsablePrimTypeInterfaces |> Map.find name
+    Choice2Of2 (prim, Case (tprintf "%s%s" pv_head name))
+  | _ ->
+    let inheritingType = InheritingType.KnownIdent {| fullName = fullName; tyargs = typeParams |> List.map (fun tp -> TypeVar tp.name) |}
+    getLabelsFromInheritingTypes emitType_ ctx (Set.singleton inheritingType) |> Choice1Of2
+
 type StructuredTextItem =
   | ImportText of text // import texts should be at the top of the module
   | TypeDef of text    // and type definitions should come next
@@ -824,6 +833,13 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     let selfTyText =
       GetSelfTyText.class_ { flags with failContravariantTypeVar = true } overrideFunc innerCtx c
 
+    let polymorphicThis =
+      getLabelOfFullName emitType_ innerCtx (List.rev innerCtx.currentNamespace) c.typeParams
+      |> function Choice1Of2 xs -> xs | Choice2Of2 (_, x) -> [x]
+      |> emitLabelsBody innerCtx
+      |> between "[> " " ]"
+      |> fun x -> Type.app Type.intf [x]
+
     let members = [
       for ma, m in c.members do
         yield! emitMembers emitType_ innerCtx name selfTy ma m
@@ -852,10 +868,9 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
       yield! members
 
       if not isAnonymous && not (List.isEmpty labels) then
-        let labelsBody = emitLabelsBody innerCtx labels
         let castTy =
           Type.arrow [
-            Type.app Type.intf [between "[> " " ]" labelsBody]
+            polymorphicThis
             Type.appOpt (str "t") (typrms |> List.map (emitType_ innerCtx));
           ]
         yield ScopeIndependent (val_ "cast_from" castTy +@ " " + Attr.js_custom_val (let_ "cast_from" [] None (str "Obj.magic")))

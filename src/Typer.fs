@@ -428,10 +428,10 @@ module Type =
       InheritingType.Other (substTypeVar subst ctx t)
 
   let inline private (|Dummy|) _ = []
-  let mutable private inheritCache: Map<string list, Set<InheritingType> * InheritingType option> = Map.empty
+  let mutable private inheritCache: Map<string list, (InheritingType * int) list * InheritingType option> = Map.empty
   let mutable private hasNoInherits: Set<string list> = Set.empty
 
-  let rec private getAllInheritancesImpl (includeSelf: bool) (ctx: Context<'a, 's>) (ty: Type) : Set<InheritingType> =
+  let rec private getAllInheritancesImpl (depth: int) (includeSelf: bool) (ctx: Context<'a, 's>) (ty: Type) : (InheritingType * int) seq =
     seq {
       match ty with
       | Ident { name = name; fullName = Some fn; loc = loc } & Dummy ts
@@ -441,71 +441,89 @@ module Type =
             |> List.tryPick (function
               | AliasName { typeParams = typrms; erased = false } | ClassName { typeParams = typrms } ->
                 let subst = createBindings fn loc typrms ts
-                getAllInheritancesFromNameImpl includeSelf ctx fn |> Seq.map (substTypeVarInInheritingType subst ctx) |> Some
+                getAllInheritancesFromNameImpl (depth+1) includeSelf ctx fn
+                |> Seq.map (fun (t, d) -> substTypeVarInInheritingType subst ctx t, d) |> Some
               | AliasName { target = Prim p; erased = true } ->
-                getAllInheritancesImpl includeSelf ctx (App (APrim p, ts, loc)) |> Set.toSeq |> Some
+                getAllInheritancesImpl (depth+1) includeSelf ctx (App (APrim p, ts, loc)) |> Some
               | ImportedName _ ->
                 if includeSelf then
-                  Some (Seq.singleton (InheritingType.ImportedIdent {| name = name; fullName = fn; tyargs = ts |}))
+                  Some (Seq.singleton (InheritingType.ImportedIdent {| name = name; fullName = fn; tyargs = ts |}, depth))
                 else None
               | _ -> None
             ) |> Option.defaultValue Seq.empty
       | Ident { name = name; fullName = None } & Dummy ts
       | App (AIdent { name = name; fullName = None }, ts, _) ->
         if includeSelf then
-          yield InheritingType.UnknownIdent {| name = name; tyargs = ts |}
+          yield InheritingType.UnknownIdent {| name = name; tyargs = ts |}, depth
       | Prim p & Dummy ts
       | App (APrim p, ts, _) ->
         if includeSelf then
-          yield InheritingType.Prim (p, ts)
+          yield InheritingType.Prim (p, ts), depth
       | _ ->
         if includeSelf then
-          yield InheritingType.Other ty
-    } |> Set.ofSeq
+          yield InheritingType.Other ty, depth
+    }
 
-  and private getAllInheritancesFromNameImpl (includeSelf: bool) (ctx: Context<'a, 's>) (fn: string list) : Set<InheritingType> =
-    if hasNoInherits |> Set.contains fn then Set.empty
+  and private getAllInheritancesFromNameImpl (depth: int) (includeSelf: bool) (ctx: Context<'a, 's>) (fn: string list) : (InheritingType * int) list =
+    if hasNoInherits |> Set.contains fn then List.empty
     else
       match inheritCache |> Map.tryFind fn with
       | Some (s, selfo) ->
-        if includeSelf then
-          match selfo with
-          | None -> s
-          | Some self -> Set.add self s
-        else s
+        let ret =
+          if includeSelf then
+            match selfo with
+            | None -> s
+            | Some self -> (self, 0) :: s
+          else s
+        ret |> List.map (fun (t, d) -> t, d + depth)
       | None ->
         let result =
           FullName.lookup ctx fn |> Seq.tryPick (function
             | ClassName c ->
               let self =
                 InheritingType.KnownIdent {| fullName = fn; tyargs = c.typeParams |> List.map (fun tp -> TypeVar tp.name) |}
-              let s = c.implements |> List.map (getAllInheritancesImpl true ctx) |> Set.unionMany
+              let s = c.implements |> Seq.collect (getAllInheritancesImpl (depth+1) true ctx)
               Some (s, Some self)
             | AliasName a ->
               let tyargs =
                 a.typeParams |> List.map (fun tp -> TypeVar tp.name)
               let s =
                 let subst = createBindings fn a.loc a.typeParams tyargs
-                getAllInheritancesImpl true ctx a.target |> Set.map (substTypeVarInInheritingType subst ctx)
+                getAllInheritancesImpl (depth+1) true ctx a.target
+                |> Seq.map (fun (t, d) -> substTypeVarInInheritingType subst ctx t, d)
               Some (s, None)
             | _ -> None
           )
         match result with
         | None ->
           hasNoInherits <- hasNoInherits |> Set.add fn
-          Set.empty
+          List.empty
         | Some (s, selfo) ->
-          inheritCache <- inheritCache |> Map.add fn (s, selfo)
+          let s = Seq.toList s
+          inheritCache <- inheritCache |> Map.add fn (s |> List.map (fun (t, d) -> t, d - depth), selfo)
           if includeSelf then
             match selfo with
             | None -> s
-            | Some self -> Set.add self s
+            | Some self -> (self, depth) :: s
           else s
 
-  let getAllInheritances ctx ty = getAllInheritancesImpl false ctx ty
-  let getAllInheritancesFromName ctx fn = getAllInheritancesFromNameImpl false ctx fn
-  let getAllInheritancesAndSelf ctx ty = getAllInheritancesImpl true ctx ty
-  let getAllInheritancesAndSelfFromName ctx fn = getAllInheritancesFromNameImpl true ctx fn
+  and private removeDuplicatesFromInheritingTypes (xs: (InheritingType * int) seq) : Set<InheritingType> =
+    xs
+    |> Seq.groupBy (fun (t, _) ->
+      match t with
+      | InheritingType.KnownIdent i -> Choice1Of5 i.fullName
+      | InheritingType.UnknownIdent i -> Choice2Of5 i.name
+      | InheritingType.ImportedIdent i -> Choice3Of5 i.name
+      | InheritingType.Prim (p, _) -> Choice4Of5 p
+      | InheritingType.Other ty -> Choice5Of5 ty)
+    |> Seq.map (fun (_, xs) ->
+      xs |> Seq.sortBy (fun (_, depth) -> depth) |> Seq.head |> fst)
+    |> Set.ofSeq
+
+  let getAllInheritances ctx ty = getAllInheritancesImpl 0 false ctx ty |> removeDuplicatesFromInheritingTypes
+  let getAllInheritancesFromName ctx fn = getAllInheritancesFromNameImpl 0 false ctx fn |> removeDuplicatesFromInheritingTypes
+  let getAllInheritancesAndSelf ctx ty = getAllInheritancesImpl 0 true ctx ty |> removeDuplicatesFromInheritingTypes
+  let getAllInheritancesAndSelfFromName ctx fn = getAllInheritancesFromNameImpl 0 true ctx fn |> removeDuplicatesFromInheritingTypes
 
   let createFunctionInterface (funcs: {| ty: FuncType<Type>; typrms: TypeParam list; comments: Comment list; loc: Location; isNewable: bool |} list) =
     let usedTyprms =
@@ -968,31 +986,62 @@ module Statement =
 
   let introduceAdditionalInheritance (stmts: Statement list) : Statement list =
     let rec go stmts =
-      let likeIntfDict = new Dict<string, Class>()
-      for stmt in stmts do
-        match stmt with
-        | ClassDef (c & { name = Some name; isInterface = true }) ->
-          if name <> "Like" && name.EndsWith("Like") then
-            let origName = name.Substring(0, name.Length - "Like".Length)
-            likeIntfDict.Add(origName, c)
-        | _ -> ()
-
       stmts |> List.map (function
         | ClassDef (c & { name = Some name }) ->
           let inherits = ResizeArray(c.implements)
 
-          for _, m in c.members do
+          let has tyName =
+            name = tyName || inherits.Exists(fun t ->
+              match t with
+              | Ident { name = [name'] }
+              | App (AIdent { name = [name'] }, _, _) -> tyName = name'
+              | _ -> false
+            )
+
+          let inline app t ts loc =
+            App (AIdent { name = [t]; fullName = None; loc = loc}, ts, loc)
+
+          for ma, m in c.members do
             match m with
-            | SymbolIndexer (name, { returnType = ty }, _) ->
-              // iterator & iterable iterator
-              if name = "Symbol.iterator" then inherits.Add(ty)
+            // iterator & iterable iterator
+            | SymbolIndexer ("iterator", { returnType = ty }, _) ->
+              match ty with
+              | App (AIdent { name = ["Iterator"] }, [argTy], _) when not (has "Iterable") ->
+                inherits.Add(app "Iterable" [argTy] ma.loc)
+              | App (AIdent { name = ["IterableIterator"] }, [argTy], _) when not (has "IterableIterator") ->
+                inherits.Add(app "IterableIterator" [argTy] ma.loc)
+              | _ -> ()
+
+            // async iterator & iterable iterator
+            | SymbolIndexer ("asyncIterator", { returnType = ty }, _) ->
+              match ty with
+              | App (AIdent { name = ["AsyncIterator"] }, [argTy], _) when not (has "AsyncIterable") ->
+                inherits.Add(app "AsyncIterable" [argTy] ma.loc)
+              | App (AIdent { name = ["AsyncIterableIterator"] }, [argTy], _) when not (has "AsyncIterableIterator") ->
+                inherits.Add(app "AsyncIterableIterator" [argTy] ma.loc)
+              | _ -> ()
+
+            // ArrayLike
+            | Indexer ({ args = [Choice1Of2 { value = Prim Number } | Choice2Of2 (Prim Number)]; returnType = retTy }, _)
+              when not (has "ArrayLike") -> inherits.Add(app "ArrayLike" [retTy] ma.loc)
+
+            // PromiseLike
+            | Method ("then", { args = [Choice1Of2 { name = "onfulfilled"; value = onfulfilled }; Choice1Of2 { name = "onrejected" }] }, _)
+              when not (has "PromiseLike") ->
+              match onfulfilled with
+              | Function { args = [Choice1Of2 { value = t } | Choice2Of2 t] } ->
+                inherits.Add(app "PromiseLike" [t] ma.loc)
+              | Union { types = ts } ->
+                for t in ts do
+                  match t with
+                  | Function { args = [Choice1Of2 { value = t } | Choice2Of2 t] } ->
+                    inherits.Add(app "PromiseLike" [t] ma.loc)
+                  | _ -> ()
+              | _ -> ()
+
             | _ -> ()
 
-          if likeIntfDict.ContainsKey(name) then
-            let likeIntf = likeIntfDict.[name]
-            failwith "TODO"
-
-          ClassDef { c with implements = List.ofSeq inherits }
+          ClassDef { c with implements = List.ofSeq inherits |> List.distinct }
         | x -> x
       )
     go stmts
@@ -1540,7 +1589,7 @@ let runAll (srcs: SourceFile list) (opts: TyperOptions) =
       mapStatements (fun stmts ->
         stmts
               |> Statement.merge // merge modules, interfaces, etc
-              // |> Statement.introduceAdditionalInheritance
+              |> Statement.introduceAdditionalInheritance // add common inheritances which tends not to be defined by `extends` or `implements`
               |> Statement.detectPatterns // group statements with pattern
               |> Statement.replaceAliasToFunctionWithInterface // replace alias to function type with a function interface
       )

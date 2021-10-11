@@ -44,7 +44,7 @@ jobs:
            | dotnet tool restore
 
       - name: Install OCaml Dependencies
-        run: opam install js_of_ocaml js_of_ocaml-compiler js_of_ocaml-ppx
+        run: opam install js_of_ocaml js_of_ocaml-compiler js_of_ocaml-ppx gen_js_api
 
       - name: Run FAKE
         run: dotnet fake build target TestBuild

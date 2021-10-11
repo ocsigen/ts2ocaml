@@ -71,8 +71,9 @@ Target.create "Watch" <| fun _ ->
     dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w"
 
 module Test =
-    let duneTool = platformTool "dune"
-    let dune args = run duneTool "./" args
+    let opamTool = platformTool "opam"
+    let opam args = run opamTool "./" args
+    let dune args = run opamTool "./" (sprintf "exec -- dune %s" args)
 
     let generateBindings () =
         let ts2ocaml args files =

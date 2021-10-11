@@ -42,10 +42,11 @@ jobs:
       - name: Install .NET Dependencies
         run: dotnet restore
            | dotnet tool restore
-           
+
       - name: Install OCaml Dependencies
-        run: opam install dune js_of_ocaml js_of_ocaml-compiler js_of_ocaml-ppx
-           | eval $(opam env)
+        run: opam install js_of_ocaml js_of_ocaml-compiler js_of_ocaml-ppx
+
+      - run: eval $(opam env)
 
       - name: Run FAKE
         run: dotnet fake build target TestBuild

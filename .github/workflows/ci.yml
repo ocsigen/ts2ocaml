@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ bootstrap ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        dotnet:
+          - 5.0.x
+        node-version:
+          - 14.x
+        ocaml-compiler:
+          - 4.12.x
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use .NET ${{ matrix.dotnet }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          dune-cache: true
+
+      - name: Install .NET Dependencies
+        run: dotnet restore
+           | dotnet tool restore
+           
+      - name: Install OCaml Dependencies
+        run: opam install js_of_ocaml js_of_ocaml-compiler js_of_ocaml-ppx
+
+      - name: Run FAKE
+        run: dotnet fake build target TestBuild

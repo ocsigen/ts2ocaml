@@ -25,11 +25,6 @@
 ;   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule
-  (targets monaco_editor.ml)
-  (deps monaco_editor.mli)
-  (action (run %{bin:gen_js_api} %{deps})))
-
-(rule
   (targets csstype.ml)
   (deps csstype.mli)
   (action (run %{bin:gen_js_api} %{deps})))
@@ -62,11 +57,6 @@
 (rule
   (targets yargs.ml)
   (deps yargs.mli)
-  (action (run %{bin:gen_js_api} %{deps})))
-
-(rule
-  (targets test.ml)
-  (deps test.mli)
   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule

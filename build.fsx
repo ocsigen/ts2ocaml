@@ -86,6 +86,7 @@ module Test =
             !! "node_modules/typescript/lib/typescript.d.ts";
             !! "node_modules/@types/scheduler/tracing.d.ts";
             !! "node_modules/csstype/index.d.ts";
+            !! "node_modules/@types/prop-types/index.d.ts";
             !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts";
             !! "node_modules/@types/react-modal/index.d.ts";
             !! "node_modules/@types/yargs-parser/index.d.ts";

@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Use OCaml ${{ matrix.ocaml-version }}
+      - name: Use OCaml ${{ matrix.ocaml-compiler }}
         uses: ocaml/setup-ocaml@v2
         with:
           ocaml-compiler: ${{ matrix.ocaml-compiler }}

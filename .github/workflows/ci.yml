@@ -22,6 +22,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
 
       - name: Use .NET ${{ matrix.dotnet }}
         uses: actions/setup-dotnet@v1
@@ -44,7 +46,7 @@ jobs:
            | dotnet tool restore
 
       - name: Install OCaml Dependencies
-        run: opam install js_of_ocaml js_of_ocaml-compiler js_of_ocaml-ppx gen_js_api
+        run: opam install js_of_ocaml-compiler js_of_ocaml-ppx gen_js_api
 
       - name: Run FAKE
         run: dotnet fake build target TestBuild

@@ -349,29 +349,39 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     | Function f ->
       let renamer = new OverloadRenamer(used=(flags.avoidTheseArgumentNames |> Set.map (fun s -> "value", s)))
       let inline rename x = renamer.Rename "value" x
-      let rec go acc (args: Choice<FieldLike, Type> list) =
+      // warning 16 (this optional argument cannot be erased) is widened since OCaml 4.12:
+      // labelled arguments after the optional argument does not prevent warning 16 anymore, so
+      //
+      //    let f ~x ?y ~z = ..
+      //
+      // now should have an extra unit argument.
+      let rec go hasOptional acc (args: Choice<FieldLike, Type> list) =
         let flags = { flags with variance = -flags.variance }
         match args with
         | [] -> acc + Type.void_
         | Choice1Of2 x :: [] when acc = empty && not x.isOptional ->
-          go acc [Choice2Of2 x.value] // do not generate label if it is the only argument and is not optional
+          go hasOptional acc [Choice2Of2 x.value] // do not generate label if it is the only argument and is not optional
         | Choice1Of2 x :: [] when f.isVariadic ->
           assert (not x.isOptional)
-          acc + tprintf "%s:" (Naming.valueName x.name |> rename) + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx x.value + forceSkipAttr (str " [@js.variadic]"))
-        | Choice2Of2 t :: [] | Choice1Of2 { value = t } :: [] when f.isVariadic ->
-          acc + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx t + forceSkipAttr (str " [@js.variadic]"))
+          let t = tprintf "%s:" (Naming.valueName x.name |> rename) + between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx x.value + forceSkipAttr (str " [@js.variadic]"))
+          if not hasOptional then acc + t
+          else acc + t +@ " -> " + Type.void_
+        | Choice2Of2 t :: [] when f.isVariadic ->
+          let t = between "(" ")" (emitTypeImpl { flags with forceVariadic = true } overrideFunc ctx t + forceSkipAttr (str " [@js.variadic]"))
+          if not hasOptional then acc + t
+          else acc + t +@ " -> " + Type.void_
         | Choice1Of2 x :: xs ->
           let prefix =
             if x.isOptional then "?" else ""
           let ty = emitTypeImpl { flags with needParen = true } overrideFunc ctx x.value
           let t = tprintf "%s%s:" prefix (Naming.valueName x.name |> rename) + ty
-          if not x.isOptional && List.isEmpty xs then acc + t
-          else go (acc + t +@ " -> ") xs
+          if not x.isOptional && not hasOptional && List.isEmpty xs then acc + t
+          else go (hasOptional || x.isOptional) (acc + t +@ " -> ") xs
         | Choice2Of2 t :: xs ->
           let t = emitTypeImpl { flags with needParen = true } overrideFunc ctx t
-          if List.isEmpty xs then acc + t
-          else go (acc + t +@ " -> ") xs
-      let lhs = go empty f.args
+          if not hasOptional && List.isEmpty xs then acc + t
+          else go hasOptional (acc + t +@ " -> ") xs
+      let lhs = go false empty f.args
       let rhs =
         let argNames =
           f.args |> List.choose (function Choice1Of2 x -> Some x.name | Choice2Of2 _ -> None) |> Set.ofList

@@ -5,7 +5,7 @@
   (preprocess (pps gen_js_api.ppx))
   (modes js)
   (js_of_ocaml
-    (flags)
+    (flags --pretty --enable deadcode --enable strict --enable inline)
     (javascript_files stub.js))
 )
 

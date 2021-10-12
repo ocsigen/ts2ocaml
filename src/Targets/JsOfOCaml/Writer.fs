@@ -781,6 +781,8 @@ let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kind
     Some {| comments = []; clause = clause; loc = s.loc; origText = sprintf "export %s %s" kindString name; kind = Set.ofList kind |}
 
 let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Class) (additionalMembers: list<StructuredTextItem>, additionalKnownTypes: Set<KnownType>, forceScoped) =
+  let emitType orf ctx ty = emitTypeImpl flags orf ctx ty
+
   let typrms = List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams
   let name, isAnonymous, selfTy, overrideFunc =
     match c.name with
@@ -817,14 +819,9 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
         selfTy,
         OverrideFunc.combine overrideFunc orf
 
-  let overrideFunc =
-    OverrideFunc.combine overrideFunc <|
-      fun _emitType _ctx -> function
-        | PolymorphicThis -> _emitType _ctx selfTy |> Some
-        | _ -> None
+  let knownTypes = Statement.getKnownTypes ctx [ClassDef c] |> Set.union additionalKnownTypes
 
   let node, shouldBeScoped =
-    let knownTypes = Statement.getKnownTypes ctx [ClassDef c] |> Set.union additionalKnownTypes
     let ctx, innerCtx =
       (),
       {| (ctx |> Context.ofChildNamespace name) with
@@ -834,27 +831,33 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
               // no need to generate t_n types for anonymous interfaces
               ctx.options |> jsWith (fun o -> o.safeArity <- o.safeArity.WithProvide(false)) |}
 
-    let emitType = emitTypeImpl flags
-    let emitType_ = emitType overrideFunc
+    let typrms = List.map (fun (tp: TypeParam) -> tprintf "'%s" tp.name) c.typeParams
 
     let labels =
+      let emitType_ = emitType overrideFunc // labels should not have polymorphic this type
       getLabelsOfFullName emitType_ innerCtx (List.rev innerCtx.currentNamespace) c.typeParams
       |> function Choice1Of2 xs -> xs | Choice2Of2 (_, x) -> [x]
-    let selfTyText =
-      GetSelfTyText.class_ { flags with failContravariantTypeVar = true } overrideFunc innerCtx c
 
     let polymorphicThis =
-      getLabelOfFullName emitType_ innerCtx (List.rev innerCtx.currentNamespace) c.typeParams
-      |> function Choice1Of2 xs -> xs | Choice2Of2 (_, x) -> [x]
-      |> emitLabelsBody innerCtx
-      |> between "[> " " ]"
-      |> fun x -> Type.app Type.intf [x]
+      if not isAnonymous && not (List.isEmpty labels) then
+        Type.appOpt (str "this") (str "'tags" :: typrms)
+      else
+        Type.appOpt (str "t") typrms
+
+    let overrideFunc =
+      OverrideFunc.combine overrideFunc <|
+        fun _emitType _ctx -> function
+          | PolymorphicThis -> Some polymorphicThis
+          | _ -> None
+
+    let emitType_ ctx ty = emitType overrideFunc ctx ty
 
     let members = [
       for ma, m in c.members do
-        yield! emitMembers emitType_ innerCtx name selfTy ma m
+        yield! emitMembers emitType_ innerCtx name PolymorphicThis ma m
       yield! additionalMembers
     ]
+
     let shouldBeScoped =
       forceScoped
       || (c.members |> List.exists (fun (ma, m) ->
@@ -864,24 +867,45 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     let docCommentLines =
       c.comments |> List.distinct |> List.map emitCommentBody
 
-    let items = [
-      yield! emitTypeAliases flags overrideFunc innerCtx c.typeParams selfTyText
-
+    let tagsDefinition =
       if not isAnonymous && not (List.isEmpty labels) && innerCtx.options.inheritWithTags.HasProvide then
         let alias =
           emitTypeAliasesImpl
             "tags" { flags with forceSkipAttributes = true } overrideFunc innerCtx c.typeParams (emitLabels innerCtx labels)
             (fun x -> [typeAlias x.name (x.tyargs |> List.map snd) x.target])
           |> concat newline
-        yield Attr.js_stop_start_implem alias alias |> TypeDef
+        Attr.js_stop_start_implem alias alias |> TypeDef |> Some
+      else None
 
+    let polymorphicThisDefinition =
+      if not isAnonymous && not (List.isEmpty labels) then
+        let tags =
+          getLabelOfFullName emitType_ innerCtx (List.rev innerCtx.currentNamespace) c.typeParams
+          |> function Choice1Of2 xs -> xs | Choice2Of2 (_, x) -> [x]
+          |> emitLabelsBody innerCtx
+          |> between "[> " " ]"
+        typeAlias "this"
+          (str "'tags" :: typrms)
+          (Type.app Type.intf [str "'tags"] +@ " constraint 'tags = " + tags)
+        |> TypeDef |> Some
+      else None
+
+    let typeDefinition =
+      let selfTyText =
+        GetSelfTyText.class_ { flags with failContravariantTypeVar = true } overrideFunc innerCtx c
+      emitTypeAliases flags overrideFunc innerCtx c.typeParams selfTyText
+
+    let items = [
+      yield! typeDefinition
+      yield! tagsDefinition |> Option.toList
+      yield! polymorphicThisDefinition |> Option.toList
       yield! members
 
       if not isAnonymous && not (List.isEmpty labels) then
         let castTy =
           Type.arrow [
             polymorphicThis
-            Type.appOpt (str "t") (typrms |> List.map (emitType_ innerCtx));
+            Type.appOpt (str "t") typrms
           ]
         yield ScopeIndependent (val_ "cast_from" castTy +@ " " + Attr.js_custom_val (let_ "cast_from" [] None (str "Obj.magic")))
 

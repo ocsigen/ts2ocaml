@@ -6,7 +6,7 @@
     of gen_js_api *)
 
 
-[@@@ocaml.warning "-7-32-33-39"]
+[@@@ocaml.warning "-7-26-32-33-39"]
 
 open Ts2ocaml
 module TypeScript = Typescript.Export
@@ -23,7 +23,17 @@ let () =
   Printf.printf "%f\n" (Math.cos (Math.pi () /. 2.0));
   Printf.printf "%f\n" (Number.parseInt ~string:"42" ());
   let s = String.bold (String.of_ml "foo") in
-  Printf.printf "%s\n" s;
+
+  let regex = RegExp.create' ~pattern:"[abc]+" () in
+  let result = RegExp.exec regex ~string:"cabaret" in
+  let () =
+    begin match result with
+    | Some xs ->
+      let ys = Array.sort xs () in
+      Dom.Console.log (Dom.console ()) ~data:[Obj.magic ys];
+    | None -> ()
+    end
+  in
   Printf.printf "typescript version: %s\n" (TypeScript.version ());
   ()
 ;;

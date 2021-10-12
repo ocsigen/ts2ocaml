@@ -60,7 +60,10 @@ Target.create "Restore" <| fun _ ->
         (DotNet.Options.withWorkingDirectory __SOURCE_DIRECTORY__)
         "ts2ocaml.sln"
 
-Target.create "YarnInstall" <| fun _ -> Yarn.install id
+Target.create "YarnInstall" <| fun _ ->
+    Yarn.installFrozenLockFile (fun ``params`` ->
+        { ``params`` with
+            WorkingDirectory = "./" })
 
 Target.create "Prepare" ignore
 

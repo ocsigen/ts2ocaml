@@ -24,8 +24,7 @@ let () =
   Printf.printf "%f\n" (Number.parseInt ~string:"42" ());
   let s = String.bold (String.of_ml "foo") in
 
-  let regex = RegExp.create' ~pattern:"[abc]+" () in
-  let result = RegExp.exec regex ~string:"cabaret" in
+  let result = String.match_ (String.of_ml "cabaret") ~regexp:(`String "[abc]+") in
   let () =
     begin match result with
     | Some xs ->

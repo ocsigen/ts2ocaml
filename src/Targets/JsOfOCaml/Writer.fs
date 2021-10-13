@@ -958,7 +958,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
   |> Trie.addOrUpdate [name] node StructuredTextNode.union
   |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = (if node.scoped <> Scoped.No then Scoped.Yes else Scoped.No); exports = Option.toList export |} StructuredTextNode.union
 
-let emitValue flags overrideFunc ctx v nameOverride =
+let emitValue flags overrideFunc ctx v =
   let emitType = emitTypeImpl flags
   let emitType_ = emitType overrideFunc
 
@@ -974,10 +974,8 @@ let emitValue flags overrideFunc ctx v nameOverride =
     else ScopeIndependent empty :: [v.comments |> List.map emitCommentBody |> concat newline |> docComment |> ScopeIndependent]
   let item =
     let ty = emitType_ ctx ty
-    let name =
-      match nameOverride with Some name -> name | None -> v.name
     overloaded (fun rename -> [
-      val_ (Naming.valueName name |> rename) ty + str " " + attr
+      val_ (Naming.valueName v.name |> rename) ty + str " " + attr
     ])
   comments @ [item]
 
@@ -987,6 +985,39 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
   let emitType = emitTypeImpl emitTypeFlags
   let emitType_ = emitType overrideFunc
   let emitSelfType = emitTypeImpl { emitTypeFlags with failContravariantTypeVar = true } overrideFunc
+
+  /// convert interface members to appropriate statements
+  let intfToStmts (moduleIntf: Class) ctx flags overrideFunc =
+    let emitAsValue name typ typrms isConst (memberAttr: MemberAttribute) =
+      let v =
+        { name = name; typ = typ; typeParams = typrms;
+          isConst = isConst; isExported = Exported.No; accessibility = Some memberAttr.accessibility;
+          comments = memberAttr.comments; loc = memberAttr.loc }
+      emitValue flags overrideFunc ctx v
+    [ for ma, m in moduleIntf.members do
+        let cmt =
+          if List.isEmpty ma.comments then []
+          else ScopeIndependent empty :: [ma.comments |> List.map emitCommentBody |> concat newline |> docComment |> ScopeIndependent]
+        match m with
+        | Field (fl, mt, tps) ->
+          yield! emitAsValue fl.name fl.value tps (mt = ReadOnly) ma
+        | Getter fl ->
+          yield! emitAsValue fl.name fl.value [] true ma
+        | Setter _ -> ()
+        | Method (name, ft, tps) ->
+          yield! emitAsValue name (Function ft) tps true ma
+        | New (ft, _tps) ->
+          let ty = emitType_ ctx (Function ft)
+          yield! cmt
+          yield overloaded (fun rename -> [val_ (rename "create") ty + str " " + Attr.js_create])
+        | FunctionInterface (ft, _tps) ->
+          let ty = emitType_ ctx (Function ft)
+          yield! cmt
+          yield overloaded (fun rename -> [val_ (rename "invoke") ty + str " " + Attr.js_invoke])
+        | Constructor _ -> failwith "impossible_emitStructuredDefinition_Pattern_intfToModule_Constructor" // because interface!
+        | Indexer (ft, _) -> yield ScopeIndependent (comment (tprintf "unsupported indexer of type: %s" (Type.pp (Function ft))))
+        | UnknownMember (Some msg) -> yield ScopeIndependent (commentStr msg)
+        | SymbolIndexer _ | UnknownMember None -> () ]
 
   let rec folder ctx (current: StructuredText) (s: Statement) : StructuredText =
     let getModule name =
@@ -1051,68 +1082,52 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           getModule ta.name |> Trie.setOrUpdate node StructuredTextNode.union
         setModule ta.name module' |> addExport ta.name [Kind.Type] "type"
     | Pattern p ->
-      let fallback () =
+      let fallback current =
         p.underlyingStatements |> List.fold (folder ctx) current
-      let intfToStmts suffix (moduleIntf: Class) ctx flags overrideFunc =
-        let emitAsValue name typ typrms isConst (memberAttr: MemberAttribute) =
-          let v =
-            { name = name; typ = typ; typeParams = typrms;
-              isConst = isConst; isExported = Exported.No; accessibility = Some memberAttr.accessibility;
-              comments = memberAttr.comments; loc = memberAttr.loc }
-          let nameOverride = suffix |> Option.map (fun s -> name + s)
-          emitValue flags overrideFunc ctx v nameOverride
-        [ for ma, m in moduleIntf.members do
-            let cmt =
-              if List.isEmpty ma.comments then []
-              else ScopeIndependent empty :: [ma.comments |> List.map emitCommentBody |> concat newline |> docComment |> ScopeIndependent]
-            match m with
-            | Field (fl, mt, tps) ->
-              yield! emitAsValue fl.name fl.value tps (mt = ReadOnly) ma
-            | Getter fl ->
-              yield! emitAsValue fl.name fl.value [] true ma
-            | Setter _ -> ()
-            | Method (name, ft, tps) ->
-              yield! emitAsValue name (Function ft) tps true ma
-            | New (ft, _tps) ->
-              let ty = emitType_ ctx (Function ft)
-              yield! cmt
-              yield overloaded (fun rename -> [val_ (rename "create") ty + str " " + Attr.js_create])
-            | FunctionInterface (ft, _tps) ->
-              let ty = emitType_ ctx (Function ft)
-              yield! cmt
-              yield overloaded (fun rename -> [val_ (rename "invoke") ty + str " " + Attr.js_invoke])
-            | Constructor _ -> failwith "impossible_emitStructuredDefinition_Pattern_intfToModule_Constructor" // because interface!
-            | Indexer (ft, _) -> yield ScopeIndependent (comment (tprintf "unsupported indexer of type: %s" (Type.pp (Function ft))))
-            | UnknownMember (Some msg) -> yield ScopeIndependent (commentStr msg)
-            | SymbolIndexer _ | UnknownMember None -> () ]
       match p with
       | ImmediateInstance (intf & { name = Some intfName }, value) when ctx.options.simplifyImmediateInstance ->
         let knownTypesInMembers = Statement.getKnownTypes ctx [ClassDef intf]
+        let createModule () =
+          let items = intfToStmts intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
+          {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scoped = Scoped.Force value.name |}
         if intfName <> value.name || knownTypesInMembers |> Set.contains (KnownType.Ident (ctx |> Context.getFullName [intfName])) then
-          let current =
-            emitClass
-              emitTypeFlags OverrideFunc.noOverride
-              ctx current intf
-              (intfToStmts (Some "Static") intf, knownTypesInMembers, Some (Scoped.Force value.name))
-          folder ctx current (Value value)
+          let name = value.name + "Static"
+          getModule name
+          |> Trie.setOrUpdate (createModule ()) StructuredTextNode.union
+          |> setModule name
+          |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = Scoped.Yes |} StructuredTextNode.union
+          |> addExport name [Kind.Value] (if value.isConst then "const" else "let")
+          |> fallback
         else
-          let module' =
-            let items = intfToStmts None intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
-            getModule value.name
-            |> Trie.setOrUpdate {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scoped = Scoped.Force value.name |} StructuredTextNode.union
-          setModule value.name module'
+          getModule value.name
+          |> Trie.setOrUpdate (createModule ()) StructuredTextNode.union
+          |> setModule value.name
           |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = Scoped.Yes |} StructuredTextNode.union
           |> addExport value.name [Kind.Type; Kind.ClassLike; Kind.Value] "interface"
       | ImmediateConstructor (baseIntf, ctorIntf, ctorValue) when ctx.options.simplifyImmediateConstructor ->
-        emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts None ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf], Some (Scoped.Force ctorValue.name))
-      | _ -> fallback ()
-    | Value v ->
-      setNode
-        {| StructuredTextNode.empty with
-            items = emitValue emitTypeFlags overrideFunc ctx v None
-            knownTypes = knownTypes ()
-            scoped = Scoped.Yes |}
-      |> addExport v.name [Kind.Value] (if v.isConst then "const" else "let")
+        emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf], Some (Scoped.Force ctorValue.name))
+      | _ -> fallback current
+    | Value value ->
+      match value.typ with
+      | AnonymousInterface intf ->
+        let knownTypes = knownTypes ()
+        let items = intfToStmts intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
+        getModule value.name
+        |> Trie.setOrUpdate {| StructuredTextNode.empty with items = items; knownTypes = knownTypes; scoped = Scoped.Force value.name |} StructuredTextNode.union
+        |> setModule value.name
+        |> Trie.setOrUpdate
+          {| StructuredTextNode.empty with
+              items = emitValue emitTypeFlags overrideFunc ctx value
+              knownTypes = knownTypes
+              scoped = Scoped.Yes |} StructuredTextNode.union
+        |> addExport value.name [Kind.Value] (if value.isConst then "const" else "let")
+      | _ ->
+        setNode
+          {| StructuredTextNode.empty with
+              items = emitValue emitTypeFlags overrideFunc ctx value
+              knownTypes = knownTypes ()
+              scoped = Scoped.Yes |}
+        |> addExport value.name [Kind.Value] (if value.isConst then "const" else "let")
     | Import _ -> current // nop
     | Export e ->
       let kind =
@@ -1129,6 +1144,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | FloatingComment c ->
       let cmt = ScopeIndependent empty :: (c.comments |> List.map (emitCommentBody >> comment >> ScopeIndependent))
       setNode {| StructuredTextNode.empty with items = ScopeIndependent empty :: cmt |}
+  and folder' ctx stmt node = folder ctx node stmt
 
   let anonymousInterfaces =
     rootCtx.anonymousInterfacesMap

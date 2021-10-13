@@ -1014,6 +1014,7 @@ module Statement =
     mapType Type.resolveErasedType ctx stmts
 
   type Dict<'k, 'v> = System.Collections.Generic.Dictionary<'k, 'v>
+  type HashSet<'v> = System.Collections.Generic.HashSet<'v>
 
   let introduceAdditionalInheritance (opts: TyperOptions) (stmts: Statement list) : Statement list =
     let rec go stmts =
@@ -1079,20 +1080,28 @@ module Statement =
 
   let detectPatterns (stmts: Statement list) : Statement list =
     let rec go stmts =
+      let inline eq (s1: string) (s2: string) = s1.Equals(s2, System.StringComparison.InvariantCultureIgnoreCase)
+
+      let cmp =
+        { new System.Collections.Generic.IEqualityComparer<string> with
+            member _.Equals(s1: string, s2: string) = eq s1 s2
+            member __.GetHashCode(s: string) = s.ToLowerInvariant().GetHashCode() }
+
       // declare var Foo: Foo
-      let valDict = new Dict<string, Value>()
+      let valDict = new Dict<string, Value>(cmp)
       // interface Foo { .. }
-      let intfDict = new Dict<string, Class>()
+      let intfDict = new Dict<string, Class>(cmp)
       // declare var Foo: FooConstructor
-      let ctorValDict = new Dict<string, Value>()
+      let ctorValDict = new Dict<string, Value>(cmp)
       // interface FooConstructor { .. }
-      let ctorIntfDict = new Dict<string, Class>()
+      let ctorIntfDict = new Dict<string, Class>(cmp)
+
 
       for stmt in stmts do
         match stmt with
         | Value (v & { name = name; typ = Ident { name = [intfName] } }) ->
-          if name = intfName then valDict.Add(name, v)
-          else if name + "Constructor" = intfName then ctorValDict.Add(name, v)
+          if eq name intfName then valDict.Add(name, v)
+          else if eq (name + "Constructor") intfName then ctorValDict.Add(name, v)
         | ClassDef (intf & { name = Some name; isInterface = true }) ->
           if name <> "Constructor" && name.EndsWith("Constructor") then
             let origName = name.Substring(0, name.Length - "Constructor".Length)
@@ -1101,25 +1110,37 @@ module Statement =
             intfDict.Add(name, intf)
         | _ -> ()
 
-      let immediateInstances = Set.intersectMany [Set.ofSeq valDict.Keys; Set.ofSeq intfDict.Keys]
-      let immediateCtors = Set.intersectMany [Set.ofSeq intfDict.Keys; Set.ofSeq ctorValDict.Keys; Set.ofSeq ctorIntfDict.Keys]
+      let intersect (other: string seq) (set: HashSet<string>) =
+        let otherSet = new HashSet<string>(other, cmp)
+        for s in set do
+          if not <| otherSet.Contains(s) then
+            set.Remove(s) |> ignore
+        set
+
+      let immediateInstances =
+        new HashSet<string>(valDict.Keys, cmp)
+        |> intersect intfDict.Keys
+      let immediateCtors =
+        new HashSet<string>(intfDict.Keys, cmp)
+        |> intersect ctorValDict.Keys
+        |> intersect ctorIntfDict.Keys
 
       stmts |> List.choose (function
         | Value (v & { name = name; typ = Ident { name = [intfName] } }) ->
-          if name = intfName && immediateInstances |> Set.contains name && valDict.[name] = v then
+          if eq name intfName && immediateInstances.Contains name && valDict.[name] = v then
             let intf = intfDict.[name]
             Some (Pattern (ImmediateInstance (intf, v)))
-          else if name + "Constructor" = intfName && immediateCtors |> Set.contains name && ctorValDict.[name] = v then
+          else if name + "Constructor" = intfName && immediateCtors.Contains name && ctorValDict.[name] = v then
             let baseIntf = intfDict.[name]
             let ctorIntf = ctorIntfDict.[name]
             Some (Pattern (ImmediateConstructor (baseIntf, ctorIntf, v)))
           else
             Some (Value v)
         | ClassDef (intf & { name = Some name; isInterface = true }) ->
-          if   (immediateInstances |> Set.contains name || immediateCtors |> Set.contains name) then None
+          if   (immediateInstances.Contains name || immediateCtors.Contains name) then None
           else if name <> "Constructor" && name.EndsWith("Constructor") then
             let origName = name.Substring(0, name.Length - "Constructor".Length)
-            if immediateCtors |> Set.contains origName then None
+            if immediateCtors.Contains origName then None
             else Some (ClassDef intf)
           else Some (ClassDef intf)
         | Module m -> Some (Module { m with statements = go m.statements })

@@ -488,8 +488,21 @@ type ExportWithKind = {|
   kind: Set<Kind>
 |}
 
+type [<RequireQualifiedAccess>] Scoped =
+  | Force of string
+  | Yes
+  | No
+with
+  static member union s1 s2 =
+    match s1, s2 with
+    | No, No -> No
+    | Force s1, Force s2 when s1 <> s2 ->
+      failwithf "impossible_Scoped_union(%s, %s)" s1 s2
+    | Force s, _ | _, Force s -> Force s
+    | Yes, _ | _, Yes -> Yes
+
 type StructuredTextNode = {|
-  shouldBeScoped: bool
+  scoped: Scoped
   items: StructuredTextItem list
   docCommentLines: text list
   exports: ExportWithKind list
@@ -497,9 +510,9 @@ type StructuredTextNode = {|
 |}
 module StructuredTextNode =
   let empty : StructuredTextNode =
-    {| shouldBeScoped = false; items = []; docCommentLines = []; exports = []; knownTypes = Set.empty |}
+    {| scoped = Scoped.No; items = []; docCommentLines = []; exports = []; knownTypes = Set.empty |}
   let union (a: StructuredTextNode) (b: StructuredTextNode) : StructuredTextNode =
-    {| shouldBeScoped = a.shouldBeScoped || b.shouldBeScoped
+    {| scoped = Scoped.union a.scoped b.scoped
        items = List.append a.items b.items
        docCommentLines = List.append a.docCommentLines b.docCommentLines
        exports = List.append a.exports b.exports
@@ -780,7 +793,7 @@ let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kind
   | Some clause ->
     Some {| comments = []; clause = clause; loc = s.loc; origText = sprintf "export %s %s" kindString name; kind = Set.ofList kind |}
 
-let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Class) (additionalMembers: list<StructuredTextItem>, additionalKnownTypes: Set<KnownType>, forceScoped) =
+let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Class) (additionalMembers: Context -> EmitTypeFlags -> OverrideFunc -> list<StructuredTextItem>, additionalKnownTypes: Set<KnownType>, forceScoped: Scoped option) =
   let emitType orf ctx ty = emitTypeImpl flags orf ctx ty
 
   let typrms = List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams
@@ -821,7 +834,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
 
   let knownTypes = Statement.getKnownTypes ctx [ClassDef c] |> Set.union additionalKnownTypes
 
-  let node, shouldBeScoped =
+  let node =
     let ctx, innerCtx =
       (),
       {| (ctx |> Context.ofChildNamespace name) with
@@ -855,14 +868,18 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     let members = [
       for ma, m in c.members do
         yield! emitMembers emitType_ innerCtx name PolymorphicThis ma m
-      yield! additionalMembers
+      yield! additionalMembers innerCtx flags overrideFunc
     ]
 
-    let shouldBeScoped =
-      forceScoped
-      || (c.members |> List.exists (fun (ma, m) ->
-        if ma.isStatic then true
-        else match m with Constructor _ -> true | _ -> false)) // constructor generates global value
+    let scoped =
+      let scoped = forceScoped |> Option.defaultValue Scoped.No
+      let shouldBeScoped =
+        c.members |> List.exists (fun (ma, m) ->
+          if ma.isStatic then true
+          else match m with Constructor _ -> true | _ -> false) // constructor generates global value
+      Scoped.union
+        scoped
+        (if shouldBeScoped then Scoped.Yes else Scoped.No)
 
     let docCommentLines =
       c.comments |> List.distinct |> List.map emitCommentBody
@@ -927,22 +944,21 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
             ])
     ]
 
-    {| StructuredTextNode.empty with items = items; docCommentLines = docCommentLines; knownTypes = knownTypes; shouldBeScoped = shouldBeScoped |},
-    shouldBeScoped
+    {| StructuredTextNode.empty with items = items; docCommentLines = docCommentLines; knownTypes = knownTypes; scoped = scoped |}
 
   let export =
     match c.name with
     | None -> None
     | Some name ->
       let kind =
-        if shouldBeScoped then [Kind.Type; Kind.ClassLike; Kind.Value]
+        if node.scoped <> Scoped.No then [Kind.Type; Kind.ClassLike; Kind.Value]
         else [Kind.Type; Kind.ClassLike]
       getExportFromStatement ctx name kind (if c.isInterface then "interface" else "class") (ClassDef c)
   current
   |> Trie.addOrUpdate [name] node StructuredTextNode.union
-  |> Trie.setOrUpdate {| StructuredTextNode.empty with shouldBeScoped = shouldBeScoped; exports = Option.toList export |} StructuredTextNode.union
+  |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = (if node.scoped <> Scoped.No then Scoped.Yes else Scoped.No); exports = Option.toList export |} StructuredTextNode.union
 
-let emitValue flags overrideFunc ctx v =
+let emitValue flags overrideFunc ctx v nameOverride =
   let emitType = emitTypeImpl flags
   let emitType_ = emitType overrideFunc
 
@@ -958,8 +974,10 @@ let emitValue flags overrideFunc ctx v =
     else ScopeIndependent empty :: [v.comments |> List.map emitCommentBody |> concat newline |> docComment |> ScopeIndependent]
   let item =
     let ty = emitType_ ctx ty
+    let name =
+      match nameOverride with Some name -> name | None -> v.name
     overloaded (fun rename -> [
-      val_ (Naming.valueName v.name |> rename) ty + str " " + attr
+      val_ (Naming.valueName name |> rename) ty + str " " + attr
     ])
   comments @ [item]
 
@@ -1001,11 +1019,11 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       | None -> result
       | Some v ->
         let kind =
-          if v.shouldBeScoped then [Kind.Module; Kind.Value]
+          if v.scoped <> Scoped.No then [Kind.Module; Kind.Value]
           else [Kind.Module]
         result |> addExport m.name kind (if m.isNamespace then "namespace" else "module")
     | ClassDef c ->
-      emitClass emitTypeFlags OverrideFunc.noOverride ctx current c ([], Set.empty, false)
+      emitClass emitTypeFlags OverrideFunc.noOverride ctx current c ((fun _ _ _ -> []), Set.empty, None)
     | EnumDef e ->
       let module' =
         let ctx = ctx |> Context.ofChildNamespace e.name
@@ -1035,14 +1053,14 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | Pattern p ->
       let fallback () =
         p.underlyingStatements |> List.fold (folder ctx) current
-      let intfToStmts name (moduleIntf: Class) =
-        let ctx = ctx |> Context.ofChildNamespace name
+      let intfToStmts suffix (moduleIntf: Class) ctx flags overrideFunc =
         let emitAsValue name typ typrms isConst (memberAttr: MemberAttribute) =
           let v =
             { name = name; typ = typ; typeParams = typrms;
               isConst = isConst; isExported = Exported.No; accessibility = Some memberAttr.accessibility;
               comments = memberAttr.comments; loc = memberAttr.loc }
-          emitValue emitTypeFlags overrideFunc ctx v
+          let nameOverride = suffix |> Option.map (fun s -> name + s)
+          emitValue flags overrideFunc ctx v nameOverride
         [ for ma, m in moduleIntf.members do
             let cmt =
               if List.isEmpty ma.comments then []
@@ -1068,23 +1086,32 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
             | UnknownMember (Some msg) -> yield ScopeIndependent (commentStr msg)
             | SymbolIndexer _ | UnknownMember None -> () ]
       match p with
-      | ImmediateInstance (intf, value) when ctx.options.simplifyImmediateInstance ->
-        let module' =
-          let items = intfToStmts value.name intf
-          getModule value.name
-          |> Trie.setOrUpdate {| StructuredTextNode.empty with items = items; knownTypes = knownTypes (); shouldBeScoped = true |} StructuredTextNode.union
-        setModule value.name module'
-        |> Trie.setOrUpdate {| StructuredTextNode.empty with shouldBeScoped = true |} StructuredTextNode.union
-        |> addExport value.name [Kind.Type; Kind.ClassLike; Kind.Value] "interface"
+      | ImmediateInstance (intf & { name = Some intfName }, value) when ctx.options.simplifyImmediateInstance ->
+        let knownTypesInMembers = Statement.getKnownTypes ctx [ClassDef intf]
+        if intfName <> value.name || knownTypesInMembers |> Set.contains (KnownType.Ident (ctx |> Context.getFullName [intfName])) then
+          let current =
+            emitClass
+              emitTypeFlags OverrideFunc.noOverride
+              ctx current intf
+              (intfToStmts (Some "Static") intf, knownTypesInMembers, Some (Scoped.Force value.name))
+          folder ctx current (Value value)
+        else
+          let module' =
+            let items = intfToStmts None intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
+            getModule value.name
+            |> Trie.setOrUpdate {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scoped = Scoped.Force value.name |} StructuredTextNode.union
+          setModule value.name module'
+          |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = Scoped.Yes |} StructuredTextNode.union
+          |> addExport value.name [Kind.Type; Kind.ClassLike; Kind.Value] "interface"
       | ImmediateConstructor (baseIntf, ctorIntf, ctorValue) when ctx.options.simplifyImmediateConstructor ->
-        emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts ctorValue.name ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf], true)
+        emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts None ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf], Some (Scoped.Force ctorValue.name))
       | _ -> fallback ()
     | Value v ->
       setNode
         {| StructuredTextNode.empty with
-            items = emitValue emitTypeFlags overrideFunc ctx v
+            items = emitValue emitTypeFlags overrideFunc ctx v None
             knownTypes = knownTypes ()
-            shouldBeScoped = true |}
+            scoped = Scoped.Yes |}
       |> addExport v.name [Kind.Value] (if v.isConst then "const" else "let")
     | Import _ -> current // nop
     | Export e ->
@@ -1190,7 +1217,7 @@ let emitExportModule (ctx: Context) (exports: ExportWithKind list) : text list =
     exports |> List.filter (fun e -> Set.intersect e.kind (Set.ofList [Kind.Type; Kind.Module]) |> Set.isEmpty |> not)
   go true [] moduleGeneratingExports
 
-let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context) (st: StructuredText) : {| shouldBeScoped: bool; content: text list; docCommentBody: text list |} =
+let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context) (st: StructuredText) : {| scoped: Scoped; content: text list; docCommentBody: text list |} =
   let renamer = new OverloadRenamer()
   let modules : TextModuleSig list =
     st.children
@@ -1202,7 +1229,11 @@ let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context)
       {|
         name = name
         origName = k
-        scope = if result.shouldBeScoped then Some k else None
+        scope =
+          match result.scoped with
+          | Scoped.Force s -> Some s
+          | Scoped.Yes -> Some k
+          | Scoped.No -> None
         content = result.content
         docCommentBody = result.docCommentBody
       |}
@@ -1220,10 +1251,10 @@ let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context)
           | OverloadedText f -> (imports, typedefs, Choice2Of2 f :: items)
         ) ([], [], []) node.items
       List.rev imports, List.rev typedefs, List.rev items, node.docCommentLines
-  let shouldBeScoped =
+  let scoped =
     match st.value with
-    | Some v -> v.shouldBeScoped
-    | None -> false
+    | Some v -> v.scoped
+    | None -> Scoped.No
   let content =
     [
       yield! imports
@@ -1237,7 +1268,7 @@ let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context)
       | None -> ()
       | Some v -> yield! emitExportModule ctx v.exports
     ]
-  {| shouldBeScoped = shouldBeScoped; content = content; docCommentBody = docCommentBody |}
+  {| scoped = scoped; content = content; docCommentBody = docCommentBody |}
 
 let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list =
   let flags = { EmitTypeFlags.defaultValue with failContravariantTypeVar = true }

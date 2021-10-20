@@ -3,6 +3,24 @@ ts2ocaml for js_of_ocaml
 
 Generates binding for js_of_ocaml.
 
+## Overview
+
+TODO
+
+### Using generated bindings in your project
+
+`ts2ocaml` for `js_of_ocaml` generates `.mli` files, which should then be processed with [LexiFi/gen_js_api](https://github.com/LexiFi/gen_js_api).
+
+You should use the latest `gen_js_api` as `ts2ocaml` uses the latest features of `gen_js_api`.
+As of Oct 2021, most of the required features have not been present in the latest version in opam.
+So you would have to `git submodule` their repository (`https://github.com/LexiFi/gen_js_api`) to the `lib` directory of your OCaml project.
+
+### Standard library
+
+TODO
+
+------
+
 ## Usage
 
 ```bash
@@ -116,7 +134,7 @@ module Bar : sig
     (* if --full is set, the following will be generated *)
     [@@js.stop] type tags =  [`B | Foo.A.tags] [@@js.start] [@@js.implem type tags = [`B | Foo.A.tags]]
     (* else if --provide is set, the following will be generated *)
-    [@@js.stop] type tags =  [`B (* | Foo.A.tags *)] [@@js.start] [@@js.implem type tags = [`B]]
+    [@@js.stop] type tags =  [`B] [@@js.start] [@@js.implem type tags = [`B]]
 
     (* the following will be generated regardless of the option *)
     val cast: t -> Foo.A.t [@@js.cast]
@@ -128,7 +146,7 @@ end
 ```
 
 If `--provide` or `--full` is used for `foo.d.ts` and `--consume` or `--full` is used for `bar.d.ts`,
-you will be able to safely cast `Bar.Export.B.t` to `Foo.Export.A.t`:
+you will be able to safely cast `Bar.Export.B.t` to `Foo.Export.A.t`.
 Otherwise, you will have to use `Bar.Export.B.cast`.
 
 ```ocaml

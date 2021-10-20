@@ -29,6 +29,12 @@ with
     | Full | Provide -> if b then Full else Provide
 
 [<StringEnum; RequireQualifiedAccess>]
+type Subtyping =
+  | [<CompiledName("tag-based")>] TagBased
+  | [<CompiledName("private-type-alias")>] PrivateTypeAlias
+  | [<CompiledName("off")>] Off
+
+[<StringEnum; RequireQualifiedAccess>]
 type Simplify =
   | [<CompiledName("all")>] All
   | [<CompiledName("immediate-instance")>] ImmediateInstance
@@ -324,11 +330,4 @@ type ('a, 'cases) or_enum = [`Enum of 'cases | `Other of 'a] [@@js.custom {
 }]
 val or_enum_to_js: ('a -> Ojs.t) -> ('cases -> Ojs.t) -> ('a, 'cases) or_enum -> Ojs.t
 val or_enum_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'cases) -> Ojs.t -> ('a, 'cases) or_enum
-
-[@@@js.stop]
-external pure_js_expr: string -> Ojs.t = "caml_pure_js_expr"
-[@@@js.start]
-[@@@js.implem
-  external pure_js_expr: string -> Ojs.t = "caml_pure_js_expr"
-]
 """

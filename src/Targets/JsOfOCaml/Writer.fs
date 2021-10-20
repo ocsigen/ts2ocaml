@@ -402,9 +402,9 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
       match msgo with None -> commentStr "FIXME: unknown type" + Type.any | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + Type.any
 
 and emitLabelsBody (ctx: Context) labels =
-  let inline commentTags t =
+  let inline tag t =
     if ctx.options.inheritWithTags.HasConsume then t
-    else comment t
+    else empty
   let rec go firstCaseEmitted acc = function
     | [] -> acc
     | Case c :: rest ->
@@ -414,9 +414,9 @@ and emitLabelsBody (ctx: Context) labels =
         go true (acc + c) rest
     | TagType t :: rest ->
       if firstCaseEmitted then
-        go firstCaseEmitted (acc + commentTags (" | " @+ t)) rest
+        go firstCaseEmitted (acc + tag (" | " @+ t)) rest
       else
-        go true (acc + commentTags t) rest
+        go ctx.options.inheritWithTags.HasConsume (acc + tag t) rest
   go false empty labels
 
 /// ``[ `A | `B | ... ]``

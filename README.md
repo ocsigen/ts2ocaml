@@ -27,7 +27,7 @@ For users:
 
 For developers and contributors:
 - [Building and testing](docs/development.md)
-- [Notes on modeling TS subtyping in OCaml](docs/modeling_subtyping.md)
+- [Note on modeling TS subtyping in OCaml](docs/modeling_subtyping.md)
 
 ## About this tool
 

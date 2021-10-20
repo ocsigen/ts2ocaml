@@ -3,12 +3,12 @@ Modeling TypeScript's Subtyping in OCaml
 
 TypeScript uses [structural subtyping](https://www.typescriptlang.org/docs/handbook/type-compatibility.html).
 
-In OCaml we have row polymorphism, which is very close to structural subtyping in TypeScript.
+In OCaml, we have row polymorphism, which is very close to structural subtyping in TypeScript.
 But **TypeScript objects can have overloaded methods**, which is impossible to represent in OCaml classes without giving them different names, and therefore will easily break the intended subtyping relations.
 
 However, *most* TypeScript developers tend to use `extends` and `implements` to explicitly define subtyping relations.
 So in *most* cases, we can regard it as **nominal subtyping**.
-[fable-compiler/ts2fable](https://github.com/fable-compiler/ts2fable), which this project is inspired by, has been successful on simulating
+[fable-compiler/ts2fable](https://github.com/fable-compiler/ts2fable), which this project is inspired by, has been successful in simulating
 TypeScript's subtyping using [F# interfaces](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/interfaces).
 
 In OCaml, there are several ways to simulate nominal subtyping.

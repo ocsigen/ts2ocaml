@@ -109,7 +109,7 @@ let main argv =
          .parserConfiguration({| ``parse-positional-numbers`` = false |})
          .addFlag("verbose", (fun (o: GlobalOptions) -> o.verbose), descr="Show verbose log", alias="v")
          .addFlag("nowarn", (fun (o: GlobalOptions) -> o.nowarn), descr="Do not show warnings")
-    |> Typer.TyperOptions.add
+    |> Typer.TyperOptions.register
     |> Target.register parse Target.JsOfOCaml.target
     |> Target.register parse Target.ParserTest.target
   yargs.demandCommand(1.0).scriptName("ts2ocaml").help().argv |> ignore

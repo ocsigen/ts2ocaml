@@ -519,3 +519,20 @@ type Argv<'T> with
     this.count(!^key)
         .addImpl<int>(key, descr, ?alias=alias)
         :> Argv<'U>
+  member this.addCommaSeparatedStringSet (key: string, validate: string -> 'a option, f: 'U -> 'a list, ?descr, ?alias) =
+    this.string(!^key)
+        .addImpl(key, descr, ?alias=alias)
+        .coerce(!^key, fun o ->
+          match o with
+          | None -> []
+          | Some s ->
+            let s =
+              if jsTypeof s = "string" then s :?> string
+              else s.ToString()
+            s.Split([|','|], StringSplitOptions.RemoveEmptyEntries)
+            |> Array.map (fun s ->
+              match validate s with
+              | Some x -> x
+              | None -> failwithf "Unknown value '%s' for option '%s'" s key)
+            |> Array.toList)
+        :> Argv<'U>

@@ -1085,31 +1085,36 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       let fallback current =
         p.underlyingStatements |> List.fold (folder ctx) current
       match p with
-      | ImmediateInstance (intf & { name = Some intfName }, value) when ctx.options.simplifyImmediateInstance ->
+      | ImmediateInstance (intf & { name = Some intfName }, value) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateInstance) ->
         let knownTypesInMembers = Statement.getKnownTypes ctx [ClassDef intf]
         let createModule () =
           let items = intfToStmts intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
           {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scoped = Scoped.Force value.name |}
-        if intfName <> value.name || knownTypesInMembers |> Set.contains (KnownType.Ident (ctx |> Context.getFullName [intfName])) then
-          let name = value.name + "Static"
-          getModule name
-          |> Trie.setOrUpdate (createModule ()) StructuredTextNode.union
-          |> setModule name
-          |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = Scoped.Yes |} StructuredTextNode.union
-          |> addExport name [Kind.Value] (if value.isConst then "const" else "let")
-          |> fallback
+        if knownTypesInMembers |> Set.contains (KnownType.Ident (ctx |> Context.getFullName [intfName])) then
+          fallback current
         else
           getModule value.name
           |> Trie.setOrUpdate (createModule ()) StructuredTextNode.union
           |> setModule value.name
           |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = Scoped.Yes |} StructuredTextNode.union
           |> addExport value.name [Kind.Type; Kind.ClassLike; Kind.Value] "interface"
-      | ImmediateConstructor (baseIntf, ctorIntf, ctorValue) when ctx.options.simplifyImmediateConstructor ->
+      | ImmediateConstructor (baseIntf, ctorIntf, ctorValue) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateConstructor) ->
         emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf], Some (Scoped.Force ctorValue.name))
       | _ -> fallback current
     | Value value ->
+      let fallback current =
+        let node =
+          {| StructuredTextNode.empty with
+              items = emitValue emitTypeFlags overrideFunc ctx value
+              knownTypes = knownTypes ()
+              scoped = Scoped.Yes |}
+        current
+        |> Trie.setOrUpdate node StructuredTextNode.union
+        |> addExport value.name [Kind.Value] (if value.isConst then "const" else "let")
+
+      let inline (|Dummy|) _ = []
       match value.typ with
-      | AnonymousInterface intf ->
+      | AnonymousInterface intf when Simplify.Has(ctx.options.simplify, Simplify.AnonymousInterfaceValue) ->
         let knownTypes = knownTypes ()
         let items = intfToStmts intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
         getModule value.name
@@ -1121,13 +1126,27 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
               knownTypes = knownTypes
               scoped = Scoped.Yes |} StructuredTextNode.union
         |> addExport value.name [Kind.Value] (if value.isConst then "const" else "let")
-      | _ ->
-        setNode
-          {| StructuredTextNode.empty with
-              items = emitValue emitTypeFlags overrideFunc ctx value
-              knownTypes = knownTypes ()
-              scoped = Scoped.Yes |}
-        |> addExport value.name [Kind.Value] (if value.isConst then "const" else "let")
+      | Ident { fullName = Some fn; loc = loc } & Dummy tyargs
+      | App (AIdent { fullName = Some fn }, tyargs, loc) when Simplify.Has(ctx.options.simplify, Simplify.NamedInterfaceValue) ->
+        let intf =
+          FullName.tryLookupWith ctx fn (function ClassName c when c.isInterface -> Some c | _ -> None)
+        match intf with
+        | None -> fallback current
+        | Some intf ->
+          let bindings = createBindings fn loc intf.typeParams tyargs
+          let intf = intf |> mapInClass (substTypeVar bindings) ctx
+          let name = value.name + "Static"
+          let knownTypesInMembers = Statement.getKnownTypes ctx [ClassDef intf]
+          let createModule () =
+            let items = intfToStmts intf ctx emitTypeFlags overrideFunc
+            {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scoped = Scoped.Force value.name |}
+          getModule name
+          |> Trie.setOrUpdate (createModule ()) StructuredTextNode.union
+          |> setModule name
+          |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = Scoped.Yes |} StructuredTextNode.union
+          |> addExport name [Kind.Value] (if value.isConst then "const" else "let")
+          |> fallback
+      | _ -> fallback current
     | Import _ -> current // nop
     | Export e ->
       let kind =
@@ -1329,9 +1348,13 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
     | Module m -> m.statements |> List.collect (go prefix (ctx |> Context.ofChildNamespace m.name))
     | Pattern p ->
       match p with
-      | ImmediateInstance _ when ctx.options.simplifyImmediateInstance ->
-        [] // no type is generated for immediate instance
-      | ImmediateConstructor (baseIntf, _, _) when ctx.options.simplifyImmediateConstructor ->
+      | ImmediateInstance (intf & { name = Some intfName }, value) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateInstance) ->
+        let knownTypesInMembers = Statement.getKnownTypes ctx [ClassDef intf]
+        if intfName <> value.name || knownTypesInMembers |> Set.contains (KnownType.Ident (ctx |> Context.getFullName [intfName])) then
+          p.underlyingStatements |> List.collect (go prefix ctx)
+        else
+          [] // no type is generated for immediate instance
+      | ImmediateConstructor (baseIntf, _, _) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateConstructor) ->
         go prefix ctx (ClassDef baseIntf) // only the base interface is used as a type
       | _ ->
         p.underlyingStatements |> List.collect (go prefix ctx)
@@ -1407,8 +1430,7 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
     { fileName = "lib.webworker.d.ts"; statements = stmts; references = []; hasNoDefaultLib = false; moduleName = None }
 
   Log.tracef opts "* running typer..."
-  opts.simplifyImmediateInstance <- true
-  opts.simplifyImmediateConstructor <- true
+  opts.simplify <- [Simplify.All]
   opts.inheritWithTags <- FeatureFlag.Full
   opts.safeArity <- FeatureFlag.Full
   opts.recModule <- RecModule.Optimized

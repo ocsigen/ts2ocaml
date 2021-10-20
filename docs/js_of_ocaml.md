@@ -320,7 +320,15 @@ module C : sig
 end
 ```
 
-### `--simplify-immediate-instance`
+### `--simplify`
+
+Turn on simplification features.
+
+You can use `--simplify=foo,bar` to turn on multiple features. Also, `--simplify=all` enables all the features.
+
+#### Feature: `immediate-instance`
+
+Simplifies a value definition of an interface type with the same name **(case sensitive)** to a module.
 
 Assume we have the following input:
 
@@ -358,7 +366,11 @@ val foo: unit -> Foo.t [@@js.global "Foo"]
 let _ = Foo.someMethod (foo ()) 42.0
 ```
 
-### `--simplify-immediate-constructor`
+A notable example is the `Math` object in ES5 (https://github.com/microsoft/TypeScript/blob/main/lib/lib.es5.d.ts).
+
+#### Feature: `immediate-constructor`
+
+Simplifies so-called constructor pattern.
 
 Assume we have the following input:
 
@@ -418,3 +430,98 @@ let _ =
   let num = FooConstructor.anotherMethod (foo ()) () in
   Foo.someMethod foo num
 ```
+
+A notable example is the `ArrayConstructor` type in ES5 (https://github.com/microsoft/TypeScript/blob/main/lib/lib.es5.d.ts).
+
+#### Feature: `anonymous-interface-value`
+
+Simplifies a value definition of an anonymous interface type to a module.
+
+Assume we have the following input:
+
+```typescript
+declare var Foo: {
+  someMethod(value: number): void;
+};
+```
+
+If this option is set, the output will be:
+
+```ocaml
+module [@js.scope "Foo"] Foo : sig
+  val someMethod: float -> unit [@@js.global "someMethod"]
+end
+
+(* usage *)
+let _ = Foo.someMethod 42.0
+```
+
+Otherwise, the output will be:
+
+```ocaml
+module AnonymousInterfaceN : sig
+  type t = private Ojs.t
+
+  val someMethod: t -> float -> unit [@@js.call "someMethod"]
+end
+
+val foo: unit -> AnonymousInterfaceN.t [@@js.global "Foo"]
+
+(* usage *)
+let _ = AnonymousInterfaceN.someMethod (foo ()) 42.0
+```
+
+A notable example is the `Document` variable in DOM (https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts).
+
+#### Feature: `named-interface-value`
+
+Defines additional module with a suffix `Static` for a value definition of some interface type.
+
+Note that `immediate-instance` and `immediate-constructor` will override this feature if the name of the value definition is the same as the corresponding interface.
+
+Assume we have the following input:
+
+```typescript
+interface Foo = {
+  someMethod(value: number): void;
+}
+
+declare var foo: Foo;
+```
+
+If this option is set, the output will be:
+
+```ocaml
+module Foo : sig
+  type t = ...
+
+  val someMethod: t -> float -> unit [@@js.call "someMethod"]
+end
+
+module [@js.scope "foo"] FooStatic : sig
+  val someMethod: float -> unit [@@js.global "someMethod"]
+end
+
+val foo: unit -> Foo.t [@@js.global "Foo"]
+
+(* usage *)
+let _ = FooStatic.someMethod 42.0
+let _ = Foo.someMethod (foo ()) 42.0 (* "instance call" is also available *)
+```
+
+Otherwise, the output will be:
+
+```ocaml
+module Foo : sig
+  type t = ...
+
+  val someMethod: t -> float -> unit [@@js.call "someMethod"]
+end
+
+val foo: unit -> Foo.t [@@js.global "Foo"]
+
+(* usage *)
+let _ = Foo.someMethod (foo ()) 42.0
+```
+
+A notable example is the `document` variable in DOM (https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts).

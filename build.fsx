@@ -97,7 +97,7 @@ module Test =
         ]
 
         for package in packages do
-            ts2ocaml ["jsoo"; "-v"; "--nowarn"; $"-o {outputDir}"; "--simplify-immediate-instance"; "--simplify-immediate-constructor"] package
+            ts2ocaml ["jsoo"; "-v"; "--nowarn"; $"-o {outputDir}"; "--simplify=all"] package
 
     let prepare () =
         for file in outputDir |> Shell.copyRecursiveTo true testSrcDir do

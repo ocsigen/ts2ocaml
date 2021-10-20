@@ -28,6 +28,30 @@ with
     | Consume | Off -> if b then Consume else Off
     | Full | Provide -> if b then Full else Provide
 
+[<StringEnum; RequireQualifiedAccess>]
+type Simplify =
+  | [<CompiledName("all")>] All
+  | [<CompiledName("immediate-instance")>] ImmediateInstance
+  | [<CompiledName("immediate-constructor")>] ImmediateConstructor
+  | [<CompiledName("anonymous-interface-value")>] AnonymousInterfaceValue
+  | [<CompiledName("named-interface-value")>] NamedInterfaceValue
+with
+  static member Values = [All; ImmediateInstance; ImmediateConstructor; AnonymousInterfaceValue; NamedInterfaceValue]
+
+  static member Has (flags: Simplify list, target: Simplify) =
+    if flags |> List.contains All then true
+    else flags |> List.contains target
+
+  static member TryParse (s: string) =
+    match s with
+    | "all" -> Some All
+    | "immediate-instance" -> Some ImmediateInstance
+    | "immediate-constructor" -> Some ImmediateConstructor
+    | "anonymous-interface-value" -> Some AnonymousInterfaceValue
+    | "named-interface-value" -> Some NamedInterfaceValue
+    | _ -> None
+
+
 type Options =
   inherit GlobalOptions
   inherit Typer.TyperOptions
@@ -39,8 +63,7 @@ type Options =
   abstract inheritWithTags: FeatureFlag with get, set
   abstract recModule: RecModule with get, set
   abstract safeArity: FeatureFlag with get, set
-  abstract simplifyImmediateInstance: bool with get, set
-  abstract simplifyImmediateConstructor: bool with get, set
+  abstract simplify: Simplify list with get, set
   // hidden options
   abstract stdlib: bool with get
 

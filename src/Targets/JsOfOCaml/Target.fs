@@ -32,7 +32,7 @@ let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
         !^ResizeArray[
           "number-as-int"; "inherit-with-tags";
           "safe-arity"; "rec-module";
-          "simplify-immediate-instance"; "simplify-immediate-constructor"
+          "simplify";
         ],
         "Code Generator Options:")
       .addFlag(
@@ -44,7 +44,7 @@ let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
       .addChoice(
         "inherit-with-tags",
         [|FeatureFlag.Full; FeatureFlag.Provide; FeatureFlag.Consume; FeatureFlag.Off|],
-        (fun (o: Options) -> o.safeArity),
+        (fun (o: Options) -> o.inheritWithTags),
         descr="Use `TypeName.tags` type names to inherit types from other packages.",
         defaultValue=FeatureFlag.Full)
       .addChoice(
@@ -59,16 +59,11 @@ let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
         (fun (o: Options) -> o.recModule),
         descr="Use recursive modules to simplify the output.\nCan impact the compilation time.",
         defaultValue=RecModule.Optimized)
-      .addFlag(
-        "simplify-immediate-instance",
-        (fun (o: Options) -> o.simplifyImmediateInstance),
-        descr="Simplify\n\ninterface Foo { .. }\nvar Foo: Foo;\n\nto one module.",
-        defaultValue=true)
-      .addFlag(
-        "simplify-immediate-constructor",
-        (fun (o: Options) -> o.simplifyImmediateConstructor),
-        descr="Simplify\n\ninterface Foo { .. }\ninterface FooConstructor { .. }\nvar Foo: FooConstructor;\n\nto one module.",
-        defaultValue=true)
+      .addCommaSeparatedStringSet(
+        "simplify",
+        Simplify.TryParse,
+        (fun (o: Options) -> o.simplify),
+        descr=sprintf "Turn on simplification features. Available features: %s" (Simplify.Values |> List.map string |> String.concat ", "))
 
       .addFlag("stdlib", (fun (o: Options) -> o.stdlib), descr = "Internal. Used to generate Ts2ocaml.mli from typescript/lib/lib.*.d.ts.").hide("stdlib")
 

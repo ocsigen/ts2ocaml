@@ -12,7 +12,7 @@ type TyperOptions =
 module TyperOptions =
   open Fable.Core.JsInterop
 
-  let add (yargs: Yargs.Argv<_>) =
+  let register (yargs: Yargs.Argv<GlobalOptions>) =
     yargs
       .group(
         !^ResizeArray[
@@ -1080,28 +1080,20 @@ module Statement =
 
   let detectPatterns (stmts: Statement list) : Statement list =
     let rec go stmts =
-      let inline eq (s1: string) (s2: string) = s1.Equals(s2, System.StringComparison.InvariantCultureIgnoreCase)
-
-      let cmp =
-        { new System.Collections.Generic.IEqualityComparer<string> with
-            member _.Equals(s1: string, s2: string) = eq s1 s2
-            member __.GetHashCode(s: string) = s.ToLowerInvariant().GetHashCode() }
-
       // declare var Foo: Foo
-      let valDict = new Dict<string, Value>(cmp)
+      let valDict = new Dict<string, Value>()
       // interface Foo { .. }
-      let intfDict = new Dict<string, Class>(cmp)
+      let intfDict = new Dict<string, Class>()
       // declare var Foo: FooConstructor
-      let ctorValDict = new Dict<string, Value>(cmp)
+      let ctorValDict = new Dict<string, Value>()
       // interface FooConstructor { .. }
-      let ctorIntfDict = new Dict<string, Class>(cmp)
-
+      let ctorIntfDict = new Dict<string, Class>()
 
       for stmt in stmts do
         match stmt with
         | Value (v & { name = name; typ = Ident { name = [intfName] } }) ->
-          if eq name intfName then valDict.Add(name, v)
-          else if eq (name + "Constructor") intfName then ctorValDict.Add(name, v)
+          if name = intfName then valDict.Add(name, v)
+          else if (name + "Constructor") = intfName then ctorValDict.Add(name, v)
         | ClassDef (intf & { name = Some name; isInterface = true }) ->
           if name <> "Constructor" && name.EndsWith("Constructor") then
             let origName = name.Substring(0, name.Length - "Constructor".Length)
@@ -1111,23 +1103,23 @@ module Statement =
         | _ -> ()
 
       let intersect (other: string seq) (set: HashSet<string>) =
-        let otherSet = new HashSet<string>(other, cmp)
+        let otherSet = new HashSet<string>(other)
         for s in set do
           if not <| otherSet.Contains(s) then
             set.Remove(s) |> ignore
         set
 
       let immediateInstances =
-        new HashSet<string>(valDict.Keys, cmp)
+        new HashSet<string>(valDict.Keys)
         |> intersect intfDict.Keys
       let immediateCtors =
-        new HashSet<string>(intfDict.Keys, cmp)
+        new HashSet<string>(intfDict.Keys)
         |> intersect ctorValDict.Keys
         |> intersect ctorIntfDict.Keys
 
       stmts |> List.choose (function
         | Value (v & { name = name; typ = Ident { name = [intfName] } }) ->
-          if eq name intfName && immediateInstances.Contains name && valDict.[name] = v then
+          if name = intfName && immediateInstances.Contains name && valDict.[name] = v then
             let intf = intfDict.[name]
             Some (Pattern (ImmediateInstance (intf, v)))
           else if name + "Constructor" = intfName && immediateCtors.Contains name && ctorValDict.[name] = v then

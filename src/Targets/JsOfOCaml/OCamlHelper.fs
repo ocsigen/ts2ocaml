@@ -1,9 +1,10 @@
-module Target.JsOfOCaml.OCamlHelper
+module Targets.JsOfOCaml.OCamlHelper
 
 open System
-open Text
 open Syntax
-open Target.JsOfOCaml.Common
+open Targets.JsOfOCaml.Common
+open DataType
+open DataType.Text
 
 let comment text =
   if text = empty then empty
@@ -369,14 +370,16 @@ module Naming =
     | None -> sprintf "%s_%d" name arity
 
   let jsModuleNameToFileName (jsModuleName: string) =
-    jsModuleName.Split('/')
+    jsModuleName
+    |> String.split "/"
     |> Array.map (fun n ->
       n |> Naming.toCase Naming.Case.LowerSnakeCase)
     |> String.concat "__"
     |> sprintf "%s.mli"
 
   let jsModuleNameToOCamlModuleName (jsModuleName: string) =
-    jsModuleName.Split('/')
+    jsModuleName
+    |> String.split "/"
     |> Array.map (fun n ->
       n |> Naming.toCase Naming.Case.LowerSnakeCase)
     |> String.concat "__"

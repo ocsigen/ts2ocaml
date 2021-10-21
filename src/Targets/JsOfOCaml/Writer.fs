@@ -1,26 +1,25 @@
-module Target.JsOfOCaml.Writer
+module Targets.JsOfOCaml.Writer
 
-open System
 open Syntax
 open Typer
 open Typer.Type
-open Text
+open DataType
+open DataType.Text
 
-open Target.JsOfOCaml.Common
-open Target.JsOfOCaml.OCamlHelper
+open Targets.JsOfOCaml.Common
+open Targets.JsOfOCaml.OCamlHelper
 
 type ScriptTarget = TypeScript.Ts.ScriptTarget
-type Dict<'k, 'v> = Collections.Generic.Dictionary<'k, 'v>
 
 type State = {|
-  referencesCache: Dict<string list, WeakTrie<string>>
-  usedAnonymousInterfacesCache: Dict<string list, Set<int>>
+  referencesCache: MutableMap<string list, WeakTrie<string>>
+  usedAnonymousInterfacesCache: MutableMap<string list, Set<int>>
   es6ExportContainerName: string option
 |}
 module State =
   let defaultValue () : State =
-    {| referencesCache = new Dict<_, _>();
-       usedAnonymousInterfacesCache = new Dict<_, _>()
+    {| referencesCache = new MutableMap<_, _>();
+       usedAnonymousInterfacesCache = new MutableMap<_, _>()
        es6ExportContainerName = None |}
 
 type Context = Context<Options, State>
@@ -842,7 +841,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
             if not isAnonymous then ctx.options
             else
               // no need to generate t_n types for anonymous interfaces
-              ctx.options |> jsWith (fun o -> o.safeArity <- o.safeArity.WithProvide(false)) |}
+              ctx.options |> JS.cloneWith (fun o -> o.safeArity <- o.safeArity.WithProvide(false)) |}
 
     let typrms = List.map (fun (tp: TypeParam) -> tprintf "'%s" tp.name) c.typeParams
 

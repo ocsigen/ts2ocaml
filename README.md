@@ -26,7 +26,7 @@ For users:
 - ts2ocaml for ReScript (planned)
 
 For developers and contributors:
-- [Building and testing](docs/development.md)
+- [Overview](docs/development.md)
 - [Note on modeling TS subtyping in OCaml](docs/modeling_subtyping.md)
 
 ## About this tool

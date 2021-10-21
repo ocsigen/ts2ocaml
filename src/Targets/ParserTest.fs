@@ -1,5 +1,7 @@
-module Target.ParserTest
+module Targets.ParserTest
+
 open Syntax
+open Target
 
 type Options =
   inherit GlobalOptions

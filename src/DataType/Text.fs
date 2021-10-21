@@ -1,4 +1,4 @@
-module Text
+namespace DataType
 
 [<StructuredFormatDisplay("{AsString}")>]
 type text =
@@ -51,52 +51,53 @@ with
 and IText =
   abstract getText: unit -> text
 
-let toString indentLength (t: text) = t.ToString(indentLength)
+module Text =
+  let toString indentLength (t: text) = t.ToString(indentLength)
 
-let empty = Empty
+  let empty = Empty
 
-let strLines (lines: string seq) =
-  let lines =
-    lines
-    |> Seq.collect (fun s -> s.Split([|"\r\n"; "\r"; "\n"|], System.StringSplitOptions.None))
-    |> Seq.toArray
-  match lines.Length with
-  | 0 -> empty
-  | 1 -> Str lines.[0]
-  | _ ->
-    lines |> Array.mapi (fun i x -> if i = 0 then Str x else Newline + Str x)
-          |> Array.reduce (+)
+  let strLines (lines: string seq) =
+    let lines =
+      lines
+      |> Seq.collect (fun s -> s.Split([|"\r\n"; "\r"; "\n"|], System.StringSplitOptions.None))
+      |> Seq.toArray
+    match lines.Length with
+    | 0 -> empty
+    | 1 -> Str lines.[0]
+    | _ ->
+      lines |> Array.mapi (fun i x -> if i = 0 then Str x else Newline + Str x)
+            |> Array.reduce (+)
 
-let str (s: string) = strLines [s]
+  let str (s: string) = strLines [s]
 
-let indent x = Indent x
+  let indent x = Indent x
 
-let newline = Newline
+  let newline = Newline
 
-let inline (@+) s x = str s + x
-let inline (+@) x s = x + str s
+  let inline (@+) s x = str s + x
+  let inline (+@) x s = x + str s
 
-let inline tprintf format = Printf.kprintf str format
-let inline tprintfn format = Printf.kprintf (fun s -> str s + newline) format
+  let inline tprintf format = Printf.kprintf str format
+  let inline tprintfn format = Printf.kprintf (fun s -> str s + newline) format
 
-let between l r x = l @+ x +@ r
+  let between l r x = l @+ x +@ r
 
-let join xs =
-  match xs with
-  | [] -> empty
-  | h :: t -> t |> List.fold (+) h
+  let join xs =
+    match xs with
+    | [] -> empty
+    | h :: t -> t |> List.fold (+) h
 
-let concat sep xs =
-  match xs with
-  | [] -> empty
-  | h :: t ->
-    let rec go result = function
-      | [] -> result
-      | x :: xs -> go (result + sep + x) xs
-    go h t
+  let concat sep xs =
+    match xs with
+    | [] -> empty
+    | h :: t ->
+      let rec go result = function
+        | [] -> result
+        | x :: xs -> go (result + sep + x) xs
+      go h t
 
-let rec isMultiLine = function
-  | Newline -> true
-  | Indent x -> isMultiLine x
-  | Concat (x, y) -> isMultiLine x || isMultiLine y
-  | Empty | Str _ -> false
+  let rec isMultiLine = function
+    | Newline -> true
+    | Indent x -> isMultiLine x
+    | Concat (x, y) -> isMultiLine x || isMultiLine y
+    | Empty | Str _ -> false

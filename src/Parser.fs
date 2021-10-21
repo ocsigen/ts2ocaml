@@ -32,8 +32,8 @@ module Node =
     let pos = src.getLineAndCharacterOfPosition (n.getStart())
     let startPos = int <| src.getPositionOfLineAndCharacter(pos.line, 0.)
     let endPos = int <| src.getLineEndOfPosition(n.getEnd())
-    let text = src.text.Substring(startPos, endPos - startPos).Replace("\r\n", "\n").Replace("\r", "\n")
-    let lines = text.Split('\n')
+    let lines =
+      src.text.Substring(startPos, endPos - startPos) |> String.toLines
     lines |> Array.map (sprintf "> %s") |> String.concat System.Environment.NewLine
 
 let nodeWarn (ctx: ParserContext) (node: Node) format =
@@ -145,12 +145,12 @@ let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.K
         Some (Set.ofList kinds)
     go s
 
-let sanitizeCommentText (str: string) : string list =
-  str.Replace("\r\n","\n").Replace("\r","\n").Split [|'\n'|] |> List.ofArray
+let sanitizeCommentText str : string list =
+  str |> String.toLines |> List.ofArray
 
 let readCommentText (comment: U2<string, ResizeArray<Ts.JSDocComment>>) : string list =
   let str =
-    if jsTypeof comment = "string" then
+    if JS.jsTypeof comment = "string" then
       box comment :?> string
     else
       let texts = box comment :?> ResizeArray<Ts.JSDocText> // TODO: do not ignore links
@@ -253,7 +253,7 @@ let readLiteral (node: Node) : Literal option =
 let getFullNameAtNodeLocation (ctx: ParserContext) (nd: Node) =
     match ctx.checker.getSymbolAtLocation nd with
     | None -> None
-    | Some smb -> ctx.checker.getFullyQualifiedName smb |> Option.ofObj |> Option.map (fun s -> s.Split '.' |> Array.toList)
+    | Some smb -> ctx.checker.getFullyQualifiedName smb |> Option.ofObj |> Option.map (fun s -> s |> String.split "." |> Array.toList)
 
 let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) : Type =
   match t.kind with
@@ -461,7 +461,7 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
     match e.kind with
     | Kind.PropertyAccessExpression ->
       let e = !!e : Ts.PropertyAccessExpression
-      let name = e.getText().Split('.') |> List.ofArray
+      let name = e.getText() |> String.split "." |> List.ofArray
       match name with
       | ["Symbol"; symbolName] ->
         let ft =

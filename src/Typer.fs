@@ -1,13 +1,13 @@
 module Typer
 
 open Syntax
+open DataType
 
 type TyperOptions =
   inherit GlobalOptions
   abstract inheritIterable: bool with get,set
   abstract inheritArraylike: bool with get,set
   abstract inheritPromiselike: bool with get,set
-
 
 module TyperOptions =
   open Fable.Core.JsInterop
@@ -1013,9 +1013,6 @@ module Statement =
   let resolveErasedTypes (ctx: Context<TyperOptions, _>) (stmts: Statement list) =
     mapType Type.resolveErasedType ctx stmts
 
-  type Dict<'k, 'v> = System.Collections.Generic.Dictionary<'k, 'v>
-  type HashSet<'v> = System.Collections.Generic.HashSet<'v>
-
   let introduceAdditionalInheritance (opts: TyperOptions) (stmts: Statement list) : Statement list =
     let rec go stmts =
       stmts |> List.map (function
@@ -1081,13 +1078,13 @@ module Statement =
   let detectPatterns (stmts: Statement list) : Statement list =
     let rec go stmts =
       // declare var Foo: Foo
-      let valDict = new Dict<string, Value>()
+      let valDict = new MutableMap<string, Value>()
       // interface Foo { .. }
-      let intfDict = new Dict<string, Class>()
+      let intfDict = new MutableMap<string, Class>()
       // declare var Foo: FooConstructor
-      let ctorValDict = new Dict<string, Value>()
+      let ctorValDict = new MutableMap<string, Value>()
       // interface FooConstructor { .. }
-      let ctorIntfDict = new Dict<string, Class>()
+      let ctorIntfDict = new MutableMap<string, Class>()
 
       for stmt in stmts do
         match stmt with
@@ -1102,18 +1099,18 @@ module Statement =
             intfDict.Add(name, intf)
         | _ -> ()
 
-      let intersect (other: string seq) (set: HashSet<string>) =
-        let otherSet = new HashSet<string>(other)
+      let intersect (other: string seq) (set: MutableSet<string>) =
+        let otherSet = new MutableSet<string>(other)
         for s in set do
           if not <| otherSet.Contains(s) then
             set.Remove(s) |> ignore
         set
 
       let immediateInstances =
-        new HashSet<string>(valDict.Keys)
+        new MutableSet<string>(valDict.Keys)
         |> intersect intfDict.Keys
       let immediateCtors =
-        new HashSet<string>(intfDict.Keys)
+        new MutableSet<string>(intfDict.Keys)
         |> intersect ctorValDict.Keys
         |> intersect ctorIntfDict.Keys
 

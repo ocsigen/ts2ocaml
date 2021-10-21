@@ -1,6 +1,5 @@
 module Target
 
-open Typer
 open Syntax
 open Yargs
 

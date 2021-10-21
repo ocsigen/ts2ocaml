@@ -6,9 +6,11 @@
     <Compile Include="Bindings/TypeScript.fs" />
     <Compile Include="Bindings/YargsParser.fs" />
     <Compile Include="Bindings/Yargs.fs" />
+    <Compile Include="Extensions.fs" />
+    <Compile Include="DataType/Text.fs" />
+    <Compile Include="DataType/Trie.fs" />
+    <Compile Include="DataType/Graph.fs" />
     <Compile Include="Common.fs" />
-    <Compile Include="Utils.fs" />
-    <Compile Include="Text.fs" />
     <Compile Include="Syntax.fs" />
     <Compile Include="Naming.fs" />
     <Compile Include="Typer.fs" />

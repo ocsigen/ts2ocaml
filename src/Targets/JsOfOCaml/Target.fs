@@ -1,10 +1,11 @@
-module Target.JsOfOCaml
+module Targets.JsOfOCaml.Target
 
 open Syntax
-open Typer
+open DataType
 
-open Target.JsOfOCaml.Common
-open Target.JsOfOCaml.Writer
+open Target
+open Targets.JsOfOCaml.Common
+open Targets.JsOfOCaml.Writer
 open Fable.Core.JsInterop
 
 let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =

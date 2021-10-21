@@ -1,6 +1,7 @@
-module Target.JsOfOCaml.Common
+module Targets.JsOfOCaml.Common
 
 open Fable.Core
+open DataType
 
 [<StringEnum; RequireQualifiedAccess>]
 type RecModule =
@@ -75,7 +76,7 @@ type Options =
 
 type Output = {
   fileName: string
-  content: Text.text
+  content: text
   stubLines: string list
 }
 

@@ -2,6 +2,8 @@
 // For a more comprehensive configuration check:
 // https://github.com/fable-compiler/webpack-config-template
 
+const webpack = require('webpack');
+
 var CONFIG = {
   fsharpEntry: './src/Main.fs.js',
   outputDir: './dist',
@@ -26,18 +28,21 @@ fs.readdirSync(nodeModulesDir)
   });
 
 module.exports = {
-  mode: 'development',
-  devtool: "inline-source-map",
-  entry: CONFIG.fsharpEntry,
+  mode: 'production',
   target: "node",
+  entry: CONFIG.fsharpEntry,
   externals: nodeExternals,
   output: {
-    filename: 'ts2ocaml.js',
     path: path.join(__dirname, CONFIG.outputDir),
-    devtoolModuleFilenameTemplate: info =>
-      path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+    filename: 'ts2ocaml.js'
   },
   resolve: {
     modules: [nodeModulesDir]
   },
+  plugins: [
+    new webpack.BannerPlugin({
+      banner: "#!/usr/bin/env node",
+      raw: true
+    })
+  ]
 };

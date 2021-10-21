@@ -27,6 +27,9 @@ let distDir = "./dist"
 let testDir = "./test"
 let testSrcDir = Path.combine testDir "src"
 
+let changelogFile = "CHANGELOG.md"
+let changelog = Changelog.load changelogFile
+
 let run cmd dir args =
     let result =
         CreateProcess.fromRawCommandLine cmd args
@@ -67,11 +70,28 @@ Target.create "YarnInstall" <| fun _ ->
 
 Target.create "Prepare" ignore
 
-Target.create "Build" <| fun _ ->
+Target.create "BuildOnly" <| fun _ ->
     dotnetExec "fable" $"{srcDir} --sourceMaps --run webpack"
+
+Target.create "Build" ignore
+Target.create "BuildNoClean" ignore
 
 Target.create "Watch" <| fun _ ->
     dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w"
+
+module Deploy =
+    let appendSheBang () =
+        let binFile = Path.combine outputDir "ts2ocaml.js"
+        let content = File.readWithEncoding System.Text.Encoding.UTF8 binFile
+        let newContent =
+            Seq.concat [
+                Seq.singleton "#!/usr/bin/env node"
+                content
+            ]
+        File.writeWithEncoding System.Text.Encoding.UTF8 false binFile newContent
+
+    let setPackageJson () =
+        Yarn.exec $"version --new-version {changelog.LatestEntry.SemVer.AsString} --no-git-tag-version" id
 
 module Test =
     let opamTool = platformTool "opam"
@@ -111,28 +131,41 @@ Target.create "TestClean" <| fun _ -> Shell.cleanDir outputDir
 Target.create "TestGenerateBindings" <| fun _ -> Test.generateBindings ()
 Target.create "TestPrepare" <| fun _ -> Test.prepare ()
 Target.create "TestBuild" <| fun _ -> Test.build ()
+Target.create "TestOnly" ignore
+Target.create "TestNoClean" ignore
+Target.create "Test" ignore
 
 // Build order
 
 "Clean"
+    ==> "YarnInstall"
     ==> "Restore"
     ==> "Prepare"
-
-"Clean"
-    ==> "YarnInstall"
-    ==> "Prepare"
-
-"Prepare"
     ==> "Build"
-    ==> "TestGenerateBindings"
 
 "Prepare"
-    ==> "Watch"
+    ?=> "BuildOnly"
+    ==> "BuildNoClean"
+    ==> "Build"
 
-"TestClean"
+"Prepare"
+    ?=> "Watch"
+
+"BuildOnly"
+    ==> "TestClean"
     ==> "TestGenerateBindings"
     ==> "TestPrepare"
-    ==> "TestBuild"
+    ?=> "TestBuild"
+    ==> "TestOnly"
+    ==> "TestNoClean"
+    ==> "Test"
+
+"Prepare"
+    ==> "Test"
+
+"TestPrepare"
+    ==> "TestNoClean"
+    ==> "Test"
 
 // start build
 Target.runOrDefault "Build"

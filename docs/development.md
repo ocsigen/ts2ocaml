@@ -56,7 +56,7 @@ The resulting `dist/ts2ocaml.js` is then ready to run through `node`.
 
 ## Testing
 
-`dotnet fake build -t TestBuild` builds the tool (as described above) and then performs the followings:
+`dotnet fake build -t Test` builds the tool (as described above) and then performs the followings:
 - Test the tool with the following packages:
   - TypeScript standard libraries (`node_modules/typescript/lib/lib.*.d.ts`)
   - `typescript` (binding for TypeScript compiler API)

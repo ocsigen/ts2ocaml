@@ -1,7 +1,23 @@
 ts2ocaml
 ========
 
+[![npm latest version](https://img.shields.io/npm/v/@ocsigen/ts2ocaml/latest.svg)](https://www.npmjs.com/package/@ocsigen/ts2ocaml)
+
 Generate OCaml bindings from TypeScript definitions via the TypeScript compiler API.
+
+## Installation
+
+```
+npm install -g @ocsigen/ts2ocaml
+```
+
+Or if you are using yarn:
+
+```
+yarn global add @ocsigen/ts2ocaml
+```
+
+An in-browser version may be available in future.
 
 ## Overview
 

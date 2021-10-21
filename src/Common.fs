@@ -24,6 +24,7 @@ module Log =
         eprintfn "warn: %s" str
     ) fmt
 
+/// Stateful class to rename overloaded identifiers.
 type OverloadRenamer(?rename: string -> int -> string, ?used: Set<string * string>) =
   let rename =
     match rename with
@@ -36,13 +37,19 @@ type OverloadRenamer(?rename: string -> int -> string, ?used: Set<string * strin
     | Some used ->
       for name in used |> Set.toSeq do
         m.[name] <- 0
-  member __.Rename (ns: string) (name: string) =
-    match m.TryGetValue((ns, name)) with
+
+  /// If the `name` is already used in the same `category`, returns the new renamed name.
+  ///
+  /// Otherwise, (even if it is used in a different `category`), returns the original name.
+  ///
+  /// `category` can be arbitrary, but it is intended for something like `value`, `type`, `module`, etc.
+  member __.Rename (category: string) (name: string) =
+    match m.TryGetValue((category, name)) with
     | true, i ->
-      m.[(ns, name)] <- i + 1
+      m.[(category, name)] <- i + 1
       let name' = rename name (i+1)
-      m.[(ns, name')] <- 0
+      m.[(category, name')] <- 0
       name'
     | false, _ ->
-      m.[(ns, name)] <- 0
+      m.[(category, name)] <- 0
       name

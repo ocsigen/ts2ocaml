@@ -44,6 +44,13 @@ module Graph =
        |> snd
        |> List.rev
 
+  /// Performs topological sort while grouping mutually-referencing nodes (i.e. loops)
+  ///
+  /// You can also use this to detect loops:
+  ///
+  /// if the output looks like ``[[a]; [b]; [c]]`` then there is no loop
+  ///
+  /// otherwise, the element with more than one child elements is a loop
   let stronglyConnectedComponents (g: Graph<'a>) (xs: 'a list) : 'a list list =
     let gR = rev g
 

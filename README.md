@@ -31,6 +31,6 @@ For developers and contributors:
 
 ## About this tool
 
-This tool is heavily inspired by [fable-compiler/ts2fable](https://github.com/fable-compiler/ts2fable), which generates [Fable (F# AltJS)](https://fable.io/) bindings from TS definition files.
+This tool is heavily inspired by [fable-compiler/ts2fable](https://github.com/fable-compiler/ts2fable), which generates [Fable](https://fable.io/) (F# AltJS) bindings from TS definition files.
 
 This tools is licensed under the [Apache License 2.0](LICENSE.md).

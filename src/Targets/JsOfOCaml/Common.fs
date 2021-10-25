@@ -62,6 +62,8 @@ with
 type Options =
   inherit GlobalOptions
   inherit Typer.TyperOptions
+  // utility options
+  abstract createMinimalStdlib: bool with get
   // output options
   abstract outputDir: string option with get
   abstract stubFile: string with get
@@ -73,6 +75,75 @@ type Options =
   abstract simplify: Simplify list with get, set
   // hidden options
   abstract stdlib: bool with get
+
+module Options =
+  open Fable.Core.JsInterop
+
+  let register (yargs: Yargs.Argv<Options>) =
+    yargs
+      .addFlag(
+        "create-minimal-stdlib",
+        (fun (o:Options) -> o.createMinimalStdlib),
+        descr="Create ts2ocaml_min.mli. When this option is used, code generator options are ignored.",
+        defaultValue=false
+      )
+      .group(
+        !^ResizeArray[
+          "output-dir"; "stub-file"
+        ],
+        "Output Options:"
+      )
+      .addOption(
+        "output-dir",
+        (fun (o: Options) -> o.outputDir),
+        descr="The directory to place the generated bindings.\nIf not set, it will be the current directory.",
+        alias="o")
+      .addOption(
+        "stub-file",
+        (fun (o: Options) -> o.stubFile),
+        descr="The name of the JS stub file to import/require JS modules.\nIf not set, it will be 'stub.js'.",
+        defaultValue="stub.js",
+        defaultDescr="stub.js",
+        alias="s")
+
+      .group(
+        !^ResizeArray[
+          "number-as-int"; "inherit-with-tags";
+          "safe-arity"; "rec-module";
+          "simplify";
+        ],
+        "Code Generator Options:")
+      .addFlag(
+        "number-as-int",
+        (fun (o: Options) -> o.numberAsInt),
+        descr="Treat number types as int.\nIf not set, float will be used.",
+        defaultValue=false,
+        alias="int")
+      .addChoice(
+        "inherit-with-tags",
+        [|FeatureFlag.Full; FeatureFlag.Provide; FeatureFlag.Consume; FeatureFlag.Off|],
+        (fun (o: Options) -> o.inheritWithTags),
+        descr="Use `TypeName.tags` type names to inherit types from other packages.",
+        defaultValue=FeatureFlag.Full)
+      .addChoice(
+        "safe-arity",
+        [|FeatureFlag.Full; FeatureFlag.Provide; FeatureFlag.Consume; FeatureFlag.Off|],
+        (fun (o: Options) -> o.safeArity),
+        descr="Use `TypeName.t_n` type names to safely use overloaded types from other packages.",
+        defaultValue=FeatureFlag.Full)
+      .addChoice(
+        "rec-module",
+        [|RecModule.Optimized; RecModule.Naive; RecModule.Off|],
+        (fun (o: Options) -> o.recModule),
+        descr="Use recursive modules to simplify the output.\nCan impact the compilation time.",
+        defaultValue=RecModule.Optimized)
+      .addCommaSeparatedStringSet(
+        "simplify",
+        Simplify.TryParse,
+        (fun (o: Options) -> o.simplify),
+        descr=sprintf "Turn on simplification features. Available features: %s" (Simplify.Values |> List.map string |> String.concat ", "))
+
+      .addFlag("stdlib", (fun (o: Options) -> o.stdlib), descr = "Internal. Used to generate Ts2ocaml.mli from typescript/lib/lib.*.d.ts.").hide("stdlib")
 
 type Output = {
   fileName: string

@@ -16,7 +16,7 @@ let register (parse: GlobalOptions -> string[] -> SourceFile list) (target: ITar
   when 'Options :> GlobalOptions
   and  'TargetOptions :> GlobalOptions =
   argv.command(
-    U2.Case1 (target.Command + " <inputs..>"),
+    U2.Case1 (target.Command + " [inputs..]"),
     target.Description,
     builder = U3.Case2 (fun argv ->
       (target.Builder !!argv).positional("inputs", {| describe = ".d.ts files to generate a binding" |})

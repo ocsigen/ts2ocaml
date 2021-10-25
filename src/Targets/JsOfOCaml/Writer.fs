@@ -1452,7 +1452,7 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output list =
     ctx |> Context.mapOptions (fun _ -> opts)
         |> Context.mapState (fun _ -> State.defaultValue ())
 
-  Log.tracef opts "* emitting baselib..."
+  Log.tracef opts "* emitting stdlib..."
 
   let createOutput (fileNameSuffix: string) (opens: string list) ctx (src: SourceFile list) =
     let content =

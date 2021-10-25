@@ -10,8 +10,23 @@
 )
 
 (rule
-  (targets ts2ocaml.ml)
-  (deps ts2ocaml.mli)
+  (targets ts2ocaml_min.ml)
+  (deps ts2ocaml_min.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets ts2ocaml_es.ml)
+  (deps ts2ocaml_es.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets ts2ocaml_dom.ml)
+  (deps ts2ocaml_dom.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
+  (targets ts2ocaml_webworker.ml)
+  (deps ts2ocaml_webworker.mli)
   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule

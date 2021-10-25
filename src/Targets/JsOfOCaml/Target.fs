@@ -83,31 +83,32 @@ let private run (srcs: SourceFile list) (options: Options) =
       with
         _ -> fail ()
 
-  let result =
+  let results =
     if options.stdlib then
       emitStdlib srcs options
     else
       emitEverythingCombined srcs options
 
-  let fullPath = Node.Api.path.join[|outputDir; result.fileName|]
-  Log.tracef options "* writing the binding to '%s'..." fullPath
-  Node.Api.fs.writeFileSync(fullPath, Text.toString 2 result.content)
+  for result in results do
+    let fullPath = Node.Api.path.join[|outputDir; result.fileName|]
+    Log.tracef options "* writing the binding to '%s'..." fullPath
+    Node.Api.fs.writeFileSync(fullPath, Text.toString 2 result.content)
 
-  let stubFile = Node.Api.path.join [|outputDir; options.stubFile|]
-  if not (List.isEmpty result.stubLines) then
-    let existingStubLines =
-      if not (Node.Api.fs.existsSync(!^stubFile)) then Set.empty
-      else if Node.Api.fs.lstatSync(!^stubFile).isFile() then
-        Node.Api.fs.readFileSync(stubFile, "UTF-8")
-                   .Split([|Node.Api.os.EOL|], System.StringSplitOptions.RemoveEmptyEntries)
-        |> Set.ofArray
-      else
-        failwithf "The path '%s' is not a file." stubFile
-    let stubLines = Set.union existingStubLines (Set.ofList result.stubLines)
-    if stubLines <> existingStubLines then
-      Log.tracef options "* writing the stub file to '%s'..." stubFile
-      let stub = stubLines |> String.concat Node.Api.os.EOL
-      Node.Api.fs.writeFileSync(stubFile, stub)
+    let stubFile = Node.Api.path.join [|outputDir; options.stubFile|]
+    if not (List.isEmpty result.stubLines) then
+      let existingStubLines =
+        if not (Node.Api.fs.existsSync(!^stubFile)) then Set.empty
+        else if Node.Api.fs.lstatSync(!^stubFile).isFile() then
+          Node.Api.fs.readFileSync(stubFile, "UTF-8")
+                     .Split([|Node.Api.os.EOL|], System.StringSplitOptions.RemoveEmptyEntries)
+          |> Set.ofArray
+        else
+          failwithf "The path '%s' is not a file." stubFile
+      let stubLines = Set.union existingStubLines (Set.ofList result.stubLines)
+      if stubLines <> existingStubLines then
+        Log.tracef options "* writing the stub file to '%s'..." stubFile
+        let stub = stubLines |> String.concat Node.Api.os.EOL
+        Node.Api.fs.writeFileSync(stubFile, stub)
 
 let target =
   { new ITarget<Options> with

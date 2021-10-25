@@ -1405,7 +1405,11 @@ let emitStatementsWithStructuredText (ctx: Context) (stmts: Statement list) (st:
 let emitStatements (ctx: Context) (stmts: Statement list) =
   emitStatementsWithStructuredText ctx stmts (createStructuredText ctx stmts)
 
-let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
+let header =
+  [ str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
+    Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]") ]
+
+let emitStdlib (srcs: SourceFile list) (opts: Options) : Output list =
   Log.tracef opts "* looking up the minimal supported ES version for each definition..."
   let esSrc =
     srcs
@@ -1449,17 +1453,24 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output =
         |> Context.mapState (fun _ -> State.defaultValue ())
 
   Log.tracef opts "* emitting baselib..."
-  let content =
-    concat newline [
-      yield str stdlib
-      yield newline
-      yield! emitStatements (writerCtx esCtx) (esSrc |> List.collect (fun x -> x.statements))
-      yield newline
-      yield moduleSig {| name = "Dom"; origName = "Dom"; scope = None; content = emitStatements (writerCtx domCtx) (domSrc |> List.collect (fun x -> x.statements)); docCommentBody = [] |}
-      yield moduleSig {| name = "WebWorker"; origName = "WebWorker"; scope = None; content = emitStatements (writerCtx webworkerCtx) (webworkerSrc |> List.collect (fun x -> x.statements)); docCommentBody = [] |}
-    ]
 
-  { fileName = "ts2ocaml.mli"; content = content; stubLines = [] }
+  let createOutput (fileNameSuffix: string) (opens: string list) ctx (src: SourceFile list) =
+    let content =
+      concat newline [
+        yield! header
+        yield open_ opens
+        yield empty
+        yield! emitStatements (writerCtx ctx) (src |> List.collect (fun s -> s.statements))
+      ]
+    { fileName = sprintf "ts2ocaml_%s.mli" fileNameSuffix; content = content; stubLines = []}
+
+  let ts2ocamlMin =
+    { fileName = "ts2ocaml_min.mli"; content = str stdlib; stubLines = []}
+
+  [ ts2ocamlMin
+    createOutput  "es" ["Ts2ocaml_min"] esCtx esSrc
+    createOutput "dom" ["Ts2ocaml_min"; "Ts2ocaml_es"] domCtx domSrc
+    createOutput "webworker" ["Ts2ocaml_min"; "Ts2ocaml_es"] webworkerCtx webworkerSrc ]
 
 let emitImports (stmts: Statement list) : text list =
   let emitImport (i: Import) =
@@ -1563,7 +1574,7 @@ let emitReferenceTypeDirectives (src: SourceFile) : text list =
 
     empty :: comments @ [openRefs]
 
-let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
+let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output list =
   if srcs = [] then failwith "no input files were given"
 
   let srcs =
@@ -1608,8 +1619,7 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
   Log.tracef opts "* emitting a binding for js_of_ocaml..."
   let content =
     concat newline [
-      yield str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
-      yield Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]")
+      yield! header
       match exported.topLevelScope with
       | None -> ()
       | Some scope ->
@@ -1624,4 +1634,4 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output =
       yield! emitStatementsWithStructuredText ctx stmts structuredText
     ]
 
-  { fileName = derivedOutputFileName; content = content; stubLines = exported.stubLines }
+  [{ fileName = derivedOutputFileName; content = content; stubLines = exported.stubLines }]

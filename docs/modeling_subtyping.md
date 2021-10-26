@@ -211,7 +211,7 @@ Pros:
 Cons:
 * **No type safety.**
   - Every JS type is the same type `obj`.
-* **Bad editor experiences in Merlin.**
+* **Worst editor experiences in Merlin.**
   - Every JS type now shows up as `obj`.
 * A bit awkward to use.
 * Poor support for recursive types.
@@ -405,3 +405,24 @@ You can't introduce a new type variable in a destructive substitutions (`with ..
 > 2. it's difficult to inherit multiple classes into a single `'T b`,
 > 3. it's also difficult to add `B`'s own methods to `'T b`, and
 > 4. we can't extract the module type back from `'T b`, so we can't inherit `B` by `include` anymore.
+
+### The only real workaround
+
+The root of these problems is, in fact, that we have a distinct `type t` for each type `A .. D`, and so we have to do `with type t := t` to replace them.
+
+So the only workaround for this to work is [making everything untyped](#give-up-modeling-subtyping-relations):
+```ocaml
+type obj
+
+module A : sig
+  val methA: obj -> a:float -> float
+  val doSomethingWithB: obj -> b:obj -> unit
+end
+
+module B : sig
+  include module type of A
+  val methB: obj -> a:float -> b:float -> float
+end
+```
+
+However, I think being able to use `include` for shorter and cleaner output does not really justify losing the type safety entirely...

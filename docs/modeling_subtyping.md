@@ -296,8 +296,31 @@ end
 ```
 
 But this does not compile: it fails with `Illegal recursive module reference` error.
+OCaml's module system simply don't support this.
 
-OCaml's module system simply don't support this...
+> We could remove the recursion by moving the types to the outside of its modules, but then `with type t := t` does not work anymore:
+> ```ocaml
+> type _A
+> type _B
+>
+> module A : sig
+>   type t = _A
+>   val methA: t -> a:float -> float
+>   val doSomethingWithB: t -> b:_B -> unit
+> end
+>
+> module B : sig
+>   type t = _B
+>   include module type of A with type t := t
+>   val methB: t -> a:float -> b:float -> float
+> end
+> ```
+> This now fails with a different error:
+> ```
+> In this `with' constraint, the new definition of t
+> does not match its original definition in the constrained signature:
+> Type declarations do not match: type t = _B is not included in type t = A.t
+> ```
 
 ### Functions from the parent class with the same name are problematic
 

@@ -11,6 +11,8 @@ So in *most* cases, we can regard it as **nominal subtyping**.
 [fable-compiler/ts2fable](https://github.com/fable-compiler/ts2fable), which this project is inspired by, has been successful in simulating
 TypeScript's subtyping using [F# interfaces](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/interfaces).
 
+# Simulating nominal subtyping in OCaml
+
 In OCaml, there are several ways to simulate nominal subtyping.
 
 ## Classes
@@ -71,13 +73,13 @@ Cons:
 Uses private type abbreviations to inherit a type.
 
 ```ocaml
-module Foo: sig
+module Foo : sig
   type t
 
   val meth: t -> float -> unit
 end
 
-module Bar: sig
+module Bar : sig
   type t = private Foo.t
 
   val meth: t -> float -> float -> unit
@@ -108,13 +110,13 @@ Cons:
 Creates cast functions to cast an object to its parent classes.
 
 ```ocaml
-module Foo: sig
+module Foo : sig
   type t
 
   val meth: t -> float -> unit
 end
 
-module Bar: sig
+module Bar : sig
   type t
 
   val meth: t -> float -> float -> unit
@@ -148,13 +150,13 @@ In this way, we use **row polymorphism on class names** to model nominal subtypi
 ```ocaml
 type -'tags intf
 
-module Foo: sig
+module Foo : sig
   type t = [`Foo] intf
 
   val meth: t -> float -> unit
 end
 
-module Bar: sig
+module Bar : sig
   type t = [`Bar | `Foo] intf
 
   val meth: t -> float -> float -> unit
@@ -184,13 +186,13 @@ Cons:
 ```ocaml
 type obj
 
-module Foo: sig
+module Foo : sig
   type t = obj
 
   val meth: t -> float -> unit
 end
 
-module Bar: sig
+module Bar : sig
   type t = obj
 
   val meth: t -> float -> float -> unit
@@ -213,3 +215,170 @@ Cons:
   - Every JS type now shows up as `obj`.
 * A bit awkward to use.
 * Poor support for recursive types.
+
+# Failed attempts
+
+Here I list other approaches which ended up being failure when I'm trying to simulate nominal subtyping in OCaml.
+
+## Use `include` to inherit methods and property from super class
+
+Assume we have the following input:
+
+```typescript
+interface A { methA(a: number): number; }
+
+interface B extends A { methB(a: number, b: number): number; }
+
+interface C extends A { methC(a: number, b: number, c: number): number; }
+
+interface D extends B, C { methD(a: number, b: number, c: number, d: number): number; }
+```
+
+It seems we could beautifully model it with module inclusion (`include`):
+
+```ocaml
+module A : sig
+  type t
+  val methA: t -> a:float -> float
+end
+
+module B : sig
+  type t
+  include module type of A with type t := t
+  val methB: t -> a:float -> b:float -> float
+end
+
+module C : sig
+  type t
+  include module type of A with type t := t
+  val methC: t -> a:float -> b:float -> c:float -> float
+end
+
+module D : sig
+  type t
+  include module type of B with type t := t
+  include module type of C with type t := t
+  val methD: t -> a:float -> b:float -> c:float -> d:float -> float
+end
+```
+
+But this approach starts to fall apart once we encounter a bit more complex cases.
+
+### Can't `include` mutually-recursive module
+
+Consider `A` has some method which takes `B` as an argument.
+
+```typescript
+interface A {
+  methA(a: number): number;
+  doSomethingWithB(b: B): unit;
+}
+
+interface B extends A {
+  methB(a: number, b: number): number;
+}
+```
+
+Then we would have to define `A` and `B` as mutually recursive modules.
+
+```ocaml
+module rec A : sig
+  type t
+  val methA: t -> a:float -> float
+  val doSomethingWithB: t -> b:B.t -> unit
+end
+
+and B : sig
+  type t
+  include module type of A with type t := t
+  val methB: t -> a:float -> b:float -> float
+end
+```
+
+But this does not compile: it fails with `Illegal recursive module reference` error.
+
+OCaml's module system simply don't support this...
+
+### Functions from the parent class with the same name are problematic
+
+In the above example, each interface (conveniently) has a distinct name. But this is not the case in real-world examples.
+
+If they share the same name `meth`, the above example now looks like this:
+
+```ocaml
+module A : sig
+  type t
+  val meth: t -> a:float -> float
+end
+
+module B : sig
+  type t
+  include module type of A with type t := t
+  val meth: t -> a:float -> b:float -> float
+end
+```
+
+Here, in the module `B`, the `meth` from `A` is hidden by `B`'s own `meth`.
+
+What we have to do here is
+1. List all the methods from the parent classes `A`, then
+2. If there are any name collisions, rename the one from the child class `B` (in this case, to `meth'`).
+
+But this means **we are always forced to have the complete list of methods** of the child class.
+
+So using `include module type` does not make the implementation any easier than just dumping everything to `B` like this:
+
+```ocaml
+module A : sig
+  type t
+  val meth: t -> a:float -> float
+end
+
+module B : sig
+  type t
+  val meth: t -> a:float -> float
+  val meth': t -> a:float -> b:float -> float
+end
+```
+
+### Can't `include` the parent class if it has fewer type parameter than the child
+
+Suppose `B` has a type parameter `T`:
+
+```typescript
+interface B<T> extends A {
+  methB(a: number, b: number): T;
+}
+```
+
+We would want to translate it to something like this:
+
+```ocaml
+module B : sig
+  type 'T t
+  include module type of A with type t := 'T t
+  val methB: 'T t -> a:float -> b:float -> 'T
+end
+```
+
+But this fails with the error `The type variable 'T is unbound in this type declaration`.
+You can't introduce a new type variable in a destructive substitutions (`with .. := ..`).
+
+> Yes, first-class module supports introducing additional type parameters:
+> ```ocaml
+> module type A_Type = sig
+>   type t
+>   val methA: t -> a:float -> float
+> end
+>
+> module B : sig
+>   type 'T t
+>   type 'T b = (module A with type t = 'T t)
+> end
+> ```
+> Then `'T b` is the type of the first-class module.
+> But it has several problems:
+> 1. first-class modules in JS require special runtime support,
+> 2. it's difficult to inherit multiple classes into a single `'T b`,
+> 3. it's also difficult to add `B`'s own methods to `'T b`, and
+> 4. we can't extract the module type back from `'T b`, so we can't inherit `B` by `include` anymore.

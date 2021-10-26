@@ -8,6 +8,9 @@ type RecModule =
   | [<CompiledName("optimized")>] Optimized
   | [<CompiledName("naive")>] Naive
   | [<CompiledName("off")>] Off
+  | [<CompiledName("default")>] Default
+with
+  static member Values = [|Optimized; Naive; Off; Default|]
 
 [<StringEnum; RequireQualifiedAccess>]
 type FeatureFlag =
@@ -15,25 +18,22 @@ type FeatureFlag =
   | [<CompiledName("provide")>] Provide
   | [<CompiledName("consume")>] Consume
   | [<CompiledName("off")>] Off
+  | [<CompiledName("default")>] Default
 with
+  static member Values = [|Full; Provide; Consume; Off; Default|]
+
   member this.HasProvide = match this with Full | Provide -> true | _ -> false
   member this.HasConsume = match this with Full | Consume -> true | _ -> false
 
   member this.WithProvide(b: bool) =
     match this with
-    | Provide | Off -> if b then Provide else Off
+    | Provide | Off | Default -> if b then Provide else Off
     | Full | Consume -> if b then Full else Consume
 
   member this.WithConsume(b: bool) =
     match this with
-    | Consume | Off -> if b then Consume else Off
+    | Consume | Off | Default -> if b then Consume else Off
     | Full | Provide -> if b then Full else Provide
-
-[<StringEnum; RequireQualifiedAccess>]
-type Subtyping =
-  | [<CompiledName("tag-based")>] TagBased
-  | [<CompiledName("private-type-alias")>] PrivateTypeAlias
-  | [<CompiledName("off")>] Off
 
 [<StringEnum; RequireQualifiedAccess>]
 type Simplify =
@@ -42,8 +42,9 @@ type Simplify =
   | [<CompiledName("immediate-constructor")>] ImmediateConstructor
   | [<CompiledName("anonymous-interface-value")>] AnonymousInterfaceValue
   | [<CompiledName("named-interface-value")>] NamedInterfaceValue
+  | [<CompiledName("default")>] Default
 with
-  static member Values = [All; ImmediateInstance; ImmediateConstructor; AnonymousInterfaceValue; NamedInterfaceValue]
+  static member Values = [|All; ImmediateInstance; ImmediateConstructor; AnonymousInterfaceValue; NamedInterfaceValue; Default|]
 
   static member Has (flags: Simplify list, target: Simplify) =
     if flags |> List.contains All then true
@@ -58,35 +59,102 @@ with
     | "named-interface-value" -> Some NamedInterfaceValue
     | _ -> None
 
+[<StringEnum; RequireQualifiedAccess>]
+type Subtyping =
+  | [<CompiledName("tag")>] Tag
+  | [<CompiledName("cast-function")>] CastFunction
+  | [<CompiledName("default")>] Default
+with
+  static member Values = [|Tag; CastFunction; Default|]
+
+  static member TryParse (s: string) =
+    match s with
+    | "tag" -> Some Tag
+    | "cast-function" -> Some CastFunction
+    | _ -> None
+
+[<StringEnum; RequireQualifiedAccess>]
+type Preset =
+  | [<CompiledName("minimal")>] Minimal
+  | [<CompiledName("typesafe")>] Typesafe
+  | [<CompiledName("recommended")>] Recommended
+with
+  static member Values = [|Minimal; Typesafe; Recommended|]
 
 type Options =
   inherit GlobalOptions
   inherit Typer.TyperOptions
   // utility options
+  abstract preset: Preset option with get
   abstract createMinimalStdlib: bool with get
+  abstract stdlib: bool with get // hidden
   // output options
   abstract outputDir: string option with get
   abstract stubFile: string with get
   // generator options
-  abstract numberAsInt: bool with get
+  abstract numberAsInt: bool with get, set
+  //abstract subtyping: Subtyping list with get, set
   abstract inheritWithTags: FeatureFlag with get, set
   abstract recModule: RecModule with get, set
   abstract safeArity: FeatureFlag with get, set
   abstract simplify: Simplify list with get, set
-  // hidden options
-  abstract stdlib: bool with get
 
 module Options =
   open Fable.Core.JsInterop
 
+  let validate : Yargs.MiddlewareFunction<Options> =
+    Yargs.MiddlewareFunction<Options>(fun opts yargs ->
+      match opts.preset with
+      | None -> ()
+      | Some p ->
+        if opts.simplify = [] then
+          opts.simplify <- [Simplify.All]
+
+        if p = Preset.Minimal || p = Preset.Recommended then
+          opts.recModule <- RecModule.Optimized
+
+        if p = Preset.Typesafe || p = Preset.Recommended then
+          if opts.safeArity = FeatureFlag.Default then
+            opts.safeArity <- FeatureFlag.Full
+          //if opts.subtyping |> List.contains Subtyping.Tag |> not then
+          //  opts.subtyping <- Subtyping.Tag :: opts.subtyping
+          //if opts.subtyping |> List.contains Subtyping.CastFunction |> not then
+          //  opts.subtyping <- Subtyping.CastFunction :: opts.subtyping
+          if opts.inheritWithTags = FeatureFlag.Default then
+            opts.inheritWithTags <- FeatureFlag.Full
+
+      //if opts.subtyping |> List.contains Subtyping.Tag |> not
+      //&& (opts.inheritWithTags <> FeatureFlag.Off || opts.inheritWithTags <> FeatureFlag.Default) then
+      //  yargs.exit(-1, new System.ArgumentException("--inherit-with-tags requires --subtyping=tag."))
+
+      !^opts)
+
   let register (yargs: Yargs.Argv<Options>) =
     yargs
+      .group(
+        !^ResizeArray[
+          "create-minimal-stdlib"; "stdlib"; "preset"
+        ],
+        "Meta Options:"
+      )
       .addFlag(
         "create-minimal-stdlib",
         (fun (o:Options) -> o.createMinimalStdlib),
         descr="Create ts2ocaml_min.mli. When this option is used, code generator options are ignored.",
         defaultValue=false
       )
+      .addFlag(
+        "stdlib",
+        (fun (o: Options) -> o.stdlib),
+        descr = "Internal. Used to generate Ts2ocaml.mli from typescript/lib/lib.*.d.ts."
+      ).hide("stdlib")
+      .addChoice(
+        "preset",
+        Preset.Values,
+        (fun (o: Options) -> o.preset),
+        descr="Specify the preset to use."
+      )
+
       .group(
         !^ResizeArray[
           "output-dir"; "stub-file"
@@ -108,11 +176,23 @@ module Options =
 
       .group(
         !^ResizeArray[
-          "number-as-int"; "inherit-with-tags";
-          "safe-arity"; "rec-module";
+          "subtyping";
+          "inherit-with-tags";
+          "rec-module";
+          "safe-arity";
+          "number-as-int";
           "simplify";
         ],
         "Code Generator Options:")
+      (*
+      .addCommaSeparatedStringSet(
+        "subtyping",
+        Subtyping.TryParse,
+        (fun (o: Options) -> o.subtyping),
+        descr=
+          sprintf "Turn on subtyping features. Available features: %s"
+                  (Subtyping.Values |> Array.filter ((<>) Subtyping.Default) |> Array.map string |> String.concat ", "))
+      *)
       .addFlag(
         "number-as-int",
         (fun (o: Options) -> o.numberAsInt),
@@ -121,29 +201,32 @@ module Options =
         alias="int")
       .addChoice(
         "inherit-with-tags",
-        [|FeatureFlag.Full; FeatureFlag.Provide; FeatureFlag.Consume; FeatureFlag.Off|],
+        FeatureFlag.Values,
         (fun (o: Options) -> o.inheritWithTags),
         descr="Use `TypeName.tags` type names to inherit types from other packages.",
-        defaultValue=FeatureFlag.Full)
+        defaultValue=FeatureFlag.Default)
       .addChoice(
         "safe-arity",
-        [|FeatureFlag.Full; FeatureFlag.Provide; FeatureFlag.Consume; FeatureFlag.Off|],
+        FeatureFlag.Values,
         (fun (o: Options) -> o.safeArity),
         descr="Use `TypeName.t_n` type names to safely use overloaded types from other packages.",
-        defaultValue=FeatureFlag.Full)
+        defaultValue=FeatureFlag.Default)
       .addChoice(
         "rec-module",
-        [|RecModule.Optimized; RecModule.Naive; RecModule.Off|],
+        RecModule.Values,
         (fun (o: Options) -> o.recModule),
         descr="Use recursive modules to simplify the output.\nCan impact the compilation time.",
-        defaultValue=RecModule.Optimized)
+        defaultValue=RecModule.Default)
       .addCommaSeparatedStringSet(
         "simplify",
         Simplify.TryParse,
         (fun (o: Options) -> o.simplify),
-        descr=sprintf "Turn on simplification features. Available features: %s" (Simplify.Values |> List.map string |> String.concat ", "))
+        descr=
+          sprintf "Turn on simplification features. Available features: %s"
+                  (Simplify.Values |> Array.filter ((<>) Simplify.Default) |> Array.map string |> String.concat ", "))
 
-      .addFlag("stdlib", (fun (o: Options) -> o.stdlib), descr = "Internal. Used to generate Ts2ocaml.mli from typescript/lib/lib.*.d.ts.").hide("stdlib")
+      .middleware(!^validate)
+
 
 type Output = {
   fileName: string

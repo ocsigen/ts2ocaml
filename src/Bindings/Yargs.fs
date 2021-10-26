@@ -187,7 +187,7 @@ type [<AllowNullLiteral>] Argv<'T> =
     abstract example: command: string * description: string -> Argv<'T>
     abstract example: command: ResizeArray<string * obj> -> Argv<'T>
     /// Manually indicate that the program should exit, and provide context about why we wanted to exit. Follows the behavior set by `.exitProcess().`
-    abstract exit: code: float * err: Error -> unit
+    abstract exit: code: int * err: Error -> unit
     /// By default, yargs exits the process when the user passes a help flag, the user uses the `.version` functionality, validation fails, or the command handler fails.
     /// Calling `.exitProcess(false)` disables this behavior, enabling further actions after yargs have been validated.
     abstract exitProcess: enabled: bool -> Argv<'T>
@@ -526,8 +526,8 @@ type [<AllowNullLiteral>] CommandModule<'T, 'U> =
 type ParseCallback =
     ParseCallback<obj>
 
-type [<AllowNullLiteral>] ParseCallback<'T> =
-    [<Emit "$0($1...)">] abstract Invoke: err: Error option * argv: U2<Arguments<'T>, Promise<Arguments<'T>>> * output: string -> unit
+type ParseCallback<'T> =
+    delegate of err: Error option * argv: U2<Arguments<'T>, Promise<Arguments<'T>>> * output: string -> unit
 
 type CommandBuilder<'U> =
     CommandBuilder<obj, 'U>
@@ -538,20 +538,20 @@ type CommandBuilder =
 type CommandBuilder<'T, 'U> =
     U3<Options, (Argv<'T> -> Argv<'U>), (Argv<'T> -> Promise<Argv<'U>>)>
 
-type [<AllowNullLiteral>] SyncCompletionFunction =
-    [<Emit "$0($1...)">] abstract Invoke: current: string * argv: obj option -> ResizeArray<string>
+type SyncCompletionFunction =
+    delegate of current: string * argv: obj option -> ResizeArray<string>
 
-type [<AllowNullLiteral>] AsyncCompletionFunction =
-    [<Emit "$0($1...)">] abstract Invoke: current: string * argv: obj option * ``done``: (ResizeArray<string> -> unit) -> unit
+type AsyncCompletionFunction =
+    delegate of current: string * argv: obj option * ``done``: (ResizeArray<string> -> unit) -> unit
 
-type [<AllowNullLiteral>] PromiseCompletionFunction =
-    [<Emit "$0($1...)">] abstract Invoke: current: string * argv: obj option -> Promise<ResizeArray<string>>
+type PromiseCompletionFunction =
+    delegate of current: string * argv: obj option -> Promise<ResizeArray<string>>
 
 type MiddlewareFunction =
     MiddlewareFunction<obj>
 
-type [<AllowNullLiteral>] MiddlewareFunction<'T> =
-    [<Emit "$0($1...)">] abstract Invoke: args: Arguments<'T> -> unit
+type MiddlewareFunction<'T> =
+    delegate of arvg:'T * yargs:Argv<'T> -> U2<'T, Promise<'T>>
 
 type Choices =
     ReadonlyArray<U2<string, float> option>

@@ -1188,7 +1188,7 @@ module ModuleEmitter =
         |> List.concat
   let fromOption (opt: Options) =
     match opt.recModule with
-    | RecModule.Off -> nonRec
+    | RecModule.Off | RecModule.Default -> nonRec
     | RecModule.Naive -> recAll
     | RecModule.Optimized -> recOptimized
 

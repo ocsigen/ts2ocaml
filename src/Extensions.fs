@@ -157,6 +157,10 @@ type Argv<'T> with
     this.choices(key, values)
         .addImpl<'a>(key, descr, demand=true, ?missingMsg=missingMsg, ?dv=defaultValue, ?dd=defaultDescr, ?alias=alias)
         :> Argv<'U>
+  member this.addChoice (key: string, values: 'a[], f: 'U -> 'a option, ?descr, ?alias) =
+    this.choices(key, values)
+        .addImpl<'a>(key, descr, ?alias=alias)
+        :> Argv<'U>
   member this.addFlag (key: string, f: 'U -> bool, ?descr, ?defaultValue, ?defaultDescr, ?alias) =
     this.boolean(!^key)
         .addImpl<bool>(key, descr, dv=(defaultValue |> Option.defaultValue false), ?dd=defaultDescr, ?alias=alias)

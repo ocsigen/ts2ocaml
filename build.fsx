@@ -106,18 +106,23 @@ module Test =
             !! "node_modules/typescript/lib/lib.*.d.ts"
 
         let packages = [
-            !! "node_modules/typescript/lib/typescript.d.ts";
-            !! "node_modules/@types/scheduler/tracing.d.ts";
-            !! "node_modules/csstype/index.d.ts";
-            !! "node_modules/@types/prop-types/index.d.ts";
-            !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts";
-            !! "node_modules/@types/react-modal/index.d.ts";
-            !! "node_modules/@types/yargs-parser/index.d.ts";
-            !! "node_modules/@types/yargs/index.d.ts";
+           // "full" package involving a lot of inheritance
+           "full", !! "node_modules/typescript/lib/typescript.d.ts";
+
+           // "full" packages involving a lot of dependencies (which includes some "safe" packages)
+           "safe", !! "node_modules/@types/scheduler/tracing.d.ts";
+           "full", !! "node_modules/csstype/index.d.ts";
+           "safe", !! "node_modules/@types/prop-types/index.d.ts";
+           "full", !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts";
+           "full", !! "node_modules/@types/react-modal/index.d.ts";
+
+           // "safe" package which depends on another "safe" package
+           "safe", !! "node_modules/@types/yargs-parser/index.d.ts";
+           "safe", !! "node_modules/@types/yargs/index.d.ts";
         ]
 
-        for package in packages do
-            ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; "--preset recommended"; $"-o {outputDir}"] package
+        for preset, package in packages do
+            ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; $"--preset {preset}"; $"-o {outputDir}"] package
 
     let prepare () =
         for file in outputDir |> Shell.copyRecursiveTo true testSrcDir do

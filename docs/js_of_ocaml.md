@@ -3,11 +3,35 @@ ts2ocaml for js_of_ocaml
 
 Generates binding for js_of_ocaml.
 
-## Overview
+# Overview
 
 TODO
 
-### Using generated bindings in your project
+## Choosing a preset
+
+`ts2ocaml` has many options, so there is an option [`--preset`](#--preset) to set multiple options at once which is commonly used together.
+
+* `--preset=minimal`
+  - A preset to **minimize the output**.
+  - Intended for library authors, who will modify the output and build a binding library upon it.
+    - It generates the simplest binding.
+    - However, it lacks subtyping and it will not compile if the package depends on another package.
+* `--preset=safe`
+  - A preset to generate a code **which just compiles and works**.
+  - Suited for generating bindings for relatively small packages, which involve less inheritance and slightly depend on other packages.
+    - e.g. `yargs`, which has a minimal dependency and does not make use of `extends` so much.
+* `--preset=full`
+  - A preset to generate a code with **more type safety** and **more support for package dependency**.
+  - Suited for generating bindings for large packages, which have many `extends` and/or heavily depend on another package.
+    - e.g. React component packages, which almost certainly inherits many interfaces from React.
+
+[`--preset`](#--preset) doesn't override options you explicitly set.
+See [`--preset`](#--preset) for the options which will be set by each preset.
+
+> **Hint:** if a package `foo` depends only on `bar` and `bar` depends on many other packages,
+> it's safe to use `--preset=safe` to `foo` and `--preset=full` to `bar`, but not vice versa.
+
+## Using the generated bindings in your project
 
 `ts2ocaml` for `js_of_ocaml` generates `.mli` files, which should then be processed with [LexiFi/gen_js_api](https://github.com/LexiFi/gen_js_api).
 
@@ -15,26 +39,52 @@ You should use the latest `gen_js_api` as `ts2ocaml` uses the latest features of
 As of Oct 2021, most of the required features have not been present in the latest version in opam.
 So you would have to `git submodule` their repository (`https://github.com/LexiFi/gen_js_api`) to the `lib` directory of your OCaml project.
 
-### Standard library
+## Standard library
 
 TODO
 
-------
-
-## Usage
+# Usage
 
 ```bash
 $ ts2ocaml jsoo [options] <inputs..>
 ```
 
-## Output Options
+> See also [the common options](common_options.md).
 
-### `-o`, `--output-dir`
+# General Options
+
+## `--preset`
+
+Specify the preset to use.
+
+* `--preset=minimal`
+  - It sets `--simplify=all` and `--rec-module=optimized`.
+* `--preset=safe`
+  - It sets `--safe-arity=full` and `--subtyping=cast-function`.
+  - It also sets all the options `--preset=minimal` sets.
+* `--preset=full`
+  - It sets `--inherit-with-tags=full` and `--subtyping=tag`.
+  - It also sets all the options `--preset=safe` sets.
+
+## `--create-minimal-stdlib`
+
+Create `ts2ocaml_min.mli`, which is the minimal standard library for ts2ocaml *without* any bindings for
+* JS standard API (`Ts2ocaml_es`),
+* DOM API (`Ts2ocaml_dom`), or
+* web worker API (`Ts2ocaml_webworker`).
+
+This option is helpful if you have an existing binding for these APIs, and don't want to use ones from the full `Ts2ocaml` [standard library](#standard-library).
+
+When this option is used, ts2ocaml requires no input files. So most of the other options will be ignored.
+
+# Output Options
+
+## `-o`, `--output-dir`
 
 The directory to place the generated bindings.
 If not set, it will be the current directory.
 
-### `-s`, `--stub-file`
+## `-s`, `--stub-file`
 
 The name of the JS stub file to import/require JS modules.
 If not set, it will be `stub.js`.
@@ -55,23 +105,131 @@ joo_global_object["yargsParser"] = require('yargs-parser')
 
 The stub file uses `require` for importing packages. `/* need Babel */` indicates the referenced package is actually a ES6 module and so it needs to be converted by Babel.
 
-## Code Generator Options
+# Typer Options
 
-### `--int`, `--number-as-int`
+> **Note:** This section describes the options which is only available for js_of_ocaml target.
+>
+> See also [the common typer options](common_options.md#typer-options).
 
-Treat number types as int. If not set, float will be used.
+## `--int`, `--number-as-int`
 
-### `--tags`, `--inherit-with-tags`
+Treat number types as `int`. If not set, `float` will be used.
+
+## `--subtyping`
+
+> See also [the detailed docs about modeling TypeScript's subtyping in OCaml](modeling_subtyping.md).
+
+Turn on subtyping features.
+
+You can use `--subtyping=foo,bar` to turn on multiple features.
+
+### Feature: `tag`
+
+Use `-'tags intf` for class and interface types, which [simulates nominal subtyping](modeling_subtyping.md#phantom-types-with-row-polymorphism-polymorphic-variants) by putting to `'tags` the class names as a polymorphic variant.
+
+For example, assume we have the following input:
+
+```typescript
+interface A { methA(a: number): number; }
+
+interface B extends A { methB(a: number, b: number): number; }
+
+interface C extends B { methC(a: number, b: number, c: number): number; }
+```
+
+When this feature is used, the resulting binding will look like:
+
+```ocaml
+module A : sig
+  type t = [ `A ] intf
+  val methA: t -> a:float -> float
+  val cast_from: [> `A] intf -> t
+end
+
+module B : sig
+  type t = [ `B | `A ] intf
+  val methB: t -> a:float -> b:float -> float
+  val cast_from: [> `B] intf -> t
+end
+
+module C : sig
+  type t = [ `C | `B | `A ] intf
+  val methC: t -> a:float -> b:float -> c:float -> float
+  val cast_from: [> `C] intf -> t
+end
+```
+
+So if we have a `val x : C.t`, you can directly cast it to `A.t` by writing `x :> A.t`.
+
+Alternatively, you can also write `A.cast_from x`, which uses a generic cast function `cast_from`.
+
+```ocaml
+let c : C.t = ...
+
+let a1 : A.t = c :> A.t
+let a2 : A.t = A.cast_from c
+```
+
+### Feature: `cast-function`
+
+Add [`cast` functions](https://github.com/ocsigen/ts2ocaml/blob/bootstrap/docs/modeling_subtyping.md#cast-functions) to cast types around.
+
+For example, assume we have the following input:
+
+```typescript
+interface A { methA(a: number): number; }
+
+interface B extends A { methB(a: number, b: number): number; }
+
+interface C extends B { methC(a: number, b: number, c: number): number; }
+```
+
+When this feature is used, the resulting binding will look like:
+
+```ocaml
+module A : sig
+  type t
+  val methA: t -> a:float -> float
+end
+
+module B : sig
+  type t
+  val methB: t -> a:float -> b:float -> float
+  val cast_to_A: t -> A.t
+end
+
+module C : sig
+  type t
+  val methC: t -> a:float -> b:float -> c:float -> float
+  val cast_to_B: t -> B.t
+end
+```
+
+So if we have a `val x : C.t`, you can cast it to `A.t` by writing `B.cast_to_A (C.cast_to_B x)`.
+
+```ocaml
+let c : C.t = ...
+
+let a : A.t = x |> C.cast_to_B |> B.cast_to_A
+```
+
+This feature is less powerful than [`tag`](#feature-tag), but it has some use cases [`tag`](#feature-tag) doesn't cover.
+* [`tag`](#feature-tag) [doesn't support diamond inheritance](modeling_subtyping.md#phantom-types-with-row-polymorphism-polymorphic-variants), while `cast-function` does.
+* When [`--inherit-with-tags`](#--inherit-with-tags) is not used, [`tag`](#feature-tag) doesn't support casting a type to other from a different package, while `cast-function` does.
+
+## `--inherit-with-tags`
+
+> **Note:** This options requires [`--subtyping=tag`](#feature-tag). If the `tag` feature is not specified, it will fail with an error.
 
 Use `TypeName.tags` type names to inherit types from other packages.
 
-* `--tags=full` (default)
+* `--inherit-with-tags=full` (default)
   - It generates `tags` types in the module, and tries to use `tags` type to inherit a type if it is unknown (e.g. from another package).
-* `--tags=provide`
+* `--inherit-with-tags=provide`
   - It only generates `tags` types in the module.
-* `--tags=consume`
+* `--inherit-with-tags=consume`
   - It only tries to use `tags` type if the inherited type is unknown.
-* `--tag=off`
+* `--inherit-with-tags=off`
   - It disables any usage of `tags` types.
 
 For example, assume we have `node_modules/foo/index.d.ts` and `node_modules/bar/index.d.ts` as the following:
@@ -105,49 +263,53 @@ Then the outputs will look like depending on the option you set:
 
 module Foo : sig
   module A : sig
-    type t = [`A] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t = [`A] intf
 
-    (* The following will be generated if --full or --provide is set *)
-    [@@js.stop] type tags =  [`A] [@@js.start] [@@js.implem type tags = [`A]]
+    (* this will be generated if `full` or `provide` is set *)
+    type tags =  [`A]
+
+    (* this will be generated regardless of the option *)
+    val cast_from: [> `A] intf -> t
 
     ...
   end
 end
 
 (* export = foo; *)
-[@@@js.stop] module Export = Foo [@@@js.start] [@@@js.implem module Export = Foo]
+module Export = Foo
 ```
 
 ```ocaml
 (* Bar.mli *)
 
 (* import * as Foo from "foo"; *)
-[@@@js.stop] module Foo = Foo.Export [@@@js.start] [@@@js.implem module Foo = Foo.Export]
+module Foo = Foo.Export
 
 module Bar : sig
   module B : sig
-    (* if --full or --consume is set, the following will be generated *)
-    type t = [`B | Foo.A.tags] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    (* otherwise, the following will be generated *)
-    type t = [`B] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    (* if `full` or `consume` is set, this will be generated *)
+    type t = [`B | Foo.A.tags] intf
+    (* otherwise, this will be generated *)
+    type t = [`B] intf
 
-    (* if --full is set, the following will be generated *)
-    [@@js.stop] type tags =  [`B | Foo.A.tags] [@@js.start] [@@js.implem type tags = [`B | Foo.A.tags]]
-    (* else if --provide is set, the following will be generated *)
-    [@@js.stop] type tags =  [`B] [@@js.start] [@@js.implem type tags = [`B]]
+    (* if `full` is set, this will be generated *)
+    type tags = [`B | Foo.A.tags]
+    (* else if `provide` is set, this will be generated *)
+    type tags = [`B]
 
-    (* the following will be generated regardless of the option *)
-    val cast: t -> Foo.A.t [@@js.cast]
+    (* this will be generated regardless of the option *)
+    val cast_from: [> `B] intf -> t
+
+    ...
   end
 end
 
 (* export = bar; *)
-[@@@js.stop] module Export = Bar [@@@js.start] [@@@js.implem module Export = Bar]
+module Export = Bar
 ```
 
-If `--provide` or `--full` is used for `foo.d.ts` and `--consume` or `--full` is used for `bar.d.ts`,
-you will be able to safely cast `Bar.Export.B.t` to `Foo.Export.A.t`.
-Otherwise, you will have to use `Bar.Export.B.cast`.
+If `provide` or `full` is used for `foo.d.ts` and `consume` or `full` is used for `bar.d.ts`,
+you will be able to safely cast `B.t` to `A.t`, although they come from different packages.
 
 ```ocaml
 module Foo = Foo.Export
@@ -156,22 +318,28 @@ module Bar = Bar.Export
 let bar : Bar.B.t = ...
 
 let foo1 : Foo.A.t = bar :> Foo.A.t
-let foo2 : Foo.A.t = Bar.B.cast bar
+let foo2 : Foo.A.t = Foo.A.cast_from bar
 ```
 
-**Note:** `TypeName.tags` types will come with the "arity-safe" version of them if `--safe-arity` is also set.
+Otherwise, you can't safely cast `B.t` to `A.t`. To do it, you will have to
+* set [`--subtyping=cast-function`](#feature-cast-function) to obtain `val cast_to_A: t -> A.t`, or
+* manually add `` `A `` to the definition of `B.t` (and `B.tags` if you choose to provide).
 
-### `--safe-arity`
+> **Note:** `TypeName.tags` types will come with the "arity-safe" version of them if [`--safe-arity`](#--safe-arity) is also set.
+
+# Code Generator Options
+
+## `--safe-arity`
 
 Use `TypeName.t_n` type names to safely use overloaded types from other packages.
 
-* `--safe-arity=full` (default)
+* `--safe-arity=full`
   - It generates `t_n` types in the module, and tries to use `t_n` type if the type is unknown (e.g. from another package).
 * `--safe-arity=provide`
   - It only generates `t_n` types in the module.
 * `--safe-arity=consume`
   - It only tries to use `t_n` type if the type is unknown.
-* `--safe-arity=off`
+* `--safe-arity=off` (default)
   - It disables any usage of `t_n` types.
 
 For example, assume we have `node_modules/foo/index.d.ts` and `node_modules/bar/index.d.ts` as the following:
@@ -207,21 +375,21 @@ Then the outputs will look like depending on the option you set:
 
 module Foo : sig
   module A : sig
-    type 'T t = [`A of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
+    type 'T t = [`A of 'T] intf
 
-    (* The following will be generated if --full or --provide is set *)
+    (* this will be generated if `full` or `provide` is set *)
     type 'T t_1 = 'T t (* for arity 1 *)
 
     ...
   end
 
   module B : sig
-    type 'T t = [`B of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
+    type 'T t = [`B of 'T] intf
 
-    (* The following will be generated if --full or --provide is set *)
+    (* this will be generated if `full` or `provide` is set *)
     type 'T t_1 =  'T t  (* for arity 1 *)
 
-    (* The following will be generated regardless of the option, since B contains an optional type parameter *)
+    (* this will be generated regardless of the option, since B contains an optional type parameter *)
     type    t_0 = any t  (* for arity 0 *)
 
     ...
@@ -229,27 +397,27 @@ module Foo : sig
 end
 
 (* export = foo; *)
-[@@@js.stop] module Export = Foo [@@@js.start] [@@@js.implem module Export = Foo]
+module Export = Foo
 ```
 
 ```ocaml
 (* Bar.mli *)
 
 (* import * as Foo from "foo"; *)
-[@@@js.stop] module Foo = Foo.Export [@@@js.start] [@@@js.implem module Foo = Foo.Export]
+module Foo = Foo.Export
 
-(* if --full or --consume is set, the followings will be generated *)
-val useA: 'T Foo.A.t_1 -> unit [@@js.global "useA"]
-val useB: 'T Foo.B.t_1 -> unit [@@js.global "useB"]
-val useBDefault: Foo.B.t_0 -> unit [@@js.global "useBDefault"]
+(* if `full` or `consume` is set, this will be generated *)
+val useA: 'T Foo.A.t_1 -> unit
+val useB: 'T Foo.B.t_1 -> unit
+val useBDefault: Foo.B.t_0 -> unit
 
-(* otherwise, the followings will be generated *)
-val useA: 'T Foo.A.t -> unit [@@js.global "useA"]
-val useB: 'T Foo.B.t -> unit [@@js.global "useB"]
-val useBDefault: Foo.B.t -> unit [@@js.global "useBDefault"] (* this does not compile! *)
+(* otherwise, this will be generated *)
+val useA: 'T Foo.A.t -> unit
+val useB: 'T Foo.B.t -> unit
+val useBDefault: Foo.B.t -> unit (* this does not compile! *)
 ```
 
-### `--rec-module`
+## `--rec-module`
 
 Use recursive modules to simplify the output. Can impact the compilation time.
 
@@ -270,24 +438,24 @@ interface C {
 }
 ```
 
-* `--rec-module=optimized` (default)
+* `--rec-module=optimized`
   - It applies [strongly-connected-component algorithm](https://en.wikipedia.org/wiki/Strongly_connected_component) to find the smallest sets of recursively defined types and modules.
 
 ```ocaml
 module rec A : sig
   type t = ...
-  val get_b: unit -> B.t [@@js.get "b"]
+  val get_b: unit -> B.t
 end
 
 and B : sig
   type t = ...
-  val get_a: unit -> A.t [@@js.get "a"]
+  val get_a: unit -> A.t
 end
 
 module C : sig
   type t = ...
-  val get_a: unit -> A.t [@@js.get "a"]
-  val get_b: unit -> B.t [@@js.get "b"]
+  val get_a: unit -> A.t
+  val get_b: unit -> B.t
 end
 ```
 
@@ -298,22 +466,22 @@ end
 ```ocaml
 module rec A : sig
   type t = ...
-  val get_b: unit -> B.t [@@js.get "b"]
+  val get_b: unit -> B.t
 end
 
 and B : sig
   type t = ...
-  val get_a: unit -> A.t [@@js.get "a"]
+  val get_a: unit -> A.t
 end
 
 and C : sig
   type t = ...
-  val get_a: unit -> A.t [@@js.get "a"]
-  val get_b: unit -> B.t [@@js.get "b"]
+  val get_a: unit -> A.t
+  val get_b: unit -> B.t
 end
 ```
 
-* `--rec-module=off`
+* `--rec-module=off` (default)
   - It generates types and the corresponding modules (which contain methods and fields for the type) separately.
 
 ```ocaml
@@ -323,28 +491,28 @@ type _C = ...
 
 module A : sig
   type t = _A
-  val get_b: unit -> _B [@@js.get "b"]
+  val get_b: unit -> _B
 end
 
 module B : sig
   type t = _B
-  val get_a: unit -> _A [@@js.get "a"]
+  val get_a: unit -> _A
 end
 
 module C : sig
   type t = _C
-  val get_a: unit -> _A [@@js.get "a"]
-  val get_b: unit -> _B [@@js.get "b"]
+  val get_a: unit -> _A
+  val get_b: unit -> _B
 end
 ```
 
-### `--simplify`
+## `--simplify`
 
 Turn on simplification features.
 
 You can use `--simplify=foo,bar` to turn on multiple features. Also, `--simplify=all` enables all the features.
 
-#### Feature: `immediate-instance`
+### Feature: `immediate-instance`
 
 Simplifies a value definition of an interface type with the same name **(case sensitive)** to a module.
 
@@ -386,7 +554,7 @@ let _ = Foo.someMethod (foo ()) 42.0
 
 A notable example is the `Math` object in ES5 (https://github.com/microsoft/TypeScript/blob/main/lib/lib.es5.d.ts).
 
-#### Feature: `immediate-constructor`
+### Feature: `immediate-constructor`
 
 Simplifies so-called constructor pattern.
 
@@ -451,7 +619,7 @@ let _ =
 
 A notable example is the `ArrayConstructor` type in ES5 (https://github.com/microsoft/TypeScript/blob/main/lib/lib.es5.d.ts).
 
-#### Feature: `anonymous-interface-value`
+### Feature: `anonymous-interface-value`
 
 Simplifies a value definition of an anonymous interface type to a module.
 
@@ -491,11 +659,11 @@ let _ = AnonymousInterfaceN.someMethod (foo ()) 42.0
 
 A notable example is the `Document` variable in DOM (https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts).
 
-#### Feature: `named-interface-value`
+### Feature: `named-interface-value`
+
+> **Note:** [`immediate-instance`](#feature-immediate-instance) and [`immediate-constructor`](#feature-immediate-constructor) will override this feature if the name of the value definition is the same as the corresponding interface.
 
 Defines additional module with a suffix `Static` for a value definition of some interface type.
-
-Note that `immediate-instance` and `immediate-constructor` will override this feature if the name of the value definition is the same as the corresponding interface.
 
 Assume we have the following input:
 

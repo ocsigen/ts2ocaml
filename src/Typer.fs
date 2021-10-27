@@ -463,27 +463,36 @@ module Type =
   let mutable private hasNoInherits: Set<string list> = Set.empty
 
   let rec private getAllInheritancesImpl (depth: int) (includeSelf: bool) (ctx: Context<'a, 's>) (ty: Type) : (InheritingType * int) seq =
+    let treatPrimTypeInterfaces (name: string list) (ts: Type list) =
+      match name with
+      | [name] ->
+        match PrimType.FromJSClassName name with
+        | None -> None
+        | Some p ->
+          Some (InheritingType.Prim (p, ts), depth)
+      | _ -> None
+
     seq {
       match ty with
       | Ident { name = name; fullName = Some fn; loc = loc } & Dummy ts
       | App (AIdent { name = name; fullName = Some fn }, ts, loc) ->
-          yield!
-            FullName.lookup ctx fn
-            |> List.tryPick (function
-              | AliasName { typeParams = typrms; erased = false } | ClassName { typeParams = typrms } ->
-                let subst = createBindings fn loc typrms ts
-                getAllInheritancesFromNameImpl (depth+1) includeSelf ctx fn
-                |> Seq.map (fun (t, d) -> substTypeVarInInheritingType subst ctx t, d) |> Some
-              | AliasName { target = Prim p; erased = true } ->
-                getAllInheritancesImpl (depth+1) includeSelf ctx (App (APrim p, ts, loc)) |> Some
-              | ImportedName _ ->
-                if includeSelf then
-                  Some (Seq.singleton (InheritingType.ImportedIdent {| name = name; fullName = fn; tyargs = ts |}, depth))
-                else None
-              | _ -> None
-            ) |> Option.defaultValue Seq.empty
+        yield! treatPrimTypeInterfaces name ts |> Option.toList
+        yield!
+          FullName.lookup ctx fn
+          |> List.tryPick (function
+            | AliasName { typeParams = typrms } | ClassName { typeParams = typrms } ->
+              let subst = createBindings fn loc typrms ts
+              getAllInheritancesFromNameImpl (depth+1) includeSelf ctx fn
+              |> Seq.map (fun (t, d) -> substTypeVarInInheritingType subst ctx t, d) |> Some
+            | ImportedName _ ->
+              if includeSelf then
+                Some (Seq.singleton (InheritingType.ImportedIdent {| name = name; fullName = fn; tyargs = ts |}, depth))
+              else None
+            | _ -> None
+          ) |> Option.defaultValue Seq.empty
       | Ident { name = name; fullName = None } & Dummy ts
       | App (AIdent { name = name; fullName = None }, ts, _) ->
+        yield! treatPrimTypeInterfaces name ts |> Option.toList
         if includeSelf then
           yield InheritingType.UnknownIdent {| name = name; tyargs = ts |}, depth
       | Prim p & Dummy ts
@@ -676,7 +685,7 @@ module Type =
           | Tuple ts, Prim (Number | Any) -> Union { types = ts.types |> List.map (fun x -> x.value) }
           | (App (AIdent { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)), _ ->
             FullName.tryLookupWith ctx fn (function
-              | AliasName ta when not ta.erased ->
+              | AliasName ta ->
                 let subst = createBindings fn loc ta.typeParams ts
                 let target =
                   ta.target |> substTypeVar subst ctx |> resolveErasedTypeImpl typeQueries ctx
@@ -740,7 +749,7 @@ module Type =
           | App ((APrim Array | APrim ReadonlyArray), [_], _) | Tuple _ -> Set.singleton (Prim Number)
           | (App (AIdent { fullName = Some fn }, ts, loc) | (Ident { fullName = Some fn; loc = loc } & Dummy ts)) ->
             FullName.tryLookupWith ctx fn (function
-              | AliasName ta when not ta.erased ->
+              | AliasName ta ->
                 let subst = createBindings fn loc ta.typeParams ts
                 ta.target |> substTypeVar subst ctx |> resolveErasedTypeImpl typeQueries ctx |> go |> Some
               | ClassName c ->
@@ -761,6 +770,73 @@ module Type =
     | UnknownType msgo -> UnknownType msgo
 
   let resolveErasedType ctx ty = resolveErasedTypeImpl Set.empty ctx ty
+
+  /// intended to be used as an identifier.
+  /// * can be any case.
+  /// * can be a reserved name (e.g. `this`).
+  /// * can start with a digit.
+  let rec getHumanReadableName (ctx: Context<_, _>) = function
+    | Intrinsic -> "intrinsic"
+    | PolymorphicThis -> "this"
+    | Ident i -> i.name |> List.last
+    | TypeVar v -> v
+    | Prim p ->
+      match p with
+      | String -> "string" | Bool -> "boolean" | Number -> "number"
+      | Any -> "any" | Void -> "void" | Unknown -> "unknown"
+      | Null -> "null" | Never -> "never" | Undefined -> "undefined"
+      | Symbol _ -> "symbol" | RegExp -> "RegExp"
+      | BigInt -> "BigInt" | Array -> "Array"
+      | ReadonlyArray -> "ReadonlyArray"
+      | Object -> "Object" | UntypedFunction -> "Function"
+    | TypeLiteral l ->
+      let formatString (s: string) =
+        (s :> char seq)
+        |> Seq.map (fun c ->
+          if Char.isAlphabetOrDigit c then c
+          else '_')
+        |> Seq.toArray |> System.String
+      let inline formatNumber (x: 'a) =
+        string x
+        |> String.replace "+" "plus"
+        |> String.replace "-" "minus"
+        |> String.replace "." "_"
+      match l with
+      | LString s -> formatString s
+      | LInt i -> formatNumber i
+      | LFloat f -> formatNumber f
+      | LBool true -> "true" | LBool false -> "false"
+    | AnonymousInterface c ->
+      match ctx.anonymousInterfacesMap |> Map.tryFind c, c.name with
+      | Some i, None -> sprintf "AnonymousInterface%d" i
+      | None, Some s -> s
+      | _ -> "AnonymousInterface"
+    | Union _ -> "union" | Intersection _ -> "intersection" | Tuple _ -> "tuple"
+    | Function _ -> "function"
+    | App (lhs, rhs, _) ->
+      match lhs with
+      | AIdent i -> getHumanReadableName ctx (Ident i)
+      | AAnonymousInterface c -> getHumanReadableName ctx (AnonymousInterface c)
+      | APrim Array ->
+        match rhs with
+        | [t] ->
+          let elemType = getHumanReadableName ctx t
+          Naming.toCase Naming.Case.PascalCase elemType + "Array"
+        | _ -> "Array"
+      | APrim p -> getHumanReadableName ctx (Prim p)
+    | Erased (et, _, _) ->
+      match et with
+      | Keyof t ->
+        let targetType = getHumanReadableName ctx t
+        "Keyof" + Naming.toCase Naming.Case.PascalCase targetType
+      | TypeQuery i ->
+        "Typeof" + Naming.toCase Naming.Case.PascalCase (List.last i.name)
+      | IndexedAccess (t1, t2) ->
+        let s1 = getHumanReadableName ctx t1 |> Naming.toCase Naming.Case.PascalCase
+        let s2 = getHumanReadableName ctx t2 |> Naming.toCase Naming.Case.PascalCase
+        s1 + s2
+      | NewableFunction _ -> "constructor"
+    | UnknownType _ -> "unknown"
 
 type [<RequireQualifiedAccess>] KnownType =
   | Ident of fullName:string list
@@ -1293,7 +1369,7 @@ module ResolvedUnion =
         | App (AIdent { fullName = Some fn }, tyargs, loc) ->
           for x in fn |> FullName.lookup ctx do
             match x with
-            | AliasName a when not a.erased ->
+            | AliasName a ->
               let bindings = Type.createBindings fn loc a.typeParams tyargs
               yield! go (a.target |> Type.substTypeVar bindings ())
             | EnumName e ->
@@ -1351,7 +1427,7 @@ module ResolvedUnion =
         getLiteralFieldsFromClass (c |> Type.mapInClass (Type.substTypeVar bindings) ())
       | (Ident { fullName = Some fn; loc = loc } & Dummy ts) | App (AIdent { fullName = Some fn }, ts, loc) ->
         let go = function
-          | AliasName a when not a.erased ->
+          | AliasName a ->
             if List.isEmpty ts then Some (getLiteralFieldsFromType a.target)
             else
               let bindings = Type.createBindings fn loc a.typeParams ts
@@ -1399,7 +1475,7 @@ module ResolvedUnion =
                     match e.cases |> List.tryFind (fun c -> c.name = cn) with
                     | Some { value = Some v } -> Some [fl.name, v]
                     | _ -> None
-                  | AliasName a when not a.erased ->
+                  | AliasName a ->
                     let bindings = Type.createBindings fn loc a.typeParams ts
                     go (a.target |> Type.substTypeVar bindings ()) |> Some
                   | _ -> None
@@ -1518,28 +1594,10 @@ module ResolvedUnion =
 
 let createRootContextForTyper (srcs: SourceFile list) (opts: TyperOptions) : Context<TyperOptions, unit> =
   // TODO: handle SourceFile-specific things
-  let add name ty m =
-    if m |> Trie.containsKey [name] then m
-    else
-      m |> Trie.add [name] [TypeAlias { name = name; typeParams = []; target = ty; erased = true; comments = []; isExported = Exported.No; loc = UnknownLocation }]
-  let addPoly name ty typeParams m =
-    if m |> Trie.containsKey [name] then m
-    else
-      m |> Trie.add [name] [TypeAlias { name = name; typeParams = typeParams; target = ty; erased = true; comments = []; isExported = Exported.No; loc = UnknownLocation }]
   let m =
     srcs
     |> List.collect (fun src -> src.statements)
     |> Statement.extractNamedDefinitions
-    |> add "String" (Prim String)
-    |> add "Boolean" (Prim Bool)
-    |> add "Number" (Prim Number)
-    |> add "Object" (Prim Object)
-    |> add "Function" (Prim UntypedFunction)
-    |> add "Symbol" (Prim (Symbol false))
-    |> add "RegExp" (Prim RegExp)
-    |> addPoly "Array" (Prim Array) [{ name = "T"; extends = None; defaultType = None }]
-    |> addPoly "ReadonlyArray" (Prim Array) [{ name = "T"; extends = None; defaultType = None }]
-    |> add "BigInt" (Prim BigInt)
   {|
     currentNamespace = []
     definitionsMap = m

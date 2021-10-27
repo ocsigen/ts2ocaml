@@ -89,9 +89,6 @@ module Type =
   // prim types that are JS-able and defined as interface in typescript/lib/lib.*.d.ts
   let jsablePrimTypeInterfaces =
     Map.ofList [
-      "String",  String
-      "Boolean", Bool
-      "Number",  Number
       "Array",   Array
       "ReadonlyArray", Array
     ]

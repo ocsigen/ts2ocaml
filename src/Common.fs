@@ -6,9 +6,12 @@ type GlobalOptions =
   abstract nowarn: bool with get
 
 module GlobalOptions =
+  open Fable.Core.JsInterop
+
   let register (yargs: Yargs.Argv<_>) =
     yargs
-      .addFlag("verbose", (fun (o: GlobalOptions) -> o.verbose), descr="Show verbose log", alias="v")
+      .group(!^ResizeArray["verbose"; "nowarn"], "Logging Options:")
+      .addFlag("verbose", (fun (o: GlobalOptions) -> o.verbose), descr="Show verbose log")
       .addFlag("nowarn", (fun (o: GlobalOptions) -> o.nowarn), descr="Do not show warnings")
 
 module Log =

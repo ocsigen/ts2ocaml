@@ -657,7 +657,7 @@ let readTypeAlias (ctx: ParserContext) (a: Ts.TypeAliasDeclaration) : TypeAlias 
   let typrm = readTypeParameters Set.empty ctx a.typeParameters
   let ty = readTypeNode (typrm |> List.map (fun x -> x.name) |> Set.ofList) ctx a.``type``
   let comments = readCommentsForNamedDeclaration ctx a
-  { name = a.name.text; typeParams = typrm; target = ty; erased = false; comments = comments; isExported = getExported a.modifiers; loc = Node.location a }
+  { name = a.name.text; typeParams = typrm; target = ty; comments = comments; isExported = getExported a.modifiers; loc = Node.location a }
 
 let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list =
   v.declarationList.declarations |> List.ofSeq |> List.map (fun vd ->

@@ -102,7 +102,7 @@ module Test =
         let ts2ocaml args files =
             Yarn.exec (sprintf "ts2ocaml %s" (String.concat " " (Seq.append args files))) id
 
-        ts2ocaml ["jsoo"; "-v"; "--nowarn"; "--stdlib"; $"-o {outputDir}"] <|
+        ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; "--stdlib"; $"-o {outputDir}"] <|
             !! "node_modules/typescript/lib/lib.*.d.ts"
 
         let packages = [
@@ -117,7 +117,7 @@ module Test =
         ]
 
         for package in packages do
-            ts2ocaml ["jsoo"; "-v"; "--nowarn"; $"-o {outputDir}"; "--simplify=all"] package
+            ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; "--preset recommended"; $"-o {outputDir}"] package
 
     let prepare () =
         for file in outputDir |> Shell.copyRecursiveTo true testSrcDir do

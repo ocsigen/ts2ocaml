@@ -12,6 +12,8 @@ type RecModule =
 with
   static member Values = [|Optimized; Naive; Off; Default|]
 
+  member this.IsOffOrDefault = match this with Off | Default -> true | _ -> false
+
 [<StringEnum; RequireQualifiedAccess>]
 type FeatureFlag =
   | [<CompiledName("full")>] Full
@@ -24,6 +26,7 @@ with
 
   member this.HasProvide = match this with Full | Provide -> true | _ -> false
   member this.HasConsume = match this with Full | Consume -> true | _ -> false
+  member this.IsOffOrDefault = match this with Off | Default -> true | _ -> false
 
   member this.WithProvide(b: bool) =
     match this with
@@ -93,7 +96,7 @@ type Options =
   abstract stubFile: string with get
   // generator options
   abstract numberAsInt: bool with get, set
-  //abstract subtyping: Subtyping list with get, set
+  abstract subtyping: Subtyping list with get, set
   abstract inheritWithTags: FeatureFlag with get, set
   abstract recModule: RecModule with get, set
   abstract safeArity: FeatureFlag with get, set
@@ -104,9 +107,14 @@ module Options =
 
   let validate : Yargs.MiddlewareFunction<Options> =
     Yargs.MiddlewareFunction<Options>(fun opts yargs ->
+      if isNullOrUndefined opts.subtyping then opts.subtyping <- []
+      if isNullOrUndefined opts.simplify then opts.simplify <- []
+
       match opts.preset with
       | None -> ()
       | Some p ->
+        Log.tracef opts "* using preset '%s'..." !!p
+
         if opts.simplify = [] then
           opts.simplify <- [Simplify.All]
 
@@ -116,16 +124,20 @@ module Options =
         if p = Preset.Typesafe || p = Preset.Recommended then
           if opts.safeArity = FeatureFlag.Default then
             opts.safeArity <- FeatureFlag.Full
-          //if opts.subtyping |> List.contains Subtyping.Tag |> not then
-          //  opts.subtyping <- Subtyping.Tag :: opts.subtyping
-          //if opts.subtyping |> List.contains Subtyping.CastFunction |> not then
-          //  opts.subtyping <- Subtyping.CastFunction :: opts.subtyping
+          if opts.subtyping |> List.contains Subtyping.CastFunction |> not then
+            opts.subtyping <- Subtyping.CastFunction :: opts.subtyping
+
+        if p = Preset.Recommended then
+          if opts.subtyping |> List.contains Subtyping.Tag |> not then
+            opts.subtyping <- Subtyping.Tag :: opts.subtyping
           if opts.inheritWithTags = FeatureFlag.Default then
             opts.inheritWithTags <- FeatureFlag.Full
 
-      //if opts.subtyping |> List.contains Subtyping.Tag |> not
-      //&& (opts.inheritWithTags <> FeatureFlag.Off || opts.inheritWithTags <> FeatureFlag.Default) then
-      //  yargs.exit(-1, new System.ArgumentException("--inherit-with-tags requires --subtyping=tag."))
+      if opts.subtyping |> List.contains Subtyping.Tag |> not
+      && opts.inheritWithTags <> FeatureFlag.Off
+      && opts.inheritWithTags <> FeatureFlag.Default then
+        eprintfn "error: --inherit-with-tags=%s requires --subtyping=tag." !!opts.inheritWithTags
+        yargs.exit(-1, new System.ArgumentException("--inherit-with-tags requires --subtyping=tag."))
 
       !^opts)
 
@@ -184,7 +196,6 @@ module Options =
           "simplify";
         ],
         "Code Generator Options:")
-      (*
       .addCommaSeparatedStringSet(
         "subtyping",
         Subtyping.TryParse,
@@ -192,7 +203,6 @@ module Options =
         descr=
           sprintf "Turn on subtyping features. Available features: %s"
                   (Subtyping.Values |> Array.filter ((<>) Subtyping.Default) |> Array.map string |> String.concat ", "))
-      *)
       .addFlag(
         "number-as-int",
         (fun (o: Options) -> o.numberAsInt),

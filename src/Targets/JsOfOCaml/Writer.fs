@@ -88,7 +88,7 @@ let anonymousInterfaceModuleName (index: int) = sprintf "AnonymousInterface%d" i
 let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
   match ctx.anonymousInterfacesMap |> Map.tryFind c, c.name with
   | Some i, None ->
-    if ctx.options.recModule <> RecModule.Off then
+    if not ctx.options.recModule.IsOffOrDefault then
       tprintf "%s.t" (anonymousInterfaceModuleName i)
     else
       tprintf "anonymous_interface_%d" i
@@ -163,21 +163,30 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
 
   let treatIdent { name = name; fullName = fno; loc = identLoc } (tyargs: Type list) (loc: Location) =
     let arity = List.length tyargs
-    let withTyargs tyName =
-      Type.appOpt (str tyName) (tyargs |> List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx))
+    let withTyargs ty =
+      Type.appOpt ty (tyargs |> List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx))
     match fno with
     | None ->
       let tyName =
-        match ctx.options.safeArity with
-        | FeatureFlag.Full | FeatureFlag.Consume ->
-          Naming.createTypeNameOfArity arity None "t"
-        | _ -> "t"
-      Naming.structured Naming.moduleName name + "." + tyName |> withTyargs
+        let fallback () =
+          let tyName =
+            match ctx.options.safeArity with
+            | FeatureFlag.Full | FeatureFlag.Consume ->
+              Naming.createTypeNameOfArity arity None "t"
+            | _ -> "t"
+          Naming.structured Naming.moduleName name + "." + tyName |> str
+        match name with
+        | [name] ->
+          match PrimType.FromJSClassName name with
+          | Some p -> emitTypeImpl flags overrideFunc ctx (Prim p)
+          | None -> fallback ()
+        | _ -> fallback ()
+      tyName |> withTyargs
     | Some fn ->
-      if ctx.options.recModule <> RecModule.Off then
+      if not ctx.options.recModule.IsOffOrDefault then
         let maxArity =
           FullName.tryLookupWith ctx fn (function
-            | AliasName { typeParams = tps; erased = false }
+            | AliasName { typeParams = tps }
             | ClassName { typeParams = tps } -> List.length tps |> Some
             | _ -> None
           )
@@ -185,23 +194,30 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
         match ctx |> Context.getRelativeNameTo fn with
         | Ok relativeName ->
           assert (relativeName = name)
-          Naming.structured Naming.moduleName relativeName + "." + tyName |> withTyargs
+          Naming.structured Naming.moduleName relativeName + "." + tyName |> str |> withTyargs
         | Error diff ->
           if List.isEmpty diff then
             // the type is the current namespace
-            tyName |> withTyargs
+            tyName |> str |> withTyargs
           else
-            // the type is a parent of the current namespace.
-            // we expand the identifier to `[ .. ] intf`
-            let ty =
-              if List.isEmpty tyargs then Ident { name = name; fullName = fno; loc = loc }
-              else App (AIdent { name = name; fullName = fno; loc = identLoc }, tyargs, loc)
-            let labels =
-              getAllInheritancesAndSelf ctx ty
-              |> getLabelsFromInheritingTypes (emitTypeImpl flags overrideFunc) ctx
-            emitLabels ctx labels
-            |> List.singleton
-            |> Type.app Type.intf
+            if ctx.options.subtyping |> List.contains Subtyping.Tag then
+              // the type is a parent of the current namespace.
+              // we expand the identifier to `[ .. ] intf`
+              let ty =
+                if List.isEmpty tyargs then Ident { name = name; fullName = fno; loc = loc }
+                else App (AIdent { name = name; fullName = fno; loc = identLoc }, tyargs, loc)
+              let labels =
+                getAllInheritancesAndSelf ctx ty
+                |> getLabelsFromInheritingTypes (emitTypeImpl flags overrideFunc) ctx
+              emitLabels ctx labels
+              |> List.singleton
+              |> Type.app Type.intf
+            else
+              let fn = String.concat "." fn
+              let selfName = String.concat "." diff
+              let warnText = $"cannot reference a type {fn} from its sub-namespace {selfName}"
+              Log.warnf ctx.options "%s at %s" warnText loc.AsString
+              commentStr warnText + Type.any
       else
         let name = Naming.flattenedTypeName fn
         let ts =
@@ -217,7 +233,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
               |> Some
             | _ -> None
           ) |> Option.defaultValue tyargs
-        Type.appOpt (str name) (ts |> List.map (emitTypeImpl flags overrideFunc ctx))
+        Type.appOpt (str name) (ts |> List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false  } overrideFunc ctx))
 
   match overrideFunc (emitTypeImpl flags overrideFunc) ctx ty with
   | Some t -> t
@@ -761,17 +777,20 @@ module GetSelfTyText =
   let class_ flags overrideFunc (ctx: Context) (c: Class) =
     let emitType = emitTypeImpl flags
     let emitType_ = emitType overrideFunc
+    let fallback = str "private Ojs.t"
     match c.name with
     | Some name ->
-      assert (name = List.last ctx.currentNamespace)
-      let labels =
-        getLabelsOfFullName emitType_ ctx (List.rev ctx.currentNamespace) c.typeParams
-        |> function Choice1Of2 xs -> xs | Choice2Of2 (_, x) -> [x]
-      if List.isEmpty labels then
-        str "private Ojs.t"
-      else
-        Type.appOpt Type.intf [emitLabels ctx labels] + str " " + Attr.js_custom_typ (genJsCustomMapper c.typeParams)
-    | None -> str "private Ojs.t"
+      assert (name = List.head ctx.currentNamespace)
+
+      if ctx.options.subtyping |> List.contains Subtyping.Tag then
+        let labels =
+          getLabelsOfFullName emitType_ ctx (List.rev ctx.currentNamespace) c.typeParams
+          |> function Choice1Of2 xs -> xs | Choice2Of2 (_, x) -> [x]
+        if List.isEmpty labels then fallback
+        else
+          Type.appOpt Type.intf [emitLabels ctx labels] + str " " + Attr.js_custom_typ (genJsCustomMapper c.typeParams)
+      else fallback
+    | None -> fallback
 
   let enumCases (cases: EnumCase list) =
     between "[" "]" (concat (str " | ") [
@@ -805,7 +824,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
         if List.isEmpty c.typeParams then Ident ident
         else App (AIdent ident, typrms, UnknownLocation)
       let overrideFunc =
-        if ctx.options.recModule <> RecModule.Off then overrideFunc
+        if not ctx.options.recModule.IsOffOrDefault then overrideFunc
         else
           let orf _emitType _ctx = function
             | Ident { name = [n']; fullName = Some k' } when n = n' && k = k' -> Some (str "t")
@@ -850,8 +869,13 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
       getLabelsOfFullName emitType_ innerCtx (List.rev innerCtx.currentNamespace) c.typeParams
       |> function Choice1Of2 xs -> xs | Choice2Of2 (_, x) -> [x]
 
+    let useTags =
+         not isAnonymous
+      && innerCtx.options.subtyping |> List.contains Subtyping.Tag
+      && not (List.isEmpty labels)
+
     let polymorphicThis =
-      if not isAnonymous && not (List.isEmpty labels) then
+      if useTags then
         Type.appOpt (str "this") (str "'tags" :: typrms)
       else
         Type.appOpt (str "t") typrms
@@ -884,7 +908,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
       c.comments |> List.distinct |> List.map emitCommentBody
 
     let tagsDefinition =
-      if not isAnonymous && not (List.isEmpty labels) && innerCtx.options.inheritWithTags.HasProvide then
+      if useTags && innerCtx.options.inheritWithTags.HasProvide then
         let alias =
           emitTypeAliasesImpl
             "tags" { flags with forceSkipAttributes = true } overrideFunc innerCtx c.typeParams (emitLabels innerCtx labels)
@@ -894,7 +918,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
       else None
 
     let polymorphicThisDefinition =
-      if not isAnonymous && not (List.isEmpty labels) then
+      if useTags then
         let tags =
           getLabelOfFullName emitType_ innerCtx (List.rev innerCtx.currentNamespace) c.typeParams
           |> function Choice1Of2 xs -> xs | Choice2Of2 (_, x) -> [x]
@@ -908,16 +932,20 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
 
     let typeDefinition =
       let selfTyText =
-        GetSelfTyText.class_ { flags with failContravariantTypeVar = true } overrideFunc innerCtx c
+        if innerCtx.options.recModule.IsOffOrDefault then
+          let t =
+            if isAnonymous then
+              anonymousInterfaceToIdentifier innerCtx c
+            else
+              Naming.flattenedTypeName (List.rev innerCtx.currentNamespace) |> str
+          Type.appOpt t (c.typeParams |> List.map (fun tp -> TypeVar tp.name |> emitType_ innerCtx))
+        else
+          GetSelfTyText.class_ { flags with failContravariantTypeVar = true } overrideFunc innerCtx c
       emitTypeAliases flags overrideFunc innerCtx c.typeParams selfTyText
 
-    let items = [
-      yield! typeDefinition
-      yield! tagsDefinition |> Option.toList
-      yield! polymorphicThisDefinition |> Option.toList
-      yield! members
-
-      if not isAnonymous && not (List.isEmpty labels) then
+    let castFunctions = [
+      // add a generic cast function if tag is available
+      if useTags then
         let castTy =
           Type.arrow [
             polymorphicThis
@@ -925,6 +953,13 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
           ]
         yield ScopeIndependent (val_ "cast_from" castTy +@ " " + Attr.js_custom_val (let_ "cast_from" [] None (str "Obj.magic")))
 
+      if innerCtx.options.subtyping |> List.contains Subtyping.CastFunction then
+        for parent in c.implements do
+          let ty = Function { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = parent; loc = UnknownLocation } |> emitType_ innerCtx
+          let parentName = getHumanReadableName innerCtx parent
+          yield overloaded (fun rename -> [val_ (rename $"cast_to_{parentName}") ty + str " " + Attr.attr Attr.Category.Block "js.cast" empty])
+
+      // add `to_ml` and `of_ml` if the type is primitive and has an OCaml equivalent (e.g. number, boolean, string, array)
       match c.name with
       | None -> ()
       | Some name ->
@@ -941,6 +976,14 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
               val_ (rename "to_ml") toMlTy + str " " + Attr.attr Attr.Category.Block "js.cast" empty
               val_ (rename "of_ml") ofMlTy + str " " + Attr.attr Attr.Category.Block "js.cast" empty
             ])
+    ]
+
+    let items = [
+      yield! typeDefinition
+      yield! tagsDefinition |> Option.toList
+      yield! polymorphicThisDefinition |> Option.toList
+      yield! members
+      yield! castFunctions
     ]
 
     {| StructuredTextNode.empty with items = items; docCommentLines = docCommentLines; knownTypes = knownTypes; scoped = scoped |}
@@ -1071,15 +1114,13 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         ) module'
       setModule e.name module' |> addExport e.name [Kind.Type; Kind.Enum] "enum"
     | TypeAlias ta ->
-      if ta.erased then current
-      else
-        let ctx = ctx |> Context.ofChildNamespace ta.name
-        let items =
-          emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target)
-        let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
-        let module' =
-          getModule ta.name |> Trie.setOrUpdate node StructuredTextNode.union
-        setModule ta.name module' |> addExport ta.name [Kind.Type] "type"
+      let ctx = ctx |> Context.ofChildNamespace ta.name
+      let items =
+        emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target)
+      let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
+      let module' =
+        getModule ta.name |> Trie.setOrUpdate node StructuredTextNode.union
+      setModule ta.name module' |> addExport ta.name [Kind.Type] "type"
     | Pattern p ->
       let fallback current =
         p.underlyingStatements |> List.fold (folder ctx) current
@@ -1338,7 +1379,7 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
               | _  -> App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
             emitType_ ctx target
         [prefix @+ " " @+ emitTypeName fn typrm +@ " = " + selfTyText]
-    | TypeAlias { name = name; erased = false; typeParams = typeParams; target = target } ->
+    | TypeAlias { name = name; typeParams = typeParams; target = target } ->
       let fn = List.rev (name :: ctx.currentNamespace)
       let typrm = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
       let selfTyText = emitType_ ctx target
@@ -1360,7 +1401,6 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
     | Import _
     | Value _
     | Module _
-    | TypeAlias { erased = true } -> []
     | Export _
     | UnknownStatement _
     | FloatingComment _ -> []
@@ -1396,7 +1436,7 @@ let emitStatementsWithStructuredText (ctx: Context) (stmts: Statement list) (st:
     else
       docComment (concat newline result.docCommentBody) :: result.content
   [
-    if ctx.options.recModule = RecModule.Off then
+    if ctx.options.recModule.IsOffOrDefault then
       yield! emitFlattenedDefinitions ctx stmts
       yield empty
     yield! content
@@ -1437,6 +1477,7 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output list =
   opts.inheritWithTags <- FeatureFlag.Full
   opts.safeArity <- FeatureFlag.Full
   opts.recModule <- RecModule.Optimized
+  opts.subtyping <- [Subtyping.Tag]
   opts.inheritArraylike <- true
   opts.inheritIterable <- true
   opts.inheritPromiselike <- true

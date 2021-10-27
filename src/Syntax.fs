@@ -100,9 +100,6 @@ and PrimType =
 with
   member this.AsJSClassName =
     match this with
-    | String -> Some "String"
-    | Bool -> Some "Boolean"
-    | Number -> Some "Number"
     | Object -> Some "Object"
     | UntypedFunction -> Some "Function"
     | Symbol _ -> Some "Symbol"
@@ -110,10 +107,22 @@ with
     | BigInt -> Some "BigInt"
     | Array -> Some "Array"
     | ReadonlyArray -> Some "ReadonlyArray"
+    // has a distinct primitive type
+    | String | Bool | Number -> None
     // TS-specific
     | Any | Void | Unknown | Never -> None
     // invalid types
     | Null | Undefined -> None
+  static member FromJSClassName(name: string) =
+    match name with
+    | "Object" -> Some Object
+    | "Function" -> Some UntypedFunction
+    | "Symbol" -> Some (Symbol false)
+    | "RegExp" -> Some RegExp
+    | "BigInt" -> Some BigInt
+    | "Array" -> Some Array
+    | "ReadonlyArray" -> Some ReadonlyArray
+    | _ -> None
 
 and Enum = {
   name: string
@@ -248,7 +257,6 @@ and TypeAlias = {
   name: string
   typeParams: TypeParam list
   target: Type
-  erased: bool
   comments: Comment list
   isExported: Exported
   loc: Location

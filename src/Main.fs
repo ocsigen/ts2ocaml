@@ -19,35 +19,35 @@ type ICompilerHost =
   abstract getDirectories: path: string -> ResizeArray<string>
 
 let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
-    let options = jsOptions<Ts.CompilerOptions>(fun o ->
-      o.target <- Some Ts.ScriptTarget.ESNext
-      o.``module`` <- Some Ts.ModuleKind.CommonJS
-      o.incremental <- Some false
-      o.checkJs <- Some true
-      o.lib <- Some (ResizeArray ["ESNext"; "DOM"])
-      o.noEmit <- Some true
-      o.alwaysStrict <- Some true
-      o.strict <- Some true
-      o.skipLibCheck <- Some false
-      o.traceResolution <- Some true
-    )
-    let host =
-      { new ICompilerHost with
-          member _.getSourceFile(fileName, _, ?__, ?___) =
-            sourceFiles |> List.tryFind (fun sf -> sf.fileName = fileName)
-          member _.getSourceFileByPath(fileName, _, _, ?__, ?___) =
-            sourceFiles |> List.tryFind (fun sf -> sf.fileName = fileName)
-          member _.getDefaultLibFileName(_) = "lib.d.ts"
-          member _.useCaseSensitiveFileNames() = false
-          member _.getCanonicalFileName(s) = s
-          member _.getCurrentDirectory() = ""
-          member _.getNewLine() = "\r\n"
-          member _.fileExists(fileName) = Array.contains fileName tsPaths
-          member _.readFile(fileName) = sourceFiles |> List.tryPick (fun sf -> if sf.fileName = fileName then Some (sf.getFullText()) else None)
-          member _.directoryExists(_) = true
-          member _.getDirectories(_) = ResizeArray []
-      }
-    ts.createProgram(ResizeArray tsPaths, options, !!host)
+  let options = jsOptions<Ts.CompilerOptions>(fun o ->
+    o.target <- Some Ts.ScriptTarget.ESNext
+    o.``module`` <- Some Ts.ModuleKind.CommonJS
+    o.incremental <- Some false
+    o.checkJs <- Some true
+    o.lib <- Some (ResizeArray ["ESNext"; "DOM"])
+    o.noEmit <- Some true
+    o.alwaysStrict <- Some true
+    o.strict <- Some true
+    o.skipLibCheck <- Some false
+    o.traceResolution <- Some true
+  )
+  let host =
+    { new ICompilerHost with
+        member _.getSourceFile(fileName, _, ?__, ?___) =
+          sourceFiles |> List.tryFind (fun sf -> sf.fileName = fileName)
+        member _.getSourceFileByPath(fileName, _, _, ?__, ?___) =
+          sourceFiles |> List.tryFind (fun sf -> sf.fileName = fileName)
+        member _.getDefaultLibFileName(_) = "lib.d.ts"
+        member _.useCaseSensitiveFileNames() = false
+        member _.getCanonicalFileName(s) = s
+        member _.getCurrentDirectory() = ""
+        member _.getNewLine() = "\r\n"
+        member _.fileExists(fileName) = Array.contains fileName tsPaths
+        member _.readFile(fileName) = sourceFiles |> List.tryPick (fun sf -> if sf.fileName = fileName then Some (sf.getFullText()) else None)
+        member _.directoryExists(_) = true
+        member _.getDirectories(_) = ResizeArray []
+    }
+  ts.createProgram(ResizeArray tsPaths, options, !!host)
 
 let expandSourceFiles (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq) =
   let sourceFilesMap =

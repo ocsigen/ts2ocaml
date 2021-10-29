@@ -46,9 +46,8 @@ type Simplify =
   | [<CompiledName("anonymous-interface-value")>] AnonymousInterfaceValue
   | [<CompiledName("named-interface-value")>] NamedInterfaceValue
   | [<CompiledName("off")>] Off
-  | [<CompiledName("default")>] Default
 with
-  static member Values = [|All; ImmediateInstance; ImmediateConstructor; AnonymousInterfaceValue; NamedInterfaceValue; Off; Default|]
+  static member Values = [|All; ImmediateInstance; ImmediateConstructor; AnonymousInterfaceValue; NamedInterfaceValue; Off|]
 
   static member Has (flags: Simplify list, target: Simplify) =
     if flags |> List.contains All then true
@@ -243,7 +242,7 @@ module Options =
         (fun (o: Options) -> o.simplify),
         descr=
           sprintf "Turn on simplification features. Available features: %s"
-                  (Simplify.Values |> Array.filter ((<>) Simplify.Default) |> Array.map string |> String.concat ", "))
+                  (Simplify.Values |> Array.map string |> String.concat ", "))
 
       .middleware(!^validate)
 

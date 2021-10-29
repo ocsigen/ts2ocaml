@@ -14,13 +14,11 @@ type ScriptTarget = TypeScript.Ts.ScriptTarget
 type State = {|
   referencesCache: MutableMap<string list, WeakTrie<string>>
   usedAnonymousInterfacesCache: MutableMap<string list, Set<int>>
-  es6ExportContainerName: string option
 |}
 module State =
-  let defaultValue () : State =
+  let create () : State =
     {| referencesCache = new MutableMap<_, _>();
-       usedAnonymousInterfacesCache = new MutableMap<_, _>()
-       es6ExportContainerName = None |}
+       usedAnonymousInterfacesCache = new MutableMap<_, _>() |}
 
 type Context = Context<Options, State>
 
@@ -1491,7 +1489,7 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output list =
 
   let writerCtx ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
-        |> Context.mapState (fun _ -> State.defaultValue ())
+        |> Context.mapState (fun _ -> State.create ())
 
   Log.tracef opts "* emitting stdlib..."
 
@@ -1651,7 +1649,7 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output list
   let ctx, srcs = runAll srcs opts
   let ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
-        |> Context.mapState (fun _ -> {| State.defaultValue () with es6ExportContainerName = Some moduleName |})
+        |> Context.mapState (fun _ -> State.create ())
   let stmts = srcs |> List.collect (fun x -> x.statements)
   let structuredText = createStructuredText ctx stmts
 

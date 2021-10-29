@@ -45,9 +45,10 @@ type Simplify =
   | [<CompiledName("immediate-constructor")>] ImmediateConstructor
   | [<CompiledName("anonymous-interface-value")>] AnonymousInterfaceValue
   | [<CompiledName("named-interface-value")>] NamedInterfaceValue
+  | [<CompiledName("off")>] Off
   | [<CompiledName("default")>] Default
 with
-  static member Values = [|All; ImmediateInstance; ImmediateConstructor; AnonymousInterfaceValue; NamedInterfaceValue; Default|]
+  static member Values = [|All; ImmediateInstance; ImmediateConstructor; AnonymousInterfaceValue; NamedInterfaceValue; Off; Default|]
 
   static member Has (flags: Simplify list, target: Simplify) =
     if flags |> List.contains All then true
@@ -66,9 +67,10 @@ with
 type Subtyping =
   | [<CompiledName("tag")>] Tag
   | [<CompiledName("cast-function")>] CastFunction
+  | [<CompiledName("off")>] Off
   | [<CompiledName("default")>] Default
 with
-  static member Values = [|Tag; CastFunction; Default|]
+  static member Values = [|Tag; CastFunction; Off; Default|]
 
   static member TryParse (s: string) =
     match s with

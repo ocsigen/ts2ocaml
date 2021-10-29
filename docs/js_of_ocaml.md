@@ -121,7 +121,7 @@ Treat number types as `int`. If not set, `float` will be used.
 
 Turn on subtyping features.
 
-You can use `--subtyping=foo,bar` to turn on multiple features.
+You can use `--subtyping=foo,bar` to turn on multiple features. Also, use `--subtyping=off` to explicitly disable subtyping features.
 
 ### Feature: `tag`
 
@@ -510,7 +510,7 @@ end
 
 Turn on simplification features.
 
-You can use `--simplify=foo,bar` to turn on multiple features. Also, `--simplify=all` enables all the features.
+You can use `--simplify=foo,bar` to turn on multiple features. Also, `--simplify=all` enables all the features and `--simplify=off` explicitly disables simplification features.
 
 ### Feature: `immediate-instance`
 

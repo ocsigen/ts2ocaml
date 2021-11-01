@@ -295,10 +295,12 @@ __pycache__/
 .ignored
 
 # Outputs
-dist
 output
 *.fs.js*
 
 # Test artifacts
 test/jsoo/src/*.mli
 test/jsoo/src/stub.js
+
+# Dist artifacts
+dist

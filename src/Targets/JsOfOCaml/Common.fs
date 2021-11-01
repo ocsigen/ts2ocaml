@@ -114,7 +114,7 @@ module Options =
       match opts.preset with
       | None -> ()
       | Some p ->
-        Log.tracef opts "* using preset '%s'..." !!p
+        Log.tracef opts "* using the preset '%s'." !!p
 
         if opts.simplify = [] then
           opts.simplify <- [Simplify.All]

@@ -13,6 +13,13 @@ module GlobalOptions =
       .group(!^ResizeArray["verbose"; "nowarn"], "Logging Options:")
       .addFlag("verbose", (fun (o: GlobalOptions) -> o.verbose), descr="Show verbose log")
       .addFlag("nowarn", (fun (o: GlobalOptions) -> o.nowarn), descr="Do not show warnings")
+      .group(
+        !^ResizeArray[
+          "config"
+        ],
+        "General Options:"
+      )
+      .describe(!^"config", "Specify the path to a ts2ocaml configuration file.")
 
 module Log =
   let tracef (opt: 'Options) fmt : _ when 'Options :> GlobalOptions =

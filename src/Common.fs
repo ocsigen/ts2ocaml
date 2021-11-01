@@ -19,7 +19,7 @@ module GlobalOptions =
         ],
         "General Options:"
       )
-      .describe(!^"config", "Specify the path to a ts2ocaml configuration file.")
+      .describe(!^"config", "Specify the path to a ts2ocaml configuration JSON file.")
 
 module Log =
   let tracef (opt: 'Options) fmt : _ when 'Options :> GlobalOptions =

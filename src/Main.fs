@@ -98,42 +98,16 @@ let parse (opts: GlobalOptions) (argv: string[]) =
       hasNoDefaultLib = src.hasNoDefaultLib
       references = references })
 
-let findUp (names: string list) =
-  let rec go (dir: string) =
-    let candidate =
-      names |> List.fold (fun state name ->
-        match state with
-        | Some x -> Some x
-        | None ->
-          let fileName = path.join(dir, name)
-          if fs.existsSync(!!fileName) then Some fileName else None) None
-    match candidate with
-    | Some fileName -> Some fileName
-    | None ->
-      let parentDir = path.basename(dir)
-      if parentDir <> dir then
-        go (path.basename(dir))
-      else None
-  go (path.resolve(``process``.cwd()))
-
 open Yargs
 
 [<EntryPoint>]
 let main argv =
-  let configPath = findUp [".ts2ocamlrc"; ".ts2ocamlrc.json"; "ts2ocaml.config"]
-  let config (yargs: Argv<_>) =
-    match configPath with
-    | Some path ->
-      printfn $"* using the configuration file '{path}'."
-      yargs.config(fs.readFileSync(path))
-    | None -> yargs.config()
-
   let yargs =
     yargs
          .Invoke(argv)
          .wrap(yargs.terminalWidth() |> Some)
          .parserConfiguration({| ``parse-positional-numbers`` = false |})
-    |> config
+         .config()
     |> GlobalOptions.register
     |> Typer.TyperOptions.register
     |> Target.register parse Targets.JsOfOCaml.Target.target

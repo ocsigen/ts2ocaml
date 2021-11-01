@@ -26,11 +26,6 @@ let outputDir = "./output"
 let distDir = "./dist"
 let testDir = "./test"
 
-let inline (+/) a b = Path.combine a b
-
-let changelogFile = "CHANGELOG.md"
-let changelog = Changelog.load changelogFile
-
 let run cmd dir args =
     let result =
         CreateProcess.fromRawCommandLine cmd args
@@ -47,6 +42,8 @@ let dotnetExec cmd args =
     let result = DotNet.exec id cmd args
     if not result.OK then
         failwithf "Error while running 'dotnet %s %s'" cmd args
+
+// Build targets
 
 Target.create "Clean" <| fun _ ->
     !! "src/bin"
@@ -75,24 +72,24 @@ Target.create "BuildOnly" <| fun _ ->
     dotnetExec "fable" $"{srcDir} --sourceMaps --run webpack"
 
 Target.create "Build" ignore
-Target.create "BuildNoClean" ignore
 
 Target.create "Watch" <| fun _ ->
     dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w"
 
-module Deploy =
-    let appendSheBang () =
-        let binFile = outputDir +/ "ts2ocaml.js"
-        let content = File.readWithEncoding System.Text.Encoding.UTF8 binFile
-        let newContent =
-            Seq.concat [
-                Seq.singleton "#!/usr/bin/env node"
-                content
-            ]
-        File.writeWithEncoding System.Text.Encoding.UTF8 false binFile newContent
+"Clean"
+    ==> "YarnInstall"
+    ==> "Restore"
+    ==> "Prepare"
+    ==> "Build"
 
-    let setPackageJson () =
-        Yarn.exec $"version --new-version {changelog.LatestEntry.SemVer.AsString} --no-git-tag-version" id
+"Prepare"
+    ?=> "BuildOnly"
+    ==> "Build"
+
+"Prepare"
+    ?=> "Watch"
+
+// Test targets
 
 module Test =
     let opamTool = platformTool "opam"
@@ -100,9 +97,9 @@ module Test =
     let dune args = run opamTool "./" (sprintf "exec -- dune %s" args)
 
     module Jsoo =
-        let testDir = testDir +/ "jsoo"
-        let outputDir = outputDir +/ "test_jsoo"
-        let srcDir = testDir +/ "src"
+        let testDir = testDir </> "jsoo"
+        let outputDir = outputDir </> "test_jsoo"
+        let srcDir = testDir </> "src"
 
         let generateBindings () =
             Directory.create outputDir
@@ -132,62 +129,38 @@ module Test =
             for preset, package in packages do
                 ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; $"--preset {preset}"; $"-o {outputDir}"] package
 
-        let prepare () =
+        let build () =
             for file in outputDir |> Shell.copyRecursiveTo true srcDir do
                 printfn "* copied to %s" file
-
-        let build () =
             Shell.cd testDir
             dune "build"
 
-    let generateBindings () =
-        Jsoo.generateBindings ()
-
-    let prepare () =
-        Jsoo.prepare ()
-
-    let build () =
-        Jsoo.build ()
-
-Target.create "TestClean" <| fun _ -> Shell.cleanDir outputDir
-Target.create "TestGenerateBindings" <| fun _ -> Test.generateBindings ()
-Target.create "TestPrepare" <| fun _ -> Test.prepare ()
-Target.create "TestBuild" <| fun _ -> Test.build ()
-Target.create "TestOnly" ignore
-Target.create "TestNoClean" ignore
-Target.create "Test" ignore
-
-// Build order
-
-"Clean"
-    ==> "YarnInstall"
-    ==> "Restore"
-    ==> "Prepare"
-    ==> "Build"
-
-"Prepare"
-    ?=> "BuildOnly"
-    ==> "BuildNoClean"
-    ==> "Build"
-
-"Prepare"
-    ?=> "Watch"
+Target.create "TestJsooGenerateBindings" <| fun _ -> Test.Jsoo.generateBindings ()
+Target.create "TestJsooBuild" <| fun _ -> Test.Jsoo.build ()
+Target.create "TestJsoo" ignore
 
 "BuildOnly"
-    ==> "TestClean"
-    ==> "TestGenerateBindings"
-    ==> "TestPrepare"
-    ?=> "TestBuild"
+    ==> "TestJsooGenerateBindings"
+    ==> "TestJsooBuild"
+    ==> "TestJsoo"
+
+Target.create "Test" ignore
+Target.create "TestOnly" ignore
+
+"TestJsoo"
     ==> "TestOnly"
-    ==> "TestNoClean"
     ==> "Test"
 
-"Prepare"
-    ==> "Test"
+"Build" ==> "Test"
 
-"TestPrepare"
-    ==> "TestNoClean"
-    ==> "Test"
+// Deploy targets
+
+let changelogFile = "CHANGELOG.md"
+let changelog = Changelog.load changelogFile
+
+module Deploy =
+    let setPackageJson () =
+        Yarn.exec $"version --new-version {changelog.LatestEntry.SemVer.AsString} --no-git-tag-version" id
 
 // start build
 Target.runOrDefault "Build"

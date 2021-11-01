@@ -300,5 +300,5 @@ output
 *.fs.js*
 
 # Test artifacts
-test/src/*.mli
-test/src/stub.js
+test/jsoo/src/*.mli
+test/jsoo/src/stub.js

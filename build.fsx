@@ -25,7 +25,8 @@ let srcDir = "./src"
 let outputDir = "./output"
 let distDir = "./dist"
 let testDir = "./test"
-let testSrcDir = Path.combine testDir "src"
+
+let inline (+/) a b = Path.combine a b
 
 let changelogFile = "CHANGELOG.md"
 let changelog = Changelog.load changelogFile
@@ -81,7 +82,7 @@ Target.create "Watch" <| fun _ ->
 
 module Deploy =
     let appendSheBang () =
-        let binFile = Path.combine outputDir "ts2ocaml.js"
+        let binFile = outputDir +/ "ts2ocaml.js"
         let content = File.readWithEncoding System.Text.Encoding.UTF8 binFile
         let newContent =
             Seq.concat [
@@ -98,39 +99,55 @@ module Test =
     let opam args = run opamTool "./" args
     let dune args = run opamTool "./" (sprintf "exec -- dune %s" args)
 
+    module Jsoo =
+        let testDir = testDir +/ "jsoo"
+        let outputDir = outputDir +/ "test_jsoo"
+        let srcDir = testDir +/ "src"
+
+        let generateBindings () =
+            Directory.create outputDir
+
+            let ts2ocaml args files =
+                Yarn.exec (sprintf "ts2ocaml %s" (String.concat " " (Seq.append args files))) id
+
+            ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; "--stdlib"; $"-o {outputDir}"] <|
+                !! "node_modules/typescript/lib/lib.*.d.ts"
+
+            let packages = [
+               // "full" package involving a lot of inheritance
+               "full", !! "node_modules/typescript/lib/typescript.d.ts";
+
+               // "full" packages involving a lot of dependencies (which includes some "safe" packages)
+               "safe", !! "node_modules/@types/scheduler/tracing.d.ts";
+               "full", !! "node_modules/csstype/index.d.ts";
+               "safe", !! "node_modules/@types/prop-types/index.d.ts";
+               "full", !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts";
+               "full", !! "node_modules/@types/react-modal/index.d.ts";
+
+               // "safe" package which depends on another "safe" package
+               "safe", !! "node_modules/@types/yargs-parser/index.d.ts";
+               "safe", !! "node_modules/@types/yargs/index.d.ts";
+            ]
+
+            for preset, package in packages do
+                ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; $"--preset {preset}"; $"-o {outputDir}"] package
+
+        let prepare () =
+            for file in outputDir |> Shell.copyRecursiveTo true srcDir do
+                printfn "* copied to %s" file
+
+        let build () =
+            Shell.cd testDir
+            dune "build"
+
     let generateBindings () =
-        let ts2ocaml args files =
-            Yarn.exec (sprintf "ts2ocaml %s" (String.concat " " (Seq.append args files))) id
-
-        ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; "--stdlib"; $"-o {outputDir}"] <|
-            !! "node_modules/typescript/lib/lib.*.d.ts"
-
-        let packages = [
-           // "full" package involving a lot of inheritance
-           "full", !! "node_modules/typescript/lib/typescript.d.ts";
-
-           // "full" packages involving a lot of dependencies (which includes some "safe" packages)
-           "safe", !! "node_modules/@types/scheduler/tracing.d.ts";
-           "full", !! "node_modules/csstype/index.d.ts";
-           "safe", !! "node_modules/@types/prop-types/index.d.ts";
-           "full", !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts";
-           "full", !! "node_modules/@types/react-modal/index.d.ts";
-
-           // "safe" package which depends on another "safe" package
-           "safe", !! "node_modules/@types/yargs-parser/index.d.ts";
-           "safe", !! "node_modules/@types/yargs/index.d.ts";
-        ]
-
-        for preset, package in packages do
-            ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; $"--preset {preset}"; $"-o {outputDir}"] package
+        Jsoo.generateBindings ()
 
     let prepare () =
-        for file in outputDir |> Shell.copyRecursiveTo true testSrcDir do
-            printfn "* copied to %s" file
+        Jsoo.prepare ()
 
     let build () =
-        Shell.cd testDir
-        dune "build"
+        Jsoo.build ()
 
 Target.create "TestClean" <| fun _ -> Shell.cleanDir outputDir
 Target.create "TestGenerateBindings" <| fun _ -> Test.generateBindings ()

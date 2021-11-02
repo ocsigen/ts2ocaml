@@ -1,0 +1,8 @@
+(library
+  (name ts2ocaml)
+  (public_name ts2ocaml-stdlib)
+  (libraries ojs)
+  (wrapped false)
+  (modes byte)
+  (js_of_ocaml
+    (flags --pretty --enable deadcode --enable strict --enable inline)))

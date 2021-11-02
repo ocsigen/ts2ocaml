@@ -1,0 +1,8 @@
+ts2ocaml-stdlib.install
+*.merlin
+_build
+_opam
+.vscode
+build
+node_modules
+src/ts2ocaml_*.ml*

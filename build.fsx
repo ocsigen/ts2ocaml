@@ -21,10 +21,16 @@ open Fake.IO.Globbing.Operators
 open Fake.IO.FileSystemOperators
 open Fake.JavaScript
 
+let rootDir = Path.getFullName "."
 let srcDir = "./src"
 let outputDir = "./output"
 let distDir = "./dist"
 let testDir = "./test"
+
+let inDirectory dirName action =
+  Shell.cd dirName
+  action ()
+  Shell.cd rootDir
 
 let run cmd dir args =
   let result =
@@ -131,8 +137,7 @@ module Test =
     let build () =
       for file in outputDir |> Shell.copyRecursiveTo true srcDir do
         printfn "* copied to %s" file
-      Shell.cd testDir
-      dune "build"
+      inDirectory testDir <| fun () -> dune "build"
 
 Target.create "TestJsooGenerateBindings" <| fun _ -> Test.Jsoo.generateBindings ()
 Target.create "TestJsooBuild" <| fun _ -> Test.Jsoo.build ()
@@ -170,30 +175,33 @@ module Deploy =
     let copyArtifacts () =
       let mliDir = outputDir </> "test_jsoo"
       let mlDir  = testDir </> "jsoo/_build/default/src"
-      let targets = ["ts2ocaml_es"; "ts2ocaml_dom"; "ts2ocaml_webworker"]
+      let targets = ["ts2ocaml_min"; "ts2ocaml_es"; "ts2ocaml_dom"; "ts2ocaml_webworker"]
       let targetDir = targetDir </> "src"
       for target in targets do
+        Shell.rm (targetDir </> $"{target}.mli")
         Shell.copyFile targetDir (mliDir </> $"{target}.mli")
+        Shell.rm (targetDir </> $"{target}.ml")
         Shell.copyFile targetDir (mlDir </> $"{target}.ml")
 
     let versionRegex =
       String.getRegEx "\\(version ((?>\\w\\.)*\\w)\\)"
 
     let updateVersion () =
-      File.read duneProject
-      |> Seq.map (fun line ->
-        let result = versionRegex.Match line
+      duneProject |> File.applyReplace (fun content ->
+        let result = versionRegex.Match content
         if result.Success then
           let oldVersion = result.Groups.[1].Value
           if oldVersion <> newVersion then
             printfn $"* updating version in dist_jsoo/dune-project from '{oldVersion}' to '{newVersion}'."
-            "(version ${newVersion})"
+            content |> String.replace result.Value $"(version {newVersion})"
           else
             printfn $"* version in dist_jsoo/dune-project not updated ('{newVersion}')."
-            line
-        else
-          line)
-      |> File.write false duneProject
+            content
+        else content
+      )
+
+    let testBuild () =
+      inDirectory targetDir <| fun () -> dune "build"
 
 Target.create "Deploy" <| fun _ -> ()
 Target.create "DeployOnly" <| fun _ -> ()
@@ -204,6 +212,7 @@ Target.create "DeployNpm" <| fun _ ->
 Target.create "DeployJsoo" <| fun _ ->
   Deploy.Jsoo.copyArtifacts ()
   Deploy.Jsoo.updateVersion ()
+  Deploy.Jsoo.testBuild ()
 
 "BuildOnly"
   ==> "DeployNpm"
@@ -211,7 +220,16 @@ Target.create "DeployJsoo" <| fun _ ->
   ==> "DeployOnly"
   ==> "Deploy"
 
+"TestJsoo" ==> "DeployJsoo"
+
 "Build" ==> "Deploy"
+
+Target.create "All" ignore
+
+"Build"
+  ==> "Test"
+  ==> "Deploy"
+  ==> "All"
 
 // start build
 Target.runOrDefault "Build"

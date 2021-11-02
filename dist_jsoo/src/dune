@@ -1,6 +1,6 @@
 (library
   (name ts2ocaml)
-  (public_name ts2ocaml-stdlib)
+  (public_name ts2ocaml-jsoo-stdlib)
   (libraries ojs)
   (wrapped false)
   (modes byte)

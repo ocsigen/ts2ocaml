@@ -16,6 +16,8 @@ jobs:
           - 5.0.x
         node-version:
           - 14.x
+        ocaml-compiler:
+          - 4.12.x
 
     runs-on: ${{ matrix.os }}
 
@@ -34,14 +36,35 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+          dune-cache: true
+
       - name: Install .NET Dependencies
         run: dotnet restore
            | dotnet tool restore
 
+      - name: Install OCaml Dependencies
+        run: opam install js_of_ocaml-compiler js_of_ocaml-ppx ojs
+
       - name: Run FAKE
-        run: dotnet fake build target Build
+        run: dotnet fake build target All
+
+      - name: Push js_of_ocaml standard library to jsoo-stdlib
+        if: success()
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: jsoo-stdlib
+          FOLDER: dist_jsoo
+          TAG: ${{ github.ref }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MESSAGE: "Build {sha}:\n{msg}"
 
       - name: NPM Publish
+        if: success()
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}

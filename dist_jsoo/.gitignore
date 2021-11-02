@@ -5,4 +5,4 @@ _opam
 .vscode
 build
 node_modules
-src/ts2ocaml_*.ml*
+test

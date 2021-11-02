@@ -304,3 +304,4 @@ test/jsoo/src/stub.js
 
 # Dist artifacts
 dist
+dist_jsoo/src/ts2ocaml_*.ml*

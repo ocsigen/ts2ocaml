@@ -59,7 +59,7 @@ jobs:
           REPO: self
           BRANCH: jsoo-stdlib
           FOLDER: dist_jsoo
-          TAG: ${{ github.ref }}
+          TAG: jsoo-stdlib-${{ github.ref }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build {sha}:\n{msg}"
 

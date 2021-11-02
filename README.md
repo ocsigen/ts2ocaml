@@ -31,7 +31,7 @@ An in-browser version may be available in future.
 * Generate a binding written in 100% OCaml-idiomatic way.
   - OCaml has very different programming concepts from TypeScript, so it's not very straightforward to translate TypeScript's concepts to OCaml's one.
   - This tool will simply generate bindings which closely resembles the original TypeScript definitions. It's human's job to translate it to OCaml-idiomatic API.
-* Perfectly replicate TypeScript in OCaml.
+* Perfectly replicate TypeScript's type system in OCaml.
   - Many of [the advanced types in TypeScript](https://www.typescriptlang.org/docs/handbook/2/types-from-types.html), such as `keyof T` or `T extends U ? A : B`, are simply impossible to simulate in OCaml.
   - In those cases, this tool will leave them as untyped. It's also human's job to (possibly) restore type safety with some other means.
 

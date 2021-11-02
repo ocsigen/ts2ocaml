@@ -18,7 +18,7 @@ module Never: sig
   ]
 end
 
-type any = private Ojs.t
+type any = Ojs.t
 val any_to_js: any -> Ojs.t
 val any_of_js: Ojs.t -> any
 
@@ -26,10 +26,10 @@ module Any: sig
   type t = any
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val unsafe_cast: t -> 'a
-  [@@js.custom
-    let unsafe_cast x = Obj.magic x
-  ]
+  val cast_from: 'a -> t
+  [@@js.custom let cast_from x = Obj.magic x]
+  val unsafe_cast_to: t -> 'a
+  [@@js.custom let unsafe_cast_to x = Obj.magic x]
 end
 
 type unknown = private Ojs.t
@@ -47,12 +47,12 @@ module Unknown: sig
 end
 
 [@@@js.stop]
-type -'a intf = private Ojs.t
-val intf_to_js: ('a -> Ojs.t) -> 'a intf -> Ojs.t
-val intf_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a intf
+type -'tags intf = private Ojs.t
+val intf_to_js: ('tags -> Ojs.t) -> 'tags intf -> Ojs.t
+val intf_of_js: (Ojs.t -> 'tags) -> Ojs.t -> 'tags intf
 [@@@js.start]
 [@@@js.implem
-  type -'a intf = Ojs.t
+  type -'tags intf = Ojs.t
   let intf_to_js _ x : Ojs.t = x
   let intf_of_js _ x : _ intf = x
 ]

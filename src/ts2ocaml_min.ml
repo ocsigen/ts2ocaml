@@ -20,7 +20,8 @@ module Any =
     type t = any
     let rec t_of_js : Ojs.t -> t = fun (x8 : Ojs.t) -> any_of_js x8
     and t_to_js : t -> Ojs.t = fun (x7 : any) -> any_to_js x7
-    let unsafe_cast x = Obj.magic x
+    let cast_from x = Obj.magic x
+    let unsafe_cast_to x = Obj.magic x
   end
 type unknown = Ojs.t
 let rec unknown_of_js : Ojs.t -> unknown = fun (x10 : Ojs.t) -> x10
@@ -32,7 +33,7 @@ module Unknown =
     and t_to_js : t -> Ojs.t = fun (x11 : unknown) -> unknown_to_js x11
     let unsafe_cast x = Obj.magic x
   end
-type -'a intf = Ojs.t
+type -'tags intf = Ojs.t
 let intf_to_js _ x = (x : Ojs.t)
 let intf_of_js _ x = (x : _ intf)
 type untyped_object = [ `Object ] intf

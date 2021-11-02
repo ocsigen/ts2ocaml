@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.3] - 2021-11-02
+Nothing is changed internally, but the GitHub Action is now working as intended.
+Publishing the NPM package and the OPAM package (to `jsoo-stdlib` branch for OPAM pinning) is now automated.
+
 ## [0.0.2] - 2021-11-02
-Testing if package is published correctly when we create an release on GitHub.
-Also created an OPAM package for js_of_ocaml.
+Test if package is published correctly when we create an release on GitHub.
+Also create a branch to be used as the standard library for js_of_ocaml.
 
 ## [0.0.1] - 2021-10-22
 Test publishing to npm.

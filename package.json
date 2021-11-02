@@ -1,6 +1,6 @@
 {
   "name": "@ocsigen/ts2ocaml",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generate OCaml bindings from TypeScript definitions via the TypeScript compiler API",
   "repository": {
     "type": "git",

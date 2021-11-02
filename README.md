@@ -38,11 +38,12 @@ An in-browser version may be available in future.
 ## Documentation
 
 For users:
+- [Common options](docs/common_options.md) among all the targets
 - [ts2ocaml for js_of_ocaml](docs/js_of_ocaml.md)
 - ts2ocaml for ReScript (planned)
 
 For developers and contributors:
-- [Overview](docs/development.md)
+- [Overview for developers](docs/development.md)
 - [Note on modeling TS subtyping in OCaml](docs/modeling_subtyping.md)
 
 ## About this tool

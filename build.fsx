@@ -157,9 +157,9 @@ Target.create "TestOnly" ignore
 
 "Build" ==> "Test"
 
-// Deploy targets
+// Publish targets
 
-module Deploy =
+module Publish =
   let changelogFile = "CHANGELOG.md"
   let changelog = Changelog.load changelogFile
   let newVersion = changelog.LatestEntry.SemVer.AsString
@@ -203,32 +203,32 @@ module Deploy =
     let testBuild () =
       inDirectory targetDir <| fun () -> dune "build"
 
-Target.create "Deploy" <| fun _ -> ()
-Target.create "DeployOnly" <| fun _ -> ()
+Target.create "Publish" <| fun _ -> ()
+Target.create "PublishOnly" <| fun _ -> ()
 
-Target.create "DeployNpm" <| fun _ ->
-  Deploy.Npm.updateVersion ()
+Target.create "PublishNpm" <| fun _ ->
+  Publish.Npm.updateVersion ()
 
-Target.create "DeployJsoo" <| fun _ ->
-  Deploy.Jsoo.copyArtifacts ()
-  Deploy.Jsoo.updateVersion ()
-  Deploy.Jsoo.testBuild ()
+Target.create "PublishJsoo" <| fun _ ->
+  Publish.Jsoo.copyArtifacts ()
+  Publish.Jsoo.updateVersion ()
+  Publish.Jsoo.testBuild ()
 
 "BuildOnly"
-  ==> "DeployNpm"
-  ==> "DeployJsoo"
-  ==> "DeployOnly"
-  ==> "Deploy"
+  ==> "PublishNpm"
+  ==> "PublishJsoo"
+  ==> "PublishOnly"
+  ==> "Publish"
 
-"TestJsoo" ==> "DeployJsoo"
+"TestJsoo" ==> "PublishJsoo"
 
-"Build" ==> "Deploy"
+"Build" ==> "Publish"
 
 Target.create "All" ignore
 
 "Build"
   ==> "Test"
-  ==> "Deploy"
+  ==> "Publish"
   ==> "All"
 
 // start build

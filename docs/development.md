@@ -39,7 +39,7 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 
 - OCaml 4.08 or higher
   - [js_of_ocaml](https://github.com/ocsigen/js_of_ocaml) should be installed to your opam switch.
-  - The latest [gen_js_api](https://github.com/LexiFi/gen_js_api) is already present in `test/lib/gen_js_api` as a git submodule. Run `git submodule update --init --recursive`.
+  - The latest [gen_js_api](https://github.com/LexiFi/gen_js_api) is already present in `test/jsoo/lib/gen_js_api` as a git submodule. Run `git submodule update --init --recursive`.
 
 - Node 14.0 or higher
   - [yarn](https://yarnpkg.com/) is required.
@@ -56,17 +56,41 @@ The resulting `dist/ts2ocaml.js` is then ready to run through `node`.
 
 ## Testing
 
-`dotnet fake build -t Test` builds the tool (as described above) and then performs the followings:
-- Test the tool with the following packages:
+`dotnet fake build -t Test` builds the tool and then performs the followings:
+
+### Test the tool for [`js_of_ocaml` target](js_of_ocaml.md)
+
+- Generate bindings for the following packages:
   - TypeScript standard libraries (`node_modules/typescript/lib/lib.*.d.ts`)
-  - `typescript` (binding for TypeScript compiler API)
-  - `react`
-    - `scheduler/tracing`
-    - `csstype`
-    - `prop-types`
-  - `react-modal`
-  - `yargs`
-    - `yargs-parser`
-  - The output files will be placed into `output/`
-- Copy the resulting OCaml bindings to `test/src/`
-- Perform `dune build` in `test/`
+  - `typescript` with the `full` preset (involving a lot of inheritance)
+  - `react` with the `full` preset (depending on both `full` packages and `safe` packages)
+    - `scheduler/tracing` (`safe`)
+    - `csstype` (`full`)
+    - `prop-types` (`safe`)
+  - `react-modal` with the `full` preset (depending on a `full` package)
+  - `yargs` with the `safe` preset (depending on a `safe` package)
+    - `yargs-parser` (`safe`)
+- The bindings will be placed into `output/test_jsoo/`
+- Copy the bindings to `test/jsoo/src/`
+- Perform `dune build` in `test/jsoo/`
+
+> Tests for other targets will be added here
+
+## Publishing
+
+`dotnet fake build -t Publish` builds the tool, runs the tests, and then performs the followings:
+
+### Prepare for publishing the standard library for [`js_of_ocaml` target](js_of_ocaml.md) to the `jsoo-stdlib` branch
+
+- Copy `ts2ocaml_*.mli` from `output/test_jsoo/` to `dist_jsoo/src/`
+- Copy `ts2ocaml_*.ml`  from `test/jsoo/_build/default/src/` to `dist_jsoo/src/`
+- Set the correct `version` in `dist_jsoo/dune-project`
+- Perform `dune build` in `dist_jsoo/` to generate `.opam` file and check if it compiles
+
+GitHub Action `publish.yml` is configured to push the `dist_jsoo` directory to the `jsoo-stdlib` branch.
+
+### Prepare for publishing the tool to NPM
+
+- Set the correct `version` in `package.json`
+
+GitHub Action `publish.yml` is configured to publish `ts2ocaml` to NPM.

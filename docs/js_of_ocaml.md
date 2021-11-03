@@ -102,7 +102,7 @@ See [`--preset`](#--preset) for the options which will be set by each preset.
 Once you figure out which preset (and some additional options if any) to use, you are now ready to run `ts2ocaml`.
 
 ```
-ts2ocaml jsoo --preset safe --output-dir src node_modules/typescript/lib/typescript.d.ts
+ts2ocaml jsoo --preset full --output-dir src node_modules/typescript/lib/typescript.d.ts
 ```
 
 A binding (`typescript.mli` in this example) and a JS stub file `stub.js` will be generated in the `src` directory.

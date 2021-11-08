@@ -26,10 +26,11 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
       - `Writer.fs` ... functions for generating OCaml code from AST
       - `Target.fs` ... `ITarget<_>` instance for `js_of_ocaml` target
   - `Main.fs` ... entry point
-- `test/` ... test for `js_of_ocaml` target
-  - this should be divided to subdirectories if `ReScript` or other targets are added.
+- `test/`
+  - `jsoo/` ... test for `js_of_ocaml` target
 - `dist/` ... output directory for NPM packaging
-- `output/` ... output directory for automated testing, etc
+- `dist_jsoo/` ... output directory for OPAM packaging
+- `output/` ... temporary output directory for automated testing, etc
 
 ## Requirements
 

@@ -39,7 +39,9 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 
 - OCaml 4.08 or higher
   - [js_of_ocaml](https://github.com/ocsigen/js_of_ocaml) should be installed to your opam switch.
-  - The latest [gen_js_api](https://github.com/LexiFi/gen_js_api) is already present in `test/jsoo/lib/gen_js_api` as a git submodule. Run `git submodule update --init --recursive`.
+  - The latest [gen_js_api](https://github.com/LexiFi/gen_js_api) should also be installed to your opam switch.
+    - As of Oct 2021, most of the required features have not been present in the latest version in opam.
+    - You should install the latest version by `opam pin add gen_js_api https://github.com/LexiFi/gen_js_api.git`
 
 - Node 14.0 or higher
   - [yarn](https://yarnpkg.com/) is required.

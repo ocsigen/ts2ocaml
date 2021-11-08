@@ -45,8 +45,11 @@ jobs:
         run: dotnet restore
            | dotnet tool restore
 
-      - name: Install OCaml Dependencies
         run: opam install js_of_ocaml-compiler js_of_ocaml-ppx ojs
+
+      - name: Install OCaml Dependencies
+        run: opam pin add gen_js_api https://github.com/LexiFi/gen_js_api.git -y
+           | opam install js_of_ocaml -y
 
       - name: Run FAKE
         run: dotnet fake build target All

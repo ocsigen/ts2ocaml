@@ -19,7 +19,7 @@ You should use the latest `gen_js_api` as `ts2ocaml` uses the latest features of
 As of Oct 2021, most of the required features have not been present in the latest version in opam.
 So you would have to either do
 
-* `opam pin add gen_js_api https://github.com/LexiFi/gen_js_api` **(recommended)**, or
+* `opam pin add gen_js_api https://github.com/LexiFi/gen_js_api.git` **(recommended)**, or
 * `git submodule` [their repository](https://github.com/LexiFi/gen_js_api) to the `lib` directory of your OCaml project.
   - Note that if you use `gen_js_api` via a submodule, it might conflict with [`ts2ocaml-jsoo-stdlib`](#using-ts2ocaml-jsoo-stdlib-package) which is installed via `ocaml pin add`.
   - Therefore, this would work only if you are going to do [`ts2ocaml jsoo --create-minimal-lib`](#using---create-minimal-lib--create-minimal-stdlib).

@@ -127,7 +127,7 @@ The resulting `dune` will look like below:
 (rule
   (targets main.js)
   (deps main.bc.js)
-  (action (run cp %{deps} %{targets})))
+  (action (copy %{deps} %{targets})))
 
 (alias
   (name DEFAULT)

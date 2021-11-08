@@ -52,11 +52,6 @@ Check the version of `ts2ocaml` with `ts2ocaml --version` and do the following:
 opam pin add ts2ocaml-jsoo-stdlib https://github.com/ocsigen/ts2ocaml.git#jsoo-stdlib-vX.Y.Z
 ```
 
-> **Note:** This may not work while this repo is private. Make sure you have a SSH access to GitHub and use the following instead:
-> ```
-> opam pin add ts2ocaml-jsoo-stdlib "git@github.com:ocsigen/ts2ocaml.git#jsoo-stdlib-vX.Y.Z"
-> ```
-
 ### Using [`--create-minimal-lib`](#--create-minimal-stdlib)
 
 `ts2ocaml jsoo --create-minimal-lib` generates a minimal standard library for `ts2ocaml`.

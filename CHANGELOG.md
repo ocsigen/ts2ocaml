@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 2021-11-08
+Test automated publishing for the official release. Nothing is changed internally.
+
 ## [0.0.3] - 2021-11-02
 Nothing is changed internally, but the GitHub Action is now working as intended.
 Publishing the NPM package and the OPAM package (to `jsoo-stdlib` branch for OPAM pinning) is now automated.

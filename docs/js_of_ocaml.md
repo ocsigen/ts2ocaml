@@ -226,10 +226,6 @@ The stub file uses `require` for importing packages. `/* need Babel */` indicate
 
 # Typer Options
 
-> **Note:** This section describes the options which is only available for js_of_ocaml target.
->
-> See also [the common typer options](common_options.md#typer-options).
-
 ## `--int`, `--number-as-int`
 
 Treat number types as `int`. If not set, `float` will be used.

@@ -139,9 +139,9 @@ module[@js.scope "WeakSet"] WeakSet : sig
   val add: ('tags, 'T) this -> value:'T -> ('tags, 'T) this [@@js.call "add"]
   val delete: ('tags, 'T) this -> value:'T -> bool [@@js.call "delete"]
   val has: ('tags, 'T) this -> value:'T -> bool [@@js.call "has"]
-  val create: 'T Iterable.t -> 'T t [@@js.create]
-  val create': ?values:'T list or_null -> unit -> 'T t [@@js.create]
+  val create: ?values:'T list or_null -> unit -> 'T t [@@js.create]
   val prototype: unit -> untyped_object t [@@js.get "prototype"]
+  val create': 'T Iterable.t -> 'T t [@@js.create]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -212,9 +212,9 @@ module[@js.scope "WeakMap"] WeakMap : sig
   val get_: ('tags, 'K, 'V) this -> key:'K -> 'V or_undefined [@@js.call "get"]
   val has: ('tags, 'K, 'V) this -> key:'K -> bool [@@js.call "has"]
   val set_: ('tags, 'K, 'V) this -> key:'K -> value:'V -> ('tags, 'K, 'V) this [@@js.call "set"]
-  val create: ('K * 'V) Iterable.t -> ('K, 'V) t [@@js.create]
-  val create': ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) t [@@js.create]
+  val create: ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) t [@@js.create]
   val prototype: unit -> (untyped_object, any) t [@@js.get "prototype"]
+  val create': ('K * 'V) Iterable.t -> ('K, 'V) t [@@js.create]
   val cast_from: (('tags, 'K, 'V) this -> ('K, 'V) t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -364,24 +364,6 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (**
     language version: ES2016
@@ -629,24 +611,30 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
   val get: 'tags this -> float -> float [@@js.index_get]
   val set: 'tags this -> float -> float -> unit [@@js.index_set]
   
-  (** language version: ES2015 *)
-  val create: float Iterable.t -> t [@@js.create]
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
   
   (**
     language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an list of keys in the array
   *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (** language version: ES2017 *)
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  val create': float -> t [@@js.create]
+  val create'': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
+  val create''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
   
   (** The size in bytes of each element in the array. *)
   val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -661,7 +649,7 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
     Creates an array from an array-like or iterable object.
     @param arrayLike An array-like or iterable object to convert to an array.
   *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
+  val from: float ArrayLike.t -> t [@@js.global "from"]
   
   (**
     Creates an array from an array-like or iterable object.
@@ -669,7 +657,19 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  
+  (** language version: ES2015 *)
+  val create'''': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -807,24 +807,6 @@ module ReadonlyArray : sig
   
   (**
     language version: ES2015
-    Returns an iterable of key, value pairs for every entry in the array
-  *)
-  val entries: ('tags, 'T) this -> (float * 'T) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an iterable of keys in the array
-  *)
-  val keys: ('tags, 'T) this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an iterable of values in the array
-  *)
-  val values: ('tags, 'T) this -> 'T IterableIterator.t [@@js.call "values"]
-  
-  (**
-    language version: ES2015
     Returns the value of the first element in the array where predicate is true, and undefined
     otherwise.
     @param predicate find calls predicate once for each element of the array, in ascending
@@ -853,26 +835,6 @@ module ReadonlyArray : sig
     predicate. If it is not provided, undefined is used instead.
   *)
   val findIndex: ('tags, 'T) this -> predicate:(value:'T -> index:float -> obj:'T list -> unknown) -> ?thisArg:any -> unit -> float [@@js.call "findIndex"]
-  
-  (**
-    language version: ES2019
-    Calls a defined callback function on each element of an array. Then, flattens the result into
-    a new array.
-    This is identical to a map followed by flat with depth 1.
-    @param callback A function that accepts up to three arguments. The flatMap method calls the
-    callback function one time for each element in the array.
-    @param thisArg An object to which the this keyword can refer in the callback function. If
-    thisArg is omitted, undefined is used as the this value.
-  *)
-  val flatMap: ('tags, 'T) this -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U t) union2) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
-  
-  (**
-    language version: ES2019
-    Returns a new array with all sub-array elements concatenated into it recursively up to the
-    specified depth.
-    @param depth The maximum recursion depth
-  *)
-  val flat: ('tags, 'T) this -> this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list [@@js.call "flat"]
   
   (**
     language version: ES2016
@@ -1022,6 +984,44 @@ module ReadonlyArray : sig
   *)
   val reduceRight'': ('tags, 'T) this -> callbackfn:(previousValue:'U -> currentValue:'T -> currentIndex:float -> array:'T list -> 'U) -> initialValue:'U -> 'U [@@js.call "reduceRight"]
   val get: ('tags, 'T) this -> float -> 'T [@@js.index_get]
+  
+  (**
+    language version: ES2019
+    Calls a defined callback function on each element of an array. Then, flattens the result into
+    a new array.
+    This is identical to a map followed by flat with depth 1.
+    @param callback A function that accepts up to three arguments. The flatMap method calls the
+    callback function one time for each element in the array.
+    @param thisArg An object to which the this keyword can refer in the callback function. If
+    thisArg is omitted, undefined is used as the this value.
+  *)
+  val flatMap: ('tags, 'T) this -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U t) union2) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
+  
+  (**
+    language version: ES2019
+    Returns a new array with all sub-array elements concatenated into it recursively up to the
+    specified depth.
+    @param depth The maximum recursion depth
+  *)
+  val flat: ('tags, 'T) this -> this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list [@@js.call "flat"]
+  
+  (**
+    language version: ES2015
+    Returns an iterable of key, value pairs for every entry in the array
+  *)
+  val entries: ('tags, 'T) this -> (float * 'T) IterableIterator.t [@@js.call "entries"]
+  
+  (**
+    language version: ES2015
+    Returns an iterable of keys in the array
+  *)
+  val keys: ('tags, 'T) this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an iterable of values in the array
+  *)
+  val values: ('tags, 'T) this -> 'T IterableIterator.t [@@js.call "values"]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
   val to_ml: 'T t -> 'T list [@@js.cast]
   val of_ml: 'T list -> 'T t [@@js.cast]
@@ -1102,6 +1102,43 @@ module[@js.scope "Symbol"] Symbol : sig
   val valueOf: 'tags this -> symbol [@@js.call "valueOf"]
   
   (**
+    language version: ES2018
+    A method that returns the default async iterator for an object. Called by the semantics of
+    the for-await-of statement.
+  *)
+  val asyncIterator: unit -> symbol [@@js.get "asyncIterator"]
+  
+  (**
+    language version: ES2020
+    A regular expression method that matches the regular expression against a string. Called
+    by the String.prototype.matchAll method.
+  *)
+  val matchAll: unit -> symbol [@@js.get "matchAll"]
+  
+  (** A reference to the prototype. *)
+  val prototype: unit -> t [@@js.get "prototype"]
+  
+  (**
+    Returns a new unique Symbol value.
+    @param description Description of the new Symbol object.
+  *)
+  val invoke: ?description:string or_number -> unit -> symbol [@@js.invoke]
+  
+  (**
+    Returns a Symbol object from the global symbol registry matching the given key if found.
+    Otherwise, returns a new symbol with this key.
+    @param key key to search for.
+  *)
+  val for_: string -> symbol [@@js.global "for"]
+  
+  (**
+    Returns a key from the global symbol registry matching the given Symbol if found.
+    Otherwise, returns a undefined.
+    @param sym Symbol to find the key for.
+  *)
+  val keyFor: symbol -> string or_undefined [@@js.global "keyFor"]
+  
+  (**
     A method that determines if a constructor object recognizes an object as one of the
     constructor’s instances. Called by the semantics of the instanceof operator.
   *)
@@ -1166,43 +1203,6 @@ module[@js.scope "Symbol"] Symbol : sig
     for-of statement.
   *)
   val iterator: unit -> symbol [@@js.get "iterator"]
-  
-  (** A reference to the prototype. *)
-  val prototype: unit -> t [@@js.get "prototype"]
-  
-  (**
-    Returns a new unique Symbol value.
-    @param description Description of the new Symbol object.
-  *)
-  val invoke: ?description:string or_number -> unit -> symbol [@@js.invoke]
-  
-  (**
-    Returns a Symbol object from the global symbol registry matching the given key if found.
-    Otherwise, returns a new symbol with this key.
-    @param key key to search for.
-  *)
-  val for_: string -> symbol [@@js.global "for"]
-  
-  (**
-    Returns a key from the global symbol registry matching the given Symbol if found.
-    Otherwise, returns a undefined.
-    @param sym Symbol to find the key for.
-  *)
-  val keyFor: symbol -> string or_undefined [@@js.global "keyFor"]
-  
-  (**
-    language version: ES2018
-    A method that returns the default async iterator for an object. Called by the semantics of
-    the for-await-of statement.
-  *)
-  val asyncIterator: unit -> symbol [@@js.get "asyncIterator"]
-  
-  (**
-    language version: ES2020
-    A regular expression method that matches the regular expression against a string. Called
-    by the String.prototype.matchAll method.
-  *)
-  val matchAll: unit -> symbol [@@js.get "matchAll"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module AnonymousInterface1 : sig
@@ -1242,24 +1242,6 @@ module[@js.scope "Array"] Array : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-  
-  (**
-    language version: ES2015
-    Returns an iterable of key, value pairs for every entry in the array
-  *)
-  val entries: ('tags, 'T) this -> (float * 'T) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an iterable of keys in the array
-  *)
-  val keys: ('tags, 'T) this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an iterable of values in the array
-  *)
-  val values: ('tags, 'T) this -> 'T IterableIterator.t [@@js.call "values"]
   
   (**
     language version: ES2015
@@ -1314,26 +1296,6 @@ module[@js.scope "Array"] Array : sig
     @param end If not specified, length of the this object is used as its default value.
   *)
   val copyWithin: ('tags, 'T) this -> target:float -> start:float -> ?end_:float -> unit -> ('tags, 'T) this [@@js.call "copyWithin"]
-  
-  (**
-    language version: ES2019
-    Calls a defined callback function on each element of an array. Then, flattens the result into
-    a new array.
-    This is identical to a map followed by flat with depth 1.
-    @param callback A function that accepts up to three arguments. The flatMap method calls the
-    callback function one time for each element in the array.
-    @param thisArg An object to which the this keyword can refer in the callback function. If
-    thisArg is omitted, undefined is used as the this value.
-  *)
-  val flatMap: ('tags, 'T) this -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U ReadonlyArray.t) union2) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
-  
-  (**
-    language version: ES2019
-    Returns a new array with all sub-array elements concatenated into it recursively up to the
-    specified depth.
-    @param depth The maximum recursion depth
-  *)
-  val flat: ('tags, 'T) this -> this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list [@@js.call "flat"]
   
   (**
     language version: ES2016
@@ -1554,27 +1516,49 @@ module[@js.scope "Array"] Array : sig
   val set: ('tags, 'T) this -> float -> 'T -> unit [@@js.index_set]
   
   (**
-    language version: ES2015
-    Creates an array from an iterable object.
-    @param iterable An iterable object to convert to an array.
+    language version: ES2019
+    Calls a defined callback function on each element of an array. Then, flattens the result into
+    a new array.
+    This is identical to a map followed by flat with depth 1.
+    @param callback A function that accepts up to three arguments. The flatMap method calls the
+    callback function one time for each element in the array.
+    @param thisArg An object to which the this keyword can refer in the callback function. If
+    thisArg is omitted, undefined is used as the this value.
   *)
-  val from: ('T ArrayLike.t, 'T Iterable.t) union2 -> 'T list [@@js.global "from"]
+  val flatMap: ('tags, 'T) this -> callback:(this:'This -> value:'T -> index:float -> array:'T list -> ('U, 'U ReadonlyArray.t) union2) -> ?thisArg:'This -> unit -> 'U list [@@js.call "flatMap"]
+  
+  (**
+    language version: ES2019
+    Returns a new array with all sub-array elements concatenated into it recursively up to the
+    specified depth.
+    @param depth The maximum recursion depth
+  *)
+  val flat: ('tags, 'T) this -> this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list [@@js.call "flat"]
   
   (**
     language version: ES2015
-    Creates an array from an iterable object.
-    @param iterable An iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an iterable of key, value pairs for every entry in the array
   *)
-  val from': iterable:('T ArrayLike.t, 'T Iterable.t) union2 -> mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list [@@js.global "from"]
+  val entries: ('tags, 'T) this -> (float * 'T) IterableIterator.t [@@js.call "entries"]
+  
+  (**
+    language version: ES2015
+    Returns an iterable of keys in the array
+  *)
+  val keys: ('tags, 'T) this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an iterable of values in the array
+  *)
+  val values: ('tags, 'T) this -> 'T IterableIterator.t [@@js.call "values"]
   
   (**
     language version: ES2015
     Creates an array from an array-like object.
     @param arrayLike An array-like object to convert to an array.
   *)
-  val from'': 'T ArrayLike.t -> 'T list [@@js.global "from"]
+  val from: 'T ArrayLike.t -> 'T list [@@js.global "from"]
   
   (**
     language version: ES2015
@@ -1583,7 +1567,7 @@ module[@js.scope "Array"] Array : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from''': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list [@@js.global "from"]
   
   (**
     language version: ES2015
@@ -1599,6 +1583,22 @@ module[@js.scope "Array"] Array : sig
   val invoke'': ('T list [@js.variadic]) -> 'T list [@@js.invoke]
   val isArray: any -> bool [@@js.global "isArray"]
   val prototype: unit -> any list [@@js.get "prototype"]
+  
+  (**
+    language version: ES2015
+    Creates an array from an iterable object.
+    @param iterable An iterable object to convert to an array.
+  *)
+  val from'': ('T ArrayLike.t, 'T Iterable.t) union2 -> 'T list [@@js.global "from"]
+  
+  (**
+    language version: ES2015
+    Creates an array from an iterable object.
+    @param iterable An iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from''': iterable:('T ArrayLike.t, 'T Iterable.t) union2 -> mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list [@@js.global "from"]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
   val to_ml: 'T t -> 'T list [@@js.cast]
   val of_ml: 'T list -> 'T t [@@js.cast]
@@ -1690,13 +1690,6 @@ module[@js.scope "RegExp"] RegExp : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (**
-    language version: ES2018
-    Returns a Boolean value indicating the state of the dotAll flag (s) used with a regular expression.
-    Default is false. Read-only.
-  *)
-  val get_dotAll: 'tags this -> bool [@@js.get "dotAll"]
-  
-  (**
     language version: ES2015
     Returns a string indicating the flags of the regular expression in question. This field is read-only.
     The characters in this string are sequenced and concatenated in the following order:
@@ -1724,6 +1717,13 @@ module[@js.scope "RegExp"] RegExp : sig
     expression. Default is false. Read-only.
   *)
   val get_unicode: 'tags this -> bool [@@js.get "unicode"]
+  
+  (**
+    language version: ES2018
+    Returns a Boolean value indicating the state of the dotAll flag (s) used with a regular expression.
+    Default is false. Read-only.
+  *)
+  val get_dotAll: 'tags this -> bool [@@js.get "dotAll"]
   
   (**
     Executes a search on a string using a regular expression pattern, and returns an array containing the results of that search.
@@ -2727,14 +2727,14 @@ and[@js.scope "Intl"] Intl : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     
-    (** language version: ESNext *)
-    val formatToParts: 'tags this -> ?number:bigint or_number -> unit -> NumberFormatPart.t list [@@js.call "formatToParts"]
-    
     (** language version: ES2020 *)
     val format: 'tags this -> value:bigint or_number -> string [@@js.call "format"]
     
     (** language version: ES2020 *)
     val resolvedOptions: 'tags this -> ResolvedNumberFormatOptions.t [@@js.call "resolvedOptions"]
+    
+    (** language version: ESNext *)
+    val formatToParts: 'tags this -> ?number:bigint or_number -> unit -> NumberFormatPart.t list [@@js.call "formatToParts"]
     val format': 'tags this -> value:float -> string [@@js.call "format"]
     val resolvedOptions': 'tags this -> ResolvedNumberFormatOptions.t [@@js.call "resolvedOptions"]
     val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
@@ -3032,6 +3032,9 @@ and[@js.scope "Intl"] Intl : sig
     val supportedLocalesOf: locales:string list or_string -> ?options:CollatorOptions.t -> unit -> string list [@@js.global "supportedLocalesOf"]
   end
   
+  (** language version: ES2018 *)
+  val pluralRules: unit -> AnonymousInterface8.t [@@js.get "PluralRules"]
+  
   
   val collator: unit -> AnonymousInterface5.t [@@js.get "Collator"]
   
@@ -3040,9 +3043,6 @@ and[@js.scope "Intl"] Intl : sig
   
   
   val dateTimeFormat: unit -> AnonymousInterface6.t [@@js.get "DateTimeFormat"]
-  
-  (** language version: ES2018 *)
-  val pluralRules: unit -> AnonymousInterface8.t [@@js.get "PluralRules"]
   
   (**
     language version: ES2020
@@ -3120,77 +3120,6 @@ module[@js.scope "String"] String : sig
     Removes the trailing white space and line terminator characters from a string.
   *)
   val trimRight: 'tags this -> string [@@js.call "trimRight"]
-  
-  (**
-    language version: ES2015
-    Matches a string or an object that supports being matched against, and returns an array
-    containing the results of that search, or null if no matches are found.
-    @param matcher An object that supports being matched against.
-  *)
-  val match_: 'tags this -> matcher:AnonymousInterface9.t -> RegExpMatchArray.t or_null [@@js.call "match"]
-  
-  (**
-    language version: ES2015
-    Replaces first match with string or all matches with RegExp.
-    @param searchValue A string or RegExp search value.
-    @param replaceValue A string containing the text to replace for match.
-  *)
-  val replace: 'tags this -> searchValue:AnonymousInterface10.t -> replaceValue:string -> string [@@js.call "replace"]
-  
-  (**
-    language version: ES2015
-    Replaces text in a string, using an object that supports replacement within a string.
-    @param searchValue A object can search for and replace matches within a string.
-    @param replacer A function that returns the replacement text.
-  *)
-  val replace': 'tags this -> searchValue:AnonymousInterface11.t -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replace"]
-  
-  (**
-    language version: ES2015
-    Finds the first substring match in a regular expression search.
-    @param searcher An object which supports searching within a string.
-  *)
-  val search: 'tags this -> searcher:AnonymousInterface12.t -> float [@@js.call "search"]
-  
-  (**
-    language version: ES2015
-    Split a string into substrings using the specified separator and return them as an array.
-    @param splitter An object that can split a string.
-    @param limit A value used to limit the number of elements returned in the array.
-  *)
-  val split: 'tags this -> splitter:AnonymousInterface13.t -> ?limit:float -> unit -> string list [@@js.call "split"]
-  
-  (**
-    language version: ES2017
-    Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length.
-    The padding is applied from the start (left) of the current string.
-    @param maxLength The length of the resulting string once the current string has been padded.
-    If this parameter is smaller than the current string's length, the current string will be returned as it is.
-    @param fillString The string to pad the current string with.
-    If this string is too long, it will be truncated and the left-most part will be applied.
-    The default value for this parameter is " " (U+0020).
-  *)
-  val padStart: 'tags this -> maxLength:float -> ?fillString:string -> unit -> string [@@js.call "padStart"]
-  
-  (**
-    language version: ES2017
-    Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length.
-    The padding is applied from the end (right) of the current string.
-    @param maxLength The length of the resulting string once the current string has been padded.
-    If this parameter is smaller than the current string's length, the current string will be returned as it is.
-    @param fillString The string to pad the current string with.
-    If this string is too long, it will be truncated and the left-most part will be applied.
-    The default value for this parameter is " " (U+0020).
-  *)
-  val padEnd: 'tags this -> maxLength:float -> ?fillString:string -> unit -> string [@@js.call "padEnd"]
-  
-  (**
-    language version: ES2020
-    Matches a string with a regular expression, and returns an iterable of matches
-    containing the results of that search.
-    @param regexp A variable name or string literal containing the regular expression pattern and flags.
-  *)
-  val matchAll: 'tags this -> regexp:RegExp.t -> RegExpMatchArray.t IterableIterator.t [@@js.call "matchAll"]
   
   (**
     language version: ES2015
@@ -3340,38 +3269,6 @@ module[@js.scope "String"] String : sig
   val sup: 'tags this -> string [@@js.call "sup"]
   
   (**
-    language version: ESNext
-    Replace all instances of a substring in a string, using a regular expression or search string.
-    @param searchValue A string to search for.
-    @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
-  *)
-  val replaceAll: 'tags this -> searchValue:RegExp.t or_string -> replaceValue:string -> string [@@js.call "replaceAll"]
-  
-  (**
-    language version: ESNext
-    Replace all instances of a substring in a string, using a regular expression or search string.
-    @param searchValue A string to search for.
-    @param replacer A function that returns the replacement text.
-  *)
-  val replaceAll': 'tags this -> searchValue:RegExp.t or_string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replaceAll"]
-  
-  (**
-    language version: ESNext
-    Replace all instances of a substring in a string, using a regular expression or search string.
-    @param searchValue A string to search for.
-    @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
-  *)
-  val replaceAll'': 'tags this -> searchValue:RegExp.t or_string -> replaceValue:string -> string [@@js.call "replaceAll"]
-  
-  (**
-    language version: ESNext
-    Replace all instances of a substring in a string, using a regular expression or search string.
-    @param searchValue A string to search for.
-    @param replacer A function that returns the replacement text.
-  *)
-  val replaceAll''': 'tags this -> searchValue:RegExp.t or_string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replaceAll"]
-  
-  (**
     Determines whether two strings are equivalent in the current or specified locale.
     @param that String to compare to target string
     @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
@@ -3424,27 +3321,27 @@ module[@js.scope "String"] String : sig
     Matches a string with a regular expression, and returns an array containing the results of that search.
     @param regexp A variable name or string literal containing the regular expression pattern and flags.
   *)
-  val match_': 'tags this -> regexp:RegExp.t or_string -> RegExpMatchArray.t or_null [@@js.call "match"]
+  val match_: 'tags this -> regexp:RegExp.t or_string -> RegExpMatchArray.t or_null [@@js.call "match"]
   
   (**
     Replaces text in a string, using a regular expression or search string.
     @param searchValue A string to search for.
     @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
   *)
-  val replace'': 'tags this -> searchValue:RegExp.t or_string -> replaceValue:string -> string [@@js.call "replace"]
+  val replace: 'tags this -> searchValue:RegExp.t or_string -> replaceValue:string -> string [@@js.call "replace"]
   
   (**
     Replaces text in a string, using a regular expression or search string.
     @param searchValue A string to search for.
     @param replacer A function that returns the replacement text.
   *)
-  val replace''': 'tags this -> searchValue:RegExp.t or_string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replace"]
+  val replace': 'tags this -> searchValue:RegExp.t or_string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replace"]
   
   (**
     Finds the first substring match in a regular expression search.
     @param regexp The regular expression pattern and applicable flags.
   *)
-  val search': 'tags this -> regexp:RegExp.t or_string -> float [@@js.call "search"]
+  val search: 'tags this -> regexp:RegExp.t or_string -> float [@@js.call "search"]
   
   (**
     Returns a section of a string.
@@ -3459,7 +3356,7 @@ module[@js.scope "String"] String : sig
     @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
     @param limit A value used to limit the number of elements returned in the array.
   *)
-  val split': 'tags this -> separator:RegExp.t or_string -> ?limit:float -> unit -> string list [@@js.call "split"]
+  val split: 'tags this -> separator:RegExp.t or_string -> ?limit:float -> unit -> string list [@@js.call "split"]
   
   (**
     Returns the substring at the specified location within a String object.
@@ -3497,6 +3394,109 @@ module[@js.scope "String"] String : sig
   (** Returns the primitive value of the specified object. *)
   val valueOf: 'tags this -> string [@@js.call "valueOf"]
   val get: 'tags this -> float -> string [@@js.index_get]
+  
+  (**
+    language version: ESNext
+    Replace all instances of a substring in a string, using a regular expression or search string.
+    @param searchValue A string to search for.
+    @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+  *)
+  val replaceAll: 'tags this -> searchValue:RegExp.t or_string -> replaceValue:string -> string [@@js.call "replaceAll"]
+  
+  (**
+    language version: ESNext
+    Replace all instances of a substring in a string, using a regular expression or search string.
+    @param searchValue A string to search for.
+    @param replacer A function that returns the replacement text.
+  *)
+  val replaceAll': 'tags this -> searchValue:RegExp.t or_string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replaceAll"]
+  
+  (**
+    language version: ESNext
+    Replace all instances of a substring in a string, using a regular expression or search string.
+    @param searchValue A string to search for.
+    @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+  *)
+  val replaceAll'': 'tags this -> searchValue:RegExp.t or_string -> replaceValue:string -> string [@@js.call "replaceAll"]
+  
+  (**
+    language version: ESNext
+    Replace all instances of a substring in a string, using a regular expression or search string.
+    @param searchValue A string to search for.
+    @param replacer A function that returns the replacement text.
+  *)
+  val replaceAll''': 'tags this -> searchValue:RegExp.t or_string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replaceAll"]
+  
+  (**
+    language version: ES2017
+    Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length.
+    The padding is applied from the start (left) of the current string.
+    @param maxLength The length of the resulting string once the current string has been padded.
+    If this parameter is smaller than the current string's length, the current string will be returned as it is.
+    @param fillString The string to pad the current string with.
+    If this string is too long, it will be truncated and the left-most part will be applied.
+    The default value for this parameter is " " (U+0020).
+  *)
+  val padStart: 'tags this -> maxLength:float -> ?fillString:string -> unit -> string [@@js.call "padStart"]
+  
+  (**
+    language version: ES2017
+    Pads the current string with a given string (possibly repeated) so that the resulting string reaches a given length.
+    The padding is applied from the end (right) of the current string.
+    @param maxLength The length of the resulting string once the current string has been padded.
+    If this parameter is smaller than the current string's length, the current string will be returned as it is.
+    @param fillString The string to pad the current string with.
+    If this string is too long, it will be truncated and the left-most part will be applied.
+    The default value for this parameter is " " (U+0020).
+  *)
+  val padEnd: 'tags this -> maxLength:float -> ?fillString:string -> unit -> string [@@js.call "padEnd"]
+  
+  (**
+    language version: ES2020
+    Matches a string with a regular expression, and returns an iterable of matches
+    containing the results of that search.
+    @param regexp A variable name or string literal containing the regular expression pattern and flags.
+  *)
+  val matchAll: 'tags this -> regexp:RegExp.t -> RegExpMatchArray.t IterableIterator.t [@@js.call "matchAll"]
+  
+  (**
+    language version: ES2015
+    Matches a string or an object that supports being matched against, and returns an array
+    containing the results of that search, or null if no matches are found.
+    @param matcher An object that supports being matched against.
+  *)
+  val match_': 'tags this -> matcher:AnonymousInterface9.t -> RegExpMatchArray.t or_null [@@js.call "match"]
+  
+  (**
+    language version: ES2015
+    Replaces first match with string or all matches with RegExp.
+    @param searchValue A string or RegExp search value.
+    @param replaceValue A string containing the text to replace for match.
+  *)
+  val replace'': 'tags this -> searchValue:AnonymousInterface10.t -> replaceValue:string -> string [@@js.call "replace"]
+  
+  (**
+    language version: ES2015
+    Replaces text in a string, using an object that supports replacement within a string.
+    @param searchValue A object can search for and replace matches within a string.
+    @param replacer A function that returns the replacement text.
+  *)
+  val replace''': 'tags this -> searchValue:AnonymousInterface11.t -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replace"]
+  
+  (**
+    language version: ES2015
+    Finds the first substring match in a regular expression search.
+    @param searcher An object which supports searching within a string.
+  *)
+  val search': 'tags this -> searcher:AnonymousInterface12.t -> float [@@js.call "search"]
+  
+  (**
+    language version: ES2015
+    Split a string into substrings using the specified separator and return them as an array.
+    @param splitter An object that can split a string.
+    @param limit A value used to limit the number of elements returned in the array.
+  *)
+  val split': 'tags this -> splitter:AnonymousInterface13.t -> ?limit:float -> unit -> string list [@@js.call "split"]
   
   (**
     language version: ES2015
@@ -3540,6 +3540,12 @@ module[@js.scope "Set"] Set : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  val add: ('tags, 'T) this -> value:'T -> ('tags, 'T) this [@@js.call "add"]
+  val clear: ('tags, 'T) this -> unit [@@js.call "clear"]
+  val delete: ('tags, 'T) this -> value:'T -> bool [@@js.call "delete"]
+  val forEach: ('tags, 'T) this -> callbackfn:(value:'T -> value2:'T -> set_:'T t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  val has: ('tags, 'T) this -> value:'T -> bool [@@js.call "has"]
+  val get_size: ('tags, 'T) this -> float [@@js.get "size"]
   
   (** Returns an iterable of \[v,v\] pairs for every value `v` in the set. *)
   val entries: ('tags, 'T) this -> ('T * 'T) IterableIterator.t [@@js.call "entries"]
@@ -3549,15 +3555,9 @@ module[@js.scope "Set"] Set : sig
   
   (** Returns an iterable of values in the set. *)
   val values: ('tags, 'T) this -> 'T IterableIterator.t [@@js.call "values"]
-  val add: ('tags, 'T) this -> value:'T -> ('tags, 'T) this [@@js.call "add"]
-  val clear: ('tags, 'T) this -> unit [@@js.call "clear"]
-  val delete: ('tags, 'T) this -> value:'T -> bool [@@js.call "delete"]
-  val forEach: ('tags, 'T) this -> callbackfn:(value:'T -> value2:'T -> set_:'T t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val has: ('tags, 'T) this -> value:'T -> bool [@@js.call "has"]
-  val get_size: ('tags, 'T) this -> float [@@js.get "size"]
-  val create: ?iterable:'T Iterable.t or_null -> unit -> 'T t [@@js.create]
-  val create': ?values:'T list or_null -> unit -> 'T t [@@js.create]
+  val create: ?values:'T list or_null -> unit -> 'T t [@@js.create]
   val prototype: unit -> any t [@@js.get "prototype"]
+  val create': ?iterable:'T Iterable.t or_null -> unit -> 'T t [@@js.create]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -3860,6 +3860,9 @@ module ReadonlySet : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  val forEach: ('tags, 'T) this -> callbackfn:(value:'T -> value2:'T -> set_:'T t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  val has: ('tags, 'T) this -> value:'T -> bool [@@js.call "has"]
+  val get_size: ('tags, 'T) this -> float [@@js.get "size"]
   
   (** Returns an iterable of \[v,v\] pairs for every value `v` in the set. *)
   val entries: ('tags, 'T) this -> ('T * 'T) IterableIterator.t [@@js.call "entries"]
@@ -3869,9 +3872,6 @@ module ReadonlySet : sig
   
   (** Returns an iterable of values in the set. *)
   val values: ('tags, 'T) this -> 'T IterableIterator.t [@@js.call "values"]
-  val forEach: ('tags, 'T) this -> callbackfn:(value:'T -> value2:'T -> set_:'T t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val has: ('tags, 'T) this -> value:'T -> bool [@@js.call "has"]
-  val get_size: ('tags, 'T) this -> float [@@js.get "size"]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -3892,6 +3892,10 @@ module ReadonlyMap : sig
   val t_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t
   val t_2_to_js: ('K -> Ojs.t) -> ('V -> Ojs.t) -> ('K, 'V) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t_2
+  val forEach: ('tags, 'K, 'V) this -> callbackfn:(value:'V -> key:'K -> map:('K, 'V) t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  val get_: ('tags, 'K, 'V) this -> key:'K -> 'V or_undefined [@@js.call "get"]
+  val has: ('tags, 'K, 'V) this -> key:'K -> bool [@@js.call "has"]
+  val get_size: ('tags, 'K, 'V) this -> float [@@js.get "size"]
   
   (** Returns an iterable of key, value pairs for every entry in the map. *)
   val entries: ('tags, 'K, 'V) this -> ('K * 'V) IterableIterator.t [@@js.call "entries"]
@@ -3901,10 +3905,6 @@ module ReadonlyMap : sig
   
   (** Returns an iterable of values in the map *)
   val values: ('tags, 'K, 'V) this -> 'V IterableIterator.t [@@js.call "values"]
-  val forEach: ('tags, 'K, 'V) this -> callbackfn:(value:'V -> key:'K -> map:('K, 'V) t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val get_: ('tags, 'K, 'V) this -> key:'K -> 'V or_undefined [@@js.call "get"]
-  val has: ('tags, 'K, 'V) this -> key:'K -> bool [@@js.call "has"]
-  val get_size: ('tags, 'K, 'V) this -> float [@@js.get "size"]
   val cast_from: (('tags, 'K, 'V) this -> ('K, 'V) t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -4197,41 +4197,6 @@ module[@js.scope "Object"] Object : sig
     @param proto The value of the new prototype or null.
   *)
   val setPrototypeOf: o:any -> proto:untyped_object or_null -> any [@@js.global "setPrototypeOf"]
-  
-  (**
-    language version: ES2017
-    Returns an array of values of the enumerable properties of an object
-    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
-  *)
-  val values: ('T ArrayLike.t, 'T AnonymousInterface26.t) union2 -> 'T list [@@js.global "values"]
-  
-  (**
-    language version: ES2017
-    Returns an array of values of the enumerable properties of an object
-    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
-  *)
-  val values': AnonymousInterface0.t -> any list [@@js.global "values"]
-  
-  (**
-    language version: ES2017
-    Returns an array of key/values of the enumerable properties of an object
-    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
-  *)
-  val entries: ('T ArrayLike.t, 'T AnonymousInterface26.t) union2 -> (string * 'T) list [@@js.global "entries"]
-  
-  (**
-    language version: ES2017
-    Returns an array of key/values of the enumerable properties of an object
-    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
-  *)
-  val entries': AnonymousInterface0.t -> (string * any) list [@@js.global "entries"]
-  
-  (**
-    language version: ES2017
-    Returns an object containing all own property descriptors of an object
-    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
-  *)
-  val getOwnPropertyDescriptors: 'T -> ((* FIXME: unknown type '{[P in keyof T]: TypedPropertyDescriptor<T[P]>}' *)any, AnonymousInterface4.t) intersection2 [@@js.global "getOwnPropertyDescriptors"]
   val create: ?value:any -> unit -> t [@@js.create]
   val invoke: unit -> any [@@js.invoke]
   val invoke': any -> any [@@js.invoke]
@@ -4341,6 +4306,41 @@ module[@js.scope "Object"] Object : sig
     @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
   *)
   val keys': untyped_object -> string list [@@js.global "keys"]
+  
+  (**
+    language version: ES2017
+    Returns an array of values of the enumerable properties of an object
+    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+  *)
+  val values: ('T ArrayLike.t, 'T AnonymousInterface26.t) union2 -> 'T list [@@js.global "values"]
+  
+  (**
+    language version: ES2017
+    Returns an array of values of the enumerable properties of an object
+    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+  *)
+  val values': AnonymousInterface0.t -> any list [@@js.global "values"]
+  
+  (**
+    language version: ES2017
+    Returns an array of key/values of the enumerable properties of an object
+    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+  *)
+  val entries: ('T ArrayLike.t, 'T AnonymousInterface26.t) union2 -> (string * 'T) list [@@js.global "entries"]
+  
+  (**
+    language version: ES2017
+    Returns an array of key/values of the enumerable properties of an object
+    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+  *)
+  val entries': AnonymousInterface0.t -> (string * any) list [@@js.global "entries"]
+  
+  (**
+    language version: ES2017
+    Returns an object containing all own property descriptors of an object
+    @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+  *)
+  val getOwnPropertyDescriptors: 'T -> ((* FIXME: unknown type '{[P in keyof T]: TypedPropertyDescriptor<T[P]>}' *)any, AnonymousInterface4.t) intersection2 [@@js.global "getOwnPropertyDescriptors"]
   
   (**
     language version: ES2019
@@ -5133,6 +5133,13 @@ module[@js.scope "Map"] Map : sig
   val t_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t
   val t_2_to_js: ('K -> Ojs.t) -> ('V -> Ojs.t) -> ('K, 'V) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t_2
+  val clear: ('tags, 'K, 'V) this -> unit [@@js.call "clear"]
+  val delete: ('tags, 'K, 'V) this -> key:'K -> bool [@@js.call "delete"]
+  val forEach: ('tags, 'K, 'V) this -> callbackfn:(value:'V -> key:'K -> map:('K, 'V) t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  val get_: ('tags, 'K, 'V) this -> key:'K -> 'V or_undefined [@@js.call "get"]
+  val has: ('tags, 'K, 'V) this -> key:'K -> bool [@@js.call "has"]
+  val set_: ('tags, 'K, 'V) this -> key:'K -> value:'V -> ('tags, 'K, 'V) this [@@js.call "set"]
+  val get_size: ('tags, 'K, 'V) this -> float [@@js.get "size"]
   
   (** Returns an iterable of key, value pairs for every entry in the map. *)
   val entries: ('tags, 'K, 'V) this -> ('K * 'V) IterableIterator.t [@@js.call "entries"]
@@ -5142,17 +5149,10 @@ module[@js.scope "Map"] Map : sig
   
   (** Returns an iterable of values in the map *)
   val values: ('tags, 'K, 'V) this -> 'V IterableIterator.t [@@js.call "values"]
-  val clear: ('tags, 'K, 'V) this -> unit [@@js.call "clear"]
-  val delete: ('tags, 'K, 'V) this -> key:'K -> bool [@@js.call "delete"]
-  val forEach: ('tags, 'K, 'V) this -> callbackfn:(value:'V -> key:'K -> map:('K, 'V) t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val get_: ('tags, 'K, 'V) this -> key:'K -> 'V or_undefined [@@js.call "get"]
-  val has: ('tags, 'K, 'V) this -> key:'K -> bool [@@js.call "has"]
-  val set_: ('tags, 'K, 'V) this -> key:'K -> value:'V -> ('tags, 'K, 'V) this [@@js.call "set"]
-  val get_size: ('tags, 'K, 'V) this -> float [@@js.get "size"]
-  val create: ('K * 'V) Iterable.t -> ('K, 'V) t [@@js.create]
-  val create': unit -> (any, any) t [@@js.create]
-  val create'': ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) t [@@js.create]
+  val create: unit -> (any, any) t [@@js.create]
+  val create': ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) t [@@js.create]
   val prototype: unit -> (any, any) t [@@js.get "prototype"]
+  val create'': ('K * 'V) Iterable.t -> ('K, 'V) t [@@js.create]
   val cast_from: (('tags, 'K, 'V) this -> ('K, 'V) t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -5395,24 +5395,6 @@ module[@js.scope "Float64Array"] Float64Array : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
-  
-  (**
     language version: ES2016
     Determines whether an array includes a certain element, returning true or false as appropriate.
     @param searchElement The element to search for.
@@ -5652,24 +5634,30 @@ module[@js.scope "Float64Array"] Float64Array : sig
   val get: 'tags this -> float -> float [@@js.index_get]
   val set: 'tags this -> float -> float -> unit [@@js.index_set]
   
-  (** language version: ES2015 *)
-  val create: float Iterable.t -> t [@@js.create]
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
   
   (**
     language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an list of keys in the array
   *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (** language version: ES2017 *)
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  val create': float -> t [@@js.create]
+  val create'': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
+  val create''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
   
   (** The size in bytes of each element in the array. *)
   val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -5684,7 +5672,7 @@ module[@js.scope "Float64Array"] Float64Array : sig
     Creates an array from an array-like or iterable object.
     @param arrayLike An array-like or iterable object to convert to an array.
   *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
+  val from: float ArrayLike.t -> t [@@js.global "from"]
   
   (**
     Creates an array from an array-like or iterable object.
@@ -5692,7 +5680,19 @@ module[@js.scope "Float64Array"] Float64Array : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  
+  (** language version: ES2015 *)
+  val create'''': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -5713,24 +5713,6 @@ module[@js.scope "Float32Array"] Float32Array : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (**
     language version: ES2016
@@ -5978,24 +5960,30 @@ module[@js.scope "Float32Array"] Float32Array : sig
   val get: 'tags this -> float -> float [@@js.index_get]
   val set: 'tags this -> float -> float -> unit [@@js.index_set]
   
-  (** language version: ES2015 *)
-  val create: float Iterable.t -> t [@@js.create]
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
   
   (**
     language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an list of keys in the array
   *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (** language version: ES2017 *)
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  val create': float -> t [@@js.create]
+  val create'': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
+  val create''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
   
   (** The size in bytes of each element in the array. *)
   val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -6010,7 +5998,7 @@ module[@js.scope "Float32Array"] Float32Array : sig
     Creates an array from an array-like or iterable object.
     @param arrayLike An array-like or iterable object to convert to an array.
   *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
+  val from: float ArrayLike.t -> t [@@js.global "from"]
   
   (**
     Creates an array from an array-like or iterable object.
@@ -6018,7 +6006,19 @@ module[@js.scope "Float32Array"] Float32Array : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  
+  (** language version: ES2015 *)
+  val create'''': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -6724,24 +6724,6 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
-  
-  (**
     language version: ES2016
     Determines whether an array includes a certain element, returning true or false as appropriate.
     @param searchElement The element to search for.
@@ -6987,24 +6969,30 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
   val get: 'tags this -> float -> float [@@js.index_get]
   val set: 'tags this -> float -> float -> unit [@@js.index_set]
   
-  (** language version: ES2015 *)
-  val create: float Iterable.t -> t [@@js.create]
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
   
   (**
     language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an list of keys in the array
   *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (** language version: ES2017 *)
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  val create': float -> t [@@js.create]
+  val create'': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
+  val create''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
   
   (** The size in bytes of each element in the array. *)
   val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -7019,7 +7007,7 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
     Creates an array from an array-like or iterable object.
     @param arrayLike An array-like or iterable object to convert to an array.
   *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
+  val from: float ArrayLike.t -> t [@@js.global "from"]
   
   (**
     Creates an array from an array-like or iterable object.
@@ -7027,7 +7015,19 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  
+  (** language version: ES2015 *)
+  val create'''': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -7048,24 +7048,6 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (**
     language version: ES2016
@@ -7313,24 +7295,30 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
   val get: 'tags this -> float -> float [@@js.index_get]
   val set: 'tags this -> float -> float -> unit [@@js.index_set]
   
-  (** language version: ES2015 *)
-  val create: float Iterable.t -> t [@@js.create]
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
   
   (**
     language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an list of keys in the array
   *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (** language version: ES2017 *)
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  val create': float -> t [@@js.create]
+  val create'': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
+  val create''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
   
   (** The size in bytes of each element in the array. *)
   val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -7345,7 +7333,7 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
     Creates an array from an array-like or iterable object.
     @param arrayLike An array-like or iterable object to convert to an array.
   *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
+  val from: float ArrayLike.t -> t [@@js.global "from"]
   
   (**
     Creates an array from an array-like or iterable object.
@@ -7353,7 +7341,19 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  
+  (** language version: ES2015 *)
+  val create'''': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -7374,24 +7374,6 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (**
     language version: ES2016
@@ -7639,24 +7621,30 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
   val get: 'tags this -> float -> float [@@js.index_get]
   val set: 'tags this -> float -> float -> unit [@@js.index_set]
   
-  (** language version: ES2015 *)
-  val create: float Iterable.t -> t [@@js.create]
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
   
   (**
     language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an list of keys in the array
   *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (** language version: ES2017 *)
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  val create': float -> t [@@js.create]
+  val create'': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
+  val create''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
   
   (** The size in bytes of each element in the array. *)
   val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -7671,7 +7659,7 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
     Creates an array from an array-like or iterable object.
     @param arrayLike An array-like or iterable object to convert to an array.
   *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
+  val from: float ArrayLike.t -> t [@@js.global "from"]
   
   (**
     Creates an array from an array-like or iterable object.
@@ -7679,7 +7667,19 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  
+  (** language version: ES2015 *)
+  val create'''': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -7700,24 +7700,6 @@ module[@js.scope "Int8Array"] Int8Array : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (**
     language version: ES2016
@@ -7965,24 +7947,30 @@ module[@js.scope "Int8Array"] Int8Array : sig
   val get: 'tags this -> float -> float [@@js.index_get]
   val set: 'tags this -> float -> float -> unit [@@js.index_set]
   
-  (** language version: ES2015 *)
-  val create: float Iterable.t -> t [@@js.create]
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
   
   (**
     language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an list of keys in the array
   *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (** language version: ES2017 *)
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  val create': float -> t [@@js.create]
+  val create'': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
+  val create''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
   
   (** The size in bytes of each element in the array. *)
   val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -7997,7 +7985,7 @@ module[@js.scope "Int8Array"] Int8Array : sig
     Creates an array from an array-like or iterable object.
     @param arrayLike An array-like or iterable object to convert to an array.
   *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
+  val from: float ArrayLike.t -> t [@@js.global "from"]
   
   (**
     Creates an array from an array-like or iterable object.
@@ -8005,7 +7993,19 @@ module[@js.scope "Int8Array"] Int8Array : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  
+  (** language version: ES2015 *)
+  val create'''': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -8026,24 +8026,6 @@ module[@js.scope "Int32Array"] Int32Array : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (**
     language version: ES2016
@@ -8291,24 +8273,30 @@ module[@js.scope "Int32Array"] Int32Array : sig
   val get: 'tags this -> float -> float [@@js.index_get]
   val set: 'tags this -> float -> float -> unit [@@js.index_set]
   
-  (** language version: ES2015 *)
-  val create: float Iterable.t -> t [@@js.create]
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
   
   (**
     language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an list of keys in the array
   *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (** language version: ES2017 *)
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  val create': float -> t [@@js.create]
+  val create'': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
+  val create''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
   
   (** The size in bytes of each element in the array. *)
   val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -8323,7 +8311,7 @@ module[@js.scope "Int32Array"] Int32Array : sig
     Creates an array from an array-like or iterable object.
     @param arrayLike An array-like or iterable object to convert to an array.
   *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
+  val from: float ArrayLike.t -> t [@@js.global "from"]
   
   (**
     Creates an array from an array-like or iterable object.
@@ -8331,7 +8319,19 @@ module[@js.scope "Int32Array"] Int32Array : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  
+  (** language version: ES2015 *)
+  val create'''': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -8352,24 +8352,6 @@ module[@js.scope "Int16Array"] Int16Array : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    language version: ES2015
-    Returns an array of key, value pairs for every entry in the array
-  *)
-  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
-  
-  (**
-    language version: ES2015
-    Returns an list of keys in the array
-  *)
-  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
-  
-  (**
-    language version: ES2015
-    Returns an list of values in the array
-  *)
-  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (**
     language version: ES2016
@@ -8617,24 +8599,30 @@ module[@js.scope "Int16Array"] Int16Array : sig
   val get: 'tags this -> float -> float [@@js.index_get]
   val set: 'tags this -> float -> float -> unit [@@js.index_set]
   
-  (** language version: ES2015 *)
-  val create: float Iterable.t -> t [@@js.create]
+  (**
+    language version: ES2015
+    Returns an array of key, value pairs for every entry in the array
+  *)
+  val entries: 'tags this -> (float * float) IterableIterator.t [@@js.call "entries"]
   
   (**
     language version: ES2015
-    Creates an array from an array-like or iterable object.
-    @param arrayLike An array-like or iterable object to convert to an array.
-    @param mapfn A mapping function to call on every element of the array.
-    @param thisArg Value of 'this' used to invoke the mapfn.
+    Returns an list of keys in the array
   *)
-  val from: arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val keys: 'tags this -> float IterableIterator.t [@@js.call "keys"]
+  
+  (**
+    language version: ES2015
+    Returns an list of values in the array
+  *)
+  val values: 'tags this -> float IterableIterator.t [@@js.call "values"]
   
   (** language version: ES2017 *)
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create'': float -> t [@@js.create]
-  val create''': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
-  val create'''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
+  val create': float -> t [@@js.create]
+  val create'': (ArrayBufferLike.t, float ArrayLike.t) union2 -> t [@@js.create]
+  val create''': buffer:ArrayBufferLike.t -> ?byteOffset:float -> ?length:float -> unit -> t [@@js.create]
   
   (** The size in bytes of each element in the array. *)
   val bytes_per_element: unit -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -8649,7 +8637,7 @@ module[@js.scope "Int16Array"] Int16Array : sig
     Creates an array from an array-like or iterable object.
     @param arrayLike An array-like or iterable object to convert to an array.
   *)
-  val from': float ArrayLike.t -> t [@@js.global "from"]
+  val from: float ArrayLike.t -> t [@@js.global "from"]
   
   (**
     Creates an array from an array-like or iterable object.
@@ -8657,7 +8645,19 @@ module[@js.scope "Int16Array"] Int16Array : sig
     @param mapfn A mapping function to call on every element of the array.
     @param thisArg Value of 'this' used to invoke the mapfn.
   *)
-  val from'': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  val from': arrayLike:'T ArrayLike.t -> mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
+  
+  (** language version: ES2015 *)
+  val create'''': float Iterable.t -> t [@@js.create]
+  
+  (**
+    language version: ES2015
+    Creates an array from an array-like or iterable object.
+    @param arrayLike An array-like or iterable object to convert to an array.
+    @param mapfn A mapping function to call on every element of the array.
+    @param thisArg Value of 'this' used to invoke the mapfn.
+  *)
+  val from'': arrayLike:float Iterable.t -> ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t [@@js.global "from"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -9495,6 +9495,14 @@ module[@js.scope "Promise"] Promise : sig
   *)
   val catch: ('tags, 'T) this -> ?onrejected:(any -> ('TResult, 'TResult PromiseLike.t) union2) or_null_or_undefined -> unit -> ('T, 'TResult) union2 t [@@js.call "catch"]
   
+  (**
+    language version: ESNext
+    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
+    @param values An array or iterable of Promises.
+    @return A new Promise.
+  *)
+  val any: (('T, 'T PromiseLike.t) union2 Iterable.t, ('T, 'T PromiseLike.t) union2) or_array -> 'T t [@@js.global "any"]
+  
   (** A reference to the prototype. *)
   val prototype: unit -> any t [@@js.get "prototype"]
   
@@ -9615,12 +9623,30 @@ module[@js.scope "Promise"] Promise : sig
   val resolve': ('T, 'T PromiseLike.t) union2 -> 'T t [@@js.global "resolve"]
   
   (**
+    language version: ES2020
+    Creates a Promise that is resolved with an array of results when all
+    of the provided Promises resolve or reject.
+    @param values An array of Promises.
+    @return A new Promise.
+  *)
+  val allSettled: 'T -> (* FIXME: unknown type '{ -readonly [P in keyof T]: PromiseSettledResult<T[P] extends PromiseLike<infer U> ? U : T[P]> }' *)any t [@@js.global "allSettled"]
+  
+  (**
+    language version: ES2020
+    Creates a Promise that is resolved with an array of results when all
+    of the provided Promises resolve or reject.
+    @param values An array of Promises.
+    @return A new Promise.
+  *)
+  val allSettled': 'T Iterable.t -> (* FIXME: unknown type 'T extends PromiseLike<infer U> ? U : T' *)any PromiseSettledResult.t list t [@@js.global "allSettled"]
+  
+  (**
     language version: ESNext
     The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
     @param values An array or iterable of Promises.
     @return A new Promise.
   *)
-  val any: (('T, 'T PromiseLike.t) union2 Iterable.t, ('T, 'T PromiseLike.t) union2) or_array -> 'T t [@@js.global "any"]
+  val any': (('T, 'T PromiseLike.t) union2 Iterable.t, ('T, 'T PromiseLike.t) union2) or_array -> 'T t [@@js.global "any"]
   
   (**
     Creates a Promise that is resolved with an array of results when all of the provided Promises
@@ -9645,32 +9671,6 @@ module[@js.scope "Promise"] Promise : sig
     @return A new Promise.
   *)
   val race'': ('T, 'T PromiseLike.t) union2 Iterable.t -> 'T t [@@js.global "race"]
-  
-  (**
-    language version: ESNext
-    The any function returns a promise that is fulfilled by the first given promise to be fulfilled, or rejected with an AggregateError containing an array of rejection reasons if all of the given promises are rejected. It resolves all elements of the passed iterable to promises as it runs this algorithm.
-    @param values An array or iterable of Promises.
-    @return A new Promise.
-  *)
-  val any': (('T, 'T PromiseLike.t) union2 Iterable.t, ('T, 'T PromiseLike.t) union2) or_array -> 'T t [@@js.global "any"]
-  
-  (**
-    language version: ES2020
-    Creates a Promise that is resolved with an array of results when all
-    of the provided Promises resolve or reject.
-    @param values An array of Promises.
-    @return A new Promise.
-  *)
-  val allSettled: 'T -> (* FIXME: unknown type '{ -readonly [P in keyof T]: PromiseSettledResult<T[P] extends PromiseLike<infer U> ? U : T[P]> }' *)any t [@@js.global "allSettled"]
-  
-  (**
-    language version: ES2020
-    Creates a Promise that is resolved with an array of results when all
-    of the provided Promises resolve or reject.
-    @param values An array of Promises.
-    @return A new Promise.
-  *)
-  val allSettled': 'T Iterable.t -> (* FIXME: unknown type 'T extends PromiseLike<infer U> ? U : T' *)any PromiseSettledResult.t list t [@@js.global "allSettled"]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -9922,14 +9922,14 @@ module ArrayBufferTypes : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val get_ArrayBuffer: 'tags this -> ArrayBuffer.t [@@js.get "ArrayBuffer"]
+  val set_ArrayBuffer: 'tags this -> ArrayBuffer.t -> unit [@@js.set "ArrayBuffer"]
   
   (** language version: ES2017 *)
   val get_SharedArrayBuffer: 'tags this -> SharedArrayBuffer.t [@@js.get "SharedArrayBuffer"]
   
   (** language version: ES2017 *)
   val set_SharedArrayBuffer: 'tags this -> SharedArrayBuffer.t -> unit [@@js.set "SharedArrayBuffer"]
-  val get_ArrayBuffer: 'tags this -> ArrayBuffer.t [@@js.get "ArrayBuffer"]
-  val set_ArrayBuffer: 'tags this -> ArrayBuffer.t -> unit [@@js.set "ArrayBuffer"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -9962,6 +9962,9 @@ module[@js.scope "AggregateError"] AggregateError : sig
   val prototype': unit -> t [@@js.get "prototype"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+
+(** language version: ES2015 *)
+val proxy: unit -> ProxyConstructor.t [@@js.get "Proxy"]
 
 
 val nan: unit -> float [@@js.get "NaN"]
@@ -10048,6 +10051,3 @@ val escape: string -> string [@@js.global "escape"]
   @param string A string value
 *)
 val unescape: string -> string [@@js.global "unescape"]
-
-(** language version: ES2015 *)
-val proxy: unit -> ProxyConstructor.t [@@js.get "Proxy"]

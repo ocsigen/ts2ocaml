@@ -55945,9 +55945,6 @@ val open_: ?url:URL.t or_string -> ?target:string -> ?features:string -> unit ->
 val postMessage: message:any -> targetOrigin:string -> ?transfer:Transferable.t list -> unit -> unit [@@js.global "postMessage"]
 
 (**
-  Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
-  
-  
   Posts a message to the given window. Messages can be structured objects, e.g. nested objects and arrays, can contain JavaScript values (strings, numbers, Date objects, etc), and can contain certain data objects such as File Blob, FileList, and ArrayBuffer objects.
   
   Objects listed in the transfer member of options are transferred, not just cloned, meaning that they are no longer usable on the sending side.
@@ -55957,6 +55954,9 @@ val postMessage: message:any -> targetOrigin:string -> ?transfer:Transferable.t 
   If the origin of the target window doesn't match the given target origin, the message is discarded, to avoid information leakage. To send the message to the target regardless of origin, set the target origin to "*".
   
   Throws a "DataCloneError" DOMException if transfer array contains duplicate objects or if message could not be cloned.
+  
+  
+  Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
 *)
 val postMessage': message:any -> ?options:WindowPostMessageOptions.t -> unit -> unit [@@js.global "postMessage"]
 val print: unit -> unit [@@js.global "print"]

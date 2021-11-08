@@ -430,32 +430,32 @@ module WeakSet =
           Ojs.bool_of_js
             (Ojs.call (this_to_js Obj.magic Obj.magic x160) "has"
                [|(Obj.magic x159)|])
-    let (create : 'T Iterable.t -> 'T t) =
-      fun (x163 : 'T Iterable.t) ->
-        t_of_js Obj.magic
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "WeakSet")
-             [|(Iterable.t_to_js Obj.magic x163)|])
-    let (create' : ?values:'T list or_null -> unit -> 'T t) =
-      fun ?values:(x166 : 'T list or_null option) ->
+    let (create : ?values:'T list or_null -> unit -> 'T t) =
+      fun ?values:(x163 : 'T list or_null option) ->
         fun () ->
           t_of_js Obj.magic
             (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "WeakSet")
-               (let x167 =
+               (let x164 =
                   Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array") [||] in
-                (match x166 with
-                 | Some x168 ->
+                (match x163 with
+                 | Some x165 ->
                      ignore
-                       (Ojs.call x167 "push"
+                       (Ojs.call x164 "push"
                           [|(or_null_to_js
-                               (fun (x169 : 'T list) ->
-                                  Ojs.list_to_js Obj.magic x169) x168)|])
+                               (fun (x166 : 'T list) ->
+                                  Ojs.list_to_js Obj.magic x166) x165)|])
                  | None -> ());
-                x167))
+                x164))
     let (prototype : unit -> untyped_object t) =
       fun () ->
         t_of_js untyped_object_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "WeakSet")
              "prototype")
+    let (create' : 'T Iterable.t -> 'T t) =
+      fun (x170 : 'T Iterable.t) ->
+        t_of_js Obj.magic
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "WeakSet")
+             [|(Iterable.t_to_js Obj.magic x170)|])
     let cast_from = Obj.magic
   end
 module WeakRef =
@@ -596,44 +596,44 @@ module WeakMap =
             this_of_js Obj.magic Obj.magic Obj.magic
               (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x225) "set"
                  [|(Obj.magic x223);(Obj.magic x224)|])
-    let (create : ('K * 'V) Iterable.t -> ('K, 'V) t) =
-      fun (x232 : ('K * 'V) Iterable.t) ->
-        t_of_js Obj.magic Obj.magic
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "WeakMap")
-             [|(Iterable.t_to_js
-                  (fun (x233 : ('K * 'V)) ->
-                     let (x234, x235) = x233 in
-                     let x236 = Ojs.array_make 2 in
-                     Ojs.array_set x236 0 (Obj.magic x234);
-                     Ojs.array_set x236 1 (Obj.magic x235);
-                     x236) x232)|])
-    let (create' : ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) t) =
-      fun ?entries:(x239 : ('K * 'V) list or_null option) ->
+    let (create : ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) t) =
+      fun ?entries:(x232 : ('K * 'V) list or_null option) ->
         fun () ->
           t_of_js Obj.magic Obj.magic
             (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "WeakMap")
-               (let x240 =
+               (let x233 =
                   Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array") [||] in
-                (match x239 with
-                 | Some x241 ->
+                (match x232 with
+                 | Some x234 ->
                      ignore
-                       (Ojs.call x240 "push"
+                       (Ojs.call x233 "push"
                           [|(or_null_to_js
-                               (fun (x242 : ('K * 'V) list) ->
+                               (fun (x235 : ('K * 'V) list) ->
                                   Ojs.list_to_js
-                                    (fun (x243 : ('K * 'V)) ->
-                                       let (x244, x245) = x243 in
-                                       let x246 = Ojs.array_make 2 in
-                                       Ojs.array_set x246 0 (Obj.magic x244);
-                                       Ojs.array_set x246 1 (Obj.magic x245);
-                                       x246) x242) x241)|])
+                                    (fun (x236 : ('K * 'V)) ->
+                                       let (x237, x238) = x236 in
+                                       let x239 = Ojs.array_make 2 in
+                                       Ojs.array_set x239 0 (Obj.magic x237);
+                                       Ojs.array_set x239 1 (Obj.magic x238);
+                                       x239) x235) x234)|])
                  | None -> ());
-                x240))
+                x233))
     let (prototype : unit -> (untyped_object, any) t) =
       fun () ->
         t_of_js untyped_object_of_js any_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "WeakMap")
              "prototype")
+    let (create' : ('K * 'V) Iterable.t -> ('K, 'V) t) =
+      fun (x244 : ('K * 'V) Iterable.t) ->
+        t_of_js Obj.magic Obj.magic
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "WeakMap")
+             [|(Iterable.t_to_js
+                  (fun (x245 : ('K * 'V)) ->
+                     let (x246, x247) = x245 in
+                     let x248 = Ojs.array_make 2 in
+                     Ojs.array_set x248 0 (Obj.magic x246);
+                     Ojs.array_set x248 1 (Obj.magic x247);
+                     x248) x244)|])
     let cast_from = Obj.magic
   end
 module Uppercase =
@@ -907,174 +907,194 @@ module Uint8ClampedArray =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x329 : __tags intf) -> intf_to_js __tags_to_js x329
-    let (entries : 'tags this -> (float * float) IterableIterator.t) =
-      fun (x333 : 'tags this) ->
-        IterableIterator.t_of_js
-          (fun (x335 : Ojs.t) ->
-             let x336 = x335 in
-             ((Ojs.float_of_js (Ojs.array_get x336 0)),
-               (Ojs.float_of_js (Ojs.array_get x336 1))))
-          (Ojs.call (this_to_js Obj.magic x333) "entries" [||])
-    let (keys : 'tags this -> float IterableIterator.t) =
-      fun (x337 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x337) "keys" [||])
-    let (values : 'tags this -> float IterableIterator.t) =
-      fun (x340 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x340) "values" [||])
     let (includes :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x347 : 'tags this) ->
-        fun ~searchElement:(x343 : float) ->
-          fun ?fromIndex:(x344 : float option) ->
+      fun (x337 : 'tags this) ->
+        fun ~searchElement:(x333 : float) ->
+          fun ?fromIndex:(x334 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x349 = this_to_js Obj.magic x347 in
-                 Ojs.call (Ojs.get_prop_ascii x349 "includes") "apply"
-                   [|x349;((let x345 =
+                (let x339 = this_to_js Obj.magic x337 in
+                 Ojs.call (Ojs.get_prop_ascii x339 "includes") "apply"
+                   [|x339;((let x335 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x345 "push"
-                                 [|(Ojs.float_to_js x343)|]);
-                            (match x344 with
-                             | Some x346 ->
+                              (Ojs.call x335 "push"
+                                 [|(Ojs.float_to_js x333)|]);
+                            (match x334 with
+                             | Some x336 ->
                                  ignore
-                                   (Ojs.call x345 "push"
-                                      [|(Ojs.float_to_js x346)|])
+                                   (Ojs.call x335 "push"
+                                      [|(Ojs.float_to_js x336)|])
                              | None -> ());
-                            x345))|])
+                            x335))|])
     let (get_BYTES_PER_ELEMENT : 'tags this -> float) =
-      fun (x350 : 'tags this) ->
+      fun (x340 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x350) "BYTES_PER_ELEMENT")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x340) "BYTES_PER_ELEMENT")
     let (get_buffer : 'tags this -> ArrayBufferLike.t) =
-      fun (x352 : 'tags this) ->
+      fun (x342 : 'tags this) ->
         ArrayBufferLike.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x352) "buffer")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x342) "buffer")
     let (get_byteLength : 'tags this -> float) =
-      fun (x354 : 'tags this) ->
+      fun (x344 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x354) "byteLength")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x344) "byteLength")
     let (get_byteOffset : 'tags this -> float) =
-      fun (x356 : 'tags this) ->
+      fun (x346 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x356) "byteOffset")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x346) "byteOffset")
     let (copyWithin :
       'tags this ->
         target:float -> start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x363 : 'tags this) ->
-        fun ~target:(x358 : float) ->
-          fun ~start:(x359 : float) ->
-            fun ?end_:(x360 : float option) ->
+      fun (x353 : 'tags this) ->
+        fun ~target:(x348 : float) ->
+          fun ~start:(x349 : float) ->
+            fun ?end_:(x350 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x365 = this_to_js Obj.magic x363 in
-                   Ojs.call (Ojs.get_prop_ascii x365 "copyWithin") "apply"
-                     [|x365;((let x361 =
+                  (let x355 = this_to_js Obj.magic x353 in
+                   Ojs.call (Ojs.get_prop_ascii x355 "copyWithin") "apply"
+                     [|x355;((let x351 =
                                 Ojs.new_obj
                                   (Ojs.get_prop_ascii Ojs.global "Array")
                                   [||] in
                               ignore
-                                (Ojs.call x361 "push"
-                                   [|(Ojs.float_to_js x358)|]);
+                                (Ojs.call x351 "push"
+                                   [|(Ojs.float_to_js x348)|]);
                               ignore
-                                (Ojs.call x361 "push"
-                                   [|(Ojs.float_to_js x359)|]);
-                              (match x360 with
-                               | Some x362 ->
+                                (Ojs.call x351 "push"
+                                   [|(Ojs.float_to_js x349)|]);
+                              (match x350 with
+                               | Some x352 ->
                                    ignore
-                                     (Ojs.call x361 "push"
-                                        [|(Ojs.float_to_js x362)|])
+                                     (Ojs.call x351 "push"
+                                        [|(Ojs.float_to_js x352)|])
                                | None -> ());
-                              x361))|])
+                              x351))|])
     let (every :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x374 : 'tags this) ->
+      fun (x364 : 'tags this) ->
         fun
-          ~predicate:(x367 :
+          ~predicate:(x357 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x368 : any option) ->
+          fun ?thisArg:(x358 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x376 = this_to_js Obj.magic x374 in
-                 Ojs.call (Ojs.get_prop_ascii x376 "every") "apply"
-                   [|x376;((let x369 =
+                (let x366 = this_to_js Obj.magic x364 in
+                 Ojs.call (Ojs.get_prop_ascii x366 "every") "apply"
+                   [|x366;((let x359 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x369 "push"
+                              (Ojs.call x359 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x371 : Ojs.t) ->
-                                         fun (x372 : Ojs.t) ->
-                                           fun (x373 : Ojs.t) ->
+                                      (fun (x361 : Ojs.t) ->
+                                         fun (x362 : Ojs.t) ->
+                                           fun (x363 : Ojs.t) ->
                                              unknown_to_js
-                                               (x367
+                                               (x357
                                                   ~value:(Ojs.float_of_js
-                                                            x371)
+                                                            x361)
                                                   ~index:(Ojs.float_of_js
-                                                            x372)
-                                                  ~array:(t_of_js x373))))|]);
-                            (match x368 with
-                             | Some x370 ->
+                                                            x362)
+                                                  ~array:(t_of_js x363))))|]);
+                            (match x358 with
+                             | Some x360 ->
                                  ignore
-                                   (Ojs.call x369 "push" [|(any_to_js x370)|])
+                                   (Ojs.call x359 "push" [|(any_to_js x360)|])
                              | None -> ());
-                            x369))|])
+                            x359))|])
     let (fill :
       'tags this ->
         value:float -> ?start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x383 : 'tags this) ->
-        fun ~value:(x377 : float) ->
-          fun ?start:(x378 : float option) ->
-            fun ?end_:(x379 : float option) ->
+      fun (x373 : 'tags this) ->
+        fun ~value:(x367 : float) ->
+          fun ?start:(x368 : float option) ->
+            fun ?end_:(x369 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x385 = this_to_js Obj.magic x383 in
-                   Ojs.call (Ojs.get_prop_ascii x385 "fill") "apply"
-                     [|x385;((let x380 =
+                  (let x375 = this_to_js Obj.magic x373 in
+                   Ojs.call (Ojs.get_prop_ascii x375 "fill") "apply"
+                     [|x375;((let x370 =
                                 Ojs.new_obj
                                   (Ojs.get_prop_ascii Ojs.global "Array")
                                   [||] in
                               ignore
-                                (Ojs.call x380 "push"
-                                   [|(Ojs.float_to_js x377)|]);
-                              (match x378 with
-                               | Some x382 ->
+                                (Ojs.call x370 "push"
+                                   [|(Ojs.float_to_js x367)|]);
+                              (match x368 with
+                               | Some x372 ->
                                    ignore
-                                     (Ojs.call x380 "push"
-                                        [|(Ojs.float_to_js x382)|])
+                                     (Ojs.call x370 "push"
+                                        [|(Ojs.float_to_js x372)|])
                                | None -> ());
-                              (match x379 with
-                               | Some x381 ->
+                              (match x369 with
+                               | Some x371 ->
                                    ignore
-                                     (Ojs.call x380 "push"
-                                        [|(Ojs.float_to_js x381)|])
+                                     (Ojs.call x370 "push"
+                                        [|(Ojs.float_to_js x371)|])
                                | None -> ());
-                              x380))|])
+                              x370))|])
     let (filter :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> any) ->
           ?thisArg:any -> unit -> t)
       =
+      fun (x384 : 'tags this) ->
+        fun ~predicate:(x377 : value:float -> index:float -> array:t -> any)
+          ->
+          fun ?thisArg:(x378 : any option) ->
+            fun () ->
+              t_of_js
+                (let x386 = this_to_js Obj.magic x384 in
+                 Ojs.call (Ojs.get_prop_ascii x386 "filter") "apply"
+                   [|x386;((let x379 =
+                              Ojs.new_obj
+                                (Ojs.get_prop_ascii Ojs.global "Array") 
+                                [||] in
+                            ignore
+                              (Ojs.call x379 "push"
+                                 [|(Ojs.fun_to_js 3
+                                      (fun (x381 : Ojs.t) ->
+                                         fun (x382 : Ojs.t) ->
+                                           fun (x383 : Ojs.t) ->
+                                             any_to_js
+                                               (x377
+                                                  ~value:(Ojs.float_of_js
+                                                            x381)
+                                                  ~index:(Ojs.float_of_js
+                                                            x382)
+                                                  ~array:(t_of_js x383))))|]);
+                            (match x378 with
+                             | Some x380 ->
+                                 ignore
+                                   (Ojs.call x379 "push" [|(any_to_js x380)|])
+                             | None -> ());
+                            x379))|])
+    let (find :
+      'tags this ->
+        predicate:(value:float -> index:float -> obj:t -> bool) ->
+          ?thisArg:any -> unit -> float or_undefined)
+      =
       fun (x394 : 'tags this) ->
-        fun ~predicate:(x387 : value:float -> index:float -> array:t -> any)
+        fun ~predicate:(x387 : value:float -> index:float -> obj:t -> bool)
           ->
           fun ?thisArg:(x388 : any option) ->
             fun () ->
-              t_of_js
+              or_undefined_of_js Ojs.float_of_js
                 (let x396 = this_to_js Obj.magic x394 in
-                 Ojs.call (Ojs.get_prop_ascii x396 "filter") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x396 "find") "apply"
                    [|x396;((let x389 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -1085,68 +1105,69 @@ module Uint8ClampedArray =
                                       (fun (x391 : Ojs.t) ->
                                          fun (x392 : Ojs.t) ->
                                            fun (x393 : Ojs.t) ->
-                                             any_to_js
+                                             Ojs.bool_to_js
                                                (x387
                                                   ~value:(Ojs.float_of_js
                                                             x391)
                                                   ~index:(Ojs.float_of_js
                                                             x392)
-                                                  ~array:(t_of_js x393))))|]);
+                                                  ~obj:(t_of_js x393))))|]);
                             (match x388 with
                              | Some x390 ->
                                  ignore
                                    (Ojs.call x389 "push" [|(any_to_js x390)|])
                              | None -> ());
                             x389))|])
-    let (find :
-      'tags this ->
-        predicate:(value:float -> index:float -> obj:t -> bool) ->
-          ?thisArg:any -> unit -> float or_undefined)
-      =
-      fun (x404 : 'tags this) ->
-        fun ~predicate:(x397 : value:float -> index:float -> obj:t -> bool)
-          ->
-          fun ?thisArg:(x398 : any option) ->
-            fun () ->
-              or_undefined_of_js Ojs.float_of_js
-                (let x406 = this_to_js Obj.magic x404 in
-                 Ojs.call (Ojs.get_prop_ascii x406 "find") "apply"
-                   [|x406;((let x399 =
-                              Ojs.new_obj
-                                (Ojs.get_prop_ascii Ojs.global "Array") 
-                                [||] in
-                            ignore
-                              (Ojs.call x399 "push"
-                                 [|(Ojs.fun_to_js 3
-                                      (fun (x401 : Ojs.t) ->
-                                         fun (x402 : Ojs.t) ->
-                                           fun (x403 : Ojs.t) ->
-                                             Ojs.bool_to_js
-                                               (x397
-                                                  ~value:(Ojs.float_of_js
-                                                            x401)
-                                                  ~index:(Ojs.float_of_js
-                                                            x402)
-                                                  ~obj:(t_of_js x403))))|]);
-                            (match x398 with
-                             | Some x400 ->
-                                 ignore
-                                   (Ojs.call x399 "push" [|(any_to_js x400)|])
-                             | None -> ());
-                            x399))|])
     let (findIndex :
       'tags this ->
         predicate:(value:float -> index:float -> obj:t -> bool) ->
           ?thisArg:any -> unit -> float)
       =
+      fun (x405 : 'tags this) ->
+        fun ~predicate:(x398 : value:float -> index:float -> obj:t -> bool)
+          ->
+          fun ?thisArg:(x399 : any option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x407 = this_to_js Obj.magic x405 in
+                 Ojs.call (Ojs.get_prop_ascii x407 "findIndex") "apply"
+                   [|x407;((let x400 =
+                              Ojs.new_obj
+                                (Ojs.get_prop_ascii Ojs.global "Array") 
+                                [||] in
+                            ignore
+                              (Ojs.call x400 "push"
+                                 [|(Ojs.fun_to_js 3
+                                      (fun (x402 : Ojs.t) ->
+                                         fun (x403 : Ojs.t) ->
+                                           fun (x404 : Ojs.t) ->
+                                             Ojs.bool_to_js
+                                               (x398
+                                                  ~value:(Ojs.float_of_js
+                                                            x402)
+                                                  ~index:(Ojs.float_of_js
+                                                            x403)
+                                                  ~obj:(t_of_js x404))))|]);
+                            (match x399 with
+                             | Some x401 ->
+                                 ignore
+                                   (Ojs.call x400 "push" [|(any_to_js x401)|])
+                             | None -> ());
+                            x400))|])
+    let (forEach :
+      'tags this ->
+        callbackfn:(value:float -> index:float -> array:t -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
       fun (x415 : 'tags this) ->
-        fun ~predicate:(x408 : value:float -> index:float -> obj:t -> bool)
+        fun
+          ~callbackfn:(x408 : value:float -> index:float -> array:t -> unit)
           ->
           fun ?thisArg:(x409 : any option) ->
             fun () ->
-              Ojs.float_of_js
+              ignore
                 (let x417 = this_to_js Obj.magic x415 in
-                 Ojs.call (Ojs.get_prop_ascii x417 "findIndex") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x417 "forEach") "apply"
                    [|x417;((let x410 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -1157,160 +1178,123 @@ module Uint8ClampedArray =
                                       (fun (x412 : Ojs.t) ->
                                          fun (x413 : Ojs.t) ->
                                            fun (x414 : Ojs.t) ->
-                                             Ojs.bool_to_js
-                                               (x408
-                                                  ~value:(Ojs.float_of_js
-                                                            x412)
-                                                  ~index:(Ojs.float_of_js
-                                                            x413)
-                                                  ~obj:(t_of_js x414))))|]);
+                                             x408
+                                               ~value:(Ojs.float_of_js x412)
+                                               ~index:(Ojs.float_of_js x413)
+                                               ~array:(t_of_js x414)))|]);
                             (match x409 with
                              | Some x411 ->
                                  ignore
                                    (Ojs.call x410 "push" [|(any_to_js x411)|])
                              | None -> ());
                             x410))|])
-    let (forEach :
-      'tags this ->
-        callbackfn:(value:float -> index:float -> array:t -> unit) ->
-          ?thisArg:any -> unit -> unit)
+    let (indexOf :
+      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x425 : 'tags this) ->
-        fun
-          ~callbackfn:(x418 : value:float -> index:float -> array:t -> unit)
-          ->
-          fun ?thisArg:(x419 : any option) ->
+      fun (x422 : 'tags this) ->
+        fun ~searchElement:(x418 : float) ->
+          fun ?fromIndex:(x419 : float option) ->
             fun () ->
-              ignore
-                (let x427 = this_to_js Obj.magic x425 in
-                 Ojs.call (Ojs.get_prop_ascii x427 "forEach") "apply"
-                   [|x427;((let x420 =
+              Ojs.float_of_js
+                (let x424 = this_to_js Obj.magic x422 in
+                 Ojs.call (Ojs.get_prop_ascii x424 "indexOf") "apply"
+                   [|x424;((let x420 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
                               (Ojs.call x420 "push"
-                                 [|(Ojs.fun_to_js 3
-                                      (fun (x422 : Ojs.t) ->
-                                         fun (x423 : Ojs.t) ->
-                                           fun (x424 : Ojs.t) ->
-                                             x418
-                                               ~value:(Ojs.float_of_js x422)
-                                               ~index:(Ojs.float_of_js x423)
-                                               ~array:(t_of_js x424)))|]);
+                                 [|(Ojs.float_to_js x418)|]);
                             (match x419 with
                              | Some x421 ->
                                  ignore
-                                   (Ojs.call x420 "push" [|(any_to_js x421)|])
+                                   (Ojs.call x420 "push"
+                                      [|(Ojs.float_to_js x421)|])
                              | None -> ());
                             x420))|])
-    let (indexOf :
-      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x432 : 'tags this) ->
-        fun ~searchElement:(x428 : float) ->
-          fun ?fromIndex:(x429 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x434 = this_to_js Obj.magic x432 in
-                 Ojs.call (Ojs.get_prop_ascii x434 "indexOf") "apply"
-                   [|x434;((let x430 =
-                              Ojs.new_obj
-                                (Ojs.get_prop_ascii Ojs.global "Array") 
-                                [||] in
-                            ignore
-                              (Ojs.call x430 "push"
-                                 [|(Ojs.float_to_js x428)|]);
-                            (match x429 with
-                             | Some x431 ->
-                                 ignore
-                                   (Ojs.call x430 "push"
-                                      [|(Ojs.float_to_js x431)|])
-                             | None -> ());
-                            x430))|])
     let (join : 'tags this -> ?separator:string -> unit -> string) =
-      fun (x438 : 'tags this) ->
-        fun ?separator:(x435 : string option) ->
+      fun (x428 : 'tags this) ->
+        fun ?separator:(x425 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x440 = this_to_js Obj.magic x438 in
-               Ojs.call (Ojs.get_prop_ascii x440 "join") "apply"
-                 [|x440;((let x436 =
+              (let x430 = this_to_js Obj.magic x428 in
+               Ojs.call (Ojs.get_prop_ascii x430 "join") "apply"
+                 [|x430;((let x426 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
-                          (match x435 with
-                           | Some x437 ->
+                          (match x425 with
+                           | Some x427 ->
                                ignore
-                                 (Ojs.call x436 "push"
-                                    [|(Ojs.string_to_js x437)|])
+                                 (Ojs.call x426 "push"
+                                    [|(Ojs.string_to_js x427)|])
                            | None -> ());
-                          x436))|])
+                          x426))|])
     let (lastIndexOf :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x445 : 'tags this) ->
-        fun ~searchElement:(x441 : float) ->
-          fun ?fromIndex:(x442 : float option) ->
+      fun (x435 : 'tags this) ->
+        fun ~searchElement:(x431 : float) ->
+          fun ?fromIndex:(x432 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x447 = this_to_js Obj.magic x445 in
-                 Ojs.call (Ojs.get_prop_ascii x447 "lastIndexOf") "apply"
-                   [|x447;((let x443 =
+                (let x437 = this_to_js Obj.magic x435 in
+                 Ojs.call (Ojs.get_prop_ascii x437 "lastIndexOf") "apply"
+                   [|x437;((let x433 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x443 "push"
-                                 [|(Ojs.float_to_js x441)|]);
-                            (match x442 with
-                             | Some x444 ->
+                              (Ojs.call x433 "push"
+                                 [|(Ojs.float_to_js x431)|]);
+                            (match x432 with
+                             | Some x434 ->
                                  ignore
-                                   (Ojs.call x443 "push"
-                                      [|(Ojs.float_to_js x444)|])
+                                   (Ojs.call x433 "push"
+                                      [|(Ojs.float_to_js x434)|])
                              | None -> ());
-                            x443))|])
+                            x433))|])
     let (get_length : 'tags this -> float) =
-      fun (x448 : 'tags this) ->
+      fun (x438 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x448) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x438) "length")
     let (map :
       'tags this ->
         callbackfn:(value:float -> index:float -> array:t -> float) ->
           ?thisArg:any -> unit -> t)
       =
-      fun (x457 : 'tags this) ->
+      fun (x447 : 'tags this) ->
         fun
-          ~callbackfn:(x450 : value:float -> index:float -> array:t -> float)
+          ~callbackfn:(x440 : value:float -> index:float -> array:t -> float)
           ->
-          fun ?thisArg:(x451 : any option) ->
+          fun ?thisArg:(x441 : any option) ->
             fun () ->
               t_of_js
-                (let x459 = this_to_js Obj.magic x457 in
-                 Ojs.call (Ojs.get_prop_ascii x459 "map") "apply"
-                   [|x459;((let x452 =
+                (let x449 = this_to_js Obj.magic x447 in
+                 Ojs.call (Ojs.get_prop_ascii x449 "map") "apply"
+                   [|x449;((let x442 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x452 "push"
+                              (Ojs.call x442 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x454 : Ojs.t) ->
-                                         fun (x455 : Ojs.t) ->
-                                           fun (x456 : Ojs.t) ->
+                                      (fun (x444 : Ojs.t) ->
+                                         fun (x445 : Ojs.t) ->
+                                           fun (x446 : Ojs.t) ->
                                              Ojs.float_to_js
-                                               (x450
+                                               (x440
                                                   ~value:(Ojs.float_of_js
-                                                            x454)
+                                                            x444)
                                                   ~index:(Ojs.float_of_js
-                                                            x455)
-                                                  ~array:(t_of_js x456))))|]);
-                            (match x451 with
-                             | Some x453 ->
+                                                            x445)
+                                                  ~array:(t_of_js x446))))|]);
+                            (match x441 with
+                             | Some x443 ->
                                  ignore
-                                   (Ojs.call x452 "push" [|(any_to_js x453)|])
+                                   (Ojs.call x442 "push" [|(any_to_js x443)|])
                              | None -> ());
-                            x452))|])
+                            x442))|])
     let (reduce :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -1318,25 +1302,25 @@ module Uint8ClampedArray =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x465 : 'tags this) ->
+      fun (x455 : 'tags this) ->
         fun
-          ~callbackfn:(x460 :
+          ~callbackfn:(x450 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x465) "reduce"
+            (Ojs.call (this_to_js Obj.magic x455) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x461 : Ojs.t) ->
-                       fun (x462 : Ojs.t) ->
-                         fun (x463 : Ojs.t) ->
-                           fun (x464 : Ojs.t) ->
+                    (fun (x451 : Ojs.t) ->
+                       fun (x452 : Ojs.t) ->
+                         fun (x453 : Ojs.t) ->
+                           fun (x454 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x460 ~previousValue:(Ojs.float_of_js x461)
-                                  ~currentValue:(Ojs.float_of_js x462)
-                                  ~currentIndex:(Ojs.float_of_js x463)
-                                  ~array:(t_of_js x464))))|])
+                               (x450 ~previousValue:(Ojs.float_of_js x451)
+                                  ~currentValue:(Ojs.float_of_js x452)
+                                  ~currentIndex:(Ojs.float_of_js x453)
+                                  ~array:(t_of_js x454))))|])
     let (reduce' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -1344,27 +1328,27 @@ module Uint8ClampedArray =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x473 : 'tags this) ->
+      fun (x463 : 'tags this) ->
         fun
-          ~callbackfn:(x467 :
+          ~callbackfn:(x457 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x472 : float) ->
+          fun ~initialValue:(x462 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x473) "reduce"
+              (Ojs.call (this_to_js Obj.magic x463) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x468 : Ojs.t) ->
-                         fun (x469 : Ojs.t) ->
-                           fun (x470 : Ojs.t) ->
-                             fun (x471 : Ojs.t) ->
+                      (fun (x458 : Ojs.t) ->
+                         fun (x459 : Ojs.t) ->
+                           fun (x460 : Ojs.t) ->
+                             fun (x461 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x467 ~previousValue:(Ojs.float_of_js x468)
-                                    ~currentValue:(Ojs.float_of_js x469)
-                                    ~currentIndex:(Ojs.float_of_js x470)
-                                    ~array:(t_of_js x471))));(Ojs.float_to_js
-                                                                x472)|])
+                                 (x457 ~previousValue:(Ojs.float_of_js x458)
+                                    ~currentValue:(Ojs.float_of_js x459)
+                                    ~currentIndex:(Ojs.float_of_js x460)
+                                    ~array:(t_of_js x461))));(Ojs.float_to_js
+                                                                x462)|])
     let (reduce'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -1372,26 +1356,26 @@ module Uint8ClampedArray =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x481 : 'tags this) ->
+      fun (x471 : 'tags this) ->
         fun
-          ~callbackfn:(x475 :
+          ~callbackfn:(x465 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x480 : 'U) ->
+          fun ~initialValue:(x470 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x481) "reduce"
+              (Ojs.call (this_to_js Obj.magic x471) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x476 : Ojs.t) ->
-                         fun (x477 : Ojs.t) ->
-                           fun (x478 : Ojs.t) ->
-                             fun (x479 : Ojs.t) ->
+                      (fun (x466 : Ojs.t) ->
+                         fun (x467 : Ojs.t) ->
+                           fun (x468 : Ojs.t) ->
+                             fun (x469 : Ojs.t) ->
                                Obj.magic
-                                 (x475 ~previousValue:(Obj.magic x476)
-                                    ~currentValue:(Ojs.float_of_js x477)
-                                    ~currentIndex:(Ojs.float_of_js x478)
-                                    ~array:(t_of_js x479))));(Obj.magic x480)|])
+                                 (x465 ~previousValue:(Obj.magic x466)
+                                    ~currentValue:(Ojs.float_of_js x467)
+                                    ~currentIndex:(Ojs.float_of_js x468)
+                                    ~array:(t_of_js x469))));(Obj.magic x470)|])
     let (reduceRight :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -1399,25 +1383,25 @@ module Uint8ClampedArray =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x488 : 'tags this) ->
+      fun (x478 : 'tags this) ->
         fun
-          ~callbackfn:(x483 :
+          ~callbackfn:(x473 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x488) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic x478) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x484 : Ojs.t) ->
-                       fun (x485 : Ojs.t) ->
-                         fun (x486 : Ojs.t) ->
-                           fun (x487 : Ojs.t) ->
+                    (fun (x474 : Ojs.t) ->
+                       fun (x475 : Ojs.t) ->
+                         fun (x476 : Ojs.t) ->
+                           fun (x477 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x483 ~previousValue:(Ojs.float_of_js x484)
-                                  ~currentValue:(Ojs.float_of_js x485)
-                                  ~currentIndex:(Ojs.float_of_js x486)
-                                  ~array:(t_of_js x487))))|])
+                               (x473 ~previousValue:(Ojs.float_of_js x474)
+                                  ~currentValue:(Ojs.float_of_js x475)
+                                  ~currentIndex:(Ojs.float_of_js x476)
+                                  ~array:(t_of_js x477))))|])
     let (reduceRight' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -1425,27 +1409,27 @@ module Uint8ClampedArray =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x496 : 'tags this) ->
+      fun (x486 : 'tags this) ->
         fun
-          ~callbackfn:(x490 :
+          ~callbackfn:(x480 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x495 : float) ->
+          fun ~initialValue:(x485 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x496) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x486) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x491 : Ojs.t) ->
-                         fun (x492 : Ojs.t) ->
-                           fun (x493 : Ojs.t) ->
-                             fun (x494 : Ojs.t) ->
+                      (fun (x481 : Ojs.t) ->
+                         fun (x482 : Ojs.t) ->
+                           fun (x483 : Ojs.t) ->
+                             fun (x484 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x490 ~previousValue:(Ojs.float_of_js x491)
-                                    ~currentValue:(Ojs.float_of_js x492)
-                                    ~currentIndex:(Ojs.float_of_js x493)
-                                    ~array:(t_of_js x494))));(Ojs.float_to_js
-                                                                x495)|])
+                                 (x480 ~previousValue:(Ojs.float_of_js x481)
+                                    ~currentValue:(Ojs.float_of_js x482)
+                                    ~currentIndex:(Ojs.float_of_js x483)
+                                    ~array:(t_of_js x484))));(Ojs.float_to_js
+                                                                x485)|])
     let (reduceRight'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -1453,233 +1437,208 @@ module Uint8ClampedArray =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x504 : 'tags this) ->
+      fun (x494 : 'tags this) ->
         fun
-          ~callbackfn:(x498 :
+          ~callbackfn:(x488 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x503 : 'U) ->
+          fun ~initialValue:(x493 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x504) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x494) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x499 : Ojs.t) ->
-                         fun (x500 : Ojs.t) ->
-                           fun (x501 : Ojs.t) ->
-                             fun (x502 : Ojs.t) ->
+                      (fun (x489 : Ojs.t) ->
+                         fun (x490 : Ojs.t) ->
+                           fun (x491 : Ojs.t) ->
+                             fun (x492 : Ojs.t) ->
                                Obj.magic
-                                 (x498 ~previousValue:(Obj.magic x499)
-                                    ~currentValue:(Ojs.float_of_js x500)
-                                    ~currentIndex:(Ojs.float_of_js x501)
-                                    ~array:(t_of_js x502))));(Obj.magic x503)|])
+                                 (x488 ~previousValue:(Obj.magic x489)
+                                    ~currentValue:(Ojs.float_of_js x490)
+                                    ~currentIndex:(Ojs.float_of_js x491)
+                                    ~array:(t_of_js x492))));(Obj.magic x493)|])
     let (reverse : 'tags this -> t) =
-      fun (x506 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x506) "reverse" [||])
+      fun (x496 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x496) "reverse" [||])
     let (set_ :
       'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit)
       =
-      fun (x513 : 'tags this) ->
-        fun ~array:(x508 : float ArrayLike.t) ->
-          fun ?offset:(x509 : float option) ->
+      fun (x503 : 'tags this) ->
+        fun ~array:(x498 : float ArrayLike.t) ->
+          fun ?offset:(x499 : float option) ->
             fun () ->
               ignore
-                (let x515 = this_to_js Obj.magic x513 in
-                 Ojs.call (Ojs.get_prop_ascii x515 "set") "apply"
-                   [|x515;((let x510 =
+                (let x505 = this_to_js Obj.magic x503 in
+                 Ojs.call (Ojs.get_prop_ascii x505 "set") "apply"
+                   [|x505;((let x500 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x510 "push"
-                                 [|(ArrayLike.t_to_js Ojs.float_to_js x508)|]);
-                            (match x509 with
-                             | Some x511 ->
+                              (Ojs.call x500 "push"
+                                 [|(ArrayLike.t_to_js Ojs.float_to_js x498)|]);
+                            (match x499 with
+                             | Some x501 ->
                                  ignore
-                                   (Ojs.call x510 "push"
-                                      [|(Ojs.float_to_js x511)|])
+                                   (Ojs.call x500 "push"
+                                      [|(Ojs.float_to_js x501)|])
                              | None -> ());
-                            x510))|])
+                            x500))|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> t) =
-      fun (x521 : 'tags this) ->
-        fun ?start:(x516 : float option) ->
-          fun ?end_:(x517 : float option) ->
+      fun (x511 : 'tags this) ->
+        fun ?start:(x506 : float option) ->
+          fun ?end_:(x507 : float option) ->
             fun () ->
               t_of_js
-                (let x523 = this_to_js Obj.magic x521 in
-                 Ojs.call (Ojs.get_prop_ascii x523 "slice") "apply"
-                   [|x523;((let x518 =
+                (let x513 = this_to_js Obj.magic x511 in
+                 Ojs.call (Ojs.get_prop_ascii x513 "slice") "apply"
+                   [|x513;((let x508 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
-                            (match x516 with
-                             | Some x520 ->
+                            (match x506 with
+                             | Some x510 ->
                                  ignore
-                                   (Ojs.call x518 "push"
-                                      [|(Ojs.float_to_js x520)|])
+                                   (Ojs.call x508 "push"
+                                      [|(Ojs.float_to_js x510)|])
                              | None -> ());
-                            (match x517 with
-                             | Some x519 ->
+                            (match x507 with
+                             | Some x509 ->
                                  ignore
-                                   (Ojs.call x518 "push"
-                                      [|(Ojs.float_to_js x519)|])
+                                   (Ojs.call x508 "push"
+                                      [|(Ojs.float_to_js x509)|])
                              | None -> ());
-                            x518))|])
+                            x508))|])
     let (some :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x531 : 'tags this) ->
+      fun (x521 : 'tags this) ->
         fun
-          ~predicate:(x524 :
+          ~predicate:(x514 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x525 : any option) ->
+          fun ?thisArg:(x515 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x533 = this_to_js Obj.magic x531 in
-                 Ojs.call (Ojs.get_prop_ascii x533 "some") "apply"
-                   [|x533;((let x526 =
+                (let x523 = this_to_js Obj.magic x521 in
+                 Ojs.call (Ojs.get_prop_ascii x523 "some") "apply"
+                   [|x523;((let x516 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x526 "push"
+                              (Ojs.call x516 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x528 : Ojs.t) ->
-                                         fun (x529 : Ojs.t) ->
-                                           fun (x530 : Ojs.t) ->
+                                      (fun (x518 : Ojs.t) ->
+                                         fun (x519 : Ojs.t) ->
+                                           fun (x520 : Ojs.t) ->
                                              unknown_to_js
-                                               (x524
+                                               (x514
                                                   ~value:(Ojs.float_of_js
-                                                            x528)
+                                                            x518)
                                                   ~index:(Ojs.float_of_js
-                                                            x529)
-                                                  ~array:(t_of_js x530))))|]);
-                            (match x525 with
-                             | Some x527 ->
+                                                            x519)
+                                                  ~array:(t_of_js x520))))|]);
+                            (match x515 with
+                             | Some x517 ->
                                  ignore
-                                   (Ojs.call x526 "push" [|(any_to_js x527)|])
+                                   (Ojs.call x516 "push" [|(any_to_js x517)|])
                              | None -> ());
-                            x526))|])
+                            x516))|])
     let (sort :
       'tags this ->
         ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this)
       =
-      fun (x539 : 'tags this) ->
-        fun ?compareFn:(x534 : (a:float -> b:float -> float) option) ->
+      fun (x529 : 'tags this) ->
+        fun ?compareFn:(x524 : (a:float -> b:float -> float) option) ->
           fun () ->
             this_of_js Obj.magic
-              (let x541 = this_to_js Obj.magic x539 in
-               Ojs.call (Ojs.get_prop_ascii x541 "sort") "apply"
-                 [|x541;((let x535 =
+              (let x531 = this_to_js Obj.magic x529 in
+               Ojs.call (Ojs.get_prop_ascii x531 "sort") "apply"
+                 [|x531;((let x525 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
-                          (match x534 with
-                           | Some x536 ->
+                          (match x524 with
+                           | Some x526 ->
                                ignore
-                                 (Ojs.call x535 "push"
+                                 (Ojs.call x525 "push"
                                     [|(Ojs.fun_to_js 2
-                                         (fun (x537 : Ojs.t) ->
-                                            fun (x538 : Ojs.t) ->
+                                         (fun (x527 : Ojs.t) ->
+                                            fun (x528 : Ojs.t) ->
                                               Ojs.float_to_js
-                                                (x536
-                                                   ~a:(Ojs.float_of_js x537)
-                                                   ~b:(Ojs.float_of_js x538))))|])
+                                                (x526
+                                                   ~a:(Ojs.float_of_js x527)
+                                                   ~b:(Ojs.float_of_js x528))))|])
                            | None -> ());
-                          x535))|])
+                          x525))|])
     let (subarray : 'tags this -> ?begin_:float -> ?end_:float -> unit -> t)
       =
-      fun (x548 : 'tags this) ->
-        fun ?begin_:(x543 : float option) ->
-          fun ?end_:(x544 : float option) ->
+      fun (x538 : 'tags this) ->
+        fun ?begin_:(x533 : float option) ->
+          fun ?end_:(x534 : float option) ->
             fun () ->
               t_of_js
-                (let x550 = this_to_js Obj.magic x548 in
-                 Ojs.call (Ojs.get_prop_ascii x550 "subarray") "apply"
-                   [|x550;((let x545 =
+                (let x540 = this_to_js Obj.magic x538 in
+                 Ojs.call (Ojs.get_prop_ascii x540 "subarray") "apply"
+                   [|x540;((let x535 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
-                            (match x543 with
-                             | Some x547 ->
+                            (match x533 with
+                             | Some x537 ->
                                  ignore
-                                   (Ojs.call x545 "push"
-                                      [|(Ojs.float_to_js x547)|])
+                                   (Ojs.call x535 "push"
+                                      [|(Ojs.float_to_js x537)|])
                              | None -> ());
-                            (match x544 with
-                             | Some x546 ->
+                            (match x534 with
+                             | Some x536 ->
                                  ignore
-                                   (Ojs.call x545 "push"
-                                      [|(Ojs.float_to_js x546)|])
+                                   (Ojs.call x535 "push"
+                                      [|(Ojs.float_to_js x536)|])
                              | None -> ());
-                            x545))|])
+                            x535))|])
     let (toLocaleString : 'tags this -> string) =
-      fun (x551 : 'tags this) ->
+      fun (x541 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x551) "toLocaleString" [||])
+          (Ojs.call (this_to_js Obj.magic x541) "toLocaleString" [||])
     let (toString : 'tags this -> string) =
-      fun (x553 : 'tags this) ->
+      fun (x543 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x553) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x543) "toString" [||])
     let (valueOf : 'tags this -> t) =
-      fun (x555 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x555) "valueOf" [||])
+      fun (x545 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x545) "valueOf" [||])
     let (get : 'tags this -> float -> float) =
-      fun (x557 : 'tags this) ->
-        fun (x559 : float) ->
+      fun (x547 : 'tags this) ->
+        fun (x549 : float) ->
           Ojs.float_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x557) (Ojs.float_to_js x559))
+            (Ojs.get_prop (this_to_js Obj.magic x547) (Ojs.float_to_js x549))
     let (set : 'tags this -> float -> float -> unit) =
-      fun (x560 : 'tags this) ->
-        fun (x562 : float) ->
-          fun (x563 : float) ->
-            Ojs.set_prop (this_to_js Obj.magic x560) (Ojs.float_to_js x562)
-              (Ojs.float_to_js x563)
-    let (create : float Iterable.t -> t) =
-      fun (x564 : float Iterable.t) ->
-        t_of_js
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray")
-             [|(Iterable.t_to_js Ojs.float_to_js x564)|])
-    let (from :
-      arrayLike:float Iterable.t ->
-        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
-      =
-      fun ~arrayLike:(x566 : float Iterable.t) ->
-        fun ?mapfn:(x567 : (v:float -> k:float -> float) option) ->
-          fun ?thisArg:(x568 : any option) ->
-            fun () ->
-              t_of_js
-                (let x575 = Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray" in
-                 Ojs.call (Ojs.get_prop_ascii x575 "from") "apply"
-                   [|x575;((let x569 =
-                              Ojs.new_obj
-                                (Ojs.get_prop_ascii Ojs.global "Array") 
-                                [||] in
-                            ignore
-                              (Ojs.call x569 "push"
-                                 [|(Iterable.t_to_js Ojs.float_to_js x566)|]);
-                            (match x567 with
-                             | Some x571 ->
-                                 ignore
-                                   (Ojs.call x569 "push"
-                                      [|(Ojs.fun_to_js 2
-                                           (fun (x572 : Ojs.t) ->
-                                              fun (x573 : Ojs.t) ->
-                                                Ojs.float_to_js
-                                                  (x571
-                                                     ~v:(Ojs.float_of_js x572)
-                                                     ~k:(Ojs.float_of_js x573))))|])
-                             | None -> ());
-                            (match x568 with
-                             | Some x570 ->
-                                 ignore
-                                   (Ojs.call x569 "push" [|(any_to_js x570)|])
-                             | None -> ());
-                            x569))|])
-    let (create' : unit -> t) =
+      fun (x550 : 'tags this) ->
+        fun (x552 : float) ->
+          fun (x553 : float) ->
+            Ojs.set_prop (this_to_js Obj.magic x550) (Ojs.float_to_js x552)
+              (Ojs.float_to_js x553)
+    let (entries : 'tags this -> (float * float) IterableIterator.t) =
+      fun (x554 : 'tags this) ->
+        IterableIterator.t_of_js
+          (fun (x556 : Ojs.t) ->
+             let x557 = x556 in
+             ((Ojs.float_of_js (Ojs.array_get x557 0)),
+               (Ojs.float_of_js (Ojs.array_get x557 1))))
+          (Ojs.call (this_to_js Obj.magic x554) "entries" [||])
+    let (keys : 'tags this -> float IterableIterator.t) =
+      fun (x558 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x558) "keys" [||])
+    let (values : 'tags this -> float IterableIterator.t) =
+      fun (x561 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x561) "values" [||])
+    let (create : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray")
@@ -1689,46 +1648,46 @@ module Uint8ClampedArray =
         t_of_js
           (Ojs.get_prop_ascii
              (Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray") "prototype")
-    let (create'' : float -> t) =
-      fun (x576 : float) ->
+    let (create' : float -> t) =
+      fun (x564 : float) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray")
-             [|(Ojs.float_to_js x576)|])
-    let (create''' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
-      fun (x577 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
+             [|(Ojs.float_to_js x564)|])
+    let (create'' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
+      fun (x565 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray")
              [|(union2_to_js ArrayBufferLike.t_to_js
-                  (fun (x579 : float ArrayLike.t) ->
-                     ArrayLike.t_to_js Ojs.float_to_js x579) x577)|])
-    let (create'''' :
+                  (fun (x567 : float ArrayLike.t) ->
+                     ArrayLike.t_to_js Ojs.float_to_js x567) x565)|])
+    let (create''' :
       buffer:ArrayBufferLike.t ->
         ?byteOffset:float -> ?length:float -> unit -> t)
       =
-      fun ~buffer:(x581 : ArrayBufferLike.t) ->
-        fun ?byteOffset:(x582 : float option) ->
-          fun ?length:(x583 : float option) ->
+      fun ~buffer:(x569 : ArrayBufferLike.t) ->
+        fun ?byteOffset:(x570 : float option) ->
+          fun ?length:(x571 : float option) ->
             fun () ->
               t_of_js
                 (Ojs.new_obj_arr
                    (Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray")
-                   (let x584 =
+                   (let x572 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     ignore
-                      (Ojs.call x584 "push"
-                         [|(ArrayBufferLike.t_to_js x581)|]);
-                    (match x582 with
-                     | Some x586 ->
+                      (Ojs.call x572 "push"
+                         [|(ArrayBufferLike.t_to_js x569)|]);
+                    (match x570 with
+                     | Some x574 ->
                          ignore
-                           (Ojs.call x584 "push" [|(Ojs.float_to_js x586)|])
+                           (Ojs.call x572 "push" [|(Ojs.float_to_js x574)|])
                      | None -> ());
-                    (match x583 with
-                     | Some x585 ->
+                    (match x571 with
+                     | Some x573 ->
                          ignore
-                           (Ojs.call x584 "push" [|(Ojs.float_to_js x585)|])
+                           (Ojs.call x572 "push" [|(Ojs.float_to_js x573)|])
                      | None -> ());
-                    x584))
+                    x572))
     let (bytes_per_element : unit -> float) =
       fun () ->
         Ojs.float_of_js
@@ -1736,56 +1695,97 @@ module Uint8ClampedArray =
              (Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray")
              "BYTES_PER_ELEMENT")
     let (of_ : float list -> t) =
-      fun (x587 : float list) ->
+      fun (x575 : float list) ->
         t_of_js
-          (let x590 = Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray" in
-           Ojs.call (Ojs.get_prop_ascii x590 "of") "apply"
-             [|x590;((let x588 =
+          (let x578 = Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray" in
+           Ojs.call (Ojs.get_prop_ascii x578 "of") "apply"
+             [|x578;((let x576 =
                         Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                           [||] in
                       List.iter
-                        (fun (x589 : float) ->
+                        (fun (x577 : float) ->
                            ignore
-                             (Ojs.call x588 "push" [|(Ojs.float_to_js x589)|]))
-                        x587;
-                      x588))|])
-    let (from' : float ArrayLike.t -> t) =
-      fun (x591 : float ArrayLike.t) ->
+                             (Ojs.call x576 "push" [|(Ojs.float_to_js x577)|]))
+                        x575;
+                      x576))|])
+    let (from : float ArrayLike.t -> t) =
+      fun (x579 : float ArrayLike.t) ->
         t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray")
-             "from" [|(ArrayLike.t_to_js Ojs.float_to_js x591)|])
-    let (from'' :
+             "from" [|(ArrayLike.t_to_js Ojs.float_to_js x579)|])
+    let (from' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t)
       =
-      fun ~arrayLike:(x593 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x594 : v:'T -> k:float -> float) ->
-          fun ?thisArg:(x595 : any option) ->
+      fun ~arrayLike:(x581 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x582 : v:'T -> k:float -> float) ->
+          fun ?thisArg:(x583 : any option) ->
             fun () ->
               t_of_js
-                (let x601 = Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray" in
-                 Ojs.call (Ojs.get_prop_ascii x601 "from") "apply"
-                   [|x601;((let x596 =
+                (let x589 = Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray" in
+                 Ojs.call (Ojs.get_prop_ascii x589 "from") "apply"
+                   [|x589;((let x584 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x596 "push"
-                                 [|(ArrayLike.t_to_js Obj.magic x593)|]);
+                              (Ojs.call x584 "push"
+                                 [|(ArrayLike.t_to_js Obj.magic x581)|]);
                             ignore
-                              (Ojs.call x596 "push"
+                              (Ojs.call x584 "push"
                                  [|(Ojs.fun_to_js 2
-                                      (fun (x598 : Ojs.t) ->
-                                         fun (x599 : Ojs.t) ->
+                                      (fun (x586 : Ojs.t) ->
+                                         fun (x587 : Ojs.t) ->
                                            Ojs.float_to_js
-                                             (x594 ~v:(Obj.magic x598)
-                                                ~k:(Ojs.float_of_js x599))))|]);
-                            (match x595 with
+                                             (x582 ~v:(Obj.magic x586)
+                                                ~k:(Ojs.float_of_js x587))))|]);
+                            (match x583 with
+                             | Some x585 ->
+                                 ignore
+                                   (Ojs.call x584 "push" [|(any_to_js x585)|])
+                             | None -> ());
+                            x584))|])
+    let (create'''' : float Iterable.t -> t) =
+      fun (x590 : float Iterable.t) ->
+        t_of_js
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray")
+             [|(Iterable.t_to_js Ojs.float_to_js x590)|])
+    let (from'' :
+      arrayLike:float Iterable.t ->
+        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
+      =
+      fun ~arrayLike:(x592 : float Iterable.t) ->
+        fun ?mapfn:(x593 : (v:float -> k:float -> float) option) ->
+          fun ?thisArg:(x594 : any option) ->
+            fun () ->
+              t_of_js
+                (let x601 = Ojs.get_prop_ascii Ojs.global "Uint8ClampedArray" in
+                 Ojs.call (Ojs.get_prop_ascii x601 "from") "apply"
+                   [|x601;((let x595 =
+                              Ojs.new_obj
+                                (Ojs.get_prop_ascii Ojs.global "Array") 
+                                [||] in
+                            ignore
+                              (Ojs.call x595 "push"
+                                 [|(Iterable.t_to_js Ojs.float_to_js x592)|]);
+                            (match x593 with
                              | Some x597 ->
                                  ignore
-                                   (Ojs.call x596 "push" [|(any_to_js x597)|])
+                                   (Ojs.call x595 "push"
+                                      [|(Ojs.fun_to_js 2
+                                           (fun (x598 : Ojs.t) ->
+                                              fun (x599 : Ojs.t) ->
+                                                Ojs.float_to_js
+                                                  (x597
+                                                     ~v:(Ojs.float_of_js x598)
+                                                     ~k:(Ojs.float_of_js x599))))|])
                              | None -> ());
-                            x596))|])
+                            (match x594 with
+                             | Some x596 ->
+                                 ignore
+                                   (Ojs.call x595 "push" [|(any_to_js x596)|])
+                             | None -> ());
+                            x595))|])
     let cast_from = Obj.magic
   end
 module Error =
@@ -2140,69 +2140,90 @@ module ReadonlyArray =
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (__T_to_js : __T -> Ojs.t) ->
           fun (x697 : __tags intf) -> intf_to_js __tags_to_js x697
-    let (entries : ('tags, 'T) this -> (float * 'T) IterableIterator.t) =
-      fun (x701 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js
-          (fun (x704 : Ojs.t) ->
-             let x705 = x704 in
-             ((Ojs.float_of_js (Ojs.array_get x705 0)),
-               (Obj.magic (Ojs.array_get x705 1))))
-          (Ojs.call (this_to_js Obj.magic Obj.magic x701) "entries" [||])
-    let (keys : ('tags, 'T) this -> float IterableIterator.t) =
-      fun (x706 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic Obj.magic x706) "keys" [||])
-    let (values : ('tags, 'T) this -> 'T IterableIterator.t) =
-      fun (x710 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic x710) "values" [||])
     let (find :
       ('tags, 'T) this ->
         predicate:(this:unit ->
                      value:'T -> index:float -> obj:'T list -> bool)
           -> ?thisArg:any -> unit -> 'S or_undefined)
       =
-      fun (x723 : ('tags, 'T) this) ->
+      fun (x710 : ('tags, 'T) this) ->
         fun
-          ~predicate:(x714 :
+          ~predicate:(x701 :
                        this:unit ->
                          value:'T -> index:float -> obj:'T list -> bool)
           ->
-          fun ?thisArg:(x715 : any option) ->
+          fun ?thisArg:(x702 : any option) ->
             fun () ->
               or_undefined_of_js Obj.magic
-                (let x726 = this_to_js Obj.magic Obj.magic x723 in
-                 Ojs.call (Ojs.get_prop_ascii x726 "find") "apply"
-                   [|x726;((let x716 =
+                (let x713 = this_to_js Obj.magic Obj.magic x710 in
+                 Ojs.call (Ojs.get_prop_ascii x713 "find") "apply"
+                   [|x713;((let x703 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x716 "push"
+                              (Ojs.call x703 "push"
                                  [|(Ojs.fun_to_js 4
-                                      (fun (x718 : Ojs.t) ->
-                                         fun (x719 : Ojs.t) ->
-                                           fun (x720 : Ojs.t) ->
-                                             fun (x721 : Ojs.t) ->
+                                      (fun (x705 : Ojs.t) ->
+                                         fun (x706 : Ojs.t) ->
+                                           fun (x707 : Ojs.t) ->
+                                             fun (x708 : Ojs.t) ->
                                                Ojs.bool_to_js
-                                                 (x714
+                                                 (x701
                                                     ~this:(Ojs.unit_of_js
-                                                             x718)
-                                                    ~value:(Obj.magic x719)
+                                                             x705)
+                                                    ~value:(Obj.magic x706)
                                                     ~index:(Ojs.float_of_js
-                                                              x720)
+                                                              x707)
                                                     ~obj:(Ojs.list_of_js
-                                                            Obj.magic x721))))|]);
-                            (match x715 with
-                             | Some x717 ->
+                                                            Obj.magic x708))))|]);
+                            (match x702 with
+                             | Some x704 ->
                                  ignore
-                                   (Ojs.call x716 "push" [|(any_to_js x717)|])
+                                   (Ojs.call x703 "push" [|(any_to_js x704)|])
                              | None -> ());
-                            x716))|])
+                            x703))|])
     let (find' :
       ('tags, 'T) this ->
         predicate:(value:'T -> index:float -> obj:'T list -> unknown) ->
           ?thisArg:any -> unit -> 'T or_undefined)
+      =
+      fun (x723 : ('tags, 'T) this) ->
+        fun
+          ~predicate:(x715 :
+                       value:'T -> index:float -> obj:'T list -> unknown)
+          ->
+          fun ?thisArg:(x716 : any option) ->
+            fun () ->
+              or_undefined_of_js Obj.magic
+                (let x726 = this_to_js Obj.magic Obj.magic x723 in
+                 Ojs.call (Ojs.get_prop_ascii x726 "find") "apply"
+                   [|x726;((let x717 =
+                              Ojs.new_obj
+                                (Ojs.get_prop_ascii Ojs.global "Array") 
+                                [||] in
+                            ignore
+                              (Ojs.call x717 "push"
+                                 [|(Ojs.fun_to_js 3
+                                      (fun (x719 : Ojs.t) ->
+                                         fun (x720 : Ojs.t) ->
+                                           fun (x721 : Ojs.t) ->
+                                             unknown_to_js
+                                               (x715 ~value:(Obj.magic x719)
+                                                  ~index:(Ojs.float_of_js
+                                                            x720)
+                                                  ~obj:(Ojs.list_of_js
+                                                          Obj.magic x721))))|]);
+                            (match x716 with
+                             | Some x718 ->
+                                 ignore
+                                   (Ojs.call x717 "push" [|(any_to_js x718)|])
+                             | None -> ());
+                            x717))|])
+    let (findIndex :
+      ('tags, 'T) this ->
+        predicate:(value:'T -> index:float -> obj:'T list -> unknown) ->
+          ?thisArg:any -> unit -> float)
       =
       fun (x736 : ('tags, 'T) this) ->
         fun
@@ -2211,9 +2232,9 @@ module ReadonlyArray =
           ->
           fun ?thisArg:(x729 : any option) ->
             fun () ->
-              or_undefined_of_js Obj.magic
+              Ojs.float_of_js
                 (let x739 = this_to_js Obj.magic Obj.magic x736 in
-                 Ojs.call (Ojs.get_prop_ascii x739 "find") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x739 "findIndex") "apply"
                    [|x739;((let x730 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -2236,535 +2257,428 @@ module ReadonlyArray =
                                    (Ojs.call x730 "push" [|(any_to_js x731)|])
                              | None -> ());
                             x730))|])
-    let (findIndex :
-      ('tags, 'T) this ->
-        predicate:(value:'T -> index:float -> obj:'T list -> unknown) ->
-          ?thisArg:any -> unit -> float)
-      =
-      fun (x749 : ('tags, 'T) this) ->
-        fun
-          ~predicate:(x741 :
-                       value:'T -> index:float -> obj:'T list -> unknown)
-          ->
-          fun ?thisArg:(x742 : any option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x752 = this_to_js Obj.magic Obj.magic x749 in
-                 Ojs.call (Ojs.get_prop_ascii x752 "findIndex") "apply"
-                   [|x752;((let x743 =
-                              Ojs.new_obj
-                                (Ojs.get_prop_ascii Ojs.global "Array") 
-                                [||] in
-                            ignore
-                              (Ojs.call x743 "push"
-                                 [|(Ojs.fun_to_js 3
-                                      (fun (x745 : Ojs.t) ->
-                                         fun (x746 : Ojs.t) ->
-                                           fun (x747 : Ojs.t) ->
-                                             unknown_to_js
-                                               (x741 ~value:(Obj.magic x745)
-                                                  ~index:(Ojs.float_of_js
-                                                            x746)
-                                                  ~obj:(Ojs.list_of_js
-                                                          Obj.magic x747))))|]);
-                            (match x742 with
-                             | Some x744 ->
-                                 ignore
-                                   (Ojs.call x743 "push" [|(any_to_js x744)|])
-                             | None -> ());
-                            x743))|])
-    let (flatMap :
-      ('tags, 'T) this ->
-        callback:(this:'This ->
-                    value:'T ->
-                      index:float -> array:'T list -> ('U, 'U t) union2)
-          -> ?thisArg:'This -> unit -> 'U list)
-      =
-      fun (x765 : ('tags, 'T) this) ->
-        fun
-          ~callback:(x753 :
-                      this:'This ->
-                        value:'T ->
-                          index:float -> array:'T list -> ('U, 'U t) union2)
-          ->
-          fun ?thisArg:(x754 : 'This option) ->
-            fun () ->
-              Ojs.list_of_js Obj.magic
-                (let x768 = this_to_js Obj.magic Obj.magic x765 in
-                 Ojs.call (Ojs.get_prop_ascii x768 "flatMap") "apply"
-                   [|x768;((let x755 =
-                              Ojs.new_obj
-                                (Ojs.get_prop_ascii Ojs.global "Array") 
-                                [||] in
-                            ignore
-                              (Ojs.call x755 "push"
-                                 [|(Ojs.fun_to_js 4
-                                      (fun (x757 : Ojs.t) ->
-                                         fun (x758 : Ojs.t) ->
-                                           fun (x759 : Ojs.t) ->
-                                             fun (x760 : Ojs.t) ->
-                                               union2_to_js Obj.magic
-                                                 (fun (x763 : 'U t) ->
-                                                    t_to_js Obj.magic x763)
-                                                 (x753 ~this:(Obj.magic x757)
-                                                    ~value:(Obj.magic x758)
-                                                    ~index:(Ojs.float_of_js
-                                                              x759)
-                                                    ~array:(Ojs.list_of_js
-                                                              Obj.magic x760))))|]);
-                            (match x754 with
-                             | Some x756 ->
-                                 ignore
-                                   (Ojs.call x755 "push" [|(Obj.magic x756)|])
-                             | None -> ());
-                            x755))|])
-    let (flat :
-      ('tags, 'T) this ->
-        this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list)
-      =
-      fun (x774 : ('tags, 'T) this) ->
-        fun ~this:(x770 : 'A) ->
-          fun ?depth:(x771 : 'D option) ->
-            fun () ->
-              Ojs.list_of_js
-                (fun (x778 : Ojs.t) ->
-                   FlatArray.t_of_js Obj.magic Obj.magic x778)
-                (let x777 = this_to_js Obj.magic Obj.magic x774 in
-                 Ojs.call (Ojs.get_prop_ascii x777 "flat") "apply"
-                   [|x777;((let x772 =
-                              Ojs.new_obj
-                                (Ojs.get_prop_ascii Ojs.global "Array") 
-                                [||] in
-                            ignore
-                              (Ojs.call x772 "push" [|(Obj.magic x770)|]);
-                            (match x771 with
-                             | Some x773 ->
-                                 ignore
-                                   (Ojs.call x772 "push" [|(Obj.magic x773)|])
-                             | None -> ());
-                            x772))|])
     let (includes :
       ('tags, 'T) this ->
         searchElement:'T -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x785 : ('tags, 'T) this) ->
-        fun ~searchElement:(x781 : 'T) ->
-          fun ?fromIndex:(x782 : float option) ->
+      fun (x744 : ('tags, 'T) this) ->
+        fun ~searchElement:(x740 : 'T) ->
+          fun ?fromIndex:(x741 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x788 = this_to_js Obj.magic Obj.magic x785 in
-                 Ojs.call (Ojs.get_prop_ascii x788 "includes") "apply"
-                   [|x788;((let x783 =
+                (let x747 = this_to_js Obj.magic Obj.magic x744 in
+                 Ojs.call (Ojs.get_prop_ascii x747 "includes") "apply"
+                   [|x747;((let x742 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x783 "push" [|(Obj.magic x781)|]);
-                            (match x782 with
-                             | Some x784 ->
+                              (Ojs.call x742 "push" [|(Obj.magic x740)|]);
+                            (match x741 with
+                             | Some x743 ->
                                  ignore
-                                   (Ojs.call x783 "push"
-                                      [|(Ojs.float_to_js x784)|])
+                                   (Ojs.call x742 "push"
+                                      [|(Ojs.float_to_js x743)|])
                              | None -> ());
-                            x783))|])
+                            x742))|])
     let (get_length : ('tags, 'T) this -> float) =
-      fun (x789 : ('tags, 'T) this) ->
+      fun (x748 : ('tags, 'T) this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic Obj.magic x789) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic Obj.magic x748) "length")
     let (toString : ('tags, 'T) this -> string) =
-      fun (x792 : ('tags, 'T) this) ->
+      fun (x751 : ('tags, 'T) this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic Obj.magic x792) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic Obj.magic x751) "toString" [||])
     let (toLocaleString : ('tags, 'T) this -> string) =
-      fun (x795 : ('tags, 'T) this) ->
+      fun (x754 : ('tags, 'T) this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic Obj.magic x795) "toLocaleString"
+          (Ojs.call (this_to_js Obj.magic Obj.magic x754) "toLocaleString"
              [||])
     let (concat : ('tags, 'T) this -> items:'T ConcatArray.t list -> 'T list)
       =
-      fun (x802 : ('tags, 'T) this) ->
-        fun ~items:(x798 : 'T ConcatArray.t list) ->
+      fun (x761 : ('tags, 'T) this) ->
+        fun ~items:(x757 : 'T ConcatArray.t list) ->
           Ojs.list_of_js Obj.magic
-            (let x805 = this_to_js Obj.magic Obj.magic x802 in
-             Ojs.call (Ojs.get_prop_ascii x805 "concat") "apply"
-               [|x805;((let x799 =
+            (let x764 = this_to_js Obj.magic Obj.magic x761 in
+             Ojs.call (Ojs.get_prop_ascii x764 "concat") "apply"
+               [|x764;((let x758 =
                           Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                             [||] in
                         List.iter
-                          (fun (x800 : 'T ConcatArray.t) ->
+                          (fun (x759 : 'T ConcatArray.t) ->
                              ignore
-                               (Ojs.call x799 "push"
-                                  [|(ConcatArray.t_to_js Obj.magic x800)|]))
-                          x798;
-                        x799))|])
+                               (Ojs.call x758 "push"
+                                  [|(ConcatArray.t_to_js Obj.magic x759)|]))
+                          x757;
+                        x758))|])
     let (concat' :
       ('tags, 'T) this -> items:('T, 'T ConcatArray.t) union2 list -> 'T list)
       =
-      fun (x813 : ('tags, 'T) this) ->
-        fun ~items:(x807 : ('T, 'T ConcatArray.t) union2 list) ->
+      fun (x772 : ('tags, 'T) this) ->
+        fun ~items:(x766 : ('T, 'T ConcatArray.t) union2 list) ->
           Ojs.list_of_js Obj.magic
-            (let x816 = this_to_js Obj.magic Obj.magic x813 in
-             Ojs.call (Ojs.get_prop_ascii x816 "concat") "apply"
-               [|x816;((let x808 =
+            (let x775 = this_to_js Obj.magic Obj.magic x772 in
+             Ojs.call (Ojs.get_prop_ascii x775 "concat") "apply"
+               [|x775;((let x767 =
                           Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                             [||] in
                         List.iter
-                          (fun (x809 : ('T, 'T ConcatArray.t) union2) ->
+                          (fun (x768 : ('T, 'T ConcatArray.t) union2) ->
                              ignore
-                               (Ojs.call x808 "push"
+                               (Ojs.call x767 "push"
                                   [|(union2_to_js Obj.magic
-                                       (fun (x811 : 'T ConcatArray.t) ->
-                                          ConcatArray.t_to_js Obj.magic x811)
-                                       x809)|])) x807;
-                        x808))|])
+                                       (fun (x770 : 'T ConcatArray.t) ->
+                                          ConcatArray.t_to_js Obj.magic x770)
+                                       x768)|])) x766;
+                        x767))|])
     let (join : ('tags, 'T) this -> ?separator:string -> unit -> string) =
-      fun (x821 : ('tags, 'T) this) ->
-        fun ?separator:(x818 : string option) ->
+      fun (x780 : ('tags, 'T) this) ->
+        fun ?separator:(x777 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x824 = this_to_js Obj.magic Obj.magic x821 in
-               Ojs.call (Ojs.get_prop_ascii x824 "join") "apply"
-                 [|x824;((let x819 =
+              (let x783 = this_to_js Obj.magic Obj.magic x780 in
+               Ojs.call (Ojs.get_prop_ascii x783 "join") "apply"
+                 [|x783;((let x778 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
-                          (match x818 with
-                           | Some x820 ->
+                          (match x777 with
+                           | Some x779 ->
                                ignore
-                                 (Ojs.call x819 "push"
-                                    [|(Ojs.string_to_js x820)|])
+                                 (Ojs.call x778 "push"
+                                    [|(Ojs.string_to_js x779)|])
                            | None -> ());
-                          x819))|])
+                          x778))|])
     let (slice :
       ('tags, 'T) this -> ?start:float -> ?end_:float -> unit -> 'T list) =
-      fun (x830 : ('tags, 'T) this) ->
-        fun ?start:(x825 : float option) ->
-          fun ?end_:(x826 : float option) ->
+      fun (x789 : ('tags, 'T) this) ->
+        fun ?start:(x784 : float option) ->
+          fun ?end_:(x785 : float option) ->
             fun () ->
               Ojs.list_of_js Obj.magic
-                (let x833 = this_to_js Obj.magic Obj.magic x830 in
-                 Ojs.call (Ojs.get_prop_ascii x833 "slice") "apply"
-                   [|x833;((let x827 =
+                (let x792 = this_to_js Obj.magic Obj.magic x789 in
+                 Ojs.call (Ojs.get_prop_ascii x792 "slice") "apply"
+                   [|x792;((let x786 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
-                            (match x825 with
-                             | Some x829 ->
+                            (match x784 with
+                             | Some x788 ->
                                  ignore
-                                   (Ojs.call x827 "push"
-                                      [|(Ojs.float_to_js x829)|])
+                                   (Ojs.call x786 "push"
+                                      [|(Ojs.float_to_js x788)|])
                              | None -> ());
-                            (match x826 with
-                             | Some x828 ->
+                            (match x785 with
+                             | Some x787 ->
                                  ignore
-                                   (Ojs.call x827 "push"
-                                      [|(Ojs.float_to_js x828)|])
+                                   (Ojs.call x786 "push"
+                                      [|(Ojs.float_to_js x787)|])
                              | None -> ());
-                            x827))|])
+                            x786))|])
     let (indexOf :
       ('tags, 'T) this ->
         searchElement:'T -> ?fromIndex:float -> unit -> float)
       =
-      fun (x839 : ('tags, 'T) this) ->
-        fun ~searchElement:(x835 : 'T) ->
-          fun ?fromIndex:(x836 : float option) ->
+      fun (x798 : ('tags, 'T) this) ->
+        fun ~searchElement:(x794 : 'T) ->
+          fun ?fromIndex:(x795 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x842 = this_to_js Obj.magic Obj.magic x839 in
-                 Ojs.call (Ojs.get_prop_ascii x842 "indexOf") "apply"
-                   [|x842;((let x837 =
+                (let x801 = this_to_js Obj.magic Obj.magic x798 in
+                 Ojs.call (Ojs.get_prop_ascii x801 "indexOf") "apply"
+                   [|x801;((let x796 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x837 "push" [|(Obj.magic x835)|]);
-                            (match x836 with
-                             | Some x838 ->
+                              (Ojs.call x796 "push" [|(Obj.magic x794)|]);
+                            (match x795 with
+                             | Some x797 ->
                                  ignore
-                                   (Ojs.call x837 "push"
-                                      [|(Ojs.float_to_js x838)|])
+                                   (Ojs.call x796 "push"
+                                      [|(Ojs.float_to_js x797)|])
                              | None -> ());
-                            x837))|])
+                            x796))|])
     let (lastIndexOf :
       ('tags, 'T) this ->
         searchElement:'T -> ?fromIndex:float -> unit -> float)
       =
-      fun (x847 : ('tags, 'T) this) ->
-        fun ~searchElement:(x843 : 'T) ->
-          fun ?fromIndex:(x844 : float option) ->
+      fun (x806 : ('tags, 'T) this) ->
+        fun ~searchElement:(x802 : 'T) ->
+          fun ?fromIndex:(x803 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x850 = this_to_js Obj.magic Obj.magic x847 in
-                 Ojs.call (Ojs.get_prop_ascii x850 "lastIndexOf") "apply"
-                   [|x850;((let x845 =
+                (let x809 = this_to_js Obj.magic Obj.magic x806 in
+                 Ojs.call (Ojs.get_prop_ascii x809 "lastIndexOf") "apply"
+                   [|x809;((let x804 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x845 "push" [|(Obj.magic x843)|]);
-                            (match x844 with
-                             | Some x846 ->
+                              (Ojs.call x804 "push" [|(Obj.magic x802)|]);
+                            (match x803 with
+                             | Some x805 ->
                                  ignore
-                                   (Ojs.call x845 "push"
-                                      [|(Ojs.float_to_js x846)|])
+                                   (Ojs.call x804 "push"
+                                      [|(Ojs.float_to_js x805)|])
                              | None -> ());
-                            x845))|])
+                            x804))|])
     let (every :
       ('tags, 'T) this ->
         predicate:(value:'T -> index:float -> array:'T list -> bool) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x859 : ('tags, 'T) this) ->
+      fun (x818 : ('tags, 'T) this) ->
         fun
-          ~predicate:(x851 :
+          ~predicate:(x810 :
                        value:'T -> index:float -> array:'T list -> bool)
           ->
-          fun ?thisArg:(x852 : any option) ->
+          fun ?thisArg:(x811 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x862 = this_to_js Obj.magic Obj.magic x859 in
-                 Ojs.call (Ojs.get_prop_ascii x862 "every") "apply"
-                   [|x862;((let x853 =
+                (let x821 = this_to_js Obj.magic Obj.magic x818 in
+                 Ojs.call (Ojs.get_prop_ascii x821 "every") "apply"
+                   [|x821;((let x812 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x853 "push"
+                              (Ojs.call x812 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x855 : Ojs.t) ->
-                                         fun (x856 : Ojs.t) ->
-                                           fun (x857 : Ojs.t) ->
+                                      (fun (x814 : Ojs.t) ->
+                                         fun (x815 : Ojs.t) ->
+                                           fun (x816 : Ojs.t) ->
                                              Ojs.bool_to_js
-                                               (x851 ~value:(Obj.magic x855)
+                                               (x810 ~value:(Obj.magic x814)
                                                   ~index:(Ojs.float_of_js
-                                                            x856)
+                                                            x815)
                                                   ~array:(Ojs.list_of_js
-                                                            Obj.magic x857))))|]);
-                            (match x852 with
-                             | Some x854 ->
+                                                            Obj.magic x816))))|]);
+                            (match x811 with
+                             | Some x813 ->
                                  ignore
-                                   (Ojs.call x853 "push" [|(any_to_js x854)|])
+                                   (Ojs.call x812 "push" [|(any_to_js x813)|])
                              | None -> ());
-                            x853))|])
+                            x812))|])
     let (every' :
       ('tags, 'T) this ->
         predicate:(value:'T -> index:float -> array:'T list -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x871 : ('tags, 'T) this) ->
+      fun (x830 : ('tags, 'T) this) ->
         fun
-          ~predicate:(x863 :
+          ~predicate:(x822 :
                        value:'T -> index:float -> array:'T list -> unknown)
           ->
-          fun ?thisArg:(x864 : any option) ->
+          fun ?thisArg:(x823 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x874 = this_to_js Obj.magic Obj.magic x871 in
-                 Ojs.call (Ojs.get_prop_ascii x874 "every") "apply"
-                   [|x874;((let x865 =
+                (let x833 = this_to_js Obj.magic Obj.magic x830 in
+                 Ojs.call (Ojs.get_prop_ascii x833 "every") "apply"
+                   [|x833;((let x824 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x865 "push"
+                              (Ojs.call x824 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x867 : Ojs.t) ->
-                                         fun (x868 : Ojs.t) ->
-                                           fun (x869 : Ojs.t) ->
+                                      (fun (x826 : Ojs.t) ->
+                                         fun (x827 : Ojs.t) ->
+                                           fun (x828 : Ojs.t) ->
                                              unknown_to_js
-                                               (x863 ~value:(Obj.magic x867)
+                                               (x822 ~value:(Obj.magic x826)
                                                   ~index:(Ojs.float_of_js
-                                                            x868)
+                                                            x827)
                                                   ~array:(Ojs.list_of_js
-                                                            Obj.magic x869))))|]);
-                            (match x864 with
-                             | Some x866 ->
+                                                            Obj.magic x828))))|]);
+                            (match x823 with
+                             | Some x825 ->
                                  ignore
-                                   (Ojs.call x865 "push" [|(any_to_js x866)|])
+                                   (Ojs.call x824 "push" [|(any_to_js x825)|])
                              | None -> ());
-                            x865))|])
+                            x824))|])
     let (some :
       ('tags, 'T) this ->
         predicate:(value:'T -> index:float -> array:'T list -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x883 : ('tags, 'T) this) ->
+      fun (x842 : ('tags, 'T) this) ->
         fun
-          ~predicate:(x875 :
+          ~predicate:(x834 :
                        value:'T -> index:float -> array:'T list -> unknown)
           ->
-          fun ?thisArg:(x876 : any option) ->
+          fun ?thisArg:(x835 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x886 = this_to_js Obj.magic Obj.magic x883 in
-                 Ojs.call (Ojs.get_prop_ascii x886 "some") "apply"
-                   [|x886;((let x877 =
+                (let x845 = this_to_js Obj.magic Obj.magic x842 in
+                 Ojs.call (Ojs.get_prop_ascii x845 "some") "apply"
+                   [|x845;((let x836 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x877 "push"
+                              (Ojs.call x836 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x879 : Ojs.t) ->
-                                         fun (x880 : Ojs.t) ->
-                                           fun (x881 : Ojs.t) ->
+                                      (fun (x838 : Ojs.t) ->
+                                         fun (x839 : Ojs.t) ->
+                                           fun (x840 : Ojs.t) ->
                                              unknown_to_js
-                                               (x875 ~value:(Obj.magic x879)
+                                               (x834 ~value:(Obj.magic x838)
                                                   ~index:(Ojs.float_of_js
-                                                            x880)
+                                                            x839)
                                                   ~array:(Ojs.list_of_js
-                                                            Obj.magic x881))))|]);
-                            (match x876 with
-                             | Some x878 ->
+                                                            Obj.magic x840))))|]);
+                            (match x835 with
+                             | Some x837 ->
                                  ignore
-                                   (Ojs.call x877 "push" [|(any_to_js x878)|])
+                                   (Ojs.call x836 "push" [|(any_to_js x837)|])
                              | None -> ());
-                            x877))|])
+                            x836))|])
     let (forEach :
       ('tags, 'T) this ->
         callbackfn:(value:'T -> index:float -> array:'T list -> unit) ->
           ?thisArg:any -> unit -> unit)
       =
-      fun (x895 : ('tags, 'T) this) ->
+      fun (x854 : ('tags, 'T) this) ->
         fun
-          ~callbackfn:(x887 :
+          ~callbackfn:(x846 :
                         value:'T -> index:float -> array:'T list -> unit)
           ->
-          fun ?thisArg:(x888 : any option) ->
+          fun ?thisArg:(x847 : any option) ->
             fun () ->
               ignore
-                (let x898 = this_to_js Obj.magic Obj.magic x895 in
-                 Ojs.call (Ojs.get_prop_ascii x898 "forEach") "apply"
-                   [|x898;((let x889 =
+                (let x857 = this_to_js Obj.magic Obj.magic x854 in
+                 Ojs.call (Ojs.get_prop_ascii x857 "forEach") "apply"
+                   [|x857;((let x848 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x889 "push"
+                              (Ojs.call x848 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x891 : Ojs.t) ->
-                                         fun (x892 : Ojs.t) ->
-                                           fun (x893 : Ojs.t) ->
-                                             x887 ~value:(Obj.magic x891)
-                                               ~index:(Ojs.float_of_js x892)
+                                      (fun (x850 : Ojs.t) ->
+                                         fun (x851 : Ojs.t) ->
+                                           fun (x852 : Ojs.t) ->
+                                             x846 ~value:(Obj.magic x850)
+                                               ~index:(Ojs.float_of_js x851)
                                                ~array:(Ojs.list_of_js
-                                                         Obj.magic x893)))|]);
-                            (match x888 with
-                             | Some x890 ->
+                                                         Obj.magic x852)))|]);
+                            (match x847 with
+                             | Some x849 ->
                                  ignore
-                                   (Ojs.call x889 "push" [|(any_to_js x890)|])
+                                   (Ojs.call x848 "push" [|(any_to_js x849)|])
                              | None -> ());
-                            x889))|])
+                            x848))|])
     let (map :
       ('tags, 'T) this ->
         callbackfn:(value:'T -> index:float -> array:'T list -> 'U) ->
           ?thisArg:any -> unit -> 'U list)
       =
-      fun (x907 : ('tags, 'T) this) ->
+      fun (x866 : ('tags, 'T) this) ->
         fun
-          ~callbackfn:(x899 : value:'T -> index:float -> array:'T list -> 'U)
+          ~callbackfn:(x858 : value:'T -> index:float -> array:'T list -> 'U)
           ->
-          fun ?thisArg:(x900 : any option) ->
+          fun ?thisArg:(x859 : any option) ->
             fun () ->
               Ojs.list_of_js Obj.magic
-                (let x910 = this_to_js Obj.magic Obj.magic x907 in
-                 Ojs.call (Ojs.get_prop_ascii x910 "map") "apply"
-                   [|x910;((let x901 =
+                (let x869 = this_to_js Obj.magic Obj.magic x866 in
+                 Ojs.call (Ojs.get_prop_ascii x869 "map") "apply"
+                   [|x869;((let x860 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x901 "push"
+                              (Ojs.call x860 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x903 : Ojs.t) ->
-                                         fun (x904 : Ojs.t) ->
-                                           fun (x905 : Ojs.t) ->
+                                      (fun (x862 : Ojs.t) ->
+                                         fun (x863 : Ojs.t) ->
+                                           fun (x864 : Ojs.t) ->
                                              Obj.magic
-                                               (x899 ~value:(Obj.magic x903)
+                                               (x858 ~value:(Obj.magic x862)
                                                   ~index:(Ojs.float_of_js
-                                                            x904)
+                                                            x863)
                                                   ~array:(Ojs.list_of_js
-                                                            Obj.magic x905))))|]);
-                            (match x900 with
-                             | Some x902 ->
+                                                            Obj.magic x864))))|]);
+                            (match x859 with
+                             | Some x861 ->
                                  ignore
-                                   (Ojs.call x901 "push" [|(any_to_js x902)|])
+                                   (Ojs.call x860 "push" [|(any_to_js x861)|])
                              | None -> ());
-                            x901))|])
+                            x860))|])
     let (filter :
       ('tags, 'T) this ->
         predicate:(value:'T -> index:float -> array:'T list -> bool) ->
           ?thisArg:any -> unit -> 'S list)
       =
-      fun (x920 : ('tags, 'T) this) ->
+      fun (x879 : ('tags, 'T) this) ->
         fun
-          ~predicate:(x912 :
+          ~predicate:(x871 :
                        value:'T -> index:float -> array:'T list -> bool)
           ->
-          fun ?thisArg:(x913 : any option) ->
+          fun ?thisArg:(x872 : any option) ->
             fun () ->
               Ojs.list_of_js Obj.magic
-                (let x923 = this_to_js Obj.magic Obj.magic x920 in
-                 Ojs.call (Ojs.get_prop_ascii x923 "filter") "apply"
-                   [|x923;((let x914 =
+                (let x882 = this_to_js Obj.magic Obj.magic x879 in
+                 Ojs.call (Ojs.get_prop_ascii x882 "filter") "apply"
+                   [|x882;((let x873 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x914 "push"
+                              (Ojs.call x873 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x916 : Ojs.t) ->
-                                         fun (x917 : Ojs.t) ->
-                                           fun (x918 : Ojs.t) ->
+                                      (fun (x875 : Ojs.t) ->
+                                         fun (x876 : Ojs.t) ->
+                                           fun (x877 : Ojs.t) ->
                                              Ojs.bool_to_js
-                                               (x912 ~value:(Obj.magic x916)
+                                               (x871 ~value:(Obj.magic x875)
                                                   ~index:(Ojs.float_of_js
-                                                            x917)
+                                                            x876)
                                                   ~array:(Ojs.list_of_js
-                                                            Obj.magic x918))))|]);
-                            (match x913 with
-                             | Some x915 ->
+                                                            Obj.magic x877))))|]);
+                            (match x872 with
+                             | Some x874 ->
                                  ignore
-                                   (Ojs.call x914 "push" [|(any_to_js x915)|])
+                                   (Ojs.call x873 "push" [|(any_to_js x874)|])
                              | None -> ());
-                            x914))|])
+                            x873))|])
     let (filter' :
       ('tags, 'T) this ->
         predicate:(value:'T -> index:float -> array:'T list -> unknown) ->
           ?thisArg:any -> unit -> 'T list)
       =
-      fun (x933 : ('tags, 'T) this) ->
+      fun (x892 : ('tags, 'T) this) ->
         fun
-          ~predicate:(x925 :
+          ~predicate:(x884 :
                        value:'T -> index:float -> array:'T list -> unknown)
           ->
-          fun ?thisArg:(x926 : any option) ->
+          fun ?thisArg:(x885 : any option) ->
             fun () ->
               Ojs.list_of_js Obj.magic
-                (let x936 = this_to_js Obj.magic Obj.magic x933 in
-                 Ojs.call (Ojs.get_prop_ascii x936 "filter") "apply"
-                   [|x936;((let x927 =
+                (let x895 = this_to_js Obj.magic Obj.magic x892 in
+                 Ojs.call (Ojs.get_prop_ascii x895 "filter") "apply"
+                   [|x895;((let x886 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
                             ignore
-                              (Ojs.call x927 "push"
+                              (Ojs.call x886 "push"
                                  [|(Ojs.fun_to_js 3
-                                      (fun (x929 : Ojs.t) ->
-                                         fun (x930 : Ojs.t) ->
-                                           fun (x931 : Ojs.t) ->
+                                      (fun (x888 : Ojs.t) ->
+                                         fun (x889 : Ojs.t) ->
+                                           fun (x890 : Ojs.t) ->
                                              unknown_to_js
-                                               (x925 ~value:(Obj.magic x929)
+                                               (x884 ~value:(Obj.magic x888)
                                                   ~index:(Ojs.float_of_js
-                                                            x930)
+                                                            x889)
                                                   ~array:(Ojs.list_of_js
-                                                            Obj.magic x931))))|]);
-                            (match x926 with
-                             | Some x928 ->
+                                                            Obj.magic x890))))|]);
+                            (match x885 with
+                             | Some x887 ->
                                  ignore
-                                   (Ojs.call x927 "push" [|(any_to_js x928)|])
+                                   (Ojs.call x886 "push" [|(any_to_js x887)|])
                              | None -> ());
-                            x927))|])
+                            x886))|])
     let (reduce :
       ('tags, 'T) this ->
         callbackfn:(previousValue:'T ->
@@ -2772,25 +2686,25 @@ module ReadonlyArray =
                         currentIndex:float -> array:'T list -> 'T)
           -> 'T)
       =
-      fun (x944 : ('tags, 'T) this) ->
+      fun (x903 : ('tags, 'T) this) ->
         fun
-          ~callbackfn:(x938 :
+          ~callbackfn:(x897 :
                         previousValue:'T ->
                           currentValue:'T ->
                             currentIndex:float -> array:'T list -> 'T)
           ->
           Obj.magic
-            (Ojs.call (this_to_js Obj.magic Obj.magic x944) "reduce"
+            (Ojs.call (this_to_js Obj.magic Obj.magic x903) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x939 : Ojs.t) ->
-                       fun (x940 : Ojs.t) ->
-                         fun (x941 : Ojs.t) ->
-                           fun (x942 : Ojs.t) ->
+                    (fun (x898 : Ojs.t) ->
+                       fun (x899 : Ojs.t) ->
+                         fun (x900 : Ojs.t) ->
+                           fun (x901 : Ojs.t) ->
                              Obj.magic
-                               (x938 ~previousValue:(Obj.magic x939)
-                                  ~currentValue:(Obj.magic x940)
-                                  ~currentIndex:(Ojs.float_of_js x941)
-                                  ~array:(Ojs.list_of_js Obj.magic x942))))|])
+                               (x897 ~previousValue:(Obj.magic x898)
+                                  ~currentValue:(Obj.magic x899)
+                                  ~currentIndex:(Ojs.float_of_js x900)
+                                  ~array:(Ojs.list_of_js Obj.magic x901))))|])
     let (reduce' :
       ('tags, 'T) this ->
         callbackfn:(previousValue:'T ->
@@ -2798,27 +2712,27 @@ module ReadonlyArray =
                         currentIndex:float -> array:'T list -> 'T)
           -> initialValue:'T -> 'T)
       =
-      fun (x954 : ('tags, 'T) this) ->
+      fun (x913 : ('tags, 'T) this) ->
         fun
-          ~callbackfn:(x947 :
+          ~callbackfn:(x906 :
                         previousValue:'T ->
                           currentValue:'T ->
                             currentIndex:float -> array:'T list -> 'T)
           ->
-          fun ~initialValue:(x953 : 'T) ->
+          fun ~initialValue:(x912 : 'T) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic Obj.magic x954) "reduce"
+              (Ojs.call (this_to_js Obj.magic Obj.magic x913) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x948 : Ojs.t) ->
-                         fun (x949 : Ojs.t) ->
-                           fun (x950 : Ojs.t) ->
-                             fun (x951 : Ojs.t) ->
+                      (fun (x907 : Ojs.t) ->
+                         fun (x908 : Ojs.t) ->
+                           fun (x909 : Ojs.t) ->
+                             fun (x910 : Ojs.t) ->
                                Obj.magic
-                                 (x947 ~previousValue:(Obj.magic x948)
-                                    ~currentValue:(Obj.magic x949)
-                                    ~currentIndex:(Ojs.float_of_js x950)
-                                    ~array:(Ojs.list_of_js Obj.magic x951))));(
-                   Obj.magic x953)|])
+                                 (x906 ~previousValue:(Obj.magic x907)
+                                    ~currentValue:(Obj.magic x908)
+                                    ~currentIndex:(Ojs.float_of_js x909)
+                                    ~array:(Ojs.list_of_js Obj.magic x910))));(
+                   Obj.magic x912)|])
     let (reduce'' :
       ('tags, 'T) this ->
         callbackfn:(previousValue:'U ->
@@ -2826,27 +2740,27 @@ module ReadonlyArray =
                         currentIndex:float -> array:'T list -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x964 : ('tags, 'T) this) ->
+      fun (x923 : ('tags, 'T) this) ->
         fun
-          ~callbackfn:(x957 :
+          ~callbackfn:(x916 :
                         previousValue:'U ->
                           currentValue:'T ->
                             currentIndex:float -> array:'T list -> 'U)
           ->
-          fun ~initialValue:(x963 : 'U) ->
+          fun ~initialValue:(x922 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic Obj.magic x964) "reduce"
+              (Ojs.call (this_to_js Obj.magic Obj.magic x923) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x958 : Ojs.t) ->
-                         fun (x959 : Ojs.t) ->
-                           fun (x960 : Ojs.t) ->
-                             fun (x961 : Ojs.t) ->
+                      (fun (x917 : Ojs.t) ->
+                         fun (x918 : Ojs.t) ->
+                           fun (x919 : Ojs.t) ->
+                             fun (x920 : Ojs.t) ->
                                Obj.magic
-                                 (x957 ~previousValue:(Obj.magic x958)
-                                    ~currentValue:(Obj.magic x959)
-                                    ~currentIndex:(Ojs.float_of_js x960)
-                                    ~array:(Ojs.list_of_js Obj.magic x961))));(
-                   Obj.magic x963)|])
+                                 (x916 ~previousValue:(Obj.magic x917)
+                                    ~currentValue:(Obj.magic x918)
+                                    ~currentIndex:(Ojs.float_of_js x919)
+                                    ~array:(Ojs.list_of_js Obj.magic x920))));(
+                   Obj.magic x922)|])
     let (reduceRight :
       ('tags, 'T) this ->
         callbackfn:(previousValue:'T ->
@@ -2854,25 +2768,25 @@ module ReadonlyArray =
                         currentIndex:float -> array:'T list -> 'T)
           -> 'T)
       =
-      fun (x973 : ('tags, 'T) this) ->
+      fun (x932 : ('tags, 'T) this) ->
         fun
-          ~callbackfn:(x967 :
+          ~callbackfn:(x926 :
                         previousValue:'T ->
                           currentValue:'T ->
                             currentIndex:float -> array:'T list -> 'T)
           ->
           Obj.magic
-            (Ojs.call (this_to_js Obj.magic Obj.magic x973) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic Obj.magic x932) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x968 : Ojs.t) ->
-                       fun (x969 : Ojs.t) ->
-                         fun (x970 : Ojs.t) ->
-                           fun (x971 : Ojs.t) ->
+                    (fun (x927 : Ojs.t) ->
+                       fun (x928 : Ojs.t) ->
+                         fun (x929 : Ojs.t) ->
+                           fun (x930 : Ojs.t) ->
                              Obj.magic
-                               (x967 ~previousValue:(Obj.magic x968)
-                                  ~currentValue:(Obj.magic x969)
-                                  ~currentIndex:(Ojs.float_of_js x970)
-                                  ~array:(Ojs.list_of_js Obj.magic x971))))|])
+                               (x926 ~previousValue:(Obj.magic x927)
+                                  ~currentValue:(Obj.magic x928)
+                                  ~currentIndex:(Ojs.float_of_js x929)
+                                  ~array:(Ojs.list_of_js Obj.magic x930))))|])
     let (reduceRight' :
       ('tags, 'T) this ->
         callbackfn:(previousValue:'T ->
@@ -2880,27 +2794,27 @@ module ReadonlyArray =
                         currentIndex:float -> array:'T list -> 'T)
           -> initialValue:'T -> 'T)
       =
-      fun (x983 : ('tags, 'T) this) ->
+      fun (x942 : ('tags, 'T) this) ->
         fun
-          ~callbackfn:(x976 :
+          ~callbackfn:(x935 :
                         previousValue:'T ->
                           currentValue:'T ->
                             currentIndex:float -> array:'T list -> 'T)
           ->
-          fun ~initialValue:(x982 : 'T) ->
+          fun ~initialValue:(x941 : 'T) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic Obj.magic x983) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic Obj.magic x942) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x977 : Ojs.t) ->
-                         fun (x978 : Ojs.t) ->
-                           fun (x979 : Ojs.t) ->
-                             fun (x980 : Ojs.t) ->
+                      (fun (x936 : Ojs.t) ->
+                         fun (x937 : Ojs.t) ->
+                           fun (x938 : Ojs.t) ->
+                             fun (x939 : Ojs.t) ->
                                Obj.magic
-                                 (x976 ~previousValue:(Obj.magic x977)
-                                    ~currentValue:(Obj.magic x978)
-                                    ~currentIndex:(Ojs.float_of_js x979)
-                                    ~array:(Ojs.list_of_js Obj.magic x980))));(
-                   Obj.magic x982)|])
+                                 (x935 ~previousValue:(Obj.magic x936)
+                                    ~currentValue:(Obj.magic x937)
+                                    ~currentIndex:(Ojs.float_of_js x938)
+                                    ~array:(Ojs.list_of_js Obj.magic x939))));(
+                   Obj.magic x941)|])
     let (reduceRight'' :
       ('tags, 'T) this ->
         callbackfn:(previousValue:'U ->
@@ -2908,33 +2822,119 @@ module ReadonlyArray =
                         currentIndex:float -> array:'T list -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x993 : ('tags, 'T) this) ->
+      fun (x952 : ('tags, 'T) this) ->
         fun
-          ~callbackfn:(x986 :
+          ~callbackfn:(x945 :
                         previousValue:'U ->
                           currentValue:'T ->
                             currentIndex:float -> array:'T list -> 'U)
           ->
-          fun ~initialValue:(x992 : 'U) ->
+          fun ~initialValue:(x951 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic Obj.magic x993) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic Obj.magic x952) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x987 : Ojs.t) ->
-                         fun (x988 : Ojs.t) ->
-                           fun (x989 : Ojs.t) ->
-                             fun (x990 : Ojs.t) ->
+                      (fun (x946 : Ojs.t) ->
+                         fun (x947 : Ojs.t) ->
+                           fun (x948 : Ojs.t) ->
+                             fun (x949 : Ojs.t) ->
                                Obj.magic
-                                 (x986 ~previousValue:(Obj.magic x987)
-                                    ~currentValue:(Obj.magic x988)
-                                    ~currentIndex:(Ojs.float_of_js x989)
-                                    ~array:(Ojs.list_of_js Obj.magic x990))));(
-                   Obj.magic x992)|])
+                                 (x945 ~previousValue:(Obj.magic x946)
+                                    ~currentValue:(Obj.magic x947)
+                                    ~currentIndex:(Ojs.float_of_js x948)
+                                    ~array:(Ojs.list_of_js Obj.magic x949))));(
+                   Obj.magic x951)|])
     let (get : ('tags, 'T) this -> float -> 'T) =
-      fun (x996 : ('tags, 'T) this) ->
-        fun (x999 : float) ->
+      fun (x955 : ('tags, 'T) this) ->
+        fun (x958 : float) ->
           Obj.magic
-            (Ojs.get_prop (this_to_js Obj.magic Obj.magic x996)
-               (Ojs.float_to_js x999))
+            (Ojs.get_prop (this_to_js Obj.magic Obj.magic x955)
+               (Ojs.float_to_js x958))
+    let (flatMap :
+      ('tags, 'T) this ->
+        callback:(this:'This ->
+                    value:'T ->
+                      index:float -> array:'T list -> ('U, 'U t) union2)
+          -> ?thisArg:'This -> unit -> 'U list)
+      =
+      fun (x971 : ('tags, 'T) this) ->
+        fun
+          ~callback:(x959 :
+                      this:'This ->
+                        value:'T ->
+                          index:float -> array:'T list -> ('U, 'U t) union2)
+          ->
+          fun ?thisArg:(x960 : 'This option) ->
+            fun () ->
+              Ojs.list_of_js Obj.magic
+                (let x974 = this_to_js Obj.magic Obj.magic x971 in
+                 Ojs.call (Ojs.get_prop_ascii x974 "flatMap") "apply"
+                   [|x974;((let x961 =
+                              Ojs.new_obj
+                                (Ojs.get_prop_ascii Ojs.global "Array") 
+                                [||] in
+                            ignore
+                              (Ojs.call x961 "push"
+                                 [|(Ojs.fun_to_js 4
+                                      (fun (x963 : Ojs.t) ->
+                                         fun (x964 : Ojs.t) ->
+                                           fun (x965 : Ojs.t) ->
+                                             fun (x966 : Ojs.t) ->
+                                               union2_to_js Obj.magic
+                                                 (fun (x969 : 'U t) ->
+                                                    t_to_js Obj.magic x969)
+                                                 (x959 ~this:(Obj.magic x963)
+                                                    ~value:(Obj.magic x964)
+                                                    ~index:(Ojs.float_of_js
+                                                              x965)
+                                                    ~array:(Ojs.list_of_js
+                                                              Obj.magic x966))))|]);
+                            (match x960 with
+                             | Some x962 ->
+                                 ignore
+                                   (Ojs.call x961 "push" [|(Obj.magic x962)|])
+                             | None -> ());
+                            x961))|])
+    let (flat :
+      ('tags, 'T) this ->
+        this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list)
+      =
+      fun (x980 : ('tags, 'T) this) ->
+        fun ~this:(x976 : 'A) ->
+          fun ?depth:(x977 : 'D option) ->
+            fun () ->
+              Ojs.list_of_js
+                (fun (x984 : Ojs.t) ->
+                   FlatArray.t_of_js Obj.magic Obj.magic x984)
+                (let x983 = this_to_js Obj.magic Obj.magic x980 in
+                 Ojs.call (Ojs.get_prop_ascii x983 "flat") "apply"
+                   [|x983;((let x978 =
+                              Ojs.new_obj
+                                (Ojs.get_prop_ascii Ojs.global "Array") 
+                                [||] in
+                            ignore
+                              (Ojs.call x978 "push" [|(Obj.magic x976)|]);
+                            (match x977 with
+                             | Some x979 ->
+                                 ignore
+                                   (Ojs.call x978 "push" [|(Obj.magic x979)|])
+                             | None -> ());
+                            x978))|])
+    let (entries : ('tags, 'T) this -> (float * 'T) IterableIterator.t) =
+      fun (x987 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js
+          (fun (x990 : Ojs.t) ->
+             let x991 = x990 in
+             ((Ojs.float_of_js (Ojs.array_get x991 0)),
+               (Obj.magic (Ojs.array_get x991 1))))
+          (Ojs.call (this_to_js Obj.magic Obj.magic x987) "entries" [||])
+    let (keys : ('tags, 'T) this -> float IterableIterator.t) =
+      fun (x992 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic Obj.magic x992) "keys" [||])
+    let (values : ('tags, 'T) this -> 'T IterableIterator.t) =
+      fun (x996 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic x996) "values" [||])
     let cast_from = Obj.magic
     let (to_ml : 'T t -> 'T list) =
       fun (x1000 : 'T t) ->
@@ -3062,6 +3062,48 @@ module Symbol =
     let (valueOf : 'tags this -> symbol) =
       fun (x1038 : 'tags this) ->
         symbol_of_js (Ojs.call (this_to_js Obj.magic x1038) "valueOf" [||])
+    let (asyncIterator : unit -> symbol) =
+      fun () ->
+        symbol_of_js
+          (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Symbol")
+             "asyncIterator")
+    let (matchAll : unit -> symbol) =
+      fun () ->
+        symbol_of_js
+          (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Symbol")
+             "matchAll")
+    let (prototype : unit -> t) =
+      fun () ->
+        t_of_js
+          (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Symbol")
+             "prototype")
+    let (invoke : ?description:string or_number -> unit -> symbol) =
+      fun ?description:(x1040 : string or_number option) ->
+        fun () ->
+          symbol_of_js
+            (Ojs.call (Ojs.get_prop_ascii Ojs.global "Symbol") "apply"
+               [|Ojs.null;((let x1041 =
+                              Ojs.new_obj
+                                (Ojs.get_prop_ascii Ojs.global "Array") 
+                                [||] in
+                            (match x1040 with
+                             | Some x1042 ->
+                                 ignore
+                                   (Ojs.call x1041 "push"
+                                      [|(or_number_to_js Ojs.string_to_js
+                                           x1042)|])
+                             | None -> ());
+                            x1041))|])
+    let (for_ : string -> symbol) =
+      fun (x1044 : string) ->
+        symbol_of_js
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Symbol") "for"
+             [|(Ojs.string_to_js x1044)|])
+    let (keyFor : symbol -> string or_undefined) =
+      fun (x1045 : symbol) ->
+        or_undefined_of_js Ojs.string_of_js
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Symbol") "keyFor"
+             [|(symbol_to_js x1045)|])
     let (hasInstance : unit -> symbol) =
       fun () ->
         symbol_of_js
@@ -3117,48 +3159,6 @@ module Symbol =
         symbol_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Symbol")
              "iterator")
-    let (prototype : unit -> t) =
-      fun () ->
-        t_of_js
-          (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Symbol")
-             "prototype")
-    let (invoke : ?description:string or_number -> unit -> symbol) =
-      fun ?description:(x1040 : string or_number option) ->
-        fun () ->
-          symbol_of_js
-            (Ojs.call (Ojs.get_prop_ascii Ojs.global "Symbol") "apply"
-               [|Ojs.null;((let x1041 =
-                              Ojs.new_obj
-                                (Ojs.get_prop_ascii Ojs.global "Array") 
-                                [||] in
-                            (match x1040 with
-                             | Some x1042 ->
-                                 ignore
-                                   (Ojs.call x1041 "push"
-                                      [|(or_number_to_js Ojs.string_to_js
-                                           x1042)|])
-                             | None -> ());
-                            x1041))|])
-    let (for_ : string -> symbol) =
-      fun (x1044 : string) ->
-        symbol_of_js
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Symbol") "for"
-             [|(Ojs.string_to_js x1044)|])
-    let (keyFor : symbol -> string or_undefined) =
-      fun (x1045 : symbol) ->
-        or_undefined_of_js Ojs.string_of_js
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Symbol") "keyFor"
-             [|(symbol_to_js x1045)|])
-    let (asyncIterator : unit -> symbol) =
-      fun () ->
-        symbol_of_js
-          (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Symbol")
-             "asyncIterator")
-    let (matchAll : unit -> symbol) =
-      fun () ->
-        symbol_of_js
-          (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Symbol")
-             "matchAll")
     let cast_from = Obj.magic
   end
 module AnonymousInterface1 =
@@ -3253,70 +3253,93 @@ module Array =
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (__T_to_js : __T -> Ojs.t) ->
           fun (x1074 : __tags intf) -> intf_to_js __tags_to_js x1074
-    let (entries : ('tags, 'T) this -> (float * 'T) IterableIterator.t) =
-      fun (x1078 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js
-          (fun (x1081 : Ojs.t) ->
-             let x1082 = x1081 in
-             ((Ojs.float_of_js (Ojs.array_get x1082 0)),
-               (Obj.magic (Ojs.array_get x1082 1))))
-          (Ojs.call (this_to_js Obj.magic Obj.magic x1078) "entries" [||])
-    let (keys : ('tags, 'T) this -> float IterableIterator.t) =
-      fun (x1083 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic Obj.magic x1083) "keys" [||])
-    let (values : ('tags, 'T) this -> 'T IterableIterator.t) =
-      fun (x1087 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic x1087) "values" [||])
     let (find :
       ('tags, 'T) this ->
         predicate:(this:unit ->
                      value:'T -> index:float -> obj:'T list -> bool)
           -> ?thisArg:any -> unit -> 'S or_undefined)
       =
-      fun (x1100 : ('tags, 'T) this) ->
+      fun (x1087 : ('tags, 'T) this) ->
         fun
-          ~predicate:(x1091 :
+          ~predicate:(x1078 :
                        this:unit ->
                          value:'T -> index:float -> obj:'T list -> bool)
           ->
-          fun ?thisArg:(x1092 : any option) ->
+          fun ?thisArg:(x1079 : any option) ->
             fun () ->
               or_undefined_of_js Obj.magic
-                (let x1103 = this_to_js Obj.magic Obj.magic x1100 in
-                 Ojs.call (Ojs.get_prop_ascii x1103 "find") "apply"
-                   [|x1103;((let x1093 =
+                (let x1090 = this_to_js Obj.magic Obj.magic x1087 in
+                 Ojs.call (Ojs.get_prop_ascii x1090 "find") "apply"
+                   [|x1090;((let x1080 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x1093 "push"
+                               (Ojs.call x1080 "push"
                                   [|(Ojs.fun_to_js 4
-                                       (fun (x1095 : Ojs.t) ->
-                                          fun (x1096 : Ojs.t) ->
-                                            fun (x1097 : Ojs.t) ->
-                                              fun (x1098 : Ojs.t) ->
+                                       (fun (x1082 : Ojs.t) ->
+                                          fun (x1083 : Ojs.t) ->
+                                            fun (x1084 : Ojs.t) ->
+                                              fun (x1085 : Ojs.t) ->
                                                 Ojs.bool_to_js
-                                                  (x1091
+                                                  (x1078
                                                      ~this:(Ojs.unit_of_js
-                                                              x1095)
-                                                     ~value:(Obj.magic x1096)
+                                                              x1082)
+                                                     ~value:(Obj.magic x1083)
                                                      ~index:(Ojs.float_of_js
-                                                               x1097)
+                                                               x1084)
                                                      ~obj:(Ojs.list_of_js
-                                                             Obj.magic x1098))))|]);
-                             (match x1092 with
-                              | Some x1094 ->
+                                                             Obj.magic x1085))))|]);
+                             (match x1079 with
+                              | Some x1081 ->
                                   ignore
-                                    (Ojs.call x1093 "push"
-                                       [|(any_to_js x1094)|])
+                                    (Ojs.call x1080 "push"
+                                       [|(any_to_js x1081)|])
                               | None -> ());
-                             x1093))|])
+                             x1080))|])
     let (find' :
       ('tags, 'T) this ->
         predicate:(value:'T -> index:float -> obj:'T list -> unknown) ->
           ?thisArg:any -> unit -> 'T or_undefined)
+      =
+      fun (x1100 : ('tags, 'T) this) ->
+        fun
+          ~predicate:(x1092 :
+                       value:'T -> index:float -> obj:'T list -> unknown)
+          ->
+          fun ?thisArg:(x1093 : any option) ->
+            fun () ->
+              or_undefined_of_js Obj.magic
+                (let x1103 = this_to_js Obj.magic Obj.magic x1100 in
+                 Ojs.call (Ojs.get_prop_ascii x1103 "find") "apply"
+                   [|x1103;((let x1094 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1094 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x1096 : Ojs.t) ->
+                                          fun (x1097 : Ojs.t) ->
+                                            fun (x1098 : Ojs.t) ->
+                                              unknown_to_js
+                                                (x1092
+                                                   ~value:(Obj.magic x1096)
+                                                   ~index:(Ojs.float_of_js
+                                                             x1097)
+                                                   ~obj:(Ojs.list_of_js
+                                                           Obj.magic x1098))))|]);
+                             (match x1093 with
+                              | Some x1095 ->
+                                  ignore
+                                    (Ojs.call x1094 "push"
+                                       [|(any_to_js x1095)|])
+                              | None -> ());
+                             x1094))|])
+    let (findIndex :
+      ('tags, 'T) this ->
+        predicate:(value:'T -> index:float -> obj:'T list -> unknown) ->
+          ?thisArg:any -> unit -> float)
       =
       fun (x1113 : ('tags, 'T) this) ->
         fun
@@ -3325,9 +3348,9 @@ module Array =
           ->
           fun ?thisArg:(x1106 : any option) ->
             fun () ->
-              or_undefined_of_js Obj.magic
+              Ojs.float_of_js
                 (let x1116 = this_to_js Obj.magic Obj.magic x1113 in
-                 Ojs.call (Ojs.get_prop_ascii x1116 "find") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x1116 "findIndex") "apply"
                    [|x1116;((let x1107 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -3352,106 +3375,808 @@ module Array =
                                        [|(any_to_js x1108)|])
                               | None -> ());
                              x1107))|])
-    let (findIndex :
-      ('tags, 'T) this ->
-        predicate:(value:'T -> index:float -> obj:'T list -> unknown) ->
-          ?thisArg:any -> unit -> float)
-      =
-      fun (x1126 : ('tags, 'T) this) ->
-        fun
-          ~predicate:(x1118 :
-                       value:'T -> index:float -> obj:'T list -> unknown)
-          ->
-          fun ?thisArg:(x1119 : any option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x1129 = this_to_js Obj.magic Obj.magic x1126 in
-                 Ojs.call (Ojs.get_prop_ascii x1129 "findIndex") "apply"
-                   [|x1129;((let x1120 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1120 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x1122 : Ojs.t) ->
-                                          fun (x1123 : Ojs.t) ->
-                                            fun (x1124 : Ojs.t) ->
-                                              unknown_to_js
-                                                (x1118
-                                                   ~value:(Obj.magic x1122)
-                                                   ~index:(Ojs.float_of_js
-                                                             x1123)
-                                                   ~obj:(Ojs.list_of_js
-                                                           Obj.magic x1124))))|]);
-                             (match x1119 with
-                              | Some x1121 ->
-                                  ignore
-                                    (Ojs.call x1120 "push"
-                                       [|(any_to_js x1121)|])
-                              | None -> ());
-                             x1120))|])
     let (fill :
       ('tags, 'T) this ->
         value:'T -> ?start:float -> ?end_:float -> unit -> ('tags, 'T) this)
       =
-      fun (x1136 : ('tags, 'T) this) ->
-        fun ~value:(x1130 : 'T) ->
-          fun ?start:(x1131 : float option) ->
-            fun ?end_:(x1132 : float option) ->
+      fun (x1123 : ('tags, 'T) this) ->
+        fun ~value:(x1117 : 'T) ->
+          fun ?start:(x1118 : float option) ->
+            fun ?end_:(x1119 : float option) ->
               fun () ->
                 this_of_js Obj.magic Obj.magic
-                  (let x1139 = this_to_js Obj.magic Obj.magic x1136 in
-                   Ojs.call (Ojs.get_prop_ascii x1139 "fill") "apply"
-                     [|x1139;((let x1133 =
+                  (let x1126 = this_to_js Obj.magic Obj.magic x1123 in
+                   Ojs.call (Ojs.get_prop_ascii x1126 "fill") "apply"
+                     [|x1126;((let x1120 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x1133 "push" [|(Obj.magic x1130)|]);
-                               (match x1131 with
-                                | Some x1135 ->
+                                 (Ojs.call x1120 "push" [|(Obj.magic x1117)|]);
+                               (match x1118 with
+                                | Some x1122 ->
                                     ignore
-                                      (Ojs.call x1133 "push"
-                                         [|(Ojs.float_to_js x1135)|])
+                                      (Ojs.call x1120 "push"
+                                         [|(Ojs.float_to_js x1122)|])
                                 | None -> ());
-                               (match x1132 with
-                                | Some x1134 ->
+                               (match x1119 with
+                                | Some x1121 ->
                                     ignore
-                                      (Ojs.call x1133 "push"
-                                         [|(Ojs.float_to_js x1134)|])
+                                      (Ojs.call x1120 "push"
+                                         [|(Ojs.float_to_js x1121)|])
                                 | None -> ());
-                               x1133))|])
+                               x1120))|])
     let (copyWithin :
       ('tags, 'T) this ->
         target:float ->
           start:float -> ?end_:float -> unit -> ('tags, 'T) this)
       =
-      fun (x1147 : ('tags, 'T) this) ->
-        fun ~target:(x1142 : float) ->
-          fun ~start:(x1143 : float) ->
-            fun ?end_:(x1144 : float option) ->
+      fun (x1134 : ('tags, 'T) this) ->
+        fun ~target:(x1129 : float) ->
+          fun ~start:(x1130 : float) ->
+            fun ?end_:(x1131 : float option) ->
               fun () ->
                 this_of_js Obj.magic Obj.magic
-                  (let x1150 = this_to_js Obj.magic Obj.magic x1147 in
-                   Ojs.call (Ojs.get_prop_ascii x1150 "copyWithin") "apply"
-                     [|x1150;((let x1145 =
+                  (let x1137 = this_to_js Obj.magic Obj.magic x1134 in
+                   Ojs.call (Ojs.get_prop_ascii x1137 "copyWithin") "apply"
+                     [|x1137;((let x1132 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x1145 "push"
-                                    [|(Ojs.float_to_js x1142)|]);
+                                 (Ojs.call x1132 "push"
+                                    [|(Ojs.float_to_js x1129)|]);
                                ignore
-                                 (Ojs.call x1145 "push"
-                                    [|(Ojs.float_to_js x1143)|]);
-                               (match x1144 with
-                                | Some x1146 ->
+                                 (Ojs.call x1132 "push"
+                                    [|(Ojs.float_to_js x1130)|]);
+                               (match x1131 with
+                                | Some x1133 ->
                                     ignore
-                                      (Ojs.call x1145 "push"
-                                         [|(Ojs.float_to_js x1146)|])
+                                      (Ojs.call x1132 "push"
+                                         [|(Ojs.float_to_js x1133)|])
                                 | None -> ());
-                               x1145))|])
+                               x1132))|])
+    let (includes :
+      ('tags, 'T) this ->
+        searchElement:'T -> ?fromIndex:float -> unit -> bool)
+      =
+      fun (x1144 : ('tags, 'T) this) ->
+        fun ~searchElement:(x1140 : 'T) ->
+          fun ?fromIndex:(x1141 : float option) ->
+            fun () ->
+              Ojs.bool_of_js
+                (let x1147 = this_to_js Obj.magic Obj.magic x1144 in
+                 Ojs.call (Ojs.get_prop_ascii x1147 "includes") "apply"
+                   [|x1147;((let x1142 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1142 "push" [|(Obj.magic x1140)|]);
+                             (match x1141 with
+                              | Some x1143 ->
+                                  ignore
+                                    (Ojs.call x1142 "push"
+                                       [|(Ojs.float_to_js x1143)|])
+                              | None -> ());
+                             x1142))|])
+    let (get_length : ('tags, 'T) this -> float) =
+      fun (x1148 : ('tags, 'T) this) ->
+        Ojs.float_of_js
+          (Ojs.get_prop_ascii (this_to_js Obj.magic Obj.magic x1148) "length")
+    let (set_length : ('tags, 'T) this -> float -> unit) =
+      fun (x1151 : ('tags, 'T) this) ->
+        fun (x1152 : float) ->
+          Ojs.set_prop_ascii (this_to_js Obj.magic Obj.magic x1151) "length"
+            (Ojs.float_to_js x1152)
+    let (toString : ('tags, 'T) this -> string) =
+      fun (x1155 : ('tags, 'T) this) ->
+        Ojs.string_of_js
+          (Ojs.call (this_to_js Obj.magic Obj.magic x1155) "toString" [||])
+    let (toLocaleString : ('tags, 'T) this -> string) =
+      fun (x1158 : ('tags, 'T) this) ->
+        Ojs.string_of_js
+          (Ojs.call (this_to_js Obj.magic Obj.magic x1158) "toLocaleString"
+             [||])
+    let (pop : ('tags, 'T) this -> 'T or_undefined) =
+      fun (x1161 : ('tags, 'T) this) ->
+        or_undefined_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic x1161) "pop" [||])
+    let (push : ('tags, 'T) this -> items:'T list -> float) =
+      fun (x1168 : ('tags, 'T) this) ->
+        fun ~items:(x1165 : 'T list) ->
+          Ojs.float_of_js
+            (let x1171 = this_to_js Obj.magic Obj.magic x1168 in
+             Ojs.call (Ojs.get_prop_ascii x1171 "push") "apply"
+               [|x1171;((let x1166 =
+                           Ojs.new_obj
+                             (Ojs.get_prop_ascii Ojs.global "Array") 
+                             [||] in
+                         List.iter
+                           (fun (x1167 : 'T) ->
+                              ignore
+                                (Ojs.call x1166 "push" [|(Obj.magic x1167)|]))
+                           x1165;
+                         x1166))|])
+    let (concat : ('tags, 'T) this -> items:'T ConcatArray.t list -> 'T list)
+      =
+      fun (x1176 : ('tags, 'T) this) ->
+        fun ~items:(x1172 : 'T ConcatArray.t list) ->
+          Ojs.list_of_js Obj.magic
+            (let x1179 = this_to_js Obj.magic Obj.magic x1176 in
+             Ojs.call (Ojs.get_prop_ascii x1179 "concat") "apply"
+               [|x1179;((let x1173 =
+                           Ojs.new_obj
+                             (Ojs.get_prop_ascii Ojs.global "Array") 
+                             [||] in
+                         List.iter
+                           (fun (x1174 : 'T ConcatArray.t) ->
+                              ignore
+                                (Ojs.call x1173 "push"
+                                   [|(ConcatArray.t_to_js Obj.magic x1174)|]))
+                           x1172;
+                         x1173))|])
+    let (concat' :
+      ('tags, 'T) this -> items:('T, 'T ConcatArray.t) union2 list -> 'T list)
+      =
+      fun (x1187 : ('tags, 'T) this) ->
+        fun ~items:(x1181 : ('T, 'T ConcatArray.t) union2 list) ->
+          Ojs.list_of_js Obj.magic
+            (let x1190 = this_to_js Obj.magic Obj.magic x1187 in
+             Ojs.call (Ojs.get_prop_ascii x1190 "concat") "apply"
+               [|x1190;((let x1182 =
+                           Ojs.new_obj
+                             (Ojs.get_prop_ascii Ojs.global "Array") 
+                             [||] in
+                         List.iter
+                           (fun (x1183 : ('T, 'T ConcatArray.t) union2) ->
+                              ignore
+                                (Ojs.call x1182 "push"
+                                   [|(union2_to_js Obj.magic
+                                        (fun (x1185 : 'T ConcatArray.t) ->
+                                           ConcatArray.t_to_js Obj.magic
+                                             x1185) x1183)|])) x1181;
+                         x1182))|])
+    let (join : ('tags, 'T) this -> ?separator:string -> unit -> string) =
+      fun (x1195 : ('tags, 'T) this) ->
+        fun ?separator:(x1192 : string option) ->
+          fun () ->
+            Ojs.string_of_js
+              (let x1198 = this_to_js Obj.magic Obj.magic x1195 in
+               Ojs.call (Ojs.get_prop_ascii x1198 "join") "apply"
+                 [|x1198;((let x1193 =
+                             Ojs.new_obj
+                               (Ojs.get_prop_ascii Ojs.global "Array") 
+                               [||] in
+                           (match x1192 with
+                            | Some x1194 ->
+                                ignore
+                                  (Ojs.call x1193 "push"
+                                     [|(Ojs.string_to_js x1194)|])
+                            | None -> ());
+                           x1193))|])
+    let (reverse : ('tags, 'T) this -> 'T list) =
+      fun (x1199 : ('tags, 'T) this) ->
+        Ojs.list_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic x1199) "reverse" [||])
+    let (shift : ('tags, 'T) this -> 'T or_undefined) =
+      fun (x1203 : ('tags, 'T) this) ->
+        or_undefined_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic x1203) "shift" [||])
+    let (slice :
+      ('tags, 'T) this -> ?start:float -> ?end_:float -> unit -> 'T list) =
+      fun (x1212 : ('tags, 'T) this) ->
+        fun ?start:(x1207 : float option) ->
+          fun ?end_:(x1208 : float option) ->
+            fun () ->
+              Ojs.list_of_js Obj.magic
+                (let x1215 = this_to_js Obj.magic Obj.magic x1212 in
+                 Ojs.call (Ojs.get_prop_ascii x1215 "slice") "apply"
+                   [|x1215;((let x1209 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             (match x1207 with
+                              | Some x1211 ->
+                                  ignore
+                                    (Ojs.call x1209 "push"
+                                       [|(Ojs.float_to_js x1211)|])
+                              | None -> ());
+                             (match x1208 with
+                              | Some x1210 ->
+                                  ignore
+                                    (Ojs.call x1209 "push"
+                                       [|(Ojs.float_to_js x1210)|])
+                              | None -> ());
+                             x1209))|])
+    let (sort :
+      ('tags, 'T) this ->
+        ?compareFn:(a:'T -> b:'T -> float) -> unit -> ('tags, 'T) this)
+      =
+      fun (x1222 : ('tags, 'T) this) ->
+        fun ?compareFn:(x1217 : (a:'T -> b:'T -> float) option) ->
+          fun () ->
+            this_of_js Obj.magic Obj.magic
+              (let x1225 = this_to_js Obj.magic Obj.magic x1222 in
+               Ojs.call (Ojs.get_prop_ascii x1225 "sort") "apply"
+                 [|x1225;((let x1218 =
+                             Ojs.new_obj
+                               (Ojs.get_prop_ascii Ojs.global "Array") 
+                               [||] in
+                           (match x1217 with
+                            | Some x1219 ->
+                                ignore
+                                  (Ojs.call x1218 "push"
+                                     [|(Ojs.fun_to_js 2
+                                          (fun (x1220 : Ojs.t) ->
+                                             fun (x1221 : Ojs.t) ->
+                                               Ojs.float_to_js
+                                                 (x1219 ~a:(Obj.magic x1220)
+                                                    ~b:(Obj.magic x1221))))|])
+                            | None -> ());
+                           x1218))|])
+    let (splice :
+      ('tags, 'T) this ->
+        start:float -> ?deleteCount:float -> unit -> 'T list)
+      =
+      fun (x1232 : ('tags, 'T) this) ->
+        fun ~start:(x1228 : float) ->
+          fun ?deleteCount:(x1229 : float option) ->
+            fun () ->
+              Ojs.list_of_js Obj.magic
+                (let x1235 = this_to_js Obj.magic Obj.magic x1232 in
+                 Ojs.call (Ojs.get_prop_ascii x1235 "splice") "apply"
+                   [|x1235;((let x1230 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1230 "push"
+                                  [|(Ojs.float_to_js x1228)|]);
+                             (match x1229 with
+                              | Some x1231 ->
+                                  ignore
+                                    (Ojs.call x1230 "push"
+                                       [|(Ojs.float_to_js x1231)|])
+                              | None -> ());
+                             x1230))|])
+    let (splice' :
+      ('tags, 'T) this ->
+        start:float -> deleteCount:float -> items:'T list -> 'T list)
+      =
+      fun (x1242 : ('tags, 'T) this) ->
+        fun ~start:(x1237 : float) ->
+          fun ~deleteCount:(x1238 : float) ->
+            fun ~items:(x1239 : 'T list) ->
+              Ojs.list_of_js Obj.magic
+                (let x1245 = this_to_js Obj.magic Obj.magic x1242 in
+                 Ojs.call (Ojs.get_prop_ascii x1245 "splice") "apply"
+                   [|x1245;((let x1240 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1240 "push"
+                                  [|(Ojs.float_to_js x1237)|]);
+                             ignore
+                               (Ojs.call x1240 "push"
+                                  [|(Ojs.float_to_js x1238)|]);
+                             List.iter
+                               (fun (x1241 : 'T) ->
+                                  ignore
+                                    (Ojs.call x1240 "push"
+                                       [|(Obj.magic x1241)|])) x1239;
+                             x1240))|])
+    let (unshift : ('tags, 'T) this -> items:'T list -> float) =
+      fun (x1250 : ('tags, 'T) this) ->
+        fun ~items:(x1247 : 'T list) ->
+          Ojs.float_of_js
+            (let x1253 = this_to_js Obj.magic Obj.magic x1250 in
+             Ojs.call (Ojs.get_prop_ascii x1253 "unshift") "apply"
+               [|x1253;((let x1248 =
+                           Ojs.new_obj
+                             (Ojs.get_prop_ascii Ojs.global "Array") 
+                             [||] in
+                         List.iter
+                           (fun (x1249 : 'T) ->
+                              ignore
+                                (Ojs.call x1248 "push" [|(Obj.magic x1249)|]))
+                           x1247;
+                         x1248))|])
+    let (indexOf :
+      ('tags, 'T) this ->
+        searchElement:'T -> ?fromIndex:float -> unit -> float)
+      =
+      fun (x1258 : ('tags, 'T) this) ->
+        fun ~searchElement:(x1254 : 'T) ->
+          fun ?fromIndex:(x1255 : float option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x1261 = this_to_js Obj.magic Obj.magic x1258 in
+                 Ojs.call (Ojs.get_prop_ascii x1261 "indexOf") "apply"
+                   [|x1261;((let x1256 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1256 "push" [|(Obj.magic x1254)|]);
+                             (match x1255 with
+                              | Some x1257 ->
+                                  ignore
+                                    (Ojs.call x1256 "push"
+                                       [|(Ojs.float_to_js x1257)|])
+                              | None -> ());
+                             x1256))|])
+    let (lastIndexOf :
+      ('tags, 'T) this ->
+        searchElement:'T -> ?fromIndex:float -> unit -> float)
+      =
+      fun (x1266 : ('tags, 'T) this) ->
+        fun ~searchElement:(x1262 : 'T) ->
+          fun ?fromIndex:(x1263 : float option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x1269 = this_to_js Obj.magic Obj.magic x1266 in
+                 Ojs.call (Ojs.get_prop_ascii x1269 "lastIndexOf") "apply"
+                   [|x1269;((let x1264 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1264 "push" [|(Obj.magic x1262)|]);
+                             (match x1263 with
+                              | Some x1265 ->
+                                  ignore
+                                    (Ojs.call x1264 "push"
+                                       [|(Ojs.float_to_js x1265)|])
+                              | None -> ());
+                             x1264))|])
+    let (every :
+      ('tags, 'T) this ->
+        predicate:(value:'T -> index:float -> array:'T list -> bool) ->
+          ?thisArg:any -> unit -> bool)
+      =
+      fun (x1278 : ('tags, 'T) this) ->
+        fun
+          ~predicate:(x1270 :
+                       value:'T -> index:float -> array:'T list -> bool)
+          ->
+          fun ?thisArg:(x1271 : any option) ->
+            fun () ->
+              Ojs.bool_of_js
+                (let x1281 = this_to_js Obj.magic Obj.magic x1278 in
+                 Ojs.call (Ojs.get_prop_ascii x1281 "every") "apply"
+                   [|x1281;((let x1272 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1272 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x1274 : Ojs.t) ->
+                                          fun (x1275 : Ojs.t) ->
+                                            fun (x1276 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x1270
+                                                   ~value:(Obj.magic x1274)
+                                                   ~index:(Ojs.float_of_js
+                                                             x1275)
+                                                   ~array:(Ojs.list_of_js
+                                                             Obj.magic x1276))))|]);
+                             (match x1271 with
+                              | Some x1273 ->
+                                  ignore
+                                    (Ojs.call x1272 "push"
+                                       [|(any_to_js x1273)|])
+                              | None -> ());
+                             x1272))|])
+    let (every' :
+      ('tags, 'T) this ->
+        predicate:(value:'T -> index:float -> array:'T list -> unknown) ->
+          ?thisArg:any -> unit -> bool)
+      =
+      fun (x1290 : ('tags, 'T) this) ->
+        fun
+          ~predicate:(x1282 :
+                       value:'T -> index:float -> array:'T list -> unknown)
+          ->
+          fun ?thisArg:(x1283 : any option) ->
+            fun () ->
+              Ojs.bool_of_js
+                (let x1293 = this_to_js Obj.magic Obj.magic x1290 in
+                 Ojs.call (Ojs.get_prop_ascii x1293 "every") "apply"
+                   [|x1293;((let x1284 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1284 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x1286 : Ojs.t) ->
+                                          fun (x1287 : Ojs.t) ->
+                                            fun (x1288 : Ojs.t) ->
+                                              unknown_to_js
+                                                (x1282
+                                                   ~value:(Obj.magic x1286)
+                                                   ~index:(Ojs.float_of_js
+                                                             x1287)
+                                                   ~array:(Ojs.list_of_js
+                                                             Obj.magic x1288))))|]);
+                             (match x1283 with
+                              | Some x1285 ->
+                                  ignore
+                                    (Ojs.call x1284 "push"
+                                       [|(any_to_js x1285)|])
+                              | None -> ());
+                             x1284))|])
+    let (some :
+      ('tags, 'T) this ->
+        predicate:(value:'T -> index:float -> array:'T list -> unknown) ->
+          ?thisArg:any -> unit -> bool)
+      =
+      fun (x1302 : ('tags, 'T) this) ->
+        fun
+          ~predicate:(x1294 :
+                       value:'T -> index:float -> array:'T list -> unknown)
+          ->
+          fun ?thisArg:(x1295 : any option) ->
+            fun () ->
+              Ojs.bool_of_js
+                (let x1305 = this_to_js Obj.magic Obj.magic x1302 in
+                 Ojs.call (Ojs.get_prop_ascii x1305 "some") "apply"
+                   [|x1305;((let x1296 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1296 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x1298 : Ojs.t) ->
+                                          fun (x1299 : Ojs.t) ->
+                                            fun (x1300 : Ojs.t) ->
+                                              unknown_to_js
+                                                (x1294
+                                                   ~value:(Obj.magic x1298)
+                                                   ~index:(Ojs.float_of_js
+                                                             x1299)
+                                                   ~array:(Ojs.list_of_js
+                                                             Obj.magic x1300))))|]);
+                             (match x1295 with
+                              | Some x1297 ->
+                                  ignore
+                                    (Ojs.call x1296 "push"
+                                       [|(any_to_js x1297)|])
+                              | None -> ());
+                             x1296))|])
+    let (forEach :
+      ('tags, 'T) this ->
+        callbackfn:(value:'T -> index:float -> array:'T list -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
+      fun (x1314 : ('tags, 'T) this) ->
+        fun
+          ~callbackfn:(x1306 :
+                        value:'T -> index:float -> array:'T list -> unit)
+          ->
+          fun ?thisArg:(x1307 : any option) ->
+            fun () ->
+              ignore
+                (let x1317 = this_to_js Obj.magic Obj.magic x1314 in
+                 Ojs.call (Ojs.get_prop_ascii x1317 "forEach") "apply"
+                   [|x1317;((let x1308 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1308 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x1310 : Ojs.t) ->
+                                          fun (x1311 : Ojs.t) ->
+                                            fun (x1312 : Ojs.t) ->
+                                              x1306 ~value:(Obj.magic x1310)
+                                                ~index:(Ojs.float_of_js x1311)
+                                                ~array:(Ojs.list_of_js
+                                                          Obj.magic x1312)))|]);
+                             (match x1307 with
+                              | Some x1309 ->
+                                  ignore
+                                    (Ojs.call x1308 "push"
+                                       [|(any_to_js x1309)|])
+                              | None -> ());
+                             x1308))|])
+    let (map :
+      ('tags, 'T) this ->
+        callbackfn:(value:'T -> index:float -> array:'T list -> 'U) ->
+          ?thisArg:any -> unit -> 'U list)
+      =
+      fun (x1326 : ('tags, 'T) this) ->
+        fun
+          ~callbackfn:(x1318 :
+                        value:'T -> index:float -> array:'T list -> 'U)
+          ->
+          fun ?thisArg:(x1319 : any option) ->
+            fun () ->
+              Ojs.list_of_js Obj.magic
+                (let x1329 = this_to_js Obj.magic Obj.magic x1326 in
+                 Ojs.call (Ojs.get_prop_ascii x1329 "map") "apply"
+                   [|x1329;((let x1320 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1320 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x1322 : Ojs.t) ->
+                                          fun (x1323 : Ojs.t) ->
+                                            fun (x1324 : Ojs.t) ->
+                                              Obj.magic
+                                                (x1318
+                                                   ~value:(Obj.magic x1322)
+                                                   ~index:(Ojs.float_of_js
+                                                             x1323)
+                                                   ~array:(Ojs.list_of_js
+                                                             Obj.magic x1324))))|]);
+                             (match x1319 with
+                              | Some x1321 ->
+                                  ignore
+                                    (Ojs.call x1320 "push"
+                                       [|(any_to_js x1321)|])
+                              | None -> ());
+                             x1320))|])
+    let (filter :
+      ('tags, 'T) this ->
+        predicate:(value:'T -> index:float -> array:'T list -> bool) ->
+          ?thisArg:any -> unit -> 'S list)
+      =
+      fun (x1339 : ('tags, 'T) this) ->
+        fun
+          ~predicate:(x1331 :
+                       value:'T -> index:float -> array:'T list -> bool)
+          ->
+          fun ?thisArg:(x1332 : any option) ->
+            fun () ->
+              Ojs.list_of_js Obj.magic
+                (let x1342 = this_to_js Obj.magic Obj.magic x1339 in
+                 Ojs.call (Ojs.get_prop_ascii x1342 "filter") "apply"
+                   [|x1342;((let x1333 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1333 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x1335 : Ojs.t) ->
+                                          fun (x1336 : Ojs.t) ->
+                                            fun (x1337 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x1331
+                                                   ~value:(Obj.magic x1335)
+                                                   ~index:(Ojs.float_of_js
+                                                             x1336)
+                                                   ~array:(Ojs.list_of_js
+                                                             Obj.magic x1337))))|]);
+                             (match x1332 with
+                              | Some x1334 ->
+                                  ignore
+                                    (Ojs.call x1333 "push"
+                                       [|(any_to_js x1334)|])
+                              | None -> ());
+                             x1333))|])
+    let (filter' :
+      ('tags, 'T) this ->
+        predicate:(value:'T -> index:float -> array:'T list -> unknown) ->
+          ?thisArg:any -> unit -> 'T list)
+      =
+      fun (x1352 : ('tags, 'T) this) ->
+        fun
+          ~predicate:(x1344 :
+                       value:'T -> index:float -> array:'T list -> unknown)
+          ->
+          fun ?thisArg:(x1345 : any option) ->
+            fun () ->
+              Ojs.list_of_js Obj.magic
+                (let x1355 = this_to_js Obj.magic Obj.magic x1352 in
+                 Ojs.call (Ojs.get_prop_ascii x1355 "filter") "apply"
+                   [|x1355;((let x1346 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1346 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x1348 : Ojs.t) ->
+                                          fun (x1349 : Ojs.t) ->
+                                            fun (x1350 : Ojs.t) ->
+                                              unknown_to_js
+                                                (x1344
+                                                   ~value:(Obj.magic x1348)
+                                                   ~index:(Ojs.float_of_js
+                                                             x1349)
+                                                   ~array:(Ojs.list_of_js
+                                                             Obj.magic x1350))))|]);
+                             (match x1345 with
+                              | Some x1347 ->
+                                  ignore
+                                    (Ojs.call x1346 "push"
+                                       [|(any_to_js x1347)|])
+                              | None -> ());
+                             x1346))|])
+    let (reduce :
+      ('tags, 'T) this ->
+        callbackfn:(previousValue:'T ->
+                      currentValue:'T ->
+                        currentIndex:float -> array:'T list -> 'T)
+          -> 'T)
+      =
+      fun (x1363 : ('tags, 'T) this) ->
+        fun
+          ~callbackfn:(x1357 :
+                        previousValue:'T ->
+                          currentValue:'T ->
+                            currentIndex:float -> array:'T list -> 'T)
+          ->
+          Obj.magic
+            (Ojs.call (this_to_js Obj.magic Obj.magic x1363) "reduce"
+               [|(Ojs.fun_to_js 4
+                    (fun (x1358 : Ojs.t) ->
+                       fun (x1359 : Ojs.t) ->
+                         fun (x1360 : Ojs.t) ->
+                           fun (x1361 : Ojs.t) ->
+                             Obj.magic
+                               (x1357 ~previousValue:(Obj.magic x1358)
+                                  ~currentValue:(Obj.magic x1359)
+                                  ~currentIndex:(Ojs.float_of_js x1360)
+                                  ~array:(Ojs.list_of_js Obj.magic x1361))))|])
+    let (reduce' :
+      ('tags, 'T) this ->
+        callbackfn:(previousValue:'T ->
+                      currentValue:'T ->
+                        currentIndex:float -> array:'T list -> 'T)
+          -> initialValue:'T -> 'T)
+      =
+      fun (x1373 : ('tags, 'T) this) ->
+        fun
+          ~callbackfn:(x1366 :
+                        previousValue:'T ->
+                          currentValue:'T ->
+                            currentIndex:float -> array:'T list -> 'T)
+          ->
+          fun ~initialValue:(x1372 : 'T) ->
+            Obj.magic
+              (Ojs.call (this_to_js Obj.magic Obj.magic x1373) "reduce"
+                 [|(Ojs.fun_to_js 4
+                      (fun (x1367 : Ojs.t) ->
+                         fun (x1368 : Ojs.t) ->
+                           fun (x1369 : Ojs.t) ->
+                             fun (x1370 : Ojs.t) ->
+                               Obj.magic
+                                 (x1366 ~previousValue:(Obj.magic x1367)
+                                    ~currentValue:(Obj.magic x1368)
+                                    ~currentIndex:(Ojs.float_of_js x1369)
+                                    ~array:(Ojs.list_of_js Obj.magic x1370))));(
+                   Obj.magic x1372)|])
+    let (reduce'' :
+      ('tags, 'T) this ->
+        callbackfn:(previousValue:'U ->
+                      currentValue:'T ->
+                        currentIndex:float -> array:'T list -> 'U)
+          -> initialValue:'U -> 'U)
+      =
+      fun (x1383 : ('tags, 'T) this) ->
+        fun
+          ~callbackfn:(x1376 :
+                        previousValue:'U ->
+                          currentValue:'T ->
+                            currentIndex:float -> array:'T list -> 'U)
+          ->
+          fun ~initialValue:(x1382 : 'U) ->
+            Obj.magic
+              (Ojs.call (this_to_js Obj.magic Obj.magic x1383) "reduce"
+                 [|(Ojs.fun_to_js 4
+                      (fun (x1377 : Ojs.t) ->
+                         fun (x1378 : Ojs.t) ->
+                           fun (x1379 : Ojs.t) ->
+                             fun (x1380 : Ojs.t) ->
+                               Obj.magic
+                                 (x1376 ~previousValue:(Obj.magic x1377)
+                                    ~currentValue:(Obj.magic x1378)
+                                    ~currentIndex:(Ojs.float_of_js x1379)
+                                    ~array:(Ojs.list_of_js Obj.magic x1380))));(
+                   Obj.magic x1382)|])
+    let (reduceRight :
+      ('tags, 'T) this ->
+        callbackfn:(previousValue:'T ->
+                      currentValue:'T ->
+                        currentIndex:float -> array:'T list -> 'T)
+          -> 'T)
+      =
+      fun (x1392 : ('tags, 'T) this) ->
+        fun
+          ~callbackfn:(x1386 :
+                        previousValue:'T ->
+                          currentValue:'T ->
+                            currentIndex:float -> array:'T list -> 'T)
+          ->
+          Obj.magic
+            (Ojs.call (this_to_js Obj.magic Obj.magic x1392) "reduceRight"
+               [|(Ojs.fun_to_js 4
+                    (fun (x1387 : Ojs.t) ->
+                       fun (x1388 : Ojs.t) ->
+                         fun (x1389 : Ojs.t) ->
+                           fun (x1390 : Ojs.t) ->
+                             Obj.magic
+                               (x1386 ~previousValue:(Obj.magic x1387)
+                                  ~currentValue:(Obj.magic x1388)
+                                  ~currentIndex:(Ojs.float_of_js x1389)
+                                  ~array:(Ojs.list_of_js Obj.magic x1390))))|])
+    let (reduceRight' :
+      ('tags, 'T) this ->
+        callbackfn:(previousValue:'T ->
+                      currentValue:'T ->
+                        currentIndex:float -> array:'T list -> 'T)
+          -> initialValue:'T -> 'T)
+      =
+      fun (x1402 : ('tags, 'T) this) ->
+        fun
+          ~callbackfn:(x1395 :
+                        previousValue:'T ->
+                          currentValue:'T ->
+                            currentIndex:float -> array:'T list -> 'T)
+          ->
+          fun ~initialValue:(x1401 : 'T) ->
+            Obj.magic
+              (Ojs.call (this_to_js Obj.magic Obj.magic x1402) "reduceRight"
+                 [|(Ojs.fun_to_js 4
+                      (fun (x1396 : Ojs.t) ->
+                         fun (x1397 : Ojs.t) ->
+                           fun (x1398 : Ojs.t) ->
+                             fun (x1399 : Ojs.t) ->
+                               Obj.magic
+                                 (x1395 ~previousValue:(Obj.magic x1396)
+                                    ~currentValue:(Obj.magic x1397)
+                                    ~currentIndex:(Ojs.float_of_js x1398)
+                                    ~array:(Ojs.list_of_js Obj.magic x1399))));(
+                   Obj.magic x1401)|])
+    let (reduceRight'' :
+      ('tags, 'T) this ->
+        callbackfn:(previousValue:'U ->
+                      currentValue:'T ->
+                        currentIndex:float -> array:'T list -> 'U)
+          -> initialValue:'U -> 'U)
+      =
+      fun (x1412 : ('tags, 'T) this) ->
+        fun
+          ~callbackfn:(x1405 :
+                        previousValue:'U ->
+                          currentValue:'T ->
+                            currentIndex:float -> array:'T list -> 'U)
+          ->
+          fun ~initialValue:(x1411 : 'U) ->
+            Obj.magic
+              (Ojs.call (this_to_js Obj.magic Obj.magic x1412) "reduceRight"
+                 [|(Ojs.fun_to_js 4
+                      (fun (x1406 : Ojs.t) ->
+                         fun (x1407 : Ojs.t) ->
+                           fun (x1408 : Ojs.t) ->
+                             fun (x1409 : Ojs.t) ->
+                               Obj.magic
+                                 (x1405 ~previousValue:(Obj.magic x1406)
+                                    ~currentValue:(Obj.magic x1407)
+                                    ~currentIndex:(Ojs.float_of_js x1408)
+                                    ~array:(Ojs.list_of_js Obj.magic x1409))));(
+                   Obj.magic x1411)|])
+    let (get : ('tags, 'T) this -> float -> 'T) =
+      fun (x1415 : ('tags, 'T) this) ->
+        fun (x1418 : float) ->
+          Obj.magic
+            (Ojs.get_prop (this_to_js Obj.magic Obj.magic x1415)
+               (Ojs.float_to_js x1418))
+    let (set : ('tags, 'T) this -> float -> 'T -> unit) =
+      fun (x1419 : ('tags, 'T) this) ->
+        fun (x1422 : float) ->
+          fun (x1423 : 'T) ->
+            Ojs.set_prop (this_to_js Obj.magic Obj.magic x1419)
+              (Ojs.float_to_js x1422) (Obj.magic x1423)
     let (flatMap :
       ('tags, 'T) this ->
         callback:(this:'This ->
@@ -3460,992 +4185,267 @@ module Array =
                         array:'T list -> ('U, 'U ReadonlyArray.t) union2)
           -> ?thisArg:'This -> unit -> 'U list)
       =
-      fun (x1165 : ('tags, 'T) this) ->
+      fun (x1436 : ('tags, 'T) this) ->
         fun
-          ~callback:(x1153 :
+          ~callback:(x1424 :
                       this:'This ->
                         value:'T ->
                           index:float ->
                             array:'T list -> ('U, 'U ReadonlyArray.t) union2)
           ->
-          fun ?thisArg:(x1154 : 'This option) ->
+          fun ?thisArg:(x1425 : 'This option) ->
             fun () ->
               Ojs.list_of_js Obj.magic
-                (let x1168 = this_to_js Obj.magic Obj.magic x1165 in
-                 Ojs.call (Ojs.get_prop_ascii x1168 "flatMap") "apply"
-                   [|x1168;((let x1155 =
+                (let x1439 = this_to_js Obj.magic Obj.magic x1436 in
+                 Ojs.call (Ojs.get_prop_ascii x1439 "flatMap") "apply"
+                   [|x1439;((let x1426 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x1155 "push"
+                               (Ojs.call x1426 "push"
                                   [|(Ojs.fun_to_js 4
-                                       (fun (x1157 : Ojs.t) ->
-                                          fun (x1158 : Ojs.t) ->
-                                            fun (x1159 : Ojs.t) ->
-                                              fun (x1160 : Ojs.t) ->
+                                       (fun (x1428 : Ojs.t) ->
+                                          fun (x1429 : Ojs.t) ->
+                                            fun (x1430 : Ojs.t) ->
+                                              fun (x1431 : Ojs.t) ->
                                                 union2_to_js Obj.magic
                                                   (fun
-                                                     (x1163 :
+                                                     (x1434 :
                                                        'U ReadonlyArray.t)
                                                      ->
                                                      ReadonlyArray.t_to_js
-                                                       Obj.magic x1163)
-                                                  (x1153
-                                                     ~this:(Obj.magic x1157)
-                                                     ~value:(Obj.magic x1158)
+                                                       Obj.magic x1434)
+                                                  (x1424
+                                                     ~this:(Obj.magic x1428)
+                                                     ~value:(Obj.magic x1429)
                                                      ~index:(Ojs.float_of_js
-                                                               x1159)
+                                                               x1430)
                                                      ~array:(Ojs.list_of_js
                                                                Obj.magic
-                                                               x1160))))|]);
-                             (match x1154 with
-                              | Some x1156 ->
+                                                               x1431))))|]);
+                             (match x1425 with
+                              | Some x1427 ->
                                   ignore
-                                    (Ojs.call x1155 "push"
-                                       [|(Obj.magic x1156)|])
+                                    (Ojs.call x1426 "push"
+                                       [|(Obj.magic x1427)|])
                               | None -> ());
-                             x1155))|])
+                             x1426))|])
     let (flat :
       ('tags, 'T) this ->
         this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list)
       =
-      fun (x1174 : ('tags, 'T) this) ->
-        fun ~this:(x1170 : 'A) ->
-          fun ?depth:(x1171 : 'D option) ->
+      fun (x1445 : ('tags, 'T) this) ->
+        fun ~this:(x1441 : 'A) ->
+          fun ?depth:(x1442 : 'D option) ->
             fun () ->
               Ojs.list_of_js
-                (fun (x1178 : Ojs.t) ->
-                   FlatArray.t_of_js Obj.magic Obj.magic x1178)
-                (let x1177 = this_to_js Obj.magic Obj.magic x1174 in
-                 Ojs.call (Ojs.get_prop_ascii x1177 "flat") "apply"
-                   [|x1177;((let x1172 =
+                (fun (x1449 : Ojs.t) ->
+                   FlatArray.t_of_js Obj.magic Obj.magic x1449)
+                (let x1448 = this_to_js Obj.magic Obj.magic x1445 in
+                 Ojs.call (Ojs.get_prop_ascii x1448 "flat") "apply"
+                   [|x1448;((let x1443 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x1172 "push" [|(Obj.magic x1170)|]);
-                             (match x1171 with
-                              | Some x1173 ->
+                               (Ojs.call x1443 "push" [|(Obj.magic x1441)|]);
+                             (match x1442 with
+                              | Some x1444 ->
                                   ignore
-                                    (Ojs.call x1172 "push"
-                                       [|(Obj.magic x1173)|])
+                                    (Ojs.call x1443 "push"
+                                       [|(Obj.magic x1444)|])
                               | None -> ());
-                             x1172))|])
-    let (includes :
-      ('tags, 'T) this ->
-        searchElement:'T -> ?fromIndex:float -> unit -> bool)
-      =
-      fun (x1185 : ('tags, 'T) this) ->
-        fun ~searchElement:(x1181 : 'T) ->
-          fun ?fromIndex:(x1182 : float option) ->
-            fun () ->
-              Ojs.bool_of_js
-                (let x1188 = this_to_js Obj.magic Obj.magic x1185 in
-                 Ojs.call (Ojs.get_prop_ascii x1188 "includes") "apply"
-                   [|x1188;((let x1183 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1183 "push" [|(Obj.magic x1181)|]);
-                             (match x1182 with
-                              | Some x1184 ->
-                                  ignore
-                                    (Ojs.call x1183 "push"
-                                       [|(Ojs.float_to_js x1184)|])
-                              | None -> ());
-                             x1183))|])
-    let (get_length : ('tags, 'T) this -> float) =
-      fun (x1189 : ('tags, 'T) this) ->
-        Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic Obj.magic x1189) "length")
-    let (set_length : ('tags, 'T) this -> float -> unit) =
-      fun (x1192 : ('tags, 'T) this) ->
-        fun (x1193 : float) ->
-          Ojs.set_prop_ascii (this_to_js Obj.magic Obj.magic x1192) "length"
-            (Ojs.float_to_js x1193)
-    let (toString : ('tags, 'T) this -> string) =
-      fun (x1196 : ('tags, 'T) this) ->
-        Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic Obj.magic x1196) "toString" [||])
-    let (toLocaleString : ('tags, 'T) this -> string) =
-      fun (x1199 : ('tags, 'T) this) ->
-        Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic Obj.magic x1199) "toLocaleString"
-             [||])
-    let (pop : ('tags, 'T) this -> 'T or_undefined) =
-      fun (x1202 : ('tags, 'T) this) ->
-        or_undefined_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic x1202) "pop" [||])
-    let (push : ('tags, 'T) this -> items:'T list -> float) =
-      fun (x1209 : ('tags, 'T) this) ->
-        fun ~items:(x1206 : 'T list) ->
-          Ojs.float_of_js
-            (let x1212 = this_to_js Obj.magic Obj.magic x1209 in
-             Ojs.call (Ojs.get_prop_ascii x1212 "push") "apply"
-               [|x1212;((let x1207 =
-                           Ojs.new_obj
-                             (Ojs.get_prop_ascii Ojs.global "Array") 
-                             [||] in
-                         List.iter
-                           (fun (x1208 : 'T) ->
-                              ignore
-                                (Ojs.call x1207 "push" [|(Obj.magic x1208)|]))
-                           x1206;
-                         x1207))|])
-    let (concat : ('tags, 'T) this -> items:'T ConcatArray.t list -> 'T list)
-      =
-      fun (x1217 : ('tags, 'T) this) ->
-        fun ~items:(x1213 : 'T ConcatArray.t list) ->
-          Ojs.list_of_js Obj.magic
-            (let x1220 = this_to_js Obj.magic Obj.magic x1217 in
-             Ojs.call (Ojs.get_prop_ascii x1220 "concat") "apply"
-               [|x1220;((let x1214 =
-                           Ojs.new_obj
-                             (Ojs.get_prop_ascii Ojs.global "Array") 
-                             [||] in
-                         List.iter
-                           (fun (x1215 : 'T ConcatArray.t) ->
-                              ignore
-                                (Ojs.call x1214 "push"
-                                   [|(ConcatArray.t_to_js Obj.magic x1215)|]))
-                           x1213;
-                         x1214))|])
-    let (concat' :
-      ('tags, 'T) this -> items:('T, 'T ConcatArray.t) union2 list -> 'T list)
-      =
-      fun (x1228 : ('tags, 'T) this) ->
-        fun ~items:(x1222 : ('T, 'T ConcatArray.t) union2 list) ->
-          Ojs.list_of_js Obj.magic
-            (let x1231 = this_to_js Obj.magic Obj.magic x1228 in
-             Ojs.call (Ojs.get_prop_ascii x1231 "concat") "apply"
-               [|x1231;((let x1223 =
-                           Ojs.new_obj
-                             (Ojs.get_prop_ascii Ojs.global "Array") 
-                             [||] in
-                         List.iter
-                           (fun (x1224 : ('T, 'T ConcatArray.t) union2) ->
-                              ignore
-                                (Ojs.call x1223 "push"
-                                   [|(union2_to_js Obj.magic
-                                        (fun (x1226 : 'T ConcatArray.t) ->
-                                           ConcatArray.t_to_js Obj.magic
-                                             x1226) x1224)|])) x1222;
-                         x1223))|])
-    let (join : ('tags, 'T) this -> ?separator:string -> unit -> string) =
-      fun (x1236 : ('tags, 'T) this) ->
-        fun ?separator:(x1233 : string option) ->
-          fun () ->
-            Ojs.string_of_js
-              (let x1239 = this_to_js Obj.magic Obj.magic x1236 in
-               Ojs.call (Ojs.get_prop_ascii x1239 "join") "apply"
-                 [|x1239;((let x1234 =
-                             Ojs.new_obj
-                               (Ojs.get_prop_ascii Ojs.global "Array") 
-                               [||] in
-                           (match x1233 with
-                            | Some x1235 ->
-                                ignore
-                                  (Ojs.call x1234 "push"
-                                     [|(Ojs.string_to_js x1235)|])
-                            | None -> ());
-                           x1234))|])
-    let (reverse : ('tags, 'T) this -> 'T list) =
-      fun (x1240 : ('tags, 'T) this) ->
-        Ojs.list_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic x1240) "reverse" [||])
-    let (shift : ('tags, 'T) this -> 'T or_undefined) =
-      fun (x1244 : ('tags, 'T) this) ->
-        or_undefined_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic x1244) "shift" [||])
-    let (slice :
-      ('tags, 'T) this -> ?start:float -> ?end_:float -> unit -> 'T list) =
-      fun (x1253 : ('tags, 'T) this) ->
-        fun ?start:(x1248 : float option) ->
-          fun ?end_:(x1249 : float option) ->
-            fun () ->
-              Ojs.list_of_js Obj.magic
-                (let x1256 = this_to_js Obj.magic Obj.magic x1253 in
-                 Ojs.call (Ojs.get_prop_ascii x1256 "slice") "apply"
-                   [|x1256;((let x1250 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             (match x1248 with
-                              | Some x1252 ->
-                                  ignore
-                                    (Ojs.call x1250 "push"
-                                       [|(Ojs.float_to_js x1252)|])
-                              | None -> ());
-                             (match x1249 with
-                              | Some x1251 ->
-                                  ignore
-                                    (Ojs.call x1250 "push"
-                                       [|(Ojs.float_to_js x1251)|])
-                              | None -> ());
-                             x1250))|])
-    let (sort :
-      ('tags, 'T) this ->
-        ?compareFn:(a:'T -> b:'T -> float) -> unit -> ('tags, 'T) this)
-      =
-      fun (x1263 : ('tags, 'T) this) ->
-        fun ?compareFn:(x1258 : (a:'T -> b:'T -> float) option) ->
-          fun () ->
-            this_of_js Obj.magic Obj.magic
-              (let x1266 = this_to_js Obj.magic Obj.magic x1263 in
-               Ojs.call (Ojs.get_prop_ascii x1266 "sort") "apply"
-                 [|x1266;((let x1259 =
-                             Ojs.new_obj
-                               (Ojs.get_prop_ascii Ojs.global "Array") 
-                               [||] in
-                           (match x1258 with
-                            | Some x1260 ->
-                                ignore
-                                  (Ojs.call x1259 "push"
-                                     [|(Ojs.fun_to_js 2
-                                          (fun (x1261 : Ojs.t) ->
-                                             fun (x1262 : Ojs.t) ->
-                                               Ojs.float_to_js
-                                                 (x1260 ~a:(Obj.magic x1261)
-                                                    ~b:(Obj.magic x1262))))|])
-                            | None -> ());
-                           x1259))|])
-    let (splice :
-      ('tags, 'T) this ->
-        start:float -> ?deleteCount:float -> unit -> 'T list)
-      =
-      fun (x1273 : ('tags, 'T) this) ->
-        fun ~start:(x1269 : float) ->
-          fun ?deleteCount:(x1270 : float option) ->
-            fun () ->
-              Ojs.list_of_js Obj.magic
-                (let x1276 = this_to_js Obj.magic Obj.magic x1273 in
-                 Ojs.call (Ojs.get_prop_ascii x1276 "splice") "apply"
-                   [|x1276;((let x1271 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1271 "push"
-                                  [|(Ojs.float_to_js x1269)|]);
-                             (match x1270 with
-                              | Some x1272 ->
-                                  ignore
-                                    (Ojs.call x1271 "push"
-                                       [|(Ojs.float_to_js x1272)|])
-                              | None -> ());
-                             x1271))|])
-    let (splice' :
-      ('tags, 'T) this ->
-        start:float -> deleteCount:float -> items:'T list -> 'T list)
-      =
-      fun (x1283 : ('tags, 'T) this) ->
-        fun ~start:(x1278 : float) ->
-          fun ~deleteCount:(x1279 : float) ->
-            fun ~items:(x1280 : 'T list) ->
-              Ojs.list_of_js Obj.magic
-                (let x1286 = this_to_js Obj.magic Obj.magic x1283 in
-                 Ojs.call (Ojs.get_prop_ascii x1286 "splice") "apply"
-                   [|x1286;((let x1281 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1281 "push"
-                                  [|(Ojs.float_to_js x1278)|]);
-                             ignore
-                               (Ojs.call x1281 "push"
-                                  [|(Ojs.float_to_js x1279)|]);
-                             List.iter
-                               (fun (x1282 : 'T) ->
-                                  ignore
-                                    (Ojs.call x1281 "push"
-                                       [|(Obj.magic x1282)|])) x1280;
-                             x1281))|])
-    let (unshift : ('tags, 'T) this -> items:'T list -> float) =
-      fun (x1291 : ('tags, 'T) this) ->
-        fun ~items:(x1288 : 'T list) ->
-          Ojs.float_of_js
-            (let x1294 = this_to_js Obj.magic Obj.magic x1291 in
-             Ojs.call (Ojs.get_prop_ascii x1294 "unshift") "apply"
-               [|x1294;((let x1289 =
-                           Ojs.new_obj
-                             (Ojs.get_prop_ascii Ojs.global "Array") 
-                             [||] in
-                         List.iter
-                           (fun (x1290 : 'T) ->
-                              ignore
-                                (Ojs.call x1289 "push" [|(Obj.magic x1290)|]))
-                           x1288;
-                         x1289))|])
-    let (indexOf :
-      ('tags, 'T) this ->
-        searchElement:'T -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x1299 : ('tags, 'T) this) ->
-        fun ~searchElement:(x1295 : 'T) ->
-          fun ?fromIndex:(x1296 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x1302 = this_to_js Obj.magic Obj.magic x1299 in
-                 Ojs.call (Ojs.get_prop_ascii x1302 "indexOf") "apply"
-                   [|x1302;((let x1297 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1297 "push" [|(Obj.magic x1295)|]);
-                             (match x1296 with
-                              | Some x1298 ->
-                                  ignore
-                                    (Ojs.call x1297 "push"
-                                       [|(Ojs.float_to_js x1298)|])
-                              | None -> ());
-                             x1297))|])
-    let (lastIndexOf :
-      ('tags, 'T) this ->
-        searchElement:'T -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x1307 : ('tags, 'T) this) ->
-        fun ~searchElement:(x1303 : 'T) ->
-          fun ?fromIndex:(x1304 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x1310 = this_to_js Obj.magic Obj.magic x1307 in
-                 Ojs.call (Ojs.get_prop_ascii x1310 "lastIndexOf") "apply"
-                   [|x1310;((let x1305 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1305 "push" [|(Obj.magic x1303)|]);
-                             (match x1304 with
-                              | Some x1306 ->
-                                  ignore
-                                    (Ojs.call x1305 "push"
-                                       [|(Ojs.float_to_js x1306)|])
-                              | None -> ());
-                             x1305))|])
-    let (every :
-      ('tags, 'T) this ->
-        predicate:(value:'T -> index:float -> array:'T list -> bool) ->
-          ?thisArg:any -> unit -> bool)
-      =
-      fun (x1319 : ('tags, 'T) this) ->
-        fun
-          ~predicate:(x1311 :
-                       value:'T -> index:float -> array:'T list -> bool)
-          ->
-          fun ?thisArg:(x1312 : any option) ->
-            fun () ->
-              Ojs.bool_of_js
-                (let x1322 = this_to_js Obj.magic Obj.magic x1319 in
-                 Ojs.call (Ojs.get_prop_ascii x1322 "every") "apply"
-                   [|x1322;((let x1313 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1313 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x1315 : Ojs.t) ->
-                                          fun (x1316 : Ojs.t) ->
-                                            fun (x1317 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x1311
-                                                   ~value:(Obj.magic x1315)
-                                                   ~index:(Ojs.float_of_js
-                                                             x1316)
-                                                   ~array:(Ojs.list_of_js
-                                                             Obj.magic x1317))))|]);
-                             (match x1312 with
-                              | Some x1314 ->
-                                  ignore
-                                    (Ojs.call x1313 "push"
-                                       [|(any_to_js x1314)|])
-                              | None -> ());
-                             x1313))|])
-    let (every' :
-      ('tags, 'T) this ->
-        predicate:(value:'T -> index:float -> array:'T list -> unknown) ->
-          ?thisArg:any -> unit -> bool)
-      =
-      fun (x1331 : ('tags, 'T) this) ->
-        fun
-          ~predicate:(x1323 :
-                       value:'T -> index:float -> array:'T list -> unknown)
-          ->
-          fun ?thisArg:(x1324 : any option) ->
-            fun () ->
-              Ojs.bool_of_js
-                (let x1334 = this_to_js Obj.magic Obj.magic x1331 in
-                 Ojs.call (Ojs.get_prop_ascii x1334 "every") "apply"
-                   [|x1334;((let x1325 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1325 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x1327 : Ojs.t) ->
-                                          fun (x1328 : Ojs.t) ->
-                                            fun (x1329 : Ojs.t) ->
-                                              unknown_to_js
-                                                (x1323
-                                                   ~value:(Obj.magic x1327)
-                                                   ~index:(Ojs.float_of_js
-                                                             x1328)
-                                                   ~array:(Ojs.list_of_js
-                                                             Obj.magic x1329))))|]);
-                             (match x1324 with
-                              | Some x1326 ->
-                                  ignore
-                                    (Ojs.call x1325 "push"
-                                       [|(any_to_js x1326)|])
-                              | None -> ());
-                             x1325))|])
-    let (some :
-      ('tags, 'T) this ->
-        predicate:(value:'T -> index:float -> array:'T list -> unknown) ->
-          ?thisArg:any -> unit -> bool)
-      =
-      fun (x1343 : ('tags, 'T) this) ->
-        fun
-          ~predicate:(x1335 :
-                       value:'T -> index:float -> array:'T list -> unknown)
-          ->
-          fun ?thisArg:(x1336 : any option) ->
-            fun () ->
-              Ojs.bool_of_js
-                (let x1346 = this_to_js Obj.magic Obj.magic x1343 in
-                 Ojs.call (Ojs.get_prop_ascii x1346 "some") "apply"
-                   [|x1346;((let x1337 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1337 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x1339 : Ojs.t) ->
-                                          fun (x1340 : Ojs.t) ->
-                                            fun (x1341 : Ojs.t) ->
-                                              unknown_to_js
-                                                (x1335
-                                                   ~value:(Obj.magic x1339)
-                                                   ~index:(Ojs.float_of_js
-                                                             x1340)
-                                                   ~array:(Ojs.list_of_js
-                                                             Obj.magic x1341))))|]);
-                             (match x1336 with
-                              | Some x1338 ->
-                                  ignore
-                                    (Ojs.call x1337 "push"
-                                       [|(any_to_js x1338)|])
-                              | None -> ());
-                             x1337))|])
-    let (forEach :
-      ('tags, 'T) this ->
-        callbackfn:(value:'T -> index:float -> array:'T list -> unit) ->
-          ?thisArg:any -> unit -> unit)
-      =
-      fun (x1355 : ('tags, 'T) this) ->
-        fun
-          ~callbackfn:(x1347 :
-                        value:'T -> index:float -> array:'T list -> unit)
-          ->
-          fun ?thisArg:(x1348 : any option) ->
-            fun () ->
-              ignore
-                (let x1358 = this_to_js Obj.magic Obj.magic x1355 in
-                 Ojs.call (Ojs.get_prop_ascii x1358 "forEach") "apply"
-                   [|x1358;((let x1349 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1349 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x1351 : Ojs.t) ->
-                                          fun (x1352 : Ojs.t) ->
-                                            fun (x1353 : Ojs.t) ->
-                                              x1347 ~value:(Obj.magic x1351)
-                                                ~index:(Ojs.float_of_js x1352)
-                                                ~array:(Ojs.list_of_js
-                                                          Obj.magic x1353)))|]);
-                             (match x1348 with
-                              | Some x1350 ->
-                                  ignore
-                                    (Ojs.call x1349 "push"
-                                       [|(any_to_js x1350)|])
-                              | None -> ());
-                             x1349))|])
-    let (map :
-      ('tags, 'T) this ->
-        callbackfn:(value:'T -> index:float -> array:'T list -> 'U) ->
-          ?thisArg:any -> unit -> 'U list)
-      =
-      fun (x1367 : ('tags, 'T) this) ->
-        fun
-          ~callbackfn:(x1359 :
-                        value:'T -> index:float -> array:'T list -> 'U)
-          ->
-          fun ?thisArg:(x1360 : any option) ->
-            fun () ->
-              Ojs.list_of_js Obj.magic
-                (let x1370 = this_to_js Obj.magic Obj.magic x1367 in
-                 Ojs.call (Ojs.get_prop_ascii x1370 "map") "apply"
-                   [|x1370;((let x1361 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1361 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x1363 : Ojs.t) ->
-                                          fun (x1364 : Ojs.t) ->
-                                            fun (x1365 : Ojs.t) ->
-                                              Obj.magic
-                                                (x1359
-                                                   ~value:(Obj.magic x1363)
-                                                   ~index:(Ojs.float_of_js
-                                                             x1364)
-                                                   ~array:(Ojs.list_of_js
-                                                             Obj.magic x1365))))|]);
-                             (match x1360 with
-                              | Some x1362 ->
-                                  ignore
-                                    (Ojs.call x1361 "push"
-                                       [|(any_to_js x1362)|])
-                              | None -> ());
-                             x1361))|])
-    let (filter :
-      ('tags, 'T) this ->
-        predicate:(value:'T -> index:float -> array:'T list -> bool) ->
-          ?thisArg:any -> unit -> 'S list)
-      =
-      fun (x1380 : ('tags, 'T) this) ->
-        fun
-          ~predicate:(x1372 :
-                       value:'T -> index:float -> array:'T list -> bool)
-          ->
-          fun ?thisArg:(x1373 : any option) ->
-            fun () ->
-              Ojs.list_of_js Obj.magic
-                (let x1383 = this_to_js Obj.magic Obj.magic x1380 in
-                 Ojs.call (Ojs.get_prop_ascii x1383 "filter") "apply"
-                   [|x1383;((let x1374 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1374 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x1376 : Ojs.t) ->
-                                          fun (x1377 : Ojs.t) ->
-                                            fun (x1378 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x1372
-                                                   ~value:(Obj.magic x1376)
-                                                   ~index:(Ojs.float_of_js
-                                                             x1377)
-                                                   ~array:(Ojs.list_of_js
-                                                             Obj.magic x1378))))|]);
-                             (match x1373 with
-                              | Some x1375 ->
-                                  ignore
-                                    (Ojs.call x1374 "push"
-                                       [|(any_to_js x1375)|])
-                              | None -> ());
-                             x1374))|])
-    let (filter' :
-      ('tags, 'T) this ->
-        predicate:(value:'T -> index:float -> array:'T list -> unknown) ->
-          ?thisArg:any -> unit -> 'T list)
-      =
-      fun (x1393 : ('tags, 'T) this) ->
-        fun
-          ~predicate:(x1385 :
-                       value:'T -> index:float -> array:'T list -> unknown)
-          ->
-          fun ?thisArg:(x1386 : any option) ->
-            fun () ->
-              Ojs.list_of_js Obj.magic
-                (let x1396 = this_to_js Obj.magic Obj.magic x1393 in
-                 Ojs.call (Ojs.get_prop_ascii x1396 "filter") "apply"
-                   [|x1396;((let x1387 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1387 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x1389 : Ojs.t) ->
-                                          fun (x1390 : Ojs.t) ->
-                                            fun (x1391 : Ojs.t) ->
-                                              unknown_to_js
-                                                (x1385
-                                                   ~value:(Obj.magic x1389)
-                                                   ~index:(Ojs.float_of_js
-                                                             x1390)
-                                                   ~array:(Ojs.list_of_js
-                                                             Obj.magic x1391))))|]);
-                             (match x1386 with
-                              | Some x1388 ->
-                                  ignore
-                                    (Ojs.call x1387 "push"
-                                       [|(any_to_js x1388)|])
-                              | None -> ());
-                             x1387))|])
-    let (reduce :
-      ('tags, 'T) this ->
-        callbackfn:(previousValue:'T ->
-                      currentValue:'T ->
-                        currentIndex:float -> array:'T list -> 'T)
-          -> 'T)
-      =
-      fun (x1404 : ('tags, 'T) this) ->
-        fun
-          ~callbackfn:(x1398 :
-                        previousValue:'T ->
-                          currentValue:'T ->
-                            currentIndex:float -> array:'T list -> 'T)
-          ->
-          Obj.magic
-            (Ojs.call (this_to_js Obj.magic Obj.magic x1404) "reduce"
-               [|(Ojs.fun_to_js 4
-                    (fun (x1399 : Ojs.t) ->
-                       fun (x1400 : Ojs.t) ->
-                         fun (x1401 : Ojs.t) ->
-                           fun (x1402 : Ojs.t) ->
-                             Obj.magic
-                               (x1398 ~previousValue:(Obj.magic x1399)
-                                  ~currentValue:(Obj.magic x1400)
-                                  ~currentIndex:(Ojs.float_of_js x1401)
-                                  ~array:(Ojs.list_of_js Obj.magic x1402))))|])
-    let (reduce' :
-      ('tags, 'T) this ->
-        callbackfn:(previousValue:'T ->
-                      currentValue:'T ->
-                        currentIndex:float -> array:'T list -> 'T)
-          -> initialValue:'T -> 'T)
-      =
-      fun (x1414 : ('tags, 'T) this) ->
-        fun
-          ~callbackfn:(x1407 :
-                        previousValue:'T ->
-                          currentValue:'T ->
-                            currentIndex:float -> array:'T list -> 'T)
-          ->
-          fun ~initialValue:(x1413 : 'T) ->
-            Obj.magic
-              (Ojs.call (this_to_js Obj.magic Obj.magic x1414) "reduce"
-                 [|(Ojs.fun_to_js 4
-                      (fun (x1408 : Ojs.t) ->
-                         fun (x1409 : Ojs.t) ->
-                           fun (x1410 : Ojs.t) ->
-                             fun (x1411 : Ojs.t) ->
-                               Obj.magic
-                                 (x1407 ~previousValue:(Obj.magic x1408)
-                                    ~currentValue:(Obj.magic x1409)
-                                    ~currentIndex:(Ojs.float_of_js x1410)
-                                    ~array:(Ojs.list_of_js Obj.magic x1411))));(
-                   Obj.magic x1413)|])
-    let (reduce'' :
-      ('tags, 'T) this ->
-        callbackfn:(previousValue:'U ->
-                      currentValue:'T ->
-                        currentIndex:float -> array:'T list -> 'U)
-          -> initialValue:'U -> 'U)
-      =
-      fun (x1424 : ('tags, 'T) this) ->
-        fun
-          ~callbackfn:(x1417 :
-                        previousValue:'U ->
-                          currentValue:'T ->
-                            currentIndex:float -> array:'T list -> 'U)
-          ->
-          fun ~initialValue:(x1423 : 'U) ->
-            Obj.magic
-              (Ojs.call (this_to_js Obj.magic Obj.magic x1424) "reduce"
-                 [|(Ojs.fun_to_js 4
-                      (fun (x1418 : Ojs.t) ->
-                         fun (x1419 : Ojs.t) ->
-                           fun (x1420 : Ojs.t) ->
-                             fun (x1421 : Ojs.t) ->
-                               Obj.magic
-                                 (x1417 ~previousValue:(Obj.magic x1418)
-                                    ~currentValue:(Obj.magic x1419)
-                                    ~currentIndex:(Ojs.float_of_js x1420)
-                                    ~array:(Ojs.list_of_js Obj.magic x1421))));(
-                   Obj.magic x1423)|])
-    let (reduceRight :
-      ('tags, 'T) this ->
-        callbackfn:(previousValue:'T ->
-                      currentValue:'T ->
-                        currentIndex:float -> array:'T list -> 'T)
-          -> 'T)
-      =
-      fun (x1433 : ('tags, 'T) this) ->
-        fun
-          ~callbackfn:(x1427 :
-                        previousValue:'T ->
-                          currentValue:'T ->
-                            currentIndex:float -> array:'T list -> 'T)
-          ->
-          Obj.magic
-            (Ojs.call (this_to_js Obj.magic Obj.magic x1433) "reduceRight"
-               [|(Ojs.fun_to_js 4
-                    (fun (x1428 : Ojs.t) ->
-                       fun (x1429 : Ojs.t) ->
-                         fun (x1430 : Ojs.t) ->
-                           fun (x1431 : Ojs.t) ->
-                             Obj.magic
-                               (x1427 ~previousValue:(Obj.magic x1428)
-                                  ~currentValue:(Obj.magic x1429)
-                                  ~currentIndex:(Ojs.float_of_js x1430)
-                                  ~array:(Ojs.list_of_js Obj.magic x1431))))|])
-    let (reduceRight' :
-      ('tags, 'T) this ->
-        callbackfn:(previousValue:'T ->
-                      currentValue:'T ->
-                        currentIndex:float -> array:'T list -> 'T)
-          -> initialValue:'T -> 'T)
-      =
-      fun (x1443 : ('tags, 'T) this) ->
-        fun
-          ~callbackfn:(x1436 :
-                        previousValue:'T ->
-                          currentValue:'T ->
-                            currentIndex:float -> array:'T list -> 'T)
-          ->
-          fun ~initialValue:(x1442 : 'T) ->
-            Obj.magic
-              (Ojs.call (this_to_js Obj.magic Obj.magic x1443) "reduceRight"
-                 [|(Ojs.fun_to_js 4
-                      (fun (x1437 : Ojs.t) ->
-                         fun (x1438 : Ojs.t) ->
-                           fun (x1439 : Ojs.t) ->
-                             fun (x1440 : Ojs.t) ->
-                               Obj.magic
-                                 (x1436 ~previousValue:(Obj.magic x1437)
-                                    ~currentValue:(Obj.magic x1438)
-                                    ~currentIndex:(Ojs.float_of_js x1439)
-                                    ~array:(Ojs.list_of_js Obj.magic x1440))));(
-                   Obj.magic x1442)|])
-    let (reduceRight'' :
-      ('tags, 'T) this ->
-        callbackfn:(previousValue:'U ->
-                      currentValue:'T ->
-                        currentIndex:float -> array:'T list -> 'U)
-          -> initialValue:'U -> 'U)
-      =
-      fun (x1453 : ('tags, 'T) this) ->
-        fun
-          ~callbackfn:(x1446 :
-                        previousValue:'U ->
-                          currentValue:'T ->
-                            currentIndex:float -> array:'T list -> 'U)
-          ->
-          fun ~initialValue:(x1452 : 'U) ->
-            Obj.magic
-              (Ojs.call (this_to_js Obj.magic Obj.magic x1453) "reduceRight"
-                 [|(Ojs.fun_to_js 4
-                      (fun (x1447 : Ojs.t) ->
-                         fun (x1448 : Ojs.t) ->
-                           fun (x1449 : Ojs.t) ->
-                             fun (x1450 : Ojs.t) ->
-                               Obj.magic
-                                 (x1446 ~previousValue:(Obj.magic x1447)
-                                    ~currentValue:(Obj.magic x1448)
-                                    ~currentIndex:(Ojs.float_of_js x1449)
-                                    ~array:(Ojs.list_of_js Obj.magic x1450))));(
-                   Obj.magic x1452)|])
-    let (get : ('tags, 'T) this -> float -> 'T) =
-      fun (x1456 : ('tags, 'T) this) ->
-        fun (x1459 : float) ->
-          Obj.magic
-            (Ojs.get_prop (this_to_js Obj.magic Obj.magic x1456)
-               (Ojs.float_to_js x1459))
-    let (set : ('tags, 'T) this -> float -> 'T -> unit) =
-      fun (x1460 : ('tags, 'T) this) ->
-        fun (x1463 : float) ->
-          fun (x1464 : 'T) ->
-            Ojs.set_prop (this_to_js Obj.magic Obj.magic x1460)
-              (Ojs.float_to_js x1463) (Obj.magic x1464)
-    let (from : ('T ArrayLike.t, 'T Iterable.t) union2 -> 'T list) =
-      fun (x1465 : ('T ArrayLike.t, 'T Iterable.t) union2) ->
+                             x1443))|])
+    let (entries : ('tags, 'T) this -> (float * 'T) IterableIterator.t) =
+      fun (x1452 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js
+          (fun (x1455 : Ojs.t) ->
+             let x1456 = x1455 in
+             ((Ojs.float_of_js (Ojs.array_get x1456 0)),
+               (Obj.magic (Ojs.array_get x1456 1))))
+          (Ojs.call (this_to_js Obj.magic Obj.magic x1452) "entries" [||])
+    let (keys : ('tags, 'T) this -> float IterableIterator.t) =
+      fun (x1457 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic Obj.magic x1457) "keys" [||])
+    let (values : ('tags, 'T) this -> 'T IterableIterator.t) =
+      fun (x1461 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic x1461) "values" [||])
+    let (from : 'T ArrayLike.t -> 'T list) =
+      fun (x1465 : 'T ArrayLike.t) ->
         Ojs.list_of_js Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Array") "from"
-             [|(union2_to_js
-                  (fun (x1466 : 'T ArrayLike.t) ->
-                     ArrayLike.t_to_js Obj.magic x1466)
-                  (fun (x1468 : 'T Iterable.t) ->
-                     Iterable.t_to_js Obj.magic x1468) x1465)|])
+             [|(ArrayLike.t_to_js Obj.magic x1465)|])
     let (from' :
-      iterable:('T ArrayLike.t, 'T Iterable.t) union2 ->
-        mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list)
-      =
-      fun ~iterable:(x1471 : ('T ArrayLike.t, 'T Iterable.t) union2) ->
-        fun ~mapfn:(x1472 : v:'T -> k:float -> 'U) ->
-          fun ?thisArg:(x1473 : any option) ->
-            fun () ->
-              Ojs.list_of_js Obj.magic
-                (let x1482 = Ojs.get_prop_ascii Ojs.global "Array" in
-                 Ojs.call (Ojs.get_prop_ascii x1482 "from") "apply"
-                   [|x1482;((let x1474 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x1474 "push"
-                                  [|(union2_to_js
-                                       (fun (x1478 : 'T ArrayLike.t) ->
-                                          ArrayLike.t_to_js Obj.magic x1478)
-                                       (fun (x1480 : 'T Iterable.t) ->
-                                          Iterable.t_to_js Obj.magic x1480)
-                                       x1471)|]);
-                             ignore
-                               (Ojs.call x1474 "push"
-                                  [|(Ojs.fun_to_js 2
-                                       (fun (x1476 : Ojs.t) ->
-                                          fun (x1477 : Ojs.t) ->
-                                            Obj.magic
-                                              (x1472 ~v:(Obj.magic x1476)
-                                                 ~k:(Ojs.float_of_js x1477))))|]);
-                             (match x1473 with
-                              | Some x1475 ->
-                                  ignore
-                                    (Ojs.call x1474 "push"
-                                       [|(any_to_js x1475)|])
-                              | None -> ());
-                             x1474))|])
-    let (from'' : 'T ArrayLike.t -> 'T list) =
-      fun (x1484 : 'T ArrayLike.t) ->
-        Ojs.list_of_js Obj.magic
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Array") "from"
-             [|(ArrayLike.t_to_js Obj.magic x1484)|])
-    let (from''' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list)
       =
-      fun ~arrayLike:(x1487 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x1488 : v:'T -> k:float -> 'U) ->
-          fun ?thisArg:(x1489 : any option) ->
+      fun ~arrayLike:(x1468 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x1469 : v:'T -> k:float -> 'U) ->
+          fun ?thisArg:(x1470 : any option) ->
             fun () ->
               Ojs.list_of_js Obj.magic
-                (let x1495 = Ojs.get_prop_ascii Ojs.global "Array" in
-                 Ojs.call (Ojs.get_prop_ascii x1495 "from") "apply"
-                   [|x1495;((let x1490 =
+                (let x1476 = Ojs.get_prop_ascii Ojs.global "Array" in
+                 Ojs.call (Ojs.get_prop_ascii x1476 "from") "apply"
+                   [|x1476;((let x1471 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x1490 "push"
-                                  [|(ArrayLike.t_to_js Obj.magic x1487)|]);
+                               (Ojs.call x1471 "push"
+                                  [|(ArrayLike.t_to_js Obj.magic x1468)|]);
                              ignore
-                               (Ojs.call x1490 "push"
+                               (Ojs.call x1471 "push"
                                   [|(Ojs.fun_to_js 2
-                                       (fun (x1492 : Ojs.t) ->
-                                          fun (x1493 : Ojs.t) ->
+                                       (fun (x1473 : Ojs.t) ->
+                                          fun (x1474 : Ojs.t) ->
                                             Obj.magic
-                                              (x1488 ~v:(Obj.magic x1492)
-                                                 ~k:(Ojs.float_of_js x1493))))|]);
-                             (match x1489 with
-                              | Some x1491 ->
+                                              (x1469 ~v:(Obj.magic x1473)
+                                                 ~k:(Ojs.float_of_js x1474))))|]);
+                             (match x1470 with
+                              | Some x1472 ->
                                   ignore
-                                    (Ojs.call x1490 "push"
-                                       [|(any_to_js x1491)|])
+                                    (Ojs.call x1471 "push"
+                                       [|(any_to_js x1472)|])
                               | None -> ());
-                             x1490))|])
+                             x1471))|])
     let (of_ : 'T list -> 'T list) =
-      fun (x1497 : 'T list) ->
+      fun (x1478 : 'T list) ->
         Ojs.list_of_js Obj.magic
-          (let x1500 = Ojs.get_prop_ascii Ojs.global "Array" in
-           Ojs.call (Ojs.get_prop_ascii x1500 "of") "apply"
-             [|x1500;((let x1498 =
+          (let x1481 = Ojs.get_prop_ascii Ojs.global "Array" in
+           Ojs.call (Ojs.get_prop_ascii x1481 "of") "apply"
+             [|x1481;((let x1479 =
                          Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                            [||] in
                        List.iter
-                         (fun (x1499 : 'T) ->
+                         (fun (x1480 : 'T) ->
                             ignore
-                              (Ojs.call x1498 "push" [|(Obj.magic x1499)|]))
-                         x1497;
-                       x1498))|])
+                              (Ojs.call x1479 "push" [|(Obj.magic x1480)|]))
+                         x1478;
+                       x1479))|])
     let (create : ?arrayLength:float -> unit -> any list) =
-      fun ?arrayLength:(x1502 : float option) ->
+      fun ?arrayLength:(x1483 : float option) ->
         fun () ->
           Ojs.list_of_js any_of_js
             (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Array")
-               (let x1503 =
+               (let x1484 =
                   Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array") [||] in
-                (match x1502 with
-                 | Some x1504 ->
+                (match x1483 with
+                 | Some x1485 ->
                      ignore
-                       (Ojs.call x1503 "push" [|(Ojs.float_to_js x1504)|])
+                       (Ojs.call x1484 "push" [|(Ojs.float_to_js x1485)|])
                  | None -> ());
-                x1503))
+                x1484))
     let (create' : float -> 'T list) =
-      fun (x1506 : float) ->
+      fun (x1487 : float) ->
         Ojs.list_of_js Obj.magic
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
-             [|(Ojs.float_to_js x1506)|])
+             [|(Ojs.float_to_js x1487)|])
     let (create'' : 'T list -> 'T list) =
-      fun (x1508 : 'T list) ->
+      fun (x1489 : 'T list) ->
         Ojs.list_of_js Obj.magic
           (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Array")
-             (let x1509 =
+             (let x1490 =
                 Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array") [||] in
               List.iter
-                (fun (x1510 : 'T) ->
-                   ignore (Ojs.call x1509 "push" [|(Obj.magic x1510)|]))
-                x1508;
-              x1509))
+                (fun (x1491 : 'T) ->
+                   ignore (Ojs.call x1490 "push" [|(Obj.magic x1491)|]))
+                x1489;
+              x1490))
     let (invoke : ?arrayLength:float -> unit -> any list) =
-      fun ?arrayLength:(x1512 : float option) ->
+      fun ?arrayLength:(x1493 : float option) ->
         fun () ->
           Ojs.list_of_js any_of_js
             (Ojs.call (Ojs.get_prop_ascii Ojs.global "Array") "apply"
-               [|Ojs.null;((let x1513 =
+               [|Ojs.null;((let x1494 =
                               Ojs.new_obj
                                 (Ojs.get_prop_ascii Ojs.global "Array") 
                                 [||] in
-                            (match x1512 with
-                             | Some x1514 ->
+                            (match x1493 with
+                             | Some x1495 ->
                                  ignore
-                                   (Ojs.call x1513 "push"
-                                      [|(Ojs.float_to_js x1514)|])
+                                   (Ojs.call x1494 "push"
+                                      [|(Ojs.float_to_js x1495)|])
                              | None -> ());
-                            x1513))|])
+                            x1494))|])
     let (invoke' : float -> 'T list) =
-      fun (x1516 : float) ->
+      fun (x1497 : float) ->
         Ojs.list_of_js Obj.magic
           (Ojs.apply (Ojs.get_prop_ascii Ojs.global "Array")
-             [|(Ojs.float_to_js x1516)|])
+             [|(Ojs.float_to_js x1497)|])
     let (invoke'' : 'T list -> 'T list) =
-      fun (x1518 : 'T list) ->
+      fun (x1499 : 'T list) ->
         Ojs.list_of_js Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Array") "apply"
-             [|Ojs.null;((let x1519 =
+             [|Ojs.null;((let x1500 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
                           List.iter
-                            (fun (x1520 : 'T) ->
+                            (fun (x1501 : 'T) ->
                                ignore
-                                 (Ojs.call x1519 "push" [|(Obj.magic x1520)|]))
-                            x1518;
-                          x1519))|])
+                                 (Ojs.call x1500 "push" [|(Obj.magic x1501)|]))
+                            x1499;
+                          x1500))|])
     let (isArray : any -> bool) =
-      fun (x1522 : any) ->
+      fun (x1503 : any) ->
         Ojs.bool_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Array") "isArray"
-             [|(any_to_js x1522)|])
+             [|(any_to_js x1503)|])
     let (prototype : unit -> any list) =
       fun () ->
         Ojs.list_of_js any_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Array")
              "prototype")
+    let (from'' : ('T ArrayLike.t, 'T Iterable.t) union2 -> 'T list) =
+      fun (x1505 : ('T ArrayLike.t, 'T Iterable.t) union2) ->
+        Ojs.list_of_js Obj.magic
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Array") "from"
+             [|(union2_to_js
+                  (fun (x1506 : 'T ArrayLike.t) ->
+                     ArrayLike.t_to_js Obj.magic x1506)
+                  (fun (x1508 : 'T Iterable.t) ->
+                     Iterable.t_to_js Obj.magic x1508) x1505)|])
+    let (from''' :
+      iterable:('T ArrayLike.t, 'T Iterable.t) union2 ->
+        mapfn:(v:'T -> k:float -> 'U) -> ?thisArg:any -> unit -> 'U list)
+      =
+      fun ~iterable:(x1511 : ('T ArrayLike.t, 'T Iterable.t) union2) ->
+        fun ~mapfn:(x1512 : v:'T -> k:float -> 'U) ->
+          fun ?thisArg:(x1513 : any option) ->
+            fun () ->
+              Ojs.list_of_js Obj.magic
+                (let x1522 = Ojs.get_prop_ascii Ojs.global "Array" in
+                 Ojs.call (Ojs.get_prop_ascii x1522 "from") "apply"
+                   [|x1522;((let x1514 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x1514 "push"
+                                  [|(union2_to_js
+                                       (fun (x1518 : 'T ArrayLike.t) ->
+                                          ArrayLike.t_to_js Obj.magic x1518)
+                                       (fun (x1520 : 'T Iterable.t) ->
+                                          Iterable.t_to_js Obj.magic x1520)
+                                       x1511)|]);
+                             ignore
+                               (Ojs.call x1514 "push"
+                                  [|(Ojs.fun_to_js 2
+                                       (fun (x1516 : Ojs.t) ->
+                                          fun (x1517 : Ojs.t) ->
+                                            Obj.magic
+                                              (x1512 ~v:(Obj.magic x1516)
+                                                 ~k:(Ojs.float_of_js x1517))))|]);
+                             (match x1513 with
+                              | Some x1515 ->
+                                  ignore
+                                    (Ojs.call x1514 "push"
+                                       [|(any_to_js x1515)|])
+                              | None -> ());
+                             x1514))|])
     let cast_from = Obj.magic
     let (to_ml : 'T t -> 'T list) =
       fun (x1524 : 'T t) ->
@@ -4602,22 +4602,22 @@ module RegExp =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x1581 : __tags intf) -> intf_to_js __tags_to_js x1581
-    let (get_dotAll : 'tags this -> bool) =
-      fun (x1585 : 'tags this) ->
-        Ojs.bool_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x1585) "dotAll")
     let (get_flags : 'tags this -> string) =
-      fun (x1587 : 'tags this) ->
+      fun (x1585 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x1587) "flags")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x1585) "flags")
     let (get_sticky : 'tags this -> bool) =
+      fun (x1587 : 'tags this) ->
+        Ojs.bool_of_js
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x1587) "sticky")
+    let (get_unicode : 'tags this -> bool) =
       fun (x1589 : 'tags this) ->
         Ojs.bool_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x1589) "sticky")
-    let (get_unicode : 'tags this -> bool) =
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x1589) "unicode")
+    let (get_dotAll : 'tags this -> bool) =
       fun (x1591 : 'tags this) ->
         Ojs.bool_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x1591) "unicode")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x1591) "dotAll")
     let (exec : 'tags this -> string:string -> RegExpExecArray.t or_null) =
       fun (x1594 : 'tags this) ->
         fun ~string:(x1593 : string) ->
@@ -7193,16 +7193,16 @@ module rec
                                     val t_of_js : Ojs.t -> t
                                     val t_0_to_js : t_0 -> Ojs.t
                                     val t_0_of_js : Ojs.t -> t_0
-                                    val formatToParts :
-                                      'tags this ->
-                                        ?number:bigint or_number ->
-                                          unit -> NumberFormatPart.t list
                                     val format :
                                       'tags this ->
                                         value:bigint or_number -> string
                                     val resolvedOptions :
                                       'tags this ->
                                         ResolvedNumberFormatOptions.t
+                                    val formatToParts :
+                                      'tags this ->
+                                        ?number:bigint or_number ->
+                                          unit -> NumberFormatPart.t list
                                     val format' :
                                       'tags this -> value:float -> string
                                     val resolvedOptions' :
@@ -7671,14 +7671,14 @@ module rec
                                         ?options:CollatorOptions.t ->
                                           unit -> string list
                                   end
+                                  val pluralRules :
+                                    unit -> AnonymousInterface8.t
                                   val collator :
                                     unit -> AnonymousInterface5.t
                                   val numberFormat :
                                     unit -> AnonymousInterface7.t
                                   val dateTimeFormat :
                                     unit -> AnonymousInterface6.t
-                                  val pluralRules :
-                                    unit -> AnonymousInterface8.t
                                   val relativeTimeFormat :
                                     unit -> AnonymousInterface16.t
                                 end =
@@ -9606,62 +9606,62 @@ module rec
                                    fun (__tags_to_js : __tags -> Ojs.t) ->
                                      fun (x2464 : __tags intf) ->
                                        intf_to_js __tags_to_js x2464
+                                 let (format :
+                                   'tags this ->
+                                     value:bigint or_number -> string)
+                                   =
+                                   fun (x2470 : 'tags this) ->
+                                     fun ~value:(x2468 : bigint or_number) ->
+                                       Ojs.string_of_js
+                                         (Ojs.call
+                                            (this_to_js Obj.magic x2470)
+                                            "format"
+                                            [|(or_number_to_js bigint_to_js
+                                                 x2468)|])
+                                 let (resolvedOptions :
+                                   'tags this ->
+                                     ResolvedNumberFormatOptions.t)
+                                   =
+                                   fun (x2472 : 'tags this) ->
+                                     ResolvedNumberFormatOptions.t_of_js
+                                       (Ojs.call (this_to_js Obj.magic x2472)
+                                          "resolvedOptions" [||])
                                  let (formatToParts :
                                    'tags this ->
                                      ?number:bigint or_number ->
                                        unit -> NumberFormatPart.t list)
                                    =
-                                   fun (x2472 : 'tags this) ->
+                                   fun (x2478 : 'tags this) ->
                                      fun
-                                       ?number:(x2468 :
+                                       ?number:(x2474 :
                                                  bigint or_number option)
                                        ->
                                        fun () ->
                                          Ojs.list_of_js
                                            NumberFormatPart.t_of_js
-                                           (let x2474 =
-                                              this_to_js Obj.magic x2472 in
+                                           (let x2480 =
+                                              this_to_js Obj.magic x2478 in
                                             Ojs.call
-                                              (Ojs.get_prop_ascii x2474
+                                              (Ojs.get_prop_ascii x2480
                                                  "formatToParts") "apply"
-                                              [|x2474;((let x2469 =
+                                              [|x2480;((let x2475 =
                                                           Ojs.new_obj
                                                             (Ojs.get_prop_ascii
                                                                Ojs.global
                                                                "Array") 
                                                             [||] in
-                                                        (match x2468 with
-                                                         | Some x2470 ->
+                                                        (match x2474 with
+                                                         | Some x2476 ->
                                                              ignore
                                                                (Ojs.call
-                                                                  x2469
+                                                                  x2475
                                                                   "push"
                                                                   [|(
                                                                     or_number_to_js
                                                                     bigint_to_js
-                                                                    x2470)|])
+                                                                    x2476)|])
                                                          | None -> ());
-                                                        x2469))|])
-                                 let (format :
-                                   'tags this ->
-                                     value:bigint or_number -> string)
-                                   =
-                                   fun (x2478 : 'tags this) ->
-                                     fun ~value:(x2476 : bigint or_number) ->
-                                       Ojs.string_of_js
-                                         (Ojs.call
-                                            (this_to_js Obj.magic x2478)
-                                            "format"
-                                            [|(or_number_to_js bigint_to_js
-                                                 x2476)|])
-                                 let (resolvedOptions :
-                                   'tags this ->
-                                     ResolvedNumberFormatOptions.t)
-                                   =
-                                   fun (x2480 : 'tags this) ->
-                                     ResolvedNumberFormatOptions.t_of_js
-                                       (Ojs.call (this_to_js Obj.magic x2480)
-                                          "resolvedOptions" [||])
+                                                        x2475))|])
                                  let (format' :
                                    'tags this -> value:float -> string) =
                                    fun (x2483 : 'tags this) ->
@@ -11521,6 +11521,13 @@ module rec
                                                          | None -> ());
                                                         x2878))|])
                                end
+                             let (pluralRules :
+                               unit -> AnonymousInterface8.t) =
+                               fun () ->
+                                 AnonymousInterface8.t_of_js
+                                   (Ojs.get_prop_ascii
+                                      (Ojs.get_prop_ascii Ojs.global "Intl")
+                                      "PluralRules")
                              let (collator : unit -> AnonymousInterface5.t) =
                                fun () ->
                                  AnonymousInterface5.t_of_js
@@ -11541,13 +11548,6 @@ module rec
                                    (Ojs.get_prop_ascii
                                       (Ojs.get_prop_ascii Ojs.global "Intl")
                                       "DateTimeFormat")
-                             let (pluralRules :
-                               unit -> AnonymousInterface8.t) =
-                               fun () ->
-                                 AnonymousInterface8.t_of_js
-                                   (Ojs.get_prop_ascii
-                                      (Ojs.get_prop_ascii Ojs.global "Intl")
-                                      "PluralRules")
                              let (relativeTimeFormat :
                                unit -> AnonymousInterface16.t) =
                                fun () ->
@@ -11619,619 +11619,605 @@ module String =
       fun (x2904 : 'tags this) ->
         Ojs.string_of_js
           (Ojs.call (this_to_js Obj.magic x2904) "trimRight" [||])
-    let (match_ :
-      'tags this ->
-        matcher:AnonymousInterface9.t -> RegExpMatchArray.t or_null)
-      =
-      fun (x2907 : 'tags this) ->
-        fun ~matcher:(x2906 : AnonymousInterface9.t) ->
-          or_null_of_js RegExpMatchArray.t_of_js
-            (Ojs.call (this_to_js Obj.magic x2907) "match"
-               [|(AnonymousInterface9.t_to_js x2906)|])
-    let (replace :
-      'tags this ->
-        searchValue:AnonymousInterface10.t -> replaceValue:string -> string)
-      =
-      fun (x2912 : 'tags this) ->
-        fun ~searchValue:(x2910 : AnonymousInterface10.t) ->
-          fun ~replaceValue:(x2911 : string) ->
-            Ojs.string_of_js
-              (Ojs.call (this_to_js Obj.magic x2912) "replace"
-                 [|(AnonymousInterface10.t_to_js x2910);(Ojs.string_to_js
-                                                           x2911)|])
-    let (replace' :
-      'tags this ->
-        searchValue:AnonymousInterface11.t ->
-          replacer:(substring:string -> args:any list -> string) -> string)
-      =
-      fun (x2918 : 'tags this) ->
-        fun ~searchValue:(x2914 : AnonymousInterface11.t) ->
-          fun ~replacer:(x2915 : substring:string -> args:any list -> string)
-            ->
-            Ojs.string_of_js
-              (Ojs.call (this_to_js Obj.magic x2918) "replace"
-                 [|(AnonymousInterface11.t_to_js x2914);(Ojs.fun_to_js_args
-                                                           (fun (x2916 : _)
-                                                              ->
-                                                              Ojs.string_to_js
-                                                                (x2915
-                                                                   ~substring:(
-                                                                   Ojs.string_of_js
-                                                                    (Ojs.array_get
-                                                                    x2916 0))
-                                                                   ~args:(
-                                                                   Ojs.list_of_js_from
-                                                                    any_of_js
-                                                                    x2916 1))))|])
-    let (search : 'tags this -> searcher:AnonymousInterface12.t -> float) =
-      fun (x2921 : 'tags this) ->
-        fun ~searcher:(x2920 : AnonymousInterface12.t) ->
-          Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x2921) "search"
-               [|(AnonymousInterface12.t_to_js x2920)|])
-    let (split :
-      'tags this ->
-        splitter:AnonymousInterface13.t ->
-          ?limit:float -> unit -> string list)
-      =
-      fun (x2927 : 'tags this) ->
-        fun ~splitter:(x2923 : AnonymousInterface13.t) ->
-          fun ?limit:(x2924 : float option) ->
-            fun () ->
-              Ojs.list_of_js Ojs.string_of_js
-                (let x2929 = this_to_js Obj.magic x2927 in
-                 Ojs.call (Ojs.get_prop_ascii x2929 "split") "apply"
-                   [|x2929;((let x2925 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x2925 "push"
-                                  [|(AnonymousInterface13.t_to_js x2923)|]);
-                             (match x2924 with
-                              | Some x2926 ->
-                                  ignore
-                                    (Ojs.call x2925 "push"
-                                       [|(Ojs.float_to_js x2926)|])
-                              | None -> ());
-                             x2925))|])
-    let (padStart :
-      'tags this -> maxLength:float -> ?fillString:string -> unit -> string)
-      =
-      fun (x2935 : 'tags this) ->
-        fun ~maxLength:(x2931 : float) ->
-          fun ?fillString:(x2932 : string option) ->
-            fun () ->
-              Ojs.string_of_js
-                (let x2937 = this_to_js Obj.magic x2935 in
-                 Ojs.call (Ojs.get_prop_ascii x2937 "padStart") "apply"
-                   [|x2937;((let x2933 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x2933 "push"
-                                  [|(Ojs.float_to_js x2931)|]);
-                             (match x2932 with
-                              | Some x2934 ->
-                                  ignore
-                                    (Ojs.call x2933 "push"
-                                       [|(Ojs.string_to_js x2934)|])
-                              | None -> ());
-                             x2933))|])
-    let (padEnd :
-      'tags this -> maxLength:float -> ?fillString:string -> unit -> string)
-      =
-      fun (x2942 : 'tags this) ->
-        fun ~maxLength:(x2938 : float) ->
-          fun ?fillString:(x2939 : string option) ->
-            fun () ->
-              Ojs.string_of_js
-                (let x2944 = this_to_js Obj.magic x2942 in
-                 Ojs.call (Ojs.get_prop_ascii x2944 "padEnd") "apply"
-                   [|x2944;((let x2940 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x2940 "push"
-                                  [|(Ojs.float_to_js x2938)|]);
-                             (match x2939 with
-                              | Some x2941 ->
-                                  ignore
-                                    (Ojs.call x2940 "push"
-                                       [|(Ojs.string_to_js x2941)|])
-                              | None -> ());
-                             x2940))|])
-    let (matchAll :
-      'tags this -> regexp:RegExp.t -> RegExpMatchArray.t IterableIterator.t)
-      =
-      fun (x2946 : 'tags this) ->
-        fun ~regexp:(x2945 : RegExp.t) ->
-          IterableIterator.t_of_js RegExpMatchArray.t_of_js
-            (Ojs.call (this_to_js Obj.magic x2946) "matchAll"
-               [|(RegExp.t_to_js x2945)|])
     let (codePointAt : 'tags this -> pos:float -> float or_undefined) =
-      fun (x2950 : 'tags this) ->
-        fun ~pos:(x2949 : float) ->
+      fun (x2907 : 'tags this) ->
+        fun ~pos:(x2906 : float) ->
           or_undefined_of_js Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x2950) "codePointAt"
-               [|(Ojs.float_to_js x2949)|])
+            (Ojs.call (this_to_js Obj.magic x2907) "codePointAt"
+               [|(Ojs.float_to_js x2906)|])
     let (includes :
       'tags this -> searchString:string -> ?position:float -> unit -> bool) =
-      fun (x2957 : 'tags this) ->
-        fun ~searchString:(x2953 : string) ->
-          fun ?position:(x2954 : float option) ->
+      fun (x2914 : 'tags this) ->
+        fun ~searchString:(x2910 : string) ->
+          fun ?position:(x2911 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x2959 = this_to_js Obj.magic x2957 in
-                 Ojs.call (Ojs.get_prop_ascii x2959 "includes") "apply"
-                   [|x2959;((let x2955 =
+                (let x2916 = this_to_js Obj.magic x2914 in
+                 Ojs.call (Ojs.get_prop_ascii x2916 "includes") "apply"
+                   [|x2916;((let x2912 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x2955 "push"
-                                  [|(Ojs.string_to_js x2953)|]);
-                             (match x2954 with
-                              | Some x2956 ->
+                               (Ojs.call x2912 "push"
+                                  [|(Ojs.string_to_js x2910)|]);
+                             (match x2911 with
+                              | Some x2913 ->
                                   ignore
-                                    (Ojs.call x2955 "push"
-                                       [|(Ojs.float_to_js x2956)|])
+                                    (Ojs.call x2912 "push"
+                                       [|(Ojs.float_to_js x2913)|])
                               | None -> ());
-                             x2955))|])
+                             x2912))|])
     let (endsWith :
       'tags this -> searchString:string -> ?endPosition:float -> unit -> bool)
       =
-      fun (x2964 : 'tags this) ->
-        fun ~searchString:(x2960 : string) ->
-          fun ?endPosition:(x2961 : float option) ->
+      fun (x2921 : 'tags this) ->
+        fun ~searchString:(x2917 : string) ->
+          fun ?endPosition:(x2918 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x2966 = this_to_js Obj.magic x2964 in
-                 Ojs.call (Ojs.get_prop_ascii x2966 "endsWith") "apply"
-                   [|x2966;((let x2962 =
+                (let x2923 = this_to_js Obj.magic x2921 in
+                 Ojs.call (Ojs.get_prop_ascii x2923 "endsWith") "apply"
+                   [|x2923;((let x2919 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x2962 "push"
-                                  [|(Ojs.string_to_js x2960)|]);
-                             (match x2961 with
-                              | Some x2963 ->
+                               (Ojs.call x2919 "push"
+                                  [|(Ojs.string_to_js x2917)|]);
+                             (match x2918 with
+                              | Some x2920 ->
                                   ignore
-                                    (Ojs.call x2962 "push"
-                                       [|(Ojs.float_to_js x2963)|])
+                                    (Ojs.call x2919 "push"
+                                       [|(Ojs.float_to_js x2920)|])
                               | None -> ());
-                             x2962))|])
+                             x2919))|])
     let (normalize :
       'tags this ->
         form:[ `L_s11_NFC  | `L_s12_NFD  | `L_s13_NFKC  | `L_s14_NFKD ] ->
           string)
       =
-      fun (x2968 : 'tags this) ->
+      fun (x2925 : 'tags this) ->
         fun
-          ~form:(x2967 :
+          ~form:(x2924 :
                   [ `L_s11_NFC  | `L_s12_NFD  | `L_s13_NFKC  | `L_s14_NFKD ])
           ->
           Ojs.string_of_js
-            (Ojs.call (this_to_js Obj.magic x2968) "normalize"
-               [|((match x2967 with
+            (Ojs.call (this_to_js Obj.magic x2925) "normalize"
+               [|((match x2924 with
                    | `L_s11_NFC -> Ojs.string_to_js "NFC"
                    | `L_s12_NFD -> Ojs.string_to_js "NFD"
                    | `L_s13_NFKC -> Ojs.string_to_js "NFKC"
                    | `L_s14_NFKD -> Ojs.string_to_js "NFKD"))|])
     let (normalize' : 'tags this -> ?form:string -> unit -> string) =
-      fun (x2973 : 'tags this) ->
-        fun ?form:(x2970 : string option) ->
+      fun (x2930 : 'tags this) ->
+        fun ?form:(x2927 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x2975 = this_to_js Obj.magic x2973 in
-               Ojs.call (Ojs.get_prop_ascii x2975 "normalize") "apply"
-                 [|x2975;((let x2971 =
+              (let x2932 = this_to_js Obj.magic x2930 in
+               Ojs.call (Ojs.get_prop_ascii x2932 "normalize") "apply"
+                 [|x2932;((let x2928 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x2970 with
-                            | Some x2972 ->
+                           (match x2927 with
+                            | Some x2929 ->
                                 ignore
-                                  (Ojs.call x2971 "push"
-                                     [|(Ojs.string_to_js x2972)|])
+                                  (Ojs.call x2928 "push"
+                                     [|(Ojs.string_to_js x2929)|])
                             | None -> ());
-                           x2971))|])
+                           x2928))|])
     let (repeat : 'tags this -> count:float -> string) =
-      fun (x2977 : 'tags this) ->
-        fun ~count:(x2976 : float) ->
+      fun (x2934 : 'tags this) ->
+        fun ~count:(x2933 : float) ->
           Ojs.string_of_js
-            (Ojs.call (this_to_js Obj.magic x2977) "repeat"
-               [|(Ojs.float_to_js x2976)|])
+            (Ojs.call (this_to_js Obj.magic x2934) "repeat"
+               [|(Ojs.float_to_js x2933)|])
     let (startsWith :
       'tags this -> searchString:string -> ?position:float -> unit -> bool) =
-      fun (x2983 : 'tags this) ->
-        fun ~searchString:(x2979 : string) ->
-          fun ?position:(x2980 : float option) ->
+      fun (x2940 : 'tags this) ->
+        fun ~searchString:(x2936 : string) ->
+          fun ?position:(x2937 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x2985 = this_to_js Obj.magic x2983 in
-                 Ojs.call (Ojs.get_prop_ascii x2985 "startsWith") "apply"
-                   [|x2985;((let x2981 =
+                (let x2942 = this_to_js Obj.magic x2940 in
+                 Ojs.call (Ojs.get_prop_ascii x2942 "startsWith") "apply"
+                   [|x2942;((let x2938 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x2981 "push"
-                                  [|(Ojs.string_to_js x2979)|]);
-                             (match x2980 with
-                              | Some x2982 ->
+                               (Ojs.call x2938 "push"
+                                  [|(Ojs.string_to_js x2936)|]);
+                             (match x2937 with
+                              | Some x2939 ->
                                   ignore
-                                    (Ojs.call x2981 "push"
-                                       [|(Ojs.float_to_js x2982)|])
+                                    (Ojs.call x2938 "push"
+                                       [|(Ojs.float_to_js x2939)|])
                               | None -> ());
-                             x2981))|])
+                             x2938))|])
     let (anchor : 'tags this -> name:string -> string) =
-      fun (x2987 : 'tags this) ->
-        fun ~name:(x2986 : string) ->
+      fun (x2944 : 'tags this) ->
+        fun ~name:(x2943 : string) ->
           Ojs.string_of_js
-            (Ojs.call (this_to_js Obj.magic x2987) "anchor"
-               [|(Ojs.string_to_js x2986)|])
+            (Ojs.call (this_to_js Obj.magic x2944) "anchor"
+               [|(Ojs.string_to_js x2943)|])
     let (big : 'tags this -> string) =
-      fun (x2989 : 'tags this) ->
-        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2989) "big" [||])
+      fun (x2946 : 'tags this) ->
+        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2946) "big" [||])
     let (blink : 'tags this -> string) =
-      fun (x2991 : 'tags this) ->
-        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2991) "blink" [||])
+      fun (x2948 : 'tags this) ->
+        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2948) "blink" [||])
     let (bold : 'tags this -> string) =
-      fun (x2993 : 'tags this) ->
-        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2993) "bold" [||])
+      fun (x2950 : 'tags this) ->
+        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2950) "bold" [||])
     let (fixed : 'tags this -> string) =
-      fun (x2995 : 'tags this) ->
-        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2995) "fixed" [||])
+      fun (x2952 : 'tags this) ->
+        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2952) "fixed" [||])
     let (fontcolor : 'tags this -> color:string -> string) =
-      fun (x2998 : 'tags this) ->
-        fun ~color:(x2997 : string) ->
+      fun (x2955 : 'tags this) ->
+        fun ~color:(x2954 : string) ->
           Ojs.string_of_js
-            (Ojs.call (this_to_js Obj.magic x2998) "fontcolor"
-               [|(Ojs.string_to_js x2997)|])
+            (Ojs.call (this_to_js Obj.magic x2955) "fontcolor"
+               [|(Ojs.string_to_js x2954)|])
     let (fontsize : 'tags this -> size:float -> string) =
-      fun (x3001 : 'tags this) ->
-        fun ~size:(x3000 : float) ->
+      fun (x2958 : 'tags this) ->
+        fun ~size:(x2957 : float) ->
           Ojs.string_of_js
-            (Ojs.call (this_to_js Obj.magic x3001) "fontsize"
-               [|(Ojs.float_to_js x3000)|])
+            (Ojs.call (this_to_js Obj.magic x2958) "fontsize"
+               [|(Ojs.float_to_js x2957)|])
     let (fontsize' : 'tags this -> size:string -> string) =
-      fun (x3004 : 'tags this) ->
-        fun ~size:(x3003 : string) ->
+      fun (x2961 : 'tags this) ->
+        fun ~size:(x2960 : string) ->
           Ojs.string_of_js
-            (Ojs.call (this_to_js Obj.magic x3004) "fontsize"
-               [|(Ojs.string_to_js x3003)|])
+            (Ojs.call (this_to_js Obj.magic x2961) "fontsize"
+               [|(Ojs.string_to_js x2960)|])
     let (italics : 'tags this -> string) =
-      fun (x3006 : 'tags this) ->
+      fun (x2963 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x3006) "italics" [||])
+          (Ojs.call (this_to_js Obj.magic x2963) "italics" [||])
     let (link : 'tags this -> url:string -> string) =
-      fun (x3009 : 'tags this) ->
-        fun ~url:(x3008 : string) ->
+      fun (x2966 : 'tags this) ->
+        fun ~url:(x2965 : string) ->
           Ojs.string_of_js
-            (Ojs.call (this_to_js Obj.magic x3009) "link"
-               [|(Ojs.string_to_js x3008)|])
+            (Ojs.call (this_to_js Obj.magic x2966) "link"
+               [|(Ojs.string_to_js x2965)|])
     let (small : 'tags this -> string) =
-      fun (x3011 : 'tags this) ->
-        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x3011) "small" [||])
+      fun (x2968 : 'tags this) ->
+        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2968) "small" [||])
     let (strike : 'tags this -> string) =
-      fun (x3013 : 'tags this) ->
+      fun (x2970 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x3013) "strike" [||])
+          (Ojs.call (this_to_js Obj.magic x2970) "strike" [||])
     let (sub : 'tags this -> string) =
-      fun (x3015 : 'tags this) ->
-        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x3015) "sub" [||])
+      fun (x2972 : 'tags this) ->
+        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2972) "sub" [||])
     let (sup : 'tags this -> string) =
-      fun (x3017 : 'tags this) ->
-        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x3017) "sup" [||])
-    let (replaceAll :
-      'tags this ->
-        searchValue:RegExp.t or_string -> replaceValue:string -> string)
-      =
-      fun (x3022 : 'tags this) ->
-        fun ~searchValue:(x3019 : RegExp.t or_string) ->
-          fun ~replaceValue:(x3021 : string) ->
-            Ojs.string_of_js
-              (Ojs.call (this_to_js Obj.magic x3022) "replaceAll"
-                 [|(or_string_to_js RegExp.t_to_js x3019);(Ojs.string_to_js
-                                                             x3021)|])
-    let (replaceAll' :
-      'tags this ->
-        searchValue:RegExp.t or_string ->
-          replacer:(substring:string -> args:any list -> string) -> string)
-      =
-      fun (x3029 : 'tags this) ->
-        fun ~searchValue:(x3024 : RegExp.t or_string) ->
-          fun ~replacer:(x3026 : substring:string -> args:any list -> string)
-            ->
-            Ojs.string_of_js
-              (Ojs.call (this_to_js Obj.magic x3029) "replaceAll"
-                 [|(or_string_to_js RegExp.t_to_js x3024);(Ojs.fun_to_js_args
-                                                             (fun (x3027 : _)
-                                                                ->
-                                                                Ojs.string_to_js
-                                                                  (x3026
-                                                                    ~substring:(
-                                                                    Ojs.string_of_js
-                                                                    (Ojs.array_get
-                                                                    x3027 0))
-                                                                    ~args:(
-                                                                    Ojs.list_of_js_from
-                                                                    any_of_js
-                                                                    x3027 1))))|])
-    let (replaceAll'' :
-      'tags this ->
-        searchValue:RegExp.t or_string -> replaceValue:string -> string)
-      =
-      fun (x3034 : 'tags this) ->
-        fun ~searchValue:(x3031 : RegExp.t or_string) ->
-          fun ~replaceValue:(x3033 : string) ->
-            Ojs.string_of_js
-              (Ojs.call (this_to_js Obj.magic x3034) "replaceAll"
-                 [|(or_string_to_js RegExp.t_to_js x3031);(Ojs.string_to_js
-                                                             x3033)|])
-    let (replaceAll''' :
-      'tags this ->
-        searchValue:RegExp.t or_string ->
-          replacer:(substring:string -> args:any list -> string) -> string)
-      =
-      fun (x3041 : 'tags this) ->
-        fun ~searchValue:(x3036 : RegExp.t or_string) ->
-          fun ~replacer:(x3038 : substring:string -> args:any list -> string)
-            ->
-            Ojs.string_of_js
-              (Ojs.call (this_to_js Obj.magic x3041) "replaceAll"
-                 [|(or_string_to_js RegExp.t_to_js x3036);(Ojs.fun_to_js_args
-                                                             (fun (x3039 : _)
-                                                                ->
-                                                                Ojs.string_to_js
-                                                                  (x3038
-                                                                    ~substring:(
-                                                                    Ojs.string_of_js
-                                                                    (Ojs.array_get
-                                                                    x3039 0))
-                                                                    ~args:(
-                                                                    Ojs.list_of_js_from
-                                                                    any_of_js
-                                                                    x3039 1))))|])
+      fun (x2974 : 'tags this) ->
+        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x2974) "sup" [||])
     let (localeCompare :
       'tags this ->
         that:string ->
           ?locales:string list or_string ->
             ?options:Intl.CollatorOptions.t -> unit -> float)
       =
-      fun (x3051 : 'tags this) ->
-        fun ~that:(x3043 : string) ->
-          fun ?locales:(x3044 : string list or_string option) ->
-            fun ?options:(x3045 : Intl.CollatorOptions.t option) ->
+      fun (x2984 : 'tags this) ->
+        fun ~that:(x2976 : string) ->
+          fun ?locales:(x2977 : string list or_string option) ->
+            fun ?options:(x2978 : Intl.CollatorOptions.t option) ->
               fun () ->
                 Ojs.float_of_js
-                  (let x3053 = this_to_js Obj.magic x3051 in
-                   Ojs.call (Ojs.get_prop_ascii x3053 "localeCompare")
+                  (let x2986 = this_to_js Obj.magic x2984 in
+                   Ojs.call (Ojs.get_prop_ascii x2986 "localeCompare")
                      "apply"
-                     [|x3053;((let x3046 =
+                     [|x2986;((let x2979 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x3046 "push"
-                                    [|(Ojs.string_to_js x3043)|]);
-                               (match x3044 with
-                                | Some x3048 ->
+                                 (Ojs.call x2979 "push"
+                                    [|(Ojs.string_to_js x2976)|]);
+                               (match x2977 with
+                                | Some x2981 ->
                                     ignore
-                                      (Ojs.call x3046 "push"
+                                      (Ojs.call x2979 "push"
                                          [|(or_string_to_js
-                                              (fun (x3049 : string list) ->
+                                              (fun (x2982 : string list) ->
                                                  Ojs.list_to_js
-                                                   Ojs.string_to_js x3049)
-                                              x3048)|])
+                                                   Ojs.string_to_js x2982)
+                                              x2981)|])
                                 | None -> ());
-                               (match x3045 with
-                                | Some x3047 ->
+                               (match x2978 with
+                                | Some x2980 ->
                                     ignore
-                                      (Ojs.call x3046 "push"
+                                      (Ojs.call x2979 "push"
                                          [|(Intl.CollatorOptions.t_to_js
-                                              x3047)|])
+                                              x2980)|])
                                 | None -> ());
-                               x3046))|])
+                               x2979))|])
     let (toString : 'tags this -> string) =
-      fun (x3054 : 'tags this) ->
+      fun (x2987 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x3054) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x2987) "toString" [||])
     let (charAt : 'tags this -> pos:float -> string) =
-      fun (x3057 : 'tags this) ->
-        fun ~pos:(x3056 : float) ->
+      fun (x2990 : 'tags this) ->
+        fun ~pos:(x2989 : float) ->
           Ojs.string_of_js
-            (Ojs.call (this_to_js Obj.magic x3057) "charAt"
-               [|(Ojs.float_to_js x3056)|])
+            (Ojs.call (this_to_js Obj.magic x2990) "charAt"
+               [|(Ojs.float_to_js x2989)|])
     let (charCodeAt : 'tags this -> index:float -> float) =
-      fun (x3060 : 'tags this) ->
-        fun ~index:(x3059 : float) ->
+      fun (x2993 : 'tags this) ->
+        fun ~index:(x2992 : float) ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x3060) "charCodeAt"
-               [|(Ojs.float_to_js x3059)|])
+            (Ojs.call (this_to_js Obj.magic x2993) "charCodeAt"
+               [|(Ojs.float_to_js x2992)|])
     let (concat : 'tags this -> strings:string list -> string) =
-      fun (x3065 : 'tags this) ->
-        fun ~strings:(x3062 : string list) ->
+      fun (x2998 : 'tags this) ->
+        fun ~strings:(x2995 : string list) ->
           Ojs.string_of_js
-            (let x3067 = this_to_js Obj.magic x3065 in
-             Ojs.call (Ojs.get_prop_ascii x3067 "concat") "apply"
-               [|x3067;((let x3063 =
+            (let x3000 = this_to_js Obj.magic x2998 in
+             Ojs.call (Ojs.get_prop_ascii x3000 "concat") "apply"
+               [|x3000;((let x2996 =
                            Ojs.new_obj
                              (Ojs.get_prop_ascii Ojs.global "Array") 
                              [||] in
                          List.iter
-                           (fun (x3064 : string) ->
+                           (fun (x2997 : string) ->
                               ignore
-                                (Ojs.call x3063 "push"
-                                   [|(Ojs.string_to_js x3064)|])) x3062;
-                         x3063))|])
+                                (Ojs.call x2996 "push"
+                                   [|(Ojs.string_to_js x2997)|])) x2995;
+                         x2996))|])
     let (indexOf :
       'tags this -> searchString:string -> ?position:float -> unit -> float)
       =
-      fun (x3072 : 'tags this) ->
-        fun ~searchString:(x3068 : string) ->
-          fun ?position:(x3069 : float option) ->
+      fun (x3005 : 'tags this) ->
+        fun ~searchString:(x3001 : string) ->
+          fun ?position:(x3002 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x3074 = this_to_js Obj.magic x3072 in
-                 Ojs.call (Ojs.get_prop_ascii x3074 "indexOf") "apply"
-                   [|x3074;((let x3070 =
+                (let x3007 = this_to_js Obj.magic x3005 in
+                 Ojs.call (Ojs.get_prop_ascii x3007 "indexOf") "apply"
+                   [|x3007;((let x3003 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x3070 "push"
-                                  [|(Ojs.string_to_js x3068)|]);
-                             (match x3069 with
-                              | Some x3071 ->
+                               (Ojs.call x3003 "push"
+                                  [|(Ojs.string_to_js x3001)|]);
+                             (match x3002 with
+                              | Some x3004 ->
                                   ignore
-                                    (Ojs.call x3070 "push"
-                                       [|(Ojs.float_to_js x3071)|])
+                                    (Ojs.call x3003 "push"
+                                       [|(Ojs.float_to_js x3004)|])
                               | None -> ());
-                             x3070))|])
+                             x3003))|])
     let (lastIndexOf :
       'tags this -> searchString:string -> ?position:float -> unit -> float)
       =
-      fun (x3079 : 'tags this) ->
-        fun ~searchString:(x3075 : string) ->
-          fun ?position:(x3076 : float option) ->
+      fun (x3012 : 'tags this) ->
+        fun ~searchString:(x3008 : string) ->
+          fun ?position:(x3009 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x3081 = this_to_js Obj.magic x3079 in
-                 Ojs.call (Ojs.get_prop_ascii x3081 "lastIndexOf") "apply"
-                   [|x3081;((let x3077 =
+                (let x3014 = this_to_js Obj.magic x3012 in
+                 Ojs.call (Ojs.get_prop_ascii x3014 "lastIndexOf") "apply"
+                   [|x3014;((let x3010 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x3077 "push"
-                                  [|(Ojs.string_to_js x3075)|]);
-                             (match x3076 with
-                              | Some x3078 ->
+                               (Ojs.call x3010 "push"
+                                  [|(Ojs.string_to_js x3008)|]);
+                             (match x3009 with
+                              | Some x3011 ->
                                   ignore
-                                    (Ojs.call x3077 "push"
-                                       [|(Ojs.float_to_js x3078)|])
+                                    (Ojs.call x3010 "push"
+                                       [|(Ojs.float_to_js x3011)|])
                               | None -> ());
-                             x3077))|])
+                             x3010))|])
     let (localeCompare' : 'tags this -> that:string -> float) =
-      fun (x3083 : 'tags this) ->
-        fun ~that:(x3082 : string) ->
+      fun (x3016 : 'tags this) ->
+        fun ~that:(x3015 : string) ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x3083) "localeCompare"
-               [|(Ojs.string_to_js x3082)|])
-    let (match_' :
+            (Ojs.call (this_to_js Obj.magic x3016) "localeCompare"
+               [|(Ojs.string_to_js x3015)|])
+    let (match_ :
       'tags this -> regexp:RegExp.t or_string -> RegExpMatchArray.t or_null)
       =
-      fun (x3087 : 'tags this) ->
-        fun ~regexp:(x3085 : RegExp.t or_string) ->
+      fun (x3020 : 'tags this) ->
+        fun ~regexp:(x3018 : RegExp.t or_string) ->
           or_null_of_js RegExpMatchArray.t_of_js
-            (Ojs.call (this_to_js Obj.magic x3087) "match"
-               [|(or_string_to_js RegExp.t_to_js x3085)|])
-    let (replace'' :
+            (Ojs.call (this_to_js Obj.magic x3020) "match"
+               [|(or_string_to_js RegExp.t_to_js x3018)|])
+    let (replace :
       'tags this ->
         searchValue:RegExp.t or_string -> replaceValue:string -> string)
       =
-      fun (x3093 : 'tags this) ->
-        fun ~searchValue:(x3090 : RegExp.t or_string) ->
-          fun ~replaceValue:(x3092 : string) ->
+      fun (x3026 : 'tags this) ->
+        fun ~searchValue:(x3023 : RegExp.t or_string) ->
+          fun ~replaceValue:(x3025 : string) ->
             Ojs.string_of_js
-              (Ojs.call (this_to_js Obj.magic x3093) "replace"
-                 [|(or_string_to_js RegExp.t_to_js x3090);(Ojs.string_to_js
-                                                             x3092)|])
-    let (replace''' :
+              (Ojs.call (this_to_js Obj.magic x3026) "replace"
+                 [|(or_string_to_js RegExp.t_to_js x3023);(Ojs.string_to_js
+                                                             x3025)|])
+    let (replace' :
       'tags this ->
         searchValue:RegExp.t or_string ->
           replacer:(substring:string -> args:any list -> string) -> string)
       =
-      fun (x3100 : 'tags this) ->
-        fun ~searchValue:(x3095 : RegExp.t or_string) ->
-          fun ~replacer:(x3097 : substring:string -> args:any list -> string)
+      fun (x3033 : 'tags this) ->
+        fun ~searchValue:(x3028 : RegExp.t or_string) ->
+          fun ~replacer:(x3030 : substring:string -> args:any list -> string)
             ->
             Ojs.string_of_js
-              (Ojs.call (this_to_js Obj.magic x3100) "replace"
-                 [|(or_string_to_js RegExp.t_to_js x3095);(Ojs.fun_to_js_args
-                                                             (fun (x3098 : _)
+              (Ojs.call (this_to_js Obj.magic x3033) "replace"
+                 [|(or_string_to_js RegExp.t_to_js x3028);(Ojs.fun_to_js_args
+                                                             (fun (x3031 : _)
                                                                 ->
                                                                 Ojs.string_to_js
-                                                                  (x3097
+                                                                  (x3030
                                                                     ~substring:(
                                                                     Ojs.string_of_js
                                                                     (Ojs.array_get
-                                                                    x3098 0))
+                                                                    x3031 0))
                                                                     ~args:(
                                                                     Ojs.list_of_js_from
                                                                     any_of_js
-                                                                    x3098 1))))|])
-    let (search' : 'tags this -> regexp:RegExp.t or_string -> float) =
-      fun (x3104 : 'tags this) ->
-        fun ~regexp:(x3102 : RegExp.t or_string) ->
+                                                                    x3031 1))))|])
+    let (search : 'tags this -> regexp:RegExp.t or_string -> float) =
+      fun (x3037 : 'tags this) ->
+        fun ~regexp:(x3035 : RegExp.t or_string) ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x3104) "search"
-               [|(or_string_to_js RegExp.t_to_js x3102)|])
+            (Ojs.call (this_to_js Obj.magic x3037) "search"
+               [|(or_string_to_js RegExp.t_to_js x3035)|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> string)
       =
-      fun (x3111 : 'tags this) ->
-        fun ?start:(x3106 : float option) ->
-          fun ?end_:(x3107 : float option) ->
+      fun (x3044 : 'tags this) ->
+        fun ?start:(x3039 : float option) ->
+          fun ?end_:(x3040 : float option) ->
             fun () ->
               Ojs.string_of_js
-                (let x3113 = this_to_js Obj.magic x3111 in
-                 Ojs.call (Ojs.get_prop_ascii x3113 "slice") "apply"
-                   [|x3113;((let x3108 =
+                (let x3046 = this_to_js Obj.magic x3044 in
+                 Ojs.call (Ojs.get_prop_ascii x3046 "slice") "apply"
+                   [|x3046;((let x3041 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x3106 with
-                              | Some x3110 ->
+                             (match x3039 with
+                              | Some x3043 ->
                                   ignore
-                                    (Ojs.call x3108 "push"
-                                       [|(Ojs.float_to_js x3110)|])
+                                    (Ojs.call x3041 "push"
+                                       [|(Ojs.float_to_js x3043)|])
                               | None -> ());
-                             (match x3107 with
-                              | Some x3109 ->
+                             (match x3040 with
+                              | Some x3042 ->
                                   ignore
-                                    (Ojs.call x3108 "push"
-                                       [|(Ojs.float_to_js x3109)|])
+                                    (Ojs.call x3041 "push"
+                                       [|(Ojs.float_to_js x3042)|])
                               | None -> ());
-                             x3108))|])
-    let (split' :
+                             x3041))|])
+    let (split :
       'tags this ->
         separator:RegExp.t or_string -> ?limit:float -> unit -> string list)
       =
-      fun (x3119 : 'tags this) ->
-        fun ~separator:(x3114 : RegExp.t or_string) ->
-          fun ?limit:(x3115 : float option) ->
+      fun (x3052 : 'tags this) ->
+        fun ~separator:(x3047 : RegExp.t or_string) ->
+          fun ?limit:(x3048 : float option) ->
             fun () ->
               Ojs.list_of_js Ojs.string_of_js
-                (let x3121 = this_to_js Obj.magic x3119 in
-                 Ojs.call (Ojs.get_prop_ascii x3121 "split") "apply"
-                   [|x3121;((let x3116 =
+                (let x3054 = this_to_js Obj.magic x3052 in
+                 Ojs.call (Ojs.get_prop_ascii x3054 "split") "apply"
+                   [|x3054;((let x3049 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x3116 "push"
-                                  [|(or_string_to_js RegExp.t_to_js x3114)|]);
-                             (match x3115 with
-                              | Some x3117 ->
+                               (Ojs.call x3049 "push"
+                                  [|(or_string_to_js RegExp.t_to_js x3047)|]);
+                             (match x3048 with
+                              | Some x3050 ->
                                   ignore
-                                    (Ojs.call x3116 "push"
-                                       [|(Ojs.float_to_js x3117)|])
+                                    (Ojs.call x3049 "push"
+                                       [|(Ojs.float_to_js x3050)|])
                               | None -> ());
-                             x3116))|])
+                             x3049))|])
     let (substring :
       'tags this -> start:float -> ?end_:float -> unit -> string) =
+      fun (x3060 : 'tags this) ->
+        fun ~start:(x3056 : float) ->
+          fun ?end_:(x3057 : float option) ->
+            fun () ->
+              Ojs.string_of_js
+                (let x3062 = this_to_js Obj.magic x3060 in
+                 Ojs.call (Ojs.get_prop_ascii x3062 "substring") "apply"
+                   [|x3062;((let x3058 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x3058 "push"
+                                  [|(Ojs.float_to_js x3056)|]);
+                             (match x3057 with
+                              | Some x3059 ->
+                                  ignore
+                                    (Ojs.call x3058 "push"
+                                       [|(Ojs.float_to_js x3059)|])
+                              | None -> ());
+                             x3058))|])
+    let (toLowerCase : 'tags this -> string) =
+      fun (x3063 : 'tags this) ->
+        Ojs.string_of_js
+          (Ojs.call (this_to_js Obj.magic x3063) "toLowerCase" [||])
+    let (toLocaleLowerCase :
+      'tags this -> ?locales:string list or_string -> unit -> string) =
+      fun (x3070 : 'tags this) ->
+        fun ?locales:(x3065 : string list or_string option) ->
+          fun () ->
+            Ojs.string_of_js
+              (let x3072 = this_to_js Obj.magic x3070 in
+               Ojs.call (Ojs.get_prop_ascii x3072 "toLocaleLowerCase")
+                 "apply"
+                 [|x3072;((let x3066 =
+                             Ojs.new_obj
+                               (Ojs.get_prop_ascii Ojs.global "Array") 
+                               [||] in
+                           (match x3065 with
+                            | Some x3067 ->
+                                ignore
+                                  (Ojs.call x3066 "push"
+                                     [|(or_string_to_js
+                                          (fun (x3068 : string list) ->
+                                             Ojs.list_to_js Ojs.string_to_js
+                                               x3068) x3067)|])
+                            | None -> ());
+                           x3066))|])
+    let (toUpperCase : 'tags this -> string) =
+      fun (x3073 : 'tags this) ->
+        Ojs.string_of_js
+          (Ojs.call (this_to_js Obj.magic x3073) "toUpperCase" [||])
+    let (toLocaleUpperCase :
+      'tags this -> ?locales:string list or_string -> unit -> string) =
+      fun (x3080 : 'tags this) ->
+        fun ?locales:(x3075 : string list or_string option) ->
+          fun () ->
+            Ojs.string_of_js
+              (let x3082 = this_to_js Obj.magic x3080 in
+               Ojs.call (Ojs.get_prop_ascii x3082 "toLocaleUpperCase")
+                 "apply"
+                 [|x3082;((let x3076 =
+                             Ojs.new_obj
+                               (Ojs.get_prop_ascii Ojs.global "Array") 
+                               [||] in
+                           (match x3075 with
+                            | Some x3077 ->
+                                ignore
+                                  (Ojs.call x3076 "push"
+                                     [|(or_string_to_js
+                                          (fun (x3078 : string list) ->
+                                             Ojs.list_to_js Ojs.string_to_js
+                                               x3078) x3077)|])
+                            | None -> ());
+                           x3076))|])
+    let (trim : 'tags this -> string) =
+      fun (x3083 : 'tags this) ->
+        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x3083) "trim" [||])
+    let (get_length : 'tags this -> float) =
+      fun (x3085 : 'tags this) ->
+        Ojs.float_of_js
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x3085) "length")
+    let (substr :
+      'tags this -> from:float -> ?length:float -> unit -> string) =
+      fun (x3091 : 'tags this) ->
+        fun ~from:(x3087 : float) ->
+          fun ?length:(x3088 : float option) ->
+            fun () ->
+              Ojs.string_of_js
+                (let x3093 = this_to_js Obj.magic x3091 in
+                 Ojs.call (Ojs.get_prop_ascii x3093 "substr") "apply"
+                   [|x3093;((let x3089 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x3089 "push"
+                                  [|(Ojs.float_to_js x3087)|]);
+                             (match x3088 with
+                              | Some x3090 ->
+                                  ignore
+                                    (Ojs.call x3089 "push"
+                                       [|(Ojs.float_to_js x3090)|])
+                              | None -> ());
+                             x3089))|])
+    let (valueOf : 'tags this -> string) =
+      fun (x3094 : 'tags this) ->
+        Ojs.string_of_js
+          (Ojs.call (this_to_js Obj.magic x3094) "valueOf" [||])
+    let (get : 'tags this -> float -> string) =
+      fun (x3096 : 'tags this) ->
+        fun (x3098 : float) ->
+          Ojs.string_of_js
+            (Ojs.get_prop (this_to_js Obj.magic x3096)
+               (Ojs.float_to_js x3098))
+    let (replaceAll :
+      'tags this ->
+        searchValue:RegExp.t or_string -> replaceValue:string -> string)
+      =
+      fun (x3102 : 'tags this) ->
+        fun ~searchValue:(x3099 : RegExp.t or_string) ->
+          fun ~replaceValue:(x3101 : string) ->
+            Ojs.string_of_js
+              (Ojs.call (this_to_js Obj.magic x3102) "replaceAll"
+                 [|(or_string_to_js RegExp.t_to_js x3099);(Ojs.string_to_js
+                                                             x3101)|])
+    let (replaceAll' :
+      'tags this ->
+        searchValue:RegExp.t or_string ->
+          replacer:(substring:string -> args:any list -> string) -> string)
+      =
+      fun (x3109 : 'tags this) ->
+        fun ~searchValue:(x3104 : RegExp.t or_string) ->
+          fun ~replacer:(x3106 : substring:string -> args:any list -> string)
+            ->
+            Ojs.string_of_js
+              (Ojs.call (this_to_js Obj.magic x3109) "replaceAll"
+                 [|(or_string_to_js RegExp.t_to_js x3104);(Ojs.fun_to_js_args
+                                                             (fun (x3107 : _)
+                                                                ->
+                                                                Ojs.string_to_js
+                                                                  (x3106
+                                                                    ~substring:(
+                                                                    Ojs.string_of_js
+                                                                    (Ojs.array_get
+                                                                    x3107 0))
+                                                                    ~args:(
+                                                                    Ojs.list_of_js_from
+                                                                    any_of_js
+                                                                    x3107 1))))|])
+    let (replaceAll'' :
+      'tags this ->
+        searchValue:RegExp.t or_string -> replaceValue:string -> string)
+      =
+      fun (x3114 : 'tags this) ->
+        fun ~searchValue:(x3111 : RegExp.t or_string) ->
+          fun ~replaceValue:(x3113 : string) ->
+            Ojs.string_of_js
+              (Ojs.call (this_to_js Obj.magic x3114) "replaceAll"
+                 [|(or_string_to_js RegExp.t_to_js x3111);(Ojs.string_to_js
+                                                             x3113)|])
+    let (replaceAll''' :
+      'tags this ->
+        searchValue:RegExp.t or_string ->
+          replacer:(substring:string -> args:any list -> string) -> string)
+      =
+      fun (x3121 : 'tags this) ->
+        fun ~searchValue:(x3116 : RegExp.t or_string) ->
+          fun ~replacer:(x3118 : substring:string -> args:any list -> string)
+            ->
+            Ojs.string_of_js
+              (Ojs.call (this_to_js Obj.magic x3121) "replaceAll"
+                 [|(or_string_to_js RegExp.t_to_js x3116);(Ojs.fun_to_js_args
+                                                             (fun (x3119 : _)
+                                                                ->
+                                                                Ojs.string_to_js
+                                                                  (x3118
+                                                                    ~substring:(
+                                                                    Ojs.string_of_js
+                                                                    (Ojs.array_get
+                                                                    x3119 0))
+                                                                    ~args:(
+                                                                    Ojs.list_of_js_from
+                                                                    any_of_js
+                                                                    x3119 1))))|])
+    let (padStart :
+      'tags this -> maxLength:float -> ?fillString:string -> unit -> string)
+      =
       fun (x3127 : 'tags this) ->
-        fun ~start:(x3123 : float) ->
-          fun ?end_:(x3124 : float option) ->
+        fun ~maxLength:(x3123 : float) ->
+          fun ?fillString:(x3124 : string option) ->
             fun () ->
               Ojs.string_of_js
                 (let x3129 = this_to_js Obj.magic x3127 in
-                 Ojs.call (Ojs.get_prop_ascii x3129 "substring") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x3129 "padStart") "apply"
                    [|x3129;((let x3125 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -12243,103 +12229,117 @@ module String =
                               | Some x3126 ->
                                   ignore
                                     (Ojs.call x3125 "push"
-                                       [|(Ojs.float_to_js x3126)|])
+                                       [|(Ojs.string_to_js x3126)|])
                               | None -> ());
                              x3125))|])
-    let (toLowerCase : 'tags this -> string) =
-      fun (x3130 : 'tags this) ->
-        Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x3130) "toLowerCase" [||])
-    let (toLocaleLowerCase :
-      'tags this -> ?locales:string list or_string -> unit -> string) =
-      fun (x3137 : 'tags this) ->
-        fun ?locales:(x3132 : string list or_string option) ->
-          fun () ->
-            Ojs.string_of_js
-              (let x3139 = this_to_js Obj.magic x3137 in
-               Ojs.call (Ojs.get_prop_ascii x3139 "toLocaleLowerCase")
-                 "apply"
-                 [|x3139;((let x3133 =
-                             Ojs.new_obj
-                               (Ojs.get_prop_ascii Ojs.global "Array") 
-                               [||] in
-                           (match x3132 with
-                            | Some x3134 ->
-                                ignore
-                                  (Ojs.call x3133 "push"
-                                     [|(or_string_to_js
-                                          (fun (x3135 : string list) ->
-                                             Ojs.list_to_js Ojs.string_to_js
-                                               x3135) x3134)|])
-                            | None -> ());
-                           x3133))|])
-    let (toUpperCase : 'tags this -> string) =
-      fun (x3140 : 'tags this) ->
-        Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x3140) "toUpperCase" [||])
-    let (toLocaleUpperCase :
-      'tags this -> ?locales:string list or_string -> unit -> string) =
-      fun (x3147 : 'tags this) ->
-        fun ?locales:(x3142 : string list or_string option) ->
-          fun () ->
-            Ojs.string_of_js
-              (let x3149 = this_to_js Obj.magic x3147 in
-               Ojs.call (Ojs.get_prop_ascii x3149 "toLocaleUpperCase")
-                 "apply"
-                 [|x3149;((let x3143 =
-                             Ojs.new_obj
-                               (Ojs.get_prop_ascii Ojs.global "Array") 
-                               [||] in
-                           (match x3142 with
-                            | Some x3144 ->
-                                ignore
-                                  (Ojs.call x3143 "push"
-                                     [|(or_string_to_js
-                                          (fun (x3145 : string list) ->
-                                             Ojs.list_to_js Ojs.string_to_js
-                                               x3145) x3144)|])
-                            | None -> ());
-                           x3143))|])
-    let (trim : 'tags this -> string) =
-      fun (x3150 : 'tags this) ->
-        Ojs.string_of_js (Ojs.call (this_to_js Obj.magic x3150) "trim" [||])
-    let (get_length : 'tags this -> float) =
-      fun (x3152 : 'tags this) ->
-        Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x3152) "length")
-    let (substr :
-      'tags this -> from:float -> ?length:float -> unit -> string) =
-      fun (x3158 : 'tags this) ->
-        fun ~from:(x3154 : float) ->
-          fun ?length:(x3155 : float option) ->
+    let (padEnd :
+      'tags this -> maxLength:float -> ?fillString:string -> unit -> string)
+      =
+      fun (x3134 : 'tags this) ->
+        fun ~maxLength:(x3130 : float) ->
+          fun ?fillString:(x3131 : string option) ->
             fun () ->
               Ojs.string_of_js
-                (let x3160 = this_to_js Obj.magic x3158 in
-                 Ojs.call (Ojs.get_prop_ascii x3160 "substr") "apply"
-                   [|x3160;((let x3156 =
+                (let x3136 = this_to_js Obj.magic x3134 in
+                 Ojs.call (Ojs.get_prop_ascii x3136 "padEnd") "apply"
+                   [|x3136;((let x3132 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x3156 "push"
-                                  [|(Ojs.float_to_js x3154)|]);
-                             (match x3155 with
-                              | Some x3157 ->
+                               (Ojs.call x3132 "push"
+                                  [|(Ojs.float_to_js x3130)|]);
+                             (match x3131 with
+                              | Some x3133 ->
                                   ignore
-                                    (Ojs.call x3156 "push"
-                                       [|(Ojs.float_to_js x3157)|])
+                                    (Ojs.call x3132 "push"
+                                       [|(Ojs.string_to_js x3133)|])
                               | None -> ());
-                             x3156))|])
-    let (valueOf : 'tags this -> string) =
-      fun (x3161 : 'tags this) ->
-        Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x3161) "valueOf" [||])
-    let (get : 'tags this -> float -> string) =
-      fun (x3163 : 'tags this) ->
-        fun (x3165 : float) ->
-          Ojs.string_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x3163)
-               (Ojs.float_to_js x3165))
+                             x3132))|])
+    let (matchAll :
+      'tags this -> regexp:RegExp.t -> RegExpMatchArray.t IterableIterator.t)
+      =
+      fun (x3138 : 'tags this) ->
+        fun ~regexp:(x3137 : RegExp.t) ->
+          IterableIterator.t_of_js RegExpMatchArray.t_of_js
+            (Ojs.call (this_to_js Obj.magic x3138) "matchAll"
+               [|(RegExp.t_to_js x3137)|])
+    let (match_' :
+      'tags this ->
+        matcher:AnonymousInterface9.t -> RegExpMatchArray.t or_null)
+      =
+      fun (x3142 : 'tags this) ->
+        fun ~matcher:(x3141 : AnonymousInterface9.t) ->
+          or_null_of_js RegExpMatchArray.t_of_js
+            (Ojs.call (this_to_js Obj.magic x3142) "match"
+               [|(AnonymousInterface9.t_to_js x3141)|])
+    let (replace'' :
+      'tags this ->
+        searchValue:AnonymousInterface10.t -> replaceValue:string -> string)
+      =
+      fun (x3147 : 'tags this) ->
+        fun ~searchValue:(x3145 : AnonymousInterface10.t) ->
+          fun ~replaceValue:(x3146 : string) ->
+            Ojs.string_of_js
+              (Ojs.call (this_to_js Obj.magic x3147) "replace"
+                 [|(AnonymousInterface10.t_to_js x3145);(Ojs.string_to_js
+                                                           x3146)|])
+    let (replace''' :
+      'tags this ->
+        searchValue:AnonymousInterface11.t ->
+          replacer:(substring:string -> args:any list -> string) -> string)
+      =
+      fun (x3153 : 'tags this) ->
+        fun ~searchValue:(x3149 : AnonymousInterface11.t) ->
+          fun ~replacer:(x3150 : substring:string -> args:any list -> string)
+            ->
+            Ojs.string_of_js
+              (Ojs.call (this_to_js Obj.magic x3153) "replace"
+                 [|(AnonymousInterface11.t_to_js x3149);(Ojs.fun_to_js_args
+                                                           (fun (x3151 : _)
+                                                              ->
+                                                              Ojs.string_to_js
+                                                                (x3150
+                                                                   ~substring:(
+                                                                   Ojs.string_of_js
+                                                                    (Ojs.array_get
+                                                                    x3151 0))
+                                                                   ~args:(
+                                                                   Ojs.list_of_js_from
+                                                                    any_of_js
+                                                                    x3151 1))))|])
+    let (search' : 'tags this -> searcher:AnonymousInterface12.t -> float) =
+      fun (x3156 : 'tags this) ->
+        fun ~searcher:(x3155 : AnonymousInterface12.t) ->
+          Ojs.float_of_js
+            (Ojs.call (this_to_js Obj.magic x3156) "search"
+               [|(AnonymousInterface12.t_to_js x3155)|])
+    let (split' :
+      'tags this ->
+        splitter:AnonymousInterface13.t ->
+          ?limit:float -> unit -> string list)
+      =
+      fun (x3162 : 'tags this) ->
+        fun ~splitter:(x3158 : AnonymousInterface13.t) ->
+          fun ?limit:(x3159 : float option) ->
+            fun () ->
+              Ojs.list_of_js Ojs.string_of_js
+                (let x3164 = this_to_js Obj.magic x3162 in
+                 Ojs.call (Ojs.get_prop_ascii x3164 "split") "apply"
+                   [|x3164;((let x3160 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x3160 "push"
+                                  [|(AnonymousInterface13.t_to_js x3158)|]);
+                             (match x3159 with
+                              | Some x3161 ->
+                                  ignore
+                                    (Ojs.call x3160 "push"
+                                       [|(Ojs.float_to_js x3161)|])
+                              | None -> ());
+                             x3160))|])
     let (fromCodePoint : float list -> string) =
       fun (x3166 : float list) ->
         Ojs.string_of_js
@@ -12458,83 +12458,83 @@ module Set =
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (__T_to_js : __T -> Ojs.t) ->
           fun (x3189 : __tags intf) -> intf_to_js __tags_to_js x3189
-    let (entries : ('tags, 'T) this -> ('T * 'T) IterableIterator.t) =
-      fun (x3193 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js
-          (fun (x3196 : Ojs.t) ->
-             let x3197 = x3196 in
-             ((Obj.magic (Ojs.array_get x3197 0)),
-               (Obj.magic (Ojs.array_get x3197 1))))
-          (Ojs.call (this_to_js Obj.magic Obj.magic x3193) "entries" [||])
-    let (keys : ('tags, 'T) this -> 'T IterableIterator.t) =
-      fun (x3198 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic x3198) "keys" [||])
-    let (values : ('tags, 'T) this -> 'T IterableIterator.t) =
-      fun (x3202 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic x3202) "values" [||])
     let (add : ('tags, 'T) this -> value:'T -> ('tags, 'T) this) =
-      fun (x3207 : ('tags, 'T) this) ->
-        fun ~value:(x3206 : 'T) ->
+      fun (x3194 : ('tags, 'T) this) ->
+        fun ~value:(x3193 : 'T) ->
           this_of_js Obj.magic Obj.magic
-            (Ojs.call (this_to_js Obj.magic Obj.magic x3207) "add"
-               [|(Obj.magic x3206)|])
+            (Ojs.call (this_to_js Obj.magic Obj.magic x3194) "add"
+               [|(Obj.magic x3193)|])
     let (clear : ('tags, 'T) this -> unit) =
-      fun (x3212 : ('tags, 'T) this) ->
-        ignore (Ojs.call (this_to_js Obj.magic Obj.magic x3212) "clear" [||])
+      fun (x3199 : ('tags, 'T) this) ->
+        ignore (Ojs.call (this_to_js Obj.magic Obj.magic x3199) "clear" [||])
     let (delete : ('tags, 'T) this -> value:'T -> bool) =
-      fun (x3216 : ('tags, 'T) this) ->
-        fun ~value:(x3215 : 'T) ->
+      fun (x3203 : ('tags, 'T) this) ->
+        fun ~value:(x3202 : 'T) ->
           Ojs.bool_of_js
-            (Ojs.call (this_to_js Obj.magic Obj.magic x3216) "delete"
-               [|(Obj.magic x3215)|])
+            (Ojs.call (this_to_js Obj.magic Obj.magic x3203) "delete"
+               [|(Obj.magic x3202)|])
     let (forEach :
       ('tags, 'T) this ->
         callbackfn:(value:'T -> value2:'T -> set_:'T t -> unit) ->
           ?thisArg:any -> unit -> unit)
       =
-      fun (x3227 : ('tags, 'T) this) ->
-        fun ~callbackfn:(x3219 : value:'T -> value2:'T -> set_:'T t -> unit)
+      fun (x3214 : ('tags, 'T) this) ->
+        fun ~callbackfn:(x3206 : value:'T -> value2:'T -> set_:'T t -> unit)
           ->
-          fun ?thisArg:(x3220 : any option) ->
+          fun ?thisArg:(x3207 : any option) ->
             fun () ->
               ignore
-                (let x3230 = this_to_js Obj.magic Obj.magic x3227 in
-                 Ojs.call (Ojs.get_prop_ascii x3230 "forEach") "apply"
-                   [|x3230;((let x3221 =
+                (let x3217 = this_to_js Obj.magic Obj.magic x3214 in
+                 Ojs.call (Ojs.get_prop_ascii x3217 "forEach") "apply"
+                   [|x3217;((let x3208 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x3221 "push"
+                               (Ojs.call x3208 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x3223 : Ojs.t) ->
-                                          fun (x3224 : Ojs.t) ->
-                                            fun (x3225 : Ojs.t) ->
-                                              x3219 ~value:(Obj.magic x3223)
-                                                ~value2:(Obj.magic x3224)
+                                       (fun (x3210 : Ojs.t) ->
+                                          fun (x3211 : Ojs.t) ->
+                                            fun (x3212 : Ojs.t) ->
+                                              x3206 ~value:(Obj.magic x3210)
+                                                ~value2:(Obj.magic x3211)
                                                 ~set_:(t_of_js Obj.magic
-                                                         x3225)))|]);
-                             (match x3220 with
-                              | Some x3222 ->
+                                                         x3212)))|]);
+                             (match x3207 with
+                              | Some x3209 ->
                                   ignore
-                                    (Ojs.call x3221 "push"
-                                       [|(any_to_js x3222)|])
+                                    (Ojs.call x3208 "push"
+                                       [|(any_to_js x3209)|])
                               | None -> ());
-                             x3221))|])
+                             x3208))|])
     let (has : ('tags, 'T) this -> value:'T -> bool) =
-      fun (x3232 : ('tags, 'T) this) ->
-        fun ~value:(x3231 : 'T) ->
+      fun (x3219 : ('tags, 'T) this) ->
+        fun ~value:(x3218 : 'T) ->
           Ojs.bool_of_js
-            (Ojs.call (this_to_js Obj.magic Obj.magic x3232) "has"
-               [|(Obj.magic x3231)|])
+            (Ojs.call (this_to_js Obj.magic Obj.magic x3219) "has"
+               [|(Obj.magic x3218)|])
     let (get_size : ('tags, 'T) this -> float) =
-      fun (x3235 : ('tags, 'T) this) ->
+      fun (x3222 : ('tags, 'T) this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic Obj.magic x3235) "size")
-    let (create : ?iterable:'T Iterable.t or_null -> unit -> 'T t) =
-      fun ?iterable:(x3238 : 'T Iterable.t or_null option) ->
+          (Ojs.get_prop_ascii (this_to_js Obj.magic Obj.magic x3222) "size")
+    let (entries : ('tags, 'T) this -> ('T * 'T) IterableIterator.t) =
+      fun (x3225 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js
+          (fun (x3228 : Ojs.t) ->
+             let x3229 = x3228 in
+             ((Obj.magic (Ojs.array_get x3229 0)),
+               (Obj.magic (Ojs.array_get x3229 1))))
+          (Ojs.call (this_to_js Obj.magic Obj.magic x3225) "entries" [||])
+    let (keys : ('tags, 'T) this -> 'T IterableIterator.t) =
+      fun (x3230 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic x3230) "keys" [||])
+    let (values : ('tags, 'T) this -> 'T IterableIterator.t) =
+      fun (x3234 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic x3234) "values" [||])
+    let (create : ?values:'T list or_null -> unit -> 'T t) =
+      fun ?values:(x3238 : 'T list or_null option) ->
         fun () ->
           t_of_js Obj.magic
             (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Set")
@@ -12545,31 +12545,31 @@ module Set =
                      ignore
                        (Ojs.call x3239 "push"
                           [|(or_null_to_js
-                               (fun (x3241 : 'T Iterable.t) ->
-                                  Iterable.t_to_js Obj.magic x3241) x3240)|])
+                               (fun (x3241 : 'T list) ->
+                                  Ojs.list_to_js Obj.magic x3241) x3240)|])
                  | None -> ());
                 x3239))
-    let (create' : ?values:'T list or_null -> unit -> 'T t) =
-      fun ?values:(x3244 : 'T list or_null option) ->
-        fun () ->
-          t_of_js Obj.magic
-            (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Set")
-               (let x3245 =
-                  Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array") [||] in
-                (match x3244 with
-                 | Some x3246 ->
-                     ignore
-                       (Ojs.call x3245 "push"
-                          [|(or_null_to_js
-                               (fun (x3247 : 'T list) ->
-                                  Ojs.list_to_js Obj.magic x3247) x3246)|])
-                 | None -> ());
-                x3245))
     let (prototype : unit -> any t) =
       fun () ->
         t_of_js any_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Set")
              "prototype")
+    let (create' : ?iterable:'T Iterable.t or_null -> unit -> 'T t) =
+      fun ?iterable:(x3245 : 'T Iterable.t or_null option) ->
+        fun () ->
+          t_of_js Obj.magic
+            (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Set")
+               (let x3246 =
+                  Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array") [||] in
+                (match x3245 with
+                 | Some x3247 ->
+                     ignore
+                       (Ojs.call x3246 "push"
+                          [|(or_null_to_js
+                               (fun (x3248 : 'T Iterable.t) ->
+                                  Iterable.t_to_js Obj.magic x3248) x3247)|])
+                 | None -> ());
+                x3246))
     let cast_from = Obj.magic
   end
 module ReturnType =
@@ -13139,66 +13139,66 @@ module ReadonlySet =
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (__T_to_js : __T -> Ojs.t) ->
           fun (x3427 : __tags intf) -> intf_to_js __tags_to_js x3427
-    let (entries : ('tags, 'T) this -> ('T * 'T) IterableIterator.t) =
-      fun (x3431 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js
-          (fun (x3434 : Ojs.t) ->
-             let x3435 = x3434 in
-             ((Obj.magic (Ojs.array_get x3435 0)),
-               (Obj.magic (Ojs.array_get x3435 1))))
-          (Ojs.call (this_to_js Obj.magic Obj.magic x3431) "entries" [||])
-    let (keys : ('tags, 'T) this -> 'T IterableIterator.t) =
-      fun (x3436 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic x3436) "keys" [||])
-    let (values : ('tags, 'T) this -> 'T IterableIterator.t) =
-      fun (x3440 : ('tags, 'T) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic x3440) "values" [||])
     let (forEach :
       ('tags, 'T) this ->
         callbackfn:(value:'T -> value2:'T -> set_:'T t -> unit) ->
           ?thisArg:any -> unit -> unit)
       =
-      fun (x3452 : ('tags, 'T) this) ->
-        fun ~callbackfn:(x3444 : value:'T -> value2:'T -> set_:'T t -> unit)
+      fun (x3439 : ('tags, 'T) this) ->
+        fun ~callbackfn:(x3431 : value:'T -> value2:'T -> set_:'T t -> unit)
           ->
-          fun ?thisArg:(x3445 : any option) ->
+          fun ?thisArg:(x3432 : any option) ->
             fun () ->
               ignore
-                (let x3455 = this_to_js Obj.magic Obj.magic x3452 in
-                 Ojs.call (Ojs.get_prop_ascii x3455 "forEach") "apply"
-                   [|x3455;((let x3446 =
+                (let x3442 = this_to_js Obj.magic Obj.magic x3439 in
+                 Ojs.call (Ojs.get_prop_ascii x3442 "forEach") "apply"
+                   [|x3442;((let x3433 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x3446 "push"
+                               (Ojs.call x3433 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x3448 : Ojs.t) ->
-                                          fun (x3449 : Ojs.t) ->
-                                            fun (x3450 : Ojs.t) ->
-                                              x3444 ~value:(Obj.magic x3448)
-                                                ~value2:(Obj.magic x3449)
+                                       (fun (x3435 : Ojs.t) ->
+                                          fun (x3436 : Ojs.t) ->
+                                            fun (x3437 : Ojs.t) ->
+                                              x3431 ~value:(Obj.magic x3435)
+                                                ~value2:(Obj.magic x3436)
                                                 ~set_:(t_of_js Obj.magic
-                                                         x3450)))|]);
-                             (match x3445 with
-                              | Some x3447 ->
+                                                         x3437)))|]);
+                             (match x3432 with
+                              | Some x3434 ->
                                   ignore
-                                    (Ojs.call x3446 "push"
-                                       [|(any_to_js x3447)|])
+                                    (Ojs.call x3433 "push"
+                                       [|(any_to_js x3434)|])
                               | None -> ());
-                             x3446))|])
+                             x3433))|])
     let (has : ('tags, 'T) this -> value:'T -> bool) =
-      fun (x3457 : ('tags, 'T) this) ->
-        fun ~value:(x3456 : 'T) ->
+      fun (x3444 : ('tags, 'T) this) ->
+        fun ~value:(x3443 : 'T) ->
           Ojs.bool_of_js
-            (Ojs.call (this_to_js Obj.magic Obj.magic x3457) "has"
-               [|(Obj.magic x3456)|])
+            (Ojs.call (this_to_js Obj.magic Obj.magic x3444) "has"
+               [|(Obj.magic x3443)|])
     let (get_size : ('tags, 'T) this -> float) =
-      fun (x3460 : ('tags, 'T) this) ->
+      fun (x3447 : ('tags, 'T) this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic Obj.magic x3460) "size")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic Obj.magic x3447) "size")
+    let (entries : ('tags, 'T) this -> ('T * 'T) IterableIterator.t) =
+      fun (x3450 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js
+          (fun (x3453 : Ojs.t) ->
+             let x3454 = x3453 in
+             ((Obj.magic (Ojs.array_get x3454 0)),
+               (Obj.magic (Ojs.array_get x3454 1))))
+          (Ojs.call (this_to_js Obj.magic Obj.magic x3450) "entries" [||])
+    let (keys : ('tags, 'T) this -> 'T IterableIterator.t) =
+      fun (x3455 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic x3455) "keys" [||])
+    let (values : ('tags, 'T) this -> 'T IterableIterator.t) =
+      fun (x3459 : ('tags, 'T) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic x3459) "values" [||])
     let cast_from = Obj.magic
   end
 module ReadonlyMap =
@@ -13251,77 +13251,77 @@ module ReadonlyMap =
         fun (__K_to_js : __K -> Ojs.t) ->
           fun (__V_to_js : __V -> Ojs.t) ->
             fun (x3469 : __tags intf) -> intf_to_js __tags_to_js x3469
-    let (entries : ('tags, 'K, 'V) this -> ('K * 'V) IterableIterator.t) =
-      fun (x3473 : ('tags, 'K, 'V) this) ->
-        IterableIterator.t_of_js
-          (fun (x3477 : Ojs.t) ->
-             let x3478 = x3477 in
-             ((Obj.magic (Ojs.array_get x3478 0)),
-               (Obj.magic (Ojs.array_get x3478 1))))
-          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3473)
-             "entries" [||])
-    let (keys : ('tags, 'K, 'V) this -> 'K IterableIterator.t) =
-      fun (x3479 : ('tags, 'K, 'V) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3479) "keys"
-             [||])
-    let (values : ('tags, 'K, 'V) this -> 'V IterableIterator.t) =
-      fun (x3484 : ('tags, 'K, 'V) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3484) "values"
-             [||])
     let (forEach :
       ('tags, 'K, 'V) this ->
         callbackfn:(value:'V -> key:'K -> map:('K, 'V) t -> unit) ->
           ?thisArg:any -> unit -> unit)
       =
-      fun (x3498 : ('tags, 'K, 'V) this) ->
+      fun (x3482 : ('tags, 'K, 'V) this) ->
         fun
-          ~callbackfn:(x3489 : value:'V -> key:'K -> map:('K, 'V) t -> unit)
+          ~callbackfn:(x3473 : value:'V -> key:'K -> map:('K, 'V) t -> unit)
           ->
-          fun ?thisArg:(x3490 : any option) ->
+          fun ?thisArg:(x3474 : any option) ->
             fun () ->
               ignore
-                (let x3502 = this_to_js Obj.magic Obj.magic Obj.magic x3498 in
-                 Ojs.call (Ojs.get_prop_ascii x3502 "forEach") "apply"
-                   [|x3502;((let x3491 =
+                (let x3486 = this_to_js Obj.magic Obj.magic Obj.magic x3482 in
+                 Ojs.call (Ojs.get_prop_ascii x3486 "forEach") "apply"
+                   [|x3486;((let x3475 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x3491 "push"
+                               (Ojs.call x3475 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x3493 : Ojs.t) ->
-                                          fun (x3494 : Ojs.t) ->
-                                            fun (x3495 : Ojs.t) ->
-                                              x3489 ~value:(Obj.magic x3493)
-                                                ~key:(Obj.magic x3494)
+                                       (fun (x3477 : Ojs.t) ->
+                                          fun (x3478 : Ojs.t) ->
+                                            fun (x3479 : Ojs.t) ->
+                                              x3473 ~value:(Obj.magic x3477)
+                                                ~key:(Obj.magic x3478)
                                                 ~map:(t_of_js Obj.magic
-                                                        Obj.magic x3495)))|]);
-                             (match x3490 with
-                              | Some x3492 ->
+                                                        Obj.magic x3479)))|]);
+                             (match x3474 with
+                              | Some x3476 ->
                                   ignore
-                                    (Ojs.call x3491 "push"
-                                       [|(any_to_js x3492)|])
+                                    (Ojs.call x3475 "push"
+                                       [|(any_to_js x3476)|])
                               | None -> ());
-                             x3491))|])
+                             x3475))|])
     let (get_ : ('tags, 'K, 'V) this -> key:'K -> 'V or_undefined) =
-      fun (x3504 : ('tags, 'K, 'V) this) ->
-        fun ~key:(x3503 : 'K) ->
+      fun (x3488 : ('tags, 'K, 'V) this) ->
+        fun ~key:(x3487 : 'K) ->
           or_undefined_of_js Obj.magic
-            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3504) "get"
-               [|(Obj.magic x3503)|])
+            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3488) "get"
+               [|(Obj.magic x3487)|])
     let (has : ('tags, 'K, 'V) this -> key:'K -> bool) =
-      fun (x3510 : ('tags, 'K, 'V) this) ->
-        fun ~key:(x3509 : 'K) ->
+      fun (x3494 : ('tags, 'K, 'V) this) ->
+        fun ~key:(x3493 : 'K) ->
           Ojs.bool_of_js
-            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3510) "has"
-               [|(Obj.magic x3509)|])
+            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3494) "has"
+               [|(Obj.magic x3493)|])
     let (get_size : ('tags, 'K, 'V) this -> float) =
-      fun (x3514 : ('tags, 'K, 'V) this) ->
+      fun (x3498 : ('tags, 'K, 'V) this) ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii
-             (this_to_js Obj.magic Obj.magic Obj.magic x3514) "size")
+             (this_to_js Obj.magic Obj.magic Obj.magic x3498) "size")
+    let (entries : ('tags, 'K, 'V) this -> ('K * 'V) IterableIterator.t) =
+      fun (x3502 : ('tags, 'K, 'V) this) ->
+        IterableIterator.t_of_js
+          (fun (x3506 : Ojs.t) ->
+             let x3507 = x3506 in
+             ((Obj.magic (Ojs.array_get x3507 0)),
+               (Obj.magic (Ojs.array_get x3507 1))))
+          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3502)
+             "entries" [||])
+    let (keys : ('tags, 'K, 'V) this -> 'K IterableIterator.t) =
+      fun (x3508 : ('tags, 'K, 'V) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3508) "keys"
+             [||])
+    let (values : ('tags, 'K, 'V) this -> 'V IterableIterator.t) =
+      fun (x3513 : ('tags, 'K, 'V) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x3513) "values"
+             [||])
     let cast_from = Obj.magic
   end
 module RangeError =
@@ -13887,216 +13887,216 @@ module Object =
             (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object")
                "setPrototypeOf"
                [|(any_to_js x3760);(or_null_to_js untyped_object_to_js x3761)|])
-    let (values :
-      ('T ArrayLike.t, 'T AnonymousInterface26.t) union2 -> 'T list) =
-      fun (x3763 : ('T ArrayLike.t, 'T AnonymousInterface26.t) union2) ->
-        Ojs.list_of_js Obj.magic
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "values"
-             [|(union2_to_js
-                  (fun (x3764 : 'T ArrayLike.t) ->
-                     ArrayLike.t_to_js Obj.magic x3764)
-                  (fun (x3766 : 'T AnonymousInterface26.t) ->
-                     AnonymousInterface26.t_to_js Obj.magic x3766) x3763)|])
-    let (values' : AnonymousInterface0.t -> any list) =
-      fun (x3769 : AnonymousInterface0.t) ->
-        Ojs.list_of_js any_of_js
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "values"
-             [|(AnonymousInterface0.t_to_js x3769)|])
-    let (entries :
-      ('T ArrayLike.t, 'T AnonymousInterface26.t) union2 ->
-        (string * 'T) list)
-      =
-      fun (x3771 : ('T ArrayLike.t, 'T AnonymousInterface26.t) union2) ->
-        Ojs.list_of_js
-          (fun (x3776 : Ojs.t) ->
-             let x3777 = x3776 in
-             ((Ojs.string_of_js (Ojs.array_get x3777 0)),
-               (Obj.magic (Ojs.array_get x3777 1))))
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "entries"
-             [|(union2_to_js
-                  (fun (x3772 : 'T ArrayLike.t) ->
-                     ArrayLike.t_to_js Obj.magic x3772)
-                  (fun (x3774 : 'T AnonymousInterface26.t) ->
-                     AnonymousInterface26.t_to_js Obj.magic x3774) x3771)|])
-    let (entries' : AnonymousInterface0.t -> (string * any) list) =
-      fun (x3778 : AnonymousInterface0.t) ->
-        Ojs.list_of_js
-          (fun (x3779 : Ojs.t) ->
-             let x3780 = x3779 in
-             ((Ojs.string_of_js (Ojs.array_get x3780 0)),
-               (any_of_js (Ojs.array_get x3780 1))))
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "entries"
-             [|(AnonymousInterface0.t_to_js x3778)|])
-    let (getOwnPropertyDescriptors :
-      'T -> (any, AnonymousInterface4.t) intersection2) =
-      fun (x3781 : 'T) ->
-        intersection2_of_js any_of_js AnonymousInterface4.t_of_js
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object")
-             "getOwnPropertyDescriptors" [|(Obj.magic x3781)|])
     let (create : ?value:any -> unit -> t) =
-      fun ?value:(x3784 : any option) ->
+      fun ?value:(x3763 : any option) ->
         fun () ->
           t_of_js
             (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Object")
-               (let x3785 =
+               (let x3764 =
                   Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array") [||] in
-                (match x3784 with
-                 | Some x3786 ->
-                     ignore (Ojs.call x3785 "push" [|(any_to_js x3786)|])
+                (match x3763 with
+                 | Some x3765 ->
+                     ignore (Ojs.call x3764 "push" [|(any_to_js x3765)|])
                  | None -> ());
-                x3785))
+                x3764))
     let (invoke : unit -> any) =
       fun () ->
         any_of_js (Ojs.apply (Ojs.get_prop_ascii Ojs.global "Object") [||])
     let (invoke' : any -> any) =
-      fun (x3787 : any) ->
+      fun (x3766 : any) ->
         any_of_js
           (Ojs.apply (Ojs.get_prop_ascii Ojs.global "Object")
-             [|(any_to_js x3787)|])
+             [|(any_to_js x3766)|])
     let (prototype : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Object")
              "prototype")
     let (getPrototypeOf : any -> any) =
-      fun (x3788 : any) ->
+      fun (x3767 : any) ->
         any_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "getPrototypeOf"
-             [|(any_to_js x3788)|])
+             [|(any_to_js x3767)|])
     let (getOwnPropertyDescriptor :
       o:any -> p:PropertyKey.t -> PropertyDescriptor.t or_undefined) =
-      fun ~o:(x3789 : any) ->
-        fun ~p:(x3790 : PropertyKey.t) ->
+      fun ~o:(x3768 : any) ->
+        fun ~p:(x3769 : PropertyKey.t) ->
           or_undefined_of_js PropertyDescriptor.t_of_js
             (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object")
                "getOwnPropertyDescriptor"
-               [|(any_to_js x3789);(PropertyKey.t_to_js x3790)|])
+               [|(any_to_js x3768);(PropertyKey.t_to_js x3769)|])
     let (getOwnPropertyNames : any -> string list) =
-      fun (x3792 : any) ->
+      fun (x3771 : any) ->
         Ojs.list_of_js Ojs.string_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object")
-             "getOwnPropertyNames" [|(any_to_js x3792)|])
+             "getOwnPropertyNames" [|(any_to_js x3771)|])
     let (create_ : untyped_object or_null -> any) =
-      fun (x3794 : untyped_object or_null) ->
+      fun (x3773 : untyped_object or_null) ->
         any_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "create"
-             [|(or_null_to_js untyped_object_to_js x3794)|])
+             [|(or_null_to_js untyped_object_to_js x3773)|])
     let (create_' :
       o:untyped_object or_null ->
         properties:(PropertyDescriptorMap.t, any ThisType.t) intersection2 ->
           any)
       =
-      fun ~o:(x3796 : untyped_object or_null) ->
+      fun ~o:(x3775 : untyped_object or_null) ->
         fun
-          ~properties:(x3798 :
+          ~properties:(x3777 :
                         (PropertyDescriptorMap.t, any ThisType.t)
                           intersection2)
           ->
           any_of_js
             (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "create"
-               [|(or_null_to_js untyped_object_to_js x3796);(intersection2_to_js
+               [|(or_null_to_js untyped_object_to_js x3775);(intersection2_to_js
                                                                PropertyDescriptorMap.t_to_js
                                                                (fun
-                                                                  (x3800 :
+                                                                  (x3779 :
                                                                     any
                                                                     ThisType.t)
                                                                   ->
                                                                   ThisType.t_to_js
                                                                     any_to_js
-                                                                    x3800)
-                                                               x3798)|])
+                                                                    x3779)
+                                                               x3777)|])
     let (defineProperty :
       o:'T ->
         p:PropertyKey.t ->
           attributes:(PropertyDescriptor.t, any ThisType.t) intersection2 ->
             'T)
       =
-      fun ~o:(x3802 : 'T) ->
-        fun ~p:(x3803 : PropertyKey.t) ->
+      fun ~o:(x3781 : 'T) ->
+        fun ~p:(x3782 : PropertyKey.t) ->
           fun
-            ~attributes:(x3804 :
+            ~attributes:(x3783 :
                           (PropertyDescriptor.t, any ThisType.t)
                             intersection2)
             ->
             Obj.magic
               (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object")
                  "defineProperty"
-                 [|(Obj.magic x3802);(PropertyKey.t_to_js x3803);(intersection2_to_js
+                 [|(Obj.magic x3781);(PropertyKey.t_to_js x3782);(intersection2_to_js
                                                                     PropertyDescriptor.t_to_js
                                                                     (
                                                                     fun
-                                                                    (x3806 :
+                                                                    (x3785 :
                                                                     any
                                                                     ThisType.t)
                                                                     ->
                                                                     ThisType.t_to_js
                                                                     any_to_js
-                                                                    x3806)
-                                                                    x3804)|])
+                                                                    x3785)
+                                                                    x3783)|])
     let (defineProperties :
       o:'T ->
         properties:(PropertyDescriptorMap.t, any ThisType.t) intersection2 ->
           'T)
       =
-      fun ~o:(x3808 : 'T) ->
+      fun ~o:(x3787 : 'T) ->
         fun
-          ~properties:(x3809 :
+          ~properties:(x3788 :
                         (PropertyDescriptorMap.t, any ThisType.t)
                           intersection2)
           ->
           Obj.magic
             (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object")
                "defineProperties"
-               [|(Obj.magic x3808);(intersection2_to_js
+               [|(Obj.magic x3787);(intersection2_to_js
                                       PropertyDescriptorMap.t_to_js
-                                      (fun (x3811 : any ThisType.t) ->
-                                         ThisType.t_to_js any_to_js x3811)
-                                      x3809)|])
+                                      (fun (x3790 : any ThisType.t) ->
+                                         ThisType.t_to_js any_to_js x3790)
+                                      x3788)|])
     let (seal : 'T -> 'T) =
-      fun (x3813 : 'T) ->
+      fun (x3792 : 'T) ->
         Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "seal"
-             [|(Obj.magic x3813)|])
+             [|(Obj.magic x3792)|])
     let (freeze : 'T list -> 'T list) =
-      fun (x3814 : 'T list) ->
+      fun (x3793 : 'T list) ->
         Ojs.list_of_js Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "freeze"
-             [|(Ojs.list_to_js Obj.magic x3814)|])
+             [|(Ojs.list_to_js Obj.magic x3793)|])
     let (freeze' : 'T -> 'T) =
-      fun (x3817 : 'T) ->
+      fun (x3796 : 'T) ->
         Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "freeze"
-             [|(Obj.magic x3817)|])
+             [|(Obj.magic x3796)|])
     let (freeze'' : 'T -> 'T Readonly.t) =
-      fun (x3818 : 'T) ->
+      fun (x3797 : 'T) ->
         Readonly.t_of_js Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "freeze"
-             [|(Obj.magic x3818)|])
+             [|(Obj.magic x3797)|])
     let (preventExtensions : 'T -> 'T) =
-      fun (x3820 : 'T) ->
+      fun (x3799 : 'T) ->
         Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object")
-             "preventExtensions" [|(Obj.magic x3820)|])
+             "preventExtensions" [|(Obj.magic x3799)|])
     let (isSealed : any -> bool) =
-      fun (x3821 : any) ->
+      fun (x3800 : any) ->
         Ojs.bool_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "isSealed"
-             [|(any_to_js x3821)|])
+             [|(any_to_js x3800)|])
     let (isFrozen : any -> bool) =
-      fun (x3822 : any) ->
+      fun (x3801 : any) ->
         Ojs.bool_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "isFrozen"
-             [|(any_to_js x3822)|])
+             [|(any_to_js x3801)|])
     let (isExtensible : any -> bool) =
-      fun (x3823 : any) ->
+      fun (x3802 : any) ->
         Ojs.bool_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "isExtensible"
-             [|(any_to_js x3823)|])
+             [|(any_to_js x3802)|])
     let (keys' : untyped_object -> string list) =
-      fun (x3824 : untyped_object) ->
+      fun (x3803 : untyped_object) ->
         Ojs.list_of_js Ojs.string_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "keys"
-             [|(untyped_object_to_js x3824)|])
+             [|(untyped_object_to_js x3803)|])
+    let (values :
+      ('T ArrayLike.t, 'T AnonymousInterface26.t) union2 -> 'T list) =
+      fun (x3805 : ('T ArrayLike.t, 'T AnonymousInterface26.t) union2) ->
+        Ojs.list_of_js Obj.magic
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "values"
+             [|(union2_to_js
+                  (fun (x3806 : 'T ArrayLike.t) ->
+                     ArrayLike.t_to_js Obj.magic x3806)
+                  (fun (x3808 : 'T AnonymousInterface26.t) ->
+                     AnonymousInterface26.t_to_js Obj.magic x3808) x3805)|])
+    let (values' : AnonymousInterface0.t -> any list) =
+      fun (x3811 : AnonymousInterface0.t) ->
+        Ojs.list_of_js any_of_js
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "values"
+             [|(AnonymousInterface0.t_to_js x3811)|])
+    let (entries :
+      ('T ArrayLike.t, 'T AnonymousInterface26.t) union2 ->
+        (string * 'T) list)
+      =
+      fun (x3813 : ('T ArrayLike.t, 'T AnonymousInterface26.t) union2) ->
+        Ojs.list_of_js
+          (fun (x3818 : Ojs.t) ->
+             let x3819 = x3818 in
+             ((Ojs.string_of_js (Ojs.array_get x3819 0)),
+               (Obj.magic (Ojs.array_get x3819 1))))
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "entries"
+             [|(union2_to_js
+                  (fun (x3814 : 'T ArrayLike.t) ->
+                     ArrayLike.t_to_js Obj.magic x3814)
+                  (fun (x3816 : 'T AnonymousInterface26.t) ->
+                     AnonymousInterface26.t_to_js Obj.magic x3816) x3813)|])
+    let (entries' : AnonymousInterface0.t -> (string * any) list) =
+      fun (x3820 : AnonymousInterface0.t) ->
+        Ojs.list_of_js
+          (fun (x3821 : Ojs.t) ->
+             let x3822 = x3821 in
+             ((Ojs.string_of_js (Ojs.array_get x3822 0)),
+               (any_of_js (Ojs.array_get x3822 1))))
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "entries"
+             [|(AnonymousInterface0.t_to_js x3820)|])
+    let (getOwnPropertyDescriptors :
+      'T -> (any, AnonymousInterface4.t) intersection2) =
+      fun (x3823 : 'T) ->
+        intersection2_of_js any_of_js AnonymousInterface4.t_of_js
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object")
+             "getOwnPropertyDescriptors" [|(Obj.magic x3823)|])
     let (fromEntries :
       (PropertyKey.t * 'T) Iterable.t -> 'T AnonymousInterface25.t) =
       fun (x3826 : (PropertyKey.t * 'T) Iterable.t) ->
@@ -15636,140 +15636,140 @@ module Map =
         fun (__K_to_js : __K -> Ojs.t) ->
           fun (__V_to_js : __V -> Ojs.t) ->
             fun (x4301 : __tags intf) -> intf_to_js __tags_to_js x4301
-    let (entries : ('tags, 'K, 'V) this -> ('K * 'V) IterableIterator.t) =
-      fun (x4305 : ('tags, 'K, 'V) this) ->
-        IterableIterator.t_of_js
-          (fun (x4309 : Ojs.t) ->
-             let x4310 = x4309 in
-             ((Obj.magic (Ojs.array_get x4310 0)),
-               (Obj.magic (Ojs.array_get x4310 1))))
-          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4305)
-             "entries" [||])
-    let (keys : ('tags, 'K, 'V) this -> 'K IterableIterator.t) =
-      fun (x4311 : ('tags, 'K, 'V) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4311) "keys"
-             [||])
-    let (values : ('tags, 'K, 'V) this -> 'V IterableIterator.t) =
-      fun (x4316 : ('tags, 'K, 'V) this) ->
-        IterableIterator.t_of_js Obj.magic
-          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4316) "values"
-             [||])
     let (clear : ('tags, 'K, 'V) this -> unit) =
-      fun (x4321 : ('tags, 'K, 'V) this) ->
+      fun (x4305 : ('tags, 'K, 'V) this) ->
         ignore
-          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4321) "clear"
+          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4305) "clear"
              [||])
     let (delete : ('tags, 'K, 'V) this -> key:'K -> bool) =
-      fun (x4326 : ('tags, 'K, 'V) this) ->
-        fun ~key:(x4325 : 'K) ->
+      fun (x4310 : ('tags, 'K, 'V) this) ->
+        fun ~key:(x4309 : 'K) ->
           Ojs.bool_of_js
-            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4326)
-               "delete" [|(Obj.magic x4325)|])
+            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4310)
+               "delete" [|(Obj.magic x4309)|])
     let (forEach :
       ('tags, 'K, 'V) this ->
         callbackfn:(value:'V -> key:'K -> map:('K, 'V) t -> unit) ->
           ?thisArg:any -> unit -> unit)
       =
-      fun (x4339 : ('tags, 'K, 'V) this) ->
+      fun (x4323 : ('tags, 'K, 'V) this) ->
         fun
-          ~callbackfn:(x4330 : value:'V -> key:'K -> map:('K, 'V) t -> unit)
+          ~callbackfn:(x4314 : value:'V -> key:'K -> map:('K, 'V) t -> unit)
           ->
-          fun ?thisArg:(x4331 : any option) ->
+          fun ?thisArg:(x4315 : any option) ->
             fun () ->
               ignore
-                (let x4343 = this_to_js Obj.magic Obj.magic Obj.magic x4339 in
-                 Ojs.call (Ojs.get_prop_ascii x4343 "forEach") "apply"
-                   [|x4343;((let x4332 =
+                (let x4327 = this_to_js Obj.magic Obj.magic Obj.magic x4323 in
+                 Ojs.call (Ojs.get_prop_ascii x4327 "forEach") "apply"
+                   [|x4327;((let x4316 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4332 "push"
+                               (Ojs.call x4316 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x4334 : Ojs.t) ->
-                                          fun (x4335 : Ojs.t) ->
-                                            fun (x4336 : Ojs.t) ->
-                                              x4330 ~value:(Obj.magic x4334)
-                                                ~key:(Obj.magic x4335)
+                                       (fun (x4318 : Ojs.t) ->
+                                          fun (x4319 : Ojs.t) ->
+                                            fun (x4320 : Ojs.t) ->
+                                              x4314 ~value:(Obj.magic x4318)
+                                                ~key:(Obj.magic x4319)
                                                 ~map:(t_of_js Obj.magic
-                                                        Obj.magic x4336)))|]);
-                             (match x4331 with
-                              | Some x4333 ->
+                                                        Obj.magic x4320)))|]);
+                             (match x4315 with
+                              | Some x4317 ->
                                   ignore
-                                    (Ojs.call x4332 "push"
-                                       [|(any_to_js x4333)|])
+                                    (Ojs.call x4316 "push"
+                                       [|(any_to_js x4317)|])
                               | None -> ());
-                             x4332))|])
+                             x4316))|])
     let (get_ : ('tags, 'K, 'V) this -> key:'K -> 'V or_undefined) =
-      fun (x4345 : ('tags, 'K, 'V) this) ->
-        fun ~key:(x4344 : 'K) ->
+      fun (x4329 : ('tags, 'K, 'V) this) ->
+        fun ~key:(x4328 : 'K) ->
           or_undefined_of_js Obj.magic
-            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4345) "get"
-               [|(Obj.magic x4344)|])
+            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4329) "get"
+               [|(Obj.magic x4328)|])
     let (has : ('tags, 'K, 'V) this -> key:'K -> bool) =
-      fun (x4351 : ('tags, 'K, 'V) this) ->
-        fun ~key:(x4350 : 'K) ->
+      fun (x4335 : ('tags, 'K, 'V) this) ->
+        fun ~key:(x4334 : 'K) ->
           Ojs.bool_of_js
-            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4351) "has"
-               [|(Obj.magic x4350)|])
+            (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4335) "has"
+               [|(Obj.magic x4334)|])
     let (set_ :
       ('tags, 'K, 'V) this -> key:'K -> value:'V -> ('tags, 'K, 'V) this) =
-      fun (x4357 : ('tags, 'K, 'V) this) ->
-        fun ~key:(x4355 : 'K) ->
-          fun ~value:(x4356 : 'V) ->
+      fun (x4341 : ('tags, 'K, 'V) this) ->
+        fun ~key:(x4339 : 'K) ->
+          fun ~value:(x4340 : 'V) ->
             this_of_js Obj.magic Obj.magic Obj.magic
-              (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4357)
-                 "set" [|(Obj.magic x4355);(Obj.magic x4356)|])
+              (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4341)
+                 "set" [|(Obj.magic x4339);(Obj.magic x4340)|])
     let (get_size : ('tags, 'K, 'V) this -> float) =
-      fun (x4364 : ('tags, 'K, 'V) this) ->
+      fun (x4348 : ('tags, 'K, 'V) this) ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii
-             (this_to_js Obj.magic Obj.magic Obj.magic x4364) "size")
-    let (create : ('K * 'V) Iterable.t -> ('K, 'V) t) =
-      fun (x4368 : ('K * 'V) Iterable.t) ->
-        t_of_js Obj.magic Obj.magic
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Map")
-             [|(Iterable.t_to_js
-                  (fun (x4369 : ('K * 'V)) ->
-                     let (x4370, x4371) = x4369 in
-                     let x4372 = Ojs.array_make 2 in
-                     Ojs.array_set x4372 0 (Obj.magic x4370);
-                     Ojs.array_set x4372 1 (Obj.magic x4371);
-                     x4372) x4368)|])
-    let (create' : unit -> (any, any) t) =
+             (this_to_js Obj.magic Obj.magic Obj.magic x4348) "size")
+    let (entries : ('tags, 'K, 'V) this -> ('K * 'V) IterableIterator.t) =
+      fun (x4352 : ('tags, 'K, 'V) this) ->
+        IterableIterator.t_of_js
+          (fun (x4356 : Ojs.t) ->
+             let x4357 = x4356 in
+             ((Obj.magic (Ojs.array_get x4357 0)),
+               (Obj.magic (Ojs.array_get x4357 1))))
+          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4352)
+             "entries" [||])
+    let (keys : ('tags, 'K, 'V) this -> 'K IterableIterator.t) =
+      fun (x4358 : ('tags, 'K, 'V) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4358) "keys"
+             [||])
+    let (values : ('tags, 'K, 'V) this -> 'V IterableIterator.t) =
+      fun (x4363 : ('tags, 'K, 'V) this) ->
+        IterableIterator.t_of_js Obj.magic
+          (Ojs.call (this_to_js Obj.magic Obj.magic Obj.magic x4363) "values"
+             [||])
+    let (create : unit -> (any, any) t) =
       fun () ->
         t_of_js any_of_js any_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Map") [||])
-    let (create'' : ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) t) =
-      fun ?entries:(x4377 : ('K * 'V) list or_null option) ->
+    let (create' : ?entries:('K * 'V) list or_null -> unit -> ('K, 'V) t) =
+      fun ?entries:(x4370 : ('K * 'V) list or_null option) ->
         fun () ->
           t_of_js Obj.magic Obj.magic
             (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Map")
-               (let x4378 =
+               (let x4371 =
                   Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array") [||] in
-                (match x4377 with
-                 | Some x4379 ->
+                (match x4370 with
+                 | Some x4372 ->
                      ignore
-                       (Ojs.call x4378 "push"
+                       (Ojs.call x4371 "push"
                           [|(or_null_to_js
-                               (fun (x4380 : ('K * 'V) list) ->
+                               (fun (x4373 : ('K * 'V) list) ->
                                   Ojs.list_to_js
-                                    (fun (x4381 : ('K * 'V)) ->
-                                       let (x4382, x4383) = x4381 in
-                                       let x4384 = Ojs.array_make 2 in
-                                       Ojs.array_set x4384 0
-                                         (Obj.magic x4382);
-                                       Ojs.array_set x4384 1
-                                         (Obj.magic x4383);
-                                       x4384) x4380) x4379)|])
+                                    (fun (x4374 : ('K * 'V)) ->
+                                       let (x4375, x4376) = x4374 in
+                                       let x4377 = Ojs.array_make 2 in
+                                       Ojs.array_set x4377 0
+                                         (Obj.magic x4375);
+                                       Ojs.array_set x4377 1
+                                         (Obj.magic x4376);
+                                       x4377) x4373) x4372)|])
                  | None -> ());
-                x4378))
+                x4371))
     let (prototype : unit -> (any, any) t) =
       fun () ->
         t_of_js any_of_js any_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Map")
              "prototype")
+    let (create'' : ('K * 'V) Iterable.t -> ('K, 'V) t) =
+      fun (x4382 : ('K * 'V) Iterable.t) ->
+        t_of_js Obj.magic Obj.magic
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Map")
+             [|(Iterable.t_to_js
+                  (fun (x4383 : ('K * 'V)) ->
+                     let (x4384, x4385) = x4383 in
+                     let x4386 = Ojs.array_make 2 in
+                     Ojs.array_set x4386 0 (Obj.magic x4384);
+                     Ojs.array_set x4386 1 (Obj.magic x4385);
+                     x4386) x4382)|])
     let cast_from = Obj.magic
   end
 module Lowercase =
@@ -16327,176 +16327,197 @@ module Float64Array =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x4575 : __tags intf) -> intf_to_js __tags_to_js x4575
-    let (entries : 'tags this -> (float * float) IterableIterator.t) =
-      fun (x4579 : 'tags this) ->
-        IterableIterator.t_of_js
-          (fun (x4581 : Ojs.t) ->
-             let x4582 = x4581 in
-             ((Ojs.float_of_js (Ojs.array_get x4582 0)),
-               (Ojs.float_of_js (Ojs.array_get x4582 1))))
-          (Ojs.call (this_to_js Obj.magic x4579) "entries" [||])
-    let (keys : 'tags this -> float IterableIterator.t) =
-      fun (x4583 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x4583) "keys" [||])
-    let (values : 'tags this -> float IterableIterator.t) =
-      fun (x4586 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x4586) "values" [||])
     let (includes :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x4593 : 'tags this) ->
-        fun ~searchElement:(x4589 : float) ->
-          fun ?fromIndex:(x4590 : float option) ->
+      fun (x4583 : 'tags this) ->
+        fun ~searchElement:(x4579 : float) ->
+          fun ?fromIndex:(x4580 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x4595 = this_to_js Obj.magic x4593 in
-                 Ojs.call (Ojs.get_prop_ascii x4595 "includes") "apply"
-                   [|x4595;((let x4591 =
+                (let x4585 = this_to_js Obj.magic x4583 in
+                 Ojs.call (Ojs.get_prop_ascii x4585 "includes") "apply"
+                   [|x4585;((let x4581 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4591 "push"
-                                  [|(Ojs.float_to_js x4589)|]);
-                             (match x4590 with
-                              | Some x4592 ->
+                               (Ojs.call x4581 "push"
+                                  [|(Ojs.float_to_js x4579)|]);
+                             (match x4580 with
+                              | Some x4582 ->
                                   ignore
-                                    (Ojs.call x4591 "push"
-                                       [|(Ojs.float_to_js x4592)|])
+                                    (Ojs.call x4581 "push"
+                                       [|(Ojs.float_to_js x4582)|])
                               | None -> ());
-                             x4591))|])
+                             x4581))|])
     let (get_BYTES_PER_ELEMENT : 'tags this -> float) =
-      fun (x4596 : 'tags this) ->
+      fun (x4586 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4596)
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4586)
              "BYTES_PER_ELEMENT")
     let (get_buffer : 'tags this -> ArrayBufferLike.t) =
-      fun (x4598 : 'tags this) ->
+      fun (x4588 : 'tags this) ->
         ArrayBufferLike.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4598) "buffer")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4588) "buffer")
     let (get_byteLength : 'tags this -> float) =
-      fun (x4600 : 'tags this) ->
+      fun (x4590 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4600) "byteLength")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4590) "byteLength")
     let (get_byteOffset : 'tags this -> float) =
-      fun (x4602 : 'tags this) ->
+      fun (x4592 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4602) "byteOffset")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4592) "byteOffset")
     let (copyWithin :
       'tags this ->
         target:float -> start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x4609 : 'tags this) ->
-        fun ~target:(x4604 : float) ->
-          fun ~start:(x4605 : float) ->
-            fun ?end_:(x4606 : float option) ->
+      fun (x4599 : 'tags this) ->
+        fun ~target:(x4594 : float) ->
+          fun ~start:(x4595 : float) ->
+            fun ?end_:(x4596 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x4611 = this_to_js Obj.magic x4609 in
-                   Ojs.call (Ojs.get_prop_ascii x4611 "copyWithin") "apply"
-                     [|x4611;((let x4607 =
+                  (let x4601 = this_to_js Obj.magic x4599 in
+                   Ojs.call (Ojs.get_prop_ascii x4601 "copyWithin") "apply"
+                     [|x4601;((let x4597 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x4607 "push"
-                                    [|(Ojs.float_to_js x4604)|]);
+                                 (Ojs.call x4597 "push"
+                                    [|(Ojs.float_to_js x4594)|]);
                                ignore
-                                 (Ojs.call x4607 "push"
-                                    [|(Ojs.float_to_js x4605)|]);
-                               (match x4606 with
-                                | Some x4608 ->
+                                 (Ojs.call x4597 "push"
+                                    [|(Ojs.float_to_js x4595)|]);
+                               (match x4596 with
+                                | Some x4598 ->
                                     ignore
-                                      (Ojs.call x4607 "push"
-                                         [|(Ojs.float_to_js x4608)|])
+                                      (Ojs.call x4597 "push"
+                                         [|(Ojs.float_to_js x4598)|])
                                 | None -> ());
-                               x4607))|])
+                               x4597))|])
     let (every :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x4620 : 'tags this) ->
+      fun (x4610 : 'tags this) ->
         fun
-          ~predicate:(x4613 :
+          ~predicate:(x4603 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x4614 : any option) ->
+          fun ?thisArg:(x4604 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x4622 = this_to_js Obj.magic x4620 in
-                 Ojs.call (Ojs.get_prop_ascii x4622 "every") "apply"
-                   [|x4622;((let x4615 =
+                (let x4612 = this_to_js Obj.magic x4610 in
+                 Ojs.call (Ojs.get_prop_ascii x4612 "every") "apply"
+                   [|x4612;((let x4605 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4615 "push"
+                               (Ojs.call x4605 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x4617 : Ojs.t) ->
-                                          fun (x4618 : Ojs.t) ->
-                                            fun (x4619 : Ojs.t) ->
+                                       (fun (x4607 : Ojs.t) ->
+                                          fun (x4608 : Ojs.t) ->
+                                            fun (x4609 : Ojs.t) ->
                                               unknown_to_js
-                                                (x4613
+                                                (x4603
                                                    ~value:(Ojs.float_of_js
-                                                             x4617)
+                                                             x4607)
                                                    ~index:(Ojs.float_of_js
-                                                             x4618)
-                                                   ~array:(t_of_js x4619))))|]);
-                             (match x4614 with
-                              | Some x4616 ->
+                                                             x4608)
+                                                   ~array:(t_of_js x4609))))|]);
+                             (match x4604 with
+                              | Some x4606 ->
                                   ignore
-                                    (Ojs.call x4615 "push"
-                                       [|(any_to_js x4616)|])
+                                    (Ojs.call x4605 "push"
+                                       [|(any_to_js x4606)|])
                               | None -> ());
-                             x4615))|])
+                             x4605))|])
     let (fill :
       'tags this ->
         value:float -> ?start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x4629 : 'tags this) ->
-        fun ~value:(x4623 : float) ->
-          fun ?start:(x4624 : float option) ->
-            fun ?end_:(x4625 : float option) ->
+      fun (x4619 : 'tags this) ->
+        fun ~value:(x4613 : float) ->
+          fun ?start:(x4614 : float option) ->
+            fun ?end_:(x4615 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x4631 = this_to_js Obj.magic x4629 in
-                   Ojs.call (Ojs.get_prop_ascii x4631 "fill") "apply"
-                     [|x4631;((let x4626 =
+                  (let x4621 = this_to_js Obj.magic x4619 in
+                   Ojs.call (Ojs.get_prop_ascii x4621 "fill") "apply"
+                     [|x4621;((let x4616 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x4626 "push"
-                                    [|(Ojs.float_to_js x4623)|]);
-                               (match x4624 with
-                                | Some x4628 ->
+                                 (Ojs.call x4616 "push"
+                                    [|(Ojs.float_to_js x4613)|]);
+                               (match x4614 with
+                                | Some x4618 ->
                                     ignore
-                                      (Ojs.call x4626 "push"
-                                         [|(Ojs.float_to_js x4628)|])
+                                      (Ojs.call x4616 "push"
+                                         [|(Ojs.float_to_js x4618)|])
                                 | None -> ());
-                               (match x4625 with
-                                | Some x4627 ->
+                               (match x4615 with
+                                | Some x4617 ->
                                     ignore
-                                      (Ojs.call x4626 "push"
-                                         [|(Ojs.float_to_js x4627)|])
+                                      (Ojs.call x4616 "push"
+                                         [|(Ojs.float_to_js x4617)|])
                                 | None -> ());
-                               x4626))|])
+                               x4616))|])
     let (filter :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> any) ->
           ?thisArg:any -> unit -> t)
       =
+      fun (x4630 : 'tags this) ->
+        fun ~predicate:(x4623 : value:float -> index:float -> array:t -> any)
+          ->
+          fun ?thisArg:(x4624 : any option) ->
+            fun () ->
+              t_of_js
+                (let x4632 = this_to_js Obj.magic x4630 in
+                 Ojs.call (Ojs.get_prop_ascii x4632 "filter") "apply"
+                   [|x4632;((let x4625 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x4625 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x4627 : Ojs.t) ->
+                                          fun (x4628 : Ojs.t) ->
+                                            fun (x4629 : Ojs.t) ->
+                                              any_to_js
+                                                (x4623
+                                                   ~value:(Ojs.float_of_js
+                                                             x4627)
+                                                   ~index:(Ojs.float_of_js
+                                                             x4628)
+                                                   ~array:(t_of_js x4629))))|]);
+                             (match x4624 with
+                              | Some x4626 ->
+                                  ignore
+                                    (Ojs.call x4625 "push"
+                                       [|(any_to_js x4626)|])
+                              | None -> ());
+                             x4625))|])
+    let (find :
+      'tags this ->
+        predicate:(value:float -> index:float -> obj:t -> bool) ->
+          ?thisArg:any -> unit -> float or_undefined)
+      =
       fun (x4640 : 'tags this) ->
-        fun ~predicate:(x4633 : value:float -> index:float -> array:t -> any)
+        fun ~predicate:(x4633 : value:float -> index:float -> obj:t -> bool)
           ->
           fun ?thisArg:(x4634 : any option) ->
             fun () ->
-              t_of_js
+              or_undefined_of_js Ojs.float_of_js
                 (let x4642 = this_to_js Obj.magic x4640 in
-                 Ojs.call (Ojs.get_prop_ascii x4642 "filter") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x4642 "find") "apply"
                    [|x4642;((let x4635 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -16507,13 +16528,13 @@ module Float64Array =
                                        (fun (x4637 : Ojs.t) ->
                                           fun (x4638 : Ojs.t) ->
                                             fun (x4639 : Ojs.t) ->
-                                              any_to_js
+                                              Ojs.bool_to_js
                                                 (x4633
                                                    ~value:(Ojs.float_of_js
                                                              x4637)
                                                    ~index:(Ojs.float_of_js
                                                              x4638)
-                                                   ~array:(t_of_js x4639))))|]);
+                                                   ~obj:(t_of_js x4639))))|]);
                              (match x4634 with
                               | Some x4636 ->
                                   ignore
@@ -16521,56 +16542,57 @@ module Float64Array =
                                        [|(any_to_js x4636)|])
                               | None -> ());
                              x4635))|])
-    let (find :
-      'tags this ->
-        predicate:(value:float -> index:float -> obj:t -> bool) ->
-          ?thisArg:any -> unit -> float or_undefined)
-      =
-      fun (x4650 : 'tags this) ->
-        fun ~predicate:(x4643 : value:float -> index:float -> obj:t -> bool)
-          ->
-          fun ?thisArg:(x4644 : any option) ->
-            fun () ->
-              or_undefined_of_js Ojs.float_of_js
-                (let x4652 = this_to_js Obj.magic x4650 in
-                 Ojs.call (Ojs.get_prop_ascii x4652 "find") "apply"
-                   [|x4652;((let x4645 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x4645 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x4647 : Ojs.t) ->
-                                          fun (x4648 : Ojs.t) ->
-                                            fun (x4649 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x4643
-                                                   ~value:(Ojs.float_of_js
-                                                             x4647)
-                                                   ~index:(Ojs.float_of_js
-                                                             x4648)
-                                                   ~obj:(t_of_js x4649))))|]);
-                             (match x4644 with
-                              | Some x4646 ->
-                                  ignore
-                                    (Ojs.call x4645 "push"
-                                       [|(any_to_js x4646)|])
-                              | None -> ());
-                             x4645))|])
     let (findIndex :
       'tags this ->
         predicate:(value:float -> index:float -> obj:t -> bool) ->
           ?thisArg:any -> unit -> float)
       =
+      fun (x4651 : 'tags this) ->
+        fun ~predicate:(x4644 : value:float -> index:float -> obj:t -> bool)
+          ->
+          fun ?thisArg:(x4645 : any option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x4653 = this_to_js Obj.magic x4651 in
+                 Ojs.call (Ojs.get_prop_ascii x4653 "findIndex") "apply"
+                   [|x4653;((let x4646 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x4646 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x4648 : Ojs.t) ->
+                                          fun (x4649 : Ojs.t) ->
+                                            fun (x4650 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x4644
+                                                   ~value:(Ojs.float_of_js
+                                                             x4648)
+                                                   ~index:(Ojs.float_of_js
+                                                             x4649)
+                                                   ~obj:(t_of_js x4650))))|]);
+                             (match x4645 with
+                              | Some x4647 ->
+                                  ignore
+                                    (Ojs.call x4646 "push"
+                                       [|(any_to_js x4647)|])
+                              | None -> ());
+                             x4646))|])
+    let (forEach :
+      'tags this ->
+        callbackfn:(value:float -> index:float -> array:t -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
       fun (x4661 : 'tags this) ->
-        fun ~predicate:(x4654 : value:float -> index:float -> obj:t -> bool)
+        fun
+          ~callbackfn:(x4654 : value:float -> index:float -> array:t -> unit)
           ->
           fun ?thisArg:(x4655 : any option) ->
             fun () ->
-              Ojs.float_of_js
+              ignore
                 (let x4663 = this_to_js Obj.magic x4661 in
-                 Ojs.call (Ojs.get_prop_ascii x4663 "findIndex") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x4663 "forEach") "apply"
                    [|x4663;((let x4656 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -16581,13 +16603,10 @@ module Float64Array =
                                        (fun (x4658 : Ojs.t) ->
                                           fun (x4659 : Ojs.t) ->
                                             fun (x4660 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x4654
-                                                   ~value:(Ojs.float_of_js
-                                                             x4658)
-                                                   ~index:(Ojs.float_of_js
-                                                             x4659)
-                                                   ~obj:(t_of_js x4660))))|]);
+                                              x4654
+                                                ~value:(Ojs.float_of_js x4658)
+                                                ~index:(Ojs.float_of_js x4659)
+                                                ~array:(t_of_js x4660)))|]);
                              (match x4655 with
                               | Some x4657 ->
                                   ignore
@@ -16595,150 +16614,115 @@ module Float64Array =
                                        [|(any_to_js x4657)|])
                               | None -> ());
                              x4656))|])
-    let (forEach :
-      'tags this ->
-        callbackfn:(value:float -> index:float -> array:t -> unit) ->
-          ?thisArg:any -> unit -> unit)
+    let (indexOf :
+      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x4671 : 'tags this) ->
-        fun
-          ~callbackfn:(x4664 : value:float -> index:float -> array:t -> unit)
-          ->
-          fun ?thisArg:(x4665 : any option) ->
+      fun (x4668 : 'tags this) ->
+        fun ~searchElement:(x4664 : float) ->
+          fun ?fromIndex:(x4665 : float option) ->
             fun () ->
-              ignore
-                (let x4673 = this_to_js Obj.magic x4671 in
-                 Ojs.call (Ojs.get_prop_ascii x4673 "forEach") "apply"
-                   [|x4673;((let x4666 =
+              Ojs.float_of_js
+                (let x4670 = this_to_js Obj.magic x4668 in
+                 Ojs.call (Ojs.get_prop_ascii x4670 "indexOf") "apply"
+                   [|x4670;((let x4666 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
                                (Ojs.call x4666 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x4668 : Ojs.t) ->
-                                          fun (x4669 : Ojs.t) ->
-                                            fun (x4670 : Ojs.t) ->
-                                              x4664
-                                                ~value:(Ojs.float_of_js x4668)
-                                                ~index:(Ojs.float_of_js x4669)
-                                                ~array:(t_of_js x4670)))|]);
+                                  [|(Ojs.float_to_js x4664)|]);
                              (match x4665 with
                               | Some x4667 ->
                                   ignore
                                     (Ojs.call x4666 "push"
-                                       [|(any_to_js x4667)|])
+                                       [|(Ojs.float_to_js x4667)|])
                               | None -> ());
                              x4666))|])
-    let (indexOf :
-      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x4678 : 'tags this) ->
-        fun ~searchElement:(x4674 : float) ->
-          fun ?fromIndex:(x4675 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x4680 = this_to_js Obj.magic x4678 in
-                 Ojs.call (Ojs.get_prop_ascii x4680 "indexOf") "apply"
-                   [|x4680;((let x4676 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x4676 "push"
-                                  [|(Ojs.float_to_js x4674)|]);
-                             (match x4675 with
-                              | Some x4677 ->
-                                  ignore
-                                    (Ojs.call x4676 "push"
-                                       [|(Ojs.float_to_js x4677)|])
-                              | None -> ());
-                             x4676))|])
     let (join : 'tags this -> ?separator:string -> unit -> string) =
-      fun (x4684 : 'tags this) ->
-        fun ?separator:(x4681 : string option) ->
+      fun (x4674 : 'tags this) ->
+        fun ?separator:(x4671 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x4686 = this_to_js Obj.magic x4684 in
-               Ojs.call (Ojs.get_prop_ascii x4686 "join") "apply"
-                 [|x4686;((let x4682 =
+              (let x4676 = this_to_js Obj.magic x4674 in
+               Ojs.call (Ojs.get_prop_ascii x4676 "join") "apply"
+                 [|x4676;((let x4672 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x4681 with
-                            | Some x4683 ->
+                           (match x4671 with
+                            | Some x4673 ->
                                 ignore
-                                  (Ojs.call x4682 "push"
-                                     [|(Ojs.string_to_js x4683)|])
+                                  (Ojs.call x4672 "push"
+                                     [|(Ojs.string_to_js x4673)|])
                             | None -> ());
-                           x4682))|])
+                           x4672))|])
     let (lastIndexOf :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x4691 : 'tags this) ->
-        fun ~searchElement:(x4687 : float) ->
-          fun ?fromIndex:(x4688 : float option) ->
+      fun (x4681 : 'tags this) ->
+        fun ~searchElement:(x4677 : float) ->
+          fun ?fromIndex:(x4678 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x4693 = this_to_js Obj.magic x4691 in
-                 Ojs.call (Ojs.get_prop_ascii x4693 "lastIndexOf") "apply"
-                   [|x4693;((let x4689 =
+                (let x4683 = this_to_js Obj.magic x4681 in
+                 Ojs.call (Ojs.get_prop_ascii x4683 "lastIndexOf") "apply"
+                   [|x4683;((let x4679 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4689 "push"
-                                  [|(Ojs.float_to_js x4687)|]);
-                             (match x4688 with
-                              | Some x4690 ->
+                               (Ojs.call x4679 "push"
+                                  [|(Ojs.float_to_js x4677)|]);
+                             (match x4678 with
+                              | Some x4680 ->
                                   ignore
-                                    (Ojs.call x4689 "push"
-                                       [|(Ojs.float_to_js x4690)|])
+                                    (Ojs.call x4679 "push"
+                                       [|(Ojs.float_to_js x4680)|])
                               | None -> ());
-                             x4689))|])
+                             x4679))|])
     let (get_length : 'tags this -> float) =
-      fun (x4694 : 'tags this) ->
+      fun (x4684 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4694) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4684) "length")
     let (map :
       'tags this ->
         callbackfn:(value:float -> index:float -> array:t -> float) ->
           ?thisArg:any -> unit -> t)
       =
-      fun (x4703 : 'tags this) ->
+      fun (x4693 : 'tags this) ->
         fun
-          ~callbackfn:(x4696 :
+          ~callbackfn:(x4686 :
                         value:float -> index:float -> array:t -> float)
           ->
-          fun ?thisArg:(x4697 : any option) ->
+          fun ?thisArg:(x4687 : any option) ->
             fun () ->
               t_of_js
-                (let x4705 = this_to_js Obj.magic x4703 in
-                 Ojs.call (Ojs.get_prop_ascii x4705 "map") "apply"
-                   [|x4705;((let x4698 =
+                (let x4695 = this_to_js Obj.magic x4693 in
+                 Ojs.call (Ojs.get_prop_ascii x4695 "map") "apply"
+                   [|x4695;((let x4688 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4698 "push"
+                               (Ojs.call x4688 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x4700 : Ojs.t) ->
-                                          fun (x4701 : Ojs.t) ->
-                                            fun (x4702 : Ojs.t) ->
+                                       (fun (x4690 : Ojs.t) ->
+                                          fun (x4691 : Ojs.t) ->
+                                            fun (x4692 : Ojs.t) ->
                                               Ojs.float_to_js
-                                                (x4696
+                                                (x4686
                                                    ~value:(Ojs.float_of_js
-                                                             x4700)
+                                                             x4690)
                                                    ~index:(Ojs.float_of_js
-                                                             x4701)
-                                                   ~array:(t_of_js x4702))))|]);
-                             (match x4697 with
-                              | Some x4699 ->
+                                                             x4691)
+                                                   ~array:(t_of_js x4692))))|]);
+                             (match x4687 with
+                              | Some x4689 ->
                                   ignore
-                                    (Ojs.call x4698 "push"
-                                       [|(any_to_js x4699)|])
+                                    (Ojs.call x4688 "push"
+                                       [|(any_to_js x4689)|])
                               | None -> ());
-                             x4698))|])
+                             x4688))|])
     let (reduce :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -16746,25 +16730,25 @@ module Float64Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x4711 : 'tags this) ->
+      fun (x4701 : 'tags this) ->
         fun
-          ~callbackfn:(x4706 :
+          ~callbackfn:(x4696 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x4711) "reduce"
+            (Ojs.call (this_to_js Obj.magic x4701) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x4707 : Ojs.t) ->
-                       fun (x4708 : Ojs.t) ->
-                         fun (x4709 : Ojs.t) ->
-                           fun (x4710 : Ojs.t) ->
+                    (fun (x4697 : Ojs.t) ->
+                       fun (x4698 : Ojs.t) ->
+                         fun (x4699 : Ojs.t) ->
+                           fun (x4700 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x4706 ~previousValue:(Ojs.float_of_js x4707)
-                                  ~currentValue:(Ojs.float_of_js x4708)
-                                  ~currentIndex:(Ojs.float_of_js x4709)
-                                  ~array:(t_of_js x4710))))|])
+                               (x4696 ~previousValue:(Ojs.float_of_js x4697)
+                                  ~currentValue:(Ojs.float_of_js x4698)
+                                  ~currentIndex:(Ojs.float_of_js x4699)
+                                  ~array:(t_of_js x4700))))|])
     let (reduce' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -16772,28 +16756,28 @@ module Float64Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x4719 : 'tags this) ->
+      fun (x4709 : 'tags this) ->
         fun
-          ~callbackfn:(x4713 :
+          ~callbackfn:(x4703 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x4718 : float) ->
+          fun ~initialValue:(x4708 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x4719) "reduce"
+              (Ojs.call (this_to_js Obj.magic x4709) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x4714 : Ojs.t) ->
-                         fun (x4715 : Ojs.t) ->
-                           fun (x4716 : Ojs.t) ->
-                             fun (x4717 : Ojs.t) ->
+                      (fun (x4704 : Ojs.t) ->
+                         fun (x4705 : Ojs.t) ->
+                           fun (x4706 : Ojs.t) ->
+                             fun (x4707 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x4713
-                                    ~previousValue:(Ojs.float_of_js x4714)
-                                    ~currentValue:(Ojs.float_of_js x4715)
-                                    ~currentIndex:(Ojs.float_of_js x4716)
-                                    ~array:(t_of_js x4717))));(Ojs.float_to_js
-                                                                 x4718)|])
+                                 (x4703
+                                    ~previousValue:(Ojs.float_of_js x4704)
+                                    ~currentValue:(Ojs.float_of_js x4705)
+                                    ~currentIndex:(Ojs.float_of_js x4706)
+                                    ~array:(t_of_js x4707))));(Ojs.float_to_js
+                                                                 x4708)|])
     let (reduce'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -16801,27 +16785,27 @@ module Float64Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x4727 : 'tags this) ->
+      fun (x4717 : 'tags this) ->
         fun
-          ~callbackfn:(x4721 :
+          ~callbackfn:(x4711 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x4726 : 'U) ->
+          fun ~initialValue:(x4716 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x4727) "reduce"
+              (Ojs.call (this_to_js Obj.magic x4717) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x4722 : Ojs.t) ->
-                         fun (x4723 : Ojs.t) ->
-                           fun (x4724 : Ojs.t) ->
-                             fun (x4725 : Ojs.t) ->
+                      (fun (x4712 : Ojs.t) ->
+                         fun (x4713 : Ojs.t) ->
+                           fun (x4714 : Ojs.t) ->
+                             fun (x4715 : Ojs.t) ->
                                Obj.magic
-                                 (x4721 ~previousValue:(Obj.magic x4722)
-                                    ~currentValue:(Ojs.float_of_js x4723)
-                                    ~currentIndex:(Ojs.float_of_js x4724)
-                                    ~array:(t_of_js x4725))));(Obj.magic
-                                                                 x4726)|])
+                                 (x4711 ~previousValue:(Obj.magic x4712)
+                                    ~currentValue:(Ojs.float_of_js x4713)
+                                    ~currentIndex:(Ojs.float_of_js x4714)
+                                    ~array:(t_of_js x4715))));(Obj.magic
+                                                                 x4716)|])
     let (reduceRight :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -16829,25 +16813,25 @@ module Float64Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x4734 : 'tags this) ->
+      fun (x4724 : 'tags this) ->
         fun
-          ~callbackfn:(x4729 :
+          ~callbackfn:(x4719 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x4734) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic x4724) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x4730 : Ojs.t) ->
-                       fun (x4731 : Ojs.t) ->
-                         fun (x4732 : Ojs.t) ->
-                           fun (x4733 : Ojs.t) ->
+                    (fun (x4720 : Ojs.t) ->
+                       fun (x4721 : Ojs.t) ->
+                         fun (x4722 : Ojs.t) ->
+                           fun (x4723 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x4729 ~previousValue:(Ojs.float_of_js x4730)
-                                  ~currentValue:(Ojs.float_of_js x4731)
-                                  ~currentIndex:(Ojs.float_of_js x4732)
-                                  ~array:(t_of_js x4733))))|])
+                               (x4719 ~previousValue:(Ojs.float_of_js x4720)
+                                  ~currentValue:(Ojs.float_of_js x4721)
+                                  ~currentIndex:(Ojs.float_of_js x4722)
+                                  ~array:(t_of_js x4723))))|])
     let (reduceRight' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -16855,28 +16839,28 @@ module Float64Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x4742 : 'tags this) ->
+      fun (x4732 : 'tags this) ->
         fun
-          ~callbackfn:(x4736 :
+          ~callbackfn:(x4726 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x4741 : float) ->
+          fun ~initialValue:(x4731 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x4742) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x4732) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x4737 : Ojs.t) ->
-                         fun (x4738 : Ojs.t) ->
-                           fun (x4739 : Ojs.t) ->
-                             fun (x4740 : Ojs.t) ->
+                      (fun (x4727 : Ojs.t) ->
+                         fun (x4728 : Ojs.t) ->
+                           fun (x4729 : Ojs.t) ->
+                             fun (x4730 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x4736
-                                    ~previousValue:(Ojs.float_of_js x4737)
-                                    ~currentValue:(Ojs.float_of_js x4738)
-                                    ~currentIndex:(Ojs.float_of_js x4739)
-                                    ~array:(t_of_js x4740))));(Ojs.float_to_js
-                                                                 x4741)|])
+                                 (x4726
+                                    ~previousValue:(Ojs.float_of_js x4727)
+                                    ~currentValue:(Ojs.float_of_js x4728)
+                                    ~currentIndex:(Ojs.float_of_js x4729)
+                                    ~array:(t_of_js x4730))));(Ojs.float_to_js
+                                                                 x4731)|])
     let (reduceRight'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -16884,235 +16868,207 @@ module Float64Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x4750 : 'tags this) ->
+      fun (x4740 : 'tags this) ->
         fun
-          ~callbackfn:(x4744 :
+          ~callbackfn:(x4734 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x4749 : 'U) ->
+          fun ~initialValue:(x4739 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x4750) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x4740) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x4745 : Ojs.t) ->
-                         fun (x4746 : Ojs.t) ->
-                           fun (x4747 : Ojs.t) ->
-                             fun (x4748 : Ojs.t) ->
+                      (fun (x4735 : Ojs.t) ->
+                         fun (x4736 : Ojs.t) ->
+                           fun (x4737 : Ojs.t) ->
+                             fun (x4738 : Ojs.t) ->
                                Obj.magic
-                                 (x4744 ~previousValue:(Obj.magic x4745)
-                                    ~currentValue:(Ojs.float_of_js x4746)
-                                    ~currentIndex:(Ojs.float_of_js x4747)
-                                    ~array:(t_of_js x4748))));(Obj.magic
-                                                                 x4749)|])
+                                 (x4734 ~previousValue:(Obj.magic x4735)
+                                    ~currentValue:(Ojs.float_of_js x4736)
+                                    ~currentIndex:(Ojs.float_of_js x4737)
+                                    ~array:(t_of_js x4738))));(Obj.magic
+                                                                 x4739)|])
     let (reverse : 'tags this -> t) =
-      fun (x4752 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x4752) "reverse" [||])
+      fun (x4742 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x4742) "reverse" [||])
     let (set_ :
       'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit)
       =
-      fun (x4759 : 'tags this) ->
-        fun ~array:(x4754 : float ArrayLike.t) ->
-          fun ?offset:(x4755 : float option) ->
+      fun (x4749 : 'tags this) ->
+        fun ~array:(x4744 : float ArrayLike.t) ->
+          fun ?offset:(x4745 : float option) ->
             fun () ->
               ignore
-                (let x4761 = this_to_js Obj.magic x4759 in
-                 Ojs.call (Ojs.get_prop_ascii x4761 "set") "apply"
-                   [|x4761;((let x4756 =
+                (let x4751 = this_to_js Obj.magic x4749 in
+                 Ojs.call (Ojs.get_prop_ascii x4751 "set") "apply"
+                   [|x4751;((let x4746 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4756 "push"
-                                  [|(ArrayLike.t_to_js Ojs.float_to_js x4754)|]);
-                             (match x4755 with
-                              | Some x4757 ->
+                               (Ojs.call x4746 "push"
+                                  [|(ArrayLike.t_to_js Ojs.float_to_js x4744)|]);
+                             (match x4745 with
+                              | Some x4747 ->
                                   ignore
-                                    (Ojs.call x4756 "push"
-                                       [|(Ojs.float_to_js x4757)|])
+                                    (Ojs.call x4746 "push"
+                                       [|(Ojs.float_to_js x4747)|])
                               | None -> ());
-                             x4756))|])
+                             x4746))|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> t) =
-      fun (x4767 : 'tags this) ->
-        fun ?start:(x4762 : float option) ->
-          fun ?end_:(x4763 : float option) ->
+      fun (x4757 : 'tags this) ->
+        fun ?start:(x4752 : float option) ->
+          fun ?end_:(x4753 : float option) ->
             fun () ->
               t_of_js
-                (let x4769 = this_to_js Obj.magic x4767 in
-                 Ojs.call (Ojs.get_prop_ascii x4769 "slice") "apply"
-                   [|x4769;((let x4764 =
+                (let x4759 = this_to_js Obj.magic x4757 in
+                 Ojs.call (Ojs.get_prop_ascii x4759 "slice") "apply"
+                   [|x4759;((let x4754 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x4762 with
-                              | Some x4766 ->
+                             (match x4752 with
+                              | Some x4756 ->
                                   ignore
-                                    (Ojs.call x4764 "push"
-                                       [|(Ojs.float_to_js x4766)|])
+                                    (Ojs.call x4754 "push"
+                                       [|(Ojs.float_to_js x4756)|])
                               | None -> ());
-                             (match x4763 with
-                              | Some x4765 ->
+                             (match x4753 with
+                              | Some x4755 ->
                                   ignore
-                                    (Ojs.call x4764 "push"
-                                       [|(Ojs.float_to_js x4765)|])
+                                    (Ojs.call x4754 "push"
+                                       [|(Ojs.float_to_js x4755)|])
                               | None -> ());
-                             x4764))|])
+                             x4754))|])
     let (some :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x4777 : 'tags this) ->
+      fun (x4767 : 'tags this) ->
         fun
-          ~predicate:(x4770 :
+          ~predicate:(x4760 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x4771 : any option) ->
+          fun ?thisArg:(x4761 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x4779 = this_to_js Obj.magic x4777 in
-                 Ojs.call (Ojs.get_prop_ascii x4779 "some") "apply"
-                   [|x4779;((let x4772 =
+                (let x4769 = this_to_js Obj.magic x4767 in
+                 Ojs.call (Ojs.get_prop_ascii x4769 "some") "apply"
+                   [|x4769;((let x4762 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4772 "push"
+                               (Ojs.call x4762 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x4774 : Ojs.t) ->
-                                          fun (x4775 : Ojs.t) ->
-                                            fun (x4776 : Ojs.t) ->
+                                       (fun (x4764 : Ojs.t) ->
+                                          fun (x4765 : Ojs.t) ->
+                                            fun (x4766 : Ojs.t) ->
                                               unknown_to_js
-                                                (x4770
+                                                (x4760
                                                    ~value:(Ojs.float_of_js
-                                                             x4774)
+                                                             x4764)
                                                    ~index:(Ojs.float_of_js
-                                                             x4775)
-                                                   ~array:(t_of_js x4776))))|]);
-                             (match x4771 with
-                              | Some x4773 ->
+                                                             x4765)
+                                                   ~array:(t_of_js x4766))))|]);
+                             (match x4761 with
+                              | Some x4763 ->
                                   ignore
-                                    (Ojs.call x4772 "push"
-                                       [|(any_to_js x4773)|])
+                                    (Ojs.call x4762 "push"
+                                       [|(any_to_js x4763)|])
                               | None -> ());
-                             x4772))|])
+                             x4762))|])
     let (sort :
       'tags this ->
         ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this)
       =
-      fun (x4785 : 'tags this) ->
-        fun ?compareFn:(x4780 : (a:float -> b:float -> float) option) ->
+      fun (x4775 : 'tags this) ->
+        fun ?compareFn:(x4770 : (a:float -> b:float -> float) option) ->
           fun () ->
             this_of_js Obj.magic
-              (let x4787 = this_to_js Obj.magic x4785 in
-               Ojs.call (Ojs.get_prop_ascii x4787 "sort") "apply"
-                 [|x4787;((let x4781 =
+              (let x4777 = this_to_js Obj.magic x4775 in
+               Ojs.call (Ojs.get_prop_ascii x4777 "sort") "apply"
+                 [|x4777;((let x4771 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x4780 with
-                            | Some x4782 ->
+                           (match x4770 with
+                            | Some x4772 ->
                                 ignore
-                                  (Ojs.call x4781 "push"
+                                  (Ojs.call x4771 "push"
                                      [|(Ojs.fun_to_js 2
-                                          (fun (x4783 : Ojs.t) ->
-                                             fun (x4784 : Ojs.t) ->
+                                          (fun (x4773 : Ojs.t) ->
+                                             fun (x4774 : Ojs.t) ->
                                                Ojs.float_to_js
-                                                 (x4782
-                                                    ~a:(Ojs.float_of_js x4783)
-                                                    ~b:(Ojs.float_of_js x4784))))|])
+                                                 (x4772
+                                                    ~a:(Ojs.float_of_js x4773)
+                                                    ~b:(Ojs.float_of_js x4774))))|])
                             | None -> ());
-                           x4781))|])
+                           x4771))|])
     let (subarray : 'tags this -> ?begin_:float -> ?end_:float -> unit -> t)
       =
-      fun (x4794 : 'tags this) ->
-        fun ?begin_:(x4789 : float option) ->
-          fun ?end_:(x4790 : float option) ->
+      fun (x4784 : 'tags this) ->
+        fun ?begin_:(x4779 : float option) ->
+          fun ?end_:(x4780 : float option) ->
             fun () ->
               t_of_js
-                (let x4796 = this_to_js Obj.magic x4794 in
-                 Ojs.call (Ojs.get_prop_ascii x4796 "subarray") "apply"
-                   [|x4796;((let x4791 =
+                (let x4786 = this_to_js Obj.magic x4784 in
+                 Ojs.call (Ojs.get_prop_ascii x4786 "subarray") "apply"
+                   [|x4786;((let x4781 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x4789 with
-                              | Some x4793 ->
+                             (match x4779 with
+                              | Some x4783 ->
                                   ignore
-                                    (Ojs.call x4791 "push"
-                                       [|(Ojs.float_to_js x4793)|])
+                                    (Ojs.call x4781 "push"
+                                       [|(Ojs.float_to_js x4783)|])
                               | None -> ());
-                             (match x4790 with
-                              | Some x4792 ->
+                             (match x4780 with
+                              | Some x4782 ->
                                   ignore
-                                    (Ojs.call x4791 "push"
-                                       [|(Ojs.float_to_js x4792)|])
+                                    (Ojs.call x4781 "push"
+                                       [|(Ojs.float_to_js x4782)|])
                               | None -> ());
-                             x4791))|])
+                             x4781))|])
     let (toString : 'tags this -> string) =
-      fun (x4797 : 'tags this) ->
+      fun (x4787 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x4797) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x4787) "toString" [||])
     let (valueOf : 'tags this -> t) =
-      fun (x4799 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x4799) "valueOf" [||])
+      fun (x4789 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x4789) "valueOf" [||])
     let (get : 'tags this -> float -> float) =
-      fun (x4801 : 'tags this) ->
-        fun (x4803 : float) ->
+      fun (x4791 : 'tags this) ->
+        fun (x4793 : float) ->
           Ojs.float_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x4801)
-               (Ojs.float_to_js x4803))
+            (Ojs.get_prop (this_to_js Obj.magic x4791)
+               (Ojs.float_to_js x4793))
     let (set : 'tags this -> float -> float -> unit) =
-      fun (x4804 : 'tags this) ->
-        fun (x4806 : float) ->
-          fun (x4807 : float) ->
-            Ojs.set_prop (this_to_js Obj.magic x4804) (Ojs.float_to_js x4806)
-              (Ojs.float_to_js x4807)
-    let (create : float Iterable.t -> t) =
-      fun (x4808 : float Iterable.t) ->
-        t_of_js
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float64Array")
-             [|(Iterable.t_to_js Ojs.float_to_js x4808)|])
-    let (from :
-      arrayLike:float Iterable.t ->
-        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
-      =
-      fun ~arrayLike:(x4810 : float Iterable.t) ->
-        fun ?mapfn:(x4811 : (v:float -> k:float -> float) option) ->
-          fun ?thisArg:(x4812 : any option) ->
-            fun () ->
-              t_of_js
-                (let x4819 = Ojs.get_prop_ascii Ojs.global "Float64Array" in
-                 Ojs.call (Ojs.get_prop_ascii x4819 "from") "apply"
-                   [|x4819;((let x4813 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x4813 "push"
-                                  [|(Iterable.t_to_js Ojs.float_to_js x4810)|]);
-                             (match x4811 with
-                              | Some x4815 ->
-                                  ignore
-                                    (Ojs.call x4813 "push"
-                                       [|(Ojs.fun_to_js 2
-                                            (fun (x4816 : Ojs.t) ->
-                                               fun (x4817 : Ojs.t) ->
-                                                 Ojs.float_to_js
-                                                   (x4815
-                                                      ~v:(Ojs.float_of_js
-                                                            x4816)
-                                                      ~k:(Ojs.float_of_js
-                                                            x4817))))|])
-                              | None -> ());
-                             (match x4812 with
-                              | Some x4814 ->
-                                  ignore
-                                    (Ojs.call x4813 "push"
-                                       [|(any_to_js x4814)|])
-                              | None -> ());
-                             x4813))|])
-    let (create' : unit -> t) =
+      fun (x4794 : 'tags this) ->
+        fun (x4796 : float) ->
+          fun (x4797 : float) ->
+            Ojs.set_prop (this_to_js Obj.magic x4794) (Ojs.float_to_js x4796)
+              (Ojs.float_to_js x4797)
+    let (entries : 'tags this -> (float * float) IterableIterator.t) =
+      fun (x4798 : 'tags this) ->
+        IterableIterator.t_of_js
+          (fun (x4800 : Ojs.t) ->
+             let x4801 = x4800 in
+             ((Ojs.float_of_js (Ojs.array_get x4801 0)),
+               (Ojs.float_of_js (Ojs.array_get x4801 1))))
+          (Ojs.call (this_to_js Obj.magic x4798) "entries" [||])
+    let (keys : 'tags this -> float IterableIterator.t) =
+      fun (x4802 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x4802) "keys" [||])
+    let (values : 'tags this -> float IterableIterator.t) =
+      fun (x4805 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x4805) "values" [||])
+    let (create : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float64Array") [||])
@@ -17121,103 +17077,147 @@ module Float64Array =
         t_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Float64Array")
              "prototype")
-    let (create'' : float -> t) =
-      fun (x4820 : float) ->
+    let (create' : float -> t) =
+      fun (x4808 : float) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float64Array")
-             [|(Ojs.float_to_js x4820)|])
-    let (create''' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
-      fun (x4821 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
+             [|(Ojs.float_to_js x4808)|])
+    let (create'' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
+      fun (x4809 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float64Array")
              [|(union2_to_js ArrayBufferLike.t_to_js
-                  (fun (x4823 : float ArrayLike.t) ->
-                     ArrayLike.t_to_js Ojs.float_to_js x4823) x4821)|])
-    let (create'''' :
+                  (fun (x4811 : float ArrayLike.t) ->
+                     ArrayLike.t_to_js Ojs.float_to_js x4811) x4809)|])
+    let (create''' :
       buffer:ArrayBufferLike.t ->
         ?byteOffset:float -> ?length:float -> unit -> t)
       =
-      fun ~buffer:(x4825 : ArrayBufferLike.t) ->
-        fun ?byteOffset:(x4826 : float option) ->
-          fun ?length:(x4827 : float option) ->
+      fun ~buffer:(x4813 : ArrayBufferLike.t) ->
+        fun ?byteOffset:(x4814 : float option) ->
+          fun ?length:(x4815 : float option) ->
             fun () ->
               t_of_js
                 (Ojs.new_obj_arr
                    (Ojs.get_prop_ascii Ojs.global "Float64Array")
-                   (let x4828 =
+                   (let x4816 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     ignore
-                      (Ojs.call x4828 "push"
-                         [|(ArrayBufferLike.t_to_js x4825)|]);
-                    (match x4826 with
-                     | Some x4830 ->
+                      (Ojs.call x4816 "push"
+                         [|(ArrayBufferLike.t_to_js x4813)|]);
+                    (match x4814 with
+                     | Some x4818 ->
                          ignore
-                           (Ojs.call x4828 "push" [|(Ojs.float_to_js x4830)|])
+                           (Ojs.call x4816 "push" [|(Ojs.float_to_js x4818)|])
                      | None -> ());
-                    (match x4827 with
-                     | Some x4829 ->
+                    (match x4815 with
+                     | Some x4817 ->
                          ignore
-                           (Ojs.call x4828 "push" [|(Ojs.float_to_js x4829)|])
+                           (Ojs.call x4816 "push" [|(Ojs.float_to_js x4817)|])
                      | None -> ());
-                    x4828))
+                    x4816))
     let (bytes_per_element : unit -> float) =
       fun () ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Float64Array")
              "BYTES_PER_ELEMENT")
     let (of_ : float list -> t) =
-      fun (x4831 : float list) ->
+      fun (x4819 : float list) ->
         t_of_js
-          (let x4834 = Ojs.get_prop_ascii Ojs.global "Float64Array" in
-           Ojs.call (Ojs.get_prop_ascii x4834 "of") "apply"
-             [|x4834;((let x4832 =
+          (let x4822 = Ojs.get_prop_ascii Ojs.global "Float64Array" in
+           Ojs.call (Ojs.get_prop_ascii x4822 "of") "apply"
+             [|x4822;((let x4820 =
                          Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                            [||] in
                        List.iter
-                         (fun (x4833 : float) ->
+                         (fun (x4821 : float) ->
                             ignore
-                              (Ojs.call x4832 "push"
-                                 [|(Ojs.float_to_js x4833)|])) x4831;
-                       x4832))|])
-    let (from' : float ArrayLike.t -> t) =
-      fun (x4835 : float ArrayLike.t) ->
+                              (Ojs.call x4820 "push"
+                                 [|(Ojs.float_to_js x4821)|])) x4819;
+                       x4820))|])
+    let (from : float ArrayLike.t -> t) =
+      fun (x4823 : float ArrayLike.t) ->
         t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Float64Array") "from"
-             [|(ArrayLike.t_to_js Ojs.float_to_js x4835)|])
-    let (from'' :
+             [|(ArrayLike.t_to_js Ojs.float_to_js x4823)|])
+    let (from' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t)
       =
-      fun ~arrayLike:(x4837 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x4838 : v:'T -> k:float -> float) ->
-          fun ?thisArg:(x4839 : any option) ->
+      fun ~arrayLike:(x4825 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x4826 : v:'T -> k:float -> float) ->
+          fun ?thisArg:(x4827 : any option) ->
             fun () ->
               t_of_js
-                (let x4845 = Ojs.get_prop_ascii Ojs.global "Float64Array" in
-                 Ojs.call (Ojs.get_prop_ascii x4845 "from") "apply"
-                   [|x4845;((let x4840 =
+                (let x4833 = Ojs.get_prop_ascii Ojs.global "Float64Array" in
+                 Ojs.call (Ojs.get_prop_ascii x4833 "from") "apply"
+                   [|x4833;((let x4828 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4840 "push"
-                                  [|(ArrayLike.t_to_js Obj.magic x4837)|]);
+                               (Ojs.call x4828 "push"
+                                  [|(ArrayLike.t_to_js Obj.magic x4825)|]);
                              ignore
-                               (Ojs.call x4840 "push"
+                               (Ojs.call x4828 "push"
                                   [|(Ojs.fun_to_js 2
-                                       (fun (x4842 : Ojs.t) ->
-                                          fun (x4843 : Ojs.t) ->
+                                       (fun (x4830 : Ojs.t) ->
+                                          fun (x4831 : Ojs.t) ->
                                             Ojs.float_to_js
-                                              (x4838 ~v:(Obj.magic x4842)
-                                                 ~k:(Ojs.float_of_js x4843))))|]);
-                             (match x4839 with
+                                              (x4826 ~v:(Obj.magic x4830)
+                                                 ~k:(Ojs.float_of_js x4831))))|]);
+                             (match x4827 with
+                              | Some x4829 ->
+                                  ignore
+                                    (Ojs.call x4828 "push"
+                                       [|(any_to_js x4829)|])
+                              | None -> ());
+                             x4828))|])
+    let (create'''' : float Iterable.t -> t) =
+      fun (x4834 : float Iterable.t) ->
+        t_of_js
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float64Array")
+             [|(Iterable.t_to_js Ojs.float_to_js x4834)|])
+    let (from'' :
+      arrayLike:float Iterable.t ->
+        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
+      =
+      fun ~arrayLike:(x4836 : float Iterable.t) ->
+        fun ?mapfn:(x4837 : (v:float -> k:float -> float) option) ->
+          fun ?thisArg:(x4838 : any option) ->
+            fun () ->
+              t_of_js
+                (let x4845 = Ojs.get_prop_ascii Ojs.global "Float64Array" in
+                 Ojs.call (Ojs.get_prop_ascii x4845 "from") "apply"
+                   [|x4845;((let x4839 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x4839 "push"
+                                  [|(Iterable.t_to_js Ojs.float_to_js x4836)|]);
+                             (match x4837 with
                               | Some x4841 ->
                                   ignore
-                                    (Ojs.call x4840 "push"
-                                       [|(any_to_js x4841)|])
+                                    (Ojs.call x4839 "push"
+                                       [|(Ojs.fun_to_js 2
+                                            (fun (x4842 : Ojs.t) ->
+                                               fun (x4843 : Ojs.t) ->
+                                                 Ojs.float_to_js
+                                                   (x4841
+                                                      ~v:(Ojs.float_of_js
+                                                            x4842)
+                                                      ~k:(Ojs.float_of_js
+                                                            x4843))))|])
                               | None -> ());
-                             x4840))|])
+                             (match x4838 with
+                              | Some x4840 ->
+                                  ignore
+                                    (Ojs.call x4839 "push"
+                                       [|(any_to_js x4840)|])
+                              | None -> ());
+                             x4839))|])
     let cast_from = Obj.magic
   end
 module Float32Array =
@@ -17243,176 +17243,197 @@ module Float32Array =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x4848 : __tags intf) -> intf_to_js __tags_to_js x4848
-    let (entries : 'tags this -> (float * float) IterableIterator.t) =
-      fun (x4852 : 'tags this) ->
-        IterableIterator.t_of_js
-          (fun (x4854 : Ojs.t) ->
-             let x4855 = x4854 in
-             ((Ojs.float_of_js (Ojs.array_get x4855 0)),
-               (Ojs.float_of_js (Ojs.array_get x4855 1))))
-          (Ojs.call (this_to_js Obj.magic x4852) "entries" [||])
-    let (keys : 'tags this -> float IterableIterator.t) =
-      fun (x4856 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x4856) "keys" [||])
-    let (values : 'tags this -> float IterableIterator.t) =
-      fun (x4859 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x4859) "values" [||])
     let (includes :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x4866 : 'tags this) ->
-        fun ~searchElement:(x4862 : float) ->
-          fun ?fromIndex:(x4863 : float option) ->
+      fun (x4856 : 'tags this) ->
+        fun ~searchElement:(x4852 : float) ->
+          fun ?fromIndex:(x4853 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x4868 = this_to_js Obj.magic x4866 in
-                 Ojs.call (Ojs.get_prop_ascii x4868 "includes") "apply"
-                   [|x4868;((let x4864 =
+                (let x4858 = this_to_js Obj.magic x4856 in
+                 Ojs.call (Ojs.get_prop_ascii x4858 "includes") "apply"
+                   [|x4858;((let x4854 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4864 "push"
-                                  [|(Ojs.float_to_js x4862)|]);
-                             (match x4863 with
-                              | Some x4865 ->
+                               (Ojs.call x4854 "push"
+                                  [|(Ojs.float_to_js x4852)|]);
+                             (match x4853 with
+                              | Some x4855 ->
                                   ignore
-                                    (Ojs.call x4864 "push"
-                                       [|(Ojs.float_to_js x4865)|])
+                                    (Ojs.call x4854 "push"
+                                       [|(Ojs.float_to_js x4855)|])
                               | None -> ());
-                             x4864))|])
+                             x4854))|])
     let (get_BYTES_PER_ELEMENT : 'tags this -> float) =
-      fun (x4869 : 'tags this) ->
+      fun (x4859 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4869)
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4859)
              "BYTES_PER_ELEMENT")
     let (get_buffer : 'tags this -> ArrayBufferLike.t) =
-      fun (x4871 : 'tags this) ->
+      fun (x4861 : 'tags this) ->
         ArrayBufferLike.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4871) "buffer")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4861) "buffer")
     let (get_byteLength : 'tags this -> float) =
-      fun (x4873 : 'tags this) ->
+      fun (x4863 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4873) "byteLength")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4863) "byteLength")
     let (get_byteOffset : 'tags this -> float) =
-      fun (x4875 : 'tags this) ->
+      fun (x4865 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4875) "byteOffset")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4865) "byteOffset")
     let (copyWithin :
       'tags this ->
         target:float -> start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x4882 : 'tags this) ->
-        fun ~target:(x4877 : float) ->
-          fun ~start:(x4878 : float) ->
-            fun ?end_:(x4879 : float option) ->
+      fun (x4872 : 'tags this) ->
+        fun ~target:(x4867 : float) ->
+          fun ~start:(x4868 : float) ->
+            fun ?end_:(x4869 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x4884 = this_to_js Obj.magic x4882 in
-                   Ojs.call (Ojs.get_prop_ascii x4884 "copyWithin") "apply"
-                     [|x4884;((let x4880 =
+                  (let x4874 = this_to_js Obj.magic x4872 in
+                   Ojs.call (Ojs.get_prop_ascii x4874 "copyWithin") "apply"
+                     [|x4874;((let x4870 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x4880 "push"
-                                    [|(Ojs.float_to_js x4877)|]);
+                                 (Ojs.call x4870 "push"
+                                    [|(Ojs.float_to_js x4867)|]);
                                ignore
-                                 (Ojs.call x4880 "push"
-                                    [|(Ojs.float_to_js x4878)|]);
-                               (match x4879 with
-                                | Some x4881 ->
+                                 (Ojs.call x4870 "push"
+                                    [|(Ojs.float_to_js x4868)|]);
+                               (match x4869 with
+                                | Some x4871 ->
                                     ignore
-                                      (Ojs.call x4880 "push"
-                                         [|(Ojs.float_to_js x4881)|])
+                                      (Ojs.call x4870 "push"
+                                         [|(Ojs.float_to_js x4871)|])
                                 | None -> ());
-                               x4880))|])
+                               x4870))|])
     let (every :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x4893 : 'tags this) ->
+      fun (x4883 : 'tags this) ->
         fun
-          ~predicate:(x4886 :
+          ~predicate:(x4876 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x4887 : any option) ->
+          fun ?thisArg:(x4877 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x4895 = this_to_js Obj.magic x4893 in
-                 Ojs.call (Ojs.get_prop_ascii x4895 "every") "apply"
-                   [|x4895;((let x4888 =
+                (let x4885 = this_to_js Obj.magic x4883 in
+                 Ojs.call (Ojs.get_prop_ascii x4885 "every") "apply"
+                   [|x4885;((let x4878 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4888 "push"
+                               (Ojs.call x4878 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x4890 : Ojs.t) ->
-                                          fun (x4891 : Ojs.t) ->
-                                            fun (x4892 : Ojs.t) ->
+                                       (fun (x4880 : Ojs.t) ->
+                                          fun (x4881 : Ojs.t) ->
+                                            fun (x4882 : Ojs.t) ->
                                               unknown_to_js
-                                                (x4886
+                                                (x4876
                                                    ~value:(Ojs.float_of_js
-                                                             x4890)
+                                                             x4880)
                                                    ~index:(Ojs.float_of_js
-                                                             x4891)
-                                                   ~array:(t_of_js x4892))))|]);
-                             (match x4887 with
-                              | Some x4889 ->
+                                                             x4881)
+                                                   ~array:(t_of_js x4882))))|]);
+                             (match x4877 with
+                              | Some x4879 ->
                                   ignore
-                                    (Ojs.call x4888 "push"
-                                       [|(any_to_js x4889)|])
+                                    (Ojs.call x4878 "push"
+                                       [|(any_to_js x4879)|])
                               | None -> ());
-                             x4888))|])
+                             x4878))|])
     let (fill :
       'tags this ->
         value:float -> ?start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x4902 : 'tags this) ->
-        fun ~value:(x4896 : float) ->
-          fun ?start:(x4897 : float option) ->
-            fun ?end_:(x4898 : float option) ->
+      fun (x4892 : 'tags this) ->
+        fun ~value:(x4886 : float) ->
+          fun ?start:(x4887 : float option) ->
+            fun ?end_:(x4888 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x4904 = this_to_js Obj.magic x4902 in
-                   Ojs.call (Ojs.get_prop_ascii x4904 "fill") "apply"
-                     [|x4904;((let x4899 =
+                  (let x4894 = this_to_js Obj.magic x4892 in
+                   Ojs.call (Ojs.get_prop_ascii x4894 "fill") "apply"
+                     [|x4894;((let x4889 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x4899 "push"
-                                    [|(Ojs.float_to_js x4896)|]);
-                               (match x4897 with
-                                | Some x4901 ->
+                                 (Ojs.call x4889 "push"
+                                    [|(Ojs.float_to_js x4886)|]);
+                               (match x4887 with
+                                | Some x4891 ->
                                     ignore
-                                      (Ojs.call x4899 "push"
-                                         [|(Ojs.float_to_js x4901)|])
+                                      (Ojs.call x4889 "push"
+                                         [|(Ojs.float_to_js x4891)|])
                                 | None -> ());
-                               (match x4898 with
-                                | Some x4900 ->
+                               (match x4888 with
+                                | Some x4890 ->
                                     ignore
-                                      (Ojs.call x4899 "push"
-                                         [|(Ojs.float_to_js x4900)|])
+                                      (Ojs.call x4889 "push"
+                                         [|(Ojs.float_to_js x4890)|])
                                 | None -> ());
-                               x4899))|])
+                               x4889))|])
     let (filter :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> any) ->
           ?thisArg:any -> unit -> t)
       =
+      fun (x4903 : 'tags this) ->
+        fun ~predicate:(x4896 : value:float -> index:float -> array:t -> any)
+          ->
+          fun ?thisArg:(x4897 : any option) ->
+            fun () ->
+              t_of_js
+                (let x4905 = this_to_js Obj.magic x4903 in
+                 Ojs.call (Ojs.get_prop_ascii x4905 "filter") "apply"
+                   [|x4905;((let x4898 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x4898 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x4900 : Ojs.t) ->
+                                          fun (x4901 : Ojs.t) ->
+                                            fun (x4902 : Ojs.t) ->
+                                              any_to_js
+                                                (x4896
+                                                   ~value:(Ojs.float_of_js
+                                                             x4900)
+                                                   ~index:(Ojs.float_of_js
+                                                             x4901)
+                                                   ~array:(t_of_js x4902))))|]);
+                             (match x4897 with
+                              | Some x4899 ->
+                                  ignore
+                                    (Ojs.call x4898 "push"
+                                       [|(any_to_js x4899)|])
+                              | None -> ());
+                             x4898))|])
+    let (find :
+      'tags this ->
+        predicate:(value:float -> index:float -> obj:t -> bool) ->
+          ?thisArg:any -> unit -> float or_undefined)
+      =
       fun (x4913 : 'tags this) ->
-        fun ~predicate:(x4906 : value:float -> index:float -> array:t -> any)
+        fun ~predicate:(x4906 : value:float -> index:float -> obj:t -> bool)
           ->
           fun ?thisArg:(x4907 : any option) ->
             fun () ->
-              t_of_js
+              or_undefined_of_js Ojs.float_of_js
                 (let x4915 = this_to_js Obj.magic x4913 in
-                 Ojs.call (Ojs.get_prop_ascii x4915 "filter") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x4915 "find") "apply"
                    [|x4915;((let x4908 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -17423,13 +17444,13 @@ module Float32Array =
                                        (fun (x4910 : Ojs.t) ->
                                           fun (x4911 : Ojs.t) ->
                                             fun (x4912 : Ojs.t) ->
-                                              any_to_js
+                                              Ojs.bool_to_js
                                                 (x4906
                                                    ~value:(Ojs.float_of_js
                                                              x4910)
                                                    ~index:(Ojs.float_of_js
                                                              x4911)
-                                                   ~array:(t_of_js x4912))))|]);
+                                                   ~obj:(t_of_js x4912))))|]);
                              (match x4907 with
                               | Some x4909 ->
                                   ignore
@@ -17437,56 +17458,57 @@ module Float32Array =
                                        [|(any_to_js x4909)|])
                               | None -> ());
                              x4908))|])
-    let (find :
-      'tags this ->
-        predicate:(value:float -> index:float -> obj:t -> bool) ->
-          ?thisArg:any -> unit -> float or_undefined)
-      =
-      fun (x4923 : 'tags this) ->
-        fun ~predicate:(x4916 : value:float -> index:float -> obj:t -> bool)
-          ->
-          fun ?thisArg:(x4917 : any option) ->
-            fun () ->
-              or_undefined_of_js Ojs.float_of_js
-                (let x4925 = this_to_js Obj.magic x4923 in
-                 Ojs.call (Ojs.get_prop_ascii x4925 "find") "apply"
-                   [|x4925;((let x4918 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x4918 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x4920 : Ojs.t) ->
-                                          fun (x4921 : Ojs.t) ->
-                                            fun (x4922 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x4916
-                                                   ~value:(Ojs.float_of_js
-                                                             x4920)
-                                                   ~index:(Ojs.float_of_js
-                                                             x4921)
-                                                   ~obj:(t_of_js x4922))))|]);
-                             (match x4917 with
-                              | Some x4919 ->
-                                  ignore
-                                    (Ojs.call x4918 "push"
-                                       [|(any_to_js x4919)|])
-                              | None -> ());
-                             x4918))|])
     let (findIndex :
       'tags this ->
         predicate:(value:float -> index:float -> obj:t -> bool) ->
           ?thisArg:any -> unit -> float)
       =
+      fun (x4924 : 'tags this) ->
+        fun ~predicate:(x4917 : value:float -> index:float -> obj:t -> bool)
+          ->
+          fun ?thisArg:(x4918 : any option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x4926 = this_to_js Obj.magic x4924 in
+                 Ojs.call (Ojs.get_prop_ascii x4926 "findIndex") "apply"
+                   [|x4926;((let x4919 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x4919 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x4921 : Ojs.t) ->
+                                          fun (x4922 : Ojs.t) ->
+                                            fun (x4923 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x4917
+                                                   ~value:(Ojs.float_of_js
+                                                             x4921)
+                                                   ~index:(Ojs.float_of_js
+                                                             x4922)
+                                                   ~obj:(t_of_js x4923))))|]);
+                             (match x4918 with
+                              | Some x4920 ->
+                                  ignore
+                                    (Ojs.call x4919 "push"
+                                       [|(any_to_js x4920)|])
+                              | None -> ());
+                             x4919))|])
+    let (forEach :
+      'tags this ->
+        callbackfn:(value:float -> index:float -> array:t -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
       fun (x4934 : 'tags this) ->
-        fun ~predicate:(x4927 : value:float -> index:float -> obj:t -> bool)
+        fun
+          ~callbackfn:(x4927 : value:float -> index:float -> array:t -> unit)
           ->
           fun ?thisArg:(x4928 : any option) ->
             fun () ->
-              Ojs.float_of_js
+              ignore
                 (let x4936 = this_to_js Obj.magic x4934 in
-                 Ojs.call (Ojs.get_prop_ascii x4936 "findIndex") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x4936 "forEach") "apply"
                    [|x4936;((let x4929 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -17497,13 +17519,10 @@ module Float32Array =
                                        (fun (x4931 : Ojs.t) ->
                                           fun (x4932 : Ojs.t) ->
                                             fun (x4933 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x4927
-                                                   ~value:(Ojs.float_of_js
-                                                             x4931)
-                                                   ~index:(Ojs.float_of_js
-                                                             x4932)
-                                                   ~obj:(t_of_js x4933))))|]);
+                                              x4927
+                                                ~value:(Ojs.float_of_js x4931)
+                                                ~index:(Ojs.float_of_js x4932)
+                                                ~array:(t_of_js x4933)))|]);
                              (match x4928 with
                               | Some x4930 ->
                                   ignore
@@ -17511,150 +17530,115 @@ module Float32Array =
                                        [|(any_to_js x4930)|])
                               | None -> ());
                              x4929))|])
-    let (forEach :
-      'tags this ->
-        callbackfn:(value:float -> index:float -> array:t -> unit) ->
-          ?thisArg:any -> unit -> unit)
+    let (indexOf :
+      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x4944 : 'tags this) ->
-        fun
-          ~callbackfn:(x4937 : value:float -> index:float -> array:t -> unit)
-          ->
-          fun ?thisArg:(x4938 : any option) ->
+      fun (x4941 : 'tags this) ->
+        fun ~searchElement:(x4937 : float) ->
+          fun ?fromIndex:(x4938 : float option) ->
             fun () ->
-              ignore
-                (let x4946 = this_to_js Obj.magic x4944 in
-                 Ojs.call (Ojs.get_prop_ascii x4946 "forEach") "apply"
-                   [|x4946;((let x4939 =
+              Ojs.float_of_js
+                (let x4943 = this_to_js Obj.magic x4941 in
+                 Ojs.call (Ojs.get_prop_ascii x4943 "indexOf") "apply"
+                   [|x4943;((let x4939 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
                                (Ojs.call x4939 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x4941 : Ojs.t) ->
-                                          fun (x4942 : Ojs.t) ->
-                                            fun (x4943 : Ojs.t) ->
-                                              x4937
-                                                ~value:(Ojs.float_of_js x4941)
-                                                ~index:(Ojs.float_of_js x4942)
-                                                ~array:(t_of_js x4943)))|]);
+                                  [|(Ojs.float_to_js x4937)|]);
                              (match x4938 with
                               | Some x4940 ->
                                   ignore
                                     (Ojs.call x4939 "push"
-                                       [|(any_to_js x4940)|])
+                                       [|(Ojs.float_to_js x4940)|])
                               | None -> ());
                              x4939))|])
-    let (indexOf :
-      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x4951 : 'tags this) ->
-        fun ~searchElement:(x4947 : float) ->
-          fun ?fromIndex:(x4948 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x4953 = this_to_js Obj.magic x4951 in
-                 Ojs.call (Ojs.get_prop_ascii x4953 "indexOf") "apply"
-                   [|x4953;((let x4949 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x4949 "push"
-                                  [|(Ojs.float_to_js x4947)|]);
-                             (match x4948 with
-                              | Some x4950 ->
-                                  ignore
-                                    (Ojs.call x4949 "push"
-                                       [|(Ojs.float_to_js x4950)|])
-                              | None -> ());
-                             x4949))|])
     let (join : 'tags this -> ?separator:string -> unit -> string) =
-      fun (x4957 : 'tags this) ->
-        fun ?separator:(x4954 : string option) ->
+      fun (x4947 : 'tags this) ->
+        fun ?separator:(x4944 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x4959 = this_to_js Obj.magic x4957 in
-               Ojs.call (Ojs.get_prop_ascii x4959 "join") "apply"
-                 [|x4959;((let x4955 =
+              (let x4949 = this_to_js Obj.magic x4947 in
+               Ojs.call (Ojs.get_prop_ascii x4949 "join") "apply"
+                 [|x4949;((let x4945 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x4954 with
-                            | Some x4956 ->
+                           (match x4944 with
+                            | Some x4946 ->
                                 ignore
-                                  (Ojs.call x4955 "push"
-                                     [|(Ojs.string_to_js x4956)|])
+                                  (Ojs.call x4945 "push"
+                                     [|(Ojs.string_to_js x4946)|])
                             | None -> ());
-                           x4955))|])
+                           x4945))|])
     let (lastIndexOf :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x4964 : 'tags this) ->
-        fun ~searchElement:(x4960 : float) ->
-          fun ?fromIndex:(x4961 : float option) ->
+      fun (x4954 : 'tags this) ->
+        fun ~searchElement:(x4950 : float) ->
+          fun ?fromIndex:(x4951 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x4966 = this_to_js Obj.magic x4964 in
-                 Ojs.call (Ojs.get_prop_ascii x4966 "lastIndexOf") "apply"
-                   [|x4966;((let x4962 =
+                (let x4956 = this_to_js Obj.magic x4954 in
+                 Ojs.call (Ojs.get_prop_ascii x4956 "lastIndexOf") "apply"
+                   [|x4956;((let x4952 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4962 "push"
-                                  [|(Ojs.float_to_js x4960)|]);
-                             (match x4961 with
-                              | Some x4963 ->
+                               (Ojs.call x4952 "push"
+                                  [|(Ojs.float_to_js x4950)|]);
+                             (match x4951 with
+                              | Some x4953 ->
                                   ignore
-                                    (Ojs.call x4962 "push"
-                                       [|(Ojs.float_to_js x4963)|])
+                                    (Ojs.call x4952 "push"
+                                       [|(Ojs.float_to_js x4953)|])
                               | None -> ());
-                             x4962))|])
+                             x4952))|])
     let (get_length : 'tags this -> float) =
-      fun (x4967 : 'tags this) ->
+      fun (x4957 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x4967) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x4957) "length")
     let (map :
       'tags this ->
         callbackfn:(value:float -> index:float -> array:t -> float) ->
           ?thisArg:any -> unit -> t)
       =
-      fun (x4976 : 'tags this) ->
+      fun (x4966 : 'tags this) ->
         fun
-          ~callbackfn:(x4969 :
+          ~callbackfn:(x4959 :
                         value:float -> index:float -> array:t -> float)
           ->
-          fun ?thisArg:(x4970 : any option) ->
+          fun ?thisArg:(x4960 : any option) ->
             fun () ->
               t_of_js
-                (let x4978 = this_to_js Obj.magic x4976 in
-                 Ojs.call (Ojs.get_prop_ascii x4978 "map") "apply"
-                   [|x4978;((let x4971 =
+                (let x4968 = this_to_js Obj.magic x4966 in
+                 Ojs.call (Ojs.get_prop_ascii x4968 "map") "apply"
+                   [|x4968;((let x4961 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x4971 "push"
+                               (Ojs.call x4961 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x4973 : Ojs.t) ->
-                                          fun (x4974 : Ojs.t) ->
-                                            fun (x4975 : Ojs.t) ->
+                                       (fun (x4963 : Ojs.t) ->
+                                          fun (x4964 : Ojs.t) ->
+                                            fun (x4965 : Ojs.t) ->
                                               Ojs.float_to_js
-                                                (x4969
+                                                (x4959
                                                    ~value:(Ojs.float_of_js
-                                                             x4973)
+                                                             x4963)
                                                    ~index:(Ojs.float_of_js
-                                                             x4974)
-                                                   ~array:(t_of_js x4975))))|]);
-                             (match x4970 with
-                              | Some x4972 ->
+                                                             x4964)
+                                                   ~array:(t_of_js x4965))))|]);
+                             (match x4960 with
+                              | Some x4962 ->
                                   ignore
-                                    (Ojs.call x4971 "push"
-                                       [|(any_to_js x4972)|])
+                                    (Ojs.call x4961 "push"
+                                       [|(any_to_js x4962)|])
                               | None -> ());
-                             x4971))|])
+                             x4961))|])
     let (reduce :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -17662,25 +17646,25 @@ module Float32Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x4984 : 'tags this) ->
+      fun (x4974 : 'tags this) ->
         fun
-          ~callbackfn:(x4979 :
+          ~callbackfn:(x4969 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x4984) "reduce"
+            (Ojs.call (this_to_js Obj.magic x4974) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x4980 : Ojs.t) ->
-                       fun (x4981 : Ojs.t) ->
-                         fun (x4982 : Ojs.t) ->
-                           fun (x4983 : Ojs.t) ->
+                    (fun (x4970 : Ojs.t) ->
+                       fun (x4971 : Ojs.t) ->
+                         fun (x4972 : Ojs.t) ->
+                           fun (x4973 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x4979 ~previousValue:(Ojs.float_of_js x4980)
-                                  ~currentValue:(Ojs.float_of_js x4981)
-                                  ~currentIndex:(Ojs.float_of_js x4982)
-                                  ~array:(t_of_js x4983))))|])
+                               (x4969 ~previousValue:(Ojs.float_of_js x4970)
+                                  ~currentValue:(Ojs.float_of_js x4971)
+                                  ~currentIndex:(Ojs.float_of_js x4972)
+                                  ~array:(t_of_js x4973))))|])
     let (reduce' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -17688,28 +17672,28 @@ module Float32Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x4992 : 'tags this) ->
+      fun (x4982 : 'tags this) ->
         fun
-          ~callbackfn:(x4986 :
+          ~callbackfn:(x4976 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x4991 : float) ->
+          fun ~initialValue:(x4981 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x4992) "reduce"
+              (Ojs.call (this_to_js Obj.magic x4982) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x4987 : Ojs.t) ->
-                         fun (x4988 : Ojs.t) ->
-                           fun (x4989 : Ojs.t) ->
-                             fun (x4990 : Ojs.t) ->
+                      (fun (x4977 : Ojs.t) ->
+                         fun (x4978 : Ojs.t) ->
+                           fun (x4979 : Ojs.t) ->
+                             fun (x4980 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x4986
-                                    ~previousValue:(Ojs.float_of_js x4987)
-                                    ~currentValue:(Ojs.float_of_js x4988)
-                                    ~currentIndex:(Ojs.float_of_js x4989)
-                                    ~array:(t_of_js x4990))));(Ojs.float_to_js
-                                                                 x4991)|])
+                                 (x4976
+                                    ~previousValue:(Ojs.float_of_js x4977)
+                                    ~currentValue:(Ojs.float_of_js x4978)
+                                    ~currentIndex:(Ojs.float_of_js x4979)
+                                    ~array:(t_of_js x4980))));(Ojs.float_to_js
+                                                                 x4981)|])
     let (reduce'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -17717,27 +17701,27 @@ module Float32Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x5000 : 'tags this) ->
+      fun (x4990 : 'tags this) ->
         fun
-          ~callbackfn:(x4994 :
+          ~callbackfn:(x4984 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x4999 : 'U) ->
+          fun ~initialValue:(x4989 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x5000) "reduce"
+              (Ojs.call (this_to_js Obj.magic x4990) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x4995 : Ojs.t) ->
-                         fun (x4996 : Ojs.t) ->
-                           fun (x4997 : Ojs.t) ->
-                             fun (x4998 : Ojs.t) ->
+                      (fun (x4985 : Ojs.t) ->
+                         fun (x4986 : Ojs.t) ->
+                           fun (x4987 : Ojs.t) ->
+                             fun (x4988 : Ojs.t) ->
                                Obj.magic
-                                 (x4994 ~previousValue:(Obj.magic x4995)
-                                    ~currentValue:(Ojs.float_of_js x4996)
-                                    ~currentIndex:(Ojs.float_of_js x4997)
-                                    ~array:(t_of_js x4998))));(Obj.magic
-                                                                 x4999)|])
+                                 (x4984 ~previousValue:(Obj.magic x4985)
+                                    ~currentValue:(Ojs.float_of_js x4986)
+                                    ~currentIndex:(Ojs.float_of_js x4987)
+                                    ~array:(t_of_js x4988))));(Obj.magic
+                                                                 x4989)|])
     let (reduceRight :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -17745,25 +17729,25 @@ module Float32Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x5007 : 'tags this) ->
+      fun (x4997 : 'tags this) ->
         fun
-          ~callbackfn:(x5002 :
+          ~callbackfn:(x4992 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x5007) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic x4997) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x5003 : Ojs.t) ->
-                       fun (x5004 : Ojs.t) ->
-                         fun (x5005 : Ojs.t) ->
-                           fun (x5006 : Ojs.t) ->
+                    (fun (x4993 : Ojs.t) ->
+                       fun (x4994 : Ojs.t) ->
+                         fun (x4995 : Ojs.t) ->
+                           fun (x4996 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x5002 ~previousValue:(Ojs.float_of_js x5003)
-                                  ~currentValue:(Ojs.float_of_js x5004)
-                                  ~currentIndex:(Ojs.float_of_js x5005)
-                                  ~array:(t_of_js x5006))))|])
+                               (x4992 ~previousValue:(Ojs.float_of_js x4993)
+                                  ~currentValue:(Ojs.float_of_js x4994)
+                                  ~currentIndex:(Ojs.float_of_js x4995)
+                                  ~array:(t_of_js x4996))))|])
     let (reduceRight' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -17771,28 +17755,28 @@ module Float32Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x5015 : 'tags this) ->
+      fun (x5005 : 'tags this) ->
         fun
-          ~callbackfn:(x5009 :
+          ~callbackfn:(x4999 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x5014 : float) ->
+          fun ~initialValue:(x5004 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x5015) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x5005) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x5010 : Ojs.t) ->
-                         fun (x5011 : Ojs.t) ->
-                           fun (x5012 : Ojs.t) ->
-                             fun (x5013 : Ojs.t) ->
+                      (fun (x5000 : Ojs.t) ->
+                         fun (x5001 : Ojs.t) ->
+                           fun (x5002 : Ojs.t) ->
+                             fun (x5003 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x5009
-                                    ~previousValue:(Ojs.float_of_js x5010)
-                                    ~currentValue:(Ojs.float_of_js x5011)
-                                    ~currentIndex:(Ojs.float_of_js x5012)
-                                    ~array:(t_of_js x5013))));(Ojs.float_to_js
-                                                                 x5014)|])
+                                 (x4999
+                                    ~previousValue:(Ojs.float_of_js x5000)
+                                    ~currentValue:(Ojs.float_of_js x5001)
+                                    ~currentIndex:(Ojs.float_of_js x5002)
+                                    ~array:(t_of_js x5003))));(Ojs.float_to_js
+                                                                 x5004)|])
     let (reduceRight'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -17800,239 +17784,211 @@ module Float32Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x5023 : 'tags this) ->
+      fun (x5013 : 'tags this) ->
         fun
-          ~callbackfn:(x5017 :
+          ~callbackfn:(x5007 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x5022 : 'U) ->
+          fun ~initialValue:(x5012 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x5023) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x5013) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x5018 : Ojs.t) ->
-                         fun (x5019 : Ojs.t) ->
-                           fun (x5020 : Ojs.t) ->
-                             fun (x5021 : Ojs.t) ->
+                      (fun (x5008 : Ojs.t) ->
+                         fun (x5009 : Ojs.t) ->
+                           fun (x5010 : Ojs.t) ->
+                             fun (x5011 : Ojs.t) ->
                                Obj.magic
-                                 (x5017 ~previousValue:(Obj.magic x5018)
-                                    ~currentValue:(Ojs.float_of_js x5019)
-                                    ~currentIndex:(Ojs.float_of_js x5020)
-                                    ~array:(t_of_js x5021))));(Obj.magic
-                                                                 x5022)|])
+                                 (x5007 ~previousValue:(Obj.magic x5008)
+                                    ~currentValue:(Ojs.float_of_js x5009)
+                                    ~currentIndex:(Ojs.float_of_js x5010)
+                                    ~array:(t_of_js x5011))));(Obj.magic
+                                                                 x5012)|])
     let (reverse : 'tags this -> t) =
-      fun (x5025 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x5025) "reverse" [||])
+      fun (x5015 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x5015) "reverse" [||])
     let (set_ :
       'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit)
       =
-      fun (x5032 : 'tags this) ->
-        fun ~array:(x5027 : float ArrayLike.t) ->
-          fun ?offset:(x5028 : float option) ->
+      fun (x5022 : 'tags this) ->
+        fun ~array:(x5017 : float ArrayLike.t) ->
+          fun ?offset:(x5018 : float option) ->
             fun () ->
               ignore
-                (let x5034 = this_to_js Obj.magic x5032 in
-                 Ojs.call (Ojs.get_prop_ascii x5034 "set") "apply"
-                   [|x5034;((let x5029 =
+                (let x5024 = this_to_js Obj.magic x5022 in
+                 Ojs.call (Ojs.get_prop_ascii x5024 "set") "apply"
+                   [|x5024;((let x5019 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5029 "push"
-                                  [|(ArrayLike.t_to_js Ojs.float_to_js x5027)|]);
-                             (match x5028 with
-                              | Some x5030 ->
+                               (Ojs.call x5019 "push"
+                                  [|(ArrayLike.t_to_js Ojs.float_to_js x5017)|]);
+                             (match x5018 with
+                              | Some x5020 ->
                                   ignore
-                                    (Ojs.call x5029 "push"
-                                       [|(Ojs.float_to_js x5030)|])
+                                    (Ojs.call x5019 "push"
+                                       [|(Ojs.float_to_js x5020)|])
                               | None -> ());
-                             x5029))|])
+                             x5019))|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> t) =
-      fun (x5040 : 'tags this) ->
-        fun ?start:(x5035 : float option) ->
-          fun ?end_:(x5036 : float option) ->
+      fun (x5030 : 'tags this) ->
+        fun ?start:(x5025 : float option) ->
+          fun ?end_:(x5026 : float option) ->
             fun () ->
               t_of_js
-                (let x5042 = this_to_js Obj.magic x5040 in
-                 Ojs.call (Ojs.get_prop_ascii x5042 "slice") "apply"
-                   [|x5042;((let x5037 =
+                (let x5032 = this_to_js Obj.magic x5030 in
+                 Ojs.call (Ojs.get_prop_ascii x5032 "slice") "apply"
+                   [|x5032;((let x5027 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x5035 with
-                              | Some x5039 ->
+                             (match x5025 with
+                              | Some x5029 ->
                                   ignore
-                                    (Ojs.call x5037 "push"
-                                       [|(Ojs.float_to_js x5039)|])
+                                    (Ojs.call x5027 "push"
+                                       [|(Ojs.float_to_js x5029)|])
                               | None -> ());
-                             (match x5036 with
-                              | Some x5038 ->
+                             (match x5026 with
+                              | Some x5028 ->
                                   ignore
-                                    (Ojs.call x5037 "push"
-                                       [|(Ojs.float_to_js x5038)|])
+                                    (Ojs.call x5027 "push"
+                                       [|(Ojs.float_to_js x5028)|])
                               | None -> ());
-                             x5037))|])
+                             x5027))|])
     let (some :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x5050 : 'tags this) ->
+      fun (x5040 : 'tags this) ->
         fun
-          ~predicate:(x5043 :
+          ~predicate:(x5033 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x5044 : any option) ->
+          fun ?thisArg:(x5034 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x5052 = this_to_js Obj.magic x5050 in
-                 Ojs.call (Ojs.get_prop_ascii x5052 "some") "apply"
-                   [|x5052;((let x5045 =
+                (let x5042 = this_to_js Obj.magic x5040 in
+                 Ojs.call (Ojs.get_prop_ascii x5042 "some") "apply"
+                   [|x5042;((let x5035 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5045 "push"
+                               (Ojs.call x5035 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x5047 : Ojs.t) ->
-                                          fun (x5048 : Ojs.t) ->
-                                            fun (x5049 : Ojs.t) ->
+                                       (fun (x5037 : Ojs.t) ->
+                                          fun (x5038 : Ojs.t) ->
+                                            fun (x5039 : Ojs.t) ->
                                               unknown_to_js
-                                                (x5043
+                                                (x5033
                                                    ~value:(Ojs.float_of_js
-                                                             x5047)
+                                                             x5037)
                                                    ~index:(Ojs.float_of_js
-                                                             x5048)
-                                                   ~array:(t_of_js x5049))))|]);
-                             (match x5044 with
-                              | Some x5046 ->
+                                                             x5038)
+                                                   ~array:(t_of_js x5039))))|]);
+                             (match x5034 with
+                              | Some x5036 ->
                                   ignore
-                                    (Ojs.call x5045 "push"
-                                       [|(any_to_js x5046)|])
+                                    (Ojs.call x5035 "push"
+                                       [|(any_to_js x5036)|])
                               | None -> ());
-                             x5045))|])
+                             x5035))|])
     let (sort :
       'tags this ->
         ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this)
       =
-      fun (x5058 : 'tags this) ->
-        fun ?compareFn:(x5053 : (a:float -> b:float -> float) option) ->
+      fun (x5048 : 'tags this) ->
+        fun ?compareFn:(x5043 : (a:float -> b:float -> float) option) ->
           fun () ->
             this_of_js Obj.magic
-              (let x5060 = this_to_js Obj.magic x5058 in
-               Ojs.call (Ojs.get_prop_ascii x5060 "sort") "apply"
-                 [|x5060;((let x5054 =
+              (let x5050 = this_to_js Obj.magic x5048 in
+               Ojs.call (Ojs.get_prop_ascii x5050 "sort") "apply"
+                 [|x5050;((let x5044 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x5053 with
-                            | Some x5055 ->
+                           (match x5043 with
+                            | Some x5045 ->
                                 ignore
-                                  (Ojs.call x5054 "push"
+                                  (Ojs.call x5044 "push"
                                      [|(Ojs.fun_to_js 2
-                                          (fun (x5056 : Ojs.t) ->
-                                             fun (x5057 : Ojs.t) ->
+                                          (fun (x5046 : Ojs.t) ->
+                                             fun (x5047 : Ojs.t) ->
                                                Ojs.float_to_js
-                                                 (x5055
-                                                    ~a:(Ojs.float_of_js x5056)
-                                                    ~b:(Ojs.float_of_js x5057))))|])
+                                                 (x5045
+                                                    ~a:(Ojs.float_of_js x5046)
+                                                    ~b:(Ojs.float_of_js x5047))))|])
                             | None -> ());
-                           x5054))|])
+                           x5044))|])
     let (subarray : 'tags this -> ?begin_:float -> ?end_:float -> unit -> t)
       =
-      fun (x5067 : 'tags this) ->
-        fun ?begin_:(x5062 : float option) ->
-          fun ?end_:(x5063 : float option) ->
+      fun (x5057 : 'tags this) ->
+        fun ?begin_:(x5052 : float option) ->
+          fun ?end_:(x5053 : float option) ->
             fun () ->
               t_of_js
-                (let x5069 = this_to_js Obj.magic x5067 in
-                 Ojs.call (Ojs.get_prop_ascii x5069 "subarray") "apply"
-                   [|x5069;((let x5064 =
+                (let x5059 = this_to_js Obj.magic x5057 in
+                 Ojs.call (Ojs.get_prop_ascii x5059 "subarray") "apply"
+                   [|x5059;((let x5054 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x5062 with
-                              | Some x5066 ->
+                             (match x5052 with
+                              | Some x5056 ->
                                   ignore
-                                    (Ojs.call x5064 "push"
-                                       [|(Ojs.float_to_js x5066)|])
+                                    (Ojs.call x5054 "push"
+                                       [|(Ojs.float_to_js x5056)|])
                               | None -> ());
-                             (match x5063 with
-                              | Some x5065 ->
+                             (match x5053 with
+                              | Some x5055 ->
                                   ignore
-                                    (Ojs.call x5064 "push"
-                                       [|(Ojs.float_to_js x5065)|])
+                                    (Ojs.call x5054 "push"
+                                       [|(Ojs.float_to_js x5055)|])
                               | None -> ());
-                             x5064))|])
+                             x5054))|])
     let (toLocaleString : 'tags this -> string) =
-      fun (x5070 : 'tags this) ->
+      fun (x5060 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x5070) "toLocaleString" [||])
+          (Ojs.call (this_to_js Obj.magic x5060) "toLocaleString" [||])
     let (toString : 'tags this -> string) =
-      fun (x5072 : 'tags this) ->
+      fun (x5062 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x5072) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x5062) "toString" [||])
     let (valueOf : 'tags this -> t) =
-      fun (x5074 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x5074) "valueOf" [||])
+      fun (x5064 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x5064) "valueOf" [||])
     let (get : 'tags this -> float -> float) =
-      fun (x5076 : 'tags this) ->
-        fun (x5078 : float) ->
+      fun (x5066 : 'tags this) ->
+        fun (x5068 : float) ->
           Ojs.float_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x5076)
-               (Ojs.float_to_js x5078))
+            (Ojs.get_prop (this_to_js Obj.magic x5066)
+               (Ojs.float_to_js x5068))
     let (set : 'tags this -> float -> float -> unit) =
-      fun (x5079 : 'tags this) ->
-        fun (x5081 : float) ->
-          fun (x5082 : float) ->
-            Ojs.set_prop (this_to_js Obj.magic x5079) (Ojs.float_to_js x5081)
-              (Ojs.float_to_js x5082)
-    let (create : float Iterable.t -> t) =
-      fun (x5083 : float Iterable.t) ->
-        t_of_js
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float32Array")
-             [|(Iterable.t_to_js Ojs.float_to_js x5083)|])
-    let (from :
-      arrayLike:float Iterable.t ->
-        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
-      =
-      fun ~arrayLike:(x5085 : float Iterable.t) ->
-        fun ?mapfn:(x5086 : (v:float -> k:float -> float) option) ->
-          fun ?thisArg:(x5087 : any option) ->
-            fun () ->
-              t_of_js
-                (let x5094 = Ojs.get_prop_ascii Ojs.global "Float32Array" in
-                 Ojs.call (Ojs.get_prop_ascii x5094 "from") "apply"
-                   [|x5094;((let x5088 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x5088 "push"
-                                  [|(Iterable.t_to_js Ojs.float_to_js x5085)|]);
-                             (match x5086 with
-                              | Some x5090 ->
-                                  ignore
-                                    (Ojs.call x5088 "push"
-                                       [|(Ojs.fun_to_js 2
-                                            (fun (x5091 : Ojs.t) ->
-                                               fun (x5092 : Ojs.t) ->
-                                                 Ojs.float_to_js
-                                                   (x5090
-                                                      ~v:(Ojs.float_of_js
-                                                            x5091)
-                                                      ~k:(Ojs.float_of_js
-                                                            x5092))))|])
-                              | None -> ());
-                             (match x5087 with
-                              | Some x5089 ->
-                                  ignore
-                                    (Ojs.call x5088 "push"
-                                       [|(any_to_js x5089)|])
-                              | None -> ());
-                             x5088))|])
-    let (create' : unit -> t) =
+      fun (x5069 : 'tags this) ->
+        fun (x5071 : float) ->
+          fun (x5072 : float) ->
+            Ojs.set_prop (this_to_js Obj.magic x5069) (Ojs.float_to_js x5071)
+              (Ojs.float_to_js x5072)
+    let (entries : 'tags this -> (float * float) IterableIterator.t) =
+      fun (x5073 : 'tags this) ->
+        IterableIterator.t_of_js
+          (fun (x5075 : Ojs.t) ->
+             let x5076 = x5075 in
+             ((Ojs.float_of_js (Ojs.array_get x5076 0)),
+               (Ojs.float_of_js (Ojs.array_get x5076 1))))
+          (Ojs.call (this_to_js Obj.magic x5073) "entries" [||])
+    let (keys : 'tags this -> float IterableIterator.t) =
+      fun (x5077 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x5077) "keys" [||])
+    let (values : 'tags this -> float IterableIterator.t) =
+      fun (x5080 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x5080) "values" [||])
+    let (create : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float32Array") [||])
@@ -18041,103 +17997,147 @@ module Float32Array =
         t_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Float32Array")
              "prototype")
-    let (create'' : float -> t) =
-      fun (x5095 : float) ->
+    let (create' : float -> t) =
+      fun (x5083 : float) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float32Array")
-             [|(Ojs.float_to_js x5095)|])
-    let (create''' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
-      fun (x5096 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
+             [|(Ojs.float_to_js x5083)|])
+    let (create'' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
+      fun (x5084 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float32Array")
              [|(union2_to_js ArrayBufferLike.t_to_js
-                  (fun (x5098 : float ArrayLike.t) ->
-                     ArrayLike.t_to_js Ojs.float_to_js x5098) x5096)|])
-    let (create'''' :
+                  (fun (x5086 : float ArrayLike.t) ->
+                     ArrayLike.t_to_js Ojs.float_to_js x5086) x5084)|])
+    let (create''' :
       buffer:ArrayBufferLike.t ->
         ?byteOffset:float -> ?length:float -> unit -> t)
       =
-      fun ~buffer:(x5100 : ArrayBufferLike.t) ->
-        fun ?byteOffset:(x5101 : float option) ->
-          fun ?length:(x5102 : float option) ->
+      fun ~buffer:(x5088 : ArrayBufferLike.t) ->
+        fun ?byteOffset:(x5089 : float option) ->
+          fun ?length:(x5090 : float option) ->
             fun () ->
               t_of_js
                 (Ojs.new_obj_arr
                    (Ojs.get_prop_ascii Ojs.global "Float32Array")
-                   (let x5103 =
+                   (let x5091 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     ignore
-                      (Ojs.call x5103 "push"
-                         [|(ArrayBufferLike.t_to_js x5100)|]);
-                    (match x5101 with
-                     | Some x5105 ->
+                      (Ojs.call x5091 "push"
+                         [|(ArrayBufferLike.t_to_js x5088)|]);
+                    (match x5089 with
+                     | Some x5093 ->
                          ignore
-                           (Ojs.call x5103 "push" [|(Ojs.float_to_js x5105)|])
+                           (Ojs.call x5091 "push" [|(Ojs.float_to_js x5093)|])
                      | None -> ());
-                    (match x5102 with
-                     | Some x5104 ->
+                    (match x5090 with
+                     | Some x5092 ->
                          ignore
-                           (Ojs.call x5103 "push" [|(Ojs.float_to_js x5104)|])
+                           (Ojs.call x5091 "push" [|(Ojs.float_to_js x5092)|])
                      | None -> ());
-                    x5103))
+                    x5091))
     let (bytes_per_element : unit -> float) =
       fun () ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Float32Array")
              "BYTES_PER_ELEMENT")
     let (of_ : float list -> t) =
-      fun (x5106 : float list) ->
+      fun (x5094 : float list) ->
         t_of_js
-          (let x5109 = Ojs.get_prop_ascii Ojs.global "Float32Array" in
-           Ojs.call (Ojs.get_prop_ascii x5109 "of") "apply"
-             [|x5109;((let x5107 =
+          (let x5097 = Ojs.get_prop_ascii Ojs.global "Float32Array" in
+           Ojs.call (Ojs.get_prop_ascii x5097 "of") "apply"
+             [|x5097;((let x5095 =
                          Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                            [||] in
                        List.iter
-                         (fun (x5108 : float) ->
+                         (fun (x5096 : float) ->
                             ignore
-                              (Ojs.call x5107 "push"
-                                 [|(Ojs.float_to_js x5108)|])) x5106;
-                       x5107))|])
-    let (from' : float ArrayLike.t -> t) =
-      fun (x5110 : float ArrayLike.t) ->
+                              (Ojs.call x5095 "push"
+                                 [|(Ojs.float_to_js x5096)|])) x5094;
+                       x5095))|])
+    let (from : float ArrayLike.t -> t) =
+      fun (x5098 : float ArrayLike.t) ->
         t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Float32Array") "from"
-             [|(ArrayLike.t_to_js Ojs.float_to_js x5110)|])
-    let (from'' :
+             [|(ArrayLike.t_to_js Ojs.float_to_js x5098)|])
+    let (from' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t)
       =
-      fun ~arrayLike:(x5112 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x5113 : v:'T -> k:float -> float) ->
-          fun ?thisArg:(x5114 : any option) ->
+      fun ~arrayLike:(x5100 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x5101 : v:'T -> k:float -> float) ->
+          fun ?thisArg:(x5102 : any option) ->
             fun () ->
               t_of_js
-                (let x5120 = Ojs.get_prop_ascii Ojs.global "Float32Array" in
-                 Ojs.call (Ojs.get_prop_ascii x5120 "from") "apply"
-                   [|x5120;((let x5115 =
+                (let x5108 = Ojs.get_prop_ascii Ojs.global "Float32Array" in
+                 Ojs.call (Ojs.get_prop_ascii x5108 "from") "apply"
+                   [|x5108;((let x5103 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5115 "push"
-                                  [|(ArrayLike.t_to_js Obj.magic x5112)|]);
+                               (Ojs.call x5103 "push"
+                                  [|(ArrayLike.t_to_js Obj.magic x5100)|]);
                              ignore
-                               (Ojs.call x5115 "push"
+                               (Ojs.call x5103 "push"
                                   [|(Ojs.fun_to_js 2
-                                       (fun (x5117 : Ojs.t) ->
-                                          fun (x5118 : Ojs.t) ->
+                                       (fun (x5105 : Ojs.t) ->
+                                          fun (x5106 : Ojs.t) ->
                                             Ojs.float_to_js
-                                              (x5113 ~v:(Obj.magic x5117)
-                                                 ~k:(Ojs.float_of_js x5118))))|]);
-                             (match x5114 with
+                                              (x5101 ~v:(Obj.magic x5105)
+                                                 ~k:(Ojs.float_of_js x5106))))|]);
+                             (match x5102 with
+                              | Some x5104 ->
+                                  ignore
+                                    (Ojs.call x5103 "push"
+                                       [|(any_to_js x5104)|])
+                              | None -> ());
+                             x5103))|])
+    let (create'''' : float Iterable.t -> t) =
+      fun (x5109 : float Iterable.t) ->
+        t_of_js
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Float32Array")
+             [|(Iterable.t_to_js Ojs.float_to_js x5109)|])
+    let (from'' :
+      arrayLike:float Iterable.t ->
+        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
+      =
+      fun ~arrayLike:(x5111 : float Iterable.t) ->
+        fun ?mapfn:(x5112 : (v:float -> k:float -> float) option) ->
+          fun ?thisArg:(x5113 : any option) ->
+            fun () ->
+              t_of_js
+                (let x5120 = Ojs.get_prop_ascii Ojs.global "Float32Array" in
+                 Ojs.call (Ojs.get_prop_ascii x5120 "from") "apply"
+                   [|x5120;((let x5114 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x5114 "push"
+                                  [|(Iterable.t_to_js Ojs.float_to_js x5111)|]);
+                             (match x5112 with
                               | Some x5116 ->
                                   ignore
-                                    (Ojs.call x5115 "push"
-                                       [|(any_to_js x5116)|])
+                                    (Ojs.call x5114 "push"
+                                       [|(Ojs.fun_to_js 2
+                                            (fun (x5117 : Ojs.t) ->
+                                               fun (x5118 : Ojs.t) ->
+                                                 Ojs.float_to_js
+                                                   (x5116
+                                                      ~v:(Ojs.float_of_js
+                                                            x5117)
+                                                      ~k:(Ojs.float_of_js
+                                                            x5118))))|])
                               | None -> ());
-                             x5115))|])
+                             (match x5113 with
+                              | Some x5115 ->
+                                  ignore
+                                    (Ojs.call x5114 "push"
+                                       [|(any_to_js x5115)|])
+                              | None -> ());
+                             x5114))|])
     let cast_from = Obj.magic
   end
 module FinalizationRegistry =
@@ -19958,176 +19958,197 @@ module Uint8Array =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x5597 : __tags intf) -> intf_to_js __tags_to_js x5597
-    let (entries : 'tags this -> (float * float) IterableIterator.t) =
-      fun (x5601 : 'tags this) ->
-        IterableIterator.t_of_js
-          (fun (x5603 : Ojs.t) ->
-             let x5604 = x5603 in
-             ((Ojs.float_of_js (Ojs.array_get x5604 0)),
-               (Ojs.float_of_js (Ojs.array_get x5604 1))))
-          (Ojs.call (this_to_js Obj.magic x5601) "entries" [||])
-    let (keys : 'tags this -> float IterableIterator.t) =
-      fun (x5605 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x5605) "keys" [||])
-    let (values : 'tags this -> float IterableIterator.t) =
-      fun (x5608 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x5608) "values" [||])
     let (includes :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x5615 : 'tags this) ->
-        fun ~searchElement:(x5611 : float) ->
-          fun ?fromIndex:(x5612 : float option) ->
+      fun (x5605 : 'tags this) ->
+        fun ~searchElement:(x5601 : float) ->
+          fun ?fromIndex:(x5602 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x5617 = this_to_js Obj.magic x5615 in
-                 Ojs.call (Ojs.get_prop_ascii x5617 "includes") "apply"
-                   [|x5617;((let x5613 =
+                (let x5607 = this_to_js Obj.magic x5605 in
+                 Ojs.call (Ojs.get_prop_ascii x5607 "includes") "apply"
+                   [|x5607;((let x5603 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5613 "push"
-                                  [|(Ojs.float_to_js x5611)|]);
-                             (match x5612 with
-                              | Some x5614 ->
+                               (Ojs.call x5603 "push"
+                                  [|(Ojs.float_to_js x5601)|]);
+                             (match x5602 with
+                              | Some x5604 ->
                                   ignore
-                                    (Ojs.call x5613 "push"
-                                       [|(Ojs.float_to_js x5614)|])
+                                    (Ojs.call x5603 "push"
+                                       [|(Ojs.float_to_js x5604)|])
                               | None -> ());
-                             x5613))|])
+                             x5603))|])
     let (get_BYTES_PER_ELEMENT : 'tags this -> float) =
-      fun (x5618 : 'tags this) ->
+      fun (x5608 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5618)
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5608)
              "BYTES_PER_ELEMENT")
     let (get_buffer : 'tags this -> ArrayBufferLike.t) =
-      fun (x5620 : 'tags this) ->
+      fun (x5610 : 'tags this) ->
         ArrayBufferLike.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5620) "buffer")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5610) "buffer")
     let (get_byteLength : 'tags this -> float) =
-      fun (x5622 : 'tags this) ->
+      fun (x5612 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5622) "byteLength")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5612) "byteLength")
     let (get_byteOffset : 'tags this -> float) =
-      fun (x5624 : 'tags this) ->
+      fun (x5614 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5624) "byteOffset")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5614) "byteOffset")
     let (copyWithin :
       'tags this ->
         target:float -> start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x5631 : 'tags this) ->
-        fun ~target:(x5626 : float) ->
-          fun ~start:(x5627 : float) ->
-            fun ?end_:(x5628 : float option) ->
+      fun (x5621 : 'tags this) ->
+        fun ~target:(x5616 : float) ->
+          fun ~start:(x5617 : float) ->
+            fun ?end_:(x5618 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x5633 = this_to_js Obj.magic x5631 in
-                   Ojs.call (Ojs.get_prop_ascii x5633 "copyWithin") "apply"
-                     [|x5633;((let x5629 =
+                  (let x5623 = this_to_js Obj.magic x5621 in
+                   Ojs.call (Ojs.get_prop_ascii x5623 "copyWithin") "apply"
+                     [|x5623;((let x5619 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x5629 "push"
-                                    [|(Ojs.float_to_js x5626)|]);
+                                 (Ojs.call x5619 "push"
+                                    [|(Ojs.float_to_js x5616)|]);
                                ignore
-                                 (Ojs.call x5629 "push"
-                                    [|(Ojs.float_to_js x5627)|]);
-                               (match x5628 with
-                                | Some x5630 ->
+                                 (Ojs.call x5619 "push"
+                                    [|(Ojs.float_to_js x5617)|]);
+                               (match x5618 with
+                                | Some x5620 ->
                                     ignore
-                                      (Ojs.call x5629 "push"
-                                         [|(Ojs.float_to_js x5630)|])
+                                      (Ojs.call x5619 "push"
+                                         [|(Ojs.float_to_js x5620)|])
                                 | None -> ());
-                               x5629))|])
+                               x5619))|])
     let (every :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x5642 : 'tags this) ->
+      fun (x5632 : 'tags this) ->
         fun
-          ~predicate:(x5635 :
+          ~predicate:(x5625 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x5636 : any option) ->
+          fun ?thisArg:(x5626 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x5644 = this_to_js Obj.magic x5642 in
-                 Ojs.call (Ojs.get_prop_ascii x5644 "every") "apply"
-                   [|x5644;((let x5637 =
+                (let x5634 = this_to_js Obj.magic x5632 in
+                 Ojs.call (Ojs.get_prop_ascii x5634 "every") "apply"
+                   [|x5634;((let x5627 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5637 "push"
+                               (Ojs.call x5627 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x5639 : Ojs.t) ->
-                                          fun (x5640 : Ojs.t) ->
-                                            fun (x5641 : Ojs.t) ->
+                                       (fun (x5629 : Ojs.t) ->
+                                          fun (x5630 : Ojs.t) ->
+                                            fun (x5631 : Ojs.t) ->
                                               unknown_to_js
-                                                (x5635
+                                                (x5625
                                                    ~value:(Ojs.float_of_js
-                                                             x5639)
+                                                             x5629)
                                                    ~index:(Ojs.float_of_js
-                                                             x5640)
-                                                   ~array:(t_of_js x5641))))|]);
-                             (match x5636 with
-                              | Some x5638 ->
+                                                             x5630)
+                                                   ~array:(t_of_js x5631))))|]);
+                             (match x5626 with
+                              | Some x5628 ->
                                   ignore
-                                    (Ojs.call x5637 "push"
-                                       [|(any_to_js x5638)|])
+                                    (Ojs.call x5627 "push"
+                                       [|(any_to_js x5628)|])
                               | None -> ());
-                             x5637))|])
+                             x5627))|])
     let (fill :
       'tags this ->
         value:float -> ?start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x5651 : 'tags this) ->
-        fun ~value:(x5645 : float) ->
-          fun ?start:(x5646 : float option) ->
-            fun ?end_:(x5647 : float option) ->
+      fun (x5641 : 'tags this) ->
+        fun ~value:(x5635 : float) ->
+          fun ?start:(x5636 : float option) ->
+            fun ?end_:(x5637 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x5653 = this_to_js Obj.magic x5651 in
-                   Ojs.call (Ojs.get_prop_ascii x5653 "fill") "apply"
-                     [|x5653;((let x5648 =
+                  (let x5643 = this_to_js Obj.magic x5641 in
+                   Ojs.call (Ojs.get_prop_ascii x5643 "fill") "apply"
+                     [|x5643;((let x5638 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x5648 "push"
-                                    [|(Ojs.float_to_js x5645)|]);
-                               (match x5646 with
-                                | Some x5650 ->
+                                 (Ojs.call x5638 "push"
+                                    [|(Ojs.float_to_js x5635)|]);
+                               (match x5636 with
+                                | Some x5640 ->
                                     ignore
-                                      (Ojs.call x5648 "push"
-                                         [|(Ojs.float_to_js x5650)|])
+                                      (Ojs.call x5638 "push"
+                                         [|(Ojs.float_to_js x5640)|])
                                 | None -> ());
-                               (match x5647 with
-                                | Some x5649 ->
+                               (match x5637 with
+                                | Some x5639 ->
                                     ignore
-                                      (Ojs.call x5648 "push"
-                                         [|(Ojs.float_to_js x5649)|])
+                                      (Ojs.call x5638 "push"
+                                         [|(Ojs.float_to_js x5639)|])
                                 | None -> ());
-                               x5648))|])
+                               x5638))|])
     let (filter :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> any) ->
           ?thisArg:any -> unit -> t)
       =
+      fun (x5652 : 'tags this) ->
+        fun ~predicate:(x5645 : value:float -> index:float -> array:t -> any)
+          ->
+          fun ?thisArg:(x5646 : any option) ->
+            fun () ->
+              t_of_js
+                (let x5654 = this_to_js Obj.magic x5652 in
+                 Ojs.call (Ojs.get_prop_ascii x5654 "filter") "apply"
+                   [|x5654;((let x5647 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x5647 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x5649 : Ojs.t) ->
+                                          fun (x5650 : Ojs.t) ->
+                                            fun (x5651 : Ojs.t) ->
+                                              any_to_js
+                                                (x5645
+                                                   ~value:(Ojs.float_of_js
+                                                             x5649)
+                                                   ~index:(Ojs.float_of_js
+                                                             x5650)
+                                                   ~array:(t_of_js x5651))))|]);
+                             (match x5646 with
+                              | Some x5648 ->
+                                  ignore
+                                    (Ojs.call x5647 "push"
+                                       [|(any_to_js x5648)|])
+                              | None -> ());
+                             x5647))|])
+    let (find :
+      'tags this ->
+        predicate:(value:float -> index:float -> obj:t -> bool) ->
+          ?thisArg:any -> unit -> float or_undefined)
+      =
       fun (x5662 : 'tags this) ->
-        fun ~predicate:(x5655 : value:float -> index:float -> array:t -> any)
+        fun ~predicate:(x5655 : value:float -> index:float -> obj:t -> bool)
           ->
           fun ?thisArg:(x5656 : any option) ->
             fun () ->
-              t_of_js
+              or_undefined_of_js Ojs.float_of_js
                 (let x5664 = this_to_js Obj.magic x5662 in
-                 Ojs.call (Ojs.get_prop_ascii x5664 "filter") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x5664 "find") "apply"
                    [|x5664;((let x5657 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -20138,13 +20159,13 @@ module Uint8Array =
                                        (fun (x5659 : Ojs.t) ->
                                           fun (x5660 : Ojs.t) ->
                                             fun (x5661 : Ojs.t) ->
-                                              any_to_js
+                                              Ojs.bool_to_js
                                                 (x5655
                                                    ~value:(Ojs.float_of_js
                                                              x5659)
                                                    ~index:(Ojs.float_of_js
                                                              x5660)
-                                                   ~array:(t_of_js x5661))))|]);
+                                                   ~obj:(t_of_js x5661))))|]);
                              (match x5656 with
                               | Some x5658 ->
                                   ignore
@@ -20152,56 +20173,57 @@ module Uint8Array =
                                        [|(any_to_js x5658)|])
                               | None -> ());
                              x5657))|])
-    let (find :
-      'tags this ->
-        predicate:(value:float -> index:float -> obj:t -> bool) ->
-          ?thisArg:any -> unit -> float or_undefined)
-      =
-      fun (x5672 : 'tags this) ->
-        fun ~predicate:(x5665 : value:float -> index:float -> obj:t -> bool)
-          ->
-          fun ?thisArg:(x5666 : any option) ->
-            fun () ->
-              or_undefined_of_js Ojs.float_of_js
-                (let x5674 = this_to_js Obj.magic x5672 in
-                 Ojs.call (Ojs.get_prop_ascii x5674 "find") "apply"
-                   [|x5674;((let x5667 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x5667 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x5669 : Ojs.t) ->
-                                          fun (x5670 : Ojs.t) ->
-                                            fun (x5671 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x5665
-                                                   ~value:(Ojs.float_of_js
-                                                             x5669)
-                                                   ~index:(Ojs.float_of_js
-                                                             x5670)
-                                                   ~obj:(t_of_js x5671))))|]);
-                             (match x5666 with
-                              | Some x5668 ->
-                                  ignore
-                                    (Ojs.call x5667 "push"
-                                       [|(any_to_js x5668)|])
-                              | None -> ());
-                             x5667))|])
     let (findIndex :
       'tags this ->
         predicate:(value:float -> index:float -> obj:t -> bool) ->
           ?thisArg:any -> unit -> float)
       =
+      fun (x5673 : 'tags this) ->
+        fun ~predicate:(x5666 : value:float -> index:float -> obj:t -> bool)
+          ->
+          fun ?thisArg:(x5667 : any option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x5675 = this_to_js Obj.magic x5673 in
+                 Ojs.call (Ojs.get_prop_ascii x5675 "findIndex") "apply"
+                   [|x5675;((let x5668 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x5668 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x5670 : Ojs.t) ->
+                                          fun (x5671 : Ojs.t) ->
+                                            fun (x5672 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x5666
+                                                   ~value:(Ojs.float_of_js
+                                                             x5670)
+                                                   ~index:(Ojs.float_of_js
+                                                             x5671)
+                                                   ~obj:(t_of_js x5672))))|]);
+                             (match x5667 with
+                              | Some x5669 ->
+                                  ignore
+                                    (Ojs.call x5668 "push"
+                                       [|(any_to_js x5669)|])
+                              | None -> ());
+                             x5668))|])
+    let (forEach :
+      'tags this ->
+        callbackfn:(value:float -> index:float -> array:t -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
       fun (x5683 : 'tags this) ->
-        fun ~predicate:(x5676 : value:float -> index:float -> obj:t -> bool)
+        fun
+          ~callbackfn:(x5676 : value:float -> index:float -> array:t -> unit)
           ->
           fun ?thisArg:(x5677 : any option) ->
             fun () ->
-              Ojs.float_of_js
+              ignore
                 (let x5685 = this_to_js Obj.magic x5683 in
-                 Ojs.call (Ojs.get_prop_ascii x5685 "findIndex") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x5685 "forEach") "apply"
                    [|x5685;((let x5678 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -20212,13 +20234,10 @@ module Uint8Array =
                                        (fun (x5680 : Ojs.t) ->
                                           fun (x5681 : Ojs.t) ->
                                             fun (x5682 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x5676
-                                                   ~value:(Ojs.float_of_js
-                                                             x5680)
-                                                   ~index:(Ojs.float_of_js
-                                                             x5681)
-                                                   ~obj:(t_of_js x5682))))|]);
+                                              x5676
+                                                ~value:(Ojs.float_of_js x5680)
+                                                ~index:(Ojs.float_of_js x5681)
+                                                ~array:(t_of_js x5682)))|]);
                              (match x5677 with
                               | Some x5679 ->
                                   ignore
@@ -20226,150 +20245,115 @@ module Uint8Array =
                                        [|(any_to_js x5679)|])
                               | None -> ());
                              x5678))|])
-    let (forEach :
-      'tags this ->
-        callbackfn:(value:float -> index:float -> array:t -> unit) ->
-          ?thisArg:any -> unit -> unit)
+    let (indexOf :
+      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x5693 : 'tags this) ->
-        fun
-          ~callbackfn:(x5686 : value:float -> index:float -> array:t -> unit)
-          ->
-          fun ?thisArg:(x5687 : any option) ->
+      fun (x5690 : 'tags this) ->
+        fun ~searchElement:(x5686 : float) ->
+          fun ?fromIndex:(x5687 : float option) ->
             fun () ->
-              ignore
-                (let x5695 = this_to_js Obj.magic x5693 in
-                 Ojs.call (Ojs.get_prop_ascii x5695 "forEach") "apply"
-                   [|x5695;((let x5688 =
+              Ojs.float_of_js
+                (let x5692 = this_to_js Obj.magic x5690 in
+                 Ojs.call (Ojs.get_prop_ascii x5692 "indexOf") "apply"
+                   [|x5692;((let x5688 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
                                (Ojs.call x5688 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x5690 : Ojs.t) ->
-                                          fun (x5691 : Ojs.t) ->
-                                            fun (x5692 : Ojs.t) ->
-                                              x5686
-                                                ~value:(Ojs.float_of_js x5690)
-                                                ~index:(Ojs.float_of_js x5691)
-                                                ~array:(t_of_js x5692)))|]);
+                                  [|(Ojs.float_to_js x5686)|]);
                              (match x5687 with
                               | Some x5689 ->
                                   ignore
                                     (Ojs.call x5688 "push"
-                                       [|(any_to_js x5689)|])
+                                       [|(Ojs.float_to_js x5689)|])
                               | None -> ());
                              x5688))|])
-    let (indexOf :
-      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x5700 : 'tags this) ->
-        fun ~searchElement:(x5696 : float) ->
-          fun ?fromIndex:(x5697 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x5702 = this_to_js Obj.magic x5700 in
-                 Ojs.call (Ojs.get_prop_ascii x5702 "indexOf") "apply"
-                   [|x5702;((let x5698 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x5698 "push"
-                                  [|(Ojs.float_to_js x5696)|]);
-                             (match x5697 with
-                              | Some x5699 ->
-                                  ignore
-                                    (Ojs.call x5698 "push"
-                                       [|(Ojs.float_to_js x5699)|])
-                              | None -> ());
-                             x5698))|])
     let (join : 'tags this -> ?separator:string -> unit -> string) =
-      fun (x5706 : 'tags this) ->
-        fun ?separator:(x5703 : string option) ->
+      fun (x5696 : 'tags this) ->
+        fun ?separator:(x5693 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x5708 = this_to_js Obj.magic x5706 in
-               Ojs.call (Ojs.get_prop_ascii x5708 "join") "apply"
-                 [|x5708;((let x5704 =
+              (let x5698 = this_to_js Obj.magic x5696 in
+               Ojs.call (Ojs.get_prop_ascii x5698 "join") "apply"
+                 [|x5698;((let x5694 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x5703 with
-                            | Some x5705 ->
+                           (match x5693 with
+                            | Some x5695 ->
                                 ignore
-                                  (Ojs.call x5704 "push"
-                                     [|(Ojs.string_to_js x5705)|])
+                                  (Ojs.call x5694 "push"
+                                     [|(Ojs.string_to_js x5695)|])
                             | None -> ());
-                           x5704))|])
+                           x5694))|])
     let (lastIndexOf :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x5713 : 'tags this) ->
-        fun ~searchElement:(x5709 : float) ->
-          fun ?fromIndex:(x5710 : float option) ->
+      fun (x5703 : 'tags this) ->
+        fun ~searchElement:(x5699 : float) ->
+          fun ?fromIndex:(x5700 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x5715 = this_to_js Obj.magic x5713 in
-                 Ojs.call (Ojs.get_prop_ascii x5715 "lastIndexOf") "apply"
-                   [|x5715;((let x5711 =
+                (let x5705 = this_to_js Obj.magic x5703 in
+                 Ojs.call (Ojs.get_prop_ascii x5705 "lastIndexOf") "apply"
+                   [|x5705;((let x5701 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5711 "push"
-                                  [|(Ojs.float_to_js x5709)|]);
-                             (match x5710 with
-                              | Some x5712 ->
+                               (Ojs.call x5701 "push"
+                                  [|(Ojs.float_to_js x5699)|]);
+                             (match x5700 with
+                              | Some x5702 ->
                                   ignore
-                                    (Ojs.call x5711 "push"
-                                       [|(Ojs.float_to_js x5712)|])
+                                    (Ojs.call x5701 "push"
+                                       [|(Ojs.float_to_js x5702)|])
                               | None -> ());
-                             x5711))|])
+                             x5701))|])
     let (get_length : 'tags this -> float) =
-      fun (x5716 : 'tags this) ->
+      fun (x5706 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5716) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5706) "length")
     let (map :
       'tags this ->
         callbackfn:(value:float -> index:float -> array:t -> float) ->
           ?thisArg:any -> unit -> t)
       =
-      fun (x5725 : 'tags this) ->
+      fun (x5715 : 'tags this) ->
         fun
-          ~callbackfn:(x5718 :
+          ~callbackfn:(x5708 :
                         value:float -> index:float -> array:t -> float)
           ->
-          fun ?thisArg:(x5719 : any option) ->
+          fun ?thisArg:(x5709 : any option) ->
             fun () ->
               t_of_js
-                (let x5727 = this_to_js Obj.magic x5725 in
-                 Ojs.call (Ojs.get_prop_ascii x5727 "map") "apply"
-                   [|x5727;((let x5720 =
+                (let x5717 = this_to_js Obj.magic x5715 in
+                 Ojs.call (Ojs.get_prop_ascii x5717 "map") "apply"
+                   [|x5717;((let x5710 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5720 "push"
+                               (Ojs.call x5710 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x5722 : Ojs.t) ->
-                                          fun (x5723 : Ojs.t) ->
-                                            fun (x5724 : Ojs.t) ->
+                                       (fun (x5712 : Ojs.t) ->
+                                          fun (x5713 : Ojs.t) ->
+                                            fun (x5714 : Ojs.t) ->
                                               Ojs.float_to_js
-                                                (x5718
+                                                (x5708
                                                    ~value:(Ojs.float_of_js
-                                                             x5722)
+                                                             x5712)
                                                    ~index:(Ojs.float_of_js
-                                                             x5723)
-                                                   ~array:(t_of_js x5724))))|]);
-                             (match x5719 with
-                              | Some x5721 ->
+                                                             x5713)
+                                                   ~array:(t_of_js x5714))))|]);
+                             (match x5709 with
+                              | Some x5711 ->
                                   ignore
-                                    (Ojs.call x5720 "push"
-                                       [|(any_to_js x5721)|])
+                                    (Ojs.call x5710 "push"
+                                       [|(any_to_js x5711)|])
                               | None -> ());
-                             x5720))|])
+                             x5710))|])
     let (reduce :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -20377,25 +20361,25 @@ module Uint8Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x5733 : 'tags this) ->
+      fun (x5723 : 'tags this) ->
         fun
-          ~callbackfn:(x5728 :
+          ~callbackfn:(x5718 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x5733) "reduce"
+            (Ojs.call (this_to_js Obj.magic x5723) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x5729 : Ojs.t) ->
-                       fun (x5730 : Ojs.t) ->
-                         fun (x5731 : Ojs.t) ->
-                           fun (x5732 : Ojs.t) ->
+                    (fun (x5719 : Ojs.t) ->
+                       fun (x5720 : Ojs.t) ->
+                         fun (x5721 : Ojs.t) ->
+                           fun (x5722 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x5728 ~previousValue:(Ojs.float_of_js x5729)
-                                  ~currentValue:(Ojs.float_of_js x5730)
-                                  ~currentIndex:(Ojs.float_of_js x5731)
-                                  ~array:(t_of_js x5732))))|])
+                               (x5718 ~previousValue:(Ojs.float_of_js x5719)
+                                  ~currentValue:(Ojs.float_of_js x5720)
+                                  ~currentIndex:(Ojs.float_of_js x5721)
+                                  ~array:(t_of_js x5722))))|])
     let (reduce' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -20403,28 +20387,28 @@ module Uint8Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x5741 : 'tags this) ->
+      fun (x5731 : 'tags this) ->
         fun
-          ~callbackfn:(x5735 :
+          ~callbackfn:(x5725 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x5740 : float) ->
+          fun ~initialValue:(x5730 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x5741) "reduce"
+              (Ojs.call (this_to_js Obj.magic x5731) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x5736 : Ojs.t) ->
-                         fun (x5737 : Ojs.t) ->
-                           fun (x5738 : Ojs.t) ->
-                             fun (x5739 : Ojs.t) ->
+                      (fun (x5726 : Ojs.t) ->
+                         fun (x5727 : Ojs.t) ->
+                           fun (x5728 : Ojs.t) ->
+                             fun (x5729 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x5735
-                                    ~previousValue:(Ojs.float_of_js x5736)
-                                    ~currentValue:(Ojs.float_of_js x5737)
-                                    ~currentIndex:(Ojs.float_of_js x5738)
-                                    ~array:(t_of_js x5739))));(Ojs.float_to_js
-                                                                 x5740)|])
+                                 (x5725
+                                    ~previousValue:(Ojs.float_of_js x5726)
+                                    ~currentValue:(Ojs.float_of_js x5727)
+                                    ~currentIndex:(Ojs.float_of_js x5728)
+                                    ~array:(t_of_js x5729))));(Ojs.float_to_js
+                                                                 x5730)|])
     let (reduce'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -20432,27 +20416,27 @@ module Uint8Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x5749 : 'tags this) ->
+      fun (x5739 : 'tags this) ->
         fun
-          ~callbackfn:(x5743 :
+          ~callbackfn:(x5733 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x5748 : 'U) ->
+          fun ~initialValue:(x5738 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x5749) "reduce"
+              (Ojs.call (this_to_js Obj.magic x5739) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x5744 : Ojs.t) ->
-                         fun (x5745 : Ojs.t) ->
-                           fun (x5746 : Ojs.t) ->
-                             fun (x5747 : Ojs.t) ->
+                      (fun (x5734 : Ojs.t) ->
+                         fun (x5735 : Ojs.t) ->
+                           fun (x5736 : Ojs.t) ->
+                             fun (x5737 : Ojs.t) ->
                                Obj.magic
-                                 (x5743 ~previousValue:(Obj.magic x5744)
-                                    ~currentValue:(Ojs.float_of_js x5745)
-                                    ~currentIndex:(Ojs.float_of_js x5746)
-                                    ~array:(t_of_js x5747))));(Obj.magic
-                                                                 x5748)|])
+                                 (x5733 ~previousValue:(Obj.magic x5734)
+                                    ~currentValue:(Ojs.float_of_js x5735)
+                                    ~currentIndex:(Ojs.float_of_js x5736)
+                                    ~array:(t_of_js x5737))));(Obj.magic
+                                                                 x5738)|])
     let (reduceRight :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -20460,25 +20444,25 @@ module Uint8Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x5756 : 'tags this) ->
+      fun (x5746 : 'tags this) ->
         fun
-          ~callbackfn:(x5751 :
+          ~callbackfn:(x5741 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x5756) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic x5746) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x5752 : Ojs.t) ->
-                       fun (x5753 : Ojs.t) ->
-                         fun (x5754 : Ojs.t) ->
-                           fun (x5755 : Ojs.t) ->
+                    (fun (x5742 : Ojs.t) ->
+                       fun (x5743 : Ojs.t) ->
+                         fun (x5744 : Ojs.t) ->
+                           fun (x5745 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x5751 ~previousValue:(Ojs.float_of_js x5752)
-                                  ~currentValue:(Ojs.float_of_js x5753)
-                                  ~currentIndex:(Ojs.float_of_js x5754)
-                                  ~array:(t_of_js x5755))))|])
+                               (x5741 ~previousValue:(Ojs.float_of_js x5742)
+                                  ~currentValue:(Ojs.float_of_js x5743)
+                                  ~currentIndex:(Ojs.float_of_js x5744)
+                                  ~array:(t_of_js x5745))))|])
     let (reduceRight' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -20486,28 +20470,28 @@ module Uint8Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x5764 : 'tags this) ->
+      fun (x5754 : 'tags this) ->
         fun
-          ~callbackfn:(x5758 :
+          ~callbackfn:(x5748 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x5763 : float) ->
+          fun ~initialValue:(x5753 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x5764) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x5754) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x5759 : Ojs.t) ->
-                         fun (x5760 : Ojs.t) ->
-                           fun (x5761 : Ojs.t) ->
-                             fun (x5762 : Ojs.t) ->
+                      (fun (x5749 : Ojs.t) ->
+                         fun (x5750 : Ojs.t) ->
+                           fun (x5751 : Ojs.t) ->
+                             fun (x5752 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x5758
-                                    ~previousValue:(Ojs.float_of_js x5759)
-                                    ~currentValue:(Ojs.float_of_js x5760)
-                                    ~currentIndex:(Ojs.float_of_js x5761)
-                                    ~array:(t_of_js x5762))));(Ojs.float_to_js
-                                                                 x5763)|])
+                                 (x5748
+                                    ~previousValue:(Ojs.float_of_js x5749)
+                                    ~currentValue:(Ojs.float_of_js x5750)
+                                    ~currentIndex:(Ojs.float_of_js x5751)
+                                    ~array:(t_of_js x5752))));(Ojs.float_to_js
+                                                                 x5753)|])
     let (reduceRight'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -20515,239 +20499,211 @@ module Uint8Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x5772 : 'tags this) ->
+      fun (x5762 : 'tags this) ->
         fun
-          ~callbackfn:(x5766 :
+          ~callbackfn:(x5756 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x5771 : 'U) ->
+          fun ~initialValue:(x5761 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x5772) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x5762) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x5767 : Ojs.t) ->
-                         fun (x5768 : Ojs.t) ->
-                           fun (x5769 : Ojs.t) ->
-                             fun (x5770 : Ojs.t) ->
+                      (fun (x5757 : Ojs.t) ->
+                         fun (x5758 : Ojs.t) ->
+                           fun (x5759 : Ojs.t) ->
+                             fun (x5760 : Ojs.t) ->
                                Obj.magic
-                                 (x5766 ~previousValue:(Obj.magic x5767)
-                                    ~currentValue:(Ojs.float_of_js x5768)
-                                    ~currentIndex:(Ojs.float_of_js x5769)
-                                    ~array:(t_of_js x5770))));(Obj.magic
-                                                                 x5771)|])
+                                 (x5756 ~previousValue:(Obj.magic x5757)
+                                    ~currentValue:(Ojs.float_of_js x5758)
+                                    ~currentIndex:(Ojs.float_of_js x5759)
+                                    ~array:(t_of_js x5760))));(Obj.magic
+                                                                 x5761)|])
     let (reverse : 'tags this -> t) =
-      fun (x5774 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x5774) "reverse" [||])
+      fun (x5764 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x5764) "reverse" [||])
     let (set_ :
       'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit)
       =
-      fun (x5781 : 'tags this) ->
-        fun ~array:(x5776 : float ArrayLike.t) ->
-          fun ?offset:(x5777 : float option) ->
+      fun (x5771 : 'tags this) ->
+        fun ~array:(x5766 : float ArrayLike.t) ->
+          fun ?offset:(x5767 : float option) ->
             fun () ->
               ignore
-                (let x5783 = this_to_js Obj.magic x5781 in
-                 Ojs.call (Ojs.get_prop_ascii x5783 "set") "apply"
-                   [|x5783;((let x5778 =
+                (let x5773 = this_to_js Obj.magic x5771 in
+                 Ojs.call (Ojs.get_prop_ascii x5773 "set") "apply"
+                   [|x5773;((let x5768 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5778 "push"
-                                  [|(ArrayLike.t_to_js Ojs.float_to_js x5776)|]);
-                             (match x5777 with
-                              | Some x5779 ->
+                               (Ojs.call x5768 "push"
+                                  [|(ArrayLike.t_to_js Ojs.float_to_js x5766)|]);
+                             (match x5767 with
+                              | Some x5769 ->
                                   ignore
-                                    (Ojs.call x5778 "push"
-                                       [|(Ojs.float_to_js x5779)|])
+                                    (Ojs.call x5768 "push"
+                                       [|(Ojs.float_to_js x5769)|])
                               | None -> ());
-                             x5778))|])
+                             x5768))|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> t) =
-      fun (x5789 : 'tags this) ->
-        fun ?start:(x5784 : float option) ->
-          fun ?end_:(x5785 : float option) ->
+      fun (x5779 : 'tags this) ->
+        fun ?start:(x5774 : float option) ->
+          fun ?end_:(x5775 : float option) ->
             fun () ->
               t_of_js
-                (let x5791 = this_to_js Obj.magic x5789 in
-                 Ojs.call (Ojs.get_prop_ascii x5791 "slice") "apply"
-                   [|x5791;((let x5786 =
+                (let x5781 = this_to_js Obj.magic x5779 in
+                 Ojs.call (Ojs.get_prop_ascii x5781 "slice") "apply"
+                   [|x5781;((let x5776 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x5784 with
-                              | Some x5788 ->
+                             (match x5774 with
+                              | Some x5778 ->
                                   ignore
-                                    (Ojs.call x5786 "push"
-                                       [|(Ojs.float_to_js x5788)|])
+                                    (Ojs.call x5776 "push"
+                                       [|(Ojs.float_to_js x5778)|])
                               | None -> ());
-                             (match x5785 with
-                              | Some x5787 ->
+                             (match x5775 with
+                              | Some x5777 ->
                                   ignore
-                                    (Ojs.call x5786 "push"
-                                       [|(Ojs.float_to_js x5787)|])
+                                    (Ojs.call x5776 "push"
+                                       [|(Ojs.float_to_js x5777)|])
                               | None -> ());
-                             x5786))|])
+                             x5776))|])
     let (some :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x5799 : 'tags this) ->
+      fun (x5789 : 'tags this) ->
         fun
-          ~predicate:(x5792 :
+          ~predicate:(x5782 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x5793 : any option) ->
+          fun ?thisArg:(x5783 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x5801 = this_to_js Obj.magic x5799 in
-                 Ojs.call (Ojs.get_prop_ascii x5801 "some") "apply"
-                   [|x5801;((let x5794 =
+                (let x5791 = this_to_js Obj.magic x5789 in
+                 Ojs.call (Ojs.get_prop_ascii x5791 "some") "apply"
+                   [|x5791;((let x5784 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5794 "push"
+                               (Ojs.call x5784 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x5796 : Ojs.t) ->
-                                          fun (x5797 : Ojs.t) ->
-                                            fun (x5798 : Ojs.t) ->
+                                       (fun (x5786 : Ojs.t) ->
+                                          fun (x5787 : Ojs.t) ->
+                                            fun (x5788 : Ojs.t) ->
                                               unknown_to_js
-                                                (x5792
+                                                (x5782
                                                    ~value:(Ojs.float_of_js
-                                                             x5796)
+                                                             x5786)
                                                    ~index:(Ojs.float_of_js
-                                                             x5797)
-                                                   ~array:(t_of_js x5798))))|]);
-                             (match x5793 with
-                              | Some x5795 ->
+                                                             x5787)
+                                                   ~array:(t_of_js x5788))))|]);
+                             (match x5783 with
+                              | Some x5785 ->
                                   ignore
-                                    (Ojs.call x5794 "push"
-                                       [|(any_to_js x5795)|])
+                                    (Ojs.call x5784 "push"
+                                       [|(any_to_js x5785)|])
                               | None -> ());
-                             x5794))|])
+                             x5784))|])
     let (sort :
       'tags this ->
         ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this)
       =
-      fun (x5807 : 'tags this) ->
-        fun ?compareFn:(x5802 : (a:float -> b:float -> float) option) ->
+      fun (x5797 : 'tags this) ->
+        fun ?compareFn:(x5792 : (a:float -> b:float -> float) option) ->
           fun () ->
             this_of_js Obj.magic
-              (let x5809 = this_to_js Obj.magic x5807 in
-               Ojs.call (Ojs.get_prop_ascii x5809 "sort") "apply"
-                 [|x5809;((let x5803 =
+              (let x5799 = this_to_js Obj.magic x5797 in
+               Ojs.call (Ojs.get_prop_ascii x5799 "sort") "apply"
+                 [|x5799;((let x5793 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x5802 with
-                            | Some x5804 ->
+                           (match x5792 with
+                            | Some x5794 ->
                                 ignore
-                                  (Ojs.call x5803 "push"
+                                  (Ojs.call x5793 "push"
                                      [|(Ojs.fun_to_js 2
-                                          (fun (x5805 : Ojs.t) ->
-                                             fun (x5806 : Ojs.t) ->
+                                          (fun (x5795 : Ojs.t) ->
+                                             fun (x5796 : Ojs.t) ->
                                                Ojs.float_to_js
-                                                 (x5804
-                                                    ~a:(Ojs.float_of_js x5805)
-                                                    ~b:(Ojs.float_of_js x5806))))|])
+                                                 (x5794
+                                                    ~a:(Ojs.float_of_js x5795)
+                                                    ~b:(Ojs.float_of_js x5796))))|])
                             | None -> ());
-                           x5803))|])
+                           x5793))|])
     let (subarray : 'tags this -> ?begin_:float -> ?end_:float -> unit -> t)
       =
-      fun (x5816 : 'tags this) ->
-        fun ?begin_:(x5811 : float option) ->
-          fun ?end_:(x5812 : float option) ->
+      fun (x5806 : 'tags this) ->
+        fun ?begin_:(x5801 : float option) ->
+          fun ?end_:(x5802 : float option) ->
             fun () ->
               t_of_js
-                (let x5818 = this_to_js Obj.magic x5816 in
-                 Ojs.call (Ojs.get_prop_ascii x5818 "subarray") "apply"
-                   [|x5818;((let x5813 =
+                (let x5808 = this_to_js Obj.magic x5806 in
+                 Ojs.call (Ojs.get_prop_ascii x5808 "subarray") "apply"
+                   [|x5808;((let x5803 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x5811 with
-                              | Some x5815 ->
+                             (match x5801 with
+                              | Some x5805 ->
                                   ignore
-                                    (Ojs.call x5813 "push"
-                                       [|(Ojs.float_to_js x5815)|])
+                                    (Ojs.call x5803 "push"
+                                       [|(Ojs.float_to_js x5805)|])
                               | None -> ());
-                             (match x5812 with
-                              | Some x5814 ->
+                             (match x5802 with
+                              | Some x5804 ->
                                   ignore
-                                    (Ojs.call x5813 "push"
-                                       [|(Ojs.float_to_js x5814)|])
+                                    (Ojs.call x5803 "push"
+                                       [|(Ojs.float_to_js x5804)|])
                               | None -> ());
-                             x5813))|])
+                             x5803))|])
     let (toLocaleString : 'tags this -> string) =
-      fun (x5819 : 'tags this) ->
+      fun (x5809 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x5819) "toLocaleString" [||])
+          (Ojs.call (this_to_js Obj.magic x5809) "toLocaleString" [||])
     let (toString : 'tags this -> string) =
-      fun (x5821 : 'tags this) ->
+      fun (x5811 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x5821) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x5811) "toString" [||])
     let (valueOf : 'tags this -> t) =
-      fun (x5823 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x5823) "valueOf" [||])
+      fun (x5813 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x5813) "valueOf" [||])
     let (get : 'tags this -> float -> float) =
-      fun (x5825 : 'tags this) ->
-        fun (x5827 : float) ->
+      fun (x5815 : 'tags this) ->
+        fun (x5817 : float) ->
           Ojs.float_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x5825)
-               (Ojs.float_to_js x5827))
+            (Ojs.get_prop (this_to_js Obj.magic x5815)
+               (Ojs.float_to_js x5817))
     let (set : 'tags this -> float -> float -> unit) =
-      fun (x5828 : 'tags this) ->
-        fun (x5830 : float) ->
-          fun (x5831 : float) ->
-            Ojs.set_prop (this_to_js Obj.magic x5828) (Ojs.float_to_js x5830)
-              (Ojs.float_to_js x5831)
-    let (create : float Iterable.t -> t) =
-      fun (x5832 : float Iterable.t) ->
-        t_of_js
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8Array")
-             [|(Iterable.t_to_js Ojs.float_to_js x5832)|])
-    let (from :
-      arrayLike:float Iterable.t ->
-        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
-      =
-      fun ~arrayLike:(x5834 : float Iterable.t) ->
-        fun ?mapfn:(x5835 : (v:float -> k:float -> float) option) ->
-          fun ?thisArg:(x5836 : any option) ->
-            fun () ->
-              t_of_js
-                (let x5843 = Ojs.get_prop_ascii Ojs.global "Uint8Array" in
-                 Ojs.call (Ojs.get_prop_ascii x5843 "from") "apply"
-                   [|x5843;((let x5837 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x5837 "push"
-                                  [|(Iterable.t_to_js Ojs.float_to_js x5834)|]);
-                             (match x5835 with
-                              | Some x5839 ->
-                                  ignore
-                                    (Ojs.call x5837 "push"
-                                       [|(Ojs.fun_to_js 2
-                                            (fun (x5840 : Ojs.t) ->
-                                               fun (x5841 : Ojs.t) ->
-                                                 Ojs.float_to_js
-                                                   (x5839
-                                                      ~v:(Ojs.float_of_js
-                                                            x5840)
-                                                      ~k:(Ojs.float_of_js
-                                                            x5841))))|])
-                              | None -> ());
-                             (match x5836 with
-                              | Some x5838 ->
-                                  ignore
-                                    (Ojs.call x5837 "push"
-                                       [|(any_to_js x5838)|])
-                              | None -> ());
-                             x5837))|])
-    let (create' : unit -> t) =
+      fun (x5818 : 'tags this) ->
+        fun (x5820 : float) ->
+          fun (x5821 : float) ->
+            Ojs.set_prop (this_to_js Obj.magic x5818) (Ojs.float_to_js x5820)
+              (Ojs.float_to_js x5821)
+    let (entries : 'tags this -> (float * float) IterableIterator.t) =
+      fun (x5822 : 'tags this) ->
+        IterableIterator.t_of_js
+          (fun (x5824 : Ojs.t) ->
+             let x5825 = x5824 in
+             ((Ojs.float_of_js (Ojs.array_get x5825 0)),
+               (Ojs.float_of_js (Ojs.array_get x5825 1))))
+          (Ojs.call (this_to_js Obj.magic x5822) "entries" [||])
+    let (keys : 'tags this -> float IterableIterator.t) =
+      fun (x5826 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x5826) "keys" [||])
+    let (values : 'tags this -> float IterableIterator.t) =
+      fun (x5829 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x5829) "values" [||])
+    let (create : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8Array") [||])
@@ -20756,102 +20712,146 @@ module Uint8Array =
         t_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Uint8Array")
              "prototype")
-    let (create'' : float -> t) =
-      fun (x5844 : float) ->
+    let (create' : float -> t) =
+      fun (x5832 : float) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8Array")
-             [|(Ojs.float_to_js x5844)|])
-    let (create''' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
-      fun (x5845 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
+             [|(Ojs.float_to_js x5832)|])
+    let (create'' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
+      fun (x5833 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8Array")
              [|(union2_to_js ArrayBufferLike.t_to_js
-                  (fun (x5847 : float ArrayLike.t) ->
-                     ArrayLike.t_to_js Ojs.float_to_js x5847) x5845)|])
-    let (create'''' :
+                  (fun (x5835 : float ArrayLike.t) ->
+                     ArrayLike.t_to_js Ojs.float_to_js x5835) x5833)|])
+    let (create''' :
       buffer:ArrayBufferLike.t ->
         ?byteOffset:float -> ?length:float -> unit -> t)
       =
-      fun ~buffer:(x5849 : ArrayBufferLike.t) ->
-        fun ?byteOffset:(x5850 : float option) ->
-          fun ?length:(x5851 : float option) ->
+      fun ~buffer:(x5837 : ArrayBufferLike.t) ->
+        fun ?byteOffset:(x5838 : float option) ->
+          fun ?length:(x5839 : float option) ->
             fun () ->
               t_of_js
                 (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Uint8Array")
-                   (let x5852 =
+                   (let x5840 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     ignore
-                      (Ojs.call x5852 "push"
-                         [|(ArrayBufferLike.t_to_js x5849)|]);
-                    (match x5850 with
-                     | Some x5854 ->
+                      (Ojs.call x5840 "push"
+                         [|(ArrayBufferLike.t_to_js x5837)|]);
+                    (match x5838 with
+                     | Some x5842 ->
                          ignore
-                           (Ojs.call x5852 "push" [|(Ojs.float_to_js x5854)|])
+                           (Ojs.call x5840 "push" [|(Ojs.float_to_js x5842)|])
                      | None -> ());
-                    (match x5851 with
-                     | Some x5853 ->
+                    (match x5839 with
+                     | Some x5841 ->
                          ignore
-                           (Ojs.call x5852 "push" [|(Ojs.float_to_js x5853)|])
+                           (Ojs.call x5840 "push" [|(Ojs.float_to_js x5841)|])
                      | None -> ());
-                    x5852))
+                    x5840))
     let (bytes_per_element : unit -> float) =
       fun () ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Uint8Array")
              "BYTES_PER_ELEMENT")
     let (of_ : float list -> t) =
-      fun (x5855 : float list) ->
+      fun (x5843 : float list) ->
         t_of_js
-          (let x5858 = Ojs.get_prop_ascii Ojs.global "Uint8Array" in
-           Ojs.call (Ojs.get_prop_ascii x5858 "of") "apply"
-             [|x5858;((let x5856 =
+          (let x5846 = Ojs.get_prop_ascii Ojs.global "Uint8Array" in
+           Ojs.call (Ojs.get_prop_ascii x5846 "of") "apply"
+             [|x5846;((let x5844 =
                          Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                            [||] in
                        List.iter
-                         (fun (x5857 : float) ->
+                         (fun (x5845 : float) ->
                             ignore
-                              (Ojs.call x5856 "push"
-                                 [|(Ojs.float_to_js x5857)|])) x5855;
-                       x5856))|])
-    let (from' : float ArrayLike.t -> t) =
-      fun (x5859 : float ArrayLike.t) ->
+                              (Ojs.call x5844 "push"
+                                 [|(Ojs.float_to_js x5845)|])) x5843;
+                       x5844))|])
+    let (from : float ArrayLike.t -> t) =
+      fun (x5847 : float ArrayLike.t) ->
         t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Uint8Array") "from"
-             [|(ArrayLike.t_to_js Ojs.float_to_js x5859)|])
-    let (from'' :
+             [|(ArrayLike.t_to_js Ojs.float_to_js x5847)|])
+    let (from' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t)
       =
-      fun ~arrayLike:(x5861 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x5862 : v:'T -> k:float -> float) ->
-          fun ?thisArg:(x5863 : any option) ->
+      fun ~arrayLike:(x5849 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x5850 : v:'T -> k:float -> float) ->
+          fun ?thisArg:(x5851 : any option) ->
             fun () ->
               t_of_js
-                (let x5869 = Ojs.get_prop_ascii Ojs.global "Uint8Array" in
-                 Ojs.call (Ojs.get_prop_ascii x5869 "from") "apply"
-                   [|x5869;((let x5864 =
+                (let x5857 = Ojs.get_prop_ascii Ojs.global "Uint8Array" in
+                 Ojs.call (Ojs.get_prop_ascii x5857 "from") "apply"
+                   [|x5857;((let x5852 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5864 "push"
-                                  [|(ArrayLike.t_to_js Obj.magic x5861)|]);
+                               (Ojs.call x5852 "push"
+                                  [|(ArrayLike.t_to_js Obj.magic x5849)|]);
                              ignore
-                               (Ojs.call x5864 "push"
+                               (Ojs.call x5852 "push"
                                   [|(Ojs.fun_to_js 2
-                                       (fun (x5866 : Ojs.t) ->
-                                          fun (x5867 : Ojs.t) ->
+                                       (fun (x5854 : Ojs.t) ->
+                                          fun (x5855 : Ojs.t) ->
                                             Ojs.float_to_js
-                                              (x5862 ~v:(Obj.magic x5866)
-                                                 ~k:(Ojs.float_of_js x5867))))|]);
-                             (match x5863 with
+                                              (x5850 ~v:(Obj.magic x5854)
+                                                 ~k:(Ojs.float_of_js x5855))))|]);
+                             (match x5851 with
+                              | Some x5853 ->
+                                  ignore
+                                    (Ojs.call x5852 "push"
+                                       [|(any_to_js x5853)|])
+                              | None -> ());
+                             x5852))|])
+    let (create'''' : float Iterable.t -> t) =
+      fun (x5858 : float Iterable.t) ->
+        t_of_js
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint8Array")
+             [|(Iterable.t_to_js Ojs.float_to_js x5858)|])
+    let (from'' :
+      arrayLike:float Iterable.t ->
+        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
+      =
+      fun ~arrayLike:(x5860 : float Iterable.t) ->
+        fun ?mapfn:(x5861 : (v:float -> k:float -> float) option) ->
+          fun ?thisArg:(x5862 : any option) ->
+            fun () ->
+              t_of_js
+                (let x5869 = Ojs.get_prop_ascii Ojs.global "Uint8Array" in
+                 Ojs.call (Ojs.get_prop_ascii x5869 "from") "apply"
+                   [|x5869;((let x5863 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x5863 "push"
+                                  [|(Iterable.t_to_js Ojs.float_to_js x5860)|]);
+                             (match x5861 with
                               | Some x5865 ->
                                   ignore
-                                    (Ojs.call x5864 "push"
-                                       [|(any_to_js x5865)|])
+                                    (Ojs.call x5863 "push"
+                                       [|(Ojs.fun_to_js 2
+                                            (fun (x5866 : Ojs.t) ->
+                                               fun (x5867 : Ojs.t) ->
+                                                 Ojs.float_to_js
+                                                   (x5865
+                                                      ~v:(Ojs.float_of_js
+                                                            x5866)
+                                                      ~k:(Ojs.float_of_js
+                                                            x5867))))|])
                               | None -> ());
-                             x5864))|])
+                             (match x5862 with
+                              | Some x5864 ->
+                                  ignore
+                                    (Ojs.call x5863 "push"
+                                       [|(any_to_js x5864)|])
+                              | None -> ());
+                             x5863))|])
     let cast_from = Obj.magic
   end
 module Uint32Array =
@@ -20878,176 +20878,197 @@ module Uint32Array =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x5872 : __tags intf) -> intf_to_js __tags_to_js x5872
-    let (entries : 'tags this -> (float * float) IterableIterator.t) =
-      fun (x5876 : 'tags this) ->
-        IterableIterator.t_of_js
-          (fun (x5878 : Ojs.t) ->
-             let x5879 = x5878 in
-             ((Ojs.float_of_js (Ojs.array_get x5879 0)),
-               (Ojs.float_of_js (Ojs.array_get x5879 1))))
-          (Ojs.call (this_to_js Obj.magic x5876) "entries" [||])
-    let (keys : 'tags this -> float IterableIterator.t) =
-      fun (x5880 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x5880) "keys" [||])
-    let (values : 'tags this -> float IterableIterator.t) =
-      fun (x5883 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x5883) "values" [||])
     let (includes :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x5890 : 'tags this) ->
-        fun ~searchElement:(x5886 : float) ->
-          fun ?fromIndex:(x5887 : float option) ->
+      fun (x5880 : 'tags this) ->
+        fun ~searchElement:(x5876 : float) ->
+          fun ?fromIndex:(x5877 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x5892 = this_to_js Obj.magic x5890 in
-                 Ojs.call (Ojs.get_prop_ascii x5892 "includes") "apply"
-                   [|x5892;((let x5888 =
+                (let x5882 = this_to_js Obj.magic x5880 in
+                 Ojs.call (Ojs.get_prop_ascii x5882 "includes") "apply"
+                   [|x5882;((let x5878 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5888 "push"
-                                  [|(Ojs.float_to_js x5886)|]);
-                             (match x5887 with
-                              | Some x5889 ->
+                               (Ojs.call x5878 "push"
+                                  [|(Ojs.float_to_js x5876)|]);
+                             (match x5877 with
+                              | Some x5879 ->
                                   ignore
-                                    (Ojs.call x5888 "push"
-                                       [|(Ojs.float_to_js x5889)|])
+                                    (Ojs.call x5878 "push"
+                                       [|(Ojs.float_to_js x5879)|])
                               | None -> ());
-                             x5888))|])
+                             x5878))|])
     let (get_BYTES_PER_ELEMENT : 'tags this -> float) =
-      fun (x5893 : 'tags this) ->
+      fun (x5883 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5893)
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5883)
              "BYTES_PER_ELEMENT")
     let (get_buffer : 'tags this -> ArrayBufferLike.t) =
-      fun (x5895 : 'tags this) ->
+      fun (x5885 : 'tags this) ->
         ArrayBufferLike.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5895) "buffer")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5885) "buffer")
     let (get_byteLength : 'tags this -> float) =
-      fun (x5897 : 'tags this) ->
+      fun (x5887 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5897) "byteLength")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5887) "byteLength")
     let (get_byteOffset : 'tags this -> float) =
-      fun (x5899 : 'tags this) ->
+      fun (x5889 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5899) "byteOffset")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5889) "byteOffset")
     let (copyWithin :
       'tags this ->
         target:float -> start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x5906 : 'tags this) ->
-        fun ~target:(x5901 : float) ->
-          fun ~start:(x5902 : float) ->
-            fun ?end_:(x5903 : float option) ->
+      fun (x5896 : 'tags this) ->
+        fun ~target:(x5891 : float) ->
+          fun ~start:(x5892 : float) ->
+            fun ?end_:(x5893 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x5908 = this_to_js Obj.magic x5906 in
-                   Ojs.call (Ojs.get_prop_ascii x5908 "copyWithin") "apply"
-                     [|x5908;((let x5904 =
+                  (let x5898 = this_to_js Obj.magic x5896 in
+                   Ojs.call (Ojs.get_prop_ascii x5898 "copyWithin") "apply"
+                     [|x5898;((let x5894 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x5904 "push"
-                                    [|(Ojs.float_to_js x5901)|]);
+                                 (Ojs.call x5894 "push"
+                                    [|(Ojs.float_to_js x5891)|]);
                                ignore
-                                 (Ojs.call x5904 "push"
-                                    [|(Ojs.float_to_js x5902)|]);
-                               (match x5903 with
-                                | Some x5905 ->
+                                 (Ojs.call x5894 "push"
+                                    [|(Ojs.float_to_js x5892)|]);
+                               (match x5893 with
+                                | Some x5895 ->
                                     ignore
-                                      (Ojs.call x5904 "push"
-                                         [|(Ojs.float_to_js x5905)|])
+                                      (Ojs.call x5894 "push"
+                                         [|(Ojs.float_to_js x5895)|])
                                 | None -> ());
-                               x5904))|])
+                               x5894))|])
     let (every :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x5917 : 'tags this) ->
+      fun (x5907 : 'tags this) ->
         fun
-          ~predicate:(x5910 :
+          ~predicate:(x5900 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x5911 : any option) ->
+          fun ?thisArg:(x5901 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x5919 = this_to_js Obj.magic x5917 in
-                 Ojs.call (Ojs.get_prop_ascii x5919 "every") "apply"
-                   [|x5919;((let x5912 =
+                (let x5909 = this_to_js Obj.magic x5907 in
+                 Ojs.call (Ojs.get_prop_ascii x5909 "every") "apply"
+                   [|x5909;((let x5902 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5912 "push"
+                               (Ojs.call x5902 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x5914 : Ojs.t) ->
-                                          fun (x5915 : Ojs.t) ->
-                                            fun (x5916 : Ojs.t) ->
+                                       (fun (x5904 : Ojs.t) ->
+                                          fun (x5905 : Ojs.t) ->
+                                            fun (x5906 : Ojs.t) ->
                                               unknown_to_js
-                                                (x5910
+                                                (x5900
                                                    ~value:(Ojs.float_of_js
-                                                             x5914)
+                                                             x5904)
                                                    ~index:(Ojs.float_of_js
-                                                             x5915)
-                                                   ~array:(t_of_js x5916))))|]);
-                             (match x5911 with
-                              | Some x5913 ->
+                                                             x5905)
+                                                   ~array:(t_of_js x5906))))|]);
+                             (match x5901 with
+                              | Some x5903 ->
                                   ignore
-                                    (Ojs.call x5912 "push"
-                                       [|(any_to_js x5913)|])
+                                    (Ojs.call x5902 "push"
+                                       [|(any_to_js x5903)|])
                               | None -> ());
-                             x5912))|])
+                             x5902))|])
     let (fill :
       'tags this ->
         value:float -> ?start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x5926 : 'tags this) ->
-        fun ~value:(x5920 : float) ->
-          fun ?start:(x5921 : float option) ->
-            fun ?end_:(x5922 : float option) ->
+      fun (x5916 : 'tags this) ->
+        fun ~value:(x5910 : float) ->
+          fun ?start:(x5911 : float option) ->
+            fun ?end_:(x5912 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x5928 = this_to_js Obj.magic x5926 in
-                   Ojs.call (Ojs.get_prop_ascii x5928 "fill") "apply"
-                     [|x5928;((let x5923 =
+                  (let x5918 = this_to_js Obj.magic x5916 in
+                   Ojs.call (Ojs.get_prop_ascii x5918 "fill") "apply"
+                     [|x5918;((let x5913 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x5923 "push"
-                                    [|(Ojs.float_to_js x5920)|]);
-                               (match x5921 with
-                                | Some x5925 ->
+                                 (Ojs.call x5913 "push"
+                                    [|(Ojs.float_to_js x5910)|]);
+                               (match x5911 with
+                                | Some x5915 ->
                                     ignore
-                                      (Ojs.call x5923 "push"
-                                         [|(Ojs.float_to_js x5925)|])
+                                      (Ojs.call x5913 "push"
+                                         [|(Ojs.float_to_js x5915)|])
                                 | None -> ());
-                               (match x5922 with
-                                | Some x5924 ->
+                               (match x5912 with
+                                | Some x5914 ->
                                     ignore
-                                      (Ojs.call x5923 "push"
-                                         [|(Ojs.float_to_js x5924)|])
+                                      (Ojs.call x5913 "push"
+                                         [|(Ojs.float_to_js x5914)|])
                                 | None -> ());
-                               x5923))|])
+                               x5913))|])
     let (filter :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> any) ->
           ?thisArg:any -> unit -> t)
       =
+      fun (x5927 : 'tags this) ->
+        fun ~predicate:(x5920 : value:float -> index:float -> array:t -> any)
+          ->
+          fun ?thisArg:(x5921 : any option) ->
+            fun () ->
+              t_of_js
+                (let x5929 = this_to_js Obj.magic x5927 in
+                 Ojs.call (Ojs.get_prop_ascii x5929 "filter") "apply"
+                   [|x5929;((let x5922 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x5922 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x5924 : Ojs.t) ->
+                                          fun (x5925 : Ojs.t) ->
+                                            fun (x5926 : Ojs.t) ->
+                                              any_to_js
+                                                (x5920
+                                                   ~value:(Ojs.float_of_js
+                                                             x5924)
+                                                   ~index:(Ojs.float_of_js
+                                                             x5925)
+                                                   ~array:(t_of_js x5926))))|]);
+                             (match x5921 with
+                              | Some x5923 ->
+                                  ignore
+                                    (Ojs.call x5922 "push"
+                                       [|(any_to_js x5923)|])
+                              | None -> ());
+                             x5922))|])
+    let (find :
+      'tags this ->
+        predicate:(value:float -> index:float -> obj:t -> bool) ->
+          ?thisArg:any -> unit -> float or_undefined)
+      =
       fun (x5937 : 'tags this) ->
-        fun ~predicate:(x5930 : value:float -> index:float -> array:t -> any)
+        fun ~predicate:(x5930 : value:float -> index:float -> obj:t -> bool)
           ->
           fun ?thisArg:(x5931 : any option) ->
             fun () ->
-              t_of_js
+              or_undefined_of_js Ojs.float_of_js
                 (let x5939 = this_to_js Obj.magic x5937 in
-                 Ojs.call (Ojs.get_prop_ascii x5939 "filter") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x5939 "find") "apply"
                    [|x5939;((let x5932 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -21058,13 +21079,13 @@ module Uint32Array =
                                        (fun (x5934 : Ojs.t) ->
                                           fun (x5935 : Ojs.t) ->
                                             fun (x5936 : Ojs.t) ->
-                                              any_to_js
+                                              Ojs.bool_to_js
                                                 (x5930
                                                    ~value:(Ojs.float_of_js
                                                              x5934)
                                                    ~index:(Ojs.float_of_js
                                                              x5935)
-                                                   ~array:(t_of_js x5936))))|]);
+                                                   ~obj:(t_of_js x5936))))|]);
                              (match x5931 with
                               | Some x5933 ->
                                   ignore
@@ -21072,56 +21093,57 @@ module Uint32Array =
                                        [|(any_to_js x5933)|])
                               | None -> ());
                              x5932))|])
-    let (find :
-      'tags this ->
-        predicate:(value:float -> index:float -> obj:t -> bool) ->
-          ?thisArg:any -> unit -> float or_undefined)
-      =
-      fun (x5947 : 'tags this) ->
-        fun ~predicate:(x5940 : value:float -> index:float -> obj:t -> bool)
-          ->
-          fun ?thisArg:(x5941 : any option) ->
-            fun () ->
-              or_undefined_of_js Ojs.float_of_js
-                (let x5949 = this_to_js Obj.magic x5947 in
-                 Ojs.call (Ojs.get_prop_ascii x5949 "find") "apply"
-                   [|x5949;((let x5942 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x5942 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x5944 : Ojs.t) ->
-                                          fun (x5945 : Ojs.t) ->
-                                            fun (x5946 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x5940
-                                                   ~value:(Ojs.float_of_js
-                                                             x5944)
-                                                   ~index:(Ojs.float_of_js
-                                                             x5945)
-                                                   ~obj:(t_of_js x5946))))|]);
-                             (match x5941 with
-                              | Some x5943 ->
-                                  ignore
-                                    (Ojs.call x5942 "push"
-                                       [|(any_to_js x5943)|])
-                              | None -> ());
-                             x5942))|])
     let (findIndex :
       'tags this ->
         predicate:(value:float -> index:float -> obj:t -> bool) ->
           ?thisArg:any -> unit -> float)
       =
+      fun (x5948 : 'tags this) ->
+        fun ~predicate:(x5941 : value:float -> index:float -> obj:t -> bool)
+          ->
+          fun ?thisArg:(x5942 : any option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x5950 = this_to_js Obj.magic x5948 in
+                 Ojs.call (Ojs.get_prop_ascii x5950 "findIndex") "apply"
+                   [|x5950;((let x5943 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x5943 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x5945 : Ojs.t) ->
+                                          fun (x5946 : Ojs.t) ->
+                                            fun (x5947 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x5941
+                                                   ~value:(Ojs.float_of_js
+                                                             x5945)
+                                                   ~index:(Ojs.float_of_js
+                                                             x5946)
+                                                   ~obj:(t_of_js x5947))))|]);
+                             (match x5942 with
+                              | Some x5944 ->
+                                  ignore
+                                    (Ojs.call x5943 "push"
+                                       [|(any_to_js x5944)|])
+                              | None -> ());
+                             x5943))|])
+    let (forEach :
+      'tags this ->
+        callbackfn:(value:float -> index:float -> array:t -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
       fun (x5958 : 'tags this) ->
-        fun ~predicate:(x5951 : value:float -> index:float -> obj:t -> bool)
+        fun
+          ~callbackfn:(x5951 : value:float -> index:float -> array:t -> unit)
           ->
           fun ?thisArg:(x5952 : any option) ->
             fun () ->
-              Ojs.float_of_js
+              ignore
                 (let x5960 = this_to_js Obj.magic x5958 in
-                 Ojs.call (Ojs.get_prop_ascii x5960 "findIndex") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x5960 "forEach") "apply"
                    [|x5960;((let x5953 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -21132,13 +21154,10 @@ module Uint32Array =
                                        (fun (x5955 : Ojs.t) ->
                                           fun (x5956 : Ojs.t) ->
                                             fun (x5957 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x5951
-                                                   ~value:(Ojs.float_of_js
-                                                             x5955)
-                                                   ~index:(Ojs.float_of_js
-                                                             x5956)
-                                                   ~obj:(t_of_js x5957))))|]);
+                                              x5951
+                                                ~value:(Ojs.float_of_js x5955)
+                                                ~index:(Ojs.float_of_js x5956)
+                                                ~array:(t_of_js x5957)))|]);
                              (match x5952 with
                               | Some x5954 ->
                                   ignore
@@ -21146,150 +21165,115 @@ module Uint32Array =
                                        [|(any_to_js x5954)|])
                               | None -> ());
                              x5953))|])
-    let (forEach :
-      'tags this ->
-        callbackfn:(value:float -> index:float -> array:t -> unit) ->
-          ?thisArg:any -> unit -> unit)
+    let (indexOf :
+      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x5968 : 'tags this) ->
-        fun
-          ~callbackfn:(x5961 : value:float -> index:float -> array:t -> unit)
-          ->
-          fun ?thisArg:(x5962 : any option) ->
+      fun (x5965 : 'tags this) ->
+        fun ~searchElement:(x5961 : float) ->
+          fun ?fromIndex:(x5962 : float option) ->
             fun () ->
-              ignore
-                (let x5970 = this_to_js Obj.magic x5968 in
-                 Ojs.call (Ojs.get_prop_ascii x5970 "forEach") "apply"
-                   [|x5970;((let x5963 =
+              Ojs.float_of_js
+                (let x5967 = this_to_js Obj.magic x5965 in
+                 Ojs.call (Ojs.get_prop_ascii x5967 "indexOf") "apply"
+                   [|x5967;((let x5963 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
                                (Ojs.call x5963 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x5965 : Ojs.t) ->
-                                          fun (x5966 : Ojs.t) ->
-                                            fun (x5967 : Ojs.t) ->
-                                              x5961
-                                                ~value:(Ojs.float_of_js x5965)
-                                                ~index:(Ojs.float_of_js x5966)
-                                                ~array:(t_of_js x5967)))|]);
+                                  [|(Ojs.float_to_js x5961)|]);
                              (match x5962 with
                               | Some x5964 ->
                                   ignore
                                     (Ojs.call x5963 "push"
-                                       [|(any_to_js x5964)|])
+                                       [|(Ojs.float_to_js x5964)|])
                               | None -> ());
                              x5963))|])
-    let (indexOf :
-      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x5975 : 'tags this) ->
-        fun ~searchElement:(x5971 : float) ->
-          fun ?fromIndex:(x5972 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x5977 = this_to_js Obj.magic x5975 in
-                 Ojs.call (Ojs.get_prop_ascii x5977 "indexOf") "apply"
-                   [|x5977;((let x5973 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x5973 "push"
-                                  [|(Ojs.float_to_js x5971)|]);
-                             (match x5972 with
-                              | Some x5974 ->
-                                  ignore
-                                    (Ojs.call x5973 "push"
-                                       [|(Ojs.float_to_js x5974)|])
-                              | None -> ());
-                             x5973))|])
     let (join : 'tags this -> ?separator:string -> unit -> string) =
-      fun (x5981 : 'tags this) ->
-        fun ?separator:(x5978 : string option) ->
+      fun (x5971 : 'tags this) ->
+        fun ?separator:(x5968 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x5983 = this_to_js Obj.magic x5981 in
-               Ojs.call (Ojs.get_prop_ascii x5983 "join") "apply"
-                 [|x5983;((let x5979 =
+              (let x5973 = this_to_js Obj.magic x5971 in
+               Ojs.call (Ojs.get_prop_ascii x5973 "join") "apply"
+                 [|x5973;((let x5969 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x5978 with
-                            | Some x5980 ->
+                           (match x5968 with
+                            | Some x5970 ->
                                 ignore
-                                  (Ojs.call x5979 "push"
-                                     [|(Ojs.string_to_js x5980)|])
+                                  (Ojs.call x5969 "push"
+                                     [|(Ojs.string_to_js x5970)|])
                             | None -> ());
-                           x5979))|])
+                           x5969))|])
     let (lastIndexOf :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x5988 : 'tags this) ->
-        fun ~searchElement:(x5984 : float) ->
-          fun ?fromIndex:(x5985 : float option) ->
+      fun (x5978 : 'tags this) ->
+        fun ~searchElement:(x5974 : float) ->
+          fun ?fromIndex:(x5975 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x5990 = this_to_js Obj.magic x5988 in
-                 Ojs.call (Ojs.get_prop_ascii x5990 "lastIndexOf") "apply"
-                   [|x5990;((let x5986 =
+                (let x5980 = this_to_js Obj.magic x5978 in
+                 Ojs.call (Ojs.get_prop_ascii x5980 "lastIndexOf") "apply"
+                   [|x5980;((let x5976 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5986 "push"
-                                  [|(Ojs.float_to_js x5984)|]);
-                             (match x5985 with
-                              | Some x5987 ->
+                               (Ojs.call x5976 "push"
+                                  [|(Ojs.float_to_js x5974)|]);
+                             (match x5975 with
+                              | Some x5977 ->
                                   ignore
-                                    (Ojs.call x5986 "push"
-                                       [|(Ojs.float_to_js x5987)|])
+                                    (Ojs.call x5976 "push"
+                                       [|(Ojs.float_to_js x5977)|])
                               | None -> ());
-                             x5986))|])
+                             x5976))|])
     let (get_length : 'tags this -> float) =
-      fun (x5991 : 'tags this) ->
+      fun (x5981 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x5991) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x5981) "length")
     let (map :
       'tags this ->
         callbackfn:(value:float -> index:float -> array:t -> float) ->
           ?thisArg:any -> unit -> t)
       =
-      fun (x6000 : 'tags this) ->
+      fun (x5990 : 'tags this) ->
         fun
-          ~callbackfn:(x5993 :
+          ~callbackfn:(x5983 :
                         value:float -> index:float -> array:t -> float)
           ->
-          fun ?thisArg:(x5994 : any option) ->
+          fun ?thisArg:(x5984 : any option) ->
             fun () ->
               t_of_js
-                (let x6002 = this_to_js Obj.magic x6000 in
-                 Ojs.call (Ojs.get_prop_ascii x6002 "map") "apply"
-                   [|x6002;((let x5995 =
+                (let x5992 = this_to_js Obj.magic x5990 in
+                 Ojs.call (Ojs.get_prop_ascii x5992 "map") "apply"
+                   [|x5992;((let x5985 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x5995 "push"
+                               (Ojs.call x5985 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x5997 : Ojs.t) ->
-                                          fun (x5998 : Ojs.t) ->
-                                            fun (x5999 : Ojs.t) ->
+                                       (fun (x5987 : Ojs.t) ->
+                                          fun (x5988 : Ojs.t) ->
+                                            fun (x5989 : Ojs.t) ->
                                               Ojs.float_to_js
-                                                (x5993
+                                                (x5983
                                                    ~value:(Ojs.float_of_js
-                                                             x5997)
+                                                             x5987)
                                                    ~index:(Ojs.float_of_js
-                                                             x5998)
-                                                   ~array:(t_of_js x5999))))|]);
-                             (match x5994 with
-                              | Some x5996 ->
+                                                             x5988)
+                                                   ~array:(t_of_js x5989))))|]);
+                             (match x5984 with
+                              | Some x5986 ->
                                   ignore
-                                    (Ojs.call x5995 "push"
-                                       [|(any_to_js x5996)|])
+                                    (Ojs.call x5985 "push"
+                                       [|(any_to_js x5986)|])
                               | None -> ());
-                             x5995))|])
+                             x5985))|])
     let (reduce :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -21297,25 +21281,25 @@ module Uint32Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x6008 : 'tags this) ->
+      fun (x5998 : 'tags this) ->
         fun
-          ~callbackfn:(x6003 :
+          ~callbackfn:(x5993 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x6008) "reduce"
+            (Ojs.call (this_to_js Obj.magic x5998) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x6004 : Ojs.t) ->
-                       fun (x6005 : Ojs.t) ->
-                         fun (x6006 : Ojs.t) ->
-                           fun (x6007 : Ojs.t) ->
+                    (fun (x5994 : Ojs.t) ->
+                       fun (x5995 : Ojs.t) ->
+                         fun (x5996 : Ojs.t) ->
+                           fun (x5997 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x6003 ~previousValue:(Ojs.float_of_js x6004)
-                                  ~currentValue:(Ojs.float_of_js x6005)
-                                  ~currentIndex:(Ojs.float_of_js x6006)
-                                  ~array:(t_of_js x6007))))|])
+                               (x5993 ~previousValue:(Ojs.float_of_js x5994)
+                                  ~currentValue:(Ojs.float_of_js x5995)
+                                  ~currentIndex:(Ojs.float_of_js x5996)
+                                  ~array:(t_of_js x5997))))|])
     let (reduce' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -21323,28 +21307,28 @@ module Uint32Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x6016 : 'tags this) ->
+      fun (x6006 : 'tags this) ->
         fun
-          ~callbackfn:(x6010 :
+          ~callbackfn:(x6000 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x6015 : float) ->
+          fun ~initialValue:(x6005 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x6016) "reduce"
+              (Ojs.call (this_to_js Obj.magic x6006) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6011 : Ojs.t) ->
-                         fun (x6012 : Ojs.t) ->
-                           fun (x6013 : Ojs.t) ->
-                             fun (x6014 : Ojs.t) ->
+                      (fun (x6001 : Ojs.t) ->
+                         fun (x6002 : Ojs.t) ->
+                           fun (x6003 : Ojs.t) ->
+                             fun (x6004 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x6010
-                                    ~previousValue:(Ojs.float_of_js x6011)
-                                    ~currentValue:(Ojs.float_of_js x6012)
-                                    ~currentIndex:(Ojs.float_of_js x6013)
-                                    ~array:(t_of_js x6014))));(Ojs.float_to_js
-                                                                 x6015)|])
+                                 (x6000
+                                    ~previousValue:(Ojs.float_of_js x6001)
+                                    ~currentValue:(Ojs.float_of_js x6002)
+                                    ~currentIndex:(Ojs.float_of_js x6003)
+                                    ~array:(t_of_js x6004))));(Ojs.float_to_js
+                                                                 x6005)|])
     let (reduce'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -21352,27 +21336,27 @@ module Uint32Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x6024 : 'tags this) ->
+      fun (x6014 : 'tags this) ->
         fun
-          ~callbackfn:(x6018 :
+          ~callbackfn:(x6008 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x6023 : 'U) ->
+          fun ~initialValue:(x6013 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x6024) "reduce"
+              (Ojs.call (this_to_js Obj.magic x6014) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6019 : Ojs.t) ->
-                         fun (x6020 : Ojs.t) ->
-                           fun (x6021 : Ojs.t) ->
-                             fun (x6022 : Ojs.t) ->
+                      (fun (x6009 : Ojs.t) ->
+                         fun (x6010 : Ojs.t) ->
+                           fun (x6011 : Ojs.t) ->
+                             fun (x6012 : Ojs.t) ->
                                Obj.magic
-                                 (x6018 ~previousValue:(Obj.magic x6019)
-                                    ~currentValue:(Ojs.float_of_js x6020)
-                                    ~currentIndex:(Ojs.float_of_js x6021)
-                                    ~array:(t_of_js x6022))));(Obj.magic
-                                                                 x6023)|])
+                                 (x6008 ~previousValue:(Obj.magic x6009)
+                                    ~currentValue:(Ojs.float_of_js x6010)
+                                    ~currentIndex:(Ojs.float_of_js x6011)
+                                    ~array:(t_of_js x6012))));(Obj.magic
+                                                                 x6013)|])
     let (reduceRight :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -21380,25 +21364,25 @@ module Uint32Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x6031 : 'tags this) ->
+      fun (x6021 : 'tags this) ->
         fun
-          ~callbackfn:(x6026 :
+          ~callbackfn:(x6016 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x6031) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic x6021) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x6027 : Ojs.t) ->
-                       fun (x6028 : Ojs.t) ->
-                         fun (x6029 : Ojs.t) ->
-                           fun (x6030 : Ojs.t) ->
+                    (fun (x6017 : Ojs.t) ->
+                       fun (x6018 : Ojs.t) ->
+                         fun (x6019 : Ojs.t) ->
+                           fun (x6020 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x6026 ~previousValue:(Ojs.float_of_js x6027)
-                                  ~currentValue:(Ojs.float_of_js x6028)
-                                  ~currentIndex:(Ojs.float_of_js x6029)
-                                  ~array:(t_of_js x6030))))|])
+                               (x6016 ~previousValue:(Ojs.float_of_js x6017)
+                                  ~currentValue:(Ojs.float_of_js x6018)
+                                  ~currentIndex:(Ojs.float_of_js x6019)
+                                  ~array:(t_of_js x6020))))|])
     let (reduceRight' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -21406,28 +21390,28 @@ module Uint32Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x6039 : 'tags this) ->
+      fun (x6029 : 'tags this) ->
         fun
-          ~callbackfn:(x6033 :
+          ~callbackfn:(x6023 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x6038 : float) ->
+          fun ~initialValue:(x6028 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x6039) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x6029) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6034 : Ojs.t) ->
-                         fun (x6035 : Ojs.t) ->
-                           fun (x6036 : Ojs.t) ->
-                             fun (x6037 : Ojs.t) ->
+                      (fun (x6024 : Ojs.t) ->
+                         fun (x6025 : Ojs.t) ->
+                           fun (x6026 : Ojs.t) ->
+                             fun (x6027 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x6033
-                                    ~previousValue:(Ojs.float_of_js x6034)
-                                    ~currentValue:(Ojs.float_of_js x6035)
-                                    ~currentIndex:(Ojs.float_of_js x6036)
-                                    ~array:(t_of_js x6037))));(Ojs.float_to_js
-                                                                 x6038)|])
+                                 (x6023
+                                    ~previousValue:(Ojs.float_of_js x6024)
+                                    ~currentValue:(Ojs.float_of_js x6025)
+                                    ~currentIndex:(Ojs.float_of_js x6026)
+                                    ~array:(t_of_js x6027))));(Ojs.float_to_js
+                                                                 x6028)|])
     let (reduceRight'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -21435,239 +21419,211 @@ module Uint32Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x6047 : 'tags this) ->
+      fun (x6037 : 'tags this) ->
         fun
-          ~callbackfn:(x6041 :
+          ~callbackfn:(x6031 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x6046 : 'U) ->
+          fun ~initialValue:(x6036 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x6047) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x6037) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6042 : Ojs.t) ->
-                         fun (x6043 : Ojs.t) ->
-                           fun (x6044 : Ojs.t) ->
-                             fun (x6045 : Ojs.t) ->
+                      (fun (x6032 : Ojs.t) ->
+                         fun (x6033 : Ojs.t) ->
+                           fun (x6034 : Ojs.t) ->
+                             fun (x6035 : Ojs.t) ->
                                Obj.magic
-                                 (x6041 ~previousValue:(Obj.magic x6042)
-                                    ~currentValue:(Ojs.float_of_js x6043)
-                                    ~currentIndex:(Ojs.float_of_js x6044)
-                                    ~array:(t_of_js x6045))));(Obj.magic
-                                                                 x6046)|])
+                                 (x6031 ~previousValue:(Obj.magic x6032)
+                                    ~currentValue:(Ojs.float_of_js x6033)
+                                    ~currentIndex:(Ojs.float_of_js x6034)
+                                    ~array:(t_of_js x6035))));(Obj.magic
+                                                                 x6036)|])
     let (reverse : 'tags this -> t) =
-      fun (x6049 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x6049) "reverse" [||])
+      fun (x6039 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x6039) "reverse" [||])
     let (set_ :
       'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit)
       =
-      fun (x6056 : 'tags this) ->
-        fun ~array:(x6051 : float ArrayLike.t) ->
-          fun ?offset:(x6052 : float option) ->
+      fun (x6046 : 'tags this) ->
+        fun ~array:(x6041 : float ArrayLike.t) ->
+          fun ?offset:(x6042 : float option) ->
             fun () ->
               ignore
-                (let x6058 = this_to_js Obj.magic x6056 in
-                 Ojs.call (Ojs.get_prop_ascii x6058 "set") "apply"
-                   [|x6058;((let x6053 =
+                (let x6048 = this_to_js Obj.magic x6046 in
+                 Ojs.call (Ojs.get_prop_ascii x6048 "set") "apply"
+                   [|x6048;((let x6043 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6053 "push"
-                                  [|(ArrayLike.t_to_js Ojs.float_to_js x6051)|]);
-                             (match x6052 with
-                              | Some x6054 ->
+                               (Ojs.call x6043 "push"
+                                  [|(ArrayLike.t_to_js Ojs.float_to_js x6041)|]);
+                             (match x6042 with
+                              | Some x6044 ->
                                   ignore
-                                    (Ojs.call x6053 "push"
-                                       [|(Ojs.float_to_js x6054)|])
+                                    (Ojs.call x6043 "push"
+                                       [|(Ojs.float_to_js x6044)|])
                               | None -> ());
-                             x6053))|])
+                             x6043))|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> t) =
-      fun (x6064 : 'tags this) ->
-        fun ?start:(x6059 : float option) ->
-          fun ?end_:(x6060 : float option) ->
+      fun (x6054 : 'tags this) ->
+        fun ?start:(x6049 : float option) ->
+          fun ?end_:(x6050 : float option) ->
             fun () ->
               t_of_js
-                (let x6066 = this_to_js Obj.magic x6064 in
-                 Ojs.call (Ojs.get_prop_ascii x6066 "slice") "apply"
-                   [|x6066;((let x6061 =
+                (let x6056 = this_to_js Obj.magic x6054 in
+                 Ojs.call (Ojs.get_prop_ascii x6056 "slice") "apply"
+                   [|x6056;((let x6051 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x6059 with
-                              | Some x6063 ->
+                             (match x6049 with
+                              | Some x6053 ->
                                   ignore
-                                    (Ojs.call x6061 "push"
-                                       [|(Ojs.float_to_js x6063)|])
+                                    (Ojs.call x6051 "push"
+                                       [|(Ojs.float_to_js x6053)|])
                               | None -> ());
-                             (match x6060 with
-                              | Some x6062 ->
+                             (match x6050 with
+                              | Some x6052 ->
                                   ignore
-                                    (Ojs.call x6061 "push"
-                                       [|(Ojs.float_to_js x6062)|])
+                                    (Ojs.call x6051 "push"
+                                       [|(Ojs.float_to_js x6052)|])
                               | None -> ());
-                             x6061))|])
+                             x6051))|])
     let (some :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x6074 : 'tags this) ->
+      fun (x6064 : 'tags this) ->
         fun
-          ~predicate:(x6067 :
+          ~predicate:(x6057 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x6068 : any option) ->
+          fun ?thisArg:(x6058 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6076 = this_to_js Obj.magic x6074 in
-                 Ojs.call (Ojs.get_prop_ascii x6076 "some") "apply"
-                   [|x6076;((let x6069 =
+                (let x6066 = this_to_js Obj.magic x6064 in
+                 Ojs.call (Ojs.get_prop_ascii x6066 "some") "apply"
+                   [|x6066;((let x6059 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6069 "push"
+                               (Ojs.call x6059 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6071 : Ojs.t) ->
-                                          fun (x6072 : Ojs.t) ->
-                                            fun (x6073 : Ojs.t) ->
+                                       (fun (x6061 : Ojs.t) ->
+                                          fun (x6062 : Ojs.t) ->
+                                            fun (x6063 : Ojs.t) ->
                                               unknown_to_js
-                                                (x6067
+                                                (x6057
                                                    ~value:(Ojs.float_of_js
-                                                             x6071)
+                                                             x6061)
                                                    ~index:(Ojs.float_of_js
-                                                             x6072)
-                                                   ~array:(t_of_js x6073))))|]);
-                             (match x6068 with
-                              | Some x6070 ->
+                                                             x6062)
+                                                   ~array:(t_of_js x6063))))|]);
+                             (match x6058 with
+                              | Some x6060 ->
                                   ignore
-                                    (Ojs.call x6069 "push"
-                                       [|(any_to_js x6070)|])
+                                    (Ojs.call x6059 "push"
+                                       [|(any_to_js x6060)|])
                               | None -> ());
-                             x6069))|])
+                             x6059))|])
     let (sort :
       'tags this ->
         ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this)
       =
-      fun (x6082 : 'tags this) ->
-        fun ?compareFn:(x6077 : (a:float -> b:float -> float) option) ->
+      fun (x6072 : 'tags this) ->
+        fun ?compareFn:(x6067 : (a:float -> b:float -> float) option) ->
           fun () ->
             this_of_js Obj.magic
-              (let x6084 = this_to_js Obj.magic x6082 in
-               Ojs.call (Ojs.get_prop_ascii x6084 "sort") "apply"
-                 [|x6084;((let x6078 =
+              (let x6074 = this_to_js Obj.magic x6072 in
+               Ojs.call (Ojs.get_prop_ascii x6074 "sort") "apply"
+                 [|x6074;((let x6068 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x6077 with
-                            | Some x6079 ->
+                           (match x6067 with
+                            | Some x6069 ->
                                 ignore
-                                  (Ojs.call x6078 "push"
+                                  (Ojs.call x6068 "push"
                                      [|(Ojs.fun_to_js 2
-                                          (fun (x6080 : Ojs.t) ->
-                                             fun (x6081 : Ojs.t) ->
+                                          (fun (x6070 : Ojs.t) ->
+                                             fun (x6071 : Ojs.t) ->
                                                Ojs.float_to_js
-                                                 (x6079
-                                                    ~a:(Ojs.float_of_js x6080)
-                                                    ~b:(Ojs.float_of_js x6081))))|])
+                                                 (x6069
+                                                    ~a:(Ojs.float_of_js x6070)
+                                                    ~b:(Ojs.float_of_js x6071))))|])
                             | None -> ());
-                           x6078))|])
+                           x6068))|])
     let (subarray : 'tags this -> ?begin_:float -> ?end_:float -> unit -> t)
       =
-      fun (x6091 : 'tags this) ->
-        fun ?begin_:(x6086 : float option) ->
-          fun ?end_:(x6087 : float option) ->
+      fun (x6081 : 'tags this) ->
+        fun ?begin_:(x6076 : float option) ->
+          fun ?end_:(x6077 : float option) ->
             fun () ->
               t_of_js
-                (let x6093 = this_to_js Obj.magic x6091 in
-                 Ojs.call (Ojs.get_prop_ascii x6093 "subarray") "apply"
-                   [|x6093;((let x6088 =
+                (let x6083 = this_to_js Obj.magic x6081 in
+                 Ojs.call (Ojs.get_prop_ascii x6083 "subarray") "apply"
+                   [|x6083;((let x6078 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x6086 with
-                              | Some x6090 ->
+                             (match x6076 with
+                              | Some x6080 ->
                                   ignore
-                                    (Ojs.call x6088 "push"
-                                       [|(Ojs.float_to_js x6090)|])
+                                    (Ojs.call x6078 "push"
+                                       [|(Ojs.float_to_js x6080)|])
                               | None -> ());
-                             (match x6087 with
-                              | Some x6089 ->
+                             (match x6077 with
+                              | Some x6079 ->
                                   ignore
-                                    (Ojs.call x6088 "push"
-                                       [|(Ojs.float_to_js x6089)|])
+                                    (Ojs.call x6078 "push"
+                                       [|(Ojs.float_to_js x6079)|])
                               | None -> ());
-                             x6088))|])
+                             x6078))|])
     let (toLocaleString : 'tags this -> string) =
-      fun (x6094 : 'tags this) ->
+      fun (x6084 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x6094) "toLocaleString" [||])
+          (Ojs.call (this_to_js Obj.magic x6084) "toLocaleString" [||])
     let (toString : 'tags this -> string) =
-      fun (x6096 : 'tags this) ->
+      fun (x6086 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x6096) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x6086) "toString" [||])
     let (valueOf : 'tags this -> t) =
-      fun (x6098 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x6098) "valueOf" [||])
+      fun (x6088 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x6088) "valueOf" [||])
     let (get : 'tags this -> float -> float) =
-      fun (x6100 : 'tags this) ->
-        fun (x6102 : float) ->
+      fun (x6090 : 'tags this) ->
+        fun (x6092 : float) ->
           Ojs.float_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x6100)
-               (Ojs.float_to_js x6102))
+            (Ojs.get_prop (this_to_js Obj.magic x6090)
+               (Ojs.float_to_js x6092))
     let (set : 'tags this -> float -> float -> unit) =
-      fun (x6103 : 'tags this) ->
-        fun (x6105 : float) ->
-          fun (x6106 : float) ->
-            Ojs.set_prop (this_to_js Obj.magic x6103) (Ojs.float_to_js x6105)
-              (Ojs.float_to_js x6106)
-    let (create : float Iterable.t -> t) =
-      fun (x6107 : float Iterable.t) ->
-        t_of_js
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint32Array")
-             [|(Iterable.t_to_js Ojs.float_to_js x6107)|])
-    let (from :
-      arrayLike:float Iterable.t ->
-        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
-      =
-      fun ~arrayLike:(x6109 : float Iterable.t) ->
-        fun ?mapfn:(x6110 : (v:float -> k:float -> float) option) ->
-          fun ?thisArg:(x6111 : any option) ->
-            fun () ->
-              t_of_js
-                (let x6118 = Ojs.get_prop_ascii Ojs.global "Uint32Array" in
-                 Ojs.call (Ojs.get_prop_ascii x6118 "from") "apply"
-                   [|x6118;((let x6112 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6112 "push"
-                                  [|(Iterable.t_to_js Ojs.float_to_js x6109)|]);
-                             (match x6110 with
-                              | Some x6114 ->
-                                  ignore
-                                    (Ojs.call x6112 "push"
-                                       [|(Ojs.fun_to_js 2
-                                            (fun (x6115 : Ojs.t) ->
-                                               fun (x6116 : Ojs.t) ->
-                                                 Ojs.float_to_js
-                                                   (x6114
-                                                      ~v:(Ojs.float_of_js
-                                                            x6115)
-                                                      ~k:(Ojs.float_of_js
-                                                            x6116))))|])
-                              | None -> ());
-                             (match x6111 with
-                              | Some x6113 ->
-                                  ignore
-                                    (Ojs.call x6112 "push"
-                                       [|(any_to_js x6113)|])
-                              | None -> ());
-                             x6112))|])
-    let (create' : unit -> t) =
+      fun (x6093 : 'tags this) ->
+        fun (x6095 : float) ->
+          fun (x6096 : float) ->
+            Ojs.set_prop (this_to_js Obj.magic x6093) (Ojs.float_to_js x6095)
+              (Ojs.float_to_js x6096)
+    let (entries : 'tags this -> (float * float) IterableIterator.t) =
+      fun (x6097 : 'tags this) ->
+        IterableIterator.t_of_js
+          (fun (x6099 : Ojs.t) ->
+             let x6100 = x6099 in
+             ((Ojs.float_of_js (Ojs.array_get x6100 0)),
+               (Ojs.float_of_js (Ojs.array_get x6100 1))))
+          (Ojs.call (this_to_js Obj.magic x6097) "entries" [||])
+    let (keys : 'tags this -> float IterableIterator.t) =
+      fun (x6101 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x6101) "keys" [||])
+    let (values : 'tags this -> float IterableIterator.t) =
+      fun (x6104 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x6104) "values" [||])
+    let (create : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint32Array") [||])
@@ -21676,103 +21632,147 @@ module Uint32Array =
         t_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Uint32Array")
              "prototype")
-    let (create'' : float -> t) =
-      fun (x6119 : float) ->
+    let (create' : float -> t) =
+      fun (x6107 : float) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint32Array")
-             [|(Ojs.float_to_js x6119)|])
-    let (create''' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
-      fun (x6120 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
+             [|(Ojs.float_to_js x6107)|])
+    let (create'' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
+      fun (x6108 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint32Array")
              [|(union2_to_js ArrayBufferLike.t_to_js
-                  (fun (x6122 : float ArrayLike.t) ->
-                     ArrayLike.t_to_js Ojs.float_to_js x6122) x6120)|])
-    let (create'''' :
+                  (fun (x6110 : float ArrayLike.t) ->
+                     ArrayLike.t_to_js Ojs.float_to_js x6110) x6108)|])
+    let (create''' :
       buffer:ArrayBufferLike.t ->
         ?byteOffset:float -> ?length:float -> unit -> t)
       =
-      fun ~buffer:(x6124 : ArrayBufferLike.t) ->
-        fun ?byteOffset:(x6125 : float option) ->
-          fun ?length:(x6126 : float option) ->
+      fun ~buffer:(x6112 : ArrayBufferLike.t) ->
+        fun ?byteOffset:(x6113 : float option) ->
+          fun ?length:(x6114 : float option) ->
             fun () ->
               t_of_js
                 (Ojs.new_obj_arr
                    (Ojs.get_prop_ascii Ojs.global "Uint32Array")
-                   (let x6127 =
+                   (let x6115 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     ignore
-                      (Ojs.call x6127 "push"
-                         [|(ArrayBufferLike.t_to_js x6124)|]);
-                    (match x6125 with
-                     | Some x6129 ->
+                      (Ojs.call x6115 "push"
+                         [|(ArrayBufferLike.t_to_js x6112)|]);
+                    (match x6113 with
+                     | Some x6117 ->
                          ignore
-                           (Ojs.call x6127 "push" [|(Ojs.float_to_js x6129)|])
+                           (Ojs.call x6115 "push" [|(Ojs.float_to_js x6117)|])
                      | None -> ());
-                    (match x6126 with
-                     | Some x6128 ->
+                    (match x6114 with
+                     | Some x6116 ->
                          ignore
-                           (Ojs.call x6127 "push" [|(Ojs.float_to_js x6128)|])
+                           (Ojs.call x6115 "push" [|(Ojs.float_to_js x6116)|])
                      | None -> ());
-                    x6127))
+                    x6115))
     let (bytes_per_element : unit -> float) =
       fun () ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Uint32Array")
              "BYTES_PER_ELEMENT")
     let (of_ : float list -> t) =
-      fun (x6130 : float list) ->
+      fun (x6118 : float list) ->
         t_of_js
-          (let x6133 = Ojs.get_prop_ascii Ojs.global "Uint32Array" in
-           Ojs.call (Ojs.get_prop_ascii x6133 "of") "apply"
-             [|x6133;((let x6131 =
+          (let x6121 = Ojs.get_prop_ascii Ojs.global "Uint32Array" in
+           Ojs.call (Ojs.get_prop_ascii x6121 "of") "apply"
+             [|x6121;((let x6119 =
                          Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                            [||] in
                        List.iter
-                         (fun (x6132 : float) ->
+                         (fun (x6120 : float) ->
                             ignore
-                              (Ojs.call x6131 "push"
-                                 [|(Ojs.float_to_js x6132)|])) x6130;
-                       x6131))|])
-    let (from' : float ArrayLike.t -> t) =
-      fun (x6134 : float ArrayLike.t) ->
+                              (Ojs.call x6119 "push"
+                                 [|(Ojs.float_to_js x6120)|])) x6118;
+                       x6119))|])
+    let (from : float ArrayLike.t -> t) =
+      fun (x6122 : float ArrayLike.t) ->
         t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Uint32Array") "from"
-             [|(ArrayLike.t_to_js Ojs.float_to_js x6134)|])
-    let (from'' :
+             [|(ArrayLike.t_to_js Ojs.float_to_js x6122)|])
+    let (from' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t)
       =
-      fun ~arrayLike:(x6136 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x6137 : v:'T -> k:float -> float) ->
-          fun ?thisArg:(x6138 : any option) ->
+      fun ~arrayLike:(x6124 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x6125 : v:'T -> k:float -> float) ->
+          fun ?thisArg:(x6126 : any option) ->
             fun () ->
               t_of_js
-                (let x6144 = Ojs.get_prop_ascii Ojs.global "Uint32Array" in
-                 Ojs.call (Ojs.get_prop_ascii x6144 "from") "apply"
-                   [|x6144;((let x6139 =
+                (let x6132 = Ojs.get_prop_ascii Ojs.global "Uint32Array" in
+                 Ojs.call (Ojs.get_prop_ascii x6132 "from") "apply"
+                   [|x6132;((let x6127 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6139 "push"
-                                  [|(ArrayLike.t_to_js Obj.magic x6136)|]);
+                               (Ojs.call x6127 "push"
+                                  [|(ArrayLike.t_to_js Obj.magic x6124)|]);
                              ignore
-                               (Ojs.call x6139 "push"
+                               (Ojs.call x6127 "push"
                                   [|(Ojs.fun_to_js 2
-                                       (fun (x6141 : Ojs.t) ->
-                                          fun (x6142 : Ojs.t) ->
+                                       (fun (x6129 : Ojs.t) ->
+                                          fun (x6130 : Ojs.t) ->
                                             Ojs.float_to_js
-                                              (x6137 ~v:(Obj.magic x6141)
-                                                 ~k:(Ojs.float_of_js x6142))))|]);
-                             (match x6138 with
+                                              (x6125 ~v:(Obj.magic x6129)
+                                                 ~k:(Ojs.float_of_js x6130))))|]);
+                             (match x6126 with
+                              | Some x6128 ->
+                                  ignore
+                                    (Ojs.call x6127 "push"
+                                       [|(any_to_js x6128)|])
+                              | None -> ());
+                             x6127))|])
+    let (create'''' : float Iterable.t -> t) =
+      fun (x6133 : float Iterable.t) ->
+        t_of_js
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint32Array")
+             [|(Iterable.t_to_js Ojs.float_to_js x6133)|])
+    let (from'' :
+      arrayLike:float Iterable.t ->
+        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
+      =
+      fun ~arrayLike:(x6135 : float Iterable.t) ->
+        fun ?mapfn:(x6136 : (v:float -> k:float -> float) option) ->
+          fun ?thisArg:(x6137 : any option) ->
+            fun () ->
+              t_of_js
+                (let x6144 = Ojs.get_prop_ascii Ojs.global "Uint32Array" in
+                 Ojs.call (Ojs.get_prop_ascii x6144 "from") "apply"
+                   [|x6144;((let x6138 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6138 "push"
+                                  [|(Iterable.t_to_js Ojs.float_to_js x6135)|]);
+                             (match x6136 with
                               | Some x6140 ->
                                   ignore
-                                    (Ojs.call x6139 "push"
-                                       [|(any_to_js x6140)|])
+                                    (Ojs.call x6138 "push"
+                                       [|(Ojs.fun_to_js 2
+                                            (fun (x6141 : Ojs.t) ->
+                                               fun (x6142 : Ojs.t) ->
+                                                 Ojs.float_to_js
+                                                   (x6140
+                                                      ~v:(Ojs.float_of_js
+                                                            x6141)
+                                                      ~k:(Ojs.float_of_js
+                                                            x6142))))|])
                               | None -> ());
-                             x6139))|])
+                             (match x6137 with
+                              | Some x6139 ->
+                                  ignore
+                                    (Ojs.call x6138 "push"
+                                       [|(any_to_js x6139)|])
+                              | None -> ());
+                             x6138))|])
     let cast_from = Obj.magic
   end
 module Uint16Array =
@@ -21799,176 +21799,197 @@ module Uint16Array =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x6147 : __tags intf) -> intf_to_js __tags_to_js x6147
-    let (entries : 'tags this -> (float * float) IterableIterator.t) =
-      fun (x6151 : 'tags this) ->
-        IterableIterator.t_of_js
-          (fun (x6153 : Ojs.t) ->
-             let x6154 = x6153 in
-             ((Ojs.float_of_js (Ojs.array_get x6154 0)),
-               (Ojs.float_of_js (Ojs.array_get x6154 1))))
-          (Ojs.call (this_to_js Obj.magic x6151) "entries" [||])
-    let (keys : 'tags this -> float IterableIterator.t) =
-      fun (x6155 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x6155) "keys" [||])
-    let (values : 'tags this -> float IterableIterator.t) =
-      fun (x6158 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x6158) "values" [||])
     let (includes :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x6165 : 'tags this) ->
-        fun ~searchElement:(x6161 : float) ->
-          fun ?fromIndex:(x6162 : float option) ->
+      fun (x6155 : 'tags this) ->
+        fun ~searchElement:(x6151 : float) ->
+          fun ?fromIndex:(x6152 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6167 = this_to_js Obj.magic x6165 in
-                 Ojs.call (Ojs.get_prop_ascii x6167 "includes") "apply"
-                   [|x6167;((let x6163 =
+                (let x6157 = this_to_js Obj.magic x6155 in
+                 Ojs.call (Ojs.get_prop_ascii x6157 "includes") "apply"
+                   [|x6157;((let x6153 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6163 "push"
-                                  [|(Ojs.float_to_js x6161)|]);
-                             (match x6162 with
-                              | Some x6164 ->
+                               (Ojs.call x6153 "push"
+                                  [|(Ojs.float_to_js x6151)|]);
+                             (match x6152 with
+                              | Some x6154 ->
                                   ignore
-                                    (Ojs.call x6163 "push"
-                                       [|(Ojs.float_to_js x6164)|])
+                                    (Ojs.call x6153 "push"
+                                       [|(Ojs.float_to_js x6154)|])
                               | None -> ());
-                             x6163))|])
+                             x6153))|])
     let (get_BYTES_PER_ELEMENT : 'tags this -> float) =
-      fun (x6168 : 'tags this) ->
+      fun (x6158 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6168)
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6158)
              "BYTES_PER_ELEMENT")
     let (get_buffer : 'tags this -> ArrayBufferLike.t) =
-      fun (x6170 : 'tags this) ->
+      fun (x6160 : 'tags this) ->
         ArrayBufferLike.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6170) "buffer")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6160) "buffer")
     let (get_byteLength : 'tags this -> float) =
-      fun (x6172 : 'tags this) ->
+      fun (x6162 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6172) "byteLength")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6162) "byteLength")
     let (get_byteOffset : 'tags this -> float) =
-      fun (x6174 : 'tags this) ->
+      fun (x6164 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6174) "byteOffset")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6164) "byteOffset")
     let (copyWithin :
       'tags this ->
         target:float -> start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x6181 : 'tags this) ->
-        fun ~target:(x6176 : float) ->
-          fun ~start:(x6177 : float) ->
-            fun ?end_:(x6178 : float option) ->
+      fun (x6171 : 'tags this) ->
+        fun ~target:(x6166 : float) ->
+          fun ~start:(x6167 : float) ->
+            fun ?end_:(x6168 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x6183 = this_to_js Obj.magic x6181 in
-                   Ojs.call (Ojs.get_prop_ascii x6183 "copyWithin") "apply"
-                     [|x6183;((let x6179 =
+                  (let x6173 = this_to_js Obj.magic x6171 in
+                   Ojs.call (Ojs.get_prop_ascii x6173 "copyWithin") "apply"
+                     [|x6173;((let x6169 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x6179 "push"
-                                    [|(Ojs.float_to_js x6176)|]);
+                                 (Ojs.call x6169 "push"
+                                    [|(Ojs.float_to_js x6166)|]);
                                ignore
-                                 (Ojs.call x6179 "push"
-                                    [|(Ojs.float_to_js x6177)|]);
-                               (match x6178 with
-                                | Some x6180 ->
+                                 (Ojs.call x6169 "push"
+                                    [|(Ojs.float_to_js x6167)|]);
+                               (match x6168 with
+                                | Some x6170 ->
                                     ignore
-                                      (Ojs.call x6179 "push"
-                                         [|(Ojs.float_to_js x6180)|])
+                                      (Ojs.call x6169 "push"
+                                         [|(Ojs.float_to_js x6170)|])
                                 | None -> ());
-                               x6179))|])
+                               x6169))|])
     let (every :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x6192 : 'tags this) ->
+      fun (x6182 : 'tags this) ->
         fun
-          ~predicate:(x6185 :
+          ~predicate:(x6175 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x6186 : any option) ->
+          fun ?thisArg:(x6176 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6194 = this_to_js Obj.magic x6192 in
-                 Ojs.call (Ojs.get_prop_ascii x6194 "every") "apply"
-                   [|x6194;((let x6187 =
+                (let x6184 = this_to_js Obj.magic x6182 in
+                 Ojs.call (Ojs.get_prop_ascii x6184 "every") "apply"
+                   [|x6184;((let x6177 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6187 "push"
+                               (Ojs.call x6177 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6189 : Ojs.t) ->
-                                          fun (x6190 : Ojs.t) ->
-                                            fun (x6191 : Ojs.t) ->
+                                       (fun (x6179 : Ojs.t) ->
+                                          fun (x6180 : Ojs.t) ->
+                                            fun (x6181 : Ojs.t) ->
                                               unknown_to_js
-                                                (x6185
+                                                (x6175
                                                    ~value:(Ojs.float_of_js
-                                                             x6189)
+                                                             x6179)
                                                    ~index:(Ojs.float_of_js
-                                                             x6190)
-                                                   ~array:(t_of_js x6191))))|]);
-                             (match x6186 with
-                              | Some x6188 ->
+                                                             x6180)
+                                                   ~array:(t_of_js x6181))))|]);
+                             (match x6176 with
+                              | Some x6178 ->
                                   ignore
-                                    (Ojs.call x6187 "push"
-                                       [|(any_to_js x6188)|])
+                                    (Ojs.call x6177 "push"
+                                       [|(any_to_js x6178)|])
                               | None -> ());
-                             x6187))|])
+                             x6177))|])
     let (fill :
       'tags this ->
         value:float -> ?start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x6201 : 'tags this) ->
-        fun ~value:(x6195 : float) ->
-          fun ?start:(x6196 : float option) ->
-            fun ?end_:(x6197 : float option) ->
+      fun (x6191 : 'tags this) ->
+        fun ~value:(x6185 : float) ->
+          fun ?start:(x6186 : float option) ->
+            fun ?end_:(x6187 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x6203 = this_to_js Obj.magic x6201 in
-                   Ojs.call (Ojs.get_prop_ascii x6203 "fill") "apply"
-                     [|x6203;((let x6198 =
+                  (let x6193 = this_to_js Obj.magic x6191 in
+                   Ojs.call (Ojs.get_prop_ascii x6193 "fill") "apply"
+                     [|x6193;((let x6188 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x6198 "push"
-                                    [|(Ojs.float_to_js x6195)|]);
-                               (match x6196 with
-                                | Some x6200 ->
+                                 (Ojs.call x6188 "push"
+                                    [|(Ojs.float_to_js x6185)|]);
+                               (match x6186 with
+                                | Some x6190 ->
                                     ignore
-                                      (Ojs.call x6198 "push"
-                                         [|(Ojs.float_to_js x6200)|])
+                                      (Ojs.call x6188 "push"
+                                         [|(Ojs.float_to_js x6190)|])
                                 | None -> ());
-                               (match x6197 with
-                                | Some x6199 ->
+                               (match x6187 with
+                                | Some x6189 ->
                                     ignore
-                                      (Ojs.call x6198 "push"
-                                         [|(Ojs.float_to_js x6199)|])
+                                      (Ojs.call x6188 "push"
+                                         [|(Ojs.float_to_js x6189)|])
                                 | None -> ());
-                               x6198))|])
+                               x6188))|])
     let (filter :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> any) ->
           ?thisArg:any -> unit -> t)
       =
+      fun (x6202 : 'tags this) ->
+        fun ~predicate:(x6195 : value:float -> index:float -> array:t -> any)
+          ->
+          fun ?thisArg:(x6196 : any option) ->
+            fun () ->
+              t_of_js
+                (let x6204 = this_to_js Obj.magic x6202 in
+                 Ojs.call (Ojs.get_prop_ascii x6204 "filter") "apply"
+                   [|x6204;((let x6197 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6197 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x6199 : Ojs.t) ->
+                                          fun (x6200 : Ojs.t) ->
+                                            fun (x6201 : Ojs.t) ->
+                                              any_to_js
+                                                (x6195
+                                                   ~value:(Ojs.float_of_js
+                                                             x6199)
+                                                   ~index:(Ojs.float_of_js
+                                                             x6200)
+                                                   ~array:(t_of_js x6201))))|]);
+                             (match x6196 with
+                              | Some x6198 ->
+                                  ignore
+                                    (Ojs.call x6197 "push"
+                                       [|(any_to_js x6198)|])
+                              | None -> ());
+                             x6197))|])
+    let (find :
+      'tags this ->
+        predicate:(value:float -> index:float -> obj:t -> bool) ->
+          ?thisArg:any -> unit -> float or_undefined)
+      =
       fun (x6212 : 'tags this) ->
-        fun ~predicate:(x6205 : value:float -> index:float -> array:t -> any)
+        fun ~predicate:(x6205 : value:float -> index:float -> obj:t -> bool)
           ->
           fun ?thisArg:(x6206 : any option) ->
             fun () ->
-              t_of_js
+              or_undefined_of_js Ojs.float_of_js
                 (let x6214 = this_to_js Obj.magic x6212 in
-                 Ojs.call (Ojs.get_prop_ascii x6214 "filter") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x6214 "find") "apply"
                    [|x6214;((let x6207 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -21979,13 +22000,13 @@ module Uint16Array =
                                        (fun (x6209 : Ojs.t) ->
                                           fun (x6210 : Ojs.t) ->
                                             fun (x6211 : Ojs.t) ->
-                                              any_to_js
+                                              Ojs.bool_to_js
                                                 (x6205
                                                    ~value:(Ojs.float_of_js
                                                              x6209)
                                                    ~index:(Ojs.float_of_js
                                                              x6210)
-                                                   ~array:(t_of_js x6211))))|]);
+                                                   ~obj:(t_of_js x6211))))|]);
                              (match x6206 with
                               | Some x6208 ->
                                   ignore
@@ -21993,56 +22014,57 @@ module Uint16Array =
                                        [|(any_to_js x6208)|])
                               | None -> ());
                              x6207))|])
-    let (find :
-      'tags this ->
-        predicate:(value:float -> index:float -> obj:t -> bool) ->
-          ?thisArg:any -> unit -> float or_undefined)
-      =
-      fun (x6222 : 'tags this) ->
-        fun ~predicate:(x6215 : value:float -> index:float -> obj:t -> bool)
-          ->
-          fun ?thisArg:(x6216 : any option) ->
-            fun () ->
-              or_undefined_of_js Ojs.float_of_js
-                (let x6224 = this_to_js Obj.magic x6222 in
-                 Ojs.call (Ojs.get_prop_ascii x6224 "find") "apply"
-                   [|x6224;((let x6217 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6217 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x6219 : Ojs.t) ->
-                                          fun (x6220 : Ojs.t) ->
-                                            fun (x6221 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x6215
-                                                   ~value:(Ojs.float_of_js
-                                                             x6219)
-                                                   ~index:(Ojs.float_of_js
-                                                             x6220)
-                                                   ~obj:(t_of_js x6221))))|]);
-                             (match x6216 with
-                              | Some x6218 ->
-                                  ignore
-                                    (Ojs.call x6217 "push"
-                                       [|(any_to_js x6218)|])
-                              | None -> ());
-                             x6217))|])
     let (findIndex :
       'tags this ->
         predicate:(value:float -> index:float -> obj:t -> bool) ->
           ?thisArg:any -> unit -> float)
       =
+      fun (x6223 : 'tags this) ->
+        fun ~predicate:(x6216 : value:float -> index:float -> obj:t -> bool)
+          ->
+          fun ?thisArg:(x6217 : any option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x6225 = this_to_js Obj.magic x6223 in
+                 Ojs.call (Ojs.get_prop_ascii x6225 "findIndex") "apply"
+                   [|x6225;((let x6218 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6218 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x6220 : Ojs.t) ->
+                                          fun (x6221 : Ojs.t) ->
+                                            fun (x6222 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x6216
+                                                   ~value:(Ojs.float_of_js
+                                                             x6220)
+                                                   ~index:(Ojs.float_of_js
+                                                             x6221)
+                                                   ~obj:(t_of_js x6222))))|]);
+                             (match x6217 with
+                              | Some x6219 ->
+                                  ignore
+                                    (Ojs.call x6218 "push"
+                                       [|(any_to_js x6219)|])
+                              | None -> ());
+                             x6218))|])
+    let (forEach :
+      'tags this ->
+        callbackfn:(value:float -> index:float -> array:t -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
       fun (x6233 : 'tags this) ->
-        fun ~predicate:(x6226 : value:float -> index:float -> obj:t -> bool)
+        fun
+          ~callbackfn:(x6226 : value:float -> index:float -> array:t -> unit)
           ->
           fun ?thisArg:(x6227 : any option) ->
             fun () ->
-              Ojs.float_of_js
+              ignore
                 (let x6235 = this_to_js Obj.magic x6233 in
-                 Ojs.call (Ojs.get_prop_ascii x6235 "findIndex") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x6235 "forEach") "apply"
                    [|x6235;((let x6228 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -22053,13 +22075,10 @@ module Uint16Array =
                                        (fun (x6230 : Ojs.t) ->
                                           fun (x6231 : Ojs.t) ->
                                             fun (x6232 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x6226
-                                                   ~value:(Ojs.float_of_js
-                                                             x6230)
-                                                   ~index:(Ojs.float_of_js
-                                                             x6231)
-                                                   ~obj:(t_of_js x6232))))|]);
+                                              x6226
+                                                ~value:(Ojs.float_of_js x6230)
+                                                ~index:(Ojs.float_of_js x6231)
+                                                ~array:(t_of_js x6232)))|]);
                              (match x6227 with
                               | Some x6229 ->
                                   ignore
@@ -22067,150 +22086,115 @@ module Uint16Array =
                                        [|(any_to_js x6229)|])
                               | None -> ());
                              x6228))|])
-    let (forEach :
-      'tags this ->
-        callbackfn:(value:float -> index:float -> array:t -> unit) ->
-          ?thisArg:any -> unit -> unit)
+    let (indexOf :
+      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x6243 : 'tags this) ->
-        fun
-          ~callbackfn:(x6236 : value:float -> index:float -> array:t -> unit)
-          ->
-          fun ?thisArg:(x6237 : any option) ->
+      fun (x6240 : 'tags this) ->
+        fun ~searchElement:(x6236 : float) ->
+          fun ?fromIndex:(x6237 : float option) ->
             fun () ->
-              ignore
-                (let x6245 = this_to_js Obj.magic x6243 in
-                 Ojs.call (Ojs.get_prop_ascii x6245 "forEach") "apply"
-                   [|x6245;((let x6238 =
+              Ojs.float_of_js
+                (let x6242 = this_to_js Obj.magic x6240 in
+                 Ojs.call (Ojs.get_prop_ascii x6242 "indexOf") "apply"
+                   [|x6242;((let x6238 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
                                (Ojs.call x6238 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x6240 : Ojs.t) ->
-                                          fun (x6241 : Ojs.t) ->
-                                            fun (x6242 : Ojs.t) ->
-                                              x6236
-                                                ~value:(Ojs.float_of_js x6240)
-                                                ~index:(Ojs.float_of_js x6241)
-                                                ~array:(t_of_js x6242)))|]);
+                                  [|(Ojs.float_to_js x6236)|]);
                              (match x6237 with
                               | Some x6239 ->
                                   ignore
                                     (Ojs.call x6238 "push"
-                                       [|(any_to_js x6239)|])
+                                       [|(Ojs.float_to_js x6239)|])
                               | None -> ());
                              x6238))|])
-    let (indexOf :
-      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x6250 : 'tags this) ->
-        fun ~searchElement:(x6246 : float) ->
-          fun ?fromIndex:(x6247 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x6252 = this_to_js Obj.magic x6250 in
-                 Ojs.call (Ojs.get_prop_ascii x6252 "indexOf") "apply"
-                   [|x6252;((let x6248 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6248 "push"
-                                  [|(Ojs.float_to_js x6246)|]);
-                             (match x6247 with
-                              | Some x6249 ->
-                                  ignore
-                                    (Ojs.call x6248 "push"
-                                       [|(Ojs.float_to_js x6249)|])
-                              | None -> ());
-                             x6248))|])
     let (join : 'tags this -> ?separator:string -> unit -> string) =
-      fun (x6256 : 'tags this) ->
-        fun ?separator:(x6253 : string option) ->
+      fun (x6246 : 'tags this) ->
+        fun ?separator:(x6243 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x6258 = this_to_js Obj.magic x6256 in
-               Ojs.call (Ojs.get_prop_ascii x6258 "join") "apply"
-                 [|x6258;((let x6254 =
+              (let x6248 = this_to_js Obj.magic x6246 in
+               Ojs.call (Ojs.get_prop_ascii x6248 "join") "apply"
+                 [|x6248;((let x6244 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x6253 with
-                            | Some x6255 ->
+                           (match x6243 with
+                            | Some x6245 ->
                                 ignore
-                                  (Ojs.call x6254 "push"
-                                     [|(Ojs.string_to_js x6255)|])
+                                  (Ojs.call x6244 "push"
+                                     [|(Ojs.string_to_js x6245)|])
                             | None -> ());
-                           x6254))|])
+                           x6244))|])
     let (lastIndexOf :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x6263 : 'tags this) ->
-        fun ~searchElement:(x6259 : float) ->
-          fun ?fromIndex:(x6260 : float option) ->
+      fun (x6253 : 'tags this) ->
+        fun ~searchElement:(x6249 : float) ->
+          fun ?fromIndex:(x6250 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x6265 = this_to_js Obj.magic x6263 in
-                 Ojs.call (Ojs.get_prop_ascii x6265 "lastIndexOf") "apply"
-                   [|x6265;((let x6261 =
+                (let x6255 = this_to_js Obj.magic x6253 in
+                 Ojs.call (Ojs.get_prop_ascii x6255 "lastIndexOf") "apply"
+                   [|x6255;((let x6251 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6261 "push"
-                                  [|(Ojs.float_to_js x6259)|]);
-                             (match x6260 with
-                              | Some x6262 ->
+                               (Ojs.call x6251 "push"
+                                  [|(Ojs.float_to_js x6249)|]);
+                             (match x6250 with
+                              | Some x6252 ->
                                   ignore
-                                    (Ojs.call x6261 "push"
-                                       [|(Ojs.float_to_js x6262)|])
+                                    (Ojs.call x6251 "push"
+                                       [|(Ojs.float_to_js x6252)|])
                               | None -> ());
-                             x6261))|])
+                             x6251))|])
     let (get_length : 'tags this -> float) =
-      fun (x6266 : 'tags this) ->
+      fun (x6256 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6266) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6256) "length")
     let (map :
       'tags this ->
         callbackfn:(value:float -> index:float -> array:t -> float) ->
           ?thisArg:any -> unit -> t)
       =
-      fun (x6275 : 'tags this) ->
+      fun (x6265 : 'tags this) ->
         fun
-          ~callbackfn:(x6268 :
+          ~callbackfn:(x6258 :
                         value:float -> index:float -> array:t -> float)
           ->
-          fun ?thisArg:(x6269 : any option) ->
+          fun ?thisArg:(x6259 : any option) ->
             fun () ->
               t_of_js
-                (let x6277 = this_to_js Obj.magic x6275 in
-                 Ojs.call (Ojs.get_prop_ascii x6277 "map") "apply"
-                   [|x6277;((let x6270 =
+                (let x6267 = this_to_js Obj.magic x6265 in
+                 Ojs.call (Ojs.get_prop_ascii x6267 "map") "apply"
+                   [|x6267;((let x6260 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6270 "push"
+                               (Ojs.call x6260 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6272 : Ojs.t) ->
-                                          fun (x6273 : Ojs.t) ->
-                                            fun (x6274 : Ojs.t) ->
+                                       (fun (x6262 : Ojs.t) ->
+                                          fun (x6263 : Ojs.t) ->
+                                            fun (x6264 : Ojs.t) ->
                                               Ojs.float_to_js
-                                                (x6268
+                                                (x6258
                                                    ~value:(Ojs.float_of_js
-                                                             x6272)
+                                                             x6262)
                                                    ~index:(Ojs.float_of_js
-                                                             x6273)
-                                                   ~array:(t_of_js x6274))))|]);
-                             (match x6269 with
-                              | Some x6271 ->
+                                                             x6263)
+                                                   ~array:(t_of_js x6264))))|]);
+                             (match x6259 with
+                              | Some x6261 ->
                                   ignore
-                                    (Ojs.call x6270 "push"
-                                       [|(any_to_js x6271)|])
+                                    (Ojs.call x6260 "push"
+                                       [|(any_to_js x6261)|])
                               | None -> ());
-                             x6270))|])
+                             x6260))|])
     let (reduce :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -22218,25 +22202,25 @@ module Uint16Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x6283 : 'tags this) ->
+      fun (x6273 : 'tags this) ->
         fun
-          ~callbackfn:(x6278 :
+          ~callbackfn:(x6268 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x6283) "reduce"
+            (Ojs.call (this_to_js Obj.magic x6273) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x6279 : Ojs.t) ->
-                       fun (x6280 : Ojs.t) ->
-                         fun (x6281 : Ojs.t) ->
-                           fun (x6282 : Ojs.t) ->
+                    (fun (x6269 : Ojs.t) ->
+                       fun (x6270 : Ojs.t) ->
+                         fun (x6271 : Ojs.t) ->
+                           fun (x6272 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x6278 ~previousValue:(Ojs.float_of_js x6279)
-                                  ~currentValue:(Ojs.float_of_js x6280)
-                                  ~currentIndex:(Ojs.float_of_js x6281)
-                                  ~array:(t_of_js x6282))))|])
+                               (x6268 ~previousValue:(Ojs.float_of_js x6269)
+                                  ~currentValue:(Ojs.float_of_js x6270)
+                                  ~currentIndex:(Ojs.float_of_js x6271)
+                                  ~array:(t_of_js x6272))))|])
     let (reduce' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -22244,28 +22228,28 @@ module Uint16Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x6291 : 'tags this) ->
+      fun (x6281 : 'tags this) ->
         fun
-          ~callbackfn:(x6285 :
+          ~callbackfn:(x6275 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x6290 : float) ->
+          fun ~initialValue:(x6280 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x6291) "reduce"
+              (Ojs.call (this_to_js Obj.magic x6281) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6286 : Ojs.t) ->
-                         fun (x6287 : Ojs.t) ->
-                           fun (x6288 : Ojs.t) ->
-                             fun (x6289 : Ojs.t) ->
+                      (fun (x6276 : Ojs.t) ->
+                         fun (x6277 : Ojs.t) ->
+                           fun (x6278 : Ojs.t) ->
+                             fun (x6279 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x6285
-                                    ~previousValue:(Ojs.float_of_js x6286)
-                                    ~currentValue:(Ojs.float_of_js x6287)
-                                    ~currentIndex:(Ojs.float_of_js x6288)
-                                    ~array:(t_of_js x6289))));(Ojs.float_to_js
-                                                                 x6290)|])
+                                 (x6275
+                                    ~previousValue:(Ojs.float_of_js x6276)
+                                    ~currentValue:(Ojs.float_of_js x6277)
+                                    ~currentIndex:(Ojs.float_of_js x6278)
+                                    ~array:(t_of_js x6279))));(Ojs.float_to_js
+                                                                 x6280)|])
     let (reduce'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -22273,27 +22257,27 @@ module Uint16Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x6299 : 'tags this) ->
+      fun (x6289 : 'tags this) ->
         fun
-          ~callbackfn:(x6293 :
+          ~callbackfn:(x6283 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x6298 : 'U) ->
+          fun ~initialValue:(x6288 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x6299) "reduce"
+              (Ojs.call (this_to_js Obj.magic x6289) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6294 : Ojs.t) ->
-                         fun (x6295 : Ojs.t) ->
-                           fun (x6296 : Ojs.t) ->
-                             fun (x6297 : Ojs.t) ->
+                      (fun (x6284 : Ojs.t) ->
+                         fun (x6285 : Ojs.t) ->
+                           fun (x6286 : Ojs.t) ->
+                             fun (x6287 : Ojs.t) ->
                                Obj.magic
-                                 (x6293 ~previousValue:(Obj.magic x6294)
-                                    ~currentValue:(Ojs.float_of_js x6295)
-                                    ~currentIndex:(Ojs.float_of_js x6296)
-                                    ~array:(t_of_js x6297))));(Obj.magic
-                                                                 x6298)|])
+                                 (x6283 ~previousValue:(Obj.magic x6284)
+                                    ~currentValue:(Ojs.float_of_js x6285)
+                                    ~currentIndex:(Ojs.float_of_js x6286)
+                                    ~array:(t_of_js x6287))));(Obj.magic
+                                                                 x6288)|])
     let (reduceRight :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -22301,25 +22285,25 @@ module Uint16Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x6306 : 'tags this) ->
+      fun (x6296 : 'tags this) ->
         fun
-          ~callbackfn:(x6301 :
+          ~callbackfn:(x6291 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x6306) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic x6296) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x6302 : Ojs.t) ->
-                       fun (x6303 : Ojs.t) ->
-                         fun (x6304 : Ojs.t) ->
-                           fun (x6305 : Ojs.t) ->
+                    (fun (x6292 : Ojs.t) ->
+                       fun (x6293 : Ojs.t) ->
+                         fun (x6294 : Ojs.t) ->
+                           fun (x6295 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x6301 ~previousValue:(Ojs.float_of_js x6302)
-                                  ~currentValue:(Ojs.float_of_js x6303)
-                                  ~currentIndex:(Ojs.float_of_js x6304)
-                                  ~array:(t_of_js x6305))))|])
+                               (x6291 ~previousValue:(Ojs.float_of_js x6292)
+                                  ~currentValue:(Ojs.float_of_js x6293)
+                                  ~currentIndex:(Ojs.float_of_js x6294)
+                                  ~array:(t_of_js x6295))))|])
     let (reduceRight' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -22327,28 +22311,28 @@ module Uint16Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x6314 : 'tags this) ->
+      fun (x6304 : 'tags this) ->
         fun
-          ~callbackfn:(x6308 :
+          ~callbackfn:(x6298 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x6313 : float) ->
+          fun ~initialValue:(x6303 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x6314) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x6304) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6309 : Ojs.t) ->
-                         fun (x6310 : Ojs.t) ->
-                           fun (x6311 : Ojs.t) ->
-                             fun (x6312 : Ojs.t) ->
+                      (fun (x6299 : Ojs.t) ->
+                         fun (x6300 : Ojs.t) ->
+                           fun (x6301 : Ojs.t) ->
+                             fun (x6302 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x6308
-                                    ~previousValue:(Ojs.float_of_js x6309)
-                                    ~currentValue:(Ojs.float_of_js x6310)
-                                    ~currentIndex:(Ojs.float_of_js x6311)
-                                    ~array:(t_of_js x6312))));(Ojs.float_to_js
-                                                                 x6313)|])
+                                 (x6298
+                                    ~previousValue:(Ojs.float_of_js x6299)
+                                    ~currentValue:(Ojs.float_of_js x6300)
+                                    ~currentIndex:(Ojs.float_of_js x6301)
+                                    ~array:(t_of_js x6302))));(Ojs.float_to_js
+                                                                 x6303)|])
     let (reduceRight'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -22356,239 +22340,211 @@ module Uint16Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x6322 : 'tags this) ->
+      fun (x6312 : 'tags this) ->
         fun
-          ~callbackfn:(x6316 :
+          ~callbackfn:(x6306 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x6321 : 'U) ->
+          fun ~initialValue:(x6311 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x6322) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x6312) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6317 : Ojs.t) ->
-                         fun (x6318 : Ojs.t) ->
-                           fun (x6319 : Ojs.t) ->
-                             fun (x6320 : Ojs.t) ->
+                      (fun (x6307 : Ojs.t) ->
+                         fun (x6308 : Ojs.t) ->
+                           fun (x6309 : Ojs.t) ->
+                             fun (x6310 : Ojs.t) ->
                                Obj.magic
-                                 (x6316 ~previousValue:(Obj.magic x6317)
-                                    ~currentValue:(Ojs.float_of_js x6318)
-                                    ~currentIndex:(Ojs.float_of_js x6319)
-                                    ~array:(t_of_js x6320))));(Obj.magic
-                                                                 x6321)|])
+                                 (x6306 ~previousValue:(Obj.magic x6307)
+                                    ~currentValue:(Ojs.float_of_js x6308)
+                                    ~currentIndex:(Ojs.float_of_js x6309)
+                                    ~array:(t_of_js x6310))));(Obj.magic
+                                                                 x6311)|])
     let (reverse : 'tags this -> t) =
-      fun (x6324 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x6324) "reverse" [||])
+      fun (x6314 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x6314) "reverse" [||])
     let (set_ :
       'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit)
       =
-      fun (x6331 : 'tags this) ->
-        fun ~array:(x6326 : float ArrayLike.t) ->
-          fun ?offset:(x6327 : float option) ->
+      fun (x6321 : 'tags this) ->
+        fun ~array:(x6316 : float ArrayLike.t) ->
+          fun ?offset:(x6317 : float option) ->
             fun () ->
               ignore
-                (let x6333 = this_to_js Obj.magic x6331 in
-                 Ojs.call (Ojs.get_prop_ascii x6333 "set") "apply"
-                   [|x6333;((let x6328 =
+                (let x6323 = this_to_js Obj.magic x6321 in
+                 Ojs.call (Ojs.get_prop_ascii x6323 "set") "apply"
+                   [|x6323;((let x6318 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6328 "push"
-                                  [|(ArrayLike.t_to_js Ojs.float_to_js x6326)|]);
-                             (match x6327 with
-                              | Some x6329 ->
+                               (Ojs.call x6318 "push"
+                                  [|(ArrayLike.t_to_js Ojs.float_to_js x6316)|]);
+                             (match x6317 with
+                              | Some x6319 ->
                                   ignore
-                                    (Ojs.call x6328 "push"
-                                       [|(Ojs.float_to_js x6329)|])
+                                    (Ojs.call x6318 "push"
+                                       [|(Ojs.float_to_js x6319)|])
                               | None -> ());
-                             x6328))|])
+                             x6318))|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> t) =
-      fun (x6339 : 'tags this) ->
-        fun ?start:(x6334 : float option) ->
-          fun ?end_:(x6335 : float option) ->
+      fun (x6329 : 'tags this) ->
+        fun ?start:(x6324 : float option) ->
+          fun ?end_:(x6325 : float option) ->
             fun () ->
               t_of_js
-                (let x6341 = this_to_js Obj.magic x6339 in
-                 Ojs.call (Ojs.get_prop_ascii x6341 "slice") "apply"
-                   [|x6341;((let x6336 =
+                (let x6331 = this_to_js Obj.magic x6329 in
+                 Ojs.call (Ojs.get_prop_ascii x6331 "slice") "apply"
+                   [|x6331;((let x6326 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x6334 with
-                              | Some x6338 ->
+                             (match x6324 with
+                              | Some x6328 ->
                                   ignore
-                                    (Ojs.call x6336 "push"
-                                       [|(Ojs.float_to_js x6338)|])
+                                    (Ojs.call x6326 "push"
+                                       [|(Ojs.float_to_js x6328)|])
                               | None -> ());
-                             (match x6335 with
-                              | Some x6337 ->
+                             (match x6325 with
+                              | Some x6327 ->
                                   ignore
-                                    (Ojs.call x6336 "push"
-                                       [|(Ojs.float_to_js x6337)|])
+                                    (Ojs.call x6326 "push"
+                                       [|(Ojs.float_to_js x6327)|])
                               | None -> ());
-                             x6336))|])
+                             x6326))|])
     let (some :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x6349 : 'tags this) ->
+      fun (x6339 : 'tags this) ->
         fun
-          ~predicate:(x6342 :
+          ~predicate:(x6332 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x6343 : any option) ->
+          fun ?thisArg:(x6333 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6351 = this_to_js Obj.magic x6349 in
-                 Ojs.call (Ojs.get_prop_ascii x6351 "some") "apply"
-                   [|x6351;((let x6344 =
+                (let x6341 = this_to_js Obj.magic x6339 in
+                 Ojs.call (Ojs.get_prop_ascii x6341 "some") "apply"
+                   [|x6341;((let x6334 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6344 "push"
+                               (Ojs.call x6334 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6346 : Ojs.t) ->
-                                          fun (x6347 : Ojs.t) ->
-                                            fun (x6348 : Ojs.t) ->
+                                       (fun (x6336 : Ojs.t) ->
+                                          fun (x6337 : Ojs.t) ->
+                                            fun (x6338 : Ojs.t) ->
                                               unknown_to_js
-                                                (x6342
+                                                (x6332
                                                    ~value:(Ojs.float_of_js
-                                                             x6346)
+                                                             x6336)
                                                    ~index:(Ojs.float_of_js
-                                                             x6347)
-                                                   ~array:(t_of_js x6348))))|]);
-                             (match x6343 with
-                              | Some x6345 ->
+                                                             x6337)
+                                                   ~array:(t_of_js x6338))))|]);
+                             (match x6333 with
+                              | Some x6335 ->
                                   ignore
-                                    (Ojs.call x6344 "push"
-                                       [|(any_to_js x6345)|])
+                                    (Ojs.call x6334 "push"
+                                       [|(any_to_js x6335)|])
                               | None -> ());
-                             x6344))|])
+                             x6334))|])
     let (sort :
       'tags this ->
         ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this)
       =
-      fun (x6357 : 'tags this) ->
-        fun ?compareFn:(x6352 : (a:float -> b:float -> float) option) ->
+      fun (x6347 : 'tags this) ->
+        fun ?compareFn:(x6342 : (a:float -> b:float -> float) option) ->
           fun () ->
             this_of_js Obj.magic
-              (let x6359 = this_to_js Obj.magic x6357 in
-               Ojs.call (Ojs.get_prop_ascii x6359 "sort") "apply"
-                 [|x6359;((let x6353 =
+              (let x6349 = this_to_js Obj.magic x6347 in
+               Ojs.call (Ojs.get_prop_ascii x6349 "sort") "apply"
+                 [|x6349;((let x6343 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x6352 with
-                            | Some x6354 ->
+                           (match x6342 with
+                            | Some x6344 ->
                                 ignore
-                                  (Ojs.call x6353 "push"
+                                  (Ojs.call x6343 "push"
                                      [|(Ojs.fun_to_js 2
-                                          (fun (x6355 : Ojs.t) ->
-                                             fun (x6356 : Ojs.t) ->
+                                          (fun (x6345 : Ojs.t) ->
+                                             fun (x6346 : Ojs.t) ->
                                                Ojs.float_to_js
-                                                 (x6354
-                                                    ~a:(Ojs.float_of_js x6355)
-                                                    ~b:(Ojs.float_of_js x6356))))|])
+                                                 (x6344
+                                                    ~a:(Ojs.float_of_js x6345)
+                                                    ~b:(Ojs.float_of_js x6346))))|])
                             | None -> ());
-                           x6353))|])
+                           x6343))|])
     let (subarray : 'tags this -> ?begin_:float -> ?end_:float -> unit -> t)
       =
-      fun (x6366 : 'tags this) ->
-        fun ?begin_:(x6361 : float option) ->
-          fun ?end_:(x6362 : float option) ->
+      fun (x6356 : 'tags this) ->
+        fun ?begin_:(x6351 : float option) ->
+          fun ?end_:(x6352 : float option) ->
             fun () ->
               t_of_js
-                (let x6368 = this_to_js Obj.magic x6366 in
-                 Ojs.call (Ojs.get_prop_ascii x6368 "subarray") "apply"
-                   [|x6368;((let x6363 =
+                (let x6358 = this_to_js Obj.magic x6356 in
+                 Ojs.call (Ojs.get_prop_ascii x6358 "subarray") "apply"
+                   [|x6358;((let x6353 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x6361 with
-                              | Some x6365 ->
+                             (match x6351 with
+                              | Some x6355 ->
                                   ignore
-                                    (Ojs.call x6363 "push"
-                                       [|(Ojs.float_to_js x6365)|])
+                                    (Ojs.call x6353 "push"
+                                       [|(Ojs.float_to_js x6355)|])
                               | None -> ());
-                             (match x6362 with
-                              | Some x6364 ->
+                             (match x6352 with
+                              | Some x6354 ->
                                   ignore
-                                    (Ojs.call x6363 "push"
-                                       [|(Ojs.float_to_js x6364)|])
+                                    (Ojs.call x6353 "push"
+                                       [|(Ojs.float_to_js x6354)|])
                               | None -> ());
-                             x6363))|])
+                             x6353))|])
     let (toLocaleString : 'tags this -> string) =
-      fun (x6369 : 'tags this) ->
+      fun (x6359 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x6369) "toLocaleString" [||])
+          (Ojs.call (this_to_js Obj.magic x6359) "toLocaleString" [||])
     let (toString : 'tags this -> string) =
-      fun (x6371 : 'tags this) ->
+      fun (x6361 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x6371) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x6361) "toString" [||])
     let (valueOf : 'tags this -> t) =
-      fun (x6373 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x6373) "valueOf" [||])
+      fun (x6363 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x6363) "valueOf" [||])
     let (get : 'tags this -> float -> float) =
-      fun (x6375 : 'tags this) ->
-        fun (x6377 : float) ->
+      fun (x6365 : 'tags this) ->
+        fun (x6367 : float) ->
           Ojs.float_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x6375)
-               (Ojs.float_to_js x6377))
+            (Ojs.get_prop (this_to_js Obj.magic x6365)
+               (Ojs.float_to_js x6367))
     let (set : 'tags this -> float -> float -> unit) =
-      fun (x6378 : 'tags this) ->
-        fun (x6380 : float) ->
-          fun (x6381 : float) ->
-            Ojs.set_prop (this_to_js Obj.magic x6378) (Ojs.float_to_js x6380)
-              (Ojs.float_to_js x6381)
-    let (create : float Iterable.t -> t) =
-      fun (x6382 : float Iterable.t) ->
-        t_of_js
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint16Array")
-             [|(Iterable.t_to_js Ojs.float_to_js x6382)|])
-    let (from :
-      arrayLike:float Iterable.t ->
-        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
-      =
-      fun ~arrayLike:(x6384 : float Iterable.t) ->
-        fun ?mapfn:(x6385 : (v:float -> k:float -> float) option) ->
-          fun ?thisArg:(x6386 : any option) ->
-            fun () ->
-              t_of_js
-                (let x6393 = Ojs.get_prop_ascii Ojs.global "Uint16Array" in
-                 Ojs.call (Ojs.get_prop_ascii x6393 "from") "apply"
-                   [|x6393;((let x6387 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6387 "push"
-                                  [|(Iterable.t_to_js Ojs.float_to_js x6384)|]);
-                             (match x6385 with
-                              | Some x6389 ->
-                                  ignore
-                                    (Ojs.call x6387 "push"
-                                       [|(Ojs.fun_to_js 2
-                                            (fun (x6390 : Ojs.t) ->
-                                               fun (x6391 : Ojs.t) ->
-                                                 Ojs.float_to_js
-                                                   (x6389
-                                                      ~v:(Ojs.float_of_js
-                                                            x6390)
-                                                      ~k:(Ojs.float_of_js
-                                                            x6391))))|])
-                              | None -> ());
-                             (match x6386 with
-                              | Some x6388 ->
-                                  ignore
-                                    (Ojs.call x6387 "push"
-                                       [|(any_to_js x6388)|])
-                              | None -> ());
-                             x6387))|])
-    let (create' : unit -> t) =
+      fun (x6368 : 'tags this) ->
+        fun (x6370 : float) ->
+          fun (x6371 : float) ->
+            Ojs.set_prop (this_to_js Obj.magic x6368) (Ojs.float_to_js x6370)
+              (Ojs.float_to_js x6371)
+    let (entries : 'tags this -> (float * float) IterableIterator.t) =
+      fun (x6372 : 'tags this) ->
+        IterableIterator.t_of_js
+          (fun (x6374 : Ojs.t) ->
+             let x6375 = x6374 in
+             ((Ojs.float_of_js (Ojs.array_get x6375 0)),
+               (Ojs.float_of_js (Ojs.array_get x6375 1))))
+          (Ojs.call (this_to_js Obj.magic x6372) "entries" [||])
+    let (keys : 'tags this -> float IterableIterator.t) =
+      fun (x6376 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x6376) "keys" [||])
+    let (values : 'tags this -> float IterableIterator.t) =
+      fun (x6379 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x6379) "values" [||])
+    let (create : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint16Array") [||])
@@ -22597,103 +22553,147 @@ module Uint16Array =
         t_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Uint16Array")
              "prototype")
-    let (create'' : float -> t) =
-      fun (x6394 : float) ->
+    let (create' : float -> t) =
+      fun (x6382 : float) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint16Array")
-             [|(Ojs.float_to_js x6394)|])
-    let (create''' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
-      fun (x6395 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
+             [|(Ojs.float_to_js x6382)|])
+    let (create'' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
+      fun (x6383 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint16Array")
              [|(union2_to_js ArrayBufferLike.t_to_js
-                  (fun (x6397 : float ArrayLike.t) ->
-                     ArrayLike.t_to_js Ojs.float_to_js x6397) x6395)|])
-    let (create'''' :
+                  (fun (x6385 : float ArrayLike.t) ->
+                     ArrayLike.t_to_js Ojs.float_to_js x6385) x6383)|])
+    let (create''' :
       buffer:ArrayBufferLike.t ->
         ?byteOffset:float -> ?length:float -> unit -> t)
       =
-      fun ~buffer:(x6399 : ArrayBufferLike.t) ->
-        fun ?byteOffset:(x6400 : float option) ->
-          fun ?length:(x6401 : float option) ->
+      fun ~buffer:(x6387 : ArrayBufferLike.t) ->
+        fun ?byteOffset:(x6388 : float option) ->
+          fun ?length:(x6389 : float option) ->
             fun () ->
               t_of_js
                 (Ojs.new_obj_arr
                    (Ojs.get_prop_ascii Ojs.global "Uint16Array")
-                   (let x6402 =
+                   (let x6390 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     ignore
-                      (Ojs.call x6402 "push"
-                         [|(ArrayBufferLike.t_to_js x6399)|]);
-                    (match x6400 with
-                     | Some x6404 ->
+                      (Ojs.call x6390 "push"
+                         [|(ArrayBufferLike.t_to_js x6387)|]);
+                    (match x6388 with
+                     | Some x6392 ->
                          ignore
-                           (Ojs.call x6402 "push" [|(Ojs.float_to_js x6404)|])
+                           (Ojs.call x6390 "push" [|(Ojs.float_to_js x6392)|])
                      | None -> ());
-                    (match x6401 with
-                     | Some x6403 ->
+                    (match x6389 with
+                     | Some x6391 ->
                          ignore
-                           (Ojs.call x6402 "push" [|(Ojs.float_to_js x6403)|])
+                           (Ojs.call x6390 "push" [|(Ojs.float_to_js x6391)|])
                      | None -> ());
-                    x6402))
+                    x6390))
     let (bytes_per_element : unit -> float) =
       fun () ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Uint16Array")
              "BYTES_PER_ELEMENT")
     let (of_ : float list -> t) =
-      fun (x6405 : float list) ->
+      fun (x6393 : float list) ->
         t_of_js
-          (let x6408 = Ojs.get_prop_ascii Ojs.global "Uint16Array" in
-           Ojs.call (Ojs.get_prop_ascii x6408 "of") "apply"
-             [|x6408;((let x6406 =
+          (let x6396 = Ojs.get_prop_ascii Ojs.global "Uint16Array" in
+           Ojs.call (Ojs.get_prop_ascii x6396 "of") "apply"
+             [|x6396;((let x6394 =
                          Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                            [||] in
                        List.iter
-                         (fun (x6407 : float) ->
+                         (fun (x6395 : float) ->
                             ignore
-                              (Ojs.call x6406 "push"
-                                 [|(Ojs.float_to_js x6407)|])) x6405;
-                       x6406))|])
-    let (from' : float ArrayLike.t -> t) =
-      fun (x6409 : float ArrayLike.t) ->
+                              (Ojs.call x6394 "push"
+                                 [|(Ojs.float_to_js x6395)|])) x6393;
+                       x6394))|])
+    let (from : float ArrayLike.t -> t) =
+      fun (x6397 : float ArrayLike.t) ->
         t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Uint16Array") "from"
-             [|(ArrayLike.t_to_js Ojs.float_to_js x6409)|])
-    let (from'' :
+             [|(ArrayLike.t_to_js Ojs.float_to_js x6397)|])
+    let (from' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t)
       =
-      fun ~arrayLike:(x6411 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x6412 : v:'T -> k:float -> float) ->
-          fun ?thisArg:(x6413 : any option) ->
+      fun ~arrayLike:(x6399 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x6400 : v:'T -> k:float -> float) ->
+          fun ?thisArg:(x6401 : any option) ->
             fun () ->
               t_of_js
-                (let x6419 = Ojs.get_prop_ascii Ojs.global "Uint16Array" in
-                 Ojs.call (Ojs.get_prop_ascii x6419 "from") "apply"
-                   [|x6419;((let x6414 =
+                (let x6407 = Ojs.get_prop_ascii Ojs.global "Uint16Array" in
+                 Ojs.call (Ojs.get_prop_ascii x6407 "from") "apply"
+                   [|x6407;((let x6402 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6414 "push"
-                                  [|(ArrayLike.t_to_js Obj.magic x6411)|]);
+                               (Ojs.call x6402 "push"
+                                  [|(ArrayLike.t_to_js Obj.magic x6399)|]);
                              ignore
-                               (Ojs.call x6414 "push"
+                               (Ojs.call x6402 "push"
                                   [|(Ojs.fun_to_js 2
-                                       (fun (x6416 : Ojs.t) ->
-                                          fun (x6417 : Ojs.t) ->
+                                       (fun (x6404 : Ojs.t) ->
+                                          fun (x6405 : Ojs.t) ->
                                             Ojs.float_to_js
-                                              (x6412 ~v:(Obj.magic x6416)
-                                                 ~k:(Ojs.float_of_js x6417))))|]);
-                             (match x6413 with
+                                              (x6400 ~v:(Obj.magic x6404)
+                                                 ~k:(Ojs.float_of_js x6405))))|]);
+                             (match x6401 with
+                              | Some x6403 ->
+                                  ignore
+                                    (Ojs.call x6402 "push"
+                                       [|(any_to_js x6403)|])
+                              | None -> ());
+                             x6402))|])
+    let (create'''' : float Iterable.t -> t) =
+      fun (x6408 : float Iterable.t) ->
+        t_of_js
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Uint16Array")
+             [|(Iterable.t_to_js Ojs.float_to_js x6408)|])
+    let (from'' :
+      arrayLike:float Iterable.t ->
+        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
+      =
+      fun ~arrayLike:(x6410 : float Iterable.t) ->
+        fun ?mapfn:(x6411 : (v:float -> k:float -> float) option) ->
+          fun ?thisArg:(x6412 : any option) ->
+            fun () ->
+              t_of_js
+                (let x6419 = Ojs.get_prop_ascii Ojs.global "Uint16Array" in
+                 Ojs.call (Ojs.get_prop_ascii x6419 "from") "apply"
+                   [|x6419;((let x6413 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6413 "push"
+                                  [|(Iterable.t_to_js Ojs.float_to_js x6410)|]);
+                             (match x6411 with
                               | Some x6415 ->
                                   ignore
-                                    (Ojs.call x6414 "push"
-                                       [|(any_to_js x6415)|])
+                                    (Ojs.call x6413 "push"
+                                       [|(Ojs.fun_to_js 2
+                                            (fun (x6416 : Ojs.t) ->
+                                               fun (x6417 : Ojs.t) ->
+                                                 Ojs.float_to_js
+                                                   (x6415
+                                                      ~v:(Ojs.float_of_js
+                                                            x6416)
+                                                      ~k:(Ojs.float_of_js
+                                                            x6417))))|])
                               | None -> ());
-                             x6414))|])
+                             (match x6412 with
+                              | Some x6414 ->
+                                  ignore
+                                    (Ojs.call x6413 "push"
+                                       [|(any_to_js x6414)|])
+                              | None -> ());
+                             x6413))|])
     let cast_from = Obj.magic
   end
 module Int8Array =
@@ -22719,176 +22719,197 @@ module Int8Array =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x6422 : __tags intf) -> intf_to_js __tags_to_js x6422
-    let (entries : 'tags this -> (float * float) IterableIterator.t) =
-      fun (x6426 : 'tags this) ->
-        IterableIterator.t_of_js
-          (fun (x6428 : Ojs.t) ->
-             let x6429 = x6428 in
-             ((Ojs.float_of_js (Ojs.array_get x6429 0)),
-               (Ojs.float_of_js (Ojs.array_get x6429 1))))
-          (Ojs.call (this_to_js Obj.magic x6426) "entries" [||])
-    let (keys : 'tags this -> float IterableIterator.t) =
-      fun (x6430 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x6430) "keys" [||])
-    let (values : 'tags this -> float IterableIterator.t) =
-      fun (x6433 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x6433) "values" [||])
     let (includes :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x6440 : 'tags this) ->
-        fun ~searchElement:(x6436 : float) ->
-          fun ?fromIndex:(x6437 : float option) ->
+      fun (x6430 : 'tags this) ->
+        fun ~searchElement:(x6426 : float) ->
+          fun ?fromIndex:(x6427 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6442 = this_to_js Obj.magic x6440 in
-                 Ojs.call (Ojs.get_prop_ascii x6442 "includes") "apply"
-                   [|x6442;((let x6438 =
+                (let x6432 = this_to_js Obj.magic x6430 in
+                 Ojs.call (Ojs.get_prop_ascii x6432 "includes") "apply"
+                   [|x6432;((let x6428 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6438 "push"
-                                  [|(Ojs.float_to_js x6436)|]);
-                             (match x6437 with
-                              | Some x6439 ->
+                               (Ojs.call x6428 "push"
+                                  [|(Ojs.float_to_js x6426)|]);
+                             (match x6427 with
+                              | Some x6429 ->
                                   ignore
-                                    (Ojs.call x6438 "push"
-                                       [|(Ojs.float_to_js x6439)|])
+                                    (Ojs.call x6428 "push"
+                                       [|(Ojs.float_to_js x6429)|])
                               | None -> ());
-                             x6438))|])
+                             x6428))|])
     let (get_BYTES_PER_ELEMENT : 'tags this -> float) =
-      fun (x6443 : 'tags this) ->
+      fun (x6433 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6443)
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6433)
              "BYTES_PER_ELEMENT")
     let (get_buffer : 'tags this -> ArrayBufferLike.t) =
-      fun (x6445 : 'tags this) ->
+      fun (x6435 : 'tags this) ->
         ArrayBufferLike.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6445) "buffer")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6435) "buffer")
     let (get_byteLength : 'tags this -> float) =
-      fun (x6447 : 'tags this) ->
+      fun (x6437 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6447) "byteLength")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6437) "byteLength")
     let (get_byteOffset : 'tags this -> float) =
-      fun (x6449 : 'tags this) ->
+      fun (x6439 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6449) "byteOffset")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6439) "byteOffset")
     let (copyWithin :
       'tags this ->
         target:float -> start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x6456 : 'tags this) ->
-        fun ~target:(x6451 : float) ->
-          fun ~start:(x6452 : float) ->
-            fun ?end_:(x6453 : float option) ->
+      fun (x6446 : 'tags this) ->
+        fun ~target:(x6441 : float) ->
+          fun ~start:(x6442 : float) ->
+            fun ?end_:(x6443 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x6458 = this_to_js Obj.magic x6456 in
-                   Ojs.call (Ojs.get_prop_ascii x6458 "copyWithin") "apply"
-                     [|x6458;((let x6454 =
+                  (let x6448 = this_to_js Obj.magic x6446 in
+                   Ojs.call (Ojs.get_prop_ascii x6448 "copyWithin") "apply"
+                     [|x6448;((let x6444 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x6454 "push"
-                                    [|(Ojs.float_to_js x6451)|]);
+                                 (Ojs.call x6444 "push"
+                                    [|(Ojs.float_to_js x6441)|]);
                                ignore
-                                 (Ojs.call x6454 "push"
-                                    [|(Ojs.float_to_js x6452)|]);
-                               (match x6453 with
-                                | Some x6455 ->
+                                 (Ojs.call x6444 "push"
+                                    [|(Ojs.float_to_js x6442)|]);
+                               (match x6443 with
+                                | Some x6445 ->
                                     ignore
-                                      (Ojs.call x6454 "push"
-                                         [|(Ojs.float_to_js x6455)|])
+                                      (Ojs.call x6444 "push"
+                                         [|(Ojs.float_to_js x6445)|])
                                 | None -> ());
-                               x6454))|])
+                               x6444))|])
     let (every :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x6467 : 'tags this) ->
+      fun (x6457 : 'tags this) ->
         fun
-          ~predicate:(x6460 :
+          ~predicate:(x6450 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x6461 : any option) ->
+          fun ?thisArg:(x6451 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6469 = this_to_js Obj.magic x6467 in
-                 Ojs.call (Ojs.get_prop_ascii x6469 "every") "apply"
-                   [|x6469;((let x6462 =
+                (let x6459 = this_to_js Obj.magic x6457 in
+                 Ojs.call (Ojs.get_prop_ascii x6459 "every") "apply"
+                   [|x6459;((let x6452 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6462 "push"
+                               (Ojs.call x6452 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6464 : Ojs.t) ->
-                                          fun (x6465 : Ojs.t) ->
-                                            fun (x6466 : Ojs.t) ->
+                                       (fun (x6454 : Ojs.t) ->
+                                          fun (x6455 : Ojs.t) ->
+                                            fun (x6456 : Ojs.t) ->
                                               unknown_to_js
-                                                (x6460
+                                                (x6450
                                                    ~value:(Ojs.float_of_js
-                                                             x6464)
+                                                             x6454)
                                                    ~index:(Ojs.float_of_js
-                                                             x6465)
-                                                   ~array:(t_of_js x6466))))|]);
-                             (match x6461 with
-                              | Some x6463 ->
+                                                             x6455)
+                                                   ~array:(t_of_js x6456))))|]);
+                             (match x6451 with
+                              | Some x6453 ->
                                   ignore
-                                    (Ojs.call x6462 "push"
-                                       [|(any_to_js x6463)|])
+                                    (Ojs.call x6452 "push"
+                                       [|(any_to_js x6453)|])
                               | None -> ());
-                             x6462))|])
+                             x6452))|])
     let (fill :
       'tags this ->
         value:float -> ?start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x6476 : 'tags this) ->
-        fun ~value:(x6470 : float) ->
-          fun ?start:(x6471 : float option) ->
-            fun ?end_:(x6472 : float option) ->
+      fun (x6466 : 'tags this) ->
+        fun ~value:(x6460 : float) ->
+          fun ?start:(x6461 : float option) ->
+            fun ?end_:(x6462 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x6478 = this_to_js Obj.magic x6476 in
-                   Ojs.call (Ojs.get_prop_ascii x6478 "fill") "apply"
-                     [|x6478;((let x6473 =
+                  (let x6468 = this_to_js Obj.magic x6466 in
+                   Ojs.call (Ojs.get_prop_ascii x6468 "fill") "apply"
+                     [|x6468;((let x6463 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x6473 "push"
-                                    [|(Ojs.float_to_js x6470)|]);
-                               (match x6471 with
-                                | Some x6475 ->
+                                 (Ojs.call x6463 "push"
+                                    [|(Ojs.float_to_js x6460)|]);
+                               (match x6461 with
+                                | Some x6465 ->
                                     ignore
-                                      (Ojs.call x6473 "push"
-                                         [|(Ojs.float_to_js x6475)|])
+                                      (Ojs.call x6463 "push"
+                                         [|(Ojs.float_to_js x6465)|])
                                 | None -> ());
-                               (match x6472 with
-                                | Some x6474 ->
+                               (match x6462 with
+                                | Some x6464 ->
                                     ignore
-                                      (Ojs.call x6473 "push"
-                                         [|(Ojs.float_to_js x6474)|])
+                                      (Ojs.call x6463 "push"
+                                         [|(Ojs.float_to_js x6464)|])
                                 | None -> ());
-                               x6473))|])
+                               x6463))|])
     let (filter :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> any) ->
           ?thisArg:any -> unit -> t)
       =
+      fun (x6477 : 'tags this) ->
+        fun ~predicate:(x6470 : value:float -> index:float -> array:t -> any)
+          ->
+          fun ?thisArg:(x6471 : any option) ->
+            fun () ->
+              t_of_js
+                (let x6479 = this_to_js Obj.magic x6477 in
+                 Ojs.call (Ojs.get_prop_ascii x6479 "filter") "apply"
+                   [|x6479;((let x6472 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6472 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x6474 : Ojs.t) ->
+                                          fun (x6475 : Ojs.t) ->
+                                            fun (x6476 : Ojs.t) ->
+                                              any_to_js
+                                                (x6470
+                                                   ~value:(Ojs.float_of_js
+                                                             x6474)
+                                                   ~index:(Ojs.float_of_js
+                                                             x6475)
+                                                   ~array:(t_of_js x6476))))|]);
+                             (match x6471 with
+                              | Some x6473 ->
+                                  ignore
+                                    (Ojs.call x6472 "push"
+                                       [|(any_to_js x6473)|])
+                              | None -> ());
+                             x6472))|])
+    let (find :
+      'tags this ->
+        predicate:(value:float -> index:float -> obj:t -> bool) ->
+          ?thisArg:any -> unit -> float or_undefined)
+      =
       fun (x6487 : 'tags this) ->
-        fun ~predicate:(x6480 : value:float -> index:float -> array:t -> any)
+        fun ~predicate:(x6480 : value:float -> index:float -> obj:t -> bool)
           ->
           fun ?thisArg:(x6481 : any option) ->
             fun () ->
-              t_of_js
+              or_undefined_of_js Ojs.float_of_js
                 (let x6489 = this_to_js Obj.magic x6487 in
-                 Ojs.call (Ojs.get_prop_ascii x6489 "filter") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x6489 "find") "apply"
                    [|x6489;((let x6482 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -22899,13 +22920,13 @@ module Int8Array =
                                        (fun (x6484 : Ojs.t) ->
                                           fun (x6485 : Ojs.t) ->
                                             fun (x6486 : Ojs.t) ->
-                                              any_to_js
+                                              Ojs.bool_to_js
                                                 (x6480
                                                    ~value:(Ojs.float_of_js
                                                              x6484)
                                                    ~index:(Ojs.float_of_js
                                                              x6485)
-                                                   ~array:(t_of_js x6486))))|]);
+                                                   ~obj:(t_of_js x6486))))|]);
                              (match x6481 with
                               | Some x6483 ->
                                   ignore
@@ -22913,56 +22934,57 @@ module Int8Array =
                                        [|(any_to_js x6483)|])
                               | None -> ());
                              x6482))|])
-    let (find :
-      'tags this ->
-        predicate:(value:float -> index:float -> obj:t -> bool) ->
-          ?thisArg:any -> unit -> float or_undefined)
-      =
-      fun (x6497 : 'tags this) ->
-        fun ~predicate:(x6490 : value:float -> index:float -> obj:t -> bool)
-          ->
-          fun ?thisArg:(x6491 : any option) ->
-            fun () ->
-              or_undefined_of_js Ojs.float_of_js
-                (let x6499 = this_to_js Obj.magic x6497 in
-                 Ojs.call (Ojs.get_prop_ascii x6499 "find") "apply"
-                   [|x6499;((let x6492 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6492 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x6494 : Ojs.t) ->
-                                          fun (x6495 : Ojs.t) ->
-                                            fun (x6496 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x6490
-                                                   ~value:(Ojs.float_of_js
-                                                             x6494)
-                                                   ~index:(Ojs.float_of_js
-                                                             x6495)
-                                                   ~obj:(t_of_js x6496))))|]);
-                             (match x6491 with
-                              | Some x6493 ->
-                                  ignore
-                                    (Ojs.call x6492 "push"
-                                       [|(any_to_js x6493)|])
-                              | None -> ());
-                             x6492))|])
     let (findIndex :
       'tags this ->
         predicate:(value:float -> index:float -> obj:t -> bool) ->
           ?thisArg:any -> unit -> float)
       =
+      fun (x6498 : 'tags this) ->
+        fun ~predicate:(x6491 : value:float -> index:float -> obj:t -> bool)
+          ->
+          fun ?thisArg:(x6492 : any option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x6500 = this_to_js Obj.magic x6498 in
+                 Ojs.call (Ojs.get_prop_ascii x6500 "findIndex") "apply"
+                   [|x6500;((let x6493 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6493 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x6495 : Ojs.t) ->
+                                          fun (x6496 : Ojs.t) ->
+                                            fun (x6497 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x6491
+                                                   ~value:(Ojs.float_of_js
+                                                             x6495)
+                                                   ~index:(Ojs.float_of_js
+                                                             x6496)
+                                                   ~obj:(t_of_js x6497))))|]);
+                             (match x6492 with
+                              | Some x6494 ->
+                                  ignore
+                                    (Ojs.call x6493 "push"
+                                       [|(any_to_js x6494)|])
+                              | None -> ());
+                             x6493))|])
+    let (forEach :
+      'tags this ->
+        callbackfn:(value:float -> index:float -> array:t -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
       fun (x6508 : 'tags this) ->
-        fun ~predicate:(x6501 : value:float -> index:float -> obj:t -> bool)
+        fun
+          ~callbackfn:(x6501 : value:float -> index:float -> array:t -> unit)
           ->
           fun ?thisArg:(x6502 : any option) ->
             fun () ->
-              Ojs.float_of_js
+              ignore
                 (let x6510 = this_to_js Obj.magic x6508 in
-                 Ojs.call (Ojs.get_prop_ascii x6510 "findIndex") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x6510 "forEach") "apply"
                    [|x6510;((let x6503 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -22973,13 +22995,10 @@ module Int8Array =
                                        (fun (x6505 : Ojs.t) ->
                                           fun (x6506 : Ojs.t) ->
                                             fun (x6507 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x6501
-                                                   ~value:(Ojs.float_of_js
-                                                             x6505)
-                                                   ~index:(Ojs.float_of_js
-                                                             x6506)
-                                                   ~obj:(t_of_js x6507))))|]);
+                                              x6501
+                                                ~value:(Ojs.float_of_js x6505)
+                                                ~index:(Ojs.float_of_js x6506)
+                                                ~array:(t_of_js x6507)))|]);
                              (match x6502 with
                               | Some x6504 ->
                                   ignore
@@ -22987,150 +23006,115 @@ module Int8Array =
                                        [|(any_to_js x6504)|])
                               | None -> ());
                              x6503))|])
-    let (forEach :
-      'tags this ->
-        callbackfn:(value:float -> index:float -> array:t -> unit) ->
-          ?thisArg:any -> unit -> unit)
+    let (indexOf :
+      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x6518 : 'tags this) ->
-        fun
-          ~callbackfn:(x6511 : value:float -> index:float -> array:t -> unit)
-          ->
-          fun ?thisArg:(x6512 : any option) ->
+      fun (x6515 : 'tags this) ->
+        fun ~searchElement:(x6511 : float) ->
+          fun ?fromIndex:(x6512 : float option) ->
             fun () ->
-              ignore
-                (let x6520 = this_to_js Obj.magic x6518 in
-                 Ojs.call (Ojs.get_prop_ascii x6520 "forEach") "apply"
-                   [|x6520;((let x6513 =
+              Ojs.float_of_js
+                (let x6517 = this_to_js Obj.magic x6515 in
+                 Ojs.call (Ojs.get_prop_ascii x6517 "indexOf") "apply"
+                   [|x6517;((let x6513 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
                                (Ojs.call x6513 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x6515 : Ojs.t) ->
-                                          fun (x6516 : Ojs.t) ->
-                                            fun (x6517 : Ojs.t) ->
-                                              x6511
-                                                ~value:(Ojs.float_of_js x6515)
-                                                ~index:(Ojs.float_of_js x6516)
-                                                ~array:(t_of_js x6517)))|]);
+                                  [|(Ojs.float_to_js x6511)|]);
                              (match x6512 with
                               | Some x6514 ->
                                   ignore
                                     (Ojs.call x6513 "push"
-                                       [|(any_to_js x6514)|])
+                                       [|(Ojs.float_to_js x6514)|])
                               | None -> ());
                              x6513))|])
-    let (indexOf :
-      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x6525 : 'tags this) ->
-        fun ~searchElement:(x6521 : float) ->
-          fun ?fromIndex:(x6522 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x6527 = this_to_js Obj.magic x6525 in
-                 Ojs.call (Ojs.get_prop_ascii x6527 "indexOf") "apply"
-                   [|x6527;((let x6523 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6523 "push"
-                                  [|(Ojs.float_to_js x6521)|]);
-                             (match x6522 with
-                              | Some x6524 ->
-                                  ignore
-                                    (Ojs.call x6523 "push"
-                                       [|(Ojs.float_to_js x6524)|])
-                              | None -> ());
-                             x6523))|])
     let (join : 'tags this -> ?separator:string -> unit -> string) =
-      fun (x6531 : 'tags this) ->
-        fun ?separator:(x6528 : string option) ->
+      fun (x6521 : 'tags this) ->
+        fun ?separator:(x6518 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x6533 = this_to_js Obj.magic x6531 in
-               Ojs.call (Ojs.get_prop_ascii x6533 "join") "apply"
-                 [|x6533;((let x6529 =
+              (let x6523 = this_to_js Obj.magic x6521 in
+               Ojs.call (Ojs.get_prop_ascii x6523 "join") "apply"
+                 [|x6523;((let x6519 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x6528 with
-                            | Some x6530 ->
+                           (match x6518 with
+                            | Some x6520 ->
                                 ignore
-                                  (Ojs.call x6529 "push"
-                                     [|(Ojs.string_to_js x6530)|])
+                                  (Ojs.call x6519 "push"
+                                     [|(Ojs.string_to_js x6520)|])
                             | None -> ());
-                           x6529))|])
+                           x6519))|])
     let (lastIndexOf :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x6538 : 'tags this) ->
-        fun ~searchElement:(x6534 : float) ->
-          fun ?fromIndex:(x6535 : float option) ->
+      fun (x6528 : 'tags this) ->
+        fun ~searchElement:(x6524 : float) ->
+          fun ?fromIndex:(x6525 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x6540 = this_to_js Obj.magic x6538 in
-                 Ojs.call (Ojs.get_prop_ascii x6540 "lastIndexOf") "apply"
-                   [|x6540;((let x6536 =
+                (let x6530 = this_to_js Obj.magic x6528 in
+                 Ojs.call (Ojs.get_prop_ascii x6530 "lastIndexOf") "apply"
+                   [|x6530;((let x6526 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6536 "push"
-                                  [|(Ojs.float_to_js x6534)|]);
-                             (match x6535 with
-                              | Some x6537 ->
+                               (Ojs.call x6526 "push"
+                                  [|(Ojs.float_to_js x6524)|]);
+                             (match x6525 with
+                              | Some x6527 ->
                                   ignore
-                                    (Ojs.call x6536 "push"
-                                       [|(Ojs.float_to_js x6537)|])
+                                    (Ojs.call x6526 "push"
+                                       [|(Ojs.float_to_js x6527)|])
                               | None -> ());
-                             x6536))|])
+                             x6526))|])
     let (get_length : 'tags this -> float) =
-      fun (x6541 : 'tags this) ->
+      fun (x6531 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6541) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6531) "length")
     let (map :
       'tags this ->
         callbackfn:(value:float -> index:float -> array:t -> float) ->
           ?thisArg:any -> unit -> t)
       =
-      fun (x6550 : 'tags this) ->
+      fun (x6540 : 'tags this) ->
         fun
-          ~callbackfn:(x6543 :
+          ~callbackfn:(x6533 :
                         value:float -> index:float -> array:t -> float)
           ->
-          fun ?thisArg:(x6544 : any option) ->
+          fun ?thisArg:(x6534 : any option) ->
             fun () ->
               t_of_js
-                (let x6552 = this_to_js Obj.magic x6550 in
-                 Ojs.call (Ojs.get_prop_ascii x6552 "map") "apply"
-                   [|x6552;((let x6545 =
+                (let x6542 = this_to_js Obj.magic x6540 in
+                 Ojs.call (Ojs.get_prop_ascii x6542 "map") "apply"
+                   [|x6542;((let x6535 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6545 "push"
+                               (Ojs.call x6535 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6547 : Ojs.t) ->
-                                          fun (x6548 : Ojs.t) ->
-                                            fun (x6549 : Ojs.t) ->
+                                       (fun (x6537 : Ojs.t) ->
+                                          fun (x6538 : Ojs.t) ->
+                                            fun (x6539 : Ojs.t) ->
                                               Ojs.float_to_js
-                                                (x6543
+                                                (x6533
                                                    ~value:(Ojs.float_of_js
-                                                             x6547)
+                                                             x6537)
                                                    ~index:(Ojs.float_of_js
-                                                             x6548)
-                                                   ~array:(t_of_js x6549))))|]);
-                             (match x6544 with
-                              | Some x6546 ->
+                                                             x6538)
+                                                   ~array:(t_of_js x6539))))|]);
+                             (match x6534 with
+                              | Some x6536 ->
                                   ignore
-                                    (Ojs.call x6545 "push"
-                                       [|(any_to_js x6546)|])
+                                    (Ojs.call x6535 "push"
+                                       [|(any_to_js x6536)|])
                               | None -> ());
-                             x6545))|])
+                             x6535))|])
     let (reduce :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -23138,25 +23122,25 @@ module Int8Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x6558 : 'tags this) ->
+      fun (x6548 : 'tags this) ->
         fun
-          ~callbackfn:(x6553 :
+          ~callbackfn:(x6543 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x6558) "reduce"
+            (Ojs.call (this_to_js Obj.magic x6548) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x6554 : Ojs.t) ->
-                       fun (x6555 : Ojs.t) ->
-                         fun (x6556 : Ojs.t) ->
-                           fun (x6557 : Ojs.t) ->
+                    (fun (x6544 : Ojs.t) ->
+                       fun (x6545 : Ojs.t) ->
+                         fun (x6546 : Ojs.t) ->
+                           fun (x6547 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x6553 ~previousValue:(Ojs.float_of_js x6554)
-                                  ~currentValue:(Ojs.float_of_js x6555)
-                                  ~currentIndex:(Ojs.float_of_js x6556)
-                                  ~array:(t_of_js x6557))))|])
+                               (x6543 ~previousValue:(Ojs.float_of_js x6544)
+                                  ~currentValue:(Ojs.float_of_js x6545)
+                                  ~currentIndex:(Ojs.float_of_js x6546)
+                                  ~array:(t_of_js x6547))))|])
     let (reduce' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -23164,28 +23148,28 @@ module Int8Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x6566 : 'tags this) ->
+      fun (x6556 : 'tags this) ->
         fun
-          ~callbackfn:(x6560 :
+          ~callbackfn:(x6550 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x6565 : float) ->
+          fun ~initialValue:(x6555 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x6566) "reduce"
+              (Ojs.call (this_to_js Obj.magic x6556) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6561 : Ojs.t) ->
-                         fun (x6562 : Ojs.t) ->
-                           fun (x6563 : Ojs.t) ->
-                             fun (x6564 : Ojs.t) ->
+                      (fun (x6551 : Ojs.t) ->
+                         fun (x6552 : Ojs.t) ->
+                           fun (x6553 : Ojs.t) ->
+                             fun (x6554 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x6560
-                                    ~previousValue:(Ojs.float_of_js x6561)
-                                    ~currentValue:(Ojs.float_of_js x6562)
-                                    ~currentIndex:(Ojs.float_of_js x6563)
-                                    ~array:(t_of_js x6564))));(Ojs.float_to_js
-                                                                 x6565)|])
+                                 (x6550
+                                    ~previousValue:(Ojs.float_of_js x6551)
+                                    ~currentValue:(Ojs.float_of_js x6552)
+                                    ~currentIndex:(Ojs.float_of_js x6553)
+                                    ~array:(t_of_js x6554))));(Ojs.float_to_js
+                                                                 x6555)|])
     let (reduce'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -23193,27 +23177,27 @@ module Int8Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x6574 : 'tags this) ->
+      fun (x6564 : 'tags this) ->
         fun
-          ~callbackfn:(x6568 :
+          ~callbackfn:(x6558 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x6573 : 'U) ->
+          fun ~initialValue:(x6563 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x6574) "reduce"
+              (Ojs.call (this_to_js Obj.magic x6564) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6569 : Ojs.t) ->
-                         fun (x6570 : Ojs.t) ->
-                           fun (x6571 : Ojs.t) ->
-                             fun (x6572 : Ojs.t) ->
+                      (fun (x6559 : Ojs.t) ->
+                         fun (x6560 : Ojs.t) ->
+                           fun (x6561 : Ojs.t) ->
+                             fun (x6562 : Ojs.t) ->
                                Obj.magic
-                                 (x6568 ~previousValue:(Obj.magic x6569)
-                                    ~currentValue:(Ojs.float_of_js x6570)
-                                    ~currentIndex:(Ojs.float_of_js x6571)
-                                    ~array:(t_of_js x6572))));(Obj.magic
-                                                                 x6573)|])
+                                 (x6558 ~previousValue:(Obj.magic x6559)
+                                    ~currentValue:(Ojs.float_of_js x6560)
+                                    ~currentIndex:(Ojs.float_of_js x6561)
+                                    ~array:(t_of_js x6562))));(Obj.magic
+                                                                 x6563)|])
     let (reduceRight :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -23221,25 +23205,25 @@ module Int8Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x6581 : 'tags this) ->
+      fun (x6571 : 'tags this) ->
         fun
-          ~callbackfn:(x6576 :
+          ~callbackfn:(x6566 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x6581) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic x6571) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x6577 : Ojs.t) ->
-                       fun (x6578 : Ojs.t) ->
-                         fun (x6579 : Ojs.t) ->
-                           fun (x6580 : Ojs.t) ->
+                    (fun (x6567 : Ojs.t) ->
+                       fun (x6568 : Ojs.t) ->
+                         fun (x6569 : Ojs.t) ->
+                           fun (x6570 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x6576 ~previousValue:(Ojs.float_of_js x6577)
-                                  ~currentValue:(Ojs.float_of_js x6578)
-                                  ~currentIndex:(Ojs.float_of_js x6579)
-                                  ~array:(t_of_js x6580))))|])
+                               (x6566 ~previousValue:(Ojs.float_of_js x6567)
+                                  ~currentValue:(Ojs.float_of_js x6568)
+                                  ~currentIndex:(Ojs.float_of_js x6569)
+                                  ~array:(t_of_js x6570))))|])
     let (reduceRight' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -23247,28 +23231,28 @@ module Int8Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x6589 : 'tags this) ->
+      fun (x6579 : 'tags this) ->
         fun
-          ~callbackfn:(x6583 :
+          ~callbackfn:(x6573 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x6588 : float) ->
+          fun ~initialValue:(x6578 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x6589) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x6579) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6584 : Ojs.t) ->
-                         fun (x6585 : Ojs.t) ->
-                           fun (x6586 : Ojs.t) ->
-                             fun (x6587 : Ojs.t) ->
+                      (fun (x6574 : Ojs.t) ->
+                         fun (x6575 : Ojs.t) ->
+                           fun (x6576 : Ojs.t) ->
+                             fun (x6577 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x6583
-                                    ~previousValue:(Ojs.float_of_js x6584)
-                                    ~currentValue:(Ojs.float_of_js x6585)
-                                    ~currentIndex:(Ojs.float_of_js x6586)
-                                    ~array:(t_of_js x6587))));(Ojs.float_to_js
-                                                                 x6588)|])
+                                 (x6573
+                                    ~previousValue:(Ojs.float_of_js x6574)
+                                    ~currentValue:(Ojs.float_of_js x6575)
+                                    ~currentIndex:(Ojs.float_of_js x6576)
+                                    ~array:(t_of_js x6577))));(Ojs.float_to_js
+                                                                 x6578)|])
     let (reduceRight'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -23276,239 +23260,211 @@ module Int8Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x6597 : 'tags this) ->
+      fun (x6587 : 'tags this) ->
         fun
-          ~callbackfn:(x6591 :
+          ~callbackfn:(x6581 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x6596 : 'U) ->
+          fun ~initialValue:(x6586 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x6597) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x6587) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6592 : Ojs.t) ->
-                         fun (x6593 : Ojs.t) ->
-                           fun (x6594 : Ojs.t) ->
-                             fun (x6595 : Ojs.t) ->
+                      (fun (x6582 : Ojs.t) ->
+                         fun (x6583 : Ojs.t) ->
+                           fun (x6584 : Ojs.t) ->
+                             fun (x6585 : Ojs.t) ->
                                Obj.magic
-                                 (x6591 ~previousValue:(Obj.magic x6592)
-                                    ~currentValue:(Ojs.float_of_js x6593)
-                                    ~currentIndex:(Ojs.float_of_js x6594)
-                                    ~array:(t_of_js x6595))));(Obj.magic
-                                                                 x6596)|])
+                                 (x6581 ~previousValue:(Obj.magic x6582)
+                                    ~currentValue:(Ojs.float_of_js x6583)
+                                    ~currentIndex:(Ojs.float_of_js x6584)
+                                    ~array:(t_of_js x6585))));(Obj.magic
+                                                                 x6586)|])
     let (reverse : 'tags this -> t) =
-      fun (x6599 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x6599) "reverse" [||])
+      fun (x6589 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x6589) "reverse" [||])
     let (set_ :
       'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit)
       =
-      fun (x6606 : 'tags this) ->
-        fun ~array:(x6601 : float ArrayLike.t) ->
-          fun ?offset:(x6602 : float option) ->
+      fun (x6596 : 'tags this) ->
+        fun ~array:(x6591 : float ArrayLike.t) ->
+          fun ?offset:(x6592 : float option) ->
             fun () ->
               ignore
-                (let x6608 = this_to_js Obj.magic x6606 in
-                 Ojs.call (Ojs.get_prop_ascii x6608 "set") "apply"
-                   [|x6608;((let x6603 =
+                (let x6598 = this_to_js Obj.magic x6596 in
+                 Ojs.call (Ojs.get_prop_ascii x6598 "set") "apply"
+                   [|x6598;((let x6593 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6603 "push"
-                                  [|(ArrayLike.t_to_js Ojs.float_to_js x6601)|]);
-                             (match x6602 with
-                              | Some x6604 ->
+                               (Ojs.call x6593 "push"
+                                  [|(ArrayLike.t_to_js Ojs.float_to_js x6591)|]);
+                             (match x6592 with
+                              | Some x6594 ->
                                   ignore
-                                    (Ojs.call x6603 "push"
-                                       [|(Ojs.float_to_js x6604)|])
+                                    (Ojs.call x6593 "push"
+                                       [|(Ojs.float_to_js x6594)|])
                               | None -> ());
-                             x6603))|])
+                             x6593))|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> t) =
-      fun (x6614 : 'tags this) ->
-        fun ?start:(x6609 : float option) ->
-          fun ?end_:(x6610 : float option) ->
+      fun (x6604 : 'tags this) ->
+        fun ?start:(x6599 : float option) ->
+          fun ?end_:(x6600 : float option) ->
             fun () ->
               t_of_js
-                (let x6616 = this_to_js Obj.magic x6614 in
-                 Ojs.call (Ojs.get_prop_ascii x6616 "slice") "apply"
-                   [|x6616;((let x6611 =
+                (let x6606 = this_to_js Obj.magic x6604 in
+                 Ojs.call (Ojs.get_prop_ascii x6606 "slice") "apply"
+                   [|x6606;((let x6601 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x6609 with
-                              | Some x6613 ->
+                             (match x6599 with
+                              | Some x6603 ->
                                   ignore
-                                    (Ojs.call x6611 "push"
-                                       [|(Ojs.float_to_js x6613)|])
+                                    (Ojs.call x6601 "push"
+                                       [|(Ojs.float_to_js x6603)|])
                               | None -> ());
-                             (match x6610 with
-                              | Some x6612 ->
+                             (match x6600 with
+                              | Some x6602 ->
                                   ignore
-                                    (Ojs.call x6611 "push"
-                                       [|(Ojs.float_to_js x6612)|])
+                                    (Ojs.call x6601 "push"
+                                       [|(Ojs.float_to_js x6602)|])
                               | None -> ());
-                             x6611))|])
+                             x6601))|])
     let (some :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x6624 : 'tags this) ->
+      fun (x6614 : 'tags this) ->
         fun
-          ~predicate:(x6617 :
+          ~predicate:(x6607 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x6618 : any option) ->
+          fun ?thisArg:(x6608 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6626 = this_to_js Obj.magic x6624 in
-                 Ojs.call (Ojs.get_prop_ascii x6626 "some") "apply"
-                   [|x6626;((let x6619 =
+                (let x6616 = this_to_js Obj.magic x6614 in
+                 Ojs.call (Ojs.get_prop_ascii x6616 "some") "apply"
+                   [|x6616;((let x6609 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6619 "push"
+                               (Ojs.call x6609 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6621 : Ojs.t) ->
-                                          fun (x6622 : Ojs.t) ->
-                                            fun (x6623 : Ojs.t) ->
+                                       (fun (x6611 : Ojs.t) ->
+                                          fun (x6612 : Ojs.t) ->
+                                            fun (x6613 : Ojs.t) ->
                                               unknown_to_js
-                                                (x6617
+                                                (x6607
                                                    ~value:(Ojs.float_of_js
-                                                             x6621)
+                                                             x6611)
                                                    ~index:(Ojs.float_of_js
-                                                             x6622)
-                                                   ~array:(t_of_js x6623))))|]);
-                             (match x6618 with
-                              | Some x6620 ->
+                                                             x6612)
+                                                   ~array:(t_of_js x6613))))|]);
+                             (match x6608 with
+                              | Some x6610 ->
                                   ignore
-                                    (Ojs.call x6619 "push"
-                                       [|(any_to_js x6620)|])
+                                    (Ojs.call x6609 "push"
+                                       [|(any_to_js x6610)|])
                               | None -> ());
-                             x6619))|])
+                             x6609))|])
     let (sort :
       'tags this ->
         ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this)
       =
-      fun (x6632 : 'tags this) ->
-        fun ?compareFn:(x6627 : (a:float -> b:float -> float) option) ->
+      fun (x6622 : 'tags this) ->
+        fun ?compareFn:(x6617 : (a:float -> b:float -> float) option) ->
           fun () ->
             this_of_js Obj.magic
-              (let x6634 = this_to_js Obj.magic x6632 in
-               Ojs.call (Ojs.get_prop_ascii x6634 "sort") "apply"
-                 [|x6634;((let x6628 =
+              (let x6624 = this_to_js Obj.magic x6622 in
+               Ojs.call (Ojs.get_prop_ascii x6624 "sort") "apply"
+                 [|x6624;((let x6618 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x6627 with
-                            | Some x6629 ->
+                           (match x6617 with
+                            | Some x6619 ->
                                 ignore
-                                  (Ojs.call x6628 "push"
+                                  (Ojs.call x6618 "push"
                                      [|(Ojs.fun_to_js 2
-                                          (fun (x6630 : Ojs.t) ->
-                                             fun (x6631 : Ojs.t) ->
+                                          (fun (x6620 : Ojs.t) ->
+                                             fun (x6621 : Ojs.t) ->
                                                Ojs.float_to_js
-                                                 (x6629
-                                                    ~a:(Ojs.float_of_js x6630)
-                                                    ~b:(Ojs.float_of_js x6631))))|])
+                                                 (x6619
+                                                    ~a:(Ojs.float_of_js x6620)
+                                                    ~b:(Ojs.float_of_js x6621))))|])
                             | None -> ());
-                           x6628))|])
+                           x6618))|])
     let (subarray : 'tags this -> ?begin_:float -> ?end_:float -> unit -> t)
       =
-      fun (x6641 : 'tags this) ->
-        fun ?begin_:(x6636 : float option) ->
-          fun ?end_:(x6637 : float option) ->
+      fun (x6631 : 'tags this) ->
+        fun ?begin_:(x6626 : float option) ->
+          fun ?end_:(x6627 : float option) ->
             fun () ->
               t_of_js
-                (let x6643 = this_to_js Obj.magic x6641 in
-                 Ojs.call (Ojs.get_prop_ascii x6643 "subarray") "apply"
-                   [|x6643;((let x6638 =
+                (let x6633 = this_to_js Obj.magic x6631 in
+                 Ojs.call (Ojs.get_prop_ascii x6633 "subarray") "apply"
+                   [|x6633;((let x6628 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x6636 with
-                              | Some x6640 ->
+                             (match x6626 with
+                              | Some x6630 ->
                                   ignore
-                                    (Ojs.call x6638 "push"
-                                       [|(Ojs.float_to_js x6640)|])
+                                    (Ojs.call x6628 "push"
+                                       [|(Ojs.float_to_js x6630)|])
                               | None -> ());
-                             (match x6637 with
-                              | Some x6639 ->
+                             (match x6627 with
+                              | Some x6629 ->
                                   ignore
-                                    (Ojs.call x6638 "push"
-                                       [|(Ojs.float_to_js x6639)|])
+                                    (Ojs.call x6628 "push"
+                                       [|(Ojs.float_to_js x6629)|])
                               | None -> ());
-                             x6638))|])
+                             x6628))|])
     let (toLocaleString : 'tags this -> string) =
-      fun (x6644 : 'tags this) ->
+      fun (x6634 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x6644) "toLocaleString" [||])
+          (Ojs.call (this_to_js Obj.magic x6634) "toLocaleString" [||])
     let (toString : 'tags this -> string) =
-      fun (x6646 : 'tags this) ->
+      fun (x6636 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x6646) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x6636) "toString" [||])
     let (valueOf : 'tags this -> t) =
-      fun (x6648 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x6648) "valueOf" [||])
+      fun (x6638 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x6638) "valueOf" [||])
     let (get : 'tags this -> float -> float) =
-      fun (x6650 : 'tags this) ->
-        fun (x6652 : float) ->
+      fun (x6640 : 'tags this) ->
+        fun (x6642 : float) ->
           Ojs.float_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x6650)
-               (Ojs.float_to_js x6652))
+            (Ojs.get_prop (this_to_js Obj.magic x6640)
+               (Ojs.float_to_js x6642))
     let (set : 'tags this -> float -> float -> unit) =
-      fun (x6653 : 'tags this) ->
-        fun (x6655 : float) ->
-          fun (x6656 : float) ->
-            Ojs.set_prop (this_to_js Obj.magic x6653) (Ojs.float_to_js x6655)
-              (Ojs.float_to_js x6656)
-    let (create : float Iterable.t -> t) =
-      fun (x6657 : float Iterable.t) ->
-        t_of_js
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int8Array")
-             [|(Iterable.t_to_js Ojs.float_to_js x6657)|])
-    let (from :
-      arrayLike:float Iterable.t ->
-        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
-      =
-      fun ~arrayLike:(x6659 : float Iterable.t) ->
-        fun ?mapfn:(x6660 : (v:float -> k:float -> float) option) ->
-          fun ?thisArg:(x6661 : any option) ->
-            fun () ->
-              t_of_js
-                (let x6668 = Ojs.get_prop_ascii Ojs.global "Int8Array" in
-                 Ojs.call (Ojs.get_prop_ascii x6668 "from") "apply"
-                   [|x6668;((let x6662 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6662 "push"
-                                  [|(Iterable.t_to_js Ojs.float_to_js x6659)|]);
-                             (match x6660 with
-                              | Some x6664 ->
-                                  ignore
-                                    (Ojs.call x6662 "push"
-                                       [|(Ojs.fun_to_js 2
-                                            (fun (x6665 : Ojs.t) ->
-                                               fun (x6666 : Ojs.t) ->
-                                                 Ojs.float_to_js
-                                                   (x6664
-                                                      ~v:(Ojs.float_of_js
-                                                            x6665)
-                                                      ~k:(Ojs.float_of_js
-                                                            x6666))))|])
-                              | None -> ());
-                             (match x6661 with
-                              | Some x6663 ->
-                                  ignore
-                                    (Ojs.call x6662 "push"
-                                       [|(any_to_js x6663)|])
-                              | None -> ());
-                             x6662))|])
-    let (create' : unit -> t) =
+      fun (x6643 : 'tags this) ->
+        fun (x6645 : float) ->
+          fun (x6646 : float) ->
+            Ojs.set_prop (this_to_js Obj.magic x6643) (Ojs.float_to_js x6645)
+              (Ojs.float_to_js x6646)
+    let (entries : 'tags this -> (float * float) IterableIterator.t) =
+      fun (x6647 : 'tags this) ->
+        IterableIterator.t_of_js
+          (fun (x6649 : Ojs.t) ->
+             let x6650 = x6649 in
+             ((Ojs.float_of_js (Ojs.array_get x6650 0)),
+               (Ojs.float_of_js (Ojs.array_get x6650 1))))
+          (Ojs.call (this_to_js Obj.magic x6647) "entries" [||])
+    let (keys : 'tags this -> float IterableIterator.t) =
+      fun (x6651 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x6651) "keys" [||])
+    let (values : 'tags this -> float IterableIterator.t) =
+      fun (x6654 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x6654) "values" [||])
+    let (create : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int8Array") [||])
@@ -23517,102 +23473,146 @@ module Int8Array =
         t_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Int8Array")
              "prototype")
-    let (create'' : float -> t) =
-      fun (x6669 : float) ->
+    let (create' : float -> t) =
+      fun (x6657 : float) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int8Array")
-             [|(Ojs.float_to_js x6669)|])
-    let (create''' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
-      fun (x6670 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
+             [|(Ojs.float_to_js x6657)|])
+    let (create'' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
+      fun (x6658 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int8Array")
              [|(union2_to_js ArrayBufferLike.t_to_js
-                  (fun (x6672 : float ArrayLike.t) ->
-                     ArrayLike.t_to_js Ojs.float_to_js x6672) x6670)|])
-    let (create'''' :
+                  (fun (x6660 : float ArrayLike.t) ->
+                     ArrayLike.t_to_js Ojs.float_to_js x6660) x6658)|])
+    let (create''' :
       buffer:ArrayBufferLike.t ->
         ?byteOffset:float -> ?length:float -> unit -> t)
       =
-      fun ~buffer:(x6674 : ArrayBufferLike.t) ->
-        fun ?byteOffset:(x6675 : float option) ->
-          fun ?length:(x6676 : float option) ->
+      fun ~buffer:(x6662 : ArrayBufferLike.t) ->
+        fun ?byteOffset:(x6663 : float option) ->
+          fun ?length:(x6664 : float option) ->
             fun () ->
               t_of_js
                 (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Int8Array")
-                   (let x6677 =
+                   (let x6665 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     ignore
-                      (Ojs.call x6677 "push"
-                         [|(ArrayBufferLike.t_to_js x6674)|]);
-                    (match x6675 with
-                     | Some x6679 ->
+                      (Ojs.call x6665 "push"
+                         [|(ArrayBufferLike.t_to_js x6662)|]);
+                    (match x6663 with
+                     | Some x6667 ->
                          ignore
-                           (Ojs.call x6677 "push" [|(Ojs.float_to_js x6679)|])
+                           (Ojs.call x6665 "push" [|(Ojs.float_to_js x6667)|])
                      | None -> ());
-                    (match x6676 with
-                     | Some x6678 ->
+                    (match x6664 with
+                     | Some x6666 ->
                          ignore
-                           (Ojs.call x6677 "push" [|(Ojs.float_to_js x6678)|])
+                           (Ojs.call x6665 "push" [|(Ojs.float_to_js x6666)|])
                      | None -> ());
-                    x6677))
+                    x6665))
     let (bytes_per_element : unit -> float) =
       fun () ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Int8Array")
              "BYTES_PER_ELEMENT")
     let (of_ : float list -> t) =
-      fun (x6680 : float list) ->
+      fun (x6668 : float list) ->
         t_of_js
-          (let x6683 = Ojs.get_prop_ascii Ojs.global "Int8Array" in
-           Ojs.call (Ojs.get_prop_ascii x6683 "of") "apply"
-             [|x6683;((let x6681 =
+          (let x6671 = Ojs.get_prop_ascii Ojs.global "Int8Array" in
+           Ojs.call (Ojs.get_prop_ascii x6671 "of") "apply"
+             [|x6671;((let x6669 =
                          Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                            [||] in
                        List.iter
-                         (fun (x6682 : float) ->
+                         (fun (x6670 : float) ->
                             ignore
-                              (Ojs.call x6681 "push"
-                                 [|(Ojs.float_to_js x6682)|])) x6680;
-                       x6681))|])
-    let (from' : float ArrayLike.t -> t) =
-      fun (x6684 : float ArrayLike.t) ->
+                              (Ojs.call x6669 "push"
+                                 [|(Ojs.float_to_js x6670)|])) x6668;
+                       x6669))|])
+    let (from : float ArrayLike.t -> t) =
+      fun (x6672 : float ArrayLike.t) ->
         t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Int8Array") "from"
-             [|(ArrayLike.t_to_js Ojs.float_to_js x6684)|])
-    let (from'' :
+             [|(ArrayLike.t_to_js Ojs.float_to_js x6672)|])
+    let (from' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t)
       =
-      fun ~arrayLike:(x6686 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x6687 : v:'T -> k:float -> float) ->
-          fun ?thisArg:(x6688 : any option) ->
+      fun ~arrayLike:(x6674 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x6675 : v:'T -> k:float -> float) ->
+          fun ?thisArg:(x6676 : any option) ->
             fun () ->
               t_of_js
-                (let x6694 = Ojs.get_prop_ascii Ojs.global "Int8Array" in
-                 Ojs.call (Ojs.get_prop_ascii x6694 "from") "apply"
-                   [|x6694;((let x6689 =
+                (let x6682 = Ojs.get_prop_ascii Ojs.global "Int8Array" in
+                 Ojs.call (Ojs.get_prop_ascii x6682 "from") "apply"
+                   [|x6682;((let x6677 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6689 "push"
-                                  [|(ArrayLike.t_to_js Obj.magic x6686)|]);
+                               (Ojs.call x6677 "push"
+                                  [|(ArrayLike.t_to_js Obj.magic x6674)|]);
                              ignore
-                               (Ojs.call x6689 "push"
+                               (Ojs.call x6677 "push"
                                   [|(Ojs.fun_to_js 2
-                                       (fun (x6691 : Ojs.t) ->
-                                          fun (x6692 : Ojs.t) ->
+                                       (fun (x6679 : Ojs.t) ->
+                                          fun (x6680 : Ojs.t) ->
                                             Ojs.float_to_js
-                                              (x6687 ~v:(Obj.magic x6691)
-                                                 ~k:(Ojs.float_of_js x6692))))|]);
-                             (match x6688 with
+                                              (x6675 ~v:(Obj.magic x6679)
+                                                 ~k:(Ojs.float_of_js x6680))))|]);
+                             (match x6676 with
+                              | Some x6678 ->
+                                  ignore
+                                    (Ojs.call x6677 "push"
+                                       [|(any_to_js x6678)|])
+                              | None -> ());
+                             x6677))|])
+    let (create'''' : float Iterable.t -> t) =
+      fun (x6683 : float Iterable.t) ->
+        t_of_js
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int8Array")
+             [|(Iterable.t_to_js Ojs.float_to_js x6683)|])
+    let (from'' :
+      arrayLike:float Iterable.t ->
+        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
+      =
+      fun ~arrayLike:(x6685 : float Iterable.t) ->
+        fun ?mapfn:(x6686 : (v:float -> k:float -> float) option) ->
+          fun ?thisArg:(x6687 : any option) ->
+            fun () ->
+              t_of_js
+                (let x6694 = Ojs.get_prop_ascii Ojs.global "Int8Array" in
+                 Ojs.call (Ojs.get_prop_ascii x6694 "from") "apply"
+                   [|x6694;((let x6688 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6688 "push"
+                                  [|(Iterable.t_to_js Ojs.float_to_js x6685)|]);
+                             (match x6686 with
                               | Some x6690 ->
                                   ignore
-                                    (Ojs.call x6689 "push"
-                                       [|(any_to_js x6690)|])
+                                    (Ojs.call x6688 "push"
+                                       [|(Ojs.fun_to_js 2
+                                            (fun (x6691 : Ojs.t) ->
+                                               fun (x6692 : Ojs.t) ->
+                                                 Ojs.float_to_js
+                                                   (x6690
+                                                      ~v:(Ojs.float_of_js
+                                                            x6691)
+                                                      ~k:(Ojs.float_of_js
+                                                            x6692))))|])
                               | None -> ());
-                             x6689))|])
+                             (match x6687 with
+                              | Some x6689 ->
+                                  ignore
+                                    (Ojs.call x6688 "push"
+                                       [|(any_to_js x6689)|])
+                              | None -> ());
+                             x6688))|])
     let cast_from = Obj.magic
   end
 module Int32Array =
@@ -23638,176 +23638,197 @@ module Int32Array =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x6697 : __tags intf) -> intf_to_js __tags_to_js x6697
-    let (entries : 'tags this -> (float * float) IterableIterator.t) =
-      fun (x6701 : 'tags this) ->
-        IterableIterator.t_of_js
-          (fun (x6703 : Ojs.t) ->
-             let x6704 = x6703 in
-             ((Ojs.float_of_js (Ojs.array_get x6704 0)),
-               (Ojs.float_of_js (Ojs.array_get x6704 1))))
-          (Ojs.call (this_to_js Obj.magic x6701) "entries" [||])
-    let (keys : 'tags this -> float IterableIterator.t) =
-      fun (x6705 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x6705) "keys" [||])
-    let (values : 'tags this -> float IterableIterator.t) =
-      fun (x6708 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x6708) "values" [||])
     let (includes :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x6715 : 'tags this) ->
-        fun ~searchElement:(x6711 : float) ->
-          fun ?fromIndex:(x6712 : float option) ->
+      fun (x6705 : 'tags this) ->
+        fun ~searchElement:(x6701 : float) ->
+          fun ?fromIndex:(x6702 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6717 = this_to_js Obj.magic x6715 in
-                 Ojs.call (Ojs.get_prop_ascii x6717 "includes") "apply"
-                   [|x6717;((let x6713 =
+                (let x6707 = this_to_js Obj.magic x6705 in
+                 Ojs.call (Ojs.get_prop_ascii x6707 "includes") "apply"
+                   [|x6707;((let x6703 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6713 "push"
-                                  [|(Ojs.float_to_js x6711)|]);
-                             (match x6712 with
-                              | Some x6714 ->
+                               (Ojs.call x6703 "push"
+                                  [|(Ojs.float_to_js x6701)|]);
+                             (match x6702 with
+                              | Some x6704 ->
                                   ignore
-                                    (Ojs.call x6713 "push"
-                                       [|(Ojs.float_to_js x6714)|])
+                                    (Ojs.call x6703 "push"
+                                       [|(Ojs.float_to_js x6704)|])
                               | None -> ());
-                             x6713))|])
+                             x6703))|])
     let (get_BYTES_PER_ELEMENT : 'tags this -> float) =
-      fun (x6718 : 'tags this) ->
+      fun (x6708 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6718)
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6708)
              "BYTES_PER_ELEMENT")
     let (get_buffer : 'tags this -> ArrayBufferLike.t) =
-      fun (x6720 : 'tags this) ->
+      fun (x6710 : 'tags this) ->
         ArrayBufferLike.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6720) "buffer")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6710) "buffer")
     let (get_byteLength : 'tags this -> float) =
-      fun (x6722 : 'tags this) ->
+      fun (x6712 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6722) "byteLength")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6712) "byteLength")
     let (get_byteOffset : 'tags this -> float) =
-      fun (x6724 : 'tags this) ->
+      fun (x6714 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6724) "byteOffset")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6714) "byteOffset")
     let (copyWithin :
       'tags this ->
         target:float -> start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x6731 : 'tags this) ->
-        fun ~target:(x6726 : float) ->
-          fun ~start:(x6727 : float) ->
-            fun ?end_:(x6728 : float option) ->
+      fun (x6721 : 'tags this) ->
+        fun ~target:(x6716 : float) ->
+          fun ~start:(x6717 : float) ->
+            fun ?end_:(x6718 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x6733 = this_to_js Obj.magic x6731 in
-                   Ojs.call (Ojs.get_prop_ascii x6733 "copyWithin") "apply"
-                     [|x6733;((let x6729 =
+                  (let x6723 = this_to_js Obj.magic x6721 in
+                   Ojs.call (Ojs.get_prop_ascii x6723 "copyWithin") "apply"
+                     [|x6723;((let x6719 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x6729 "push"
-                                    [|(Ojs.float_to_js x6726)|]);
+                                 (Ojs.call x6719 "push"
+                                    [|(Ojs.float_to_js x6716)|]);
                                ignore
-                                 (Ojs.call x6729 "push"
-                                    [|(Ojs.float_to_js x6727)|]);
-                               (match x6728 with
-                                | Some x6730 ->
+                                 (Ojs.call x6719 "push"
+                                    [|(Ojs.float_to_js x6717)|]);
+                               (match x6718 with
+                                | Some x6720 ->
                                     ignore
-                                      (Ojs.call x6729 "push"
-                                         [|(Ojs.float_to_js x6730)|])
+                                      (Ojs.call x6719 "push"
+                                         [|(Ojs.float_to_js x6720)|])
                                 | None -> ());
-                               x6729))|])
+                               x6719))|])
     let (every :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x6742 : 'tags this) ->
+      fun (x6732 : 'tags this) ->
         fun
-          ~predicate:(x6735 :
+          ~predicate:(x6725 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x6736 : any option) ->
+          fun ?thisArg:(x6726 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6744 = this_to_js Obj.magic x6742 in
-                 Ojs.call (Ojs.get_prop_ascii x6744 "every") "apply"
-                   [|x6744;((let x6737 =
+                (let x6734 = this_to_js Obj.magic x6732 in
+                 Ojs.call (Ojs.get_prop_ascii x6734 "every") "apply"
+                   [|x6734;((let x6727 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6737 "push"
+                               (Ojs.call x6727 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6739 : Ojs.t) ->
-                                          fun (x6740 : Ojs.t) ->
-                                            fun (x6741 : Ojs.t) ->
+                                       (fun (x6729 : Ojs.t) ->
+                                          fun (x6730 : Ojs.t) ->
+                                            fun (x6731 : Ojs.t) ->
                                               unknown_to_js
-                                                (x6735
+                                                (x6725
                                                    ~value:(Ojs.float_of_js
-                                                             x6739)
+                                                             x6729)
                                                    ~index:(Ojs.float_of_js
-                                                             x6740)
-                                                   ~array:(t_of_js x6741))))|]);
-                             (match x6736 with
-                              | Some x6738 ->
+                                                             x6730)
+                                                   ~array:(t_of_js x6731))))|]);
+                             (match x6726 with
+                              | Some x6728 ->
                                   ignore
-                                    (Ojs.call x6737 "push"
-                                       [|(any_to_js x6738)|])
+                                    (Ojs.call x6727 "push"
+                                       [|(any_to_js x6728)|])
                               | None -> ());
-                             x6737))|])
+                             x6727))|])
     let (fill :
       'tags this ->
         value:float -> ?start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x6751 : 'tags this) ->
-        fun ~value:(x6745 : float) ->
-          fun ?start:(x6746 : float option) ->
-            fun ?end_:(x6747 : float option) ->
+      fun (x6741 : 'tags this) ->
+        fun ~value:(x6735 : float) ->
+          fun ?start:(x6736 : float option) ->
+            fun ?end_:(x6737 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x6753 = this_to_js Obj.magic x6751 in
-                   Ojs.call (Ojs.get_prop_ascii x6753 "fill") "apply"
-                     [|x6753;((let x6748 =
+                  (let x6743 = this_to_js Obj.magic x6741 in
+                   Ojs.call (Ojs.get_prop_ascii x6743 "fill") "apply"
+                     [|x6743;((let x6738 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x6748 "push"
-                                    [|(Ojs.float_to_js x6745)|]);
-                               (match x6746 with
-                                | Some x6750 ->
+                                 (Ojs.call x6738 "push"
+                                    [|(Ojs.float_to_js x6735)|]);
+                               (match x6736 with
+                                | Some x6740 ->
                                     ignore
-                                      (Ojs.call x6748 "push"
-                                         [|(Ojs.float_to_js x6750)|])
+                                      (Ojs.call x6738 "push"
+                                         [|(Ojs.float_to_js x6740)|])
                                 | None -> ());
-                               (match x6747 with
-                                | Some x6749 ->
+                               (match x6737 with
+                                | Some x6739 ->
                                     ignore
-                                      (Ojs.call x6748 "push"
-                                         [|(Ojs.float_to_js x6749)|])
+                                      (Ojs.call x6738 "push"
+                                         [|(Ojs.float_to_js x6739)|])
                                 | None -> ());
-                               x6748))|])
+                               x6738))|])
     let (filter :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> any) ->
           ?thisArg:any -> unit -> t)
       =
+      fun (x6752 : 'tags this) ->
+        fun ~predicate:(x6745 : value:float -> index:float -> array:t -> any)
+          ->
+          fun ?thisArg:(x6746 : any option) ->
+            fun () ->
+              t_of_js
+                (let x6754 = this_to_js Obj.magic x6752 in
+                 Ojs.call (Ojs.get_prop_ascii x6754 "filter") "apply"
+                   [|x6754;((let x6747 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6747 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x6749 : Ojs.t) ->
+                                          fun (x6750 : Ojs.t) ->
+                                            fun (x6751 : Ojs.t) ->
+                                              any_to_js
+                                                (x6745
+                                                   ~value:(Ojs.float_of_js
+                                                             x6749)
+                                                   ~index:(Ojs.float_of_js
+                                                             x6750)
+                                                   ~array:(t_of_js x6751))))|]);
+                             (match x6746 with
+                              | Some x6748 ->
+                                  ignore
+                                    (Ojs.call x6747 "push"
+                                       [|(any_to_js x6748)|])
+                              | None -> ());
+                             x6747))|])
+    let (find :
+      'tags this ->
+        predicate:(value:float -> index:float -> obj:t -> bool) ->
+          ?thisArg:any -> unit -> float or_undefined)
+      =
       fun (x6762 : 'tags this) ->
-        fun ~predicate:(x6755 : value:float -> index:float -> array:t -> any)
+        fun ~predicate:(x6755 : value:float -> index:float -> obj:t -> bool)
           ->
           fun ?thisArg:(x6756 : any option) ->
             fun () ->
-              t_of_js
+              or_undefined_of_js Ojs.float_of_js
                 (let x6764 = this_to_js Obj.magic x6762 in
-                 Ojs.call (Ojs.get_prop_ascii x6764 "filter") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x6764 "find") "apply"
                    [|x6764;((let x6757 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -23818,13 +23839,13 @@ module Int32Array =
                                        (fun (x6759 : Ojs.t) ->
                                           fun (x6760 : Ojs.t) ->
                                             fun (x6761 : Ojs.t) ->
-                                              any_to_js
+                                              Ojs.bool_to_js
                                                 (x6755
                                                    ~value:(Ojs.float_of_js
                                                              x6759)
                                                    ~index:(Ojs.float_of_js
                                                              x6760)
-                                                   ~array:(t_of_js x6761))))|]);
+                                                   ~obj:(t_of_js x6761))))|]);
                              (match x6756 with
                               | Some x6758 ->
                                   ignore
@@ -23832,56 +23853,57 @@ module Int32Array =
                                        [|(any_to_js x6758)|])
                               | None -> ());
                              x6757))|])
-    let (find :
-      'tags this ->
-        predicate:(value:float -> index:float -> obj:t -> bool) ->
-          ?thisArg:any -> unit -> float or_undefined)
-      =
-      fun (x6772 : 'tags this) ->
-        fun ~predicate:(x6765 : value:float -> index:float -> obj:t -> bool)
-          ->
-          fun ?thisArg:(x6766 : any option) ->
-            fun () ->
-              or_undefined_of_js Ojs.float_of_js
-                (let x6774 = this_to_js Obj.magic x6772 in
-                 Ojs.call (Ojs.get_prop_ascii x6774 "find") "apply"
-                   [|x6774;((let x6767 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6767 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x6769 : Ojs.t) ->
-                                          fun (x6770 : Ojs.t) ->
-                                            fun (x6771 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x6765
-                                                   ~value:(Ojs.float_of_js
-                                                             x6769)
-                                                   ~index:(Ojs.float_of_js
-                                                             x6770)
-                                                   ~obj:(t_of_js x6771))))|]);
-                             (match x6766 with
-                              | Some x6768 ->
-                                  ignore
-                                    (Ojs.call x6767 "push"
-                                       [|(any_to_js x6768)|])
-                              | None -> ());
-                             x6767))|])
     let (findIndex :
       'tags this ->
         predicate:(value:float -> index:float -> obj:t -> bool) ->
           ?thisArg:any -> unit -> float)
       =
+      fun (x6773 : 'tags this) ->
+        fun ~predicate:(x6766 : value:float -> index:float -> obj:t -> bool)
+          ->
+          fun ?thisArg:(x6767 : any option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x6775 = this_to_js Obj.magic x6773 in
+                 Ojs.call (Ojs.get_prop_ascii x6775 "findIndex") "apply"
+                   [|x6775;((let x6768 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6768 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x6770 : Ojs.t) ->
+                                          fun (x6771 : Ojs.t) ->
+                                            fun (x6772 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x6766
+                                                   ~value:(Ojs.float_of_js
+                                                             x6770)
+                                                   ~index:(Ojs.float_of_js
+                                                             x6771)
+                                                   ~obj:(t_of_js x6772))))|]);
+                             (match x6767 with
+                              | Some x6769 ->
+                                  ignore
+                                    (Ojs.call x6768 "push"
+                                       [|(any_to_js x6769)|])
+                              | None -> ());
+                             x6768))|])
+    let (forEach :
+      'tags this ->
+        callbackfn:(value:float -> index:float -> array:t -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
       fun (x6783 : 'tags this) ->
-        fun ~predicate:(x6776 : value:float -> index:float -> obj:t -> bool)
+        fun
+          ~callbackfn:(x6776 : value:float -> index:float -> array:t -> unit)
           ->
           fun ?thisArg:(x6777 : any option) ->
             fun () ->
-              Ojs.float_of_js
+              ignore
                 (let x6785 = this_to_js Obj.magic x6783 in
-                 Ojs.call (Ojs.get_prop_ascii x6785 "findIndex") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x6785 "forEach") "apply"
                    [|x6785;((let x6778 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -23892,13 +23914,10 @@ module Int32Array =
                                        (fun (x6780 : Ojs.t) ->
                                           fun (x6781 : Ojs.t) ->
                                             fun (x6782 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x6776
-                                                   ~value:(Ojs.float_of_js
-                                                             x6780)
-                                                   ~index:(Ojs.float_of_js
-                                                             x6781)
-                                                   ~obj:(t_of_js x6782))))|]);
+                                              x6776
+                                                ~value:(Ojs.float_of_js x6780)
+                                                ~index:(Ojs.float_of_js x6781)
+                                                ~array:(t_of_js x6782)))|]);
                              (match x6777 with
                               | Some x6779 ->
                                   ignore
@@ -23906,150 +23925,115 @@ module Int32Array =
                                        [|(any_to_js x6779)|])
                               | None -> ());
                              x6778))|])
-    let (forEach :
-      'tags this ->
-        callbackfn:(value:float -> index:float -> array:t -> unit) ->
-          ?thisArg:any -> unit -> unit)
+    let (indexOf :
+      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x6793 : 'tags this) ->
-        fun
-          ~callbackfn:(x6786 : value:float -> index:float -> array:t -> unit)
-          ->
-          fun ?thisArg:(x6787 : any option) ->
+      fun (x6790 : 'tags this) ->
+        fun ~searchElement:(x6786 : float) ->
+          fun ?fromIndex:(x6787 : float option) ->
             fun () ->
-              ignore
-                (let x6795 = this_to_js Obj.magic x6793 in
-                 Ojs.call (Ojs.get_prop_ascii x6795 "forEach") "apply"
-                   [|x6795;((let x6788 =
+              Ojs.float_of_js
+                (let x6792 = this_to_js Obj.magic x6790 in
+                 Ojs.call (Ojs.get_prop_ascii x6792 "indexOf") "apply"
+                   [|x6792;((let x6788 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
                                (Ojs.call x6788 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x6790 : Ojs.t) ->
-                                          fun (x6791 : Ojs.t) ->
-                                            fun (x6792 : Ojs.t) ->
-                                              x6786
-                                                ~value:(Ojs.float_of_js x6790)
-                                                ~index:(Ojs.float_of_js x6791)
-                                                ~array:(t_of_js x6792)))|]);
+                                  [|(Ojs.float_to_js x6786)|]);
                              (match x6787 with
                               | Some x6789 ->
                                   ignore
                                     (Ojs.call x6788 "push"
-                                       [|(any_to_js x6789)|])
+                                       [|(Ojs.float_to_js x6789)|])
                               | None -> ());
                              x6788))|])
-    let (indexOf :
-      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x6800 : 'tags this) ->
-        fun ~searchElement:(x6796 : float) ->
-          fun ?fromIndex:(x6797 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x6802 = this_to_js Obj.magic x6800 in
-                 Ojs.call (Ojs.get_prop_ascii x6802 "indexOf") "apply"
-                   [|x6802;((let x6798 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6798 "push"
-                                  [|(Ojs.float_to_js x6796)|]);
-                             (match x6797 with
-                              | Some x6799 ->
-                                  ignore
-                                    (Ojs.call x6798 "push"
-                                       [|(Ojs.float_to_js x6799)|])
-                              | None -> ());
-                             x6798))|])
     let (join : 'tags this -> ?separator:string -> unit -> string) =
-      fun (x6806 : 'tags this) ->
-        fun ?separator:(x6803 : string option) ->
+      fun (x6796 : 'tags this) ->
+        fun ?separator:(x6793 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x6808 = this_to_js Obj.magic x6806 in
-               Ojs.call (Ojs.get_prop_ascii x6808 "join") "apply"
-                 [|x6808;((let x6804 =
+              (let x6798 = this_to_js Obj.magic x6796 in
+               Ojs.call (Ojs.get_prop_ascii x6798 "join") "apply"
+                 [|x6798;((let x6794 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x6803 with
-                            | Some x6805 ->
+                           (match x6793 with
+                            | Some x6795 ->
                                 ignore
-                                  (Ojs.call x6804 "push"
-                                     [|(Ojs.string_to_js x6805)|])
+                                  (Ojs.call x6794 "push"
+                                     [|(Ojs.string_to_js x6795)|])
                             | None -> ());
-                           x6804))|])
+                           x6794))|])
     let (lastIndexOf :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x6813 : 'tags this) ->
-        fun ~searchElement:(x6809 : float) ->
-          fun ?fromIndex:(x6810 : float option) ->
+      fun (x6803 : 'tags this) ->
+        fun ~searchElement:(x6799 : float) ->
+          fun ?fromIndex:(x6800 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x6815 = this_to_js Obj.magic x6813 in
-                 Ojs.call (Ojs.get_prop_ascii x6815 "lastIndexOf") "apply"
-                   [|x6815;((let x6811 =
+                (let x6805 = this_to_js Obj.magic x6803 in
+                 Ojs.call (Ojs.get_prop_ascii x6805 "lastIndexOf") "apply"
+                   [|x6805;((let x6801 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6811 "push"
-                                  [|(Ojs.float_to_js x6809)|]);
-                             (match x6810 with
-                              | Some x6812 ->
+                               (Ojs.call x6801 "push"
+                                  [|(Ojs.float_to_js x6799)|]);
+                             (match x6800 with
+                              | Some x6802 ->
                                   ignore
-                                    (Ojs.call x6811 "push"
-                                       [|(Ojs.float_to_js x6812)|])
+                                    (Ojs.call x6801 "push"
+                                       [|(Ojs.float_to_js x6802)|])
                               | None -> ());
-                             x6811))|])
+                             x6801))|])
     let (get_length : 'tags this -> float) =
-      fun (x6816 : 'tags this) ->
+      fun (x6806 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6816) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6806) "length")
     let (map :
       'tags this ->
         callbackfn:(value:float -> index:float -> array:t -> float) ->
           ?thisArg:any -> unit -> t)
       =
-      fun (x6825 : 'tags this) ->
+      fun (x6815 : 'tags this) ->
         fun
-          ~callbackfn:(x6818 :
+          ~callbackfn:(x6808 :
                         value:float -> index:float -> array:t -> float)
           ->
-          fun ?thisArg:(x6819 : any option) ->
+          fun ?thisArg:(x6809 : any option) ->
             fun () ->
               t_of_js
-                (let x6827 = this_to_js Obj.magic x6825 in
-                 Ojs.call (Ojs.get_prop_ascii x6827 "map") "apply"
-                   [|x6827;((let x6820 =
+                (let x6817 = this_to_js Obj.magic x6815 in
+                 Ojs.call (Ojs.get_prop_ascii x6817 "map") "apply"
+                   [|x6817;((let x6810 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6820 "push"
+                               (Ojs.call x6810 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6822 : Ojs.t) ->
-                                          fun (x6823 : Ojs.t) ->
-                                            fun (x6824 : Ojs.t) ->
+                                       (fun (x6812 : Ojs.t) ->
+                                          fun (x6813 : Ojs.t) ->
+                                            fun (x6814 : Ojs.t) ->
                                               Ojs.float_to_js
-                                                (x6818
+                                                (x6808
                                                    ~value:(Ojs.float_of_js
-                                                             x6822)
+                                                             x6812)
                                                    ~index:(Ojs.float_of_js
-                                                             x6823)
-                                                   ~array:(t_of_js x6824))))|]);
-                             (match x6819 with
-                              | Some x6821 ->
+                                                             x6813)
+                                                   ~array:(t_of_js x6814))))|]);
+                             (match x6809 with
+                              | Some x6811 ->
                                   ignore
-                                    (Ojs.call x6820 "push"
-                                       [|(any_to_js x6821)|])
+                                    (Ojs.call x6810 "push"
+                                       [|(any_to_js x6811)|])
                               | None -> ());
-                             x6820))|])
+                             x6810))|])
     let (reduce :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -24057,25 +24041,25 @@ module Int32Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x6833 : 'tags this) ->
+      fun (x6823 : 'tags this) ->
         fun
-          ~callbackfn:(x6828 :
+          ~callbackfn:(x6818 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x6833) "reduce"
+            (Ojs.call (this_to_js Obj.magic x6823) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x6829 : Ojs.t) ->
-                       fun (x6830 : Ojs.t) ->
-                         fun (x6831 : Ojs.t) ->
-                           fun (x6832 : Ojs.t) ->
+                    (fun (x6819 : Ojs.t) ->
+                       fun (x6820 : Ojs.t) ->
+                         fun (x6821 : Ojs.t) ->
+                           fun (x6822 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x6828 ~previousValue:(Ojs.float_of_js x6829)
-                                  ~currentValue:(Ojs.float_of_js x6830)
-                                  ~currentIndex:(Ojs.float_of_js x6831)
-                                  ~array:(t_of_js x6832))))|])
+                               (x6818 ~previousValue:(Ojs.float_of_js x6819)
+                                  ~currentValue:(Ojs.float_of_js x6820)
+                                  ~currentIndex:(Ojs.float_of_js x6821)
+                                  ~array:(t_of_js x6822))))|])
     let (reduce' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -24083,28 +24067,28 @@ module Int32Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x6841 : 'tags this) ->
+      fun (x6831 : 'tags this) ->
         fun
-          ~callbackfn:(x6835 :
+          ~callbackfn:(x6825 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x6840 : float) ->
+          fun ~initialValue:(x6830 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x6841) "reduce"
+              (Ojs.call (this_to_js Obj.magic x6831) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6836 : Ojs.t) ->
-                         fun (x6837 : Ojs.t) ->
-                           fun (x6838 : Ojs.t) ->
-                             fun (x6839 : Ojs.t) ->
+                      (fun (x6826 : Ojs.t) ->
+                         fun (x6827 : Ojs.t) ->
+                           fun (x6828 : Ojs.t) ->
+                             fun (x6829 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x6835
-                                    ~previousValue:(Ojs.float_of_js x6836)
-                                    ~currentValue:(Ojs.float_of_js x6837)
-                                    ~currentIndex:(Ojs.float_of_js x6838)
-                                    ~array:(t_of_js x6839))));(Ojs.float_to_js
-                                                                 x6840)|])
+                                 (x6825
+                                    ~previousValue:(Ojs.float_of_js x6826)
+                                    ~currentValue:(Ojs.float_of_js x6827)
+                                    ~currentIndex:(Ojs.float_of_js x6828)
+                                    ~array:(t_of_js x6829))));(Ojs.float_to_js
+                                                                 x6830)|])
     let (reduce'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -24112,27 +24096,27 @@ module Int32Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x6849 : 'tags this) ->
+      fun (x6839 : 'tags this) ->
         fun
-          ~callbackfn:(x6843 :
+          ~callbackfn:(x6833 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x6848 : 'U) ->
+          fun ~initialValue:(x6838 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x6849) "reduce"
+              (Ojs.call (this_to_js Obj.magic x6839) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6844 : Ojs.t) ->
-                         fun (x6845 : Ojs.t) ->
-                           fun (x6846 : Ojs.t) ->
-                             fun (x6847 : Ojs.t) ->
+                      (fun (x6834 : Ojs.t) ->
+                         fun (x6835 : Ojs.t) ->
+                           fun (x6836 : Ojs.t) ->
+                             fun (x6837 : Ojs.t) ->
                                Obj.magic
-                                 (x6843 ~previousValue:(Obj.magic x6844)
-                                    ~currentValue:(Ojs.float_of_js x6845)
-                                    ~currentIndex:(Ojs.float_of_js x6846)
-                                    ~array:(t_of_js x6847))));(Obj.magic
-                                                                 x6848)|])
+                                 (x6833 ~previousValue:(Obj.magic x6834)
+                                    ~currentValue:(Ojs.float_of_js x6835)
+                                    ~currentIndex:(Ojs.float_of_js x6836)
+                                    ~array:(t_of_js x6837))));(Obj.magic
+                                                                 x6838)|])
     let (reduceRight :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -24140,25 +24124,25 @@ module Int32Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x6856 : 'tags this) ->
+      fun (x6846 : 'tags this) ->
         fun
-          ~callbackfn:(x6851 :
+          ~callbackfn:(x6841 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x6856) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic x6846) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x6852 : Ojs.t) ->
-                       fun (x6853 : Ojs.t) ->
-                         fun (x6854 : Ojs.t) ->
-                           fun (x6855 : Ojs.t) ->
+                    (fun (x6842 : Ojs.t) ->
+                       fun (x6843 : Ojs.t) ->
+                         fun (x6844 : Ojs.t) ->
+                           fun (x6845 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x6851 ~previousValue:(Ojs.float_of_js x6852)
-                                  ~currentValue:(Ojs.float_of_js x6853)
-                                  ~currentIndex:(Ojs.float_of_js x6854)
-                                  ~array:(t_of_js x6855))))|])
+                               (x6841 ~previousValue:(Ojs.float_of_js x6842)
+                                  ~currentValue:(Ojs.float_of_js x6843)
+                                  ~currentIndex:(Ojs.float_of_js x6844)
+                                  ~array:(t_of_js x6845))))|])
     let (reduceRight' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -24166,28 +24150,28 @@ module Int32Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x6864 : 'tags this) ->
+      fun (x6854 : 'tags this) ->
         fun
-          ~callbackfn:(x6858 :
+          ~callbackfn:(x6848 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x6863 : float) ->
+          fun ~initialValue:(x6853 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x6864) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x6854) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6859 : Ojs.t) ->
-                         fun (x6860 : Ojs.t) ->
-                           fun (x6861 : Ojs.t) ->
-                             fun (x6862 : Ojs.t) ->
+                      (fun (x6849 : Ojs.t) ->
+                         fun (x6850 : Ojs.t) ->
+                           fun (x6851 : Ojs.t) ->
+                             fun (x6852 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x6858
-                                    ~previousValue:(Ojs.float_of_js x6859)
-                                    ~currentValue:(Ojs.float_of_js x6860)
-                                    ~currentIndex:(Ojs.float_of_js x6861)
-                                    ~array:(t_of_js x6862))));(Ojs.float_to_js
-                                                                 x6863)|])
+                                 (x6848
+                                    ~previousValue:(Ojs.float_of_js x6849)
+                                    ~currentValue:(Ojs.float_of_js x6850)
+                                    ~currentIndex:(Ojs.float_of_js x6851)
+                                    ~array:(t_of_js x6852))));(Ojs.float_to_js
+                                                                 x6853)|])
     let (reduceRight'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -24195,239 +24179,211 @@ module Int32Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x6872 : 'tags this) ->
+      fun (x6862 : 'tags this) ->
         fun
-          ~callbackfn:(x6866 :
+          ~callbackfn:(x6856 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x6871 : 'U) ->
+          fun ~initialValue:(x6861 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x6872) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x6862) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x6867 : Ojs.t) ->
-                         fun (x6868 : Ojs.t) ->
-                           fun (x6869 : Ojs.t) ->
-                             fun (x6870 : Ojs.t) ->
+                      (fun (x6857 : Ojs.t) ->
+                         fun (x6858 : Ojs.t) ->
+                           fun (x6859 : Ojs.t) ->
+                             fun (x6860 : Ojs.t) ->
                                Obj.magic
-                                 (x6866 ~previousValue:(Obj.magic x6867)
-                                    ~currentValue:(Ojs.float_of_js x6868)
-                                    ~currentIndex:(Ojs.float_of_js x6869)
-                                    ~array:(t_of_js x6870))));(Obj.magic
-                                                                 x6871)|])
+                                 (x6856 ~previousValue:(Obj.magic x6857)
+                                    ~currentValue:(Ojs.float_of_js x6858)
+                                    ~currentIndex:(Ojs.float_of_js x6859)
+                                    ~array:(t_of_js x6860))));(Obj.magic
+                                                                 x6861)|])
     let (reverse : 'tags this -> t) =
-      fun (x6874 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x6874) "reverse" [||])
+      fun (x6864 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x6864) "reverse" [||])
     let (set_ :
       'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit)
       =
-      fun (x6881 : 'tags this) ->
-        fun ~array:(x6876 : float ArrayLike.t) ->
-          fun ?offset:(x6877 : float option) ->
+      fun (x6871 : 'tags this) ->
+        fun ~array:(x6866 : float ArrayLike.t) ->
+          fun ?offset:(x6867 : float option) ->
             fun () ->
               ignore
-                (let x6883 = this_to_js Obj.magic x6881 in
-                 Ojs.call (Ojs.get_prop_ascii x6883 "set") "apply"
-                   [|x6883;((let x6878 =
+                (let x6873 = this_to_js Obj.magic x6871 in
+                 Ojs.call (Ojs.get_prop_ascii x6873 "set") "apply"
+                   [|x6873;((let x6868 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6878 "push"
-                                  [|(ArrayLike.t_to_js Ojs.float_to_js x6876)|]);
-                             (match x6877 with
-                              | Some x6879 ->
+                               (Ojs.call x6868 "push"
+                                  [|(ArrayLike.t_to_js Ojs.float_to_js x6866)|]);
+                             (match x6867 with
+                              | Some x6869 ->
                                   ignore
-                                    (Ojs.call x6878 "push"
-                                       [|(Ojs.float_to_js x6879)|])
+                                    (Ojs.call x6868 "push"
+                                       [|(Ojs.float_to_js x6869)|])
                               | None -> ());
-                             x6878))|])
+                             x6868))|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> t) =
-      fun (x6889 : 'tags this) ->
-        fun ?start:(x6884 : float option) ->
-          fun ?end_:(x6885 : float option) ->
+      fun (x6879 : 'tags this) ->
+        fun ?start:(x6874 : float option) ->
+          fun ?end_:(x6875 : float option) ->
             fun () ->
               t_of_js
-                (let x6891 = this_to_js Obj.magic x6889 in
-                 Ojs.call (Ojs.get_prop_ascii x6891 "slice") "apply"
-                   [|x6891;((let x6886 =
+                (let x6881 = this_to_js Obj.magic x6879 in
+                 Ojs.call (Ojs.get_prop_ascii x6881 "slice") "apply"
+                   [|x6881;((let x6876 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x6884 with
-                              | Some x6888 ->
+                             (match x6874 with
+                              | Some x6878 ->
                                   ignore
-                                    (Ojs.call x6886 "push"
-                                       [|(Ojs.float_to_js x6888)|])
+                                    (Ojs.call x6876 "push"
+                                       [|(Ojs.float_to_js x6878)|])
                               | None -> ());
-                             (match x6885 with
-                              | Some x6887 ->
+                             (match x6875 with
+                              | Some x6877 ->
                                   ignore
-                                    (Ojs.call x6886 "push"
-                                       [|(Ojs.float_to_js x6887)|])
+                                    (Ojs.call x6876 "push"
+                                       [|(Ojs.float_to_js x6877)|])
                               | None -> ());
-                             x6886))|])
+                             x6876))|])
     let (some :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x6899 : 'tags this) ->
+      fun (x6889 : 'tags this) ->
         fun
-          ~predicate:(x6892 :
+          ~predicate:(x6882 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x6893 : any option) ->
+          fun ?thisArg:(x6883 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6901 = this_to_js Obj.magic x6899 in
-                 Ojs.call (Ojs.get_prop_ascii x6901 "some") "apply"
-                   [|x6901;((let x6894 =
+                (let x6891 = this_to_js Obj.magic x6889 in
+                 Ojs.call (Ojs.get_prop_ascii x6891 "some") "apply"
+                   [|x6891;((let x6884 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6894 "push"
+                               (Ojs.call x6884 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x6896 : Ojs.t) ->
-                                          fun (x6897 : Ojs.t) ->
-                                            fun (x6898 : Ojs.t) ->
+                                       (fun (x6886 : Ojs.t) ->
+                                          fun (x6887 : Ojs.t) ->
+                                            fun (x6888 : Ojs.t) ->
                                               unknown_to_js
-                                                (x6892
+                                                (x6882
                                                    ~value:(Ojs.float_of_js
-                                                             x6896)
+                                                             x6886)
                                                    ~index:(Ojs.float_of_js
-                                                             x6897)
-                                                   ~array:(t_of_js x6898))))|]);
-                             (match x6893 with
-                              | Some x6895 ->
+                                                             x6887)
+                                                   ~array:(t_of_js x6888))))|]);
+                             (match x6883 with
+                              | Some x6885 ->
                                   ignore
-                                    (Ojs.call x6894 "push"
-                                       [|(any_to_js x6895)|])
+                                    (Ojs.call x6884 "push"
+                                       [|(any_to_js x6885)|])
                               | None -> ());
-                             x6894))|])
+                             x6884))|])
     let (sort :
       'tags this ->
         ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this)
       =
-      fun (x6907 : 'tags this) ->
-        fun ?compareFn:(x6902 : (a:float -> b:float -> float) option) ->
+      fun (x6897 : 'tags this) ->
+        fun ?compareFn:(x6892 : (a:float -> b:float -> float) option) ->
           fun () ->
             this_of_js Obj.magic
-              (let x6909 = this_to_js Obj.magic x6907 in
-               Ojs.call (Ojs.get_prop_ascii x6909 "sort") "apply"
-                 [|x6909;((let x6903 =
+              (let x6899 = this_to_js Obj.magic x6897 in
+               Ojs.call (Ojs.get_prop_ascii x6899 "sort") "apply"
+                 [|x6899;((let x6893 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x6902 with
-                            | Some x6904 ->
+                           (match x6892 with
+                            | Some x6894 ->
                                 ignore
-                                  (Ojs.call x6903 "push"
+                                  (Ojs.call x6893 "push"
                                      [|(Ojs.fun_to_js 2
-                                          (fun (x6905 : Ojs.t) ->
-                                             fun (x6906 : Ojs.t) ->
+                                          (fun (x6895 : Ojs.t) ->
+                                             fun (x6896 : Ojs.t) ->
                                                Ojs.float_to_js
-                                                 (x6904
-                                                    ~a:(Ojs.float_of_js x6905)
-                                                    ~b:(Ojs.float_of_js x6906))))|])
+                                                 (x6894
+                                                    ~a:(Ojs.float_of_js x6895)
+                                                    ~b:(Ojs.float_of_js x6896))))|])
                             | None -> ());
-                           x6903))|])
+                           x6893))|])
     let (subarray : 'tags this -> ?begin_:float -> ?end_:float -> unit -> t)
       =
-      fun (x6916 : 'tags this) ->
-        fun ?begin_:(x6911 : float option) ->
-          fun ?end_:(x6912 : float option) ->
+      fun (x6906 : 'tags this) ->
+        fun ?begin_:(x6901 : float option) ->
+          fun ?end_:(x6902 : float option) ->
             fun () ->
               t_of_js
-                (let x6918 = this_to_js Obj.magic x6916 in
-                 Ojs.call (Ojs.get_prop_ascii x6918 "subarray") "apply"
-                   [|x6918;((let x6913 =
+                (let x6908 = this_to_js Obj.magic x6906 in
+                 Ojs.call (Ojs.get_prop_ascii x6908 "subarray") "apply"
+                   [|x6908;((let x6903 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x6911 with
-                              | Some x6915 ->
+                             (match x6901 with
+                              | Some x6905 ->
                                   ignore
-                                    (Ojs.call x6913 "push"
-                                       [|(Ojs.float_to_js x6915)|])
+                                    (Ojs.call x6903 "push"
+                                       [|(Ojs.float_to_js x6905)|])
                               | None -> ());
-                             (match x6912 with
-                              | Some x6914 ->
+                             (match x6902 with
+                              | Some x6904 ->
                                   ignore
-                                    (Ojs.call x6913 "push"
-                                       [|(Ojs.float_to_js x6914)|])
+                                    (Ojs.call x6903 "push"
+                                       [|(Ojs.float_to_js x6904)|])
                               | None -> ());
-                             x6913))|])
+                             x6903))|])
     let (toLocaleString : 'tags this -> string) =
-      fun (x6919 : 'tags this) ->
+      fun (x6909 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x6919) "toLocaleString" [||])
+          (Ojs.call (this_to_js Obj.magic x6909) "toLocaleString" [||])
     let (toString : 'tags this -> string) =
-      fun (x6921 : 'tags this) ->
+      fun (x6911 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x6921) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x6911) "toString" [||])
     let (valueOf : 'tags this -> t) =
-      fun (x6923 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x6923) "valueOf" [||])
+      fun (x6913 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x6913) "valueOf" [||])
     let (get : 'tags this -> float -> float) =
-      fun (x6925 : 'tags this) ->
-        fun (x6927 : float) ->
+      fun (x6915 : 'tags this) ->
+        fun (x6917 : float) ->
           Ojs.float_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x6925)
-               (Ojs.float_to_js x6927))
+            (Ojs.get_prop (this_to_js Obj.magic x6915)
+               (Ojs.float_to_js x6917))
     let (set : 'tags this -> float -> float -> unit) =
-      fun (x6928 : 'tags this) ->
-        fun (x6930 : float) ->
-          fun (x6931 : float) ->
-            Ojs.set_prop (this_to_js Obj.magic x6928) (Ojs.float_to_js x6930)
-              (Ojs.float_to_js x6931)
-    let (create : float Iterable.t -> t) =
-      fun (x6932 : float Iterable.t) ->
-        t_of_js
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int32Array")
-             [|(Iterable.t_to_js Ojs.float_to_js x6932)|])
-    let (from :
-      arrayLike:float Iterable.t ->
-        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
-      =
-      fun ~arrayLike:(x6934 : float Iterable.t) ->
-        fun ?mapfn:(x6935 : (v:float -> k:float -> float) option) ->
-          fun ?thisArg:(x6936 : any option) ->
-            fun () ->
-              t_of_js
-                (let x6943 = Ojs.get_prop_ascii Ojs.global "Int32Array" in
-                 Ojs.call (Ojs.get_prop_ascii x6943 "from") "apply"
-                   [|x6943;((let x6937 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x6937 "push"
-                                  [|(Iterable.t_to_js Ojs.float_to_js x6934)|]);
-                             (match x6935 with
-                              | Some x6939 ->
-                                  ignore
-                                    (Ojs.call x6937 "push"
-                                       [|(Ojs.fun_to_js 2
-                                            (fun (x6940 : Ojs.t) ->
-                                               fun (x6941 : Ojs.t) ->
-                                                 Ojs.float_to_js
-                                                   (x6939
-                                                      ~v:(Ojs.float_of_js
-                                                            x6940)
-                                                      ~k:(Ojs.float_of_js
-                                                            x6941))))|])
-                              | None -> ());
-                             (match x6936 with
-                              | Some x6938 ->
-                                  ignore
-                                    (Ojs.call x6937 "push"
-                                       [|(any_to_js x6938)|])
-                              | None -> ());
-                             x6937))|])
-    let (create' : unit -> t) =
+      fun (x6918 : 'tags this) ->
+        fun (x6920 : float) ->
+          fun (x6921 : float) ->
+            Ojs.set_prop (this_to_js Obj.magic x6918) (Ojs.float_to_js x6920)
+              (Ojs.float_to_js x6921)
+    let (entries : 'tags this -> (float * float) IterableIterator.t) =
+      fun (x6922 : 'tags this) ->
+        IterableIterator.t_of_js
+          (fun (x6924 : Ojs.t) ->
+             let x6925 = x6924 in
+             ((Ojs.float_of_js (Ojs.array_get x6925 0)),
+               (Ojs.float_of_js (Ojs.array_get x6925 1))))
+          (Ojs.call (this_to_js Obj.magic x6922) "entries" [||])
+    let (keys : 'tags this -> float IterableIterator.t) =
+      fun (x6926 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x6926) "keys" [||])
+    let (values : 'tags this -> float IterableIterator.t) =
+      fun (x6929 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x6929) "values" [||])
+    let (create : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int32Array") [||])
@@ -24436,102 +24392,146 @@ module Int32Array =
         t_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Int32Array")
              "prototype")
-    let (create'' : float -> t) =
-      fun (x6944 : float) ->
+    let (create' : float -> t) =
+      fun (x6932 : float) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int32Array")
-             [|(Ojs.float_to_js x6944)|])
-    let (create''' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
-      fun (x6945 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
+             [|(Ojs.float_to_js x6932)|])
+    let (create'' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
+      fun (x6933 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int32Array")
              [|(union2_to_js ArrayBufferLike.t_to_js
-                  (fun (x6947 : float ArrayLike.t) ->
-                     ArrayLike.t_to_js Ojs.float_to_js x6947) x6945)|])
-    let (create'''' :
+                  (fun (x6935 : float ArrayLike.t) ->
+                     ArrayLike.t_to_js Ojs.float_to_js x6935) x6933)|])
+    let (create''' :
       buffer:ArrayBufferLike.t ->
         ?byteOffset:float -> ?length:float -> unit -> t)
       =
-      fun ~buffer:(x6949 : ArrayBufferLike.t) ->
-        fun ?byteOffset:(x6950 : float option) ->
-          fun ?length:(x6951 : float option) ->
+      fun ~buffer:(x6937 : ArrayBufferLike.t) ->
+        fun ?byteOffset:(x6938 : float option) ->
+          fun ?length:(x6939 : float option) ->
             fun () ->
               t_of_js
                 (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Int32Array")
-                   (let x6952 =
+                   (let x6940 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     ignore
-                      (Ojs.call x6952 "push"
-                         [|(ArrayBufferLike.t_to_js x6949)|]);
-                    (match x6950 with
-                     | Some x6954 ->
+                      (Ojs.call x6940 "push"
+                         [|(ArrayBufferLike.t_to_js x6937)|]);
+                    (match x6938 with
+                     | Some x6942 ->
                          ignore
-                           (Ojs.call x6952 "push" [|(Ojs.float_to_js x6954)|])
+                           (Ojs.call x6940 "push" [|(Ojs.float_to_js x6942)|])
                      | None -> ());
-                    (match x6951 with
-                     | Some x6953 ->
+                    (match x6939 with
+                     | Some x6941 ->
                          ignore
-                           (Ojs.call x6952 "push" [|(Ojs.float_to_js x6953)|])
+                           (Ojs.call x6940 "push" [|(Ojs.float_to_js x6941)|])
                      | None -> ());
-                    x6952))
+                    x6940))
     let (bytes_per_element : unit -> float) =
       fun () ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Int32Array")
              "BYTES_PER_ELEMENT")
     let (of_ : float list -> t) =
-      fun (x6955 : float list) ->
+      fun (x6943 : float list) ->
         t_of_js
-          (let x6958 = Ojs.get_prop_ascii Ojs.global "Int32Array" in
-           Ojs.call (Ojs.get_prop_ascii x6958 "of") "apply"
-             [|x6958;((let x6956 =
+          (let x6946 = Ojs.get_prop_ascii Ojs.global "Int32Array" in
+           Ojs.call (Ojs.get_prop_ascii x6946 "of") "apply"
+             [|x6946;((let x6944 =
                          Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                            [||] in
                        List.iter
-                         (fun (x6957 : float) ->
+                         (fun (x6945 : float) ->
                             ignore
-                              (Ojs.call x6956 "push"
-                                 [|(Ojs.float_to_js x6957)|])) x6955;
-                       x6956))|])
-    let (from' : float ArrayLike.t -> t) =
-      fun (x6959 : float ArrayLike.t) ->
+                              (Ojs.call x6944 "push"
+                                 [|(Ojs.float_to_js x6945)|])) x6943;
+                       x6944))|])
+    let (from : float ArrayLike.t -> t) =
+      fun (x6947 : float ArrayLike.t) ->
         t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Int32Array") "from"
-             [|(ArrayLike.t_to_js Ojs.float_to_js x6959)|])
-    let (from'' :
+             [|(ArrayLike.t_to_js Ojs.float_to_js x6947)|])
+    let (from' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t)
       =
-      fun ~arrayLike:(x6961 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x6962 : v:'T -> k:float -> float) ->
-          fun ?thisArg:(x6963 : any option) ->
+      fun ~arrayLike:(x6949 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x6950 : v:'T -> k:float -> float) ->
+          fun ?thisArg:(x6951 : any option) ->
             fun () ->
               t_of_js
-                (let x6969 = Ojs.get_prop_ascii Ojs.global "Int32Array" in
-                 Ojs.call (Ojs.get_prop_ascii x6969 "from") "apply"
-                   [|x6969;((let x6964 =
+                (let x6957 = Ojs.get_prop_ascii Ojs.global "Int32Array" in
+                 Ojs.call (Ojs.get_prop_ascii x6957 "from") "apply"
+                   [|x6957;((let x6952 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6964 "push"
-                                  [|(ArrayLike.t_to_js Obj.magic x6961)|]);
+                               (Ojs.call x6952 "push"
+                                  [|(ArrayLike.t_to_js Obj.magic x6949)|]);
                              ignore
-                               (Ojs.call x6964 "push"
+                               (Ojs.call x6952 "push"
                                   [|(Ojs.fun_to_js 2
-                                       (fun (x6966 : Ojs.t) ->
-                                          fun (x6967 : Ojs.t) ->
+                                       (fun (x6954 : Ojs.t) ->
+                                          fun (x6955 : Ojs.t) ->
                                             Ojs.float_to_js
-                                              (x6962 ~v:(Obj.magic x6966)
-                                                 ~k:(Ojs.float_of_js x6967))))|]);
-                             (match x6963 with
+                                              (x6950 ~v:(Obj.magic x6954)
+                                                 ~k:(Ojs.float_of_js x6955))))|]);
+                             (match x6951 with
+                              | Some x6953 ->
+                                  ignore
+                                    (Ojs.call x6952 "push"
+                                       [|(any_to_js x6953)|])
+                              | None -> ());
+                             x6952))|])
+    let (create'''' : float Iterable.t -> t) =
+      fun (x6958 : float Iterable.t) ->
+        t_of_js
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int32Array")
+             [|(Iterable.t_to_js Ojs.float_to_js x6958)|])
+    let (from'' :
+      arrayLike:float Iterable.t ->
+        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
+      =
+      fun ~arrayLike:(x6960 : float Iterable.t) ->
+        fun ?mapfn:(x6961 : (v:float -> k:float -> float) option) ->
+          fun ?thisArg:(x6962 : any option) ->
+            fun () ->
+              t_of_js
+                (let x6969 = Ojs.get_prop_ascii Ojs.global "Int32Array" in
+                 Ojs.call (Ojs.get_prop_ascii x6969 "from") "apply"
+                   [|x6969;((let x6963 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x6963 "push"
+                                  [|(Iterable.t_to_js Ojs.float_to_js x6960)|]);
+                             (match x6961 with
                               | Some x6965 ->
                                   ignore
-                                    (Ojs.call x6964 "push"
-                                       [|(any_to_js x6965)|])
+                                    (Ojs.call x6963 "push"
+                                       [|(Ojs.fun_to_js 2
+                                            (fun (x6966 : Ojs.t) ->
+                                               fun (x6967 : Ojs.t) ->
+                                                 Ojs.float_to_js
+                                                   (x6965
+                                                      ~v:(Ojs.float_of_js
+                                                            x6966)
+                                                      ~k:(Ojs.float_of_js
+                                                            x6967))))|])
                               | None -> ());
-                             x6964))|])
+                             (match x6962 with
+                              | Some x6964 ->
+                                  ignore
+                                    (Ojs.call x6963 "push"
+                                       [|(any_to_js x6964)|])
+                              | None -> ());
+                             x6963))|])
     let cast_from = Obj.magic
   end
 module Int16Array =
@@ -24557,176 +24557,197 @@ module Int16Array =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x6972 : __tags intf) -> intf_to_js __tags_to_js x6972
-    let (entries : 'tags this -> (float * float) IterableIterator.t) =
-      fun (x6976 : 'tags this) ->
-        IterableIterator.t_of_js
-          (fun (x6978 : Ojs.t) ->
-             let x6979 = x6978 in
-             ((Ojs.float_of_js (Ojs.array_get x6979 0)),
-               (Ojs.float_of_js (Ojs.array_get x6979 1))))
-          (Ojs.call (this_to_js Obj.magic x6976) "entries" [||])
-    let (keys : 'tags this -> float IterableIterator.t) =
-      fun (x6980 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x6980) "keys" [||])
-    let (values : 'tags this -> float IterableIterator.t) =
-      fun (x6983 : 'tags this) ->
-        IterableIterator.t_of_js Ojs.float_of_js
-          (Ojs.call (this_to_js Obj.magic x6983) "values" [||])
     let (includes :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool)
       =
-      fun (x6990 : 'tags this) ->
-        fun ~searchElement:(x6986 : float) ->
-          fun ?fromIndex:(x6987 : float option) ->
+      fun (x6980 : 'tags this) ->
+        fun ~searchElement:(x6976 : float) ->
+          fun ?fromIndex:(x6977 : float option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x6992 = this_to_js Obj.magic x6990 in
-                 Ojs.call (Ojs.get_prop_ascii x6992 "includes") "apply"
-                   [|x6992;((let x6988 =
+                (let x6982 = this_to_js Obj.magic x6980 in
+                 Ojs.call (Ojs.get_prop_ascii x6982 "includes") "apply"
+                   [|x6982;((let x6978 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x6988 "push"
-                                  [|(Ojs.float_to_js x6986)|]);
-                             (match x6987 with
-                              | Some x6989 ->
+                               (Ojs.call x6978 "push"
+                                  [|(Ojs.float_to_js x6976)|]);
+                             (match x6977 with
+                              | Some x6979 ->
                                   ignore
-                                    (Ojs.call x6988 "push"
-                                       [|(Ojs.float_to_js x6989)|])
+                                    (Ojs.call x6978 "push"
+                                       [|(Ojs.float_to_js x6979)|])
                               | None -> ());
-                             x6988))|])
+                             x6978))|])
     let (get_BYTES_PER_ELEMENT : 'tags this -> float) =
-      fun (x6993 : 'tags this) ->
+      fun (x6983 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6993)
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6983)
              "BYTES_PER_ELEMENT")
     let (get_buffer : 'tags this -> ArrayBufferLike.t) =
-      fun (x6995 : 'tags this) ->
+      fun (x6985 : 'tags this) ->
         ArrayBufferLike.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6995) "buffer")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6985) "buffer")
     let (get_byteLength : 'tags this -> float) =
-      fun (x6997 : 'tags this) ->
+      fun (x6987 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6997) "byteLength")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6987) "byteLength")
     let (get_byteOffset : 'tags this -> float) =
-      fun (x6999 : 'tags this) ->
+      fun (x6989 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x6999) "byteOffset")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x6989) "byteOffset")
     let (copyWithin :
       'tags this ->
         target:float -> start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x7006 : 'tags this) ->
-        fun ~target:(x7001 : float) ->
-          fun ~start:(x7002 : float) ->
-            fun ?end_:(x7003 : float option) ->
+      fun (x6996 : 'tags this) ->
+        fun ~target:(x6991 : float) ->
+          fun ~start:(x6992 : float) ->
+            fun ?end_:(x6993 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x7008 = this_to_js Obj.magic x7006 in
-                   Ojs.call (Ojs.get_prop_ascii x7008 "copyWithin") "apply"
-                     [|x7008;((let x7004 =
+                  (let x6998 = this_to_js Obj.magic x6996 in
+                   Ojs.call (Ojs.get_prop_ascii x6998 "copyWithin") "apply"
+                     [|x6998;((let x6994 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x7004 "push"
-                                    [|(Ojs.float_to_js x7001)|]);
+                                 (Ojs.call x6994 "push"
+                                    [|(Ojs.float_to_js x6991)|]);
                                ignore
-                                 (Ojs.call x7004 "push"
-                                    [|(Ojs.float_to_js x7002)|]);
-                               (match x7003 with
-                                | Some x7005 ->
+                                 (Ojs.call x6994 "push"
+                                    [|(Ojs.float_to_js x6992)|]);
+                               (match x6993 with
+                                | Some x6995 ->
                                     ignore
-                                      (Ojs.call x7004 "push"
-                                         [|(Ojs.float_to_js x7005)|])
+                                      (Ojs.call x6994 "push"
+                                         [|(Ojs.float_to_js x6995)|])
                                 | None -> ());
-                               x7004))|])
+                               x6994))|])
     let (every :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x7017 : 'tags this) ->
+      fun (x7007 : 'tags this) ->
         fun
-          ~predicate:(x7010 :
+          ~predicate:(x7000 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x7011 : any option) ->
+          fun ?thisArg:(x7001 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x7019 = this_to_js Obj.magic x7017 in
-                 Ojs.call (Ojs.get_prop_ascii x7019 "every") "apply"
-                   [|x7019;((let x7012 =
+                (let x7009 = this_to_js Obj.magic x7007 in
+                 Ojs.call (Ojs.get_prop_ascii x7009 "every") "apply"
+                   [|x7009;((let x7002 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x7012 "push"
+                               (Ojs.call x7002 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x7014 : Ojs.t) ->
-                                          fun (x7015 : Ojs.t) ->
-                                            fun (x7016 : Ojs.t) ->
+                                       (fun (x7004 : Ojs.t) ->
+                                          fun (x7005 : Ojs.t) ->
+                                            fun (x7006 : Ojs.t) ->
                                               unknown_to_js
-                                                (x7010
+                                                (x7000
                                                    ~value:(Ojs.float_of_js
-                                                             x7014)
+                                                             x7004)
                                                    ~index:(Ojs.float_of_js
-                                                             x7015)
-                                                   ~array:(t_of_js x7016))))|]);
-                             (match x7011 with
-                              | Some x7013 ->
+                                                             x7005)
+                                                   ~array:(t_of_js x7006))))|]);
+                             (match x7001 with
+                              | Some x7003 ->
                                   ignore
-                                    (Ojs.call x7012 "push"
-                                       [|(any_to_js x7013)|])
+                                    (Ojs.call x7002 "push"
+                                       [|(any_to_js x7003)|])
                               | None -> ());
-                             x7012))|])
+                             x7002))|])
     let (fill :
       'tags this ->
         value:float -> ?start:float -> ?end_:float -> unit -> 'tags this)
       =
-      fun (x7026 : 'tags this) ->
-        fun ~value:(x7020 : float) ->
-          fun ?start:(x7021 : float option) ->
-            fun ?end_:(x7022 : float option) ->
+      fun (x7016 : 'tags this) ->
+        fun ~value:(x7010 : float) ->
+          fun ?start:(x7011 : float option) ->
+            fun ?end_:(x7012 : float option) ->
               fun () ->
                 this_of_js Obj.magic
-                  (let x7028 = this_to_js Obj.magic x7026 in
-                   Ojs.call (Ojs.get_prop_ascii x7028 "fill") "apply"
-                     [|x7028;((let x7023 =
+                  (let x7018 = this_to_js Obj.magic x7016 in
+                   Ojs.call (Ojs.get_prop_ascii x7018 "fill") "apply"
+                     [|x7018;((let x7013 =
                                  Ojs.new_obj
                                    (Ojs.get_prop_ascii Ojs.global "Array")
                                    [||] in
                                ignore
-                                 (Ojs.call x7023 "push"
-                                    [|(Ojs.float_to_js x7020)|]);
-                               (match x7021 with
-                                | Some x7025 ->
+                                 (Ojs.call x7013 "push"
+                                    [|(Ojs.float_to_js x7010)|]);
+                               (match x7011 with
+                                | Some x7015 ->
                                     ignore
-                                      (Ojs.call x7023 "push"
-                                         [|(Ojs.float_to_js x7025)|])
+                                      (Ojs.call x7013 "push"
+                                         [|(Ojs.float_to_js x7015)|])
                                 | None -> ());
-                               (match x7022 with
-                                | Some x7024 ->
+                               (match x7012 with
+                                | Some x7014 ->
                                     ignore
-                                      (Ojs.call x7023 "push"
-                                         [|(Ojs.float_to_js x7024)|])
+                                      (Ojs.call x7013 "push"
+                                         [|(Ojs.float_to_js x7014)|])
                                 | None -> ());
-                               x7023))|])
+                               x7013))|])
     let (filter :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> any) ->
           ?thisArg:any -> unit -> t)
       =
+      fun (x7027 : 'tags this) ->
+        fun ~predicate:(x7020 : value:float -> index:float -> array:t -> any)
+          ->
+          fun ?thisArg:(x7021 : any option) ->
+            fun () ->
+              t_of_js
+                (let x7029 = this_to_js Obj.magic x7027 in
+                 Ojs.call (Ojs.get_prop_ascii x7029 "filter") "apply"
+                   [|x7029;((let x7022 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x7022 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x7024 : Ojs.t) ->
+                                          fun (x7025 : Ojs.t) ->
+                                            fun (x7026 : Ojs.t) ->
+                                              any_to_js
+                                                (x7020
+                                                   ~value:(Ojs.float_of_js
+                                                             x7024)
+                                                   ~index:(Ojs.float_of_js
+                                                             x7025)
+                                                   ~array:(t_of_js x7026))))|]);
+                             (match x7021 with
+                              | Some x7023 ->
+                                  ignore
+                                    (Ojs.call x7022 "push"
+                                       [|(any_to_js x7023)|])
+                              | None -> ());
+                             x7022))|])
+    let (find :
+      'tags this ->
+        predicate:(value:float -> index:float -> obj:t -> bool) ->
+          ?thisArg:any -> unit -> float or_undefined)
+      =
       fun (x7037 : 'tags this) ->
-        fun ~predicate:(x7030 : value:float -> index:float -> array:t -> any)
+        fun ~predicate:(x7030 : value:float -> index:float -> obj:t -> bool)
           ->
           fun ?thisArg:(x7031 : any option) ->
             fun () ->
-              t_of_js
+              or_undefined_of_js Ojs.float_of_js
                 (let x7039 = this_to_js Obj.magic x7037 in
-                 Ojs.call (Ojs.get_prop_ascii x7039 "filter") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x7039 "find") "apply"
                    [|x7039;((let x7032 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -24737,13 +24758,13 @@ module Int16Array =
                                        (fun (x7034 : Ojs.t) ->
                                           fun (x7035 : Ojs.t) ->
                                             fun (x7036 : Ojs.t) ->
-                                              any_to_js
+                                              Ojs.bool_to_js
                                                 (x7030
                                                    ~value:(Ojs.float_of_js
                                                              x7034)
                                                    ~index:(Ojs.float_of_js
                                                              x7035)
-                                                   ~array:(t_of_js x7036))))|]);
+                                                   ~obj:(t_of_js x7036))))|]);
                              (match x7031 with
                               | Some x7033 ->
                                   ignore
@@ -24751,56 +24772,57 @@ module Int16Array =
                                        [|(any_to_js x7033)|])
                               | None -> ());
                              x7032))|])
-    let (find :
-      'tags this ->
-        predicate:(value:float -> index:float -> obj:t -> bool) ->
-          ?thisArg:any -> unit -> float or_undefined)
-      =
-      fun (x7047 : 'tags this) ->
-        fun ~predicate:(x7040 : value:float -> index:float -> obj:t -> bool)
-          ->
-          fun ?thisArg:(x7041 : any option) ->
-            fun () ->
-              or_undefined_of_js Ojs.float_of_js
-                (let x7049 = this_to_js Obj.magic x7047 in
-                 Ojs.call (Ojs.get_prop_ascii x7049 "find") "apply"
-                   [|x7049;((let x7042 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x7042 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x7044 : Ojs.t) ->
-                                          fun (x7045 : Ojs.t) ->
-                                            fun (x7046 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x7040
-                                                   ~value:(Ojs.float_of_js
-                                                             x7044)
-                                                   ~index:(Ojs.float_of_js
-                                                             x7045)
-                                                   ~obj:(t_of_js x7046))))|]);
-                             (match x7041 with
-                              | Some x7043 ->
-                                  ignore
-                                    (Ojs.call x7042 "push"
-                                       [|(any_to_js x7043)|])
-                              | None -> ());
-                             x7042))|])
     let (findIndex :
       'tags this ->
         predicate:(value:float -> index:float -> obj:t -> bool) ->
           ?thisArg:any -> unit -> float)
       =
+      fun (x7048 : 'tags this) ->
+        fun ~predicate:(x7041 : value:float -> index:float -> obj:t -> bool)
+          ->
+          fun ?thisArg:(x7042 : any option) ->
+            fun () ->
+              Ojs.float_of_js
+                (let x7050 = this_to_js Obj.magic x7048 in
+                 Ojs.call (Ojs.get_prop_ascii x7050 "findIndex") "apply"
+                   [|x7050;((let x7043 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x7043 "push"
+                                  [|(Ojs.fun_to_js 3
+                                       (fun (x7045 : Ojs.t) ->
+                                          fun (x7046 : Ojs.t) ->
+                                            fun (x7047 : Ojs.t) ->
+                                              Ojs.bool_to_js
+                                                (x7041
+                                                   ~value:(Ojs.float_of_js
+                                                             x7045)
+                                                   ~index:(Ojs.float_of_js
+                                                             x7046)
+                                                   ~obj:(t_of_js x7047))))|]);
+                             (match x7042 with
+                              | Some x7044 ->
+                                  ignore
+                                    (Ojs.call x7043 "push"
+                                       [|(any_to_js x7044)|])
+                              | None -> ());
+                             x7043))|])
+    let (forEach :
+      'tags this ->
+        callbackfn:(value:float -> index:float -> array:t -> unit) ->
+          ?thisArg:any -> unit -> unit)
+      =
       fun (x7058 : 'tags this) ->
-        fun ~predicate:(x7051 : value:float -> index:float -> obj:t -> bool)
+        fun
+          ~callbackfn:(x7051 : value:float -> index:float -> array:t -> unit)
           ->
           fun ?thisArg:(x7052 : any option) ->
             fun () ->
-              Ojs.float_of_js
+              ignore
                 (let x7060 = this_to_js Obj.magic x7058 in
-                 Ojs.call (Ojs.get_prop_ascii x7060 "findIndex") "apply"
+                 Ojs.call (Ojs.get_prop_ascii x7060 "forEach") "apply"
                    [|x7060;((let x7053 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
@@ -24811,13 +24833,10 @@ module Int16Array =
                                        (fun (x7055 : Ojs.t) ->
                                           fun (x7056 : Ojs.t) ->
                                             fun (x7057 : Ojs.t) ->
-                                              Ojs.bool_to_js
-                                                (x7051
-                                                   ~value:(Ojs.float_of_js
-                                                             x7055)
-                                                   ~index:(Ojs.float_of_js
-                                                             x7056)
-                                                   ~obj:(t_of_js x7057))))|]);
+                                              x7051
+                                                ~value:(Ojs.float_of_js x7055)
+                                                ~index:(Ojs.float_of_js x7056)
+                                                ~array:(t_of_js x7057)))|]);
                              (match x7052 with
                               | Some x7054 ->
                                   ignore
@@ -24825,150 +24844,115 @@ module Int16Array =
                                        [|(any_to_js x7054)|])
                               | None -> ());
                              x7053))|])
-    let (forEach :
-      'tags this ->
-        callbackfn:(value:float -> index:float -> array:t -> unit) ->
-          ?thisArg:any -> unit -> unit)
+    let (indexOf :
+      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x7068 : 'tags this) ->
-        fun
-          ~callbackfn:(x7061 : value:float -> index:float -> array:t -> unit)
-          ->
-          fun ?thisArg:(x7062 : any option) ->
+      fun (x7065 : 'tags this) ->
+        fun ~searchElement:(x7061 : float) ->
+          fun ?fromIndex:(x7062 : float option) ->
             fun () ->
-              ignore
-                (let x7070 = this_to_js Obj.magic x7068 in
-                 Ojs.call (Ojs.get_prop_ascii x7070 "forEach") "apply"
-                   [|x7070;((let x7063 =
+              Ojs.float_of_js
+                (let x7067 = this_to_js Obj.magic x7065 in
+                 Ojs.call (Ojs.get_prop_ascii x7067 "indexOf") "apply"
+                   [|x7067;((let x7063 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
                                (Ojs.call x7063 "push"
-                                  [|(Ojs.fun_to_js 3
-                                       (fun (x7065 : Ojs.t) ->
-                                          fun (x7066 : Ojs.t) ->
-                                            fun (x7067 : Ojs.t) ->
-                                              x7061
-                                                ~value:(Ojs.float_of_js x7065)
-                                                ~index:(Ojs.float_of_js x7066)
-                                                ~array:(t_of_js x7067)))|]);
+                                  [|(Ojs.float_to_js x7061)|]);
                              (match x7062 with
                               | Some x7064 ->
                                   ignore
                                     (Ojs.call x7063 "push"
-                                       [|(any_to_js x7064)|])
+                                       [|(Ojs.float_to_js x7064)|])
                               | None -> ());
                              x7063))|])
-    let (indexOf :
-      'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
-      =
-      fun (x7075 : 'tags this) ->
-        fun ~searchElement:(x7071 : float) ->
-          fun ?fromIndex:(x7072 : float option) ->
-            fun () ->
-              Ojs.float_of_js
-                (let x7077 = this_to_js Obj.magic x7075 in
-                 Ojs.call (Ojs.get_prop_ascii x7077 "indexOf") "apply"
-                   [|x7077;((let x7073 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x7073 "push"
-                                  [|(Ojs.float_to_js x7071)|]);
-                             (match x7072 with
-                              | Some x7074 ->
-                                  ignore
-                                    (Ojs.call x7073 "push"
-                                       [|(Ojs.float_to_js x7074)|])
-                              | None -> ());
-                             x7073))|])
     let (join : 'tags this -> ?separator:string -> unit -> string) =
-      fun (x7081 : 'tags this) ->
-        fun ?separator:(x7078 : string option) ->
+      fun (x7071 : 'tags this) ->
+        fun ?separator:(x7068 : string option) ->
           fun () ->
             Ojs.string_of_js
-              (let x7083 = this_to_js Obj.magic x7081 in
-               Ojs.call (Ojs.get_prop_ascii x7083 "join") "apply"
-                 [|x7083;((let x7079 =
+              (let x7073 = this_to_js Obj.magic x7071 in
+               Ojs.call (Ojs.get_prop_ascii x7073 "join") "apply"
+                 [|x7073;((let x7069 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x7078 with
-                            | Some x7080 ->
+                           (match x7068 with
+                            | Some x7070 ->
                                 ignore
-                                  (Ojs.call x7079 "push"
-                                     [|(Ojs.string_to_js x7080)|])
+                                  (Ojs.call x7069 "push"
+                                     [|(Ojs.string_to_js x7070)|])
                             | None -> ());
-                           x7079))|])
+                           x7069))|])
     let (lastIndexOf :
       'tags this -> searchElement:float -> ?fromIndex:float -> unit -> float)
       =
-      fun (x7088 : 'tags this) ->
-        fun ~searchElement:(x7084 : float) ->
-          fun ?fromIndex:(x7085 : float option) ->
+      fun (x7078 : 'tags this) ->
+        fun ~searchElement:(x7074 : float) ->
+          fun ?fromIndex:(x7075 : float option) ->
             fun () ->
               Ojs.float_of_js
-                (let x7090 = this_to_js Obj.magic x7088 in
-                 Ojs.call (Ojs.get_prop_ascii x7090 "lastIndexOf") "apply"
-                   [|x7090;((let x7086 =
+                (let x7080 = this_to_js Obj.magic x7078 in
+                 Ojs.call (Ojs.get_prop_ascii x7080 "lastIndexOf") "apply"
+                   [|x7080;((let x7076 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x7086 "push"
-                                  [|(Ojs.float_to_js x7084)|]);
-                             (match x7085 with
-                              | Some x7087 ->
+                               (Ojs.call x7076 "push"
+                                  [|(Ojs.float_to_js x7074)|]);
+                             (match x7075 with
+                              | Some x7077 ->
                                   ignore
-                                    (Ojs.call x7086 "push"
-                                       [|(Ojs.float_to_js x7087)|])
+                                    (Ojs.call x7076 "push"
+                                       [|(Ojs.float_to_js x7077)|])
                               | None -> ());
-                             x7086))|])
+                             x7076))|])
     let (get_length : 'tags this -> float) =
-      fun (x7091 : 'tags this) ->
+      fun (x7081 : 'tags this) ->
         Ojs.float_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x7091) "length")
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x7081) "length")
     let (map :
       'tags this ->
         callbackfn:(value:float -> index:float -> array:t -> float) ->
           ?thisArg:any -> unit -> t)
       =
-      fun (x7100 : 'tags this) ->
+      fun (x7090 : 'tags this) ->
         fun
-          ~callbackfn:(x7093 :
+          ~callbackfn:(x7083 :
                         value:float -> index:float -> array:t -> float)
           ->
-          fun ?thisArg:(x7094 : any option) ->
+          fun ?thisArg:(x7084 : any option) ->
             fun () ->
               t_of_js
-                (let x7102 = this_to_js Obj.magic x7100 in
-                 Ojs.call (Ojs.get_prop_ascii x7102 "map") "apply"
-                   [|x7102;((let x7095 =
+                (let x7092 = this_to_js Obj.magic x7090 in
+                 Ojs.call (Ojs.get_prop_ascii x7092 "map") "apply"
+                   [|x7092;((let x7085 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x7095 "push"
+                               (Ojs.call x7085 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x7097 : Ojs.t) ->
-                                          fun (x7098 : Ojs.t) ->
-                                            fun (x7099 : Ojs.t) ->
+                                       (fun (x7087 : Ojs.t) ->
+                                          fun (x7088 : Ojs.t) ->
+                                            fun (x7089 : Ojs.t) ->
                                               Ojs.float_to_js
-                                                (x7093
+                                                (x7083
                                                    ~value:(Ojs.float_of_js
-                                                             x7097)
+                                                             x7087)
                                                    ~index:(Ojs.float_of_js
-                                                             x7098)
-                                                   ~array:(t_of_js x7099))))|]);
-                             (match x7094 with
-                              | Some x7096 ->
+                                                             x7088)
+                                                   ~array:(t_of_js x7089))))|]);
+                             (match x7084 with
+                              | Some x7086 ->
                                   ignore
-                                    (Ojs.call x7095 "push"
-                                       [|(any_to_js x7096)|])
+                                    (Ojs.call x7085 "push"
+                                       [|(any_to_js x7086)|])
                               | None -> ());
-                             x7095))|])
+                             x7085))|])
     let (reduce :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -24976,25 +24960,25 @@ module Int16Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x7108 : 'tags this) ->
+      fun (x7098 : 'tags this) ->
         fun
-          ~callbackfn:(x7103 :
+          ~callbackfn:(x7093 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x7108) "reduce"
+            (Ojs.call (this_to_js Obj.magic x7098) "reduce"
                [|(Ojs.fun_to_js 4
-                    (fun (x7104 : Ojs.t) ->
-                       fun (x7105 : Ojs.t) ->
-                         fun (x7106 : Ojs.t) ->
-                           fun (x7107 : Ojs.t) ->
+                    (fun (x7094 : Ojs.t) ->
+                       fun (x7095 : Ojs.t) ->
+                         fun (x7096 : Ojs.t) ->
+                           fun (x7097 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x7103 ~previousValue:(Ojs.float_of_js x7104)
-                                  ~currentValue:(Ojs.float_of_js x7105)
-                                  ~currentIndex:(Ojs.float_of_js x7106)
-                                  ~array:(t_of_js x7107))))|])
+                               (x7093 ~previousValue:(Ojs.float_of_js x7094)
+                                  ~currentValue:(Ojs.float_of_js x7095)
+                                  ~currentIndex:(Ojs.float_of_js x7096)
+                                  ~array:(t_of_js x7097))))|])
     let (reduce' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -25002,28 +24986,28 @@ module Int16Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x7116 : 'tags this) ->
+      fun (x7106 : 'tags this) ->
         fun
-          ~callbackfn:(x7110 :
+          ~callbackfn:(x7100 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x7115 : float) ->
+          fun ~initialValue:(x7105 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x7116) "reduce"
+              (Ojs.call (this_to_js Obj.magic x7106) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x7111 : Ojs.t) ->
-                         fun (x7112 : Ojs.t) ->
-                           fun (x7113 : Ojs.t) ->
-                             fun (x7114 : Ojs.t) ->
+                      (fun (x7101 : Ojs.t) ->
+                         fun (x7102 : Ojs.t) ->
+                           fun (x7103 : Ojs.t) ->
+                             fun (x7104 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x7110
-                                    ~previousValue:(Ojs.float_of_js x7111)
-                                    ~currentValue:(Ojs.float_of_js x7112)
-                                    ~currentIndex:(Ojs.float_of_js x7113)
-                                    ~array:(t_of_js x7114))));(Ojs.float_to_js
-                                                                 x7115)|])
+                                 (x7100
+                                    ~previousValue:(Ojs.float_of_js x7101)
+                                    ~currentValue:(Ojs.float_of_js x7102)
+                                    ~currentIndex:(Ojs.float_of_js x7103)
+                                    ~array:(t_of_js x7104))));(Ojs.float_to_js
+                                                                 x7105)|])
     let (reduce'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -25031,27 +25015,27 @@ module Int16Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x7124 : 'tags this) ->
+      fun (x7114 : 'tags this) ->
         fun
-          ~callbackfn:(x7118 :
+          ~callbackfn:(x7108 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x7123 : 'U) ->
+          fun ~initialValue:(x7113 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x7124) "reduce"
+              (Ojs.call (this_to_js Obj.magic x7114) "reduce"
                  [|(Ojs.fun_to_js 4
-                      (fun (x7119 : Ojs.t) ->
-                         fun (x7120 : Ojs.t) ->
-                           fun (x7121 : Ojs.t) ->
-                             fun (x7122 : Ojs.t) ->
+                      (fun (x7109 : Ojs.t) ->
+                         fun (x7110 : Ojs.t) ->
+                           fun (x7111 : Ojs.t) ->
+                             fun (x7112 : Ojs.t) ->
                                Obj.magic
-                                 (x7118 ~previousValue:(Obj.magic x7119)
-                                    ~currentValue:(Ojs.float_of_js x7120)
-                                    ~currentIndex:(Ojs.float_of_js x7121)
-                                    ~array:(t_of_js x7122))));(Obj.magic
-                                                                 x7123)|])
+                                 (x7108 ~previousValue:(Obj.magic x7109)
+                                    ~currentValue:(Ojs.float_of_js x7110)
+                                    ~currentIndex:(Ojs.float_of_js x7111)
+                                    ~array:(t_of_js x7112))));(Obj.magic
+                                                                 x7113)|])
     let (reduceRight :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -25059,25 +25043,25 @@ module Int16Array =
                         currentIndex:float -> array:t -> float)
           -> float)
       =
-      fun (x7131 : 'tags this) ->
+      fun (x7121 : 'tags this) ->
         fun
-          ~callbackfn:(x7126 :
+          ~callbackfn:(x7116 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
           Ojs.float_of_js
-            (Ojs.call (this_to_js Obj.magic x7131) "reduceRight"
+            (Ojs.call (this_to_js Obj.magic x7121) "reduceRight"
                [|(Ojs.fun_to_js 4
-                    (fun (x7127 : Ojs.t) ->
-                       fun (x7128 : Ojs.t) ->
-                         fun (x7129 : Ojs.t) ->
-                           fun (x7130 : Ojs.t) ->
+                    (fun (x7117 : Ojs.t) ->
+                       fun (x7118 : Ojs.t) ->
+                         fun (x7119 : Ojs.t) ->
+                           fun (x7120 : Ojs.t) ->
                              Ojs.float_to_js
-                               (x7126 ~previousValue:(Ojs.float_of_js x7127)
-                                  ~currentValue:(Ojs.float_of_js x7128)
-                                  ~currentIndex:(Ojs.float_of_js x7129)
-                                  ~array:(t_of_js x7130))))|])
+                               (x7116 ~previousValue:(Ojs.float_of_js x7117)
+                                  ~currentValue:(Ojs.float_of_js x7118)
+                                  ~currentIndex:(Ojs.float_of_js x7119)
+                                  ~array:(t_of_js x7120))))|])
     let (reduceRight' :
       'tags this ->
         callbackfn:(previousValue:float ->
@@ -25085,28 +25069,28 @@ module Int16Array =
                         currentIndex:float -> array:t -> float)
           -> initialValue:float -> float)
       =
-      fun (x7139 : 'tags this) ->
+      fun (x7129 : 'tags this) ->
         fun
-          ~callbackfn:(x7133 :
+          ~callbackfn:(x7123 :
                         previousValue:float ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> float)
           ->
-          fun ~initialValue:(x7138 : float) ->
+          fun ~initialValue:(x7128 : float) ->
             Ojs.float_of_js
-              (Ojs.call (this_to_js Obj.magic x7139) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x7129) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x7134 : Ojs.t) ->
-                         fun (x7135 : Ojs.t) ->
-                           fun (x7136 : Ojs.t) ->
-                             fun (x7137 : Ojs.t) ->
+                      (fun (x7124 : Ojs.t) ->
+                         fun (x7125 : Ojs.t) ->
+                           fun (x7126 : Ojs.t) ->
+                             fun (x7127 : Ojs.t) ->
                                Ojs.float_to_js
-                                 (x7133
-                                    ~previousValue:(Ojs.float_of_js x7134)
-                                    ~currentValue:(Ojs.float_of_js x7135)
-                                    ~currentIndex:(Ojs.float_of_js x7136)
-                                    ~array:(t_of_js x7137))));(Ojs.float_to_js
-                                                                 x7138)|])
+                                 (x7123
+                                    ~previousValue:(Ojs.float_of_js x7124)
+                                    ~currentValue:(Ojs.float_of_js x7125)
+                                    ~currentIndex:(Ojs.float_of_js x7126)
+                                    ~array:(t_of_js x7127))));(Ojs.float_to_js
+                                                                 x7128)|])
     let (reduceRight'' :
       'tags this ->
         callbackfn:(previousValue:'U ->
@@ -25114,239 +25098,211 @@ module Int16Array =
                         currentIndex:float -> array:t -> 'U)
           -> initialValue:'U -> 'U)
       =
-      fun (x7147 : 'tags this) ->
+      fun (x7137 : 'tags this) ->
         fun
-          ~callbackfn:(x7141 :
+          ~callbackfn:(x7131 :
                         previousValue:'U ->
                           currentValue:float ->
                             currentIndex:float -> array:t -> 'U)
           ->
-          fun ~initialValue:(x7146 : 'U) ->
+          fun ~initialValue:(x7136 : 'U) ->
             Obj.magic
-              (Ojs.call (this_to_js Obj.magic x7147) "reduceRight"
+              (Ojs.call (this_to_js Obj.magic x7137) "reduceRight"
                  [|(Ojs.fun_to_js 4
-                      (fun (x7142 : Ojs.t) ->
-                         fun (x7143 : Ojs.t) ->
-                           fun (x7144 : Ojs.t) ->
-                             fun (x7145 : Ojs.t) ->
+                      (fun (x7132 : Ojs.t) ->
+                         fun (x7133 : Ojs.t) ->
+                           fun (x7134 : Ojs.t) ->
+                             fun (x7135 : Ojs.t) ->
                                Obj.magic
-                                 (x7141 ~previousValue:(Obj.magic x7142)
-                                    ~currentValue:(Ojs.float_of_js x7143)
-                                    ~currentIndex:(Ojs.float_of_js x7144)
-                                    ~array:(t_of_js x7145))));(Obj.magic
-                                                                 x7146)|])
+                                 (x7131 ~previousValue:(Obj.magic x7132)
+                                    ~currentValue:(Ojs.float_of_js x7133)
+                                    ~currentIndex:(Ojs.float_of_js x7134)
+                                    ~array:(t_of_js x7135))));(Obj.magic
+                                                                 x7136)|])
     let (reverse : 'tags this -> t) =
-      fun (x7149 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x7149) "reverse" [||])
+      fun (x7139 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x7139) "reverse" [||])
     let (set_ :
       'tags this -> array:float ArrayLike.t -> ?offset:float -> unit -> unit)
       =
-      fun (x7156 : 'tags this) ->
-        fun ~array:(x7151 : float ArrayLike.t) ->
-          fun ?offset:(x7152 : float option) ->
+      fun (x7146 : 'tags this) ->
+        fun ~array:(x7141 : float ArrayLike.t) ->
+          fun ?offset:(x7142 : float option) ->
             fun () ->
               ignore
-                (let x7158 = this_to_js Obj.magic x7156 in
-                 Ojs.call (Ojs.get_prop_ascii x7158 "set") "apply"
-                   [|x7158;((let x7153 =
+                (let x7148 = this_to_js Obj.magic x7146 in
+                 Ojs.call (Ojs.get_prop_ascii x7148 "set") "apply"
+                   [|x7148;((let x7143 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x7153 "push"
-                                  [|(ArrayLike.t_to_js Ojs.float_to_js x7151)|]);
-                             (match x7152 with
-                              | Some x7154 ->
+                               (Ojs.call x7143 "push"
+                                  [|(ArrayLike.t_to_js Ojs.float_to_js x7141)|]);
+                             (match x7142 with
+                              | Some x7144 ->
                                   ignore
-                                    (Ojs.call x7153 "push"
-                                       [|(Ojs.float_to_js x7154)|])
+                                    (Ojs.call x7143 "push"
+                                       [|(Ojs.float_to_js x7144)|])
                               | None -> ());
-                             x7153))|])
+                             x7143))|])
     let (slice : 'tags this -> ?start:float -> ?end_:float -> unit -> t) =
-      fun (x7164 : 'tags this) ->
-        fun ?start:(x7159 : float option) ->
-          fun ?end_:(x7160 : float option) ->
+      fun (x7154 : 'tags this) ->
+        fun ?start:(x7149 : float option) ->
+          fun ?end_:(x7150 : float option) ->
             fun () ->
               t_of_js
-                (let x7166 = this_to_js Obj.magic x7164 in
-                 Ojs.call (Ojs.get_prop_ascii x7166 "slice") "apply"
-                   [|x7166;((let x7161 =
+                (let x7156 = this_to_js Obj.magic x7154 in
+                 Ojs.call (Ojs.get_prop_ascii x7156 "slice") "apply"
+                   [|x7156;((let x7151 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x7159 with
-                              | Some x7163 ->
+                             (match x7149 with
+                              | Some x7153 ->
                                   ignore
-                                    (Ojs.call x7161 "push"
-                                       [|(Ojs.float_to_js x7163)|])
+                                    (Ojs.call x7151 "push"
+                                       [|(Ojs.float_to_js x7153)|])
                               | None -> ());
-                             (match x7160 with
-                              | Some x7162 ->
+                             (match x7150 with
+                              | Some x7152 ->
                                   ignore
-                                    (Ojs.call x7161 "push"
-                                       [|(Ojs.float_to_js x7162)|])
+                                    (Ojs.call x7151 "push"
+                                       [|(Ojs.float_to_js x7152)|])
                               | None -> ());
-                             x7161))|])
+                             x7151))|])
     let (some :
       'tags this ->
         predicate:(value:float -> index:float -> array:t -> unknown) ->
           ?thisArg:any -> unit -> bool)
       =
-      fun (x7174 : 'tags this) ->
+      fun (x7164 : 'tags this) ->
         fun
-          ~predicate:(x7167 :
+          ~predicate:(x7157 :
                        value:float -> index:float -> array:t -> unknown)
           ->
-          fun ?thisArg:(x7168 : any option) ->
+          fun ?thisArg:(x7158 : any option) ->
             fun () ->
               Ojs.bool_of_js
-                (let x7176 = this_to_js Obj.magic x7174 in
-                 Ojs.call (Ojs.get_prop_ascii x7176 "some") "apply"
-                   [|x7176;((let x7169 =
+                (let x7166 = this_to_js Obj.magic x7164 in
+                 Ojs.call (Ojs.get_prop_ascii x7166 "some") "apply"
+                   [|x7166;((let x7159 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x7169 "push"
+                               (Ojs.call x7159 "push"
                                   [|(Ojs.fun_to_js 3
-                                       (fun (x7171 : Ojs.t) ->
-                                          fun (x7172 : Ojs.t) ->
-                                            fun (x7173 : Ojs.t) ->
+                                       (fun (x7161 : Ojs.t) ->
+                                          fun (x7162 : Ojs.t) ->
+                                            fun (x7163 : Ojs.t) ->
                                               unknown_to_js
-                                                (x7167
+                                                (x7157
                                                    ~value:(Ojs.float_of_js
-                                                             x7171)
+                                                             x7161)
                                                    ~index:(Ojs.float_of_js
-                                                             x7172)
-                                                   ~array:(t_of_js x7173))))|]);
-                             (match x7168 with
-                              | Some x7170 ->
+                                                             x7162)
+                                                   ~array:(t_of_js x7163))))|]);
+                             (match x7158 with
+                              | Some x7160 ->
                                   ignore
-                                    (Ojs.call x7169 "push"
-                                       [|(any_to_js x7170)|])
+                                    (Ojs.call x7159 "push"
+                                       [|(any_to_js x7160)|])
                               | None -> ());
-                             x7169))|])
+                             x7159))|])
     let (sort :
       'tags this ->
         ?compareFn:(a:float -> b:float -> float) -> unit -> 'tags this)
       =
-      fun (x7182 : 'tags this) ->
-        fun ?compareFn:(x7177 : (a:float -> b:float -> float) option) ->
+      fun (x7172 : 'tags this) ->
+        fun ?compareFn:(x7167 : (a:float -> b:float -> float) option) ->
           fun () ->
             this_of_js Obj.magic
-              (let x7184 = this_to_js Obj.magic x7182 in
-               Ojs.call (Ojs.get_prop_ascii x7184 "sort") "apply"
-                 [|x7184;((let x7178 =
+              (let x7174 = this_to_js Obj.magic x7172 in
+               Ojs.call (Ojs.get_prop_ascii x7174 "sort") "apply"
+                 [|x7174;((let x7168 =
                              Ojs.new_obj
                                (Ojs.get_prop_ascii Ojs.global "Array") 
                                [||] in
-                           (match x7177 with
-                            | Some x7179 ->
+                           (match x7167 with
+                            | Some x7169 ->
                                 ignore
-                                  (Ojs.call x7178 "push"
+                                  (Ojs.call x7168 "push"
                                      [|(Ojs.fun_to_js 2
-                                          (fun (x7180 : Ojs.t) ->
-                                             fun (x7181 : Ojs.t) ->
+                                          (fun (x7170 : Ojs.t) ->
+                                             fun (x7171 : Ojs.t) ->
                                                Ojs.float_to_js
-                                                 (x7179
-                                                    ~a:(Ojs.float_of_js x7180)
-                                                    ~b:(Ojs.float_of_js x7181))))|])
+                                                 (x7169
+                                                    ~a:(Ojs.float_of_js x7170)
+                                                    ~b:(Ojs.float_of_js x7171))))|])
                             | None -> ());
-                           x7178))|])
+                           x7168))|])
     let (subarray : 'tags this -> ?begin_:float -> ?end_:float -> unit -> t)
       =
-      fun (x7191 : 'tags this) ->
-        fun ?begin_:(x7186 : float option) ->
-          fun ?end_:(x7187 : float option) ->
+      fun (x7181 : 'tags this) ->
+        fun ?begin_:(x7176 : float option) ->
+          fun ?end_:(x7177 : float option) ->
             fun () ->
               t_of_js
-                (let x7193 = this_to_js Obj.magic x7191 in
-                 Ojs.call (Ojs.get_prop_ascii x7193 "subarray") "apply"
-                   [|x7193;((let x7188 =
+                (let x7183 = this_to_js Obj.magic x7181 in
+                 Ojs.call (Ojs.get_prop_ascii x7183 "subarray") "apply"
+                   [|x7183;((let x7178 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
-                             (match x7186 with
-                              | Some x7190 ->
+                             (match x7176 with
+                              | Some x7180 ->
                                   ignore
-                                    (Ojs.call x7188 "push"
-                                       [|(Ojs.float_to_js x7190)|])
+                                    (Ojs.call x7178 "push"
+                                       [|(Ojs.float_to_js x7180)|])
                               | None -> ());
-                             (match x7187 with
-                              | Some x7189 ->
+                             (match x7177 with
+                              | Some x7179 ->
                                   ignore
-                                    (Ojs.call x7188 "push"
-                                       [|(Ojs.float_to_js x7189)|])
+                                    (Ojs.call x7178 "push"
+                                       [|(Ojs.float_to_js x7179)|])
                               | None -> ());
-                             x7188))|])
+                             x7178))|])
     let (toLocaleString : 'tags this -> string) =
-      fun (x7194 : 'tags this) ->
+      fun (x7184 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x7194) "toLocaleString" [||])
+          (Ojs.call (this_to_js Obj.magic x7184) "toLocaleString" [||])
     let (toString : 'tags this -> string) =
-      fun (x7196 : 'tags this) ->
+      fun (x7186 : 'tags this) ->
         Ojs.string_of_js
-          (Ojs.call (this_to_js Obj.magic x7196) "toString" [||])
+          (Ojs.call (this_to_js Obj.magic x7186) "toString" [||])
     let (valueOf : 'tags this -> t) =
-      fun (x7198 : 'tags this) ->
-        t_of_js (Ojs.call (this_to_js Obj.magic x7198) "valueOf" [||])
+      fun (x7188 : 'tags this) ->
+        t_of_js (Ojs.call (this_to_js Obj.magic x7188) "valueOf" [||])
     let (get : 'tags this -> float -> float) =
-      fun (x7200 : 'tags this) ->
-        fun (x7202 : float) ->
+      fun (x7190 : 'tags this) ->
+        fun (x7192 : float) ->
           Ojs.float_of_js
-            (Ojs.get_prop (this_to_js Obj.magic x7200)
-               (Ojs.float_to_js x7202))
+            (Ojs.get_prop (this_to_js Obj.magic x7190)
+               (Ojs.float_to_js x7192))
     let (set : 'tags this -> float -> float -> unit) =
-      fun (x7203 : 'tags this) ->
-        fun (x7205 : float) ->
-          fun (x7206 : float) ->
-            Ojs.set_prop (this_to_js Obj.magic x7203) (Ojs.float_to_js x7205)
-              (Ojs.float_to_js x7206)
-    let (create : float Iterable.t -> t) =
-      fun (x7207 : float Iterable.t) ->
-        t_of_js
-          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int16Array")
-             [|(Iterable.t_to_js Ojs.float_to_js x7207)|])
-    let (from :
-      arrayLike:float Iterable.t ->
-        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
-      =
-      fun ~arrayLike:(x7209 : float Iterable.t) ->
-        fun ?mapfn:(x7210 : (v:float -> k:float -> float) option) ->
-          fun ?thisArg:(x7211 : any option) ->
-            fun () ->
-              t_of_js
-                (let x7218 = Ojs.get_prop_ascii Ojs.global "Int16Array" in
-                 Ojs.call (Ojs.get_prop_ascii x7218 "from") "apply"
-                   [|x7218;((let x7212 =
-                               Ojs.new_obj
-                                 (Ojs.get_prop_ascii Ojs.global "Array") 
-                                 [||] in
-                             ignore
-                               (Ojs.call x7212 "push"
-                                  [|(Iterable.t_to_js Ojs.float_to_js x7209)|]);
-                             (match x7210 with
-                              | Some x7214 ->
-                                  ignore
-                                    (Ojs.call x7212 "push"
-                                       [|(Ojs.fun_to_js 2
-                                            (fun (x7215 : Ojs.t) ->
-                                               fun (x7216 : Ojs.t) ->
-                                                 Ojs.float_to_js
-                                                   (x7214
-                                                      ~v:(Ojs.float_of_js
-                                                            x7215)
-                                                      ~k:(Ojs.float_of_js
-                                                            x7216))))|])
-                              | None -> ());
-                             (match x7211 with
-                              | Some x7213 ->
-                                  ignore
-                                    (Ojs.call x7212 "push"
-                                       [|(any_to_js x7213)|])
-                              | None -> ());
-                             x7212))|])
-    let (create' : unit -> t) =
+      fun (x7193 : 'tags this) ->
+        fun (x7195 : float) ->
+          fun (x7196 : float) ->
+            Ojs.set_prop (this_to_js Obj.magic x7193) (Ojs.float_to_js x7195)
+              (Ojs.float_to_js x7196)
+    let (entries : 'tags this -> (float * float) IterableIterator.t) =
+      fun (x7197 : 'tags this) ->
+        IterableIterator.t_of_js
+          (fun (x7199 : Ojs.t) ->
+             let x7200 = x7199 in
+             ((Ojs.float_of_js (Ojs.array_get x7200 0)),
+               (Ojs.float_of_js (Ojs.array_get x7200 1))))
+          (Ojs.call (this_to_js Obj.magic x7197) "entries" [||])
+    let (keys : 'tags this -> float IterableIterator.t) =
+      fun (x7201 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x7201) "keys" [||])
+    let (values : 'tags this -> float IterableIterator.t) =
+      fun (x7204 : 'tags this) ->
+        IterableIterator.t_of_js Ojs.float_of_js
+          (Ojs.call (this_to_js Obj.magic x7204) "values" [||])
+    let (create : unit -> t) =
       fun () ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int16Array") [||])
@@ -25355,102 +25311,146 @@ module Int16Array =
         t_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Int16Array")
              "prototype")
-    let (create'' : float -> t) =
-      fun (x7219 : float) ->
+    let (create' : float -> t) =
+      fun (x7207 : float) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int16Array")
-             [|(Ojs.float_to_js x7219)|])
-    let (create''' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
-      fun (x7220 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
+             [|(Ojs.float_to_js x7207)|])
+    let (create'' : (ArrayBufferLike.t, float ArrayLike.t) union2 -> t) =
+      fun (x7208 : (ArrayBufferLike.t, float ArrayLike.t) union2) ->
         t_of_js
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int16Array")
              [|(union2_to_js ArrayBufferLike.t_to_js
-                  (fun (x7222 : float ArrayLike.t) ->
-                     ArrayLike.t_to_js Ojs.float_to_js x7222) x7220)|])
-    let (create'''' :
+                  (fun (x7210 : float ArrayLike.t) ->
+                     ArrayLike.t_to_js Ojs.float_to_js x7210) x7208)|])
+    let (create''' :
       buffer:ArrayBufferLike.t ->
         ?byteOffset:float -> ?length:float -> unit -> t)
       =
-      fun ~buffer:(x7224 : ArrayBufferLike.t) ->
-        fun ?byteOffset:(x7225 : float option) ->
-          fun ?length:(x7226 : float option) ->
+      fun ~buffer:(x7212 : ArrayBufferLike.t) ->
+        fun ?byteOffset:(x7213 : float option) ->
+          fun ?length:(x7214 : float option) ->
             fun () ->
               t_of_js
                 (Ojs.new_obj_arr (Ojs.get_prop_ascii Ojs.global "Int16Array")
-                   (let x7227 =
+                   (let x7215 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     ignore
-                      (Ojs.call x7227 "push"
-                         [|(ArrayBufferLike.t_to_js x7224)|]);
-                    (match x7225 with
-                     | Some x7229 ->
+                      (Ojs.call x7215 "push"
+                         [|(ArrayBufferLike.t_to_js x7212)|]);
+                    (match x7213 with
+                     | Some x7217 ->
                          ignore
-                           (Ojs.call x7227 "push" [|(Ojs.float_to_js x7229)|])
+                           (Ojs.call x7215 "push" [|(Ojs.float_to_js x7217)|])
                      | None -> ());
-                    (match x7226 with
-                     | Some x7228 ->
+                    (match x7214 with
+                     | Some x7216 ->
                          ignore
-                           (Ojs.call x7227 "push" [|(Ojs.float_to_js x7228)|])
+                           (Ojs.call x7215 "push" [|(Ojs.float_to_js x7216)|])
                      | None -> ());
-                    x7227))
+                    x7215))
     let (bytes_per_element : unit -> float) =
       fun () ->
         Ojs.float_of_js
           (Ojs.get_prop_ascii (Ojs.get_prop_ascii Ojs.global "Int16Array")
              "BYTES_PER_ELEMENT")
     let (of_ : float list -> t) =
-      fun (x7230 : float list) ->
+      fun (x7218 : float list) ->
         t_of_js
-          (let x7233 = Ojs.get_prop_ascii Ojs.global "Int16Array" in
-           Ojs.call (Ojs.get_prop_ascii x7233 "of") "apply"
-             [|x7233;((let x7231 =
+          (let x7221 = Ojs.get_prop_ascii Ojs.global "Int16Array" in
+           Ojs.call (Ojs.get_prop_ascii x7221 "of") "apply"
+             [|x7221;((let x7219 =
                          Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                            [||] in
                        List.iter
-                         (fun (x7232 : float) ->
+                         (fun (x7220 : float) ->
                             ignore
-                              (Ojs.call x7231 "push"
-                                 [|(Ojs.float_to_js x7232)|])) x7230;
-                       x7231))|])
-    let (from' : float ArrayLike.t -> t) =
-      fun (x7234 : float ArrayLike.t) ->
+                              (Ojs.call x7219 "push"
+                                 [|(Ojs.float_to_js x7220)|])) x7218;
+                       x7219))|])
+    let (from : float ArrayLike.t -> t) =
+      fun (x7222 : float ArrayLike.t) ->
         t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Int16Array") "from"
-             [|(ArrayLike.t_to_js Ojs.float_to_js x7234)|])
-    let (from'' :
+             [|(ArrayLike.t_to_js Ojs.float_to_js x7222)|])
+    let (from' :
       arrayLike:'T ArrayLike.t ->
         mapfn:(v:'T -> k:float -> float) -> ?thisArg:any -> unit -> t)
       =
-      fun ~arrayLike:(x7236 : 'T ArrayLike.t) ->
-        fun ~mapfn:(x7237 : v:'T -> k:float -> float) ->
-          fun ?thisArg:(x7238 : any option) ->
+      fun ~arrayLike:(x7224 : 'T ArrayLike.t) ->
+        fun ~mapfn:(x7225 : v:'T -> k:float -> float) ->
+          fun ?thisArg:(x7226 : any option) ->
             fun () ->
               t_of_js
-                (let x7244 = Ojs.get_prop_ascii Ojs.global "Int16Array" in
-                 Ojs.call (Ojs.get_prop_ascii x7244 "from") "apply"
-                   [|x7244;((let x7239 =
+                (let x7232 = Ojs.get_prop_ascii Ojs.global "Int16Array" in
+                 Ojs.call (Ojs.get_prop_ascii x7232 "from") "apply"
+                   [|x7232;((let x7227 =
                                Ojs.new_obj
                                  (Ojs.get_prop_ascii Ojs.global "Array") 
                                  [||] in
                              ignore
-                               (Ojs.call x7239 "push"
-                                  [|(ArrayLike.t_to_js Obj.magic x7236)|]);
+                               (Ojs.call x7227 "push"
+                                  [|(ArrayLike.t_to_js Obj.magic x7224)|]);
                              ignore
-                               (Ojs.call x7239 "push"
+                               (Ojs.call x7227 "push"
                                   [|(Ojs.fun_to_js 2
-                                       (fun (x7241 : Ojs.t) ->
-                                          fun (x7242 : Ojs.t) ->
+                                       (fun (x7229 : Ojs.t) ->
+                                          fun (x7230 : Ojs.t) ->
                                             Ojs.float_to_js
-                                              (x7237 ~v:(Obj.magic x7241)
-                                                 ~k:(Ojs.float_of_js x7242))))|]);
-                             (match x7238 with
+                                              (x7225 ~v:(Obj.magic x7229)
+                                                 ~k:(Ojs.float_of_js x7230))))|]);
+                             (match x7226 with
+                              | Some x7228 ->
+                                  ignore
+                                    (Ojs.call x7227 "push"
+                                       [|(any_to_js x7228)|])
+                              | None -> ());
+                             x7227))|])
+    let (create'''' : float Iterable.t -> t) =
+      fun (x7233 : float Iterable.t) ->
+        t_of_js
+          (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Int16Array")
+             [|(Iterable.t_to_js Ojs.float_to_js x7233)|])
+    let (from'' :
+      arrayLike:float Iterable.t ->
+        ?mapfn:(v:float -> k:float -> float) -> ?thisArg:any -> unit -> t)
+      =
+      fun ~arrayLike:(x7235 : float Iterable.t) ->
+        fun ?mapfn:(x7236 : (v:float -> k:float -> float) option) ->
+          fun ?thisArg:(x7237 : any option) ->
+            fun () ->
+              t_of_js
+                (let x7244 = Ojs.get_prop_ascii Ojs.global "Int16Array" in
+                 Ojs.call (Ojs.get_prop_ascii x7244 "from") "apply"
+                   [|x7244;((let x7238 =
+                               Ojs.new_obj
+                                 (Ojs.get_prop_ascii Ojs.global "Array") 
+                                 [||] in
+                             ignore
+                               (Ojs.call x7238 "push"
+                                  [|(Iterable.t_to_js Ojs.float_to_js x7235)|]);
+                             (match x7236 with
                               | Some x7240 ->
                                   ignore
-                                    (Ojs.call x7239 "push"
-                                       [|(any_to_js x7240)|])
+                                    (Ojs.call x7238 "push"
+                                       [|(Ojs.fun_to_js 2
+                                            (fun (x7241 : Ojs.t) ->
+                                               fun (x7242 : Ojs.t) ->
+                                                 Ojs.float_to_js
+                                                   (x7240
+                                                      ~v:(Ojs.float_of_js
+                                                            x7241)
+                                                      ~k:(Ojs.float_of_js
+                                                            x7242))))|])
                               | None -> ());
-                             x7239))|])
+                             (match x7237 with
+                              | Some x7239 ->
+                                  ignore
+                                    (Ojs.call x7238 "push"
+                                       [|(any_to_js x7239)|])
+                              | None -> ());
+                             x7238))|])
     let cast_from = Obj.magic
   end
 module BigUint64Array =
@@ -27824,6 +27824,29 @@ module Promise =
                                           x7990)|])
                             | None -> ());
                            x7989))|])
+    let (any :
+      (('T, 'T PromiseLike.t) union2 Iterable.t,
+        ('T, 'T PromiseLike.t) union2) or_array -> 'T t)
+      =
+      fun
+        (x8003 :
+          (('T, 'T PromiseLike.t) union2 Iterable.t,
+            ('T, 'T PromiseLike.t) union2) or_array)
+        ->
+        t_of_js Obj.magic
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
+             [|(or_array_to_js
+                  (fun (x8004 : ('T, 'T PromiseLike.t) union2 Iterable.t) ->
+                     Iterable.t_to_js
+                       (fun (x8005 : ('T, 'T PromiseLike.t) union2) ->
+                          union2_to_js Obj.magic
+                            (fun (x8007 : 'T PromiseLike.t) ->
+                               PromiseLike.t_to_js Obj.magic x8007) x8005)
+                       x8004)
+                  (fun (x8009 : ('T, 'T PromiseLike.t) union2) ->
+                     union2_to_js Obj.magic
+                       (fun (x8011 : 'T PromiseLike.t) ->
+                          PromiseLike.t_to_js Obj.magic x8011) x8009) x8003)|])
     let (prototype : unit -> any t) =
       fun () ->
         t_of_js any_of_js
@@ -27835,48 +27858,48 @@ module Promise =
         -> 'T t)
       =
       fun
-        (x8004 :
+        (x8015 :
           resolve:(('T, 'T PromiseLike.t) union2 -> unit) ->
             reject:(?reason:any -> unit -> unit) -> unit)
         ->
         t_of_js Obj.magic
           (Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Promise")
              [|(Ojs.fun_to_js 2
-                  (fun (x8005 : Ojs.t) ->
-                     fun (x8010 : Ojs.t) ->
-                       x8004
+                  (fun (x8016 : Ojs.t) ->
+                     fun (x8021 : Ojs.t) ->
+                       x8015
                          ~resolve:(fun
-                                     (x8006 : ('T, 'T PromiseLike.t) union2)
+                                     (x8017 : ('T, 'T PromiseLike.t) union2)
                                      ->
                                      ignore
-                                       (Ojs.apply x8005
+                                       (Ojs.apply x8016
                                           [|(union2_to_js Obj.magic
                                                (fun
-                                                  (x8008 : 'T PromiseLike.t)
+                                                  (x8019 : 'T PromiseLike.t)
                                                   ->
                                                   PromiseLike.t_to_js
-                                                    Obj.magic x8008) x8006)|]))
-                         ~reject:(fun ?reason:(x8011 : any option) ->
+                                                    Obj.magic x8019) x8017)|]))
+                         ~reject:(fun ?reason:(x8022 : any option) ->
                                     fun () ->
                                       ignore
-                                        (Ojs.call x8010 "apply"
-                                           [|Ojs.null;((let x8012 =
+                                        (Ojs.call x8021 "apply"
+                                           [|Ojs.null;((let x8023 =
                                                           Ojs.new_obj
                                                             (Ojs.get_prop_ascii
                                                                Ojs.global
                                                                "Array") 
                                                             [||] in
-                                                        (match x8011 with
-                                                         | Some x8013 ->
+                                                        (match x8022 with
+                                                         | Some x8024 ->
                                                              ignore
                                                                (Ojs.call
-                                                                  x8012
+                                                                  x8023
                                                                   "push"
                                                                   [|(
                                                                     any_to_js
-                                                                    x8013)|])
+                                                                    x8024)|])
                                                          | None -> ());
-                                                        x8012))|]))))|])
+                                                        x8023))|]))))|])
     let (all :
       (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2 *
         ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t) union2 *
@@ -27886,7 +27909,7 @@ module Promise =
         -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8 * 'T9 * 'T10) t)
       =
       fun
-        (x8015 :
+        (x8026 :
           (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2
             * ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t)
             union2 * ('T5, 'T5 PromiseLike.t) union2 * ('T6,
@@ -27895,64 +27918,64 @@ module Promise =
             * ('T10, 'T10 PromiseLike.t) union2))
         ->
         t_of_js
-          (fun (x8057 : Ojs.t) ->
-             let x8058 = x8057 in
-             ((Obj.magic (Ojs.array_get x8058 0)),
-               (Obj.magic (Ojs.array_get x8058 1)),
-               (Obj.magic (Ojs.array_get x8058 2)),
-               (Obj.magic (Ojs.array_get x8058 3)),
-               (Obj.magic (Ojs.array_get x8058 4)),
-               (Obj.magic (Ojs.array_get x8058 5)),
-               (Obj.magic (Ojs.array_get x8058 6)),
-               (Obj.magic (Ojs.array_get x8058 7)),
-               (Obj.magic (Ojs.array_get x8058 8)),
-               (Obj.magic (Ojs.array_get x8058 9))))
+          (fun (x8068 : Ojs.t) ->
+             let x8069 = x8068 in
+             ((Obj.magic (Ojs.array_get x8069 0)),
+               (Obj.magic (Ojs.array_get x8069 1)),
+               (Obj.magic (Ojs.array_get x8069 2)),
+               (Obj.magic (Ojs.array_get x8069 3)),
+               (Obj.magic (Ojs.array_get x8069 4)),
+               (Obj.magic (Ojs.array_get x8069 5)),
+               (Obj.magic (Ojs.array_get x8069 6)),
+               (Obj.magic (Ojs.array_get x8069 7)),
+               (Obj.magic (Ojs.array_get x8069 8)),
+               (Obj.magic (Ojs.array_get x8069 9))))
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|((let (x8016, x8017, x8018, x8019, x8020, x8021, x8022, x8023,
-                      x8024, x8025)
-                   = x8015 in
-                 let x8026 = Ojs.array_make 10 in
-                 Ojs.array_set x8026 0
+             [|((let (x8027, x8028, x8029, x8030, x8031, x8032, x8033, x8034,
+                      x8035, x8036)
+                   = x8026 in
+                 let x8037 = Ojs.array_make 10 in
+                 Ojs.array_set x8037 0
                    (union2_to_js Obj.magic
-                      (fun (x8055 : 'T1 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8055) x8016);
-                 Ojs.array_set x8026 1
+                      (fun (x8066 : 'T1 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8066) x8027);
+                 Ojs.array_set x8037 1
                    (union2_to_js Obj.magic
-                      (fun (x8052 : 'T2 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8052) x8017);
-                 Ojs.array_set x8026 2
+                      (fun (x8063 : 'T2 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8063) x8028);
+                 Ojs.array_set x8037 2
                    (union2_to_js Obj.magic
-                      (fun (x8049 : 'T3 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8049) x8018);
-                 Ojs.array_set x8026 3
+                      (fun (x8060 : 'T3 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8060) x8029);
+                 Ojs.array_set x8037 3
                    (union2_to_js Obj.magic
-                      (fun (x8046 : 'T4 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8046) x8019);
-                 Ojs.array_set x8026 4
+                      (fun (x8057 : 'T4 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8057) x8030);
+                 Ojs.array_set x8037 4
                    (union2_to_js Obj.magic
-                      (fun (x8043 : 'T5 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8043) x8020);
-                 Ojs.array_set x8026 5
+                      (fun (x8054 : 'T5 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8054) x8031);
+                 Ojs.array_set x8037 5
                    (union2_to_js Obj.magic
-                      (fun (x8040 : 'T6 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8040) x8021);
-                 Ojs.array_set x8026 6
+                      (fun (x8051 : 'T6 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8051) x8032);
+                 Ojs.array_set x8037 6
                    (union2_to_js Obj.magic
-                      (fun (x8037 : 'T7 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8037) x8022);
-                 Ojs.array_set x8026 7
+                      (fun (x8048 : 'T7 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8048) x8033);
+                 Ojs.array_set x8037 7
                    (union2_to_js Obj.magic
-                      (fun (x8034 : 'T8 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8034) x8023);
-                 Ojs.array_set x8026 8
+                      (fun (x8045 : 'T8 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8045) x8034);
+                 Ojs.array_set x8037 8
                    (union2_to_js Obj.magic
-                      (fun (x8031 : 'T9 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8031) x8024);
-                 Ojs.array_set x8026 9
+                      (fun (x8042 : 'T9 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8042) x8035);
+                 Ojs.array_set x8037 9
                    (union2_to_js Obj.magic
-                      (fun (x8028 : 'T10 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8028) x8025);
-                 x8026))|])
+                      (fun (x8039 : 'T10 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8039) x8036);
+                 x8037))|])
     let (all' :
       (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2 *
         ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t) union2 *
@@ -27962,7 +27985,7 @@ module Promise =
         ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8 * 'T9) t)
       =
       fun
-        (x8059 :
+        (x8070 :
           (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2
             * ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t)
             union2 * ('T5, 'T5 PromiseLike.t) union2 * ('T6,
@@ -27971,59 +27994,59 @@ module Promise =
             union2))
         ->
         t_of_js
-          (fun (x8097 : Ojs.t) ->
-             let x8098 = x8097 in
-             ((Obj.magic (Ojs.array_get x8098 0)),
-               (Obj.magic (Ojs.array_get x8098 1)),
-               (Obj.magic (Ojs.array_get x8098 2)),
-               (Obj.magic (Ojs.array_get x8098 3)),
-               (Obj.magic (Ojs.array_get x8098 4)),
-               (Obj.magic (Ojs.array_get x8098 5)),
-               (Obj.magic (Ojs.array_get x8098 6)),
-               (Obj.magic (Ojs.array_get x8098 7)),
-               (Obj.magic (Ojs.array_get x8098 8))))
+          (fun (x8108 : Ojs.t) ->
+             let x8109 = x8108 in
+             ((Obj.magic (Ojs.array_get x8109 0)),
+               (Obj.magic (Ojs.array_get x8109 1)),
+               (Obj.magic (Ojs.array_get x8109 2)),
+               (Obj.magic (Ojs.array_get x8109 3)),
+               (Obj.magic (Ojs.array_get x8109 4)),
+               (Obj.magic (Ojs.array_get x8109 5)),
+               (Obj.magic (Ojs.array_get x8109 6)),
+               (Obj.magic (Ojs.array_get x8109 7)),
+               (Obj.magic (Ojs.array_get x8109 8))))
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|((let (x8060, x8061, x8062, x8063, x8064, x8065, x8066, x8067,
-                      x8068)
-                   = x8059 in
-                 let x8069 = Ojs.array_make 9 in
-                 Ojs.array_set x8069 0
+             [|((let (x8071, x8072, x8073, x8074, x8075, x8076, x8077, x8078,
+                      x8079)
+                   = x8070 in
+                 let x8080 = Ojs.array_make 9 in
+                 Ojs.array_set x8080 0
                    (union2_to_js Obj.magic
-                      (fun (x8095 : 'T1 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8095) x8060);
-                 Ojs.array_set x8069 1
+                      (fun (x8106 : 'T1 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8106) x8071);
+                 Ojs.array_set x8080 1
                    (union2_to_js Obj.magic
-                      (fun (x8092 : 'T2 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8092) x8061);
-                 Ojs.array_set x8069 2
+                      (fun (x8103 : 'T2 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8103) x8072);
+                 Ojs.array_set x8080 2
                    (union2_to_js Obj.magic
-                      (fun (x8089 : 'T3 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8089) x8062);
-                 Ojs.array_set x8069 3
+                      (fun (x8100 : 'T3 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8100) x8073);
+                 Ojs.array_set x8080 3
                    (union2_to_js Obj.magic
-                      (fun (x8086 : 'T4 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8086) x8063);
-                 Ojs.array_set x8069 4
+                      (fun (x8097 : 'T4 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8097) x8074);
+                 Ojs.array_set x8080 4
                    (union2_to_js Obj.magic
-                      (fun (x8083 : 'T5 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8083) x8064);
-                 Ojs.array_set x8069 5
+                      (fun (x8094 : 'T5 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8094) x8075);
+                 Ojs.array_set x8080 5
                    (union2_to_js Obj.magic
-                      (fun (x8080 : 'T6 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8080) x8065);
-                 Ojs.array_set x8069 6
+                      (fun (x8091 : 'T6 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8091) x8076);
+                 Ojs.array_set x8080 6
                    (union2_to_js Obj.magic
-                      (fun (x8077 : 'T7 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8077) x8066);
-                 Ojs.array_set x8069 7
+                      (fun (x8088 : 'T7 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8088) x8077);
+                 Ojs.array_set x8080 7
                    (union2_to_js Obj.magic
-                      (fun (x8074 : 'T8 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8074) x8067);
-                 Ojs.array_set x8069 8
+                      (fun (x8085 : 'T8 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8085) x8078);
+                 Ojs.array_set x8080 8
                    (union2_to_js Obj.magic
-                      (fun (x8071 : 'T9 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8071) x8068);
-                 x8069))|])
+                      (fun (x8082 : 'T9 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8082) x8079);
+                 x8080))|])
     let (all'' :
       (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2 *
         ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t) union2 *
@@ -28032,7 +28055,7 @@ module Promise =
         ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7 * 'T8) t)
       =
       fun
-        (x8099 :
+        (x8110 :
           (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2
             * ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t)
             union2 * ('T5, 'T5 PromiseLike.t) union2 * ('T6,
@@ -28040,53 +28063,53 @@ module Promise =
             ('T8, 'T8 PromiseLike.t) union2))
         ->
         t_of_js
-          (fun (x8133 : Ojs.t) ->
-             let x8134 = x8133 in
-             ((Obj.magic (Ojs.array_get x8134 0)),
-               (Obj.magic (Ojs.array_get x8134 1)),
-               (Obj.magic (Ojs.array_get x8134 2)),
-               (Obj.magic (Ojs.array_get x8134 3)),
-               (Obj.magic (Ojs.array_get x8134 4)),
-               (Obj.magic (Ojs.array_get x8134 5)),
-               (Obj.magic (Ojs.array_get x8134 6)),
-               (Obj.magic (Ojs.array_get x8134 7))))
+          (fun (x8144 : Ojs.t) ->
+             let x8145 = x8144 in
+             ((Obj.magic (Ojs.array_get x8145 0)),
+               (Obj.magic (Ojs.array_get x8145 1)),
+               (Obj.magic (Ojs.array_get x8145 2)),
+               (Obj.magic (Ojs.array_get x8145 3)),
+               (Obj.magic (Ojs.array_get x8145 4)),
+               (Obj.magic (Ojs.array_get x8145 5)),
+               (Obj.magic (Ojs.array_get x8145 6)),
+               (Obj.magic (Ojs.array_get x8145 7))))
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|((let (x8100, x8101, x8102, x8103, x8104, x8105, x8106, x8107)
-                   = x8099 in
-                 let x8108 = Ojs.array_make 8 in
-                 Ojs.array_set x8108 0
+             [|((let (x8111, x8112, x8113, x8114, x8115, x8116, x8117, x8118)
+                   = x8110 in
+                 let x8119 = Ojs.array_make 8 in
+                 Ojs.array_set x8119 0
                    (union2_to_js Obj.magic
-                      (fun (x8131 : 'T1 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8131) x8100);
-                 Ojs.array_set x8108 1
+                      (fun (x8142 : 'T1 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8142) x8111);
+                 Ojs.array_set x8119 1
                    (union2_to_js Obj.magic
-                      (fun (x8128 : 'T2 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8128) x8101);
-                 Ojs.array_set x8108 2
+                      (fun (x8139 : 'T2 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8139) x8112);
+                 Ojs.array_set x8119 2
                    (union2_to_js Obj.magic
-                      (fun (x8125 : 'T3 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8125) x8102);
-                 Ojs.array_set x8108 3
+                      (fun (x8136 : 'T3 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8136) x8113);
+                 Ojs.array_set x8119 3
                    (union2_to_js Obj.magic
-                      (fun (x8122 : 'T4 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8122) x8103);
-                 Ojs.array_set x8108 4
+                      (fun (x8133 : 'T4 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8133) x8114);
+                 Ojs.array_set x8119 4
                    (union2_to_js Obj.magic
-                      (fun (x8119 : 'T5 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8119) x8104);
-                 Ojs.array_set x8108 5
+                      (fun (x8130 : 'T5 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8130) x8115);
+                 Ojs.array_set x8119 5
                    (union2_to_js Obj.magic
-                      (fun (x8116 : 'T6 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8116) x8105);
-                 Ojs.array_set x8108 6
+                      (fun (x8127 : 'T6 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8127) x8116);
+                 Ojs.array_set x8119 6
                    (union2_to_js Obj.magic
-                      (fun (x8113 : 'T7 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8113) x8106);
-                 Ojs.array_set x8108 7
+                      (fun (x8124 : 'T7 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8124) x8117);
+                 Ojs.array_set x8119 7
                    (union2_to_js Obj.magic
-                      (fun (x8110 : 'T8 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8110) x8107);
-                 x8108))|])
+                      (fun (x8121 : 'T8 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8121) x8118);
+                 x8119))|])
     let (all''' :
       (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2 *
         ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t) union2 *
@@ -28095,55 +28118,55 @@ module Promise =
         ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6 * 'T7) t)
       =
       fun
-        (x8135 :
+        (x8146 :
           (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2
             * ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t)
             union2 * ('T5, 'T5 PromiseLike.t) union2 * ('T6,
             'T6 PromiseLike.t) union2 * ('T7, 'T7 PromiseLike.t) union2))
         ->
         t_of_js
-          (fun (x8165 : Ojs.t) ->
-             let x8166 = x8165 in
-             ((Obj.magic (Ojs.array_get x8166 0)),
-               (Obj.magic (Ojs.array_get x8166 1)),
-               (Obj.magic (Ojs.array_get x8166 2)),
-               (Obj.magic (Ojs.array_get x8166 3)),
-               (Obj.magic (Ojs.array_get x8166 4)),
-               (Obj.magic (Ojs.array_get x8166 5)),
-               (Obj.magic (Ojs.array_get x8166 6))))
+          (fun (x8176 : Ojs.t) ->
+             let x8177 = x8176 in
+             ((Obj.magic (Ojs.array_get x8177 0)),
+               (Obj.magic (Ojs.array_get x8177 1)),
+               (Obj.magic (Ojs.array_get x8177 2)),
+               (Obj.magic (Ojs.array_get x8177 3)),
+               (Obj.magic (Ojs.array_get x8177 4)),
+               (Obj.magic (Ojs.array_get x8177 5)),
+               (Obj.magic (Ojs.array_get x8177 6))))
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|((let (x8136, x8137, x8138, x8139, x8140, x8141, x8142) =
-                   x8135 in
-                 let x8143 = Ojs.array_make 7 in
-                 Ojs.array_set x8143 0
+             [|((let (x8147, x8148, x8149, x8150, x8151, x8152, x8153) =
+                   x8146 in
+                 let x8154 = Ojs.array_make 7 in
+                 Ojs.array_set x8154 0
                    (union2_to_js Obj.magic
-                      (fun (x8163 : 'T1 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8163) x8136);
-                 Ojs.array_set x8143 1
+                      (fun (x8174 : 'T1 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8174) x8147);
+                 Ojs.array_set x8154 1
                    (union2_to_js Obj.magic
-                      (fun (x8160 : 'T2 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8160) x8137);
-                 Ojs.array_set x8143 2
+                      (fun (x8171 : 'T2 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8171) x8148);
+                 Ojs.array_set x8154 2
                    (union2_to_js Obj.magic
-                      (fun (x8157 : 'T3 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8157) x8138);
-                 Ojs.array_set x8143 3
+                      (fun (x8168 : 'T3 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8168) x8149);
+                 Ojs.array_set x8154 3
                    (union2_to_js Obj.magic
-                      (fun (x8154 : 'T4 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8154) x8139);
-                 Ojs.array_set x8143 4
+                      (fun (x8165 : 'T4 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8165) x8150);
+                 Ojs.array_set x8154 4
                    (union2_to_js Obj.magic
-                      (fun (x8151 : 'T5 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8151) x8140);
-                 Ojs.array_set x8143 5
+                      (fun (x8162 : 'T5 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8162) x8151);
+                 Ojs.array_set x8154 5
                    (union2_to_js Obj.magic
-                      (fun (x8148 : 'T6 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8148) x8141);
-                 Ojs.array_set x8143 6
+                      (fun (x8159 : 'T6 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8159) x8152);
+                 Ojs.array_set x8154 6
                    (union2_to_js Obj.magic
-                      (fun (x8145 : 'T7 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8145) x8142);
-                 x8143))|])
+                      (fun (x8156 : 'T7 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8156) x8153);
+                 x8154))|])
     let (all'''' :
       (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2 *
         ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t) union2 *
@@ -28151,311 +28174,288 @@ module Promise =
         ('T1 * 'T2 * 'T3 * 'T4 * 'T5 * 'T6) t)
       =
       fun
-        (x8167 :
+        (x8178 :
           (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2
             * ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t)
             union2 * ('T5, 'T5 PromiseLike.t) union2 * ('T6,
             'T6 PromiseLike.t) union2))
         ->
         t_of_js
-          (fun (x8193 : Ojs.t) ->
-             let x8194 = x8193 in
-             ((Obj.magic (Ojs.array_get x8194 0)),
-               (Obj.magic (Ojs.array_get x8194 1)),
-               (Obj.magic (Ojs.array_get x8194 2)),
-               (Obj.magic (Ojs.array_get x8194 3)),
-               (Obj.magic (Ojs.array_get x8194 4)),
-               (Obj.magic (Ojs.array_get x8194 5))))
+          (fun (x8204 : Ojs.t) ->
+             let x8205 = x8204 in
+             ((Obj.magic (Ojs.array_get x8205 0)),
+               (Obj.magic (Ojs.array_get x8205 1)),
+               (Obj.magic (Ojs.array_get x8205 2)),
+               (Obj.magic (Ojs.array_get x8205 3)),
+               (Obj.magic (Ojs.array_get x8205 4)),
+               (Obj.magic (Ojs.array_get x8205 5))))
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|((let (x8168, x8169, x8170, x8171, x8172, x8173) = x8167 in
-                 let x8174 = Ojs.array_make 6 in
-                 Ojs.array_set x8174 0
+             [|((let (x8179, x8180, x8181, x8182, x8183, x8184) = x8178 in
+                 let x8185 = Ojs.array_make 6 in
+                 Ojs.array_set x8185 0
                    (union2_to_js Obj.magic
-                      (fun (x8191 : 'T1 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8191) x8168);
-                 Ojs.array_set x8174 1
+                      (fun (x8202 : 'T1 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8202) x8179);
+                 Ojs.array_set x8185 1
                    (union2_to_js Obj.magic
-                      (fun (x8188 : 'T2 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8188) x8169);
-                 Ojs.array_set x8174 2
+                      (fun (x8199 : 'T2 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8199) x8180);
+                 Ojs.array_set x8185 2
                    (union2_to_js Obj.magic
-                      (fun (x8185 : 'T3 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8185) x8170);
-                 Ojs.array_set x8174 3
+                      (fun (x8196 : 'T3 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8196) x8181);
+                 Ojs.array_set x8185 3
                    (union2_to_js Obj.magic
-                      (fun (x8182 : 'T4 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8182) x8171);
-                 Ojs.array_set x8174 4
+                      (fun (x8193 : 'T4 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8193) x8182);
+                 Ojs.array_set x8185 4
                    (union2_to_js Obj.magic
-                      (fun (x8179 : 'T5 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8179) x8172);
-                 Ojs.array_set x8174 5
+                      (fun (x8190 : 'T5 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8190) x8183);
+                 Ojs.array_set x8185 5
                    (union2_to_js Obj.magic
-                      (fun (x8176 : 'T6 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8176) x8173);
-                 x8174))|])
+                      (fun (x8187 : 'T6 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8187) x8184);
+                 x8185))|])
     let (all''''' :
       (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2 *
         ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t) union2 *
         ('T5, 'T5 PromiseLike.t) union2) -> ('T1 * 'T2 * 'T3 * 'T4 * 'T5) t)
       =
       fun
-        (x8195 :
+        (x8206 :
           (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2
             * ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t)
             union2 * ('T5, 'T5 PromiseLike.t) union2))
         ->
         t_of_js
-          (fun (x8217 : Ojs.t) ->
-             let x8218 = x8217 in
-             ((Obj.magic (Ojs.array_get x8218 0)),
-               (Obj.magic (Ojs.array_get x8218 1)),
-               (Obj.magic (Ojs.array_get x8218 2)),
-               (Obj.magic (Ojs.array_get x8218 3)),
-               (Obj.magic (Ojs.array_get x8218 4))))
+          (fun (x8228 : Ojs.t) ->
+             let x8229 = x8228 in
+             ((Obj.magic (Ojs.array_get x8229 0)),
+               (Obj.magic (Ojs.array_get x8229 1)),
+               (Obj.magic (Ojs.array_get x8229 2)),
+               (Obj.magic (Ojs.array_get x8229 3)),
+               (Obj.magic (Ojs.array_get x8229 4))))
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|((let (x8196, x8197, x8198, x8199, x8200) = x8195 in
-                 let x8201 = Ojs.array_make 5 in
-                 Ojs.array_set x8201 0
+             [|((let (x8207, x8208, x8209, x8210, x8211) = x8206 in
+                 let x8212 = Ojs.array_make 5 in
+                 Ojs.array_set x8212 0
                    (union2_to_js Obj.magic
-                      (fun (x8215 : 'T1 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8215) x8196);
-                 Ojs.array_set x8201 1
+                      (fun (x8226 : 'T1 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8226) x8207);
+                 Ojs.array_set x8212 1
                    (union2_to_js Obj.magic
-                      (fun (x8212 : 'T2 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8212) x8197);
-                 Ojs.array_set x8201 2
+                      (fun (x8223 : 'T2 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8223) x8208);
+                 Ojs.array_set x8212 2
                    (union2_to_js Obj.magic
-                      (fun (x8209 : 'T3 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8209) x8198);
-                 Ojs.array_set x8201 3
+                      (fun (x8220 : 'T3 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8220) x8209);
+                 Ojs.array_set x8212 3
                    (union2_to_js Obj.magic
-                      (fun (x8206 : 'T4 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8206) x8199);
-                 Ojs.array_set x8201 4
+                      (fun (x8217 : 'T4 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8217) x8210);
+                 Ojs.array_set x8212 4
                    (union2_to_js Obj.magic
-                      (fun (x8203 : 'T5 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8203) x8200);
-                 x8201))|])
+                      (fun (x8214 : 'T5 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8214) x8211);
+                 x8212))|])
     let (all'''''' :
       (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2 *
         ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t) union2) ->
         ('T1 * 'T2 * 'T3 * 'T4) t)
       =
       fun
-        (x8219 :
+        (x8230 :
           (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2
             * ('T3, 'T3 PromiseLike.t) union2 * ('T4, 'T4 PromiseLike.t)
             union2))
         ->
         t_of_js
-          (fun (x8237 : Ojs.t) ->
-             let x8238 = x8237 in
-             ((Obj.magic (Ojs.array_get x8238 0)),
-               (Obj.magic (Ojs.array_get x8238 1)),
-               (Obj.magic (Ojs.array_get x8238 2)),
-               (Obj.magic (Ojs.array_get x8238 3))))
+          (fun (x8248 : Ojs.t) ->
+             let x8249 = x8248 in
+             ((Obj.magic (Ojs.array_get x8249 0)),
+               (Obj.magic (Ojs.array_get x8249 1)),
+               (Obj.magic (Ojs.array_get x8249 2)),
+               (Obj.magic (Ojs.array_get x8249 3))))
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|((let (x8220, x8221, x8222, x8223) = x8219 in
-                 let x8224 = Ojs.array_make 4 in
-                 Ojs.array_set x8224 0
+             [|((let (x8231, x8232, x8233, x8234) = x8230 in
+                 let x8235 = Ojs.array_make 4 in
+                 Ojs.array_set x8235 0
                    (union2_to_js Obj.magic
-                      (fun (x8235 : 'T1 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8235) x8220);
-                 Ojs.array_set x8224 1
+                      (fun (x8246 : 'T1 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8246) x8231);
+                 Ojs.array_set x8235 1
                    (union2_to_js Obj.magic
-                      (fun (x8232 : 'T2 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8232) x8221);
-                 Ojs.array_set x8224 2
+                      (fun (x8243 : 'T2 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8243) x8232);
+                 Ojs.array_set x8235 2
                    (union2_to_js Obj.magic
-                      (fun (x8229 : 'T3 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8229) x8222);
-                 Ojs.array_set x8224 3
+                      (fun (x8240 : 'T3 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8240) x8233);
+                 Ojs.array_set x8235 3
                    (union2_to_js Obj.magic
-                      (fun (x8226 : 'T4 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8226) x8223);
-                 x8224))|])
+                      (fun (x8237 : 'T4 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8237) x8234);
+                 x8235))|])
     let (all''''''' :
       (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2 *
         ('T3, 'T3 PromiseLike.t) union2) -> ('T1 * 'T2 * 'T3) t)
       =
       fun
-        (x8239 :
+        (x8250 :
           (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2
             * ('T3, 'T3 PromiseLike.t) union2))
         ->
         t_of_js
-          (fun (x8253 : Ojs.t) ->
-             let x8254 = x8253 in
-             ((Obj.magic (Ojs.array_get x8254 0)),
-               (Obj.magic (Ojs.array_get x8254 1)),
-               (Obj.magic (Ojs.array_get x8254 2))))
+          (fun (x8264 : Ojs.t) ->
+             let x8265 = x8264 in
+             ((Obj.magic (Ojs.array_get x8265 0)),
+               (Obj.magic (Ojs.array_get x8265 1)),
+               (Obj.magic (Ojs.array_get x8265 2))))
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|((let (x8240, x8241, x8242) = x8239 in
-                 let x8243 = Ojs.array_make 3 in
-                 Ojs.array_set x8243 0
+             [|((let (x8251, x8252, x8253) = x8250 in
+                 let x8254 = Ojs.array_make 3 in
+                 Ojs.array_set x8254 0
                    (union2_to_js Obj.magic
-                      (fun (x8251 : 'T1 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8251) x8240);
-                 Ojs.array_set x8243 1
+                      (fun (x8262 : 'T1 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8262) x8251);
+                 Ojs.array_set x8254 1
                    (union2_to_js Obj.magic
-                      (fun (x8248 : 'T2 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8248) x8241);
-                 Ojs.array_set x8243 2
+                      (fun (x8259 : 'T2 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8259) x8252);
+                 Ojs.array_set x8254 2
                    (union2_to_js Obj.magic
-                      (fun (x8245 : 'T3 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8245) x8242);
-                 x8243))|])
+                      (fun (x8256 : 'T3 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8256) x8253);
+                 x8254))|])
     let (all'''''''' :
       (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2) ->
         ('T1 * 'T2) t)
       =
       fun
-        (x8255 :
+        (x8266 :
           (('T1, 'T1 PromiseLike.t) union2 * ('T2, 'T2 PromiseLike.t) union2))
         ->
         t_of_js
-          (fun (x8265 : Ojs.t) ->
-             let x8266 = x8265 in
-             ((Obj.magic (Ojs.array_get x8266 0)),
-               (Obj.magic (Ojs.array_get x8266 1))))
+          (fun (x8276 : Ojs.t) ->
+             let x8277 = x8276 in
+             ((Obj.magic (Ojs.array_get x8277 0)),
+               (Obj.magic (Ojs.array_get x8277 1))))
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|((let (x8256, x8257) = x8255 in
-                 let x8258 = Ojs.array_make 2 in
-                 Ojs.array_set x8258 0
+             [|((let (x8267, x8268) = x8266 in
+                 let x8269 = Ojs.array_make 2 in
+                 Ojs.array_set x8269 0
                    (union2_to_js Obj.magic
-                      (fun (x8263 : 'T1 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8263) x8256);
-                 Ojs.array_set x8258 1
+                      (fun (x8274 : 'T1 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8274) x8267);
+                 Ojs.array_set x8269 1
                    (union2_to_js Obj.magic
-                      (fun (x8260 : 'T2 PromiseLike.t) ->
-                         PromiseLike.t_to_js Obj.magic x8260) x8257);
-                 x8258))|])
+                      (fun (x8271 : 'T2 PromiseLike.t) ->
+                         PromiseLike.t_to_js Obj.magic x8271) x8268);
+                 x8269))|])
     let (all''''''''' : ('T, 'T PromiseLike.t) union2 list -> 'T list t) =
-      fun (x8267 : ('T, 'T PromiseLike.t) union2 list) ->
-        t_of_js (fun (x8272 : Ojs.t) -> Ojs.list_of_js Obj.magic x8272)
+      fun (x8278 : ('T, 'T PromiseLike.t) union2 list) ->
+        t_of_js (fun (x8283 : Ojs.t) -> Ojs.list_of_js Obj.magic x8283)
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
              [|(Ojs.list_to_js
-                  (fun (x8268 : ('T, 'T PromiseLike.t) union2) ->
+                  (fun (x8279 : ('T, 'T PromiseLike.t) union2) ->
                      union2_to_js Obj.magic
-                       (fun (x8270 : 'T PromiseLike.t) ->
-                          PromiseLike.t_to_js Obj.magic x8270) x8268) x8267)|])
+                       (fun (x8281 : 'T PromiseLike.t) ->
+                          PromiseLike.t_to_js Obj.magic x8281) x8279) x8278)|])
     let (race : 'T list -> any t) =
-      fun (x8274 : 'T list) ->
+      fun (x8285 : 'T list) ->
         t_of_js any_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "race"
-             [|(Ojs.list_to_js Obj.magic x8274)|])
+             [|(Ojs.list_to_js Obj.magic x8285)|])
     let (reject : ?reason:any -> unit -> 'T t) =
-      fun ?reason:(x8277 : any option) ->
+      fun ?reason:(x8288 : any option) ->
         fun () ->
           t_of_js Obj.magic
-            (let x8280 = Ojs.get_prop_ascii Ojs.global "Promise" in
-             Ojs.call (Ojs.get_prop_ascii x8280 "reject") "apply"
-               [|x8280;((let x8278 =
+            (let x8291 = Ojs.get_prop_ascii Ojs.global "Promise" in
+             Ojs.call (Ojs.get_prop_ascii x8291 "reject") "apply"
+               [|x8291;((let x8289 =
                            Ojs.new_obj
                              (Ojs.get_prop_ascii Ojs.global "Array") 
                              [||] in
-                         (match x8277 with
-                          | Some x8279 ->
+                         (match x8288 with
+                          | Some x8290 ->
                               ignore
-                                (Ojs.call x8278 "push" [|(any_to_js x8279)|])
+                                (Ojs.call x8289 "push" [|(any_to_js x8290)|])
                           | None -> ());
-                         x8278))|])
+                         x8289))|])
     let (resolve : unit -> unit t) =
       fun () ->
         t_of_js Ojs.unit_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "resolve" [||])
     let (resolve' : ('T, 'T PromiseLike.t) union2 -> 'T t) =
-      fun (x8283 : ('T, 'T PromiseLike.t) union2) ->
+      fun (x8294 : ('T, 'T PromiseLike.t) union2) ->
         t_of_js Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "resolve"
              [|(union2_to_js Obj.magic
-                  (fun (x8285 : 'T PromiseLike.t) ->
-                     PromiseLike.t_to_js Obj.magic x8285) x8283)|])
-    let (any :
-      (('T, 'T PromiseLike.t) union2 Iterable.t,
-        ('T, 'T PromiseLike.t) union2) or_array -> 'T t)
-      =
-      fun
-        (x8288 :
-          (('T, 'T PromiseLike.t) union2 Iterable.t,
-            ('T, 'T PromiseLike.t) union2) or_array)
-        ->
-        t_of_js Obj.magic
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
-             [|(or_array_to_js
-                  (fun (x8289 : ('T, 'T PromiseLike.t) union2 Iterable.t) ->
-                     Iterable.t_to_js
-                       (fun (x8290 : ('T, 'T PromiseLike.t) union2) ->
-                          union2_to_js Obj.magic
-                            (fun (x8292 : 'T PromiseLike.t) ->
-                               PromiseLike.t_to_js Obj.magic x8292) x8290)
-                       x8289)
-                  (fun (x8294 : ('T, 'T PromiseLike.t) union2) ->
-                     union2_to_js Obj.magic
-                       (fun (x8296 : 'T PromiseLike.t) ->
-                          PromiseLike.t_to_js Obj.magic x8296) x8294) x8288)|])
-    let (all'''''''''' :
-      ('T, 'T PromiseLike.t) union2 Iterable.t -> 'T list t) =
-      fun (x8299 : ('T, 'T PromiseLike.t) union2 Iterable.t) ->
-        t_of_js (fun (x8304 : Ojs.t) -> Ojs.list_of_js Obj.magic x8304)
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
-             [|(Iterable.t_to_js
-                  (fun (x8300 : ('T, 'T PromiseLike.t) union2) ->
-                     union2_to_js Obj.magic
-                       (fun (x8302 : 'T PromiseLike.t) ->
-                          PromiseLike.t_to_js Obj.magic x8302) x8300) x8299)|])
-    let (race' : 'T Iterable.t -> any t) =
-      fun (x8306 : 'T Iterable.t) ->
+                  (fun (x8296 : 'T PromiseLike.t) ->
+                     PromiseLike.t_to_js Obj.magic x8296) x8294)|])
+    let (allSettled : 'T -> any t) =
+      fun (x8299 : 'T) ->
         t_of_js any_of_js
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "race"
-             [|(Iterable.t_to_js Obj.magic x8306)|])
-    let (race'' : ('T, 'T PromiseLike.t) union2 Iterable.t -> 'T t) =
-      fun (x8309 : ('T, 'T PromiseLike.t) union2 Iterable.t) ->
-        t_of_js Obj.magic
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "race"
-             [|(Iterable.t_to_js
-                  (fun (x8310 : ('T, 'T PromiseLike.t) union2) ->
-                     union2_to_js Obj.magic
-                       (fun (x8312 : 'T PromiseLike.t) ->
-                          PromiseLike.t_to_js Obj.magic x8312) x8310) x8309)|])
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "allSettled"
+             [|(Obj.magic x8299)|])
+    let (allSettled' : 'T Iterable.t -> any PromiseSettledResult.t list t) =
+      fun (x8301 : 'T Iterable.t) ->
+        t_of_js
+          (fun (x8303 : Ojs.t) ->
+             Ojs.list_of_js
+               (fun (x8304 : Ojs.t) ->
+                  PromiseSettledResult.t_of_js any_of_js x8304) x8303)
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "allSettled"
+             [|(Iterable.t_to_js Obj.magic x8301)|])
     let (any' :
       (('T, 'T PromiseLike.t) union2 Iterable.t,
         ('T, 'T PromiseLike.t) union2) or_array -> 'T t)
       =
       fun
-        (x8315 :
+        (x8306 :
           (('T, 'T PromiseLike.t) union2 Iterable.t,
             ('T, 'T PromiseLike.t) union2) or_array)
         ->
         t_of_js Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "any"
              [|(or_array_to_js
-                  (fun (x8316 : ('T, 'T PromiseLike.t) union2 Iterable.t) ->
+                  (fun (x8307 : ('T, 'T PromiseLike.t) union2 Iterable.t) ->
                      Iterable.t_to_js
-                       (fun (x8317 : ('T, 'T PromiseLike.t) union2) ->
+                       (fun (x8308 : ('T, 'T PromiseLike.t) union2) ->
                           union2_to_js Obj.magic
-                            (fun (x8319 : 'T PromiseLike.t) ->
-                               PromiseLike.t_to_js Obj.magic x8319) x8317)
-                       x8316)
-                  (fun (x8321 : ('T, 'T PromiseLike.t) union2) ->
+                            (fun (x8310 : 'T PromiseLike.t) ->
+                               PromiseLike.t_to_js Obj.magic x8310) x8308)
+                       x8307)
+                  (fun (x8312 : ('T, 'T PromiseLike.t) union2) ->
                      union2_to_js Obj.magic
-                       (fun (x8323 : 'T PromiseLike.t) ->
-                          PromiseLike.t_to_js Obj.magic x8323) x8321) x8315)|])
-    let (allSettled : 'T -> any t) =
-      fun (x8326 : 'T) ->
+                       (fun (x8314 : 'T PromiseLike.t) ->
+                          PromiseLike.t_to_js Obj.magic x8314) x8312) x8306)|])
+    let (all'''''''''' :
+      ('T, 'T PromiseLike.t) union2 Iterable.t -> 'T list t) =
+      fun (x8317 : ('T, 'T PromiseLike.t) union2 Iterable.t) ->
+        t_of_js (fun (x8322 : Ojs.t) -> Ojs.list_of_js Obj.magic x8322)
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "all"
+             [|(Iterable.t_to_js
+                  (fun (x8318 : ('T, 'T PromiseLike.t) union2) ->
+                     union2_to_js Obj.magic
+                       (fun (x8320 : 'T PromiseLike.t) ->
+                          PromiseLike.t_to_js Obj.magic x8320) x8318) x8317)|])
+    let (race' : 'T Iterable.t -> any t) =
+      fun (x8324 : 'T Iterable.t) ->
         t_of_js any_of_js
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "allSettled"
-             [|(Obj.magic x8326)|])
-    let (allSettled' : 'T Iterable.t -> any PromiseSettledResult.t list t) =
-      fun (x8328 : 'T Iterable.t) ->
-        t_of_js
-          (fun (x8330 : Ojs.t) ->
-             Ojs.list_of_js
-               (fun (x8331 : Ojs.t) ->
-                  PromiseSettledResult.t_of_js any_of_js x8331) x8330)
-          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "allSettled"
-             [|(Iterable.t_to_js Obj.magic x8328)|])
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "race"
+             [|(Iterable.t_to_js Obj.magic x8324)|])
+    let (race'' : ('T, 'T PromiseLike.t) union2 Iterable.t -> 'T t) =
+      fun (x8327 : ('T, 'T PromiseLike.t) union2 Iterable.t) ->
+        t_of_js Obj.magic
+          (Ojs.call (Ojs.get_prop_ascii Ojs.global "Promise") "race"
+             [|(Iterable.t_to_js
+                  (fun (x8328 : ('T, 'T PromiseLike.t) union2) ->
+                     union2_to_js Obj.magic
+                       (fun (x8330 : 'T PromiseLike.t) ->
+                          PromiseLike.t_to_js Obj.magic x8330) x8328) x8327)|])
     let cast_from = Obj.magic
   end
 module AsyncIterator =
@@ -29075,25 +29075,25 @@ module ArrayBufferTypes =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x8556 : __tags intf) -> intf_to_js __tags_to_js x8556
-    let (get_SharedArrayBuffer : 'tags this -> SharedArrayBuffer.t) =
+    let (get_ArrayBuffer : 'tags this -> ArrayBuffer.t) =
       fun (x8560 : 'tags this) ->
+        ArrayBuffer.t_of_js
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x8560) "ArrayBuffer")
+    let (set_ArrayBuffer : 'tags this -> ArrayBuffer.t -> unit) =
+      fun (x8562 : 'tags this) ->
+        fun (x8563 : ArrayBuffer.t) ->
+          Ojs.set_prop_ascii (this_to_js Obj.magic x8562) "ArrayBuffer"
+            (ArrayBuffer.t_to_js x8563)
+    let (get_SharedArrayBuffer : 'tags this -> SharedArrayBuffer.t) =
+      fun (x8565 : 'tags this) ->
         SharedArrayBuffer.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x8560)
+          (Ojs.get_prop_ascii (this_to_js Obj.magic x8565)
              "SharedArrayBuffer")
     let (set_SharedArrayBuffer : 'tags this -> SharedArrayBuffer.t -> unit) =
-      fun (x8562 : 'tags this) ->
-        fun (x8563 : SharedArrayBuffer.t) ->
-          Ojs.set_prop_ascii (this_to_js Obj.magic x8562) "SharedArrayBuffer"
-            (SharedArrayBuffer.t_to_js x8563)
-    let (get_ArrayBuffer : 'tags this -> ArrayBuffer.t) =
-      fun (x8565 : 'tags this) ->
-        ArrayBuffer.t_of_js
-          (Ojs.get_prop_ascii (this_to_js Obj.magic x8565) "ArrayBuffer")
-    let (set_ArrayBuffer : 'tags this -> ArrayBuffer.t -> unit) =
       fun (x8567 : 'tags this) ->
-        fun (x8568 : ArrayBuffer.t) ->
-          Ojs.set_prop_ascii (this_to_js Obj.magic x8567) "ArrayBuffer"
-            (ArrayBuffer.t_to_js x8568)
+        fun (x8568 : SharedArrayBuffer.t) ->
+          Ojs.set_prop_ascii (this_to_js Obj.magic x8567) "SharedArrayBuffer"
+            (SharedArrayBuffer.t_to_js x8568)
     let cast_from = Obj.magic
   end
 module AggregateError =
@@ -29223,6 +29223,8 @@ module AggregateError =
              (Ojs.get_prop_ascii Ojs.global "AggregateError") "prototype")
     let cast_from = Obj.magic
   end
+let (proxy : unit -> ProxyConstructor.t) =
+  fun () -> ProxyConstructor.t_of_js (Ojs.get_prop_ascii Ojs.global "Proxy")
 let (nan : unit -> float) =
   fun () -> Ojs.float_of_js (Ojs.get_prop_ascii Ojs.global "NaN")
 let (infinity : unit -> float) =
@@ -29287,5 +29289,3 @@ let (unescape : string -> string) =
   fun (x8626 : string) ->
     Ojs.string_of_js
       (Ojs.call Ojs.global "unescape" [|(Ojs.string_to_js x8626)|])
-let (proxy : unit -> ProxyConstructor.t) =
-  fun () -> ProxyConstructor.t_of_js (Ojs.get_prop_ascii Ojs.global "Proxy")

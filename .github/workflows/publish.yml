@@ -45,8 +45,6 @@ jobs:
         run: dotnet restore
            | dotnet tool restore
 
-        run: opam install js_of_ocaml-compiler js_of_ocaml-ppx ojs
-
       - name: Pin the latest gen_js_api
         run: opam pin add gen_js_api https://github.com/LexiFi/gen_js_api.git -y
       - name: Install OCaml Dependencies

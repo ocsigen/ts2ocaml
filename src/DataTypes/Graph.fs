@@ -1,4 +1,4 @@
-namespace DataType
+namespace DataTypes
 
 type Graph<'node when 'node: comparison> = Map<'node, 'node list>
 

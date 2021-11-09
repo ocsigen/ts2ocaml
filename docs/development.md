@@ -8,7 +8,7 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 - `src/`
   - `Bindings/` ... bindings to JS libraries
   - `Extensions.fs` ... **\[\<AutoOpen\>\]** extensions for standard library and JS libraries
-  - `DataType/`  ... common data structures and algorithm
+  - `DataTypes/`  ... common data structures and algorithm
     - `Text.fs`  ... efficient rope with `O(1)` concat & `O(n)` stringify
     - `Trie.fs`  ... trie based on immutable map
     - `Graph.fs` ... graph based on immutable map & graph algorithms

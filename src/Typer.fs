@@ -1,7 +1,7 @@
 module Typer
 
 open Syntax
-open DataType
+open DataTypes
 
 type TyperOptions =
   inherit GlobalOptions

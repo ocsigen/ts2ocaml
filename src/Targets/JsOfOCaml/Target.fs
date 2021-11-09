@@ -1,7 +1,7 @@
 module Targets.JsOfOCaml.Target
 
 open Syntax
-open DataType
+open DataTypes
 
 open Target
 open Targets.JsOfOCaml.Common

@@ -1,7 +1,7 @@
 module Targets.JsOfOCaml.Common
 
 open Fable.Core
-open DataType
+open DataTypes
 
 [<StringEnum; RequireQualifiedAccess>]
 type RecModule =

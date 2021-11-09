@@ -7,9 +7,9 @@
     <Compile Include="Bindings/YargsParser.fs" />
     <Compile Include="Bindings/Yargs.fs" />
     <Compile Include="Extensions.fs" />
-    <Compile Include="DataType/Text.fs" />
-    <Compile Include="DataType/Trie.fs" />
-    <Compile Include="DataType/Graph.fs" />
+    <Compile Include="DataTypes/Text.fs" />
+    <Compile Include="DataTypes/Trie.fs" />
+    <Compile Include="DataTypes/Graph.fs" />
     <Compile Include="Common.fs" />
     <Compile Include="Syntax.fs" />
     <Compile Include="Naming.fs" />

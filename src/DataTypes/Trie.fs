@@ -1,4 +1,4 @@
-namespace DataType
+namespace DataTypes
 
 type Trie<'k, 'v when 'k: comparison> = {
   value: 'v option

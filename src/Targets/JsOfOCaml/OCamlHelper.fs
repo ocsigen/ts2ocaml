@@ -3,8 +3,8 @@ module Targets.JsOfOCaml.OCamlHelper
 open System
 open Syntax
 open Targets.JsOfOCaml.Common
-open DataType
-open DataType.Text
+open DataTypes
+open DataTypes.Text
 
 let comment text =
   if text = empty then empty

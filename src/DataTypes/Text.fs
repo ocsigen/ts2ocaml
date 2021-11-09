@@ -1,4 +1,4 @@
-namespace DataType
+namespace DataTypes
 
 [<StructuredFormatDisplay("{AsString}")>]
 type text =

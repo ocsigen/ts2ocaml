@@ -3,8 +3,8 @@ module Targets.JsOfOCaml.Writer
 open Syntax
 open Typer
 open Typer.Type
-open DataType
-open DataType.Text
+open DataTypes
+open DataTypes.Text
 
 open Targets.JsOfOCaml.Common
 open Targets.JsOfOCaml.OCamlHelper

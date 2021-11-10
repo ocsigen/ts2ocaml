@@ -518,11 +518,31 @@ and Reference =
   | LibReference of string
 
 and SourceFile = {
-  fileName: string
+  fileName: Path.Relative
   statements: Statement list
   references: Reference list
   hasNoDefaultLib: bool
   moduleName: string option
+}
+
+type PackageInfo = {
+  /// * will be `foo` if `fullName` is `@types/foo`
+  /// * will be `@user/foo` if `fullName` is `@user/foo`
+  name: string
+  /// * will be `foo` if `fullName` is `@user/foo`
+  shortName: string
+  isDefinitelyTyped: bool
+  version: string
+  /// absolute path
+  rootPath: Path.Absolute
+  /// `index.d.ts` or the one specified in `package.json`.
+  indexFile: Path.Relative option
+  exports: {| submodule: string; file: Path.Relative |} list
+}
+
+type Input = {
+  sources: SourceFile list
+  info: PackageInfo option
 }
 
 module Literal =

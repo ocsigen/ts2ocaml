@@ -11,7 +11,7 @@ open Fable.Core.JsInterop
 let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
   argv |> Options.register
 
-let private run (srcs: SourceFile list) (options: Options) =
+let private run (input: Input) (options: Options) =
   let outputDir =
     let curdir = Node.Api.``process``.cwd()
     match options.outputDir with
@@ -30,13 +30,13 @@ let private run (srcs: SourceFile list) (options: Options) =
     if options.createMinimalStdlib then
       [{ fileName = "ts2ocaml_min.mli"; content = Text.str stdlib; stubLines = [] }]
     else
-      if List.isEmpty srcs then
+      if List.isEmpty input.sources then
         Log.warnf options "No input file given."
         []
       else if options.stdlib then
-        emitStdlib srcs options
+        emitStdlib input options
       else
-        emitEverythingCombined srcs options
+        emitEverythingCombined input options
 
   for result in results do
     let fullPath = Node.Api.path.join[|outputDir; result.fileName|]

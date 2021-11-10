@@ -12,13 +12,13 @@ open Targets.JsOfOCaml.OCamlHelper
 type ScriptTarget = TypeScript.Ts.ScriptTarget
 
 type State = {|
-  selfModuleName: string
+  info: Result<PackageInfo, string option>
   referencesCache: MutableMap<string list, WeakTrie<string>>
   usedAnonymousInterfacesCache: MutableMap<string list, Set<int>>
 |}
 module State =
-  let create selfModuleName : State =
-    {| selfModuleName = selfModuleName
+  let create info : State =
+    {| info = info
        referencesCache = new MutableMap<_, _>();
        usedAnonymousInterfacesCache = new MutableMap<_, _>() |}
 
@@ -1449,7 +1449,9 @@ let header =
   [ str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
     Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]") ]
 
-let emitStdlib (srcs: SourceFile list) (opts: Options) : Output list =
+let emitStdlib (input: Input) (opts: Options) : Output list =
+  let srcs = input.sources
+
   Log.tracef opts "* looking up the minimal supported ES version for each definition..."
   let esSrc =
     srcs
@@ -1491,7 +1493,7 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output list =
 
   let writerCtx ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
-        |> Context.mapState (fun _ -> State.create "")
+        |> Context.mapState (fun _ -> State.create (Error None))
 
   Log.tracef opts "* emitting stdlib..."
 
@@ -1513,9 +1515,13 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output list =
     createOutput "dom" ["Ts2ocaml_min"; "Ts2ocaml_es"] domCtx domSrc
     createOutput "webworker" ["Ts2ocaml_min"; "Ts2ocaml_es"] webworkerCtx webworkerSrc ]
 
-let emitImports (ctx: Context) (stmts: Statement list) : text list =
+let emitImports (ctx: Context) (sourceFile: SourceFile) : text list =
   let emitImport (i: Import) =
-    let theirModuleName = i.moduleSpecifier |> Naming.jsModuleNameToOCamlModuleName ctx.state.selfModuleName
+    let moduleSpecifier =
+      match JsHelper.resolveRelativeImportPath (ctx.state.info |> Result.toOption) sourceFile.fileName i.moduleSpecifier with
+      | JsHelper.Valid s | JsHelper.Heuristic s -> s
+      | JsHelper.Unknown -> i.moduleSpecifier
+    let theirModuleName = moduleSpecifier |> Naming.jsModuleNameToOCamlModuleName
 
     let isModule (name: string) (kind: Set<Kind> option) =
       i.isTypeOnly
@@ -1555,7 +1561,7 @@ let emitImports (ctx: Context) (stmts: Statement list) : text list =
         for b in x.bindings do
           match emitES6Import b with Some t -> yield stopStartImplem t | None -> () ]
 
-  stmts |> List.collect (function Import i -> emitImport i | _ -> [])
+  sourceFile.statements |> List.collect (function Import i -> emitImport i | _ -> [])
 
 let handleExports moduleName (ctx: Context) (str: StructuredText) : {| stubLines: string list; topLevelScope: string option |} =
   let stubBinding xs expr =
@@ -1611,13 +1617,17 @@ let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
 
     let openRefs =
       refs
-      |> List.map (Naming.jsModuleNameToOCamlModuleName ctx.state.selfModuleName)
+      |> List.map (fun x ->
+        x
+        |> JsHelper.resolveRelativeImportPath (Result.toOption ctx.state.info) src.fileName
+        |> JsHelper.InferenceResult.unwrap x
+        |> Naming.jsModuleNameToOCamlModuleName)
       |> open_
 
     empty :: comments @ [openRefs]
 
-let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output list =
-  if srcs = [] then failwith "no input files were given"
+let emitEverythingCombined (input: Input) (opts: Options) : Output list =
+  let srcs = input.sources
 
   let srcs =
     match srcs with
@@ -1639,24 +1649,29 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output list
           moduleName = moduleName }
       ]
 
-  let moduleName =
-    let indexFile =
-      srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts")
-           |> Option.defaultWith (fun () -> List.head srcs)
-    Naming.getJsModuleName indexFile.fileName
-  let derivedOutputFileName = moduleName |> Naming.jsModuleNameToFileName moduleName
+  let derivedOutputFileName =
+    JsHelper.deriveOutputFileName
+      opts input.info (srcs |> List.map (fun src -> src.fileName))
+      Naming.jsModuleNameToFileName "output.mli"
 
-  Log.tracef opts "* the inferred output file name is '%s'" derivedOutputFileName
+  let derivedModuleName =
+    JsHelper.deriveModuleName input.info (srcs |> List.map (fun src -> src.fileName))
+    |> JsHelper.InferenceResult.unwrap "package"
+
+  let info =
+    match input.info with
+    | Some info -> Ok info
+    | None -> Error (Some derivedModuleName)
 
   Log.tracef opts "* running typer..."
   let ctx, srcs = runAll srcs opts
   let ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
-        |> Context.mapState (fun _ -> State.create moduleName)
+        |> Context.mapState (fun _ -> State.create info)
   let stmts = srcs |> List.collect (fun x -> x.statements)
   let structuredText = createStructuredText ctx stmts
 
-  let exported = handleExports moduleName ctx structuredText
+  let exported = handleExports derivedModuleName ctx structuredText
 
   Log.tracef opts "* emitting a binding for js_of_ocaml..."
   let content =
@@ -1668,8 +1683,8 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output list
         yield tprintf "[@@@js.scope \"%s\"]" scope
 
       yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; "Ts2ocaml.WebWorker" ]
-      yield! emitImports ctx stmts
       for src in srcs do
+        yield! emitImports ctx src
         yield! emitReferenceTypeDirectives ctx src
 
       yield empty

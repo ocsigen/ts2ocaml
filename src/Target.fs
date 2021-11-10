@@ -7,12 +7,12 @@ type ITarget<'Options when 'Options :> GlobalOptions> =
   abstract Command: string
   abstract Description: string
   abstract Builder: (Argv<'Options> -> Argv<'Options>)
-  abstract Run: sources:SourceFile list * options:'Options -> unit
+  abstract Run: input: Input * options:'Options -> unit
 
 open Fable.Core
 open Fable.Core.JsInterop
 
-let register (parse: GlobalOptions -> string[] -> SourceFile list) (target: ITarget<'TargetOptions>) (argv: Argv<'Options>) : Argv<'Options>
+let register (parse: GlobalOptions -> string[] -> Input) (target: ITarget<'TargetOptions>) (argv: Argv<'Options>) : Argv<'Options>
   when 'Options :> GlobalOptions
   and  'TargetOptions :> GlobalOptions =
   argv.command(
@@ -23,9 +23,9 @@ let register (parse: GlobalOptions -> string[] -> SourceFile list) (target: ITar
     ),
     handler = (fun (argv: Arguments<'Options>) ->
       let inputs = argv.["inputs"] :?> string[]
-      let srcs = parse !!argv.Options inputs
       try
-        target.Run(srcs, !!argv.Options)
+        let input = parse !!argv.Options inputs
+        target.Run(input, !!argv.Options)
       with
         e ->
           eprintfn "%s" e.StackTrace

@@ -367,7 +367,7 @@ module Naming =
     | None -> sprintf "%s_%d" name arity
 
   let private jsModuleNameToOCamlName (jsModuleName: string) =
-    match jsModuleName |> String.splitThenRemoveEmptyEntries "/" |> Array.toList with
+    match jsModuleName.TrimStart('@') |> String.splitThenRemoveEmptyEntries "/" |> Array.toList with
     | xs ->
       xs
       |> List.map (fun n ->

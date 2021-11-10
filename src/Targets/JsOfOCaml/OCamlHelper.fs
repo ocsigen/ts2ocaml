@@ -366,18 +366,22 @@ module Naming =
       else sprintf "%s_%d" name arity
     | None -> sprintf "%s_%d" name arity
 
-  let jsModuleNameToFileName (jsModuleName: string) =
+  let private jsModuleNameToOCamlName (selfModuleName: string) (jsModuleName: string) =
+    match jsModuleName |> String.splitThenRemoveEmptyEntries "/" |> Array.toList with
+    | "." :: [] -> selfModuleName
+    | "." :: relativePath -> List.last relativePath
+    | xs ->
+      xs
+      |> List.map (fun n ->
+        n |> Naming.toCase Naming.Case.LowerSnakeCase)
+      |> String.concat "__"
+
+  let jsModuleNameToFileName (selfModuleName: string) (jsModuleName: string) =
     jsModuleName
-    |> String.split "/"
-    |> Array.map (fun n ->
-      n |> Naming.toCase Naming.Case.LowerSnakeCase)
-    |> String.concat "__"
+    |> jsModuleNameToOCamlName selfModuleName
     |> sprintf "%s.mli"
 
-  let jsModuleNameToOCamlModuleName (jsModuleName: string) =
+  let jsModuleNameToOCamlModuleName (selfModuleName: string) (jsModuleName: string) =
     jsModuleName
-    |> String.split "/"
-    |> Array.map (fun n ->
-      n |> Naming.toCase Naming.Case.LowerSnakeCase)
-    |> String.concat "__"
+    |> jsModuleNameToOCamlName selfModuleName
     |> moduleName

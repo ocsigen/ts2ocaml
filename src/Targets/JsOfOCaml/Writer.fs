@@ -12,12 +12,14 @@ open Targets.JsOfOCaml.OCamlHelper
 type ScriptTarget = TypeScript.Ts.ScriptTarget
 
 type State = {|
+  selfModuleName: string
   referencesCache: MutableMap<string list, WeakTrie<string>>
   usedAnonymousInterfacesCache: MutableMap<string list, Set<int>>
 |}
 module State =
-  let create () : State =
-    {| referencesCache = new MutableMap<_, _>();
+  let create selfModuleName : State =
+    {| selfModuleName = selfModuleName
+       referencesCache = new MutableMap<_, _>();
        usedAnonymousInterfacesCache = new MutableMap<_, _>() |}
 
 type Context = Context<Options, State>
@@ -1489,7 +1491,7 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output list =
 
   let writerCtx ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
-        |> Context.mapState (fun _ -> State.create ())
+        |> Context.mapState (fun _ -> State.create "")
 
   Log.tracef opts "* emitting stdlib..."
 
@@ -1511,15 +1513,16 @@ let emitStdlib (srcs: SourceFile list) (opts: Options) : Output list =
     createOutput "dom" ["Ts2ocaml_min"; "Ts2ocaml_es"] domCtx domSrc
     createOutput "webworker" ["Ts2ocaml_min"; "Ts2ocaml_es"] webworkerCtx webworkerSrc ]
 
-let emitImports (stmts: Statement list) : text list =
+let emitImports (ctx: Context) (stmts: Statement list) : text list =
   let emitImport (i: Import) =
-    let theirModuleName = i.moduleSpecifier |> Naming.jsModuleNameToOCamlModuleName
+    let theirModuleName = i.moduleSpecifier |> Naming.jsModuleNameToOCamlModuleName ctx.state.selfModuleName
 
     let isModule (name: string) (kind: Set<Kind> option) =
       i.isTypeOnly
       || kind |> Option.map (fun k -> Set.intersect k (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not)
               |> Option.defaultValue false
-      || name |> Naming.isCase Naming.Case.PascalCase
+      || ctx.unknownIdentTypes |> Trie.containsKey [name]
+      || name |> Naming.isCase Naming.PascalCase
 
     let emitES6Import (b: {| name: string; kind: Set<Kind> option; renameAs: string option |}) =
       if isModule b.name b.kind then
@@ -1594,7 +1597,7 @@ let handleExports moduleName (ctx: Context) (str: StructuredText) : {| stubLines
           stubLines, Some moduleName
     {| stubLines = stubLines; topLevelScope = topLevelScope |}
 
-let emitReferenceTypeDirectives (src: SourceFile) : text list =
+let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
   let refs =
     src.references
     |> List.choose (function TypeReference r -> Some r | _ -> None)
@@ -1608,7 +1611,7 @@ let emitReferenceTypeDirectives (src: SourceFile) : text list =
 
     let openRefs =
       refs
-      |> List.map Naming.jsModuleNameToOCamlModuleName
+      |> List.map (Naming.jsModuleNameToOCamlModuleName ctx.state.selfModuleName)
       |> open_
 
     empty :: comments @ [openRefs]
@@ -1641,7 +1644,7 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output list
       srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts")
            |> Option.defaultWith (fun () -> List.head srcs)
     Naming.getJsModuleName indexFile.fileName
-  let derivedOutputFileName = moduleName |> Naming.jsModuleNameToFileName
+  let derivedOutputFileName = moduleName |> Naming.jsModuleNameToFileName moduleName
 
   Log.tracef opts "* the inferred output file name is '%s'" derivedOutputFileName
 
@@ -1649,7 +1652,7 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output list
   let ctx, srcs = runAll srcs opts
   let ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
-        |> Context.mapState (fun _ -> State.create ())
+        |> Context.mapState (fun _ -> State.create moduleName)
   let stmts = srcs |> List.collect (fun x -> x.statements)
   let structuredText = createStructuredText ctx stmts
 
@@ -1665,9 +1668,9 @@ let emitEverythingCombined (srcs: SourceFile list) (opts: Options) : Output list
         yield tprintf "[@@@js.scope \"%s\"]" scope
 
       yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; "Ts2ocaml.WebWorker" ]
-      yield! emitImports stmts
+      yield! emitImports ctx stmts
       for src in srcs do
-        yield! emitReferenceTypeDirectives src
+        yield! emitReferenceTypeDirectives ctx src
 
       yield empty
       yield! emitStatementsWithStructuredText ctx stmts structuredText

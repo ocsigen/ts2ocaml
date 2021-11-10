@@ -28,7 +28,6 @@ fs.readdirSync(nodeModulesDir)
   });
 
 module.exports = {
-  mode: 'production',
   target: "node",
   entry: CONFIG.fsharpEntry,
   externals: nodeExternals,

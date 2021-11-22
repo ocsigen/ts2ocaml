@@ -49,7 +49,8 @@ let emitCommentBody (c: Comment) : text =
       str "example:"
       between "[" "]" (strLines (escape lines))
     ]
-  | See (link, lines) -> tprintf "@see \"%s\" " link + strLines (escape lines)
+  | See (Some name, lines) -> tprintf "@see \"%s\" " name + strLines (escape lines)
+  | See (None, lines) -> str "see: " + strLines (escape lines)
   | ESVersion target ->
     match target with
     | ScriptTarget.ES3 | ScriptTarget.ES5 -> empty

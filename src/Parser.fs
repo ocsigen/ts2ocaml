@@ -179,7 +179,7 @@ let readJSDocTag (tag: Ts.JSDocTag) : Comment =
   | Kind.JSDocDeprecatedTag -> Deprecated text
   | Kind.JSDocSeeTag ->
     let tag = tag :?> Ts.JSDocSeeTag
-    See ((box tag.name :?> Node) |> extractNestedName |> String.concat ".", text)
+    See ((box tag.name :?> Node option) |> Option.map (extractNestedName >> String.concat "."), text)
   | _ ->
     match tag.tagName.text with
     | "description" | "desc" -> Description text

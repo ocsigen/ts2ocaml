@@ -63,7 +63,7 @@ and [<CustomEquality; CustomComparison>] Comment =
   | Return of string list
   | Deprecated of string list
   | Example of string list
-  | See of link:string * text:string list
+  | See of name:string option * text:string list
   | ESVersion of Ts.ScriptTarget
   | Other of tag:string * text:string list * orig:Ts.JSDocTag
   override x.Equals(yo) =

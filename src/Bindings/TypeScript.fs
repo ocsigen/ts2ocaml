@@ -188,6 +188,7 @@ module Ts =
         abstract isTemplateMiddleOrTemplateTail: node: Node -> bool
         abstract isImportOrExportSpecifier: node: Node -> bool
         abstract isTypeOnlyImportOrExportDeclaration: node: Node -> bool
+        abstract isAssertionKey: node: Node -> bool
         abstract isStringTextContainingNode: node: Node -> bool
         abstract isModifier: node: Node -> bool
         abstract isEntityName: node: Node -> bool
@@ -395,6 +396,8 @@ module Ts =
         abstract isImportEqualsDeclaration: node: Node -> bool
         abstract isImportDeclaration: node: Node -> bool
         abstract isImportClause: node: Node -> bool
+        abstract isAssertClause: node: Node -> bool
+        abstract isAssertEntry: node: Node -> bool
         abstract isNamespaceImport: node: Node -> bool
         abstract isNamespaceExport: node: Node -> bool
         abstract isNamedImports: node: Node -> bool
@@ -524,8 +527,8 @@ module Ts =
         abstract getAutomaticTypeDirectiveNames: options: CompilerOptions * host: ModuleResolutionHost -> ResizeArray<string>
         abstract createModuleResolutionCache: currentDirectory: string * getCanonicalFileName: (string -> string) * ?options: CompilerOptions -> ModuleResolutionCache
         abstract createTypeReferenceDirectiveResolutionCache: currentDirectory: string * getCanonicalFileName: (string -> string) * ?options: CompilerOptions * ?packageJsonInfoCache: PackageJsonInfoCache -> TypeReferenceDirectiveResolutionCache
-        abstract resolveModuleNameFromCache: moduleName: string * containingFile: string * cache: ModuleResolutionCache -> ResolvedModuleWithFailedLookupLocations option
-        abstract resolveModuleName: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference -> ResolvedModuleWithFailedLookupLocations
+        abstract resolveModuleNameFromCache: moduleName: string * containingFile: string * cache: ModuleResolutionCache * ?mode: ModuleKind -> ResolvedModuleWithFailedLookupLocations option
+        abstract resolveModuleName: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference * ?resolutionMode: ModuleKind -> ResolvedModuleWithFailedLookupLocations
         abstract nodeModuleNameResolver: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: ModuleResolutionCache * ?redirectedReference: ResolvedProjectReference -> ResolvedModuleWithFailedLookupLocations
         abstract classicNameResolver: moduleName: string * containingFile: string * compilerOptions: CompilerOptions * host: ModuleResolutionHost * ?cache: NonRelativeModuleNameResolutionCache * ?redirectedReference: ResolvedProjectReference -> ResolvedModuleWithFailedLookupLocations
         /// <summary>Visits a Node using the supplied visitor, possibly returning a new Node in its place.</summary>
@@ -594,6 +597,13 @@ module Ts =
         abstract formatDiagnosticsWithColorAndContext: diagnostics: ResizeArray<Diagnostic> * host: FormatDiagnosticsHost -> string
         abstract flattenDiagnosticMessageText: diag: U2<string, DiagnosticMessageChain> option * newLine: string * ?indent: float -> string
         abstract getConfigFileParsingDiagnostics: configFileParseResult: ParsedCommandLine -> ResizeArray<Diagnostic>
+        /// <summary>A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
+        /// `options` parameter.</summary>
+        /// <param name="fileName">The normalized absolute path to check the format of (it need not exist on disk)</param>
+        /// <param name="packageJsonInfoCache">A cache for package file lookups - it's best to have a cache when this function is called often</param>
+        /// <param name="host">The ModuleResolutionHost which can perform the filesystem lookups for package json data</param>
+        /// <param name="options">The compiler options to perform the analysis under - relevant options are `moduleResolution` and `traceResolution`</param>
+        abstract getImpliedNodeFormatForFile: fileName: Path * packageJsonInfoCache: PackageJsonInfoCache option * host: ModuleResolutionHost * options: CompilerOptions -> ModuleKind option
         /// <summary>Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
         /// that represent a compilation unit.
         ///
@@ -744,8 +754,8 @@ module Ts =
         abstract updateTypeOperatorNode: (TypeOperatorNode -> TypeNode -> TypeOperatorNode)
         abstract createIndexedAccessTypeNode: (TypeNode -> TypeNode -> IndexedAccessTypeNode)
         abstract updateIndexedAccessTypeNode: (IndexedAccessTypeNode -> TypeNode -> TypeNode -> IndexedAccessTypeNode)
-        abstract createMappedTypeNode: (U3<ReadonlyKeyword, PlusToken, MinusToken> option -> TypeParameterDeclaration -> TypeNode option -> U3<QuestionToken, PlusToken, MinusToken> option -> TypeNode option -> MappedTypeNode)
-        abstract updateMappedTypeNode: (MappedTypeNode -> U3<ReadonlyKeyword, PlusToken, MinusToken> option -> TypeParameterDeclaration -> TypeNode option -> U3<QuestionToken, PlusToken, MinusToken> option -> TypeNode option -> MappedTypeNode)
+        abstract createMappedTypeNode: (U3<ReadonlyKeyword, PlusToken, MinusToken> option -> TypeParameterDeclaration -> TypeNode option -> U3<QuestionToken, PlusToken, MinusToken> option -> TypeNode option -> ResizeArray<TypeElement> option -> MappedTypeNode)
+        abstract updateMappedTypeNode: (MappedTypeNode -> U3<ReadonlyKeyword, PlusToken, MinusToken> option -> TypeParameterDeclaration -> TypeNode option -> U3<QuestionToken, PlusToken, MinusToken> option -> TypeNode option -> ResizeArray<TypeElement> option -> MappedTypeNode)
         abstract createLiteralTypeNode: (U4<LiteralExpression, BooleanLiteral, PrefixUnaryExpression, NullLiteral> -> LiteralTypeNode)
         abstract updateLiteralTypeNode: (LiteralTypeNode -> U4<LiteralExpression, BooleanLiteral, PrefixUnaryExpression, NullLiteral> -> LiteralTypeNode)
         abstract createObjectBindingPattern: (ResizeArray<BindingElement> -> ObjectBindingPattern)
@@ -873,20 +883,20 @@ module Ts =
         abstract updateNamespaceExportDeclaration: (NamespaceExportDeclaration -> Identifier -> NamespaceExportDeclaration)
         abstract createImportEqualsDeclaration: (ResizeArray<Decorator> option -> ResizeArray<Modifier> option -> bool -> U2<string, Identifier> -> ModuleReference -> ImportEqualsDeclaration)
         abstract updateImportEqualsDeclaration: (ImportEqualsDeclaration -> ResizeArray<Decorator> option -> ResizeArray<Modifier> option -> bool -> Identifier -> ModuleReference -> ImportEqualsDeclaration)
-        abstract createImportDeclaration: (ResizeArray<Decorator> option -> ResizeArray<Modifier> option -> ImportClause option -> Expression -> ImportDeclaration)
-        abstract updateImportDeclaration: (ImportDeclaration -> ResizeArray<Decorator> option -> ResizeArray<Modifier> option -> ImportClause option -> Expression -> ImportDeclaration)
+        abstract createImportDeclaration: (ResizeArray<Decorator> option -> ResizeArray<Modifier> option -> ImportClause option -> Expression -> AssertClause -> ImportDeclaration)
+        abstract updateImportDeclaration: (ImportDeclaration -> ResizeArray<Decorator> option -> ResizeArray<Modifier> option -> ImportClause option -> Expression -> AssertClause option -> ImportDeclaration)
         abstract createNamespaceImport: (Identifier -> NamespaceImport)
         abstract updateNamespaceImport: (NamespaceImport -> Identifier -> NamespaceImport)
         abstract createNamedImports: (ResizeArray<ImportSpecifier> -> NamedImports)
         abstract updateNamedImports: (NamedImports -> ResizeArray<ImportSpecifier> -> NamedImports)
-        abstract createImportSpecifier: (Identifier option -> Identifier -> ImportSpecifier)
-        abstract updateImportSpecifier: (ImportSpecifier -> Identifier option -> Identifier -> ImportSpecifier)
+        abstract createImportSpecifier: (bool -> Identifier option -> Identifier -> ImportSpecifier)
+        abstract updateImportSpecifier: (ImportSpecifier -> bool -> Identifier option -> Identifier -> ImportSpecifier)
         abstract createExportAssignment: (ResizeArray<Decorator> option -> ResizeArray<Modifier> option -> bool option -> Expression -> ExportAssignment)
         abstract updateExportAssignment: (ExportAssignment -> ResizeArray<Decorator> option -> ResizeArray<Modifier> option -> Expression -> ExportAssignment)
         abstract createNamedExports: (ResizeArray<ExportSpecifier> -> NamedExports)
         abstract updateNamedExports: (NamedExports -> ResizeArray<ExportSpecifier> -> NamedExports)
-        abstract createExportSpecifier: (U2<string, Identifier> option -> U2<string, Identifier> -> ExportSpecifier)
-        abstract updateExportSpecifier: (ExportSpecifier -> Identifier option -> Identifier -> ExportSpecifier)
+        abstract createExportSpecifier: (bool -> U2<string, Identifier> option -> U2<string, Identifier> -> ExportSpecifier)
+        abstract updateExportSpecifier: (ExportSpecifier -> bool -> Identifier option -> Identifier -> ExportSpecifier)
         abstract createExternalModuleReference: (Expression -> ExternalModuleReference)
         abstract updateExternalModuleReference: (ExternalModuleReference -> Expression -> ExternalModuleReference)
         abstract createJSDocTypeExpression: (TypeNode -> JSDocTypeExpression)
@@ -939,7 +949,7 @@ module Ts =
         abstract updateDefaultClause: (DefaultClause -> ResizeArray<Statement> -> DefaultClause)
         abstract createHeritageClause: (SyntaxKind -> ResizeArray<ExpressionWithTypeArguments> -> HeritageClause)
         abstract updateHeritageClause: (HeritageClause -> ResizeArray<ExpressionWithTypeArguments> -> HeritageClause)
-        abstract createCatchClause: (U2<string, VariableDeclaration> option -> Block -> CatchClause)
+        abstract createCatchClause: (U3<string, VariableDeclaration, BindingName> option -> Block -> CatchClause)
         abstract updateCatchClause: (CatchClause -> VariableDeclaration option -> Block -> CatchClause)
         abstract createPropertyAssignment: (U2<string, PropertyName> -> Expression -> PropertyAssignment)
         abstract updatePropertyAssignment: (PropertyAssignment -> PropertyName -> Expression -> PropertyAssignment)
@@ -1251,228 +1261,231 @@ module Ts =
         | AbstractKeyword = 126
         | AsKeyword = 127
         | AssertsKeyword = 128
-        | AnyKeyword = 129
-        | AsyncKeyword = 130
-        | AwaitKeyword = 131
-        | BooleanKeyword = 132
-        | ConstructorKeyword = 133
-        | DeclareKeyword = 134
-        | GetKeyword = 135
-        | InferKeyword = 136
-        | IntrinsicKeyword = 137
-        | IsKeyword = 138
-        | KeyOfKeyword = 139
-        | ModuleKeyword = 140
-        | NamespaceKeyword = 141
-        | NeverKeyword = 142
-        | ReadonlyKeyword = 143
-        | RequireKeyword = 144
-        | NumberKeyword = 145
-        | ObjectKeyword = 146
-        | SetKeyword = 147
-        | StringKeyword = 148
-        | SymbolKeyword = 149
-        | TypeKeyword = 150
-        | UndefinedKeyword = 151
-        | UniqueKeyword = 152
-        | UnknownKeyword = 153
-        | FromKeyword = 154
-        | GlobalKeyword = 155
-        | BigIntKeyword = 156
-        | OverrideKeyword = 157
-        | OfKeyword = 158
-        | QualifiedName = 159
-        | ComputedPropertyName = 160
-        | TypeParameter = 161
-        | Parameter = 162
-        | Decorator = 163
-        | PropertySignature = 164
-        | PropertyDeclaration = 165
-        | MethodSignature = 166
-        | MethodDeclaration = 167
-        | ClassStaticBlockDeclaration = 168
-        | Constructor = 169
-        | GetAccessor = 170
-        | SetAccessor = 171
-        | CallSignature = 172
-        | ConstructSignature = 173
-        | IndexSignature = 174
-        | TypePredicate = 175
-        | TypeReference = 176
-        | FunctionType = 177
-        | ConstructorType = 178
-        | TypeQuery = 179
-        | TypeLiteral = 180
-        | ArrayType = 181
-        | TupleType = 182
-        | OptionalType = 183
-        | RestType = 184
-        | UnionType = 185
-        | IntersectionType = 186
-        | ConditionalType = 187
-        | InferType = 188
-        | ParenthesizedType = 189
-        | ThisType = 190
-        | TypeOperator = 191
-        | IndexedAccessType = 192
-        | MappedType = 193
-        | LiteralType = 194
-        | NamedTupleMember = 195
-        | TemplateLiteralType = 196
-        | TemplateLiteralTypeSpan = 197
-        | ImportType = 198
-        | ObjectBindingPattern = 199
-        | ArrayBindingPattern = 200
-        | BindingElement = 201
-        | ArrayLiteralExpression = 202
-        | ObjectLiteralExpression = 203
-        | PropertyAccessExpression = 204
-        | ElementAccessExpression = 205
-        | CallExpression = 206
-        | NewExpression = 207
-        | TaggedTemplateExpression = 208
-        | TypeAssertionExpression = 209
-        | ParenthesizedExpression = 210
-        | FunctionExpression = 211
-        | ArrowFunction = 212
-        | DeleteExpression = 213
-        | TypeOfExpression = 214
-        | VoidExpression = 215
-        | AwaitExpression = 216
-        | PrefixUnaryExpression = 217
-        | PostfixUnaryExpression = 218
-        | BinaryExpression = 219
-        | ConditionalExpression = 220
-        | TemplateExpression = 221
-        | YieldExpression = 222
-        | SpreadElement = 223
-        | ClassExpression = 224
-        | OmittedExpression = 225
-        | ExpressionWithTypeArguments = 226
-        | AsExpression = 227
-        | NonNullExpression = 228
-        | MetaProperty = 229
-        | SyntheticExpression = 230
-        | TemplateSpan = 231
-        | SemicolonClassElement = 232
-        | Block = 233
-        | EmptyStatement = 234
-        | VariableStatement = 235
-        | ExpressionStatement = 236
-        | IfStatement = 237
-        | DoStatement = 238
-        | WhileStatement = 239
-        | ForStatement = 240
-        | ForInStatement = 241
-        | ForOfStatement = 242
-        | ContinueStatement = 243
-        | BreakStatement = 244
-        | ReturnStatement = 245
-        | WithStatement = 246
-        | SwitchStatement = 247
-        | LabeledStatement = 248
-        | ThrowStatement = 249
-        | TryStatement = 250
-        | DebuggerStatement = 251
-        | VariableDeclaration = 252
-        | VariableDeclarationList = 253
-        | FunctionDeclaration = 254
-        | ClassDeclaration = 255
-        | InterfaceDeclaration = 256
-        | TypeAliasDeclaration = 257
-        | EnumDeclaration = 258
-        | ModuleDeclaration = 259
-        | ModuleBlock = 260
-        | CaseBlock = 261
-        | NamespaceExportDeclaration = 262
-        | ImportEqualsDeclaration = 263
-        | ImportDeclaration = 264
-        | ImportClause = 265
-        | NamespaceImport = 266
-        | NamedImports = 267
-        | ImportSpecifier = 268
-        | ExportAssignment = 269
-        | ExportDeclaration = 270
-        | NamedExports = 271
-        | NamespaceExport = 272
-        | ExportSpecifier = 273
-        | MissingDeclaration = 274
-        | ExternalModuleReference = 275
-        | JsxElement = 276
-        | JsxSelfClosingElement = 277
-        | JsxOpeningElement = 278
-        | JsxClosingElement = 279
-        | JsxFragment = 280
-        | JsxOpeningFragment = 281
-        | JsxClosingFragment = 282
-        | JsxAttribute = 283
-        | JsxAttributes = 284
-        | JsxSpreadAttribute = 285
-        | JsxExpression = 286
-        | CaseClause = 287
-        | DefaultClause = 288
-        | HeritageClause = 289
-        | CatchClause = 290
-        | PropertyAssignment = 291
-        | ShorthandPropertyAssignment = 292
-        | SpreadAssignment = 293
-        | EnumMember = 294
-        | UnparsedPrologue = 295
-        | UnparsedPrepend = 296
-        | UnparsedText = 297
-        | UnparsedInternalText = 298
-        | UnparsedSyntheticReference = 299
-        | SourceFile = 300
-        | Bundle = 301
-        | UnparsedSource = 302
-        | InputFiles = 303
-        | JSDocTypeExpression = 304
-        | JSDocNameReference = 305
-        | JSDocMemberName = 306
-        | JSDocAllType = 307
-        | JSDocUnknownType = 308
-        | JSDocNullableType = 309
-        | JSDocNonNullableType = 310
-        | JSDocOptionalType = 311
-        | JSDocFunctionType = 312
-        | JSDocVariadicType = 313
-        | JSDocNamepathType = 314
-        | JSDocComment = 315
-        | JSDocText = 316
-        | JSDocTypeLiteral = 317
-        | JSDocSignature = 318
-        | JSDocLink = 319
-        | JSDocLinkCode = 320
-        | JSDocLinkPlain = 321
-        | JSDocTag = 322
-        | JSDocAugmentsTag = 323
-        | JSDocImplementsTag = 324
-        | JSDocAuthorTag = 325
-        | JSDocDeprecatedTag = 326
-        | JSDocClassTag = 327
-        | JSDocPublicTag = 328
-        | JSDocPrivateTag = 329
-        | JSDocProtectedTag = 330
-        | JSDocReadonlyTag = 331
-        | JSDocOverrideTag = 332
-        | JSDocCallbackTag = 333
-        | JSDocEnumTag = 334
-        | JSDocParameterTag = 335
-        | JSDocReturnTag = 336
-        | JSDocThisTag = 337
-        | JSDocTypeTag = 338
-        | JSDocTemplateTag = 339
-        | JSDocTypedefTag = 340
-        | JSDocSeeTag = 341
-        | JSDocPropertyTag = 342
-        | SyntaxList = 343
-        | NotEmittedStatement = 344
-        | PartiallyEmittedExpression = 345
-        | CommaListExpression = 346
-        | MergeDeclarationMarker = 347
-        | EndOfDeclarationMarker = 348
-        | SyntheticReferenceExpression = 349
-        | Count = 350
+        | AssertKeyword = 129
+        | AnyKeyword = 130
+        | AsyncKeyword = 131
+        | AwaitKeyword = 132
+        | BooleanKeyword = 133
+        | ConstructorKeyword = 134
+        | DeclareKeyword = 135
+        | GetKeyword = 136
+        | InferKeyword = 137
+        | IntrinsicKeyword = 138
+        | IsKeyword = 139
+        | KeyOfKeyword = 140
+        | ModuleKeyword = 141
+        | NamespaceKeyword = 142
+        | NeverKeyword = 143
+        | ReadonlyKeyword = 144
+        | RequireKeyword = 145
+        | NumberKeyword = 146
+        | ObjectKeyword = 147
+        | SetKeyword = 148
+        | StringKeyword = 149
+        | SymbolKeyword = 150
+        | TypeKeyword = 151
+        | UndefinedKeyword = 152
+        | UniqueKeyword = 153
+        | UnknownKeyword = 154
+        | FromKeyword = 155
+        | GlobalKeyword = 156
+        | BigIntKeyword = 157
+        | OverrideKeyword = 158
+        | OfKeyword = 159
+        | QualifiedName = 160
+        | ComputedPropertyName = 161
+        | TypeParameter = 162
+        | Parameter = 163
+        | Decorator = 164
+        | PropertySignature = 165
+        | PropertyDeclaration = 166
+        | MethodSignature = 167
+        | MethodDeclaration = 168
+        | ClassStaticBlockDeclaration = 169
+        | Constructor = 170
+        | GetAccessor = 171
+        | SetAccessor = 172
+        | CallSignature = 173
+        | ConstructSignature = 174
+        | IndexSignature = 175
+        | TypePredicate = 176
+        | TypeReference = 177
+        | FunctionType = 178
+        | ConstructorType = 179
+        | TypeQuery = 180
+        | TypeLiteral = 181
+        | ArrayType = 182
+        | TupleType = 183
+        | OptionalType = 184
+        | RestType = 185
+        | UnionType = 186
+        | IntersectionType = 187
+        | ConditionalType = 188
+        | InferType = 189
+        | ParenthesizedType = 190
+        | ThisType = 191
+        | TypeOperator = 192
+        | IndexedAccessType = 193
+        | MappedType = 194
+        | LiteralType = 195
+        | NamedTupleMember = 196
+        | TemplateLiteralType = 197
+        | TemplateLiteralTypeSpan = 198
+        | ImportType = 199
+        | ObjectBindingPattern = 200
+        | ArrayBindingPattern = 201
+        | BindingElement = 202
+        | ArrayLiteralExpression = 203
+        | ObjectLiteralExpression = 204
+        | PropertyAccessExpression = 205
+        | ElementAccessExpression = 206
+        | CallExpression = 207
+        | NewExpression = 208
+        | TaggedTemplateExpression = 209
+        | TypeAssertionExpression = 210
+        | ParenthesizedExpression = 211
+        | FunctionExpression = 212
+        | ArrowFunction = 213
+        | DeleteExpression = 214
+        | TypeOfExpression = 215
+        | VoidExpression = 216
+        | AwaitExpression = 217
+        | PrefixUnaryExpression = 218
+        | PostfixUnaryExpression = 219
+        | BinaryExpression = 220
+        | ConditionalExpression = 221
+        | TemplateExpression = 222
+        | YieldExpression = 223
+        | SpreadElement = 224
+        | ClassExpression = 225
+        | OmittedExpression = 226
+        | ExpressionWithTypeArguments = 227
+        | AsExpression = 228
+        | NonNullExpression = 229
+        | MetaProperty = 230
+        | SyntheticExpression = 231
+        | TemplateSpan = 232
+        | SemicolonClassElement = 233
+        | Block = 234
+        | EmptyStatement = 235
+        | VariableStatement = 236
+        | ExpressionStatement = 237
+        | IfStatement = 238
+        | DoStatement = 239
+        | WhileStatement = 240
+        | ForStatement = 241
+        | ForInStatement = 242
+        | ForOfStatement = 243
+        | ContinueStatement = 244
+        | BreakStatement = 245
+        | ReturnStatement = 246
+        | WithStatement = 247
+        | SwitchStatement = 248
+        | LabeledStatement = 249
+        | ThrowStatement = 250
+        | TryStatement = 251
+        | DebuggerStatement = 252
+        | VariableDeclaration = 253
+        | VariableDeclarationList = 254
+        | FunctionDeclaration = 255
+        | ClassDeclaration = 256
+        | InterfaceDeclaration = 257
+        | TypeAliasDeclaration = 258
+        | EnumDeclaration = 259
+        | ModuleDeclaration = 260
+        | ModuleBlock = 261
+        | CaseBlock = 262
+        | NamespaceExportDeclaration = 263
+        | ImportEqualsDeclaration = 264
+        | ImportDeclaration = 265
+        | ImportClause = 266
+        | NamespaceImport = 267
+        | NamedImports = 268
+        | ImportSpecifier = 269
+        | ExportAssignment = 270
+        | ExportDeclaration = 271
+        | NamedExports = 272
+        | NamespaceExport = 273
+        | ExportSpecifier = 274
+        | MissingDeclaration = 275
+        | ExternalModuleReference = 276
+        | JsxElement = 277
+        | JsxSelfClosingElement = 278
+        | JsxOpeningElement = 279
+        | JsxClosingElement = 280
+        | JsxFragment = 281
+        | JsxOpeningFragment = 282
+        | JsxClosingFragment = 283
+        | JsxAttribute = 284
+        | JsxAttributes = 285
+        | JsxSpreadAttribute = 286
+        | JsxExpression = 287
+        | CaseClause = 288
+        | DefaultClause = 289
+        | HeritageClause = 290
+        | CatchClause = 291
+        | AssertClause = 292
+        | AssertEntry = 293
+        | PropertyAssignment = 294
+        | ShorthandPropertyAssignment = 295
+        | SpreadAssignment = 296
+        | EnumMember = 297
+        | UnparsedPrologue = 298
+        | UnparsedPrepend = 299
+        | UnparsedText = 300
+        | UnparsedInternalText = 301
+        | UnparsedSyntheticReference = 302
+        | SourceFile = 303
+        | Bundle = 304
+        | UnparsedSource = 305
+        | InputFiles = 306
+        | JSDocTypeExpression = 307
+        | JSDocNameReference = 308
+        | JSDocMemberName = 309
+        | JSDocAllType = 310
+        | JSDocUnknownType = 311
+        | JSDocNullableType = 312
+        | JSDocNonNullableType = 313
+        | JSDocOptionalType = 314
+        | JSDocFunctionType = 315
+        | JSDocVariadicType = 316
+        | JSDocNamepathType = 317
+        | JSDocComment = 318
+        | JSDocText = 319
+        | JSDocTypeLiteral = 320
+        | JSDocSignature = 321
+        | JSDocLink = 322
+        | JSDocLinkCode = 323
+        | JSDocLinkPlain = 324
+        | JSDocTag = 325
+        | JSDocAugmentsTag = 326
+        | JSDocImplementsTag = 327
+        | JSDocAuthorTag = 328
+        | JSDocDeprecatedTag = 329
+        | JSDocClassTag = 330
+        | JSDocPublicTag = 331
+        | JSDocPrivateTag = 332
+        | JSDocProtectedTag = 333
+        | JSDocReadonlyTag = 334
+        | JSDocOverrideTag = 335
+        | JSDocCallbackTag = 336
+        | JSDocEnumTag = 337
+        | JSDocParameterTag = 338
+        | JSDocReturnTag = 339
+        | JSDocThisTag = 340
+        | JSDocTypeTag = 341
+        | JSDocTemplateTag = 342
+        | JSDocTypedefTag = 343
+        | JSDocSeeTag = 344
+        | JSDocPropertyTag = 345
+        | SyntaxList = 346
+        | NotEmittedStatement = 347
+        | PartiallyEmittedExpression = 348
+        | CommaListExpression = 349
+        | MergeDeclarationMarker = 350
+        | EndOfDeclarationMarker = 351
+        | SyntheticReferenceExpression = 352
+        | Count = 353
         | FirstAssignment = 63
         | LastAssignment = 78
         | FirstCompoundAssignment = 64
@@ -1480,15 +1493,15 @@ module Ts =
         | FirstReservedWord = 81
         | LastReservedWord = 116
         | FirstKeyword = 81
-        | LastKeyword = 158
+        | LastKeyword = 159
         | FirstFutureReservedWord = 117
         | LastFutureReservedWord = 125
-        | FirstTypeNode = 175
-        | LastTypeNode = 198
+        | FirstTypeNode = 176
+        | LastTypeNode = 199
         | FirstPunctuation = 18
         | LastPunctuation = 78
         | FirstToken = 0
-        | LastToken = 158
+        | LastToken = 159
         | FirstTriviaToken = 2
         | LastTriviaToken = 7
         | FirstLiteralToken = 8
@@ -1497,13 +1510,13 @@ module Ts =
         | LastTemplateToken = 17
         | FirstBinaryOperator = 29
         | LastBinaryOperator = 78
-        | FirstStatement = 235
-        | LastStatement = 251
-        | FirstNode = 159
-        | FirstJSDocNode = 304
-        | LastJSDocNode = 342
-        | FirstJSDocTagNode = 322
-        | LastJSDocTagNode = 342
+        | FirstStatement = 236
+        | LastStatement = 252
+        | FirstNode = 160
+        | FirstJSDocNode = 307
+        | LastJSDocNode = 345
+        | FirstJSDocTagNode = 325
+        | LastJSDocTagNode = 345
 
     type TriviaSyntaxKind =
         SyntaxKind
@@ -1690,6 +1703,9 @@ module Ts =
     type AssertsKeyword =
         KeywordToken<SyntaxKind>
 
+    type AssertKeyword =
+        KeywordToken<SyntaxKind>
+
     type AwaitKeyword =
         KeywordToken<SyntaxKind>
 
@@ -1816,7 +1832,7 @@ module Ts =
         abstract expression: Expression
 
     type [<AllowNullLiteral>] PrivateIdentifier =
-        inherit Node
+        inherit PrimaryExpression
         abstract kind: SyntaxKind
         abstract escapedText: __String
         abstract text: string
@@ -2230,6 +2246,8 @@ module Ts =
         abstract nameType: TypeNode option
         abstract questionToken: U3<QuestionToken, PlusToken, MinusToken> option
         abstract ``type``: TypeNode option
+        /// Used only to produce grammar errors
+        abstract members: ResizeArray<TypeElement> option
 
     type [<AllowNullLiteral>] LiteralTypeNode =
         inherit TypeNode
@@ -2843,14 +2861,14 @@ module Ts =
     type [<AllowNullLiteral>] JsxExpression =
         inherit Expression
         abstract kind: SyntaxKind
-        abstract parent: U2<JsxElement, JsxAttributeLike>
+        abstract parent: U3<JsxElement, JsxFragment, JsxAttributeLike>
         abstract dotDotDotToken: Token<SyntaxKind> option
         abstract expression: Expression option
 
     type [<AllowNullLiteral>] JsxText =
         inherit LiteralLikeNode
         abstract kind: SyntaxKind
-        abstract parent: JsxElement
+        abstract parent: U2<JsxElement, JsxFragment>
         abstract containsOnlyTriviaWhiteSpaces: bool
 
     type JsxChild =
@@ -3175,6 +3193,7 @@ module Ts =
         abstract importClause: ImportClause option
         /// If this is not a StringLiteral it will be a grammar error.
         abstract moduleSpecifier: Expression
+        abstract assertClause: AssertClause option
 
     type NamedImportBindings =
         U2<NamespaceImport, NamedImports>
@@ -3189,6 +3208,23 @@ module Ts =
         abstract isTypeOnly: bool
         abstract name: Identifier option
         abstract namedBindings: NamedImportBindings option
+
+    type AssertionKey =
+        U2<Identifier, StringLiteral>
+
+    type [<AllowNullLiteral>] AssertEntry =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract parent: AssertClause
+        abstract name: AssertionKey
+        abstract value: StringLiteral
+
+    type [<AllowNullLiteral>] AssertClause =
+        inherit Node
+        abstract kind: SyntaxKind
+        abstract parent: U2<ImportDeclaration, ExportDeclaration>
+        abstract elements: ResizeArray<AssertEntry>
+        abstract multiLine: bool option
 
     type [<AllowNullLiteral>] NamespaceImport =
         inherit NamedDeclaration
@@ -3218,6 +3254,7 @@ module Ts =
         abstract exportClause: NamedExportBindings option
         /// If this is not a StringLiteral it will be a grammar error.
         abstract moduleSpecifier: Expression option
+        abstract assertClause: AssertClause option
 
     type [<AllowNullLiteral>] NamedImports =
         inherit Node
@@ -3240,11 +3277,13 @@ module Ts =
         abstract parent: NamedImports
         abstract propertyName: Identifier option
         abstract name: Identifier
+        abstract isTypeOnly: bool
 
     type [<AllowNullLiteral>] ExportSpecifier =
         inherit NamedDeclaration
         abstract kind: SyntaxKind
         abstract parent: NamedExports
+        abstract isTypeOnly: bool
         abstract propertyName: Identifier option
         abstract name: Identifier
 
@@ -3253,6 +3292,9 @@ module Ts =
 
     type TypeOnlyCompatibleAliasDeclaration =
         U4<ImportClause, ImportEqualsDeclaration, NamespaceImport, ImportOrExportSpecifier>
+
+    type TypeOnlyAliasDeclaration =
+        obj
 
     /// This is either an `export =` or an `export default` declaration.
     /// Unless `isExportEquals` is set, this node was parsed as an `export default`.
@@ -3546,7 +3588,7 @@ module Ts =
 
     type [<AllowNullLiteral>] FlowStart =
         inherit FlowNodeBase
-        abstract node: U3<FunctionExpression, ArrowFunction, MethodDeclaration> option with get, set
+        abstract node: U5<FunctionExpression, ArrowFunction, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration> option with get, set
 
     type [<AllowNullLiteral>] FlowLabel =
         inherit FlowNodeBase
@@ -3618,6 +3660,16 @@ module Ts =
         /// because this containing file is intended to act as a default library.
         abstract hasNoDefaultLib: bool with get, set
         abstract languageVersion: ScriptTarget with get, set
+        /// When `module` is `Node12` or `NodeNext`, this field controls whether the
+        /// source file in question is an ESNext-output-format file, or a CommonJS-output-format
+        /// module. This is derived by the module resolver as it looks up the file, since
+        /// it is derived from either the file extension of the module, or the containing
+        /// `package.json` context, and affects both checking and emit.
+        ///
+        /// It is _public_ so that (pre)transformers can set this field,
+        /// since it switches the builtin `node` module transform. Generally speaking, if unset,
+        /// the field is treated as though it is `ModuleKind.CommonJS`.
+        abstract impliedNodeFormat: ModuleKind option with get, set
         abstract getLineAndCharacterOfPosition: pos: float -> LineAndCharacter
         abstract getLineEndOfPosition: pos: float -> float
         abstract getLineStarts: unit -> ResizeArray<float>
@@ -3918,6 +3970,7 @@ module Ts =
         abstract getApparentType: ``type``: Type -> Type
         abstract getBaseConstraintOfType: ``type``: Type -> Type option
         abstract getDefaultFromTypeParameter: ``type``: Type -> Type option
+        abstract getTypePredicateOfSignature: signature: Signature -> TypePredicate option
         /// Depending on the operation performed, it may be appropriate to throw away the checker
         /// if the cancellation token is triggered. Typically, if it is used for error checking
         /// and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
@@ -4392,8 +4445,8 @@ module Ts =
         abstract root: ConditionalRoot with get, set
         abstract checkType: Type with get, set
         abstract extendsType: Type with get, set
-        abstract resolvedTrueType: Type with get, set
-        abstract resolvedFalseType: Type with get, set
+        abstract resolvedTrueType: Type option with get, set
+        abstract resolvedFalseType: Type option with get, set
 
     type [<AllowNullLiteral>] TemplateLiteralType =
         inherit InstantiableType
@@ -4509,6 +4562,8 @@ module Ts =
     type [<RequireQualifiedAccess>] ModuleResolutionKind =
         | Classic = 1
         | NodeJs = 2
+        | Node12 = 3
+        | NodeNext = 99
 
     type [<AllowNullLiteral>] PluginImport =
         abstract name: string with get, set
@@ -4608,6 +4663,7 @@ module Ts =
         abstract preserveConstEnums: bool option with get, set
         abstract noImplicitOverride: bool option with get, set
         abstract preserveSymlinks: bool option with get, set
+        abstract preserveValueImports: bool option with get, set
         abstract project: string option with get, set
         abstract reactNamespace: string option with get, set
         abstract jsxFactory: string option with get, set
@@ -4667,7 +4723,10 @@ module Ts =
         | System = 4
         | ES2015 = 5
         | ES2020 = 6
+        | ES2022 = 7
         | ESNext = 99
+        | Node12 = 100
+        | NodeNext = 199
 
     type [<RequireQualifiedAccess>] JsxEmit =
         | None = 0
@@ -4752,6 +4811,7 @@ module Ts =
         abstract realpath: path: string -> string
         abstract getCurrentDirectory: unit -> string
         abstract getDirectories: path: string -> ResizeArray<string>
+        abstract useCaseSensitiveFileNames: U2<bool, (unit -> bool)> option with get, set
 
     /// Represents the result of module resolution.
     /// Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
@@ -4795,6 +4855,12 @@ module Ts =
         | [<CompiledName ".jsx">] Jsx
         | [<CompiledName ".json">] Json
         | [<CompiledName ".tsbuildinfo">] TsBuildInfo
+        | [<CompiledName ".mjs">] Mjs
+        | [<CompiledName ".mts">] Mts
+        | [<CompiledName ".d.mts">] Dmts
+        | [<CompiledName ".cjs">] Cjs
+        | [<CompiledName ".cts">] Cts
+        | [<CompiledName ".d.cts">] Dcts
 
     type [<AllowNullLiteral>] ResolvedModuleWithFailedLookupLocations =
         abstract resolvedModule: ResolvedModuleFull option
@@ -4823,7 +4889,9 @@ module Ts =
         abstract useCaseSensitiveFileNames: unit -> bool
         abstract getNewLine: unit -> string
         abstract readDirectory: rootDir: string * extensions: ResizeArray<string> * excludes: ResizeArray<string> option * includes: ResizeArray<string> * ?depth: float -> ResizeArray<string>
-        abstract resolveModuleNames: moduleNames: ResizeArray<string> * containingFile: string * reusedNames: ResizeArray<string> option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions -> ResizeArray<ResolvedModule option>
+        abstract resolveModuleNames: moduleNames: ResizeArray<string> * containingFile: string * reusedNames: ResizeArray<string> option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResizeArray<ResolvedModule option>
+        /// Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
+        abstract getModuleResolutionCache: unit -> ModuleResolutionCache option
         /// This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
         abstract resolveTypeReferenceDirectives: typeReferenceDirectiveNames: ResizeArray<string> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions -> ResizeArray<ResolvedTypeReferenceDirective option>
         abstract getEnvironmentVariable: name: string -> string option
@@ -4909,6 +4977,7 @@ module Ts =
         | PartiallyEmittedExpressions = 8
         | Assertions = 6
         | All = 15
+        | ExcludeJSDocTypeAssertion = 16
 
     type [<StringEnum>] [<RequireQualifiedAccess>] TypeOfTag =
         | Undefined
@@ -5031,8 +5100,8 @@ module Ts =
         abstract updateTypeOperatorNode: node: TypeOperatorNode * ``type``: TypeNode -> TypeOperatorNode
         abstract createIndexedAccessTypeNode: objectType: TypeNode * indexType: TypeNode -> IndexedAccessTypeNode
         abstract updateIndexedAccessTypeNode: node: IndexedAccessTypeNode * objectType: TypeNode * indexType: TypeNode -> IndexedAccessTypeNode
-        abstract createMappedTypeNode: readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option * typeParameter: TypeParameterDeclaration * nameType: TypeNode option * questionToken: U3<QuestionToken, PlusToken, MinusToken> option * ``type``: TypeNode option -> MappedTypeNode
-        abstract updateMappedTypeNode: node: MappedTypeNode * readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option * typeParameter: TypeParameterDeclaration * nameType: TypeNode option * questionToken: U3<QuestionToken, PlusToken, MinusToken> option * ``type``: TypeNode option -> MappedTypeNode
+        abstract createMappedTypeNode: readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option * typeParameter: TypeParameterDeclaration * nameType: TypeNode option * questionToken: U3<QuestionToken, PlusToken, MinusToken> option * ``type``: TypeNode option * members: ResizeArray<TypeElement> option -> MappedTypeNode
+        abstract updateMappedTypeNode: node: MappedTypeNode * readonlyToken: U3<ReadonlyKeyword, PlusToken, MinusToken> option * typeParameter: TypeParameterDeclaration * nameType: TypeNode option * questionToken: U3<QuestionToken, PlusToken, MinusToken> option * ``type``: TypeNode option * members: ResizeArray<TypeElement> option -> MappedTypeNode
         abstract createLiteralTypeNode: literal: LiteralTypeNode -> LiteralTypeNode
         abstract updateLiteralTypeNode: node: LiteralTypeNode * literal: LiteralTypeNode -> LiteralTypeNode
         abstract createTemplateLiteralType: head: TemplateHead * templateSpans: ResizeArray<TemplateLiteralTypeSpan> -> TemplateLiteralTypeNode
@@ -5178,26 +5247,30 @@ module Ts =
         abstract updateNamespaceExportDeclaration: node: NamespaceExportDeclaration * name: Identifier -> NamespaceExportDeclaration
         abstract createImportEqualsDeclaration: decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * isTypeOnly: bool * name: U2<string, Identifier> * moduleReference: ModuleReference -> ImportEqualsDeclaration
         abstract updateImportEqualsDeclaration: node: ImportEqualsDeclaration * decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * isTypeOnly: bool * name: Identifier * moduleReference: ModuleReference -> ImportEqualsDeclaration
-        abstract createImportDeclaration: decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * importClause: ImportClause option * moduleSpecifier: Expression -> ImportDeclaration
-        abstract updateImportDeclaration: node: ImportDeclaration * decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * importClause: ImportClause option * moduleSpecifier: Expression -> ImportDeclaration
+        abstract createImportDeclaration: decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * importClause: ImportClause option * moduleSpecifier: Expression * ?assertClause: AssertClause -> ImportDeclaration
+        abstract updateImportDeclaration: node: ImportDeclaration * decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * importClause: ImportClause option * moduleSpecifier: Expression * assertClause: AssertClause option -> ImportDeclaration
         abstract createImportClause: isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
         abstract updateImportClause: node: ImportClause * isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
+        abstract createAssertClause: elements: ResizeArray<AssertEntry> * ?multiLine: bool -> AssertClause
+        abstract updateAssertClause: node: AssertClause * elements: ResizeArray<AssertEntry> * ?multiLine: bool -> AssertClause
+        abstract createAssertEntry: name: AssertionKey * value: StringLiteral -> AssertEntry
+        abstract updateAssertEntry: node: AssertEntry * name: AssertionKey * value: StringLiteral -> AssertEntry
         abstract createNamespaceImport: name: Identifier -> NamespaceImport
         abstract updateNamespaceImport: node: NamespaceImport * name: Identifier -> NamespaceImport
         abstract createNamespaceExport: name: Identifier -> NamespaceExport
         abstract updateNamespaceExport: node: NamespaceExport * name: Identifier -> NamespaceExport
         abstract createNamedImports: elements: ResizeArray<ImportSpecifier> -> NamedImports
         abstract updateNamedImports: node: NamedImports * elements: ResizeArray<ImportSpecifier> -> NamedImports
-        abstract createImportSpecifier: propertyName: Identifier option * name: Identifier -> ImportSpecifier
-        abstract updateImportSpecifier: node: ImportSpecifier * propertyName: Identifier option * name: Identifier -> ImportSpecifier
+        abstract createImportSpecifier: isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ImportSpecifier
+        abstract updateImportSpecifier: node: ImportSpecifier * isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ImportSpecifier
         abstract createExportAssignment: decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * isExportEquals: bool option * expression: Expression -> ExportAssignment
         abstract updateExportAssignment: node: ExportAssignment * decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * expression: Expression -> ExportAssignment
-        abstract createExportDeclaration: decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression -> ExportDeclaration
-        abstract updateExportDeclaration: node: ExportDeclaration * decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option -> ExportDeclaration
+        abstract createExportDeclaration: decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?assertClause: AssertClause -> ExportDeclaration
+        abstract updateExportDeclaration: node: ExportDeclaration * decorators: ResizeArray<Decorator> option * modifiers: ResizeArray<Modifier> option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * assertClause: AssertClause option -> ExportDeclaration
         abstract createNamedExports: elements: ResizeArray<ExportSpecifier> -> NamedExports
         abstract updateNamedExports: node: NamedExports * elements: ResizeArray<ExportSpecifier> -> NamedExports
-        abstract createExportSpecifier: propertyName: U2<string, Identifier> option * name: U2<string, Identifier> -> ExportSpecifier
-        abstract updateExportSpecifier: node: ExportSpecifier * propertyName: Identifier option * name: Identifier -> ExportSpecifier
+        abstract createExportSpecifier: isTypeOnly: bool * propertyName: U2<string, Identifier> option * name: U2<string, Identifier> -> ExportSpecifier
+        abstract updateExportSpecifier: node: ExportSpecifier * isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ExportSpecifier
         abstract createExternalModuleReference: expression: Expression -> ExternalModuleReference
         abstract updateExternalModuleReference: node: ExternalModuleReference * expression: Expression -> ExternalModuleReference
         abstract createJSDocAllType: unit -> JSDocAllType
@@ -5304,7 +5377,7 @@ module Ts =
         abstract updateDefaultClause: node: DefaultClause * statements: ResizeArray<Statement> -> DefaultClause
         abstract createHeritageClause: token: HeritageClause * types: ResizeArray<ExpressionWithTypeArguments> -> HeritageClause
         abstract updateHeritageClause: node: HeritageClause * types: ResizeArray<ExpressionWithTypeArguments> -> HeritageClause
-        abstract createCatchClause: variableDeclaration: U2<string, VariableDeclaration> option * block: Block -> CatchClause
+        abstract createCatchClause: variableDeclaration: U3<string, BindingName, VariableDeclaration> option * block: Block -> CatchClause
         abstract updateCatchClause: node: CatchClause * variableDeclaration: VariableDeclaration option * block: Block -> CatchClause
         abstract createPropertyAssignment: name: U2<string, PropertyName> * initializer: Expression -> PropertyAssignment
         abstract updatePropertyAssignment: node: PropertyAssignment * name: PropertyName * initializer: Expression -> PropertyAssignment
@@ -5556,6 +5629,7 @@ module Ts =
         | ObjectBindingPatternElements = 525136
         | ArrayBindingPatternElements = 524880
         | ObjectLiteralExpressionProperties = 526226
+        | ImportClauseEntries = 526226
         | ArrayLiteralExpressionElements = 8914
         | CommaListElements = 528
         | CallExpressionArguments = 2576
@@ -5592,6 +5666,7 @@ module Ts =
         abstract includeCompletionsWithSnippetText: bool option
         abstract includeAutomaticOptionalChainCompletions: bool option
         abstract includeCompletionsWithInsertText: bool option
+        abstract includeCompletionsWithClassMemberSnippets: bool option
         abstract allowIncompleteCompletions: bool option
         abstract importModuleSpecifierPreference: UserPreferencesImportModuleSpecifierPreference option
         /// Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js"
@@ -5600,6 +5675,7 @@ module Ts =
         abstract providePrefixAndSuffixTextForRename: bool option
         abstract includePackageJsonAutoImports: UserPreferencesIncludePackageJsonAutoImports option
         abstract provideRefactorNotApplicableReason: bool option
+        abstract jsxAttributeCompletionStyle: UserPreferencesJsxAttributeCompletionStyle option
 
     /// Represents a bigint literal value without requiring bigint support
     type [<AllowNullLiteral>] PseudoBigInt =
@@ -5731,10 +5807,18 @@ module Ts =
         inherit PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>
         inherit PackageJsonInfoCache
 
+    type [<AllowNullLiteral>] ModeAwareCache<'T> =
+        abstract get: key: string * mode: ModuleKind option -> 'T option
+        abstract set: key: string * mode: ModuleKind option * value: 'T -> ModeAwareCache<'T>
+        abstract delete: key: string * mode: ModuleKind option -> ModeAwareCache<'T>
+        abstract has: key: string * mode: ModuleKind option -> bool
+        abstract forEach: cb: ('T -> string -> ModuleKind option -> unit) -> unit
+        abstract size: unit -> float
+
     /// Cached resolutions per containing directory.
     /// This assumes that any module id will have the same resolution for sibling files located in the same folder.
     type [<AllowNullLiteral>] PerDirectoryResolutionCache<'T> =
-        abstract getOrCreateCacheForDirectory: directoryName: string * ?redirectedReference: ResolvedProjectReference -> Map<'T>
+        abstract getOrCreateCacheForDirectory: directoryName: string * ?redirectedReference: ResolvedProjectReference -> ModeAwareCache<'T>
         abstract clear: unit -> unit
         /// Updates with the current compilerOptions the cache will operate with.
         /// This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
@@ -5750,7 +5834,7 @@ module Ts =
     /// We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
     type [<AllowNullLiteral>] NonRelativeModuleNameResolutionCache =
         inherit PackageJsonInfoCache
-        abstract getOrCreateCacheForModuleName: nonRelativeModuleName: string * ?redirectedReference: ResolvedProjectReference -> PerModuleNameCache
+        abstract getOrCreateCacheForModuleName: nonRelativeModuleName: string * mode: ModuleKind option * ?redirectedReference: ResolvedProjectReference -> PerModuleNameCache
 
     type [<AllowNullLiteral>] PackageJsonInfoCache =
         abstract clear: unit -> unit
@@ -5906,7 +5990,7 @@ module Ts =
         /// If provided is used to get the environment variable
         abstract getEnvironmentVariable: name: string -> string option
         /// If provided, used to resolve the module names, otherwise typescript's default module resolution
-        abstract resolveModuleNames: moduleNames: ResizeArray<string> * containingFile: string * reusedNames: ResizeArray<string> option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions -> ResizeArray<ResolvedModule option>
+        abstract resolveModuleNames: moduleNames: ResizeArray<string> * containingFile: string * reusedNames: ResizeArray<string> option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResizeArray<ResolvedModule option>
         /// If provided, used to resolve type reference directives, otherwise typescript's default resolution
         abstract resolveTypeReferenceDirectives: typeReferenceDirectiveNames: ResizeArray<string> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions -> ResizeArray<ResolvedTypeReferenceDirective option>
 
@@ -6220,8 +6304,8 @@ module Ts =
         abstract realpath: path: string -> string
         abstract fileExists: path: string -> bool
         abstract getTypeRootsVersion: unit -> float
-        abstract resolveModuleNames: moduleNames: ResizeArray<string> * containingFile: string * reusedNames: ResizeArray<string> option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions -> ResizeArray<ResolvedModule option>
-        abstract getResolvedModuleWithFailedLookupLocationsFromCache: modulename: string * containingFile: string -> ResolvedModuleWithFailedLookupLocations option
+        abstract resolveModuleNames: moduleNames: ResizeArray<string> * containingFile: string * reusedNames: ResizeArray<string> option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResizeArray<ResolvedModule option>
+        abstract getResolvedModuleWithFailedLookupLocationsFromCache: modulename: string * containingFile: string * ?resolutionMode: ModuleKind -> ResolvedModuleWithFailedLookupLocations option
         abstract resolveTypeReferenceDirectives: typeDirectiveNames: ResizeArray<string> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions -> ResizeArray<ResolvedTypeReferenceDirective option>
         abstract getDirectories: directoryName: string -> ResizeArray<string>
         /// Gets a set of custom transformers to use during emit.
@@ -6873,18 +6957,29 @@ module Ts =
         abstract isIncomplete: obj option with get, set
         abstract entries: ResizeArray<CompletionEntry> with get, set
 
-    type [<AllowNullLiteral>] CompletionEntryData =
+    type [<AllowNullLiteral>] CompletionEntryDataAutoImport =
+        /// The name of the property or export in the module's symbol table. Differs from the completion name
+        /// in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
+        abstract exportName: string with get, set
+        abstract moduleSpecifier: string option with get, set
         /// The file name declaring the export's module symbol, if it was an external module
         abstract fileName: string option with get, set
         /// The module name (with quotes stripped) of the export's module symbol, if it was an ambient module
         abstract ambientModuleName: string option with get, set
         /// True if the export was found in the package.json AutoImportProvider
         abstract isPackageJsonImport: obj option with get, set
-        /// The name of the property or export in the module's symbol table. Differs from the completion name
-        /// in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
-        abstract exportName: string with get, set
-        /// Set for auto imports with eagerly resolved module specifiers.
-        abstract moduleSpecifier: string option with get, set
+
+    type [<AllowNullLiteral>] CompletionEntryDataUnresolved =
+        inherit CompletionEntryDataAutoImport
+        /// The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found
+        abstract exportMapKey: string with get, set
+
+    type [<AllowNullLiteral>] CompletionEntryDataResolved =
+        inherit CompletionEntryDataAutoImport
+        abstract moduleSpecifier: string with get, set
+
+    type CompletionEntryData =
+        U2<CompletionEntryDataUnresolved, CompletionEntryDataResolved>
 
     type [<AllowNullLiteral>] CompletionEntry =
         abstract name: string with get, set
@@ -7052,6 +7147,12 @@ module Ts =
         | [<CompiledName ".js">] JsModifier
         | [<CompiledName ".jsx">] JsxModifier
         | [<CompiledName ".json">] JsonModifier
+        | [<CompiledName ".d.mts">] DmtsModifier
+        | [<CompiledName ".mts">] MtsModifier
+        | [<CompiledName ".mjs">] MjsModifier
+        | [<CompiledName ".d.cts">] DctsModifier
+        | [<CompiledName ".cts">] CtsModifier
+        | [<CompiledName ".cjs">] CjsModifier
 
     type [<StringEnum>] [<RequireQualifiedAccess>] ClassificationTypeNames =
         | Comment
@@ -7257,7 +7358,7 @@ module Ts =
         abstract ``done``: obj option with get, set
 
     type [<AllowNullLiteral>] IteratorNext2 =
-        abstract value: unit
+        abstract value: obj with get, set
         abstract ``done``: obj with get, set
 
     type [<AllowNullLiteral>] DiagnosticMessageReportsUnnecessary =
@@ -7284,6 +7385,11 @@ module Ts =
         | Auto
         | On
         | Off
+
+    type [<StringEnum>] [<RequireQualifiedAccess>] UserPreferencesJsxAttributeCompletionStyle =
+        | Auto
+        | Braces
+        | None
 
     type [<StringEnum>] [<RequireQualifiedAccess>] PerformanceEventKind =
         | [<CompiledName "UpdateGraph">] UpdateGraph

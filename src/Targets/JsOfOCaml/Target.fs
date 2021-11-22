@@ -27,16 +27,18 @@ let private run (input: Input) (options: Options) =
         _ -> fail ()
 
   let results =
-    if options.createMinimalStdlib then
-      [{ fileName = "ts2ocaml_min.mli"; content = Text.str stdlib; stubLines = [] }]
+    let result =
+      if options.createMinimalStdlib then
+        [{ fileName = "ts2ocaml_min.mli"; content = Text.str stdlib; stubLines = [] }]
+      else []
+    if List.isEmpty input.sources then result
+    else if options.stdlib then
+      result @ emitStdlib input options
     else
-      if List.isEmpty input.sources then
-        Log.warnf options "No input file given."
-        []
-      else if options.stdlib then
-        emitStdlib input options
-      else
-        emitEverythingCombined input options
+      result @ emitEverythingCombined input options
+
+  if results = [] then
+    Log.warnf options "no input files are given."
 
   for result in results do
     let fullPath = Node.Api.path.join[|outputDir; result.fileName|]

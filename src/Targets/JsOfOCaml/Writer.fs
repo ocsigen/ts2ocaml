@@ -1608,14 +1608,12 @@ let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
   let refs =
     src.references
     |> List.choose (function TypeReference r -> Some r | _ -> None)
-
   if List.isEmpty refs then []
   else
     let comments =
       refs
       |> List.map (sprintf "<reference types=\"%s\">")
       |> List.map commentStr
-
     let openRefs =
       refs
       |> List.map (fun x ->
@@ -1624,7 +1622,6 @@ let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
         |> JsHelper.InferenceResult.unwrap x
         |> Naming.jsModuleNameToOCamlModuleName)
       |> open_
-
     empty :: comments @ [openRefs]
 
 let emitEverythingCombined (input: Input) (opts: Options) : Output list =

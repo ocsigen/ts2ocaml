@@ -18,8 +18,8 @@ type ICompilerHost =
   abstract directoryExists: directoryName: string -> bool
   abstract getDirectories: path: string -> ResizeArray<string>
 
-let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
-  let options = jsOptions<Ts.CompilerOptions>(fun o ->
+let options =
+  jsOptions<Ts.CompilerOptions>(fun o ->
     o.target <- Some Ts.ScriptTarget.Latest
     o.``module`` <- Some Ts.ModuleKind.None
     o.incremental <- Some false
@@ -31,6 +31,8 @@ let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
     o.skipLibCheck <- Some false
     o.allowJs <- Some true
   )
+
+let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
   let host =
     { new ICompilerHost with
         member _.getSourceFile(fileName, _, ?__, ?___) =
@@ -49,34 +51,85 @@ let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
     }
   ts.createProgram(ResizeArray tsPaths, options, !!host)
 
-let expandSourceFiles (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq) =
-  let sourceFilesMap =
-    sourceFiles
-    |> Seq.map (fun sf -> sf.fileName, sf)
-    |> Map.ofSeq
+/// works on NodeJS only.
+let getAllLocalReferences (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq) =
+  let sourceFilesMap = new MutableMap<_, _>()
+  for sourceFile in sourceFiles do
+    sourceFilesMap.Add(Path.absolute sourceFile.fileName, sourceFile)
 
-  let expanded =
-    sourceFiles
-    |> Seq.fold (fun sfMap sf ->
+  let createSourceFile path =
+    ts.createSourceFile(path, fs.readFileSync(path, "utf-8"), Ts.ScriptTarget.Latest, setParentNodes=true)
 
-      sfMap) sourceFilesMap
+  let tryAdd (from: Ts.SourceFile) path =
+    let key = Path.absolute path
+    if not (sourceFilesMap.ContainsKey(key)) then
+      Log.tracef opts "* found '%s' referenced by '%s'" path from.fileName
+      let sourceFile = createSourceFile path
+      sourceFilesMap.Add(key, sourceFile)
+      Some sourceFile
+    else None
 
-  expanded |> Map.toArray |> Array.map snd
+  for sourceFile in sourceFiles do
+    for file in sourceFile.referencedFiles do
+      path.join(path.dirname(sourceFile.fileName), file.fileName) |> tryAdd sourceFile |> ignore
+
+  let tryFindDefinitionFile (sourceFile: Ts.SourceFile) relativePath =
+    let tryGet name =
+      let p = path.join(path.dirname(sourceFile.fileName), name)
+      if fs.existsSync(!^p) then Some p else None
+    tryGet $"{relativePath}.d.ts"
+    |> Option.orElseWith (fun () -> tryGet $"{relativePath}/index.d.ts")
+
+  let handleModuleSpecifier (sourceFile: Ts.SourceFile) (e: Ts.Expression) =
+    if e.kind = Ts.SyntaxKind.StringLiteral then
+      let specifier = (!!e : Ts.StringLiteral).text
+      if specifier.StartsWith(".") then
+        match tryFindDefinitionFile sourceFile specifier with
+        | None -> None
+        | Some path -> tryAdd sourceFile path
+      else None
+    else None
+
+  let rec go (sourceFile: Ts.SourceFile) (n: Ts.Node) : unit option =
+    match n.kind with
+    | Ts.SyntaxKind.ImportEqualsDeclaration ->
+      let n = n :?> Ts.ImportEqualsDeclaration
+      if (!!n.moduleReference : Ts.Node).kind = Ts.SyntaxKind.ExternalModuleReference then
+        (!!n.moduleReference : Ts.ExternalModuleReference).expression
+        |> handleModuleSpecifier sourceFile
+        |> Option.iter goSourceFile
+    | Ts.SyntaxKind.ImportDeclaration ->
+      let n = n :?> Ts.ImportDeclaration
+      n.moduleSpecifier
+      |> handleModuleSpecifier sourceFile
+      |> Option.iter goSourceFile
+    | _ -> ()
+    n.forEachChild(go sourceFile)
+
+  and goSourceFile sourceFile =
+    for statement in sourceFile.statements do
+      go sourceFile statement |> ignore
+
+  for sourceFile in sourceFiles do goSourceFile sourceFile
+
+  sourceFilesMap.Values :> Ts.SourceFile seq
 
 let parse (opts: GlobalOptions) (argv: string[]) : Input =
   let program =
     let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))
     let srcs =
-      inputs |> Seq.map (fun (a, i) ->
+      inputs
+      |> Seq.map (fun (a, i) ->
         ts.createSourceFile (a, i, Ts.ScriptTarget.Latest, setParentNodes=true))
+      |> fun srcs ->
+        if not opts.followRelativeReferences then srcs
+        else
+          Log.tracef opts "* following relative references..."
+          getAllLocalReferences opts srcs
     createProgram argv (Seq.toList srcs)
 
   let srcs = program.getSourceFiles()
   let checker = program.getTypeChecker()
-  let rec display (node: Ts.Node) depth =
-    let indent = String.replicate depth "  "
-    System.Enum.GetName(typeof<Ts.SyntaxKind>, node.kind) |> printfn "%s%A" indent
-    node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
   let sources =
     srcs
@@ -91,7 +144,7 @@ let parse (opts: GlobalOptions) (argv: string[]) : Input =
         ] |> Seq.toList
       let statements =
         src.statements
-        |> Seq.collect (Parser.readStatement !!{| verbose = opts.verbose; checker = checker; sourceFile = src; nowarn = opts.nowarn |})
+        |> Seq.collect (Parser.readStatement !!{| verbose = opts.verbose; checker = checker; sourceFile = src; nowarn = opts.nowarn; followRelativeReferences = false |})
         |> Seq.toList
       { statements = statements
         fileName = Path.relative src.fileName

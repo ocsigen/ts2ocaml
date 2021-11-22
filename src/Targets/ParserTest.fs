@@ -11,17 +11,17 @@ type Options =
 let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
   argv.addFlag("typing", (fun (o: Options) -> o.typing), descr="Apply typer")
 
-let private run (srcs: SourceFile list) (options: Options) =
+let private run (input: Input) (options: Options) =
   let srcs =
     if options.typing then
-      Typer.runAll srcs options |> snd
+      Typer.runAll input.sources options |> snd
     else
-      srcs
-  for src in srcs do
-    printfn "source: %s" src.fileName
-    for stmt in src.statements do
-      printfn "%A" stmt
-    printfn ""
+      input.sources
+  let moduleName =
+    JsHelper.deriveModuleName input.info (srcs |> List.map (fun src -> src.fileName))
+  printfn "package info: %A" (JS.stringify input.info)
+  printfn "sources: %A" (srcs |> List.map (fun src -> src.fileName))
+  printfn "derived module name: %A" moduleName
 
 let target =
   { new ITarget<Options> with

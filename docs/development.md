@@ -15,6 +15,7 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
   - `Common.fs` ... **\[\<AutoOpen\>\]** global command line options, types, and modules
   - `Syntax.fs` ... AST for parsed TypeScAript code
   - `Naming.fs` ... naming helpers
+  - `JsHelper.fs` ... helper functions for JavaScript-related things e.g. NPM packages and ES6 module names.
   - `Typer.fs`  ... functions for resolving and manipulating AST
   - `Parser.fs` ... functions for converting TS syntax tree to our AST
   - `Target.fs` ... generic definitions for each targets (`ITarget<_>`)
@@ -46,6 +47,12 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 
 - Node 14.0 or higher
   - [yarn](https://yarnpkg.com/) is required.
+
+## Debugging
+
+`dotnet fake build -t Watch` to live update `dist/ts2ocaml.js`.
+
+It will be bundled by Webpack with the `development` mode.
 
 ## Building
 

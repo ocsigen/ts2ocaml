@@ -51,6 +51,10 @@ module String =
       state.Replace(e, "\\" + e)
     ) s
 
+module Result =
+  let toOption result =
+    match result with Ok x -> Some x | Error _ -> None
+
 module List =
   let splitChoice2 (xs: Choice<'t1, 't2> list) : 't1 list * 't2 list =
     let xs1, xs2 =
@@ -111,6 +115,31 @@ module JS =
       else
         value
     ))
+
+type JS.ObjectConstructor with
+  [<Emit("$0.entries($1)")>]
+  member __.entries (x: 'a) : (string * obj) [] = jsNative
+
+module Path =
+  module Node = Node.Api
+
+  type Absolute = string
+  /// relative to current directory
+  type Relative = string
+  type Difference = string
+
+  let relative (path: string) : Relative =
+    Node.path.relative(Node.``process``.cwd(), path)
+
+  let absolute (path: string) : Absolute =
+    if Node.path.isAbsolute(path) then path
+    else Node.path.resolve(path)
+
+  let diff (fromPath: string) (toPath: string) : Difference =
+    let fromPath =
+      if Node.fs.lstatSync(!^fromPath).isDirectory() then fromPath
+      else Node.path.dirname(fromPath)
+    Node.path.relative(fromPath, toPath)
 
 open Yargs
 

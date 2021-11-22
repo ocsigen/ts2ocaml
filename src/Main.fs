@@ -20,8 +20,8 @@ type ICompilerHost =
 
 let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
   let options = jsOptions<Ts.CompilerOptions>(fun o ->
-    o.target <- Some Ts.ScriptTarget.ESNext
-    o.``module`` <- Some Ts.ModuleKind.CommonJS
+    o.target <- Some Ts.ScriptTarget.Latest
+    o.``module`` <- Some Ts.ModuleKind.None
     o.incremental <- Some false
     o.checkJs <- Some true
     o.lib <- Some (ResizeArray ["ESNext"; "DOM"])
@@ -29,7 +29,7 @@ let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
     o.alwaysStrict <- Some true
     o.strict <- Some true
     o.skipLibCheck <- Some false
-    o.traceResolution <- Some true
+    o.allowJs <- Some true
   )
   let host =
     { new ICompilerHost with
@@ -63,7 +63,7 @@ let expandSourceFiles (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq) =
 
   expanded |> Map.toArray |> Array.map snd
 
-let parse (opts: GlobalOptions) (argv: string[]) =
+let parse (opts: GlobalOptions) (argv: string[]) : Input =
   let program =
     let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))
     let srcs =
@@ -78,26 +78,33 @@ let parse (opts: GlobalOptions) (argv: string[]) =
     System.Enum.GetName(typeof<Ts.SyntaxKind>, node.kind) |> printfn "%s%A" indent
     node.forEachChild(fun child -> display child (depth+1); None) |> ignore
 
-  srcs
-  |> Seq.toList
-  |> List.map (fun src ->
-    Log.tracef opts "* parsing %s..." src.fileName
-    let references =
-      Seq.concat [
-        src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
-        src.typeReferenceDirectives |> Seq.map (fun x -> TypeReference x.fileName)
-        src.libReferenceDirectives |> Seq.map (fun x -> LibReference x.fileName)
-      ] |> Seq.toList
-    let statements =
-      src.statements
-      |> Seq.collect (Parser.readStatement !!{| verbose = opts.verbose; checker = checker; sourceFile = src; nowarn = opts.nowarn |})
-      |> Seq.toList
-    { statements = statements
-      fileName = src.fileName
-      moduleName = src.moduleName
-      hasNoDefaultLib = src.hasNoDefaultLib
-      references = references })
+  let sources =
+    srcs
+    |> Seq.toList
+    |> List.map (fun src ->
+      Log.tracef opts "* parsing %s..." src.fileName
+      let references =
+        Seq.concat [
+          src.referencedFiles |> Seq.map (fun x -> FileReference x.fileName)
+          src.typeReferenceDirectives |> Seq.map (fun x -> TypeReference x.fileName)
+          src.libReferenceDirectives |> Seq.map (fun x -> LibReference x.fileName)
+        ] |> Seq.toList
+      let statements =
+        src.statements
+        |> Seq.collect (Parser.readStatement !!{| verbose = opts.verbose; checker = checker; sourceFile = src; nowarn = opts.nowarn |})
+        |> Seq.toList
+      { statements = statements
+        fileName = Path.relative src.fileName
+        moduleName = src.moduleName
+        hasNoDefaultLib = src.hasNoDefaultLib
+        references = references })
 
+  let info =
+    match sources with
+    | example :: _ -> JsHelper.getPackageInfo example.fileName
+    | [] -> None
+
+  { sources = sources; info = info }
 open Yargs
 
 [<EntryPoint>]

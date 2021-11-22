@@ -78,12 +78,12 @@ Target.create "YarnInstall" <| fun _ ->
 Target.create "Prepare" ignore
 
 Target.create "BuildOnly" <| fun _ ->
-  dotnetExec "fable" $"{srcDir} --sourceMaps --run webpack"
+  dotnetExec "fable" $"{srcDir} --sourceMaps --run webpack --mode=production"
 
 Target.create "Build" ignore
 
 Target.create "Watch" <| fun _ ->
-  dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w"
+  dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w --mode=development"
 
 "Clean"
   ==> "YarnInstall"
@@ -105,6 +105,12 @@ module Test =
     let testDir = testDir </> "jsoo"
     let outputDir = outputDir </> "test_jsoo"
     let srcDir = testDir </> "src"
+
+    let clean () =
+      !! $"{outputDir}/*"
+      ++ $"{srcDir}/*.mli"
+      ++ $"{srcDir}/stub.js"
+      |> Seq.iter Shell.rm
 
     let generateBindings () =
       Directory.create outputDir
@@ -139,11 +145,13 @@ module Test =
         printfn "* copied to %s" file
       inDirectory testDir <| fun () -> dune "build"
 
+Target.create "TestJsooClean" <| fun _ -> Test.Jsoo.clean ()
 Target.create "TestJsooGenerateBindings" <| fun _ -> Test.Jsoo.generateBindings ()
 Target.create "TestJsooBuild" <| fun _ -> Test.Jsoo.build ()
 Target.create "TestJsoo" ignore
 
 "BuildOnly"
+  ==> "TestJsooClean"
   ==> "TestJsooGenerateBindings"
   ==> "TestJsooBuild"
   ==> "TestJsoo"

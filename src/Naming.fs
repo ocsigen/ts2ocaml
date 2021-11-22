@@ -152,34 +152,3 @@ let removeQuotesAndTrim (s: string) =
     if (c = '\"' || c = ''')
     then s.Trim(c).Trim()
     else s.Trim()
-
-// gets the JavaScript module name
-// intended for use by SourceFile.fileName which has slashes normalized
-// TODO implement all of https://github.com/ajafff/tsutils/issues/14#issuecomment-345544684
-let getJsModuleName (path: string): string =
-  let parts =
-    path
-      |> fun x ->
-        let inm = path.LastIndexOf "node_modules"
-        if inm = -1 then x
-        else x.Substring(inm+13)
-      |> fun x ->
-        let is = x.LastIndexOf "@"
-        if is = -1 then x
-        else x.Substring(is)
-      |> fun x ->
-        x.Split '/'
-          |> List.ofArray
-          |> List.filter (fun s -> s <> "index.d.ts" && s <> "types")
-
-  let out =
-    match parts with
-      | "@types"::x::xs ->
-        let xs' = x.Replace("__", "/") :: xs
-        String.Join("/", xs')
-      | x::xs when x.StartsWith "@" ->
-        String.Join("/", x :: xs)
-      // TODO: Shouldn't this be List.last instead?
-      | xs -> List.head xs
-  out.Replace(".ts","").Replace(".d","")
-

@@ -812,7 +812,11 @@ let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kind
   match s.isExported.AsExport ident with
   | None -> None
   | Some clause ->
-    Some {| comments = []; clause = clause; loc = s.loc; origText = sprintf "export %s %s" kindString name; kind = Set.ofList kind |}
+    let prefix =
+      match clause with
+      | ES6DefaultExport _ -> "export default"
+      | _ -> "export"
+    Some {| comments = []; clause = clause; loc = s.loc; origText = sprintf "%s %s %s" prefix kindString name; kind = Set.ofList kind |}
 
 let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Class) (additionalMembers: Context -> EmitTypeFlags -> OverrideFunc -> list<StructuredTextItem>, additionalKnownTypes: Set<KnownType>, forceScoped: Scoped option) =
   let emitType orf ctx ty = emitTypeImpl flags orf ctx ty
@@ -900,9 +904,10 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     let scoped =
       let scoped = forceScoped |> Option.defaultValue Scoped.No
       let shouldBeScoped =
-        c.members |> List.exists (fun (ma, m) ->
-          if ma.isStatic then true
-          else match m with Constructor _ -> true | _ -> false) // constructor generates global value
+        not c.isInterface // class generates global value
+        || c.members |> List.exists (fun (ma, m) ->
+             if ma.isStatic then true
+             else match m with Constructor _ -> true | _ -> false) // constructor generates global value
       Scoped.union
         scoped
         (if shouldBeScoped then Scoped.Yes else Scoped.No)
@@ -1278,7 +1283,8 @@ let emitExportModule (ctx: Context) (exports: ExportWithKind list) : text list =
           match e.clause with
           | CommonJsExport _ // `export = something;` should not appear with other export elements
           | NamespaceExport _ -> fail isFirst e
-          | ES6DefaultExport i -> emitModuleAlias isFirst (i.name |> List.last |> Naming.moduleName) i e
+          | ES6DefaultExport i ->
+            emitModuleAlias isFirst "Default" i e
           | ES6Export x ->
             let name =
               match x.renameAs with

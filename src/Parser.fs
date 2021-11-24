@@ -788,11 +788,11 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
       match c.name, c.namedBindings with
       | None, None -> create ES6WildcardImport
       | None, Some b when (!!b : Ts.Node).kind = Kind.NamespaceImport ->
-        let n = (!!c.namedBindings : Ts.NamespaceImport)
+        let n = (!!b : Ts.NamespaceImport)
         let kind = getKindFromIdentifier ctx n.name
         create (NamespaceImport {| name = n.name.text; kind = kind; isES6Import = true |})
       | _, Some b when (!!b : Ts.Node).kind = Kind.NamedImports ->
-        let n = (!!c.namedBindings : Ts.NamedImports)
+        let n = (!!b : Ts.NamedImports)
         let defaultImport = c.name |> Option.map (fun i -> {| name = i.text; kind = getKindFromIdentifier ctx i |})
         let bindings =
           n.elements
@@ -805,6 +805,9 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
               | None -> e.name.text, None
             {| name = name; kind = kind; renameAs = renameAs |})
         create (ES6Import {| defaultImport = defaultImport; bindings = bindings |})
+      | Some i, None ->
+        let defaultImport = {| name = i.text; kind = getKindFromIdentifier ctx i |}
+        create (ES6Import {| defaultImport = Some defaultImport; bindings = [] |})
       | _, _ ->
         nodeWarn ctx i "invalid import statement"; None
     | kind ->

@@ -153,6 +153,117 @@ let () =
 > * [JavaScript compilation in dune](https://dune.readthedocs.io/en/latest/jsoo.html)
 > * [`gen_js_api`](https://github.com/LexiFi/gen_js_api/blob/master/INSTALL_AND_USE.md)
 
+## Handling `import` and `export`
+
+To work with multiple files and packages, ts2ocaml has some conventions around the name of the generated OCaml source codes.
+
+1. If not known, ts2ocaml computes the JS module name of the input `.d.ts` file by [heuristics](#how-the-heuristics-work).
+2. ts2ocaml converts the JS module name to a OCaml module name by the followings:
+    - Removes `@` at the top of the module name
+    - Replaces `/` with `__`
+    - Replaces any other signs (such as `-`) to `_`
+3. ts2ocaml uses the OCaml module name as the output file name.
+
+### How the heuristics work
+
+* If the filename is equal to `types` or `typings` of `package.json`, then ts2ocaml will use the package name itself.
+  - input: `node_modules/typescript/lib/typescript.d.ts`
+  - `package.json`: `"typings": "./lib/typescript.d.ts",`
+  - `getJsModuleName`: `typescript`
+  - output file: `typescript.mli`
+* If the filename is present in `exports` of `package.json`, then ts2ocaml will combine the package name and the exported module name.
+  - input: `node_modules/@angular/common/http/http.d.ts`
+  - `package.json`: `"exports": { .., "./http": { "types": "./http/http.d.ts", .. }, .. }`
+  - `getJsModuleName`: `@angualr/common/http`
+  - output file: `angular__common__http.mli`
+* Otherwise, ts2ocaml uses a heuristic module name: it will combine the package name and the filename. `index.d.ts` is handled specially.
+  - input: `node_modules/cassandra-driver/lib/auth/index.d.ts`
+  - `getJsModuleName`: `cassandra-driver/auth`
+  - output file: `cassandra_driver__auth.mli`
+  - if `package.json` is not present, the package name is also inferred heuristically from the filename.
+
+### How the `import` statements are translated
+
+* `import` of another package from `node_modules` will be converted to an `open` statement or a module alias.
+  - The OCaml module name of the imported package is computed by the step 2 of [the above](#handling-import-and-export).
+
+```typescript
+// node_modules/@types/react/index.d.ts
+import * as CSS from 'csstype';
+import { Interaction as SchedulerInteraction } from 'scheduler/tracing';
+...
+```
+```ocaml
+(* react.mli *)
+module CSS = Csstype.Export
+module SchedulerInteraction = Scheduler__tracing.Export.Interaction
+...
+```
+
+* `import` of relative path will be converted to an `open` statement or a module alias.
+  - The OCaml module name of the imported file will also be inferred by [heuristics](#how-the-heuristics-work).
+```typescript
+// node_modules/cassandra-driver/index.d.ts
+import { auth } from './lib/auth';
+```
+
+```ocaml
+(* cassandra_driver.mli *)
+module Auth = Cassandra_driver__auth.Export.Auth
+```
+
+```typescript
+// node_modules/cassandra-driver/lib/mapping/index.d.ts
+import { Client } from '../../';
+```
+
+```ocaml
+(* cassandra_driver__mapping.mli *)
+module Client = Cassandra_driver.Export.Client
+```
+
+* Indirect `import` using identifiers is not yet be supported.
+
+```typescript
+import { types } from './lib/types';
+import Uuid = types.Uuid; // we should be able to convert this to `module Uuid = Type.Uuid`, but not yet
+```
+
+* Direct `export` of an external module **will not be supported**.
+
+```typescript
+export { someFunction } from './lib/functions'; // this is VERY hard to do in OCaml!
+```
+
+### How the `export` statements are translated
+
+ts2ocaml will create a module named `Export` to represent the exported definitions.
+
+* If an export assignment `export = Something` is used, the `Export` module will be an alias to the `Something` module.
+```ocaml
+(* export = Something *)
+module Export = Something
+```
+
+* If ES6 exports `export interface Foo` or  `export { Bar }` are used, the `Export` module will contain the exported modules.
+```ocaml
+module Export : sig
+  (* export interface Foo *)
+  module Foo = Foo
+  (* export { Bar } *)
+  module Bar = Bar
+  (* export { Baz as Buzz } *)
+  module Buzz = Baz
+end
+```
+
+This is why you are advised to use the generated bindings with the following:
+
+```ocaml
+(* This is analogous to `import * as TypeScript from "typescript";` *)
+module TypeScript = Typescript.Export
+```
+
 # Usage
 
 ```bash

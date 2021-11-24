@@ -105,6 +105,9 @@ module InferenceResult =
   let unwrap defaultValue = function
     | Valid s | Heuristic s -> s
     | Unknown -> defaultValue
+  let tryUnwrap = function
+    | Valid s | Heuristic s -> Some s
+    | Unknown -> None
 
 let inferPackageInfoFromFileName (sourceFile: Path.Relative) : {| name: string; isDefinitelyTyped: bool; rest: string list |} option =
   let parts =

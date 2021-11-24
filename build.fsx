@@ -138,7 +138,7 @@ module Test =
       ]
 
       for preset, package in packages do
-        ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; $"--preset {preset}"; $"-o {outputDir}"] package
+        ts2ocaml ["jsoo"; "--verbose"; "--nowarn"; "--follow-relative-references"; $"--preset {preset}"; $"-o {outputDir}"] package
 
     let build () =
       for file in outputDir |> Shell.copyRecursiveTo true srcDir do

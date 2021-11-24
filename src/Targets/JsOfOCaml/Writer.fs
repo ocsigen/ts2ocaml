@@ -12,13 +12,15 @@ open Targets.JsOfOCaml.OCamlHelper
 type ScriptTarget = TypeScript.Ts.ScriptTarget
 
 type State = {|
+  fileNames: string list
   info: Result<PackageInfo, string option>
   referencesCache: MutableMap<string list, WeakTrie<string>>
   usedAnonymousInterfacesCache: MutableMap<string list, Set<int>>
 |}
 module State =
-  let create info : State =
-    {| info = info
+  let create fileNames info : State =
+    {| fileNames = fileNames
+       info = info
        referencesCache = new MutableMap<_, _>();
        usedAnonymousInterfacesCache = new MutableMap<_, _>() |}
 
@@ -1494,7 +1496,7 @@ let emitStdlib (input: Input) (opts: Options) : Output list =
 
   let writerCtx ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
-        |> Context.mapState (fun _ -> State.create (Error None))
+        |> Context.mapState (fun _ -> State.create [] (Error None))
 
   Log.tracef opts "* emitting stdlib..."
 
@@ -1518,49 +1520,59 @@ let emitStdlib (input: Input) (opts: Options) : Output list =
 
 let emitImports (ctx: Context) (sourceFile: SourceFile) : text list =
   let emitImport (i: Import) =
-    let moduleSpecifier =
-      match JsHelper.resolveRelativeImportPath (ctx.state.info |> Result.toOption) sourceFile.fileName i.moduleSpecifier with
-      | JsHelper.Valid s | JsHelper.Heuristic s -> s
-      | JsHelper.Unknown -> i.moduleSpecifier
-    let theirModuleName = moduleSpecifier |> Naming.jsModuleNameToOCamlModuleName
-
-    let isModule (name: string) (kind: Set<Kind> option) =
-      i.isTypeOnly
-      || kind |> Option.map (fun k -> Set.intersect k (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not)
-              |> Option.defaultValue false
-      || ctx.unknownIdentTypes |> Trie.containsKey [name]
-      || name |> Naming.isCase Naming.PascalCase
-
-    let emitES6Import (b: {| name: string; kind: Set<Kind> option; renameAs: string option |}) =
-      if isModule b.name b.kind then
-        let theirName = b.name |> Naming.moduleName
-        let ourName =
-          match b.renameAs with
-          | Some name -> name |> Naming.moduleName
-          | None -> theirName
-        tprintf "module %s = %s.Export.%s " ourName theirModuleName theirName |> Some
+    // if the imported file is included in the input files, skip emitting it
+    let shouldBeSkipped =
+      if i.moduleSpecifier.StartsWith(".") |> not then false
       else
-        None
+        let relativePath = Path.join [Path.dirname sourceFile.fileName; i.moduleSpecifier]
+        let test path = ctx.state.fileNames |> List.contains path
+        test (relativePath + ".d.ts") || test (Path.join [relativePath; "index.d.ts"])
 
-    let stopStartImplem text =
-      Attr.js_stop_start_implem_oneliner text text
+    if shouldBeSkipped then []
+    else
+      let moduleSpecifier =
+        match JsHelper.resolveRelativeImportPath (ctx.state.info |> Result.toOption) sourceFile.fileName i.moduleSpecifier with
+        | JsHelper.Valid s | JsHelper.Heuristic s -> s
+        | JsHelper.Unknown -> i.moduleSpecifier
+      let theirModuleName = moduleSpecifier |> Naming.jsModuleNameToOCamlModuleName
 
-    [ yield empty
-      yield commentStr i.origText
-      match i.clause with
-      | ES6WildcardImport ->
-        yield open_ [ sprintf "%s.Export" theirModuleName ]
-      | NamespaceImport x ->
-        yield tprintf "module %s = %s.Export" (Naming.moduleName x.name) theirModuleName |> stopStartImplem
-      | ES6Import x ->
-        match x.defaultImport with
-        | None -> ()
-        | Some b ->
-          if isModule b.name b.kind then
-            let ourName = b.name |> Naming.moduleName
-            yield tprintf "module %s = %s.Export.Default" ourName theirModuleName |> stopStartImplem
-        for b in x.bindings do
-          match emitES6Import b with Some t -> yield stopStartImplem t | None -> () ]
+      let isModule (name: string) (kind: Set<Kind> option) =
+        i.isTypeOnly
+        || kind |> Option.map (fun k -> Set.intersect k (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not)
+                |> Option.defaultValue false
+        || ctx.unknownIdentTypes |> Trie.containsKey [name]
+        || name |> Naming.isCase Naming.PascalCase
+
+      let emitES6Import (b: {| name: string; kind: Set<Kind> option; renameAs: string option |}) =
+        if isModule b.name b.kind then
+          let theirName = b.name |> Naming.moduleName
+          let ourName =
+            match b.renameAs with
+            | Some name -> name |> Naming.moduleName
+            | None -> theirName
+          tprintf "module %s = %s.Export.%s " ourName theirModuleName theirName |> Some
+        else
+          None
+
+      let stopStartImplem text =
+        Attr.js_stop_start_implem_oneliner text text
+
+      [ yield empty
+        yield commentStr i.origText
+        match i.clause with
+        | ES6WildcardImport ->
+          yield open_ [ sprintf "%s.Export" theirModuleName ]
+        | NamespaceImport x ->
+          yield tprintf "module %s = %s.Export" (Naming.moduleName x.name) theirModuleName |> stopStartImplem
+        | ES6Import x ->
+          match x.defaultImport with
+          | None -> ()
+          | Some b ->
+            if isModule b.name b.kind then
+              let ourName = b.name |> Naming.moduleName
+              yield tprintf "module %s = %s.Export.Default" ourName theirModuleName |> stopStartImplem
+          for b in x.bindings do
+            match emitES6Import b with Some t -> yield stopStartImplem t | None -> () ]
 
   sourceFile.statements |> List.collect (function Import i -> emitImport i | _ -> [])
 
@@ -1624,6 +1636,33 @@ let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
       |> open_
     empty :: comments @ [openRefs]
 
+let emitReferenceFileDirectives (ctx: Context) (src: SourceFile) : text list =
+  let refs =
+    src.references
+    |> List.choose (function FileReference r -> Some r | _ -> None)
+  if List.isEmpty refs then []
+  else
+    // if the referenced file is included in the input files, skip emitting it
+    let validRefs =
+      refs
+      |> List.choose (fun ref ->
+        let relativePath = Path.join [Path.dirname src.fileName; ref]
+        if ctx.state.fileNames |> List.contains relativePath |> not then
+          Some {| path = ref; relativePath = relativePath |}
+        else None)
+    let comments =
+      refs
+      |> List.map (sprintf "<reference path=\"%s\">")
+      |> List.map commentStr
+    let openRefs =
+      validRefs
+      |> List.choose (fun x ->
+        JsHelper.deriveModuleName (Result.toOption ctx.state.info) [x.relativePath]
+        |> JsHelper.InferenceResult.tryUnwrap
+        |> Option.map Naming.jsModuleNameToOCamlModuleName)
+      |> open_
+    empty :: comments @ [openRefs]
+
 let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (opts: Options) =
   let derivedOutputFileName =
     JsHelper.deriveOutputFileName
@@ -1643,7 +1682,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (opts
   let ctx, srcs = runAll sources opts
   let ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
-        |> Context.mapState (fun _ -> State.create info)
+        |> Context.mapState (fun _ -> State.create (srcs |> List.map (fun s -> s.fileName)) info)
   let stmts = srcs |> List.collect (fun x -> x.statements)
   let structuredText = createStructuredText ctx stmts
 
@@ -1662,6 +1701,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (opts
       for src in srcs do
         yield! emitImports ctx src
         yield! emitReferenceTypeDirectives ctx src
+        yield! emitReferenceFileDirectives ctx src
 
       yield empty
       yield! emitStatementsWithStructuredText ctx stmts structuredText
@@ -1671,26 +1711,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (opts
 
 let emit (input: Input) (opts: Options) : Output list =
   if opts.merge then
-    let srcs =
-      match input.sources with
-      | [] | _ :: [] -> input.sources
-      | srcs ->
-        let combinedName, moduleName =
-          match srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts") with
-          | Some index ->
-            Log.tracef opts "* using index.d.ts as an entrypoint"
-            index.fileName, index.moduleName
-          | None ->
-            Log.tracef opts "* treating everything as combined into lib.d.ts"
-            "lib.d.ts", None
-        [
-          { fileName = combinedName
-            statements = srcs |> List.collect (fun src -> src.statements)
-            references = srcs |> List.collect (fun src -> src.references) |> List.distinct
-            hasNoDefaultLib = srcs |> List.exists (fun src -> src.hasNoDefaultLib)
-            moduleName = moduleName }
-        ]
-    [emitImpl srcs input.info opts]
+    [emitImpl input.sources input.info opts]
   else
     input.sources
     |> List.map (fun source -> emitImpl [source] input.info opts)

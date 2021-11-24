@@ -114,7 +114,7 @@ let getAllLocalReferences (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq)
 
   for sourceFile in sourceFiles do goSourceFile sourceFile
 
-  sourceFilesMap |> Seq.toArray |> Array.map (function KeyValue(k, v) -> Path.relative k, v) |> Array.unzip
+  sourceFilesMap.Values |> Seq.toArray |> Array.map (fun v -> v.fileName, v) |> Array.unzip
 
 let parse (opts: GlobalOptions) (argv: string[]) : Input =
   let program =
@@ -146,7 +146,7 @@ let parse (opts: GlobalOptions) (argv: string[]) : Input =
         ] |> Seq.toList
       let statements =
         src.statements
-        |> Seq.collect (Parser.readStatement !!{| verbose = opts.verbose; checker = checker; sourceFile = src; nowarn = opts.nowarn; followRelativeReferences = false |})
+        |> Seq.collect (Parser.readStatement !!{| verbose = opts.verbose; checker = checker; sourceFile = src; nowarn = opts.nowarn; followRelativeReferences = false; merge = false |})
         |> Seq.toList
       { statements = statements
         fileName = Path.relative src.fileName

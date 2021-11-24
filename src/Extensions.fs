@@ -141,6 +141,15 @@ module Path =
       else Node.path.dirname(fromPath)
     Node.path.relative(fromPath, toPath)
 
+  let dirname (path: string) : string =
+    Node.path.dirname(path)
+
+  let join (paths: string list) : string =
+    Node.path.join(Array.ofList paths)
+
+  let separator =
+    Node.path.sep
+
 open Yargs
 
 type Argv<'T> with

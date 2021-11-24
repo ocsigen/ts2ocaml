@@ -639,7 +639,7 @@ let readEnumCase (ctx: ParserContext) (em: Ts.EnumMember) : EnumCase option =
       | Some ep ->
         match readLiteral ep with
         | Some ((LInt _ | LString _) as l) -> Some l
-        | _ -> nodeError ep "enum value '%s' for case '%s' not supported" (ep.getText()) name
+        | _ -> nodeWarn ctx ep "enum value '%s' for case '%s' not supported" (ep.getText()) name; None
     let comments = readCommentsForNamedDeclaration ctx em
     Some { comments = comments; loc = Node.location em; name = name; value = value }
   | None -> nodeWarn ctx em "unsupported enum case name '%s'" (getText em.name); None
@@ -809,7 +809,6 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
         nodeWarn ctx i "invalid import statement"; None
     | kind ->
       nodeWarn ctx i "invalid kind '%s' for module specifier" (Enum.pp kind); None
-
 
 let readJSDocImpl (ctx: ParserContext) (doc: Ts.JSDoc) : Comment list =
   let desc =

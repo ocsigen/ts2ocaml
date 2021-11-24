@@ -1624,45 +1624,23 @@ let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
       |> open_
     empty :: comments @ [openRefs]
 
-let emitEverythingCombined (input: Input) (opts: Options) : Output list =
-  let srcs = input.sources
-
-  let srcs =
-    match srcs with
-    | [] | _ :: [] -> srcs
-    | _ ->
-      let combinedName, moduleName =
-        match srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts") with
-        | Some index ->
-          Log.tracef opts "* using index.d.ts as an entrypoint"
-          index.fileName, index.moduleName
-        | None ->
-          Log.tracef opts "* treating everything as combined into lib.d.ts"
-          "lib.d.ts", None
-      [
-        { fileName = combinedName
-          statements = srcs |> List.collect (fun src -> src.statements)
-          references = srcs |> List.collect (fun src -> src.references) |> List.distinct
-          hasNoDefaultLib = srcs |> List.exists (fun src -> src.hasNoDefaultLib)
-          moduleName = moduleName }
-      ]
-
+let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (opts: Options) =
   let derivedOutputFileName =
     JsHelper.deriveOutputFileName
-      opts input.info (srcs |> List.map (fun src -> src.fileName))
+      opts info (sources |> List.map (fun s -> s.fileName))
       Naming.jsModuleNameToFileName "output.mli"
 
   let derivedModuleName =
-    JsHelper.deriveModuleName input.info (srcs |> List.map (fun src -> src.fileName))
+    JsHelper.deriveModuleName info (sources |> List.map (fun s -> s.fileName))
     |> JsHelper.InferenceResult.unwrap "package"
 
   let info =
-    match input.info with
+    match info with
     | Some info -> Ok info
     | None -> Error (Some derivedModuleName)
 
   Log.tracef opts "* running typer..."
-  let ctx, srcs = runAll srcs opts
+  let ctx, srcs = runAll sources opts
   let ctx =
     ctx |> Context.mapOptions (fun _ -> opts)
         |> Context.mapState (fun _ -> State.create info)
@@ -1671,7 +1649,7 @@ let emitEverythingCombined (input: Input) (opts: Options) : Output list =
 
   let exported = handleExports derivedModuleName ctx structuredText
 
-  Log.tracef opts "* emitting a binding for js_of_ocaml..."
+  Log.tracef opts "* emitting a binding to '%s' for js_of_ocaml..." derivedModuleName
   let content =
     concat newline [
       yield! header
@@ -1689,4 +1667,30 @@ let emitEverythingCombined (input: Input) (opts: Options) : Output list =
       yield! emitStatementsWithStructuredText ctx stmts structuredText
     ]
 
-  [{ fileName = derivedOutputFileName; content = content; stubLines = exported.stubLines }]
+  { fileName = derivedOutputFileName; content = content; stubLines = exported.stubLines }
+
+let emit (input: Input) (opts: Options) : Output list =
+  if opts.merge then
+    let srcs =
+      match input.sources with
+      | [] | _ :: [] -> input.sources
+      | srcs ->
+        let combinedName, moduleName =
+          match srcs |> List.tryFind (fun src -> src.fileName.EndsWith "index.d.ts") with
+          | Some index ->
+            Log.tracef opts "* using index.d.ts as an entrypoint"
+            index.fileName, index.moduleName
+          | None ->
+            Log.tracef opts "* treating everything as combined into lib.d.ts"
+            "lib.d.ts", None
+        [
+          { fileName = combinedName
+            statements = srcs |> List.collect (fun src -> src.statements)
+            references = srcs |> List.collect (fun src -> src.references) |> List.distinct
+            hasNoDefaultLib = srcs |> List.exists (fun src -> src.hasNoDefaultLib)
+            moduleName = moduleName }
+        ]
+    [emitImpl srcs input.info opts]
+  else
+    input.sources
+    |> List.map (fun source -> emitImpl [source] input.info opts)

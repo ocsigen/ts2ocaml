@@ -2,8 +2,9 @@ module Main
 
 open Fable.Core.JsInterop
 open TypeScript
-open Node.Api
 open Syntax
+
+module Node = Node.Api
 
 type ICompilerHost =
   abstract getSourceFile: fileName: string * languageVersion: Ts.ScriptTarget * ?onError: (string -> unit) * ?shouldCreateNewSourceFile: bool -> Ts.SourceFile option
@@ -28,24 +29,24 @@ let options =
     o.noEmit <- Some true
     o.alwaysStrict <- Some true
     o.strict <- Some true
-    o.skipLibCheck <- Some false
+    o.skipLibCheck <- Some true
     o.allowJs <- Some true
   )
 
-let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile list) =
+let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile[]) =
   let host =
     { new ICompilerHost with
         member _.getSourceFile(fileName, _, ?__, ?___) =
-          sourceFiles |> List.tryFind (fun sf -> sf.fileName = fileName)
+          sourceFiles |> Array.tryFind (fun sf -> sf.fileName = fileName)
         member _.getSourceFileByPath(fileName, _, _, ?__, ?___) =
-          sourceFiles |> List.tryFind (fun sf -> sf.fileName = fileName)
+          sourceFiles |> Array.tryFind (fun sf -> sf.fileName = fileName)
         member _.getDefaultLibFileName(_) = "lib.d.ts"
         member _.useCaseSensitiveFileNames() = false
         member _.getCanonicalFileName(s) = s
         member _.getCurrentDirectory() = ""
         member _.getNewLine() = "\r\n"
         member _.fileExists(fileName) = Array.contains fileName tsPaths
-        member _.readFile(fileName) = sourceFiles |> List.tryPick (fun sf -> if sf.fileName = fileName then Some (sf.getFullText()) else None)
+        member _.readFile(fileName) = sourceFiles |> Array.tryPick (fun sf -> if sf.fileName = fileName then Some (sf.getFullText()) else None)
         member _.directoryExists(_) = true
         member _.getDirectories(_) = ResizeArray []
     }
@@ -58,7 +59,7 @@ let getAllLocalReferences (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq)
     sourceFilesMap.Add(Path.absolute sourceFile.fileName, sourceFile)
 
   let createSourceFile path =
-    ts.createSourceFile(path, fs.readFileSync(path, "utf-8"), Ts.ScriptTarget.Latest, setParentNodes=true)
+    ts.createSourceFile(path, Node.fs.readFileSync(path, "utf-8"), Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS)
 
   let tryAdd (from: Ts.SourceFile) path =
     let key = Path.absolute path
@@ -71,12 +72,13 @@ let getAllLocalReferences (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq)
 
   for sourceFile in sourceFiles do
     for file in sourceFile.referencedFiles do
-      path.join(path.dirname(sourceFile.fileName), file.fileName) |> tryAdd sourceFile |> ignore
+      Path.join [Path.dirname sourceFile.fileName; file.fileName]
+      |> tryAdd sourceFile |> ignore
 
   let tryFindDefinitionFile (sourceFile: Ts.SourceFile) relativePath =
     let tryGet name =
-      let p = path.join(path.dirname(sourceFile.fileName), name)
-      if fs.existsSync(!^p) then Some p else None
+      let p = Path.join [Path.dirname sourceFile.fileName; name]
+      if Node.fs.existsSync(!^p) then Some p else None
     tryGet $"{relativePath}.d.ts"
     |> Option.orElseWith (fun () -> tryGet $"{relativePath}/index.d.ts")
 
@@ -112,21 +114,21 @@ let getAllLocalReferences (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq)
 
   for sourceFile in sourceFiles do goSourceFile sourceFile
 
-  sourceFilesMap.Values :> Ts.SourceFile seq
+  sourceFilesMap |> Seq.toArray |> Array.map (function KeyValue(k, v) -> Path.relative k, v) |> Array.unzip
 
 let parse (opts: GlobalOptions) (argv: string[]) : Input =
   let program =
-    let inputs = argv |> Seq.map (fun a -> a, fs.readFileSync(a, "utf-8"))
-    let srcs =
+    let inputs = argv |> Seq.map (fun a -> a, Node.fs.readFileSync(a, "utf-8"))
+    let argv, srcs =
       inputs
       |> Seq.map (fun (a, i) ->
-        ts.createSourceFile (a, i, Ts.ScriptTarget.Latest, setParentNodes=true))
+        ts.createSourceFile (a, i, Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
       |> fun srcs ->
-        if not opts.followRelativeReferences then srcs
+        if not opts.followRelativeReferences then argv, Array.ofSeq srcs
         else
           Log.tracef opts "* following relative references..."
           getAllLocalReferences opts srcs
-    createProgram argv (Seq.toList srcs)
+    createProgram argv srcs
 
   let srcs = program.getSourceFiles()
   let checker = program.getTypeChecker()

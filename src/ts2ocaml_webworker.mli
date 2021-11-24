@@ -675,6 +675,8 @@ module rec AnonymousInterface99 : sig
   val set_prototype: t -> StorageManager.t -> unit [@@js.set "prototype"]
   val create: t -> StorageManager.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "StorageManager"] StorageManager : sig
   type t = [`StorageManager] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -697,6 +699,8 @@ and[@js.scope "StorageManager"] StorageManager : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+
+(** Available only in secure contexts. *)
 module NavigatorStorage : sig
   type t = [`NavigatorStorage] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -736,7 +740,7 @@ module NavigatorOnLine : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ConnectionType : sig
-  type t = ([`L_s46_bluetooth[@js "bluetooth"] | `L_s47_cellular[@js "cellular"] | `L_s68_ethernet[@js "ethernet"] | `L_s117_mixed[@js "mixed"] | `L_s129_none[@js "none"] | `L_s143_other[@js "other"] | `L_s197_unknown[@js "unknown"] | `L_s208_wifi[@js "wifi"]] [@js.enum])
+  type t = ([`L_s46_bluetooth[@js "bluetooth"] | `L_s47_cellular[@js "cellular"] | `L_s68_ethernet[@js "ethernet"] | `L_s116_mixed[@js "mixed"] | `L_s128_none[@js "none"] | `L_s142_other[@js "other"] | `L_s196_unknown[@js "unknown"] | `L_s207_wifi[@js "wifi"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -865,7 +869,7 @@ module NavigatorConcurrentHardware : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module MediaEncodingType : sig
-  type t = ([`L_s166_record[@js "record"] | `L_s207_webrtc[@js "webrtc"]] [@js.enum])
+  type t = ([`L_s165_record[@js "record"] | `L_s206_webrtc[@js "webrtc"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -873,7 +877,7 @@ module MediaEncodingType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module TransferFunction : sig
-  type t = ([`L_s87_hlg[@js "hlg"] | `L_s152_pq[@js "pq"] | `L_s184_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s86_hlg[@js "hlg"] | `L_s151_pq[@js "pq"] | `L_s183_srgb[@js "srgb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -881,7 +885,7 @@ module TransferFunction : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module HdrMetadataType : sig
-  type t = ([`L_s180_smpteSt2086[@js "smpteSt2086"] | `L_s181_smpteSt2094_10[@js "smpteSt2094-10"] | `L_s182_smpteSt2094_40[@js "smpteSt2094-40"]] [@js.enum])
+  type t = ([`L_s179_smpteSt2086[@js "smpteSt2086"] | `L_s180_smpteSt2094_10[@js "smpteSt2094-10"] | `L_s181_smpteSt2094_40[@js "smpteSt2094-40"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -889,7 +893,7 @@ module HdrMetadataType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ColorGamut : sig
-  type t = ([`L_s145_p3[@js "p3"] | `L_s165_rec2020[@js "rec2020"] | `L_s184_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s144_p3[@js "p3"] | `L_s164_rec2020[@js "rec2020"] | `L_s183_srgb[@js "srgb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1047,7 +1051,7 @@ module MediaCapabilitiesEncodingInfo : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDecodingType : sig
-  type t = ([`L_s73_file[@js "file"] | `L_s112_media_source[@js "media-source"] | `L_s207_webrtc[@js "webrtc"]] [@js.enum])
+  type t = ([`L_s73_file[@js "file"] | `L_s111_media_source[@js "media-source"] | `L_s206_webrtc[@js "webrtc"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1254,7 +1258,7 @@ module IDBValidKey : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module IDBTransactionMode : sig
-  type t = ([`L_s162_readonly[@js "readonly"] | `L_s163_readwrite[@js "readwrite"] | `L_s204_versionchange[@js "versionchange"]] [@js.enum])
+  type t = ([`L_s161_readonly[@js "readonly"] | `L_s162_readwrite[@js "readwrite"] | `L_s203_versionchange[@js "versionchange"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1262,7 +1266,7 @@ module IDBTransactionMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module IDBRequestReadyState : sig
-  type t = ([`L_s63_done[@js "done"] | `L_s148_pending[@js "pending"]] [@js.enum])
+  type t = ([`L_s63_done[@js "done"] | `L_s147_pending[@js "pending"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1305,14 +1309,14 @@ end
 
 (** An abnormal event (called an exception) which occurs as a result of calling a method or accessing a property of a web API. *)
 and[@js.scope "DOMException"] DOMException : sig
-  type t = [`DOMException] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t = [`DOMException | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`DOMException]
+  type tags = [`DOMException | Error.tags_0]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`DOMException]
+    type tags = [`DOMException | Error.tags_0]
     type tags_0 = tags
   ]
   type 'tags this = 'tags intf constraint 'tags = [> `DOMException ]
@@ -1447,7 +1451,7 @@ and[@js.scope "IDBKeyRange"] IDBKeyRange : sig
   val upperBound: upper:any -> ?open_:bool -> unit -> t [@@js.global "upperBound"]
 end
 module IDBCursorDirection : sig
-  type t = ([`L_s122_next[@js "next"] | `L_s123_nextunique[@js "nextunique"] | `L_s154_prev[@js "prev"] | `L_s155_prevunique[@js "prevunique"]] [@js.enum])
+  type t = ([`L_s121_next[@js "next"] | `L_s122_nextunique[@js "nextunique"] | `L_s153_prev[@js "prev"] | `L_s154_prevunique[@js "prevunique"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2252,7 +2256,7 @@ module[@js.scope "indexedDB"] IndexedDBStatic : sig
   val open_: name:string -> ?version:float -> unit -> IDBOpenDBRequest.t [@@js.global "open"]
 end
 module FontFaceSetLoadStatus : sig
-  type t = ([`L_s101_loaded[@js "loaded"] | `L_s103_loading[@js "loading"]] [@js.enum])
+  type t = ([`L_s100_loaded[@js "loaded"] | `L_s102_loading[@js "loading"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2260,7 +2264,7 @@ module FontFaceSetLoadStatus : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module FontFaceLoadStatus : sig
-  type t = ([`L_s67_error[@js "error"] | `L_s101_loaded[@js "loaded"] | `L_s103_loading[@js "loading"] | `L_s198_unloaded[@js "unloaded"]] [@js.enum])
+  type t = ([`L_s67_error[@js "error"] | `L_s100_loaded[@js "loaded"] | `L_s102_loading[@js "loading"] | `L_s197_unloaded[@js "unloaded"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2662,7 +2666,7 @@ module Pbkdf2Params : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module KeyFormat : sig
-  type t = ([`L_s98_jwk[@js "jwk"] | `L_s151_pkcs8[@js "pkcs8"] | `L_s161_raw[@js "raw"] | `L_s183_spki[@js "spki"]] [@js.enum])
+  type t = ([`L_s97_jwk[@js "jwk"] | `L_s150_pkcs8[@js "pkcs8"] | `L_s160_raw[@js "raw"] | `L_s182_spki[@js "spki"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2836,7 +2840,7 @@ module EcdsaParams : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module KeyUsage : sig
-  type t = ([`L_s56_decrypt[@js "decrypt"] | `L_s59_deriveBits[@js "deriveBits"] | `L_s60_deriveKey[@js "deriveKey"] | `L_s65_encrypt[@js "encrypt"] | `L_s179_sign[@js "sign"] | `L_s200_unwrapKey[@js "unwrapKey"] | `L_s203_verify[@js "verify"] | `L_s211_wrapKey[@js "wrapKey"]] [@js.enum])
+  type t = ([`L_s56_decrypt[@js "decrypt"] | `L_s59_deriveBits[@js "deriveBits"] | `L_s60_deriveKey[@js "deriveKey"] | `L_s65_encrypt[@js "encrypt"] | `L_s178_sign[@js "sign"] | `L_s199_unwrapKey[@js "unwrapKey"] | `L_s202_verify[@js "verify"] | `L_s210_wrapKey[@js "wrapKey"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2844,7 +2848,7 @@ module KeyUsage : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module KeyType : sig
-  type t = ([`L_s156_private[@js "private"] | `L_s159_public[@js "public"] | `L_s176_secret[@js "secret"]] [@js.enum])
+  type t = ([`L_s155_private[@js "private"] | `L_s158_public[@js "public"] | `L_s175_secret[@js "secret"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2880,7 +2884,10 @@ module rec AnonymousInterface15 : sig
   val create: t -> CryptoKey.t [@@js.apply_newable]
 end
 
-(** The CryptoKey dictionary of the Web Crypto API represents a cryptographic key. *)
+(**
+  The CryptoKey dictionary of the Web Crypto API represents a cryptographic key.
+  Available only in secure contexts.
+*)
 and[@js.scope "CryptoKey"] CryptoKey : sig
   type t = [`CryptoKey] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -3130,7 +3137,10 @@ module rec AnonymousInterface100 : sig
   val create: t -> SubtleCrypto.t [@@js.apply_newable]
 end
 
-(** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). *)
+(**
+  This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto).
+  Available only in secure contexts.
+*)
 and[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   type t = [`SubtleCrypto] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -3152,13 +3162,13 @@ and[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val deriveKey: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
   val digest: 'tags this -> algorithm:AlgorithmIdentifier.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "digest"]
   val encrypt: 'tags this -> algorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "encrypt"]
-  val exportKey: 'tags this -> format:([`L_s98_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t_1 [@@js.call "exportKey"]
-  val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s98_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> key:CryptoKey.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "exportKey"]
+  val exportKey: 'tags this -> format:([`L_s97_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t_1 [@@js.call "exportKey"]
+  val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s97_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> key:CryptoKey.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "exportKey"]
   val generateKey: 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
   val generateKey': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
   val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
-  val importKey: 'tags this -> format:([`L_s98_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s98_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey: 'tags this -> format:([`L_s97_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s97_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
   val sign: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "sign"]
   val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
   val verify: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t_1 [@@js.call "verify"]
@@ -3167,14 +3177,16 @@ and[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val generateKey''': 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
   val generateKey'''': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
   val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
-  val importKey'': 'tags this -> format:([`L_s98_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s98_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey'': 'tags this -> format:([`L_s97_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s97_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
   val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
 module[@js.scope "crypto"] CryptoStatic : sig
+  
+  (** Available only in secure contexts. *)
   val subtle: unit -> SubtleCrypto.t [@@js.get "subtle"]
   val getRandomValues: 'T -> 'T [@@js.global "getRandomValues"]
 end
@@ -3245,7 +3257,7 @@ module MultiCacheQueryOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RequestDestination : sig
-  type t = ([`L_s0[@js ""] | `L_s38_audio[@js "audio"] | `L_s39_audioworklet[@js "audioworklet"] | `L_s62_document[@js "document"] | `L_s64_embed[@js "embed"] | `L_s76_font[@js "font"] | `L_s78_frame[@js "frame"] | `L_s90_iframe[@js "iframe"] | `L_s91_image[@js "image"] | `L_s110_manifest[@js "manifest"] | `L_s133_object[@js "object"] | `L_s146_paintworklet[@js "paintworklet"] | `L_s170_report[@js "report"] | `L_s175_script[@js "script"] | `L_s177_sharedworker[@js "sharedworker"] | `L_s188_style[@js "style"] | `L_s194_track[@js "track"] | `L_s205_video[@js "video"] | `L_s210_worker[@js "worker"] | `L_s212_xslt[@js "xslt"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s38_audio[@js "audio"] | `L_s39_audioworklet[@js "audioworklet"] | `L_s62_document[@js "document"] | `L_s64_embed[@js "embed"] | `L_s76_font[@js "font"] | `L_s78_frame[@js "frame"] | `L_s89_iframe[@js "iframe"] | `L_s90_image[@js "image"] | `L_s109_manifest[@js "manifest"] | `L_s132_object[@js "object"] | `L_s145_paintworklet[@js "paintworklet"] | `L_s169_report[@js "report"] | `L_s174_script[@js "script"] | `L_s176_sharedworker[@js "sharedworker"] | `L_s187_style[@js "style"] | `L_s193_track[@js "track"] | `L_s204_video[@js "video"] | `L_s209_worker[@js "worker"] | `L_s212_xslt[@js "xslt"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3253,7 +3265,7 @@ module RequestDestination : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestRedirect : sig
-  type t = ([`L_s67_error[@js "error"] | `L_s75_follow[@js "follow"] | `L_s111_manual[@js "manual"]] [@js.enum])
+  type t = ([`L_s67_error[@js "error"] | `L_s75_follow[@js "follow"] | `L_s110_manual[@js "manual"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3261,7 +3273,7 @@ module RequestRedirect : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestMode : sig
-  type t = ([`L_s55_cors[@js "cors"] | `L_s120_navigate[@js "navigate"] | `L_s125_no_cors[@js "no-cors"] | `L_s173_same_origin[@js "same-origin"]] [@js.enum])
+  type t = ([`L_s55_cors[@js "cors"] | `L_s119_navigate[@js "navigate"] | `L_s124_no_cors[@js "no-cors"] | `L_s172_same_origin[@js "same-origin"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3269,7 +3281,7 @@ module RequestMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestCache : sig
-  type t = ([`L_s57_default[@js "default"] | `L_s77_force_cache[@js "force-cache"] | `L_s124_no_cache[@js "no-cache"] | `L_s128_no_store[@js "no-store"] | `L_s137_only_if_cached[@js "only-if-cached"] | `L_s169_reload[@js "reload"]] [@js.enum])
+  type t = ([`L_s57_default[@js "default"] | `L_s77_force_cache[@js "force-cache"] | `L_s123_no_cache[@js "no-cache"] | `L_s127_no_store[@js "no-store"] | `L_s136_only_if_cached[@js "only-if-cached"] | `L_s168_reload[@js "reload"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3277,7 +3289,7 @@ module RequestCache : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ReferrerPolicy : sig
-  type t = ([`L_s0[@js ""] | `L_s126_no_referrer[@js "no-referrer"] | `L_s127_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s141_origin[@js "origin"] | `L_s142_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s173_same_origin[@js "same-origin"] | `L_s186_strict_origin[@js "strict-origin"] | `L_s187_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s199_unsafe_url[@js "unsafe-url"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s125_no_referrer[@js "no-referrer"] | `L_s126_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s140_origin[@js "origin"] | `L_s141_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s172_same_origin[@js "same-origin"] | `L_s185_strict_origin[@js "strict-origin"] | `L_s186_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s198_unsafe_url[@js "unsafe-url"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3285,7 +3297,7 @@ module ReferrerPolicy : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestCredentials : sig
-  type t = ([`L_s93_include[@js "include"] | `L_s135_omit[@js "omit"] | `L_s173_same_origin[@js "same-origin"]] [@js.enum])
+  type t = ([`L_s92_include[@js "include"] | `L_s134_omit[@js "omit"] | `L_s172_same_origin[@js "same-origin"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3346,7 +3358,7 @@ and HeadersInit : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module EndingType : sig
-  type t = ([`L_s119_native[@js "native"] | `L_s195_transparent[@js "transparent"]] [@js.enum])
+  type t = ([`L_s118_native[@js "native"] | `L_s194_transparent[@js "transparent"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3618,7 +3630,7 @@ module QueuingStrategySize : sig
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: ('tags, 'T) this -> ?chunk:'T -> unit -> float [@@js.apply]
+  val apply: ('tags, 'T) this -> chunk:'T -> float [@@js.apply]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 module QueuingStrategy : sig
@@ -3953,16 +3965,16 @@ end
 
 (** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. *)
 and[@js.scope "ReadableStream"] ReadableStream : sig
-  type 'R t = [`ReadableStream of 'R | any IterableIterator.tags_1] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t = [`ReadableStream of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
   type 'R t_1 = 'R t
   type t_0 = any t
   [@@@js.stop]
-  type 'R tags = [`ReadableStream of 'R | any IterableIterator.tags_1]
+  type 'R tags = [`ReadableStream of 'R]
   type 'R tags_1 = 'R tags
   type tags_0 = any tags
   [@@@js.start]
   [@@@js.implem 
-    type 'R tags = [`ReadableStream of 'R | any IterableIterator.tags_1]
+    type 'R tags = [`ReadableStream of 'R]
     type 'R tags_1 = 'R tags
     type tags_0 = any tags
   ]
@@ -3979,10 +3991,6 @@ and[@js.scope "ReadableStream"] ReadableStream : sig
   val pipeThrough: ('tags, 'R) this -> transform:('T, 'R) ReadableWritablePair.t -> ?options:StreamPipeOptions.t -> unit -> 'T t [@@js.call "pipeThrough"]
   val pipeTo: ('tags, 'R) this -> destination:'R WritableStream.t -> ?options:StreamPipeOptions.t -> unit -> unit Promise.t_1 [@@js.call "pipeTo"]
   val tee: ('tags, 'R) this -> ('R t * 'R t) [@@js.call "tee"]
-  val forEach: ('tags, 'R) this -> callbackfn:(value:any -> key:float -> parent:'R t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val entries: ('tags, 'R) this -> (float * any) IterableIterator.t_1 [@@js.call "entries"]
-  val keys: ('tags, 'R) this -> float IterableIterator.t_1 [@@js.call "keys"]
-  val values: ('tags, 'R) this -> any IterableIterator.t_1 [@@js.call "values"]
   val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: ?underlyingSource:'R UnderlyingSource.t -> ?strategy:'R QueuingStrategy.t -> unit -> 'R t [@@js.create]
@@ -4357,10 +4365,10 @@ module RequestInit : sig
   val set_signal: 'tags this -> AbortSignal.t or_null -> unit [@@js.set "signal"]
   
   (** Can only be null. Used to disassociate request from any Window. *)
-  val get_window: 'tags this -> any [@@js.get "window"]
+  val get_window: 'tags this -> never or_null [@@js.get "window"]
   
   (** Can only be null. Used to disassociate request from any Window. *)
-  val set_window: 'tags this -> any -> unit [@@js.set "window"]
+  val set_window: 'tags this -> never or_null -> unit [@@js.set "window"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module Body : sig
@@ -4467,7 +4475,7 @@ and RequestInfo : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ResponseType : sig
-  type t = ([`L_s43_basic[@js "basic"] | `L_s55_cors[@js "cors"] | `L_s57_default[@js "default"] | `L_s67_error[@js "error"] | `L_s138_opaque[@js "opaque"] | `L_s139_opaqueredirect[@js "opaqueredirect"]] [@js.enum])
+  type t = ([`L_s43_basic[@js "basic"] | `L_s55_cors[@js "cors"] | `L_s57_default[@js "default"] | `L_s67_error[@js "error"] | `L_s137_opaque[@js "opaque"] | `L_s138_opaqueredirect[@js "opaqueredirect"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4505,7 +4513,7 @@ module rec AnonymousInterface109 : sig
   val get_prototype: t -> URL.t [@@js.get "prototype"]
   val set_prototype: t -> URL.t -> unit [@@js.set "prototype"]
   val create: t -> url:URL.t or_string -> ?base:URL.t or_string -> unit -> URL.t [@@js.apply_newable]
-  val createObjectURL: t -> object_:any -> string [@@js.call "createObjectURL"]
+  val createObjectURL: t -> obj:Blob.t -> string [@@js.call "createObjectURL"]
   val revokeObjectURL: t -> url:string -> unit [@@js.call "revokeObjectURL"]
 end
 
@@ -4553,7 +4561,7 @@ and[@js.scope "URL"] URL : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: url:t or_string -> ?base:t or_string -> unit -> t [@@js.create]
-  val createObjectURL: any -> string [@@js.global "createObjectURL"]
+  val createObjectURL: Blob.t -> string [@@js.global "createObjectURL"]
   val revokeObjectURL: string -> unit [@@js.global "revokeObjectURL"]
 end
 module rec AnonymousInterface91 : sig
@@ -4607,7 +4615,10 @@ module rec AnonymousInterface5 : sig
   val create: t -> Cache.t [@@js.apply_newable]
 end
 
-(** Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec. *)
+(**
+  Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
+  Available only in secure contexts.
+*)
 and[@js.scope "Cache"] Cache : sig
   type t = [`Cache] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -4644,7 +4655,7 @@ module[@js.scope "caches"] CachesStatic : sig
   val open_: string -> Cache.t Promise.t_1 [@@js.global "open"]
 end
 module XMLHttpRequestResponseType : sig
-  type t = ([`L_s0[@js ""] | `L_s37_arraybuffer[@js "arraybuffer"] | `L_s44_blob[@js "blob"] | `L_s62_document[@js "document"] | `L_s97_json[@js "json"] | `L_s191_text[@js "text"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s37_arraybuffer[@js "arraybuffer"] | `L_s44_blob[@js "blob"] | `L_s62_document[@js "document"] | `L_s96_json[@js "json"] | `L_s190_text[@js "text"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5129,7 +5140,7 @@ module XMLHttpRequestEventMap : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerState : sig
-  type t = ([`L_s33_activated[@js "activated"] | `L_s34_activating[@js "activating"] | `L_s95_installed[@js "installed"] | `L_s96_installing[@js "installing"] | `L_s147_parsed[@js "parsed"] | `L_s167_redundant[@js "redundant"]] [@js.enum])
+  type t = ([`L_s33_activated[@js "activated"] | `L_s34_activating[@js "activating"] | `L_s94_installed[@js "installed"] | `L_s95_installing[@js "installing"] | `L_s146_parsed[@js "parsed"] | `L_s166_redundant[@js "redundant"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5173,18 +5184,18 @@ and[@js.scope "ImageBitmap"] ImageBitmap : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module PostMessageOptions : sig
-  type t = [`PostMessageOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module StructuredSerializeOptions : sig
+  type t = [`StructuredSerializeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`PostMessageOptions]
+  type tags = [`StructuredSerializeOptions]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`PostMessageOptions]
+    type tags = [`StructuredSerializeOptions]
     type tags_0 = tags
   ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PostMessageOptions ]
+  type 'tags this = 'tags intf constraint 'tags = [> `StructuredSerializeOptions ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
@@ -5431,7 +5442,7 @@ and[@js.scope "MessagePort"] MessagePort : sig
     
     Throws a "DataCloneError" DOMException if transfer contains duplicate objects or port, or if message could not be cloned.
   *)
-  val postMessage': 'tags this -> message:any -> ?options:PostMessageOptions.t -> unit -> unit [@@js.call "postMessage"]
+  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
   
   (** Begins dispatching messages received on the port. *)
   val start: 'tags this -> unit [@@js.call "start"]
@@ -5480,7 +5491,10 @@ and[@js.scope "MessagePort"] MessagePort : sig
   val create: unit -> t [@@js.create]
 end
 
-(** This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. *)
+(**
+  This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object.
+  Available only in secure contexts.
+*)
 and[@js.scope "ServiceWorker"] ServiceWorker : sig
   type t = [`AbstractWorker | `EventTarget | `ServiceWorker] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -5502,7 +5516,7 @@ and[@js.scope "ServiceWorker"] ServiceWorker : sig
   val get_scriptURL: 'tags this -> string [@@js.get "scriptURL"]
   val get_state: 'tags this -> ServiceWorkerState.t [@@js.get "state"]
   val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
-  val postMessage': 'tags this -> message:any -> ?options:PostMessageOptions.t -> unit -> unit [@@js.call "postMessage"]
+  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -5817,7 +5831,10 @@ module rec AnonymousInterface84 : sig
   val create: t -> PushMessageData.t [@@js.apply_newable]
 end
 
-(** This Push API interface provides methods which let you retrieve the push data sent by a server in various formats. *)
+(**
+  This Push API interface provides methods which let you retrieve the push data sent by a server in various formats.
+  Available only in secure contexts.
+*)
 and[@js.scope "PushMessageData"] PushMessageData : sig
   type t = [`PushMessageData] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -5928,7 +5945,10 @@ module rec AnonymousInterface82 : sig
   val create: t -> type_:string -> ?eventInitDict:PushEventInit.t -> unit -> PushEvent.t [@@js.apply_newable]
 end
 
-(** This Push API interface represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription. *)
+(**
+  This Push API interface represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription.
+  Available only in secure contexts.
+*)
 and[@js.scope "PushEvent"] PushEvent : sig
   type t = [`Event | `ExtendableEvent | `PushEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -5951,7 +5971,7 @@ and[@js.scope "PushEvent"] PushEvent : sig
   val create: type_:string -> ?eventInitDict:PushEventInit.t -> unit -> t [@@js.create]
 end
 module NotificationPermission : sig
-  type t = ([`L_s57_default[@js "default"] | `L_s58_denied[@js "denied"] | `L_s83_granted[@js "granted"]] [@js.enum])
+  type t = ([`L_s57_default[@js "default"] | `L_s58_denied[@js "denied"] | `L_s82_granted[@js "granted"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5999,7 +6019,7 @@ module DOMTimeStamp : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module NotificationDirection : sig
-  type t = ([`L_s41_auto[@js "auto"] | `L_s109_ltr[@js "ltr"] | `L_s172_rtl[@js "rtl"]] [@js.enum])
+  type t = ([`L_s41_auto[@js "auto"] | `L_s108_ltr[@js "ltr"] | `L_s171_rtl[@js "rtl"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -6260,7 +6280,7 @@ and[@js.scope "FetchEvent"] FetchEvent : sig
   val create: type_:string -> eventInitDict:FetchEventInit.t -> t [@@js.create]
 end
 module FrameType : sig
-  type t = ([`L_s42_auxiliary[@js "auxiliary"] | `L_s121_nested[@js "nested"] | `L_s129_none[@js "none"] | `L_s193_top_level[@js "top-level"]] [@js.enum])
+  type t = ([`L_s42_auxiliary[@js "auxiliary"] | `L_s120_nested[@js "nested"] | `L_s128_none[@js "none"] | `L_s192_top_level[@js "top-level"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -6268,7 +6288,7 @@ module FrameType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ClientTypes : sig
-  type t = ([`L_s35_all[@js "all"] | `L_s177_sharedworker[@js "sharedworker"] | `L_s209_window[@js "window"] | `L_s210_worker[@js "worker"]] [@js.enum])
+  type t = ([`L_s35_all[@js "all"] | `L_s176_sharedworker[@js "sharedworker"] | `L_s208_window[@js "window"] | `L_s209_worker[@js "worker"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -6306,7 +6326,7 @@ and[@js.scope "Client"] Client : sig
   val get_type: 'tags this -> ClientTypes.t [@@js.get "type"]
   val get_url: 'tags this -> string [@@js.get "url"]
   val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
-  val postMessage': 'tags this -> message:any -> ?options:PostMessageOptions.t -> unit -> unit [@@js.call "postMessage"]
+  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -6335,8 +6355,8 @@ module ExtendableMessageEventInit : sig
   val set_origin: 'tags this -> string -> unit [@@js.set "origin"]
   val get_ports: 'tags this -> MessagePort.t list [@@js.get "ports"]
   val set_ports: 'tags this -> MessagePort.t list -> unit [@@js.set "ports"]
-  val get_source: 'tags this -> ((([`U_s42_auxiliary of Client.t [@js "auxiliary"] | `U_s121_nested of Client.t [@js "nested"] | `U_s129_none of Client.t [@js "none"] | `U_s193_top_level of Client.t [@js "top-level"]] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t [@js "activated"] | `U_s34_activating of ServiceWorker.t [@js "activating"] | `U_s95_installed of ServiceWorker.t [@js "installed"] | `U_s96_installing of ServiceWorker.t [@js "installing"] | `U_s147_parsed of ServiceWorker.t [@js "parsed"] | `U_s167_redundant of ServiceWorker.t [@js "redundant"]] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null [@@js.get "source"]
-  val set_source: 'tags this -> ((([`U_s42_auxiliary of Client.t  | `U_s121_nested of Client.t  | `U_s129_none of Client.t  | `U_s193_top_level of Client.t ] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t  | `U_s34_activating of ServiceWorker.t  | `U_s95_installed of ServiceWorker.t  | `U_s96_installing of ServiceWorker.t  | `U_s147_parsed of ServiceWorker.t  | `U_s167_redundant of ServiceWorker.t ] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null -> unit [@@js.set "source"]
+  val get_source: 'tags this -> ((([`U_s42_auxiliary of Client.t [@js "auxiliary"] | `U_s120_nested of Client.t [@js "nested"] | `U_s128_none of Client.t [@js "none"] | `U_s192_top_level of Client.t [@js "top-level"]] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t [@js "activated"] | `U_s34_activating of ServiceWorker.t [@js "activating"] | `U_s94_installed of ServiceWorker.t [@js "installed"] | `U_s95_installing of ServiceWorker.t [@js "installing"] | `U_s146_parsed of ServiceWorker.t [@js "parsed"] | `U_s166_redundant of ServiceWorker.t [@js "redundant"]] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null [@@js.get "source"]
+  val set_source: 'tags this -> ((([`U_s42_auxiliary of Client.t  | `U_s120_nested of Client.t  | `U_s128_none of Client.t  | `U_s192_top_level of Client.t ] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t  | `U_s34_activating of ServiceWorker.t  | `U_s94_installed of ServiceWorker.t  | `U_s95_installing of ServiceWorker.t  | `U_s146_parsed of ServiceWorker.t  | `U_s166_redundant of ServiceWorker.t ] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null -> unit [@@js.set "source"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module rec AnonymousInterface32 : sig
@@ -6369,7 +6389,7 @@ and[@js.scope "ExtendableMessageEvent"] ExtendableMessageEvent : sig
   val get_lastEventId: 'tags this -> string [@@js.get "lastEventId"]
   val get_origin: 'tags this -> string [@@js.get "origin"]
   val get_ports: 'tags this -> MessagePort.t list [@@js.get "ports"]
-  val get_source: 'tags this -> ((([`U_s42_auxiliary of Client.t [@js "auxiliary"] | `U_s121_nested of Client.t [@js "nested"] | `U_s129_none of Client.t [@js "none"] | `U_s193_top_level of Client.t [@js "top-level"]] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t [@js "activated"] | `U_s34_activating of ServiceWorker.t [@js "activating"] | `U_s95_installed of ServiceWorker.t [@js "installed"] | `U_s96_installing of ServiceWorker.t [@js "installing"] | `U_s147_parsed of ServiceWorker.t [@js "parsed"] | `U_s167_redundant of ServiceWorker.t [@js "redundant"]] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null [@@js.get "source"]
+  val get_source: 'tags this -> ((([`U_s42_auxiliary of Client.t [@js "auxiliary"] | `U_s120_nested of Client.t [@js "nested"] | `U_s128_none of Client.t [@js "none"] | `U_s192_top_level of Client.t [@js "top-level"]] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t [@js "activated"] | `U_s34_activating of ServiceWorker.t [@js "activating"] | `U_s94_installed of ServiceWorker.t [@js "installed"] | `U_s95_installing of ServiceWorker.t [@js "installing"] | `U_s146_parsed of ServiceWorker.t [@js "parsed"] | `U_s166_redundant of ServiceWorker.t [@js "redundant"]] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null [@@js.get "source"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:ExtendableMessageEventInit.t -> unit -> t [@@js.create]
@@ -7150,7 +7170,7 @@ module CanvasImageSource : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module PredefinedColorSpace : sig
-  type t = ([`L_s61_display_p3[@js "display-p3"] | `L_s184_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s61_display_p3[@js "display-p3"] | `L_s183_srgb[@js "srgb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7227,7 +7247,7 @@ module ImageBitmapSource : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ResizeQuality : sig
-  type t = ([`L_s85_high[@js "high"] | `L_s107_low[@js "low"] | `L_s113_medium[@js "medium"] | `L_s150_pixelated[@js "pixelated"]] [@js.enum])
+  type t = ([`L_s84_high[@js "high"] | `L_s106_low[@js "low"] | `L_s112_medium[@js "medium"] | `L_s149_pixelated[@js "pixelated"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7235,7 +7255,7 @@ module ResizeQuality : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module PremultiplyAlpha : sig
-  type t = ([`L_s57_default[@js "default"] | `L_s129_none[@js "none"] | `L_s153_premultiply[@js "premultiply"]] [@js.enum])
+  type t = ([`L_s57_default[@js "default"] | `L_s128_none[@js "none"] | `L_s152_premultiply[@js "premultiply"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7243,7 +7263,7 @@ module PremultiplyAlpha : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ImageOrientation : sig
-  type t = ([`L_s74_flipY[@js "flipY"] | `L_s129_none[@js "none"]] [@js.enum])
+  type t = ([`L_s74_flipY[@js "flipY"] | `L_s128_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7251,7 +7271,7 @@ module ImageOrientation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ColorSpaceConversion : sig
-  type t = ([`L_s57_default[@js "default"] | `L_s129_none[@js "none"]] [@js.enum])
+  type t = ([`L_s57_default[@js "default"] | `L_s128_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7358,6 +7378,8 @@ and[@js.scope "Crypto"] Crypto : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  
+  (** Available only in secure contexts. *)
   val get_subtle: 'tags this -> SubtleCrypto.t [@@js.get "subtle"]
   val getRandomValues: 'tags this -> array:'T -> 'T [@@js.call "getRandomValues"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
@@ -7373,7 +7395,10 @@ module rec AnonymousInterface6 : sig
   val create: t -> CacheStorage.t [@@js.apply_newable]
 end
 
-(** The storage for Cache objects. *)
+(**
+  The storage for Cache objects.
+  Available only in secure contexts.
+*)
 and[@js.scope "CacheStorage"] CacheStorage : sig
   type t = [`CacheStorage] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -7415,6 +7440,8 @@ module WindowOrWorkerGlobalScope : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  
+  (** Available only in secure contexts. *)
   val get_caches: 'tags this -> CacheStorage.t [@@js.get "caches"]
   val get_crossOriginIsolated: 'tags this -> bool [@@js.get "crossOriginIsolated"]
   val get_crypto: 'tags this -> Crypto.t [@@js.get "crypto"]
@@ -7644,7 +7671,7 @@ module GetNotificationOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerUpdateViaCache : sig
-  type t = ([`L_s35_all[@js "all"] | `L_s92_imports[@js "imports"] | `L_s129_none[@js "none"]] [@js.enum])
+  type t = ([`L_s35_all[@js "all"] | `L_s91_imports[@js "imports"] | `L_s128_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7681,6 +7708,8 @@ module rec AnonymousInterface86 : sig
   val set_prototype: t -> PushSubscriptionOptions.t -> unit [@@js.set "prototype"]
   val create: t -> PushSubscriptionOptions.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "PushSubscriptionOptions"] PushSubscriptionOptions : sig
   type t = [`PushSubscriptionOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -7727,7 +7756,7 @@ module PushSubscriptionJSON : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module PushEncryptionKeyName : sig
-  type t = ([`L_s40_auth[@js "auth"] | `L_s144_p256dh[@js "p256dh"]] [@js.enum])
+  type t = ([`L_s40_auth[@js "auth"] | `L_s143_p256dh[@js "p256dh"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7743,7 +7772,10 @@ module rec AnonymousInterface85 : sig
   val create: t -> PushSubscription.t [@@js.apply_newable]
 end
 
-(** This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service. *)
+(**
+  This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service.
+  Available only in secure contexts.
+*)
 and[@js.scope "PushSubscription"] PushSubscription : sig
   type t = [`PushSubscription] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -7770,7 +7802,7 @@ and[@js.scope "PushSubscription"] PushSubscription : sig
   val create: unit -> t [@@js.create]
 end
 module PushPermissionState : sig
-  type t = ([`L_s58_denied[@js "denied"] | `L_s83_granted[@js "granted"] | `L_s158_prompt[@js "prompt"]] [@js.enum])
+  type t = ([`L_s58_denied[@js "denied"] | `L_s82_granted[@js "granted"] | `L_s157_prompt[@js "prompt"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7787,7 +7819,10 @@ module rec AnonymousInterface83 : sig
   val get_supportedContentEncodings: t -> string list [@@js.get "supportedContentEncodings"]
 end
 
-(** This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications. *)
+(**
+  This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications.
+  Available only in secure contexts.
+*)
 and[@js.scope "PushManager"] PushManager : sig
   type t = [`PushManager] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -7821,7 +7856,10 @@ module rec AnonymousInterface97 : sig
   val create: t -> ServiceWorkerRegistration.t [@@js.apply_newable]
 end
 
-(** This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin. *)
+(**
+  This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin.
+  Available only in secure contexts.
+*)
 and[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
   type t = [`EventTarget | `ServiceWorkerRegistration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -7895,7 +7933,7 @@ and[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
   val create: unit -> t [@@js.create]
 end
 module VisibilityState : sig
-  type t = ([`L_s84_hidden[@js "hidden"] | `L_s206_visible[@js "visible"]] [@js.enum])
+  type t = ([`L_s83_hidden[@js "hidden"] | `L_s205_visible[@js "visible"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8082,7 +8120,7 @@ and[@js.scope "ServiceWorkerGlobalScope"] ServiceWorkerGlobalScope : sig
   val create: unit -> t [@@js.create]
 end
 module WorkerType : sig
-  type t = ([`L_s49_classic[@js "classic"] | `L_s118_module[@js "module"]] [@js.enum])
+  type t = ([`L_s49_classic[@js "classic"] | `L_s117_module[@js "module"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8122,7 +8160,10 @@ module rec AnonymousInterface95 : sig
   val create: t -> ServiceWorkerContainer.t [@@js.apply_newable]
 end
 
-(** The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations. *)
+(**
+  The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations.
+  Available only in secure contexts.
+*)
 and[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   type t = [`EventTarget | `ServiceWorkerContainer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -8196,7 +8237,7 @@ and[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   val create: unit -> t [@@js.create]
 end
 module SecurityPolicyViolationEventDisposition : sig
-  type t = ([`L_s66_enforce[@js "enforce"] | `L_s170_report[@js "report"]] [@js.enum])
+  type t = ([`L_s66_enforce[@js "enforce"] | `L_s169_report[@js "report"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8363,7 +8404,7 @@ and[@js.scope "CanvasPattern"] CanvasPattern : sig
   val create: unit -> t [@@js.create]
 end
 module PermissionName : sig
-  type t = ([`L_s80_gamepad[@js "gamepad"] | `L_s81_geolocation[@js "geolocation"] | `L_s132_notifications[@js "notifications"] | `L_s149_persistent_storage[@js "persistent-storage"] | `L_s160_push[@js "push"] | `L_s174_screen_wake_lock[@js "screen-wake-lock"]] [@js.enum])
+  type t = ([`L_s80_geolocation[@js "geolocation"] | `L_s131_notifications[@js "notifications"] | `L_s148_persistent_storage[@js "persistent-storage"] | `L_s159_push[@js "push"] | `L_s173_screen_wake_lock[@js "screen-wake-lock"] | `L_s211_xr_spatial_tracking[@js "xr-spatial-tracking"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8391,7 +8432,7 @@ module PermissionDescriptor : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module PermissionState : sig
-  type t = ([`L_s58_denied[@js "denied"] | `L_s83_granted[@js "granted"] | `L_s158_prompt[@js "prompt"]] [@js.enum])
+  type t = ([`L_s58_denied[@js "denied"] | `L_s82_granted[@js "granted"] | `L_s157_prompt[@js "prompt"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9309,7 +9350,7 @@ and[@js.scope "DedicatedWorkerGlobalScope"] DedicatedWorkerGlobalScope : sig
   val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
   
   (** Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned. *)
-  val postMessage': 'tags this -> message:any -> ?options:PostMessageOptions.t -> unit -> unit [@@js.call "postMessage"]
+  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -9950,7 +9991,7 @@ and[@js.scope "Worker"] Worker : sig
   val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
   
   (** Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned. *)
-  val postMessage': 'tags this -> message:any -> ?options:PostMessageOptions.t -> unit -> unit [@@js.call "postMessage"]
+  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
   
   (** Aborts worker's associated global environment. *)
   val terminate: 'tags this -> unit [@@js.call "terminate"]
@@ -10413,7 +10454,7 @@ and[@js.scope "WebGLFramebuffer"] WebGLFramebuffer : sig
   val create: unit -> t [@@js.create]
 end
 module WebGLPowerPreference : sig
-  type t = ([`L_s57_default[@js "default"] | `L_s86_high_performance[@js "high-performance"] | `L_s108_low_power[@js "low-power"]] [@js.enum])
+  type t = ([`L_s57_default[@js "default"] | `L_s85_high_performance[@js "high-performance"] | `L_s107_low_power[@js "low-power"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14761,7 +14802,8 @@ and AnonymousInterface12 : sig
   val t_of_js: Ojs.t -> t
   val get_prototype: t -> WebAssembly.CompileError.t [@@js.get "prototype"]
   val set_prototype: t -> WebAssembly.CompileError.t -> unit [@@js.set "prototype"]
-  val create: t -> WebAssembly.CompileError.t [@@js.apply_newable]
+  val create: t -> ?message:string -> unit -> WebAssembly.CompileError.t [@@js.apply_newable]
+  val apply: t -> ?message:string -> unit -> WebAssembly.CompileError.t [@@js.apply]
 end
 and AnonymousInterface42 : sig
   type t = private Ojs.t
@@ -14785,7 +14827,8 @@ and AnonymousInterface59 : sig
   val t_of_js: Ojs.t -> t
   val get_prototype: t -> WebAssembly.LinkError.t [@@js.get "prototype"]
   val set_prototype: t -> WebAssembly.LinkError.t -> unit [@@js.set "prototype"]
-  val create: t -> WebAssembly.LinkError.t [@@js.apply_newable]
+  val create: t -> ?message:string -> unit -> WebAssembly.LinkError.t [@@js.apply_newable]
+  val apply: t -> ?message:string -> unit -> WebAssembly.LinkError.t [@@js.apply]
 end
 and AnonymousInterface61 : sig
   type t = private Ojs.t
@@ -14812,11 +14855,12 @@ and AnonymousInterface92 : sig
   val t_of_js: Ojs.t -> t
   val get_prototype: t -> WebAssembly.RuntimeError.t [@@js.get "prototype"]
   val set_prototype: t -> WebAssembly.RuntimeError.t -> unit [@@js.set "prototype"]
-  val create: t -> WebAssembly.RuntimeError.t [@@js.apply_newable]
+  val create: t -> ?message:string -> unit -> WebAssembly.RuntimeError.t [@@js.apply_newable]
+  val apply: t -> ?message:string -> unit -> WebAssembly.RuntimeError.t [@@js.apply]
 end
 and[@js.scope "WebAssembly"] WebAssembly : sig
   module ImportExportKind : sig
-    type t = ([`L_s79_function[@js "function"] | `L_s82_global[@js "global"] | `L_s114_memory[@js "memory"] | `L_s190_table[@js "table"]] [@js.enum])
+    type t = ([`L_s79_function[@js "function"] | `L_s81_global[@js "global"] | `L_s113_memory[@js "memory"] | `L_s189_table[@js "table"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -14995,7 +15039,7 @@ and[@js.scope "WebAssembly"] WebAssembly : sig
     val create: MemoryDescriptor.t -> t [@@js.create]
   end
   module ValueType : sig
-    type t = ([`L_s36_anyfunc[@js "anyfunc"] | `L_s69_externref[@js "externref"] | `L_s70_f32[@js "f32"] | `L_s71_f64[@js "f64"] | `L_s88_i32[@js "i32"] | `L_s89_i64[@js "i64"]] [@js.enum])
+    type t = ([`L_s36_anyfunc[@js "anyfunc"] | `L_s69_externref[@js "externref"] | `L_s70_f32[@js "f32"] | `L_s71_f64[@js "f64"] | `L_s87_i32[@js "i32"] | `L_s88_i64[@js "i64"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -15148,7 +15192,8 @@ and[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_of_js: Ojs.t -> t_0
     val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
-    val create: unit -> t [@@js.create]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
   module[@js.scope "LinkError"] LinkError : sig
     type t = [`WebAssembly_LinkError | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15168,7 +15213,8 @@ and[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_of_js: Ojs.t -> t_0
     val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
-    val create: unit -> t [@@js.create]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
   module[@js.scope "CompileError"] CompileError : sig
     type t = [`WebAssembly_CompileError | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15188,7 +15234,8 @@ and[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_of_js: Ojs.t -> t_0
     val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
-    val create: unit -> t [@@js.create]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
   val compileError: unit -> AnonymousInterface12.t [@@js.get "CompileError"]
   val global: unit -> AnonymousInterface42.t [@@js.get "Global"]
@@ -15262,9 +15309,6 @@ and AnonymousInterface0 : sig
   val create: t -> AbortController.t [@@js.apply_newable]
 end
 
-(** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
-val importScripts: (string list [@js.variadic]) -> unit [@@js.global "importScripts"]
-
 (** A controller object that allows you to abort one or more DOM requests as and when desired. *)
 val abortController: unit -> AnonymousInterface0.t [@@js.get "AbortController"]
 
@@ -15278,10 +15322,16 @@ val broadcastChannel: unit -> AnonymousInterface3.t [@@js.get "BroadcastChannel"
 (** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
 val byteLengthQueuingStrategy: unit -> AnonymousInterface4.t [@@js.get "ByteLengthQueuingStrategy"]
 
-(** Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec. *)
+(**
+  Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
+  Available only in secure contexts.
+*)
 val cache: unit -> AnonymousInterface5.t [@@js.get "Cache"]
 
-(** The storage for Cache objects. *)
+(**
+  The storage for Cache objects.
+  Available only in secure contexts.
+*)
 val cacheStorage: unit -> AnonymousInterface6.t [@@js.get "CacheStorage"]
 
 (** An opaque object describing a gradient. It is returned by the methods CanvasRenderingContext2D.createLinearGradient() or CanvasRenderingContext2D.createRadialGradient(). *)
@@ -15305,7 +15355,10 @@ val countQueuingStrategy: unit -> AnonymousInterface13.t [@@js.get "CountQueuing
 (** Basic cryptography features available in the current context. It allows access to a cryptographically strong random number generator and to cryptographic primitives. *)
 val crypto: unit -> AnonymousInterface14.t [@@js.get "Crypto"]
 
-(** The CryptoKey dictionary of the Web Crypto API represents a cryptographic key. *)
+(**
+  The CryptoKey dictionary of the Web Crypto API represents a cryptographic key.
+  Available only in secure contexts.
+*)
 val cryptoKey: unit -> AnonymousInterface15.t [@@js.get "CryptoKey"]
 val customEvent: unit -> AnonymousInterface16.t [@@js.get "CustomEvent"]
 
@@ -15445,17 +15498,31 @@ val permissions: unit -> AnonymousInterface79.t [@@js.get "Permissions"]
 val progressEvent: unit -> AnonymousInterface80.t [@@js.get "ProgressEvent"]
 val promiseRejectionEvent: unit -> AnonymousInterface81.t [@@js.get "PromiseRejectionEvent"]
 
-(** This Push API interface represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription. *)
+(**
+  This Push API interface represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription.
+  Available only in secure contexts.
+*)
 val pushEvent: unit -> AnonymousInterface82.t [@@js.get "PushEvent"]
 
-(** This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications. *)
+(**
+  This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications.
+  Available only in secure contexts.
+*)
 val pushManager: unit -> AnonymousInterface83.t [@@js.get "PushManager"]
 
-(** This Push API interface provides methods which let you retrieve the push data sent by a server in various formats. *)
+(**
+  This Push API interface provides methods which let you retrieve the push data sent by a server in various formats.
+  Available only in secure contexts.
+*)
 val pushMessageData: unit -> AnonymousInterface84.t [@@js.get "PushMessageData"]
 
-(** This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service. *)
+(**
+  This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service.
+  Available only in secure contexts.
+*)
 val pushSubscription: unit -> AnonymousInterface85.t [@@js.get "PushSubscription"]
+
+(** Available only in secure contexts. *)
 val pushSubscriptionOptions: unit -> AnonymousInterface86.t [@@js.get "PushSubscriptionOptions"]
 
 (** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. *)
@@ -15472,21 +15539,35 @@ val response: unit -> AnonymousInterface91.t [@@js.get "Response"]
 (** Inherits from Event, and represents the event object of an event sent on a document or worker when its content security policy is violated. *)
 val securityPolicyViolationEvent: unit -> AnonymousInterface93.t [@@js.get "SecurityPolicyViolationEvent"]
 
-(** This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. *)
+(**
+  This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object.
+  Available only in secure contexts.
+*)
 val serviceWorker: unit -> AnonymousInterface94.t [@@js.get "ServiceWorker"]
 
-(** The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations. *)
+(**
+  The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations.
+  Available only in secure contexts.
+*)
 val serviceWorkerContainer: unit -> AnonymousInterface95.t [@@js.get "ServiceWorkerContainer"]
 
 (** This ServiceWorker API interface represents the global execution context of a service worker. *)
 val serviceWorkerGlobalScope: unit -> AnonymousInterface96.t [@@js.get "ServiceWorkerGlobalScope"]
 
-(** This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin. *)
+(**
+  This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin.
+  Available only in secure contexts.
+*)
 val serviceWorkerRegistration: unit -> AnonymousInterface97.t [@@js.get "ServiceWorkerRegistration"]
 val sharedWorkerGlobalScope: unit -> AnonymousInterface98.t [@@js.get "SharedWorkerGlobalScope"]
+
+(** Available only in secure contexts. *)
 val storageManager: unit -> AnonymousInterface99.t [@@js.get "StorageManager"]
 
-(** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). *)
+(**
+  This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto).
+  Available only in secure contexts.
+*)
 val subtleCrypto: unit -> AnonymousInterface100.t [@@js.get "SubtleCrypto"]
 
 (** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
@@ -15590,6 +15671,9 @@ val close: unit -> unit [@@js.global "close"]
 val postMessage: message:any -> transfer:Transferable.t list -> unit [@@js.global "postMessage"]
 
 (**
+  Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
+  
+  
   Posts a message to the given window. Messages can be structured objects, e.g. nested objects and arrays, can contain JavaScript values (strings, numbers, Date objects, etc), and can contain certain data objects such as File Blob, FileList, and ArrayBuffer objects.
   
   Objects listed in the transfer member of options are transferred, not just cloned, meaning that they are no longer usable on the sending side.
@@ -15599,11 +15683,8 @@ val postMessage: message:any -> transfer:Transferable.t list -> unit [@@js.globa
   If the origin of the target window doesn't match the given target origin, the message is discarded, to avoid information leakage. To send the message to the target regardless of origin, set the target origin to "*".
   
   Throws a "DataCloneError" DOMException if transfer array contains duplicate objects or if message could not be cloned.
-  
-  
-  Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
 *)
-val postMessage': message:any -> ?options:PostMessageOptions.t -> unit -> unit [@@js.global "postMessage"]
+val postMessage': message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.global "postMessage"]
 
 (** Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise. *)
 val dispatchEvent: Event.t -> bool [@@js.global "dispatchEvent"]
@@ -15626,8 +15707,10 @@ val onunhandledrejection: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Promi
 val self: unit -> (WorkerGlobalScope.t, (* FIXME: unknown type 'typeof globalThis' *)any) intersection2 [@@js.get "self"]
 
 (** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
-val importScripts': (URL.t or_string list [@js.variadic]) -> unit [@@js.global "importScripts"]
+val importScripts: (URL.t or_string list [@js.variadic]) -> unit [@@js.global "importScripts"]
 val fonts: unit -> FontFaceSet.t [@@js.get "fonts"]
+
+(** Available only in secure contexts. *)
 val caches: unit -> CacheStorage.t [@@js.get "caches"]
 val crossOriginIsolated: unit -> bool [@@js.get "crossOriginIsolated"]
 val crypto': unit -> Crypto.t [@@js.get "crypto"]
@@ -15651,3 +15734,6 @@ val addEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t ->
 val addEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.global "addEventListener"]
 val removeEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
 val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
+
+(** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
+val importScripts': (string list [@js.variadic]) -> unit [@@js.global "importScripts"]

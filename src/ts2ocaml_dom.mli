@@ -31,15 +31,6 @@ and[@js.scope "URLSearchParams"] URLSearchParams : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
-  (** Returns an array of key, value pairs for every entry in the search params. *)
-  val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
-  
-  (** Returns a list of keys in the search params. *)
-  val keys: 'tags this -> string IterableIterator.t_1 [@@js.call "keys"]
-  
-  (** Returns a list of values in the search params. *)
-  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
-  
   (** Appends a specified key/value pair as a new search parameter. *)
   val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
   
@@ -62,80 +53,82 @@ and[@js.scope "URLSearchParams"] URLSearchParams : sig
   (** Returns a string containing a query string suitable for use in a URL. Does not include the question mark. *)
   val toString: 'tags this -> string [@@js.call "toString"]
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  
+  (** Returns an array of key, value pairs for every entry in the search params. *)
+  val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
+  
+  (** Returns a list of keys in the search params. *)
+  val keys: 'tags this -> string IterableIterator.t_1 [@@js.call "keys"]
+  
+  (** Returns a list of values in the search params. *)
+  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:((t, (string, string) Record.t_2) union2, string list) or_array or_string -> unit -> t [@@js.create]
   val toString': unit -> string [@@js.global "toString"]
 end
-module rec AnonymousInterface491 : sig
+module rec AnonymousInterface481 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> URL.t [@@js.get "prototype"]
-  val set_prototype: t -> URL.t -> unit [@@js.set "prototype"]
-  val create: t -> url:URL.t or_string -> ?base:URL.t or_string -> unit -> URL.t [@@js.apply_newable]
-  val createObjectURL: t -> object_:any -> string [@@js.call "createObjectURL"]
-  val revokeObjectURL: t -> url:string -> unit [@@js.call "revokeObjectURL"]
+  val get_prototype: t -> TimeRanges.t [@@js.get "prototype"]
+  val set_prototype: t -> TimeRanges.t -> unit [@@js.set "prototype"]
+  val create: t -> TimeRanges.t [@@js.apply_newable]
 end
 
-(** The URL interface represents an object providing static methods used for creating object URLs. *)
-and[@js.scope "URL"] URL : sig
-  type t = [`URL] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+(** Used to represent a set of time ranges, primarily for the purpose of tracking which portions of media have been buffered when loading it for use by the <audio> and <video> elements. *)
+and[@js.scope "TimeRanges"] TimeRanges : sig
+  type t = [`TimeRanges] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`URL]
+  type tags = [`TimeRanges]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`URL]
+    type tags = [`TimeRanges]
     type tags_0 = tags
   ]
-  type 'tags this = 'tags intf constraint 'tags = [> `URL ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TimeRanges ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_hash: 'tags this -> string [@@js.get "hash"]
-  val set_hash: 'tags this -> string -> unit [@@js.set "hash"]
-  val get_host: 'tags this -> string [@@js.get "host"]
-  val set_host: 'tags this -> string -> unit [@@js.set "host"]
-  val get_hostname: 'tags this -> string [@@js.get "hostname"]
-  val set_hostname: 'tags this -> string -> unit [@@js.set "hostname"]
-  val get_href: 'tags this -> string [@@js.get "href"]
-  val set_href: 'tags this -> string -> unit [@@js.set "href"]
-  val toString: 'tags this -> string [@@js.call "toString"]
-  val get_origin: 'tags this -> string [@@js.get "origin"]
-  val get_password: 'tags this -> string [@@js.get "password"]
-  val set_password: 'tags this -> string -> unit [@@js.set "password"]
-  val get_pathname: 'tags this -> string [@@js.get "pathname"]
-  val set_pathname: 'tags this -> string -> unit [@@js.set "pathname"]
-  val get_port: 'tags this -> string [@@js.get "port"]
-  val set_port: 'tags this -> string -> unit [@@js.set "port"]
-  val get_protocol: 'tags this -> string [@@js.get "protocol"]
-  val set_protocol: 'tags this -> string -> unit [@@js.set "protocol"]
-  val get_search: 'tags this -> string [@@js.get "search"]
-  val set_search: 'tags this -> string -> unit [@@js.set "search"]
-  val get_searchParams: 'tags this -> URLSearchParams.t [@@js.get "searchParams"]
-  val get_username: 'tags this -> string [@@js.get "username"]
-  val set_username: 'tags this -> string -> unit [@@js.set "username"]
-  val toJSON: 'tags this -> string [@@js.call "toJSON"]
+  
+  (** Returns the number of ranges in the object. *)
+  val get_length: 'tags this -> float [@@js.get "length"]
+  
+  (**
+    Returns the time for the end of the range with the given index.
+    
+    Throws an "IndexSizeError" DOMException if the index is out of range.
+  *)
+  val end_: 'tags this -> index:float -> float [@@js.call "end"]
+  
+  (**
+    Returns the time for the start of the range with the given index.
+    
+    Throws an "IndexSizeError" DOMException if the index is out of range.
+  *)
+  val start: 'tags this -> index:float -> float [@@js.call "start"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: url:t or_string -> ?base:t or_string -> unit -> t [@@js.create]
-  val createObjectURL: any -> string [@@js.global "createObjectURL"]
-  val revokeObjectURL: string -> unit [@@js.global "revokeObjectURL"]
+  val create: unit -> t [@@js.create]
 end
-module[@js.scope "webkitURL"] WebkitURL : sig
-  type t = URL.t
+module AppendMode : sig
+  type t = ([`L_s684_segments[@js "segments"] | `L_s692_sequence[@js "sequence"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val prototype: unit -> URL.t [@@js.get "prototype"]
-  val create: url:URL.t or_string -> ?base:URL.t or_string -> unit -> URL.t [@@js.create]
-  val createObjectURL: any -> string [@@js.global "createObjectURL"]
-  val revokeObjectURL: string -> unit [@@js.global "revokeObjectURL"]
+end
+module BufferSource : sig
+  type t = (ArrayBuffer.t_0, ArrayBufferView.t_0) union2
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
 end
 module DOMHighResTimeStamp : sig
   type t = float
@@ -280,7 +273,7 @@ and AddEventListenerOptions : sig
   val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-and AnonymousInterface105 : sig
+and AnonymousInterface106 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -292,7 +285,7 @@ and AnonymousInterface105 : sig
   val get_CAPTURING_PHASE: t -> float [@@js.get "CAPTURING_PHASE"]
   val get_NONE: t -> float [@@js.get "NONE"]
 end
-and AnonymousInterface107 : sig
+and AnonymousInterface108 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -485,6 +478,1084 @@ and[@js.scope "EventTarget"] EventTarget : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+module rec AnonymousInterface451 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> SourceBuffer.t [@@js.get "prototype"]
+  val set_prototype: t -> SourceBuffer.t -> unit [@@js.set "prototype"]
+  val create: t -> SourceBuffer.t [@@js.apply_newable]
+end
+
+(** A chunk of media to be passed into an HTMLMediaElement and played, via a MediaSource object. This can be made up of one or several media segments. *)
+and[@js.scope "SourceBuffer"] SourceBuffer : sig
+  type t = [`EventTarget | `SourceBuffer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `SourceBuffer]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `SourceBuffer]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SourceBuffer ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_appendWindowEnd: 'tags this -> float [@@js.get "appendWindowEnd"]
+  val set_appendWindowEnd: 'tags this -> float -> unit [@@js.set "appendWindowEnd"]
+  val get_appendWindowStart: 'tags this -> float [@@js.get "appendWindowStart"]
+  val set_appendWindowStart: 'tags this -> float -> unit [@@js.set "appendWindowStart"]
+  val get_buffered: 'tags this -> TimeRanges.t [@@js.get "buffered"]
+  val get_mode: 'tags this -> AppendMode.t [@@js.get "mode"]
+  val set_mode: 'tags this -> AppendMode.t -> unit [@@js.set "mode"]
+  val get_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onabort"]
+  val set_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onabort"]
+  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
+  val get_onupdate: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onupdate"]
+  val set_onupdate: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onupdate"]
+  val get_onupdateend: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onupdateend"]
+  val set_onupdateend: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onupdateend"]
+  val get_onupdatestart: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onupdatestart"]
+  val set_onupdatestart: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onupdatestart"]
+  val get_timestampOffset: 'tags this -> float [@@js.get "timestampOffset"]
+  val set_timestampOffset: 'tags this -> float -> unit [@@js.set "timestampOffset"]
+  val get_updating: 'tags this -> bool [@@js.get "updating"]
+  val abort: 'tags this -> unit [@@js.call "abort"]
+  val appendBuffer: 'tags this -> data:BufferSource.t -> unit [@@js.call "appendBuffer"]
+  val changeType: 'tags this -> type_:string -> unit [@@js.call "changeType"]
+  val remove: 'tags this -> start:float -> end_:float -> unit [@@js.call "remove"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SourceBufferEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SourceBufferEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module rec AnonymousInterface452 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> SourceBufferList.t [@@js.get "prototype"]
+  val set_prototype: t -> SourceBufferList.t -> unit [@@js.set "prototype"]
+  val create: t -> SourceBufferList.t [@@js.apply_newable]
+end
+
+(** A simple container list for multiple SourceBuffer objects. *)
+and[@js.scope "SourceBufferList"] SourceBufferList : sig
+  type t = [`EventTarget | `SourceBufferList | SourceBuffer.t ArrayLike.tags_1 | SourceBuffer.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `SourceBufferList | SourceBuffer.t ArrayLike.tags_1 | SourceBuffer.t IterableIterator.tags_1]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `SourceBufferList | SourceBuffer.t ArrayLike.tags_1 | SourceBuffer.t IterableIterator.tags_1]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SourceBufferList ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_length: 'tags this -> float [@@js.get "length"]
+  val get_onaddsourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onaddsourcebuffer"]
+  val set_onaddsourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onaddsourcebuffer"]
+  val get_onremovesourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onremovesourcebuffer"]
+  val set_onremovesourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onremovesourcebuffer"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SourceBufferListEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SourceBufferListEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val get: 'tags this -> float -> SourceBuffer.t [@@js.index_get]
+  val set: 'tags this -> float -> SourceBuffer.t -> unit [@@js.index_set]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module ReadyState : sig
+  type t = ([`L_s199_closed[@js "closed"] | `L_s280_ended[@js "ended"] | `L_s544_open[@js "open"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module EndOfStreamError : sig
+  type t = ([`L_s235_decode[@js "decode"] | `L_s517_network[@js "network"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module rec AnonymousInterface255 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> MediaSource.t [@@js.get "prototype"]
+  val set_prototype: t -> MediaSource.t -> unit [@@js.set "prototype"]
+  val create: t -> MediaSource.t [@@js.apply_newable]
+  val isTypeSupported: t -> type_:string -> bool [@@js.call "isTypeSupported"]
+end
+
+(** This Media Source Extensions API interface represents a source of media data for an HTMLMediaElement object. A MediaSource object can be attached to a HTMLMediaElement to be played in the user agent. *)
+and[@js.scope "MediaSource"] MediaSource : sig
+  type t = [`EventTarget | `MediaSource] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `MediaSource]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `MediaSource]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `MediaSource ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_activeSourceBuffers: 'tags this -> SourceBufferList.t [@@js.get "activeSourceBuffers"]
+  val get_duration: 'tags this -> float [@@js.get "duration"]
+  val set_duration: 'tags this -> float -> unit [@@js.set "duration"]
+  val get_onsourceclose: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onsourceclose"]
+  val set_onsourceclose: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsourceclose"]
+  val get_onsourceended: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onsourceended"]
+  val set_onsourceended: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsourceended"]
+  val get_onsourceopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onsourceopen"]
+  val set_onsourceopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsourceopen"]
+  val get_readyState: 'tags this -> ReadyState.t [@@js.get "readyState"]
+  val get_sourceBuffers: 'tags this -> SourceBufferList.t [@@js.get "sourceBuffers"]
+  val addSourceBuffer: 'tags this -> type_:string -> SourceBuffer.t [@@js.call "addSourceBuffer"]
+  val clearLiveSeekableRange: 'tags this -> unit [@@js.call "clearLiveSeekableRange"]
+  val endOfStream: 'tags this -> ?error:EndOfStreamError.t -> unit -> unit [@@js.call "endOfStream"]
+  val removeSourceBuffer: 'tags this -> sourceBuffer:SourceBuffer.t -> unit [@@js.call "removeSourceBuffer"]
+  val setLiveSeekableRange: 'tags this -> start:float -> end_:float -> unit [@@js.call "setLiveSeekableRange"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaSourceEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaSourceEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+  val isTypeSupported: string -> bool [@@js.global "isTypeSupported"]
+end
+module StreamPipeOptions : sig
+  type t = [`StreamPipeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`StreamPipeOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`StreamPipeOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `StreamPipeOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_preventAbort: 'tags this -> bool [@@js.get "preventAbort"]
+  val set_preventAbort: 'tags this -> bool -> unit [@@js.set "preventAbort"]
+  val get_preventCancel: 'tags this -> bool [@@js.get "preventCancel"]
+  val set_preventCancel: 'tags this -> bool -> unit [@@js.set "preventCancel"]
+  
+  (**
+    Pipes this readable stream to a given writable stream destination. The way in which the piping process behaves under various error conditions can be customized with a number of passed options. It returns a promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.
+    
+    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
+    
+    Errors and closures of the source and destination streams propagate as follows:
+    
+    An error in this source readable stream will abort destination, unless preventAbort is truthy. The returned promise will be rejected with the source's error, or with any error that occurs during aborting the destination.
+    
+    An error in destination will cancel this source readable stream, unless preventCancel is truthy. The returned promise will be rejected with the destination's error, or with any error that occurs during canceling the source.
+    
+    When this source readable stream closes, destination will be closed, unless preventClose is truthy. The returned promise will be fulfilled once this process completes, unless an error is encountered while closing the destination, in which case it will be rejected with that error.
+    
+    If destination starts out closed or closing, this source readable stream will be canceled, unless preventCancel is true. The returned promise will be rejected with an error indicating piping to a closed stream failed, or with any error that occurs during canceling the source.
+    
+    The signal option can be set to an AbortSignal to allow aborting an ongoing pipe operation via the corresponding AbortController. In this case, this source readable stream will be canceled, and destination aborted, unless the respective options preventCancel or preventAbort are set.
+  *)
+  val get_preventClose: 'tags this -> bool [@@js.get "preventClose"]
+  
+  (**
+    Pipes this readable stream to a given writable stream destination. The way in which the piping process behaves under various error conditions can be customized with a number of passed options. It returns a promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.
+    
+    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
+    
+    Errors and closures of the source and destination streams propagate as follows:
+    
+    An error in this source readable stream will abort destination, unless preventAbort is truthy. The returned promise will be rejected with the source's error, or with any error that occurs during aborting the destination.
+    
+    An error in destination will cancel this source readable stream, unless preventCancel is truthy. The returned promise will be rejected with the destination's error, or with any error that occurs during canceling the source.
+    
+    When this source readable stream closes, destination will be closed, unless preventClose is truthy. The returned promise will be fulfilled once this process completes, unless an error is encountered while closing the destination, in which case it will be rejected with that error.
+    
+    If destination starts out closed or closing, this source readable stream will be canceled, unless preventCancel is true. The returned promise will be rejected with an error indicating piping to a closed stream failed, or with any error that occurs during canceling the source.
+    
+    The signal option can be set to an AbortSignal to allow aborting an ongoing pipe operation via the corresponding AbortController. In this case, this source readable stream will be canceled, and destination aborted, unless the respective options preventCancel or preventAbort are set.
+  *)
+  val set_preventClose: 'tags this -> bool -> unit [@@js.set "preventClose"]
+  val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
+  val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module rec AnonymousInterface522 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WritableStreamDefaultController.t [@@js.get "prototype"]
+  val set_prototype: t -> WritableStreamDefaultController.t -> unit [@@js.set "prototype"]
+  val create: t -> WritableStreamDefaultController.t [@@js.apply_newable]
+end
+
+(** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. *)
+and[@js.scope "WritableStreamDefaultController"] WritableStreamDefaultController : sig
+  type t = [`WritableStreamDefaultController] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WritableStreamDefaultController]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WritableStreamDefaultController]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WritableStreamDefaultController ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val error: 'tags this -> ?e:any -> unit -> unit [@@js.call "error"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module UnderlyingSinkWriteCallback : sig
+  type 'W t = [`UnderlyingSinkWriteCallback of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
+  type 'W t_1 = 'W t
+  [@@@js.stop]
+  type 'W tags = [`UnderlyingSinkWriteCallback of 'W]
+  type 'W tags_1 = 'W tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'W tags = [`UnderlyingSinkWriteCallback of 'W]
+    type 'W tags_1 = 'W tags
+  ]
+  type ('tags, 'W) this = 'tags intf constraint 'tags = [> `UnderlyingSinkWriteCallback of 'W ]
+  val t_to_js: ('W -> Ojs.t) -> 'W t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
+  val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
+  val apply: ('tags, 'W) this -> chunk:'W -> controller:WritableStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSinkStartCallback : sig
+  type t = [`UnderlyingSinkStartCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`UnderlyingSinkStartCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`UnderlyingSinkStartCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSinkStartCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> controller:WritableStreamDefaultController.t -> any [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSinkCloseCallback : sig
+  type t = [`UnderlyingSinkCloseCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`UnderlyingSinkCloseCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`UnderlyingSinkCloseCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSinkCloseCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSinkAbortCallback : sig
+  type t = [`UnderlyingSinkAbortCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`UnderlyingSinkAbortCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`UnderlyingSinkAbortCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSinkAbortCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSink : sig
+  type 'W t = [`UnderlyingSink of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
+  type 'W t_1 = 'W t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'W tags = [`UnderlyingSink of 'W]
+  type 'W tags_1 = 'W tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'W tags = [`UnderlyingSink of 'W]
+    type 'W tags_1 = 'W tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'W) this = 'tags intf constraint 'tags = [> `UnderlyingSink of 'W ]
+  val t_to_js: ('W -> Ojs.t) -> 'W t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
+  val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_abort: ('tags, 'W) this -> UnderlyingSinkAbortCallback.t [@@js.get "abort"]
+  val set_abort: ('tags, 'W) this -> UnderlyingSinkAbortCallback.t -> unit [@@js.set "abort"]
+  val get_close: ('tags, 'W) this -> UnderlyingSinkCloseCallback.t [@@js.get "close"]
+  val set_close: ('tags, 'W) this -> UnderlyingSinkCloseCallback.t -> unit [@@js.set "close"]
+  val get_start: ('tags, 'W) this -> UnderlyingSinkStartCallback.t [@@js.get "start"]
+  val set_start: ('tags, 'W) this -> UnderlyingSinkStartCallback.t -> unit [@@js.set "start"]
+  val get_type: ('tags, 'W) this -> never or_undefined [@@js.get "type"]
+  val set_type: ('tags, 'W) this -> never or_undefined -> unit [@@js.set "type"]
+  val get_write: ('tags, 'W) this -> 'W UnderlyingSinkWriteCallback.t [@@js.get "write"]
+  val set_write: ('tags, 'W) this -> 'W UnderlyingSinkWriteCallback.t -> unit [@@js.set "write"]
+  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
+end
+module QueuingStrategySize : sig
+  type 'T t = [`QueuingStrategySize of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
+  type 'T t_1 = 'T t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'T tags = [`QueuingStrategySize of 'T]
+  type 'T tags_1 = 'T tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'T tags = [`QueuingStrategySize of 'T]
+    type 'T tags_1 = 'T tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'T) this = 'tags intf constraint 'tags = [> `QueuingStrategySize of 'T ]
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: ('tags, 'T) this -> chunk:'T -> float [@@js.apply]
+  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+end
+module QueuingStrategy : sig
+  type 'T t = [`QueuingStrategy of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
+  type 'T t_1 = 'T t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'T tags = [`QueuingStrategy of 'T]
+  type 'T tags_1 = 'T tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'T tags = [`QueuingStrategy of 'T]
+    type 'T tags_1 = 'T tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'T) this = 'tags intf constraint 'tags = [> `QueuingStrategy of 'T ]
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_highWaterMark: ('tags, 'T) this -> float [@@js.get "highWaterMark"]
+  val set_highWaterMark: ('tags, 'T) this -> float -> unit [@@js.set "highWaterMark"]
+  val get_size: ('tags, 'T) this -> 'T QueuingStrategySize.t [@@js.get "size"]
+  val set_size: ('tags, 'T) this -> 'T QueuingStrategySize.t -> unit [@@js.set "size"]
+  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+end
+module rec AnonymousInterface521 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WritableStream.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> WritableStream.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> ?underlyingSink:'W UnderlyingSink.t -> ?strategy:'W QueuingStrategy.t -> unit -> 'W WritableStream.t [@@js.apply_newable]
+end
+and AnonymousInterface523 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WritableStreamDefaultWriter.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> WritableStreamDefaultWriter.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> stream:'W WritableStream.t -> 'W WritableStreamDefaultWriter.t [@@js.apply_newable]
+end
+
+(** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. *)
+and[@js.scope "WritableStream"] WritableStream : sig
+  type 'W t = [`WritableStream of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
+  type 'W t_1 = 'W t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'W tags = [`WritableStream of 'W]
+  type 'W tags_1 = 'W tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'W tags = [`WritableStream of 'W]
+    type 'W tags_1 = 'W tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'W) this = 'tags intf constraint 'tags = [> `WritableStream of 'W ]
+  val t_to_js: ('W -> Ojs.t) -> 'W t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
+  val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_locked: ('tags, 'W) this -> bool [@@js.get "locked"]
+  val abort: ('tags, 'W) this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "abort"]
+  val close: ('tags, 'W) this -> unit Promise.t_1 [@@js.call "close"]
+  val getWriter: ('tags, 'W) this -> 'W WritableStreamDefaultWriter.t [@@js.call "getWriter"]
+  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t_0 [@@js.get "prototype"]
+  val create: ?underlyingSink:'W UnderlyingSink.t -> ?strategy:'W QueuingStrategy.t -> unit -> 'W t [@@js.create]
+end
+
+(** This Streams API interface is the object returned by WritableStream.getWriter() and once created locks the < writer to the WritableStream ensuring that no other streams can write to the underlying sink. *)
+and[@js.scope "WritableStreamDefaultWriter"] WritableStreamDefaultWriter : sig
+  type 'W t = [`WritableStreamDefaultWriter of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
+  type 'W t_1 = 'W t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'W tags = [`WritableStreamDefaultWriter of 'W]
+  type 'W tags_1 = 'W tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'W tags = [`WritableStreamDefaultWriter of 'W]
+    type 'W tags_1 = 'W tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'W) this = 'tags intf constraint 'tags = [> `WritableStreamDefaultWriter of 'W ]
+  val t_to_js: ('W -> Ojs.t) -> 'W t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
+  val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_closed: ('tags, 'W) this -> never or_undefined Promise.t_1 [@@js.get "closed"]
+  val get_desiredSize: ('tags, 'W) this -> float or_null [@@js.get "desiredSize"]
+  val get_ready: ('tags, 'W) this -> never or_undefined Promise.t_1 [@@js.get "ready"]
+  val abort: ('tags, 'W) this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "abort"]
+  val close: ('tags, 'W) this -> unit Promise.t_1 [@@js.call "close"]
+  val releaseLock: ('tags, 'W) this -> unit [@@js.call "releaseLock"]
+  val write: ('tags, 'W) this -> ?chunk:'W -> unit -> unit Promise.t_1 [@@js.call "write"]
+  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t_0 [@@js.get "prototype"]
+  val create: 'W WritableStream.t -> 'W t [@@js.create]
+end
+module ReadableStreamGenericReader : sig
+  type t = [`ReadableStreamGenericReader] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ReadableStreamGenericReader]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ReadableStreamGenericReader]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ReadableStreamGenericReader ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_closed: 'tags this -> never or_undefined Promise.t_1 [@@js.get "closed"]
+  val cancel: 'tags this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "cancel"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module ReadableStreamDefaultReadValueResult : sig
+  type 'T t = [`ReadableStreamDefaultReadValueResult of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
+  type 'T t_1 = 'T t
+  [@@@js.stop]
+  type 'T tags = [`ReadableStreamDefaultReadValueResult of 'T]
+  type 'T tags_1 = 'T tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'T tags = [`ReadableStreamDefaultReadValueResult of 'T]
+    type 'T tags_1 = 'T tags
+  ]
+  type ('tags, 'T) this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultReadValueResult of 'T ]
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  val get_done: ('tags, 'T) this -> ([`L_b_false[@js false]] [@js.enum]) [@@js.get "done"]
+  val set_done: ('tags, 'T) this -> ([`L_b_false[@js false]] [@js.enum]) -> unit [@@js.set "done"]
+  val get_value: ('tags, 'T) this -> 'T [@@js.get "value"]
+  val set_value: ('tags, 'T) this -> 'T -> unit [@@js.set "value"]
+  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+end
+module ReadableStreamDefaultReadDoneResult : sig
+  type t = [`ReadableStreamDefaultReadDoneResult] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ReadableStreamDefaultReadDoneResult]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ReadableStreamDefaultReadDoneResult]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultReadDoneResult ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_done: 'tags this -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "done"]
+  val set_done: 'tags this -> ([`L_b_true[@js true]] [@js.enum]) -> unit [@@js.set "done"]
+  val get_value: 'tags this -> never or_undefined [@@js.get "value"]
+  val set_value: 'tags this -> never or_undefined -> unit [@@js.set "value"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module ReadableStreamDefaultReadResult : sig
+  type 'T t = ([`U_b_false of 'T ReadableStreamDefaultReadValueResult.t [@js false] | `U_b_true of ReadableStreamDefaultReadDoneResult.t [@js true]] [@js.union on_field "done"])
+  type 'T t_1 = 'T t
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+end
+module rec AnonymousInterface338 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ReadableStreamDefaultController.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> ReadableStreamDefaultController.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> ReadableStreamDefaultController.t_0 [@@js.apply_newable]
+end
+and[@js.scope "ReadableStreamDefaultController"] ReadableStreamDefaultController : sig
+  type 'R t = [`ReadableStreamDefaultController of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'R tags = [`ReadableStreamDefaultController of 'R]
+  type 'R tags_1 = 'R tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`ReadableStreamDefaultController of 'R]
+    type 'R tags_1 = 'R tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultController of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_desiredSize: ('tags, 'R) this -> float or_null [@@js.get "desiredSize"]
+  val close: ('tags, 'R) this -> unit [@@js.call "close"]
+  val enqueue: ('tags, 'R) this -> ?chunk:'R -> unit -> unit [@@js.call "enqueue"]
+  val error: ('tags, 'R) this -> ?e:any -> unit -> unit [@@js.call "error"]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t_0 [@@js.get "prototype"]
+  val create: unit -> t_0 [@@js.create]
+end
+module ReadableStreamController : sig
+  type 'T t = 'T ReadableStreamDefaultController.t
+  type 'T t_1 = 'T t
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+end
+module UnderlyingSourceStartCallback : sig
+  type 'R t = [`UnderlyingSourceStartCallback of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  [@@@js.stop]
+  type 'R tags = [`UnderlyingSourceStartCallback of 'R]
+  type 'R tags_1 = 'R tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`UnderlyingSourceStartCallback of 'R]
+    type 'R tags_1 = 'R tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSourceStartCallback of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> any [@@js.apply]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSourcePullCallback : sig
+  type 'R t = [`UnderlyingSourcePullCallback of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  [@@@js.stop]
+  type 'R tags = [`UnderlyingSourcePullCallback of 'R]
+  type 'R tags_1 = 'R tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`UnderlyingSourcePullCallback of 'R]
+    type 'R tags_1 = 'R tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSourcePullCallback of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSourceCancelCallback : sig
+  type t = [`UnderlyingSourceCancelCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`UnderlyingSourceCancelCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`UnderlyingSourceCancelCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSourceCancelCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSource : sig
+  type 'R t = [`UnderlyingSource of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'R tags = [`UnderlyingSource of 'R]
+  type 'R tags_1 = 'R tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`UnderlyingSource of 'R]
+    type 'R tags_1 = 'R tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSource of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_cancel: ('tags, 'R) this -> UnderlyingSourceCancelCallback.t [@@js.get "cancel"]
+  val set_cancel: ('tags, 'R) this -> UnderlyingSourceCancelCallback.t -> unit [@@js.set "cancel"]
+  val get_pull: ('tags, 'R) this -> 'R UnderlyingSourcePullCallback.t [@@js.get "pull"]
+  val set_pull: ('tags, 'R) this -> 'R UnderlyingSourcePullCallback.t -> unit [@@js.set "pull"]
+  val get_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t [@@js.get "start"]
+  val set_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t -> unit [@@js.set "start"]
+  val get_type: ('tags, 'R) this -> never or_undefined [@@js.get "type"]
+  val set_type: ('tags, 'R) this -> never or_undefined -> unit [@@js.set "type"]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+end
+module rec AnonymousInterface337 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ReadableStream.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> ReadableStream.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> ?underlyingSource:'R UnderlyingSource.t -> ?strategy:'R QueuingStrategy.t -> unit -> 'R ReadableStream.t [@@js.apply_newable]
+end
+and AnonymousInterface339 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ReadableStreamDefaultReader.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> ReadableStreamDefaultReader.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> stream:'R ReadableStream.t -> 'R ReadableStreamDefaultReader.t [@@js.apply_newable]
+end
+
+(** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. *)
+and[@js.scope "ReadableStream"] ReadableStream : sig
+  type 'R t = [`ReadableStream of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'R tags = [`ReadableStream of 'R]
+  type 'R tags_1 = 'R tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`ReadableStream of 'R]
+    type 'R tags_1 = 'R tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `ReadableStream of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_locked: ('tags, 'R) this -> bool [@@js.get "locked"]
+  val cancel: ('tags, 'R) this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "cancel"]
+  val getReader: ('tags, 'R) this -> 'R ReadableStreamDefaultReader.t [@@js.call "getReader"]
+  val pipeThrough: ('tags, 'R) this -> transform:('T, 'R) ReadableWritablePair.t -> ?options:StreamPipeOptions.t -> unit -> 'T t [@@js.call "pipeThrough"]
+  val pipeTo: ('tags, 'R) this -> destination:'R WritableStream.t -> ?options:StreamPipeOptions.t -> unit -> unit Promise.t_1 [@@js.call "pipeTo"]
+  val tee: ('tags, 'R) this -> ('R t * 'R t) [@@js.call "tee"]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t_0 [@@js.get "prototype"]
+  val create: ?underlyingSource:'R UnderlyingSource.t -> ?strategy:'R QueuingStrategy.t -> unit -> 'R t [@@js.create]
+end
+and[@js.scope "ReadableStreamDefaultReader"] ReadableStreamDefaultReader : sig
+  type 'R t = [`ReadableStreamDefaultReader of 'R | `ReadableStreamGenericReader] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'R tags = [`ReadableStreamDefaultReader of 'R | `ReadableStreamGenericReader]
+  type 'R tags_1 = 'R tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`ReadableStreamDefaultReader of 'R | `ReadableStreamGenericReader]
+    type 'R tags_1 = 'R tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultReader of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val read: ('tags, 'R) this -> 'R ReadableStreamDefaultReadResult.t Promise.t_1 [@@js.call "read"]
+  val releaseLock: ('tags, 'R) this -> unit [@@js.call "releaseLock"]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t_0 [@@js.get "prototype"]
+  val create: 'R ReadableStream.t -> 'R t [@@js.create]
+end
+and ReadableWritablePair : sig
+  type ('R, 'W) t = [`ReadableWritablePair of ('R * 'W)] intf [@@js.custom { of_js=(fun _R _W -> Obj.magic); to_js=(fun _R _W -> Obj.magic) }]
+  type ('R, 'W) t_2 = ('R, 'W) t
+  type 'R t_1 = ('R, any) t
+  type t_0 = (any, any) t
+  [@@@js.stop]
+  type ('R, 'W) tags = [`ReadableWritablePair of ('R * 'W)]
+  type ('R, 'W) tags_2 = ('R, 'W) tags
+  type 'R tags_1 = ('R, any) tags
+  type tags_0 = (any, any) tags
+  [@@@js.start]
+  [@@@js.implem 
+    type ('R, 'W) tags = [`ReadableWritablePair of ('R * 'W)]
+    type ('R, 'W) tags_2 = ('R, 'W) tags
+    type 'R tags_1 = ('R, any) tags
+    type tags_0 = (any, any) tags
+  ]
+  type ('tags, 'R, 'W) this = 'tags intf constraint 'tags = [> `ReadableWritablePair of ('R * 'W) ]
+  val t_to_js: ('R -> Ojs.t) -> ('W -> Ojs.t) -> ('R, 'W) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> (Ojs.t -> 'W) -> Ojs.t -> ('R, 'W) t
+  val t_2_to_js: ('R -> Ojs.t) -> ('W -> Ojs.t) -> ('R, 'W) t_2 -> Ojs.t
+  val t_2_of_js: (Ojs.t -> 'R) -> (Ojs.t -> 'W) -> Ojs.t -> ('R, 'W) t_2
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_readable: ('tags, 'R, 'W) this -> 'R ReadableStream.t [@@js.get "readable"]
+  val set_readable: ('tags, 'R, 'W) this -> 'R ReadableStream.t -> unit [@@js.set "readable"]
+  
+  (**
+    Provides a convenient, chainable way of piping this readable stream through a transform stream (or any other \{ writable, readable \} pair). It simply pipes the stream into the writable side of the supplied pair, and returns the readable side for further use.
+    
+    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
+  *)
+  val get_writable: ('tags, 'R, 'W) this -> 'W WritableStream.t [@@js.get "writable"]
+  
+  (**
+    Provides a convenient, chainable way of piping this readable stream through a transform stream (or any other \{ writable, readable \} pair). It simply pipes the stream into the writable side of the supplied pair, and returns the readable side for further use.
+    
+    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
+  *)
+  val set_writable: ('tags, 'R, 'W) this -> 'W WritableStream.t -> unit [@@js.set "writable"]
+  val cast_from: (('tags, 'R, 'W) this -> ('R, 'W) t) [@@js.custom let cast_from = Obj.magic]
+end
+module EndingType : sig
+  type t = ([`L_s511_native[@js "native"] | `L_s784_transparent[@js "transparent"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module BlobPropertyBag : sig
+  type t = [`BlobPropertyBag] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`BlobPropertyBag]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`BlobPropertyBag]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `BlobPropertyBag ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_endings: 'tags this -> EndingType.t [@@js.get "endings"]
+  val set_endings: 'tags this -> EndingType.t -> unit [@@js.set "endings"]
+  val get_type: 'tags this -> string [@@js.get "type"]
+  val set_type: 'tags this -> string -> unit [@@js.set "type"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module rec AnonymousInterface30 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Blob.t [@@js.get "prototype"]
+  val set_prototype: t -> Blob.t -> unit [@@js.set "prototype"]
+  val create: t -> ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> Blob.t [@@js.apply_newable]
+end
+
+(** A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system. *)
+and[@js.scope "Blob"] Blob : sig
+  type t = [`Blob] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Blob]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Blob]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `Blob ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_size: 'tags this -> float [@@js.get "size"]
+  val get_type: 'tags this -> string [@@js.get "type"]
+  val arrayBuffer: 'tags this -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "arrayBuffer"]
+  val slice: 'tags this -> ?start:float -> ?end_:float -> ?contentType:string -> unit -> t [@@js.call "slice"]
+  val stream: 'tags this -> ReadableStream.t_0 [@@js.call "stream"]
+  val text: 'tags this -> string Promise.t_1 [@@js.call "text"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> t [@@js.create]
+end
+and BlobPart : sig
+  type t = (Blob.t, BufferSource.t) union2 or_string
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module rec AnonymousInterface491 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> URL.t [@@js.get "prototype"]
+  val set_prototype: t -> URL.t -> unit [@@js.set "prototype"]
+  val create: t -> url:URL.t or_string -> ?base:URL.t or_string -> unit -> URL.t [@@js.apply_newable]
+  val createObjectURL: t -> obj:(Blob.t, MediaSource.t) union2 -> string [@@js.call "createObjectURL"]
+  val revokeObjectURL: t -> url:string -> unit [@@js.call "revokeObjectURL"]
+end
+
+(** The URL interface represents an object providing static methods used for creating object URLs. *)
+and[@js.scope "URL"] URL : sig
+  type t = [`URL] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`URL]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`URL]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `URL ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_hash: 'tags this -> string [@@js.get "hash"]
+  val set_hash: 'tags this -> string -> unit [@@js.set "hash"]
+  val get_host: 'tags this -> string [@@js.get "host"]
+  val set_host: 'tags this -> string -> unit [@@js.set "host"]
+  val get_hostname: 'tags this -> string [@@js.get "hostname"]
+  val set_hostname: 'tags this -> string -> unit [@@js.set "hostname"]
+  val get_href: 'tags this -> string [@@js.get "href"]
+  val set_href: 'tags this -> string -> unit [@@js.set "href"]
+  val toString: 'tags this -> string [@@js.call "toString"]
+  val get_origin: 'tags this -> string [@@js.get "origin"]
+  val get_password: 'tags this -> string [@@js.get "password"]
+  val set_password: 'tags this -> string -> unit [@@js.set "password"]
+  val get_pathname: 'tags this -> string [@@js.get "pathname"]
+  val set_pathname: 'tags this -> string -> unit [@@js.set "pathname"]
+  val get_port: 'tags this -> string [@@js.get "port"]
+  val set_port: 'tags this -> string -> unit [@@js.set "port"]
+  val get_protocol: 'tags this -> string [@@js.get "protocol"]
+  val set_protocol: 'tags this -> string -> unit [@@js.set "protocol"]
+  val get_search: 'tags this -> string [@@js.get "search"]
+  val set_search: 'tags this -> string -> unit [@@js.set "search"]
+  val get_searchParams: 'tags this -> URLSearchParams.t [@@js.get "searchParams"]
+  val get_username: 'tags this -> string [@@js.get "username"]
+  val set_username: 'tags this -> string -> unit [@@js.set "username"]
+  val toJSON: 'tags this -> string [@@js.call "toJSON"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: url:t or_string -> ?base:t or_string -> unit -> t [@@js.create]
+  val createObjectURL: (Blob.t, MediaSource.t) union2 -> string [@@js.global "createObjectURL"]
+  val revokeObjectURL: string -> unit [@@js.global "revokeObjectURL"]
+end
+module[@js.scope "webkitURL"] WebkitURL : sig
+  type t = URL.t
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val prototype: unit -> URL.t [@@js.get "prototype"]
+  val create: url:URL.t or_string -> ?base:URL.t or_string -> unit -> URL.t [@@js.create]
+  val createObjectURL: (Blob.t, MediaSource.t) union2 -> string [@@js.global "createObjectURL"]
+  val revokeObjectURL: string -> unit [@@js.global "revokeObjectURL"]
+end
 module rec AnonymousInterface497 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
@@ -657,7 +1728,7 @@ and[@js.scope "SpeechSynthesisVoice"] SpeechSynthesisVoice : sig
   val create: unit -> t [@@js.create]
 end
 module SpeechSynthesisErrorCode : sig
-  type t = ([`L_s134_audio_busy[@js "audio-busy"] | `L_s135_audio_hardware[@js "audio-hardware"] | `L_s177_canceled[@js "canceled"] | `L_s422_interrupted[@js "interrupted"] | `L_s424_invalid_argument[@js "invalid-argument"] | `L_s438_language_unavailable[@js "language-unavailable"] | `L_s518_network[@js "network"] | `L_s533_not_allowed[@js "not-allowed"] | `L_s748_synthesis_failed[@js "synthesis-failed"] | `L_s749_synthesis_unavailable[@js "synthesis-unavailable"] | `L_s757_text_too_long[@js "text-too-long"] | `L_s825_voice_unavailable[@js "voice-unavailable"]] [@js.enum])
+  type t = ([`L_s134_audio_busy[@js "audio-busy"] | `L_s135_audio_hardware[@js "audio-hardware"] | `L_s177_canceled[@js "canceled"] | `L_s421_interrupted[@js "interrupted"] | `L_s423_invalid_argument[@js "invalid-argument"] | `L_s437_language_unavailable[@js "language-unavailable"] | `L_s517_network[@js "network"] | `L_s532_not_allowed[@js "not-allowed"] | `L_s747_synthesis_failed[@js "synthesis-failed"] | `L_s748_synthesis_unavailable[@js "synthesis-unavailable"] | `L_s756_text_too_long[@js "text-too-long"] | `L_s824_voice_unavailable[@js "voice-unavailable"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1042,7 +2113,7 @@ module[@js.scope "scrollbars"] ScrollbarsStatic : sig
   val visible: unit -> bool [@@js.get "visible"]
 end
 module OrientationType : sig
-  type t = ([`L_s436_landscape_primary[@js "landscape-primary"] | `L_s437_landscape_secondary[@js "landscape-secondary"] | `L_s603_portrait_primary[@js "portrait-primary"] | `L_s604_portrait_secondary[@js "portrait-secondary"]] [@js.enum])
+  type t = ([`L_s435_landscape_primary[@js "landscape-primary"] | `L_s436_landscape_secondary[@js "landscape-secondary"] | `L_s602_portrait_primary[@js "portrait-primary"] | `L_s603_portrait_secondary[@js "portrait-secondary"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1050,7 +2121,7 @@ module OrientationType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module OrientationLockType : sig
-  type t = ([`L_s121_any[@js "any"] | `L_s435_landscape[@js "landscape"] | `L_s436_landscape_primary[@js "landscape-primary"] | `L_s437_landscape_secondary[@js "landscape-secondary"] | `L_s513_natural[@js "natural"] | `L_s602_portrait[@js "portrait"] | `L_s603_portrait_primary[@js "portrait-primary"] | `L_s604_portrait_secondary[@js "portrait-secondary"]] [@js.enum])
+  type t = ([`L_s121_any[@js "any"] | `L_s434_landscape[@js "landscape"] | `L_s435_landscape_primary[@js "landscape-primary"] | `L_s436_landscape_secondary[@js "landscape-secondary"] | `L_s512_natural[@js "natural"] | `L_s601_portrait[@js "portrait"] | `L_s602_portrait_primary[@js "portrait-primary"] | `L_s603_portrait_secondary[@js "portrait-secondary"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1680,7 +2751,7 @@ and[@js.scope "WebGLContextEvent"] WebGLContextEvent : sig
   val create: type_:string -> ?eventInit:WebGLContextEventInit.t -> unit -> t [@@js.create]
 end
 module VisibilityState : sig
-  type t = ([`L_s380_hidden[@js "hidden"] | `L_s824_visible[@js "visible"]] [@js.enum])
+  type t = ([`L_s379_hidden[@js "hidden"] | `L_s823_visible[@js "visible"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1688,7 +2759,7 @@ module VisibilityState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module SecurityPolicyViolationEventDisposition : sig
-  type t = ([`L_s281_enforce[@js "enforce"] | `L_s650_report[@js "report"]] [@js.enum])
+  type t = ([`L_s281_enforce[@js "enforce"] | `L_s649_report[@js "report"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1780,7 +2851,7 @@ and[@js.scope "SecurityPolicyViolationEvent"] SecurityPolicyViolationEvent : sig
   val create: type_:string -> ?eventInitDict:SecurityPolicyViolationEventInit.t -> unit -> t [@@js.create]
 end
 module RTCRtpTransceiverDirection : sig
-  type t = ([`L_s407_inactive[@js "inactive"] | `L_s635_recvonly[@js "recvonly"] | `L_s691_sendonly[@js "sendonly"] | `L_s692_sendrecv[@js "sendrecv"] | `L_s728_stopped[@js "stopped"]] [@js.enum])
+  type t = ([`L_s406_inactive[@js "inactive"] | `L_s634_recvonly[@js "recvonly"] | `L_s690_sendonly[@js "sendonly"] | `L_s691_sendrecv[@js "sendrecv"] | `L_s727_stopped[@js "stopped"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1808,7 +2879,7 @@ module RTCRtpCodingParameters : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RTCPriorityType : sig
-  type t = ([`L_s382_high[@js "high"] | `L_s467_low[@js "low"] | `L_s488_medium[@js "medium"] | `L_s818_very_low[@js "very-low"]] [@js.enum])
+  type t = ([`L_s381_high[@js "high"] | `L_s466_low[@js "low"] | `L_s487_medium[@js "medium"] | `L_s817_very_low[@js "very-low"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1842,7 +2913,7 @@ module RTCRtpEncodingParameters : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDegradationPreference : sig
-  type t = ([`L_s147_balanced[@js "balanced"] | `L_s474_maintain_framerate[@js "maintain-framerate"] | `L_s475_maintain_resolution[@js "maintain-resolution"]] [@js.enum])
+  type t = ([`L_s147_balanced[@js "balanced"] | `L_s473_maintain_framerate[@js "maintain-framerate"] | `L_s474_maintain_resolution[@js "maintain-resolution"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2125,7 +3196,7 @@ and[@js.scope "RTCStatsReport"] RTCStatsReport : sig
   val create: unit -> t [@@js.create]
 end
 module RTCDtlsTransportState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s301_failed[@js "failed"] | `L_s519_new[@js "new"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2289,6 +3360,8 @@ module MediaTrackSettings : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_aspectRatio: 'tags this -> float [@@js.get "aspectRatio"]
   val set_aspectRatio: 'tags this -> float -> unit [@@js.set "aspectRatio"]
+  val get_autoGainControl: 'tags this -> bool [@@js.get "autoGainControl"]
+  val set_autoGainControl: 'tags this -> bool -> unit [@@js.set "autoGainControl"]
   val get_deviceId: 'tags this -> string [@@js.get "deviceId"]
   val set_deviceId: 'tags this -> string -> unit [@@js.set "deviceId"]
   val get_echoCancellation: 'tags this -> bool [@@js.get "echoCancellation"]
@@ -2301,6 +3374,8 @@ module MediaTrackSettings : sig
   val set_groupId: 'tags this -> string -> unit [@@js.set "groupId"]
   val get_height: 'tags this -> float [@@js.get "height"]
   val set_height: 'tags this -> float -> unit [@@js.set "height"]
+  val get_noiseSuppression: 'tags this -> bool [@@js.get "noiseSuppression"]
+  val set_noiseSuppression: 'tags this -> bool -> unit [@@js.set "noiseSuppression"]
   val get_restrictOwnAudio: 'tags this -> bool [@@js.get "restrictOwnAudio"]
   val set_restrictOwnAudio: 'tags this -> bool -> unit [@@js.set "restrictOwnAudio"]
   val get_sampleRate: 'tags this -> float [@@js.get "sampleRate"]
@@ -2410,7 +3485,7 @@ module MediaTrackCapabilities : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module MediaStreamTrackState : sig
-  type t = ([`L_s280_ended[@js "ended"] | `L_s455_live[@js "live"]] [@js.enum])
+  type t = ([`L_s280_ended[@js "ended"] | `L_s454_live[@js "live"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2555,6 +3630,8 @@ module MediaTrackConstraintSet : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_aspectRatio: 'tags this -> ConstrainDouble.t [@@js.get "aspectRatio"]
   val set_aspectRatio: 'tags this -> ConstrainDouble.t -> unit [@@js.set "aspectRatio"]
+  val get_autoGainControl: 'tags this -> ConstrainBoolean.t [@@js.get "autoGainControl"]
+  val set_autoGainControl: 'tags this -> ConstrainBoolean.t -> unit [@@js.set "autoGainControl"]
   val get_channelCount: 'tags this -> ConstrainULong.t [@@js.get "channelCount"]
   val set_channelCount: 'tags this -> ConstrainULong.t -> unit [@@js.set "channelCount"]
   val get_deviceId: 'tags this -> ConstrainDOMString.t [@@js.get "deviceId"]
@@ -2571,6 +3648,8 @@ module MediaTrackConstraintSet : sig
   val set_height: 'tags this -> ConstrainULong.t -> unit [@@js.set "height"]
   val get_latency: 'tags this -> ConstrainDouble.t [@@js.get "latency"]
   val set_latency: 'tags this -> ConstrainDouble.t -> unit [@@js.set "latency"]
+  val get_noiseSuppression: 'tags this -> ConstrainBoolean.t [@@js.get "noiseSuppression"]
+  val set_noiseSuppression: 'tags this -> ConstrainBoolean.t -> unit [@@js.set "noiseSuppression"]
   val get_sampleRate: 'tags this -> ConstrainULong.t [@@js.get "sampleRate"]
   val set_sampleRate: 'tags this -> ConstrainULong.t -> unit [@@js.set "sampleRate"]
   val get_sampleSize: 'tags this -> ConstrainULong.t [@@js.get "sampleSize"]
@@ -2601,7 +3680,7 @@ module MediaTrackConstraints : sig
   val set_advanced: 'tags this -> MediaTrackConstraintSet.t list -> unit [@@js.set "advanced"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface258 : sig
+module rec AnonymousInterface259 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2712,7 +3791,7 @@ module MediaStreamTrackEventInit : sig
   val set_track: 'tags this -> MediaStreamTrack.t -> unit [@@js.set "track"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface259 : sig
+module rec AnonymousInterface260 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2743,7 +3822,7 @@ and[@js.scope "MediaStreamTrackEvent"] MediaStreamTrackEvent : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> eventInitDict:MediaStreamTrackEventInit.t -> t [@@js.create]
 end
-module rec AnonymousInterface255 : sig
+module rec AnonymousInterface256 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3064,7 +4143,7 @@ and[@js.scope "RTCTrackEvent"] RTCTrackEvent : sig
   val create: type_:string -> eventInitDict:RTCTrackEventInit.t -> t [@@js.create]
 end
 module RTCIceTcpCandidateType : sig
-  type t = ([`L_s98_active[@js "active"] | `L_s567_passive[@js "passive"] | `L_s710_so[@js "so"]] [@js.enum])
+  type t = ([`L_s98_active[@js "active"] | `L_s566_passive[@js "passive"] | `L_s709_so[@js "so"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3072,7 +4151,7 @@ module RTCIceTcpCandidateType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceProtocol : sig
-  type t = ([`L_s752_tcp[@js "tcp"] | `L_s790_udp[@js "udp"]] [@js.enum])
+  type t = ([`L_s751_tcp[@js "tcp"] | `L_s789_udp[@js "udp"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3080,7 +4159,7 @@ module RTCIceProtocol : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceComponent : sig
-  type t = ([`L_s665_rtcp[@js "rtcp"] | `L_s667_rtp[@js "rtp"]] [@js.enum])
+  type t = ([`L_s664_rtcp[@js "rtcp"] | `L_s666_rtp[@js "rtp"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3088,7 +4167,7 @@ module RTCIceComponent : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceCandidateType : sig
-  type t = ([`L_s387_host[@js "host"] | `L_s615_prflx[@js "prflx"] | `L_s638_relay[@js "relay"] | `L_s719_srflx[@js "srflx"]] [@js.enum])
+  type t = ([`L_s386_host[@js "host"] | `L_s614_prflx[@js "prflx"] | `L_s637_relay[@js "relay"] | `L_s718_srflx[@js "srflx"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3281,7 +4360,7 @@ and[@js.scope "RTCPeerConnectionIceErrorEvent"] RTCPeerConnectionIceErrorEvent :
   val create: type_:string -> eventInitDict:RTCPeerConnectionIceErrorEventInit.t -> t [@@js.create]
 end
 module RTCDataChannelState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s201_closing[@js "closing"] | `L_s214_connecting[@js "connecting"] | `L_s545_open[@js "open"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s201_closing[@js "closing"] | `L_s214_connecting[@js "connecting"] | `L_s544_open[@js "open"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3439,7 +4518,10 @@ module rec AnonymousInterface288 : sig
   val create: t -> type_:string -> ?eventInitDict:PaymentRequestUpdateEventInit.t -> unit -> PaymentRequestUpdateEvent.t [@@js.apply_newable]
 end
 
-(** This Payment Request API interface enables a web page to update the details of a PaymentRequest in response to a user action. *)
+(**
+  This Payment Request API interface enables a web page to update the details of a PaymentRequest in response to a user action.
+  Available only in secure contexts.
+*)
 and[@js.scope "PaymentRequestUpdateEvent"] PaymentRequestUpdateEvent : sig
   type t = [`Event | `PaymentRequestUpdateEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -3491,6 +4573,8 @@ module rec AnonymousInterface286 : sig
   val set_prototype: t -> PaymentMethodChangeEvent.t -> unit [@@js.set "prototype"]
   val create: t -> type_:string -> ?eventInitDict:PaymentMethodChangeEventInit.t -> unit -> PaymentMethodChangeEvent.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "PaymentMethodChangeEvent"] PaymentMethodChangeEvent : sig
   type t = [`Event | `PaymentMethodChangeEvent | `PaymentRequestUpdateEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -3594,7 +4678,7 @@ module OfflineAudioCompletionEventInit : sig
   val set_renderedBuffer: 'tags this -> AudioBuffer.t -> unit [@@js.set "renderedBuffer"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface278 : sig
+module rec AnonymousInterface279 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3682,14 +4766,14 @@ end
 
 (** An abnormal event (called an exception) which occurs as a result of calling a method or accessing a property of a web API. *)
 and[@js.scope "DOMException"] DOMException : sig
-  type t = [`DOMException] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t = [`DOMException | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`DOMException]
+  type tags = [`DOMException | Error.tags_0]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`DOMException]
+    type tags = [`DOMException | Error.tags_0]
     type tags_0 = tags
   ]
   type 'tags this = 'tags intf constraint 'tags = [> `DOMException ]
@@ -3774,7 +4858,7 @@ module MediaRecorderErrorEventInit : sig
   val set_error: 'tags this -> DOMException.t -> unit [@@js.set "error"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface252 : sig
+module rec AnonymousInterface253 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3802,64 +4886,6 @@ and[@js.scope "MediaRecorderErrorEvent"] MediaRecorderErrorEvent : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> eventInitDict:MediaRecorderErrorEventInit.t -> t [@@js.create]
-end
-module HashChangeEventInit : sig
-  type t = [`EventInit | `HashChangeEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventInit | `HashChangeEventInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventInit | `HashChangeEventInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `HashChangeEventInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_newURL: 'tags this -> string [@@js.get "newURL"]
-  val set_newURL: 'tags this -> string -> unit [@@js.set "newURL"]
-  val get_oldURL: 'tags this -> string [@@js.get "oldURL"]
-  val set_oldURL: 'tags this -> string -> unit [@@js.set "oldURL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface208 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HashChangeEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> HashChangeEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:HashChangeEventInit.t -> unit -> HashChangeEvent.t [@@js.apply_newable]
-end
-
-(** Events that fire when the fragment identifier of the URL has changed. *)
-and[@js.scope "HashChangeEvent"] HashChangeEvent : sig
-  type t = [`Event | `HashChangeEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`Event | `HashChangeEvent]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Event | `HashChangeEvent]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `HashChangeEvent ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Returns the URL of the session history entry that is now current. *)
-  val get_newURL: 'tags this -> string [@@js.get "newURL"]
-  
-  (** Returns the URL of the session history entry that was previously current. *)
-  val get_oldURL: 'tags this -> string [@@js.get "oldURL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:HashChangeEventInit.t -> unit -> t [@@js.create]
 end
 module HTMLHyperlinkElementUtils : sig
   type t = [`HTMLHyperlinkElementUtils] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4023,177 +5049,8 @@ module HTMLHyperlinkElementUtils : sig
   val set_username: 'tags this -> string -> unit [@@js.set "username"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module GamepadMappingType : sig
-  type t = ([`L_s0[@js ""] | `L_s723_standard[@js "standard"] | `L_s844_xr_standard[@js "xr-standard"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module GamepadHapticActuatorType : sig
-  type t = ([`L_s819_vibration[@js "vibration"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module rec AnonymousInterface127 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GamepadHapticActuator.t [@@js.get "prototype"]
-  val set_prototype: t -> GamepadHapticActuator.t -> unit [@@js.set "prototype"]
-  val create: t -> GamepadHapticActuator.t [@@js.apply_newable]
-end
-
-(** This Gamepad API interface represents hardware in the controller designed to provide haptic feedback to the user (if available), most commonly vibration hardware. *)
-and[@js.scope "GamepadHapticActuator"] GamepadHapticActuator : sig
-  type t = [`GamepadHapticActuator] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`GamepadHapticActuator]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`GamepadHapticActuator]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `GamepadHapticActuator ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_type: 'tags this -> GamepadHapticActuatorType.t [@@js.get "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface125 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GamepadButton.t [@@js.get "prototype"]
-  val set_prototype: t -> GamepadButton.t -> unit [@@js.set "prototype"]
-  val create: t -> GamepadButton.t [@@js.apply_newable]
-end
-
-(** An individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device. *)
-and[@js.scope "GamepadButton"] GamepadButton : sig
-  type t = [`GamepadButton] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`GamepadButton]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`GamepadButton]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `GamepadButton ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_pressed: 'tags this -> bool [@@js.get "pressed"]
-  val get_touched: 'tags this -> bool [@@js.get "touched"]
-  val get_value: 'tags this -> float [@@js.get "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface124 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Gamepad.t [@@js.get "prototype"]
-  val set_prototype: t -> Gamepad.t -> unit [@@js.set "prototype"]
-  val create: t -> Gamepad.t [@@js.apply_newable]
-end
-
-(** This Gamepad API interface defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id. *)
-and[@js.scope "Gamepad"] Gamepad : sig
-  type t = [`Gamepad] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`Gamepad]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Gamepad]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `Gamepad ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_axes: 'tags this -> float list [@@js.get "axes"]
-  val get_buttons: 'tags this -> GamepadButton.t list [@@js.get "buttons"]
-  val get_connected: 'tags this -> bool [@@js.get "connected"]
-  val get_hapticActuators: 'tags this -> GamepadHapticActuator.t list [@@js.get "hapticActuators"]
-  val get_id: 'tags this -> string [@@js.get "id"]
-  val get_index: 'tags this -> float [@@js.get "index"]
-  val get_mapping: 'tags this -> GamepadMappingType.t [@@js.get "mapping"]
-  val get_timestamp: 'tags this -> DOMHighResTimeStamp.t [@@js.get "timestamp"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module GamepadEventInit : sig
-  type t = [`EventInit | `GamepadEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventInit | `GamepadEventInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventInit | `GamepadEventInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `GamepadEventInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_gamepad: 'tags this -> Gamepad.t [@@js.get "gamepad"]
-  val set_gamepad: 'tags this -> Gamepad.t -> unit [@@js.set "gamepad"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface126 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GamepadEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> GamepadEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:GamepadEventInit.t -> GamepadEvent.t [@@js.apply_newable]
-end
-
-(** This Gamepad API interface contains references to gamepads connected to the system, which is what the gamepad events Window.gamepadconnected and Window.gamepaddisconnected are fired in response to. *)
-and[@js.scope "GamepadEvent"] GamepadEvent : sig
-  type t = [`Event | `GamepadEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`Event | `GamepadEvent]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Event | `GamepadEvent]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `GamepadEvent ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_gamepad: 'tags this -> Gamepad.t [@@js.get "gamepad"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:GamepadEventInit.t -> t [@@js.create]
-end
 module FontFaceSetLoadStatus : sig
-  type t = ([`L_s457_loaded[@js "loaded"] | `L_s461_loading[@js "loading"]] [@js.enum])
+  type t = ([`L_s456_loaded[@js "loaded"] | `L_s460_loading[@js "loading"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4201,7 +5058,7 @@ module FontFaceSetLoadStatus : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module FontFaceLoadStatus : sig
-  type t = ([`L_s287_error[@js "error"] | `L_s457_loaded[@js "loaded"] | `L_s461_loading[@js "loading"] | `L_s799_unloaded[@js "unloaded"]] [@js.enum])
+  type t = ([`L_s287_error[@js "error"] | `L_s456_loaded[@js "loaded"] | `L_s460_loading[@js "loading"] | `L_s798_unloaded[@js "unloaded"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4248,7 +5105,7 @@ module BinaryData : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface118 : sig
+module rec AnonymousInterface119 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4303,7 +5160,7 @@ and[@js.scope "FontFace"] FontFace : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: family:string -> source:BinaryData.t or_string -> ?descriptors:FontFaceDescriptors.t -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface119 : sig
+module rec AnonymousInterface120 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4421,7 +5278,7 @@ module FontFaceSetLoadEventInit : sig
   val set_fontfaces: 'tags this -> FontFace.t list -> unit [@@js.set "fontfaces"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface120 : sig
+module rec AnonymousInterface121 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4548,7 +5405,7 @@ and[@js.scope "DocumentTimeline"] DocumentTimeline : sig
   val create: ?options:DocumentTimelineOptions.t -> unit -> t [@@js.create]
 end
 module DocumentReadyState : sig
-  type t = ([`L_s206_complete[@js "complete"] | `L_s419_interactive[@js "interactive"] | `L_s461_loading[@js "loading"]] [@js.enum])
+  type t = ([`L_s206_complete[@js "complete"] | `L_s418_interactive[@js "interactive"] | `L_s460_loading[@js "loading"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4681,751 +5538,6 @@ and[@js.scope "CloseEvent"] CloseEvent : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:CloseEventInit.t -> unit -> t [@@js.create]
-end
-module BufferSource : sig
-  type t = (ArrayBuffer.t_0, ArrayBufferView.t_0) union2
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module StreamPipeOptions : sig
-  type t = [`StreamPipeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`StreamPipeOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`StreamPipeOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `StreamPipeOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_preventAbort: 'tags this -> bool [@@js.get "preventAbort"]
-  val set_preventAbort: 'tags this -> bool -> unit [@@js.set "preventAbort"]
-  val get_preventCancel: 'tags this -> bool [@@js.get "preventCancel"]
-  val set_preventCancel: 'tags this -> bool -> unit [@@js.set "preventCancel"]
-  
-  (**
-    Pipes this readable stream to a given writable stream destination. The way in which the piping process behaves under various error conditions can be customized with a number of passed options. It returns a promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.
-    
-    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
-    
-    Errors and closures of the source and destination streams propagate as follows:
-    
-    An error in this source readable stream will abort destination, unless preventAbort is truthy. The returned promise will be rejected with the source's error, or with any error that occurs during aborting the destination.
-    
-    An error in destination will cancel this source readable stream, unless preventCancel is truthy. The returned promise will be rejected with the destination's error, or with any error that occurs during canceling the source.
-    
-    When this source readable stream closes, destination will be closed, unless preventClose is truthy. The returned promise will be fulfilled once this process completes, unless an error is encountered while closing the destination, in which case it will be rejected with that error.
-    
-    If destination starts out closed or closing, this source readable stream will be canceled, unless preventCancel is true. The returned promise will be rejected with an error indicating piping to a closed stream failed, or with any error that occurs during canceling the source.
-    
-    The signal option can be set to an AbortSignal to allow aborting an ongoing pipe operation via the corresponding AbortController. In this case, this source readable stream will be canceled, and destination aborted, unless the respective options preventCancel or preventAbort are set.
-  *)
-  val get_preventClose: 'tags this -> bool [@@js.get "preventClose"]
-  
-  (**
-    Pipes this readable stream to a given writable stream destination. The way in which the piping process behaves under various error conditions can be customized with a number of passed options. It returns a promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered.
-    
-    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
-    
-    Errors and closures of the source and destination streams propagate as follows:
-    
-    An error in this source readable stream will abort destination, unless preventAbort is truthy. The returned promise will be rejected with the source's error, or with any error that occurs during aborting the destination.
-    
-    An error in destination will cancel this source readable stream, unless preventCancel is truthy. The returned promise will be rejected with the destination's error, or with any error that occurs during canceling the source.
-    
-    When this source readable stream closes, destination will be closed, unless preventClose is truthy. The returned promise will be fulfilled once this process completes, unless an error is encountered while closing the destination, in which case it will be rejected with that error.
-    
-    If destination starts out closed or closing, this source readable stream will be canceled, unless preventCancel is true. The returned promise will be rejected with an error indicating piping to a closed stream failed, or with any error that occurs during canceling the source.
-    
-    The signal option can be set to an AbortSignal to allow aborting an ongoing pipe operation via the corresponding AbortController. In this case, this source readable stream will be canceled, and destination aborted, unless the respective options preventCancel or preventAbort are set.
-  *)
-  val set_preventClose: 'tags this -> bool -> unit [@@js.set "preventClose"]
-  val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
-  val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface522 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WritableStreamDefaultController.t [@@js.get "prototype"]
-  val set_prototype: t -> WritableStreamDefaultController.t -> unit [@@js.set "prototype"]
-  val create: t -> WritableStreamDefaultController.t [@@js.apply_newable]
-end
-
-(** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. *)
-and[@js.scope "WritableStreamDefaultController"] WritableStreamDefaultController : sig
-  type t = [`WritableStreamDefaultController] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WritableStreamDefaultController]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WritableStreamDefaultController]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WritableStreamDefaultController ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val error: 'tags this -> ?e:any -> unit -> unit [@@js.call "error"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module UnderlyingSinkWriteCallback : sig
-  type 'W t = [`UnderlyingSinkWriteCallback of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
-  type 'W t_1 = 'W t
-  [@@@js.stop]
-  type 'W tags = [`UnderlyingSinkWriteCallback of 'W]
-  type 'W tags_1 = 'W tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'W tags = [`UnderlyingSinkWriteCallback of 'W]
-    type 'W tags_1 = 'W tags
-  ]
-  type ('tags, 'W) this = 'tags intf constraint 'tags = [> `UnderlyingSinkWriteCallback of 'W ]
-  val t_to_js: ('W -> Ojs.t) -> 'W t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
-  val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
-  val apply: ('tags, 'W) this -> chunk:'W -> controller:WritableStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
-  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSinkStartCallback : sig
-  type t = [`UnderlyingSinkStartCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`UnderlyingSinkStartCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`UnderlyingSinkStartCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSinkStartCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> controller:WritableStreamDefaultController.t -> any [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSinkCloseCallback : sig
-  type t = [`UnderlyingSinkCloseCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`UnderlyingSinkCloseCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`UnderlyingSinkCloseCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSinkCloseCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSinkAbortCallback : sig
-  type t = [`UnderlyingSinkAbortCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`UnderlyingSinkAbortCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`UnderlyingSinkAbortCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSinkAbortCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSink : sig
-  type 'W t = [`UnderlyingSink of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
-  type 'W t_1 = 'W t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'W tags = [`UnderlyingSink of 'W]
-  type 'W tags_1 = 'W tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'W tags = [`UnderlyingSink of 'W]
-    type 'W tags_1 = 'W tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'W) this = 'tags intf constraint 'tags = [> `UnderlyingSink of 'W ]
-  val t_to_js: ('W -> Ojs.t) -> 'W t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
-  val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_abort: ('tags, 'W) this -> UnderlyingSinkAbortCallback.t [@@js.get "abort"]
-  val set_abort: ('tags, 'W) this -> UnderlyingSinkAbortCallback.t -> unit [@@js.set "abort"]
-  val get_close: ('tags, 'W) this -> UnderlyingSinkCloseCallback.t [@@js.get "close"]
-  val set_close: ('tags, 'W) this -> UnderlyingSinkCloseCallback.t -> unit [@@js.set "close"]
-  val get_start: ('tags, 'W) this -> UnderlyingSinkStartCallback.t [@@js.get "start"]
-  val set_start: ('tags, 'W) this -> UnderlyingSinkStartCallback.t -> unit [@@js.set "start"]
-  val get_type: ('tags, 'W) this -> never or_undefined [@@js.get "type"]
-  val set_type: ('tags, 'W) this -> never or_undefined -> unit [@@js.set "type"]
-  val get_write: ('tags, 'W) this -> 'W UnderlyingSinkWriteCallback.t [@@js.get "write"]
-  val set_write: ('tags, 'W) this -> 'W UnderlyingSinkWriteCallback.t -> unit [@@js.set "write"]
-  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
-end
-module QueuingStrategySize : sig
-  type 'T t = [`QueuingStrategySize of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
-  type 'T t_1 = 'T t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'T tags = [`QueuingStrategySize of 'T]
-  type 'T tags_1 = 'T tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'T tags = [`QueuingStrategySize of 'T]
-    type 'T tags_1 = 'T tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'T) this = 'tags intf constraint 'tags = [> `QueuingStrategySize of 'T ]
-  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
-  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: ('tags, 'T) this -> ?chunk:'T -> unit -> float [@@js.apply]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
-end
-module QueuingStrategy : sig
-  type 'T t = [`QueuingStrategy of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
-  type 'T t_1 = 'T t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'T tags = [`QueuingStrategy of 'T]
-  type 'T tags_1 = 'T tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'T tags = [`QueuingStrategy of 'T]
-    type 'T tags_1 = 'T tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'T) this = 'tags intf constraint 'tags = [> `QueuingStrategy of 'T ]
-  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
-  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_highWaterMark: ('tags, 'T) this -> float [@@js.get "highWaterMark"]
-  val set_highWaterMark: ('tags, 'T) this -> float -> unit [@@js.set "highWaterMark"]
-  val get_size: ('tags, 'T) this -> 'T QueuingStrategySize.t [@@js.get "size"]
-  val set_size: ('tags, 'T) this -> 'T QueuingStrategySize.t -> unit [@@js.set "size"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface521 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WritableStream.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> WritableStream.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ?underlyingSink:'W UnderlyingSink.t -> ?strategy:'W QueuingStrategy.t -> unit -> 'W WritableStream.t [@@js.apply_newable]
-end
-and AnonymousInterface523 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WritableStreamDefaultWriter.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> WritableStreamDefaultWriter.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> stream:'W WritableStream.t -> 'W WritableStreamDefaultWriter.t [@@js.apply_newable]
-end
-
-(** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. *)
-and[@js.scope "WritableStream"] WritableStream : sig
-  type 'W t = [`WritableStream of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
-  type 'W t_1 = 'W t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'W tags = [`WritableStream of 'W]
-  type 'W tags_1 = 'W tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'W tags = [`WritableStream of 'W]
-    type 'W tags_1 = 'W tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'W) this = 'tags intf constraint 'tags = [> `WritableStream of 'W ]
-  val t_to_js: ('W -> Ojs.t) -> 'W t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
-  val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_locked: ('tags, 'W) this -> bool [@@js.get "locked"]
-  val abort: ('tags, 'W) this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "abort"]
-  val close: ('tags, 'W) this -> unit Promise.t_1 [@@js.call "close"]
-  val getWriter: ('tags, 'W) this -> 'W WritableStreamDefaultWriter.t [@@js.call "getWriter"]
-  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: ?underlyingSink:'W UnderlyingSink.t -> ?strategy:'W QueuingStrategy.t -> unit -> 'W t [@@js.create]
-end
-
-(** This Streams API interface is the object returned by WritableStream.getWriter() and once created locks the < writer to the WritableStream ensuring that no other streams can write to the underlying sink. *)
-and[@js.scope "WritableStreamDefaultWriter"] WritableStreamDefaultWriter : sig
-  type 'W t = [`WritableStreamDefaultWriter of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
-  type 'W t_1 = 'W t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'W tags = [`WritableStreamDefaultWriter of 'W]
-  type 'W tags_1 = 'W tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'W tags = [`WritableStreamDefaultWriter of 'W]
-    type 'W tags_1 = 'W tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'W) this = 'tags intf constraint 'tags = [> `WritableStreamDefaultWriter of 'W ]
-  val t_to_js: ('W -> Ojs.t) -> 'W t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
-  val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_closed: ('tags, 'W) this -> never or_undefined Promise.t_1 [@@js.get "closed"]
-  val get_desiredSize: ('tags, 'W) this -> float or_null [@@js.get "desiredSize"]
-  val get_ready: ('tags, 'W) this -> never or_undefined Promise.t_1 [@@js.get "ready"]
-  val abort: ('tags, 'W) this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "abort"]
-  val close: ('tags, 'W) this -> unit Promise.t_1 [@@js.call "close"]
-  val releaseLock: ('tags, 'W) this -> unit [@@js.call "releaseLock"]
-  val write: ('tags, 'W) this -> ?chunk:'W -> unit -> unit Promise.t_1 [@@js.call "write"]
-  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: 'W WritableStream.t -> 'W t [@@js.create]
-end
-module ReadableStreamGenericReader : sig
-  type t = [`ReadableStreamGenericReader] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ReadableStreamGenericReader]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ReadableStreamGenericReader]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ReadableStreamGenericReader ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_closed: 'tags this -> never or_undefined Promise.t_1 [@@js.get "closed"]
-  val cancel: 'tags this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "cancel"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module ReadableStreamDefaultReadValueResult : sig
-  type 'T t = [`ReadableStreamDefaultReadValueResult of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
-  type 'T t_1 = 'T t
-  [@@@js.stop]
-  type 'T tags = [`ReadableStreamDefaultReadValueResult of 'T]
-  type 'T tags_1 = 'T tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'T tags = [`ReadableStreamDefaultReadValueResult of 'T]
-    type 'T tags_1 = 'T tags
-  ]
-  type ('tags, 'T) this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultReadValueResult of 'T ]
-  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
-  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-  val get_done: ('tags, 'T) this -> ([`L_b_false[@js false]] [@js.enum]) [@@js.get "done"]
-  val set_done: ('tags, 'T) this -> ([`L_b_false[@js false]] [@js.enum]) -> unit [@@js.set "done"]
-  val get_value: ('tags, 'T) this -> 'T [@@js.get "value"]
-  val set_value: ('tags, 'T) this -> 'T -> unit [@@js.set "value"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
-end
-module ReadableStreamDefaultReadDoneResult : sig
-  type t = [`ReadableStreamDefaultReadDoneResult] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ReadableStreamDefaultReadDoneResult]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ReadableStreamDefaultReadDoneResult]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultReadDoneResult ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_done: 'tags this -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "done"]
-  val set_done: 'tags this -> ([`L_b_true[@js true]] [@js.enum]) -> unit [@@js.set "done"]
-  val get_value: 'tags this -> never or_undefined [@@js.get "value"]
-  val set_value: 'tags this -> never or_undefined -> unit [@@js.set "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module ReadableStreamDefaultReadResult : sig
-  type 'T t = ([`U_b_false of 'T ReadableStreamDefaultReadValueResult.t [@js false] | `U_b_true of ReadableStreamDefaultReadDoneResult.t [@js true]] [@js.union on_field "done"])
-  type 'T t_1 = 'T t
-  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
-  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-end
-module rec AnonymousInterface338 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ReadableStreamDefaultController.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ReadableStreamDefaultController.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ReadableStreamDefaultController.t_0 [@@js.apply_newable]
-end
-and[@js.scope "ReadableStreamDefaultController"] ReadableStreamDefaultController : sig
-  type 'R t = [`ReadableStreamDefaultController of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'R tags = [`ReadableStreamDefaultController of 'R]
-  type 'R tags_1 = 'R tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`ReadableStreamDefaultController of 'R]
-    type 'R tags_1 = 'R tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultController of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_desiredSize: ('tags, 'R) this -> float or_null [@@js.get "desiredSize"]
-  val close: ('tags, 'R) this -> unit [@@js.call "close"]
-  val enqueue: ('tags, 'R) this -> ?chunk:'R -> unit -> unit [@@js.call "enqueue"]
-  val error: ('tags, 'R) this -> ?e:any -> unit -> unit [@@js.call "error"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: unit -> t_0 [@@js.create]
-end
-module ReadableStreamController : sig
-  type 'T t = 'T ReadableStreamDefaultController.t
-  type 'T t_1 = 'T t
-  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
-  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-end
-module UnderlyingSourceStartCallback : sig
-  type 'R t = [`UnderlyingSourceStartCallback of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  [@@@js.stop]
-  type 'R tags = [`UnderlyingSourceStartCallback of 'R]
-  type 'R tags_1 = 'R tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`UnderlyingSourceStartCallback of 'R]
-    type 'R tags_1 = 'R tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSourceStartCallback of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> any [@@js.apply]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSourcePullCallback : sig
-  type 'R t = [`UnderlyingSourcePullCallback of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  [@@@js.stop]
-  type 'R tags = [`UnderlyingSourcePullCallback of 'R]
-  type 'R tags_1 = 'R tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`UnderlyingSourcePullCallback of 'R]
-    type 'R tags_1 = 'R tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSourcePullCallback of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSourceCancelCallback : sig
-  type t = [`UnderlyingSourceCancelCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`UnderlyingSourceCancelCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`UnderlyingSourceCancelCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSourceCancelCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSource : sig
-  type 'R t = [`UnderlyingSource of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'R tags = [`UnderlyingSource of 'R]
-  type 'R tags_1 = 'R tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`UnderlyingSource of 'R]
-    type 'R tags_1 = 'R tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSource of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_cancel: ('tags, 'R) this -> UnderlyingSourceCancelCallback.t [@@js.get "cancel"]
-  val set_cancel: ('tags, 'R) this -> UnderlyingSourceCancelCallback.t -> unit [@@js.set "cancel"]
-  val get_pull: ('tags, 'R) this -> 'R UnderlyingSourcePullCallback.t [@@js.get "pull"]
-  val set_pull: ('tags, 'R) this -> 'R UnderlyingSourcePullCallback.t -> unit [@@js.set "pull"]
-  val get_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t [@@js.get "start"]
-  val set_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t -> unit [@@js.set "start"]
-  val get_type: ('tags, 'R) this -> never or_undefined [@@js.get "type"]
-  val set_type: ('tags, 'R) this -> never or_undefined -> unit [@@js.set "type"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface337 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ReadableStream.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ReadableStream.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ?underlyingSource:'R UnderlyingSource.t -> ?strategy:'R QueuingStrategy.t -> unit -> 'R ReadableStream.t [@@js.apply_newable]
-end
-and AnonymousInterface339 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ReadableStreamDefaultReader.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ReadableStreamDefaultReader.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> stream:'R ReadableStream.t -> 'R ReadableStreamDefaultReader.t [@@js.apply_newable]
-end
-
-(** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. *)
-and[@js.scope "ReadableStream"] ReadableStream : sig
-  type 'R t = [`ReadableStream of 'R | any IterableIterator.tags_1] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'R tags = [`ReadableStream of 'R | any IterableIterator.tags_1]
-  type 'R tags_1 = 'R tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`ReadableStream of 'R | any IterableIterator.tags_1]
-    type 'R tags_1 = 'R tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `ReadableStream of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val entries: ('tags, 'R) this -> (float * any) IterableIterator.t_1 [@@js.call "entries"]
-  val keys: ('tags, 'R) this -> float IterableIterator.t_1 [@@js.call "keys"]
-  val values: ('tags, 'R) this -> any IterableIterator.t_1 [@@js.call "values"]
-  val get_locked: ('tags, 'R) this -> bool [@@js.get "locked"]
-  val cancel: ('tags, 'R) this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "cancel"]
-  val getReader: ('tags, 'R) this -> 'R ReadableStreamDefaultReader.t [@@js.call "getReader"]
-  val pipeThrough: ('tags, 'R) this -> transform:('T, 'R) ReadableWritablePair.t -> ?options:StreamPipeOptions.t -> unit -> 'T t [@@js.call "pipeThrough"]
-  val pipeTo: ('tags, 'R) this -> destination:'R WritableStream.t -> ?options:StreamPipeOptions.t -> unit -> unit Promise.t_1 [@@js.call "pipeTo"]
-  val tee: ('tags, 'R) this -> ('R t * 'R t) [@@js.call "tee"]
-  val forEach: ('tags, 'R) this -> callbackfn:(value:any -> key:float -> parent:'R t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: ?underlyingSource:'R UnderlyingSource.t -> ?strategy:'R QueuingStrategy.t -> unit -> 'R t [@@js.create]
-end
-and[@js.scope "ReadableStreamDefaultReader"] ReadableStreamDefaultReader : sig
-  type 'R t = [`ReadableStreamDefaultReader of 'R | `ReadableStreamGenericReader] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'R tags = [`ReadableStreamDefaultReader of 'R | `ReadableStreamGenericReader]
-  type 'R tags_1 = 'R tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`ReadableStreamDefaultReader of 'R | `ReadableStreamGenericReader]
-    type 'R tags_1 = 'R tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultReader of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val read: ('tags, 'R) this -> 'R ReadableStreamDefaultReadResult.t Promise.t_1 [@@js.call "read"]
-  val releaseLock: ('tags, 'R) this -> unit [@@js.call "releaseLock"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: 'R ReadableStream.t -> 'R t [@@js.create]
-end
-and ReadableWritablePair : sig
-  type ('R, 'W) t = [`ReadableWritablePair of ('R * 'W)] intf [@@js.custom { of_js=(fun _R _W -> Obj.magic); to_js=(fun _R _W -> Obj.magic) }]
-  type ('R, 'W) t_2 = ('R, 'W) t
-  type 'R t_1 = ('R, any) t
-  type t_0 = (any, any) t
-  [@@@js.stop]
-  type ('R, 'W) tags = [`ReadableWritablePair of ('R * 'W)]
-  type ('R, 'W) tags_2 = ('R, 'W) tags
-  type 'R tags_1 = ('R, any) tags
-  type tags_0 = (any, any) tags
-  [@@@js.start]
-  [@@@js.implem 
-    type ('R, 'W) tags = [`ReadableWritablePair of ('R * 'W)]
-    type ('R, 'W) tags_2 = ('R, 'W) tags
-    type 'R tags_1 = ('R, any) tags
-    type tags_0 = (any, any) tags
-  ]
-  type ('tags, 'R, 'W) this = 'tags intf constraint 'tags = [> `ReadableWritablePair of ('R * 'W) ]
-  val t_to_js: ('R -> Ojs.t) -> ('W -> Ojs.t) -> ('R, 'W) t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> (Ojs.t -> 'W) -> Ojs.t -> ('R, 'W) t
-  val t_2_to_js: ('R -> Ojs.t) -> ('W -> Ojs.t) -> ('R, 'W) t_2 -> Ojs.t
-  val t_2_of_js: (Ojs.t -> 'R) -> (Ojs.t -> 'W) -> Ojs.t -> ('R, 'W) t_2
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_readable: ('tags, 'R, 'W) this -> 'R ReadableStream.t [@@js.get "readable"]
-  val set_readable: ('tags, 'R, 'W) this -> 'R ReadableStream.t -> unit [@@js.set "readable"]
-  
-  (**
-    Provides a convenient, chainable way of piping this readable stream through a transform stream (or any other \{ writable, readable \} pair). It simply pipes the stream into the writable side of the supplied pair, and returns the readable side for further use.
-    
-    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
-  *)
-  val get_writable: ('tags, 'R, 'W) this -> 'W WritableStream.t [@@js.get "writable"]
-  
-  (**
-    Provides a convenient, chainable way of piping this readable stream through a transform stream (or any other \{ writable, readable \} pair). It simply pipes the stream into the writable side of the supplied pair, and returns the readable side for further use.
-    
-    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
-  *)
-  val set_writable: ('tags, 'R, 'W) this -> 'W WritableStream.t -> unit [@@js.set "writable"]
-  val cast_from: (('tags, 'R, 'W) this -> ('R, 'W) t) [@@js.custom let cast_from = Obj.magic]
-end
-module EndingType : sig
-  type t = ([`L_s512_native[@js "native"] | `L_s785_transparent[@js "transparent"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module BlobPropertyBag : sig
-  type t = [`BlobPropertyBag] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`BlobPropertyBag]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`BlobPropertyBag]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `BlobPropertyBag ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_endings: 'tags this -> EndingType.t [@@js.get "endings"]
-  val set_endings: 'tags this -> EndingType.t -> unit [@@js.set "endings"]
-  val get_type: 'tags this -> string [@@js.get "type"]
-  val set_type: 'tags this -> string -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface30 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Blob.t [@@js.get "prototype"]
-  val set_prototype: t -> Blob.t -> unit [@@js.set "prototype"]
-  val create: t -> ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> Blob.t [@@js.apply_newable]
-end
-
-(** A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system. *)
-and[@js.scope "Blob"] Blob : sig
-  type t = [`Blob] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`Blob]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Blob]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `Blob ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_size: 'tags this -> float [@@js.get "size"]
-  val get_type: 'tags this -> string [@@js.get "type"]
-  val arrayBuffer: 'tags this -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "arrayBuffer"]
-  val slice: 'tags this -> ?start:float -> ?end_:float -> ?contentType:string -> unit -> t [@@js.call "slice"]
-  val stream: 'tags this -> ReadableStream.t_0 [@@js.call "stream"]
-  val text: 'tags this -> string Promise.t_1 [@@js.call "text"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> t [@@js.create]
-end
-and BlobPart : sig
-  type t = (Blob.t, BufferSource.t) union2 or_string
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
 end
 module BlobEventInit : sig
   type t = [`BlobEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5563,7 +5675,7 @@ module AssignedNodesOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module SlotAssignmentMode : sig
-  type t = ([`L_s477_manual[@js "manual"] | `L_s511_named[@js "named"]] [@js.enum])
+  type t = ([`L_s476_manual[@js "manual"] | `L_s510_named[@js "named"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5571,7 +5683,7 @@ module SlotAssignmentMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ShadowRootMode : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s545_open[@js "open"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s544_open[@js "open"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5603,7 +5715,7 @@ module ShadowRootInit : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ScrollLogicalPosition : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s516_nearest[@js "nearest"] | `L_s724_start[@js "start"]] [@js.enum])
+  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s515_nearest[@js "nearest"] | `L_s723_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5611,7 +5723,7 @@ module ScrollLogicalPosition : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ScrollBehavior : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s706_smooth[@js "smooth"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s705_smooth[@js "smooth"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5667,26 +5779,6 @@ module InsertPosition : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-end
-module InnerHTML : sig
-  type t = [`InnerHTML] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`InnerHTML]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`InnerHTML]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `InnerHTML ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_innerHTML: 'tags this -> string [@@js.get "innerHTML"]
-  val set_innerHTML: 'tags this -> string -> unit [@@js.set "innerHTML"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module TransitionEventInit : sig
   type t = [`EventInit | `TransitionEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5746,7 +5838,7 @@ and[@js.scope "TransitionEvent"] TransitionEvent : sig
   val create: type_:string -> ?transitionEventInitDict:TransitionEventInit.t -> unit -> t [@@js.create]
 end
 module TouchType : sig
-  type t = ([`L_s253_direct[@js "direct"] | `L_s734_stylus[@js "stylus"]] [@js.enum])
+  type t = ([`L_s253_direct[@js "direct"] | `L_s733_stylus[@js "stylus"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -6052,18 +6144,18 @@ module WindowSessionStorage : sig
   val get_sessionStorage: 'tags this -> Storage.t [@@js.get "sessionStorage"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module PostMessageOptions : sig
-  type t = [`PostMessageOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module StructuredSerializeOptions : sig
+  type t = [`StructuredSerializeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`PostMessageOptions]
+  type tags = [`StructuredSerializeOptions]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`PostMessageOptions]
+    type tags = [`StructuredSerializeOptions]
     type tags_0 = tags
   ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PostMessageOptions ]
+  type 'tags this = 'tags intf constraint 'tags = [> `StructuredSerializeOptions ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
@@ -6073,14 +6165,14 @@ module PostMessageOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module WindowPostMessageOptions : sig
-  type t = [`PostMessageOptions | `WindowPostMessageOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t = [`StructuredSerializeOptions | `WindowPostMessageOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`PostMessageOptions | `WindowPostMessageOptions]
+  type tags = [`StructuredSerializeOptions | `WindowPostMessageOptions]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`PostMessageOptions | `WindowPostMessageOptions]
+    type tags = [`StructuredSerializeOptions | `WindowPostMessageOptions]
     type tags_0 = tags
   ]
   type 'tags this = 'tags intf constraint 'tags = [> `WindowPostMessageOptions ]
@@ -7174,6 +7266,8 @@ module HTMLOrSVGElement : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val get_autofocus: 'tags this -> bool [@@js.get "autofocus"]
+  val set_autofocus: 'tags this -> bool -> unit [@@js.set "autofocus"]
   val get_dataset: 'tags this -> DOMStringMap.t [@@js.get "dataset"]
   val get_nonce: 'tags this -> string [@@js.get "nonce"]
   val set_nonce: 'tags this -> string -> unit [@@js.set "nonce"]
@@ -7648,7 +7742,7 @@ and[@js.scope "WebGLFramebuffer"] WebGLFramebuffer : sig
   val create: unit -> t [@@js.create]
 end
 module WebGLPowerPreference : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s383_high_performance[@js "high-performance"] | `L_s468_low_power[@js "low-power"]] [@js.enum])
+  type t = ([`L_s237_default[@js "default"] | `L_s382_high_performance[@js "high-performance"] | `L_s467_low_power[@js "low-power"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7735,8 +7829,7 @@ module WEBGL_draw_buffers : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val drawBuffersWEBGL: 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffersWEBGL"]
-  val drawBuffersWEBGL': 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffersWEBGL"]
+  val drawBuffersWEBGL: 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffersWEBGL"]
   val get_COLOR_ATTACHMENT0_WEBGL: 'tags this -> GLenum.t [@@js.get "COLOR_ATTACHMENT0_WEBGL"]
   val get_COLOR_ATTACHMENT10_WEBGL: 'tags this -> GLenum.t [@@js.get "COLOR_ATTACHMENT10_WEBGL"]
   val get_COLOR_ATTACHMENT11_WEBGL: 'tags this -> GLenum.t [@@js.get "COLOR_ATTACHMENT11_WEBGL"]
@@ -7771,6 +7864,7 @@ module WEBGL_draw_buffers : sig
   val get_DRAW_BUFFER9_WEBGL: 'tags this -> GLenum.t [@@js.get "DRAW_BUFFER9_WEBGL"]
   val get_MAX_COLOR_ATTACHMENTS_WEBGL: 'tags this -> GLenum.t [@@js.get "MAX_COLOR_ATTACHMENTS_WEBGL"]
   val get_MAX_DRAW_BUFFERS_WEBGL: 'tags this -> GLenum.t [@@js.get "MAX_DRAW_BUFFERS_WEBGL"]
+  val drawBuffersWEBGL': 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffersWEBGL"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -8855,7 +8949,7 @@ and[@js.scope "PictureInPictureWindow"] PictureInPictureWindow : sig
   val create: unit -> t [@@js.create]
 end
 module TextTrackMode : sig
-  type t = ([`L_s254_disabled[@js "disabled"] | `L_s380_hidden[@js "hidden"] | `L_s697_showing[@js "showing"]] [@js.enum])
+  type t = ([`L_s254_disabled[@js "disabled"] | `L_s379_hidden[@js "hidden"] | `L_s696_showing[@js "showing"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8863,7 +8957,7 @@ module TextTrackMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module TextTrackKind : sig
-  type t = ([`L_s183_captions[@js "captions"] | `L_s188_chapters[@js "chapters"] | `L_s244_descriptions[@js "descriptions"] | `L_s494_metadata[@js "metadata"] | `L_s737_subtitles[@js "subtitles"]] [@js.enum])
+  type t = ([`L_s183_captions[@js "captions"] | `L_s188_chapters[@js "chapters"] | `L_s244_descriptions[@js "descriptions"] | `L_s493_metadata[@js "metadata"] | `L_s736_subtitles[@js "subtitles"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9398,336 +9492,6 @@ and[@js.scope "RemotePlayback"] RemotePlayback : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface481 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TimeRanges.t [@@js.get "prototype"]
-  val set_prototype: t -> TimeRanges.t -> unit [@@js.set "prototype"]
-  val create: t -> TimeRanges.t [@@js.apply_newable]
-end
-
-(** Used to represent a set of time ranges, primarily for the purpose of tracking which portions of media have been buffered when loading it for use by the <audio> and <video> elements. *)
-and[@js.scope "TimeRanges"] TimeRanges : sig
-  type t = [`TimeRanges] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`TimeRanges]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`TimeRanges]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TimeRanges ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Returns the number of ranges in the object. *)
-  val get_length: 'tags this -> float [@@js.get "length"]
-  
-  (**
-    Returns the time for the end of the range with the given index.
-    
-    Throws an "IndexSizeError" DOMException if the index is out of range.
-  *)
-  val end_: 'tags this -> index:float -> float [@@js.call "end"]
-  
-  (**
-    Returns the time for the start of the range with the given index.
-    
-    Throws an "IndexSizeError" DOMException if the index is out of range.
-  *)
-  val start: 'tags this -> index:float -> float [@@js.call "start"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AppendMode : sig
-  type t = ([`L_s685_segments[@js "segments"] | `L_s693_sequence[@js "sequence"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module rec AnonymousInterface451 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SourceBuffer.t [@@js.get "prototype"]
-  val set_prototype: t -> SourceBuffer.t -> unit [@@js.set "prototype"]
-  val create: t -> SourceBuffer.t [@@js.apply_newable]
-end
-
-(** A chunk of media to be passed into an HTMLMediaElement and played, via a MediaSource object. This can be made up of one or several media segments. *)
-and[@js.scope "SourceBuffer"] SourceBuffer : sig
-  type t = [`EventTarget | `SourceBuffer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `SourceBuffer]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `SourceBuffer]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SourceBuffer ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_appendWindowEnd: 'tags this -> float [@@js.get "appendWindowEnd"]
-  val set_appendWindowEnd: 'tags this -> float -> unit [@@js.set "appendWindowEnd"]
-  val get_appendWindowStart: 'tags this -> float [@@js.get "appendWindowStart"]
-  val set_appendWindowStart: 'tags this -> float -> unit [@@js.set "appendWindowStart"]
-  val get_buffered: 'tags this -> TimeRanges.t [@@js.get "buffered"]
-  val get_mode: 'tags this -> AppendMode.t [@@js.get "mode"]
-  val set_mode: 'tags this -> AppendMode.t -> unit [@@js.set "mode"]
-  val get_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onabort"]
-  val set_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onabort"]
-  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onupdate: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onupdate"]
-  val set_onupdate: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onupdate"]
-  val get_onupdateend: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onupdateend"]
-  val set_onupdateend: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onupdateend"]
-  val get_onupdatestart: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onupdatestart"]
-  val set_onupdatestart: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onupdatestart"]
-  val get_timestampOffset: 'tags this -> float [@@js.get "timestampOffset"]
-  val set_timestampOffset: 'tags this -> float -> unit [@@js.set "timestampOffset"]
-  val get_updating: 'tags this -> bool [@@js.get "updating"]
-  val abort: 'tags this -> unit [@@js.call "abort"]
-  val appendBuffer: 'tags this -> data:BufferSource.t -> unit [@@js.call "appendBuffer"]
-  val changeType: 'tags this -> type_:string -> unit [@@js.call "changeType"]
-  val remove: 'tags this -> start:float -> end_:float -> unit [@@js.call "remove"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SourceBufferEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SourceBufferEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface452 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SourceBufferList.t [@@js.get "prototype"]
-  val set_prototype: t -> SourceBufferList.t -> unit [@@js.set "prototype"]
-  val create: t -> SourceBufferList.t [@@js.apply_newable]
-end
-
-(** A simple container list for multiple SourceBuffer objects. *)
-and[@js.scope "SourceBufferList"] SourceBufferList : sig
-  type t = [`EventTarget | `SourceBufferList | SourceBuffer.t ArrayLike.tags_1 | SourceBuffer.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `SourceBufferList | SourceBuffer.t ArrayLike.tags_1 | SourceBuffer.t IterableIterator.tags_1]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `SourceBufferList | SourceBuffer.t ArrayLike.tags_1 | SourceBuffer.t IterableIterator.tags_1]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SourceBufferList ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_length: 'tags this -> float [@@js.get "length"]
-  val get_onaddsourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onaddsourcebuffer"]
-  val set_onaddsourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onaddsourcebuffer"]
-  val get_onremovesourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onremovesourcebuffer"]
-  val set_onremovesourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onremovesourcebuffer"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SourceBufferListEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SourceBufferListEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val get: 'tags this -> float -> SourceBuffer.t [@@js.index_get]
-  val set: 'tags this -> float -> SourceBuffer.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module ReadyState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s280_ended[@js "ended"] | `L_s545_open[@js "open"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module EndOfStreamError : sig
-  type t = ([`L_s235_decode[@js "decode"] | `L_s518_network[@js "network"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module rec AnonymousInterface254 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaSource.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaSource.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaSource.t [@@js.apply_newable]
-  val isTypeSupported: t -> type_:string -> bool [@@js.call "isTypeSupported"]
-end
-
-(** This Media Source Extensions API interface represents a source of media data for an HTMLMediaElement object. A MediaSource object can be attached to a HTMLMediaElement to be played in the user agent. *)
-and[@js.scope "MediaSource"] MediaSource : sig
-  type t = [`EventTarget | `MediaSource] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `MediaSource]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `MediaSource]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `MediaSource ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_activeSourceBuffers: 'tags this -> SourceBufferList.t [@@js.get "activeSourceBuffers"]
-  val get_duration: 'tags this -> float [@@js.get "duration"]
-  val set_duration: 'tags this -> float -> unit [@@js.set "duration"]
-  val get_onsourceclose: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onsourceclose"]
-  val set_onsourceclose: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsourceclose"]
-  val get_onsourceended: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onsourceended"]
-  val set_onsourceended: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsourceended"]
-  val get_onsourceopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onsourceopen"]
-  val set_onsourceopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsourceopen"]
-  val get_readyState: 'tags this -> ReadyState.t [@@js.get "readyState"]
-  val get_sourceBuffers: 'tags this -> SourceBufferList.t [@@js.get "sourceBuffers"]
-  val addSourceBuffer: 'tags this -> type_:string -> SourceBuffer.t [@@js.call "addSourceBuffer"]
-  val clearLiveSeekableRange: 'tags this -> unit [@@js.call "clearLiveSeekableRange"]
-  val endOfStream: 'tags this -> ?error:EndOfStreamError.t -> unit -> unit [@@js.call "endOfStream"]
-  val removeSourceBuffer: 'tags this -> sourceBuffer:SourceBuffer.t -> unit [@@js.call "removeSourceBuffer"]
-  val setLiveSeekableRange: 'tags this -> start:float -> end_:float -> unit [@@js.call "setLiveSeekableRange"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaSourceEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaSourceEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-  val isTypeSupported: string -> bool [@@js.global "isTypeSupported"]
-end
 module MediaProvider : sig
   type t = (Blob.t, MediaSource.t, MediaStream.t) union3
   type t_0 = t
@@ -9736,7 +9500,7 @@ module MediaProvider : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface241 : sig
+module rec AnonymousInterface242 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9802,7 +9566,7 @@ module MediaEncryptedEventInit : sig
   val set_initDataType: 'tags this -> string -> unit [@@js.set "initDataType"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface240 : sig
+module rec AnonymousInterface241 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9833,7 +9597,7 @@ and[@js.scope "MediaEncryptedEvent"] MediaEncryptedEvent : sig
   val create: type_:string -> ?eventInitDict:MediaEncryptedEventInit.t -> unit -> t [@@js.create]
 end
 module CanPlayTypeResult : sig
-  type t = ([`L_s0[@js ""] | `L_s486_maybe[@js "maybe"] | `L_s617_probably[@js "probably"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s485_maybe[@js "maybe"] | `L_s616_probably[@js "probably"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9943,7 +9707,7 @@ module CanvasTransform : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasTextBaseline : sig
-  type t = ([`L_s110_alphabetic[@js "alphabetic"] | `L_s169_bottom[@js "bottom"] | `L_s369_hanging[@js "hanging"] | `L_s399_ideographic[@js "ideographic"] | `L_s496_middle[@js "middle"] | `L_s774_top[@js "top"]] [@js.enum])
+  type t = ([`L_s110_alphabetic[@js "alphabetic"] | `L_s169_bottom[@js "bottom"] | `L_s368_hanging[@js "hanging"] | `L_s398_ideographic[@js "ideographic"] | `L_s495_middle[@js "middle"] | `L_s773_top[@js "top"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9951,7 +9715,7 @@ module CanvasTextBaseline : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasTextAlign : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s441_left[@js "left"] | `L_s659_right[@js "right"] | `L_s724_start[@js "start"]] [@js.enum])
+  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s440_left[@js "left"] | `L_s658_right[@js "right"] | `L_s723_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9959,7 +9723,7 @@ module CanvasTextAlign : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasDirection : sig
-  type t = ([`L_s412_inherit[@js "inherit"] | `L_s472_ltr[@js "ltr"] | `L_s666_rtl[@js "rtl"]] [@js.enum])
+  type t = ([`L_s411_inherit[@js "inherit"] | `L_s471_ltr[@js "ltr"] | `L_s665_rtl[@js "rtl"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10111,7 +9875,7 @@ module CanvasShadowStyles : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module PredefinedColorSpace : sig
-  type t = ([`L_s259_display_p3[@js "display-p3"] | `L_s720_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s259_display_p3[@js "display-p3"] | `L_s719_srgb[@js "srgb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10166,7 +9930,7 @@ module CanvasRect : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasLineJoin : sig
-  type t = ([`L_s158_bevel[@js "bevel"] | `L_s497_miter[@js "miter"] | `L_s662_round[@js "round"]] [@js.enum])
+  type t = ([`L_s158_bevel[@js "bevel"] | `L_s496_miter[@js "miter"] | `L_s661_round[@js "round"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10174,7 +9938,7 @@ module CanvasLineJoin : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasLineCap : sig
-  type t = ([`L_s174_butt[@js "butt"] | `L_s662_round[@js "round"] | `L_s718_square[@js "square"]] [@js.enum])
+  type t = ([`L_s174_butt[@js "butt"] | `L_s661_round[@js "round"] | `L_s717_square[@js "square"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10197,7 +9961,6 @@ module CanvasPathDrawingStyles : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val setLineDash: 'tags this -> segments:float Iterable.t_1 -> unit [@@js.call "setLineDash"]
   val get_lineCap: 'tags this -> CanvasLineCap.t [@@js.get "lineCap"]
   val set_lineCap: 'tags this -> CanvasLineCap.t -> unit [@@js.set "lineCap"]
   val get_lineDashOffset: 'tags this -> float [@@js.get "lineDashOffset"]
@@ -10209,11 +9972,12 @@ module CanvasPathDrawingStyles : sig
   val get_miterLimit: 'tags this -> float [@@js.get "miterLimit"]
   val set_miterLimit: 'tags this -> float -> unit [@@js.set "miterLimit"]
   val getLineDash: 'tags this -> float list [@@js.call "getLineDash"]
-  val setLineDash': 'tags this -> segments:float list -> unit [@@js.call "setLineDash"]
+  val setLineDash: 'tags this -> segments:float list -> unit [@@js.call "setLineDash"]
+  val setLineDash': 'tags this -> segments:float Iterable.t_1 -> unit [@@js.call "setLineDash"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ImageSmoothingQuality : sig
-  type t = ([`L_s382_high[@js "high"] | `L_s467_low[@js "low"] | `L_s488_medium[@js "medium"]] [@js.enum])
+  type t = ([`L_s381_high[@js "high"] | `L_s466_low[@js "low"] | `L_s487_medium[@js "medium"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10262,7 +10026,7 @@ module ImageDataSettings : sig
   val set_colorSpace: 'tags this -> PredefinedColorSpace.t -> unit [@@js.set "colorSpace"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface226 : sig
+module rec AnonymousInterface227 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10443,7 +10207,7 @@ module CanvasPath : sig
   val rect: 'tags this -> x:float -> y:float -> w:float -> h:float -> unit [@@js.call "rect"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface284 : sig
+module rec AnonymousInterface285 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10477,7 +10241,7 @@ and[@js.scope "Path2D"] Path2D : sig
   val create: ?path:t or_string -> unit -> t [@@js.create]
 end
 module CanvasFillRule : sig
-  type t = ([`L_s289_evenodd[@js "evenodd"] | `L_s530_nonzero[@js "nonzero"]] [@js.enum])
+  type t = ([`L_s289_evenodd[@js "evenodd"] | `L_s529_nonzero[@js "nonzero"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10555,7 +10319,7 @@ module BlobCallback : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ResizeQuality : sig
-  type t = ([`L_s382_high[@js "high"] | `L_s467_low[@js "low"] | `L_s488_medium[@js "medium"] | `L_s583_pixelated[@js "pixelated"]] [@js.enum])
+  type t = ([`L_s381_high[@js "high"] | `L_s466_low[@js "low"] | `L_s487_medium[@js "medium"] | `L_s582_pixelated[@js "pixelated"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10563,7 +10327,7 @@ module ResizeQuality : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module PremultiplyAlpha : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s529_none[@js "none"] | `L_s609_premultiply[@js "premultiply"]] [@js.enum])
+  type t = ([`L_s237_default[@js "default"] | `L_s528_none[@js "none"] | `L_s608_premultiply[@js "premultiply"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10571,7 +10335,7 @@ module PremultiplyAlpha : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ImageOrientation : sig
-  type t = ([`L_s334_flipY[@js "flipY"] | `L_s529_none[@js "none"]] [@js.enum])
+  type t = ([`L_s334_flipY[@js "flipY"] | `L_s528_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10579,7 +10343,7 @@ module ImageOrientation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ColorSpaceConversion : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s529_none[@js "none"]] [@js.enum])
+  type t = ([`L_s237_default[@js "default"] | `L_s528_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10638,7 +10402,7 @@ module IDBVersionChangeEventInit : sig
   val set_oldVersion: 'tags this -> float -> unit [@@js.set "oldVersion"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface221 : sig
+module rec AnonymousInterface222 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10723,7 +10487,7 @@ module IDBValidKey : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module IDBTransactionMode : sig
-  type t = ([`L_s628_readonly[@js "readonly"] | `L_s629_readwrite[@js "readwrite"] | `L_s817_versionchange[@js "versionchange"]] [@js.enum])
+  type t = ([`L_s627_readonly[@js "readonly"] | `L_s628_readwrite[@js "readwrite"] | `L_s816_versionchange[@js "versionchange"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10731,14 +10495,14 @@ module IDBTransactionMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module IDBRequestReadyState : sig
-  type t = ([`L_s263_done[@js "done"] | `L_s577_pending[@js "pending"]] [@js.enum])
+  type t = ([`L_s263_done[@js "done"] | `L_s576_pending[@js "pending"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface216 : sig
+module rec AnonymousInterface217 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10808,7 +10572,7 @@ and[@js.scope "IDBKeyRange"] IDBKeyRange : sig
   val upperBound: upper:any -> ?open_:bool -> unit -> t [@@js.global "upperBound"]
 end
 module IDBCursorDirection : sig
-  type t = ([`L_s520_next[@js "next"] | `L_s522_nextunique[@js "nextunique"] | `L_s612_prev[@js "prev"] | `L_s614_prevunique[@js "prevunique"]] [@js.enum])
+  type t = ([`L_s519_next[@js "next"] | `L_s521_nextunique[@js "nextunique"] | `L_s611_prev[@js "prev"] | `L_s613_prevunique[@js "prevunique"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10856,7 +10620,7 @@ and[@js.scope "DOMStringList"] DOMStringList : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface211 : sig
+module rec AnonymousInterface212 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10864,7 +10628,7 @@ module rec AnonymousInterface211 : sig
   val set_prototype: t -> IDBCursor.t -> unit [@@js.set "prototype"]
   val create: t -> IDBCursor.t [@@js.apply_newable]
 end
-and AnonymousInterface212 : sig
+and AnonymousInterface213 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10872,7 +10636,7 @@ and AnonymousInterface212 : sig
   val set_prototype: t -> IDBCursorWithValue.t -> unit [@@js.set "prototype"]
   val create: t -> IDBCursorWithValue.t [@@js.apply_newable]
 end
-and AnonymousInterface213 : sig
+and AnonymousInterface214 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10880,7 +10644,7 @@ and AnonymousInterface213 : sig
   val set_prototype: t -> IDBDatabase.t -> unit [@@js.set "prototype"]
   val create: t -> IDBDatabase.t [@@js.apply_newable]
 end
-and AnonymousInterface215 : sig
+and AnonymousInterface216 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10888,7 +10652,7 @@ and AnonymousInterface215 : sig
   val set_prototype: t -> IDBIndex.t -> unit [@@js.set "prototype"]
   val create: t -> IDBIndex.t [@@js.apply_newable]
 end
-and AnonymousInterface217 : sig
+and AnonymousInterface218 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10896,7 +10660,7 @@ and AnonymousInterface217 : sig
   val set_prototype: t -> IDBObjectStore.t -> unit [@@js.set "prototype"]
   val create: t -> IDBObjectStore.t [@@js.apply_newable]
 end
-and AnonymousInterface219 : sig
+and AnonymousInterface220 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10904,7 +10668,7 @@ and AnonymousInterface219 : sig
   val set_prototype: t -> IDBRequest.t_0 -> unit [@@js.set "prototype"]
   val create: t -> IDBRequest.t_0 [@@js.apply_newable]
 end
-and AnonymousInterface220 : sig
+and AnonymousInterface221 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11016,9 +10780,6 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
-  (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
-  val transaction: 'tags this -> storeNames:string Iterable.t_1 or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
-  
   (** Returns the name of the database. *)
   val get_name: 'tags this -> string [@@js.get "name"]
   
@@ -11054,7 +10815,7 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   val deleteObjectStore: 'tags this -> name:string -> unit [@@js.call "deleteObjectStore"]
   
   (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
-  val transaction': 'tags this -> storeNames:string list or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
+  val transaction: 'tags this -> storeNames:string list or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -11095,6 +10856,9 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
+  val transaction': 'tags this -> storeNames:string Iterable.t_1 or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -11201,13 +10965,6 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
-  (**
-    Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
-    
-    Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
-  *)
-  val createIndex: 'tags this -> name:string -> keyPath:string Iterable.t_1 or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
-  
   (** Returns true if the store has a key generator, and false otherwise. *)
   val get_autoIncrement: 'tags this -> bool [@@js.get "autoIncrement"]
   
@@ -11256,7 +11013,7 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     
     Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
   *)
-  val createIndex': 'tags this -> name:string -> keyPath:string list or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
+  val createIndex: 'tags this -> name:string -> keyPath:string list or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
   
   (**
     Deletes records in store with the given key or in the given key range in query.
@@ -11325,6 +11082,13 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     If successful, request's result will be the record's key.
   *)
   val put: 'tags this -> value:any -> ?key:IDBValidKey.t -> unit -> IDBValidKey.t IDBRequest.t [@@js.call "put"]
+  
+  (**
+    Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
+    
+    Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
+  *)
+  val createIndex': 'tags this -> name:string -> keyPath:string Iterable.t_1 or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -11500,7 +11264,7 @@ and[@js.scope "IDBTransaction"] IDBTransaction : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface218 : sig
+module rec AnonymousInterface219 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11596,7 +11360,7 @@ module IDBDatabaseInfo : sig
   val set_version: 'tags this -> float -> unit [@@js.set "version"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface214 : sig
+module rec AnonymousInterface215 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11811,7 +11575,7 @@ module Pbkdf2Params : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module KeyFormat : sig
-  type t = ([`L_s427_jwk[@js "jwk"] | `L_s584_pkcs8[@js "pkcs8"] | `L_s627_raw[@js "raw"] | `L_s717_spki[@js "spki"]] [@js.enum])
+  type t = ([`L_s426_jwk[@js "jwk"] | `L_s583_pkcs8[@js "pkcs8"] | `L_s626_raw[@js "raw"] | `L_s716_spki[@js "spki"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11985,7 +11749,7 @@ module EcdsaParams : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module KeyUsage : sig
-  type t = ([`L_s236_decrypt[@js "decrypt"] | `L_s241_deriveBits[@js "deriveBits"] | `L_s242_deriveKey[@js "deriveKey"] | `L_s277_encrypt[@js "encrypt"] | `L_s698_sign[@js "sign"] | `L_s803_unwrapKey[@js "unwrapKey"] | `L_s816_verify[@js "verify"] | `L_s842_wrapKey[@js "wrapKey"]] [@js.enum])
+  type t = ([`L_s236_decrypt[@js "decrypt"] | `L_s241_deriveBits[@js "deriveBits"] | `L_s242_deriveKey[@js "deriveKey"] | `L_s277_encrypt[@js "encrypt"] | `L_s697_sign[@js "sign"] | `L_s802_unwrapKey[@js "unwrapKey"] | `L_s815_verify[@js "verify"] | `L_s841_wrapKey[@js "wrapKey"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11993,7 +11757,7 @@ module KeyUsage : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module KeyType : sig
-  type t = ([`L_s616_private[@js "private"] | `L_s621_public[@js "public"] | `L_s677_secret[@js "secret"]] [@js.enum])
+  type t = ([`L_s615_private[@js "private"] | `L_s620_public[@js "public"] | `L_s676_secret[@js "secret"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12029,7 +11793,10 @@ module rec AnonymousInterface74 : sig
   val create: t -> CryptoKey.t [@@js.apply_newable]
 end
 
-(** The CryptoKey dictionary of the Web Crypto API represents a cryptographic key. *)
+(**
+  The CryptoKey dictionary of the Web Crypto API represents a cryptographic key.
+  Available only in secure contexts.
+*)
 and[@js.scope "CryptoKey"] CryptoKey : sig
   type t = [`CryptoKey] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -12279,7 +12046,10 @@ module rec AnonymousInterface469 : sig
   val create: t -> SubtleCrypto.t [@@js.apply_newable]
 end
 
-(** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). *)
+(**
+  This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto).
+  Available only in secure contexts.
+*)
 and[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   type t = [`SubtleCrypto] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -12296,29 +12066,29 @@ and[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val deriveKey: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
-  val generateKey: 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
-  val importKey: 'tags this -> format:([`L_s427_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s427_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
   val decrypt: 'tags this -> algorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "decrypt"]
   val deriveBits: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> length:float -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "deriveBits"]
-  val deriveKey': 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
+  val deriveKey: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
   val digest: 'tags this -> algorithm:AlgorithmIdentifier.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "digest"]
   val encrypt: 'tags this -> algorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "encrypt"]
-  val exportKey: 'tags this -> format:([`L_s427_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t_1 [@@js.call "exportKey"]
-  val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s427_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> key:CryptoKey.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "exportKey"]
-  val generateKey''': 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey'''': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
-  val importKey'': 'tags this -> format:([`L_s427_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s427_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val exportKey: 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t_1 [@@js.call "exportKey"]
+  val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> key:CryptoKey.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "exportKey"]
+  val generateKey: 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
+  val importKey: 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
   val sign: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "sign"]
-  val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
+  val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
   val verify: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t_1 [@@js.call "verify"]
   val wrapKey: 'tags this -> format:KeyFormat.t -> key:CryptoKey.t -> wrappingKey:CryptoKey.t -> wrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "wrapKey"]
+  val deriveKey': 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
+  val generateKey''': 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey'''': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
+  val importKey'': 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -12349,6 +12119,8 @@ and[@js.scope "Crypto"] Crypto : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  
+  (** Available only in secure contexts. *)
   val get_subtle: 'tags this -> SubtleCrypto.t [@@js.get "subtle"]
   val getRandomValues: 'tags this -> array:'T -> 'T [@@js.call "getRandomValues"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
@@ -12400,14 +12172,14 @@ module MultiCacheQueryOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ResponseType : sig
-  type t = ([`L_s150_basic[@js "basic"] | `L_s222_cors[@js "cors"] | `L_s237_default[@js "default"] | `L_s287_error[@js "error"] | `L_s543_opaque[@js "opaque"] | `L_s544_opaqueredirect[@js "opaqueredirect"]] [@js.enum])
+  type t = ([`L_s150_basic[@js "basic"] | `L_s222_cors[@js "cors"] | `L_s237_default[@js "default"] | `L_s287_error[@js "error"] | `L_s542_opaque[@js "opaque"] | `L_s543_opaqueredirect[@js "opaqueredirect"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface209 : sig
+module rec AnonymousInterface210 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12433,6 +12205,12 @@ and[@js.scope "Headers"] Headers : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
+  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
+  val get_: 'tags this -> name:string -> string or_null [@@js.call "get"]
+  val has: 'tags this -> name:string -> bool [@@js.call "has"]
+  val set_: 'tags this -> name:string -> value:string -> unit [@@js.call "set"]
+  val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   
   (** Returns an iterator allowing to go through all key/value pairs contained in this object. *)
   val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
@@ -12442,12 +12220,6 @@ and[@js.scope "Headers"] Headers : sig
   
   (** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. *)
   val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
-  val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
-  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
-  val get_: 'tags this -> name:string -> string or_null [@@js.call "get"]
-  val has: 'tags this -> name:string -> bool [@@js.call "has"]
-  val set_: 'tags this -> name:string -> value:string -> unit [@@js.call "set"]
-  val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:HeadersInit.t -> unit -> t [@@js.create]
@@ -12485,7 +12257,7 @@ module ResponseInit : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RequestDestination : sig
-  type t = ([`L_s0[@js ""] | `L_s133_audio[@js "audio"] | `L_s139_audioworklet[@js "audioworklet"] | `L_s262_document[@js "document"] | `L_s275_embed[@js "embed"] | `L_s339_font[@js "font"] | `L_s347_frame[@js "frame"] | `L_s401_iframe[@js "iframe"] | `L_s402_image[@js "image"] | `L_s476_manifest[@js "manifest"] | `L_s536_object[@js "object"] | `L_s564_paintworklet[@js "paintworklet"] | `L_s650_report[@js "report"] | `L_s675_script[@js "script"] | `L_s695_sharedworker[@js "sharedworker"] | `L_s733_style[@js "style"] | `L_s780_track[@js "track"] | `L_s820_video[@js "video"] | `L_s841_worker[@js "worker"] | `L_s845_xslt[@js "xslt"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s133_audio[@js "audio"] | `L_s139_audioworklet[@js "audioworklet"] | `L_s262_document[@js "document"] | `L_s275_embed[@js "embed"] | `L_s339_font[@js "font"] | `L_s347_frame[@js "frame"] | `L_s400_iframe[@js "iframe"] | `L_s401_image[@js "image"] | `L_s475_manifest[@js "manifest"] | `L_s535_object[@js "object"] | `L_s563_paintworklet[@js "paintworklet"] | `L_s649_report[@js "report"] | `L_s674_script[@js "script"] | `L_s694_sharedworker[@js "sharedworker"] | `L_s732_style[@js "style"] | `L_s779_track[@js "track"] | `L_s819_video[@js "video"] | `L_s840_worker[@js "worker"] | `L_s845_xslt[@js "xslt"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12493,7 +12265,7 @@ module RequestDestination : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestRedirect : sig
-  type t = ([`L_s287_error[@js "error"] | `L_s338_follow[@js "follow"] | `L_s477_manual[@js "manual"]] [@js.enum])
+  type t = ([`L_s287_error[@js "error"] | `L_s338_follow[@js "follow"] | `L_s476_manual[@js "manual"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12501,7 +12273,7 @@ module RequestRedirect : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestMode : sig
-  type t = ([`L_s222_cors[@js "cors"] | `L_s515_navigate[@js "navigate"] | `L_s525_no_cors[@js "no-cors"] | `L_s671_same_origin[@js "same-origin"]] [@js.enum])
+  type t = ([`L_s222_cors[@js "cors"] | `L_s514_navigate[@js "navigate"] | `L_s524_no_cors[@js "no-cors"] | `L_s670_same_origin[@js "same-origin"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12509,7 +12281,7 @@ module RequestMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestCredentials : sig
-  type t = ([`L_s409_include[@js "include"] | `L_s540_omit[@js "omit"] | `L_s671_same_origin[@js "same-origin"]] [@js.enum])
+  type t = ([`L_s408_include[@js "include"] | `L_s539_omit[@js "omit"] | `L_s670_same_origin[@js "same-origin"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12517,7 +12289,7 @@ module RequestCredentials : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestCache : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s341_force_cache[@js "force-cache"] | `L_s524_no_cache[@js "no-cache"] | `L_s528_no_store[@js "no-store"] | `L_s542_only_if_cached[@js "only-if-cached"] | `L_s641_reload[@js "reload"]] [@js.enum])
+  type t = ([`L_s237_default[@js "default"] | `L_s341_force_cache[@js "force-cache"] | `L_s523_no_cache[@js "no-cache"] | `L_s527_no_store[@js "no-store"] | `L_s541_only_if_cached[@js "only-if-cached"] | `L_s640_reload[@js "reload"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12525,7 +12297,7 @@ module RequestCache : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ReferrerPolicy : sig
-  type t = ([`L_s0[@js ""] | `L_s526_no_referrer[@js "no-referrer"] | `L_s527_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s552_origin[@js "origin"] | `L_s553_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s671_same_origin[@js "same-origin"] | `L_s730_strict_origin[@js "strict-origin"] | `L_s731_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s801_unsafe_url[@js "unsafe-url"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s525_no_referrer[@js "no-referrer"] | `L_s526_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s551_origin[@js "origin"] | `L_s552_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s670_same_origin[@js "same-origin"] | `L_s729_strict_origin[@js "strict-origin"] | `L_s730_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s800_unsafe_url[@js "unsafe-url"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12750,7 +12522,7 @@ module PageTransitionEventInit : sig
   val set_persisted: 'tags this -> bool -> unit [@@js.set "persisted"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface282 : sig
+module rec AnonymousInterface283 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12793,6 +12565,242 @@ and[@js.scope "PageTransitionEvent"] PageTransitionEvent : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:PageTransitionEventInit.t -> unit -> t [@@js.create]
+end
+module HashChangeEventInit : sig
+  type t = [`EventInit | `HashChangeEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventInit | `HashChangeEventInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventInit | `HashChangeEventInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `HashChangeEventInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_newURL: 'tags this -> string [@@js.get "newURL"]
+  val set_newURL: 'tags this -> string -> unit [@@js.set "newURL"]
+  val get_oldURL: 'tags this -> string [@@js.get "oldURL"]
+  val set_oldURL: 'tags this -> string -> unit [@@js.set "oldURL"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module rec AnonymousInterface209 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> HashChangeEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> HashChangeEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:HashChangeEventInit.t -> unit -> HashChangeEvent.t [@@js.apply_newable]
+end
+
+(** Events that fire when the fragment identifier of the URL has changed. *)
+and[@js.scope "HashChangeEvent"] HashChangeEvent : sig
+  type t = [`Event | `HashChangeEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Event | `HashChangeEvent]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Event | `HashChangeEvent]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `HashChangeEvent ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Returns the URL of the session history entry that is now current. *)
+  val get_newURL: 'tags this -> string [@@js.get "newURL"]
+  
+  (** Returns the URL of the session history entry that was previously current. *)
+  val get_oldURL: 'tags this -> string [@@js.get "oldURL"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: type_:string -> ?eventInitDict:HashChangeEventInit.t -> unit -> t [@@js.create]
+end
+module GamepadMappingType : sig
+  type t = ([`L_s0[@js ""] | `L_s722_standard[@js "standard"] | `L_s844_xr_standard[@js "xr-standard"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module GamepadHapticActuatorType : sig
+  type t = ([`L_s818_vibration[@js "vibration"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module rec AnonymousInterface128 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> GamepadHapticActuator.t [@@js.get "prototype"]
+  val set_prototype: t -> GamepadHapticActuator.t -> unit [@@js.set "prototype"]
+  val create: t -> GamepadHapticActuator.t [@@js.apply_newable]
+end
+
+(** This Gamepad API interface represents hardware in the controller designed to provide haptic feedback to the user (if available), most commonly vibration hardware. *)
+and[@js.scope "GamepadHapticActuator"] GamepadHapticActuator : sig
+  type t = [`GamepadHapticActuator] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`GamepadHapticActuator]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`GamepadHapticActuator]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `GamepadHapticActuator ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_type: 'tags this -> GamepadHapticActuatorType.t [@@js.get "type"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module rec AnonymousInterface126 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> GamepadButton.t [@@js.get "prototype"]
+  val set_prototype: t -> GamepadButton.t -> unit [@@js.set "prototype"]
+  val create: t -> GamepadButton.t [@@js.apply_newable]
+end
+
+(**
+  An individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device.
+  Available only in secure contexts.
+*)
+and[@js.scope "GamepadButton"] GamepadButton : sig
+  type t = [`GamepadButton] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`GamepadButton]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`GamepadButton]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `GamepadButton ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_pressed: 'tags this -> bool [@@js.get "pressed"]
+  val get_touched: 'tags this -> bool [@@js.get "touched"]
+  val get_value: 'tags this -> float [@@js.get "value"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module rec AnonymousInterface125 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Gamepad.t [@@js.get "prototype"]
+  val set_prototype: t -> Gamepad.t -> unit [@@js.set "prototype"]
+  val create: t -> Gamepad.t [@@js.apply_newable]
+end
+
+(**
+  This Gamepad API interface defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id.
+  Available only in secure contexts.
+*)
+and[@js.scope "Gamepad"] Gamepad : sig
+  type t = [`Gamepad] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Gamepad]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Gamepad]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `Gamepad ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_axes: 'tags this -> float list [@@js.get "axes"]
+  val get_buttons: 'tags this -> GamepadButton.t list [@@js.get "buttons"]
+  val get_connected: 'tags this -> bool [@@js.get "connected"]
+  val get_hapticActuators: 'tags this -> GamepadHapticActuator.t list [@@js.get "hapticActuators"]
+  val get_id: 'tags this -> string [@@js.get "id"]
+  val get_index: 'tags this -> float [@@js.get "index"]
+  val get_mapping: 'tags this -> GamepadMappingType.t [@@js.get "mapping"]
+  val get_timestamp: 'tags this -> DOMHighResTimeStamp.t [@@js.get "timestamp"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module GamepadEventInit : sig
+  type t = [`EventInit | `GamepadEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventInit | `GamepadEventInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventInit | `GamepadEventInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `GamepadEventInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_gamepad: 'tags this -> Gamepad.t [@@js.get "gamepad"]
+  val set_gamepad: 'tags this -> Gamepad.t -> unit [@@js.set "gamepad"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module rec AnonymousInterface127 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> GamepadEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> GamepadEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> eventInitDict:GamepadEventInit.t -> GamepadEvent.t [@@js.apply_newable]
+end
+
+(**
+  This Gamepad API interface contains references to gamepads connected to the system, which is what the gamepad events Window.gamepadconnected and Window.gamepaddisconnected are fired in response to.
+  Available only in secure contexts.
+*)
+and[@js.scope "GamepadEvent"] GamepadEvent : sig
+  type t = [`Event | `GamepadEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Event | `GamepadEvent]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Event | `GamepadEvent]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `GamepadEvent ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_gamepad: 'tags this -> Gamepad.t [@@js.get "gamepad"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: type_:string -> eventInitDict:GamepadEventInit.t -> t [@@js.create]
 end
 module rec AnonymousInterface28 : sig
   type t = private Ojs.t
@@ -12905,7 +12913,7 @@ module FilePropertyBag : sig
   val set_lastModified: 'tags this -> float -> unit [@@js.set "lastModified"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface109 : sig
+module rec AnonymousInterface110 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12994,6 +13002,8 @@ module rec AnonymousInterface317 : sig
   val set_prototype: t -> PushSubscriptionOptions.t -> unit [@@js.set "prototype"]
   val create: t -> PushSubscriptionOptions.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "PushSubscriptionOptions"] PushSubscriptionOptions : sig
   type t = [`PushSubscriptionOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -13048,7 +13058,7 @@ module PushSubscriptionJSON : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module PushEncryptionKeyName : sig
-  type t = ([`L_s140_auth[@js "auth"] | `L_s560_p256dh[@js "p256dh"]] [@js.enum])
+  type t = ([`L_s140_auth[@js "auth"] | `L_s559_p256dh[@js "p256dh"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13064,7 +13074,10 @@ module rec AnonymousInterface316 : sig
   val create: t -> PushSubscription.t [@@js.apply_newable]
 end
 
-(** This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service. *)
+(**
+  This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service.
+  Available only in secure contexts.
+*)
 and[@js.scope "PushSubscription"] PushSubscription : sig
   type t = [`PushSubscription] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -13091,7 +13104,7 @@ and[@js.scope "PushSubscription"] PushSubscription : sig
   val create: unit -> t [@@js.create]
 end
 module PushPermissionState : sig
-  type t = ([`L_s240_denied[@js "denied"] | `L_s362_granted[@js "granted"] | `L_s620_prompt[@js "prompt"]] [@js.enum])
+  type t = ([`L_s240_denied[@js "denied"] | `L_s361_granted[@js "granted"] | `L_s619_prompt[@js "prompt"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13108,7 +13121,10 @@ module rec AnonymousInterface315 : sig
   val get_supportedContentEncodings: t -> string list [@@js.get "supportedContentEncodings"]
 end
 
-(** This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications. *)
+(**
+  This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications.
+  Available only in secure contexts.
+*)
 and[@js.scope "PushManager"] PushManager : sig
   type t = [`PushManager] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -13134,7 +13150,7 @@ and[@js.scope "PushManager"] PushManager : sig
   val supportedContentEncodings: unit -> string list [@@js.get "supportedContentEncodings"]
 end
 module NotificationPermission : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s240_denied[@js "denied"] | `L_s362_granted[@js "granted"]] [@js.enum])
+  type t = ([`L_s237_default[@js "default"] | `L_s240_denied[@js "denied"] | `L_s361_granted[@js "granted"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13169,7 +13185,7 @@ module VibratePattern : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module NotificationDirection : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s472_ltr[@js "ltr"] | `L_s666_rtl[@js "rtl"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s471_ltr[@js "ltr"] | `L_s665_rtl[@js "rtl"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13246,7 +13262,7 @@ module NotificationOptions : sig
   val set_vibrate: 'tags this -> VibratePattern.t -> unit [@@js.set "vibrate"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface277 : sig
+module rec AnonymousInterface278 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13357,7 +13373,7 @@ module GetNotificationOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module WorkerType : sig
-  type t = ([`L_s195_classic[@js "classic"] | `L_s499_module[@js "module"]] [@js.enum])
+  type t = ([`L_s195_classic[@js "classic"] | `L_s498_module[@js "module"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13365,7 +13381,7 @@ module WorkerType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ServiceWorkerUpdateViaCache : sig
-  type t = ([`L_s106_all[@js "all"] | `L_s405_imports[@js "imports"] | `L_s529_none[@js "none"]] [@js.enum])
+  type t = ([`L_s106_all[@js "all"] | `L_s404_imports[@js "imports"] | `L_s528_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13397,7 +13413,7 @@ module RegistrationOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerState : sig
-  type t = ([`L_s96_activated[@js "activated"] | `L_s97_activating[@js "activating"] | `L_s417_installed[@js "installed"] | `L_s418_installing[@js "installing"] | `L_s566_parsed[@js "parsed"] | `L_s636_redundant[@js "redundant"]] [@js.enum])
+  type t = ([`L_s96_activated[@js "activated"] | `L_s97_activating[@js "activating"] | `L_s416_installed[@js "installed"] | `L_s417_installing[@js "installing"] | `L_s565_parsed[@js "parsed"] | `L_s635_redundant[@js "redundant"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13432,7 +13448,7 @@ module ErrorEventInit : sig
   val set_message: 'tags this -> string -> unit [@@js.set "message"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface104 : sig
+module rec AnonymousInterface105 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13491,7 +13507,7 @@ module AbstractWorker : sig
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface224 : sig
+module rec AnonymousInterface225 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13529,7 +13545,7 @@ and[@js.scope "ImageBitmap"] ImageBitmap : sig
   val create: unit -> t [@@js.create]
 end
 module PermissionState : sig
-  type t = ([`L_s240_denied[@js "denied"] | `L_s362_granted[@js "granted"] | `L_s620_prompt[@js "prompt"]] [@js.enum])
+  type t = ([`L_s240_denied[@js "denied"] | `L_s361_granted[@js "granted"] | `L_s619_prompt[@js "prompt"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13608,7 +13624,7 @@ and[@js.scope "PermissionStatus"] PermissionStatus : sig
   val create: unit -> t [@@js.create]
 end
 module PermissionName : sig
-  type t = ([`L_s354_gamepad[@js "gamepad"] | `L_s358_geolocation[@js "geolocation"] | `L_s535_notifications[@js "notifications"] | `L_s580_persistent_storage[@js "persistent-storage"] | `L_s623_push[@js "push"] | `L_s674_screen_wake_lock[@js "screen-wake-lock"]] [@js.enum])
+  type t = ([`L_s357_geolocation[@js "geolocation"] | `L_s534_notifications[@js "notifications"] | `L_s579_persistent_storage[@js "persistent-storage"] | `L_s622_push[@js "push"] | `L_s673_screen_wake_lock[@js "screen-wake-lock"] | `L_s843_xr_spatial_tracking[@js "xr-spatial-tracking"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13694,6 +13710,8 @@ module rec AnonymousInterface465 : sig
   val set_prototype: t -> StorageManager.t -> unit [@@js.set "prototype"]
   val create: t -> StorageManager.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "StorageManager"] StorageManager : sig
   type t = [`StorageManager] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -13717,6 +13735,8 @@ and[@js.scope "StorageManager"] StorageManager : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+
+(** Available only in secure contexts. *)
 module NavigatorStorage : sig
   type t = [`NavigatorStorage] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -13736,7 +13756,7 @@ module NavigatorStorage : sig
   val get_storage: 'tags this -> StorageManager.t [@@js.get "storage"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface264 : sig
+module rec AnonymousInterface265 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13899,7 +13919,7 @@ and[@js.scope "PluginArray"] PluginArray : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface265 : sig
+module rec AnonymousInterface266 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13987,14 +14007,14 @@ module NavigatorOnLine : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ConnectionType : sig
-  type t = ([`L_s164_bluetooth[@js "bluetooth"] | `L_s184_cellular[@js "cellular"] | `L_s288_ethernet[@js "ethernet"] | `L_s498_mixed[@js "mixed"] | `L_s529_none[@js "none"] | `L_s554_other[@js "other"] | `L_s797_unknown[@js "unknown"] | `L_s839_wifi[@js "wifi"]] [@js.enum])
+  type t = ([`L_s164_bluetooth[@js "bluetooth"] | `L_s184_cellular[@js "cellular"] | `L_s288_ethernet[@js "ethernet"] | `L_s497_mixed[@js "mixed"] | `L_s528_none[@js "none"] | `L_s553_other[@js "other"] | `L_s796_unknown[@js "unknown"] | `L_s838_wifi[@js "wifi"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface273 : sig
+module rec AnonymousInterface274 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14138,6 +14158,8 @@ module NavigatorContentUtils : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  
+  (** Available only in secure contexts. *)
   val registerProtocolHandler: 'tags this -> scheme:string -> url:URL.t or_string -> unit [@@js.call "registerProtocolHandler"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
@@ -14180,7 +14202,7 @@ module NavigatorAutomationInformation : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module MediaSessionPlaybackState : sig
-  type t = ([`L_s529_none[@js "none"] | `L_s573_paused[@js "paused"] | `L_s588_playing[@js "playing"]] [@js.enum])
+  type t = ([`L_s528_none[@js "none"] | `L_s572_paused[@js "paused"] | `L_s587_playing[@js "playing"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14188,7 +14210,7 @@ module MediaSessionPlaybackState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module MediaSessionAction : sig
-  type t = ([`L_s370_hangup[@js "hangup"] | `L_s521_nexttrack[@js "nexttrack"] | `L_s572_pause[@js "pause"] | `L_s586_play[@js "play"] | `L_s613_previoustrack[@js "previoustrack"] | `L_s680_seekbackward[@js "seekbackward"] | `L_s682_seekforward[@js "seekforward"] | `L_s684_seekto[@js "seekto"] | `L_s702_skipad[@js "skipad"] | `L_s727_stop[@js "stop"] | `L_s771_togglecamera[@js "togglecamera"] | `L_s772_togglemicrophone[@js "togglemicrophone"]] [@js.enum])
+  type t = ([`L_s369_hangup[@js "hangup"] | `L_s520_nexttrack[@js "nexttrack"] | `L_s571_pause[@js "pause"] | `L_s585_play[@js "play"] | `L_s612_previoustrack[@js "previoustrack"] | `L_s679_seekbackward[@js "seekbackward"] | `L_s681_seekforward[@js "seekforward"] | `L_s683_seekto[@js "seekto"] | `L_s701_skipad[@js "skipad"] | `L_s726_stop[@js "stop"] | `L_s770_togglecamera[@js "togglecamera"] | `L_s771_togglemicrophone[@js "togglemicrophone"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14314,7 +14336,7 @@ module MediaMetadataInit : sig
   val set_title: 'tags this -> string -> unit [@@js.set "title"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface248 : sig
+module rec AnonymousInterface249 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14350,7 +14372,7 @@ and[@js.scope "MediaMetadata"] MediaMetadata : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:MediaMetadataInit.t -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface253 : sig
+module rec AnonymousInterface254 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14385,7 +14407,7 @@ and[@js.scope "MediaSession"] MediaSession : sig
   val create: unit -> t [@@js.create]
 end
 module MediaKeySessionType : sig
-  type t = ([`L_s579_persistent_license[@js "persistent-license"] | `L_s755_temporary[@js "temporary"]] [@js.enum])
+  type t = ([`L_s578_persistent_license[@js "persistent-license"] | `L_s754_temporary[@js "temporary"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14393,14 +14415,14 @@ module MediaKeySessionType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module MediaKeyStatus : sig
-  type t = ([`L_s292_expired[@js "expired"] | `L_s421_internal_error[@js "internal-error"] | `L_s557_output_downscaled[@js "output-downscaled"] | `L_s558_output_restricted[@js "output-restricted"] | `L_s640_released[@js "released"] | `L_s726_status_pending[@js "status-pending"] | `L_s810_usable[@js "usable"] | `L_s811_usable_in_future[@js "usable-in-future"]] [@js.enum])
+  type t = ([`L_s292_expired[@js "expired"] | `L_s420_internal_error[@js "internal-error"] | `L_s556_output_downscaled[@js "output-downscaled"] | `L_s557_output_restricted[@js "output-restricted"] | `L_s639_released[@js "released"] | `L_s725_status_pending[@js "status-pending"] | `L_s809_usable[@js "usable"] | `L_s810_usable_in_future[@js "usable-in-future"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface244 : sig
+module rec AnonymousInterface245 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14409,7 +14431,10 @@ module rec AnonymousInterface244 : sig
   val create: t -> MediaKeyStatusMap.t [@@js.apply_newable]
 end
 
-(** This EncryptedMediaExtensions API interface is a read-only map of media key statuses by key IDs. *)
+(**
+  This EncryptedMediaExtensions API interface is a read-only map of media key statuses by key IDs.
+  Available only in secure contexts.
+*)
 and[@js.scope "MediaKeyStatusMap"] MediaKeyStatusMap : sig
   type t = [`MediaKeyStatusMap | (BufferSource.t * MediaKeyStatus.t) IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -14426,19 +14451,19 @@ and[@js.scope "MediaKeyStatusMap"] MediaKeyStatusMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val entries: 'tags this -> (BufferSource.t * MediaKeyStatus.t) IterableIterator.t_1 [@@js.call "entries"]
-  val keys: 'tags this -> BufferSource.t IterableIterator.t_1 [@@js.call "keys"]
-  val values: 'tags this -> MediaKeyStatus.t IterableIterator.t_1 [@@js.call "values"]
   val get_size: 'tags this -> float [@@js.get "size"]
   val get_: 'tags this -> keyId:BufferSource.t -> MediaKeyStatus.t or_undefined [@@js.call "get"]
   val has: 'tags this -> keyId:BufferSource.t -> bool [@@js.call "has"]
   val forEach: 'tags this -> callbackfn:(value:MediaKeyStatus.t -> key:BufferSource.t -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  val entries: 'tags this -> (BufferSource.t * MediaKeyStatus.t) IterableIterator.t_1 [@@js.call "entries"]
+  val keys: 'tags this -> BufferSource.t IterableIterator.t_1 [@@js.call "keys"]
+  val values: 'tags this -> MediaKeyStatus.t IterableIterator.t_1 [@@js.call "values"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
 module MediaKeySessionClosedReason : sig
-  type t = ([`L_s200_closed_by_application[@js "closed-by-application"] | `L_s371_hardware_context_reset[@js "hardware-context-reset"] | `L_s421_internal_error[@js "internal-error"] | `L_s639_release_acknowledged[@js "release-acknowledged"] | `L_s655_resource_evicted[@js "resource-evicted"]] [@js.enum])
+  type t = ([`L_s200_closed_by_application[@js "closed-by-application"] | `L_s370_hardware_context_reset[@js "hardware-context-reset"] | `L_s420_internal_error[@js "internal-error"] | `L_s638_release_acknowledged[@js "release-acknowledged"] | `L_s654_resource_evicted[@js "resource-evicted"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14446,7 +14471,7 @@ module MediaKeySessionClosedReason : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module MediaKeyMessageType : sig
-  type t = ([`L_s411_individualization_request[@js "individualization-request"] | `L_s444_license_release[@js "license-release"] | `L_s445_license_renewal[@js "license-renewal"] | `L_s446_license_request[@js "license-request"]] [@js.enum])
+  type t = ([`L_s410_individualization_request[@js "individualization-request"] | `L_s443_license_release[@js "license-release"] | `L_s444_license_renewal[@js "license-renewal"] | `L_s445_license_request[@js "license-request"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14475,7 +14500,7 @@ module MediaKeyMessageEventInit : sig
   val set_messageType: 'tags this -> MediaKeyMessageType.t -> unit [@@js.set "messageType"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface242 : sig
+module rec AnonymousInterface243 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14484,7 +14509,10 @@ module rec AnonymousInterface242 : sig
   val create: t -> type_:string -> eventInitDict:MediaKeyMessageEventInit.t -> MediaKeyMessageEvent.t [@@js.apply_newable]
 end
 
-(** This EncryptedMediaExtensions API interface contains the content and related data when the content decryption module generates a message for the session. *)
+(**
+  This EncryptedMediaExtensions API interface contains the content and related data when the content decryption module generates a message for the session.
+  Available only in secure contexts.
+*)
 and[@js.scope "MediaKeyMessageEvent"] MediaKeyMessageEvent : sig
   type t = [`Event | `MediaKeyMessageEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -14507,7 +14535,7 @@ and[@js.scope "MediaKeyMessageEvent"] MediaKeyMessageEvent : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> eventInitDict:MediaKeyMessageEventInit.t -> t [@@js.create]
 end
-module rec AnonymousInterface243 : sig
+module rec AnonymousInterface244 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14516,7 +14544,10 @@ module rec AnonymousInterface243 : sig
   val create: t -> MediaKeySession.t [@@js.apply_newable]
 end
 
-(** This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM). *)
+(**
+  This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM).
+  Available only in secure contexts.
+*)
 and[@js.scope "MediaKeySession"] MediaKeySession : sig
   type t = [`EventTarget | `MediaKeySession] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -14590,7 +14621,7 @@ and[@js.scope "MediaKeySession"] MediaKeySession : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface246 : sig
+module rec AnonymousInterface247 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14599,7 +14630,10 @@ module rec AnonymousInterface246 : sig
   val create: t -> MediaKeys.t [@@js.apply_newable]
 end
 
-(** This EncryptedMediaExtensions API interface the represents a set of keys that an associated HTMLMediaElement can use for decryption of media data during playback. *)
+(**
+  This EncryptedMediaExtensions API interface the represents a set of keys that an associated HTMLMediaElement can use for decryption of media data during playback.
+  Available only in secure contexts.
+*)
 and[@js.scope "MediaKeys"] MediaKeys : sig
   type t = [`MediaKeys] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -14623,7 +14657,7 @@ and[@js.scope "MediaKeys"] MediaKeys : sig
   val create: unit -> t [@@js.create]
 end
 module MediaKeysRequirement : sig
-  type t = ([`L_s533_not_allowed[@js "not-allowed"] | `L_s550_optional[@js "optional"] | `L_s652_required[@js "required"]] [@js.enum])
+  type t = ([`L_s532_not_allowed[@js "not-allowed"] | `L_s549_optional[@js "optional"] | `L_s651_required[@js "required"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14686,7 +14720,7 @@ module MediaKeySystemConfiguration : sig
   val set_videoCapabilities: 'tags this -> MediaKeySystemMediaCapability.t list -> unit [@@js.set "videoCapabilities"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface245 : sig
+module rec AnonymousInterface246 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14695,7 +14729,10 @@ module rec AnonymousInterface245 : sig
   val create: t -> MediaKeySystemAccess.t [@@js.apply_newable]
 end
 
-(** This EncryptedMediaExtensions API interface provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess method. *)
+(**
+  This EncryptedMediaExtensions API interface provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess method.
+  Available only in secure contexts.
+*)
 and[@js.scope "MediaKeySystemAccess"] MediaKeySystemAccess : sig
   type t = [`MediaKeySystemAccess] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -14737,6 +14774,8 @@ module MediaTrackSupportedConstraints : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_aspectRatio: 'tags this -> bool [@@js.get "aspectRatio"]
   val set_aspectRatio: 'tags this -> bool -> unit [@@js.set "aspectRatio"]
+  val get_autoGainControl: 'tags this -> bool [@@js.get "autoGainControl"]
+  val set_autoGainControl: 'tags this -> bool -> unit [@@js.set "autoGainControl"]
   val get_deviceId: 'tags this -> bool [@@js.get "deviceId"]
   val set_deviceId: 'tags this -> bool -> unit [@@js.set "deviceId"]
   val get_echoCancellation: 'tags this -> bool [@@js.get "echoCancellation"]
@@ -14749,6 +14788,8 @@ module MediaTrackSupportedConstraints : sig
   val set_groupId: 'tags this -> bool -> unit [@@js.set "groupId"]
   val get_height: 'tags this -> bool [@@js.get "height"]
   val set_height: 'tags this -> bool -> unit [@@js.set "height"]
+  val get_noiseSuppression: 'tags this -> bool [@@js.get "noiseSuppression"]
+  val set_noiseSuppression: 'tags this -> bool -> unit [@@js.set "noiseSuppression"]
   val get_sampleRate: 'tags this -> bool [@@js.get "sampleRate"]
   val set_sampleRate: 'tags this -> bool -> unit [@@js.set "sampleRate"]
   val get_sampleSize: 'tags this -> bool [@@js.get "sampleSize"]
@@ -14779,19 +14820,21 @@ module MediaStreamConstraints : sig
   val set_audio: 'tags this -> MediaTrackConstraints.t or_boolean -> unit [@@js.set "audio"]
   val get_peerIdentity: 'tags this -> string [@@js.get "peerIdentity"]
   val set_peerIdentity: 'tags this -> string -> unit [@@js.set "peerIdentity"]
+  val get_preferCurrentTab: 'tags this -> bool [@@js.get "preferCurrentTab"]
+  val set_preferCurrentTab: 'tags this -> bool -> unit [@@js.set "preferCurrentTab"]
   val get_video: 'tags this -> MediaTrackConstraints.t or_boolean [@@js.get "video"]
   val set_video: 'tags this -> MediaTrackConstraints.t or_boolean -> unit [@@js.set "video"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDeviceKind : sig
-  type t = ([`L_s136_audioinput[@js "audioinput"] | `L_s137_audiooutput[@js "audiooutput"] | `L_s821_videoinput[@js "videoinput"]] [@js.enum])
+  type t = ([`L_s136_audioinput[@js "audioinput"] | `L_s137_audiooutput[@js "audiooutput"] | `L_s820_videoinput[@js "videoinput"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface237 : sig
+module rec AnonymousInterface238 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14800,7 +14843,10 @@ module rec AnonymousInterface237 : sig
   val create: t -> MediaDeviceInfo.t [@@js.apply_newable]
 end
 
-(** The MediaDevicesInfo interface contains information that describes a single media input or output device. *)
+(**
+  The MediaDevicesInfo interface contains information that describes a single media input or output device.
+  Available only in secure contexts.
+*)
 and[@js.scope "MediaDeviceInfo"] MediaDeviceInfo : sig
   type t = [`MediaDeviceInfo] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -14848,7 +14894,7 @@ module DisplayMediaStreamConstraints : sig
   val set_video: 'tags this -> MediaTrackConstraints.t or_boolean -> unit [@@js.set "video"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface238 : sig
+module rec AnonymousInterface239 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14857,7 +14903,10 @@ module rec AnonymousInterface238 : sig
   val create: t -> MediaDevices.t [@@js.apply_newable]
 end
 
-(** Provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data. *)
+(**
+  Provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data.
+  Available only in secure contexts.
+*)
 and[@js.scope "MediaDevices"] MediaDevices : sig
   type t = [`EventTarget | `MediaDevices] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -14925,7 +14974,7 @@ and[@js.scope "MediaDevices"] MediaDevices : sig
   val create: unit -> t [@@js.create]
 end
 module MediaEncodingType : sig
-  type t = ([`L_s632_record[@js "record"] | `L_s837_webrtc[@js "webrtc"]] [@js.enum])
+  type t = ([`L_s631_record[@js "record"] | `L_s836_webrtc[@js "webrtc"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14933,7 +14982,7 @@ module MediaEncodingType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module TransferFunction : sig
-  type t = ([`L_s386_hlg[@js "hlg"] | `L_s605_pq[@js "pq"] | `L_s720_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s385_hlg[@js "hlg"] | `L_s604_pq[@js "pq"] | `L_s719_srgb[@js "srgb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14941,7 +14990,7 @@ module TransferFunction : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module HdrMetadataType : sig
-  type t = ([`L_s707_smpteSt2086[@js "smpteSt2086"] | `L_s708_smpteSt2094_10[@js "smpteSt2094-10"] | `L_s709_smpteSt2094_40[@js "smpteSt2094-40"]] [@js.enum])
+  type t = ([`L_s706_smpteSt2086[@js "smpteSt2086"] | `L_s707_smpteSt2094_10[@js "smpteSt2094-10"] | `L_s708_smpteSt2094_40[@js "smpteSt2094-40"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14949,7 +14998,7 @@ module HdrMetadataType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ColorGamut : sig
-  type t = ([`L_s561_p3[@js "p3"] | `L_s631_rec2020[@js "rec2020"] | `L_s720_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s560_p3[@js "p3"] | `L_s630_rec2020[@js "rec2020"] | `L_s719_srgb[@js "srgb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15107,7 +15156,7 @@ module MediaCapabilitiesEncodingInfo : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDecodingType : sig
-  type t = ([`L_s330_file[@js "file"] | `L_s487_media_source[@js "media-source"] | `L_s837_webrtc[@js "webrtc"]] [@js.enum])
+  type t = ([`L_s330_file[@js "file"] | `L_s486_media_source[@js "media-source"] | `L_s836_webrtc[@js "webrtc"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15154,7 +15203,7 @@ module MediaCapabilitiesDecodingInfo : sig
   val set_configuration: 'tags this -> MediaDecodingConfiguration.t -> unit [@@js.set "configuration"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface236 : sig
+module rec AnonymousInterface237 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15208,7 +15257,7 @@ module PositionOptions : sig
   val set_timeout: 'tags this -> float -> unit [@@js.set "timeout"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface131 : sig
+module rec AnonymousInterface132 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15266,7 +15315,7 @@ module PositionErrorCallback : sig
   val apply: 'tags this -> positionError:GeolocationPositionError.t -> unit [@@js.apply]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface129 : sig
+module rec AnonymousInterface130 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15274,6 +15323,8 @@ module rec AnonymousInterface129 : sig
   val set_prototype: t -> GeolocationCoordinates.t -> unit [@@js.set "prototype"]
   val create: t -> GeolocationCoordinates.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "GeolocationCoordinates"] GeolocationCoordinates : sig
   type t = [`GeolocationCoordinates] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -15301,7 +15352,7 @@ and[@js.scope "GeolocationCoordinates"] GeolocationCoordinates : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface130 : sig
+module rec AnonymousInterface131 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15309,6 +15360,8 @@ module rec AnonymousInterface130 : sig
   val set_prototype: t -> GeolocationPosition.t -> unit [@@js.set "prototype"]
   val create: t -> GeolocationPosition.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "GeolocationPosition"] GeolocationPosition : sig
   type t = [`GeolocationPosition] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -15350,7 +15403,7 @@ module PositionCallback : sig
   val apply: 'tags this -> position:GeolocationPosition.t -> unit [@@js.apply]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface128 : sig
+module rec AnonymousInterface129 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15384,7 +15437,7 @@ and[@js.scope "Geolocation"] Geolocation : sig
   val create: unit -> t [@@js.create]
 end
 module PublicKeyCredentialType : sig
-  type t = ([`L_s622_public_key[@js "public-key"]] [@js.enum])
+  type t = ([`L_s621_public_key[@js "public-key"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15392,7 +15445,7 @@ module PublicKeyCredentialType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module AuthenticatorTransport : sig
-  type t = ([`L_s160_ble[@js "ble"] | `L_s420_internal[@js "internal"] | `L_s523_nfc[@js "nfc"] | `L_s812_usb[@js "usb"]] [@js.enum])
+  type t = ([`L_s160_ble[@js "ble"] | `L_s419_internal[@js "internal"] | `L_s522_nfc[@js "nfc"] | `L_s811_usb[@js "usb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15424,7 +15477,7 @@ module PublicKeyCredentialDescriptor : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module UserVerificationRequirement : sig
-  type t = ([`L_s257_discouraged[@js "discouraged"] | `L_s608_preferred[@js "preferred"] | `L_s652_required[@js "required"]] [@js.enum])
+  type t = ([`L_s257_discouraged[@js "discouraged"] | `L_s607_preferred[@js "preferred"] | `L_s651_required[@js "required"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15488,7 +15541,7 @@ module PublicKeyCredentialRequestOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module CredentialMediationRequirement : sig
-  type t = ([`L_s550_optional[@js "optional"] | `L_s652_required[@js "required"] | `L_s700_silent[@js "silent"]] [@js.enum])
+  type t = ([`L_s549_optional[@js "optional"] | `L_s651_required[@js "required"] | `L_s699_silent[@js "silent"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15612,7 +15665,7 @@ module PublicKeyCredentialParameters : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ResidentKeyRequirement : sig
-  type t = ([`L_s257_discouraged[@js "discouraged"] | `L_s608_preferred[@js "preferred"] | `L_s652_required[@js "required"]] [@js.enum])
+  type t = ([`L_s257_discouraged[@js "discouraged"] | `L_s607_preferred[@js "preferred"] | `L_s651_required[@js "required"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15620,7 +15673,7 @@ module ResidentKeyRequirement : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module AuthenticatorAttachment : sig
-  type t = ([`L_s223_cross_platform[@js "cross-platform"] | `L_s585_platform[@js "platform"]] [@js.enum])
+  type t = ([`L_s223_cross_platform[@js "cross-platform"] | `L_s584_platform[@js "platform"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15654,7 +15707,7 @@ module AuthenticatorSelectionCriteria : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module AttestationConveyancePreference : sig
-  type t = ([`L_s253_direct[@js "direct"] | `L_s284_enterprise[@js "enterprise"] | `L_s410_indirect[@js "indirect"] | `L_s529_none[@js "none"]] [@js.enum])
+  type t = ([`L_s253_direct[@js "direct"] | `L_s284_enterprise[@js "enterprise"] | `L_s409_indirect[@js "indirect"] | `L_s528_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15727,6 +15780,8 @@ module rec AnonymousInterface71 : sig
   val set_prototype: t -> Credential.t -> unit [@@js.set "prototype"]
   val create: t -> Credential.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "Credential"] Credential : sig
   type t = [`Credential] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -15757,6 +15812,8 @@ module rec AnonymousInterface72 : sig
   val set_prototype: t -> CredentialsContainer.t -> unit [@@js.set "prototype"]
   val create: t -> CredentialsContainer.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "CredentialsContainer"] CredentialsContainer : sig
   type t = [`CredentialsContainer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -15782,7 +15839,7 @@ and[@js.scope "CredentialsContainer"] CredentialsContainer : sig
   val create: unit -> t [@@js.create]
 end
 module PresentationStyle : sig
-  type t = ([`L_s131_attachment[@js "attachment"] | `L_s413_inline[@js "inline"] | `L_s802_unspecified[@js "unspecified"]] [@js.enum])
+  type t = ([`L_s131_attachment[@js "attachment"] | `L_s412_inline[@js "inline"] | `L_s801_unspecified[@js "unspecified"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15817,21 +15874,13 @@ module ClipboardItemDataType : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module ClipboardItemData : sig
-  type t = ClipboardItemDataType.t Promise.t_1
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
 module rec AnonymousInterface63 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val get_prototype: t -> ClipboardItem.t [@@js.get "prototype"]
   val set_prototype: t -> ClipboardItem.t -> unit [@@js.set "prototype"]
-  val create: t -> items:(string, ClipboardItemData.t) Record.t_2 -> ?options:ClipboardItemOptions.t -> unit -> ClipboardItem.t [@@js.apply_newable]
+  val create: t -> items:(string, (ClipboardItemDataType.t, ClipboardItemDataType.t PromiseLike.t_1) union2) Record.t_2 -> ?options:ClipboardItemOptions.t -> unit -> ClipboardItem.t [@@js.apply_newable]
 end
 and[@js.scope "ClipboardItem"] ClipboardItem : sig
   type t = [`ClipboardItem] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15853,7 +15902,7 @@ and[@js.scope "ClipboardItem"] ClipboardItem : sig
   val getType: 'tags this -> type_:string -> Blob.t Promise.t_1 [@@js.call "getType"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: items:(string, ClipboardItemData.t) Record.t_2 -> ?options:ClipboardItemOptions.t -> unit -> t [@@js.create]
+  val create: items:(string, (ClipboardItemDataType.t, ClipboardItemDataType.t PromiseLike.t_1) union2) Record.t_2 -> ?options:ClipboardItemOptions.t -> unit -> t [@@js.create]
 end
 module ClipboardItems : sig
   type t = ClipboardItem.t list
@@ -15871,6 +15920,8 @@ module rec AnonymousInterface61 : sig
   val set_prototype: t -> Clipboard.t -> unit [@@js.set "prototype"]
   val create: t -> Clipboard.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "Clipboard"] Clipboard : sig
   type t = [`Clipboard | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -15925,7 +15976,7 @@ module MediaQueryListEventInit : sig
   val set_media: 'tags this -> string -> unit [@@js.set "media"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface250 : sig
+module rec AnonymousInterface251 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15955,7 +16006,7 @@ and[@js.scope "MediaQueryListEvent"] MediaQueryListEvent : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:MediaQueryListEventInit.t -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface249 : sig
+module rec AnonymousInterface250 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16035,7 +16086,7 @@ and[@js.scope "MediaQueryList"] MediaQueryList : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface234 : sig
+module rec AnonymousInterface235 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16213,7 +16264,7 @@ module IdleRequestOptions : sig
   val set_timeout: 'tags this -> float -> unit [@@js.set "timeout"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface223 : sig
+module rec AnonymousInterface224 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16263,14 +16314,14 @@ module IdleRequestCallback : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ScrollRestoration : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s477_manual[@js "manual"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s476_manual[@js "manual"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface210 : sig
+module rec AnonymousInterface211 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16309,7 +16360,7 @@ and[@js.scope "History"] History : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface108 : sig
+module rec AnonymousInterface109 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16380,7 +16431,10 @@ module rec AnonymousInterface96 : sig
   val create: t -> type_:string -> ?eventInitDict:DeviceOrientationEventInit.t -> unit -> DeviceOrientationEvent.t [@@js.apply_newable]
 end
 
-(** The DeviceOrientationEvent provides web developers with information from the physical orientation of the device running the web page. *)
+(**
+  The DeviceOrientationEvent provides web developers with information from the physical orientation of the device running the web page.
+  Available only in secure contexts.
+*)
 and[@js.scope "DeviceOrientationEvent"] DeviceOrientationEvent : sig
   type t = [`DeviceOrientationEvent | `Event] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -16405,6 +16459,8 @@ and[@js.scope "DeviceOrientationEvent"] DeviceOrientationEvent : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:DeviceOrientationEventInit.t -> unit -> t [@@js.create]
 end
+
+(** Available only in secure contexts. *)
 module DeviceMotionEventRotationRate : sig
   type t = [`DeviceMotionEventRotationRate] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -16426,6 +16482,8 @@ module DeviceMotionEventRotationRate : sig
   val get_gamma: 'tags this -> float or_null [@@js.get "gamma"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+
+(** Available only in secure contexts. *)
 module DeviceMotionEventAcceleration : sig
   type t = [`DeviceMotionEventAcceleration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -16530,7 +16588,10 @@ module rec AnonymousInterface95 : sig
   val create: t -> type_:string -> ?eventInitDict:DeviceMotionEventInit.t -> unit -> DeviceMotionEvent.t [@@js.apply_newable]
 end
 
-(** The DeviceMotionEvent provides web developers with information about the speed of changes for the device's position and orientation. *)
+(**
+  The DeviceMotionEvent provides web developers with information about the speed of changes for the device's position and orientation.
+  Available only in secure contexts.
+*)
 and[@js.scope "DeviceMotionEvent"] DeviceMotionEvent : sig
   type t = [`DeviceMotionEvent | `Event] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -16643,6 +16704,26 @@ module AnimationFrameProvider : sig
   val requestAnimationFrame: 'tags this -> callback:FrameRequestCallback.t -> float [@@js.call "requestAnimationFrame"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module InnerHTML : sig
+  type t = [`InnerHTML] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`InnerHTML]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`InnerHTML]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `InnerHTML ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_innerHTML: 'tags this -> string [@@js.get "innerHTML"]
+  val set_innerHTML: 'tags this -> string -> unit [@@js.set "innerHTML"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
 module ElementContentEditable : sig
   type t = [`ElementContentEditable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -16668,7 +16749,7 @@ module ElementContentEditable : sig
   val get_isContentEditable: 'tags this -> bool [@@js.get "isContentEditable"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface247 : sig
+module rec AnonymousInterface248 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16729,7 +16810,7 @@ module CSSStyleSheetInit : sig
   val set_media: 'tags this -> MediaList.t or_string -> unit [@@js.set "media"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface110 : sig
+module rec AnonymousInterface111 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16823,7 +16904,7 @@ module ErrorCallback : sig
   val apply: 'tags this -> err:DOMException.t -> unit [@@js.apply]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface112 : sig
+module rec AnonymousInterface113 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16831,7 +16912,7 @@ module rec AnonymousInterface112 : sig
   val set_prototype: t -> FileSystem.t -> unit [@@js.set "prototype"]
   val create: t -> FileSystem.t [@@js.apply_newable]
 end
-and AnonymousInterface113 : sig
+and AnonymousInterface114 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16839,7 +16920,7 @@ and AnonymousInterface113 : sig
   val set_prototype: t -> FileSystemDirectoryEntry.t -> unit [@@js.set "prototype"]
   val create: t -> FileSystemDirectoryEntry.t [@@js.apply_newable]
 end
-and AnonymousInterface114 : sig
+and AnonymousInterface115 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16847,7 +16928,7 @@ and AnonymousInterface114 : sig
   val set_prototype: t -> FileSystemDirectoryReader.t -> unit [@@js.set "prototype"]
   val create: t -> FileSystemDirectoryReader.t [@@js.apply_newable]
 end
-and AnonymousInterface115 : sig
+and AnonymousInterface116 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16900,8 +16981,6 @@ and[@js.scope "FileSystemDirectoryEntry"] FileSystemDirectoryEntry : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-
-(** @deprecated  *)
 and[@js.scope "FileSystemDirectoryReader"] FileSystemDirectoryReader : sig
   type t = [`FileSystemDirectoryReader] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -16918,8 +16997,6 @@ and[@js.scope "FileSystemDirectoryReader"] FileSystemDirectoryReader : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  
-  (** @deprecated  *)
   val readEntries: 'tags this -> successCallback:FileSystemEntriesCallback.t -> ?errorCallback:ErrorCallback.t -> unit -> unit [@@js.call "readEntries"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -17080,7 +17157,7 @@ and[@js.scope "DataTransferItemList"] DataTransferItemList : sig
   val create: unit -> t [@@js.create]
 end
 module FullscreenNavigationUI : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s381_hide[@js "hide"] | `L_s696_show[@js "show"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s380_hide[@js "hide"] | `L_s695_show[@js "show"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17133,9 +17210,6 @@ and[@js.scope "DOMTokenList"] DOMTokenList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val entries: 'tags this -> (float * string) IterableIterator.t_1 [@@js.call "entries"]
-  val keys: 'tags this -> float IterableIterator.t_1 [@@js.call "keys"]
-  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
   
   (** Returns the number of tokens. *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -17210,6 +17284,9 @@ and[@js.scope "DOMTokenList"] DOMTokenList : sig
   val forEach: 'tags this -> callbackfn:(value:string -> key:float -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
+  val entries: 'tags this -> (float * string) IterableIterator.t_1 [@@js.call "entries"]
+  val keys: 'tags this -> float IterableIterator.t_1 [@@js.call "keys"]
+  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -17247,7 +17324,7 @@ and[@js.scope "DOMRectList"] DOMRectList : sig
   val create: unit -> t [@@js.create]
 end
 module CompositeOperationOrAuto : sig
-  type t = ([`L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"] | `L_s141_auto[@js "auto"] | `L_s649_replace[@js "replace"]] [@js.enum])
+  type t = ([`L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"] | `L_s141_auto[@js "auto"] | `L_s648_replace[@js "replace"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17281,7 +17358,7 @@ module PropertyIndexedKeyframes : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module IterationCompositeOperation : sig
-  type t = ([`L_s95_accumulate[@js "accumulate"] | `L_s649_replace[@js "replace"]] [@js.enum])
+  type t = ([`L_s95_accumulate[@js "accumulate"] | `L_s648_replace[@js "replace"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17289,7 +17366,7 @@ module IterationCompositeOperation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CompositeOperation : sig
-  type t = ([`L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"] | `L_s649_replace[@js "replace"]] [@js.enum])
+  type t = ([`L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"] | `L_s648_replace[@js "replace"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17297,7 +17374,7 @@ module CompositeOperation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module PlaybackDirection : sig
-  type t = ([`L_s111_alternate[@js "alternate"] | `L_s112_alternate_reverse[@js "alternate-reverse"] | `L_s531_normal[@js "normal"] | `L_s658_reverse[@js "reverse"]] [@js.enum])
+  type t = ([`L_s111_alternate[@js "alternate"] | `L_s112_alternate_reverse[@js "alternate-reverse"] | `L_s530_normal[@js "normal"] | `L_s657_reverse[@js "reverse"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17305,7 +17382,7 @@ module PlaybackDirection : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module FillMode : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s146_backwards[@js "backwards"] | `L_s168_both[@js "both"] | `L_s346_forwards[@js "forwards"] | `L_s529_none[@js "none"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s146_backwards[@js "backwards"] | `L_s168_both[@js "both"] | `L_s346_forwards[@js "forwards"] | `L_s528_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17439,7 +17516,7 @@ module GetAnimationsOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module AnimationReplaceState : sig
-  type t = ([`L_s98_active[@js "active"] | `L_s578_persisted[@js "persisted"] | `L_s646_removed[@js "removed"]] [@js.enum])
+  type t = ([`L_s98_active[@js "active"] | `L_s577_persisted[@js "persisted"] | `L_s645_removed[@js "removed"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17447,7 +17524,7 @@ module AnimationReplaceState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module AnimationPlayState : sig
-  type t = ([`L_s333_finished[@js "finished"] | `L_s400_idle[@js "idle"] | `L_s573_paused[@js "paused"] | `L_s669_running[@js "running"]] [@js.enum])
+  type t = ([`L_s333_finished[@js "finished"] | `L_s399_idle[@js "idle"] | `L_s572_paused[@js "paused"] | `L_s668_running[@js "running"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17575,10 +17652,10 @@ module AnimationPlaybackEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_currentTime: 'tags this -> float or_null [@@js.get "currentTime"]
-  val set_currentTime: 'tags this -> float or_null -> unit [@@js.set "currentTime"]
-  val get_timelineTime: 'tags this -> float or_null [@@js.get "timelineTime"]
-  val set_timelineTime: 'tags this -> float or_null -> unit [@@js.set "timelineTime"]
+  val get_currentTime: 'tags this -> CSSNumberish.t or_null [@@js.get "currentTime"]
+  val set_currentTime: 'tags this -> CSSNumberish.t or_null -> unit [@@js.set "currentTime"]
+  val get_timelineTime: 'tags this -> CSSNumberish.t or_null [@@js.get "timelineTime"]
+  val set_timelineTime: 'tags this -> CSSNumberish.t or_null -> unit [@@js.set "timelineTime"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "AnimationPlaybackEvent"] rec AnimationPlaybackEvent : sig
@@ -17597,8 +17674,8 @@ module[@js.scope "AnimationPlaybackEvent"] rec AnimationPlaybackEvent : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_currentTime: 'tags this -> float or_null [@@js.get "currentTime"]
-  val get_timelineTime: 'tags this -> float or_null [@@js.get "timelineTime"]
+  val get_currentTime: 'tags this -> CSSNumberish.t or_null [@@js.get "currentTime"]
+  val get_timelineTime: 'tags this -> CSSNumberish.t or_null [@@js.get "timelineTime"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:AnimationPlaybackEventInit.t -> unit -> t [@@js.create]
@@ -17627,8 +17704,8 @@ module[@js.scope "Animation"] rec Animation : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_currentTime: 'tags this -> float or_null [@@js.get "currentTime"]
-  val set_currentTime: 'tags this -> float or_null -> unit [@@js.set "currentTime"]
+  val get_currentTime: 'tags this -> CSSNumberish.t or_null [@@js.get "currentTime"]
+  val set_currentTime: 'tags this -> CSSNumberish.t or_null -> unit [@@js.set "currentTime"]
   val get_effect: 'tags this -> AnimationEffect.t or_null [@@js.get "effect"]
   val set_effect: 'tags this -> AnimationEffect.t or_null -> unit [@@js.set "effect"]
   val get_finished: 'tags this -> t Promise.t_1 [@@js.get "finished"]
@@ -17646,8 +17723,8 @@ module[@js.scope "Animation"] rec Animation : sig
   val set_playbackRate: 'tags this -> float -> unit [@@js.set "playbackRate"]
   val get_ready: 'tags this -> t Promise.t_1 [@@js.get "ready"]
   val get_replaceState: 'tags this -> AnimationReplaceState.t [@@js.get "replaceState"]
-  val get_startTime: 'tags this -> float or_null [@@js.get "startTime"]
-  val set_startTime: 'tags this -> float or_null -> unit [@@js.set "startTime"]
+  val get_startTime: 'tags this -> CSSNumberish.t or_null [@@js.get "startTime"]
+  val set_startTime: 'tags this -> CSSNumberish.t or_null -> unit [@@js.set "startTime"]
   val get_timeline: 'tags this -> AnimationTimeline.t or_null [@@js.get "timeline"]
   val set_timeline: 'tags this -> AnimationTimeline.t or_null -> unit [@@js.set "timeline"]
   val cancel: 'tags this -> unit [@@js.call "cancel"]
@@ -17976,7 +18053,15 @@ and AnonymousInterface103 : sig
   val set_prototype: t -> Element.t -> unit [@@js.set "prototype"]
   val create: t -> Element.t [@@js.apply_newable]
 end
-and AnonymousInterface117 : sig
+and AnonymousInterface104 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ElementInternals.t [@@js.get "prototype"]
+  val set_prototype: t -> ElementInternals.t -> unit [@@js.set "prototype"]
+  val create: t -> ElementInternals.t [@@js.apply_newable]
+end
+and AnonymousInterface118 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17984,7 +18069,7 @@ and AnonymousInterface117 : sig
   val set_prototype: t -> FocusEvent.t -> unit [@@js.set "prototype"]
   val create: t -> type_:string -> ?eventInitDict:FocusEventInit.t -> unit -> FocusEvent.t [@@js.apply_newable]
 end
-and AnonymousInterface121 : sig
+and AnonymousInterface122 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17992,7 +18077,7 @@ and AnonymousInterface121 : sig
   val set_prototype: t -> FormData.t -> unit [@@js.set "prototype"]
   val create: t -> ?form:HTMLFormElement.t -> unit -> FormData.t [@@js.apply_newable]
 end
-and AnonymousInterface122 : sig
+and AnonymousInterface123 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18000,7 +18085,7 @@ and AnonymousInterface122 : sig
   val set_prototype: t -> FormDataEvent.t -> unit [@@js.set "prototype"]
   val create: t -> type_:string -> eventInitDict:FormDataEventInit.t -> FormDataEvent.t [@@js.apply_newable]
 end
-and AnonymousInterface133 : sig
+and AnonymousInterface134 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18008,7 +18093,7 @@ and AnonymousInterface133 : sig
   val set_prototype: t -> HTMLAllCollection.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLAllCollection.t [@@js.apply_newable]
 end
-and AnonymousInterface134 : sig
+and AnonymousInterface135 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18016,7 +18101,7 @@ and AnonymousInterface134 : sig
   val set_prototype: t -> HTMLAnchorElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLAnchorElement.t [@@js.apply_newable]
 end
-and AnonymousInterface135 : sig
+and AnonymousInterface136 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18024,7 +18109,7 @@ and AnonymousInterface135 : sig
   val set_prototype: t -> HTMLAreaElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLAreaElement.t [@@js.apply_newable]
 end
-and AnonymousInterface141 : sig
+and AnonymousInterface142 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18032,7 +18117,7 @@ and AnonymousInterface141 : sig
   val set_prototype: t -> HTMLCanvasElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLCanvasElement.t [@@js.apply_newable]
 end
-and AnonymousInterface142 : sig
+and AnonymousInterface143 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18040,7 +18125,7 @@ and AnonymousInterface142 : sig
   val set_prototype: t -> HTMLCollection.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLCollection.t [@@js.apply_newable]
 end
-and AnonymousInterface150 : sig
+and AnonymousInterface151 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18048,7 +18133,7 @@ and AnonymousInterface150 : sig
   val set_prototype: t -> HTMLElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLElement.t [@@js.apply_newable]
 end
-and AnonymousInterface151 : sig
+and AnonymousInterface152 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18056,7 +18141,7 @@ and AnonymousInterface151 : sig
   val set_prototype: t -> HTMLEmbedElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLEmbedElement.t [@@js.apply_newable]
 end
-and AnonymousInterface154 : sig
+and AnonymousInterface155 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18064,7 +18149,7 @@ and AnonymousInterface154 : sig
   val set_prototype: t -> HTMLFormControlsCollection.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLFormControlsCollection.t [@@js.apply_newable]
 end
-and AnonymousInterface155 : sig
+and AnonymousInterface156 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18072,7 +18157,7 @@ and AnonymousInterface155 : sig
   val set_prototype: t -> HTMLFormElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLFormElement.t [@@js.apply_newable]
 end
-and AnonymousInterface159 : sig
+and AnonymousInterface160 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18080,7 +18165,7 @@ and AnonymousInterface159 : sig
   val set_prototype: t -> HTMLHeadElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLHeadElement.t [@@js.apply_newable]
 end
-and AnonymousInterface163 : sig
+and AnonymousInterface164 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18088,7 +18173,7 @@ and AnonymousInterface163 : sig
   val set_prototype: t -> HTMLImageElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLImageElement.t [@@js.apply_newable]
 end
-and AnonymousInterface171 : sig
+and AnonymousInterface172 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18105,7 +18190,7 @@ and AnonymousInterface171 : sig
   val get_NETWORK_LOADING: t -> float [@@js.get "NETWORK_LOADING"]
   val get_NETWORK_NO_SOURCE: t -> float [@@js.get "NETWORK_NO_SOURCE"]
 end
-and AnonymousInterface188 : sig
+and AnonymousInterface189 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18113,7 +18198,7 @@ and AnonymousInterface188 : sig
   val set_prototype: t -> HTMLScriptElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLScriptElement.t [@@js.apply_newable]
 end
-and AnonymousInterface190 : sig
+and AnonymousInterface191 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18121,7 +18206,7 @@ and AnonymousInterface190 : sig
   val set_prototype: t -> HTMLSlotElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLSlotElement.t [@@js.apply_newable]
 end
-and AnonymousInterface207 : sig
+and AnonymousInterface208 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18129,7 +18214,7 @@ and AnonymousInterface207 : sig
   val set_prototype: t -> HTMLVideoElement.t -> unit [@@js.set "prototype"]
   val create: t -> HTMLVideoElement.t [@@js.apply_newable]
 end
-and AnonymousInterface225 : sig
+and AnonymousInterface226 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18137,7 +18222,7 @@ and AnonymousInterface225 : sig
   val set_prototype: t -> ImageBitmapRenderingContext.t -> unit [@@js.set "prototype"]
   val create: t -> ImageBitmapRenderingContext.t [@@js.apply_newable]
 end
-and AnonymousInterface227 : sig
+and AnonymousInterface228 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18145,7 +18230,7 @@ and AnonymousInterface227 : sig
   val set_prototype: t -> InputEvent.t -> unit [@@js.set "prototype"]
   val create: t -> type_:string -> ?eventInitDict:InputEventInit.t -> unit -> InputEvent.t [@@js.apply_newable]
 end
-and AnonymousInterface231 : sig
+and AnonymousInterface232 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18157,7 +18242,7 @@ and AnonymousInterface231 : sig
   val get_DOM_KEY_LOCATION_RIGHT: t -> float [@@js.get "DOM_KEY_LOCATION_RIGHT"]
   val get_DOM_KEY_LOCATION_STANDARD: t -> float [@@js.get "DOM_KEY_LOCATION_STANDARD"]
 end
-and AnonymousInterface262 : sig
+and AnonymousInterface263 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18165,7 +18250,7 @@ and AnonymousInterface262 : sig
   val set_prototype: t -> MessageEvent.t_0 -> unit [@@js.set "prototype"]
   val create: t -> type_:string -> ?eventInitDict:'T MessageEventInit.t -> unit -> 'T MessageEvent.t [@@js.apply_newable]
 end
-and AnonymousInterface263 : sig
+and AnonymousInterface264 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18173,7 +18258,7 @@ and AnonymousInterface263 : sig
   val set_prototype: t -> MessagePort.t -> unit [@@js.set "prototype"]
   val create: t -> MessagePort.t [@@js.apply_newable]
 end
-and AnonymousInterface267 : sig
+and AnonymousInterface268 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18181,7 +18266,7 @@ and AnonymousInterface267 : sig
   val set_prototype: t -> MouseEvent.t -> unit [@@js.set "prototype"]
   val create: t -> type_:string -> ?eventInitDict:MouseEventInit.t -> unit -> MouseEvent.t [@@js.apply_newable]
 end
-and AnonymousInterface268 : sig
+and AnonymousInterface269 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18192,7 +18277,7 @@ and AnonymousInterface268 : sig
   val get_MODIFICATION: t -> float [@@js.get "MODIFICATION"]
   val get_REMOVAL: t -> float [@@js.get "REMOVAL"]
 end
-and AnonymousInterface271 : sig
+and AnonymousInterface272 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18200,7 +18285,7 @@ and AnonymousInterface271 : sig
   val set_prototype: t -> NamedNodeMap.t -> unit [@@js.set "prototype"]
   val create: t -> NamedNodeMap.t [@@js.apply_newable]
 end
-and AnonymousInterface272 : sig
+and AnonymousInterface273 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18208,7 +18293,7 @@ and AnonymousInterface272 : sig
   val set_prototype: t -> Navigator.t -> unit [@@js.set "prototype"]
   val create: t -> Navigator.t [@@js.apply_newable]
 end
-and AnonymousInterface274 : sig
+and AnonymousInterface275 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18260,7 +18345,7 @@ and AnonymousInterface274 : sig
   (** node is a Text node. *)
   val get_TEXT_NODE: t -> float [@@js.get "TEXT_NODE"]
 end
-and AnonymousInterface275 : sig
+and AnonymousInterface276 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -18268,7 +18353,7 @@ and AnonymousInterface275 : sig
   val set_prototype: t -> NodeIterator.t -> unit [@@js.set "prototype"]
   val create: t -> NodeIterator.t [@@js.apply_newable]
 end
-and AnonymousInterface276 : sig
+and AnonymousInterface277 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -19856,6 +19941,8 @@ and[@js.scope "CSSStyleDeclaration"] CSSStyleDeclaration : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val get_accentColor: 'tags this -> string [@@js.get "accentColor"]
+  val set_accentColor: 'tags this -> string -> unit [@@js.set "accentColor"]
   val get_alignContent: 'tags this -> string [@@js.get "alignContent"]
   val set_alignContent: 'tags this -> string -> unit [@@js.set "alignContent"]
   val get_alignItems: 'tags this -> string [@@js.get "alignItems"]
@@ -20206,17 +20293,29 @@ and[@js.scope "CSSStyleDeclaration"] CSSStyleDeclaration : sig
   val set_gridColumn: 'tags this -> string -> unit [@@js.set "gridColumn"]
   val get_gridColumnEnd: 'tags this -> string [@@js.get "gridColumnEnd"]
   val set_gridColumnEnd: 'tags this -> string -> unit [@@js.set "gridColumnEnd"]
+  
+  (** @deprecated This is a legacy alias of `columnGap`. *)
   val get_gridColumnGap: 'tags this -> string [@@js.get "gridColumnGap"]
+  
+  (** @deprecated This is a legacy alias of `columnGap`. *)
   val set_gridColumnGap: 'tags this -> string -> unit [@@js.set "gridColumnGap"]
   val get_gridColumnStart: 'tags this -> string [@@js.get "gridColumnStart"]
   val set_gridColumnStart: 'tags this -> string -> unit [@@js.set "gridColumnStart"]
+  
+  (** @deprecated This is a legacy alias of `gap`. *)
   val get_gridGap: 'tags this -> string [@@js.get "gridGap"]
+  
+  (** @deprecated This is a legacy alias of `gap`. *)
   val set_gridGap: 'tags this -> string -> unit [@@js.set "gridGap"]
   val get_gridRow: 'tags this -> string [@@js.get "gridRow"]
   val set_gridRow: 'tags this -> string -> unit [@@js.set "gridRow"]
   val get_gridRowEnd: 'tags this -> string [@@js.get "gridRowEnd"]
   val set_gridRowEnd: 'tags this -> string -> unit [@@js.set "gridRowEnd"]
+  
+  (** @deprecated This is a legacy alias of `rowGap`. *)
   val get_gridRowGap: 'tags this -> string [@@js.get "gridRowGap"]
+  
+  (** @deprecated This is a legacy alias of `rowGap`. *)
   val set_gridRowGap: 'tags this -> string -> unit [@@js.set "gridRowGap"]
   val get_gridRowStart: 'tags this -> string [@@js.get "gridRowStart"]
   val set_gridRowStart: 'tags this -> string -> unit [@@js.set "gridRowStart"]
@@ -20737,34 +20836,34 @@ and[@js.scope "CSSStyleDeclaration"] CSSStyleDeclaration : sig
   (** @deprecated This is a legacy alias of `borderTopRightRadius`. *)
   val set_webkitBorderTopRightRadius: 'tags this -> string -> unit [@@js.set "webkitBorderTopRightRadius"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxAlign`. *)
   val get_webkitBoxAlign: 'tags this -> string [@@js.get "webkitBoxAlign"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxAlign`. *)
   val set_webkitBoxAlign: 'tags this -> string -> unit [@@js.set "webkitBoxAlign"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxFlex`. *)
   val get_webkitBoxFlex: 'tags this -> string [@@js.get "webkitBoxFlex"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxFlex`. *)
   val set_webkitBoxFlex: 'tags this -> string -> unit [@@js.set "webkitBoxFlex"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxOrdinalGroup`. *)
   val get_webkitBoxOrdinalGroup: 'tags this -> string [@@js.get "webkitBoxOrdinalGroup"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxOrdinalGroup`. *)
   val set_webkitBoxOrdinalGroup: 'tags this -> string -> unit [@@js.set "webkitBoxOrdinalGroup"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxOrient`. *)
   val get_webkitBoxOrient: 'tags this -> string [@@js.get "webkitBoxOrient"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxOrient`. *)
   val set_webkitBoxOrient: 'tags this -> string -> unit [@@js.set "webkitBoxOrient"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxPack`. *)
   val get_webkitBoxPack: 'tags this -> string [@@js.get "webkitBoxPack"]
   
-  (** @deprecated  *)
+  (** @deprecated This is a legacy alias of `boxPack`. *)
   val set_webkitBoxPack: 'tags this -> string -> unit [@@js.set "webkitBoxPack"]
   
   (** @deprecated This is a legacy alias of `boxShadow`. *)
@@ -21063,7 +21162,10 @@ and[@js.scope "CSSStyleSheet"] CSSStyleSheet : sig
   val create: ?options:CSSStyleSheetInit.t -> unit -> t [@@js.create]
 end
 
-(** Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec. *)
+(**
+  Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
+  Available only in secure contexts.
+*)
 and[@js.scope "Cache"] Cache : sig
   type t = [`Cache] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -21080,20 +21182,23 @@ and[@js.scope "Cache"] Cache : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val addAll: 'tags this -> requests:RequestInfo.t Iterable.t_1 -> unit Promise.t_1 [@@js.call "addAll"]
   val add: 'tags this -> request:RequestInfo.t -> unit Promise.t_1 [@@js.call "add"]
-  val addAll': 'tags this -> requests:RequestInfo.t list -> unit Promise.t_1 [@@js.call "addAll"]
+  val addAll: 'tags this -> requests:RequestInfo.t list -> unit Promise.t_1 [@@js.call "addAll"]
   val delete: 'tags this -> request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> bool Promise.t_1 [@@js.call "delete"]
   val keys: 'tags this -> ?request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Request.t list Promise.t_1 [@@js.call "keys"]
   val match_: 'tags this -> request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Response.t or_undefined Promise.t_1 [@@js.call "match"]
   val matchAll: 'tags this -> ?request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Response.t list Promise.t_1 [@@js.call "matchAll"]
   val put: 'tags this -> request:RequestInfo.t -> response:Response.t -> unit Promise.t_1 [@@js.call "put"]
+  val addAll': 'tags this -> requests:RequestInfo.t Iterable.t_1 -> unit Promise.t_1 [@@js.call "addAll"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
 
-(** The storage for Cache objects. *)
+(**
+  The storage for Cache objects.
+  Available only in secure contexts.
+*)
 and[@js.scope "CacheStorage"] CacheStorage : sig
   type t = [`CacheStorage] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -21166,7 +21271,7 @@ and CanvasFillStrokeStyles : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 and CanvasImageSource : sig
-  type t = (HTMLCanvasElement.t, HTMLOrSVGImageElement.t, HTMLVideoElement.t, ImageBitmap.t) union4
+  type t = ((([`U_s130_async of HTMLOrSVGImageElement.t [@js "async"] | `U_s141_auto of HTMLOrSVGImageElement.t [@js "auto"] | `U_s746_sync of HTMLOrSVGImageElement.t [@js "sync"]] [@js.union on_field "decoding"]), ([`U_s0 of HTMLVideoElement.t [@js ""] | `U_s141_auto of HTMLVideoElement.t [@js "auto"] | `U_s493_metadata of HTMLVideoElement.t [@js "metadata"] | `U_s528_none of HTMLVideoElement.t [@js "none"]] [@js.union on_field "preload"])) union2, (HTMLCanvasElement.t, ImageBitmap.t) union2) or_
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -21500,7 +21605,7 @@ and[@js.scope "DataTransfer"] DataTransfer : sig
     
     The possible values are "none", "copy", "link", and "move".
   *)
-  val get_dropEffect: 'tags this -> ([`L_s219_copy[@js "copy"] | `L_s452_link[@js "link"] | `L_s508_move[@js "move"] | `L_s529_none[@js "none"]] [@js.enum]) [@@js.get "dropEffect"]
+  val get_dropEffect: 'tags this -> ([`L_s219_copy[@js "copy"] | `L_s451_link[@js "link"] | `L_s507_move[@js "move"] | `L_s528_none[@js "none"]] [@js.enum]) [@@js.get "dropEffect"]
   
   (**
     Returns the kind of operation that is currently selected. If the kind of operation isn't one of those that is allowed by the effectAllowed attribute, then the operation will fail.
@@ -21509,7 +21614,7 @@ and[@js.scope "DataTransfer"] DataTransfer : sig
     
     The possible values are "none", "copy", "link", and "move".
   *)
-  val set_dropEffect: 'tags this -> ([`L_s219_copy[@js "copy"] | `L_s452_link[@js "link"] | `L_s508_move[@js "move"] | `L_s529_none[@js "none"]] [@js.enum]) -> unit [@@js.set "dropEffect"]
+  val set_dropEffect: 'tags this -> ([`L_s219_copy[@js "copy"] | `L_s451_link[@js "link"] | `L_s507_move[@js "move"] | `L_s528_none[@js "none"]] [@js.enum]) -> unit [@@js.set "dropEffect"]
   
   (**
     Returns the kinds of operations that are to be allowed.
@@ -21518,7 +21623,7 @@ and[@js.scope "DataTransfer"] DataTransfer : sig
     
     The possible values are "none", "copy", "copyLink", "copyMove", "link", "linkMove", "move", "all", and "uninitialized",
   *)
-  val get_effectAllowed: 'tags this -> ([`L_s106_all[@js "all"] | `L_s219_copy[@js "copy"] | `L_s220_copyLink[@js "copyLink"] | `L_s221_copyMove[@js "copyMove"] | `L_s452_link[@js "link"] | `L_s453_linkMove[@js "linkMove"] | `L_s508_move[@js "move"] | `L_s529_none[@js "none"] | `L_s796_uninitialized[@js "uninitialized"]] [@js.enum]) [@@js.get "effectAllowed"]
+  val get_effectAllowed: 'tags this -> ([`L_s106_all[@js "all"] | `L_s219_copy[@js "copy"] | `L_s220_copyLink[@js "copyLink"] | `L_s221_copyMove[@js "copyMove"] | `L_s451_link[@js "link"] | `L_s452_linkMove[@js "linkMove"] | `L_s507_move[@js "move"] | `L_s528_none[@js "none"] | `L_s795_uninitialized[@js "uninitialized"]] [@js.enum]) [@@js.get "effectAllowed"]
   
   (**
     Returns the kinds of operations that are to be allowed.
@@ -21527,7 +21632,7 @@ and[@js.scope "DataTransfer"] DataTransfer : sig
     
     The possible values are "none", "copy", "copyLink", "copyMove", "link", "linkMove", "move", "all", and "uninitialized",
   *)
-  val set_effectAllowed: 'tags this -> ([`L_s106_all[@js "all"] | `L_s219_copy[@js "copy"] | `L_s220_copyLink[@js "copyLink"] | `L_s221_copyMove[@js "copyMove"] | `L_s452_link[@js "link"] | `L_s453_linkMove[@js "linkMove"] | `L_s508_move[@js "move"] | `L_s529_none[@js "none"] | `L_s796_uninitialized[@js "uninitialized"]] [@js.enum]) -> unit [@@js.set "effectAllowed"]
+  val set_effectAllowed: 'tags this -> ([`L_s106_all[@js "all"] | `L_s219_copy[@js "copy"] | `L_s220_copyLink[@js "copyLink"] | `L_s221_copyMove[@js "copyMove"] | `L_s451_link[@js "link"] | `L_s452_linkMove[@js "linkMove"] | `L_s507_move[@js "move"] | `L_s528_none[@js "none"] | `L_s795_uninitialized[@js "uninitialized"]] [@js.enum]) -> unit [@@js.set "effectAllowed"]
   
   (** Returns a FileList of the files being dragged, if any. *)
   val get_files: 'tags this -> FileList.t [@@js.get "files"]
@@ -21884,7 +21989,7 @@ and[@js.scope "Document"] Document : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS: 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> qualifiedName:string -> HTMLElement.t [@@js.call "createElementNS"]
+  val createElementNS: 'tags this -> namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> qualifiedName:string -> HTMLElement.t [@@js.call "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -21901,7 +22006,7 @@ and[@js.scope "Document"] Document : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS': 'tags this -> namespaceURI:([`L_s391_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any [@@js.call "createElementNS"]
+  val createElementNS': 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any [@@js.call "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -21918,7 +22023,7 @@ and[@js.scope "Document"] Document : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS'': 'tags this -> namespaceURI:([`L_s391_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:string -> SVGElement.t [@@js.call "createElementNS"]
+  val createElementNS'': 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:string -> SVGElement.t [@@js.call "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -22040,14 +22145,6 @@ and[@js.scope "Document"] Document : sig
   val createTreeWalker: 'tags this -> root:Node.t -> ?whatToShow:float -> ?filter:NodeFilter.t or_null -> unit -> TreeWalker.t [@@js.call "createTreeWalker"]
   
   (**
-    Returns the element for the specified x coordinate and the specified y coordinate.
-    @param x The x-offset
-    @param y The y-offset
-  *)
-  val elementFromPoint: 'tags this -> x:float -> y:float -> Element.t or_null [@@js.call "elementFromPoint"]
-  val elementsFromPoint: 'tags this -> x:float -> y:float -> Element.t list [@@js.call "elementsFromPoint"]
-  
-  (**
     Executes a command on the current document, current selection, or the given range.
     @param commandId String that specifies the command to execute. This command can be any of the command identifiers that can be executed in script.
     @param showUI Display the user interface, defaults to false.
@@ -22097,7 +22194,7 @@ and[@js.scope "Document"] Document : sig
     
     Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
   *)
-  val getElementsByTagNameNS: 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
+  val getElementsByTagNameNS: 'tags this -> namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
   
   (**
     If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
@@ -22108,7 +22205,7 @@ and[@js.scope "Document"] Document : sig
     
     Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
   *)
-  val getElementsByTagNameNS': 'tags this -> namespaceURI:([`L_s391_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
+  val getElementsByTagNameNS': 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
   
   (**
     If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
@@ -22328,6 +22425,14 @@ and DocumentOrShadowRoot : sig
   
   (** Retrieves a collection of styleSheet objects representing the style sheets that correspond to each instance of a link or style object in the document. *)
   val get_styleSheets: 'tags this -> StyleSheetList.t [@@js.get "styleSheets"]
+  
+  (**
+    Returns the element for the specified x coordinate and the specified y coordinate.
+    @param x The x-offset
+    @param y The y-offset
+  *)
+  val elementFromPoint: 'tags this -> x:float -> y:float -> Element.t or_null [@@js.call "elementFromPoint"]
+  val elementsFromPoint: 'tags this -> x:float -> y:float -> Element.t list [@@js.call "elementsFromPoint"]
   val getAnimations: 'tags this -> Animation.t list [@@js.call "getAnimations"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
@@ -22510,8 +22615,8 @@ and[@js.scope "Element"] Element : sig
   val getElementsByTagName: 'tags this -> qualifiedName:'K -> (* FIXME: unknown type 'HTMLElementTagNameMap[K]' *)any HTMLCollectionOf.t [@@js.call "getElementsByTagName"]
   val getElementsByTagName': 'tags this -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any HTMLCollectionOf.t [@@js.call "getElementsByTagName"]
   val getElementsByTagName'': 'tags this -> qualifiedName:string -> t HTMLCollectionOf.t [@@js.call "getElementsByTagName"]
-  val getElementsByTagNameNS: 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
-  val getElementsByTagNameNS': 'tags this -> namespaceURI:([`L_s391_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
+  val getElementsByTagNameNS: 'tags this -> namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
+  val getElementsByTagNameNS': 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
   val getElementsByTagNameNS'': 'tags this -> namespace:string or_null -> localName:string -> t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
   
   (** Returns true if element has an attribute whose qualified name is qualifiedName, and false otherwise. *)
@@ -22634,6 +22739,29 @@ and ElementCSSInlineStyle : sig
   val get_style: 'tags this -> CSSStyleDeclaration.t [@@js.get "style"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+and[@js.scope "ElementInternals"] ElementInternals : sig
+  type t = [`ARIAMixin | `ElementInternals] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ARIAMixin | `ElementInternals]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ARIAMixin | `ElementInternals]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ElementInternals ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Returns the ShadowRoot for internals's target element, if the target element is a shadow host, or null otherwise. *)
+  val get_shadowRoot: 'tags this -> ShadowRoot.t or_null [@@js.get "shadowRoot"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
 and EventModifierInit : sig
   type t = [`EventInit | `EventModifierInit | `UIEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -22741,6 +22869,13 @@ and[@js.scope "FormData"] FormData : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val append: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "append"]
+  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
+  val get_: 'tags this -> name:string -> FormDataEntryValue.t or_null [@@js.call "get"]
+  val getAll: 'tags this -> name:string -> FormDataEntryValue.t list [@@js.call "getAll"]
+  val has: 'tags this -> name:string -> bool [@@js.call "has"]
+  val set_: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "set"]
+  val forEach: 'tags this -> callbackfn:(value:FormDataEntryValue.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   
   (** Returns an array of key, value pairs for every entry in the list. *)
   val entries: 'tags this -> (string * FormDataEntryValue.t) IterableIterator.t_1 [@@js.call "entries"]
@@ -22750,13 +22885,6 @@ and[@js.scope "FormData"] FormData : sig
   
   (** Returns a list of values in the list. *)
   val values: 'tags this -> FormDataEntryValue.t IterableIterator.t_1 [@@js.call "values"]
-  val append: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "append"]
-  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
-  val get_: 'tags this -> name:string -> FormDataEntryValue.t or_null [@@js.call "get"]
-  val getAll: 'tags this -> name:string -> FormDataEntryValue.t list [@@js.call "getAll"]
-  val has: 'tags this -> name:string -> bool [@@js.call "has"]
-  val set_: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "set"]
-  val forEach: 'tags this -> callbackfn:(value:FormDataEntryValue.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?form:HTMLFormElement.t -> unit -> t [@@js.create]
@@ -23368,8 +23496,8 @@ and GlobalEventHandlers : sig
     @param ev The event.
   *)
   val set_onstalled: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onstalled"]
-  val get_onsubmit: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onsubmit"]
-  val set_onsubmit: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsubmit"]
+  val get_onsubmit: 'tags this -> (this:t -> ev:SubmitEvent.t -> any) or_null [@@js.get "onsubmit"]
+  val set_onsubmit: 'tags this -> (this:t -> ev:SubmitEvent.t -> any) or_null -> unit [@@js.set "onsubmit"]
   
   (**
     Occurs if the load operation has been intentionally halted.
@@ -23436,13 +23564,29 @@ and GlobalEventHandlers : sig
     @param ev The event.
   *)
   val set_onwaiting: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onwaiting"]
+  
+  (** @deprecated This is a legacy alias of `onanimationend`. *)
   val get_onwebkitanimationend: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onwebkitanimationend"]
+  
+  (** @deprecated This is a legacy alias of `onanimationend`. *)
   val set_onwebkitanimationend: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onwebkitanimationend"]
+  
+  (** @deprecated This is a legacy alias of `onanimationiteration`. *)
   val get_onwebkitanimationiteration: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onwebkitanimationiteration"]
+  
+  (** @deprecated This is a legacy alias of `onanimationiteration`. *)
   val set_onwebkitanimationiteration: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onwebkitanimationiteration"]
+  
+  (** @deprecated This is a legacy alias of `onanimationstart`. *)
   val get_onwebkitanimationstart: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onwebkitanimationstart"]
+  
+  (** @deprecated This is a legacy alias of `onanimationstart`. *)
   val set_onwebkitanimationstart: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onwebkitanimationstart"]
+  
+  (** @deprecated This is a legacy alias of `ontransitionend`. *)
   val get_onwebkittransitionend: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onwebkittransitionend"]
+  
+  (** @deprecated This is a legacy alias of `ontransitionend`. *)
   val set_onwebkittransitionend: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onwebkittransitionend"]
   val get_onwheel: 'tags this -> (this:t -> ev:WheelEvent.t -> any) or_null [@@js.get "onwheel"]
   val set_onwheel: 'tags this -> (this:t -> ev:WheelEvent.t -> any) or_null -> unit [@@js.set "onwheel"]
@@ -23817,10 +23961,10 @@ and[@js.scope "HTMLCanvasElement"] HTMLCanvasElement : sig
   val getContext': 'tags this -> contextId:([`L_s159_bitmaprenderer[@js "bitmaprenderer"]] [@js.enum]) -> ?options:ImageBitmapRenderingContextSettings.t -> unit -> ImageBitmapRenderingContext.t or_null [@@js.call "getContext"]
   
   (** Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas. *)
-  val getContext'': 'tags this -> contextId:([`L_s831_webgl[@js "webgl"]] [@js.enum]) -> ?options:WebGLContextAttributes.t -> unit -> WebGLRenderingContext.t or_null [@@js.call "getContext"]
+  val getContext'': 'tags this -> contextId:([`L_s830_webgl[@js "webgl"]] [@js.enum]) -> ?options:WebGLContextAttributes.t -> unit -> WebGLRenderingContext.t or_null [@@js.call "getContext"]
   
   (** Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas. *)
-  val getContext''': 'tags this -> contextId:([`L_s832_webgl2[@js "webgl2"]] [@js.enum]) -> ?options:WebGLContextAttributes.t -> unit -> WebGL2RenderingContext.t or_null [@@js.call "getContext"]
+  val getContext''': 'tags this -> contextId:([`L_s831_webgl2[@js "webgl2"]] [@js.enum]) -> ?options:WebGLContextAttributes.t -> unit -> WebGL2RenderingContext.t or_null [@@js.call "getContext"]
   
   (** Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas. *)
   val getContext'''': 'tags this -> contextId:string -> ?options:any -> unit -> RenderingContext.t or_null [@@js.call "getContext"]
@@ -24008,6 +24152,7 @@ and[@js.scope "HTMLElement"] HTMLElement : sig
   val set_title: 'tags this -> string -> unit [@@js.set "title"]
   val get_translate: 'tags this -> bool [@@js.get "translate"]
   val set_translate: 'tags this -> bool -> unit [@@js.set "translate"]
+  val attachInternals: 'tags this -> ElementInternals.t [@@js.call "attachInternals"]
   val click: 'tags this -> unit [@@js.call "click"]
   
   (**
@@ -24472,8 +24617,8 @@ and[@js.scope "HTMLImageElement"] HTMLImageElement : sig
   val get_crossOrigin: 'tags this -> string or_null [@@js.get "crossOrigin"]
   val set_crossOrigin: 'tags this -> string or_null -> unit [@@js.set "crossOrigin"]
   val get_currentSrc: 'tags this -> string [@@js.get "currentSrc"]
-  val get_decoding: 'tags this -> ([`L_s130_async[@js "async"] | `L_s141_auto[@js "auto"] | `L_s747_sync[@js "sync"]] [@js.enum]) [@@js.get "decoding"]
-  val set_decoding: 'tags this -> ([`L_s130_async[@js "async"] | `L_s141_auto[@js "auto"] | `L_s747_sync[@js "sync"]] [@js.enum]) -> unit [@@js.set "decoding"]
+  val get_decoding: 'tags this -> ([`L_s130_async[@js "async"] | `L_s141_auto[@js "auto"] | `L_s746_sync[@js "sync"]] [@js.enum]) [@@js.get "decoding"]
+  val set_decoding: 'tags this -> ([`L_s130_async[@js "async"] | `L_s141_auto[@js "auto"] | `L_s746_sync[@js "sync"]] [@js.enum]) -> unit [@@js.set "decoding"]
   
   (** Sets or retrieves the height of the object. *)
   val get_height: 'tags this -> float [@@js.get "height"]
@@ -24700,6 +24845,8 @@ and[@js.scope "HTMLMediaElement"] HTMLMediaElement : sig
   
   (** Gets or sets a flag to specify whether playback should restart after it completes. *)
   val set_loop: 'tags this -> bool -> unit [@@js.set "loop"]
+  
+  (** Available only in secure contexts. *)
   val get_mediaKeys: 'tags this -> MediaKeys.t or_null [@@js.get "mediaKeys"]
   
   (** Gets or sets a flag that indicates whether the audio (either audio or the audio track on video media) is muted. *)
@@ -24727,11 +24874,11 @@ and[@js.scope "HTMLMediaElement"] HTMLMediaElement : sig
   (** Gets TimeRanges for the current media resource that has been played. *)
   val get_played: 'tags this -> TimeRanges.t [@@js.get "played"]
   
-  (** Gets or sets the current playback position, in seconds. *)
-  val get_preload: 'tags this -> string [@@js.get "preload"]
+  (** Gets or sets a value indicating what data should be preloaded, if any. *)
+  val get_preload: 'tags this -> ([`L_s0[@js ""] | `L_s141_auto[@js "auto"] | `L_s493_metadata[@js "metadata"] | `L_s528_none[@js "none"]] [@js.enum]) [@@js.get "preload"]
   
-  (** Gets or sets the current playback position, in seconds. *)
-  val set_preload: 'tags this -> string -> unit [@@js.set "preload"]
+  (** Gets or sets a value indicating what data should be preloaded, if any. *)
+  val set_preload: 'tags this -> ([`L_s0[@js ""] | `L_s141_auto[@js "auto"] | `L_s493_metadata[@js "metadata"] | `L_s528_none[@js "none"]] [@js.enum]) -> unit [@@js.set "preload"]
   val get_readyState: 'tags this -> float [@@js.get "readyState"]
   val get_remote: 'tags this -> RemotePlayback.t [@@js.get "remote"]
   
@@ -24769,6 +24916,8 @@ and[@js.scope "HTMLMediaElement"] HTMLMediaElement : sig
   
   (** Loads and starts playback of a media resource. *)
   val play: 'tags this -> unit Promise.t_1 [@@js.call "play"]
+  
+  (** Available only in secure contexts. *)
   val setMediaKeys: 'tags this -> mediaKeys:MediaKeys.t or_null -> unit Promise.t_1 [@@js.call "setMediaKeys"]
   val get_HAVE_CURRENT_DATA: 'tags this -> float [@@js.get "HAVE_CURRENT_DATA"]
   val get_HAVE_ENOUGH_DATA: 'tags this -> float [@@js.get "HAVE_ENOUGH_DATA"]
@@ -25022,6 +25171,7 @@ and[@js.scope "HTMLSlotElement"] HTMLSlotElement : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_name: 'tags this -> string [@@js.get "name"]
   val set_name: 'tags this -> string -> unit [@@js.set "name"]
+  val assign: 'tags this -> nodes:((Element.t, Text.t) union2 list [@js.variadic]) -> unit [@@js.call "assign"]
   val assignedElements: 'tags this -> ?options:AssignedNodesOptions.t -> unit -> Element.t list [@@js.call "assignedElements"]
   val assignedNodes: 'tags this -> ?options:AssignedNodesOptions.t -> unit -> Node.t list [@@js.call "assignedNodes"]
   
@@ -25411,9 +25561,6 @@ and[@js.scope "MessageEvent"] MessageEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
-  (** @deprecated  *)
-  val initMessageEvent: ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t Iterable.t_1 -> unit -> unit [@@js.call "initMessageEvent"]
-  
   (** Returns the data of the message. *)
   val get_data: ('tags, 'T) this -> 'T [@@js.get "data"]
   
@@ -25430,7 +25577,10 @@ and[@js.scope "MessageEvent"] MessageEvent : sig
   val get_source: ('tags, 'T) this -> MessageEventSource.t or_null [@@js.get "source"]
   
   (** @deprecated  *)
-  val initMessageEvent': ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
+  val initMessageEvent: ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
+  
+  (** @deprecated  *)
+  val initMessageEvent': ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t Iterable.t_1 -> unit -> unit [@@js.call "initMessageEvent"]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:'T MessageEventInit.t -> unit -> 'T t [@@js.create]
@@ -25514,7 +25664,7 @@ and[@js.scope "MessagePort"] MessagePort : sig
     
     Throws a "DataCloneError" DOMException if transfer contains duplicate objects or port, or if message could not be cloned.
   *)
-  val postMessage': 'tags this -> message:any -> ?options:PostMessageOptions.t -> unit -> unit [@@js.call "postMessage"]
+  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
   
   (** Begins dispatching messages received on the port. *)
   val start: 'tags this -> unit [@@js.call "start"]
@@ -25739,24 +25889,40 @@ and[@js.scope "Navigator"] Navigator : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val requestMediaKeySystemAccess: 'tags this -> keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.call "requestMediaKeySystemAccess"]
-  val vibrate: 'tags this -> pattern:float Iterable.t_1 -> bool [@@js.call "vibrate"]
+  
+  (** Available only in secure contexts. *)
   val get_clipboard: 'tags this -> Clipboard.t [@@js.get "clipboard"]
+  
+  (** Available only in secure contexts. *)
   val get_credentials: 'tags this -> CredentialsContainer.t [@@js.get "credentials"]
   val get_doNotTrack: 'tags this -> string or_null [@@js.get "doNotTrack"]
   val get_geolocation: 'tags this -> Geolocation.t [@@js.get "geolocation"]
   val get_maxTouchPoints: 'tags this -> float [@@js.get "maxTouchPoints"]
   val get_mediaCapabilities: 'tags this -> MediaCapabilities.t [@@js.get "mediaCapabilities"]
+  
+  (** Available only in secure contexts. *)
   val get_mediaDevices: 'tags this -> MediaDevices.t [@@js.get "mediaDevices"]
   val get_mediaSession: 'tags this -> MediaSession.t [@@js.get "mediaSession"]
   val get_permissions: 'tags this -> Permissions.t [@@js.get "permissions"]
-  val get_pointerEnabled: 'tags this -> bool [@@js.get "pointerEnabled"]
+  
+  (** Available only in secure contexts. *)
   val get_serviceWorker: 'tags this -> ServiceWorkerContainer.t [@@js.get "serviceWorker"]
+  
+  (** Available only in secure contexts. *)
+  val canShare: 'tags this -> ?data:ShareData.t -> unit -> bool [@@js.call "canShare"]
   val getGamepads: 'tags this -> Gamepad.t or_null list [@@js.call "getGamepads"]
-  val requestMediaKeySystemAccess': 'tags this -> keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.call "requestMediaKeySystemAccess"]
+  
+  (** Available only in secure contexts. *)
+  val requestMediaKeySystemAccess: 'tags this -> keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.call "requestMediaKeySystemAccess"]
   val sendBeacon: 'tags this -> url:URL.t or_string -> ?data:BodyInit.t or_null -> unit -> bool [@@js.call "sendBeacon"]
+  
+  (** Available only in secure contexts. *)
   val share: 'tags this -> ?data:ShareData.t -> unit -> unit Promise.t_1 [@@js.call "share"]
-  val vibrate': 'tags this -> pattern:VibratePattern.t -> bool [@@js.call "vibrate"]
+  val vibrate: 'tags this -> pattern:VibratePattern.t -> bool [@@js.call "vibrate"]
+  
+  (** Available only in secure contexts. *)
+  val requestMediaKeySystemAccess': 'tags this -> keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.call "requestMediaKeySystemAccess"]
+  val vibrate': 'tags this -> pattern:float Iterable.t_1 -> bool [@@js.call "vibrate"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -26015,15 +26181,6 @@ and[@js.scope "NodeList"] NodeList : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
-  (** Returns an array of key, value pairs for every entry in the list. *)
-  val entries: 'tags this -> (float * Node.t) IterableIterator.t_1 [@@js.call "entries"]
-  
-  (** Returns an list of keys in the list. *)
-  val keys: 'tags this -> float IterableIterator.t_1 [@@js.call "keys"]
-  
-  (** Returns an list of values in the list. *)
-  val values: 'tags this -> Node.t IterableIterator.t_1 [@@js.call "values"]
-  
   (** Returns the number of nodes in the collection. *)
   val get_length: 'tags this -> float [@@js.get "length"]
   
@@ -26038,6 +26195,15 @@ and[@js.scope "NodeList"] NodeList : sig
   val forEach: 'tags this -> callbackfn:(value:Node.t -> key:float -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: 'tags this -> float -> Node.t [@@js.index_get]
   val set: 'tags this -> float -> Node.t -> unit [@@js.index_set]
+  
+  (** Returns an array of key, value pairs for every entry in the list. *)
+  val entries: 'tags this -> (float * Node.t) IterableIterator.t_1 [@@js.call "entries"]
+  
+  (** Returns an list of keys in the list. *)
+  val keys: 'tags this -> float IterableIterator.t_1 [@@js.call "keys"]
+  
+  (** Returns an list of values in the list. *)
+  val values: 'tags this -> Node.t IterableIterator.t_1 [@@js.call "values"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -26059,15 +26225,6 @@ and NodeListOf : sig
   val t_1_to_js: ('TNode -> Ojs.t) -> 'TNode t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'TNode) -> Ojs.t -> 'TNode t_1
   
-  (** Returns an array of key, value pairs for every entry in the list. *)
-  val entries: ('tags, 'TNode) this -> (float * 'TNode) IterableIterator.t_1 [@@js.call "entries"]
-  
-  (** Returns an list of keys in the list. *)
-  val keys: ('tags, 'TNode) this -> float IterableIterator.t_1 [@@js.call "keys"]
-  
-  (** Returns an list of values in the list. *)
-  val values: ('tags, 'TNode) this -> 'TNode IterableIterator.t_1 [@@js.call "values"]
-  
   (** Returns the node with index index from the collection. The nodes are sorted in tree order. *)
   val item: ('tags, 'TNode) this -> index:float -> 'TNode [@@js.call "item"]
   
@@ -26079,6 +26236,15 @@ and NodeListOf : sig
   val forEach: ('tags, 'TNode) this -> callbackfn:(value:'TNode -> key:float -> parent:'TNode t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: ('tags, 'TNode) this -> float -> 'TNode [@@js.index_get]
   val set: ('tags, 'TNode) this -> float -> 'TNode -> unit [@@js.index_set]
+  
+  (** Returns an array of key, value pairs for every entry in the list. *)
+  val entries: ('tags, 'TNode) this -> (float * 'TNode) IterableIterator.t_1 [@@js.call "entries"]
+  
+  (** Returns an list of keys in the list. *)
+  val keys: ('tags, 'TNode) this -> float IterableIterator.t_1 [@@js.call "keys"]
+  
+  (** Returns an list of values in the list. *)
+  val values: ('tags, 'TNode) this -> 'TNode IterableIterator.t_1 [@@js.call "values"]
   val cast_from: (('tags, 'TNode) this -> 'TNode t) [@@js.custom let cast_from = Obj.magic]
 end
 and NonDocumentTypeChildNode : sig
@@ -26221,6 +26387,8 @@ and[@js.scope "PointerEvent"] PointerEvent : sig
   val get_tiltY: 'tags this -> float [@@js.get "tiltY"]
   val get_twist: 'tags this -> float [@@js.get "twist"]
   val get_width: 'tags this -> float [@@js.get "width"]
+  
+  (** Available only in secure contexts. *)
   val getCoalescedEvents: 'tags this -> t list [@@js.call "getCoalescedEvents"]
   val getPredictedEvents: 'tags this -> t list [@@js.call "getPredictedEvents"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
@@ -26678,10 +26846,10 @@ and RequestInit : sig
   val set_signal: 'tags this -> AbortSignal.t or_null -> unit [@@js.set "signal"]
   
   (** Can only be null. Used to disassociate request from any Window. *)
-  val get_window: 'tags this -> any [@@js.get "window"]
+  val get_window: 'tags this -> never or_null [@@js.get "window"]
   
   (** Can only be null. Used to disassociate request from any Window. *)
-  val set_window: 'tags this -> any -> unit [@@js.set "window"]
+  val set_window: 'tags this -> never or_null -> unit [@@js.set "window"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -28113,7 +28281,10 @@ and[@js.scope "Selection"] Selection : sig
   val toString': unit -> string [@@js.global "toString"]
 end
 
-(** This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. *)
+(**
+  This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object.
+  Available only in secure contexts.
+*)
 and[@js.scope "ServiceWorker"] ServiceWorker : sig
   type t = [`AbstractWorker | `EventTarget | `ServiceWorker] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -28135,7 +28306,7 @@ and[@js.scope "ServiceWorker"] ServiceWorker : sig
   val get_scriptURL: 'tags this -> string [@@js.get "scriptURL"]
   val get_state: 'tags this -> ServiceWorkerState.t [@@js.get "state"]
   val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
-  val postMessage': 'tags this -> message:any -> ?options:PostMessageOptions.t -> unit -> unit [@@js.call "postMessage"]
+  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -28181,7 +28352,10 @@ and[@js.scope "ServiceWorker"] ServiceWorker : sig
   val create: unit -> t [@@js.create]
 end
 
-(** The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations. *)
+(**
+  The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations.
+  Available only in secure contexts.
+*)
 and[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   type t = [`EventTarget | `ServiceWorkerContainer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -28255,7 +28429,10 @@ and[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   val create: unit -> t [@@js.create]
 end
 
-(** This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin. *)
+(**
+  This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin.
+  Available only in secure contexts.
+*)
 and[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
   type t = [`EventTarget | `ServiceWorkerRegistration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -28516,7 +28693,7 @@ and SubmitEventInit : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 and TexImageSource : sig
-  type t = (HTMLCanvasElement.t, HTMLImageElement.t, HTMLVideoElement.t, ImageBitmap.t, ImageData.t) union5
+  type t = ((([`U_s130_async of HTMLImageElement.t [@js "async"] | `U_s141_auto of HTMLImageElement.t [@js "auto"] | `U_s746_sync of HTMLImageElement.t [@js "sync"]] [@js.union on_field "decoding"]), ([`U_s0 of HTMLVideoElement.t [@js ""] | `U_s141_auto of HTMLVideoElement.t [@js "auto"] | `U_s493_metadata of HTMLVideoElement.t [@js "metadata"] | `U_s528_none of HTMLVideoElement.t [@js "none"]] [@js.union on_field "preload"])) union2, (HTMLCanvasElement.t, ImageBitmap.t, ImageData.t) union3) or_
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -28541,7 +28718,6 @@ and[@js.scope "Text"] Text : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_assignedSlot: 'tags this -> HTMLSlotElement.t or_null [@@js.get "assignedSlot"]
   
   (** Returns the combined data of all direct Text node siblings. *)
   val get_wholeText: 'tags this -> string [@@js.get "wholeText"]
@@ -29300,27 +29476,6 @@ and WebGL2RenderingContextBase : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val clearBufferfv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
-  val clearBufferiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
-  val clearBufferuiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
-  val drawBuffers: 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffers"]
-  val getActiveUniforms: 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t Iterable.t_1 -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
-  val getUniformIndices: 'tags this -> program:WebGLProgram.t -> uniformNames:string Iterable.t_1 -> GLuint.t Iterable.t_1 or_null [@@js.call "getUniformIndices"]
-  val invalidateFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> unit [@@js.call "invalidateFramebuffer"]
-  val invalidateSubFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
-  val transformFeedbackVaryings: 'tags this -> program:WebGLProgram.t -> varyings:string Iterable.t_1 -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
-  val uniform1uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
-  val uniform2uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
-  val uniform3uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
-  val uniform4uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
-  val uniformMatrix2x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
-  val uniformMatrix2x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
-  val uniformMatrix3x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
-  val uniformMatrix3x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
-  val uniformMatrix4x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
-  val uniformMatrix4x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
-  val vertexAttribI4iv: 'tags this -> index:GLuint.t -> values:GLint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4iv"]
-  val vertexAttribI4uiv: 'tags this -> index:GLuint.t -> values:GLuint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4uiv"]
   val beginQuery: 'tags this -> target:GLenum.t -> query:WebGLQuery.t -> unit [@@js.call "beginQuery"]
   val beginTransformFeedback: 'tags this -> primitiveMode:GLenum.t -> unit [@@js.call "beginTransformFeedback"]
   val bindBufferBase: 'tags this -> target:GLenum.t -> index:GLuint.t -> buffer:WebGLBuffer.t or_null -> unit [@@js.call "bindBufferBase"]
@@ -29330,9 +29485,9 @@ and WebGL2RenderingContextBase : sig
   val bindVertexArray: 'tags this -> array:WebGLVertexArrayObject.t or_null -> unit [@@js.call "bindVertexArray"]
   val blitFramebuffer: 'tags this -> srcX0:GLint.t -> srcY0:GLint.t -> srcX1:GLint.t -> srcY1:GLint.t -> dstX0:GLint.t -> dstY0:GLint.t -> dstX1:GLint.t -> dstY1:GLint.t -> mask:GLbitfield.t -> filter:GLenum.t -> unit [@@js.call "blitFramebuffer"]
   val clearBufferfi: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> depth:GLfloat.t -> stencil:GLint.t -> unit [@@js.call "clearBufferfi"]
-  val clearBufferfv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Float32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
-  val clearBufferiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Int32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
-  val clearBufferuiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Uint32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
+  val clearBufferfv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Float32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
+  val clearBufferiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Int32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
+  val clearBufferuiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Uint32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
   val clientWaitSync: 'tags this -> sync:WebGLSync.t -> flags:GLbitfield.t -> timeout:GLuint64.t -> GLenum.t [@@js.call "clientWaitSync"]
   val compressedTexImage3D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> imageSize:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "compressedTexImage3D"]
   val compressedTexImage3D': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> srcData:ArrayBufferView.t_0 -> ?srcOffset:GLuint.t -> ?srcLengthOverride:GLuint.t -> unit -> unit [@@js.call "compressedTexImage3D"]
@@ -29350,7 +29505,7 @@ and WebGL2RenderingContextBase : sig
   val deleteTransformFeedback: 'tags this -> tf:WebGLTransformFeedback.t or_null -> unit [@@js.call "deleteTransformFeedback"]
   val deleteVertexArray: 'tags this -> vertexArray:WebGLVertexArrayObject.t or_null -> unit [@@js.call "deleteVertexArray"]
   val drawArraysInstanced: 'tags this -> mode:GLenum.t -> first:GLint.t -> count:GLsizei.t -> instanceCount:GLsizei.t -> unit [@@js.call "drawArraysInstanced"]
-  val drawBuffers': 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffers"]
+  val drawBuffers: 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffers"]
   val drawElementsInstanced: 'tags this -> mode:GLenum.t -> count:GLsizei.t -> type_:GLenum.t -> offset:GLintptr.t -> instanceCount:GLsizei.t -> unit [@@js.call "drawElementsInstanced"]
   val drawRangeElements: 'tags this -> mode:GLenum.t -> start:GLuint.t -> end_:GLuint.t -> count:GLsizei.t -> type_:GLenum.t -> offset:GLintptr.t -> unit [@@js.call "drawRangeElements"]
   val endQuery: 'tags this -> target:GLenum.t -> unit [@@js.call "endQuery"]
@@ -29359,7 +29514,7 @@ and WebGL2RenderingContextBase : sig
   val framebufferTextureLayer: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> texture:WebGLTexture.t or_null -> level:GLint.t -> layer:GLint.t -> unit [@@js.call "framebufferTextureLayer"]
   val getActiveUniformBlockName: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> string or_null [@@js.call "getActiveUniformBlockName"]
   val getActiveUniformBlockParameter: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> pname:GLenum.t -> any [@@js.call "getActiveUniformBlockParameter"]
-  val getActiveUniforms': 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t list -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
+  val getActiveUniforms: 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t list -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
   val getBufferSubData: 'tags this -> target:GLenum.t -> srcByteOffset:GLintptr.t -> dstBuffer:ArrayBufferView.t_0 -> ?dstOffset:GLuint.t -> ?length:GLuint.t -> unit -> unit [@@js.call "getBufferSubData"]
   val getFragDataLocation: 'tags this -> program:WebGLProgram.t -> name:string -> GLint.t [@@js.call "getFragDataLocation"]
   val getIndexedParameter: 'tags this -> target:GLenum.t -> index:GLuint.t -> any [@@js.call "getIndexedParameter"]
@@ -29370,9 +29525,9 @@ and WebGL2RenderingContextBase : sig
   val getSyncParameter: 'tags this -> sync:WebGLSync.t -> pname:GLenum.t -> any [@@js.call "getSyncParameter"]
   val getTransformFeedbackVarying: 'tags this -> program:WebGLProgram.t -> index:GLuint.t -> WebGLActiveInfo.t or_null [@@js.call "getTransformFeedbackVarying"]
   val getUniformBlockIndex: 'tags this -> program:WebGLProgram.t -> uniformBlockName:string -> GLuint.t [@@js.call "getUniformBlockIndex"]
-  val getUniformIndices': 'tags this -> program:WebGLProgram.t -> uniformNames:string list -> GLuint.t list or_null [@@js.call "getUniformIndices"]
-  val invalidateFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> unit [@@js.call "invalidateFramebuffer"]
-  val invalidateSubFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
+  val getUniformIndices: 'tags this -> program:WebGLProgram.t -> uniformNames:string list -> GLuint.t list or_null [@@js.call "getUniformIndices"]
+  val invalidateFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> unit [@@js.call "invalidateFramebuffer"]
+  val invalidateSubFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
   val isQuery: 'tags this -> query:WebGLQuery.t or_null -> GLboolean.t [@@js.call "isQuery"]
   val isSampler: 'tags this -> sampler:WebGLSampler.t or_null -> GLboolean.t [@@js.call "isSampler"]
   val isSync: 'tags this -> sync:WebGLSync.t or_null -> GLboolean.t [@@js.call "isSync"]
@@ -29393,27 +29548,27 @@ and WebGL2RenderingContextBase : sig
   val texSubImage3D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pboOffset:GLintptr.t -> unit [@@js.call "texSubImage3D"]
   val texSubImage3D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage3D"]
   val texSubImage3D'': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 or_null -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "texSubImage3D"]
-  val transformFeedbackVaryings': 'tags this -> program:WebGLProgram.t -> varyings:string list -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
+  val transformFeedbackVaryings: 'tags this -> program:WebGLProgram.t -> varyings:string list -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
   val uniform1ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> unit [@@js.call "uniform1ui"]
-  val uniform1uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
+  val uniform1uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
   val uniform2ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> v1:GLuint.t -> unit [@@js.call "uniform2ui"]
-  val uniform2uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
+  val uniform2uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
   val uniform3ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> unit [@@js.call "uniform3ui"]
-  val uniform3uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
+  val uniform3uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
   val uniform4ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> v3:GLuint.t -> unit [@@js.call "uniform4ui"]
-  val uniform4uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
+  val uniform4uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
   val uniformBlockBinding: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> uniformBlockBinding:GLuint.t -> unit [@@js.call "uniformBlockBinding"]
-  val uniformMatrix2x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
-  val uniformMatrix2x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
-  val uniformMatrix3x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
-  val uniformMatrix3x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
-  val uniformMatrix4x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
-  val uniformMatrix4x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
+  val uniformMatrix2x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
+  val uniformMatrix2x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
+  val uniformMatrix3x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
+  val uniformMatrix3x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
+  val uniformMatrix4x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
+  val uniformMatrix4x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
   val vertexAttribDivisor: 'tags this -> index:GLuint.t -> divisor:GLuint.t -> unit [@@js.call "vertexAttribDivisor"]
   val vertexAttribI4i: 'tags this -> index:GLuint.t -> x:GLint.t -> y:GLint.t -> z:GLint.t -> w:GLint.t -> unit [@@js.call "vertexAttribI4i"]
-  val vertexAttribI4iv': 'tags this -> index:GLuint.t -> values:Int32List.t -> unit [@@js.call "vertexAttribI4iv"]
+  val vertexAttribI4iv: 'tags this -> index:GLuint.t -> values:Int32List.t -> unit [@@js.call "vertexAttribI4iv"]
   val vertexAttribI4ui: 'tags this -> index:GLuint.t -> x:GLuint.t -> y:GLuint.t -> z:GLuint.t -> w:GLuint.t -> unit [@@js.call "vertexAttribI4ui"]
-  val vertexAttribI4uiv': 'tags this -> index:GLuint.t -> values:Uint32List.t -> unit [@@js.call "vertexAttribI4uiv"]
+  val vertexAttribI4uiv: 'tags this -> index:GLuint.t -> values:Uint32List.t -> unit [@@js.call "vertexAttribI4uiv"]
   val vertexAttribIPointer: 'tags this -> index:GLuint.t -> size:GLint.t -> type_:GLenum.t -> stride:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "vertexAttribIPointer"]
   val waitSync: 'tags this -> sync:WebGLSync.t -> flags:GLbitfield.t -> timeout:GLint64.t -> unit [@@js.call "waitSync"]
   val get_ACTIVE_UNIFORM_BLOCKS: 'tags this -> GLenum.t [@@js.get "ACTIVE_UNIFORM_BLOCKS"]
@@ -29679,6 +29834,27 @@ and WebGL2RenderingContextBase : sig
   val get_VERTEX_ATTRIB_ARRAY_DIVISOR: 'tags this -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_DIVISOR"]
   val get_VERTEX_ATTRIB_ARRAY_INTEGER: 'tags this -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_INTEGER"]
   val get_WAIT_FAILED: 'tags this -> GLenum.t [@@js.get "WAIT_FAILED"]
+  val clearBufferfv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
+  val clearBufferiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
+  val clearBufferuiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
+  val drawBuffers': 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffers"]
+  val getActiveUniforms': 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t Iterable.t_1 -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
+  val getUniformIndices': 'tags this -> program:WebGLProgram.t -> uniformNames:string Iterable.t_1 -> GLuint.t Iterable.t_1 or_null [@@js.call "getUniformIndices"]
+  val invalidateFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> unit [@@js.call "invalidateFramebuffer"]
+  val invalidateSubFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
+  val transformFeedbackVaryings': 'tags this -> program:WebGLProgram.t -> varyings:string Iterable.t_1 -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
+  val uniform1uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
+  val uniform2uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
+  val uniform3uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
+  val uniform4uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
+  val uniformMatrix2x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
+  val uniformMatrix2x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
+  val uniformMatrix3x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
+  val uniformMatrix3x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
+  val uniformMatrix4x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
+  val uniformMatrix4x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
+  val vertexAttribI4iv': 'tags this -> index:GLuint.t -> values:GLint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4iv"]
+  val vertexAttribI4uiv': 'tags this -> index:GLuint.t -> values:GLuint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4uiv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 and WebGL2RenderingContextOverloads : sig
@@ -29697,17 +29873,6 @@ and WebGL2RenderingContextOverloads : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
-  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
-  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
-  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
-  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
-  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
-  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
-  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
   val bufferData: 'tags this -> target:GLenum.t -> size:GLsizeiptr.t -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferData': 'tags this -> target:GLenum.t -> srcData:BufferSource.t or_null -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferData'': 'tags this -> target:GLenum.t -> srcData:ArrayBufferView.t_0 -> usage:GLenum.t -> srcOffset:GLuint.t -> ?length:GLuint.t -> unit -> unit [@@js.call "bufferData"]
@@ -29730,17 +29895,28 @@ and WebGL2RenderingContextOverloads : sig
   val texSubImage2D'': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pboOffset:GLintptr.t -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D''': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D'''': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 -> srcOffset:GLuint.t -> unit [@@js.call "texSubImage2D"]
-  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
-  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
-  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
-  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
-  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
-  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
-  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
-  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
+  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
+  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
+  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
+  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
+  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
+  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
+  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
+  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
+  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
+  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
+  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
+  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
+  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
+  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
+  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
+  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -30077,10 +30253,6 @@ and WebGLRenderingContextBase : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val vertexAttrib1fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib1fv"]
-  val vertexAttrib2fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib2fv"]
-  val vertexAttrib3fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib3fv"]
-  val vertexAttrib4fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib4fv"]
   val get_canvas: 'tags this -> HTMLCanvasElement.t [@@js.get "canvas"]
   val get_drawingBufferHeight: 'tags this -> GLsizei.t [@@js.get "drawingBufferHeight"]
   val get_drawingBufferWidth: 'tags this -> GLsizei.t [@@js.get "drawingBufferWidth"]
@@ -30223,13 +30395,13 @@ and WebGLRenderingContextBase : sig
   val useProgram: 'tags this -> program:WebGLProgram.t or_null -> unit [@@js.call "useProgram"]
   val validateProgram: 'tags this -> program:WebGLProgram.t -> unit [@@js.call "validateProgram"]
   val vertexAttrib1f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> unit [@@js.call "vertexAttrib1f"]
-  val vertexAttrib1fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib1fv"]
+  val vertexAttrib1fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib1fv"]
   val vertexAttrib2f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> unit [@@js.call "vertexAttrib2f"]
-  val vertexAttrib2fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib2fv"]
+  val vertexAttrib2fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib2fv"]
   val vertexAttrib3f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> unit [@@js.call "vertexAttrib3f"]
-  val vertexAttrib3fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib3fv"]
+  val vertexAttrib3fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib3fv"]
   val vertexAttrib4f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> w:GLfloat.t -> unit [@@js.call "vertexAttrib4f"]
-  val vertexAttrib4fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib4fv"]
+  val vertexAttrib4fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib4fv"]
   val vertexAttribPointer: 'tags this -> index:GLuint.t -> size:GLint.t -> type_:GLenum.t -> normalized:GLboolean.t -> stride:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "vertexAttribPointer"]
   val viewport: 'tags this -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "viewport"]
   val get_ACTIVE_ATTRIBUTES: 'tags this -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
@@ -30528,6 +30700,10 @@ and WebGLRenderingContextBase : sig
   val get_VERTEX_SHADER: 'tags this -> GLenum.t [@@js.get "VERTEX_SHADER"]
   val get_VIEWPORT: 'tags this -> GLenum.t [@@js.get "VIEWPORT"]
   val get_ZERO: 'tags this -> GLenum.t [@@js.get "ZERO"]
+  val vertexAttrib1fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib1fv"]
+  val vertexAttrib2fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib2fv"]
+  val vertexAttrib3fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib3fv"]
+  val vertexAttrib4fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib4fv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 and WebGLRenderingContextOverloads : sig
@@ -30546,17 +30722,6 @@ and WebGLRenderingContextOverloads : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform1fv"]
-  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform1iv"]
-  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform2fv"]
-  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform2iv"]
-  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform3fv"]
-  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform3iv"]
-  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform4fv"]
-  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix4fv"]
   val bufferData: 'tags this -> target:GLenum.t -> size:GLsizeiptr.t -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferData': 'tags this -> target:GLenum.t -> data:BufferSource.t or_null -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferSubData: 'tags this -> target:GLenum.t -> offset:GLintptr.t -> data:BufferSource.t -> unit [@@js.call "bufferSubData"]
@@ -30567,17 +30732,28 @@ and WebGLRenderingContextOverloads : sig
   val texImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texImage2D"]
   val texSubImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 or_null -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage2D"]
-  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform1fv"]
-  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform1iv"]
-  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform2fv"]
-  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform2iv"]
-  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform3fv"]
-  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform3iv"]
-  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform4fv"]
-  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
+  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform1fv"]
+  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform1iv"]
+  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform2fv"]
+  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform2iv"]
+  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform3fv"]
+  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform3iv"]
+  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform4fv"]
+  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
+  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform1fv"]
+  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform1iv"]
+  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform2fv"]
+  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform2iv"]
+  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform3fv"]
+  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform3iv"]
+  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform4fv"]
+  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -30690,9 +30866,17 @@ and[@js.scope "Window"] Window : sig
   val get_name: 'tags this -> string [@@js.get "name"]
   val set_name: 'tags this -> string -> unit [@@js.set "name"]
   val get_navigator: 'tags this -> Navigator.t [@@js.get "navigator"]
+  
+  (** Available only in secure contexts. *)
   val get_ondevicemotion: 'tags this -> (this:t -> ev:DeviceMotionEvent.t -> any) or_null [@@js.get "ondevicemotion"]
+  
+  (** Available only in secure contexts. *)
   val set_ondevicemotion: 'tags this -> (this:t -> ev:DeviceMotionEvent.t -> any) or_null -> unit [@@js.set "ondevicemotion"]
+  
+  (** Available only in secure contexts. *)
   val get_ondeviceorientation: 'tags this -> (this:t -> ev:DeviceOrientationEvent.t -> any) or_null [@@js.get "ondeviceorientation"]
+  
+  (** Available only in secure contexts. *)
   val set_ondeviceorientation: 'tags this -> (this:t -> ev:DeviceOrientationEvent.t -> any) or_null -> unit [@@js.set "ondeviceorientation"]
   
   (** @deprecated  *)
@@ -30714,7 +30898,11 @@ and[@js.scope "Window"] Window : sig
   (** @deprecated This is a legacy alias of `scrollY`. *)
   val get_pageYOffset: 'tags this -> float [@@js.get "pageYOffset"]
   
-  (** Refers to either the parent WindowProxy, or itself. It can rarely be null e.g. for contentWindow of an iframe that is already removed from the parent. *)
+  (**
+    Refers to either the parent WindowProxy, or itself.
+    
+    It can rarely be null e.g. for contentWindow of an iframe that is already removed from the parent.
+  *)
   val get_parent: 'tags this -> WindowProxy.t [@@js.get "parent"]
   
   (** Returns true if the personal bar is visible; otherwise, returns false. *)
@@ -30876,12 +31064,12 @@ and WindowEventHandlers : sig
   val set_onbeforeprint: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onbeforeprint"]
   val get_onbeforeunload: 'tags this -> (this:t -> ev:BeforeUnloadEvent.t -> any) or_null [@@js.get "onbeforeunload"]
   val set_onbeforeunload: 'tags this -> (this:t -> ev:BeforeUnloadEvent.t -> any) or_null -> unit [@@js.set "onbeforeunload"]
-  val get_ongamepadconnected: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "ongamepadconnected"]
-  val set_ongamepadconnected: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "ongamepadconnected"]
-  val get_ongamepaddisconnected: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "ongamepaddisconnected"]
-  val set_ongamepaddisconnected: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "ongamepaddisconnected"]
-  val get_onhashchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onhashchange"]
-  val set_onhashchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onhashchange"]
+  val get_ongamepadconnected: 'tags this -> (this:t -> ev:GamepadEvent.t -> any) or_null [@@js.get "ongamepadconnected"]
+  val set_ongamepadconnected: 'tags this -> (this:t -> ev:GamepadEvent.t -> any) or_null -> unit [@@js.set "ongamepadconnected"]
+  val get_ongamepaddisconnected: 'tags this -> (this:t -> ev:GamepadEvent.t -> any) or_null [@@js.get "ongamepaddisconnected"]
+  val set_ongamepaddisconnected: 'tags this -> (this:t -> ev:GamepadEvent.t -> any) or_null -> unit [@@js.set "ongamepaddisconnected"]
+  val get_onhashchange: 'tags this -> (this:t -> ev:HashChangeEvent.t -> any) or_null [@@js.get "onhashchange"]
+  val set_onhashchange: 'tags this -> (this:t -> ev:HashChangeEvent.t -> any) or_null -> unit [@@js.set "onhashchange"]
   val get_onlanguagechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onlanguagechange"]
   val set_onlanguagechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onlanguagechange"]
   val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
@@ -30928,6 +31116,8 @@ and WindowOrWorkerGlobalScope : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  
+  (** Available only in secure contexts. *)
   val get_caches: 'tags this -> CacheStorage.t [@@js.get "caches"]
   val get_crossOriginIsolated: 'tags this -> bool [@@js.get "crossOriginIsolated"]
   val get_crypto: 'tags this -> Crypto.t [@@js.get "crypto"]
@@ -31133,24 +31323,40 @@ and[@js.scope "XPathResult"] XPathResult : sig
   val unordered_node_snapshot_type: unit -> float [@@js.get "UNORDERED_NODE_SNAPSHOT_TYPE"]
 end
 module[@js.scope "navigator"] NavigatorStatic : sig
-  val requestMediaKeySystemAccess: keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
-  val vibrate: float Iterable.t_1 -> bool [@@js.global "vibrate"]
+  
+  (** Available only in secure contexts. *)
   val clipboard: unit -> Clipboard.t [@@js.get "clipboard"]
+  
+  (** Available only in secure contexts. *)
   val credentials: unit -> CredentialsContainer.t [@@js.get "credentials"]
   val doNotTrack: unit -> string or_null [@@js.get "doNotTrack"]
   val geolocation: unit -> Geolocation.t [@@js.get "geolocation"]
   val maxTouchPoints: unit -> float [@@js.get "maxTouchPoints"]
   val mediaCapabilities: unit -> MediaCapabilities.t [@@js.get "mediaCapabilities"]
+  
+  (** Available only in secure contexts. *)
   val mediaDevices: unit -> MediaDevices.t [@@js.get "mediaDevices"]
   val mediaSession: unit -> MediaSession.t [@@js.get "mediaSession"]
   val permissions: unit -> Permissions.t [@@js.get "permissions"]
-  val pointerEnabled: unit -> bool [@@js.get "pointerEnabled"]
+  
+  (** Available only in secure contexts. *)
   val serviceWorker: unit -> ServiceWorkerContainer.t [@@js.get "serviceWorker"]
+  
+  (** Available only in secure contexts. *)
+  val canShare: ?data:ShareData.t -> unit -> bool [@@js.global "canShare"]
   val getGamepads: unit -> Gamepad.t or_null list [@@js.global "getGamepads"]
-  val requestMediaKeySystemAccess': keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
+  
+  (** Available only in secure contexts. *)
+  val requestMediaKeySystemAccess: keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
   val sendBeacon: url:URL.t or_string -> ?data:BodyInit.t or_null -> unit -> bool [@@js.global "sendBeacon"]
+  
+  (** Available only in secure contexts. *)
   val share: ?data:ShareData.t -> unit -> unit Promise.t_1 [@@js.global "share"]
-  val vibrate': VibratePattern.t -> bool [@@js.global "vibrate"]
+  val vibrate: VibratePattern.t -> bool [@@js.global "vibrate"]
+  
+  (** Available only in secure contexts. *)
+  val requestMediaKeySystemAccess': keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
+  val vibrate': float Iterable.t_1 -> bool [@@js.global "vibrate"]
 end
 module[@js.scope "menubar"] MenubarStatic : sig
   val visible: unit -> bool [@@js.get "visible"]
@@ -31547,7 +31753,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS: namespaceURI:([`L_s390_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> qualifiedName:string -> HTMLElement.t [@@js.global "createElementNS"]
+  val createElementNS: namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> qualifiedName:string -> HTMLElement.t [@@js.global "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -31564,7 +31770,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS': namespaceURI:([`L_s391_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any [@@js.global "createElementNS"]
+  val createElementNS': namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any [@@js.global "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -31581,7 +31787,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS'': namespaceURI:([`L_s391_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:string -> SVGElement.t [@@js.global "createElementNS"]
+  val createElementNS'': namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:string -> SVGElement.t [@@js.global "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -31703,14 +31909,6 @@ module[@js.scope "document"] DocumentStatic : sig
   val createTreeWalker: root:Node.t -> ?whatToShow:float -> ?filter:NodeFilter.t or_null -> unit -> TreeWalker.t [@@js.global "createTreeWalker"]
   
   (**
-    Returns the element for the specified x coordinate and the specified y coordinate.
-    @param x The x-offset
-    @param y The y-offset
-  *)
-  val elementFromPoint: x:float -> y:float -> Element.t or_null [@@js.global "elementFromPoint"]
-  val elementsFromPoint: x:float -> y:float -> Element.t list [@@js.global "elementsFromPoint"]
-  
-  (**
     Executes a command on the current document, current selection, or the given range.
     @param commandId String that specifies the command to execute. This command can be any of the command identifiers that can be executed in script.
     @param showUI Display the user interface, defaults to false.
@@ -31760,7 +31958,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
   *)
-  val getElementsByTagNameNS: namespaceURI:([`L_s390_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.global "getElementsByTagNameNS"]
+  val getElementsByTagNameNS: namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.global "getElementsByTagNameNS"]
   
   (**
     If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
@@ -31771,7 +31969,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
   *)
-  val getElementsByTagNameNS': namespaceURI:([`L_s391_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.global "getElementsByTagNameNS"]
+  val getElementsByTagNameNS': namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.global "getElementsByTagNameNS"]
   
   (**
     If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
@@ -31906,6 +32104,8 @@ module[@js.scope "customElements"] CustomElementsStatic : sig
   val whenDefined: string -> CustomElementConstructor.t Promise.t_1 [@@js.global "whenDefined"]
 end
 module[@js.scope "crypto"] CryptoStatic : sig
+  
+  (** Available only in secure contexts. *)
   val subtle: unit -> SubtleCrypto.t [@@js.get "subtle"]
   val getRandomValues: 'T -> 'T [@@js.global "getRandomValues"]
 end
@@ -31932,24 +32132,40 @@ module[@js.scope "console"] ConsoleStatic : sig
   val warn: (any list [@js.variadic]) -> unit [@@js.global "warn"]
 end
 module[@js.scope "clientInformation"] ClientInformationStatic : sig
-  val requestMediaKeySystemAccess: keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
-  val vibrate: float Iterable.t_1 -> bool [@@js.global "vibrate"]
+  
+  (** Available only in secure contexts. *)
   val clipboard: unit -> Clipboard.t [@@js.get "clipboard"]
+  
+  (** Available only in secure contexts. *)
   val credentials: unit -> CredentialsContainer.t [@@js.get "credentials"]
   val doNotTrack: unit -> string or_null [@@js.get "doNotTrack"]
   val geolocation: unit -> Geolocation.t [@@js.get "geolocation"]
   val maxTouchPoints: unit -> float [@@js.get "maxTouchPoints"]
   val mediaCapabilities: unit -> MediaCapabilities.t [@@js.get "mediaCapabilities"]
+  
+  (** Available only in secure contexts. *)
   val mediaDevices: unit -> MediaDevices.t [@@js.get "mediaDevices"]
   val mediaSession: unit -> MediaSession.t [@@js.get "mediaSession"]
   val permissions: unit -> Permissions.t [@@js.get "permissions"]
-  val pointerEnabled: unit -> bool [@@js.get "pointerEnabled"]
+  
+  (** Available only in secure contexts. *)
   val serviceWorker: unit -> ServiceWorkerContainer.t [@@js.get "serviceWorker"]
+  
+  (** Available only in secure contexts. *)
+  val canShare: ?data:ShareData.t -> unit -> bool [@@js.global "canShare"]
   val getGamepads: unit -> Gamepad.t or_null list [@@js.global "getGamepads"]
-  val requestMediaKeySystemAccess': keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
+  
+  (** Available only in secure contexts. *)
+  val requestMediaKeySystemAccess: keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
   val sendBeacon: url:URL.t or_string -> ?data:BodyInit.t or_null -> unit -> bool [@@js.global "sendBeacon"]
+  
+  (** Available only in secure contexts. *)
   val share: ?data:ShareData.t -> unit -> unit Promise.t_1 [@@js.global "share"]
-  val vibrate': VibratePattern.t -> bool [@@js.global "vibrate"]
+  val vibrate: VibratePattern.t -> bool [@@js.global "vibrate"]
+  
+  (** Available only in secure contexts. *)
+  val requestMediaKeySystemAccess': keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
+  val vibrate': float Iterable.t_1 -> bool [@@js.global "vibrate"]
 end
 module[@js.scope "caches"] CachesStatic : sig
   val delete: string -> bool Promise.t_1 [@@js.global "delete"]
@@ -31959,7 +32175,7 @@ module[@js.scope "caches"] CachesStatic : sig
   val open_: string -> Cache.t Promise.t_1 [@@js.global "open"]
 end
 module XMLHttpRequestResponseType : sig
-  type t = ([`L_s0[@js ""] | `L_s127_arraybuffer[@js "arraybuffer"] | `L_s161_blob[@js "blob"] | `L_s262_document[@js "document"] | `L_s426_json[@js "json"] | `L_s756_text[@js "text"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s127_arraybuffer[@js "arraybuffer"] | `L_s161_blob[@js "blob"] | `L_s262_document[@js "document"] | `L_s425_json[@js "json"] | `L_s755_text[@js "text"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32449,12 +32665,12 @@ module WindowEventHandlersEventMap : sig
   val set_beforeprint: 'tags this -> Event.t -> unit [@@js.set "beforeprint"]
   val get_beforeunload: 'tags this -> BeforeUnloadEvent.t [@@js.get "beforeunload"]
   val set_beforeunload: 'tags this -> BeforeUnloadEvent.t -> unit [@@js.set "beforeunload"]
-  val get_gamepadconnected: 'tags this -> Event.t [@@js.get "gamepadconnected"]
-  val set_gamepadconnected: 'tags this -> Event.t -> unit [@@js.set "gamepadconnected"]
-  val get_gamepaddisconnected: 'tags this -> Event.t [@@js.get "gamepaddisconnected"]
-  val set_gamepaddisconnected: 'tags this -> Event.t -> unit [@@js.set "gamepaddisconnected"]
-  val get_hashchange: 'tags this -> Event.t [@@js.get "hashchange"]
-  val set_hashchange: 'tags this -> Event.t -> unit [@@js.set "hashchange"]
+  val get_gamepadconnected: 'tags this -> GamepadEvent.t [@@js.get "gamepadconnected"]
+  val set_gamepadconnected: 'tags this -> GamepadEvent.t -> unit [@@js.set "gamepadconnected"]
+  val get_gamepaddisconnected: 'tags this -> GamepadEvent.t [@@js.get "gamepaddisconnected"]
+  val set_gamepaddisconnected: 'tags this -> GamepadEvent.t -> unit [@@js.set "gamepaddisconnected"]
+  val get_hashchange: 'tags this -> HashChangeEvent.t [@@js.get "hashchange"]
+  val set_hashchange: 'tags this -> HashChangeEvent.t -> unit [@@js.set "hashchange"]
   val get_languagechange: 'tags this -> Event.t [@@js.get "languagechange"]
   val set_languagechange: 'tags this -> Event.t -> unit [@@js.set "languagechange"]
   val get_message: 'tags this -> MessageEvent.t_0 [@@js.get "message"]
@@ -32647,8 +32863,8 @@ module GlobalEventHandlersEventMap : sig
   val set_selectstart: 'tags this -> Event.t -> unit [@@js.set "selectstart"]
   val get_stalled: 'tags this -> Event.t [@@js.get "stalled"]
   val set_stalled: 'tags this -> Event.t -> unit [@@js.set "stalled"]
-  val get_submit: 'tags this -> Event.t [@@js.get "submit"]
-  val set_submit: 'tags this -> Event.t -> unit [@@js.set "submit"]
+  val get_submit: 'tags this -> SubmitEvent.t [@@js.get "submit"]
+  val set_submit: 'tags this -> SubmitEvent.t -> unit [@@js.set "submit"]
   val get_suspend: 'tags this -> Event.t [@@js.get "suspend"]
   val set_suspend: 'tags this -> Event.t -> unit [@@js.set "suspend"]
   val get_timeupdate: 'tags this -> Event.t [@@js.get "timeupdate"]
@@ -32777,7 +32993,7 @@ module VisualViewportEventMap : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module VideoFacingModeEnum : sig
-  type t = ([`L_s285_environment[@js "environment"] | `L_s441_left[@js "left"] | `L_s659_right[@js "right"] | `L_s814_user[@js "user"]] [@js.enum])
+  type t = ([`L_s285_environment[@js "environment"] | `L_s440_left[@js "left"] | `L_s658_right[@js "right"] | `L_s813_user[@js "user"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -33271,7 +33487,7 @@ module ReadableStreamReader : sig
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
 end
 module RTCStatsType : sig
-  type t = ([`L_s178_candidate_pair[@js "candidate-pair"] | `L_s186_certificate[@js "certificate"] | `L_s203_codec[@js "codec"] | `L_s224_csrc[@js "csrc"] | `L_s229_data_channel[@js "data-channel"] | `L_s408_inbound_rtp[@js "inbound-rtp"] | `L_s465_local_candidate[@js "local-candidate"] | `L_s487_media_source[@js "media-source"] | `L_s555_outbound_rtp[@js "outbound-rtp"] | `L_s576_peer_connection[@js "peer-connection"] | `L_s642_remote_candidate[@js "remote-candidate"] | `L_s643_remote_inbound_rtp[@js "remote-inbound-rtp"] | `L_s644_remote_outbound_rtp[@js "remote-outbound-rtp"] | `L_s780_track[@js "track"] | `L_s786_transport[@js "transport"]] [@js.enum])
+  type t = ([`L_s178_candidate_pair[@js "candidate-pair"] | `L_s186_certificate[@js "certificate"] | `L_s203_codec[@js "codec"] | `L_s224_csrc[@js "csrc"] | `L_s229_data_channel[@js "data-channel"] | `L_s407_inbound_rtp[@js "inbound-rtp"] | `L_s464_local_candidate[@js "local-candidate"] | `L_s486_media_source[@js "media-source"] | `L_s554_outbound_rtp[@js "outbound-rtp"] | `L_s575_peer_connection[@js "peer-connection"] | `L_s641_remote_candidate[@js "remote-candidate"] | `L_s642_remote_inbound_rtp[@js "remote-inbound-rtp"] | `L_s643_remote_outbound_rtp[@js "remote-outbound-rtp"] | `L_s779_track[@js "track"] | `L_s785_transport[@js "transport"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -33511,7 +33727,7 @@ module RTCInboundRtpStreamStats : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RTCStatsIceCandidatePairState : sig
-  type t = ([`L_s301_failed[@js "failed"] | `L_s349_frozen[@js "frozen"] | `L_s406_in_progress[@js "in-progress"] | `L_s414_inprogress[@js "inprogress"] | `L_s738_succeeded[@js "succeeded"] | `L_s828_waiting[@js "waiting"]] [@js.enum])
+  type t = ([`L_s301_failed[@js "failed"] | `L_s349_frozen[@js "frozen"] | `L_s405_in_progress[@js "in-progress"] | `L_s413_inprogress[@js "inprogress"] | `L_s737_succeeded[@js "succeeded"] | `L_s827_waiting[@js "waiting"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -33734,7 +33950,7 @@ module PaymentRequestEventMap : sig
   val set_paymentmethodchange: 'tags this -> Event.t -> unit [@@js.set "paymentmethodchange"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface179 : sig
+module rec AnonymousInterface180 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -34084,8 +34300,8 @@ module MediaRecorderEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_dataavailable: 'tags this -> BlobEvent.t [@@js.get "dataavailable"]
   val set_dataavailable: 'tags this -> BlobEvent.t -> unit [@@js.set "dataavailable"]
-  val get_error: 'tags this -> Event.t [@@js.get "error"]
-  val set_error: 'tags this -> Event.t -> unit [@@js.set "error"]
+  val get_error: 'tags this -> MediaRecorderErrorEvent.t [@@js.get "error"]
+  val set_error: 'tags this -> MediaRecorderErrorEvent.t -> unit [@@js.set "error"]
   val get_pause: 'tags this -> Event.t [@@js.get "pause"]
   val set_pause: 'tags this -> Event.t -> unit [@@js.set "pause"]
   val get_resume: 'tags this -> Event.t [@@js.get "resume"]
@@ -34390,7 +34606,7 @@ module HTMLVideoElementEventMap : sig
   val set_leavepictureinpicture: 'tags this -> Event.t -> unit [@@js.set "leavepictureinpicture"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface195 : sig
+module rec AnonymousInterface196 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -34751,7 +34967,7 @@ module HTMLFrameSetElementEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface185 : sig
+module rec AnonymousInterface186 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -34911,7 +35127,7 @@ module FontFaceSetEventMap : sig
   val set_loadingerror: 'tags this -> Event.t -> unit [@@js.set "loadingerror"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface111 : sig
+module rec AnonymousInterface112 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -40179,7 +40395,7 @@ module HTMLDialogElement : sig
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface205 : sig
+module rec AnonymousInterface206 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -40273,7 +40489,7 @@ and[@js.scope "HTMLUListElement"] HTMLUListElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface204 : sig
+module rec AnonymousInterface205 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -40381,7 +40597,7 @@ and[@js.scope "HTMLTrackElement"] HTMLTrackElement : sig
   val loading: unit -> float [@@js.get "LOADING"]
   val none: unit -> float [@@js.get "NONE"]
 end
-module rec AnonymousInterface203 : sig
+module rec AnonymousInterface204 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -40469,7 +40685,7 @@ and[@js.scope "HTMLTitleElement"] HTMLTitleElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface202 : sig
+module rec AnonymousInterface203 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -40554,7 +40770,7 @@ and[@js.scope "HTMLTimeElement"] HTMLTimeElement : sig
   val create: unit -> t [@@js.create]
 end
 module SelectionMode : sig
-  type t = ([`L_s279_end[@js "end"] | `L_s611_preserve[@js "preserve"] | `L_s686_select[@js "select"] | `L_s724_start[@js "start"]] [@js.enum])
+  type t = ([`L_s279_end[@js "end"] | `L_s610_preserve[@js "preserve"] | `L_s685_select[@js "select"] | `L_s723_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -40602,7 +40818,7 @@ and[@js.scope "ValidityState"] ValidityState : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface166 : sig
+module rec AnonymousInterface167 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -40696,7 +40912,7 @@ and[@js.scope "HTMLLabelElement"] HTMLLabelElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface201 : sig
+module rec AnonymousInterface202 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -40782,8 +40998,8 @@ and[@js.scope "HTMLTextAreaElement"] HTMLTextAreaElement : sig
   
   (** Sets or retrieves the number of horizontal rows contained in the object. *)
   val set_rows: 'tags this -> float -> unit [@@js.set "rows"]
-  val get_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s529_none[@js "none"]] [@js.enum]) [@@js.get "selectionDirection"]
-  val set_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s529_none[@js "none"]] [@js.enum]) -> unit [@@js.set "selectionDirection"]
+  val get_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s528_none[@js "none"]] [@js.enum]) [@@js.get "selectionDirection"]
+  val set_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s528_none[@js "none"]] [@js.enum]) -> unit [@@js.set "selectionDirection"]
   
   (** Gets or sets the end position or offset of a text selection. *)
   val get_selectionEnd: 'tags this -> float [@@js.get "selectionEnd"]
@@ -40843,7 +41059,7 @@ and[@js.scope "HTMLTextAreaElement"] HTMLTextAreaElement : sig
     @param end The offset into the text field for the end of the selection.
     @param direction The direction in which the selection is performed.
   *)
-  val setSelectionRange: 'tags this -> start:float or_null -> end_:float or_null -> ?direction:([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s529_none[@js "none"]] [@js.enum]) -> unit -> unit [@@js.call "setSelectionRange"]
+  val setSelectionRange: 'tags this -> start:float or_null -> end_:float or_null -> ?direction:([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s528_none[@js "none"]] [@js.enum]) -> unit -> unit [@@js.call "setSelectionRange"]
   
   (**
     
@@ -40900,7 +41116,7 @@ and[@js.scope "HTMLTextAreaElement"] HTMLTextAreaElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface200 : sig
+module rec AnonymousInterface201 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -40985,7 +41201,7 @@ and[@js.scope "HTMLTemplateElement"] HTMLTemplateElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface198 : sig
+module rec AnonymousInterface199 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -41124,7 +41340,7 @@ and[@js.scope "HTMLTableRowElement"] HTMLTableRowElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface199 : sig
+module rec AnonymousInterface200 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -41251,7 +41467,7 @@ and[@js.scope "HTMLTableSectionElement"] HTMLTableSectionElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface194 : sig
+module rec AnonymousInterface195 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -41345,7 +41561,7 @@ and[@js.scope "HTMLTableCaptionElement"] HTMLTableCaptionElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface197 : sig
+module rec AnonymousInterface198 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -41586,7 +41802,7 @@ and[@js.scope "HTMLTableElement"] HTMLTableElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface196 : sig
+module rec AnonymousInterface197 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -41716,7 +41932,7 @@ and[@js.scope "HTMLTableColElement"] HTMLTableColElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface193 : sig
+module rec AnonymousInterface194 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -41816,7 +42032,7 @@ and[@js.scope "HTMLStyleElement"] HTMLStyleElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface192 : sig
+module rec AnonymousInterface193 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -41898,7 +42114,7 @@ and[@js.scope "HTMLSpanElement"] HTMLSpanElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface191 : sig
+module rec AnonymousInterface192 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42002,7 +42218,7 @@ and[@js.scope "HTMLSourceElement"] HTMLSourceElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface178 : sig
+module rec AnonymousInterface179 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42092,7 +42308,7 @@ and[@js.scope "HTMLOptGroupElement"] HTMLOptGroupElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface180 : sig
+module rec AnonymousInterface181 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42168,7 +42384,7 @@ and[@js.scope "HTMLOptionsCollection"] HTMLOptionsCollection : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface189 : sig
+module rec AnonymousInterface190 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42357,7 +42573,7 @@ and[@js.scope "HTMLSelectElement"] HTMLSelectElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface187 : sig
+module rec AnonymousInterface188 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42445,7 +42661,7 @@ and[@js.scope "HTMLQuoteElement"] HTMLQuoteElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface186 : sig
+module rec AnonymousInterface187 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42543,7 +42759,7 @@ and[@js.scope "HTMLProgressElement"] HTMLProgressElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface184 : sig
+module rec AnonymousInterface185 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42625,7 +42841,7 @@ and[@js.scope "HTMLPictureElement"] HTMLPictureElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface183 : sig
+module rec AnonymousInterface184 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42743,7 +42959,7 @@ and[@js.scope "HTMLParamElement"] HTMLParamElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface182 : sig
+module rec AnonymousInterface183 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42837,7 +43053,7 @@ and[@js.scope "HTMLParagraphElement"] HTMLParagraphElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface181 : sig
+module rec AnonymousInterface182 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42949,7 +43165,7 @@ and[@js.scope "HTMLOutputElement"] HTMLOutputElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface177 : sig
+module rec AnonymousInterface178 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -43184,7 +43400,7 @@ and[@js.scope "HTMLObjectElement"] HTMLObjectElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface176 : sig
+module rec AnonymousInterface177 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -43282,7 +43498,7 @@ and[@js.scope "HTMLOListElement"] HTMLOListElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface175 : sig
+module rec AnonymousInterface176 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -43376,7 +43592,7 @@ and[@js.scope "HTMLModElement"] HTMLModElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface174 : sig
+module rec AnonymousInterface175 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -43471,7 +43687,7 @@ and[@js.scope "HTMLMeterElement"] HTMLMeterElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface173 : sig
+module rec AnonymousInterface174 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -43583,7 +43799,7 @@ and[@js.scope "HTMLMetaElement"] HTMLMetaElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface172 : sig
+module rec AnonymousInterface173 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -43669,7 +43885,7 @@ and[@js.scope "HTMLMenuElement"] HTMLMenuElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface170 : sig
+module rec AnonymousInterface171 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -43823,7 +44039,7 @@ and[@js.scope "HTMLMarqueeElement"] HTMLMarqueeElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface169 : sig
+module rec AnonymousInterface170 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -43914,7 +44130,7 @@ and[@js.scope "HTMLMapElement"] HTMLMapElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface168 : sig
+module rec AnonymousInterface169 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -44078,7 +44294,7 @@ and[@js.scope "HTMLLinkElement"] HTMLLinkElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface167 : sig
+module rec AnonymousInterface168 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -44169,7 +44385,7 @@ and[@js.scope "HTMLLegendElement"] HTMLLegendElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface165 : sig
+module rec AnonymousInterface166 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -44263,7 +44479,7 @@ and[@js.scope "HTMLLIElement"] HTMLLIElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface164 : sig
+module rec AnonymousInterface165 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -44450,8 +44666,8 @@ and[@js.scope "HTMLInputElement"] HTMLInputElement : sig
   
   (** When present, marks an element that can't be submitted without a value. *)
   val set_required: 'tags this -> bool -> unit [@@js.set "required"]
-  val get_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s529_none[@js "none"]] [@js.enum]) or_null [@@js.get "selectionDirection"]
-  val set_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s529_none[@js "none"]] [@js.enum]) or_null -> unit [@@js.set "selectionDirection"]
+  val get_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s528_none[@js "none"]] [@js.enum]) or_null [@@js.get "selectionDirection"]
+  val set_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s528_none[@js "none"]] [@js.enum]) or_null -> unit [@@js.set "selectionDirection"]
   
   (** Gets or sets the end position or offset of a text selection. *)
   val get_selectionEnd: 'tags this -> float or_null [@@js.get "selectionEnd"]
@@ -44554,7 +44770,7 @@ and[@js.scope "HTMLInputElement"] HTMLInputElement : sig
     @param end The offset into the text field for the end of the selection.
     @param direction The direction in which the selection is performed.
   *)
-  val setSelectionRange: 'tags this -> start:float or_null -> end_:float or_null -> ?direction:([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s529_none[@js "none"]] [@js.enum]) -> unit -> unit [@@js.call "setSelectionRange"]
+  val setSelectionRange: 'tags this -> start:float or_null -> end_:float or_null -> ?direction:([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s528_none[@js "none"]] [@js.enum]) -> unit -> unit [@@js.call "setSelectionRange"]
   
   (**
     Decrements a range input control's value by the value given by the Step attribute. If the optional parameter is used, it will decrement the input control's step value multiplied by the parameter's value.
@@ -44623,7 +44839,7 @@ and[@js.scope "HTMLInputElement"] HTMLInputElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface162 : sig
+module rec AnonymousInterface163 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -44821,7 +45037,7 @@ and[@js.scope "HTMLIFrameElement"] HTMLIFrameElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface161 : sig
+module rec AnonymousInterface162 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -44915,7 +45131,7 @@ and[@js.scope "HTMLHtmlElement"] HTMLHtmlElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface160 : sig
+module rec AnonymousInterface161 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -45009,7 +45225,7 @@ and[@js.scope "HTMLHeadingElement"] HTMLHeadingElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface158 : sig
+module rec AnonymousInterface159 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -45139,7 +45355,7 @@ and[@js.scope "HTMLHRElement"] HTMLHRElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface157 : sig
+module rec AnonymousInterface158 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -45245,7 +45461,7 @@ and[@js.scope "HTMLFrameSetElement"] HTMLFrameSetElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface156 : sig
+module rec AnonymousInterface157 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -45435,7 +45651,7 @@ and[@js.scope "HTMLFrameElement"] HTMLFrameElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface153 : sig
+module rec AnonymousInterface154 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -45541,7 +45757,7 @@ and[@js.scope "HTMLFontElement"] HTMLFontElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface152 : sig
+module rec AnonymousInterface153 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -45655,7 +45871,7 @@ and[@js.scope "HTMLFieldSetElement"] HTMLFieldSetElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface148 : sig
+module rec AnonymousInterface149 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -45749,7 +45965,7 @@ and[@js.scope "HTMLDivElement"] HTMLDivElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface147 : sig
+module rec AnonymousInterface148 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -45837,7 +46053,7 @@ and[@js.scope "HTMLDirectoryElement"] HTMLDirectoryElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface146 : sig
+module rec AnonymousInterface147 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -45919,7 +46135,7 @@ and[@js.scope "HTMLDetailsElement"] HTMLDetailsElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface145 : sig
+module rec AnonymousInterface146 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -46004,7 +46220,7 @@ and[@js.scope "HTMLDataListElement"] HTMLDataListElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface144 : sig
+module rec AnonymousInterface145 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -46088,7 +46304,7 @@ and[@js.scope "HTMLDataElement"] HTMLDataElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface143 : sig
+module rec AnonymousInterface144 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -46176,7 +46392,7 @@ and[@js.scope "HTMLDListElement"] HTMLDListElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface140 : sig
+module rec AnonymousInterface141 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -46331,7 +46547,7 @@ and[@js.scope "HTMLButtonElement"] HTMLButtonElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface139 : sig
+module rec AnonymousInterface140 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -46455,7 +46671,7 @@ and[@js.scope "HTMLBodyElement"] HTMLBodyElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface138 : sig
+module rec AnonymousInterface139 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -46549,7 +46765,7 @@ and[@js.scope "HTMLBaseElement"] HTMLBaseElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface137 : sig
+module rec AnonymousInterface138 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -46643,7 +46859,7 @@ and[@js.scope "HTMLBRElement"] HTMLBRElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface136 : sig
+module rec AnonymousInterface137 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -46980,7 +47196,7 @@ end
 
 (** @deprecated Directly use HTMLElementTagNameMap or SVGElementTagNameMap as appropriate, instead. *)
 module ElementTagNameMap : sig
-  type t = (HTMLElementTagNameMap.t, (SVGElementTagNameMap.t, (([`L_s91_a[@js "a"] | `L_s113_animate[@js "animate"] | `L_s114_animateMotion[@js "animateMotion"] | `L_s115_animateTransform[@js "animateTransform"] | `L_s192_circle[@js "circle"] | `L_s197_clipPath[@js "clipPath"] | `L_s238_defs[@js "defs"] | `L_s243_desc[@js "desc"] | `L_s273_ellipse[@js "ellipse"] | `L_s302_feBlend[@js "feBlend"] | `L_s303_feColorMatrix[@js "feColorMatrix"] | `L_s304_feComponentTransfer[@js "feComponentTransfer"] | `L_s305_feComposite[@js "feComposite"] | `L_s306_feConvolveMatrix[@js "feConvolveMatrix"] | `L_s307_feDiffuseLighting[@js "feDiffuseLighting"] | `L_s308_feDisplacementMap[@js "feDisplacementMap"] | `L_s309_feDistantLight[@js "feDistantLight"] | `L_s310_feDropShadow[@js "feDropShadow"] | `L_s311_feFlood[@js "feFlood"] | `L_s312_feFuncA[@js "feFuncA"] | `L_s313_feFuncB[@js "feFuncB"] | `L_s314_feFuncG[@js "feFuncG"] | `L_s315_feFuncR[@js "feFuncR"] | `L_s316_feGaussianBlur[@js "feGaussianBlur"] | `L_s317_feImage[@js "feImage"] | `L_s318_feMerge[@js "feMerge"] | `L_s319_feMergeNode[@js "feMergeNode"] | `L_s320_feMorphology[@js "feMorphology"] | `L_s321_feOffset[@js "feOffset"] | `L_s322_fePointLight[@js "fePointLight"] | `L_s323_feSpecularLighting[@js "feSpecularLighting"] | `L_s324_feSpotLight[@js "feSpotLight"] | `L_s325_feTile[@js "feTile"] | `L_s326_feTurbulence[@js "feTurbulence"] | `L_s331_filter[@js "filter"] | `L_s342_foreignObject[@js "foreignObject"] | `L_s353_g[@js "g"] | `L_s402_image[@js "image"] | `L_s447_line[@js "line"] | `L_s451_linearGradient[@js "linearGradient"] | `L_s480_marker[@js "marker"] | `L_s482_mask[@js "mask"] | `L_s494_metadata[@js "metadata"] | `L_s509_mpath[@js "mpath"] | `L_s570_path[@js "path"] | `L_s571_pattern[@js "pattern"] | `L_s599_polygon[@js "polygon"] | `L_s600_polyline[@js "polyline"] | `L_s625_radialGradient[@js "radialGradient"] | `L_s634_rect[@js "rect"] | `L_s675_script[@js "script"] | `L_s694_set[@js "set"] | `L_s727_stop[@js "stop"] | `L_s733_style[@js "style"] | `L_s744_svg[@js "svg"] | `L_s745_switch[@js "switch"] | `L_s746_symbol[@js "symbol"] | `L_s756_text[@js "text"] | `L_s760_textPath[@js "textPath"] | `L_s768_title[@js "title"] | `L_s788_tspan[@js "tspan"] | `L_s813_use[@js "use"] | `L_s822_view[@js "view"]] [@js.enum]), ([`L_s91_a[@js "a"] | `L_s93_abbr[@js "abbr"] | `L_s100_address[@js "address"] | `L_s126_area[@js "area"] | `L_s128_article[@js "article"] | `L_s129_aside[@js "aside"] | `L_s133_audio[@js "audio"] | `L_s143_b[@js "b"] | `L_s149_base[@js "base"] | `L_s151_bdi[@js "bdi"] | `L_s152_bdo[@js "bdo"] | `L_s163_blockquote[@js "blockquote"] | `L_s166_body[@js "body"] | `L_s171_br[@js "br"] | `L_s175_button[@js "button"] | `L_s181_canvas[@js "canvas"] | `L_s182_caption[@js "caption"] | `L_s193_cite[@js "cite"] | `L_s202_code[@js "code"] | `L_s204_col[@js "col"] | `L_s205_colgroup[@js "colgroup"] | `L_s228_data[@js "data"] | `L_s232_datalist[@js "datalist"] | `L_s234_dd[@js "dd"] | `L_s239_del[@js "del"] | `L_s245_details[@js "details"] | `L_s250_dfn[@js "dfn"] | `L_s251_dialog[@js "dialog"] | `L_s252_dir[@js "dir"] | `L_s260_div[@js "div"] | `L_s261_dl[@js "dl"] | `L_s271_dt[@js "dt"] | `L_s274_em[@js "em"] | `L_s275_embed[@js "embed"] | `L_s327_fieldset[@js "fieldset"] | `L_s328_figcaption[@js "figcaption"] | `L_s329_figure[@js "figure"] | `L_s339_font[@js "font"] | `L_s340_footer[@js "footer"] | `L_s343_form[@js "form"] | `L_s347_frame[@js "frame"] | `L_s348_frameset[@js "frameset"] | `L_s363_h1[@js "h1"] | `L_s364_h2[@js "h2"] | `L_s365_h3[@js "h3"] | `L_s366_h4[@js "h4"] | `L_s367_h5[@js "h5"] | `L_s368_h6[@js "h6"] | `L_s377_head[@js "head"] | `L_s378_header[@js "header"] | `L_s379_hgroup[@js "hgroup"] | `L_s388_hr[@js "hr"] | `L_s389_html[@js "html"] | `L_s392_i[@js "i"] | `L_s401_iframe[@js "iframe"] | `L_s404_img[@js "img"] | `L_s415_input[@js "input"] | `L_s416_ins[@js "ins"] | `L_s429_kbd[@js "kbd"] | `L_s434_label[@js "label"] | `L_s442_legend[@js "legend"] | `L_s443_li[@js "li"] | `L_s452_link[@js "link"] | `L_s473_main[@js "main"] | `L_s478_map[@js "map"] | `L_s479_mark[@js "mark"] | `L_s481_marquee[@js "marquee"] | `L_s490_menu[@js "menu"] | `L_s493_meta[@js "meta"] | `L_s495_meter[@js "meter"] | `L_s514_nav[@js "nav"] | `L_s532_noscript[@js "noscript"] | `L_s536_object[@js "object"] | `L_s539_ol[@js "ol"] | `L_s546_optgroup[@js "optgroup"] | `L_s549_option[@js "option"] | `L_s556_output[@js "output"] | `L_s559_p[@js "p"] | `L_s565_param[@js "param"] | `L_s582_picture[@js "picture"] | `L_s607_pre[@js "pre"] | `L_s619_progress[@js "progress"] | `L_s624_q[@js "q"] | `L_s663_rp[@js "rp"] | `L_s664_rt[@js "rt"] | `L_s668_ruby[@js "ruby"] | `L_s670_s[@js "s"] | `L_s672_samp[@js "samp"] | `L_s675_script[@js "script"] | `L_s678_section[@js "section"] | `L_s686_select[@js "select"] | `L_s703_slot[@js "slot"] | `L_s704_small[@js "small"] | `L_s711_source[@js "source"] | `L_s715_span[@js "span"] | `L_s732_strong[@js "strong"] | `L_s733_style[@js "style"] | `L_s735_sub[@js "sub"] | `L_s740_summary[@js "summary"] | `L_s741_sup[@js "sup"] | `L_s750_table[@js "table"] | `L_s751_tbody[@js "tbody"] | `L_s753_td[@js "td"] | `L_s754_template[@js "template"] | `L_s761_textarea[@js "textarea"] | `L_s762_tfoot[@js "tfoot"] | `L_s763_th[@js "th"] | `L_s764_thead[@js "thead"] | `L_s765_time[@js "time"] | `L_s768_title[@js "title"] | `L_s779_tr[@js "tr"] | `L_s780_track[@js "track"] | `L_s789_u[@js "u"] | `L_s791_ul[@js "ul"] | `L_s815_var[@js "var"] | `L_s820_video[@js "video"] | `L_s830_wbr[@js "wbr"]] [@js.enum])) Exclude.t_2) Pick.t_2) intersection2
+  type t = (HTMLElementTagNameMap.t, (SVGElementTagNameMap.t, (([`L_s91_a[@js "a"] | `L_s113_animate[@js "animate"] | `L_s114_animateMotion[@js "animateMotion"] | `L_s115_animateTransform[@js "animateTransform"] | `L_s192_circle[@js "circle"] | `L_s197_clipPath[@js "clipPath"] | `L_s238_defs[@js "defs"] | `L_s243_desc[@js "desc"] | `L_s273_ellipse[@js "ellipse"] | `L_s302_feBlend[@js "feBlend"] | `L_s303_feColorMatrix[@js "feColorMatrix"] | `L_s304_feComponentTransfer[@js "feComponentTransfer"] | `L_s305_feComposite[@js "feComposite"] | `L_s306_feConvolveMatrix[@js "feConvolveMatrix"] | `L_s307_feDiffuseLighting[@js "feDiffuseLighting"] | `L_s308_feDisplacementMap[@js "feDisplacementMap"] | `L_s309_feDistantLight[@js "feDistantLight"] | `L_s310_feDropShadow[@js "feDropShadow"] | `L_s311_feFlood[@js "feFlood"] | `L_s312_feFuncA[@js "feFuncA"] | `L_s313_feFuncB[@js "feFuncB"] | `L_s314_feFuncG[@js "feFuncG"] | `L_s315_feFuncR[@js "feFuncR"] | `L_s316_feGaussianBlur[@js "feGaussianBlur"] | `L_s317_feImage[@js "feImage"] | `L_s318_feMerge[@js "feMerge"] | `L_s319_feMergeNode[@js "feMergeNode"] | `L_s320_feMorphology[@js "feMorphology"] | `L_s321_feOffset[@js "feOffset"] | `L_s322_fePointLight[@js "fePointLight"] | `L_s323_feSpecularLighting[@js "feSpecularLighting"] | `L_s324_feSpotLight[@js "feSpotLight"] | `L_s325_feTile[@js "feTile"] | `L_s326_feTurbulence[@js "feTurbulence"] | `L_s331_filter[@js "filter"] | `L_s342_foreignObject[@js "foreignObject"] | `L_s353_g[@js "g"] | `L_s401_image[@js "image"] | `L_s446_line[@js "line"] | `L_s450_linearGradient[@js "linearGradient"] | `L_s479_marker[@js "marker"] | `L_s481_mask[@js "mask"] | `L_s493_metadata[@js "metadata"] | `L_s508_mpath[@js "mpath"] | `L_s569_path[@js "path"] | `L_s570_pattern[@js "pattern"] | `L_s598_polygon[@js "polygon"] | `L_s599_polyline[@js "polyline"] | `L_s624_radialGradient[@js "radialGradient"] | `L_s633_rect[@js "rect"] | `L_s674_script[@js "script"] | `L_s693_set[@js "set"] | `L_s726_stop[@js "stop"] | `L_s732_style[@js "style"] | `L_s743_svg[@js "svg"] | `L_s744_switch[@js "switch"] | `L_s745_symbol[@js "symbol"] | `L_s755_text[@js "text"] | `L_s759_textPath[@js "textPath"] | `L_s767_title[@js "title"] | `L_s787_tspan[@js "tspan"] | `L_s812_use[@js "use"] | `L_s821_view[@js "view"]] [@js.enum]), ([`L_s91_a[@js "a"] | `L_s93_abbr[@js "abbr"] | `L_s100_address[@js "address"] | `L_s126_area[@js "area"] | `L_s128_article[@js "article"] | `L_s129_aside[@js "aside"] | `L_s133_audio[@js "audio"] | `L_s143_b[@js "b"] | `L_s149_base[@js "base"] | `L_s151_bdi[@js "bdi"] | `L_s152_bdo[@js "bdo"] | `L_s163_blockquote[@js "blockquote"] | `L_s166_body[@js "body"] | `L_s171_br[@js "br"] | `L_s175_button[@js "button"] | `L_s181_canvas[@js "canvas"] | `L_s182_caption[@js "caption"] | `L_s193_cite[@js "cite"] | `L_s202_code[@js "code"] | `L_s204_col[@js "col"] | `L_s205_colgroup[@js "colgroup"] | `L_s228_data[@js "data"] | `L_s232_datalist[@js "datalist"] | `L_s234_dd[@js "dd"] | `L_s239_del[@js "del"] | `L_s245_details[@js "details"] | `L_s250_dfn[@js "dfn"] | `L_s251_dialog[@js "dialog"] | `L_s252_dir[@js "dir"] | `L_s260_div[@js "div"] | `L_s261_dl[@js "dl"] | `L_s271_dt[@js "dt"] | `L_s274_em[@js "em"] | `L_s275_embed[@js "embed"] | `L_s327_fieldset[@js "fieldset"] | `L_s328_figcaption[@js "figcaption"] | `L_s329_figure[@js "figure"] | `L_s339_font[@js "font"] | `L_s340_footer[@js "footer"] | `L_s343_form[@js "form"] | `L_s347_frame[@js "frame"] | `L_s348_frameset[@js "frameset"] | `L_s362_h1[@js "h1"] | `L_s363_h2[@js "h2"] | `L_s364_h3[@js "h3"] | `L_s365_h4[@js "h4"] | `L_s366_h5[@js "h5"] | `L_s367_h6[@js "h6"] | `L_s376_head[@js "head"] | `L_s377_header[@js "header"] | `L_s378_hgroup[@js "hgroup"] | `L_s387_hr[@js "hr"] | `L_s388_html[@js "html"] | `L_s391_i[@js "i"] | `L_s400_iframe[@js "iframe"] | `L_s403_img[@js "img"] | `L_s414_input[@js "input"] | `L_s415_ins[@js "ins"] | `L_s428_kbd[@js "kbd"] | `L_s433_label[@js "label"] | `L_s441_legend[@js "legend"] | `L_s442_li[@js "li"] | `L_s451_link[@js "link"] | `L_s472_main[@js "main"] | `L_s477_map[@js "map"] | `L_s478_mark[@js "mark"] | `L_s480_marquee[@js "marquee"] | `L_s489_menu[@js "menu"] | `L_s492_meta[@js "meta"] | `L_s494_meter[@js "meter"] | `L_s513_nav[@js "nav"] | `L_s531_noscript[@js "noscript"] | `L_s535_object[@js "object"] | `L_s538_ol[@js "ol"] | `L_s545_optgroup[@js "optgroup"] | `L_s548_option[@js "option"] | `L_s555_output[@js "output"] | `L_s558_p[@js "p"] | `L_s564_param[@js "param"] | `L_s581_picture[@js "picture"] | `L_s606_pre[@js "pre"] | `L_s618_progress[@js "progress"] | `L_s623_q[@js "q"] | `L_s662_rp[@js "rp"] | `L_s663_rt[@js "rt"] | `L_s667_ruby[@js "ruby"] | `L_s669_s[@js "s"] | `L_s671_samp[@js "samp"] | `L_s674_script[@js "script"] | `L_s677_section[@js "section"] | `L_s685_select[@js "select"] | `L_s702_slot[@js "slot"] | `L_s703_small[@js "small"] | `L_s710_source[@js "source"] | `L_s714_span[@js "span"] | `L_s731_strong[@js "strong"] | `L_s732_style[@js "style"] | `L_s734_sub[@js "sub"] | `L_s739_summary[@js "summary"] | `L_s740_sup[@js "sup"] | `L_s749_table[@js "table"] | `L_s750_tbody[@js "tbody"] | `L_s752_td[@js "td"] | `L_s753_template[@js "template"] | `L_s760_textarea[@js "textarea"] | `L_s761_tfoot[@js "tfoot"] | `L_s762_th[@js "th"] | `L_s763_thead[@js "thead"] | `L_s764_time[@js "time"] | `L_s767_title[@js "title"] | `L_s778_tr[@js "tr"] | `L_s779_track[@js "track"] | `L_s788_u[@js "u"] | `L_s790_ul[@js "ul"] | `L_s814_var[@js "var"] | `L_s819_video[@js "video"] | `L_s829_wbr[@js "wbr"]] [@js.enum])) Exclude.t_2) Pick.t_2) intersection2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47060,7 +47276,7 @@ module DocumentEventMap : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module DisplayCaptureSurfaceType : sig
-  type t = ([`L_s123_application[@js "application"] | `L_s172_browser[@js "browser"] | `L_s500_monitor[@js "monitor"] | `L_s840_window[@js "window"]] [@js.enum])
+  type t = ([`L_s123_application[@js "application"] | `L_s172_browser[@js "browser"] | `L_s499_monitor[@js "monitor"] | `L_s839_window[@js "window"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47105,6 +47321,14 @@ module Console : sig
   val warn: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "warn"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module ClipboardItemData : sig
+  type t = ClipboardItemDataType.t Promise.t_1
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
 
 (** @deprecated  *)
 module ClientRect : sig
@@ -47126,7 +47350,7 @@ module ClientRect : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ClientTypes : sig
-  type t = ([`L_s106_all[@js "all"] | `L_s695_sharedworker[@js "sharedworker"] | `L_s840_window[@js "window"] | `L_s841_worker[@js "worker"]] [@js.enum])
+  type t = ([`L_s106_all[@js "all"] | `L_s694_sharedworker[@js "sharedworker"] | `L_s839_window[@js "window"] | `L_s840_worker[@js "worker"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47156,7 +47380,7 @@ module ClientQueryOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasTextRendering : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s359_geometricPrecision[@js "geometricPrecision"] | `L_s547_optimizeLegibility[@js "optimizeLegibility"] | `L_s548_optimizeSpeed[@js "optimizeSpeed"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s358_geometricPrecision[@js "geometricPrecision"] | `L_s546_optimizeLegibility[@js "optimizeLegibility"] | `L_s547_optimizeSpeed[@js "optimizeSpeed"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47164,7 +47388,7 @@ module CanvasTextRendering : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasFontVariantCaps : sig
-  type t = ([`L_s107_all_petite_caps[@js "all-petite-caps"] | `L_s108_all_small_caps[@js "all-small-caps"] | `L_s531_normal[@js "normal"] | `L_s581_petite_caps[@js "petite-caps"] | `L_s705_small_caps[@js "small-caps"] | `L_s769_titling_caps[@js "titling-caps"] | `L_s795_unicase[@js "unicase"]] [@js.enum])
+  type t = ([`L_s107_all_petite_caps[@js "all-petite-caps"] | `L_s108_all_small_caps[@js "all-small-caps"] | `L_s530_normal[@js "normal"] | `L_s580_petite_caps[@js "petite-caps"] | `L_s704_small_caps[@js "small-caps"] | `L_s768_titling_caps[@js "titling-caps"] | `L_s794_unicase[@js "unicase"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47172,7 +47396,7 @@ module CanvasFontVariantCaps : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasFontStretch : sig
-  type t = ([`L_s211_condensed[@js "condensed"] | `L_s291_expanded[@js "expanded"] | `L_s296_extra_condensed[@js "extra-condensed"] | `L_s297_extra_expanded[@js "extra-expanded"] | `L_s531_normal[@js "normal"] | `L_s689_semi_condensed[@js "semi-condensed"] | `L_s690_semi_expanded[@js "semi-expanded"] | `L_s792_ultra_condensed[@js "ultra-condensed"] | `L_s793_ultra_expanded[@js "ultra-expanded"]] [@js.enum])
+  type t = ([`L_s211_condensed[@js "condensed"] | `L_s291_expanded[@js "expanded"] | `L_s296_extra_condensed[@js "extra-condensed"] | `L_s297_extra_expanded[@js "extra-expanded"] | `L_s530_normal[@js "normal"] | `L_s688_semi_condensed[@js "semi-condensed"] | `L_s689_semi_expanded[@js "semi-expanded"] | `L_s791_ultra_condensed[@js "ultra-condensed"] | `L_s792_ultra_expanded[@js "ultra-expanded"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47180,7 +47404,7 @@ module CanvasFontStretch : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasFontKerning : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s529_none[@js "none"] | `L_s531_normal[@js "normal"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s528_none[@js "none"] | `L_s530_normal[@js "normal"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47330,7 +47554,7 @@ and[@js.scope "DOMQuad"] DOMQuad : sig
   val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
 end
 module DOMParserSupportedType : sig
-  type t = ([`L_s124_application_xhtml_xml[@js "application/xhtml+xml"] | `L_s125_application_xml[@js "application/xml"] | `L_s403_image_svg_xml[@js "image/svg+xml"] | `L_s758_text_html[@js "text/html"] | `L_s759_text_xml[@js "text/xml"]] [@js.enum])
+  type t = ([`L_s124_application_xhtml_xml[@js "application/xhtml+xml"] | `L_s125_application_xml[@js "application/xml"] | `L_s402_image_svg_xml[@js "image/svg+xml"] | `L_s757_text_html[@js "text/html"] | `L_s758_text_xml[@js "text/xml"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47669,7 +47893,7 @@ and[@js.scope "Worker"] Worker : sig
   val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
   
   (** Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned. *)
-  val postMessage': 'tags this -> message:any -> ?options:PostMessageOptions.t -> unit -> unit [@@js.call "postMessage"]
+  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
   
   (** Aborts worker's associated global environment. *)
   val terminate: 'tags this -> unit [@@js.call "terminate"]
@@ -47942,7 +48166,7 @@ and[@js.scope "CSSSupportsRule"] CSSSupportsRule : sig
   val create: unit -> t [@@js.create]
 end
 module ScrollSetting : sig
-  type t = ([`L_s0[@js ""] | `L_s804_up[@js "up"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s803_up[@js "up"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47994,7 +48218,7 @@ and[@js.scope "VTTRegion"] VTTRegion : sig
   val create: unit -> t [@@js.create]
 end
 module PositionAlignSetting : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s185_center[@js "center"] | `L_s448_line_left[@js "line-left"] | `L_s449_line_right[@js "line-right"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s185_center[@js "center"] | `L_s447_line_left[@js "line-left"] | `L_s448_line_right[@js "line-right"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -48018,7 +48242,7 @@ module LineAndPositionSetting : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module LineAlignSetting : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s724_start[@js "start"]] [@js.enum])
+  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s723_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -48026,7 +48250,7 @@ module LineAlignSetting : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module DirectionSetting : sig
-  type t = ([`L_s0[@js ""] | `L_s471_lr[@js "lr"] | `L_s660_rl[@js "rl"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s470_lr[@js "lr"] | `L_s659_rl[@js "rl"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -48034,7 +48258,7 @@ module DirectionSetting : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module AlignSetting : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s441_left[@js "left"] | `L_s659_right[@js "right"] | `L_s724_start[@js "start"]] [@js.enum])
+  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s440_left[@js "left"] | `L_s658_right[@js "right"] | `L_s723_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49330,7 +49554,7 @@ and[@js.scope "ByteLengthQueuingStrategy"] ByteLengthQueuingStrategy : sig
   val create: QueuingStrategyInit.t -> t [@@js.create]
 end
 module RTCSignalingState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s373_have_local_offer[@js "have-local-offer"] | `L_s374_have_local_pranswer[@js "have-local-pranswer"] | `L_s375_have_remote_offer[@js "have-remote-offer"] | `L_s376_have_remote_pranswer[@js "have-remote-pranswer"] | `L_s721_stable[@js "stable"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s372_have_local_offer[@js "have-local-offer"] | `L_s373_have_local_pranswer[@js "have-local-pranswer"] | `L_s374_have_remote_offer[@js "have-remote-offer"] | `L_s375_have_remote_pranswer[@js "have-remote-pranswer"] | `L_s720_stable[@js "stable"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49338,7 +49562,7 @@ module RTCSignalingState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCSdpType : sig
-  type t = ([`L_s120_answer[@js "answer"] | `L_s537_offer[@js "offer"] | `L_s606_pranswer[@js "pranswer"] | `L_s661_rollback[@js "rollback"]] [@js.enum])
+  type t = ([`L_s120_answer[@js "answer"] | `L_s536_offer[@js "offer"] | `L_s605_pranswer[@js "pranswer"] | `L_s660_rollback[@js "rollback"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49444,7 +49668,7 @@ module RTCRtpTransceiverInit : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RTCPeerConnectionState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s519_new[@js "new"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49535,7 +49759,7 @@ module RTCLocalSessionDescriptionInit : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RTCIceGatheringState : sig
-  type t = ([`L_s206_complete[@js "complete"] | `L_s357_gathering[@js "gathering"] | `L_s519_new[@js "new"]] [@js.enum])
+  type t = ([`L_s206_complete[@js "complete"] | `L_s356_gathering[@js "gathering"] | `L_s518_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49543,7 +49767,7 @@ module RTCIceGatheringState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceConnectionState : sig
-  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s519_new[@js "new"]] [@js.enum])
+  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49599,7 +49823,7 @@ module RTCAnswerOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtcpMuxPolicy : sig
-  type t = ([`L_s651_require[@js "require"]] [@js.enum])
+  type t = ([`L_s650_require[@js "require"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49607,7 +49831,7 @@ module RTCRtcpMuxPolicy : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceTransportPolicy : sig
-  type t = ([`L_s106_all[@js "all"] | `L_s638_relay[@js "relay"]] [@js.enum])
+  type t = ([`L_s106_all[@js "all"] | `L_s637_relay[@js "relay"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49615,7 +49839,7 @@ module RTCIceTransportPolicy : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceCredentialType : sig
-  type t = ([`L_s568_password[@js "password"]] [@js.enum])
+  type t = ([`L_s567_password[@js "password"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49649,7 +49873,7 @@ module RTCIceServer : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RTCBundlePolicy : sig
-  type t = ([`L_s147_balanced[@js "balanced"] | `L_s484_max_bundle[@js "max-bundle"] | `L_s485_max_compat[@js "max-compat"]] [@js.enum])
+  type t = ([`L_s147_balanced[@js "balanced"] | `L_s483_max_bundle[@js "max-bundle"] | `L_s484_max_compat[@js "max-compat"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49872,7 +50096,7 @@ and[@js.scope "RTCPeerConnection"] RTCPeerConnection : sig
   val generateCertificate: AlgorithmIdentifier.t -> RTCCertificate.t Promise.t_1 [@@js.global "generateCertificate"]
 end
 module RTCIceTransportState : sig
-  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s519_new[@js "new"]] [@js.enum])
+  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49880,7 +50104,7 @@ module RTCIceTransportState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceGathererState : sig
-  type t = ([`L_s206_complete[@js "complete"] | `L_s357_gathering[@js "gathering"] | `L_s519_new[@js "new"]] [@js.enum])
+  type t = ([`L_s206_complete[@js "complete"] | `L_s356_gathering[@js "gathering"] | `L_s518_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50068,6 +50292,8 @@ module rec AnonymousInterface25 : sig
   val set_prototype: t -> AuthenticatorResponse.t -> unit [@@js.set "prototype"]
   val create: t -> AuthenticatorResponse.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "AuthenticatorResponse"] AuthenticatorResponse : sig
   type t = [`AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -50098,6 +50324,8 @@ module rec AnonymousInterface314 : sig
   val create: t -> PublicKeyCredential.t [@@js.apply_newable]
   val isUserVerifyingPlatformAuthenticatorAvailable: t -> bool Promise.t_1 [@@js.call "isUserVerifyingPlatformAuthenticatorAvailable"]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "PublicKeyCredential"] PublicKeyCredential : sig
   type t = [`Credential | `PublicKeyCredential] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -50339,7 +50567,7 @@ and[@js.scope "PerformanceResourceTiming"] PerformanceResourceTiming : sig
   val create: unit -> t [@@js.create]
 end
 module NavigationType : sig
-  type t = ([`L_s144_back_forward[@js "back_forward"] | `L_s515_navigate[@js "navigate"] | `L_s610_prerender[@js "prerender"] | `L_s641_reload[@js "reload"]] [@js.enum])
+  type t = ([`L_s144_back_forward[@js "back_forward"] | `L_s514_navigate[@js "navigate"] | `L_s609_prerender[@js "prerender"] | `L_s640_reload[@js "reload"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50442,7 +50670,7 @@ module PaymentValidationErrors : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentComplete : sig
-  type t = ([`L_s300_fail[@js "fail"] | `L_s739_success[@js "success"] | `L_s797_unknown[@js "unknown"]] [@js.enum])
+  type t = ([`L_s300_fail[@js "fail"] | `L_s738_success[@js "success"] | `L_s796_unknown[@js "unknown"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50458,7 +50686,10 @@ module rec AnonymousInterface289 : sig
   val create: t -> PaymentResponse.t [@@js.apply_newable]
 end
 
-(** This Payment Request API interface is returned after a user selects a payment method and approves a payment request. *)
+(**
+  This Payment Request API interface is returned after a user selects a payment method and approves a payment request.
+  Available only in secure contexts.
+*)
 and[@js.scope "PaymentResponse"] PaymentResponse : sig
   type t = [`EventTarget | `PaymentResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -50538,7 +50769,10 @@ module rec AnonymousInterface287 : sig
   val create: t -> methodData:PaymentMethodData.t list -> details:PaymentDetailsInit.t -> PaymentRequest.t [@@js.apply_newable]
 end
 
-(** This Payment Request API interface is the primary access point into the API, and lets web content and apps accept payments from the end user. *)
+(**
+  This Payment Request API interface is the primary access point into the API, and lets web content and apps accept payments from the end user.
+  Available only in secure contexts.
+*)
 and[@js.scope "PaymentRequest"] PaymentRequest : sig
   type t = [`EventTarget | `PaymentRequest] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -50605,70 +50839,7 @@ and[@js.scope "PaymentRequest"] PaymentRequest : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: methodData:PaymentMethodData.t list -> details:PaymentDetailsInit.t -> t [@@js.create]
 end
-module rec AnonymousInterface285 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PaymentAddress.t [@@js.get "prototype"]
-  val set_prototype: t -> PaymentAddress.t -> unit [@@js.set "prototype"]
-  val create: t -> PaymentAddress.t [@@js.apply_newable]
-end
-
-(** This Payment Request API interface is used to store shipping or payment address information. *)
-and[@js.scope "PaymentAddress"] PaymentAddress : sig
-  type t = [`PaymentAddress] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PaymentAddress]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PaymentAddress]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PaymentAddress ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** @deprecated  *)
-  val get_addressLine: 'tags this -> string list [@@js.get "addressLine"]
-  
-  (** @deprecated  *)
-  val get_city: 'tags this -> string [@@js.get "city"]
-  
-  (** @deprecated  *)
-  val get_country: 'tags this -> string [@@js.get "country"]
-  
-  (** @deprecated  *)
-  val get_dependentLocality: 'tags this -> string [@@js.get "dependentLocality"]
-  
-  (** @deprecated  *)
-  val get_organization: 'tags this -> string [@@js.get "organization"]
-  
-  (** @deprecated  *)
-  val get_phone: 'tags this -> string [@@js.get "phone"]
-  
-  (** @deprecated  *)
-  val get_postalCode: 'tags this -> string [@@js.get "postalCode"]
-  
-  (** @deprecated  *)
-  val get_recipient: 'tags this -> string [@@js.get "recipient"]
-  
-  (** @deprecated  *)
-  val get_region: 'tags this -> string [@@js.get "region"]
-  
-  (** @deprecated  *)
-  val get_sortingCode: 'tags this -> string [@@js.get "sortingCode"]
-  
-  (** @deprecated  *)
-  val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface281 : sig
+module rec AnonymousInterface282 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50722,7 +50893,7 @@ module OfflineAudioContextOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module OverSampleType : sig
-  type t = ([`L_s2_2x[@js "2x"] | `L_s3_4x[@js "4x"] | `L_s529_none[@js "none"]] [@js.enum])
+  type t = ([`L_s2_2x[@js "2x"] | `L_s3_4x[@js "4x"] | `L_s528_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50730,7 +50901,7 @@ module OverSampleType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ChannelInterpretation : sig
-  type t = ([`L_s258_discrete[@js "discrete"] | `L_s716_speakers[@js "speakers"]] [@js.enum])
+  type t = ([`L_s258_discrete[@js "discrete"] | `L_s715_speakers[@js "speakers"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50738,7 +50909,7 @@ module ChannelInterpretation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ChannelCountMode : sig
-  type t = ([`L_s194_clamped_max[@js "clamped-max"] | `L_s293_explicit[@js "explicit"] | `L_s483_max[@js "max"]] [@js.enum])
+  type t = ([`L_s194_clamped_max[@js "clamped-max"] | `L_s293_explicit[@js "explicit"] | `L_s482_max[@js "max"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50820,7 +50991,7 @@ module PanningModelType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module DistanceModelType : sig
-  type t = ([`L_s294_exponential[@js "exponential"] | `L_s425_inverse[@js "inverse"] | `L_s450_linear[@js "linear"]] [@js.enum])
+  type t = ([`L_s294_exponential[@js "exponential"] | `L_s424_inverse[@js "inverse"] | `L_s449_linear[@js "linear"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50916,7 +51087,7 @@ module PeriodicWaveOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module OscillatorType : sig
-  type t = ([`L_s226_custom[@js "custom"] | `L_s673_sawtooth[@js "sawtooth"] | `L_s701_sine[@js "sine"] | `L_s718_square[@js "square"] | `L_s787_triangle[@js "triangle"]] [@js.enum])
+  type t = ([`L_s226_custom[@js "custom"] | `L_s672_sawtooth[@js "sawtooth"] | `L_s700_sine[@js "sine"] | `L_s717_square[@js "square"] | `L_s786_triangle[@js "triangle"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -51136,7 +51307,7 @@ module ChannelMergerOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module BiquadFilterType : sig
-  type t = ([`L_s109_allpass[@js "allpass"] | `L_s148_bandpass[@js "bandpass"] | `L_s384_highpass[@js "highpass"] | `L_s385_highshelf[@js "highshelf"] | `L_s469_lowpass[@js "lowpass"] | `L_s470_lowshelf[@js "lowshelf"] | `L_s534_notch[@js "notch"] | `L_s575_peaking[@js "peaking"]] [@js.enum])
+  type t = ([`L_s109_allpass[@js "allpass"] | `L_s148_bandpass[@js "bandpass"] | `L_s383_highpass[@js "highpass"] | `L_s384_highshelf[@js "highshelf"] | `L_s468_lowpass[@js "lowpass"] | `L_s469_lowshelf[@js "lowshelf"] | `L_s533_notch[@js "notch"] | `L_s574_peaking[@js "peaking"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -51199,6 +51370,8 @@ module rec AnonymousInterface520 : sig
   val set_prototype: t -> Worklet.t -> unit [@@js.set "prototype"]
   val create: t -> Worklet.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "Worklet"] Worklet : sig
   type t = [`Worklet] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -51236,6 +51409,8 @@ module rec AnonymousInterface21 : sig
   val set_prototype: t -> AudioWorklet.t -> unit [@@js.set "prototype"]
   val create: t -> AudioWorklet.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "AudioWorklet"] AudioWorklet : sig
   type t = [`AudioWorklet | `Worklet] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -51257,7 +51432,7 @@ and[@js.scope "AudioWorklet"] AudioWorklet : sig
   val create: unit -> t [@@js.create]
 end
 module AutomationRate : sig
-  type t = ([`L_s92_a_rate[@js "a-rate"] | `L_s428_k_rate[@js "k-rate"]] [@js.enum])
+  type t = ([`L_s92_a_rate[@js "a-rate"] | `L_s427_k_rate[@js "k-rate"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -51290,7 +51465,6 @@ and[@js.scope "AudioParam"] AudioParam : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val setValueCurveAtTime: 'tags this -> values:float Iterable.t_1 -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
   val get_automationRate: 'tags this -> AutomationRate.t [@@js.get "automationRate"]
   val set_automationRate: 'tags this -> AutomationRate.t -> unit [@@js.set "automationRate"]
   val get_defaultValue: 'tags this -> float [@@js.get "defaultValue"]
@@ -51304,7 +51478,8 @@ and[@js.scope "AudioParam"] AudioParam : sig
   val linearRampToValueAtTime: 'tags this -> value:float -> endTime:float -> t [@@js.call "linearRampToValueAtTime"]
   val setTargetAtTime: 'tags this -> target:float -> startTime:float -> timeConstant:float -> t [@@js.call "setTargetAtTime"]
   val setValueAtTime: 'tags this -> value:float -> startTime:float -> t [@@js.call "setValueAtTime"]
-  val setValueCurveAtTime': 'tags this -> values:(Float32Array.t_0, float) or_array -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
+  val setValueCurveAtTime: 'tags this -> values:(Float32Array.t_0, float) or_array -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
+  val setValueCurveAtTime': 'tags this -> values:float Iterable.t_1 -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -51355,7 +51530,7 @@ and[@js.scope "AudioListener"] AudioListener : sig
   val create: unit -> t [@@js.create]
 end
 module AudioContextState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s669_running[@js "running"] | `L_s743_suspended[@js "suspended"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s668_running[@js "running"] | `L_s742_suspended[@js "suspended"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -51469,7 +51644,7 @@ and AnonymousInterface12 : sig
   val set_prototype: t -> AudioBufferSourceNode.t -> unit [@@js.set "prototype"]
   val create: t -> context:BaseAudioContext.t -> ?options:AudioBufferSourceOptions.t -> unit -> AudioBufferSourceNode.t [@@js.apply_newable]
 end
-and AnonymousInterface123 : sig
+and AnonymousInterface124 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -51501,7 +51676,7 @@ and AnonymousInterface20 : sig
   val set_prototype: t -> AudioScheduledSourceNode.t -> unit [@@js.set "prototype"]
   val create: t -> AudioScheduledSourceNode.t [@@js.apply_newable]
 end
-and AnonymousInterface222 : sig
+and AnonymousInterface223 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -51517,7 +51692,7 @@ and AnonymousInterface27 : sig
   val set_prototype: t -> BaseAudioContext.t -> unit [@@js.set "prototype"]
   val create: t -> BaseAudioContext.t [@@js.apply_newable]
 end
-and AnonymousInterface280 : sig
+and AnonymousInterface281 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -51525,7 +51700,7 @@ and AnonymousInterface280 : sig
   val set_prototype: t -> OscillatorNode.t -> unit [@@js.set "prototype"]
   val create: t -> context:BaseAudioContext.t -> ?options:OscillatorOptions.t -> unit -> OscillatorNode.t [@@js.apply_newable]
 end
-and AnonymousInterface283 : sig
+and AnonymousInterface284 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -51837,8 +52012,8 @@ and[@js.scope "BaseAudioContext"] BaseAudioContext : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val createIIRFilter: 'tags this -> feedforward:float Iterable.t_1 -> feedback:float Iterable.t_1 -> IIRFilterNode.t [@@js.call "createIIRFilter"]
-  val createPeriodicWave: 'tags this -> real:float Iterable.t_1 -> imag:float Iterable.t_1 -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
+  
+  (** Available only in secure contexts. *)
   val get_audioWorklet: 'tags this -> AudioWorklet.t [@@js.get "audioWorklet"]
   val get_currentTime: 'tags this -> float [@@js.get "currentTime"]
   val get_destination: 'tags this -> AudioDestinationNode.t [@@js.get "destination"]
@@ -51858,10 +52033,10 @@ and[@js.scope "BaseAudioContext"] BaseAudioContext : sig
   val createDelay: 'tags this -> ?maxDelayTime:float -> unit -> DelayNode.t [@@js.call "createDelay"]
   val createDynamicsCompressor: 'tags this -> DynamicsCompressorNode.t [@@js.call "createDynamicsCompressor"]
   val createGain: 'tags this -> GainNode.t [@@js.call "createGain"]
-  val createIIRFilter': 'tags this -> feedforward:float list -> feedback:float list -> IIRFilterNode.t [@@js.call "createIIRFilter"]
+  val createIIRFilter: 'tags this -> feedforward:float list -> feedback:float list -> IIRFilterNode.t [@@js.call "createIIRFilter"]
   val createOscillator: 'tags this -> OscillatorNode.t [@@js.call "createOscillator"]
   val createPanner: 'tags this -> PannerNode.t [@@js.call "createPanner"]
-  val createPeriodicWave': 'tags this -> real:(Float32Array.t_0, float) or_array -> imag:(Float32Array.t_0, float) or_array -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
+  val createPeriodicWave: 'tags this -> real:(Float32Array.t_0, float) or_array -> imag:(Float32Array.t_0, float) or_array -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
   
   (** @deprecated  *)
   val createScriptProcessor: 'tags this -> ?bufferSize:float -> ?numberOfInputChannels:float -> ?numberOfOutputChannels:float -> unit -> ScriptProcessorNode.t [@@js.call "createScriptProcessor"]
@@ -51908,6 +52083,8 @@ and[@js.scope "BaseAudioContext"] BaseAudioContext : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val createIIRFilter': 'tags this -> feedforward:float Iterable.t_1 -> feedback:float Iterable.t_1 -> IIRFilterNode.t [@@js.call "createIIRFilter"]
+  val createPeriodicWave': 'tags this -> real:float Iterable.t_1 -> imag:float Iterable.t_1 -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -52454,7 +52631,7 @@ and[@js.scope "WaveShaperNode"] WaveShaperNode : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:WaveShaperOptions.t -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface279 : sig
+module rec AnonymousInterface280 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -52540,7 +52717,7 @@ module MutationRecordType : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface270 : sig
+module rec AnonymousInterface271 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -52657,7 +52834,7 @@ module MutationObserverInit : sig
   val set_subtree: 'tags this -> bool -> unit [@@js.set "subtree"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface269 : sig
+module rec AnonymousInterface270 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -52719,7 +52896,7 @@ and[@js.scope "MutationObserver"] MutationObserver : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: MutationCallback.t -> t [@@js.create]
 end
-module rec AnonymousInterface261 : sig
+module rec AnonymousInterface262 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -52756,7 +52933,7 @@ and[@js.scope "MessageChannel"] MessageChannel : sig
   val create: unit -> t [@@js.create]
 end
 module RecordingState : sig
-  type t = ([`L_s407_inactive[@js "inactive"] | `L_s573_paused[@js "paused"] | `L_s633_recording[@js "recording"]] [@js.enum])
+  type t = ([`L_s406_inactive[@js "inactive"] | `L_s572_paused[@js "paused"] | `L_s632_recording[@js "recording"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -52789,7 +52966,7 @@ module MediaRecorderOptions : sig
   val set_videoBitsPerSecond: 'tags this -> float -> unit [@@js.set "videoBitsPerSecond"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface251 : sig
+module rec AnonymousInterface252 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -52818,8 +52995,8 @@ and[@js.scope "MediaRecorder"] MediaRecorder : sig
   val get_mimeType: 'tags this -> string [@@js.get "mimeType"]
   val get_ondataavailable: 'tags this -> (this:t -> ev:BlobEvent.t -> any) or_null [@@js.get "ondataavailable"]
   val set_ondataavailable: 'tags this -> (this:t -> ev:BlobEvent.t -> any) or_null -> unit [@@js.set "ondataavailable"]
-  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
+  val get_onerror: 'tags this -> (this:t -> ev:MediaRecorderErrorEvent.t -> any) or_null [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:MediaRecorderErrorEvent.t -> any) or_null -> unit [@@js.set "onerror"]
   val get_onpause: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onpause"]
   val set_onpause: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onpause"]
   val get_onresume: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onresume"]
@@ -52889,6 +53066,8 @@ module rec AnonymousInterface24 : sig
   val set_prototype: t -> AuthenticatorAttestationResponse.t -> unit [@@js.set "prototype"]
   val create: t -> AuthenticatorAttestationResponse.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "AuthenticatorAttestationResponse"] AuthenticatorAttestationResponse : sig
   type t = [`AuthenticatorAttestationResponse | `AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -52910,7 +53089,7 @@ and[@js.scope "AuthenticatorAttestationResponse"] AuthenticatorAttestationRespon
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface235 : sig
+module rec AnonymousInterface236 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53006,7 +53185,7 @@ module ComputedKeyframe : sig
   val set: 'tags this -> string -> string or_number or_null_or_undefined -> unit [@@js.index_set]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface232 : sig
+module rec AnonymousInterface233 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53045,37 +53224,6 @@ and[@js.scope "KeyframeEffect"] KeyframeEffect : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: target:Element.t or_null -> keyframes:(PropertyIndexedKeyframes.t, Keyframe.t) or_array or_null -> ?options:KeyframeEffectOptions.t or_number -> unit -> t [@@js.create]
   val create': t -> t [@@js.create]
-end
-module rec AnonymousInterface23 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AuthenticatorAssertionResponse.t [@@js.get "prototype"]
-  val set_prototype: t -> AuthenticatorAssertionResponse.t -> unit [@@js.set "prototype"]
-  val create: t -> AuthenticatorAssertionResponse.t [@@js.apply_newable]
-end
-and[@js.scope "AuthenticatorAssertionResponse"] AuthenticatorAssertionResponse : sig
-  type t = [`AuthenticatorAssertionResponse | `AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AuthenticatorAssertionResponse | `AuthenticatorResponse]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AuthenticatorAssertionResponse | `AuthenticatorResponse]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticatorAssertionResponse ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_authenticatorData: 'tags this -> ArrayBuffer.t_0 [@@js.get "authenticatorData"]
-  val get_signature: 'tags this -> ArrayBuffer.t_0 [@@js.get "signature"]
-  val get_userHandle: 'tags this -> ArrayBuffer.t_0 or_null [@@js.get "userHandle"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
 end
 module IntersectionObserverInit : sig
   type t = [`IntersectionObserverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -53133,7 +53281,7 @@ module IntersectionObserverEntryInit : sig
   val set_time: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "time"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface230 : sig
+module rec AnonymousInterface231 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53170,7 +53318,7 @@ and[@js.scope "IntersectionObserverEntry"] IntersectionObserverEntry : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: IntersectionObserverEntryInit.t -> t [@@js.create]
 end
-module rec AnonymousInterface229 : sig
+module rec AnonymousInterface230 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53225,6 +53373,39 @@ and IntersectionObserverCallback : sig
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> entries:IntersectionObserverEntry.t list -> observer:IntersectionObserver.t -> unit [@@js.apply]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module rec AnonymousInterface23 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> AuthenticatorAssertionResponse.t [@@js.get "prototype"]
+  val set_prototype: t -> AuthenticatorAssertionResponse.t -> unit [@@js.set "prototype"]
+  val create: t -> AuthenticatorAssertionResponse.t [@@js.apply_newable]
+end
+
+(** Available only in secure contexts. *)
+and[@js.scope "AuthenticatorAssertionResponse"] AuthenticatorAssertionResponse : sig
+  type t = [`AuthenticatorAssertionResponse | `AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AuthenticatorAssertionResponse | `AuthenticatorResponse]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AuthenticatorAssertionResponse | `AuthenticatorResponse]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticatorAssertionResponse ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_authenticatorData: 'tags this -> ArrayBuffer.t_0 [@@js.get "authenticatorData"]
+  val get_signature: 'tags this -> ArrayBuffer.t_0 [@@js.get "signature"]
+  val get_userHandle: 'tags this -> ArrayBuffer.t_0 or_null [@@js.get "userHandle"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
 end
 module AudioWorkletNodeOptions : sig
   type t = [`AudioNodeOptions | `AudioWorkletNodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -53291,6 +53472,8 @@ module rec AnonymousInterface22 : sig
   val set_prototype: t -> AudioWorkletNode.t -> unit [@@js.set "prototype"]
   val create: t -> context:BaseAudioContext.t -> name:string -> ?options:AudioWorkletNodeOptions.t -> unit -> AudioWorkletNode.t [@@js.apply_newable]
 end
+
+(** Available only in secure contexts. *)
 and[@js.scope "AudioWorkletNode"] AudioWorkletNode : sig
   type t = [`AudioNode | `AudioWorkletNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -53355,7 +53538,7 @@ and[@js.scope "AudioWorkletNode"] AudioWorkletNode : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> name:string -> ?options:AudioWorkletNodeOptions.t -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface206 : sig
+module rec AnonymousInterface207 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53437,7 +53620,7 @@ and[@js.scope "HTMLUnknownElement"] HTMLUnknownElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface149 : sig
+module rec AnonymousInterface150 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53519,7 +53702,7 @@ and[@js.scope "HTMLDocument"] HTMLDocument : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface132 : sig
+module rec AnonymousInterface133 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53527,7 +53710,7 @@ module rec AnonymousInterface132 : sig
   val set_prototype: t -> WebAssembly.Global.t -> unit [@@js.set "prototype"]
   val create: t -> descriptor:WebAssembly.GlobalDescriptor.t -> ?v:any -> unit -> WebAssembly.Global.t [@@js.apply_newable]
 end
-and AnonymousInterface228 : sig
+and AnonymousInterface229 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53535,15 +53718,16 @@ and AnonymousInterface228 : sig
   val set_prototype: t -> WebAssembly.Instance.t -> unit [@@js.set "prototype"]
   val create: t -> module_:WebAssembly.Module.t -> ?importObject:WebAssembly.Imports.t -> unit -> WebAssembly.Instance.t [@@js.apply_newable]
 end
-and AnonymousInterface233 : sig
+and AnonymousInterface234 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val get_prototype: t -> WebAssembly.LinkError.t [@@js.get "prototype"]
   val set_prototype: t -> WebAssembly.LinkError.t -> unit [@@js.set "prototype"]
-  val create: t -> WebAssembly.LinkError.t [@@js.apply_newable]
+  val create: t -> ?message:string -> unit -> WebAssembly.LinkError.t [@@js.apply_newable]
+  val apply: t -> ?message:string -> unit -> WebAssembly.LinkError.t [@@js.apply]
 end
-and AnonymousInterface260 : sig
+and AnonymousInterface261 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53551,7 +53735,7 @@ and AnonymousInterface260 : sig
   val set_prototype: t -> WebAssembly.Memory.t -> unit [@@js.set "prototype"]
   val create: t -> descriptor:WebAssembly.MemoryDescriptor.t -> WebAssembly.Memory.t [@@js.apply_newable]
 end
-and AnonymousInterface266 : sig
+and AnonymousInterface267 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -53568,7 +53752,8 @@ and AnonymousInterface346 : sig
   val t_of_js: Ojs.t -> t
   val get_prototype: t -> WebAssembly.RuntimeError.t [@@js.get "prototype"]
   val set_prototype: t -> WebAssembly.RuntimeError.t -> unit [@@js.set "prototype"]
-  val create: t -> WebAssembly.RuntimeError.t [@@js.apply_newable]
+  val create: t -> ?message:string -> unit -> WebAssembly.RuntimeError.t [@@js.apply_newable]
+  val apply: t -> ?message:string -> unit -> WebAssembly.RuntimeError.t [@@js.apply]
 end
 and AnonymousInterface470 : sig
   type t = private Ojs.t
@@ -53584,11 +53769,12 @@ and AnonymousInterface66 : sig
   val t_of_js: Ojs.t -> t
   val get_prototype: t -> WebAssembly.CompileError.t [@@js.get "prototype"]
   val set_prototype: t -> WebAssembly.CompileError.t -> unit [@@js.set "prototype"]
-  val create: t -> WebAssembly.CompileError.t [@@js.apply_newable]
+  val create: t -> ?message:string -> unit -> WebAssembly.CompileError.t [@@js.apply_newable]
+  val apply: t -> ?message:string -> unit -> WebAssembly.CompileError.t [@@js.apply]
 end
 and[@js.scope "WebAssembly"] WebAssembly : sig
   module ImportExportKind : sig
-    type t = ([`L_s352_function[@js "function"] | `L_s360_global[@js "global"] | `L_s489_memory[@js "memory"] | `L_s750_table[@js "table"]] [@js.enum])
+    type t = ([`L_s352_function[@js "function"] | `L_s359_global[@js "global"] | `L_s488_memory[@js "memory"] | `L_s749_table[@js "table"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -53767,7 +53953,7 @@ and[@js.scope "WebAssembly"] WebAssembly : sig
     val create: MemoryDescriptor.t -> t [@@js.create]
   end
   module ValueType : sig
-    type t = ([`L_s122_anyfunc[@js "anyfunc"] | `L_s295_externref[@js "externref"] | `L_s298_f32[@js "f32"] | `L_s299_f64[@js "f64"] | `L_s393_i32[@js "i32"] | `L_s394_i64[@js "i64"]] [@js.enum])
+    type t = ([`L_s122_anyfunc[@js "anyfunc"] | `L_s295_externref[@js "externref"] | `L_s298_f32[@js "f32"] | `L_s299_f64[@js "f64"] | `L_s392_i32[@js "i32"] | `L_s393_i64[@js "i64"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -53920,7 +54106,8 @@ and[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_of_js: Ojs.t -> t_0
     val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
-    val create: unit -> t [@@js.create]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
   module[@js.scope "LinkError"] LinkError : sig
     type t = [`WebAssembly_LinkError | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -53940,7 +54127,8 @@ and[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_of_js: Ojs.t -> t_0
     val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
-    val create: unit -> t [@@js.create]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
   module[@js.scope "CompileError"] CompileError : sig
     type t = [`WebAssembly_CompileError | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -53960,14 +54148,15 @@ and[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_of_js: Ojs.t -> t_0
     val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
-    val create: unit -> t [@@js.create]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
   val compileError: unit -> AnonymousInterface66.t [@@js.get "CompileError"]
-  val global: unit -> AnonymousInterface132.t [@@js.get "Global"]
-  val instance: unit -> AnonymousInterface228.t [@@js.get "Instance"]
-  val linkError: unit -> AnonymousInterface233.t [@@js.get "LinkError"]
-  val memory: unit -> AnonymousInterface260.t [@@js.get "Memory"]
-  val module_: unit -> AnonymousInterface266.t [@@js.get "Module"]
+  val global: unit -> AnonymousInterface133.t [@@js.get "Global"]
+  val instance: unit -> AnonymousInterface229.t [@@js.get "Instance"]
+  val linkError: unit -> AnonymousInterface234.t [@@js.get "LinkError"]
+  val memory: unit -> AnonymousInterface261.t [@@js.get "Memory"]
+  val module_: unit -> AnonymousInterface267.t [@@js.get "Module"]
   val runtimeError: unit -> AnonymousInterface346.t [@@js.get "RuntimeError"]
   val table: unit -> AnonymousInterface470.t [@@js.get "Table"]
   val compile: BufferSource.t -> Module.t Promise.t_1 [@@js.global "compile"]
@@ -54040,7 +54229,7 @@ module AudioTimestamp : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module AudioContextLatencyCategory : sig
-  type t = ([`L_s147_balanced[@js "balanced"] | `L_s419_interactive[@js "interactive"] | `L_s587_playback[@js "playback"]] [@js.enum])
+  type t = ([`L_s147_balanced[@js "balanced"] | `L_s418_interactive[@js "interactive"] | `L_s586_playback[@js "playback"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -54077,7 +54266,7 @@ module rec AnonymousInterface13 : sig
   val set_prototype: t -> AudioContext.t -> unit [@@js.set "prototype"]
   val create: t -> ?contextOptions:AudioContextOptions.t -> unit -> AudioContext.t [@@js.apply_newable]
 end
-and AnonymousInterface239 : sig
+and AnonymousInterface240 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -54085,7 +54274,7 @@ and AnonymousInterface239 : sig
   val set_prototype: t -> MediaElementAudioSourceNode.t -> unit [@@js.set "prototype"]
   val create: t -> context:AudioContext.t -> options:MediaElementAudioSourceOptions.t -> MediaElementAudioSourceNode.t [@@js.apply_newable]
 end
-and AnonymousInterface256 : sig
+and AnonymousInterface257 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -54093,7 +54282,7 @@ and AnonymousInterface256 : sig
   val set_prototype: t -> MediaStreamAudioDestinationNode.t -> unit [@@js.set "prototype"]
   val create: t -> context:AudioContext.t -> ?options:AudioNodeOptions.t -> unit -> MediaStreamAudioDestinationNode.t [@@js.apply_newable]
 end
-and AnonymousInterface257 : sig
+and AnonymousInterface258 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -54257,7 +54446,7 @@ module FileCallback : sig
   val apply: 'tags this -> file:File.t -> unit [@@js.apply]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface116 : sig
+module rec AnonymousInterface117 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -54306,7 +54495,7 @@ module EventSourceInit : sig
   val set_withCredentials: 'tags this -> bool -> unit [@@js.set "withCredentials"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface106 : sig
+module rec AnonymousInterface107 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -54531,10 +54720,20 @@ val audioParamMap: unit -> AnonymousInterface18.t [@@js.get "AudioParamMap"]
 *)
 val audioProcessingEvent: unit -> AnonymousInterface19.t [@@js.get "AudioProcessingEvent"]
 val audioScheduledSourceNode: unit -> AnonymousInterface20.t [@@js.get "AudioScheduledSourceNode"]
+
+(** Available only in secure contexts. *)
 val audioWorklet: unit -> AnonymousInterface21.t [@@js.get "AudioWorklet"]
+
+(** Available only in secure contexts. *)
 val audioWorkletNode: unit -> AnonymousInterface22.t [@@js.get "AudioWorkletNode"]
+
+(** Available only in secure contexts. *)
 val authenticatorAssertionResponse: unit -> AnonymousInterface23.t [@@js.get "AuthenticatorAssertionResponse"]
+
+(** Available only in secure contexts. *)
 val authenticatorAttestationResponse: unit -> AnonymousInterface24.t [@@js.get "AuthenticatorAttestationResponse"]
+
+(** Available only in secure contexts. *)
 val authenticatorResponse: unit -> AnonymousInterface25.t [@@js.get "AuthenticatorResponse"]
 val barProp: unit -> AnonymousInterface26.t [@@js.get "BarProp"]
 val baseAudioContext: unit -> AnonymousInterface27.t [@@js.get "BaseAudioContext"]
@@ -54600,10 +54799,16 @@ val cSSStyleSheet: unit -> AnonymousInterface50.t [@@js.get "CSSStyleSheet"]
 val cSSSupportsRule: unit -> AnonymousInterface51.t [@@js.get "CSSSupportsRule"]
 val cSSTransition: unit -> AnonymousInterface52.t [@@js.get "CSSTransition"]
 
-(** Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec. *)
+(**
+  Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
+  Available only in secure contexts.
+*)
 val cache: unit -> AnonymousInterface53.t [@@js.get "Cache"]
 
-(** The storage for Cache objects. *)
+(**
+  The storage for Cache objects.
+  Available only in secure contexts.
+*)
 val cacheStorage: unit -> AnonymousInterface54.t [@@js.get "CacheStorage"]
 
 (** An opaque object describing a gradient. It is returned by the methods CanvasRenderingContext2D.createLinearGradient() or CanvasRenderingContext2D.createRadialGradient(). *)
@@ -54623,6 +54828,8 @@ val channelSplitterNode: unit -> AnonymousInterface59.t [@@js.get "ChannelSplitt
 
 (** The CharacterData abstract interface represents a Node object that contains characters. This is an abstract interface, meaning there aren't any object of type CharacterData: it is implemented by other interfaces, like Text, Comment, or ProcessingInstruction which aren't abstract. *)
 val characterData: unit -> AnonymousInterface60.t [@@js.get "CharacterData"]
+
+(** Available only in secure contexts. *)
 val clipboard: unit -> AnonymousInterface61.t [@@js.get "Clipboard"]
 
 (** Events providing information related to modification of the clipboard, that is cut, copy, and paste events. *)
@@ -54644,13 +54851,20 @@ val convolverNode: unit -> AnonymousInterface69.t [@@js.get "ConvolverNode"]
 
 (** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
 val countQueuingStrategy: unit -> AnonymousInterface70.t [@@js.get "CountQueuingStrategy"]
+
+(** Available only in secure contexts. *)
 val credential: unit -> AnonymousInterface71.t [@@js.get "Credential"]
+
+(** Available only in secure contexts. *)
 val credentialsContainer: unit -> AnonymousInterface72.t [@@js.get "CredentialsContainer"]
 
 (** Basic cryptography features available in the current context. It allows access to a cryptographically strong random number generator and to cryptographic primitives. *)
 val crypto: unit -> AnonymousInterface73.t [@@js.get "Crypto"]
 
-(** The CryptoKey dictionary of the Web Crypto API represents a cryptographic key. *)
+(**
+  The CryptoKey dictionary of the Web Crypto API represents a cryptographic key.
+  Available only in secure contexts.
+*)
 val cryptoKey: unit -> AnonymousInterface74.t [@@js.get "CryptoKey"]
 val customElementRegistry: unit -> AnonymousInterface75.t [@@js.get "CustomElementRegistry"]
 val customEvent: unit -> AnonymousInterface76.t [@@js.get "CustomEvent"]
@@ -54697,10 +54911,16 @@ val dataTransferItemList: unit -> AnonymousInterface93.t [@@js.get "DataTransfer
 (** A delay-line; an AudioNode audio-processing module that causes a delay between the arrival of an input data and its propagation to the output. *)
 val delayNode: unit -> AnonymousInterface94.t [@@js.get "DelayNode"]
 
-(** The DeviceMotionEvent provides web developers with information about the speed of changes for the device's position and orientation. *)
+(**
+  The DeviceMotionEvent provides web developers with information about the speed of changes for the device's position and orientation.
+  Available only in secure contexts.
+*)
 val deviceMotionEvent: unit -> AnonymousInterface95.t [@@js.get "DeviceMotionEvent"]
 
-(** The DeviceOrientationEvent provides web developers with information from the physical orientation of the device running the web page. *)
+(**
+  The DeviceOrientationEvent provides web developers with information from the physical orientation of the device running the web page.
+  Available only in secure contexts.
+*)
 val deviceOrientationEvent: unit -> AnonymousInterface96.t [@@js.get "DeviceOrientationEvent"]
 
 (** Any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree. *)
@@ -54721,497 +54941,535 @@ val dynamicsCompressorNode: unit -> AnonymousInterface102.t [@@js.get "DynamicsC
 
 (** Element is the most general base class from which all objects in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element. *)
 val element: unit -> AnonymousInterface103.t [@@js.get "Element"]
+val elementInternals: unit -> AnonymousInterface104.t [@@js.get "ElementInternals"]
 
 (** Events providing information related to errors in scripts or in files. *)
-val errorEvent: unit -> AnonymousInterface104.t [@@js.get "ErrorEvent"]
+val errorEvent: unit -> AnonymousInterface105.t [@@js.get "ErrorEvent"]
 
 (** An event which takes place in the DOM. *)
-val event: unit -> AnonymousInterface105.t [@@js.get "Event"]
-val eventSource: unit -> AnonymousInterface106.t [@@js.get "EventSource"]
+val event: unit -> AnonymousInterface106.t [@@js.get "Event"]
+val eventSource: unit -> AnonymousInterface107.t [@@js.get "EventSource"]
 
 (** EventTarget is a DOM interface implemented by objects that can receive events and may have listeners for them. *)
-val eventTarget: unit -> AnonymousInterface107.t [@@js.get "EventTarget"]
+val eventTarget: unit -> AnonymousInterface108.t [@@js.get "EventTarget"]
 
 (** @deprecated  *)
-val external_: unit -> AnonymousInterface108.t [@@js.get "External"]
+val external_: unit -> AnonymousInterface109.t [@@js.get "External"]
 
 (** Provides information about files and allows JavaScript in a web page to access their content. *)
-val file: unit -> AnonymousInterface109.t [@@js.get "File"]
+val file: unit -> AnonymousInterface110.t [@@js.get "File"]
 
 (** An object of this type is returned by the files property of the HTML <input> element; this lets you access the list of files selected with the <input type="file"> element. It's also used for a list of files dropped into web content when using the drag and drop API; see the DataTransfer object for details on this usage. *)
-val fileList: unit -> AnonymousInterface110.t [@@js.get "FileList"]
+val fileList: unit -> AnonymousInterface111.t [@@js.get "FileList"]
 
 (** Lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read. *)
-val fileReader: unit -> AnonymousInterface111.t [@@js.get "FileReader"]
-val fileSystem: unit -> AnonymousInterface112.t [@@js.get "FileSystem"]
-val fileSystemDirectoryEntry: unit -> AnonymousInterface113.t [@@js.get "FileSystemDirectoryEntry"]
-
-(** @deprecated  *)
-val fileSystemDirectoryReader: unit -> AnonymousInterface114.t [@@js.get "FileSystemDirectoryReader"]
-val fileSystemEntry: unit -> AnonymousInterface115.t [@@js.get "FileSystemEntry"]
-val fileSystemFileEntry: unit -> AnonymousInterface116.t [@@js.get "FileSystemFileEntry"]
+val fileReader: unit -> AnonymousInterface112.t [@@js.get "FileReader"]
+val fileSystem: unit -> AnonymousInterface113.t [@@js.get "FileSystem"]
+val fileSystemDirectoryEntry: unit -> AnonymousInterface114.t [@@js.get "FileSystemDirectoryEntry"]
+val fileSystemDirectoryReader: unit -> AnonymousInterface115.t [@@js.get "FileSystemDirectoryReader"]
+val fileSystemEntry: unit -> AnonymousInterface116.t [@@js.get "FileSystemEntry"]
+val fileSystemFileEntry: unit -> AnonymousInterface117.t [@@js.get "FileSystemFileEntry"]
 
 (** Focus-related events like focus, blur, focusin, or focusout. *)
-val focusEvent: unit -> AnonymousInterface117.t [@@js.get "FocusEvent"]
-val fontFace: unit -> AnonymousInterface118.t [@@js.get "FontFace"]
-val fontFaceSet: unit -> AnonymousInterface119.t [@@js.get "FontFaceSet"]
-val fontFaceSetLoadEvent: unit -> AnonymousInterface120.t [@@js.get "FontFaceSetLoadEvent"]
+val focusEvent: unit -> AnonymousInterface118.t [@@js.get "FocusEvent"]
+val fontFace: unit -> AnonymousInterface119.t [@@js.get "FontFace"]
+val fontFaceSet: unit -> AnonymousInterface120.t [@@js.get "FontFaceSet"]
+val fontFaceSetLoadEvent: unit -> AnonymousInterface121.t [@@js.get "FontFaceSetLoadEvent"]
 
 (** Provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to "multipart/form-data". *)
-val formData: unit -> AnonymousInterface121.t [@@js.get "FormData"]
-val formDataEvent: unit -> AnonymousInterface122.t [@@js.get "FormDataEvent"]
+val formData: unit -> AnonymousInterface122.t [@@js.get "FormData"]
+val formDataEvent: unit -> AnonymousInterface123.t [@@js.get "FormDataEvent"]
 
 (** A change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same number of channels. *)
-val gainNode: unit -> AnonymousInterface123.t [@@js.get "GainNode"]
+val gainNode: unit -> AnonymousInterface124.t [@@js.get "GainNode"]
 
-(** This Gamepad API interface defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id. *)
-val gamepad: unit -> AnonymousInterface124.t [@@js.get "Gamepad"]
+(**
+  This Gamepad API interface defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id.
+  Available only in secure contexts.
+*)
+val gamepad: unit -> AnonymousInterface125.t [@@js.get "Gamepad"]
 
-(** An individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device. *)
-val gamepadButton: unit -> AnonymousInterface125.t [@@js.get "GamepadButton"]
+(**
+  An individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device.
+  Available only in secure contexts.
+*)
+val gamepadButton: unit -> AnonymousInterface126.t [@@js.get "GamepadButton"]
 
-(** This Gamepad API interface contains references to gamepads connected to the system, which is what the gamepad events Window.gamepadconnected and Window.gamepaddisconnected are fired in response to. *)
-val gamepadEvent: unit -> AnonymousInterface126.t [@@js.get "GamepadEvent"]
+(**
+  This Gamepad API interface contains references to gamepads connected to the system, which is what the gamepad events Window.gamepadconnected and Window.gamepaddisconnected are fired in response to.
+  Available only in secure contexts.
+*)
+val gamepadEvent: unit -> AnonymousInterface127.t [@@js.get "GamepadEvent"]
 
 (** This Gamepad API interface represents hardware in the controller designed to provide haptic feedback to the user (if available), most commonly vibration hardware. *)
-val gamepadHapticActuator: unit -> AnonymousInterface127.t [@@js.get "GamepadHapticActuator"]
+val gamepadHapticActuator: unit -> AnonymousInterface128.t [@@js.get "GamepadHapticActuator"]
 
 (** An object able to programmatically obtain the position of the device. It gives Web content access to the location of the device. This allows a Web site or app to offer customized results based on the user's location. *)
-val geolocation: unit -> AnonymousInterface128.t [@@js.get "Geolocation"]
-val geolocationCoordinates: unit -> AnonymousInterface129.t [@@js.get "GeolocationCoordinates"]
-val geolocationPosition: unit -> AnonymousInterface130.t [@@js.get "GeolocationPosition"]
-val geolocationPositionError: unit -> AnonymousInterface131.t [@@js.get "GeolocationPositionError"]
-val hTMLAllCollection: unit -> AnonymousInterface133.t [@@js.get "HTMLAllCollection"]
+val geolocation: unit -> AnonymousInterface129.t [@@js.get "Geolocation"]
+
+(** Available only in secure contexts. *)
+val geolocationCoordinates: unit -> AnonymousInterface130.t [@@js.get "GeolocationCoordinates"]
+
+(** Available only in secure contexts. *)
+val geolocationPosition: unit -> AnonymousInterface131.t [@@js.get "GeolocationPosition"]
+val geolocationPositionError: unit -> AnonymousInterface132.t [@@js.get "GeolocationPositionError"]
+val hTMLAllCollection: unit -> AnonymousInterface134.t [@@js.get "HTMLAllCollection"]
 
 (** Hyperlink elements and provides special properties and methods (beyond those of the regular HTMLElement object interface that they inherit from) for manipulating the layout and presentation of such elements. *)
-val hTMLAnchorElement: unit -> AnonymousInterface134.t [@@js.get "HTMLAnchorElement"]
+val hTMLAnchorElement: unit -> AnonymousInterface135.t [@@js.get "HTMLAnchorElement"]
 
 (** Provides special properties and methods (beyond those of the regular object HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <area> elements. *)
-val hTMLAreaElement: unit -> AnonymousInterface135.t [@@js.get "HTMLAreaElement"]
+val hTMLAreaElement: unit -> AnonymousInterface136.t [@@js.get "HTMLAreaElement"]
 
 (** Provides access to the properties of <audio> elements, as well as methods to manipulate them. It derives from the HTMLMediaElement interface. *)
-val hTMLAudioElement: unit -> AnonymousInterface136.t [@@js.get "HTMLAudioElement"]
+val hTMLAudioElement: unit -> AnonymousInterface137.t [@@js.get "HTMLAudioElement"]
 
 (** A HTML line break element (<br>). It inherits from HTMLElement. *)
-val hTMLBRElement: unit -> AnonymousInterface137.t [@@js.get "HTMLBRElement"]
+val hTMLBRElement: unit -> AnonymousInterface138.t [@@js.get "HTMLBRElement"]
 
 (** Contains the base URI for a document. This object inherits all of the properties and methods as described in the HTMLElement interface. *)
-val hTMLBaseElement: unit -> AnonymousInterface138.t [@@js.get "HTMLBaseElement"]
+val hTMLBaseElement: unit -> AnonymousInterface139.t [@@js.get "HTMLBaseElement"]
 
 (** Provides special properties (beyond those inherited from the regular HTMLElement interface) for manipulating <body> elements. *)
-val hTMLBodyElement: unit -> AnonymousInterface139.t [@@js.get "HTMLBodyElement"]
+val hTMLBodyElement: unit -> AnonymousInterface140.t [@@js.get "HTMLBodyElement"]
 
 (** Provides properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <button> elements. *)
-val hTMLButtonElement: unit -> AnonymousInterface140.t [@@js.get "HTMLButtonElement"]
+val hTMLButtonElement: unit -> AnonymousInterface141.t [@@js.get "HTMLButtonElement"]
 
 (** Provides properties and methods for manipulating the layout and presentation of <canvas> elements. The HTMLCanvasElement interface also inherits the properties and methods of the HTMLElement interface. *)
-val hTMLCanvasElement: unit -> AnonymousInterface141.t [@@js.get "HTMLCanvasElement"]
-val hTMLCollection: unit -> AnonymousInterface142.t [@@js.get "HTMLCollection"]
+val hTMLCanvasElement: unit -> AnonymousInterface142.t [@@js.get "HTMLCanvasElement"]
+val hTMLCollection: unit -> AnonymousInterface143.t [@@js.get "HTMLCollection"]
 
 (** Provides special properties (beyond those of the regular HTMLElement interface it also has available to it by inheritance) for manipulating definition list (<dl>) elements. *)
-val hTMLDListElement: unit -> AnonymousInterface143.t [@@js.get "HTMLDListElement"]
+val hTMLDListElement: unit -> AnonymousInterface144.t [@@js.get "HTMLDListElement"]
 
 (** Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <data> elements. *)
-val hTMLDataElement: unit -> AnonymousInterface144.t [@@js.get "HTMLDataElement"]
+val hTMLDataElement: unit -> AnonymousInterface145.t [@@js.get "HTMLDataElement"]
 
 (** Provides special properties (beyond the HTMLElement object interface it also has available to it by inheritance) to manipulate <datalist> elements and their content. *)
-val hTMLDataListElement: unit -> AnonymousInterface145.t [@@js.get "HTMLDataListElement"]
-val hTMLDetailsElement: unit -> AnonymousInterface146.t [@@js.get "HTMLDetailsElement"]
+val hTMLDataListElement: unit -> AnonymousInterface146.t [@@js.get "HTMLDataListElement"]
+val hTMLDetailsElement: unit -> AnonymousInterface147.t [@@js.get "HTMLDetailsElement"]
 
 (** @deprecated  *)
-val hTMLDirectoryElement: unit -> AnonymousInterface147.t [@@js.get "HTMLDirectoryElement"]
+val hTMLDirectoryElement: unit -> AnonymousInterface148.t [@@js.get "HTMLDirectoryElement"]
 
 (** Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <div> elements. *)
-val hTMLDivElement: unit -> AnonymousInterface148.t [@@js.get "HTMLDivElement"]
+val hTMLDivElement: unit -> AnonymousInterface149.t [@@js.get "HTMLDivElement"]
 
 (** @deprecated  *)
-val hTMLDocument: unit -> AnonymousInterface149.t [@@js.get "HTMLDocument"]
+val hTMLDocument: unit -> AnonymousInterface150.t [@@js.get "HTMLDocument"]
 
 (** Any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it. *)
-val hTMLElement: unit -> AnonymousInterface150.t [@@js.get "HTMLElement"]
+val hTMLElement: unit -> AnonymousInterface151.t [@@js.get "HTMLElement"]
 
 (** Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <embed> elements. *)
-val hTMLEmbedElement: unit -> AnonymousInterface151.t [@@js.get "HTMLEmbedElement"]
+val hTMLEmbedElement: unit -> AnonymousInterface152.t [@@js.get "HTMLEmbedElement"]
 
 (** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <fieldset> elements. *)
-val hTMLFieldSetElement: unit -> AnonymousInterface152.t [@@js.get "HTMLFieldSetElement"]
+val hTMLFieldSetElement: unit -> AnonymousInterface153.t [@@js.get "HTMLFieldSetElement"]
 
 (**
   Implements the document object model (DOM) representation of the font element. The HTML Font Element <font> defines the font size, font face and color of text.
   @deprecated 
 *)
-val hTMLFontElement: unit -> AnonymousInterface153.t [@@js.get "HTMLFontElement"]
+val hTMLFontElement: unit -> AnonymousInterface154.t [@@js.get "HTMLFontElement"]
 
 (** A collection of HTML form control elements. *)
-val hTMLFormControlsCollection: unit -> AnonymousInterface154.t [@@js.get "HTMLFormControlsCollection"]
+val hTMLFormControlsCollection: unit -> AnonymousInterface155.t [@@js.get "HTMLFormControlsCollection"]
 
 (** A <form> element in the DOM; it allows access to and in some cases modification of aspects of the form, as well as access to its component elements. *)
-val hTMLFormElement: unit -> AnonymousInterface155.t [@@js.get "HTMLFormElement"]
+val hTMLFormElement: unit -> AnonymousInterface156.t [@@js.get "HTMLFormElement"]
 
 (** @deprecated  *)
-val hTMLFrameElement: unit -> AnonymousInterface156.t [@@js.get "HTMLFrameElement"]
+val hTMLFrameElement: unit -> AnonymousInterface157.t [@@js.get "HTMLFrameElement"]
 
 (**
   Provides special properties (beyond those of the regular HTMLElement interface they also inherit) for manipulating <frameset> elements.
   @deprecated 
 *)
-val hTMLFrameSetElement: unit -> AnonymousInterface157.t [@@js.get "HTMLFrameSetElement"]
+val hTMLFrameSetElement: unit -> AnonymousInterface158.t [@@js.get "HTMLFrameSetElement"]
 
 (** Provides special properties (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating <hr> elements. *)
-val hTMLHRElement: unit -> AnonymousInterface158.t [@@js.get "HTMLHRElement"]
+val hTMLHRElement: unit -> AnonymousInterface159.t [@@js.get "HTMLHRElement"]
 
 (** Contains the descriptive information, or metadata, for a document. This object inherits all of the properties and methods described in the HTMLElement interface. *)
-val hTMLHeadElement: unit -> AnonymousInterface159.t [@@js.get "HTMLHeadElement"]
+val hTMLHeadElement: unit -> AnonymousInterface160.t [@@js.get "HTMLHeadElement"]
 
 (** The different heading elements. It inherits methods and properties from the HTMLElement interface. *)
-val hTMLHeadingElement: unit -> AnonymousInterface160.t [@@js.get "HTMLHeadingElement"]
+val hTMLHeadingElement: unit -> AnonymousInterface161.t [@@js.get "HTMLHeadingElement"]
 
 (** Serves as the root node for a given HTML document. This object inherits the properties and methods described in the HTMLElement interface. *)
-val hTMLHtmlElement: unit -> AnonymousInterface161.t [@@js.get "HTMLHtmlElement"]
+val hTMLHtmlElement: unit -> AnonymousInterface162.t [@@js.get "HTMLHtmlElement"]
 
 (** Provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements. *)
-val hTMLIFrameElement: unit -> AnonymousInterface162.t [@@js.get "HTMLIFrameElement"]
+val hTMLIFrameElement: unit -> AnonymousInterface163.t [@@js.get "HTMLIFrameElement"]
 
 (** Provides special properties and methods for manipulating <img> elements. *)
-val hTMLImageElement: unit -> AnonymousInterface163.t [@@js.get "HTMLImageElement"]
+val hTMLImageElement: unit -> AnonymousInterface164.t [@@js.get "HTMLImageElement"]
 
 (** Provides special properties and methods for manipulating the options, layout, and presentation of <input> elements. *)
-val hTMLInputElement: unit -> AnonymousInterface164.t [@@js.get "HTMLInputElement"]
+val hTMLInputElement: unit -> AnonymousInterface165.t [@@js.get "HTMLInputElement"]
 
 (** Exposes specific properties and methods (beyond those defined by regular HTMLElement interface it also has available to it by inheritance) for manipulating list elements. *)
-val hTMLLIElement: unit -> AnonymousInterface165.t [@@js.get "HTMLLIElement"]
+val hTMLLIElement: unit -> AnonymousInterface166.t [@@js.get "HTMLLIElement"]
 
 (** Gives access to properties specific to <label> elements. It inherits methods and properties from the base HTMLElement interface. *)
-val hTMLLabelElement: unit -> AnonymousInterface166.t [@@js.get "HTMLLabelElement"]
+val hTMLLabelElement: unit -> AnonymousInterface167.t [@@js.get "HTMLLabelElement"]
 
 (** The HTMLLegendElement is an interface allowing to access properties of the <legend> elements. It inherits properties and methods from the HTMLElement interface. *)
-val hTMLLegendElement: unit -> AnonymousInterface167.t [@@js.get "HTMLLegendElement"]
+val hTMLLegendElement: unit -> AnonymousInterface168.t [@@js.get "HTMLLegendElement"]
 
 (** Reference information for external resources and the relationship of those resources to a document and vice-versa. This object inherits all of the properties and methods of the HTMLElement interface. *)
-val hTMLLinkElement: unit -> AnonymousInterface168.t [@@js.get "HTMLLinkElement"]
+val hTMLLinkElement: unit -> AnonymousInterface169.t [@@js.get "HTMLLinkElement"]
 
 (** Provides special properties and methods (beyond those of the regular object HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of map elements. *)
-val hTMLMapElement: unit -> AnonymousInterface169.t [@@js.get "HTMLMapElement"]
+val hTMLMapElement: unit -> AnonymousInterface170.t [@@js.get "HTMLMapElement"]
 
 (**
   Provides methods to manipulate <marquee> elements.
   @deprecated 
 *)
-val hTMLMarqueeElement: unit -> AnonymousInterface170.t [@@js.get "HTMLMarqueeElement"]
+val hTMLMarqueeElement: unit -> AnonymousInterface171.t [@@js.get "HTMLMarqueeElement"]
 
 (** Adds to HTMLElement the properties and methods needed to support basic media-related capabilities that are common to audio and video. *)
-val hTMLMediaElement: unit -> AnonymousInterface171.t [@@js.get "HTMLMediaElement"]
-val hTMLMenuElement: unit -> AnonymousInterface172.t [@@js.get "HTMLMenuElement"]
+val hTMLMediaElement: unit -> AnonymousInterface172.t [@@js.get "HTMLMediaElement"]
+val hTMLMenuElement: unit -> AnonymousInterface173.t [@@js.get "HTMLMenuElement"]
 
 (** Contains descriptive metadata about a document. It inherits all of the properties and methods described in the HTMLElement interface. *)
-val hTMLMetaElement: unit -> AnonymousInterface173.t [@@js.get "HTMLMetaElement"]
+val hTMLMetaElement: unit -> AnonymousInterface174.t [@@js.get "HTMLMetaElement"]
 
 (** The HTML <meter> elements expose the HTMLMeterElement interface, which provides special properties and methods (beyond the HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of <meter> elements. *)
-val hTMLMeterElement: unit -> AnonymousInterface174.t [@@js.get "HTMLMeterElement"]
+val hTMLMeterElement: unit -> AnonymousInterface175.t [@@js.get "HTMLMeterElement"]
 
 (** Provides special properties (beyond the regular methods and properties available through the HTMLElement interface they also have available to them by inheritance) for manipulating modification elements, that is <del> and <ins>. *)
-val hTMLModElement: unit -> AnonymousInterface175.t [@@js.get "HTMLModElement"]
+val hTMLModElement: unit -> AnonymousInterface176.t [@@js.get "HTMLModElement"]
 
 (** Provides special properties (beyond those defined on the regular HTMLElement interface it also has available to it by inheritance) for manipulating ordered list elements. *)
-val hTMLOListElement: unit -> AnonymousInterface176.t [@@js.get "HTMLOListElement"]
+val hTMLOListElement: unit -> AnonymousInterface177.t [@@js.get "HTMLOListElement"]
 
 (** Provides special properties and methods (beyond those on the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <object> element, representing external resources. *)
-val hTMLObjectElement: unit -> AnonymousInterface177.t [@@js.get "HTMLObjectElement"]
+val hTMLObjectElement: unit -> AnonymousInterface178.t [@@js.get "HTMLObjectElement"]
 
 (** Provides special properties and methods (beyond the regular HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of <optgroup> elements. *)
-val hTMLOptGroupElement: unit -> AnonymousInterface178.t [@@js.get "HTMLOptGroupElement"]
+val hTMLOptGroupElement: unit -> AnonymousInterface179.t [@@js.get "HTMLOptGroupElement"]
 
 (** <option> elements and inherits all classes and methods of the HTMLElement interface. *)
-val hTMLOptionElement: unit -> AnonymousInterface179.t [@@js.get "HTMLOptionElement"]
+val hTMLOptionElement: unit -> AnonymousInterface180.t [@@js.get "HTMLOptionElement"]
 
 (** HTMLOptionsCollection is an interface representing a collection of HTML option elements (in document order) and offers methods and properties for traversing the list as well as optionally altering its items. This type is returned solely by the "options" property of select. *)
-val hTMLOptionsCollection: unit -> AnonymousInterface180.t [@@js.get "HTMLOptionsCollection"]
+val hTMLOptionsCollection: unit -> AnonymousInterface181.t [@@js.get "HTMLOptionsCollection"]
 
 (** Provides properties and methods (beyond those inherited from HTMLElement) for manipulating the layout and presentation of <output> elements. *)
-val hTMLOutputElement: unit -> AnonymousInterface181.t [@@js.get "HTMLOutputElement"]
+val hTMLOutputElement: unit -> AnonymousInterface182.t [@@js.get "HTMLOutputElement"]
 
 (** Provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating <p> elements. *)
-val hTMLParagraphElement: unit -> AnonymousInterface182.t [@@js.get "HTMLParagraphElement"]
+val hTMLParagraphElement: unit -> AnonymousInterface183.t [@@js.get "HTMLParagraphElement"]
 
 (** Provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating <param> elements, representing a pair of a key and a value that acts as a parameter for an <object> element. *)
-val hTMLParamElement: unit -> AnonymousInterface183.t [@@js.get "HTMLParamElement"]
+val hTMLParamElement: unit -> AnonymousInterface184.t [@@js.get "HTMLParamElement"]
 
 (** A <picture> HTML element. It doesn't implement specific properties or methods. *)
-val hTMLPictureElement: unit -> AnonymousInterface184.t [@@js.get "HTMLPictureElement"]
+val hTMLPictureElement: unit -> AnonymousInterface185.t [@@js.get "HTMLPictureElement"]
 
 (** Exposes specific properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating a block of preformatted text (<pre>). *)
-val hTMLPreElement: unit -> AnonymousInterface185.t [@@js.get "HTMLPreElement"]
+val hTMLPreElement: unit -> AnonymousInterface186.t [@@js.get "HTMLPreElement"]
 
 (** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <progress> elements. *)
-val hTMLProgressElement: unit -> AnonymousInterface186.t [@@js.get "HTMLProgressElement"]
+val hTMLProgressElement: unit -> AnonymousInterface187.t [@@js.get "HTMLProgressElement"]
 
 (** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating quoting elements, like <blockquote> and <q>, but not the <cite> element. *)
-val hTMLQuoteElement: unit -> AnonymousInterface187.t [@@js.get "HTMLQuoteElement"]
+val hTMLQuoteElement: unit -> AnonymousInterface188.t [@@js.get "HTMLQuoteElement"]
 
 (** HTML <script> elements expose the HTMLScriptElement interface, which provides special properties and methods for manipulating the behavior and execution of <script> elements (beyond the inherited HTMLElement interface). *)
-val hTMLScriptElement: unit -> AnonymousInterface188.t [@@js.get "HTMLScriptElement"]
+val hTMLScriptElement: unit -> AnonymousInterface189.t [@@js.get "HTMLScriptElement"]
 
 (** A <select> HTML Element. These elements also share all of the properties and methods of other HTML elements via the HTMLElement interface. *)
-val hTMLSelectElement: unit -> AnonymousInterface189.t [@@js.get "HTMLSelectElement"]
-val hTMLSlotElement: unit -> AnonymousInterface190.t [@@js.get "HTMLSlotElement"]
+val hTMLSelectElement: unit -> AnonymousInterface190.t [@@js.get "HTMLSelectElement"]
+val hTMLSlotElement: unit -> AnonymousInterface191.t [@@js.get "HTMLSlotElement"]
 
 (** Provides special properties (beyond the regular HTMLElement object interface it also has available to it by inheritance) for manipulating <source> elements. *)
-val hTMLSourceElement: unit -> AnonymousInterface191.t [@@js.get "HTMLSourceElement"]
+val hTMLSourceElement: unit -> AnonymousInterface192.t [@@js.get "HTMLSourceElement"]
 
 (** A <span> element and derives from the HTMLElement interface, but without implementing any additional properties or methods. *)
-val hTMLSpanElement: unit -> AnonymousInterface192.t [@@js.get "HTMLSpanElement"]
+val hTMLSpanElement: unit -> AnonymousInterface193.t [@@js.get "HTMLSpanElement"]
 
 (** A <style> element. It inherits properties and methods from its parent, HTMLElement, and from LinkStyle. *)
-val hTMLStyleElement: unit -> AnonymousInterface193.t [@@js.get "HTMLStyleElement"]
+val hTMLStyleElement: unit -> AnonymousInterface194.t [@@js.get "HTMLStyleElement"]
 
 (** Special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating table caption elements. *)
-val hTMLTableCaptionElement: unit -> AnonymousInterface194.t [@@js.get "HTMLTableCaptionElement"]
+val hTMLTableCaptionElement: unit -> AnonymousInterface195.t [@@js.get "HTMLTableCaptionElement"]
 
 (** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of table cells, either header or data cells, in an HTML document. *)
-val hTMLTableCellElement: unit -> AnonymousInterface195.t [@@js.get "HTMLTableCellElement"]
+val hTMLTableCellElement: unit -> AnonymousInterface196.t [@@js.get "HTMLTableCellElement"]
 
 (** Provides special properties (beyond the HTMLElement interface it also has available to it inheritance) for manipulating single or grouped table column elements. *)
-val hTMLTableColElement: unit -> AnonymousInterface196.t [@@js.get "HTMLTableColElement"]
+val hTMLTableColElement: unit -> AnonymousInterface197.t [@@js.get "HTMLTableColElement"]
 
 (** Provides special properties and methods (beyond the regular HTMLElement object interface it also has available to it by inheritance) for manipulating the layout and presentation of tables in an HTML document. *)
-val hTMLTableElement: unit -> AnonymousInterface197.t [@@js.get "HTMLTableElement"]
+val hTMLTableElement: unit -> AnonymousInterface198.t [@@js.get "HTMLTableElement"]
 
 (** Provides special properties and methods (beyond the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of rows in an HTML table. *)
-val hTMLTableRowElement: unit -> AnonymousInterface198.t [@@js.get "HTMLTableRowElement"]
+val hTMLTableRowElement: unit -> AnonymousInterface199.t [@@js.get "HTMLTableRowElement"]
 
 (** Provides special properties and methods (beyond the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of sections, that is headers, footers and bodies, in an HTML table. *)
-val hTMLTableSectionElement: unit -> AnonymousInterface199.t [@@js.get "HTMLTableSectionElement"]
+val hTMLTableSectionElement: unit -> AnonymousInterface200.t [@@js.get "HTMLTableSectionElement"]
 
 (** Enables access to the contents of an HTML <template> element. *)
-val hTMLTemplateElement: unit -> AnonymousInterface200.t [@@js.get "HTMLTemplateElement"]
+val hTMLTemplateElement: unit -> AnonymousInterface201.t [@@js.get "HTMLTemplateElement"]
 
 (** Provides special properties and methods for manipulating the layout and presentation of <textarea> elements. *)
-val hTMLTextAreaElement: unit -> AnonymousInterface201.t [@@js.get "HTMLTextAreaElement"]
+val hTMLTextAreaElement: unit -> AnonymousInterface202.t [@@js.get "HTMLTextAreaElement"]
 
 (** Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <time> elements. *)
-val hTMLTimeElement: unit -> AnonymousInterface202.t [@@js.get "HTMLTimeElement"]
+val hTMLTimeElement: unit -> AnonymousInterface203.t [@@js.get "HTMLTimeElement"]
 
 (** Contains the title for a document. This element inherits all of the properties and methods of the HTMLElement interface. *)
-val hTMLTitleElement: unit -> AnonymousInterface203.t [@@js.get "HTMLTitleElement"]
+val hTMLTitleElement: unit -> AnonymousInterface204.t [@@js.get "HTMLTitleElement"]
 
 (** The HTMLTrackElement *)
-val hTMLTrackElement: unit -> AnonymousInterface204.t [@@js.get "HTMLTrackElement"]
+val hTMLTrackElement: unit -> AnonymousInterface205.t [@@js.get "HTMLTrackElement"]
 
 (** Provides special properties (beyond those defined on the regular HTMLElement interface it also has available to it by inheritance) for manipulating unordered list elements. *)
-val hTMLUListElement: unit -> AnonymousInterface205.t [@@js.get "HTMLUListElement"]
+val hTMLUListElement: unit -> AnonymousInterface206.t [@@js.get "HTMLUListElement"]
 
 (** An invalid HTML element and derives from the HTMLElement interface, but without implementing any additional properties or methods. *)
-val hTMLUnknownElement: unit -> AnonymousInterface206.t [@@js.get "HTMLUnknownElement"]
+val hTMLUnknownElement: unit -> AnonymousInterface207.t [@@js.get "HTMLUnknownElement"]
 
 (** Provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement. *)
-val hTMLVideoElement: unit -> AnonymousInterface207.t [@@js.get "HTMLVideoElement"]
+val hTMLVideoElement: unit -> AnonymousInterface208.t [@@js.get "HTMLVideoElement"]
 
 (** Events that fire when the fragment identifier of the URL has changed. *)
-val hashChangeEvent: unit -> AnonymousInterface208.t [@@js.get "HashChangeEvent"]
+val hashChangeEvent: unit -> AnonymousInterface209.t [@@js.get "HashChangeEvent"]
 
 (** This Fetch API interface allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists of zero or more name and value pairs.  You can add to this using methods like append() (see Examples.) In all methods of this interface, header names are matched by case-insensitive byte sequence. *)
-val headers: unit -> AnonymousInterface209.t [@@js.get "Headers"]
+val headers: unit -> AnonymousInterface210.t [@@js.get "Headers"]
 
 (** Allows manipulation of the browser session history, that is the pages visited in the tab or frame that the current page is loaded in. *)
-val history: unit -> AnonymousInterface210.t [@@js.get "History"]
+val history: unit -> AnonymousInterface211.t [@@js.get "History"]
 
 (** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. *)
-val iDBCursor: unit -> AnonymousInterface211.t [@@js.get "IDBCursor"]
+val iDBCursor: unit -> AnonymousInterface212.t [@@js.get "IDBCursor"]
 
 (** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. It is the same as the IDBCursor, except that it includes the value property. *)
-val iDBCursorWithValue: unit -> AnonymousInterface212.t [@@js.get "IDBCursorWithValue"]
+val iDBCursorWithValue: unit -> AnonymousInterface213.t [@@js.get "IDBCursorWithValue"]
 
 (** This IndexedDB API interface provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database. *)
-val iDBDatabase: unit -> AnonymousInterface213.t [@@js.get "IDBDatabase"]
+val iDBDatabase: unit -> AnonymousInterface214.t [@@js.get "IDBDatabase"]
 
 (** In the following code snippet, we make a request to open a database, and include handlers for the success and error cases. For a full working example, see our To-do Notifications app (view example live.) *)
-val iDBFactory: unit -> AnonymousInterface214.t [@@js.get "IDBFactory"]
+val iDBFactory: unit -> AnonymousInterface215.t [@@js.get "IDBFactory"]
 
 (** IDBIndex interface of the IndexedDB API provides asynchronous access to an index in a database. An index is a kind of object store for looking up records in another object store, called the referenced object store. You use this interface to retrieve data. *)
-val iDBIndex: unit -> AnonymousInterface215.t [@@js.get "IDBIndex"]
+val iDBIndex: unit -> AnonymousInterface216.t [@@js.get "IDBIndex"]
 
 (** A key range can be a single value or a range with upper and lower bounds or endpoints. If the key range has both upper and lower bounds, then it is bounded; if it has no bounds, it is unbounded. A bounded key range can either be open (the endpoints are excluded) or closed (the endpoints are included). To retrieve all keys within a certain range, you can use the following code constructs: *)
-val iDBKeyRange: unit -> AnonymousInterface216.t [@@js.get "IDBKeyRange"]
+val iDBKeyRange: unit -> AnonymousInterface217.t [@@js.get "IDBKeyRange"]
 
 (** This example shows a variety of different uses of object stores, from updating the data structure with IDBObjectStore.createIndex inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our To-do Notifications app (view example live.) *)
-val iDBObjectStore: unit -> AnonymousInterface217.t [@@js.get "IDBObjectStore"]
+val iDBObjectStore: unit -> AnonymousInterface218.t [@@js.get "IDBObjectStore"]
 
 (** Also inherits methods from its parents IDBRequest and EventTarget. *)
-val iDBOpenDBRequest: unit -> AnonymousInterface218.t [@@js.get "IDBOpenDBRequest"]
+val iDBOpenDBRequest: unit -> AnonymousInterface219.t [@@js.get "IDBOpenDBRequest"]
 
 (** The request object does not initially contain any information about the result of the operation, but once information becomes available, an event is fired on the request, and the information becomes available through the properties of the IDBRequest instance. *)
-val iDBRequest: unit -> AnonymousInterface219.t [@@js.get "IDBRequest"]
-val iDBTransaction: unit -> AnonymousInterface220.t [@@js.get "IDBTransaction"]
+val iDBRequest: unit -> AnonymousInterface220.t [@@js.get "IDBRequest"]
+val iDBTransaction: unit -> AnonymousInterface221.t [@@js.get "IDBTransaction"]
 
 (** This IndexedDB API interface indicates that the version of the database has changed, as the result of an IDBOpenDBRequest.onupgradeneeded event handler function. *)
-val iDBVersionChangeEvent: unit -> AnonymousInterface221.t [@@js.get "IDBVersionChangeEvent"]
+val iDBVersionChangeEvent: unit -> AnonymousInterface222.t [@@js.get "IDBVersionChangeEvent"]
 
 (** The IIRFilterNode interface of the Web Audio API is a AudioNode processor which implements a general infinite impulse response (IIR)  filter; this type of filter can be used to implement tone control devices and graphic equalizers as well. It lets the parameters of the filter response be specified, so that it can be tuned as needed. *)
-val iIRFilterNode: unit -> AnonymousInterface222.t [@@js.get "IIRFilterNode"]
-val idleDeadline: unit -> AnonymousInterface223.t [@@js.get "IdleDeadline"]
-val imageBitmap: unit -> AnonymousInterface224.t [@@js.get "ImageBitmap"]
-val imageBitmapRenderingContext: unit -> AnonymousInterface225.t [@@js.get "ImageBitmapRenderingContext"]
+val iIRFilterNode: unit -> AnonymousInterface223.t [@@js.get "IIRFilterNode"]
+val idleDeadline: unit -> AnonymousInterface224.t [@@js.get "IdleDeadline"]
+val imageBitmap: unit -> AnonymousInterface225.t [@@js.get "ImageBitmap"]
+val imageBitmapRenderingContext: unit -> AnonymousInterface226.t [@@js.get "ImageBitmapRenderingContext"]
 
 (** The underlying pixel data of an area of a <canvas> element. It is created using the ImageData() constructor or creator methods on the CanvasRenderingContext2D object associated with a canvas: createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData(). *)
-val imageData: unit -> AnonymousInterface226.t [@@js.get "ImageData"]
-val inputEvent: unit -> AnonymousInterface227.t [@@js.get "InputEvent"]
+val imageData: unit -> AnonymousInterface227.t [@@js.get "ImageData"]
+val inputEvent: unit -> AnonymousInterface228.t [@@js.get "InputEvent"]
 
 (** provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with a top-level document's viewport. *)
-val intersectionObserver: unit -> AnonymousInterface229.t [@@js.get "IntersectionObserver"]
+val intersectionObserver: unit -> AnonymousInterface230.t [@@js.get "IntersectionObserver"]
 
 (** This Intersection Observer API interface describes the intersection between the target element and its root container at a specific moment of transition. *)
-val intersectionObserverEntry: unit -> AnonymousInterface230.t [@@js.get "IntersectionObserverEntry"]
+val intersectionObserverEntry: unit -> AnonymousInterface231.t [@@js.get "IntersectionObserverEntry"]
 
 (** KeyboardEvent objects describe a user interaction with the keyboard; each event describes a single interaction between the user and a key (or combination of a key with modifier keys) on the keyboard. *)
-val keyboardEvent: unit -> AnonymousInterface231.t [@@js.get "KeyboardEvent"]
-val keyframeEffect: unit -> AnonymousInterface232.t [@@js.get "KeyframeEffect"]
+val keyboardEvent: unit -> AnonymousInterface232.t [@@js.get "KeyboardEvent"]
+val keyframeEffect: unit -> AnonymousInterface233.t [@@js.get "KeyframeEffect"]
 
 (** The location (URL) of the object it is linked to. Changes done on it are reflected on the object it relates to. Both the Document and Window interface have such a linked Location, accessible via Document.location and Window.location respectively. *)
-val location: unit -> AnonymousInterface234.t [@@js.get "Location"]
-val mathMLElement: unit -> AnonymousInterface235.t [@@js.get "MathMLElement"]
-val mediaCapabilities: unit -> AnonymousInterface236.t [@@js.get "MediaCapabilities"]
+val location: unit -> AnonymousInterface235.t [@@js.get "Location"]
+val mathMLElement: unit -> AnonymousInterface236.t [@@js.get "MathMLElement"]
+val mediaCapabilities: unit -> AnonymousInterface237.t [@@js.get "MediaCapabilities"]
 
-(** The MediaDevicesInfo interface contains information that describes a single media input or output device. *)
-val mediaDeviceInfo: unit -> AnonymousInterface237.t [@@js.get "MediaDeviceInfo"]
+(**
+  The MediaDevicesInfo interface contains information that describes a single media input or output device.
+  Available only in secure contexts.
+*)
+val mediaDeviceInfo: unit -> AnonymousInterface238.t [@@js.get "MediaDeviceInfo"]
 
-(** Provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data. *)
-val mediaDevices: unit -> AnonymousInterface238.t [@@js.get "MediaDevices"]
+(**
+  Provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data.
+  Available only in secure contexts.
+*)
+val mediaDevices: unit -> AnonymousInterface239.t [@@js.get "MediaDevices"]
 
 (** A MediaElementSourceNode has no inputs and exactly one output, and is created using the AudioContext.createMediaElementSource method. The amount of channels in the output equals the number of channels of the audio referenced by the HTMLMediaElement used in the creation of the node, or is 1 if the HTMLMediaElement has no audio. *)
-val mediaElementAudioSourceNode: unit -> AnonymousInterface239.t [@@js.get "MediaElementAudioSourceNode"]
-val mediaEncryptedEvent: unit -> AnonymousInterface240.t [@@js.get "MediaEncryptedEvent"]
+val mediaElementAudioSourceNode: unit -> AnonymousInterface240.t [@@js.get "MediaElementAudioSourceNode"]
+val mediaEncryptedEvent: unit -> AnonymousInterface241.t [@@js.get "MediaEncryptedEvent"]
 
 (** An error which occurred while handling media in an HTML media element based on HTMLMediaElement, such as <audio> or <video>. *)
-val mediaError: unit -> AnonymousInterface241.t [@@js.get "MediaError"]
+val mediaError: unit -> AnonymousInterface242.t [@@js.get "MediaError"]
 
-(** This EncryptedMediaExtensions API interface contains the content and related data when the content decryption module generates a message for the session. *)
-val mediaKeyMessageEvent: unit -> AnonymousInterface242.t [@@js.get "MediaKeyMessageEvent"]
+(**
+  This EncryptedMediaExtensions API interface contains the content and related data when the content decryption module generates a message for the session.
+  Available only in secure contexts.
+*)
+val mediaKeyMessageEvent: unit -> AnonymousInterface243.t [@@js.get "MediaKeyMessageEvent"]
 
-(** This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM). *)
-val mediaKeySession: unit -> AnonymousInterface243.t [@@js.get "MediaKeySession"]
+(**
+  This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM).
+  Available only in secure contexts.
+*)
+val mediaKeySession: unit -> AnonymousInterface244.t [@@js.get "MediaKeySession"]
 
-(** This EncryptedMediaExtensions API interface is a read-only map of media key statuses by key IDs. *)
-val mediaKeyStatusMap: unit -> AnonymousInterface244.t [@@js.get "MediaKeyStatusMap"]
+(**
+  This EncryptedMediaExtensions API interface is a read-only map of media key statuses by key IDs.
+  Available only in secure contexts.
+*)
+val mediaKeyStatusMap: unit -> AnonymousInterface245.t [@@js.get "MediaKeyStatusMap"]
 
-(** This EncryptedMediaExtensions API interface provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess method. *)
-val mediaKeySystemAccess: unit -> AnonymousInterface245.t [@@js.get "MediaKeySystemAccess"]
+(**
+  This EncryptedMediaExtensions API interface provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess method.
+  Available only in secure contexts.
+*)
+val mediaKeySystemAccess: unit -> AnonymousInterface246.t [@@js.get "MediaKeySystemAccess"]
 
-(** This EncryptedMediaExtensions API interface the represents a set of keys that an associated HTMLMediaElement can use for decryption of media data during playback. *)
-val mediaKeys: unit -> AnonymousInterface246.t [@@js.get "MediaKeys"]
-val mediaList: unit -> AnonymousInterface247.t [@@js.get "MediaList"]
-val mediaMetadata: unit -> AnonymousInterface248.t [@@js.get "MediaMetadata"]
+(**
+  This EncryptedMediaExtensions API interface the represents a set of keys that an associated HTMLMediaElement can use for decryption of media data during playback.
+  Available only in secure contexts.
+*)
+val mediaKeys: unit -> AnonymousInterface247.t [@@js.get "MediaKeys"]
+val mediaList: unit -> AnonymousInterface248.t [@@js.get "MediaList"]
+val mediaMetadata: unit -> AnonymousInterface249.t [@@js.get "MediaMetadata"]
 
 (** Stores information on a media query applied to a document, and handles sending notifications to listeners when the media query state change (i.e. when the media query test starts or stops evaluating to true). *)
-val mediaQueryList: unit -> AnonymousInterface249.t [@@js.get "MediaQueryList"]
-val mediaQueryListEvent: unit -> AnonymousInterface250.t [@@js.get "MediaQueryListEvent"]
-val mediaRecorder: unit -> AnonymousInterface251.t [@@js.get "MediaRecorder"]
-val mediaRecorderErrorEvent: unit -> AnonymousInterface252.t [@@js.get "MediaRecorderErrorEvent"]
-val mediaSession: unit -> AnonymousInterface253.t [@@js.get "MediaSession"]
+val mediaQueryList: unit -> AnonymousInterface250.t [@@js.get "MediaQueryList"]
+val mediaQueryListEvent: unit -> AnonymousInterface251.t [@@js.get "MediaQueryListEvent"]
+val mediaRecorder: unit -> AnonymousInterface252.t [@@js.get "MediaRecorder"]
+val mediaRecorderErrorEvent: unit -> AnonymousInterface253.t [@@js.get "MediaRecorderErrorEvent"]
+val mediaSession: unit -> AnonymousInterface254.t [@@js.get "MediaSession"]
 
 (** This Media Source Extensions API interface represents a source of media data for an HTMLMediaElement object. A MediaSource object can be attached to a HTMLMediaElement to be played in the user agent. *)
-val mediaSource: unit -> AnonymousInterface254.t [@@js.get "MediaSource"]
+val mediaSource: unit -> AnonymousInterface255.t [@@js.get "MediaSource"]
 
 (** A stream of media content. A stream consists of several tracks such as video or audio tracks. Each track is specified as an instance of MediaStreamTrack. *)
-val mediaStream: unit -> AnonymousInterface255.t [@@js.get "MediaStream"]
-val mediaStreamAudioDestinationNode: unit -> AnonymousInterface256.t [@@js.get "MediaStreamAudioDestinationNode"]
+val mediaStream: unit -> AnonymousInterface256.t [@@js.get "MediaStream"]
+val mediaStreamAudioDestinationNode: unit -> AnonymousInterface257.t [@@js.get "MediaStreamAudioDestinationNode"]
 
 (** A type of AudioNode which operates as an audio source whose media is received from a MediaStream obtained using the WebRTC or Media Capture and Streams APIs. *)
-val mediaStreamAudioSourceNode: unit -> AnonymousInterface257.t [@@js.get "MediaStreamAudioSourceNode"]
+val mediaStreamAudioSourceNode: unit -> AnonymousInterface258.t [@@js.get "MediaStreamAudioSourceNode"]
 
 (** A single media track within a stream; typically, these are audio or video tracks, but other track types may exist as well. *)
-val mediaStreamTrack: unit -> AnonymousInterface258.t [@@js.get "MediaStreamTrack"]
+val mediaStreamTrack: unit -> AnonymousInterface259.t [@@js.get "MediaStreamTrack"]
 
 (** Events which indicate that a MediaStream has had tracks added to or removed from the stream through calls to Media Stream API methods. These events are sent to the stream when these changes occur. *)
-val mediaStreamTrackEvent: unit -> AnonymousInterface259.t [@@js.get "MediaStreamTrackEvent"]
+val mediaStreamTrackEvent: unit -> AnonymousInterface260.t [@@js.get "MediaStreamTrackEvent"]
 
 (** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. *)
-val messageChannel: unit -> AnonymousInterface261.t [@@js.get "MessageChannel"]
+val messageChannel: unit -> AnonymousInterface262.t [@@js.get "MessageChannel"]
 
 (** A message received by a target object. *)
-val messageEvent: unit -> AnonymousInterface262.t [@@js.get "MessageEvent"]
+val messageEvent: unit -> AnonymousInterface263.t [@@js.get "MessageEvent"]
 
 (** This Channel Messaging API interface represents one of the two ports of a MessageChannel, allowing messages to be sent from one port and listening out for them arriving at the other. *)
-val messagePort: unit -> AnonymousInterface263.t [@@js.get "MessagePort"]
+val messagePort: unit -> AnonymousInterface264.t [@@js.get "MessagePort"]
 
 (**
   Provides contains information about a MIME type associated with a particular plugin. NavigatorPlugins.mimeTypes returns an array of this object.
   @deprecated 
 *)
-val mimeType: unit -> AnonymousInterface264.t [@@js.get "MimeType"]
+val mimeType: unit -> AnonymousInterface265.t [@@js.get "MimeType"]
 
 (**
   Returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by NavigatorPlugins.mimeTypes.
   @deprecated 
 *)
-val mimeTypeArray: unit -> AnonymousInterface265.t [@@js.get "MimeTypeArray"]
+val mimeTypeArray: unit -> AnonymousInterface266.t [@@js.get "MimeTypeArray"]
 
 (** Events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown. *)
-val mouseEvent: unit -> AnonymousInterface267.t [@@js.get "MouseEvent"]
+val mouseEvent: unit -> AnonymousInterface268.t [@@js.get "MouseEvent"]
 
 (**
   Provides event properties that are specific to modifications to the Document Object Model (DOM) hierarchy and nodes.
   @deprecated 
 *)
-val mutationEvent: unit -> AnonymousInterface268.t [@@js.get "MutationEvent"]
+val mutationEvent: unit -> AnonymousInterface269.t [@@js.get "MutationEvent"]
 
 (** Provides the ability to watch for changes being made to the DOM tree. It is designed as a replacement for the older Mutation Events feature which was part of the DOM3 Events specification. *)
-val mutationObserver: unit -> AnonymousInterface269.t [@@js.get "MutationObserver"]
+val mutationObserver: unit -> AnonymousInterface270.t [@@js.get "MutationObserver"]
 
 (** A MutationRecord represents an individual DOM mutation. It is the object that is passed to MutationObserver's callback. *)
-val mutationRecord: unit -> AnonymousInterface270.t [@@js.get "MutationRecord"]
+val mutationRecord: unit -> AnonymousInterface271.t [@@js.get "MutationRecord"]
 
 (** A collection of Attr objects. Objects inside a NamedNodeMap are not in any particular order, unlike NodeList, although they may be accessed by an index as in an array. *)
-val namedNodeMap: unit -> AnonymousInterface271.t [@@js.get "NamedNodeMap"]
+val namedNodeMap: unit -> AnonymousInterface272.t [@@js.get "NamedNodeMap"]
 
 (** The state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities. *)
-val navigator: unit -> AnonymousInterface272.t [@@js.get "Navigator"]
-val networkInformation: unit -> AnonymousInterface273.t [@@js.get "NetworkInformation"]
+val navigator: unit -> AnonymousInterface273.t [@@js.get "Navigator"]
+val networkInformation: unit -> AnonymousInterface274.t [@@js.get "NetworkInformation"]
 
 (** Node is an interface from which a number of DOM API object types inherit. It allows those types to be treated similarly; for example, inheriting the same set of methods, or being tested in the same way. *)
-val node: unit -> AnonymousInterface274.t [@@js.get "Node"]
+val node: unit -> AnonymousInterface275.t [@@js.get "Node"]
 
 (** An iterator over the members of a list of the nodes in a subtree of the DOM. The nodes will be returned in document order. *)
-val nodeIterator: unit -> AnonymousInterface275.t [@@js.get "NodeIterator"]
+val nodeIterator: unit -> AnonymousInterface276.t [@@js.get "NodeIterator"]
 
 (** NodeList objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as document.querySelectorAll(). *)
-val nodeList: unit -> AnonymousInterface276.t [@@js.get "NodeList"]
+val nodeList: unit -> AnonymousInterface277.t [@@js.get "NodeList"]
 
 (** This Notifications API interface is used to configure and display desktop notifications to the user. *)
-val notification: unit -> AnonymousInterface277.t [@@js.get "Notification"]
+val notification: unit -> AnonymousInterface278.t [@@js.get "Notification"]
 
 (** The Web Audio API OfflineAudioCompletionEvent interface represents events that occur when the processing of an OfflineAudioContext is terminated. The complete event implements this interface. *)
-val offlineAudioCompletionEvent: unit -> AnonymousInterface278.t [@@js.get "OfflineAudioCompletionEvent"]
+val offlineAudioCompletionEvent: unit -> AnonymousInterface279.t [@@js.get "OfflineAudioCompletionEvent"]
 
 (** An AudioContext interface representing an audio-processing graph built from linked together AudioNodes. In contrast with a standard AudioContext, an OfflineAudioContext doesn't render the audio to the device hardware; instead, it generates it, as fast as it can, and outputs the result to an AudioBuffer. *)
-val offlineAudioContext: unit -> AnonymousInterface279.t [@@js.get "OfflineAudioContext"]
+val offlineAudioContext: unit -> AnonymousInterface280.t [@@js.get "OfflineAudioContext"]
 
 (** The OscillatorNode interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone. *)
-val oscillatorNode: unit -> AnonymousInterface280.t [@@js.get "OscillatorNode"]
-val overconstrainedError: unit -> AnonymousInterface281.t [@@js.get "OverconstrainedError"]
+val oscillatorNode: unit -> AnonymousInterface281.t [@@js.get "OscillatorNode"]
+val overconstrainedError: unit -> AnonymousInterface282.t [@@js.get "OverconstrainedError"]
 
 (** The PageTransitionEvent is fired when a document is being loaded or unloaded. *)
-val pageTransitionEvent: unit -> AnonymousInterface282.t [@@js.get "PageTransitionEvent"]
+val pageTransitionEvent: unit -> AnonymousInterface283.t [@@js.get "PageTransitionEvent"]
 
 (** A PannerNode always has exactly one input and one output: the input can be mono or stereo but the output is always stereo (2 channels); you can't have panning effects without at least two audio channels! *)
-val pannerNode: unit -> AnonymousInterface283.t [@@js.get "PannerNode"]
+val pannerNode: unit -> AnonymousInterface284.t [@@js.get "PannerNode"]
 
 (** This Canvas 2D API interface is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired. *)
-val path2D: unit -> AnonymousInterface284.t [@@js.get "Path2D"]
+val path2D: unit -> AnonymousInterface285.t [@@js.get "Path2D"]
 
-(**
-  This Payment Request API interface is used to store shipping or payment address information.
-  @deprecated 
-*)
-val paymentAddress: unit -> AnonymousInterface285.t [@@js.get "PaymentAddress"]
+(** Available only in secure contexts. *)
 val paymentMethodChangeEvent: unit -> AnonymousInterface286.t [@@js.get "PaymentMethodChangeEvent"]
 
-(** This Payment Request API interface is the primary access point into the API, and lets web content and apps accept payments from the end user. *)
+(**
+  This Payment Request API interface is the primary access point into the API, and lets web content and apps accept payments from the end user.
+  Available only in secure contexts.
+*)
 val paymentRequest: unit -> AnonymousInterface287.t [@@js.get "PaymentRequest"]
 
-(** This Payment Request API interface enables a web page to update the details of a PaymentRequest in response to a user action. *)
+(**
+  This Payment Request API interface enables a web page to update the details of a PaymentRequest in response to a user action.
+  Available only in secure contexts.
+*)
 val paymentRequestUpdateEvent: unit -> AnonymousInterface288.t [@@js.get "PaymentRequestUpdateEvent"]
 
-(** This Payment Request API interface is returned after a user selects a payment method and approves a payment request. *)
+(**
+  This Payment Request API interface is returned after a user selects a payment method and approves a payment request.
+  Available only in secure contexts.
+*)
 val paymentResponse: unit -> AnonymousInterface289.t [@@js.get "PaymentResponse"]
 
 (** Provides access to performance-related information for the current page. It's part of the High Resolution Time API, but is enhanced by the Performance Timeline API, the Navigation Timing API, the User Timing API, and the Resource Timing API. *)
@@ -55279,13 +55537,23 @@ val processingInstruction: unit -> AnonymousInterface311.t [@@js.get "Processing
 (** Events measuring progress of an underlying process, like an HTTP request (for an XMLHttpRequest, or the loading of the underlying resource of an <img>, <audio>, <video>, <style> or <link>). *)
 val progressEvent: unit -> AnonymousInterface312.t [@@js.get "ProgressEvent"]
 val promiseRejectionEvent: unit -> AnonymousInterface313.t [@@js.get "PromiseRejectionEvent"]
+
+(** Available only in secure contexts. *)
 val publicKeyCredential: unit -> AnonymousInterface314.t [@@js.get "PublicKeyCredential"]
 
-(** This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications. *)
+(**
+  This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications.
+  Available only in secure contexts.
+*)
 val pushManager: unit -> AnonymousInterface315.t [@@js.get "PushManager"]
 
-(** This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service. *)
+(**
+  This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service.
+  Available only in secure contexts.
+*)
 val pushSubscription: unit -> AnonymousInterface316.t [@@js.get "PushSubscription"]
+
+(** Available only in secure contexts. *)
 val pushSubscriptionOptions: unit -> AnonymousInterface317.t [@@js.get "PushSubscriptionOptions"]
 val rTCCertificate: unit -> AnonymousInterface318.t [@@js.get "RTCCertificate"]
 val rTCDTMFSender: unit -> AnonymousInterface319.t [@@js.get "RTCDTMFSender"]
@@ -55618,13 +55886,22 @@ val securityPolicyViolationEvent: unit -> AnonymousInterface444.t [@@js.get "Sec
 (** A Selection object represents the range of text selected by the user or the current position of the caret. To obtain a Selection object for examination or modification, call Window.getSelection(). *)
 val selection: unit -> AnonymousInterface445.t [@@js.get "Selection"]
 
-(** This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. *)
+(**
+  This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object.
+  Available only in secure contexts.
+*)
 val serviceWorker: unit -> AnonymousInterface446.t [@@js.get "ServiceWorker"]
 
-(** The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations. *)
+(**
+  The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations.
+  Available only in secure contexts.
+*)
 val serviceWorkerContainer: unit -> AnonymousInterface447.t [@@js.get "ServiceWorkerContainer"]
 
-(** This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin. *)
+(**
+  This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin.
+  Available only in secure contexts.
+*)
 val serviceWorkerRegistration: unit -> AnonymousInterface448.t [@@js.get "ServiceWorkerRegistration"]
 val shadowRoot: unit -> AnonymousInterface449.t [@@js.get "ShadowRoot"]
 val sharedWorker: unit -> AnonymousInterface450.t [@@js.get "SharedWorker"]
@@ -55660,6 +55937,8 @@ val storage: unit -> AnonymousInterface463.t [@@js.get "Storage"]
 
 (** A StorageEvent is sent to a window when a storage area it has access to is changed within the context of another document. *)
 val storageEvent: unit -> AnonymousInterface464.t [@@js.get "StorageEvent"]
+
+(** Available only in secure contexts. *)
 val storageManager: unit -> AnonymousInterface465.t [@@js.get "StorageManager"]
 
 (** A single style sheet. CSS style sheets will further implement the more specialized CSSStyleSheet interface. *)
@@ -55669,7 +55948,10 @@ val styleSheet: unit -> AnonymousInterface466.t [@@js.get "StyleSheet"]
 val styleSheetList: unit -> AnonymousInterface467.t [@@js.get "StyleSheetList"]
 val submitEvent: unit -> AnonymousInterface468.t [@@js.get "SubmitEvent"]
 
-(** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). *)
+(**
+  This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto).
+  Available only in secure contexts.
+*)
 val subtleCrypto: unit -> AnonymousInterface469.t [@@js.get "SubtleCrypto"]
 
 (** The textual content of Element or Attr. If an element has no markup within its content, it has a single child implementing Text that contains the element's text. However, if the element contains markup, it is parsed into information items and Text nodes that form its children. *)
@@ -55787,6 +56069,8 @@ val window: unit -> AnonymousInterface518.t [@@js.get "Window"]
 
 (** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. *)
 val worker: unit -> AnonymousInterface519.t [@@js.get "Worker"]
+
+(** Available only in secure contexts. *)
 val worklet: unit -> AnonymousInterface520.t [@@js.get "Worklet"]
 
 (** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. *)
@@ -55862,7 +56146,11 @@ val name: unit -> unit [@@js.get "name"]
 
 (** Returns workerGlobal's WorkerNavigator object. *)
 val navigator': unit -> Navigator.t [@@js.get "navigator"]
+
+(** Available only in secure contexts. *)
 val ondevicemotion: unit -> (this:Window.t -> ev:DeviceMotionEvent.t -> any) or_null [@@js.get "ondevicemotion"]
+
+(** Available only in secure contexts. *)
 val ondeviceorientation: unit -> (this:Window.t -> ev:DeviceOrientationEvent.t -> any) or_null [@@js.get "ondeviceorientation"]
 
 (** @deprecated  *)
@@ -55880,7 +56168,11 @@ val pageXOffset: unit -> float [@@js.get "pageXOffset"]
 (** @deprecated This is a legacy alias of `scrollY`. *)
 val pageYOffset: unit -> float [@@js.get "pageYOffset"]
 
-(** Refers to either the parent WindowProxy, or itself. It can rarely be null e.g. for contentWindow of an iframe that is already removed from the parent. *)
+(**
+  Refers to either the parent WindowProxy, or itself.
+  
+  It can rarely be null e.g. for contentWindow of an iframe that is already removed from the parent.
+*)
 val parent: unit -> WindowProxy.t [@@js.get "parent"]
 
 (** Returns true if the personal bar is visible; otherwise, returns false. *)
@@ -55945,6 +56237,9 @@ val open_: ?url:URL.t or_string -> ?target:string -> ?features:string -> unit ->
 val postMessage: message:any -> targetOrigin:string -> ?transfer:Transferable.t list -> unit -> unit [@@js.global "postMessage"]
 
 (**
+  Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
+  
+  
   Posts a message to the given window. Messages can be structured objects, e.g. nested objects and arrays, can contain JavaScript values (strings, numbers, Date objects, etc), and can contain certain data objects such as File Blob, FileList, and ArrayBuffer objects.
   
   Objects listed in the transfer member of options are transferred, not just cloned, meaning that they are no longer usable on the sending side.
@@ -55954,9 +56249,6 @@ val postMessage: message:any -> targetOrigin:string -> ?transfer:Transferable.t 
   If the origin of the target window doesn't match the given target origin, the message is discarded, to avoid information leakage. To send the message to the target regardless of origin, set the target origin to "*".
   
   Throws a "DataCloneError" DOMException if transfer array contains duplicate objects or if message could not be cloned.
-  
-  
-  Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
 *)
 val postMessage': message:any -> ?options:WindowPostMessageOptions.t -> unit -> unit [@@js.global "postMessage"]
 val print: unit -> unit [@@js.global "print"]
@@ -56256,7 +56548,7 @@ val onselectstart: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.ge
   @param ev The event.
 *)
 val onstalled: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onstalled"]
-val onsubmit: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onsubmit"]
+val onsubmit: unit -> (this:Window.t -> ev:SubmitEvent.t -> any) or_null [@@js.get "onsubmit"]
 
 (**
   Occurs if the load operation has been intentionally halted.
@@ -56290,17 +56582,25 @@ val onvolumechange: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.g
   @param ev The event.
 *)
 val onwaiting: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onwaiting"]
+
+(** @deprecated This is a legacy alias of `onanimationend`. *)
 val onwebkitanimationend: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onwebkitanimationend"]
+
+(** @deprecated This is a legacy alias of `onanimationiteration`. *)
 val onwebkitanimationiteration: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onwebkitanimationiteration"]
+
+(** @deprecated This is a legacy alias of `onanimationstart`. *)
 val onwebkitanimationstart: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onwebkitanimationstart"]
+
+(** @deprecated This is a legacy alias of `ontransitionend`. *)
 val onwebkittransitionend: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onwebkittransitionend"]
 val onwheel: unit -> (this:Window.t -> ev:WheelEvent.t -> any) or_null [@@js.get "onwheel"]
 val onafterprint: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onafterprint"]
 val onbeforeprint: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onbeforeprint"]
 val onbeforeunload: unit -> (this:Window.t -> ev:BeforeUnloadEvent.t -> any) or_null [@@js.get "onbeforeunload"]
-val ongamepadconnected: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "ongamepadconnected"]
-val ongamepaddisconnected: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "ongamepaddisconnected"]
-val onhashchange: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onhashchange"]
+val ongamepadconnected: unit -> (this:Window.t -> ev:GamepadEvent.t -> any) or_null [@@js.get "ongamepadconnected"]
+val ongamepaddisconnected: unit -> (this:Window.t -> ev:GamepadEvent.t -> any) or_null [@@js.get "ongamepaddisconnected"]
+val onhashchange: unit -> (this:Window.t -> ev:HashChangeEvent.t -> any) or_null [@@js.get "onhashchange"]
 val onlanguagechange: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onlanguagechange"]
 val onmessage: unit -> (this:Window.t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
 val onmessageerror: unit -> (this:Window.t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
@@ -56314,6 +56614,8 @@ val onstorage: unit -> (this:Window.t -> ev:StorageEvent.t -> any) or_null [@@js
 val onunhandledrejection: unit -> (this:Window.t -> ev:PromiseRejectionEvent.t -> any) or_null [@@js.get "onunhandledrejection"]
 val onunload: unit -> (this:Window.t -> ev:Event.t -> any) or_null [@@js.get "onunload"]
 val localStorage: unit -> Storage.t [@@js.get "localStorage"]
+
+(** Available only in secure contexts. *)
 val caches: unit -> CacheStorage.t [@@js.get "caches"]
 val crossOriginIsolated: unit -> bool [@@js.get "crossOriginIsolated"]
 val crypto': unit -> Crypto.t [@@js.get "crypto"]

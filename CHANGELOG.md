@@ -5,10 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Upgrade and fixed TypeScript version to >= 4.5.2 < 4.6.0
-- Fix the problem which prevented `--create-minimal-stdlib` from working correctly
-- Add better heuristic for relative imports
-- Fix bugs on relative imports
+
+## [1.1.0] - 2021-11-24
+- Upgrade and fixed TypeScript version to >= 4.5.2 < 4.6.0.
+- Fix the problem which prevented `--create-minimal-stdlib` from working correctly.
+- Add better heuristic for relative imports.
+- Fix bugs on relative imports.
 
 ## [1.0.0] - 2021-11-08
 

@@ -22,7 +22,7 @@ So you would have to either do
 * `opam pin add gen_js_api https://github.com/LexiFi/gen_js_api.git` **(recommended)**, or
 * `git submodule` [their repository](https://github.com/LexiFi/gen_js_api) to the `lib` directory of your OCaml project.
   - Note that if you use `gen_js_api` via a submodule, it might conflict with [`ts2ocaml-jsoo-stdlib`](#using-ts2ocaml-jsoo-stdlib-package) which is installed via `ocaml pin add`.
-  - Therefore, this would work only if you are going to do [`ts2ocaml jsoo --create-minimal-lib`](#using---create-minimal-lib--create-minimal-stdlib).
+  - Therefore, this would work only if you are going to do [`ts2ocaml jsoo --create-minimal-stdlib`](#using---create-minimal-stdlib--create-minimal-stdlib).
 
 ## Adding the standard library
 
@@ -52,9 +52,9 @@ Check the version of `ts2ocaml` with `ts2ocaml --version` and do the following:
 opam pin add ts2ocaml-jsoo-stdlib https://github.com/ocsigen/ts2ocaml.git#jsoo-stdlib-vX.Y.Z
 ```
 
-### Using [`--create-minimal-lib`](#--create-minimal-stdlib)
+### Using [`--create-minimal-stdlib`](#--create-minimal-stdlib)
 
-`ts2ocaml jsoo --create-minimal-lib` generates a minimal standard library for `ts2ocaml`.
+`ts2ocaml jsoo --create-minimal-stdlib` generates a minimal standard library for `ts2ocaml`.
 
 It only contains the following definitions:
 * `-'tags intf` type, which is used for [tag-based subtyping](#feature-tag).

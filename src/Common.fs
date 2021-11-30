@@ -4,22 +4,24 @@ module Common
 type GlobalOptions =
   abstract verbose: bool with get
   abstract nowarn: bool with get
+  abstract merge: bool with get, set
+  abstract followRelativeReferences: bool with get, set
 
 module GlobalOptions =
   open Fable.Core.JsInterop
 
   let register (yargs: Yargs.Argv<_>) =
     yargs
+      .group(!^ResizeArray["config"], "General Options:")
+      .describe(!^"config", "Specify the path to a ts2ocaml configuration JSON file.")
+      .group(!^ResizeArray["follow-relative-references"], "Parser Options:")
+      .addFlag("follow-relative-references", (fun (o: GlobalOptions) -> o.followRelativeReferences), descr="Follow and parse relative imports and file references.")
+      .group(!^ResizeArray["merge"], "Output Options:")
+      .addFlag("merge", (fun (o: GlobalOptions) -> o.merge), descr="Merge multiple input definition files to one binding", defaultValue=false)
       .group(!^ResizeArray["verbose"; "nowarn"], "Logging Options:")
       .addFlag("verbose", (fun (o: GlobalOptions) -> o.verbose), descr="Show verbose log")
       .addFlag("nowarn", (fun (o: GlobalOptions) -> o.nowarn), descr="Do not show warnings")
-      .group(
-        !^ResizeArray[
-          "config"
-        ],
-        "General Options:"
-      )
-      .describe(!^"config", "Specify the path to a ts2ocaml configuration JSON file.")
+
 
 module Log =
   let tracef (opt: 'Options) fmt : _ when 'Options :> GlobalOptions =

@@ -170,7 +170,7 @@ module Options =
         (fun (o: Options) -> o.preset),
         descr="Specify the preset to use."
       )
-
+      .group(!^ResizeArray[], "Parser Options:")
       .group(
         !^ResizeArray[
           "output-dir"; "stub-file"

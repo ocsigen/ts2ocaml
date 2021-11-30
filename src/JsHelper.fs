@@ -7,7 +7,7 @@ module Node = Node.Api
 let getPackageJsonPath (exampleFilePath: string) =
   let parts =
     exampleFilePath
-    |> String.split Node.path.sep
+    |> String.split Path.separator
     |> List.ofArray
   match parts |> List.tryFindIndexBack ((=) "node_modules") with
   | None -> None
@@ -21,11 +21,10 @@ let getPackageJsonPath (exampleFilePath: string) =
         | packageName :: _ -> [packageName]
         | _ -> failwith "impossible_getPackageJsonPath_root"
       let path =
-        prefix @ packageName @ ["package.json"] |> String.concat Node.path.sep
+        prefix @ packageName @ ["package.json"] |> String.concat Path.separator
 
       if not <| Node.fs.existsSync(!^path) then None
-      else if Node.path.isAbsolute(path) then Some path
-      else Some (Node.path.resolve(path))
+      else Some (Path.absolute path)
 
 type IPackageExportItem =
   [<EmitIndexer>]
@@ -48,7 +47,7 @@ let getPackageInfo (exampleFilePath: string) : Syntax.PackageInfo option =
   | Some path ->
     let p = getPackageJson path
 
-    let rootPath = Node.path.dirname(path)
+    let rootPath = Path.dirname path
 
     let name =
       if p.name.StartsWith("@types/") then
@@ -73,20 +72,20 @@ let getPackageInfo (exampleFilePath: string) : Syntax.PackageInfo option =
     let indexFile =
       match Option.orElse p.types p.typings, exports |> List.tryFind (fst >> (=) ".") with
       | None, None ->
-        let index = Node.path.join(rootPath, "index.d.ts")
+        let index = Path.join [rootPath; "index.d.ts"]
         if not <| Node.fs.existsSync(!^index) then None
         else
-          Node.path.relative(Node.``process``.cwd(), index) |> Node.path.normalize |> Some
+          Path.relative index |> Node.path.normalize |> Some
       | Some typings, _
       | None, Some (_, typings) ->
-        Node.path.relative(Node.``process``.cwd(), Node.path.join(rootPath, typings)) |> Node.path.normalize |> Some
+        Path.join [rootPath; typings] |> Path.relative |> Node.path.normalize |> Some
 
     let exports =
       exports
       |> List.filter (fst >> (<>) ".")
       |> List.map (fun (k, v) ->
         {| submodule = k;
-           file = Node.path.relative(Node.``process``.cwd(), Node.path.join(rootPath, v)) |> Node.path.normalize |})
+           file = Path.join [rootPath; v] |> Path.relative |> Node.path.normalize |})
 
     Some {
       name = name
@@ -106,6 +105,9 @@ module InferenceResult =
   let unwrap defaultValue = function
     | Valid s | Heuristic s -> s
     | Unknown -> defaultValue
+  let tryUnwrap = function
+    | Valid s | Heuristic s -> Some s
+    | Unknown -> None
 
 let inferPackageInfoFromFileName (sourceFile: Path.Relative) : {| name: string; isDefinitelyTyped: bool; rest: string list |} option =
   let parts =
@@ -143,17 +145,17 @@ let getJsModuleName (info: Syntax.PackageInfo option) (sourceFile: Path.Relative
       // make it relative to the package root directory
       let relativePath = Path.diff info.rootPath (Path.absolute sourceFile)
       if info.isDefinitelyTyped then
-        Node.path.join(info.name, stripExtension relativePath) |> Valid
+        Path.join [info.name; stripExtension relativePath] |> Valid
       else
         match info.exports |> List.tryFind (fun x -> x.file = sourceFile) with
-        | Some export -> Node.path.join(info.name, export.submodule) |> Valid
+        | Some export -> Path.join [info.name; export.submodule] |> Valid
         | None -> // heuristic
           let submodule =
             relativePath
             |> String.splitThenRemoveEmptyEntries "/"
             |> List.ofArray
             |> getSubmodule
-          Node.path.join(info.name, submodule) |> Heuristic
+          Path.join [info.name; submodule] |> Heuristic
   | None ->
     match inferPackageInfoFromFileName sourceFile with
     | None -> Unknown
@@ -178,13 +180,21 @@ let deriveModuleName (info: Syntax.PackageInfo option) (srcs: Path.Relative list
   | [] -> failwith "impossible_deriveModuleName"
   | [src] -> getJsModuleName info src
   | srcs ->
-    let names =
-      srcs
-      |> List.choose inferPackageInfoFromFileName
-      |> List.map (fun info -> info.name)
-      |> List.groupBy id
-      |> List.map (fun (name, xs) -> name, List.length xs)
-    names |> List.maxBy (fun (_, count) -> count) |> fst |> Heuristic
+    let fallback () =
+      let names =
+        srcs
+        |> List.choose inferPackageInfoFromFileName
+        |> List.map (fun info -> info.name)
+        |> List.groupBy id
+        |> List.map (fun (name, xs) -> name, List.length xs)
+      names |> List.maxBy (fun (_, count) -> count) |> fst |> Heuristic
+    match info with
+    | None -> fallback ()
+    | Some info ->
+      if info.indexFile |> Option.exists (fun index -> srcs |> List.exists ((=) index)) then
+        Valid info.name
+      else
+        fallback ()
 
 let deriveOutputFileName
   (opts: #GlobalOptions) (info: Syntax.PackageInfo option) (srcs: Path.Relative list)
@@ -202,8 +212,8 @@ let deriveOutputFileName
 let resolveRelativeImportPath (info: Syntax.PackageInfo option) (currentFile: Path.Relative) (path: string) =
   if path.StartsWith(".") then
     let targetPath =
-      let path = Node.path.join(Node.path.dirname(currentFile), path)
-      if not <| path.EndsWith(".ts") then Node.path.join(path, "index.d.ts")
+      let path = Path.join [Path.dirname currentFile; path]
+      if not <| path.EndsWith(".ts") then Path.join [path; "index.d.ts"]
       else path
     getJsModuleName info targetPath
   else

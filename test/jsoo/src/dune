@@ -55,6 +55,11 @@
   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule
+  (targets react__global.ml)
+  (deps react__global.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
   (targets react.ml)
   (deps react.mli)
   (action (run %{bin:gen_js_api} %{deps})))

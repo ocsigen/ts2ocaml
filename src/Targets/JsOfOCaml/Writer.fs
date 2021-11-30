@@ -904,10 +904,9 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     let scoped =
       let scoped = forceScoped |> Option.defaultValue Scoped.No
       let shouldBeScoped =
-        not c.isInterface // class generates global value
-        || c.members |> List.exists (fun (ma, m) ->
-             if ma.isStatic then true
-             else match m with Constructor _ -> true | _ -> false) // constructor generates global value
+        c.members |> List.exists (fun (ma, m) ->
+          if ma.isStatic then true
+          else match m with Constructor _ -> true | _ -> false) // constructor generates global value
       Scoped.union
         scoped
         (if shouldBeScoped then Scoped.Yes else Scoped.No)
@@ -1001,7 +1000,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     | None -> None
     | Some name ->
       let kind =
-        if node.scoped <> Scoped.No then [Kind.Type; Kind.ClassLike; Kind.Value]
+        if not c.isInterface || node.scoped <> Scoped.No then [Kind.Type; Kind.ClassLike; Kind.Value]
         else [Kind.Type; Kind.ClassLike]
       getExportFromStatement ctx name kind (if c.isInterface then "interface" else "class") (ClassDef c)
   current

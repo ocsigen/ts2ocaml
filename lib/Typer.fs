@@ -1,7 +1,8 @@
-module Typer
+module Ts2Ml.Typer
 
-open Syntax
-open DataTypes
+open Ts2Ml.Common
+open Ts2Ml.Syntax
+open Ts2Ml.DataTypes
 
 type TyperOptions =
   inherit GlobalOptions
@@ -9,38 +10,8 @@ type TyperOptions =
   abstract inheritArraylike: bool with get,set
   abstract inheritPromiselike: bool with get,set
 
-module TyperOptions =
-  open Fable.Core.JsInterop
-
-  let register (yargs: Yargs.Argv<GlobalOptions>) =
-    yargs
-      .group(
-        !^ResizeArray[
-           "inherit-iterable"
-           "inherit-arraylike"
-           "inherit-promiselike"
-        ],
-        "Typer Options:")
-      .addFlag(
-        "inherit-iterable",
-        (fun (o: TyperOptions) -> o.inheritIterable),
-        descr="Treat a type as inheriting Iterable<T> if it has an iterator as a member.",
-        defaultValue = false
-      )
-      .addFlag(
-        "inherit-arraylike",
-        (fun (o: TyperOptions) -> o.inheritArraylike),
-        descr="Treat a type as inheriting ArrayLike<T> if it has a number-indexed indexer.",
-        defaultValue = false
-      )
-      .addFlag(
-        "inherit-promiselike",
-        (fun (o: TyperOptions) -> o.inheritPromiselike),
-        descr="Treat a type as inheriting PromiseLike<T> if it has `then` as a member.",
-        defaultValue = false
-      )
-
-type Context<'Options, 'State> = {|
+type TyperContext<'Options, 'State when 'Options :> GlobalOptions> = {
+  logger: ILogger
   currentNamespace: string list
   definitionsMap: Trie<string, Statement list>
   typeLiteralsMap: Map<Literal, int>
@@ -48,40 +19,57 @@ type Context<'Options, 'State> = {|
   unknownIdentTypes: Trie<string, Set<int>>
   options: 'Options
   state: 'State
-|}
+} with
+  interface IContext<'Options> with
+    member this.options = this.options
+    member this.logger = this.logger
 
-let inline private warn (ctx: Context<TyperOptions, _>) (loc: Location) fmt =
-  Printf.kprintf (fun s ->
-    Log.warnf ctx.options "%s at %s" s loc.AsString
-  ) fmt
+let inline private warn (ctx: TyperContext<#TyperOptions, _>) (loc: Location) fmt =
+  Printf.kprintf (fun s -> ctx.logger.warnf "%s at %s" s loc.AsString) fmt
 
 module TyperContext =
-  let mapOptions (f: 'a -> 'b) (ctx: Context<'a, 's>) : Context<'b, 's> =
-    {| ctx with options = f ctx.options |}
+  type Anonoymous<'Options, 'State when 'Options :> GlobalOptions> = {|
+    logger: ILogger
+    currentNamespace: string list
+    definitionsMap: Trie<string, Statement list>
+    typeLiteralsMap: Map<Literal, int>
+    anonymousInterfacesMap: Map<Class, int>
+    unknownIdentTypes: Trie<string, Set<int>>
+    options: 'Options
+    state: 'State
+  |}
 
-  let mapState (f: 's -> 't) (ctx: Context<'a, 's>) : Context<'a, 't> =
-    {| ctx with state = f ctx.state |}
+  let inline ofAnonymous (x: Anonoymous<'a, 's>) : TyperContext<'a, 's> =
+    { logger = x.logger; currentNamespace = x.currentNamespace; definitionsMap = x.definitionsMap
+      typeLiteralsMap = x.typeLiteralsMap; anonymousInterfacesMap = x.anonymousInterfacesMap; unknownIdentTypes = x.unknownIdentTypes
+      options = x.options; state = x.state }
 
-  let ofParentNamespace (ctx: Context<'a, 's>) : Context<'a, 's> option =
+  let mapOptions (f: 'a -> 'b) (ctx: TyperContext<'a, 's>) : TyperContext<'b, 's> =
+    ofAnonymous {| ctx with options = f ctx.options |}
+
+  let mapState (f: 's -> 't) (ctx: TyperContext<'a, 's>) : TyperContext<'a, 't> =
+    ofAnonymous {| ctx with state = f ctx.state |}
+
+  let ofParentNamespace (ctx: TyperContext<'a, 's>) : TyperContext<'a, 's> option =
     match ctx.currentNamespace with
     | [] -> None
-    | _ :: ns -> Some {| ctx with currentNamespace = ns |}
+    | _ :: ns -> Some { ctx with currentNamespace = ns }
 
-  let ofChildNamespace childName (ctx: Context<'a, 's>) : Context<'a, 's> =
-    {| ctx with currentNamespace = childName :: ctx.currentNamespace |}
+  let ofChildNamespace childName (ctx: TyperContext<'a, 's>) : TyperContext<'a, 's> =
+    { ctx with currentNamespace = childName :: ctx.currentNamespace }
 
-  let getFullName (name: string list) (ctx: Context<'a, 's>) =
+  let getFullName (name: string list) (ctx: TyperContext<'a, 's>) =
     match name with
     | [] -> List.rev ctx.currentNamespace
     | n :: [] -> List.rev (n :: ctx.currentNamespace)
     | _ -> List.rev ctx.currentNamespace @ name
 
-  let getFullNameString (name: string list) (ctx: Context<'a, 's>) =
+  let getFullNameString (name: string list) (ctx: TyperContext<'a, 's>) =
     getFullName name ctx |> String.concat "."
 
   /// `Error relativeNameOfCurrentNamespace` when `fullName` is a parent of current namespace.
   /// `Ok name` otherwise.
-  let getRelativeNameTo (fullName: string list) (ctx: Context<'a, 's>) =
+  let getRelativeNameTo (fullName: string list) (ctx: TyperContext<'a, 's>) =
     let rec go name selfPos =
       match name, selfPos with
       | x :: [], y :: ys  when x = y -> Error ys
@@ -101,7 +89,7 @@ type FullNameLookupResult =
   | NotFound of string option
 
 module FullName =
-  let rec resolve (ctx: Context<'a, 's>) (name: string list) : string list option =
+  let rec resolve (ctx: TyperContext<'a, 's>) (name: string list) : string list option =
     let nsRev = List.rev ctx.currentNamespace
     let fullName = nsRev @ name
     let onFail () =
@@ -121,7 +109,7 @@ module FullName =
       | _ -> onFail ()
     | _ -> onFail ()
 
-  let lookup (ctx: Context<'a, 's>) (fullName: string list) : FullNameLookupResult list =
+  let lookup (ctx: TyperContext<'a, 's>) (fullName: string list) : FullNameLookupResult list =
     let conv name = function
       | TypeAlias a -> AliasName a |> Some
       | ClassDef c -> ClassName c |> Some
@@ -462,7 +450,7 @@ module Type =
   let mutable private inheritCache: Map<string list, (InheritingType * int) list * InheritingType option> = Map.empty
   let mutable private hasNoInherits: Set<string list> = Set.empty
 
-  let rec private getAllInheritancesImpl (depth: int) (includeSelf: bool) (ctx: Context<'a, 's>) (ty: Type) : (InheritingType * int) seq =
+  let rec private getAllInheritancesImpl (depth: int) (includeSelf: bool) (ctx: TyperContext<'a, 's>) (ty: Type) : (InheritingType * int) seq =
     let treatPrimTypeInterfaces (name: string list) (ts: Type list) =
       match name with
       | [name] ->
@@ -504,7 +492,7 @@ module Type =
           yield InheritingType.Other ty, depth
     }
 
-  and private getAllInheritancesFromNameImpl (depth: int) (includeSelf: bool) (ctx: Context<'a, 's>) (fn: string list) : (InheritingType * int) list =
+  and private getAllInheritancesFromNameImpl (depth: int) (includeSelf: bool) (ctx: TyperContext<'a, 's>) (fn: string list) : (InheritingType * int) list =
     if hasNoInherits |> Set.contains fn then List.empty
     else
       match inheritCache |> Map.tryFind fn with
@@ -775,7 +763,7 @@ module Type =
   /// * can be any case.
   /// * can be a reserved name (e.g. `this`).
   /// * can start with a digit.
-  let rec getHumanReadableName (ctx: Context<_, _>) = function
+  let rec getHumanReadableName (ctx: TyperContext<_, _>) = function
     | Intrinsic -> "intrinsic"
     | PolymorphicThis -> "this"
     | Ident i -> i.name |> List.last
@@ -908,7 +896,7 @@ module Statement =
           intfMap <- (intfMap |> Map.add i.name iref)
           result <- Choice2Of3 iref :: result
         | Some iref' ->
-          let i' = !iref'
+          let i' = iref'.Value
           assert (i.accessibility = i'.accessibility)
           let i =
             { i with
@@ -918,7 +906,7 @@ module Statement =
                 typeParams = mergeTypeParams i.typeParams i'.typeParams
                 implements = List.distinct (i.implements @ i'.implements)
                 members = i.members @ i'.members }
-          iref' := i
+          iref'.Value <- i
       | Module n (* when n.isNamespace *) ->
         match nsMap |> Map.tryFind n.name with
         | None ->
@@ -926,8 +914,8 @@ module Statement =
           nsMap <- (nsMap |> Map.add n.name nref)
           result <- Choice3Of3 nref :: result
         | Some nref' ->
-          let n' = !nref'
-          nref' :=
+          let n' = nref'.Value
+          nref'.Value <-
             { n with
                 loc = n.loc ++ n'.loc
                 comments = n.comments @ n'.comments |> List.distinct
@@ -940,29 +928,10 @@ module Statement =
     |> List.rev
     |> List.map (function
       | Choice1Of3 s -> s
-      | Choice2Of3 i -> ClassDef !i
+      | Choice2Of3 i -> ClassDef i.Value
       | Choice3Of3 n ->
-        Module { !n with statements = merge (!n).statements }
+        Module { n.Value with statements = merge n.Value.statements }
     )
-
-  let inferEnumCaseValue (stmts: Statement list) : Statement list =
-    let rec go = function
-      | EnumDef e ->
-        let f (state: Literal option) (c: EnumCase) : EnumCase * Literal option =
-          match c.value with
-          | Some v -> c, Some v
-          | None ->
-            let v =
-              match state with
-              | None -> Some (LInt 0)
-              | Some (LInt n) -> Some (LInt (n+1))
-              | Some (LFloat f) -> Some (LFloat (f+1.0))
-              | Some _ -> None
-            { c with value = v }, v
-        EnumDef { e with cases = e.cases |> List.mapFold f None |> fst }
-      | Module m -> Module { m with statements = m.statements |> List.map go }
-      | s -> s
-    stmts |> List.map go
 
   let extractNamedDefinitions (stmts: Statement list) : Trie<string, Statement list> =
     let rec go (ns: string list) trie s =
@@ -1058,7 +1027,7 @@ module Statement =
       | _ -> Choice1Of2 true, None
     ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
-  let getKnownTypes (ctx: Context<_, _>) stmts =
+  let getKnownTypes (ctx: TyperContext<_, _>) stmts =
     let (|Dummy|) _ = []
     findTypesInStatements (function
       | App (AIdent { fullName = Some fn }, ts, _) ->
@@ -1072,7 +1041,7 @@ module Statement =
         Choice1Of2 true, None
     ) stmts |> Set.ofSeq
 
-  let rec mapType mapping (ctx: Context<_, _>) stmts =
+  let rec mapType mapping (ctx: TyperContext<_, _>) stmts =
     let mapValue v =
       { v with
           typ = mapping ctx v.typ
@@ -1095,20 +1064,20 @@ module Statement =
             statements =
               mapType
                 mapping
-                {| ctx with currentNamespace = m.name :: ctx.currentNamespace |}
+                { ctx with currentNamespace = m.name :: ctx.currentNamespace }
                 m.statements
         }
       | UnknownStatement u -> UnknownStatement u
       | FloatingComment c -> FloatingComment c
-      | Pattern (ImmediateInstance (i, v)) -> Pattern (ImmediateInstance (Type.mapInClass mapping ctx i, mapValue v))
+      | Pattern (ImmediateInstance (i, v)) -> Pattern (ImmediateInstance (mapInClass mapping ctx i, mapValue v))
       | Pattern (ImmediateConstructor (bi, ci, v)) ->
-        Pattern (ImmediateConstructor (Type.mapInClass mapping ctx bi, Type.mapInClass mapping ctx ci, mapValue v))
+        Pattern (ImmediateConstructor (mapInClass mapping ctx bi, mapInClass mapping ctx ci, mapValue v))
     stmts |> List.map f
 
-  let resolveErasedTypes (ctx: Context<TyperOptions, _>) (stmts: Statement list) =
-    mapType Type.resolveErasedType ctx stmts
+  let resolveErasedTypes (ctx: TyperContext<#TyperOptions, _>) (stmts: Statement list) =
+    mapType resolveErasedType ctx stmts
 
-  let introduceAdditionalInheritance (opts: TyperOptions) (stmts: Statement list) : Statement list =
+  let introduceAdditionalInheritance (opts: #TyperOptions) (stmts: Statement list) : Statement list =
     let rec go stmts =
       stmts |> List.map (function
         | ClassDef (c & { name = Some name }) ->
@@ -1233,7 +1202,7 @@ module Statement =
     go stmts
 
 module Ident =
-  let rec mapInType (mapping: Context<'a, 's> -> IdentType -> IdentType) (ctx: Context<'a, 's>) = function
+  let rec mapInType (mapping: TyperContext<'a, 's> -> IdentType -> IdentType) (ctx: TyperContext<'a, 's>) = function
     | Ident i -> Ident (mapping ctx i)
     | Union u -> Union { types = u.types |> List.map (mapInType mapping ctx) }
     | Intersection i -> Intersection { types = i.types |> List.map (mapInType mapping ctx) }
@@ -1268,7 +1237,7 @@ module Ident =
     | AIdent i -> AIdent (mapping ctx i)
     | AAnonymousInterface i -> AAnonymousInterface (Type.mapInClass (mapInType mapping) ctx i)
 
-  let rec mapInStatements mapType mapExport (ctx: Context<'a, 's>) (stmts: Statement list) : Statement list =
+  let rec mapInStatements mapType mapExport (ctx: TyperContext<'a, 's>) (stmts: Statement list) : Statement list =
     let mapValue v =
       { v with
           typ = mapInType mapType ctx v.typ
@@ -1301,7 +1270,7 @@ module Ident =
         Pattern (ImmediateConstructor (Type.mapInClass (mapInType mapType) ctx bi, Type.mapInClass (mapInType mapType) ctx ci, mapValue v))
     stmts |> List.map f
 
-  let resolve (ctx: Context<'a, 's>) (i: IdentType) : IdentType =
+  let resolve (ctx: TyperContext<'a, 's>) (i: IdentType) : IdentType =
     match i.fullName with
     | Some _ -> i
     | None ->
@@ -1309,7 +1278,7 @@ module Ident =
       | Some fn -> { i with fullName = Some fn }
       | None -> i
 
-  let resolveInStatements (ctx: Context<'a, 's>) (stmts: Statement list) : Statement list =
+  let resolveInStatements (ctx: TyperContext<'a, 's>) (stmts: Statement list) : Statement list =
     mapInStatements
       (fun ctx i -> resolve ctx i)
       (fun ctx e ->
@@ -1322,12 +1291,12 @@ module Ident =
         { e with clause = clause }
       ) ctx stmts
 
-  let getKind (ctx: Context<'a, 's>) (i: IdentType) =
+  let getKind (ctx: TyperContext<'a, 's>) (i: IdentType) =
     match i.fullName with
     | None -> Set.empty
     | Some fn -> FullName.getKind ctx fn
 
-  let hasKind (ctx: Context<'a, 's>) kind (i: IdentType) =
+  let hasKind (ctx: TyperContext<'a, 's>) kind (i: IdentType) =
     i.fullName |> Option.map (FullName.hasKind ctx kind)
 
 type TypeofableType = TNumber | TString | TBoolean | TSymbol | TBigInt
@@ -1337,7 +1306,7 @@ type ResolvedUnion = {
   caseUndefined: bool
   typeofableTypes: Set<TypeofableType>
   caseArray: Set<Type> option
-  caseEnum: Set<Choice<Enum * EnumCase, Literal>>
+  caseEnum: Set<Choice<EnumCase, Literal>>
   discriminatedUnions: Map<string, Map<Literal, Type>>
   otherTypes: Set<Type>
 }
@@ -1366,8 +1335,8 @@ module ResolvedUnion =
           ru.caseEnum
           |> Set.toSeq
           |> Seq.map (function
-            | Choice1Of2 ({ name = ty }, { name = name; value = Some value }) -> sprintf "%s.%s=%s" ty name (Literal.toString value)
-            | Choice1Of2 ({ name = ty }, { name = name; value = None }) -> sprintf "%s.%s=?" ty name
+            | Choice1Of2 { name = name; value = Some value } -> sprintf "%s=%s" name (Literal.toString value)
+            | Choice1Of2 { name = name; value = None } -> sprintf "%s=?" name
             | Choice2Of2 l -> Literal.toString l)
         yield sprintf "enum<%s>" (cases |> String.concat " | ")
       for k, m in ru.discriminatedUnions |> Map.toSeq do
@@ -1376,7 +1345,7 @@ module ResolvedUnion =
     ]
     cases |> String.concat " | "
 
-  let rec private getEnumFromUnion ctx (u: UnionType) : Set<Choice<Enum * EnumCase, Literal>> * UnionType =
+  let rec private getEnumFromUnion ctx (u: UnionType) : Set<Choice<EnumCase, Literal>> * UnionType =
     let (|Dummy|) _ = []
 
     let rec go t =
@@ -1392,10 +1361,10 @@ module ResolvedUnion =
               let bindings = Type.createBindings fn loc a.typeParams tyargs
               yield! go (a.target |> Type.substTypeVar bindings ())
             | EnumName e ->
-              for c in e.cases do yield Choice1Of2 (Choice1Of2 (e, c))
+              for c in e.cases do yield Choice1Of2 (Choice1Of2 c)
             | EnumCaseName (name, e) ->
               match e.cases |> List.tryFind (fun c -> c.name = name) with
-              | Some c -> yield Choice1Of2 (Choice1Of2 (e, c))
+              | Some c -> yield Choice1Of2 (Choice1Of2 c)
               | None -> yield Choice2Of2 t
             | ClassName _ -> yield Choice2Of2 t
             | _ -> ()
@@ -1414,7 +1383,7 @@ module ResolvedUnion =
     let cases, types = u.types |> List.fold f (Set.empty, [])
     cases, { types = types }
 
-  let private getDiscriminatedFromUnion (ctx: Context<'a, 's>) (u: UnionType) : Map<string, Map<Literal, Type>> * UnionType =
+  let private getDiscriminatedFromUnion (ctx: TyperContext<'a, 's>) (u: UnionType) : Map<string, Map<Literal, Type>> * UnionType =
     let (|Dummy|) _ = []
 
     let rec getLiteralFieldsFromType (ty: Type) : Map<string, Set<Literal>> =
@@ -1566,7 +1535,7 @@ module ResolvedUnion =
 
   let mutable private resolveUnionMap: Map<UnionType, ResolvedUnion> = Map.empty
 
-  let rec resolve (ctx: Context<'a, 's>) (u: UnionType) : ResolvedUnion =
+  let rec resolve (ctx: TyperContext<'a, 's>) (u: UnionType) : ResolvedUnion =
     match resolveUnionMap |> Map.tryFind u with
     | Some t -> t
     | None ->
@@ -1611,33 +1580,34 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
-let createRootContextForTyper (srcs: SourceFile list) (opts: TyperOptions) : Context<TyperOptions, unit> =
+let private createTyperContextForTyper (baseCtx: IContext<#TyperOptions>) (srcs: SourceFile list) : TyperContext<#TyperOptions, unit> =
   // TODO: handle SourceFile-specific things
   let m =
     srcs
     |> List.collect (fun src -> src.statements)
     |> Statement.extractNamedDefinitions
-  {|
+  {
     currentNamespace = []
     definitionsMap = m
     typeLiteralsMap = Map.empty
     anonymousInterfacesMap = Map.empty
     unknownIdentTypes = Trie.empty
-    options = opts
     state = ()
-  |}
+    options = baseCtx.options
+    logger = baseCtx.logger
+  }
 
-let createRootContext (srcs: SourceFile list) (opts: TyperOptions) : Context<TyperOptions, unit> =
+let createTyperContext (baseCtx: IContext<#TyperOptions>) (srcs: SourceFile list) : TyperContext<#TyperOptions, unit> =
   // TODO: handle SourceFile-specific things
-  let ctx = createRootContextForTyper srcs opts
+  let ctx = createTyperContextForTyper baseCtx srcs
   let stmts = srcs |> List.collect (fun src -> src.statements)
   let tlm = Statement.getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
   let aim = Statement.getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
   let uit = Statement.getUnknownIdentTypes ctx stmts
-  {| ctx with
+  { ctx with
       typeLiteralsMap = tlm
       anonymousInterfacesMap = aim
-      unknownIdentTypes = uit |}
+      unknownIdentTypes = uit }
 
 open TypeScript
 let mergeLibESDefinitions (srcs: SourceFile list) =
@@ -1694,40 +1664,39 @@ let mergeLibESDefinitions (srcs: SourceFile list) =
     hasNoDefaultLib = true
     moduleName = None }
 
-let runAll (srcs: SourceFile list) (opts: TyperOptions) =
+let runAll (baseCtx: IContext<#TyperOptions>) (srcs: SourceFile list) =
   // TODO: handle SourceFile-specific things
 
   let inline mapStatements f (src: SourceFile) =
     { src with statements = f src.statements }
 
-  Log.tracef opts "* normalizing syntax trees..."
+  baseCtx.logger.tracef "* normalizing syntax trees..."
   let result =
     srcs
     |> List.map (
       mapStatements (fun stmts ->
         stmts
-              |> Statement.inferEnumCaseValue // infer enum case values when not specified
               |> Statement.merge // merge modules, interfaces, etc
-              |> Statement.introduceAdditionalInheritance opts // add common inheritances which tends not to be defined by `extends` or `implements`
+              |> Statement.introduceAdditionalInheritance baseCtx.options // add common inheritances which tends not to be defined by `extends` or `implements`
               |> Statement.detectPatterns // group statements with pattern
               |> Statement.replaceAliasToFunctionWithInterface // replace alias to function type with a function interface
       )
     )
   // build a context
 
-  let ctx = createRootContextForTyper result opts
+  let ctx = createTyperContextForTyper baseCtx result
 
   // resolve every identifier into its full name
-  Log.tracef opts "* resolving identifiers..."
+  baseCtx.logger.tracef "* resolving identifiers..."
   let result =
     result |> List.map (mapStatements (Ident.resolveInStatements ctx))
   // rebuild the context with the identifiers resolved to full name
-  let ctx = createRootContextForTyper result opts
+  let ctx = createTyperContextForTyper baseCtx result
 
   // resolve every erased types
-  Log.tracef opts "* evaluating type expressions..."
+  baseCtx.logger.tracef "* evaluating type expressions..."
   let result = result |> List.map (mapStatements (Statement.resolveErasedTypes ctx))
   // rebuild the context because resolveErasedTypes may introduce additional anonymous function interfaces
-  let ctx = createRootContext result opts
+  let ctx = createTyperContext baseCtx result
 
   ctx, result

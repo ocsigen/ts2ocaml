@@ -294,6 +294,9 @@ __pycache__/
 .ionide
 .ignored
 
+# opam local switch
+_opam/
+
 # Outputs
 output
 *.fs.js*

@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "typescript": "4.5.2",
-    "yargs": "17.0.1"
+    "yargs": "17.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.16.0",

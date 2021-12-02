@@ -21,9 +21,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Use .NET ${{ matrix.dotnet }}
         uses: actions/setup-dotnet@v1
@@ -45,10 +44,8 @@ jobs:
         run: dotnet restore
            | dotnet tool restore
 
-      - name: Pin the latest gen_js_api
-        run: opam pin add gen_js_api https://github.com/LexiFi/gen_js_api.git -y
       - name: Install OCaml Dependencies
-        run: opam install js_of_ocaml gen_js_api -y
+        run: opam install . --deps-only
 
       - name: Run FAKE
         run: dotnet fake build target All

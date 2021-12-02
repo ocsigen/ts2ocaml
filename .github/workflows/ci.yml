@@ -17,7 +17,7 @@ jobs:
         dotnet:
           - 5.0.x
         node-version:
-          - 14.x
+          - 16.x
         ocaml-compiler:
           - 4.08.x
           - 4.09.x

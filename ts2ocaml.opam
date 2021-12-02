@@ -1,0 +1,19 @@
+opam-version: "2.0"
+synopsis: "Dummy package context for ts2ocaml tests"
+description: "Internal package used to partition ts2ocaml tests."
+maintainer: ["Ocsigen team <dev@ocsigen.org>"]
+authors: ["Ocsigen team <dev@ocsigen.org>"]
+license: "Apache-2.0"
+homepage: "https://github.com/ocsigen/ts2ocaml"
+doc: "https://github.com/ocsigen/ts2ocaml"
+bug-reports: "https://github.com/ocsigen/ts2ocaml/issues"
+depends: [
+  "dune" {>= "2.9"}
+  "ocaml" {>= "4.08"}
+  "gen_js_api"
+  "js_of_ocaml-compiler"
+]
+pin-depends: [
+  [ "gen_js_api.dev" "git+https://github.com/LexiFi/gen_js_api.git" ]
+]
+dev-repo: "git+https://github.com/ocsigen/ts2ocaml.git"

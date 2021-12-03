@@ -3,16 +3,12 @@
   "isRoot": true,
   "tools": {
     "fable": {
-      "version": "3.1.15",
-      "commands": [
-        "fable"
-      ]
+      "version": "3.6.3",
+      "commands": ["fable"]
     },
     "fake-cli": {
       "version": "5.20.4",
-      "commands": [
-        "fake"
-      ]
+      "commands": ["fake"]
     }
   }
 }

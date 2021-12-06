@@ -17,7 +17,9 @@ let private run (input: Input) (options: Options) =
     match options.outputDir with
     | None -> curdir
     | Some dir ->
-      let path = Node.Api.path.join [|curdir; dir|]
+      let path =
+        if Node.Api.path.isAbsolute dir then dir
+        else Node.Api.path.join [|curdir; dir|]
       let fail () =
         failwithf "The output directory '%s' does not exist." path
       try

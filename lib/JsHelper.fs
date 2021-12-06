@@ -1,6 +1,5 @@
 module Ts2Ml.JsHelper
 
-open Common
 open Fable.Core
 open Fable.Core.JsInterop
 
@@ -27,6 +26,9 @@ let getPackageJsonPath (exampleFilePath: string) =
 
       if not <| Node.fs.existsSync(!^path) then None
       else Some (Path.absolute path)
+
+type IPackageExportTypesEntry =
+  abstract ``default``: string option
 
 type IPackageExportItem =
   [<EmitIndexer>]
@@ -68,8 +70,22 @@ let getPackageInfo (exampleFilePath: string) : Syntax.PackageInfo option =
       match p.exports with
       | None -> []
       | Some exports ->
-        [ for k, v in JS.Constructors.Object.entries exports do
-            if isIn "types" v then yield k, v?types ]
+        [
+          for k, v in JS.Constructors.Object.entries exports do
+            if isIn "types" v then
+              if JS.jsTypeof v?types = "string" then
+                yield k, v?types
+              else if isIn "default" v?types then
+                yield k, v?types?``default``
+              else
+                yield!
+                  JS.Constructors.Object.entries v?types
+                  |> Array.tryPick (fun (_, v) ->
+                    if JS.jsTypeof v = "string" && (!!v : string).EndsWith(".d.ts") then Some (!!v : string)
+                    else None)
+                  |> Option.map (fun v -> k, v)
+                  |> Option.toList
+        ]
 
     let indexFile =
       match Option.orElse p.types p.typings, exports |> List.tryFind (fst >> (=) ".") with

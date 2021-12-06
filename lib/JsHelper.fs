@@ -27,19 +27,20 @@ let getPackageJsonPath (exampleFilePath: string) =
       if not <| Node.fs.existsSync(!^path) then None
       else Some (Path.absolute path)
 
-type IPackageExportTypesEntry =
+type IPackageExportItemEntry =
+  inherit JSRecord<string, string>
   abstract ``default``: string option
 
 type IPackageExportItem =
-  [<EmitIndexer>]
-  abstract Item: string -> string with get
+  inherit JSRecord<string, U2<string, IPackageExportItemEntry>>
+  abstract types: U2<string, IPackageExportItemEntry> option
 
 type IPackageJson =
   abstract name: string
   abstract version: string
   abstract types: string option
   abstract typings: string option
-  abstract exports: obj option
+  abstract exports: JSRecord<string, IPackageExportItem> option
 
 let getPackageJson (path: string) : IPackageJson =
   let content = Node.fs.readFileSync(path, "utf-8")
@@ -71,20 +72,24 @@ let getPackageInfo (exampleFilePath: string) : Syntax.PackageInfo option =
       | None -> []
       | Some exports ->
         [
-          for k, v in JS.Constructors.Object.entries exports do
-            if isIn "types" v then
-              if JS.jsTypeof v?types = "string" then
-                yield k, v?types
-              else if isIn "default" v?types then
-                yield k, v?types?``default``
+          for k, v in exports.entries do
+            match v.types with
+            | None -> ()
+            | Some types ->
+              if JS.typeof types = "string" then
+                yield k, !!types
               else
-                yield!
-                  JS.Constructors.Object.entries v?types
-                  |> Array.tryPick (fun (_, v) ->
-                    if JS.jsTypeof v = "string" && (!!v : string).EndsWith(".d.ts") then Some (!!v : string)
-                    else None)
-                  |> Option.map (fun v -> k, v)
-                  |> Option.toList
+                let types = !!types : IPackageExportItemEntry
+                match types.``default`` with
+                | Some v -> yield k, v
+                | None ->
+                  yield!
+                    types.entries
+                    |> Array.tryPick (fun (_, v) ->
+                      if JS.typeof v = "string" && v.EndsWith(".d.ts") then Some v
+                      else None)
+                    |> Option.map (fun v -> k, v)
+                    |> Option.toList
         ]
 
     let indexFile =

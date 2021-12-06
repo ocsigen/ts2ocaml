@@ -129,7 +129,8 @@ module Path =
   type Difference = string
 
   let relative (path: string) : Relative =
-    Node.path.relative(Node.``process``.cwd(), path)
+    if not (Node.path.isAbsolute path) then path
+    else Node.path.relative(Node.``process``.cwd(), path)
 
   let absolute (path: string) : Absolute =
     if Node.path.isAbsolute(path) then path

@@ -95,9 +95,27 @@ type StringBuilder = System.Text.StringBuilder
 open Fable.Core
 open Fable.Core.JsInterop
 
+type JS.ObjectConstructor with
+  [<Emit("$0.entries($1)")>]
+  member __.entries (x: 'a) : (string * obj) [] = jsNative
+
+type JSRecord<'TKey, 'TValue> =
+  [<EmitIndexer>]
+  abstract member Item: 'TKey -> 'TValue option with get
+  [<EmitIndexer>]
+  abstract member Item: 'TKey -> 'TValue with set
+  [<Emit("Object.keys($0)")>]
+  abstract member keys: 'TKey[]
+  [<Emit("Object.values($0)")>]
+  abstract member values: 'TValue[]
+  [<Emit("Object.entries($0)")>]
+  abstract member entries: ('TKey * 'TValue)[]
+  [<Emit("$1 in $0")>]
+  abstract member hasKey: 'TKey -> bool
+
 module JS =
   [<Emit("typeof $0")>]
-  let jsTypeof (_: 'a) : string = jsNative
+  let typeof (_: 'a) : string = jsNative
 
   let cloneWith (f: 'a -> unit) (x: 'a) =
     let newX = JS.Constructors.Object.assign(!!{||}, x) :?> 'a
@@ -107,7 +125,7 @@ module JS =
   let stringify (x: obj) =
     let objSet = JS.Constructors.Set.Create()
     JS.JSON.stringify(x, space=2, replacer=(fun _key value ->
-      if not (isNullOrUndefined value) && jsTypeof value = "object" then
+      if not (isNullOrUndefined value) && typeof value = "object" then
         if objSet.has(value) then box "<circular object>"
         else
           objSet.add value |> ignore
@@ -115,10 +133,6 @@ module JS =
       else
         value
     ))
-
-type JS.ObjectConstructor with
-  [<Emit("$0.entries($1)")>]
-  member __.entries (x: 'a) : (string * obj) [] = jsNative
 
 module Path =
   module Node = Node.Api

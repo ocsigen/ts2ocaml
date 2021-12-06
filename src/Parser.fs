@@ -117,19 +117,52 @@ let rec extractNestedName (node: Node) =
         yield! extractNestedName child
   }
 
-let getFullName (ctx: ParserContext) (node: Node) =
-  match ctx.checker.getSymbolAtLocation node with
-  | None -> None
+let getFullName (ctx: ParserContext) (nd: Node) =
+  match ctx.checker.getSymbolAtLocation nd with
+  | None ->
+    printfn "  x %s" (nd.getText())
+    None
   | Some s ->
-    let fullName =
-      ctx.checker.getFullyQualifiedName s |> String.split "." |> List.ofArray
-    let sources =
-      s.declarations
-      |> Option.toList
-      |> List.collect (fun decs ->
-        decs |> Seq.map (fun dec -> dec.getSourceFile()) |> List.ofSeq)
-      |> List.map (fun x -> x.fileName)
-    printfn "- %s from %A" (fullName |> String.concat ".") sources
+    let normalizeQualifiedName (fileNames: string list) (s: string) =
+      s
+      |> String.split "."
+      |> List.ofArray
+      |> function
+        | x :: xs when x.StartsWith("\"") ->
+          let basenames = fileNames |> List.map JsHelper.stripExtension
+          if basenames |> List.exists (fun basename -> x.EndsWith(basename + "\"")) then xs
+          else x.Trim('"') :: xs
+        | xs -> xs
+    let rec go indent (s: Ts.Symbol) =
+      let getSources (s: Ts.Symbol) =
+        s.declarations
+        |> Option.toList
+        |> List.collect (fun decs ->
+          decs |> Seq.map (fun dec -> dec.getSourceFile()) |> List.ofSeq)
+        |> List.map (fun x -> Path.relative x.fileName)
+        |> List.distinct
+      let sources = getSources s
+      let fullName =
+        ctx.checker.getFullyQualifiedName s
+        |> normalizeQualifiedName sources
+      if sources = [Path.relative ctx.sourceFile.fileName] then
+        printfn "%s- %s" (String.replicate indent "  ") (fullName |> String.concat ".")
+      else
+        printfn "%s- %s from %A" (String.replicate indent "  ") (fullName |> String.concat ".") sources
+      let roots = ctx.checker.getRootSymbols(s)
+      try
+        let s = ctx.checker.getAliasedSymbol(s)
+        if not (ctx.checker.isUnknownSymbol s || ctx.checker.isUndefinedSymbol s) then
+          roots.Add(s)
+      with
+        _ -> ()
+      for s' in roots do
+        if getSources s' <> sources then
+          go (indent+1) s' |> ignore
+      fullName
+
+    let s = ctx.checker.getExportSymbolOfSymbol s
+    let fullName = go 1 s
     Some fullName
 
 let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.Kind> option =

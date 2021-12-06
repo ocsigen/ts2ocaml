@@ -16,7 +16,8 @@ type Kind = Ts.SyntaxKind
 type ParserContext =
   inherit IContext
   abstract checker: TypeChecker with get
-  abstract sourceFile: Ts.SourceFile with get
+  abstract currentSource: Ts.SourceFile with get
+  abstract inputs: Path.Relative list
 
 module Node =
   let location (n: Node) =
@@ -117,10 +118,10 @@ let rec extractNestedName (node: Node) =
         yield! extractNestedName child
   }
 
-let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.Kind> option =
+let getKindFromName (ctx: ParserContext) (i: Ts.Node) : Set<Syntax.Kind> option =
   match ctx.checker.getSymbolAtLocation i with
   | None ->
-    nodeWarn ctx i "failed to get the kind of an imported identifier '%s'" i.text
+    nodeWarn ctx i "failed to get the kind of an imported identifier '%s'" (i.getText())
     None
   | Some s ->
     let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
@@ -145,12 +146,82 @@ let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.K
         Some (Set.ofList kinds)
     go s
 
+let getFullNames (ctx: ParserContext) (nd: Node) =
+  let getSources (s: Ts.Symbol) =
+    s.declarations
+    |> Option.toList
+    |> List.collect (fun decs ->
+      decs |> Seq.map (fun dec -> dec.getSourceFile()) |> List.ofSeq)
+    |> List.map (fun x -> Path.relative x.fileName)
+    |> List.distinct
+
+  let getRootAndAliasedSymbols (s: Ts.Symbol) =
+    let roots = ctx.checker.getRootSymbols(s)
+    try
+      let s = ctx.checker.getAliasedSymbol(s)
+      if not (ctx.checker.isUnknownSymbol s || ctx.checker.isUndefinedSymbol s) then
+        roots.Add(s)
+    with
+      _ -> ()
+    roots.ToArray()
+
+  let normalizeQualifiedName (fileNames: string list) (s: string) =
+    s
+    |> String.split "."
+    |> List.ofArray
+    |> function
+      | x :: xs when x.StartsWith("\"") ->
+        let basenames = fileNames |> List.map JsHelper.stripExtension
+        if basenames |> List.exists (fun basename -> x.EndsWith(basename + "\"")) then xs
+        else x.Trim('"') :: xs
+      | xs -> xs
+
+  match ctx.checker.getSymbolAtLocation nd with
+  | None -> []
+  | Some s ->
+    let rec go (acc: Set<_>) (s: Ts.Symbol) =
+      let sources = getSources s
+      let fullName =
+        ctx.checker.getFullyQualifiedName s
+        |> normalizeQualifiedName sources
+      let newItems =
+        sources
+        |> List.map (fun s -> { source = s; name = fullName })
+        |> Set.ofList
+      if Set.isSubset newItems acc then acc
+      else
+        getRootAndAliasedSymbols(s)
+        |> Array.fold go (Set.union acc newItems)
+    go Set.empty s
+    |> Set.toList
+    |> List.sortBy (fun fn ->
+      if Path.relative ctx.currentSource.fileName = fn.source then 0
+      else if ctx.inputs |> List.contains fn.source then 1
+      else 2)
+
+let readIdentOrTypeVar (ctx: ParserContext) (typrms: Set<string>) (nd: Node) : Choice<IdentType, string> =
+  match extractNestedName nd |> List.ofSeq with
+  | [] -> nodeError ctx nd "cannot parse node '%s' as identifier" (nd.getText())
+  | [name] when typrms |> Set.contains name -> Choice2Of2 name
+  | name ->
+    let loc = Node.location nd
+    let fullName = getFullNames ctx nd
+    Choice1Of2 { name = name; fullName = fullName; loc = loc }
+
+let readIdent (ctx: ParserContext) (nd: Node) : IdentType =
+  match extractNestedName nd |> List.ofSeq with
+  | [] -> nodeError ctx nd "cannot parse node '%s' as identifier" (nd.getText())
+  | name ->
+    let loc = Node.location nd
+    let fullName = getFullNames ctx nd
+    { name = name; fullName = fullName; loc = loc }
+
 let sanitizeCommentText str : string list =
   str |> String.toLines |> List.ofArray
 
 let readCommentText (comment: U2<string, ResizeArray<Ts.JSDocComment>>) : string list =
   let str =
-    if JS.jsTypeof comment = "string" then
+    if JS.typeof comment = "string" then
       box comment :?> string
     else
       let texts = box comment :?> ResizeArray<Ts.JSDocText> // TODO: do not ignore links
@@ -158,7 +229,7 @@ let readCommentText (comment: U2<string, ResizeArray<Ts.JSDocComment>>) : string
   sanitizeCommentText str
 
 let readNonJSDocComments (ctx: ParserContext) (node: Node) : Comment list =
-  let fullText = ctx.sourceFile.getFullText()
+  let fullText = ctx.currentSource.getFullText()
   let ranges = ts.getLeadingCommentRanges(fullText, node.getFullStart())
   match ranges with
   | None -> []
@@ -250,12 +321,6 @@ let readLiteral (node: Node) : Literal option =
     else if parsedAsFloat then Some (LFloat floatValue)
     else None
 
-let getFullNameAtNodeLocation (ctx: ParserContext) (nd: Node) =
-    match ctx.checker.getSymbolAtLocation nd with
-    | None -> None
-    | Some smb ->
-      ctx.checker.getFullyQualifiedName smb |> Option.ofObj |> Option.map (fun s -> s |> String.split "." |> Array.toList)
-
 let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) : Type =
   match t.kind with
   // primitives
@@ -302,15 +367,12 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
       | Kind.TypeReference -> !!(t :?> Ts.TypeReferenceNode).typeName
       | Kind.ExpressionWithTypeArguments -> !!(t :?> Ts.ExpressionWithTypeArguments).expression
       | _ -> failwith "impossible"
-    match extractNestedName lhs |> List.ofSeq with
-    | [x] when typrm |> Set.contains x -> TypeVar x
-    | [] -> nodeError ctx lhs "cannot parse node '%s' as identifier" (lhs.getText())
-    | ts ->
-      let loc = Node.location lhs
-      let lt = { name = ts; fullName = None; loc = loc  }
+    match readIdentOrTypeVar ctx typrm lhs with
+    | Choice1Of2 lt ->
       match t.typeArguments with
       | None -> Ident lt
       | Some args -> App (AIdent lt, args |> Seq.map (readTypeNode typrm ctx) |> List.ofSeq, Node.location t)
+    | Choice2Of2 x -> TypeVar x
   | Kind.FunctionType ->
     let t = t :?> Ts.FunctionTypeNode
     let typrms = readTypeParameters typrm ctx t.typeParameters
@@ -386,8 +448,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
   | Kind.TypeQuery ->
     let t = t :?> Ts.TypeQueryNode
     let nameNode = box t.exprName :?> Node
-    let name = extractNestedName nameNode
-    Erased (TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }), Node.location t, t.getText())
+    Erased (TypeQuery (readIdent ctx nameNode), Node.location t, t.getText())
   // fallbacks
   | Kind.TypePredicate ->
     nodeWarn ctx t "type predicate is not supported and treated as boolean"
@@ -714,13 +775,10 @@ let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option
 
 let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx e
-  match extractNestedName e.expression |> Seq.toList with
-  | [] -> nodeWarn ctx e.expression "cannot parse node '%s' as identifier" (e.expression.getText()); None
-  | ts ->
-    let ident = { name = ts; fullName = None; loc = Node.location e.expression }
-    match e.isExportEquals with
-    | Some true -> Export { clause = CommonJsExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
-    | _ -> Export { clause = ES6DefaultExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
+  let ident = readIdent ctx e.expression
+  match e.isExportEquals with
+  | Some true -> Export { clause = CommonJsExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
+  | _ -> Export { clause = ES6DefaultExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
 
 let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : Statement list option =
   let comments = readCommentsForNamedDeclaration ctx e
@@ -738,7 +796,7 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
       let nes = bindings |> box :?> Ts.NamedExports
       nes.elements
       |> Seq.map (fun x ->
-        let ident (name: Ts.Identifier) = { name = [name.text]; fullName = None; loc = Node.location name }
+        let inline ident (name: Ts.Identifier) = readIdent ctx name
         match x.propertyName with
         | None -> {| target = ident x.name; renameAs = None |}
         | Some propertyName -> {| target = ident propertyName; renameAs = Some x.name.text  |})
@@ -753,22 +811,30 @@ let readNamespaceExportDeclaration (ctx: ParserContext) (e: Ts.NamespaceExportDe
 
 let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclaration) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx i
-  match (!!i.moduleReference : Ts.Node).kind with
+  let moduleReference = !!i.moduleReference : Ts.Node
+  match moduleReference.kind with
   | Kind.Identifier | Kind.QualifiedName ->
-    nodeWarn ctx i "importing an identifier is not supported"; None
+    let kind = getKindFromName ctx moduleReference
+    Import {
+      comments = comments;
+      loc = Node.location i;
+      isTypeOnly = i.isTypeOnly;
+      isExported = getExported i.modifiers;
+      clause = LocalImport {| name = i.name.text; kind = kind; target = readIdent ctx moduleReference |}
+      origText = i.getText()
+    } |> Some
   | Kind.ExternalModuleReference ->
     let m : Ts.ExternalModuleReference = !!i.moduleReference
     match (!!m.expression : Ts.Node).kind with
     | Kind.StringLiteral ->
       let moduleSpecifier = (!!m.expression : Ts.StringLiteral).text
-      let kind = getKindFromIdentifier ctx i.name
+      let kind = getKindFromName ctx i.name
       Import {
         comments = comments;
         loc = Node.location i;
         isTypeOnly = i.isTypeOnly;
         isExported = getExported i.modifiers;
-        moduleSpecifier = moduleSpecifier;
-        clause = NamespaceImport {| name = i.name.text; isES6Import = false; kind = kind |}
+        clause = NamespaceImport {| name = i.name.text; isES6Import = false; kind = kind; specifier = moduleSpecifier |}
         origText = i.getText()
       } |> Some
     | kind ->
@@ -785,30 +851,30 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
       let comments = readCommentsForNamedDeclaration ctx c
       let moduleSpecifier = (!!i.moduleSpecifier : Ts.StringLiteral).text
       let inline create clause =
-        Some (Import { comments = comments; loc = Node.location i; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; moduleSpecifier = moduleSpecifier; clause = clause; origText = i.getText() })
+        Some (Import { comments = comments; loc = Node.location i; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; clause = clause; origText = i.getText() })
       match c.name, c.namedBindings with
-      | None, None -> create ES6WildcardImport
+      | None, None -> create (ES6WildcardImport moduleSpecifier)
       | None, Some b when (!!b : Ts.Node).kind = Kind.NamespaceImport ->
         let n = (!!b : Ts.NamespaceImport)
-        let kind = getKindFromIdentifier ctx n.name
-        create (NamespaceImport {| name = n.name.text; kind = kind; isES6Import = true |})
+        let kind = getKindFromName ctx n.name
+        create (NamespaceImport {| name = n.name.text; kind = kind; isES6Import = true; specifier = moduleSpecifier |})
       | _, Some b when (!!b : Ts.Node).kind = Kind.NamedImports ->
         let n = (!!b : Ts.NamedImports)
-        let defaultImport = c.name |> Option.map (fun i -> {| name = i.text; kind = getKindFromIdentifier ctx i |})
+        let defaultImport = c.name |> Option.map (fun i -> {| name = i.text; kind = getKindFromName ctx i |})
         let bindings =
           n.elements
           |> Seq.toList
           |> List.map (fun e ->
-            let kind = getKindFromIdentifier ctx e.name
+            let kind = getKindFromName ctx e.name
             let name, renameAs =
               match e.propertyName with
               | Some i -> i.text, Some e.name.text
               | None -> e.name.text, None
             {| name = name; kind = kind; renameAs = renameAs |})
-        create (ES6Import {| defaultImport = defaultImport; bindings = bindings |})
+        create (ES6Import {| defaultImport = defaultImport; bindings = bindings; specifier = moduleSpecifier |})
       | Some i, None ->
-        let defaultImport = {| name = i.text; kind = getKindFromIdentifier ctx i |}
-        create (ES6Import {| defaultImport = Some defaultImport; bindings = [] |})
+        let defaultImport = {| name = i.text; kind = getKindFromName ctx i |}
+        create (ES6Import {| defaultImport = Some defaultImport; bindings = []; specifier = moduleSpecifier |})
       | _, _ ->
         nodeWarn ctx i "invalid import statement"; None
     | kind ->

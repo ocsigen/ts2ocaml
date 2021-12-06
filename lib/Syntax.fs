@@ -183,7 +183,7 @@ and TupleType = {
 
 and IdentType = {
   name: string list
-  fullName: FullName option
+  fullName: FullName list
   loc: Location
 }
 
@@ -474,7 +474,6 @@ and Import = {
   comments: Comment list
   isTypeOnly: bool
   isExported: Exported
-  moduleSpecifier: string
   clause: ImportClause
   loc: Location
   origText: string
@@ -485,12 +484,13 @@ and Import = {
   member this.Identifiers =
     match this.clause with
     | NamespaceImport i -> [{| name = i.name; kind = i.kind |}]
-    | ES6WildcardImport -> []
+    | ES6WildcardImport _ -> []
     | ES6Import i ->
       let xs = i.bindings |> List.map (fun x -> {| name = (match x.renameAs with Some name -> name | None -> x.name); kind = x.kind |})
       match i.defaultImport with
       | None -> xs
       | Some x -> x :: xs
+    | LocalImport i -> [{| name = i.name; kind = i.kind |}]
 
 and ImportClause =
   /// one of:
@@ -499,12 +499,12 @@ and ImportClause =
   ///
   /// import * as name from 'moduleSpecifier'
   /// ```
-  | NamespaceImport of {| name: string; kind: Set<Kind> option; isES6Import: bool |}
+  | NamespaceImport of {| name: string; kind: Set<Kind> option; isES6Import: bool; specifier: string |}
   /// ES6 namespace import but without a name.
   /// ```ts
   /// import * from 'moduleSpecifier'
   /// ```
-  | ES6WildcardImport
+  | ES6WildcardImport of specifier:string
   /// ```ts
   /// import defaultImport, { name1, name2 as renameAs, .. } from 'moduleSpecifier'
   /// ```
@@ -512,7 +512,12 @@ and ImportClause =
     {|
       defaultImport: {| name: string; kind: Set<Kind> option |} option
       bindings:      {| name: string; kind: Set<Kind> option; renameAs: string option |} list
+      specifier: string
     |}
+  /// ```ts
+  /// import name = identifier
+  /// ```
+  | LocalImport of {| name: string; kind: Set<Kind> option; target: IdentType |}
 
 and Reference =
   | FileReference of string
@@ -576,7 +581,7 @@ module Type =
   let rec pp = function
     | Intrinsic -> "intrinsic"
     | PolymorphicThis -> "this"
-    | Ident i -> (if Option.isNone i.fullName then "?" else "") + (i.name |> String.concat ".")
+    | Ident i -> i.name |> String.concat "."
     | TypeVar v -> "'" + v
     | Prim p -> sprintf "%A" p
     | TypeLiteral l -> Literal.toString l

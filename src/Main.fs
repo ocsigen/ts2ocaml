@@ -10,6 +10,8 @@ let options =
   jsOptions<Ts.CompilerOptions>(fun o ->
     o.target <- Some Ts.ScriptTarget.Latest
     o.noEmit <- Some true
+    o.moduleResolution <- Some Ts.ModuleResolutionKind.Node12
+    //o.traceResolution <- Some true
   )
 
 type ICompilerHost =

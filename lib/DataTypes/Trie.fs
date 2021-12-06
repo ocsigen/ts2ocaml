@@ -91,6 +91,14 @@ module Trie =
       | Some child -> { t with children = t.children |> Map.add k (setSubTrie ks subTrie child) }
       | None -> { t with children = t.children |> Map.add k (setSubTrie ks subTrie empty) }
 
+  let rec getLongestMatch (ks: 'k list) (trie: Trie<'k, 'v>) : {| value: 'v option; rest: 'k list |} =
+    match ks with
+    | [] -> {| value = trie.value; rest = [] |}
+    | k :: ks ->
+      match Map.tryFind k trie.children with
+      | Some child -> getLongestMatch ks child
+      | None -> {| value = trie.value; rest = k :: ks |}
+
   let fold (f: 'state -> 'k list -> 'v -> 'state) (s: 'state) (t: Trie<'k, 'v>) =
     let rec go ksRev state t =
       let state =

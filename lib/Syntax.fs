@@ -172,13 +172,9 @@ and ErasedType =
   | Keyof of Type
   | NewableFunction of FuncType<Type> * TypeParam list
 
-and UnionType = {
-  types: Type list
-}
+and UnionType = { types: Type list }
 
-and IntersectionType = {
-  types: Type list
-}
+and IntersectionType = { types: Type list }
 
 and TupleType = {
   types: {| value: Type; name: string option |} list
@@ -187,8 +183,13 @@ and TupleType = {
 
 and IdentType = {
   name: string list
-  fullName: string list option
+  fullName: FullName option
   loc: Location
+}
+
+and FullName = {
+  source: Path.Relative
+  name: string list
 }
 
 and FieldLike = { name:string; isOptional:bool; value:Type }

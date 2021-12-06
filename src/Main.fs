@@ -6,6 +6,12 @@ open Syntax
 
 module Node = Node.Api
 
+let options =
+  jsOptions<Ts.CompilerOptions>(fun o ->
+    o.target <- Some Ts.ScriptTarget.Latest
+    o.noEmit <- Some true
+  )
+
 type ICompilerHost =
   abstract getSourceFile: fileName: string * languageVersion: Ts.ScriptTarget * ?onError: (string -> unit) * ?shouldCreateNewSourceFile: bool -> Ts.SourceFile option
   abstract getSourceFileByPath: fileName: string * path: Ts.Path * languageVersion: Ts.ScriptTarget * ?onError: (string -> unit) * ?shouldCreateNewSourceFile: bool -> Ts.SourceFile option
@@ -19,30 +25,30 @@ type ICompilerHost =
   abstract directoryExists: directoryName: string -> bool
   abstract getDirectories: path: string -> ResizeArray<string>
 
-let options =
-  jsOptions<Ts.CompilerOptions>(fun o ->
-    o.target <- Some Ts.ScriptTarget.Latest
-    o.noEmit <- Some true
-  )
+let getCompilerHost (tsPaths: string[]) (sourceFiles: Ts.SourceFile[]) : Ts.CompilerHost =
+  if BrowserOrNode.isBrowser then
+    let host =
+      { new ICompilerHost with
+          member _.getSourceFile(fileName, _, ?__, ?___) =
+            sourceFiles |> Array.tryFind (fun sf -> sf.fileName = fileName)
+          member _.getSourceFileByPath(fileName, _, _, ?__, ?___) =
+            sourceFiles |> Array.tryFind (fun sf -> sf.fileName = fileName)
+          member _.getDefaultLibFileName(_) = "lib.d.ts"
+          member _.useCaseSensitiveFileNames() = false
+          member _.getCanonicalFileName(s) = s
+          member _.getCurrentDirectory() = ""
+          member _.getNewLine() = "\r\n"
+          member _.fileExists(fileName) = Array.contains fileName tsPaths
+          member _.readFile(fileName) = sourceFiles |> Array.tryPick (fun sf -> if sf.fileName = fileName then Some (sf.getFullText()) else None)
+          member _.directoryExists(_) = true
+          member _.getDirectories(_) = ResizeArray []
+      }
+    !!host
+  else
+    ts.createCompilerHost(options, true)
 
 let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile[]) =
-  let host =
-    { new ICompilerHost with
-        member _.getSourceFile(fileName, _, ?__, ?___) =
-          sourceFiles |> Array.tryFind (fun sf -> sf.fileName = fileName)
-        member _.getSourceFileByPath(fileName, _, _, ?__, ?___) =
-          sourceFiles |> Array.tryFind (fun sf -> sf.fileName = fileName)
-        member _.getDefaultLibFileName(_) = "lib.d.ts"
-        member _.useCaseSensitiveFileNames() = false
-        member _.getCanonicalFileName(s) = s
-        member _.getCurrentDirectory() = ""
-        member _.getNewLine() = "\r\n"
-        member _.fileExists(fileName) = Array.contains fileName tsPaths
-        member _.readFile(fileName) = sourceFiles |> Array.tryPick (fun sf -> if sf.fileName = fileName then Some (sf.getFullText()) else None)
-        member _.directoryExists(_) = true
-        member _.getDirectories(_) = ResizeArray []
-    }
-  ts.createProgram(ResizeArray tsPaths, options, !!host)
+  ts.createProgram(ResizeArray tsPaths, options, getCompilerHost tsPaths sourceFiles)
 
 /// works on NodeJS only.
 let getAllLocalReferences (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq) =
@@ -109,7 +115,7 @@ let getAllLocalReferences (opts: GlobalOptions) (sourceFiles: Ts.SourceFile seq)
   sourceFilesMap.Values |> Seq.toArray |> Array.map (fun v -> v.fileName, v) |> Array.unzip
 
 let parse (opts: GlobalOptions) (argv: string[]) : Input =
-  let program =
+  let argv, program =
     let inputs = argv |> Seq.map (fun a -> a, Node.fs.readFileSync(a, "utf-8"))
     let argv, srcs =
       inputs
@@ -120,9 +126,13 @@ let parse (opts: GlobalOptions) (argv: string[]) : Input =
         else
           Log.tracef opts "* following relative references..."
           getAllLocalReferences opts srcs
-    createProgram argv srcs
+    argv, createProgram argv srcs
 
-  let srcs = program.getSourceFiles()
+  let srcs =
+    let targets = argv |> Set.ofArray
+    program.getSourceFiles()
+    |> Seq.filter (fun sf -> targets |> Set.contains (Path.relative sf.fileName))
+
   let checker = program.getTypeChecker()
 
   let sources =

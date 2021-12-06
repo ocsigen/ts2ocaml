@@ -117,6 +117,21 @@ let rec extractNestedName (node: Node) =
         yield! extractNestedName child
   }
 
+let getFullName (ctx: ParserContext) (node: Node) =
+  match ctx.checker.getSymbolAtLocation node with
+  | None -> None
+  | Some s ->
+    let fullName =
+      ctx.checker.getFullyQualifiedName s |> String.split "." |> List.ofArray
+    let sources =
+      s.declarations
+      |> Option.toList
+      |> List.collect (fun decs ->
+        decs |> Seq.map (fun dec -> dec.getSourceFile()) |> List.ofSeq)
+      |> List.map (fun x -> x.fileName)
+    printfn "- %s from %A" (fullName |> String.concat ".") sources
+    Some fullName
+
 let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.Kind> option =
   match ctx.checker.getSymbolAtLocation i with
   | None ->
@@ -306,7 +321,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     | [] -> nodeError lhs "cannot parse node '%s' as identifier" (lhs.getText())
     | ts ->
       let loc = Node.location lhs
-      let lt = { name = ts; fullName = None; loc = loc  }
+      let lt = { name = ts; fullName = getFullName ctx lhs; loc = loc  }
       match t.typeArguments with
       | None -> Ident lt
       | Some args -> App (AIdent lt, args |> Seq.map (readTypeNode typrm ctx) |> List.ofSeq, Node.location t)
@@ -386,7 +401,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     let t = t :?> Ts.TypeQueryNode
     let nameNode = box t.exprName :?> Node
     let name = extractNestedName nameNode
-    Erased (TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }), Node.location t, t.getText())
+    Erased (TypeQuery ({ name = List.ofSeq name; fullName = getFullName ctx nameNode; loc = Node.location nameNode }), Node.location t, t.getText())
   // fallbacks
   | Kind.TypePredicate ->
     nodeWarn ctx t "type predicate is not supported and treated as boolean"
@@ -723,7 +738,7 @@ let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Stateme
   match extractNestedName e.expression |> Seq.toList with
   | [] -> nodeWarn ctx e.expression "cannot parse node '%s' as identifier" (e.expression.getText()); None
   | ts ->
-    let ident = { name = ts; fullName = None; loc = Node.location e.expression }
+    let ident = { name = ts; fullName = getFullName ctx e.expression; loc = Node.location e.expression }
     match e.isExportEquals with
     | Some true -> Export { clause = CommonJsExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
     | _ -> Export { clause = ES6DefaultExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
@@ -744,7 +759,7 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
       let nes = bindings |> box :?> Ts.NamedExports
       nes.elements
       |> Seq.map (fun x ->
-        let ident (name: Ts.Identifier) = { name = [name.text]; fullName = None; loc = Node.location name }
+        let ident (name: Ts.Identifier) = { name = [name.text]; fullName = getFullName ctx name; loc = Node.location name }
         match x.propertyName with
         | None -> {| target = ident x.name; renameAs = None |}
         | Some propertyName -> {| target = ident propertyName; renameAs = Some x.name.text  |})

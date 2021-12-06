@@ -253,7 +253,8 @@ let readLiteral (node: Node) : Literal option =
 let getFullNameAtNodeLocation (ctx: ParserContext) (nd: Node) =
     match ctx.checker.getSymbolAtLocation nd with
     | None -> None
-    | Some smb -> ctx.checker.getFullyQualifiedName smb |> Option.ofObj |> Option.map (fun s -> s |> String.split "." |> Array.toList)
+    | Some smb ->
+      ctx.checker.getFullyQualifiedName smb |> Option.ofObj |> Option.map (fun s -> s |> String.split "." |> Array.toList)
 
 let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) : Type =
   match t.kind with

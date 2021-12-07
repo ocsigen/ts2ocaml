@@ -68930,6 +68930,20 @@ module rec
       fun (x16443 : t) ->
         AbortController.t_of_js (Ojs.new_obj (t_to_js x16443) [||])
   end
+let (importScripts : string list -> unit) =
+  fun (x16444 : string list) ->
+    ignore
+      (let x16447 = Ojs.global in
+       Ojs.call (Ojs.get_prop_ascii x16447 "importScripts") "apply"
+         [|x16447;((let x16445 =
+                      Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
+                        [||] in
+                    List.iter
+                      (fun (x16446 : string) ->
+                         ignore
+                           (Ojs.call x16445 "push"
+                              [|(Ojs.string_to_js x16446)|])) x16444;
+                    x16445))|])
 let (abortController : unit -> AnonymousInterface0.t) =
   fun () ->
     AnonymousInterface0.t_of_js
@@ -69434,13 +69448,13 @@ let (onmessage :
   =
   fun () ->
     or_null_of_js
-      (fun (x16444 : Ojs.t) ->
-         fun ~this:(x16445 : DedicatedWorkerGlobalScope.t) ->
-           fun ~ev:(x16446 : MessageEvent.t_0) ->
+      (fun (x16448 : Ojs.t) ->
+         fun ~this:(x16449 : DedicatedWorkerGlobalScope.t) ->
+           fun ~ev:(x16450 : MessageEvent.t_0) ->
              any_of_js
-               (Ojs.apply x16444
-                  [|(DedicatedWorkerGlobalScope.t_to_js x16445);(MessageEvent.t_0_to_js
-                                                                   x16446)|]))
+               (Ojs.apply x16448
+                  [|(DedicatedWorkerGlobalScope.t_to_js x16449);(MessageEvent.t_0_to_js
+                                                                   x16450)|]))
       (Ojs.get_prop_ascii Ojs.global "onmessage")
 let (onmessageerror :
   unit ->
@@ -69448,47 +69462,47 @@ let (onmessageerror :
   =
   fun () ->
     or_null_of_js
-      (fun (x16447 : Ojs.t) ->
-         fun ~this:(x16448 : DedicatedWorkerGlobalScope.t) ->
-           fun ~ev:(x16449 : MessageEvent.t_0) ->
+      (fun (x16451 : Ojs.t) ->
+         fun ~this:(x16452 : DedicatedWorkerGlobalScope.t) ->
+           fun ~ev:(x16453 : MessageEvent.t_0) ->
              any_of_js
-               (Ojs.apply x16447
-                  [|(DedicatedWorkerGlobalScope.t_to_js x16448);(MessageEvent.t_0_to_js
-                                                                   x16449)|]))
+               (Ojs.apply x16451
+                  [|(DedicatedWorkerGlobalScope.t_to_js x16452);(MessageEvent.t_0_to_js
+                                                                   x16453)|]))
       (Ojs.get_prop_ascii Ojs.global "onmessageerror")
 let (close : unit -> unit) =
   fun () -> ignore (Ojs.call Ojs.global "close" [||])
 let (postMessage : message:any -> transfer:Transferable.t list -> unit) =
-  fun ~message:(x16450 : any) ->
-    fun ~transfer:(x16451 : Transferable.t list) ->
+  fun ~message:(x16454 : any) ->
+    fun ~transfer:(x16455 : Transferable.t list) ->
       ignore
         (Ojs.call Ojs.global "postMessage"
-           [|(any_to_js x16450);(Ojs.list_to_js Transferable.t_to_js x16451)|])
+           [|(any_to_js x16454);(Ojs.list_to_js Transferable.t_to_js x16455)|])
 let (postMessage' :
   message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit) =
-  fun ~message:(x16453 : any) ->
-    fun ?options:(x16454 : StructuredSerializeOptions.t option) ->
+  fun ~message:(x16457 : any) ->
+    fun ?options:(x16458 : StructuredSerializeOptions.t option) ->
       fun () ->
         ignore
-          (let x16457 = Ojs.global in
-           Ojs.call (Ojs.get_prop_ascii x16457 "postMessage") "apply"
-             [|x16457;((let x16455 =
+          (let x16461 = Ojs.global in
+           Ojs.call (Ojs.get_prop_ascii x16461 "postMessage") "apply"
+             [|x16461;((let x16459 =
                           Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                             [||] in
                         ignore
-                          (Ojs.call x16455 "push" [|(any_to_js x16453)|]);
-                        (match x16454 with
-                         | Some x16456 ->
+                          (Ojs.call x16459 "push" [|(any_to_js x16457)|]);
+                        (match x16458 with
+                         | Some x16460 ->
                              ignore
-                               (Ojs.call x16455 "push"
+                               (Ojs.call x16459 "push"
                                   [|(StructuredSerializeOptions.t_to_js
-                                       x16456)|])
+                                       x16460)|])
                          | None -> ());
-                        x16455))|])
+                        x16459))|])
 let (dispatchEvent : Event.t -> bool) =
-  fun (x16458 : Event.t) ->
+  fun (x16462 : Event.t) ->
     Ojs.bool_of_js
-      (Ojs.call Ojs.global "dispatchEvent" [|(Event.t_to_js x16458)|])
+      (Ojs.call Ojs.global "dispatchEvent" [|(Event.t_to_js x16462)|])
 let (location : unit -> WorkerLocation.t) =
   fun () -> WorkerLocation.t_of_js (Ojs.get_prop_ascii Ojs.global "location")
 let (navigator : unit -> WorkerNavigator.t) =
@@ -69500,49 +69514,49 @@ let (onerror :
   =
   fun () ->
     or_null_of_js
-      (fun (x16459 : Ojs.t) ->
-         fun ~this:(x16460 : DedicatedWorkerGlobalScope.t) ->
-           fun ~ev:(x16461 : ErrorEvent.t) ->
+      (fun (x16463 : Ojs.t) ->
+         fun ~this:(x16464 : DedicatedWorkerGlobalScope.t) ->
+           fun ~ev:(x16465 : ErrorEvent.t) ->
              any_of_js
-               (Ojs.apply x16459
-                  [|(DedicatedWorkerGlobalScope.t_to_js x16460);(ErrorEvent.t_to_js
-                                                                   x16461)|]))
+               (Ojs.apply x16463
+                  [|(DedicatedWorkerGlobalScope.t_to_js x16464);(ErrorEvent.t_to_js
+                                                                   x16465)|]))
       (Ojs.get_prop_ascii Ojs.global "onerror")
 let (onlanguagechange :
   unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Event.t -> any) or_null) =
   fun () ->
     or_null_of_js
-      (fun (x16462 : Ojs.t) ->
-         fun ~this:(x16463 : DedicatedWorkerGlobalScope.t) ->
-           fun ~ev:(x16464 : Event.t) ->
+      (fun (x16466 : Ojs.t) ->
+         fun ~this:(x16467 : DedicatedWorkerGlobalScope.t) ->
+           fun ~ev:(x16468 : Event.t) ->
              any_of_js
-               (Ojs.apply x16462
-                  [|(DedicatedWorkerGlobalScope.t_to_js x16463);(Event.t_to_js
-                                                                   x16464)|]))
+               (Ojs.apply x16466
+                  [|(DedicatedWorkerGlobalScope.t_to_js x16467);(Event.t_to_js
+                                                                   x16468)|]))
       (Ojs.get_prop_ascii Ojs.global "onlanguagechange")
 let (onoffline :
   unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Event.t -> any) or_null) =
   fun () ->
     or_null_of_js
-      (fun (x16465 : Ojs.t) ->
-         fun ~this:(x16466 : DedicatedWorkerGlobalScope.t) ->
-           fun ~ev:(x16467 : Event.t) ->
+      (fun (x16469 : Ojs.t) ->
+         fun ~this:(x16470 : DedicatedWorkerGlobalScope.t) ->
+           fun ~ev:(x16471 : Event.t) ->
              any_of_js
-               (Ojs.apply x16465
-                  [|(DedicatedWorkerGlobalScope.t_to_js x16466);(Event.t_to_js
-                                                                   x16467)|]))
+               (Ojs.apply x16469
+                  [|(DedicatedWorkerGlobalScope.t_to_js x16470);(Event.t_to_js
+                                                                   x16471)|]))
       (Ojs.get_prop_ascii Ojs.global "onoffline")
 let (ononline :
   unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Event.t -> any) or_null) =
   fun () ->
     or_null_of_js
-      (fun (x16468 : Ojs.t) ->
-         fun ~this:(x16469 : DedicatedWorkerGlobalScope.t) ->
-           fun ~ev:(x16470 : Event.t) ->
+      (fun (x16472 : Ojs.t) ->
+         fun ~this:(x16473 : DedicatedWorkerGlobalScope.t) ->
+           fun ~ev:(x16474 : Event.t) ->
              any_of_js
-               (Ojs.apply x16468
-                  [|(DedicatedWorkerGlobalScope.t_to_js x16469);(Event.t_to_js
-                                                                   x16470)|]))
+               (Ojs.apply x16472
+                  [|(DedicatedWorkerGlobalScope.t_to_js x16473);(Event.t_to_js
+                                                                   x16474)|]))
       (Ojs.get_prop_ascii Ojs.global "ononline")
 let (onrejectionhandled :
   unit ->
@@ -69551,13 +69565,13 @@ let (onrejectionhandled :
   =
   fun () ->
     or_null_of_js
-      (fun (x16471 : Ojs.t) ->
-         fun ~this:(x16472 : DedicatedWorkerGlobalScope.t) ->
-           fun ~ev:(x16473 : PromiseRejectionEvent.t) ->
+      (fun (x16475 : Ojs.t) ->
+         fun ~this:(x16476 : DedicatedWorkerGlobalScope.t) ->
+           fun ~ev:(x16477 : PromiseRejectionEvent.t) ->
              any_of_js
-               (Ojs.apply x16471
-                  [|(DedicatedWorkerGlobalScope.t_to_js x16472);(PromiseRejectionEvent.t_to_js
-                                                                   x16473)|]))
+               (Ojs.apply x16475
+                  [|(DedicatedWorkerGlobalScope.t_to_js x16476);(PromiseRejectionEvent.t_to_js
+                                                                   x16477)|]))
       (Ojs.get_prop_ascii Ojs.global "onrejectionhandled")
 let (onunhandledrejection :
   unit ->
@@ -69566,33 +69580,33 @@ let (onunhandledrejection :
   =
   fun () ->
     or_null_of_js
-      (fun (x16474 : Ojs.t) ->
-         fun ~this:(x16475 : DedicatedWorkerGlobalScope.t) ->
-           fun ~ev:(x16476 : PromiseRejectionEvent.t) ->
+      (fun (x16478 : Ojs.t) ->
+         fun ~this:(x16479 : DedicatedWorkerGlobalScope.t) ->
+           fun ~ev:(x16480 : PromiseRejectionEvent.t) ->
              any_of_js
-               (Ojs.apply x16474
-                  [|(DedicatedWorkerGlobalScope.t_to_js x16475);(PromiseRejectionEvent.t_to_js
-                                                                   x16476)|]))
+               (Ojs.apply x16478
+                  [|(DedicatedWorkerGlobalScope.t_to_js x16479);(PromiseRejectionEvent.t_to_js
+                                                                   x16480)|]))
       (Ojs.get_prop_ascii Ojs.global "onunhandledrejection")
 let (self : unit -> (WorkerGlobalScope.t, any) intersection2) =
   fun () ->
     intersection2_of_js WorkerGlobalScope.t_of_js any_of_js
       (Ojs.get_prop_ascii Ojs.global "self")
-let (importScripts : URL.t or_string list -> unit) =
-  fun (x16479 : URL.t or_string list) ->
+let (importScripts' : URL.t or_string list -> unit) =
+  fun (x16483 : URL.t or_string list) ->
     ignore
-      (let x16483 = Ojs.global in
-       Ojs.call (Ojs.get_prop_ascii x16483 "importScripts") "apply"
-         [|x16483;((let x16480 =
+      (let x16487 = Ojs.global in
+       Ojs.call (Ojs.get_prop_ascii x16487 "importScripts") "apply"
+         [|x16487;((let x16484 =
                       Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                         [||] in
                     List.iter
-                      (fun (x16481 : URL.t or_string) ->
+                      (fun (x16485 : URL.t or_string) ->
                          ignore
-                           (Ojs.call x16480 "push"
-                              [|(or_string_to_js URL.t_to_js x16481)|]))
-                      x16479;
-                    x16480))|])
+                           (Ojs.call x16484 "push"
+                              [|(or_string_to_js URL.t_to_js x16485)|]))
+                      x16483;
+                    x16484))|])
 let (fonts : unit -> FontFaceSet.t) =
   fun () -> FontFaceSet.t_of_js (Ojs.get_prop_ascii Ojs.global "fonts")
 let (caches : unit -> CacheStorage.t) =
@@ -69611,35 +69625,19 @@ let (origin : unit -> string) =
 let (performance' : unit -> Performance.t) =
   fun () -> Performance.t_of_js (Ojs.get_prop_ascii Ojs.global "performance")
 let (atob : string -> string) =
-  fun (x16484 : string) ->
+  fun (x16488 : string) ->
     Ojs.string_of_js
-      (Ojs.call Ojs.global "atob" [|(Ojs.string_to_js x16484)|])
+      (Ojs.call Ojs.global "atob" [|(Ojs.string_to_js x16488)|])
 let (btoa : string -> string) =
-  fun (x16485 : string) ->
+  fun (x16489 : string) ->
     Ojs.string_of_js
-      (Ojs.call Ojs.global "btoa" [|(Ojs.string_to_js x16485)|])
+      (Ojs.call Ojs.global "btoa" [|(Ojs.string_to_js x16489)|])
 let (clearInterval : ?handle:float -> unit -> unit) =
-  fun ?handle:(x16486 : float option) ->
-    fun () ->
-      ignore
-        (let x16489 = Ojs.global in
-         Ojs.call (Ojs.get_prop_ascii x16489 "clearInterval") "apply"
-           [|x16489;((let x16487 =
-                        Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
-                          [||] in
-                      (match x16486 with
-                       | Some x16488 ->
-                           ignore
-                             (Ojs.call x16487 "push"
-                                [|(Ojs.float_to_js x16488)|])
-                       | None -> ());
-                      x16487))|])
-let (clearTimeout : ?handle:float -> unit -> unit) =
   fun ?handle:(x16490 : float option) ->
     fun () ->
       ignore
         (let x16493 = Ojs.global in
-         Ojs.call (Ojs.get_prop_ascii x16493 "clearTimeout") "apply"
+         Ojs.call (Ojs.get_prop_ascii x16493 "clearInterval") "apply"
            [|x16493;((let x16491 =
                         Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                           [||] in
@@ -69650,29 +69648,45 @@ let (clearTimeout : ?handle:float -> unit -> unit) =
                                 [|(Ojs.float_to_js x16492)|])
                        | None -> ());
                       x16491))|])
+let (clearTimeout : ?handle:float -> unit -> unit) =
+  fun ?handle:(x16494 : float option) ->
+    fun () ->
+      ignore
+        (let x16497 = Ojs.global in
+         Ojs.call (Ojs.get_prop_ascii x16497 "clearTimeout") "apply"
+           [|x16497;((let x16495 =
+                        Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
+                          [||] in
+                      (match x16494 with
+                       | Some x16496 ->
+                           ignore
+                             (Ojs.call x16495 "push"
+                                [|(Ojs.float_to_js x16496)|])
+                       | None -> ());
+                      x16495))|])
 let (createImageBitmap :
   image:ImageBitmapSource.t ->
     ?options:ImageBitmapOptions.t -> unit -> ImageBitmap.t Promise.t_1)
   =
-  fun ~image:(x16494 : ImageBitmapSource.t) ->
-    fun ?options:(x16495 : ImageBitmapOptions.t option) ->
+  fun ~image:(x16498 : ImageBitmapSource.t) ->
+    fun ?options:(x16499 : ImageBitmapOptions.t option) ->
       fun () ->
         Promise.t_1_of_js ImageBitmap.t_of_js
-          (let x16498 = Ojs.global in
-           Ojs.call (Ojs.get_prop_ascii x16498 "createImageBitmap") "apply"
-             [|x16498;((let x16496 =
+          (let x16502 = Ojs.global in
+           Ojs.call (Ojs.get_prop_ascii x16502 "createImageBitmap") "apply"
+             [|x16502;((let x16500 =
                           Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                             [||] in
                         ignore
-                          (Ojs.call x16496 "push"
-                             [|(ImageBitmapSource.t_to_js x16494)|]);
-                        (match x16495 with
-                         | Some x16497 ->
+                          (Ojs.call x16500 "push"
+                             [|(ImageBitmapSource.t_to_js x16498)|]);
+                        (match x16499 with
+                         | Some x16501 ->
                              ignore
-                               (Ojs.call x16496 "push"
-                                  [|(ImageBitmapOptions.t_to_js x16497)|])
+                               (Ojs.call x16500 "push"
+                                  [|(ImageBitmapOptions.t_to_js x16501)|])
                          | None -> ());
-                        x16496))|])
+                        x16500))|])
 let (createImageBitmap' :
   image:ImageBitmapSource.t ->
     sx:float ->
@@ -69682,294 +69696,280 @@ let (createImageBitmap' :
             ?options:ImageBitmapOptions.t ->
               unit -> ImageBitmap.t Promise.t_1)
   =
-  fun ~image:(x16500 : ImageBitmapSource.t) ->
-    fun ~sx:(x16501 : float) ->
-      fun ~sy:(x16502 : float) ->
-        fun ~sw:(x16503 : float) ->
-          fun ~sh:(x16504 : float) ->
-            fun ?options:(x16505 : ImageBitmapOptions.t option) ->
+  fun ~image:(x16504 : ImageBitmapSource.t) ->
+    fun ~sx:(x16505 : float) ->
+      fun ~sy:(x16506 : float) ->
+        fun ~sw:(x16507 : float) ->
+          fun ~sh:(x16508 : float) ->
+            fun ?options:(x16509 : ImageBitmapOptions.t option) ->
               fun () ->
                 Promise.t_1_of_js ImageBitmap.t_of_js
-                  (let x16508 = Ojs.global in
-                   Ojs.call (Ojs.get_prop_ascii x16508 "createImageBitmap")
+                  (let x16512 = Ojs.global in
+                   Ojs.call (Ojs.get_prop_ascii x16512 "createImageBitmap")
                      "apply"
-                     [|x16508;((let x16506 =
+                     [|x16512;((let x16510 =
                                   Ojs.new_obj
                                     (Ojs.get_prop_ascii Ojs.global "Array")
                                     [||] in
                                 ignore
-                                  (Ojs.call x16506 "push"
-                                     [|(ImageBitmapSource.t_to_js x16500)|]);
+                                  (Ojs.call x16510 "push"
+                                     [|(ImageBitmapSource.t_to_js x16504)|]);
                                 ignore
-                                  (Ojs.call x16506 "push"
-                                     [|(Ojs.float_to_js x16501)|]);
+                                  (Ojs.call x16510 "push"
+                                     [|(Ojs.float_to_js x16505)|]);
                                 ignore
-                                  (Ojs.call x16506 "push"
-                                     [|(Ojs.float_to_js x16502)|]);
+                                  (Ojs.call x16510 "push"
+                                     [|(Ojs.float_to_js x16506)|]);
                                 ignore
-                                  (Ojs.call x16506 "push"
-                                     [|(Ojs.float_to_js x16503)|]);
+                                  (Ojs.call x16510 "push"
+                                     [|(Ojs.float_to_js x16507)|]);
                                 ignore
-                                  (Ojs.call x16506 "push"
-                                     [|(Ojs.float_to_js x16504)|]);
-                                (match x16505 with
-                                 | Some x16507 ->
+                                  (Ojs.call x16510 "push"
+                                     [|(Ojs.float_to_js x16508)|]);
+                                (match x16509 with
+                                 | Some x16511 ->
                                      ignore
-                                       (Ojs.call x16506 "push"
+                                       (Ojs.call x16510 "push"
                                           [|(ImageBitmapOptions.t_to_js
-                                               x16507)|])
+                                               x16511)|])
                                  | None -> ());
-                                x16506))|])
+                                x16510))|])
 let (fetch :
   input:RequestInfo.t ->
     ?init:RequestInit.t -> unit -> Response.t Promise.t_1)
   =
-  fun ~input:(x16510 : RequestInfo.t) ->
-    fun ?init:(x16511 : RequestInit.t option) ->
+  fun ~input:(x16514 : RequestInfo.t) ->
+    fun ?init:(x16515 : RequestInit.t option) ->
       fun () ->
         Promise.t_1_of_js Response.t_of_js
-          (let x16514 = Ojs.global in
-           Ojs.call (Ojs.get_prop_ascii x16514 "fetch") "apply"
-             [|x16514;((let x16512 =
+          (let x16518 = Ojs.global in
+           Ojs.call (Ojs.get_prop_ascii x16518 "fetch") "apply"
+             [|x16518;((let x16516 =
                           Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
                             [||] in
                         ignore
-                          (Ojs.call x16512 "push"
-                             [|(RequestInfo.t_to_js x16510)|]);
-                        (match x16511 with
-                         | Some x16513 ->
+                          (Ojs.call x16516 "push"
+                             [|(RequestInfo.t_to_js x16514)|]);
+                        (match x16515 with
+                         | Some x16517 ->
                              ignore
-                               (Ojs.call x16512 "push"
-                                  [|(RequestInit.t_to_js x16513)|])
+                               (Ojs.call x16516 "push"
+                                  [|(RequestInit.t_to_js x16517)|])
                          | None -> ());
-                        x16512))|])
+                        x16516))|])
 let (queueMicrotask : VoidFunction.t -> unit) =
-  fun (x16516 : VoidFunction.t) ->
+  fun (x16520 : VoidFunction.t) ->
     ignore
-      (Ojs.call Ojs.global "queueMicrotask" [|(VoidFunction.t_to_js x16516)|])
+      (Ojs.call Ojs.global "queueMicrotask" [|(VoidFunction.t_to_js x16520)|])
 let (setInterval :
   handler:TimerHandler.t ->
     ?timeout:float -> arguments:any list -> unit -> float)
   =
-  fun ~handler:(x16517 : TimerHandler.t) ->
-    fun ?timeout:(x16518 : float option) ->
-      fun ~arguments:(x16519 : any list) ->
+  fun ~handler:(x16521 : TimerHandler.t) ->
+    fun ?timeout:(x16522 : float option) ->
+      fun ~arguments:(x16523 : any list) ->
         fun () ->
           Ojs.float_of_js
-            (let x16523 = Ojs.global in
-             Ojs.call (Ojs.get_prop_ascii x16523 "setInterval") "apply"
-               [|x16523;((let x16520 =
+            (let x16527 = Ojs.global in
+             Ojs.call (Ojs.get_prop_ascii x16527 "setInterval") "apply"
+               [|x16527;((let x16524 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
                           ignore
-                            (Ojs.call x16520 "push"
-                               [|(TimerHandler.t_to_js x16517)|]);
-                          (match x16518 with
-                           | Some x16522 ->
+                            (Ojs.call x16524 "push"
+                               [|(TimerHandler.t_to_js x16521)|]);
+                          (match x16522 with
+                           | Some x16526 ->
                                ignore
-                                 (Ojs.call x16520 "push"
-                                    [|(Ojs.float_to_js x16522)|])
+                                 (Ojs.call x16524 "push"
+                                    [|(Ojs.float_to_js x16526)|])
                            | None -> ());
                           List.iter
-                            (fun (x16521 : any) ->
+                            (fun (x16525 : any) ->
                                ignore
-                                 (Ojs.call x16520 "push"
-                                    [|(any_to_js x16521)|])) x16519;
-                          x16520))|])
+                                 (Ojs.call x16524 "push"
+                                    [|(any_to_js x16525)|])) x16523;
+                          x16524))|])
 let (setTimeout :
   handler:TimerHandler.t ->
     ?timeout:float -> arguments:any list -> unit -> float)
   =
-  fun ~handler:(x16524 : TimerHandler.t) ->
-    fun ?timeout:(x16525 : float option) ->
-      fun ~arguments:(x16526 : any list) ->
+  fun ~handler:(x16528 : TimerHandler.t) ->
+    fun ?timeout:(x16529 : float option) ->
+      fun ~arguments:(x16530 : any list) ->
         fun () ->
           Ojs.float_of_js
-            (let x16530 = Ojs.global in
-             Ojs.call (Ojs.get_prop_ascii x16530 "setTimeout") "apply"
-               [|x16530;((let x16527 =
+            (let x16534 = Ojs.global in
+             Ojs.call (Ojs.get_prop_ascii x16534 "setTimeout") "apply"
+               [|x16534;((let x16531 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
                           ignore
-                            (Ojs.call x16527 "push"
-                               [|(TimerHandler.t_to_js x16524)|]);
-                          (match x16525 with
-                           | Some x16529 ->
+                            (Ojs.call x16531 "push"
+                               [|(TimerHandler.t_to_js x16528)|]);
+                          (match x16529 with
+                           | Some x16533 ->
                                ignore
-                                 (Ojs.call x16527 "push"
-                                    [|(Ojs.float_to_js x16529)|])
+                                 (Ojs.call x16531 "push"
+                                    [|(Ojs.float_to_js x16533)|])
                            | None -> ());
                           List.iter
-                            (fun (x16528 : any) ->
+                            (fun (x16532 : any) ->
                                ignore
-                                 (Ojs.call x16527 "push"
-                                    [|(any_to_js x16528)|])) x16526;
-                          x16527))|])
+                                 (Ojs.call x16531 "push"
+                                    [|(any_to_js x16532)|])) x16530;
+                          x16531))|])
 let (cancelAnimationFrame : float -> unit) =
-  fun (x16531 : float) ->
+  fun (x16535 : float) ->
     ignore
       (Ojs.call Ojs.global "cancelAnimationFrame"
-         [|(Ojs.float_to_js x16531)|])
+         [|(Ojs.float_to_js x16535)|])
 let (requestAnimationFrame : FrameRequestCallback.t -> float) =
-  fun (x16532 : FrameRequestCallback.t) ->
+  fun (x16536 : FrameRequestCallback.t) ->
     Ojs.float_of_js
       (Ojs.call Ojs.global "requestAnimationFrame"
-         [|(FrameRequestCallback.t_to_js x16532)|])
+         [|(FrameRequestCallback.t_to_js x16536)|])
 let (addEventListener :
   type_:'K ->
     listener:(this:DedicatedWorkerGlobalScope.t -> ev:any -> any) ->
       ?options:AddEventListenerOptions.t or_boolean -> unit -> unit)
   =
-  fun ~type_:(x16533 : 'K) ->
+  fun ~type_:(x16537 : 'K) ->
     fun
-      ~listener:(x16534 : this:DedicatedWorkerGlobalScope.t -> ev:any -> any)
+      ~listener:(x16538 : this:DedicatedWorkerGlobalScope.t -> ev:any -> any)
       ->
-      fun ?options:(x16535 : AddEventListenerOptions.t or_boolean option) ->
+      fun ?options:(x16539 : AddEventListenerOptions.t or_boolean option) ->
         fun () ->
           ignore
-            (let x16541 = Ojs.global in
-             Ojs.call (Ojs.get_prop_ascii x16541 "addEventListener") "apply"
-               [|x16541;((let x16536 =
+            (let x16545 = Ojs.global in
+             Ojs.call (Ojs.get_prop_ascii x16545 "addEventListener") "apply"
+               [|x16545;((let x16540 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
                           ignore
-                            (Ojs.call x16536 "push" [|(Obj.magic x16533)|]);
+                            (Ojs.call x16540 "push" [|(Obj.magic x16537)|]);
                           ignore
-                            (Ojs.call x16536 "push"
+                            (Ojs.call x16540 "push"
                                [|(Ojs.fun_to_js 2
-                                    (fun (x16539 : Ojs.t) ->
-                                       fun (x16540 : Ojs.t) ->
+                                    (fun (x16543 : Ojs.t) ->
+                                       fun (x16544 : Ojs.t) ->
                                          any_to_js
-                                           (x16534
+                                           (x16538
                                               ~this:(DedicatedWorkerGlobalScope.t_of_js
-                                                       x16539)
-                                              ~ev:(any_of_js x16540))))|]);
-                          (match x16535 with
-                           | Some x16537 ->
+                                                       x16543)
+                                              ~ev:(any_of_js x16544))))|]);
+                          (match x16539 with
+                           | Some x16541 ->
                                ignore
-                                 (Ojs.call x16536 "push"
+                                 (Ojs.call x16540 "push"
                                     [|(or_boolean_to_js
                                          AddEventListenerOptions.t_to_js
-                                         x16537)|])
+                                         x16541)|])
                            | None -> ());
-                          x16536))|])
+                          x16540))|])
 let (addEventListener' :
   type_:string ->
     listener:EventListenerOrEventListenerObject.t ->
       ?options:AddEventListenerOptions.t or_boolean -> unit -> unit)
   =
-  fun ~type_:(x16542 : string) ->
-    fun ~listener:(x16543 : EventListenerOrEventListenerObject.t) ->
-      fun ?options:(x16544 : AddEventListenerOptions.t or_boolean option) ->
+  fun ~type_:(x16546 : string) ->
+    fun ~listener:(x16547 : EventListenerOrEventListenerObject.t) ->
+      fun ?options:(x16548 : AddEventListenerOptions.t or_boolean option) ->
         fun () ->
           ignore
-            (let x16548 = Ojs.global in
-             Ojs.call (Ojs.get_prop_ascii x16548 "addEventListener") "apply"
-               [|x16548;((let x16545 =
+            (let x16552 = Ojs.global in
+             Ojs.call (Ojs.get_prop_ascii x16552 "addEventListener") "apply"
+               [|x16552;((let x16549 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
                           ignore
-                            (Ojs.call x16545 "push"
-                               [|(Ojs.string_to_js x16542)|]);
+                            (Ojs.call x16549 "push"
+                               [|(Ojs.string_to_js x16546)|]);
                           ignore
-                            (Ojs.call x16545 "push"
+                            (Ojs.call x16549 "push"
                                [|(EventListenerOrEventListenerObject.t_to_js
-                                    x16543)|]);
-                          (match x16544 with
-                           | Some x16546 ->
+                                    x16547)|]);
+                          (match x16548 with
+                           | Some x16550 ->
                                ignore
-                                 (Ojs.call x16545 "push"
+                                 (Ojs.call x16549 "push"
                                     [|(or_boolean_to_js
                                          AddEventListenerOptions.t_to_js
-                                         x16546)|])
+                                         x16550)|])
                            | None -> ());
-                          x16545))|])
+                          x16549))|])
 let (removeEventListener :
   type_:'K ->
     listener:(this:DedicatedWorkerGlobalScope.t -> ev:any -> any) ->
       ?options:EventListenerOptions.t or_boolean -> unit -> unit)
   =
-  fun ~type_:(x16549 : 'K) ->
+  fun ~type_:(x16553 : 'K) ->
     fun
-      ~listener:(x16550 : this:DedicatedWorkerGlobalScope.t -> ev:any -> any)
+      ~listener:(x16554 : this:DedicatedWorkerGlobalScope.t -> ev:any -> any)
       ->
-      fun ?options:(x16551 : EventListenerOptions.t or_boolean option) ->
+      fun ?options:(x16555 : EventListenerOptions.t or_boolean option) ->
         fun () ->
           ignore
-            (let x16557 = Ojs.global in
-             Ojs.call (Ojs.get_prop_ascii x16557 "removeEventListener")
+            (let x16561 = Ojs.global in
+             Ojs.call (Ojs.get_prop_ascii x16561 "removeEventListener")
                "apply"
-               [|x16557;((let x16552 =
+               [|x16561;((let x16556 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
                           ignore
-                            (Ojs.call x16552 "push" [|(Obj.magic x16549)|]);
+                            (Ojs.call x16556 "push" [|(Obj.magic x16553)|]);
                           ignore
-                            (Ojs.call x16552 "push"
+                            (Ojs.call x16556 "push"
                                [|(Ojs.fun_to_js 2
-                                    (fun (x16555 : Ojs.t) ->
-                                       fun (x16556 : Ojs.t) ->
+                                    (fun (x16559 : Ojs.t) ->
+                                       fun (x16560 : Ojs.t) ->
                                          any_to_js
-                                           (x16550
+                                           (x16554
                                               ~this:(DedicatedWorkerGlobalScope.t_of_js
-                                                       x16555)
-                                              ~ev:(any_of_js x16556))))|]);
-                          (match x16551 with
-                           | Some x16553 ->
+                                                       x16559)
+                                              ~ev:(any_of_js x16560))))|]);
+                          (match x16555 with
+                           | Some x16557 ->
                                ignore
-                                 (Ojs.call x16552 "push"
+                                 (Ojs.call x16556 "push"
                                     [|(or_boolean_to_js
-                                         EventListenerOptions.t_to_js x16553)|])
+                                         EventListenerOptions.t_to_js x16557)|])
                            | None -> ());
-                          x16552))|])
+                          x16556))|])
 let (removeEventListener' :
   type_:string ->
     listener:EventListenerOrEventListenerObject.t ->
       ?options:EventListenerOptions.t or_boolean -> unit -> unit)
   =
-  fun ~type_:(x16558 : string) ->
-    fun ~listener:(x16559 : EventListenerOrEventListenerObject.t) ->
-      fun ?options:(x16560 : EventListenerOptions.t or_boolean option) ->
+  fun ~type_:(x16562 : string) ->
+    fun ~listener:(x16563 : EventListenerOrEventListenerObject.t) ->
+      fun ?options:(x16564 : EventListenerOptions.t or_boolean option) ->
         fun () ->
           ignore
-            (let x16564 = Ojs.global in
-             Ojs.call (Ojs.get_prop_ascii x16564 "removeEventListener")
+            (let x16568 = Ojs.global in
+             Ojs.call (Ojs.get_prop_ascii x16568 "removeEventListener")
                "apply"
-               [|x16564;((let x16561 =
+               [|x16568;((let x16565 =
                             Ojs.new_obj
                               (Ojs.get_prop_ascii Ojs.global "Array") 
                               [||] in
                           ignore
-                            (Ojs.call x16561 "push"
-                               [|(Ojs.string_to_js x16558)|]);
+                            (Ojs.call x16565 "push"
+                               [|(Ojs.string_to_js x16562)|]);
                           ignore
-                            (Ojs.call x16561 "push"
+                            (Ojs.call x16565 "push"
                                [|(EventListenerOrEventListenerObject.t_to_js
-                                    x16559)|]);
-                          (match x16560 with
-                           | Some x16562 ->
+                                    x16563)|]);
+                          (match x16564 with
+                           | Some x16566 ->
                                ignore
-                                 (Ojs.call x16561 "push"
+                                 (Ojs.call x16565 "push"
                                     [|(or_boolean_to_js
-                                         EventListenerOptions.t_to_js x16562)|])
+                                         EventListenerOptions.t_to_js x16566)|])
                            | None -> ());
-                          x16561))|])
-let (importScripts' : string list -> unit) =
-  fun (x16565 : string list) ->
-    ignore
-      (let x16568 = Ojs.global in
-       Ojs.call (Ojs.get_prop_ascii x16568 "importScripts") "apply"
-         [|x16568;((let x16566 =
-                      Ojs.new_obj (Ojs.get_prop_ascii Ojs.global "Array")
-                        [||] in
-                    List.iter
-                      (fun (x16567 : string) ->
-                         ignore
-                           (Ojs.call x16566 "push"
-                              [|(Ojs.string_to_js x16567)|])) x16565;
-                    x16566))|])
+                          x16565))|])

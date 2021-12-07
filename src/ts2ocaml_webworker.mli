@@ -15309,6 +15309,9 @@ and AnonymousInterface0 : sig
   val create: t -> AbortController.t [@@js.apply_newable]
 end
 
+(** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
+val importScripts: (string list [@js.variadic]) -> unit [@@js.global "importScripts"]
+
 (** A controller object that allows you to abort one or more DOM requests as and when desired. *)
 val abortController: unit -> AnonymousInterface0.t [@@js.get "AbortController"]
 
@@ -15707,7 +15710,7 @@ val onunhandledrejection: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Promi
 val self: unit -> (WorkerGlobalScope.t, (* FIXME: unknown type 'typeof globalThis' *)any) intersection2 [@@js.get "self"]
 
 (** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
-val importScripts: (URL.t or_string list [@js.variadic]) -> unit [@@js.global "importScripts"]
+val importScripts': (URL.t or_string list [@js.variadic]) -> unit [@@js.global "importScripts"]
 val fonts: unit -> FontFaceSet.t [@@js.get "fonts"]
 
 (** Available only in secure contexts. *)
@@ -15734,6 +15737,3 @@ val addEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t ->
 val addEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.global "addEventListener"]
 val removeEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
 val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
-
-(** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
-val importScripts': (string list [@js.variadic]) -> unit [@@js.global "importScripts"]

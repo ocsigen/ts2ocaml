@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2021-12-07
+- Fix a bug which "relativized" the path of the specified output directory.
+- Fix a bug which prevented ts2ocaml from parsing package.json correctly.
+
 ## [1.2.0] - 2021-11-30
 - Add an option `--merge` to merge the input definition files to one binding.
   - This is a breaking change; previously `--merge` was the default behavior.

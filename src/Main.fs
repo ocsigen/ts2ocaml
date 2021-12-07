@@ -28,7 +28,7 @@ type ICompilerHost =
   abstract getDirectories: path: string -> ResizeArray<string>
 
 let getCompilerHost (tsPaths: string[]) (sourceFiles: Ts.SourceFile[]) : Ts.CompilerHost =
-  if BrowserOrNode.isBrowser then
+  if BrowserOrNode.isBrowser || true then
     let host =
       { new ICompilerHost with
           member _.getSourceFile(fileName, _, ?__, ?___) =

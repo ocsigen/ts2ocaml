@@ -117,6 +117,31 @@ let rec extractNestedName (node: Node) =
         yield! extractNestedName child
   }
 
+let getKindFromSymbol (ctx: ParserContext) (s: Ts.Symbol) =
+  let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
+  let rec go (symbol: Ts.Symbol) =
+    let flags = symbol.getFlags()
+    if flags = Ts.SymbolFlags.Alias then
+      try
+        let symbol = ctx.checker.getAliasedSymbol symbol
+        if isNullOrUndefined symbol then None
+        else
+          go symbol
+      with _ -> None
+    else if check Ts.SymbolFlags.Transient flags then None
+    else
+      let kinds = [
+        if flags |> check Ts.SymbolFlags.Type then Kind.Type
+        if flags |> check Ts.SymbolFlags.Value then Kind.Value
+        if flags |> check (Ts.SymbolFlags.Class ||| Ts.SymbolFlags.Interface) then Kind.ClassLike
+        if flags |> check Ts.SymbolFlags.ClassMember then Kind.ClassLikeMember
+        if flags |> check Ts.SymbolFlags.Enum then Kind.Enum
+        if flags |> check Ts.SymbolFlags.Module then Kind.Module
+        if flags |> check Ts.SymbolFlags.EnumMember then Kind.EnumCase
+      ]
+      Some (Set.ofList kinds)
+  go s
+
 let getFullName (ctx: ParserContext) (nd: Node) =
   match ctx.checker.getSymbolAtLocation nd with
   | None ->
@@ -145,10 +170,15 @@ let getFullName (ctx: ParserContext) (nd: Node) =
       let fullName =
         ctx.checker.getFullyQualifiedName s
         |> normalizeQualifiedName sources
+      let kinds = getKindFromSymbol ctx s
+      let kindText =
+        match kinds with
+        | None -> "unknown"
+        | Some xs -> xs |> Set.toList |> List.map Enum.pp |> String.concat ", "
       if sources = [Path.relative ctx.sourceFile.fileName] then
-        printfn "%s- %s" (String.replicate indent "  ") (fullName |> String.concat ".")
+        printfn "%s- %s (%s)" (String.replicate indent "  ") (fullName |> String.concat ".") kindText
       else
-        printfn "%s- %s from %A" (String.replicate indent "  ") (fullName |> String.concat ".") sources
+        printfn "%s- %s (%s) from %A" (String.replicate indent "  ") (fullName |> String.concat ".") kindText sources
       let roots = ctx.checker.getRootSymbols(s)
       try
         let s = ctx.checker.getAliasedSymbol(s)
@@ -170,28 +200,7 @@ let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.K
   | None ->
     nodeWarn ctx i "failed to get the kind of an imported identifier '%s'" i.text
     None
-  | Some s ->
-    let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
-    let rec go (symbol: Ts.Symbol) =
-      let flags = symbol.getFlags()
-      if flags = Ts.SymbolFlags.Alias then
-        try
-          let symbol = ctx.checker.getAliasedSymbol symbol
-          if isNullOrUndefined symbol then None
-          else
-            go symbol
-        with _ -> None
-      else if check Ts.SymbolFlags.Transient flags then None
-      else
-        let kinds = [
-          if flags |> check Ts.SymbolFlags.Type then Kind.Type
-          if flags |> check Ts.SymbolFlags.Value then Kind.Value
-          if flags |> check (Ts.SymbolFlags.Class ||| Ts.SymbolFlags.Interface) then Kind.ClassLike
-          if flags |> check Ts.SymbolFlags.Enum then Kind.Enum
-          if flags |> check Ts.SymbolFlags.Module then Kind.Module
-        ]
-        Some (Set.ofList kinds)
-    go s
+  | Some s -> getKindFromSymbol ctx s
 
 let sanitizeCommentText str : string list =
   str |> String.toLines |> List.ofArray

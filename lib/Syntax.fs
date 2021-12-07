@@ -2,6 +2,17 @@ module Ts2Ml.Syntax
 
 open TypeScript
 
+type [<RequireQualifiedAccess>] Kind =
+  | Value
+  | Type
+  | TypeAlias
+  | ClassLike
+  | Member
+  | Module
+  | Enum
+  | EnumCase
+  | Statement
+
 [<CustomEquality; CustomComparison; StructuredFormatDisplay("{AsString}")>]
 type Location =
   | LocationTs of Ts.SourceFile * Ts.LineAndCharacter
@@ -81,13 +92,6 @@ and [<CustomEquality; CustomComparison>] Comment =
 and ICommented<'a> =
   abstract getComments: unit -> Comment list
   abstract mapComments: (Comment list -> Comment list) -> 'a
-
-and [<RequireQualifiedAccess>] Kind =
-  | Value
-  | Type
-  | ClassLike
-  | Module
-  | Enum
 
 and PrimType =
   | String | Bool | Number
@@ -183,6 +187,7 @@ and TupleType = {
 
 and IdentType = {
   name: string list
+  kind: Set<Kind> option
   fullName: FullName list
   loc: Location
 }
@@ -269,8 +274,8 @@ and TypeAlias = {
 
 and Statement =
   | TypeAlias of TypeAlias
-  | ClassDef of Class
-  | EnumDef of Enum
+  | Class of Class
+  | Enum of Enum
   | Module of Module
   | Value of Value
   | Import of Import
@@ -281,23 +286,23 @@ and Statement =
   with
   member this.loc =
     match this with
-    | TypeAlias ta -> ta.loc | ClassDef c -> c.loc | EnumDef e -> e.loc
+    | TypeAlias ta -> ta.loc | Class c -> c.loc | Enum e -> e.loc
     | Module m -> m.loc | Value v -> v.loc
     | Import i -> i.loc | Export e -> e.loc
     | Pattern p -> p.loc
     | UnknownStatement u -> u.loc | FloatingComment c -> c.loc
   member this.isExported =
     match this with
-    | TypeAlias { isExported = i } | ClassDef { isExported = i }
-    | EnumDef { isExported = i } | Module { isExported = i }
+    | TypeAlias { isExported = i } | Class { isExported = i }
+    | Enum { isExported = i } | Module { isExported = i }
     | Value { isExported = i } | Import { isExported = i } -> i
     | Pattern p -> p.isExported
     | Export _ | UnknownStatement _ | FloatingComment _ -> Exported.No
   interface ICommented<Statement> with
     member this.getComments() =
       match this with
-      | TypeAlias ta -> ta.comments | ClassDef c -> c.comments
-      | EnumDef e -> e.comments | Module m -> m.comments
+      | TypeAlias ta -> ta.comments | Class c -> c.comments
+      | Enum e -> e.comments | Module m -> m.comments
       | Value v -> v.comments
       | Import i -> i.comments
       | Export e -> e.comments
@@ -308,8 +313,8 @@ and Statement =
       let inline map f (x: #ICommented<'a>) = x.mapComments f
       match this with
       | TypeAlias ta -> TypeAlias (map f ta)
-      | ClassDef c -> ClassDef (map f c)
-      | EnumDef e -> EnumDef (map f e)
+      | Class c -> Class (map f c)
+      | Enum e -> Enum (map f e)
       | Module m -> Module (map f m)
       | Value v -> Value (map f v)
       | Import i -> Import (map f i)
@@ -348,8 +353,8 @@ and Pattern =
     | ImmediateConstructor (_, _, value) -> value.isExported
   member this.underlyingStatements =
     match this with
-    | ImmediateInstance (intf, value) -> [ClassDef intf; Value value]
-    | ImmediateConstructor (bi, ci, v) -> [ClassDef bi; ClassDef ci; Value v]
+    | ImmediateInstance (intf, value) -> [Class intf; Value value]
+    | ImmediateConstructor (bi, ci, v) -> [Class bi; Class ci; Value v]
   interface ICommented<Pattern> with
     member this.getComments() =
       match this with
@@ -512,7 +517,7 @@ and ImportClause =
     {|
       defaultImport: {| name: string; kind: Set<Kind> option |} option
       bindings:      {| name: string; kind: Set<Kind> option; renameAs: string option |} list
-      specifier: string
+      specifier:     string
     |}
   /// ```ts
   /// import name = identifier

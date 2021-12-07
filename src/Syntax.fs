@@ -82,11 +82,13 @@ and ICommented<'a> =
   abstract mapComments: (Comment list -> Comment list) -> 'a
 
 and [<RequireQualifiedAccess>] Kind =
-  | Value
-  | Type
-  | ClassLike
-  | Module
-  | Enum
+  | Value = 0
+  | Type = 1
+  | ClassLike = 2
+  | ClassLikeMember = 3
+  | Module = 4
+  | Enum = 5
+  | EnumCase = 6
 
 and PrimType =
   | String | Bool | Number

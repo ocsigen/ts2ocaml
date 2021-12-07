@@ -300,6 +300,7 @@ _opam/
 # Outputs
 output
 *.fs.js*
+output*.txt
 
 # Test artifacts
 test/jsoo/src/*.mli

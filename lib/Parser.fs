@@ -120,9 +120,7 @@ let rec extractNestedName (node: Node) =
 
 let getKindFromName (ctx: ParserContext) (i: Ts.Node) : Set<Syntax.Kind> option =
   match ctx.checker.getSymbolAtLocation i with
-  | None ->
-    nodeWarn ctx i "failed to get the kind of an imported identifier '%s'" (i.getText())
-    None
+  | None -> None
   | Some s ->
     let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
     let rec go (symbol: Ts.Symbol) =
@@ -134,16 +132,18 @@ let getKindFromName (ctx: ParserContext) (i: Ts.Node) : Set<Syntax.Kind> option 
           else
             go symbol
         with _ -> None
-      else if check Ts.SymbolFlags.Transient flags then None
       else
-        let kinds = [
-          if flags |> check Ts.SymbolFlags.Type then Kind.Type
+        Set.ofList [
           if flags |> check Ts.SymbolFlags.Value then Kind.Value
+          if flags |> check Ts.SymbolFlags.Type then Kind.Type
+          if flags |> check Ts.SymbolFlags.TypeAlias then Kind.TypeAlias
           if flags |> check (Ts.SymbolFlags.Class ||| Ts.SymbolFlags.Interface) then Kind.ClassLike
-          if flags |> check Ts.SymbolFlags.Enum then Kind.Enum
+          if flags |> check Ts.SymbolFlags.ClassMember then Kind.Member
           if flags |> check Ts.SymbolFlags.Module then Kind.Module
-        ]
-        Some (Set.ofList kinds)
+          if flags |> check Ts.SymbolFlags.ModuleMember then Kind.Statement
+          if flags |> check Ts.SymbolFlags.Enum then Kind.Enum
+          if flags |> check Ts.SymbolFlags.EnumMember then Kind.EnumCase
+        ] |> Some
     go s
 
 let getFullNames (ctx: ParserContext) (nd: Node) =
@@ -186,7 +186,7 @@ let getFullNames (ctx: ParserContext) (nd: Node) =
         |> normalizeQualifiedName sources
       let newItems =
         sources
-        |> List.map (fun s -> { source = s; name = fullName })
+        |> List.map (fun source -> { source = source; name = fullName })
         |> Set.ofList
       if Set.isSubset newItems acc then acc
       else
@@ -204,17 +204,19 @@ let readIdentOrTypeVar (ctx: ParserContext) (typrms: Set<string>) (nd: Node) : C
   | [] -> nodeError ctx nd "cannot parse node '%s' as identifier" (nd.getText())
   | [name] when typrms |> Set.contains name -> Choice2Of2 name
   | name ->
+    let kind = getKindFromName ctx nd
     let loc = Node.location nd
     let fullName = getFullNames ctx nd
-    Choice1Of2 { name = name; fullName = fullName; loc = loc }
+    Choice1Of2 { name = name; kind = kind; fullName = fullName; loc = loc }
 
 let readIdent (ctx: ParserContext) (nd: Node) : IdentType =
   match extractNestedName nd |> List.ofSeq with
   | [] -> nodeError ctx nd "cannot parse node '%s' as identifier" (nd.getText())
   | name ->
+    let kind = getKindFromName ctx nd
     let loc = Node.location nd
     let fullName = getFullNames ctx nd
-    { name = name; fullName = fullName; loc = loc }
+    { name = name; kind = kind; fullName = fullName; loc = loc }
 
 let sanitizeCommentText str : string list =
   str |> String.toLines |> List.ofArray
@@ -936,9 +938,9 @@ and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
   try
     match stmt.kind with
     | Kind.TypeAliasDeclaration -> [readTypeAlias ctx (stmt :?> _) |> TypeAlias]
-    | Kind.InterfaceDeclaration -> [readInterface ctx (stmt :?> _) |> ClassDef]
-    | Kind.ClassDeclaration -> [readClass ctx (stmt :?> _) |> ClassDef]
-    | Kind.EnumDeclaration -> [readEnum ctx (stmt :?> _) |> EnumDef]
+    | Kind.InterfaceDeclaration -> [readInterface ctx (stmt :?> _) |> Class]
+    | Kind.ClassDeclaration -> [readClass ctx (stmt :?> _) |> Class]
+    | Kind.EnumDeclaration -> [readEnum ctx (stmt :?> _) |> Enum]
     | Kind.ModuleDeclaration -> [readModule ctx (stmt :?> _) |> Module]
     | Kind.VariableStatement -> readVariable ctx (stmt :?> _)
     | Kind.FunctionDeclaration -> [readFunction ctx (stmt :?> _) |> Option.map Value |> Option.defaultWith onError]

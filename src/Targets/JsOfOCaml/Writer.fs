@@ -1226,7 +1226,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       setNode {| StructuredTextNode.empty with exports = [{| e with kind = kind |}] |}
     | UnknownStatement u ->
       let cmt =
-        match u.msg with
+        match u.origText with
         | Some s -> commentStr s | None -> commentStr "unknown statement"
       setNode {| StructuredTextNode.empty with items = [ScopeIndependent cmt] |}
     | FloatingComment c ->

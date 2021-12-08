@@ -199,7 +199,7 @@ let getFullNames (ctx: ParserContext) (nd: Node) =
       else if ctx.inputs |> List.contains fn.source then 1
       else 2)
 
-let readIdentOrTypeVar (ctx: ParserContext) (typrms: Set<string>) (nd: Node) : Choice<IdentType, string> =
+let readIdentOrTypeVar (ctx: ParserContext) (typrms: Set<string>) (nd: Node) : Choice<Ident, string> =
   match extractNestedName nd |> List.ofSeq with
   | [] -> nodeError ctx nd "cannot parse node '%s' as identifier" (nd.getText())
   | [name] when typrms |> Set.contains name -> Choice2Of2 name
@@ -209,7 +209,7 @@ let readIdentOrTypeVar (ctx: ParserContext) (typrms: Set<string>) (nd: Node) : C
     let fullName = getFullNames ctx nd
     Choice1Of2 { name = name; kind = kind; fullName = fullName; loc = loc }
 
-let readIdent (ctx: ParserContext) (nd: Node) : IdentType =
+let readIdent (ctx: ParserContext) (nd: Node) : Ident =
   match extractNestedName nd |> List.ofSeq with
   | [] -> nodeError ctx nd "cannot parse node '%s' as identifier" (nd.getText())
   | name ->
@@ -378,15 +378,15 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
   | Kind.FunctionType ->
     let t = t :?> Ts.FunctionTypeNode
     let typrms = readTypeParameters typrm ctx t.typeParameters
-    let typrm = Set.union typrm (typrms |> List.map (fun x -> x.name) |> Set.ofList)
-    let retTy = readTypeNode typrm ctx t.``type``
-    Function (readParameters typrm ctx t.parameters t retTy)
+    let typrm' = Set.union typrm (typrms |> List.map (fun x -> x.name) |> Set.ofList)
+    let retTy = readTypeNode typrm' ctx t.``type``
+    Func (readParameters typrm' ctx t.parameters t retTy, typrms, Node.location t)
   | Kind.ConstructorType ->
     let t = t :?> Ts.ConstructorTypeNode
     let typrms = readTypeParameters typrm ctx t.typeParameters
     let typrm' = Set.union typrm (typrms |> List.map (fun x -> x.name) |> Set.ofList)
     let retTy = readTypeNode typrm' ctx t.``type``
-    Erased (NewableFunction (readParameters typrm' ctx t.parameters t retTy, typrms), Node.location t, t.getText())
+    NewableFunc (readParameters typrm' ctx t.parameters t retTy, typrms, Node.location t)
   | Kind.LiteralType ->
     let t = t :?> Ts.LiteralTypeNode
     if t.getText() = "null" then Prim Null // handle NullLiteral
@@ -401,7 +401,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     let t = t :?> Ts.TypeLiteralNode
     let members = t.members |> List.ofSeq |> List.map (readNamedDeclaration typrm ctx)
     let temp =
-      { name = None; isInterface = true; isExported = Exported.No
+      { name = Anonymous; isInterface = true; isExported = Exported.No
         comments = []; implements = []; typeParams = []; accessibility = Public
         members = members; loc = Node.location t }
     let freeTypeVars = Typer.Type.getFreeTypeVars (AnonymousInterface temp)
@@ -552,7 +552,7 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
         nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
       | _ -> ()
       let fl = { name = name; isOptional = false; value = ty }
-      attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), [])
+      attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
     | None ->
       match getPropertyExpression nd.name with
       | Some expr -> readSymbolIndexer expr (Choice1Of2 ty) fail
@@ -571,13 +571,13 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
         nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
       | _ -> ()
       let fl = { name = name; isOptional = false; value = ty }
-      attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable), [])
+      attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
     | None -> nodeWarn ctx nd "unsupported property name '%s' in PropertyDeclaration" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
   | Kind.CallSignature ->
     let nd = nd :?> Ts.CallSignatureDeclaration
     let localTyprm, ty = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
-    (attr, FunctionInterface (readParameters typrm ctx nd.parameters nd ty, localTyprm))
+    (attr, Callable (readParameters typrm ctx nd.parameters nd ty, localTyprm))
   | Kind.MethodSignature | Kind.MethodDeclaration ->
     let sdb = nd :?> Ts.SignatureDeclarationBase
     let fail () =
@@ -604,7 +604,7 @@ and readNamedDeclaration (typrm: Set<string>) (ctx: ParserContext) (nd: Ts.Named
     let localTyprm, retTy = extractType nd
     let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
     let ty = readParameters typrm ctx nd.parameters nd retTy
-    { attr with isStatic = false }, New (ty, localTyprm)
+    { attr with isStatic = false }, Newable (ty, localTyprm)
   | Kind.Constructor ->
     let nd = nd :?> Ts.ConstructorDeclaration
     let localTyprm, retTy = extractType nd
@@ -663,13 +663,13 @@ let readInherits (typrm: Set<string>) (ctx: ParserContext) (hcs: Ts.HeritageClau
     hcs |> Seq.collect (fun hc -> hc.types |> Seq.map (readTypeNode typrm ctx))
         |> Seq.toList
 
-let readInterface (ctx: ParserContext) (i: Ts.InterfaceDeclaration) : Class =
+let readInterface (ctx: ParserContext) (i: Ts.InterfaceDeclaration) : Class<ClassName> =
   let name = i.name.getText()
   let typrms = readTypeParameters Set.empty ctx i.typeParameters
   let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
   {
     comments = readCommentsForNamedDeclaration ctx i
-    name = Some name
+    name = Name name
     accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
     typeParams = typrms
     implements = readInherits typrmsSet ctx i.heritageClauses
@@ -679,12 +679,12 @@ let readInterface (ctx: ParserContext) (i: Ts.InterfaceDeclaration) : Class =
     loc = Node.location i
   }
 
-let readClass (ctx: ParserContext) (i: Ts.ClassDeclaration) : Class =
+let readClass (ctx: ParserContext) (i: Ts.ClassDeclaration) : Class<ClassName> =
   let typrms = readTypeParameters Set.empty ctx i.typeParameters
   let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
   {
     comments = readCommentsForNamedDeclaration ctx i
-    name = i.name |> Option.map (fun id -> id.getText())
+    name = i.name |> Option.map (fun id -> Name id.text) |> Option.defaultValue ExportDefaultClass
     accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
     typeParams = typrms
     implements = readInherits typrmsSet ctx i.heritageClauses
@@ -729,7 +729,7 @@ let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list
     match getBindingName ctx vd.name with
     | None ->
       nodeWarn ctx vd "name is not defined for variable"
-      UnknownStatement {| msg = Some (vd.getText()); loc = Node.location vd; comments = comments |}
+      UnknownStatement {| origText = Some (vd.getText()); loc = Node.location vd; comments = comments |}
     | Some name ->
       let ty =
         match vd.``type`` with
@@ -751,10 +751,10 @@ let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list
       let isConst = (int vd.flags) ||| (int Ts.NodeFlags.Const) <> 0
       let isExported = getExported vd.modifiers
       let accessibility = getAccessibility vd.modifiers
-      Value { comments = comments; loc = Node.location vd; name = name; typ = ty; typeParams = []; isConst = isConst; isExported = isExported; accessibility = accessibility }
+      Variable { comments = comments; loc = Node.location vd; name = name; typ = ty; isConst = isConst; isExported = isExported; accessibility = accessibility }
   )
 
-let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option =
+let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Function option =
   match f.name with
   | None ->
     nodeWarn ctx f "name is not defined for function"; None
@@ -772,15 +772,15 @@ let readFunction (ctx: ParserContext) (f: Ts.FunctionDeclaration) : Value option
         | None ->
           nodeWarn ctx f "return type missing for function '%s'" name
           UnknownType None
-      Function (readParameters typrm ctx f.parameters f retTy)
-    Some { comments = comments; loc = Node.location f; name = name; typ = ty; typeParams = typrm; isConst = false; isExported = isExported; accessibility = accessibility }
+      readParameters typrm ctx f.parameters f retTy
+    Some { comments = comments; loc = Node.location f; name = name; typ = ty; typeParams = typrm; isExported = isExported; accessibility = accessibility }
 
 let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx e
   let ident = readIdent ctx e.expression
   match e.isExportEquals with
-  | Some true -> Export { clause = CommonJsExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
-  | _ -> Export { clause = ES6DefaultExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
+  | Some true -> Export { clauses = [CommonJsExport ident]; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
+  | _ -> Export { clauses = [ES6DefaultExport ident]; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
 
 let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : Statement list option =
   let comments = readCommentsForNamedDeclaration ctx e
@@ -793,23 +793,23 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
     match kind with
     | Kind.NamespaceExport ->
       let ne = bindings |> box :?> Ts.NamespaceExport
-      Some [Export { clause = NamespaceExport ne.name.text; loc = Node.location ne; comments = comments; origText = e.getText() }]
+      Some [Export { clauses = [NamespaceExport ne.name.text]; loc = Node.location ne; comments = comments; origText = e.getText() }]
     | Kind.NamedExports ->
       let nes = bindings |> box :?> Ts.NamedExports
-      nes.elements
-      |> Seq.map (fun x ->
-        let inline ident (name: Ts.Identifier) = readIdent ctx name
-        match x.propertyName with
-        | None -> {| target = ident x.name; renameAs = None |}
-        | Some propertyName -> {| target = ident propertyName; renameAs = Some x.name.text  |})
-      |> Seq.toList
-      |> List.map (fun elem -> Export { clause = ES6Export elem; loc = Node.location nes; comments = comments; origText = e.getText() })
-      |> Some
+      let clauses =
+        nes.elements
+        |> Seq.map (fun x ->
+          let inline ident (name: Ts.Identifier) = readIdent ctx name
+          match x.propertyName with
+          | None -> ES6Export {| target = ident x.name; renameAs = None |}
+          | Some propertyName -> ES6Export {| target = ident propertyName; renameAs = Some x.name.text  |})
+        |> Seq.toList
+      Some [Export { clauses = clauses; loc = Node.location nes; comments = comments; origText = e.getText() }]
     | _ ->
       nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
 
 let readNamespaceExportDeclaration (ctx: ParserContext) (e: Ts.NamespaceExportDeclaration) : Statement =
-  Export { clause = NamespaceExport e.name.text; loc = Node.location e; comments = readCommentsForNamedDeclaration ctx e; origText = e.getText() }
+  Export { clauses = [NamespaceExport e.name.text]; loc = Node.location e; comments = readCommentsForNamedDeclaration ctx e; origText = e.getText() }
 
 let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclaration) : Statement option =
   let comments = readCommentsForNamedDeclaration ctx i
@@ -822,7 +822,7 @@ let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclarat
       loc = Node.location i;
       isTypeOnly = i.isTypeOnly;
       isExported = getExported i.modifiers;
-      clause = LocalImport {| name = i.name.text; kind = kind; target = readIdent ctx moduleReference |}
+      clauses = [LocalImport {| name = i.name.text; kind = kind; target = readIdent ctx moduleReference |}]
       origText = i.getText()
     } |> Some
   | Kind.ExternalModuleReference ->
@@ -836,7 +836,7 @@ let readImportEqualsDeclaration (ctx: ParserContext) (i: Ts.ImportEqualsDeclarat
         loc = Node.location i;
         isTypeOnly = i.isTypeOnly;
         isExported = getExported i.modifiers;
-        clause = NamespaceImport {| name = i.name.text; isES6Import = false; kind = kind; specifier = moduleSpecifier |}
+        clauses = [NamespaceImport {| name = i.name.text; isES6Import = false; kind = kind; specifier = moduleSpecifier |}]
         origText = i.getText()
       } |> Some
     | kind ->
@@ -852,17 +852,18 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
     | Kind.StringLiteral ->
       let comments = readCommentsForNamedDeclaration ctx c
       let moduleSpecifier = (!!i.moduleSpecifier : Ts.StringLiteral).text
-      let inline create clause =
-        Some (Import { comments = comments; loc = Node.location i; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; clause = clause; origText = i.getText() })
+      let inline create clauses =
+        Some (Import { comments = comments; loc = Node.location i; isTypeOnly = c.isTypeOnly; isExported = getExported i.modifiers; clauses = clauses; origText = i.getText() })
       match c.name, c.namedBindings with
-      | None, None -> create (ES6WildcardImport moduleSpecifier)
+      | None, None -> create [ES6WildcardImport moduleSpecifier]
       | None, Some b when (!!b : Ts.Node).kind = Kind.NamespaceImport ->
         let n = (!!b : Ts.NamespaceImport)
         let kind = getKindFromName ctx n.name
-        create (NamespaceImport {| name = n.name.text; kind = kind; isES6Import = true; specifier = moduleSpecifier |})
+        create [NamespaceImport {| name = n.name.text; kind = kind; isES6Import = true; specifier = moduleSpecifier |}]
       | _, Some b when (!!b : Ts.Node).kind = Kind.NamedImports ->
         let n = (!!b : Ts.NamedImports)
-        let defaultImport = c.name |> Option.map (fun i -> {| name = i.text; kind = getKindFromName ctx i |})
+        let spec = {| specifier = moduleSpecifier |}
+        let defaultImport = c.name |> Option.map (fun i -> ES6DefaultImport {| spec with name = i.text; kind = getKindFromName ctx i |})
         let bindings =
           n.elements
           |> Seq.toList
@@ -872,11 +873,10 @@ let readImportDeclaration (ctx: ParserContext) (i: Ts.ImportDeclaration) : State
               match e.propertyName with
               | Some i -> i.text, Some e.name.text
               | None -> e.name.text, None
-            {| name = name; kind = kind; renameAs = renameAs |})
-        create (ES6Import {| defaultImport = defaultImport; bindings = bindings; specifier = moduleSpecifier |})
+            ES6Import {| spec with name = name; kind = kind; renameAs = renameAs |})
+        create (Option.toList defaultImport @ bindings)
       | Some i, None ->
-        let defaultImport = {| name = i.text; kind = getKindFromName ctx i |}
-        create (ES6Import {| defaultImport = Some defaultImport; bindings = []; specifier = moduleSpecifier |})
+        create [ES6DefaultImport {| name = i.text; kind = getKindFromName ctx i; specifier = moduleSpecifier |}]
       | _, _ ->
         nodeWarn ctx i "invalid import statement"; None
     | kind ->
@@ -934,7 +934,7 @@ let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Module =
 and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
   let onError () =
     let comments = readCommentsForNamedDeclaration ctx (stmt :?> Ts.DeclarationStatement)
-    UnknownStatement {| msg = Some (stmt.getText()); loc = Node.location stmt; comments = comments |}
+    UnknownStatement {| origText = Some (stmt.getText()); loc = Node.location stmt; comments = comments |}
   try
     match stmt.kind with
     | Kind.TypeAliasDeclaration -> [readTypeAlias ctx (stmt :?> _) |> TypeAlias]
@@ -943,7 +943,7 @@ and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
     | Kind.EnumDeclaration -> [readEnum ctx (stmt :?> _) |> Enum]
     | Kind.ModuleDeclaration -> [readModule ctx (stmt :?> _) |> Module]
     | Kind.VariableStatement -> readVariable ctx (stmt :?> _)
-    | Kind.FunctionDeclaration -> [readFunction ctx (stmt :?> _) |> Option.map Value |> Option.defaultWith onError]
+    | Kind.FunctionDeclaration -> [readFunction ctx (stmt :?> _) |> Option.map Function |> Option.defaultWith onError]
     | Kind.ExportAssignment -> [readExportAssignment ctx (stmt :?> _) |> Option.defaultWith onError]
     | Kind.ExportDeclaration -> readExportDeclaration ctx (stmt :?> _) |> Option.defaultWith (onError >> List.singleton)
     | Kind.NamespaceExportDeclaration -> [readNamespaceExportDeclaration ctx (stmt :?> _)]

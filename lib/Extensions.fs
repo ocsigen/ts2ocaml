@@ -64,6 +64,10 @@ module List =
       ) ([], [])
     List.rev xs1, List.rev xs2
 
+module Map =
+  let addNoOverwrite k v m =
+    m |> Map.change k (function None -> Some v | Some v -> Some v)
+
 type MutableMap<'k, 'v> = Collections.Generic.Dictionary<'k, 'v>
 type MutableSet<'v> = Collections.Generic.HashSet<'v>
 

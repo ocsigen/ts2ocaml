@@ -64,6 +64,8 @@ and [<CustomEquality; CustomComparison>] Comment =
   | Deprecated of string list
   | Example of string list
   | See of name:string option * text:string list
+  /// Indicates since which ES version the API is available.
+  /// Generated from `Typer.mergeESLibDefinitions`.
   | ESVersion of Ts.ScriptTarget
   | Other of tag:string * text:string list * orig:Ts.JSDocTag
   override x.Equals(yo) =
@@ -276,7 +278,7 @@ and Statement =
   | Import of Import
   | Export of Export
   | Pattern of Pattern
-  | UnknownStatement of {| msg: string option; comments: Comment list; loc: Location |}
+  | UnknownStatement of {| origText: string option; comments: Comment list; loc: Location |}
   | FloatingComment of {| comments: Comment list; loc: Location |}
   with
   member this.loc =

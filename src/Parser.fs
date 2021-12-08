@@ -729,7 +729,7 @@ let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list
     match getBindingName vd.name with
     | None ->
       nodeWarn ctx vd "name is not defined for variable"
-      UnknownStatement {| msg = Some (vd.getText()); loc = Node.location vd; comments = comments |}
+      UnknownStatement {| origText = Some (vd.getText()); loc = Node.location vd; comments = comments |}
     | Some name ->
       let ty =
         match vd.``type`` with
@@ -929,7 +929,7 @@ let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Module =
 and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
   let onError () =
     let comments = readCommentsForNamedDeclaration ctx (stmt :?> Ts.DeclarationStatement)
-    UnknownStatement {| msg = Some (stmt.getText()); loc = Node.location stmt; comments = comments |}
+    UnknownStatement {| origText = Some (stmt.getText()); loc = Node.location stmt; comments = comments |}
   try
     match stmt.kind with
     | Kind.TypeAliasDeclaration -> [readTypeAlias ctx (stmt :?> _) |> TypeAlias]

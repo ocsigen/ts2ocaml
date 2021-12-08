@@ -82,7 +82,7 @@ let getPackageInfo (exampleFilePath: string) : Syntax.PackageInfo option =
               else
                 yield!
                   JS.Constructors.Object.entries v?types
-                  |> Array.tryPick (fun (_, v) ->
+                  |> Seq.tryPick (fun (_, v) ->
                     if JS.jsTypeof v = "string" && (!!v : string).EndsWith(".d.ts") then Some (!!v : string)
                     else None)
                   |> Option.map (fun v -> k, v)

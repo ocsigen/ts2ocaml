@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2021-12-10
+- Upgrade gen\_js\_api to 1.0.9.
+- Ts2ocaml now merges enum case names if they have the same value.
+  - This is because gen\_js\_api now profibits enum cases with duplicate values.
+  - This is a breaking change.
+
+```typescript
+enum Foo { A = 1, B = 1, C = 2 }
+```
+
+```ocaml
+module Foo: sig
+  (* before *)
+  type t = [ `A [@js 1] | `B [@js 2] | `C [@js 2] ] [@js.enum]
+
+  (* after  *)
+  type t = [ `A_B [@js 1] | `C [@js 2] ] [@js.enum]
+end
+```
+
 ## [1.2.1] - 2021-12-07
 - Fix a bug which "relativized" the path of the specified output directory.
 - Fix a bug which prevented ts2ocaml from parsing package.json correctly.

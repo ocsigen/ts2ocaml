@@ -1316,7 +1316,7 @@ type ResolvedUnion = {
   caseUndefined: bool
   typeofableTypes: Set<Typeofable>
   caseArray: Set<Type> option
-  caseEnum: Set<Choice<EnumCase, Literal>>
+  caseEnum: Set<Choice<Enum * EnumCase, Literal>>
   discriminatedUnions: Map<string, Map<Literal, Type>>
   otherTypes: Set<Type>
 }
@@ -1339,8 +1339,8 @@ module ResolvedUnion =
           ru.caseEnum
           |> Set.toSeq
           |> Seq.map (function
-            | Choice1Of2 { name = name; value = Some value } -> sprintf "%s=%s" name (Literal.toString value)
-            | Choice1Of2 { name = name; value = None } -> sprintf "%s=?" name
+            | Choice1Of2 ({ name = ty }, { name = name; value = Some value }) -> sprintf "%s.%s=%s" ty name (Literal.toString value)
+            | Choice1Of2 ({ name = ty }, { name = name; value = None }) -> sprintf "%s.%s=?" ty name
             | Choice2Of2 l -> Literal.toString l)
         yield sprintf "enum<%s>" (cases |> String.concat " | ")
       for k, m in ru.discriminatedUnions |> Map.toSeq do
@@ -1349,7 +1349,7 @@ module ResolvedUnion =
     ]
     cases |> String.concat " | "
 
-  let rec private getEnumFromUnion ctx (u: UnionType) : Set<Choice<EnumCase, Literal>> * UnionType =
+  let rec private getEnumFromUnion ctx (u: UnionType) : Set<Choice<Enum * EnumCase, Literal>> * UnionType =
     let (|Dummy|) _ = []
 
     let rec go t =
@@ -1365,9 +1365,9 @@ module ResolvedUnion =
               let bindings = Type.createBindings i.name loc a.typeParams tyargs
               yield! go (a.target |> Type.substTypeVar bindings ())
             | Definition.Enum e ->
-              for c in e.cases do yield Choice1Of2 (Choice1Of2 c)
-            | Definition.EnumCase (c, _) ->
-              yield Choice1Of2 (Choice1Of2 c)
+              for c in e.cases do yield Choice1Of2 (Choice1Of2 (e, c))
+            | Definition.EnumCase (c, e) ->
+              yield Choice1Of2 (Choice1Of2 (e, c))
             | Definition.Class _ -> yield Choice2Of2 t
             | _ -> ()
         | TypeLiteral l -> yield Choice1Of2 (Choice2Of2 l)

@@ -2657,38 +2657,38 @@ module NavigatorOnLine =
 module ConnectionType =
   struct
     type t =
-      [ `L_s46_bluetooth  | `L_s47_cellular  | `L_s68_ethernet 
-      | `L_s116_mixed  | `L_s128_none  | `L_s142_other  | `L_s196_unknown 
-      | `L_s207_wifi ]
+      [ `L_s116_mixed  | `L_s128_none  | `L_s142_other  | `L_s196_unknown 
+      | `L_s207_wifi  | `L_s46_bluetooth  | `L_s47_cellular 
+      | `L_s68_ethernet ]
     let rec t_of_js : Ojs.t -> t =
       fun (x608 : Ojs.t) ->
         let x609 = x608 in
         match Ojs.string_of_js x609 with
-        | "bluetooth" -> `L_s46_bluetooth
-        | "cellular" -> `L_s47_cellular
-        | "ethernet" -> `L_s68_ethernet
         | "mixed" -> `L_s116_mixed
         | "none" -> `L_s128_none
         | "other" -> `L_s142_other
         | "unknown" -> `L_s196_unknown
         | "wifi" -> `L_s207_wifi
+        | "bluetooth" -> `L_s46_bluetooth
+        | "cellular" -> `L_s47_cellular
+        | "ethernet" -> `L_s68_ethernet
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x607 :
-          [ `L_s46_bluetooth  | `L_s47_cellular  | `L_s68_ethernet 
-          | `L_s116_mixed  | `L_s128_none  | `L_s142_other 
-          | `L_s196_unknown  | `L_s207_wifi ])
+          [ `L_s116_mixed  | `L_s128_none  | `L_s142_other 
+          | `L_s196_unknown  | `L_s207_wifi  | `L_s46_bluetooth 
+          | `L_s47_cellular  | `L_s68_ethernet ])
         ->
         match x607 with
-        | `L_s46_bluetooth -> Ojs.string_to_js "bluetooth"
-        | `L_s47_cellular -> Ojs.string_to_js "cellular"
-        | `L_s68_ethernet -> Ojs.string_to_js "ethernet"
         | `L_s116_mixed -> Ojs.string_to_js "mixed"
         | `L_s128_none -> Ojs.string_to_js "none"
         | `L_s142_other -> Ojs.string_to_js "other"
         | `L_s196_unknown -> Ojs.string_to_js "unknown"
         | `L_s207_wifi -> Ojs.string_to_js "wifi"
+        | `L_s46_bluetooth -> Ojs.string_to_js "bluetooth"
+        | `L_s47_cellular -> Ojs.string_to_js "cellular"
+        | `L_s68_ethernet -> Ojs.string_to_js "ethernet"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x611 : Ojs.t) -> t_of_js x611
     and t_0_to_js : t_0 -> Ojs.t = fun (x610 : t) -> t_to_js x610
@@ -2925,21 +2925,21 @@ module MediaEncodingType =
   end
 module TransferFunction =
   struct
-    type t = [ `L_s86_hlg  | `L_s151_pq  | `L_s183_srgb ]
+    type t = [ `L_s151_pq  | `L_s183_srgb  | `L_s86_hlg ]
     let rec t_of_js : Ojs.t -> t =
       fun (x677 : Ojs.t) ->
         let x678 = x677 in
         match Ojs.string_of_js x678 with
-        | "hlg" -> `L_s86_hlg
         | "pq" -> `L_s151_pq
         | "srgb" -> `L_s183_srgb
+        | "hlg" -> `L_s86_hlg
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x676 : [ `L_s86_hlg  | `L_s151_pq  | `L_s183_srgb ]) ->
+      fun (x676 : [ `L_s151_pq  | `L_s183_srgb  | `L_s86_hlg ]) ->
         match x676 with
-        | `L_s86_hlg -> Ojs.string_to_js "hlg"
         | `L_s151_pq -> Ojs.string_to_js "pq"
         | `L_s183_srgb -> Ojs.string_to_js "srgb"
+        | `L_s86_hlg -> Ojs.string_to_js "hlg"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x680 : Ojs.t) -> t_of_js x680
     and t_0_to_js : t_0 -> Ojs.t = fun (x679 : t) -> t_to_js x679
@@ -3314,22 +3314,22 @@ module MediaCapabilitiesEncodingInfo =
   end
 module MediaDecodingType =
   struct
-    type t = [ `L_s73_file  | `L_s111_media_source  | `L_s206_webrtc ]
+    type t = [ `L_s111_media_source  | `L_s206_webrtc  | `L_s73_file ]
     let rec t_of_js : Ojs.t -> t =
       fun (x833 : Ojs.t) ->
         let x834 = x833 in
         match Ojs.string_of_js x834 with
-        | "file" -> `L_s73_file
         | "media-source" -> `L_s111_media_source
         | "webrtc" -> `L_s206_webrtc
+        | "file" -> `L_s73_file
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x832 : [ `L_s73_file  | `L_s111_media_source  | `L_s206_webrtc ])
+      fun (x832 : [ `L_s111_media_source  | `L_s206_webrtc  | `L_s73_file ])
         ->
         match x832 with
-        | `L_s73_file -> Ojs.string_to_js "file"
         | `L_s111_media_source -> Ojs.string_to_js "media-source"
         | `L_s206_webrtc -> Ojs.string_to_js "webrtc"
+        | `L_s73_file -> Ojs.string_to_js "file"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x836 : Ojs.t) -> t_of_js x836
     and t_0_to_js : t_0 -> Ojs.t = fun (x835 : t) -> t_to_js x835
@@ -3898,19 +3898,19 @@ module IDBTransactionMode =
   end
 module IDBRequestReadyState =
   struct
-    type t = [ `L_s63_done  | `L_s147_pending ]
+    type t = [ `L_s147_pending  | `L_s63_done ]
     let rec t_of_js : Ojs.t -> t =
       fun (x990 : Ojs.t) ->
         let x991 = x990 in
         match Ojs.string_of_js x991 with
-        | "done" -> `L_s63_done
         | "pending" -> `L_s147_pending
+        | "done" -> `L_s63_done
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x989 : [ `L_s63_done  | `L_s147_pending ]) ->
+      fun (x989 : [ `L_s147_pending  | `L_s63_done ]) ->
         match x989 with
-        | `L_s63_done -> Ojs.string_to_js "done"
         | `L_s147_pending -> Ojs.string_to_js "pending"
+        | `L_s63_done -> Ojs.string_to_js "done"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x993 : Ojs.t) -> t_of_js x993
     and t_0_to_js : t_0 -> Ojs.t = fun (x992 : t) -> t_to_js x992
@@ -11285,28 +11285,28 @@ module FontFaceSetLoadStatus =
 module FontFaceLoadStatus =
   struct
     type t =
-      [ `L_s67_error  | `L_s100_loaded  | `L_s102_loading 
-      | `L_s197_unloaded ]
+      [ `L_s100_loaded  | `L_s102_loading  | `L_s197_unloaded 
+      | `L_s67_error ]
     let rec t_of_js : Ojs.t -> t =
       fun (x1962 : Ojs.t) ->
         let x1963 = x1962 in
         match Ojs.string_of_js x1963 with
-        | "error" -> `L_s67_error
         | "loaded" -> `L_s100_loaded
         | "loading" -> `L_s102_loading
         | "unloaded" -> `L_s197_unloaded
+        | "error" -> `L_s67_error
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x1961 :
-          [ `L_s67_error  | `L_s100_loaded  | `L_s102_loading 
-          | `L_s197_unloaded ])
+          [ `L_s100_loaded  | `L_s102_loading  | `L_s197_unloaded 
+          | `L_s67_error ])
         ->
         match x1961 with
-        | `L_s67_error -> Ojs.string_to_js "error"
         | `L_s100_loaded -> Ojs.string_to_js "loaded"
         | `L_s102_loading -> Ojs.string_to_js "loading"
         | `L_s197_unloaded -> Ojs.string_to_js "unloaded"
+        | `L_s67_error -> Ojs.string_to_js "error"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x1965 : Ojs.t) -> t_of_js x1965
     and t_0_to_js : t_0 -> Ojs.t = fun (x1964 : t) -> t_to_js x1964
@@ -12682,26 +12682,26 @@ module Pbkdf2Params =
   end
 module KeyFormat =
   struct
-    type t = [ `L_s97_jwk  | `L_s150_pkcs8  | `L_s160_raw  | `L_s182_spki ]
+    type t = [ `L_s150_pkcs8  | `L_s160_raw  | `L_s182_spki  | `L_s97_jwk ]
     let rec t_of_js : Ojs.t -> t =
       fun (x2396 : Ojs.t) ->
         let x2397 = x2396 in
         match Ojs.string_of_js x2397 with
-        | "jwk" -> `L_s97_jwk
         | "pkcs8" -> `L_s150_pkcs8
         | "raw" -> `L_s160_raw
         | "spki" -> `L_s182_spki
+        | "jwk" -> `L_s97_jwk
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x2395 :
-          [ `L_s97_jwk  | `L_s150_pkcs8  | `L_s160_raw  | `L_s182_spki ])
+          [ `L_s150_pkcs8  | `L_s160_raw  | `L_s182_spki  | `L_s97_jwk ])
         ->
         match x2395 with
-        | `L_s97_jwk -> Ojs.string_to_js "jwk"
         | `L_s150_pkcs8 -> Ojs.string_to_js "pkcs8"
         | `L_s160_raw -> Ojs.string_to_js "raw"
         | `L_s182_spki -> Ojs.string_to_js "spki"
+        | `L_s97_jwk -> Ojs.string_to_js "jwk"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x2399 : Ojs.t) -> t_of_js x2399
     and t_0_to_js : t_0 -> Ojs.t = fun (x2398 : t) -> t_to_js x2398
@@ -13096,38 +13096,38 @@ module EcdsaParams =
 module KeyUsage =
   struct
     type t =
-      [ `L_s56_decrypt  | `L_s59_deriveBits  | `L_s60_deriveKey 
-      | `L_s65_encrypt  | `L_s178_sign  | `L_s199_unwrapKey 
-      | `L_s202_verify  | `L_s210_wrapKey ]
+      [ `L_s178_sign  | `L_s199_unwrapKey  | `L_s202_verify 
+      | `L_s210_wrapKey  | `L_s56_decrypt  | `L_s59_deriveBits 
+      | `L_s60_deriveKey  | `L_s65_encrypt ]
     let rec t_of_js : Ojs.t -> t =
       fun (x2586 : Ojs.t) ->
         let x2587 = x2586 in
         match Ojs.string_of_js x2587 with
-        | "decrypt" -> `L_s56_decrypt
-        | "deriveBits" -> `L_s59_deriveBits
-        | "deriveKey" -> `L_s60_deriveKey
-        | "encrypt" -> `L_s65_encrypt
         | "sign" -> `L_s178_sign
         | "unwrapKey" -> `L_s199_unwrapKey
         | "verify" -> `L_s202_verify
         | "wrapKey" -> `L_s210_wrapKey
+        | "decrypt" -> `L_s56_decrypt
+        | "deriveBits" -> `L_s59_deriveBits
+        | "deriveKey" -> `L_s60_deriveKey
+        | "encrypt" -> `L_s65_encrypt
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x2585 :
-          [ `L_s56_decrypt  | `L_s59_deriveBits  | `L_s60_deriveKey 
-          | `L_s65_encrypt  | `L_s178_sign  | `L_s199_unwrapKey 
-          | `L_s202_verify  | `L_s210_wrapKey ])
+          [ `L_s178_sign  | `L_s199_unwrapKey  | `L_s202_verify 
+          | `L_s210_wrapKey  | `L_s56_decrypt  | `L_s59_deriveBits 
+          | `L_s60_deriveKey  | `L_s65_encrypt ])
         ->
         match x2585 with
-        | `L_s56_decrypt -> Ojs.string_to_js "decrypt"
-        | `L_s59_deriveBits -> Ojs.string_to_js "deriveBits"
-        | `L_s60_deriveKey -> Ojs.string_to_js "deriveKey"
-        | `L_s65_encrypt -> Ojs.string_to_js "encrypt"
         | `L_s178_sign -> Ojs.string_to_js "sign"
         | `L_s199_unwrapKey -> Ojs.string_to_js "unwrapKey"
         | `L_s202_verify -> Ojs.string_to_js "verify"
         | `L_s210_wrapKey -> Ojs.string_to_js "wrapKey"
+        | `L_s56_decrypt -> Ojs.string_to_js "decrypt"
+        | `L_s59_deriveBits -> Ojs.string_to_js "deriveBits"
+        | `L_s60_deriveKey -> Ojs.string_to_js "deriveKey"
+        | `L_s65_encrypt -> Ojs.string_to_js "encrypt"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x2589 : Ojs.t) -> t_of_js x2589
     and t_0_to_js : t_0 -> Ojs.t = fun (x2588 : t) -> t_to_js x2588
@@ -14902,25 +14902,17 @@ module MultiCacheQueryOptions =
 module RequestDestination =
   struct
     type t =
-      [ `L_s0  | `L_s38_audio  | `L_s39_audioworklet  | `L_s62_document 
-      | `L_s64_embed  | `L_s76_font  | `L_s78_frame  | `L_s89_iframe 
-      | `L_s90_image  | `L_s109_manifest  | `L_s132_object 
-      | `L_s145_paintworklet  | `L_s169_report  | `L_s174_script 
-      | `L_s176_sharedworker  | `L_s187_style  | `L_s193_track 
-      | `L_s204_video  | `L_s209_worker  | `L_s212_xslt ]
+      [ `L_s0  | `L_s109_manifest  | `L_s132_object  | `L_s145_paintworklet 
+      | `L_s169_report  | `L_s174_script  | `L_s176_sharedworker 
+      | `L_s187_style  | `L_s193_track  | `L_s204_video  | `L_s209_worker 
+      | `L_s212_xslt  | `L_s38_audio  | `L_s39_audioworklet 
+      | `L_s62_document  | `L_s64_embed  | `L_s76_font  | `L_s78_frame 
+      | `L_s89_iframe  | `L_s90_image ]
     let rec t_of_js : Ojs.t -> t =
       fun (x3162 : Ojs.t) ->
         let x3163 = x3162 in
         match Ojs.string_of_js x3163 with
         | "" -> `L_s0
-        | "audio" -> `L_s38_audio
-        | "audioworklet" -> `L_s39_audioworklet
-        | "document" -> `L_s62_document
-        | "embed" -> `L_s64_embed
-        | "font" -> `L_s76_font
-        | "frame" -> `L_s78_frame
-        | "iframe" -> `L_s89_iframe
-        | "image" -> `L_s90_image
         | "manifest" -> `L_s109_manifest
         | "object" -> `L_s132_object
         | "paintworklet" -> `L_s145_paintworklet
@@ -14932,27 +14924,27 @@ module RequestDestination =
         | "video" -> `L_s204_video
         | "worker" -> `L_s209_worker
         | "xslt" -> `L_s212_xslt
+        | "audio" -> `L_s38_audio
+        | "audioworklet" -> `L_s39_audioworklet
+        | "document" -> `L_s62_document
+        | "embed" -> `L_s64_embed
+        | "font" -> `L_s76_font
+        | "frame" -> `L_s78_frame
+        | "iframe" -> `L_s89_iframe
+        | "image" -> `L_s90_image
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x3161 :
-          [ `L_s0  | `L_s38_audio  | `L_s39_audioworklet  | `L_s62_document 
-          | `L_s64_embed  | `L_s76_font  | `L_s78_frame  | `L_s89_iframe 
-          | `L_s90_image  | `L_s109_manifest  | `L_s132_object 
+          [ `L_s0  | `L_s109_manifest  | `L_s132_object 
           | `L_s145_paintworklet  | `L_s169_report  | `L_s174_script 
           | `L_s176_sharedworker  | `L_s187_style  | `L_s193_track 
-          | `L_s204_video  | `L_s209_worker  | `L_s212_xslt ])
+          | `L_s204_video  | `L_s209_worker  | `L_s212_xslt  | `L_s38_audio 
+          | `L_s39_audioworklet  | `L_s62_document  | `L_s64_embed 
+          | `L_s76_font  | `L_s78_frame  | `L_s89_iframe  | `L_s90_image ])
         ->
         match x3161 with
         | `L_s0 -> Ojs.string_to_js ""
-        | `L_s38_audio -> Ojs.string_to_js "audio"
-        | `L_s39_audioworklet -> Ojs.string_to_js "audioworklet"
-        | `L_s62_document -> Ojs.string_to_js "document"
-        | `L_s64_embed -> Ojs.string_to_js "embed"
-        | `L_s76_font -> Ojs.string_to_js "font"
-        | `L_s78_frame -> Ojs.string_to_js "frame"
-        | `L_s89_iframe -> Ojs.string_to_js "iframe"
-        | `L_s90_image -> Ojs.string_to_js "image"
         | `L_s109_manifest -> Ojs.string_to_js "manifest"
         | `L_s132_object -> Ojs.string_to_js "object"
         | `L_s145_paintworklet -> Ojs.string_to_js "paintworklet"
@@ -14964,27 +14956,35 @@ module RequestDestination =
         | `L_s204_video -> Ojs.string_to_js "video"
         | `L_s209_worker -> Ojs.string_to_js "worker"
         | `L_s212_xslt -> Ojs.string_to_js "xslt"
+        | `L_s38_audio -> Ojs.string_to_js "audio"
+        | `L_s39_audioworklet -> Ojs.string_to_js "audioworklet"
+        | `L_s62_document -> Ojs.string_to_js "document"
+        | `L_s64_embed -> Ojs.string_to_js "embed"
+        | `L_s76_font -> Ojs.string_to_js "font"
+        | `L_s78_frame -> Ojs.string_to_js "frame"
+        | `L_s89_iframe -> Ojs.string_to_js "iframe"
+        | `L_s90_image -> Ojs.string_to_js "image"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x3165 : Ojs.t) -> t_of_js x3165
     and t_0_to_js : t_0 -> Ojs.t = fun (x3164 : t) -> t_to_js x3164
   end
 module RequestRedirect =
   struct
-    type t = [ `L_s67_error  | `L_s75_follow  | `L_s110_manual ]
+    type t = [ `L_s110_manual  | `L_s67_error  | `L_s75_follow ]
     let rec t_of_js : Ojs.t -> t =
       fun (x3167 : Ojs.t) ->
         let x3168 = x3167 in
         match Ojs.string_of_js x3168 with
+        | "manual" -> `L_s110_manual
         | "error" -> `L_s67_error
         | "follow" -> `L_s75_follow
-        | "manual" -> `L_s110_manual
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x3166 : [ `L_s67_error  | `L_s75_follow  | `L_s110_manual ]) ->
+      fun (x3166 : [ `L_s110_manual  | `L_s67_error  | `L_s75_follow ]) ->
         match x3166 with
+        | `L_s110_manual -> Ojs.string_to_js "manual"
         | `L_s67_error -> Ojs.string_to_js "error"
         | `L_s75_follow -> Ojs.string_to_js "follow"
-        | `L_s110_manual -> Ojs.string_to_js "manual"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x3170 : Ojs.t) -> t_of_js x3170
     and t_0_to_js : t_0 -> Ojs.t = fun (x3169 : t) -> t_to_js x3169
@@ -14992,28 +14992,28 @@ module RequestRedirect =
 module RequestMode =
   struct
     type t =
-      [ `L_s55_cors  | `L_s119_navigate  | `L_s124_no_cors 
-      | `L_s172_same_origin ]
+      [ `L_s119_navigate  | `L_s124_no_cors  | `L_s172_same_origin 
+      | `L_s55_cors ]
     let rec t_of_js : Ojs.t -> t =
       fun (x3172 : Ojs.t) ->
         let x3173 = x3172 in
         match Ojs.string_of_js x3173 with
-        | "cors" -> `L_s55_cors
         | "navigate" -> `L_s119_navigate
         | "no-cors" -> `L_s124_no_cors
         | "same-origin" -> `L_s172_same_origin
+        | "cors" -> `L_s55_cors
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x3171 :
-          [ `L_s55_cors  | `L_s119_navigate  | `L_s124_no_cors 
-          | `L_s172_same_origin ])
+          [ `L_s119_navigate  | `L_s124_no_cors  | `L_s172_same_origin 
+          | `L_s55_cors ])
         ->
         match x3171 with
-        | `L_s55_cors -> Ojs.string_to_js "cors"
         | `L_s119_navigate -> Ojs.string_to_js "navigate"
         | `L_s124_no_cors -> Ojs.string_to_js "no-cors"
         | `L_s172_same_origin -> Ojs.string_to_js "same-origin"
+        | `L_s55_cors -> Ojs.string_to_js "cors"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x3175 : Ojs.t) -> t_of_js x3175
     and t_0_to_js : t_0 -> Ojs.t = fun (x3174 : t) -> t_to_js x3174
@@ -15021,32 +15021,32 @@ module RequestMode =
 module RequestCache =
   struct
     type t =
-      [ `L_s57_default  | `L_s77_force_cache  | `L_s123_no_cache 
-      | `L_s127_no_store  | `L_s136_only_if_cached  | `L_s168_reload ]
+      [ `L_s123_no_cache  | `L_s127_no_store  | `L_s136_only_if_cached 
+      | `L_s168_reload  | `L_s57_default  | `L_s77_force_cache ]
     let rec t_of_js : Ojs.t -> t =
       fun (x3177 : Ojs.t) ->
         let x3178 = x3177 in
         match Ojs.string_of_js x3178 with
-        | "default" -> `L_s57_default
-        | "force-cache" -> `L_s77_force_cache
         | "no-cache" -> `L_s123_no_cache
         | "no-store" -> `L_s127_no_store
         | "only-if-cached" -> `L_s136_only_if_cached
         | "reload" -> `L_s168_reload
+        | "default" -> `L_s57_default
+        | "force-cache" -> `L_s77_force_cache
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x3176 :
-          [ `L_s57_default  | `L_s77_force_cache  | `L_s123_no_cache 
-          | `L_s127_no_store  | `L_s136_only_if_cached  | `L_s168_reload ])
+          [ `L_s123_no_cache  | `L_s127_no_store  | `L_s136_only_if_cached 
+          | `L_s168_reload  | `L_s57_default  | `L_s77_force_cache ])
         ->
         match x3176 with
-        | `L_s57_default -> Ojs.string_to_js "default"
-        | `L_s77_force_cache -> Ojs.string_to_js "force-cache"
         | `L_s123_no_cache -> Ojs.string_to_js "no-cache"
         | `L_s127_no_store -> Ojs.string_to_js "no-store"
         | `L_s136_only_if_cached -> Ojs.string_to_js "only-if-cached"
         | `L_s168_reload -> Ojs.string_to_js "reload"
+        | `L_s57_default -> Ojs.string_to_js "default"
+        | `L_s77_force_cache -> Ojs.string_to_js "force-cache"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x3180 : Ojs.t) -> t_of_js x3180
     and t_0_to_js : t_0 -> Ojs.t = fun (x3179 : t) -> t_to_js x3179
@@ -15101,22 +15101,22 @@ module ReferrerPolicy =
   end
 module RequestCredentials =
   struct
-    type t = [ `L_s92_include  | `L_s134_omit  | `L_s172_same_origin ]
+    type t = [ `L_s134_omit  | `L_s172_same_origin  | `L_s92_include ]
     let rec t_of_js : Ojs.t -> t =
       fun (x3187 : Ojs.t) ->
         let x3188 = x3187 in
         match Ojs.string_of_js x3188 with
-        | "include" -> `L_s92_include
         | "omit" -> `L_s134_omit
         | "same-origin" -> `L_s172_same_origin
+        | "include" -> `L_s92_include
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x3186 : [ `L_s92_include  | `L_s134_omit  | `L_s172_same_origin ])
+      fun (x3186 : [ `L_s134_omit  | `L_s172_same_origin  | `L_s92_include ])
         ->
         match x3186 with
-        | `L_s92_include -> Ojs.string_to_js "include"
         | `L_s134_omit -> Ojs.string_to_js "omit"
         | `L_s172_same_origin -> Ojs.string_to_js "same-origin"
+        | `L_s92_include -> Ojs.string_to_js "include"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x3190 : Ojs.t) -> t_of_js x3190
     and t_0_to_js : t_0 -> Ojs.t = fun (x3189 : t) -> t_to_js x3189
@@ -18923,32 +18923,32 @@ module rec
 module ResponseType =
   struct
     type t =
-      [ `L_s43_basic  | `L_s55_cors  | `L_s57_default  | `L_s67_error 
-      | `L_s137_opaque  | `L_s138_opaqueredirect ]
+      [ `L_s137_opaque  | `L_s138_opaqueredirect  | `L_s43_basic 
+      | `L_s55_cors  | `L_s57_default  | `L_s67_error ]
     let rec t_of_js : Ojs.t -> t =
       fun (x4376 : Ojs.t) ->
         let x4377 = x4376 in
         match Ojs.string_of_js x4377 with
+        | "opaque" -> `L_s137_opaque
+        | "opaqueredirect" -> `L_s138_opaqueredirect
         | "basic" -> `L_s43_basic
         | "cors" -> `L_s55_cors
         | "default" -> `L_s57_default
         | "error" -> `L_s67_error
-        | "opaque" -> `L_s137_opaque
-        | "opaqueredirect" -> `L_s138_opaqueredirect
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x4375 :
-          [ `L_s43_basic  | `L_s55_cors  | `L_s57_default  | `L_s67_error 
-          | `L_s137_opaque  | `L_s138_opaqueredirect ])
+          [ `L_s137_opaque  | `L_s138_opaqueredirect  | `L_s43_basic 
+          | `L_s55_cors  | `L_s57_default  | `L_s67_error ])
         ->
         match x4375 with
+        | `L_s137_opaque -> Ojs.string_to_js "opaque"
+        | `L_s138_opaqueredirect -> Ojs.string_to_js "opaqueredirect"
         | `L_s43_basic -> Ojs.string_to_js "basic"
         | `L_s55_cors -> Ojs.string_to_js "cors"
         | `L_s57_default -> Ojs.string_to_js "default"
         | `L_s67_error -> Ojs.string_to_js "error"
-        | `L_s137_opaque -> Ojs.string_to_js "opaque"
-        | `L_s138_opaqueredirect -> Ojs.string_to_js "opaqueredirect"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x4379 : Ojs.t) -> t_of_js x4379
     and t_0_to_js : t_0 -> Ojs.t = fun (x4378 : t) -> t_to_js x4378
@@ -19779,32 +19779,32 @@ module CachesStatic =
 module XMLHttpRequestResponseType =
   struct
     type t =
-      [ `L_s0  | `L_s37_arraybuffer  | `L_s44_blob  | `L_s62_document 
-      | `L_s96_json  | `L_s190_text ]
+      [ `L_s0  | `L_s190_text  | `L_s37_arraybuffer  | `L_s44_blob 
+      | `L_s62_document  | `L_s96_json ]
     let rec t_of_js : Ojs.t -> t =
       fun (x4627 : Ojs.t) ->
         let x4628 = x4627 in
         match Ojs.string_of_js x4628 with
         | "" -> `L_s0
+        | "text" -> `L_s190_text
         | "arraybuffer" -> `L_s37_arraybuffer
         | "blob" -> `L_s44_blob
         | "document" -> `L_s62_document
         | "json" -> `L_s96_json
-        | "text" -> `L_s190_text
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x4626 :
-          [ `L_s0  | `L_s37_arraybuffer  | `L_s44_blob  | `L_s62_document 
-          | `L_s96_json  | `L_s190_text ])
+          [ `L_s0  | `L_s190_text  | `L_s37_arraybuffer  | `L_s44_blob 
+          | `L_s62_document  | `L_s96_json ])
         ->
         match x4626 with
         | `L_s0 -> Ojs.string_to_js ""
+        | `L_s190_text -> Ojs.string_to_js "text"
         | `L_s37_arraybuffer -> Ojs.string_to_js "arraybuffer"
         | `L_s44_blob -> Ojs.string_to_js "blob"
         | `L_s62_document -> Ojs.string_to_js "document"
         | `L_s96_json -> Ojs.string_to_js "json"
-        | `L_s190_text -> Ojs.string_to_js "text"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x4630 : Ojs.t) -> t_of_js x4630
     and t_0_to_js : t_0 -> Ojs.t = fun (x4629 : t) -> t_to_js x4629
@@ -21879,32 +21879,32 @@ module XMLHttpRequestEventMap =
 module ServiceWorkerState =
   struct
     type t =
-      [ `L_s33_activated  | `L_s34_activating  | `L_s94_installed 
-      | `L_s95_installing  | `L_s146_parsed  | `L_s166_redundant ]
+      [ `L_s146_parsed  | `L_s166_redundant  | `L_s33_activated 
+      | `L_s34_activating  | `L_s94_installed  | `L_s95_installing ]
     let rec t_of_js : Ojs.t -> t =
       fun (x5087 : Ojs.t) ->
         let x5088 = x5087 in
         match Ojs.string_of_js x5088 with
+        | "parsed" -> `L_s146_parsed
+        | "redundant" -> `L_s166_redundant
         | "activated" -> `L_s33_activated
         | "activating" -> `L_s34_activating
         | "installed" -> `L_s94_installed
         | "installing" -> `L_s95_installing
-        | "parsed" -> `L_s146_parsed
-        | "redundant" -> `L_s166_redundant
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x5086 :
-          [ `L_s33_activated  | `L_s34_activating  | `L_s94_installed 
-          | `L_s95_installing  | `L_s146_parsed  | `L_s166_redundant ])
+          [ `L_s146_parsed  | `L_s166_redundant  | `L_s33_activated 
+          | `L_s34_activating  | `L_s94_installed  | `L_s95_installing ])
         ->
         match x5086 with
+        | `L_s146_parsed -> Ojs.string_to_js "parsed"
+        | `L_s166_redundant -> Ojs.string_to_js "redundant"
         | `L_s33_activated -> Ojs.string_to_js "activated"
         | `L_s34_activating -> Ojs.string_to_js "activating"
         | `L_s94_installed -> Ojs.string_to_js "installed"
         | `L_s95_installing -> Ojs.string_to_js "installing"
-        | `L_s146_parsed -> Ojs.string_to_js "parsed"
-        | `L_s166_redundant -> Ojs.string_to_js "redundant"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x5090 : Ojs.t) -> t_of_js x5090
     and t_0_to_js : t_0 -> Ojs.t = fun (x5089 : t) -> t_to_js x5089
@@ -25264,21 +25264,21 @@ module DOMTimeStamp =
   end
 module NotificationDirection =
   struct
-    type t = [ `L_s41_auto  | `L_s108_ltr  | `L_s171_rtl ]
+    type t = [ `L_s108_ltr  | `L_s171_rtl  | `L_s41_auto ]
     let rec t_of_js : Ojs.t -> t =
       fun (x5894 : Ojs.t) ->
         let x5895 = x5894 in
         match Ojs.string_of_js x5895 with
-        | "auto" -> `L_s41_auto
         | "ltr" -> `L_s108_ltr
         | "rtl" -> `L_s171_rtl
+        | "auto" -> `L_s41_auto
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x5893 : [ `L_s41_auto  | `L_s108_ltr  | `L_s171_rtl ]) ->
+      fun (x5893 : [ `L_s108_ltr  | `L_s171_rtl  | `L_s41_auto ]) ->
         match x5893 with
-        | `L_s41_auto -> Ojs.string_to_js "auto"
         | `L_s108_ltr -> Ojs.string_to_js "ltr"
         | `L_s171_rtl -> Ojs.string_to_js "rtl"
+        | `L_s41_auto -> Ojs.string_to_js "auto"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x5897 : Ojs.t) -> t_of_js x5897
     and t_0_to_js : t_0 -> Ojs.t = fun (x5896 : t) -> t_to_js x5896
@@ -26233,28 +26233,28 @@ module rec
 module FrameType =
   struct
     type t =
-      [ `L_s42_auxiliary  | `L_s120_nested  | `L_s128_none 
-      | `L_s192_top_level ]
+      [ `L_s120_nested  | `L_s128_none  | `L_s192_top_level 
+      | `L_s42_auxiliary ]
     let rec t_of_js : Ojs.t -> t =
       fun (x6208 : Ojs.t) ->
         let x6209 = x6208 in
         match Ojs.string_of_js x6209 with
-        | "auxiliary" -> `L_s42_auxiliary
         | "nested" -> `L_s120_nested
         | "none" -> `L_s128_none
         | "top-level" -> `L_s192_top_level
+        | "auxiliary" -> `L_s42_auxiliary
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x6207 :
-          [ `L_s42_auxiliary  | `L_s120_nested  | `L_s128_none 
-          | `L_s192_top_level ])
+          [ `L_s120_nested  | `L_s128_none  | `L_s192_top_level 
+          | `L_s42_auxiliary ])
         ->
         match x6207 with
-        | `L_s42_auxiliary -> Ojs.string_to_js "auxiliary"
         | `L_s120_nested -> Ojs.string_to_js "nested"
         | `L_s128_none -> Ojs.string_to_js "none"
         | `L_s192_top_level -> Ojs.string_to_js "top-level"
+        | `L_s42_auxiliary -> Ojs.string_to_js "auxiliary"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x6211 : Ojs.t) -> t_of_js x6211
     and t_0_to_js : t_0 -> Ojs.t = fun (x6210 : t) -> t_to_js x6210
@@ -26262,28 +26262,28 @@ module FrameType =
 module ClientTypes =
   struct
     type t =
-      [ `L_s35_all  | `L_s176_sharedworker  | `L_s208_window 
-      | `L_s209_worker ]
+      [ `L_s176_sharedworker  | `L_s208_window  | `L_s209_worker 
+      | `L_s35_all ]
     let rec t_of_js : Ojs.t -> t =
       fun (x6213 : Ojs.t) ->
         let x6214 = x6213 in
         match Ojs.string_of_js x6214 with
-        | "all" -> `L_s35_all
         | "sharedworker" -> `L_s176_sharedworker
         | "window" -> `L_s208_window
         | "worker" -> `L_s209_worker
+        | "all" -> `L_s35_all
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x6212 :
-          [ `L_s35_all  | `L_s176_sharedworker  | `L_s208_window 
-          | `L_s209_worker ])
+          [ `L_s176_sharedworker  | `L_s208_window  | `L_s209_worker 
+          | `L_s35_all ])
         ->
         match x6212 with
-        | `L_s35_all -> Ojs.string_to_js "all"
         | `L_s176_sharedworker -> Ojs.string_to_js "sharedworker"
         | `L_s208_window -> Ojs.string_to_js "window"
         | `L_s209_worker -> Ojs.string_to_js "worker"
+        | `L_s35_all -> Ojs.string_to_js "all"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x6216 : Ojs.t) -> t_of_js x6216
     and t_0_to_js : t_0 -> Ojs.t = fun (x6215 : t) -> t_to_js x6215
@@ -29069,19 +29069,19 @@ module CanvasImageSource =
   end
 module PredefinedColorSpace =
   struct
-    type t = [ `L_s61_display_p3  | `L_s183_srgb ]
+    type t = [ `L_s183_srgb  | `L_s61_display_p3 ]
     let rec t_of_js : Ojs.t -> t =
       fun (x7132 : Ojs.t) ->
         let x7133 = x7132 in
         match Ojs.string_of_js x7133 with
-        | "display-p3" -> `L_s61_display_p3
         | "srgb" -> `L_s183_srgb
+        | "display-p3" -> `L_s61_display_p3
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x7131 : [ `L_s61_display_p3  | `L_s183_srgb ]) ->
+      fun (x7131 : [ `L_s183_srgb  | `L_s61_display_p3 ]) ->
         match x7131 with
-        | `L_s61_display_p3 -> Ojs.string_to_js "display-p3"
         | `L_s183_srgb -> Ojs.string_to_js "srgb"
+        | `L_s61_display_p3 -> Ojs.string_to_js "display-p3"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x7135 : Ojs.t) -> t_of_js x7135
     and t_0_to_js : t_0 -> Ojs.t = fun (x7134 : t) -> t_to_js x7134
@@ -29349,87 +29349,87 @@ module ImageBitmapSource =
 module ResizeQuality =
   struct
     type t =
-      [ `L_s84_high  | `L_s106_low  | `L_s112_medium  | `L_s149_pixelated ]
+      [ `L_s106_low  | `L_s112_medium  | `L_s149_pixelated  | `L_s84_high ]
     let rec t_of_js : Ojs.t -> t =
       fun (x7201 : Ojs.t) ->
         let x7202 = x7201 in
         match Ojs.string_of_js x7202 with
-        | "high" -> `L_s84_high
         | "low" -> `L_s106_low
         | "medium" -> `L_s112_medium
         | "pixelated" -> `L_s149_pixelated
+        | "high" -> `L_s84_high
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x7200 :
-          [ `L_s84_high  | `L_s106_low  | `L_s112_medium 
-          | `L_s149_pixelated ])
+          [ `L_s106_low  | `L_s112_medium  | `L_s149_pixelated 
+          | `L_s84_high ])
         ->
         match x7200 with
-        | `L_s84_high -> Ojs.string_to_js "high"
         | `L_s106_low -> Ojs.string_to_js "low"
         | `L_s112_medium -> Ojs.string_to_js "medium"
         | `L_s149_pixelated -> Ojs.string_to_js "pixelated"
+        | `L_s84_high -> Ojs.string_to_js "high"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x7204 : Ojs.t) -> t_of_js x7204
     and t_0_to_js : t_0 -> Ojs.t = fun (x7203 : t) -> t_to_js x7203
   end
 module PremultiplyAlpha =
   struct
-    type t = [ `L_s57_default  | `L_s128_none  | `L_s152_premultiply ]
+    type t = [ `L_s128_none  | `L_s152_premultiply  | `L_s57_default ]
     let rec t_of_js : Ojs.t -> t =
       fun (x7206 : Ojs.t) ->
         let x7207 = x7206 in
         match Ojs.string_of_js x7207 with
-        | "default" -> `L_s57_default
         | "none" -> `L_s128_none
         | "premultiply" -> `L_s152_premultiply
+        | "default" -> `L_s57_default
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x7205 : [ `L_s57_default  | `L_s128_none  | `L_s152_premultiply ])
+      fun (x7205 : [ `L_s128_none  | `L_s152_premultiply  | `L_s57_default ])
         ->
         match x7205 with
-        | `L_s57_default -> Ojs.string_to_js "default"
         | `L_s128_none -> Ojs.string_to_js "none"
         | `L_s152_premultiply -> Ojs.string_to_js "premultiply"
+        | `L_s57_default -> Ojs.string_to_js "default"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x7209 : Ojs.t) -> t_of_js x7209
     and t_0_to_js : t_0 -> Ojs.t = fun (x7208 : t) -> t_to_js x7208
   end
 module ImageOrientation =
   struct
-    type t = [ `L_s74_flipY  | `L_s128_none ]
+    type t = [ `L_s128_none  | `L_s74_flipY ]
     let rec t_of_js : Ojs.t -> t =
       fun (x7211 : Ojs.t) ->
         let x7212 = x7211 in
         match Ojs.string_of_js x7212 with
-        | "flipY" -> `L_s74_flipY
         | "none" -> `L_s128_none
+        | "flipY" -> `L_s74_flipY
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x7210 : [ `L_s74_flipY  | `L_s128_none ]) ->
+      fun (x7210 : [ `L_s128_none  | `L_s74_flipY ]) ->
         match x7210 with
-        | `L_s74_flipY -> Ojs.string_to_js "flipY"
         | `L_s128_none -> Ojs.string_to_js "none"
+        | `L_s74_flipY -> Ojs.string_to_js "flipY"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x7214 : Ojs.t) -> t_of_js x7214
     and t_0_to_js : t_0 -> Ojs.t = fun (x7213 : t) -> t_to_js x7213
   end
 module ColorSpaceConversion =
   struct
-    type t = [ `L_s57_default  | `L_s128_none ]
+    type t = [ `L_s128_none  | `L_s57_default ]
     let rec t_of_js : Ojs.t -> t =
       fun (x7216 : Ojs.t) ->
         let x7217 = x7216 in
         match Ojs.string_of_js x7217 with
-        | "default" -> `L_s57_default
         | "none" -> `L_s128_none
+        | "default" -> `L_s57_default
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x7215 : [ `L_s57_default  | `L_s128_none ]) ->
+      fun (x7215 : [ `L_s128_none  | `L_s57_default ]) ->
         match x7215 with
-        | `L_s57_default -> Ojs.string_to_js "default"
         | `L_s128_none -> Ojs.string_to_js "none"
+        | `L_s57_default -> Ojs.string_to_js "default"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x7219 : Ojs.t) -> t_of_js x7219
     and t_0_to_js : t_0 -> Ojs.t = fun (x7218 : t) -> t_to_js x7218
@@ -30997,21 +30997,21 @@ module GetNotificationOptions =
   end
 module ServiceWorkerUpdateViaCache =
   struct
-    type t = [ `L_s35_all  | `L_s91_imports  | `L_s128_none ]
+    type t = [ `L_s128_none  | `L_s35_all  | `L_s91_imports ]
     let rec t_of_js : Ojs.t -> t =
       fun (x7647 : Ojs.t) ->
         let x7648 = x7647 in
         match Ojs.string_of_js x7648 with
+        | "none" -> `L_s128_none
         | "all" -> `L_s35_all
         | "imports" -> `L_s91_imports
-        | "none" -> `L_s128_none
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x7646 : [ `L_s35_all  | `L_s91_imports  | `L_s128_none ]) ->
+      fun (x7646 : [ `L_s128_none  | `L_s35_all  | `L_s91_imports ]) ->
         match x7646 with
+        | `L_s128_none -> Ojs.string_to_js "none"
         | `L_s35_all -> Ojs.string_to_js "all"
         | `L_s91_imports -> Ojs.string_to_js "imports"
-        | `L_s128_none -> Ojs.string_to_js "none"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x7650 : Ojs.t) -> t_of_js x7650
     and t_0_to_js : t_0 -> Ojs.t = fun (x7649 : t) -> t_to_js x7649
@@ -31203,19 +31203,19 @@ module PushSubscriptionJSON =
   end
 module PushEncryptionKeyName =
   struct
-    type t = [ `L_s40_auth  | `L_s143_p256dh ]
+    type t = [ `L_s143_p256dh  | `L_s40_auth ]
     let rec t_of_js : Ojs.t -> t =
       fun (x7714 : Ojs.t) ->
         let x7715 = x7714 in
         match Ojs.string_of_js x7715 with
-        | "auth" -> `L_s40_auth
         | "p256dh" -> `L_s143_p256dh
+        | "auth" -> `L_s40_auth
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x7713 : [ `L_s40_auth  | `L_s143_p256dh ]) ->
+      fun (x7713 : [ `L_s143_p256dh  | `L_s40_auth ]) ->
         match x7713 with
-        | `L_s40_auth -> Ojs.string_to_js "auth"
         | `L_s143_p256dh -> Ojs.string_to_js "p256dh"
+        | `L_s40_auth -> Ojs.string_to_js "auth"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x7717 : Ojs.t) -> t_of_js x7717
     and t_0_to_js : t_0 -> Ojs.t = fun (x7716 : t) -> t_to_js x7716
@@ -31332,21 +31332,21 @@ module rec
   end
 module PushPermissionState =
   struct
-    type t = [ `L_s58_denied  | `L_s82_granted  | `L_s157_prompt ]
+    type t = [ `L_s157_prompt  | `L_s58_denied  | `L_s82_granted ]
     let rec t_of_js : Ojs.t -> t =
       fun (x7744 : Ojs.t) ->
         let x7745 = x7744 in
         match Ojs.string_of_js x7745 with
+        | "prompt" -> `L_s157_prompt
         | "denied" -> `L_s58_denied
         | "granted" -> `L_s82_granted
-        | "prompt" -> `L_s157_prompt
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x7743 : [ `L_s58_denied  | `L_s82_granted  | `L_s157_prompt ]) ->
+      fun (x7743 : [ `L_s157_prompt  | `L_s58_denied  | `L_s82_granted ]) ->
         match x7743 with
+        | `L_s157_prompt -> Ojs.string_to_js "prompt"
         | `L_s58_denied -> Ojs.string_to_js "denied"
         | `L_s82_granted -> Ojs.string_to_js "granted"
-        | `L_s157_prompt -> Ojs.string_to_js "prompt"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x7747 : Ojs.t) -> t_of_js x7747
     and t_0_to_js : t_0 -> Ojs.t = fun (x7746 : t) -> t_to_js x7746
@@ -31902,19 +31902,19 @@ module rec
   end
 module VisibilityState =
   struct
-    type t = [ `L_s83_hidden  | `L_s205_visible ]
+    type t = [ `L_s205_visible  | `L_s83_hidden ]
     let rec t_of_js : Ojs.t -> t =
       fun (x7882 : Ojs.t) ->
         let x7883 = x7882 in
         match Ojs.string_of_js x7883 with
-        | "hidden" -> `L_s83_hidden
         | "visible" -> `L_s205_visible
+        | "hidden" -> `L_s83_hidden
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x7881 : [ `L_s83_hidden  | `L_s205_visible ]) ->
+      fun (x7881 : [ `L_s205_visible  | `L_s83_hidden ]) ->
         match x7881 with
-        | `L_s83_hidden -> Ojs.string_to_js "hidden"
         | `L_s205_visible -> Ojs.string_to_js "visible"
+        | `L_s83_hidden -> Ojs.string_to_js "hidden"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x7885 : Ojs.t) -> t_of_js x7885
     and t_0_to_js : t_0 -> Ojs.t = fun (x7884 : t) -> t_to_js x7884
@@ -32741,19 +32741,19 @@ module rec
   end
 module WorkerType =
   struct
-    type t = [ `L_s49_classic  | `L_s117_module ]
+    type t = [ `L_s117_module  | `L_s49_classic ]
     let rec t_of_js : Ojs.t -> t =
       fun (x8109 : Ojs.t) ->
         let x8110 = x8109 in
         match Ojs.string_of_js x8110 with
-        | "classic" -> `L_s49_classic
         | "module" -> `L_s117_module
+        | "classic" -> `L_s49_classic
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x8108 : [ `L_s49_classic  | `L_s117_module ]) ->
+      fun (x8108 : [ `L_s117_module  | `L_s49_classic ]) ->
         match x8108 with
-        | `L_s49_classic -> Ojs.string_to_js "classic"
         | `L_s117_module -> Ojs.string_to_js "module"
+        | `L_s49_classic -> Ojs.string_to_js "classic"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x8112 : Ojs.t) -> t_of_js x8112
     and t_0_to_js : t_0 -> Ojs.t = fun (x8111 : t) -> t_to_js x8111
@@ -33255,19 +33255,19 @@ module rec
   end
 module SecurityPolicyViolationEventDisposition =
   struct
-    type t = [ `L_s66_enforce  | `L_s169_report ]
+    type t = [ `L_s169_report  | `L_s66_enforce ]
     let rec t_of_js : Ojs.t -> t =
       fun (x8250 : Ojs.t) ->
         let x8251 = x8250 in
         match Ojs.string_of_js x8251 with
-        | "enforce" -> `L_s66_enforce
         | "report" -> `L_s169_report
+        | "enforce" -> `L_s66_enforce
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x8249 : [ `L_s66_enforce  | `L_s169_report ]) ->
+      fun (x8249 : [ `L_s169_report  | `L_s66_enforce ]) ->
         match x8249 with
-        | `L_s66_enforce -> Ojs.string_to_js "enforce"
         | `L_s169_report -> Ojs.string_to_js "report"
+        | `L_s66_enforce -> Ojs.string_to_js "enforce"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x8253 : Ojs.t) -> t_of_js x8253
     and t_0_to_js : t_0 -> Ojs.t = fun (x8252 : t) -> t_to_js x8252
@@ -33838,35 +33838,35 @@ module rec
 module PermissionName =
   struct
     type t =
-      [ `L_s80_geolocation  | `L_s131_notifications 
-      | `L_s148_persistent_storage  | `L_s159_push 
-      | `L_s173_screen_wake_lock  | `L_s211_xr_spatial_tracking ]
+      [ `L_s131_notifications  | `L_s148_persistent_storage  | `L_s159_push 
+      | `L_s173_screen_wake_lock  | `L_s211_xr_spatial_tracking 
+      | `L_s80_geolocation ]
     let rec t_of_js : Ojs.t -> t =
       fun (x8449 : Ojs.t) ->
         let x8450 = x8449 in
         match Ojs.string_of_js x8450 with
-        | "geolocation" -> `L_s80_geolocation
         | "notifications" -> `L_s131_notifications
         | "persistent-storage" -> `L_s148_persistent_storage
         | "push" -> `L_s159_push
         | "screen-wake-lock" -> `L_s173_screen_wake_lock
         | "xr-spatial-tracking" -> `L_s211_xr_spatial_tracking
+        | "geolocation" -> `L_s80_geolocation
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x8448 :
-          [ `L_s80_geolocation  | `L_s131_notifications 
-          | `L_s148_persistent_storage  | `L_s159_push 
-          | `L_s173_screen_wake_lock  | `L_s211_xr_spatial_tracking ])
+          [ `L_s131_notifications  | `L_s148_persistent_storage 
+          | `L_s159_push  | `L_s173_screen_wake_lock 
+          | `L_s211_xr_spatial_tracking  | `L_s80_geolocation ])
         ->
         match x8448 with
-        | `L_s80_geolocation -> Ojs.string_to_js "geolocation"
         | `L_s131_notifications -> Ojs.string_to_js "notifications"
         | `L_s148_persistent_storage -> Ojs.string_to_js "persistent-storage"
         | `L_s159_push -> Ojs.string_to_js "push"
         | `L_s173_screen_wake_lock -> Ojs.string_to_js "screen-wake-lock"
         | `L_s211_xr_spatial_tracking ->
             Ojs.string_to_js "xr-spatial-tracking"
+        | `L_s80_geolocation -> Ojs.string_to_js "geolocation"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x8452 : Ojs.t) -> t_of_js x8452
     and t_0_to_js : t_0 -> Ojs.t = fun (x8451 : t) -> t_to_js x8451
@@ -33904,21 +33904,21 @@ module PermissionDescriptor =
   end
 module PermissionState =
   struct
-    type t = [ `L_s58_denied  | `L_s82_granted  | `L_s157_prompt ]
+    type t = [ `L_s157_prompt  | `L_s58_denied  | `L_s82_granted ]
     let rec t_of_js : Ojs.t -> t =
       fun (x8465 : Ojs.t) ->
         let x8466 = x8465 in
         match Ojs.string_of_js x8466 with
+        | "prompt" -> `L_s157_prompt
         | "denied" -> `L_s58_denied
         | "granted" -> `L_s82_granted
-        | "prompt" -> `L_s157_prompt
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
-      fun (x8464 : [ `L_s58_denied  | `L_s82_granted  | `L_s157_prompt ]) ->
+      fun (x8464 : [ `L_s157_prompt  | `L_s58_denied  | `L_s82_granted ]) ->
         match x8464 with
+        | `L_s157_prompt -> Ojs.string_to_js "prompt"
         | `L_s58_denied -> Ojs.string_to_js "denied"
         | `L_s82_granted -> Ojs.string_to_js "granted"
-        | `L_s157_prompt -> Ojs.string_to_js "prompt"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x8468 : Ojs.t) -> t_of_js x8468
     and t_0_to_js : t_0 -> Ojs.t = fun (x8467 : t) -> t_to_js x8467
@@ -42763,24 +42763,24 @@ module rec
 module WebGLPowerPreference =
   struct
     type t =
-      [ `L_s57_default  | `L_s85_high_performance  | `L_s107_low_power ]
+      [ `L_s107_low_power  | `L_s57_default  | `L_s85_high_performance ]
     let rec t_of_js : Ojs.t -> t =
       fun (x10832 : Ojs.t) ->
         let x10833 = x10832 in
         match Ojs.string_of_js x10833 with
+        | "low-power" -> `L_s107_low_power
         | "default" -> `L_s57_default
         | "high-performance" -> `L_s85_high_performance
-        | "low-power" -> `L_s107_low_power
         | _ -> assert false
     and t_to_js : t -> Ojs.t =
       fun
         (x10831 :
-          [ `L_s57_default  | `L_s85_high_performance  | `L_s107_low_power ])
+          [ `L_s107_low_power  | `L_s57_default  | `L_s85_high_performance ])
         ->
         match x10831 with
+        | `L_s107_low_power -> Ojs.string_to_js "low-power"
         | `L_s57_default -> Ojs.string_to_js "default"
         | `L_s85_high_performance -> Ojs.string_to_js "high-performance"
-        | `L_s107_low_power -> Ojs.string_to_js "low-power"
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x10835 : Ojs.t) -> t_of_js x10835
     and t_0_to_js : t_0 -> Ojs.t = fun (x10834 : t) -> t_to_js x10834
@@ -65833,10 +65833,10 @@ module rec
                                                    module ImportExportKind :
                                                    sig
                                                      type t =
-                                                       [ `L_s79_function 
-                                                       | `L_s81_global 
-                                                       | `L_s113_memory 
-                                                       | `L_s189_table ]
+                                                       [ `L_s113_memory 
+                                                       | `L_s189_table 
+                                                       | `L_s79_function 
+                                                       | `L_s81_global ]
                                                      type t_0 = t
                                                      val t_to_js : t -> Ojs.t
                                                      val t_of_js : Ojs.t -> t
@@ -66684,39 +66684,39 @@ module rec
                                        module ImportExportKind =
                                          struct
                                            type t =
-                                             [ `L_s79_function 
-                                             | `L_s81_global 
-                                             | `L_s113_memory 
-                                             | `L_s189_table ]
+                                             [ `L_s113_memory 
+                                             | `L_s189_table 
+                                             | `L_s79_function 
+                                             | `L_s81_global ]
                                            let rec t_of_js : Ojs.t -> t =
                                              fun (x16101 : Ojs.t) ->
                                                let x16102 = x16101 in
                                                match Ojs.string_of_js x16102
                                                with
+                                               | "memory" -> `L_s113_memory
+                                               | "table" -> `L_s189_table
                                                | "function" ->
                                                    `L_s79_function
                                                | "global" -> `L_s81_global
-                                               | "memory" -> `L_s113_memory
-                                               | "table" -> `L_s189_table
                                                | _ -> assert false
                                            and t_to_js : t -> Ojs.t =
                                              fun
                                                (x16100 :
-                                                 [ `L_s79_function 
-                                                 | `L_s81_global 
-                                                 | `L_s113_memory 
-                                                 | `L_s189_table ])
+                                                 [ `L_s113_memory 
+                                                 | `L_s189_table 
+                                                 | `L_s79_function 
+                                                 | `L_s81_global ])
                                                ->
                                                match x16100 with
+                                               | `L_s113_memory ->
+                                                   Ojs.string_to_js "memory"
+                                               | `L_s189_table ->
+                                                   Ojs.string_to_js "table"
                                                | `L_s79_function ->
                                                    Ojs.string_to_js
                                                      "function"
                                                | `L_s81_global ->
                                                    Ojs.string_to_js "global"
-                                               | `L_s113_memory ->
-                                                   Ojs.string_to_js "memory"
-                                               | `L_s189_table ->
-                                                   Ojs.string_to_js "table"
                                            type t_0 = t
                                            let rec t_0_of_js : Ojs.t -> t_0 =
                                              fun (x16104 : Ojs.t) ->

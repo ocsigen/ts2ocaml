@@ -4143,7 +4143,7 @@ and[@js.scope "RTCTrackEvent"] RTCTrackEvent : sig
   val create: type_:string -> eventInitDict:RTCTrackEventInit.t -> t [@@js.create]
 end
 module RTCIceTcpCandidateType : sig
-  type t = ([`L_s98_active[@js "active"] | `L_s566_passive[@js "passive"] | `L_s709_so[@js "so"]] [@js.enum])
+  type t = ([`L_s566_passive[@js "passive"] | `L_s709_so[@js "so"] | `L_s98_active[@js "active"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13413,7 +13413,7 @@ module RegistrationOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerState : sig
-  type t = ([`L_s96_activated[@js "activated"] | `L_s97_activating[@js "activating"] | `L_s416_installed[@js "installed"] | `L_s417_installing[@js "installing"] | `L_s565_parsed[@js "parsed"] | `L_s635_redundant[@js "redundant"]] [@js.enum])
+  type t = ([`L_s416_installed[@js "installed"] | `L_s417_installing[@js "installing"] | `L_s565_parsed[@js "parsed"] | `L_s635_redundant[@js "redundant"] | `L_s96_activated[@js "activated"] | `L_s97_activating[@js "activating"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17324,7 +17324,7 @@ and[@js.scope "DOMRectList"] DOMRectList : sig
   val create: unit -> t [@@js.create]
 end
 module CompositeOperationOrAuto : sig
-  type t = ([`L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"] | `L_s141_auto[@js "auto"] | `L_s648_replace[@js "replace"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s648_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17358,7 +17358,7 @@ module PropertyIndexedKeyframes : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module IterationCompositeOperation : sig
-  type t = ([`L_s95_accumulate[@js "accumulate"] | `L_s648_replace[@js "replace"]] [@js.enum])
+  type t = ([`L_s648_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17366,7 +17366,7 @@ module IterationCompositeOperation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CompositeOperation : sig
-  type t = ([`L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"] | `L_s648_replace[@js "replace"]] [@js.enum])
+  type t = ([`L_s648_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -17516,7 +17516,7 @@ module GetAnimationsOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module AnimationReplaceState : sig
-  type t = ([`L_s98_active[@js "active"] | `L_s577_persisted[@js "persisted"] | `L_s645_removed[@js "removed"]] [@js.enum])
+  type t = ([`L_s577_persisted[@js "persisted"] | `L_s645_removed[@js "removed"] | `L_s98_active[@js "active"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -47196,7 +47196,7 @@ end
 
 (** @deprecated Directly use HTMLElementTagNameMap or SVGElementTagNameMap as appropriate, instead. *)
 module ElementTagNameMap : sig
-  type t = (HTMLElementTagNameMap.t, (SVGElementTagNameMap.t, (([`L_s91_a[@js "a"] | `L_s113_animate[@js "animate"] | `L_s114_animateMotion[@js "animateMotion"] | `L_s115_animateTransform[@js "animateTransform"] | `L_s192_circle[@js "circle"] | `L_s197_clipPath[@js "clipPath"] | `L_s238_defs[@js "defs"] | `L_s243_desc[@js "desc"] | `L_s273_ellipse[@js "ellipse"] | `L_s302_feBlend[@js "feBlend"] | `L_s303_feColorMatrix[@js "feColorMatrix"] | `L_s304_feComponentTransfer[@js "feComponentTransfer"] | `L_s305_feComposite[@js "feComposite"] | `L_s306_feConvolveMatrix[@js "feConvolveMatrix"] | `L_s307_feDiffuseLighting[@js "feDiffuseLighting"] | `L_s308_feDisplacementMap[@js "feDisplacementMap"] | `L_s309_feDistantLight[@js "feDistantLight"] | `L_s310_feDropShadow[@js "feDropShadow"] | `L_s311_feFlood[@js "feFlood"] | `L_s312_feFuncA[@js "feFuncA"] | `L_s313_feFuncB[@js "feFuncB"] | `L_s314_feFuncG[@js "feFuncG"] | `L_s315_feFuncR[@js "feFuncR"] | `L_s316_feGaussianBlur[@js "feGaussianBlur"] | `L_s317_feImage[@js "feImage"] | `L_s318_feMerge[@js "feMerge"] | `L_s319_feMergeNode[@js "feMergeNode"] | `L_s320_feMorphology[@js "feMorphology"] | `L_s321_feOffset[@js "feOffset"] | `L_s322_fePointLight[@js "fePointLight"] | `L_s323_feSpecularLighting[@js "feSpecularLighting"] | `L_s324_feSpotLight[@js "feSpotLight"] | `L_s325_feTile[@js "feTile"] | `L_s326_feTurbulence[@js "feTurbulence"] | `L_s331_filter[@js "filter"] | `L_s342_foreignObject[@js "foreignObject"] | `L_s353_g[@js "g"] | `L_s401_image[@js "image"] | `L_s446_line[@js "line"] | `L_s450_linearGradient[@js "linearGradient"] | `L_s479_marker[@js "marker"] | `L_s481_mask[@js "mask"] | `L_s493_metadata[@js "metadata"] | `L_s508_mpath[@js "mpath"] | `L_s569_path[@js "path"] | `L_s570_pattern[@js "pattern"] | `L_s598_polygon[@js "polygon"] | `L_s599_polyline[@js "polyline"] | `L_s624_radialGradient[@js "radialGradient"] | `L_s633_rect[@js "rect"] | `L_s674_script[@js "script"] | `L_s693_set[@js "set"] | `L_s726_stop[@js "stop"] | `L_s732_style[@js "style"] | `L_s743_svg[@js "svg"] | `L_s744_switch[@js "switch"] | `L_s745_symbol[@js "symbol"] | `L_s755_text[@js "text"] | `L_s759_textPath[@js "textPath"] | `L_s767_title[@js "title"] | `L_s787_tspan[@js "tspan"] | `L_s812_use[@js "use"] | `L_s821_view[@js "view"]] [@js.enum]), ([`L_s91_a[@js "a"] | `L_s93_abbr[@js "abbr"] | `L_s100_address[@js "address"] | `L_s126_area[@js "area"] | `L_s128_article[@js "article"] | `L_s129_aside[@js "aside"] | `L_s133_audio[@js "audio"] | `L_s143_b[@js "b"] | `L_s149_base[@js "base"] | `L_s151_bdi[@js "bdi"] | `L_s152_bdo[@js "bdo"] | `L_s163_blockquote[@js "blockquote"] | `L_s166_body[@js "body"] | `L_s171_br[@js "br"] | `L_s175_button[@js "button"] | `L_s181_canvas[@js "canvas"] | `L_s182_caption[@js "caption"] | `L_s193_cite[@js "cite"] | `L_s202_code[@js "code"] | `L_s204_col[@js "col"] | `L_s205_colgroup[@js "colgroup"] | `L_s228_data[@js "data"] | `L_s232_datalist[@js "datalist"] | `L_s234_dd[@js "dd"] | `L_s239_del[@js "del"] | `L_s245_details[@js "details"] | `L_s250_dfn[@js "dfn"] | `L_s251_dialog[@js "dialog"] | `L_s252_dir[@js "dir"] | `L_s260_div[@js "div"] | `L_s261_dl[@js "dl"] | `L_s271_dt[@js "dt"] | `L_s274_em[@js "em"] | `L_s275_embed[@js "embed"] | `L_s327_fieldset[@js "fieldset"] | `L_s328_figcaption[@js "figcaption"] | `L_s329_figure[@js "figure"] | `L_s339_font[@js "font"] | `L_s340_footer[@js "footer"] | `L_s343_form[@js "form"] | `L_s347_frame[@js "frame"] | `L_s348_frameset[@js "frameset"] | `L_s362_h1[@js "h1"] | `L_s363_h2[@js "h2"] | `L_s364_h3[@js "h3"] | `L_s365_h4[@js "h4"] | `L_s366_h5[@js "h5"] | `L_s367_h6[@js "h6"] | `L_s376_head[@js "head"] | `L_s377_header[@js "header"] | `L_s378_hgroup[@js "hgroup"] | `L_s387_hr[@js "hr"] | `L_s388_html[@js "html"] | `L_s391_i[@js "i"] | `L_s400_iframe[@js "iframe"] | `L_s403_img[@js "img"] | `L_s414_input[@js "input"] | `L_s415_ins[@js "ins"] | `L_s428_kbd[@js "kbd"] | `L_s433_label[@js "label"] | `L_s441_legend[@js "legend"] | `L_s442_li[@js "li"] | `L_s451_link[@js "link"] | `L_s472_main[@js "main"] | `L_s477_map[@js "map"] | `L_s478_mark[@js "mark"] | `L_s480_marquee[@js "marquee"] | `L_s489_menu[@js "menu"] | `L_s492_meta[@js "meta"] | `L_s494_meter[@js "meter"] | `L_s513_nav[@js "nav"] | `L_s531_noscript[@js "noscript"] | `L_s535_object[@js "object"] | `L_s538_ol[@js "ol"] | `L_s545_optgroup[@js "optgroup"] | `L_s548_option[@js "option"] | `L_s555_output[@js "output"] | `L_s558_p[@js "p"] | `L_s564_param[@js "param"] | `L_s581_picture[@js "picture"] | `L_s606_pre[@js "pre"] | `L_s618_progress[@js "progress"] | `L_s623_q[@js "q"] | `L_s662_rp[@js "rp"] | `L_s663_rt[@js "rt"] | `L_s667_ruby[@js "ruby"] | `L_s669_s[@js "s"] | `L_s671_samp[@js "samp"] | `L_s674_script[@js "script"] | `L_s677_section[@js "section"] | `L_s685_select[@js "select"] | `L_s702_slot[@js "slot"] | `L_s703_small[@js "small"] | `L_s710_source[@js "source"] | `L_s714_span[@js "span"] | `L_s731_strong[@js "strong"] | `L_s732_style[@js "style"] | `L_s734_sub[@js "sub"] | `L_s739_summary[@js "summary"] | `L_s740_sup[@js "sup"] | `L_s749_table[@js "table"] | `L_s750_tbody[@js "tbody"] | `L_s752_td[@js "td"] | `L_s753_template[@js "template"] | `L_s760_textarea[@js "textarea"] | `L_s761_tfoot[@js "tfoot"] | `L_s762_th[@js "th"] | `L_s763_thead[@js "thead"] | `L_s764_time[@js "time"] | `L_s767_title[@js "title"] | `L_s778_tr[@js "tr"] | `L_s779_track[@js "track"] | `L_s788_u[@js "u"] | `L_s790_ul[@js "ul"] | `L_s814_var[@js "var"] | `L_s819_video[@js "video"] | `L_s829_wbr[@js "wbr"]] [@js.enum])) Exclude.t_2) Pick.t_2) intersection2
+  type t = (HTMLElementTagNameMap.t, (SVGElementTagNameMap.t, (([`L_s113_animate[@js "animate"] | `L_s114_animateMotion[@js "animateMotion"] | `L_s115_animateTransform[@js "animateTransform"] | `L_s192_circle[@js "circle"] | `L_s197_clipPath[@js "clipPath"] | `L_s238_defs[@js "defs"] | `L_s243_desc[@js "desc"] | `L_s273_ellipse[@js "ellipse"] | `L_s302_feBlend[@js "feBlend"] | `L_s303_feColorMatrix[@js "feColorMatrix"] | `L_s304_feComponentTransfer[@js "feComponentTransfer"] | `L_s305_feComposite[@js "feComposite"] | `L_s306_feConvolveMatrix[@js "feConvolveMatrix"] | `L_s307_feDiffuseLighting[@js "feDiffuseLighting"] | `L_s308_feDisplacementMap[@js "feDisplacementMap"] | `L_s309_feDistantLight[@js "feDistantLight"] | `L_s310_feDropShadow[@js "feDropShadow"] | `L_s311_feFlood[@js "feFlood"] | `L_s312_feFuncA[@js "feFuncA"] | `L_s313_feFuncB[@js "feFuncB"] | `L_s314_feFuncG[@js "feFuncG"] | `L_s315_feFuncR[@js "feFuncR"] | `L_s316_feGaussianBlur[@js "feGaussianBlur"] | `L_s317_feImage[@js "feImage"] | `L_s318_feMerge[@js "feMerge"] | `L_s319_feMergeNode[@js "feMergeNode"] | `L_s320_feMorphology[@js "feMorphology"] | `L_s321_feOffset[@js "feOffset"] | `L_s322_fePointLight[@js "fePointLight"] | `L_s323_feSpecularLighting[@js "feSpecularLighting"] | `L_s324_feSpotLight[@js "feSpotLight"] | `L_s325_feTile[@js "feTile"] | `L_s326_feTurbulence[@js "feTurbulence"] | `L_s331_filter[@js "filter"] | `L_s342_foreignObject[@js "foreignObject"] | `L_s353_g[@js "g"] | `L_s401_image[@js "image"] | `L_s446_line[@js "line"] | `L_s450_linearGradient[@js "linearGradient"] | `L_s479_marker[@js "marker"] | `L_s481_mask[@js "mask"] | `L_s493_metadata[@js "metadata"] | `L_s508_mpath[@js "mpath"] | `L_s569_path[@js "path"] | `L_s570_pattern[@js "pattern"] | `L_s598_polygon[@js "polygon"] | `L_s599_polyline[@js "polyline"] | `L_s624_radialGradient[@js "radialGradient"] | `L_s633_rect[@js "rect"] | `L_s674_script[@js "script"] | `L_s693_set[@js "set"] | `L_s726_stop[@js "stop"] | `L_s732_style[@js "style"] | `L_s743_svg[@js "svg"] | `L_s744_switch[@js "switch"] | `L_s745_symbol[@js "symbol"] | `L_s755_text[@js "text"] | `L_s759_textPath[@js "textPath"] | `L_s767_title[@js "title"] | `L_s787_tspan[@js "tspan"] | `L_s812_use[@js "use"] | `L_s821_view[@js "view"] | `L_s91_a[@js "a"]] [@js.enum]), ([`L_s100_address[@js "address"] | `L_s126_area[@js "area"] | `L_s128_article[@js "article"] | `L_s129_aside[@js "aside"] | `L_s133_audio[@js "audio"] | `L_s143_b[@js "b"] | `L_s149_base[@js "base"] | `L_s151_bdi[@js "bdi"] | `L_s152_bdo[@js "bdo"] | `L_s163_blockquote[@js "blockquote"] | `L_s166_body[@js "body"] | `L_s171_br[@js "br"] | `L_s175_button[@js "button"] | `L_s181_canvas[@js "canvas"] | `L_s182_caption[@js "caption"] | `L_s193_cite[@js "cite"] | `L_s202_code[@js "code"] | `L_s204_col[@js "col"] | `L_s205_colgroup[@js "colgroup"] | `L_s228_data[@js "data"] | `L_s232_datalist[@js "datalist"] | `L_s234_dd[@js "dd"] | `L_s239_del[@js "del"] | `L_s245_details[@js "details"] | `L_s250_dfn[@js "dfn"] | `L_s251_dialog[@js "dialog"] | `L_s252_dir[@js "dir"] | `L_s260_div[@js "div"] | `L_s261_dl[@js "dl"] | `L_s271_dt[@js "dt"] | `L_s274_em[@js "em"] | `L_s275_embed[@js "embed"] | `L_s327_fieldset[@js "fieldset"] | `L_s328_figcaption[@js "figcaption"] | `L_s329_figure[@js "figure"] | `L_s339_font[@js "font"] | `L_s340_footer[@js "footer"] | `L_s343_form[@js "form"] | `L_s347_frame[@js "frame"] | `L_s348_frameset[@js "frameset"] | `L_s362_h1[@js "h1"] | `L_s363_h2[@js "h2"] | `L_s364_h3[@js "h3"] | `L_s365_h4[@js "h4"] | `L_s366_h5[@js "h5"] | `L_s367_h6[@js "h6"] | `L_s376_head[@js "head"] | `L_s377_header[@js "header"] | `L_s378_hgroup[@js "hgroup"] | `L_s387_hr[@js "hr"] | `L_s388_html[@js "html"] | `L_s391_i[@js "i"] | `L_s400_iframe[@js "iframe"] | `L_s403_img[@js "img"] | `L_s414_input[@js "input"] | `L_s415_ins[@js "ins"] | `L_s428_kbd[@js "kbd"] | `L_s433_label[@js "label"] | `L_s441_legend[@js "legend"] | `L_s442_li[@js "li"] | `L_s451_link[@js "link"] | `L_s472_main[@js "main"] | `L_s477_map[@js "map"] | `L_s478_mark[@js "mark"] | `L_s480_marquee[@js "marquee"] | `L_s489_menu[@js "menu"] | `L_s492_meta[@js "meta"] | `L_s494_meter[@js "meter"] | `L_s513_nav[@js "nav"] | `L_s531_noscript[@js "noscript"] | `L_s535_object[@js "object"] | `L_s538_ol[@js "ol"] | `L_s545_optgroup[@js "optgroup"] | `L_s548_option[@js "option"] | `L_s555_output[@js "output"] | `L_s558_p[@js "p"] | `L_s564_param[@js "param"] | `L_s581_picture[@js "picture"] | `L_s606_pre[@js "pre"] | `L_s618_progress[@js "progress"] | `L_s623_q[@js "q"] | `L_s662_rp[@js "rp"] | `L_s663_rt[@js "rt"] | `L_s667_ruby[@js "ruby"] | `L_s669_s[@js "s"] | `L_s671_samp[@js "samp"] | `L_s674_script[@js "script"] | `L_s677_section[@js "section"] | `L_s685_select[@js "select"] | `L_s702_slot[@js "slot"] | `L_s703_small[@js "small"] | `L_s710_source[@js "source"] | `L_s714_span[@js "span"] | `L_s731_strong[@js "strong"] | `L_s732_style[@js "style"] | `L_s734_sub[@js "sub"] | `L_s739_summary[@js "summary"] | `L_s740_sup[@js "sup"] | `L_s749_table[@js "table"] | `L_s750_tbody[@js "tbody"] | `L_s752_td[@js "td"] | `L_s753_template[@js "template"] | `L_s760_textarea[@js "textarea"] | `L_s761_tfoot[@js "tfoot"] | `L_s762_th[@js "th"] | `L_s763_thead[@js "thead"] | `L_s764_time[@js "time"] | `L_s767_title[@js "title"] | `L_s778_tr[@js "tr"] | `L_s779_track[@js "track"] | `L_s788_u[@js "u"] | `L_s790_ul[@js "ul"] | `L_s814_var[@js "var"] | `L_s819_video[@js "video"] | `L_s829_wbr[@js "wbr"] | `L_s91_a[@js "a"] | `L_s93_abbr[@js "abbr"]] [@js.enum])) Exclude.t_2) Pick.t_2) intersection2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50983,7 +50983,7 @@ module StereoPannerOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module PanningModelType : sig
-  type t = ([`L_s30_HRTF[@js "HRTF"] | `L_s286_equalpower[@js "equalpower"]] [@js.enum])
+  type t = ([`L_s286_equalpower[@js "equalpower"] | `L_s30_HRTF[@js "HRTF"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -51432,7 +51432,7 @@ and[@js.scope "AudioWorklet"] AudioWorklet : sig
   val create: unit -> t [@@js.create]
 end
 module AutomationRate : sig
-  type t = ([`L_s92_a_rate[@js "a-rate"] | `L_s427_k_rate[@js "k-rate"]] [@js.enum])
+  type t = ([`L_s427_k_rate[@js "k-rate"] | `L_s92_a_rate[@js "a-rate"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t

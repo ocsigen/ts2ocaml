@@ -740,7 +740,7 @@ module NavigatorOnLine : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ConnectionType : sig
-  type t = ([`L_s46_bluetooth[@js "bluetooth"] | `L_s47_cellular[@js "cellular"] | `L_s68_ethernet[@js "ethernet"] | `L_s116_mixed[@js "mixed"] | `L_s128_none[@js "none"] | `L_s142_other[@js "other"] | `L_s196_unknown[@js "unknown"] | `L_s207_wifi[@js "wifi"]] [@js.enum])
+  type t = ([`L_s116_mixed[@js "mixed"] | `L_s128_none[@js "none"] | `L_s142_other[@js "other"] | `L_s196_unknown[@js "unknown"] | `L_s207_wifi[@js "wifi"] | `L_s46_bluetooth[@js "bluetooth"] | `L_s47_cellular[@js "cellular"] | `L_s68_ethernet[@js "ethernet"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -877,7 +877,7 @@ module MediaEncodingType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module TransferFunction : sig
-  type t = ([`L_s86_hlg[@js "hlg"] | `L_s151_pq[@js "pq"] | `L_s183_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s151_pq[@js "pq"] | `L_s183_srgb[@js "srgb"] | `L_s86_hlg[@js "hlg"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1051,7 +1051,7 @@ module MediaCapabilitiesEncodingInfo : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDecodingType : sig
-  type t = ([`L_s73_file[@js "file"] | `L_s111_media_source[@js "media-source"] | `L_s206_webrtc[@js "webrtc"]] [@js.enum])
+  type t = ([`L_s111_media_source[@js "media-source"] | `L_s206_webrtc[@js "webrtc"] | `L_s73_file[@js "file"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1266,7 +1266,7 @@ module IDBTransactionMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module IDBRequestReadyState : sig
-  type t = ([`L_s63_done[@js "done"] | `L_s147_pending[@js "pending"]] [@js.enum])
+  type t = ([`L_s147_pending[@js "pending"] | `L_s63_done[@js "done"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2264,7 +2264,7 @@ module FontFaceSetLoadStatus : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module FontFaceLoadStatus : sig
-  type t = ([`L_s67_error[@js "error"] | `L_s100_loaded[@js "loaded"] | `L_s102_loading[@js "loading"] | `L_s197_unloaded[@js "unloaded"]] [@js.enum])
+  type t = ([`L_s100_loaded[@js "loaded"] | `L_s102_loading[@js "loading"] | `L_s197_unloaded[@js "unloaded"] | `L_s67_error[@js "error"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2666,7 +2666,7 @@ module Pbkdf2Params : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module KeyFormat : sig
-  type t = ([`L_s97_jwk[@js "jwk"] | `L_s150_pkcs8[@js "pkcs8"] | `L_s160_raw[@js "raw"] | `L_s182_spki[@js "spki"]] [@js.enum])
+  type t = ([`L_s150_pkcs8[@js "pkcs8"] | `L_s160_raw[@js "raw"] | `L_s182_spki[@js "spki"] | `L_s97_jwk[@js "jwk"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2840,7 +2840,7 @@ module EcdsaParams : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module KeyUsage : sig
-  type t = ([`L_s56_decrypt[@js "decrypt"] | `L_s59_deriveBits[@js "deriveBits"] | `L_s60_deriveKey[@js "deriveKey"] | `L_s65_encrypt[@js "encrypt"] | `L_s178_sign[@js "sign"] | `L_s199_unwrapKey[@js "unwrapKey"] | `L_s202_verify[@js "verify"] | `L_s210_wrapKey[@js "wrapKey"]] [@js.enum])
+  type t = ([`L_s178_sign[@js "sign"] | `L_s199_unwrapKey[@js "unwrapKey"] | `L_s202_verify[@js "verify"] | `L_s210_wrapKey[@js "wrapKey"] | `L_s56_decrypt[@js "decrypt"] | `L_s59_deriveBits[@js "deriveBits"] | `L_s60_deriveKey[@js "deriveKey"] | `L_s65_encrypt[@js "encrypt"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3257,7 +3257,7 @@ module MultiCacheQueryOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module RequestDestination : sig
-  type t = ([`L_s0[@js ""] | `L_s38_audio[@js "audio"] | `L_s39_audioworklet[@js "audioworklet"] | `L_s62_document[@js "document"] | `L_s64_embed[@js "embed"] | `L_s76_font[@js "font"] | `L_s78_frame[@js "frame"] | `L_s89_iframe[@js "iframe"] | `L_s90_image[@js "image"] | `L_s109_manifest[@js "manifest"] | `L_s132_object[@js "object"] | `L_s145_paintworklet[@js "paintworklet"] | `L_s169_report[@js "report"] | `L_s174_script[@js "script"] | `L_s176_sharedworker[@js "sharedworker"] | `L_s187_style[@js "style"] | `L_s193_track[@js "track"] | `L_s204_video[@js "video"] | `L_s209_worker[@js "worker"] | `L_s212_xslt[@js "xslt"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s109_manifest[@js "manifest"] | `L_s132_object[@js "object"] | `L_s145_paintworklet[@js "paintworklet"] | `L_s169_report[@js "report"] | `L_s174_script[@js "script"] | `L_s176_sharedworker[@js "sharedworker"] | `L_s187_style[@js "style"] | `L_s193_track[@js "track"] | `L_s204_video[@js "video"] | `L_s209_worker[@js "worker"] | `L_s212_xslt[@js "xslt"] | `L_s38_audio[@js "audio"] | `L_s39_audioworklet[@js "audioworklet"] | `L_s62_document[@js "document"] | `L_s64_embed[@js "embed"] | `L_s76_font[@js "font"] | `L_s78_frame[@js "frame"] | `L_s89_iframe[@js "iframe"] | `L_s90_image[@js "image"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3265,7 +3265,7 @@ module RequestDestination : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestRedirect : sig
-  type t = ([`L_s67_error[@js "error"] | `L_s75_follow[@js "follow"] | `L_s110_manual[@js "manual"]] [@js.enum])
+  type t = ([`L_s110_manual[@js "manual"] | `L_s67_error[@js "error"] | `L_s75_follow[@js "follow"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3273,7 +3273,7 @@ module RequestRedirect : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestMode : sig
-  type t = ([`L_s55_cors[@js "cors"] | `L_s119_navigate[@js "navigate"] | `L_s124_no_cors[@js "no-cors"] | `L_s172_same_origin[@js "same-origin"]] [@js.enum])
+  type t = ([`L_s119_navigate[@js "navigate"] | `L_s124_no_cors[@js "no-cors"] | `L_s172_same_origin[@js "same-origin"] | `L_s55_cors[@js "cors"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3281,7 +3281,7 @@ module RequestMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestCache : sig
-  type t = ([`L_s57_default[@js "default"] | `L_s77_force_cache[@js "force-cache"] | `L_s123_no_cache[@js "no-cache"] | `L_s127_no_store[@js "no-store"] | `L_s136_only_if_cached[@js "only-if-cached"] | `L_s168_reload[@js "reload"]] [@js.enum])
+  type t = ([`L_s123_no_cache[@js "no-cache"] | `L_s127_no_store[@js "no-store"] | `L_s136_only_if_cached[@js "only-if-cached"] | `L_s168_reload[@js "reload"] | `L_s57_default[@js "default"] | `L_s77_force_cache[@js "force-cache"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3297,7 +3297,7 @@ module ReferrerPolicy : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestCredentials : sig
-  type t = ([`L_s92_include[@js "include"] | `L_s134_omit[@js "omit"] | `L_s172_same_origin[@js "same-origin"]] [@js.enum])
+  type t = ([`L_s134_omit[@js "omit"] | `L_s172_same_origin[@js "same-origin"] | `L_s92_include[@js "include"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4475,7 +4475,7 @@ and RequestInfo : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ResponseType : sig
-  type t = ([`L_s43_basic[@js "basic"] | `L_s55_cors[@js "cors"] | `L_s57_default[@js "default"] | `L_s67_error[@js "error"] | `L_s137_opaque[@js "opaque"] | `L_s138_opaqueredirect[@js "opaqueredirect"]] [@js.enum])
+  type t = ([`L_s137_opaque[@js "opaque"] | `L_s138_opaqueredirect[@js "opaqueredirect"] | `L_s43_basic[@js "basic"] | `L_s55_cors[@js "cors"] | `L_s57_default[@js "default"] | `L_s67_error[@js "error"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4655,7 +4655,7 @@ module[@js.scope "caches"] CachesStatic : sig
   val open_: string -> Cache.t Promise.t_1 [@@js.global "open"]
 end
 module XMLHttpRequestResponseType : sig
-  type t = ([`L_s0[@js ""] | `L_s37_arraybuffer[@js "arraybuffer"] | `L_s44_blob[@js "blob"] | `L_s62_document[@js "document"] | `L_s96_json[@js "json"] | `L_s190_text[@js "text"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s190_text[@js "text"] | `L_s37_arraybuffer[@js "arraybuffer"] | `L_s44_blob[@js "blob"] | `L_s62_document[@js "document"] | `L_s96_json[@js "json"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5140,7 +5140,7 @@ module XMLHttpRequestEventMap : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerState : sig
-  type t = ([`L_s33_activated[@js "activated"] | `L_s34_activating[@js "activating"] | `L_s94_installed[@js "installed"] | `L_s95_installing[@js "installing"] | `L_s146_parsed[@js "parsed"] | `L_s166_redundant[@js "redundant"]] [@js.enum])
+  type t = ([`L_s146_parsed[@js "parsed"] | `L_s166_redundant[@js "redundant"] | `L_s33_activated[@js "activated"] | `L_s34_activating[@js "activating"] | `L_s94_installed[@js "installed"] | `L_s95_installing[@js "installing"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -6019,7 +6019,7 @@ module DOMTimeStamp : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module NotificationDirection : sig
-  type t = ([`L_s41_auto[@js "auto"] | `L_s108_ltr[@js "ltr"] | `L_s171_rtl[@js "rtl"]] [@js.enum])
+  type t = ([`L_s108_ltr[@js "ltr"] | `L_s171_rtl[@js "rtl"] | `L_s41_auto[@js "auto"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -6280,7 +6280,7 @@ and[@js.scope "FetchEvent"] FetchEvent : sig
   val create: type_:string -> eventInitDict:FetchEventInit.t -> t [@@js.create]
 end
 module FrameType : sig
-  type t = ([`L_s42_auxiliary[@js "auxiliary"] | `L_s120_nested[@js "nested"] | `L_s128_none[@js "none"] | `L_s192_top_level[@js "top-level"]] [@js.enum])
+  type t = ([`L_s120_nested[@js "nested"] | `L_s128_none[@js "none"] | `L_s192_top_level[@js "top-level"] | `L_s42_auxiliary[@js "auxiliary"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -6288,7 +6288,7 @@ module FrameType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ClientTypes : sig
-  type t = ([`L_s35_all[@js "all"] | `L_s176_sharedworker[@js "sharedworker"] | `L_s208_window[@js "window"] | `L_s209_worker[@js "worker"]] [@js.enum])
+  type t = ([`L_s176_sharedworker[@js "sharedworker"] | `L_s208_window[@js "window"] | `L_s209_worker[@js "worker"] | `L_s35_all[@js "all"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7170,7 +7170,7 @@ module CanvasImageSource : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module PredefinedColorSpace : sig
-  type t = ([`L_s61_display_p3[@js "display-p3"] | `L_s183_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s183_srgb[@js "srgb"] | `L_s61_display_p3[@js "display-p3"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7247,7 +7247,7 @@ module ImageBitmapSource : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ResizeQuality : sig
-  type t = ([`L_s84_high[@js "high"] | `L_s106_low[@js "low"] | `L_s112_medium[@js "medium"] | `L_s149_pixelated[@js "pixelated"]] [@js.enum])
+  type t = ([`L_s106_low[@js "low"] | `L_s112_medium[@js "medium"] | `L_s149_pixelated[@js "pixelated"] | `L_s84_high[@js "high"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7255,7 +7255,7 @@ module ResizeQuality : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module PremultiplyAlpha : sig
-  type t = ([`L_s57_default[@js "default"] | `L_s128_none[@js "none"] | `L_s152_premultiply[@js "premultiply"]] [@js.enum])
+  type t = ([`L_s128_none[@js "none"] | `L_s152_premultiply[@js "premultiply"] | `L_s57_default[@js "default"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7263,7 +7263,7 @@ module PremultiplyAlpha : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ImageOrientation : sig
-  type t = ([`L_s74_flipY[@js "flipY"] | `L_s128_none[@js "none"]] [@js.enum])
+  type t = ([`L_s128_none[@js "none"] | `L_s74_flipY[@js "flipY"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7271,7 +7271,7 @@ module ImageOrientation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ColorSpaceConversion : sig
-  type t = ([`L_s57_default[@js "default"] | `L_s128_none[@js "none"]] [@js.enum])
+  type t = ([`L_s128_none[@js "none"] | `L_s57_default[@js "default"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7671,7 +7671,7 @@ module GetNotificationOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerUpdateViaCache : sig
-  type t = ([`L_s35_all[@js "all"] | `L_s91_imports[@js "imports"] | `L_s128_none[@js "none"]] [@js.enum])
+  type t = ([`L_s128_none[@js "none"] | `L_s35_all[@js "all"] | `L_s91_imports[@js "imports"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7756,7 +7756,7 @@ module PushSubscriptionJSON : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module PushEncryptionKeyName : sig
-  type t = ([`L_s40_auth[@js "auth"] | `L_s143_p256dh[@js "p256dh"]] [@js.enum])
+  type t = ([`L_s143_p256dh[@js "p256dh"] | `L_s40_auth[@js "auth"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7802,7 +7802,7 @@ and[@js.scope "PushSubscription"] PushSubscription : sig
   val create: unit -> t [@@js.create]
 end
 module PushPermissionState : sig
-  type t = ([`L_s58_denied[@js "denied"] | `L_s82_granted[@js "granted"] | `L_s157_prompt[@js "prompt"]] [@js.enum])
+  type t = ([`L_s157_prompt[@js "prompt"] | `L_s58_denied[@js "denied"] | `L_s82_granted[@js "granted"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -7933,7 +7933,7 @@ and[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
   val create: unit -> t [@@js.create]
 end
 module VisibilityState : sig
-  type t = ([`L_s83_hidden[@js "hidden"] | `L_s205_visible[@js "visible"]] [@js.enum])
+  type t = ([`L_s205_visible[@js "visible"] | `L_s83_hidden[@js "hidden"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8120,7 +8120,7 @@ and[@js.scope "ServiceWorkerGlobalScope"] ServiceWorkerGlobalScope : sig
   val create: unit -> t [@@js.create]
 end
 module WorkerType : sig
-  type t = ([`L_s49_classic[@js "classic"] | `L_s117_module[@js "module"]] [@js.enum])
+  type t = ([`L_s117_module[@js "module"] | `L_s49_classic[@js "classic"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8237,7 +8237,7 @@ and[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   val create: unit -> t [@@js.create]
 end
 module SecurityPolicyViolationEventDisposition : sig
-  type t = ([`L_s66_enforce[@js "enforce"] | `L_s169_report[@js "report"]] [@js.enum])
+  type t = ([`L_s169_report[@js "report"] | `L_s66_enforce[@js "enforce"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8404,7 +8404,7 @@ and[@js.scope "CanvasPattern"] CanvasPattern : sig
   val create: unit -> t [@@js.create]
 end
 module PermissionName : sig
-  type t = ([`L_s80_geolocation[@js "geolocation"] | `L_s131_notifications[@js "notifications"] | `L_s148_persistent_storage[@js "persistent-storage"] | `L_s159_push[@js "push"] | `L_s173_screen_wake_lock[@js "screen-wake-lock"] | `L_s211_xr_spatial_tracking[@js "xr-spatial-tracking"]] [@js.enum])
+  type t = ([`L_s131_notifications[@js "notifications"] | `L_s148_persistent_storage[@js "persistent-storage"] | `L_s159_push[@js "push"] | `L_s173_screen_wake_lock[@js "screen-wake-lock"] | `L_s211_xr_spatial_tracking[@js "xr-spatial-tracking"] | `L_s80_geolocation[@js "geolocation"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8432,7 +8432,7 @@ module PermissionDescriptor : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module PermissionState : sig
-  type t = ([`L_s58_denied[@js "denied"] | `L_s82_granted[@js "granted"] | `L_s157_prompt[@js "prompt"]] [@js.enum])
+  type t = ([`L_s157_prompt[@js "prompt"] | `L_s58_denied[@js "denied"] | `L_s82_granted[@js "granted"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10454,7 +10454,7 @@ and[@js.scope "WebGLFramebuffer"] WebGLFramebuffer : sig
   val create: unit -> t [@@js.create]
 end
 module WebGLPowerPreference : sig
-  type t = ([`L_s57_default[@js "default"] | `L_s85_high_performance[@js "high-performance"] | `L_s107_low_power[@js "low-power"]] [@js.enum])
+  type t = ([`L_s107_low_power[@js "low-power"] | `L_s57_default[@js "default"] | `L_s85_high_performance[@js "high-performance"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14860,7 +14860,7 @@ and AnonymousInterface92 : sig
 end
 and[@js.scope "WebAssembly"] WebAssembly : sig
   module ImportExportKind : sig
-    type t = ([`L_s79_function[@js "function"] | `L_s81_global[@js "global"] | `L_s113_memory[@js "memory"] | `L_s189_table[@js "table"]] [@js.enum])
+    type t = ([`L_s113_memory[@js "memory"] | `L_s189_table[@js "table"] | `L_s79_function[@js "function"] | `L_s81_global[@js "global"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t

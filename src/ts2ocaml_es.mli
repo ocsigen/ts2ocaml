@@ -2307,7 +2307,7 @@ and[@js.scope "Intl"] Intl : sig
   
   (** language version: ES2020 *)
   module RelativeTimeFormatUnit : sig
-    type t = ([`L_s29_day[@js "day"] | `L_s31_days[@js "days"] | `L_s49_hour[@js "hour"] | `L_s50_hours[@js "hours"] | `L_s61_minute[@js "minute"] | `L_s62_minutes[@js "minutes"] | `L_s63_month[@js "month"] | `L_s64_months[@js "months"] | `L_s80_quarter[@js "quarter"] | `L_s81_quarters[@js "quarters"] | `L_s86_second[@js "second"] | `L_s87_seconds[@js "seconds"] | `L_s98_week[@js "week"] | `L_s100_weeks[@js "weeks"] | `L_s101_year[@js "year"] | `L_s102_years[@js "years"]] [@js.enum])
+    type t = ([`L_s100_weeks[@js "weeks"] | `L_s101_year[@js "year"] | `L_s102_years[@js "years"] | `L_s29_day[@js "day"] | `L_s31_days[@js "days"] | `L_s49_hour[@js "hour"] | `L_s50_hours[@js "hours"] | `L_s61_minute[@js "minute"] | `L_s62_minutes[@js "minutes"] | `L_s63_month[@js "month"] | `L_s64_months[@js "months"] | `L_s80_quarter[@js "quarter"] | `L_s81_quarters[@js "quarters"] | `L_s86_second[@js "second"] | `L_s87_seconds[@js "seconds"] | `L_s98_week[@js "week"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -2490,7 +2490,7 @@ and[@js.scope "Intl"] Intl : sig
   
   (** language version: ES2018 *)
   module LDMLPluralRule : sig
-    type t = ([`L_s40_few[@js "few"] | `L_s58_many[@js "many"] | `L_s74_one[@js "one"] | `L_s76_other[@js "other"] | `L_s94_two[@js "two"] | `L_s103_zero[@js "zero"]] [@js.enum])
+    type t = ([`L_s103_zero[@js "zero"] | `L_s40_few[@js "few"] | `L_s58_many[@js "many"] | `L_s74_one[@js "one"] | `L_s76_other[@js "other"] | `L_s94_two[@js "two"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -3152,7 +3152,7 @@ and[@js.scope "Intl"] Intl : sig
   
   (** language version: ES2017 *)
   module DateTimeFormatPartTypes : sig
-    type t = ([`L_s29_day[@js "day"] | `L_s30_dayPeriod[@js "dayPeriod"] | `L_s35_era[@js "era"] | `L_s49_hour[@js "hour"] | `L_s54_literal[@js "literal"] | `L_s61_minute[@js "minute"] | `L_s63_month[@js "month"] | `L_s86_second[@js "second"] | `L_s92_timeZoneName[@js "timeZoneName"] | `L_s99_weekday[@js "weekday"] | `L_s101_year[@js "year"]] [@js.enum])
+    type t = ([`L_s101_year[@js "year"] | `L_s29_day[@js "day"] | `L_s30_dayPeriod[@js "dayPeriod"] | `L_s35_era[@js "era"] | `L_s49_hour[@js "hour"] | `L_s54_literal[@js "literal"] | `L_s61_minute[@js "minute"] | `L_s63_month[@js "month"] | `L_s86_second[@js "second"] | `L_s92_timeZoneName[@js "timeZoneName"] | `L_s99_weekday[@js "weekday"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -6998,10 +6998,10 @@ module BigIntToLocaleStringOptions : sig
   val set_useGrouping: 'tags this -> bool -> unit [@@js.set "useGrouping"]
   
   (** The minimum number of integer digits to use. Possible values are from 1 to 21; the default is 1. *)
-  val get_minimumIntegerDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20] | `L_n_21[@js 21]] [@js.enum]) [@@js.get "minimumIntegerDigits"]
+  val get_minimumIntegerDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_21[@js 21] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) [@@js.get "minimumIntegerDigits"]
   
   (** The minimum number of integer digits to use. Possible values are from 1 to 21; the default is 1. *)
-  val set_minimumIntegerDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20] | `L_n_21[@js 21]] [@js.enum]) -> unit [@@js.set "minimumIntegerDigits"]
+  val set_minimumIntegerDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_21[@js 21] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) -> unit [@@js.set "minimumIntegerDigits"]
   
   (**
     The minimum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number and percent formatting is 0; the default for currency formatting is the number of minor unit digits provided by the 
@@ -7010,7 +7010,7 @@ module BigIntToLocaleStringOptions : sig
     \}
      (2 if the list doesn't provide that information).
   *)
-  val get_minimumFractionDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20]] [@js.enum]) [@@js.get "minimumFractionDigits"]
+  val get_minimumFractionDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) [@@js.get "minimumFractionDigits"]
   
   (**
     The minimum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number and percent formatting is 0; the default for currency formatting is the number of minor unit digits provided by the 
@@ -7019,7 +7019,7 @@ module BigIntToLocaleStringOptions : sig
     \}
      (2 if the list doesn't provide that information).
   *)
-  val set_minimumFractionDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20]] [@js.enum]) -> unit [@@js.set "minimumFractionDigits"]
+  val set_minimumFractionDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) -> unit [@@js.set "minimumFractionDigits"]
   
   (**
     The maximum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number formatting is the larger of minimumFractionDigits and 3; the default for currency formatting is the larger of minimumFractionDigits and the number of minor unit digits provided by the 
@@ -7028,7 +7028,7 @@ module BigIntToLocaleStringOptions : sig
     \}
      (2 if the list doesn't provide that information); the default for percent formatting is the larger of minimumFractionDigits and 0.
   *)
-  val get_maximumFractionDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20]] [@js.enum]) [@@js.get "maximumFractionDigits"]
+  val get_maximumFractionDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) [@@js.get "maximumFractionDigits"]
   
   (**
     The maximum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number formatting is the larger of minimumFractionDigits and 3; the default for currency formatting is the larger of minimumFractionDigits and the number of minor unit digits provided by the 
@@ -7037,19 +7037,19 @@ module BigIntToLocaleStringOptions : sig
     \}
      (2 if the list doesn't provide that information); the default for percent formatting is the larger of minimumFractionDigits and 0.
   *)
-  val set_maximumFractionDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20]] [@js.enum]) -> unit [@@js.set "maximumFractionDigits"]
+  val set_maximumFractionDigits: 'tags this -> ([`L_n_0[@js 0] | `L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) -> unit [@@js.set "maximumFractionDigits"]
   
   (** The minimum number of significant digits to use. Possible values are from 1 to 21; the default is 1. *)
-  val get_minimumSignificantDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20] | `L_n_21[@js 21]] [@js.enum]) [@@js.get "minimumSignificantDigits"]
+  val get_minimumSignificantDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_21[@js 21] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) [@@js.get "minimumSignificantDigits"]
   
   (** The minimum number of significant digits to use. Possible values are from 1 to 21; the default is 1. *)
-  val set_minimumSignificantDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20] | `L_n_21[@js 21]] [@js.enum]) -> unit [@@js.set "minimumSignificantDigits"]
+  val set_minimumSignificantDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_21[@js 21] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) -> unit [@@js.set "minimumSignificantDigits"]
   
   (** The maximum number of significant digits to use. Possible values are from 1 to 21; the default is 21. *)
-  val get_maximumSignificantDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20] | `L_n_21[@js 21]] [@js.enum]) [@@js.get "maximumSignificantDigits"]
+  val get_maximumSignificantDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_21[@js 21] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) [@@js.get "maximumSignificantDigits"]
   
   (** The maximum number of significant digits to use. Possible values are from 1 to 21; the default is 21. *)
-  val set_maximumSignificantDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_2[@js 2] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_20[@js 20] | `L_n_21[@js 21]] [@js.enum]) -> unit [@@js.set "maximumSignificantDigits"]
+  val set_maximumSignificantDigits: 'tags this -> ([`L_n_1[@js 1] | `L_n_10[@js 10] | `L_n_11[@js 11] | `L_n_12[@js 12] | `L_n_13[@js 13] | `L_n_14[@js 14] | `L_n_15[@js 15] | `L_n_16[@js 16] | `L_n_17[@js 17] | `L_n_18[@js 18] | `L_n_19[@js 19] | `L_n_2[@js 2] | `L_n_20[@js 20] | `L_n_21[@js 21] | `L_n_3[@js 3] | `L_n_4[@js 4] | `L_n_5[@js 5] | `L_n_6[@js 6] | `L_n_7[@js 7] | `L_n_8[@js 8] | `L_n_9[@js 9]] [@js.enum]) -> unit [@@js.set "maximumSignificantDigits"]
   
   (**
     The formatting that should be displayed for the number, the defaults is "standard"

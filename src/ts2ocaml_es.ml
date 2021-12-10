@@ -7593,7 +7593,10 @@ module rec
                                                  RelativeTimeFormatUnit :
                                                  sig
                                                    type t =
-                                                     [ `L_s29_day 
+                                                     [ `L_s100_weeks 
+                                                     | `L_s101_year 
+                                                     | `L_s102_years 
+                                                     | `L_s29_day 
                                                      | `L_s31_days 
                                                      | `L_s49_hour 
                                                      | `L_s50_hours 
@@ -7605,10 +7608,7 @@ module rec
                                                      | `L_s81_quarters 
                                                      | `L_s86_second 
                                                      | `L_s87_seconds 
-                                                     | `L_s98_week 
-                                                     | `L_s100_weeks 
-                                                     | `L_s101_year 
-                                                     | `L_s102_years ]
+                                                     | `L_s98_week ]
                                                    type t_0 = t
                                                    val t_to_js : t -> Ojs.t
                                                    val t_of_js : Ojs.t -> t
@@ -7826,12 +7826,12 @@ module rec
                                                  module LDMLPluralRule :
                                                  sig
                                                    type t =
-                                                     [ `L_s40_few 
+                                                     [ `L_s103_zero 
+                                                     | `L_s40_few 
                                                      | `L_s58_many 
                                                      | `L_s74_one 
                                                      | `L_s76_other 
-                                                     | `L_s94_two 
-                                                     | `L_s103_zero ]
+                                                     | `L_s94_two ]
                                                    type t_0 = t
                                                    val t_to_js : t -> Ojs.t
                                                    val t_of_js : Ojs.t -> t
@@ -9135,7 +9135,8 @@ module rec
                                                  DateTimeFormatPartTypes :
                                                  sig
                                                    type t =
-                                                     [ `L_s29_day 
+                                                     [ `L_s101_year 
+                                                     | `L_s29_day 
                                                      | `L_s30_dayPeriod 
                                                      | `L_s35_era 
                                                      | `L_s49_hour 
@@ -9144,8 +9145,7 @@ module rec
                                                      | `L_s63_month 
                                                      | `L_s86_second 
                                                      | `L_s92_timeZoneName 
-                                                     | `L_s99_weekday 
-                                                     | `L_s101_year ]
+                                                     | `L_s99_weekday ]
                                                    type t_0 = t
                                                    val t_to_js : t -> Ojs.t
                                                    val t_of_js : Ojs.t -> t
@@ -10072,7 +10072,10 @@ module rec
                                             module RelativeTimeFormatUnit =
                                               struct
                                                 type t =
-                                                  [ `L_s29_day 
+                                                  [ `L_s100_weeks 
+                                                  | `L_s101_year 
+                                                  | `L_s102_years 
+                                                  | `L_s29_day 
                                                   | `L_s31_days 
                                                   | `L_s49_hour 
                                                   | `L_s50_hours 
@@ -10084,10 +10087,7 @@ module rec
                                                   | `L_s81_quarters 
                                                   | `L_s86_second 
                                                   | `L_s87_seconds 
-                                                  | `L_s98_week 
-                                                  | `L_s100_weeks 
-                                                  | `L_s101_year 
-                                                  | `L_s102_years ]
+                                                  | `L_s98_week ]
                                                 let rec t_of_js : Ojs.t -> t
                                                   =
                                                   fun (x2113 : Ojs.t) ->
@@ -10095,6 +10095,11 @@ module rec
                                                     match Ojs.string_of_js
                                                             x2114
                                                     with
+                                                    | "weeks" ->
+                                                        `L_s100_weeks
+                                                    | "year" -> `L_s101_year
+                                                    | "years" ->
+                                                        `L_s102_years
                                                     | "day" -> `L_s29_day
                                                     | "days" -> `L_s31_days
                                                     | "hour" -> `L_s49_hour
@@ -10115,16 +10120,14 @@ module rec
                                                     | "seconds" ->
                                                         `L_s87_seconds
                                                     | "week" -> `L_s98_week
-                                                    | "weeks" ->
-                                                        `L_s100_weeks
-                                                    | "year" -> `L_s101_year
-                                                    | "years" ->
-                                                        `L_s102_years
                                                     | _ -> assert false
                                                 and t_to_js : t -> Ojs.t =
                                                   fun
                                                     (x2112 :
-                                                      [ `L_s29_day 
+                                                      [ `L_s100_weeks 
+                                                      | `L_s101_year 
+                                                      | `L_s102_years 
+                                                      | `L_s29_day 
                                                       | `L_s31_days 
                                                       | `L_s49_hour 
                                                       | `L_s50_hours 
@@ -10136,12 +10139,18 @@ module rec
                                                       | `L_s81_quarters 
                                                       | `L_s86_second 
                                                       | `L_s87_seconds 
-                                                      | `L_s98_week 
-                                                      | `L_s100_weeks 
-                                                      | `L_s101_year 
-                                                      | `L_s102_years ])
+                                                      | `L_s98_week ])
                                                     ->
                                                     match x2112 with
+                                                    | `L_s100_weeks ->
+                                                        Ojs.string_to_js
+                                                          "weeks"
+                                                    | `L_s101_year ->
+                                                        Ojs.string_to_js
+                                                          "year"
+                                                    | `L_s102_years ->
+                                                        Ojs.string_to_js
+                                                          "years"
                                                     | `L_s29_day ->
                                                         Ojs.string_to_js
                                                           "day"
@@ -10181,15 +10190,6 @@ module rec
                                                     | `L_s98_week ->
                                                         Ojs.string_to_js
                                                           "week"
-                                                    | `L_s100_weeks ->
-                                                        Ojs.string_to_js
-                                                          "weeks"
-                                                    | `L_s101_year ->
-                                                        Ojs.string_to_js
-                                                          "year"
-                                                    | `L_s102_years ->
-                                                        Ojs.string_to_js
-                                                          "years"
                                                 type t_0 = t
                                                 let rec t_0_of_js :
                                                   Ojs.t -> t_0 =
@@ -10786,12 +10786,12 @@ module rec
                                             module LDMLPluralRule =
                                               struct
                                                 type t =
-                                                  [ `L_s40_few 
+                                                  [ `L_s103_zero 
+                                                  | `L_s40_few 
                                                   | `L_s58_many 
                                                   | `L_s74_one 
                                                   | `L_s76_other 
-                                                  | `L_s94_two 
-                                                  | `L_s103_zero ]
+                                                  | `L_s94_two ]
                                                 let rec t_of_js : Ojs.t -> t
                                                   =
                                                   fun (x2203 : Ojs.t) ->
@@ -10799,24 +10799,27 @@ module rec
                                                     match Ojs.string_of_js
                                                             x2204
                                                     with
+                                                    | "zero" -> `L_s103_zero
                                                     | "few" -> `L_s40_few
                                                     | "many" -> `L_s58_many
                                                     | "one" -> `L_s74_one
                                                     | "other" -> `L_s76_other
                                                     | "two" -> `L_s94_two
-                                                    | "zero" -> `L_s103_zero
                                                     | _ -> assert false
                                                 and t_to_js : t -> Ojs.t =
                                                   fun
                                                     (x2202 :
-                                                      [ `L_s40_few 
+                                                      [ `L_s103_zero 
+                                                      | `L_s40_few 
                                                       | `L_s58_many 
                                                       | `L_s74_one 
                                                       | `L_s76_other 
-                                                      | `L_s94_two 
-                                                      | `L_s103_zero ])
+                                                      | `L_s94_two ])
                                                     ->
                                                     match x2202 with
+                                                    | `L_s103_zero ->
+                                                        Ojs.string_to_js
+                                                          "zero"
                                                     | `L_s40_few ->
                                                         Ojs.string_to_js
                                                           "few"
@@ -10832,9 +10835,6 @@ module rec
                                                     | `L_s94_two ->
                                                         Ojs.string_to_js
                                                           "two"
-                                                    | `L_s103_zero ->
-                                                        Ojs.string_to_js
-                                                          "zero"
                                                 type t_0 = t
                                                 let rec t_0_of_js :
                                                   Ojs.t -> t_0 =
@@ -15221,7 +15221,8 @@ module rec
                                             module DateTimeFormatPartTypes =
                                               struct
                                                 type t =
-                                                  [ `L_s29_day 
+                                                  [ `L_s101_year 
+                                                  | `L_s29_day 
                                                   | `L_s30_dayPeriod 
                                                   | `L_s35_era 
                                                   | `L_s49_hour 
@@ -15230,8 +15231,7 @@ module rec
                                                   | `L_s63_month 
                                                   | `L_s86_second 
                                                   | `L_s92_timeZoneName 
-                                                  | `L_s99_weekday 
-                                                  | `L_s101_year ]
+                                                  | `L_s99_weekday ]
                                                 let rec t_of_js : Ojs.t -> t
                                                   =
                                                   fun (x2902 : Ojs.t) ->
@@ -15239,6 +15239,7 @@ module rec
                                                     match Ojs.string_of_js
                                                             x2903
                                                     with
+                                                    | "year" -> `L_s101_year
                                                     | "day" -> `L_s29_day
                                                     | "dayPeriod" ->
                                                         `L_s30_dayPeriod
@@ -15255,12 +15256,12 @@ module rec
                                                         `L_s92_timeZoneName
                                                     | "weekday" ->
                                                         `L_s99_weekday
-                                                    | "year" -> `L_s101_year
                                                     | _ -> assert false
                                                 and t_to_js : t -> Ojs.t =
                                                   fun
                                                     (x2901 :
-                                                      [ `L_s29_day 
+                                                      [ `L_s101_year 
+                                                      | `L_s29_day 
                                                       | `L_s30_dayPeriod 
                                                       | `L_s35_era 
                                                       | `L_s49_hour 
@@ -15269,10 +15270,12 @@ module rec
                                                       | `L_s63_month 
                                                       | `L_s86_second 
                                                       | `L_s92_timeZoneName 
-                                                      | `L_s99_weekday 
-                                                      | `L_s101_year ])
+                                                      | `L_s99_weekday ])
                                                     ->
                                                     match x2901 with
+                                                    | `L_s101_year ->
+                                                        Ojs.string_to_js
+                                                          "year"
                                                     | `L_s29_day ->
                                                         Ojs.string_to_js
                                                           "day"
@@ -15303,9 +15306,6 @@ module rec
                                                     | `L_s99_weekday ->
                                                         Ojs.string_to_js
                                                           "weekday"
-                                                    | `L_s101_year ->
-                                                        Ojs.string_to_js
-                                                          "year"
                                                 type t_0 = t
                                                 let rec t_0_of_js :
                                                   Ojs.t -> t_0 =
@@ -25934,11 +25934,10 @@ module BigIntToLocaleStringOptions =
             (Ojs.bool_to_js x5933)
     let (get_minimumIntegerDigits :
       'tags this ->
-        [ `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6  | 
-          `L_n_7 
-        | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
-        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
-        | `L_n_20  | `L_n_21 ])
+        [ `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13  | `L_n_14 
+        | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19  | `L_n_2 
+        | `L_n_20  | `L_n_21  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ])
       =
       fun (x5935 : 'tags this) ->
         let x5937 =
@@ -25946,14 +25945,6 @@ module BigIntToLocaleStringOptions =
             "minimumIntegerDigits" in
         match Ojs.int_of_js x5937 with
         | 1 -> `L_n_1
-        | 2 -> `L_n_2
-        | 3 -> `L_n_3
-        | 4 -> `L_n_4
-        | 5 -> `L_n_5
-        | 6 -> `L_n_6
-        | 7 -> `L_n_7
-        | 8 -> `L_n_8
-        | 9 -> `L_n_9
         | 10 -> `L_n_10
         | 11 -> `L_n_11
         | 12 -> `L_n_12
@@ -25964,38 +25955,37 @@ module BigIntToLocaleStringOptions =
         | 17 -> `L_n_17
         | 18 -> `L_n_18
         | 19 -> `L_n_19
+        | 2 -> `L_n_2
         | 20 -> `L_n_20
         | 21 -> `L_n_21
+        | 3 -> `L_n_3
+        | 4 -> `L_n_4
+        | 5 -> `L_n_5
+        | 6 -> `L_n_6
+        | 7 -> `L_n_7
+        | 8 -> `L_n_8
+        | 9 -> `L_n_9
         | _ -> assert false
     let (set_minimumIntegerDigits :
       'tags this ->
-        [ `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6  | 
-          `L_n_7 
-        | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
-        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
-        | `L_n_20  | `L_n_21 ] -> unit)
+        [ `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13  | `L_n_14 
+        | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19  | `L_n_2 
+        | `L_n_20  | `L_n_21  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ] -> unit)
       =
       fun (x5938 : 'tags this) ->
         fun
           (x5939 :
-            [ `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
-            | `L_n_7  | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12 
-            | `L_n_13  | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | 
-              `L_n_18 
-            | `L_n_19  | `L_n_20  | `L_n_21 ])
+            [ `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13  | `L_n_14 
+            | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19  | 
+              `L_n_2 
+            | `L_n_20  | `L_n_21  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+            | `L_n_7  | `L_n_8  | `L_n_9 ])
           ->
           Ojs.set_prop_ascii (this_to_js Obj.magic x5938)
             "minimumIntegerDigits"
             (match x5939 with
              | `L_n_1 -> Ojs.int_to_js 1
-             | `L_n_2 -> Ojs.int_to_js 2
-             | `L_n_3 -> Ojs.int_to_js 3
-             | `L_n_4 -> Ojs.int_to_js 4
-             | `L_n_5 -> Ojs.int_to_js 5
-             | `L_n_6 -> Ojs.int_to_js 6
-             | `L_n_7 -> Ojs.int_to_js 7
-             | `L_n_8 -> Ojs.int_to_js 8
-             | `L_n_9 -> Ojs.int_to_js 9
              | `L_n_10 -> Ojs.int_to_js 10
              | `L_n_11 -> Ojs.int_to_js 11
              | `L_n_12 -> Ojs.int_to_js 12
@@ -26006,15 +25996,22 @@ module BigIntToLocaleStringOptions =
              | `L_n_17 -> Ojs.int_to_js 17
              | `L_n_18 -> Ojs.int_to_js 18
              | `L_n_19 -> Ojs.int_to_js 19
+             | `L_n_2 -> Ojs.int_to_js 2
              | `L_n_20 -> Ojs.int_to_js 20
-             | `L_n_21 -> Ojs.int_to_js 21)
+             | `L_n_21 -> Ojs.int_to_js 21
+             | `L_n_3 -> Ojs.int_to_js 3
+             | `L_n_4 -> Ojs.int_to_js 4
+             | `L_n_5 -> Ojs.int_to_js 5
+             | `L_n_6 -> Ojs.int_to_js 6
+             | `L_n_7 -> Ojs.int_to_js 7
+             | `L_n_8 -> Ojs.int_to_js 8
+             | `L_n_9 -> Ojs.int_to_js 9)
     let (get_minimumFractionDigits :
       'tags this ->
-        [ `L_n_0  | `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | 
-          `L_n_6 
-        | `L_n_7  | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12 
-        | `L_n_13  | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18 
-        | `L_n_19  | `L_n_20 ])
+        [ `L_n_0  | `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
+        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
+        | `L_n_2  | `L_n_20  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ])
       =
       fun (x5941 : 'tags this) ->
         let x5943 =
@@ -26023,14 +26020,6 @@ module BigIntToLocaleStringOptions =
         match Ojs.int_of_js x5943 with
         | 0 -> `L_n_0
         | 1 -> `L_n_1
-        | 2 -> `L_n_2
-        | 3 -> `L_n_3
-        | 4 -> `L_n_4
-        | 5 -> `L_n_5
-        | 6 -> `L_n_6
-        | 7 -> `L_n_7
-        | 8 -> `L_n_8
-        | 9 -> `L_n_9
         | 10 -> `L_n_10
         | 11 -> `L_n_11
         | 12 -> `L_n_12
@@ -26041,38 +26030,37 @@ module BigIntToLocaleStringOptions =
         | 17 -> `L_n_17
         | 18 -> `L_n_18
         | 19 -> `L_n_19
+        | 2 -> `L_n_2
         | 20 -> `L_n_20
+        | 3 -> `L_n_3
+        | 4 -> `L_n_4
+        | 5 -> `L_n_5
+        | 6 -> `L_n_6
+        | 7 -> `L_n_7
+        | 8 -> `L_n_8
+        | 9 -> `L_n_9
         | _ -> assert false
     let (set_minimumFractionDigits :
       'tags this ->
-        [ `L_n_0  | `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | 
-          `L_n_6 
-        | `L_n_7  | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12 
-        | `L_n_13  | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18 
-        | `L_n_19  | `L_n_20 ] -> unit)
+        [ `L_n_0  | `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
+        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
+        | `L_n_2  | `L_n_20  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ] -> unit)
       =
       fun (x5944 : 'tags this) ->
         fun
           (x5945 :
-            [ `L_n_0  | `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5 
-            | `L_n_6  | `L_n_7  | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11 
-            | `L_n_12  | `L_n_13  | `L_n_14  | `L_n_15  | `L_n_16  | 
-              `L_n_17 
-            | `L_n_18  | `L_n_19  | `L_n_20 ])
+            [ `L_n_0  | `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
+            | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | 
+              `L_n_19 
+            | `L_n_2  | `L_n_20  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+            | `L_n_7  | `L_n_8  | `L_n_9 ])
           ->
           Ojs.set_prop_ascii (this_to_js Obj.magic x5944)
             "minimumFractionDigits"
             (match x5945 with
              | `L_n_0 -> Ojs.int_to_js 0
              | `L_n_1 -> Ojs.int_to_js 1
-             | `L_n_2 -> Ojs.int_to_js 2
-             | `L_n_3 -> Ojs.int_to_js 3
-             | `L_n_4 -> Ojs.int_to_js 4
-             | `L_n_5 -> Ojs.int_to_js 5
-             | `L_n_6 -> Ojs.int_to_js 6
-             | `L_n_7 -> Ojs.int_to_js 7
-             | `L_n_8 -> Ojs.int_to_js 8
-             | `L_n_9 -> Ojs.int_to_js 9
              | `L_n_10 -> Ojs.int_to_js 10
              | `L_n_11 -> Ojs.int_to_js 11
              | `L_n_12 -> Ojs.int_to_js 12
@@ -26083,14 +26071,21 @@ module BigIntToLocaleStringOptions =
              | `L_n_17 -> Ojs.int_to_js 17
              | `L_n_18 -> Ojs.int_to_js 18
              | `L_n_19 -> Ojs.int_to_js 19
-             | `L_n_20 -> Ojs.int_to_js 20)
+             | `L_n_2 -> Ojs.int_to_js 2
+             | `L_n_20 -> Ojs.int_to_js 20
+             | `L_n_3 -> Ojs.int_to_js 3
+             | `L_n_4 -> Ojs.int_to_js 4
+             | `L_n_5 -> Ojs.int_to_js 5
+             | `L_n_6 -> Ojs.int_to_js 6
+             | `L_n_7 -> Ojs.int_to_js 7
+             | `L_n_8 -> Ojs.int_to_js 8
+             | `L_n_9 -> Ojs.int_to_js 9)
     let (get_maximumFractionDigits :
       'tags this ->
-        [ `L_n_0  | `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | 
-          `L_n_6 
-        | `L_n_7  | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12 
-        | `L_n_13  | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18 
-        | `L_n_19  | `L_n_20 ])
+        [ `L_n_0  | `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
+        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
+        | `L_n_2  | `L_n_20  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ])
       =
       fun (x5947 : 'tags this) ->
         let x5949 =
@@ -26099,14 +26094,6 @@ module BigIntToLocaleStringOptions =
         match Ojs.int_of_js x5949 with
         | 0 -> `L_n_0
         | 1 -> `L_n_1
-        | 2 -> `L_n_2
-        | 3 -> `L_n_3
-        | 4 -> `L_n_4
-        | 5 -> `L_n_5
-        | 6 -> `L_n_6
-        | 7 -> `L_n_7
-        | 8 -> `L_n_8
-        | 9 -> `L_n_9
         | 10 -> `L_n_10
         | 11 -> `L_n_11
         | 12 -> `L_n_12
@@ -26117,38 +26104,37 @@ module BigIntToLocaleStringOptions =
         | 17 -> `L_n_17
         | 18 -> `L_n_18
         | 19 -> `L_n_19
+        | 2 -> `L_n_2
         | 20 -> `L_n_20
+        | 3 -> `L_n_3
+        | 4 -> `L_n_4
+        | 5 -> `L_n_5
+        | 6 -> `L_n_6
+        | 7 -> `L_n_7
+        | 8 -> `L_n_8
+        | 9 -> `L_n_9
         | _ -> assert false
     let (set_maximumFractionDigits :
       'tags this ->
-        [ `L_n_0  | `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | 
-          `L_n_6 
-        | `L_n_7  | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12 
-        | `L_n_13  | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18 
-        | `L_n_19  | `L_n_20 ] -> unit)
+        [ `L_n_0  | `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
+        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
+        | `L_n_2  | `L_n_20  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ] -> unit)
       =
       fun (x5950 : 'tags this) ->
         fun
           (x5951 :
-            [ `L_n_0  | `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5 
-            | `L_n_6  | `L_n_7  | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11 
-            | `L_n_12  | `L_n_13  | `L_n_14  | `L_n_15  | `L_n_16  | 
-              `L_n_17 
-            | `L_n_18  | `L_n_19  | `L_n_20 ])
+            [ `L_n_0  | `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
+            | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | 
+              `L_n_19 
+            | `L_n_2  | `L_n_20  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+            | `L_n_7  | `L_n_8  | `L_n_9 ])
           ->
           Ojs.set_prop_ascii (this_to_js Obj.magic x5950)
             "maximumFractionDigits"
             (match x5951 with
              | `L_n_0 -> Ojs.int_to_js 0
              | `L_n_1 -> Ojs.int_to_js 1
-             | `L_n_2 -> Ojs.int_to_js 2
-             | `L_n_3 -> Ojs.int_to_js 3
-             | `L_n_4 -> Ojs.int_to_js 4
-             | `L_n_5 -> Ojs.int_to_js 5
-             | `L_n_6 -> Ojs.int_to_js 6
-             | `L_n_7 -> Ojs.int_to_js 7
-             | `L_n_8 -> Ojs.int_to_js 8
-             | `L_n_9 -> Ojs.int_to_js 9
              | `L_n_10 -> Ojs.int_to_js 10
              | `L_n_11 -> Ojs.int_to_js 11
              | `L_n_12 -> Ojs.int_to_js 12
@@ -26159,14 +26145,21 @@ module BigIntToLocaleStringOptions =
              | `L_n_17 -> Ojs.int_to_js 17
              | `L_n_18 -> Ojs.int_to_js 18
              | `L_n_19 -> Ojs.int_to_js 19
-             | `L_n_20 -> Ojs.int_to_js 20)
+             | `L_n_2 -> Ojs.int_to_js 2
+             | `L_n_20 -> Ojs.int_to_js 20
+             | `L_n_3 -> Ojs.int_to_js 3
+             | `L_n_4 -> Ojs.int_to_js 4
+             | `L_n_5 -> Ojs.int_to_js 5
+             | `L_n_6 -> Ojs.int_to_js 6
+             | `L_n_7 -> Ojs.int_to_js 7
+             | `L_n_8 -> Ojs.int_to_js 8
+             | `L_n_9 -> Ojs.int_to_js 9)
     let (get_minimumSignificantDigits :
       'tags this ->
-        [ `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6  | 
-          `L_n_7 
-        | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
-        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
-        | `L_n_20  | `L_n_21 ])
+        [ `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13  | `L_n_14 
+        | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19  | `L_n_2 
+        | `L_n_20  | `L_n_21  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ])
       =
       fun (x5953 : 'tags this) ->
         let x5955 =
@@ -26174,14 +26167,6 @@ module BigIntToLocaleStringOptions =
             "minimumSignificantDigits" in
         match Ojs.int_of_js x5955 with
         | 1 -> `L_n_1
-        | 2 -> `L_n_2
-        | 3 -> `L_n_3
-        | 4 -> `L_n_4
-        | 5 -> `L_n_5
-        | 6 -> `L_n_6
-        | 7 -> `L_n_7
-        | 8 -> `L_n_8
-        | 9 -> `L_n_9
         | 10 -> `L_n_10
         | 11 -> `L_n_11
         | 12 -> `L_n_12
@@ -26192,38 +26177,37 @@ module BigIntToLocaleStringOptions =
         | 17 -> `L_n_17
         | 18 -> `L_n_18
         | 19 -> `L_n_19
+        | 2 -> `L_n_2
         | 20 -> `L_n_20
         | 21 -> `L_n_21
+        | 3 -> `L_n_3
+        | 4 -> `L_n_4
+        | 5 -> `L_n_5
+        | 6 -> `L_n_6
+        | 7 -> `L_n_7
+        | 8 -> `L_n_8
+        | 9 -> `L_n_9
         | _ -> assert false
     let (set_minimumSignificantDigits :
       'tags this ->
-        [ `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6  | 
-          `L_n_7 
-        | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
-        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
-        | `L_n_20  | `L_n_21 ] -> unit)
+        [ `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13  | `L_n_14 
+        | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19  | `L_n_2 
+        | `L_n_20  | `L_n_21  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ] -> unit)
       =
       fun (x5956 : 'tags this) ->
         fun
           (x5957 :
-            [ `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
-            | `L_n_7  | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12 
-            | `L_n_13  | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | 
-              `L_n_18 
-            | `L_n_19  | `L_n_20  | `L_n_21 ])
+            [ `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13  | `L_n_14 
+            | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19  | 
+              `L_n_2 
+            | `L_n_20  | `L_n_21  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+            | `L_n_7  | `L_n_8  | `L_n_9 ])
           ->
           Ojs.set_prop_ascii (this_to_js Obj.magic x5956)
             "minimumSignificantDigits"
             (match x5957 with
              | `L_n_1 -> Ojs.int_to_js 1
-             | `L_n_2 -> Ojs.int_to_js 2
-             | `L_n_3 -> Ojs.int_to_js 3
-             | `L_n_4 -> Ojs.int_to_js 4
-             | `L_n_5 -> Ojs.int_to_js 5
-             | `L_n_6 -> Ojs.int_to_js 6
-             | `L_n_7 -> Ojs.int_to_js 7
-             | `L_n_8 -> Ojs.int_to_js 8
-             | `L_n_9 -> Ojs.int_to_js 9
              | `L_n_10 -> Ojs.int_to_js 10
              | `L_n_11 -> Ojs.int_to_js 11
              | `L_n_12 -> Ojs.int_to_js 12
@@ -26234,15 +26218,22 @@ module BigIntToLocaleStringOptions =
              | `L_n_17 -> Ojs.int_to_js 17
              | `L_n_18 -> Ojs.int_to_js 18
              | `L_n_19 -> Ojs.int_to_js 19
+             | `L_n_2 -> Ojs.int_to_js 2
              | `L_n_20 -> Ojs.int_to_js 20
-             | `L_n_21 -> Ojs.int_to_js 21)
+             | `L_n_21 -> Ojs.int_to_js 21
+             | `L_n_3 -> Ojs.int_to_js 3
+             | `L_n_4 -> Ojs.int_to_js 4
+             | `L_n_5 -> Ojs.int_to_js 5
+             | `L_n_6 -> Ojs.int_to_js 6
+             | `L_n_7 -> Ojs.int_to_js 7
+             | `L_n_8 -> Ojs.int_to_js 8
+             | `L_n_9 -> Ojs.int_to_js 9)
     let (get_maximumSignificantDigits :
       'tags this ->
-        [ `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6  | 
-          `L_n_7 
-        | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
-        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
-        | `L_n_20  | `L_n_21 ])
+        [ `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13  | `L_n_14 
+        | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19  | `L_n_2 
+        | `L_n_20  | `L_n_21  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ])
       =
       fun (x5959 : 'tags this) ->
         let x5961 =
@@ -26250,14 +26241,6 @@ module BigIntToLocaleStringOptions =
             "maximumSignificantDigits" in
         match Ojs.int_of_js x5961 with
         | 1 -> `L_n_1
-        | 2 -> `L_n_2
-        | 3 -> `L_n_3
-        | 4 -> `L_n_4
-        | 5 -> `L_n_5
-        | 6 -> `L_n_6
-        | 7 -> `L_n_7
-        | 8 -> `L_n_8
-        | 9 -> `L_n_9
         | 10 -> `L_n_10
         | 11 -> `L_n_11
         | 12 -> `L_n_12
@@ -26268,38 +26251,37 @@ module BigIntToLocaleStringOptions =
         | 17 -> `L_n_17
         | 18 -> `L_n_18
         | 19 -> `L_n_19
+        | 2 -> `L_n_2
         | 20 -> `L_n_20
         | 21 -> `L_n_21
+        | 3 -> `L_n_3
+        | 4 -> `L_n_4
+        | 5 -> `L_n_5
+        | 6 -> `L_n_6
+        | 7 -> `L_n_7
+        | 8 -> `L_n_8
+        | 9 -> `L_n_9
         | _ -> assert false
     let (set_maximumSignificantDigits :
       'tags this ->
-        [ `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6  | 
-          `L_n_7 
-        | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13 
-        | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19 
-        | `L_n_20  | `L_n_21 ] -> unit)
+        [ `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13  | `L_n_14 
+        | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19  | `L_n_2 
+        | `L_n_20  | `L_n_21  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+        | `L_n_7  | `L_n_8  | `L_n_9 ] -> unit)
       =
       fun (x5962 : 'tags this) ->
         fun
           (x5963 :
-            [ `L_n_1  | `L_n_2  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
-            | `L_n_7  | `L_n_8  | `L_n_9  | `L_n_10  | `L_n_11  | `L_n_12 
-            | `L_n_13  | `L_n_14  | `L_n_15  | `L_n_16  | `L_n_17  | 
-              `L_n_18 
-            | `L_n_19  | `L_n_20  | `L_n_21 ])
+            [ `L_n_1  | `L_n_10  | `L_n_11  | `L_n_12  | `L_n_13  | `L_n_14 
+            | `L_n_15  | `L_n_16  | `L_n_17  | `L_n_18  | `L_n_19  | 
+              `L_n_2 
+            | `L_n_20  | `L_n_21  | `L_n_3  | `L_n_4  | `L_n_5  | `L_n_6 
+            | `L_n_7  | `L_n_8  | `L_n_9 ])
           ->
           Ojs.set_prop_ascii (this_to_js Obj.magic x5962)
             "maximumSignificantDigits"
             (match x5963 with
              | `L_n_1 -> Ojs.int_to_js 1
-             | `L_n_2 -> Ojs.int_to_js 2
-             | `L_n_3 -> Ojs.int_to_js 3
-             | `L_n_4 -> Ojs.int_to_js 4
-             | `L_n_5 -> Ojs.int_to_js 5
-             | `L_n_6 -> Ojs.int_to_js 6
-             | `L_n_7 -> Ojs.int_to_js 7
-             | `L_n_8 -> Ojs.int_to_js 8
-             | `L_n_9 -> Ojs.int_to_js 9
              | `L_n_10 -> Ojs.int_to_js 10
              | `L_n_11 -> Ojs.int_to_js 11
              | `L_n_12 -> Ojs.int_to_js 12
@@ -26310,8 +26292,16 @@ module BigIntToLocaleStringOptions =
              | `L_n_17 -> Ojs.int_to_js 17
              | `L_n_18 -> Ojs.int_to_js 18
              | `L_n_19 -> Ojs.int_to_js 19
+             | `L_n_2 -> Ojs.int_to_js 2
              | `L_n_20 -> Ojs.int_to_js 20
-             | `L_n_21 -> Ojs.int_to_js 21)
+             | `L_n_21 -> Ojs.int_to_js 21
+             | `L_n_3 -> Ojs.int_to_js 3
+             | `L_n_4 -> Ojs.int_to_js 4
+             | `L_n_5 -> Ojs.int_to_js 5
+             | `L_n_6 -> Ojs.int_to_js 6
+             | `L_n_7 -> Ojs.int_to_js 7
+             | `L_n_8 -> Ojs.int_to_js 8
+             | `L_n_9 -> Ojs.int_to_js 9)
     let (get_notation : 'tags this -> string) =
       fun (x5965 : 'tags this) ->
         Ojs.string_of_js

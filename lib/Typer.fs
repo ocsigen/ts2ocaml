@@ -2,10 +2,10 @@ module Ts2Ml.Typer
 
 open Ts2Ml.Common
 open Ts2Ml.Syntax
-open Ts2Ml.DataTypes
+open DataTypes
 
 type TyperOptions =
-  inherit GlobalOptions
+  inherit IOptions
 
   /// Make class inherit `Iterable<T>` when it has `[Symbol.iterator]: Iterator<T>`.
   abstract inheritIterable: bool with get,set
@@ -69,10 +69,10 @@ type TyperCache = {
   hasNoInherits: MutableSet<FullName>
 }
 
-type TyperContext<'Options, 'State when 'Options :> GlobalOptions> = private {
-  _currentSourceFile: Path.Relative
+type TyperContext<'Options, 'State when 'Options :> IOptions> = private {
+  _currentSourceFile: Path.Absolute
   _currentNamespace: string list
-  _info: Map<Path.Relative, SourceFileInfo>
+  _info: Map<Path.Absolute, SourceFileInfo>
   _state: 'State
   _cache: TyperCache
   _options: 'Options
@@ -92,10 +92,10 @@ let inline private warn (ctx: IContext<_>) (loc: Location) fmt =
   Printf.kprintf (fun s -> ctx.logger.warnf "%s at %s" s loc.AsString) fmt
 
 module TyperContext =
-  type private Anonoymous<'Options, 'State when 'Options :> GlobalOptions> = {|
-    _currentSourceFile: Path.Relative
+  type private Anonoymous<'Options, 'State when 'Options :> IOptions> = {|
+    _currentSourceFile: Path.Absolute
     _currentNamespace: string list
-    _info: Map<Path.Relative, SourceFileInfo>
+    _info: Map<Path.Absolute, SourceFileInfo>
     _state: 'State
     _cache: TyperCache
     _options: 'Options
@@ -1114,7 +1114,7 @@ module Transform =
             )
 
           let inline app t ts loc =
-            App (AIdent { name = [t]; kind = Some (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Statement]); fullName = []; loc = loc}, ts, loc)
+            App (AIdent { name = [t]; kind = Some (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Statement]); fullName = []; loc = loc; parent = None}, ts, loc)
 
           for ma, m in c.members do
             match m with

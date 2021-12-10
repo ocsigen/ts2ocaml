@@ -142,18 +142,13 @@ module Path =
   module Node = Node.Api
 
   type Absolute = string
-  /// relative to current directory
-  type Relative = string
   type Difference = string
-
-  let relative (path: string) : Relative =
-    Node.path.relative(Node.``process``.cwd(), path)
 
   let absolute (path: string) : Absolute =
     if Node.path.isAbsolute(path) then path
     else Node.path.resolve(path)
 
-  let diff (fromPath: string) (toPath: string) : Difference =
+  let diff (fromPath: Absolute) (toPath: Absolute) : string =
     let fromPath =
       if Node.fs.lstatSync(!^fromPath).isDirectory() then fromPath
       else Node.path.dirname(fromPath)

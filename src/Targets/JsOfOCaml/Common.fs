@@ -1,6 +1,7 @@
 module Targets.JsOfOCaml.Common
 
 open Fable.Core
+open Ts2Ml
 open DataTypes
 
 [<StringEnum; RequireQualifiedAccess>]

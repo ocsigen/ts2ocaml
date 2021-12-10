@@ -1,4 +1,4 @@
-namespace Ts2Ml.DataTypes
+namespace DataTypes
 
 type Graph<'node when 'node: comparison> = Map<'node, 'node list>
 

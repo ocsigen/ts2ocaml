@@ -1,22 +1,19 @@
 module Ts2Ml.Common
 
 type ILogger =
-  abstract tracef: fmt:Printf.StringFormat<'T, 'Result> -> 'T
-  abstract warnf:  fmt:Printf.StringFormat<'T, 'Result> -> 'T
+  abstract tracef: fmt:Printf.StringFormat<'T, unit> -> 'T
+  abstract warnf:  fmt:Printf.StringFormat<'T, unit> -> 'T
   abstract errorf: fmt:Printf.StringFormat<'T, 'Result> -> 'T
 
-type GlobalOptions =
-  abstract verbose: bool with get
-  abstract nowarn: bool with get
-  abstract merge: bool with get, set
+type IOptions =
   abstract followRelativeReferences: bool with get, set
 
-type IContext<'Options when 'Options :> GlobalOptions> =
+type IContext<'Options when 'Options :> IOptions> =
   abstract options: 'Options
   abstract logger: ILogger
 
 type IContext =
-  inherit IContext<GlobalOptions>
+  inherit IContext<IOptions>
 
 /// Stateful class to rename overloaded identifiers.
 type OverloadRenamer(?rename: string -> int -> string, ?used: Set<string * string>) =

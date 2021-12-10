@@ -1,6 +1,7 @@
 module Targets.JsOfOCaml.OCamlHelper
 
 open System
+open Ts2Ml
 open Syntax
 open Targets.JsOfOCaml.Common
 open DataTypes

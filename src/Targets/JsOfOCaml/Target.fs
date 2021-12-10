@@ -1,5 +1,6 @@
 module Targets.JsOfOCaml.Target
 
+open Ts2Ml
 open Syntax
 open DataTypes
 
@@ -11,10 +12,10 @@ open Fable.Core.JsInterop
 let private builder (argv: Yargs.Argv<Options>) : Yargs.Argv<Options> =
   argv |> Options.register
 
-let private run (input: Input) (options: Options) =
+let private run (input: Input) (ctx: IContext<Options>) =
   let outputDir =
     let curdir = Node.Api.``process``.cwd()
-    match options.outputDir with
+    match ctx.options.outputDir with
     | None -> curdir
     | Some dir ->
       let path =
@@ -30,28 +31,30 @@ let private run (input: Input) (options: Options) =
 
   let results =
     let result =
-      if options.createMinimalStdlib then
+      if ctx.options.createMinimalStdlib then
         [{ fileName = "ts2ocaml_min.mli"; content = Text.str stdlib; stubLines = [] }]
       else []
     if List.isEmpty input.sources then result
-    else if options.stdlib then
-      result @ emitStdlib input options
+    else if ctx.options.stdlib then
+      failwith "TODO"
+      // result @ emitStdlib input ctx
     else
-      result @ emit input options
+      failwith "TODO"
+      // result @ emit input ctx
 
   if results = [] then
-    Log.warnf options "no input files are given."
+    ctx.logger.warnf "no input files are given."
 
   for result in results do
     let fullPath = Node.Api.path.join[|outputDir; result.fileName|]
-    Log.tracef options "* writing the binding to '%s'..." fullPath
+    ctx.logger.tracef "* writing the binding to '%s'..." fullPath
     Node.Api.fs.writeFileSync(fullPath, Text.toString 2 result.content)
 
   let newStubLines =
     results |> List.collect (fun result -> result.stubLines) |> Set.ofList
 
   if not (Set.isEmpty newStubLines) then
-    let stubFile = Node.Api.path.join [|outputDir; options.stubFile|]
+    let stubFile = Node.Api.path.join [|outputDir; ctx.options.stubFile|]
     let existingStubLines =
       if not (Node.Api.fs.existsSync(!^stubFile)) then Set.empty
       else if Node.Api.fs.lstatSync(!^stubFile).isFile() then
@@ -62,7 +65,7 @@ let private run (input: Input) (options: Options) =
         failwithf "The path '%s' is not a file." stubFile
     let stubLines = Set.union existingStubLines newStubLines
     if stubLines <> existingStubLines then
-      Log.tracef options "* writing the stub file to '%s'..." stubFile
+      ctx.logger.tracef "* writing the stub file to '%s'..." stubFile
       let stub = stubLines |> String.concat Node.Api.os.EOL
       Node.Api.fs.writeFileSync(stubFile, stub)
 

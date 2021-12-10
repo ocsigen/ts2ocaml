@@ -5,27 +5,32 @@ open Fable.Core.JsInterop
 
 module Node = Node.Api
 
-let getPackageJsonPath (exampleFilePath: string) =
-  let parts =
-    exampleFilePath
-    |> String.split Path.separator
-    |> List.ofArray
-  match parts |> List.tryFindIndexBack ((=) "node_modules") with
-  | None -> None
-  | Some i ->
-    let prefix, rest = List.splitAt (i+1) parts
-    if rest = [] then None
-    else
-      let packageName =
-        match rest with
-        | userName :: packageName :: _ when userName.StartsWith("@") -> [userName; packageName]
-        | packageName :: _ -> [packageName]
-        | _ -> failwith "impossible_getPackageJsonPath_root"
-      let path =
-        prefix @ packageName @ ["package.json"] |> String.concat Path.separator
+let inline nodeOnly (f: unit -> 'a option) : 'a option =
+  if not BrowserOrNode.isNode then None
+  else f ()
 
-      if not <| Node.fs.existsSync(!^path) then None
-      else Some (Path.absolute path)
+let getPackageJsonPath (exampleFilePath: string) =
+  nodeOnly <| fun () ->
+    let parts =
+      exampleFilePath
+      |> String.split Path.separator
+      |> List.ofArray
+    match parts |> List.tryFindIndexBack ((=) "node_modules") with
+    | None -> None
+    | Some i ->
+      let prefix, rest = List.splitAt (i+1) parts
+      if rest = [] then None
+      else
+        let packageName =
+          match rest with
+          | userName :: packageName :: _ when userName.StartsWith("@") -> [userName; packageName]
+          | packageName :: _ -> [packageName]
+          | _ -> failwith "impossible_getPackageJsonPath_root"
+        let path =
+          prefix @ packageName @ ["package.json"] |> String.concat Path.separator
+
+        if not <| Node.fs.existsSync(!^path) then None
+        else Some (Path.absolute path)
 
 type IPackageExportItemEntry =
   inherit JSRecord<string, string>
@@ -42,83 +47,81 @@ type IPackageJson =
   abstract typings: string option
   abstract exports: JSRecord<string, IPackageExportItem> option
 
-let getPackageJson (path: string) : IPackageJson =
-  let content = Node.fs.readFileSync(path, "utf-8")
-  !!JS.JSON.parse(content)
-
 let getPackageInfo (exampleFilePath: string) : Syntax.PackageInfo option =
-  match getPackageJsonPath exampleFilePath with
-  | None -> None
-  | Some path ->
-    let p = getPackageJson path
+  nodeOnly <| fun () ->
+    match getPackageJsonPath exampleFilePath with
+    | None -> None
+    | Some path ->
+      let p =
+        let content = Node.fs.readFileSync(path, "utf-8")
+        !!JS.JSON.parse(content) : IPackageJson
 
-    let rootPath = Path.dirname path
+      let rootPath = Path.dirname path
 
-    let name =
-      if p.name.StartsWith("@types/") then
-        let tmp = p.name.Substring(7)
-        if tmp.Contains("__") then "@" + tmp.Replace("__", "/")
-        else tmp
-      else p.name
+      let name =
+        if p.name.StartsWith("@types/") then
+          let tmp = p.name.Substring(7)
+          if tmp.Contains("__") then "@" + tmp.Replace("__", "/")
+          else tmp
+        else p.name
 
-    let shortName =
-      p.name
-      |> String.splitThenRemoveEmptyEntries "/"
-      |> Array.skipWhile (fun s -> s.StartsWith("@"))
-      |> String.concat "/"
+      let shortName =
+        p.name
+        |> String.splitThenRemoveEmptyEntries "/"
+        |> Array.skipWhile (fun s -> s.StartsWith("@"))
+        |> String.concat "/"
 
-    let exports =
-      match p.exports with
-      | None -> []
-      | Some exports ->
-        [
-          for k, v in exports.entries do
-            match v.types with
-            | None -> ()
-            | Some types ->
-              if JS.typeof types = "string" then
-                yield k, !!types
-              else
-                let types = !!types : IPackageExportItemEntry
-                match types.``default`` with
-                | Some v -> yield k, v
-                | None ->
-                  yield!
-                    types.entries
-                    |> Array.tryPick (fun (_, v) ->
-                      if JS.typeof v = "string" && v.EndsWith(".d.ts") then Some v
-                      else None)
-                    |> Option.map (fun v -> k, v)
-                    |> Option.toList
-        ]
+      let exports =
+        match p.exports with
+        | None -> []
+        | Some exports ->
+          [
+            for k, v in exports.entries do
+              match v.types with
+              | None -> ()
+              | Some types ->
+                if JS.typeof types = "string" then
+                  yield k, !!types
+                else
+                  let types = !!types : IPackageExportItemEntry
+                  match types.``default`` with
+                  | Some v -> yield k, v
+                  | None ->
+                    yield!
+                      types.entries
+                      |> Array.tryPick (fun (_, v) ->
+                        if JS.typeof v = "string" && v.EndsWith(".d.ts") then Some v
+                        else None)
+                      |> Option.map (fun v -> k, v)
+                      |> Option.toList
+          ]
 
-    let indexFile =
-      match Option.orElse p.types p.typings, exports |> List.tryFind (fst >> (=) ".") with
-      | None, None ->
-        let index = Path.join [rootPath; "index.d.ts"]
-        if not <| Node.fs.existsSync(!^index) then None
-        else
-          Path.relative index |> Node.path.normalize |> Some
-      | Some typings, _
-      | None, Some (_, typings) ->
-        Path.join [rootPath; typings] |> Path.relative |> Node.path.normalize |> Some
+      let indexFile =
+        match Option.orElse p.types p.typings, exports |> List.tryFind (fst >> (=) ".") with
+        | None, None ->
+          let index = Path.join [rootPath; "index.d.ts"]
+          if not <| Node.fs.existsSync(!^index) then None
+          else Some index
+        | Some typings, _
+        | None, Some (_, typings) ->
+          Path.join [rootPath; typings] |> Some
 
-    let exports =
-      exports
-      |> List.filter (fst >> (<>) ".")
-      |> List.map (fun (k, v) ->
-        {| submodule = k;
-           file = Path.join [rootPath; v] |> Path.relative |> Node.path.normalize |})
+      let exports =
+        exports
+        |> List.filter (fst >> (<>) ".")
+        |> List.map (fun (k, v) ->
+          {| submodule = k;
+             file = Path.join [rootPath; v] |})
 
-    Some {
-      name = name
-      shortName = shortName
-      isDefinitelyTyped = p.name.StartsWith("@types/")
-      version = p.version
-      rootPath = rootPath
-      indexFile = indexFile
-      exports = exports
-    }
+      Some {
+        name = name
+        shortName = shortName
+        isDefinitelyTyped = p.name.StartsWith("@types/")
+        version = p.version
+        rootPath = rootPath
+        indexFile = indexFile
+        exports = exports
+      }
 
 type InferenceResult =
   | Valid of string
@@ -132,7 +135,7 @@ module InferenceResult =
     | Valid s | Heuristic s -> Some s
     | Unknown -> None
 
-let inferPackageInfoFromFileName (sourceFile: Path.Relative) : {| name: string; isDefinitelyTyped: bool; rest: string list |} option =
+let inferPackageInfoFromFileName (sourceFile: Path.Absolute) : {| name: string; isDefinitelyTyped: bool; rest: string list |} option =
   let parts =
     sourceFile
       |> fun x ->
@@ -154,7 +157,7 @@ let inferPackageInfoFromFileName (sourceFile: Path.Relative) : {| name: string; 
 let inline stripExtension path =
   path |> String.replace ".ts" "" |> String.replace ".d" ""
 
-let getJsModuleName (info: Syntax.PackageInfo option) (sourceFile: Path.Relative) =
+let getJsModuleName (info: Syntax.PackageInfo option) (sourceFile: Path.Absolute) =
   let getSubmodule rest =
     match List.rev rest with
     | "index.d.ts" :: name :: _ -> name
@@ -166,7 +169,7 @@ let getJsModuleName (info: Syntax.PackageInfo option) (sourceFile: Path.Relative
       info.name |> Valid
     else
       // make it relative to the package root directory
-      let relativePath = Path.diff info.rootPath (Path.absolute sourceFile)
+      let relativePath = Path.diff info.rootPath sourceFile
       if info.isDefinitelyTyped then
         Path.join [info.name; stripExtension relativePath] |> Valid
       else
@@ -198,7 +201,7 @@ let getJsModuleName (info: Syntax.PackageInfo option) (sourceFile: Path.Relative
           info.name + "/" + getSubmodule rest
           |> Heuristic
 
-let deriveModuleName (info: Syntax.PackageInfo option) (srcs: Path.Relative list) =
+let deriveModuleName (info: Syntax.PackageInfo option) (srcs: Path.Absolute list) =
  match srcs with
   | [] -> invalidArg "srcs" "source is empty"
   | [src] -> getJsModuleName info src
@@ -219,11 +222,18 @@ let deriveModuleName (info: Syntax.PackageInfo option) (srcs: Path.Relative list
       else
         fallback ()
 
-let resolveRelativeImportPath (info: Syntax.PackageInfo option) (currentFile: Path.Relative) (path: string) =
+let resolveRelativeImportPath (info: Syntax.PackageInfo option) (currentFile: Path.Absolute) (allFiles: Path.Absolute list) (path: string) =
   if path.StartsWith(".") then
     let targetPath =
       let path = Path.join [Path.dirname currentFile; path]
-      if not <| path.EndsWith(".ts") then Path.join [path; "index.d.ts"]
+      if not <| path.EndsWith(".ts") then
+        let tryFind p =
+          if allFiles |> List.contains p then Some p
+          else None
+        tryFind $"{path}.d.ts"
+        |> Option.orElseWith (fun () -> tryFind (Path.join [path; "index.d.ts"]))
+        |> Option.orElseWith (fun () -> allFiles |> List.tryFind (fun p -> p.StartsWith(path)))
+        |> Option.defaultWith (fun () -> Path.join [path; "index.d.ts"])
       else path
     getJsModuleName info targetPath
   else

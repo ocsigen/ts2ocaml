@@ -1,5 +1,6 @@
 module Targets.JsOfOCaml.Writer
 
+open Ts2Ml
 open Syntax
 open Typer
 open Typer.Type
@@ -10,6 +11,8 @@ open Targets.JsOfOCaml.Common
 open Targets.JsOfOCaml.OCamlHelper
 
 type ScriptTarget = TypeScript.Ts.ScriptTarget
+
+(*
 
 type State = {|
   fileNames: string list
@@ -24,7 +27,8 @@ module State =
        referencesCache = new MutableMap<_, _>();
        usedAnonymousInterfacesCache = new MutableMap<_, _>() |}
 
-type Context = Context<Options, State>
+type Context = TyperContext<Options, State>
+module Context = TyperContext
 
 let emitCommentBody (c: Comment) : text =
   // https://github.com/ocaml/ocaml/issues/5745
@@ -77,7 +81,7 @@ let literalToIdentifier (ctx: Context) (l: Literal) : text =
     |> String.replace "." "_"
   match l with
   | LString s ->
-    match ctx.typeLiteralsMap |> Map.tryFind l with
+    match ctx |> Context.bindCurrentSourceInfo (fun i -> i.typeLiteralsMap |> Map.tryFind l) with
     | Some i ->
       if String.forall (Char.isAlphabetOrDigit >> not) s then tprintf "s%i" i
       else tprintf "s%i_%s" i (formatString s)
@@ -88,15 +92,14 @@ let literalToIdentifier (ctx: Context) (l: Literal) : text =
 
 let anonymousInterfaceModuleName (index: int) = sprintf "AnonymousInterface%d" index
 
-let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
-  match ctx.anonymousInterfacesMap |> Map.tryFind c, c.name with
-  | Some i, None ->
+let anonymousInterfaceToIdentifier (ctx: Context) (a: AnonymousInterface) : text =
+  match ctx |> Context.bindCurrentSourceInfo (fun i -> i.anonymousInterfacesMap |> Map.tryFind a) with
+  | Some i ->
     if not ctx.options.recModule.IsOffOrDefault then
       tprintf "%s.t" (anonymousInterfaceModuleName i)
     else
       tprintf "anonymous_interface_%d" i
-  | None, None -> failwithf "the anonymous interface '%A' is not found in the context" c
-  | _, Some n -> failwithf "the class or interface '%s' is not anonymous" n
+  | None -> failwithf "impossible_anonymousInterfaceToIdentifier(%s)" a.loc.AsString
 
 let enumCaseToIdentifier (e: Enum) (c: EnumCase) =
   let duplicateCases =
@@ -133,7 +136,7 @@ type EmitTypeFlags = {
 }
 
 module EmitTypeFlags =
-  let defaultValue =
+  let defaultVariable =
     {
       resolveUnion = true
       needParen = false
@@ -238,7 +241,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
               let fn = String.concat "." fn
               let selfName = String.concat "." diff
               let warnText = $"cannot reference a type {fn} from its sub-namespace {selfName}"
-              Log.warnf ctx.options "%s at %s" warnText loc.AsString
+              ctx.logger.warnf "%s at %s" warnText loc.AsString
               commentStr warnText + Type.any
       else
         let name = Naming.flattenedTypeName fn
@@ -254,7 +257,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
                   | None -> failwithf "error: insufficient type params for type '%s' at %s" (String.concat "." fn) loc.AsString)
               |> Some
             | _ -> None
-          ) |> Option.defaultValue tyargs
+          ) |> Option.defaultVariable tyargs
         Type.appOpt (str name) (ts |> List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false  } overrideFunc ctx))
 
   match overrideFunc (emitTypeImpl flags overrideFunc) ctx ty with
@@ -314,14 +317,14 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
           | true, false -> Type.app Type.null_ [t]
           | false, true -> Type.app Type.undefined [t]
           | false, false -> t
-        let treatTypeofableTypes (ts: Set<TypeofableType>) t =
+        let treatTypeofableTypes (ts: Set<Typeofable>) t =
           let emitOr tt t =
             match tt with
-            | TNumber -> Type.number_or t
-            | TString -> Type.string_or t
-            | TBoolean -> Type.boolean_or t
-            | TSymbol -> Type.symbol_or t
-            | TBigInt -> Type.bigint_or t
+            | Typeofable.Number -> Type.number_or t
+            | Typeofable.String -> Type.string_or t
+            | Typeofable.Boolean -> Type.boolean_or t
+            | Typeofable.Symbol -> Type.symbol_or t
+            | Typeofable.BigInt -> Type.bigint_or t
           let rec go = function
             | [] -> t
             | [x] ->
@@ -378,7 +381,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
             t |> treatEnumOr ru.caseEnum |> Some
         baseType |> treatArray ru.caseArray
                  |> treatTypeofableTypes ru.typeofableTypes
-                 |> Option.defaultValue Type.never
+                 |> Option.defaultVariable Type.never
                  |> treatNullUndefined
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
     | PolymorphicThis -> commentStr "FIXME: polymorphic this" + Type.any
@@ -581,7 +584,7 @@ module StructuredText =
             | KnownType.AnonymousInterface i ->
               state |> WeakTrie.add [anonymousInterfaceModuleName i]
           ) WeakTrie.empty)
-        |> Option.defaultValue WeakTrie.empty
+        |> Option.defaultVariable WeakTrie.empty
       let trie =
         x.children
         |> Map.fold (fun state k child ->
@@ -597,7 +600,7 @@ module StructuredText =
       let refs =
         getReferences (ctx |> TyperContext.ofChildNamespace k) child
         |> WeakTrie.getSubTrie parent
-        |> Option.defaultValue WeakTrie.empty
+        |> Option.defaultVariable WeakTrie.empty
         |> WeakTrie.ofDepth 1
         |> WeakTrie.toList
         |> List.map (function
@@ -652,7 +655,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
     let fl =
       if fl.value <> Prim Void then fl
       else
-        Log.warnf ctx.options "the field/getter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
+        ctx.logger.warnf "the field/getter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
         { fl with value = Prim Unknown }
     let ty =
       let args =
@@ -668,7 +671,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (name: string) (selfTy: Type) (
     let fl =
       if fl.value <> Prim Void then fl
       else
-        Log.warnf ctx.options "the field/setter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
+        ctx.logger.warnf "the field/setter '%s' of type '%s' has type 'void' and treated as 'unknown'" fl.name name
         { fl with value = Prim Unknown }
     let ty =
       let args =
@@ -879,7 +882,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
         selfTy,
         OverrideFunc.combine overrideFunc orf
 
-  let knownTypes = Statement.getKnownTypes ctx [ClassDef c] |> Set.union additionalKnownTypes
+  let knownTypes = Statement.getKnownTypes ctx [Class c] |> Set.union additionalKnownTypes
 
   let node =
     let ctx, innerCtx =
@@ -924,7 +927,7 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
     ]
 
     let scoped =
-      let scoped = forceScoped |> Option.defaultValue Scoped.No
+      let scoped = forceScoped |> Option.defaultVariable Scoped.No
       let shouldBeScoped =
         c.members |> List.exists (fun (ma, m) ->
           if ma.isStatic then true
@@ -1024,12 +1027,12 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
       let kind =
         if not c.isInterface || node.scoped <> Scoped.No then [Kind.Type; Kind.ClassLike; Kind.Value]
         else [Kind.Type; Kind.ClassLike]
-      getExportFromStatement ctx name kind (if c.isInterface then "interface" else "class") (ClassDef c)
+      getExportFromStatement ctx name kind (if c.isInterface then "interface" else "class") (Class c)
   current
   |> Trie.addOrUpdate [name] node StructuredTextNode.union
   |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = (if node.scoped <> Scoped.No then Scoped.Yes else Scoped.No); exports = Option.toList export |} StructuredTextNode.union
 
-let emitValue flags overrideFunc ctx v =
+let emitVariable flags overrideFunc ctx v =
   let emitType = emitTypeImpl flags
   let emitType_ = emitType overrideFunc
 
@@ -1051,32 +1054,32 @@ let emitValue flags overrideFunc ctx v =
   comments @ [item]
 
 let createStructuredText (rootCtx: Context) (stmts: Statement list) : StructuredText =
-  let emitTypeFlags = { EmitTypeFlags.defaultValue with skipAttributesOnContravariantPosition = true }
+  let emitTypeFlags = { EmitTypeFlags.defaultVariable with skipAttributesOnContravariantPosition = true }
   let overrideFunc = OverrideFunc.noOverride
   let emitType = emitTypeImpl emitTypeFlags
   let emitType_ = emitType overrideFunc
   let emitSelfType = emitTypeImpl { emitTypeFlags with failContravariantTypeVar = true } overrideFunc
 
   /// convert interface members to appropriate statements
-  let intfToStmts (moduleIntf: Class) ctx flags overrideFunc =
-    let emitAsValue name typ typrms isConst (memberAttr: MemberAttribute) =
+  let intfToStmts (moduleIntf: Class<_>) ctx flags overrideFunc =
+    let emitAsVariable name typ typrms isConst (memberAttr: MemberAttribute) =
       let v =
         { name = name; typ = typ; typeParams = typrms;
           isConst = isConst; isExported = Exported.No; accessibility = Some memberAttr.accessibility;
           comments = memberAttr.comments; loc = memberAttr.loc }
-      emitValue flags overrideFunc ctx v
+      emitVariable flags overrideFunc ctx v
     [ for ma, m in moduleIntf.members do
         let cmt =
           if List.isEmpty ma.comments then []
           else ScopeIndependent empty :: [ma.comments |> List.map emitCommentBody |> concat newline |> docComment |> ScopeIndependent]
         match m with
         | Field (fl, mt, tps) ->
-          yield! emitAsValue fl.name fl.value tps (mt = ReadOnly) ma
+          yield! emitAsVariable fl.name fl.value tps (mt = ReadOnly) ma
         | Getter fl ->
-          yield! emitAsValue fl.name fl.value [] true ma
+          yield! emitAsVariable fl.name fl.value [] true ma
         | Setter _ -> ()
         | Method (name, ft, tps) ->
-          yield! emitAsValue name (Function ft) tps true ma
+          yield! emitAsVariable name (Function ft) tps true ma
         | New (ft, _tps) ->
           let ty = emitType_ ctx (Function ft)
           yield! cmt
@@ -1124,9 +1127,9 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           if v.scoped <> Scoped.No then [Kind.Module; Kind.Value]
           else [Kind.Module]
         result |> addExport m.name kind (if m.isNamespace then "namespace" else "module")
-    | ClassDef c ->
+    | Class c ->
       emitClass emitTypeFlags OverrideFunc.noOverride ctx current c ((fun _ _ _ -> []), Set.empty, None)
-    | EnumDef e ->
+    | Enum e ->
       let module' =
         let ctx = ctx |> TyperContext.ofChildNamespace e.name
         let items = emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e e.cases)
@@ -1155,7 +1158,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         p.underlyingStatements |> List.fold (folder ctx) current
       match p with
       | ImmediateInstance (intf & { name = Some intfName }, value) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateInstance) ->
-        let knownTypesInMembers = Statement.getKnownTypes ctx [ClassDef intf]
+        let knownTypesInMembers = Statement.getKnownTypes ctx [Class intf]
         let createModule () =
           let items = intfToStmts intf (ctx |> TyperContext.ofChildNamespace value.name) emitTypeFlags overrideFunc
           {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scoped = Scoped.Force value.name |}
@@ -1168,13 +1171,13 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = Scoped.Yes |} StructuredTextNode.union
           |> addExport value.name [Kind.Type; Kind.ClassLike; Kind.Value] "interface"
       | ImmediateConstructor (baseIntf, ctorIntf, ctorValue) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateConstructor) ->
-        emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts ctorIntf, Statement.getKnownTypes ctx [ClassDef ctorIntf], Some (Scoped.Force ctorValue.name))
+        emitClass emitTypeFlags OverrideFunc.noOverride ctx current baseIntf (intfToStmts ctorIntf, Statement.getKnownTypes ctx [Class ctorIntf], Some (Scoped.Force ctorValue.name))
       | _ -> fallback current
-    | Value value ->
+    | Variable value ->
       let fallback current =
         let node =
           {| StructuredTextNode.empty with
-              items = emitValue emitTypeFlags overrideFunc ctx value
+              items = emitVariable emitTypeFlags overrideFunc ctx value
               knownTypes = knownTypes ()
               scoped = Scoped.Yes |}
         current
@@ -1191,7 +1194,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         |> setModule value.name
         |> Trie.setOrUpdate
           {| StructuredTextNode.empty with
-              items = emitValue emitTypeFlags overrideFunc ctx value
+              items = emitVariable emitTypeFlags overrideFunc ctx value
               knownTypes = knownTypes
               scoped = Scoped.Yes |} StructuredTextNode.union
         |> addExport value.name [Kind.Value] (if value.isConst then "const" else "let")
@@ -1205,7 +1208,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           let bindings = createBindings fn loc intf.typeParams tyargs
           let intf = intf |> mapInClass (substTypeVar bindings) ctx
           let name = value.name + "Static"
-          let knownTypesInMembers = Statement.getKnownTypes ctx [ClassDef intf]
+          let knownTypesInMembers = Statement.getKnownTypes ctx [Class intf]
           let createModule () =
             let items = intfToStmts intf ctx emitTypeFlags overrideFunc
             {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scoped = Scoped.Force value.name |}
@@ -1237,7 +1240,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
   let anonymousInterfaces =
     rootCtx.anonymousInterfacesMap
     |> Map.toList
-    |> List.map (fst >> ClassDef)
+    |> List.map (fst >> Class)
 
   (anonymousInterfaces @ stmts) |> List.fold (folder rootCtx) Trie.empty
 
@@ -1376,7 +1379,7 @@ let rec private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context)
   {| scoped = scoped; content = content; docCommentBody = docCommentBody |}
 
 let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list =
-  let flags = { EmitTypeFlags.defaultValue with failContravariantTypeVar = true }
+  let flags = { EmitTypeFlags.defaultVariable with failContravariantTypeVar = true }
   let emitType_ = emitTypeImpl flags OverrideFunc.noOverride
 
   let inline emitTypeName name args =
@@ -1384,14 +1387,14 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
 
   let rec go prefix (ctx: Context) (v: Statement) =
     match v with
-    | EnumDef e ->
+    | Enum e ->
       let fn = List.rev (e.name :: ctx.currentNamespace)
       [
         yield tprintf "%s %s = " prefix (Naming.flattenedTypeName fn) + GetSelfTyText.enumCases e e.cases
         for c in e.cases do
           yield tprintf "and %s = " (Naming.flattenedTypeName (fn @ [c.name])) + GetSelfTyText.enumCases e [c]
       ]
-    | ClassDef c ->
+    | Class c ->
       match c.name with
       | None -> [] // anonymous interfaces are treated separately
       | Some name ->
@@ -1419,17 +1422,17 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
     | Pattern p ->
       match p with
       | ImmediateInstance (intf & { name = Some intfName }, value) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateInstance) ->
-        let knownTypesInMembers = Statement.getKnownTypes ctx [ClassDef intf]
+        let knownTypesInMembers = Statement.getKnownTypes ctx [Class intf]
         if intfName <> value.name || knownTypesInMembers |> Set.contains (KnownType.Ident (ctx |> TyperContext.getFullName [intfName])) then
           p.underlyingStatements |> List.collect (go prefix ctx)
         else
           [] // no type is generated for immediate instance
       | ImmediateConstructor (baseIntf, _, _) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateConstructor) ->
-        go prefix ctx (ClassDef baseIntf) // only the base interface is used as a type
+        go prefix ctx (Class baseIntf) // only the base interface is used as a type
       | _ ->
         p.underlyingStatements |> List.collect (go prefix ctx)
     | Import _
-    | Value _
+    | Variable _
     | Module _
     | Export _
     | UnknownStatement _
@@ -1479,10 +1482,10 @@ let header =
   [ str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
     Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]") ]
 
-let emitStdlib (input: Input) (opts: Options) : Output list =
+let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
   let srcs = input.sources
 
-  Log.tracef opts "* looking up the minimal supported ES version for each definition..."
+  ctx.logger.tracef "* looking up the minimal supported ES version for each definition..."
   let esSrc =
     srcs
     |> List.filter (fun src -> src.fileName.Contains("lib.es") && src.fileName.EndsWith(".d.ts"))
@@ -1504,7 +1507,7 @@ let emitStdlib (input: Input) (opts: Options) : Output list =
       |> Statement.merge
     { fileName = "lib.webworker.d.ts"; statements = stmts; references = []; hasNoDefaultLib = false; moduleName = None }
 
-  Log.tracef opts "* running typer..."
+  ctx.logger.tracef "* running typer..."
   opts.simplify <- [Simplify.All]
   opts.inheritWithTags <- FeatureFlag.Full
   opts.safeArity <- FeatureFlag.Full
@@ -1525,7 +1528,7 @@ let emitStdlib (input: Input) (opts: Options) : Output list =
     ctx |> TyperContext.mapOptions (fun _ -> opts)
         |> TyperContext.mapState (fun _ -> State.create [] (Error None))
 
-  Log.tracef opts "* emitting stdlib..."
+  ctx.logger.tracef "* emitting stdlib..."
 
   let createOutput (fileNameSuffix: string) (opens: string list) ctx (src: SourceFile list) =
     let content =
@@ -1566,7 +1569,7 @@ let emitImports (ctx: Context) (sourceFile: SourceFile) : text list =
       let isModule (name: string) (kind: Set<Kind> option) =
         i.isTypeOnly
         || kind |> Option.map (fun k -> Set.intersect k (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not)
-                |> Option.defaultValue false
+                |> Option.defaultVariable false
         || ctx.unknownIdentTypes |> Trie.containsKey [name]
         || name |> Naming.isCase Naming.PascalCase
 
@@ -1611,7 +1614,7 @@ let handleExports moduleName (ctx: Context) (str: StructuredText) : {| stubLines
   let createStubLine prefix (x: {| expr: string; needBabel: bool; target: IdentType |}) =
     match x.target.fullName with
     | None ->
-      Log.warnf ctx.options "cannot generate stub for importing '%s' at %s" (x.target.name |> String.concat ".") (x.target.loc.AsString)
+      ctx.logger.warnf "cannot generate stub for importing '%s' at %s" (x.target.name |> String.concat ".") (x.target.loc.AsString)
       None
     | Some fn -> Some (stubBinding (prefix @ fn) x.expr)
 
@@ -1690,7 +1693,7 @@ let emitReferenceFileDirectives (ctx: Context) (src: SourceFile) : text list =
       |> open_
     empty :: comments @ [openRefs]
 
-let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (opts: Options) =
+let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx: IContext<Options>) =
   let derivedOutputFileName =
     JsHelper.deriveOutputFileName
       opts info (sources |> List.map (fun s -> s.fileName))
@@ -1705,7 +1708,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (opts
     | Some info -> Ok info
     | None -> Error (Some derivedModuleName)
 
-  Log.tracef opts "* running typer..."
+  ctx.logger.tracef "* running typer..."
   let ctx, srcs = runAll sources opts
   let ctx =
     ctx |> TyperContext.mapOptions (fun _ -> opts)
@@ -1715,7 +1718,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (opts
 
   let exported = handleExports derivedModuleName ctx structuredText
 
-  Log.tracef opts "* emitting a binding to '%s' for js_of_ocaml..." derivedModuleName
+  ctx.logger.tracef "* emitting a binding to '%s' for js_of_ocaml..." derivedModuleName
   let content =
     concat newline [
       yield! header
@@ -1736,9 +1739,11 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (opts
 
   { fileName = derivedOutputFileName; content = content; stubLines = exported.stubLines }
 
-let emit (input: Input) (opts: Options) : Output list =
-  if opts.merge then
-    [emitImpl input.sources input.info opts]
+let emit (input: Input) (ctx: IContext<Options>) : Output list =
+  if ctx.options.merge then
+    [emitImpl input.sources input.info ctx]
   else
     input.sources
-    |> List.map (fun source -> emitImpl [source] input.info opts)
+    |> List.map (fun source -> emitImpl [source] input.info ctx)
+
+*)

@@ -194,10 +194,11 @@ and Ident = {
   kind: Set<Kind> option
   fullName: FullName list
   loc: Location
+  parent: Ident option
 }
 
 and [<StructuralEquality; StructuralComparison>] FullName = {
-  source: Path.Relative
+  source: Path.Absolute
   name: string list
 }
 
@@ -639,7 +640,7 @@ and Reference =
   | LibReference of string
 
 and SourceFile = {
-  fileName: Path.Relative
+  fileName: Path.Absolute
   statements: Statement list
   references: Reference list
   /// ```ts
@@ -660,8 +661,8 @@ type PackageInfo = {
   /// absolute path
   rootPath: Path.Absolute
   /// `index.d.ts` or the one specified in `package.json`.
-  indexFile: Path.Relative option
-  exports: {| submodule: string; file: Path.Relative |} list
+  indexFile: Path.Absolute option
+  exports: {| submodule: string; file: Path.Absolute |} list
 }
 
 type Input = {

@@ -1,4 +1,4 @@
-namespace Ts2Ml.DataTypes
+namespace DataTypes
 
 open Ts2Ml.Extensions
 

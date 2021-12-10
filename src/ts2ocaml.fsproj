@@ -3,19 +3,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Bindings/TypeScript.fs" />
     <Compile Include="Bindings/YargsParser.fs" />
     <Compile Include="Bindings/Yargs.fs" />
     <Compile Include="Extensions.fs" />
-    <Compile Include="DataTypes/Text.fs" />
-    <Compile Include="DataTypes/Trie.fs" />
-    <Compile Include="DataTypes/Graph.fs" />
     <Compile Include="Common.fs" />
-    <Compile Include="Syntax.fs" />
-    <Compile Include="Naming.fs" />
-    <Compile Include="JsHelper.fs" />
-    <Compile Include="Typer.fs" />
-    <Compile Include="Parser.fs" />
     <Compile Include="Target.fs" />
     <Compile Include="Targets/ParserTest.fs" />
     <Compile Include="Targets/JsOfOCaml/Common.fs" />

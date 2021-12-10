@@ -98,6 +98,17 @@ let anonymousInterfaceToIdentifier (ctx: Context) (c: Class) : text =
   | None, None -> failwithf "the anonymous interface '%A' is not found in the context" c
   | _, Some n -> failwithf "the class or interface '%s' is not anonymous" n
 
+let enumCaseToIdentifier (e: Enum) (c: EnumCase) =
+  let duplicateCases =
+    e.cases |> List.filter (fun c' -> c.value = c'.value)
+  match duplicateCases with
+  | [] -> failwith "impossible_enumCaseToIdentifier"
+  | [c'] ->
+    assert (c = c')
+    Naming.constructorName [c.name]
+  | cs ->
+    cs |> List.map (fun c -> c.name) |> Naming.constructorName
+
 type Variance = Covariant | Contravariant | Invariant with
   static member (~-) (v: Variance) =
     match v with
@@ -149,13 +160,21 @@ module OverrideFunc =
 let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (ty: Type) : text =
   let forceSkipAttr text =
     if flags.forceSkipAttributes then empty else text
-  let treatEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<EnumCase, Literal>>) =
+  let treatEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<Enum * EnumCase, Literal>>) =
+    let usedValues =
+      cases
+      |> Seq.choose (function Choice1Of2 (_, { value = v }) -> v | _ -> None)
+      |> Set.ofSeq
+    let cases =
+      cases
+      // Remove literal cases (e.g. `42`) when it is a duplicate of some enum case (e.g. `Case = 42`).
+      |> Set.filter (function Choice2Of2 l when usedValues |> Set.contains l -> false | _ -> true)
+      // Convert to identifiers while merging duplicate enum cases
+      |> Set.map (function
+        | Choice1Of2 (e, c) -> enumCaseToIdentifier e c |> str, c.value
+        | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l)
     between "[" "]" (concat (str " | ") [
-      for c in Set.toSeq cases do
-        let name, value =
-          match c with
-          | Choice1Of2 e -> str (Naming.constructorName [e.name]), e.value
-          | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l
+      for name, value in Set.toSeq cases do
         let attr =
           match value with
           | _ when flags.forceSkipAttributes -> empty
@@ -333,7 +352,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
             failwith "impossible_emitResolvedUnion_treatOther_go"
           else
             otherTypes |> Set.toList |> List.map (emitTypeImpl flags overrideFunc ctx) |> safe_union_t
-        let treatEnumOr (cases: Set<Choice<EnumCase, Literal>>) t =
+        let treatEnumOr (cases: Set<Choice<Enum * EnumCase, Literal>>) t =
           if Set.isEmpty cases then t
           else Type.enum_or (treatEnum flags ctx cases) t
         let treatDUMany du =
@@ -795,16 +814,19 @@ module GetSelfTyText =
       else fallback
     | None -> fallback
 
-  let enumCases (cases: EnumCase list) =
+  let enumCases (e: Enum) (cases: EnumCase list) =
+    let cases =
+      cases
+      |> List.map (fun c -> enumCaseToIdentifier e c, c.value)
+      |> Set.ofList
     between "[" "]" (concat (str " | ") [
-      for c in cases do
-        let name, value = str (Naming.constructorName [c.name]), c.value
+      for name, value in cases |> Set.toSeq do
         let attr =
           match value with
           | Some v -> Attr.js (Term.literal v)
           | None -> empty
-        yield pv_head @+ name + attr
-      ]) +@ " [@js.enum]"
+        yield pv_head @+ name @+ attr
+    ]) +@ " [@js.enum]"
 
 let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kindString: string) (s: Statement) : ExportWithKind option =
   let fn = ctx |> Context.getFullName [name]
@@ -1107,7 +1129,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | EnumDef e ->
       let module' =
         let ctx = ctx |> Context.ofChildNamespace e.name
-        let items = emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e.cases)
+        let items = emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e e.cases)
         let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
         let module' =
           getModule e.name |> Trie.setOrUpdate node StructuredTextNode.union
@@ -1115,7 +1137,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           let ctx = ctx |> Context.ofChildNamespace c.name
           let comments = List.map emitCommentBody c.comments
           let items =
-            emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases [c])
+            emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e [c])
           let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
           state |> Trie.addOrUpdate [c.name] node StructuredTextNode.union
         ) module'
@@ -1365,9 +1387,9 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
     | EnumDef e ->
       let fn = List.rev (e.name :: ctx.currentNamespace)
       [
-        yield tprintf "%s %s = " prefix (Naming.flattenedTypeName fn) + GetSelfTyText.enumCases e.cases
+        yield tprintf "%s %s = " prefix (Naming.flattenedTypeName fn) + GetSelfTyText.enumCases e e.cases
         for c in e.cases do
-          yield tprintf "and %s = " (Naming.flattenedTypeName (fn @ [c.name])) + GetSelfTyText.enumCases [c]
+          yield tprintf "and %s = " (Naming.flattenedTypeName (fn @ [c.name])) + GetSelfTyText.enumCases e [c]
       ]
     | ClassDef c ->
       match c.name with

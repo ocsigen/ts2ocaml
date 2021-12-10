@@ -10,10 +10,7 @@ bug-reports: "https://github.com/ocsigen/ts2ocaml/issues"
 depends: [
   "dune" {>= "2.9"}
   "ocaml" {>= "4.08"}
-  "gen_js_api"
+  "gen_js_api" {>= "1.0.9"}
   "js_of_ocaml-compiler"
-]
-pin-depends: [
-  [ "gen_js_api.dev" "git+https://github.com/LexiFi/gen_js_api.git" ]
 ]
 dev-repo: "git+https://github.com/ocsigen/ts2ocaml.git"

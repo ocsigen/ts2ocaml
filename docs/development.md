@@ -37,13 +37,12 @@ Modules with **\[\<AutoOpen\>\]** does not require `open` to use.
 
 - [.NET SDK 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
   - [FAKE](https://fake.build/) and [Fable](https://fable.io/) are required to build this tool.
-    - Run `dotnet tool restore` in the root directory of this repo to install them.
+  - Run `dotnet tool restore` in the root directory of this repo to install them.
 
 - OCaml 4.08 or higher
   - [js_of_ocaml](https://github.com/ocsigen/js_of_ocaml) should be installed to your opam switch.
-  - The latest [gen_js_api](https://github.com/LexiFi/gen_js_api) should also be installed to your opam switch.
-    - As of Oct 2021, most of the required features have not been present in the latest version in opam.
-    - You should install the latest version by `opam pin add gen_js_api https://github.com/LexiFi/gen_js_api.git`
+  - [gen_js_api](https://github.com/LexiFi/gen_js_api) `>= 1.0.9` should also be installed to your opam switch.
+  - Run `opam install . --deps-only` to install all the dependencies.
 
 - Node 14.0 or higher
   - [yarn](https://yarnpkg.com/) is required.

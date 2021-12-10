@@ -15,14 +15,7 @@ The documentation for the `ts2ocaml` command and its options comes after the wal
 
 `ts2ocaml` for `js_of_ocaml` generates `.mli` files, which should then be processed with [`LexiFi/gen_js_api`](https://github.com/LexiFi/gen_js_api).
 
-You should use the latest `gen_js_api` as `ts2ocaml` uses the latest features of `gen_js_api`.
-As of Oct 2021, most of the required features have not been present in the latest version in opam.
-So you would have to either do
-
-* `opam pin add gen_js_api https://github.com/LexiFi/gen_js_api.git` **(recommended)**, or
-* `git submodule` [their repository](https://github.com/LexiFi/gen_js_api) to the `lib` directory of your OCaml project.
-  - Note that if you use `gen_js_api` via a submodule, it might conflict with [`ts2ocaml-jsoo-stdlib`](#using-ts2ocaml-jsoo-stdlib-package) which is installed via `ocaml pin add`.
-  - Therefore, this would work only if you are going to do [`ts2ocaml jsoo --create-minimal-stdlib`](#using---create-minimal-stdlib--create-minimal-stdlib).
+You should use `gen_js_api` version 1.0.9 or higher, as `ts2ocaml` uses the latest features of `gen_js_api`.
 
 ## Adding the standard library
 
@@ -40,8 +33,7 @@ To fulfill both needs, we've made two ways to add the standard library.
 
 This package contains the full bindings for JS, DOM, and Web Worker API, generated with the [`full` preset](#choosing-a-preset).
 
-As described in [Requirements](#requirements), `ts2ocaml` needs the latest `gen_js_api`, which is still not present in OPAM repository.
-So, `ts2ocaml-jsoo-stdlib` is currently **not in OPAM repository**.
+`ts2ocaml-jsoo-stdlib` is currently **not in OPAM repository**.
 
 To install it to your OPAM switch, we recommend you to use [`opam pin`](https://opam.ocaml.org/doc/Usage.html#opam-pin).
 

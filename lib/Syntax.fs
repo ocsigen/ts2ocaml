@@ -15,6 +15,16 @@ type [<RequireQualifiedAccess>] Kind =
   | EnumCase
   /// child of a module.
   | Statement
+with
+  static member OfTypeAlias = [Kind.Type; Kind.TypeAlias; Kind.Statement]
+  static member OfInterface = [Kind.Type; Kind.ClassLike; Kind.Statement]
+  static member OfClass = [Kind.Value; Kind.Type; Kind.ClassLike; Kind.Statement]
+  static member OfEnum = [Kind.Value; Kind.Type; Kind.Enum; Kind.Statement]
+  static member OfEnumCase = [Kind.Value; Kind.Type; Kind.EnumCase]
+  static member OfNamespace = [Kind.Module; Kind.Statement]
+  static member OfModule = [Kind.Value; Kind.Module; Kind.Statement]
+  static member OfValue = [Kind.Value; Kind.Statement]
+  static member OfMember = [Kind.Value; Kind.Member]
 
 [<CustomEquality; CustomComparison; StructuredFormatDisplay("{AsString}")>]
 type Location =
@@ -226,14 +236,18 @@ and Class<'name> = {
   comments: Comment list
   loc: Location
 } with
+  member this.MapName f =
+    { name = f this.name; accessibility = this.accessibility; isInterface = this.isInterface; isExported = this.isExported;
+      implements = this.implements; typeParams = this.typeParams; members = this.members; comments = this.comments; loc = this.loc }
   interface ICommented<Class<'name>> with
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
 
-and ClassName = Name of string | ExportDefaultClass
+and ClassName = Name of string | ExportDefaultUnnamedClass
 and Class = Class<ClassName>
 and Anonymous = Anonymous
 and AnonymousInterface = Class<Anonymous>
+and ClassOrAnonymousInterface = Class<Choice<ClassName, Anonymous>>
 
 and Member =
   /// ```ts
@@ -624,6 +638,13 @@ and ImportClause =
     | ES6Import i -> i.kind
     | ES6DefaultImport i -> i.kind
     | LocalImport i -> i.kind
+  member this.moduleSpecifier =
+    match this with
+    | NamespaceImport i -> Some i.specifier
+    | ES6WildcardImport s -> Some s
+    | ES6Import i -> Some i.specifier
+    | ES6DefaultImport i -> Some i.specifier
+    | LocalImport _ -> None
 
 and Reference =
   /// ```ts

@@ -47,7 +47,7 @@ type [<RequireQualifiedAccess>] Definition =
   | Module of Module
   | Variable of Variable
   | Function of Function
-  | Import of ImportClause
+  | Import of ImportClause * Import
   | Member of MemberAttribute * Member * Class
 
 type [<RequireQualifiedAccess>] InheritingType =
@@ -56,11 +56,18 @@ type [<RequireQualifiedAccess>] InheritingType =
   | Other of Type
   | UnknownIdent of {| name: string list; tyargs: Type list |}
 
+type AnonymousInterfaceInfo = {
+  /// A unique number assigned to the anonymous interface
+  id: int
+  /// The namespace in which the anonymous interface appears
+  path: string list
+}
+
 type SourceFileInfo = {
   sourceFile: SourceFile
   definitionsMap: Trie<string, Definition list>
   typeLiteralsMap: Map<Literal, int>
-  anonymousInterfacesMap: Map<Class<Anonymous>, int>
+  anonymousInterfacesMap: Map<Class<Anonymous>, AnonymousInterfaceInfo>
   unknownIdentTypes: Trie<string, Set<int>>
 }
 
@@ -140,7 +147,7 @@ module TyperContext =
   let getFullNameString (name: string list) (ctx: TyperContext<'a, 's>) =
     (getFullName name ctx).name |> String.concat "."
 
-  /// `Error relativeNameOfCurrentNamespace` when `fullName` is a parent of current namespace.
+  /// `Error subName` when `fullName` is a parent of current namespace.
   /// `Ok name` otherwise.
   let getRelativeNameTo (fullName: string list) (ctx: TyperContext<'a, 's>) =
     let rec go name selfPos =
@@ -166,18 +173,14 @@ module FullName =
       |> Option.defaultValue []
 
   let private classify = function
-    | Definition.TypeAlias _ -> [Kind.Type; Kind.TypeAlias; Kind.Statement]
-    | Definition.Class c ->
-      if c.isInterface then [Kind.Type; Kind.ClassLike; Kind.Statement]
-      else [Kind.Value; Kind.Type; Kind.ClassLike; Kind.Statement]
-    | Definition.Enum _ -> [Kind.Value; Kind.Type; Kind.Enum; Kind.Statement]
-    | Definition.EnumCase _ -> [Kind.Value; Kind.Type; Kind.EnumCase]
-    | Definition.Module m ->
-      if m.isNamespace then [Kind.Module; Kind.Statement]
-      else [Kind.Value; Kind.Module; Kind.Statement]
-    | Definition.Variable _ | Definition.Function _ -> [Kind.Value; Kind.Statement]
-    | Definition.Import c -> c.kind |> Option.map Set.toList |> Option.defaultValue []
-    | Definition.Member _ -> [Kind.Value; Kind.Member]
+    | Definition.TypeAlias _ -> Kind.OfTypeAlias
+    | Definition.Class c -> if c.isInterface then Kind.OfInterface else Kind.OfClass
+    | Definition.Enum _ -> Kind.OfEnum
+    | Definition.EnumCase _ -> Kind.OfEnumCase
+    | Definition.Module m -> if m.isNamespace then Kind.OfNamespace else Kind.OfModule
+    | Definition.Variable _ | Definition.Function _ -> Kind.OfValue
+    | Definition.Import (c, _) -> c.kind |> Option.map Set.toList |> Option.defaultValue []
+    | Definition.Member _ -> Kind.OfMember
 
   let hasKind (ctx: TyperContext<_, _>) (kind: Kind) (fullName: FullName) =
     getDefinitions ctx fullName
@@ -187,6 +190,9 @@ module FullName =
     getDefinitions ctx fullName
     |> List.collect classify
     |> Set.ofList
+
+  let isDefinedInCurrentSource (ctx: TyperContext<_, _>) (fullName: FullName) : bool =
+    fullName.source = ctx.currentSourceFile
 
 module Ident =
   let getDefinitions (ctx: TyperContext<_, _>) (ident: Ident) =
@@ -199,6 +205,9 @@ module Ident =
   let pickDefinition ctx ident picker =
     getDefinitions ctx ident |> List.tryPick picker
 
+  let pickDefinitionWithFullName ctx ident (picker: FullName -> Definition -> _ option) =
+    getDefinitionsWithFullName ctx ident |> List.tryPick (fun x -> picker x.fullName x.definition)
+
   let hasKind (ctx: TyperContext<_, _>) (kind: Kind) (ident: Ident) =
     match ident.kind with
     | Some kinds -> kinds |> Set.contains kind
@@ -210,6 +219,9 @@ module Ident =
     | None -> ident.fullName |> List.map (FullName.getKind ctx) |> Set.unionMany
 
   let isType ctx ident = hasKind ctx Kind.Type ident
+
+  let isDefinedInCurrentSource (ctx: TyperContext<_, _>) (ident: Ident) =
+    ident.fullName |> List.exists (FullName.isDefinedInCurrentSource ctx)
 
 module Type =
   let rec mapInTypeParam mapping (ctx: 'Context) (tp: TypeParam) =
@@ -812,7 +824,7 @@ module Type =
       | LBool true -> "true" | LBool false -> "false"
     | AnonymousInterface c ->
       match ctx |> TyperContext.bindCurrentSourceInfo (fun info -> info.anonymousInterfacesMap |> Map.tryFind c) with
-      | Some i -> sprintf "AnonymousInterface%d" i
+      | Some x -> sprintf "AnonymousInterface%d" x.id
       | None -> "AnonymousInterface"
     | Union _ -> "union" | Intersection _ -> "intersection" | Tuple _ -> "tuple"
     | Func _ -> "function"
@@ -843,7 +855,7 @@ module Type =
 
 type [<RequireQualifiedAccess>] KnownType =
   | Ident of fullName:FullName
-  | AnonymousInterface of int
+  | AnonymousInterface of AnonymousInterface * AnonymousInterfaceInfo
 
 module Statement =
   open Type
@@ -856,15 +868,15 @@ module Statement =
       | Export _
       | UnknownStatement _
       | FloatingComment _ -> trie
-      | Import i ->
-        i.clauses
+      | Import import ->
+        import.clauses
         |> List.fold (fun trie c ->
           match c with
-          | NamespaceImport i -> trie |> add ns i.name (Definition.Import c)
+          | NamespaceImport i -> trie |> add ns i.name (Definition.Import (c, import))
           | ES6WildcardImport _ -> trie
-          | ES6Import i -> trie |> add ns i.name (Definition.Import c)
-          | ES6DefaultImport i -> trie |> add ns i.name (Definition.Import c)
-          | LocalImport i -> trie |> add ns i.name (Definition.Import c)
+          | ES6Import i -> trie |> add ns i.name (Definition.Import (c, import))
+          | ES6DefaultImport i -> trie |> add ns i.name (Definition.Import (c, import))
+          | LocalImport i -> trie |> add ns i.name (Definition.Import (c, import))
         ) trie
       | TypeAlias a -> trie |> add ns a.name (Definition.TypeAlias a)
       | Class c ->
@@ -880,7 +892,7 @@ module Statement =
             | _ -> trie
           ) trie
           |> add ns name (Definition.Class c)
-        | ExportDefaultClass -> trie
+        | ExportDefaultUnnamedClass -> trie
       | Enum e ->
         e.cases
         |> List.fold (fun trie c -> trie |> add (e.name :: ns) c.name (Definition.EnumCase (c, e))) trie
@@ -895,54 +907,54 @@ module Statement =
     stmts |> List.fold (go []) Trie.empty
 
   let findTypesInStatements pred (stmts: Statement list) : 'a seq =
-    let rec go = function
+    let rec go ns = function
       | TypeAlias ta ->
         seq {
-          yield! findTypes pred ta.target;
+          yield! findTypes (pred (List.rev ns)) ta.target;
           for tp in ta.typeParams do
-            yield! findTypesInTypeParam pred tp
+            yield! findTypesInTypeParam (pred (List.rev ns)) tp
         }
       | Class c ->
         seq {
           for impl in c.implements do
-            yield! findTypes pred impl
+            yield! findTypes (pred (List.rev ns)) impl
           for tp in c.typeParams do
-            yield! findTypesInTypeParam pred tp
+            yield! findTypesInTypeParam (pred (List.rev ns)) tp
           for _, m in c.members do
-            yield! findTypesInClassMember pred m
+            yield! findTypesInClassMember (pred (List.rev ns)) m
         }
       | Module m ->
-        m.statements |> Seq.collect go
-      | Variable v -> findTypes pred v.typ
+        m.statements |> Seq.collect (go (m.name :: ns))
+      | Variable v -> findTypes (pred (List.rev ns)) v.typ
       | Function f ->
         seq {
-          yield! findTypesInFuncType pred f.typ
+          yield! findTypesInFuncType (pred (List.rev ns)) f.typ
           for tp in f.typeParams do
-            yield! findTypesInTypeParam pred tp
+            yield! findTypesInTypeParam (pred (List.rev ns)) tp
         }
       | Enum e ->
         e.cases |> Seq.choose (fun c -> c.value)
-                |> Seq.collect (fun l -> findTypes pred (TypeLiteral l))
+                |> Seq.collect (fun l -> findTypes (pred (List.rev ns)) (TypeLiteral l))
       | Import _ | Export _ | UnknownStatement _ | FloatingComment _ -> Seq.empty
       | Pattern p ->
         seq {
           for stmt in p.underlyingStatements do
-            yield! go stmt
+            yield! go ns stmt
         }
-    stmts |> Seq.collect go
+    stmts |> Seq.collect (go [])
 
   let getTypeLiterals stmts =
-    findTypesInStatements (function TypeLiteral l -> Choice1Of2 true, Some l | _ -> Choice1Of2 true, None) stmts |> Set.ofSeq
+    findTypesInStatements (fun _ -> function TypeLiteral l -> Choice1Of2 true, Some l | _ -> Choice1Of2 true, None) stmts |> Set.ofSeq
 
   let getAnonymousInterfaces stmts =
-    findTypesInStatements (function
-      | AnonymousInterface c -> Choice1Of2 true, Some c
+    findTypesInStatements (fun ns -> function
+      | AnonymousInterface c -> Choice1Of2 true, Some (c, ns)
       | _ -> Choice1Of2 true, None
     ) stmts |> Set.ofSeq
 
   let getUnknownIdentTypes ctx stmts =
     let (|Dummy|) _ = []
-    findTypesInStatements (function
+    findTypesInStatements (fun _ -> function
       | App (AIdent { name = name; fullName = [] }, ts, _)
       | (Ident { name = name; fullName = [] } & Dummy ts) ->
         Choice2Of2 ts, Some (name, Set.singleton (List.length ts))
@@ -954,15 +966,18 @@ module Statement =
 
   let getKnownTypes (ctx: TyperContext<_, _>) stmts =
     let (|Dummy|) _ = []
-    findTypesInStatements (function
+    findTypesInStatements (fun _ -> function
       | App (AIdent { fullName = fns }, ts, _) ->
         Choice2Of2 ts, Some (fns |> List.map KnownType.Ident)
       | Ident { fullName = fns } ->
         Choice1Of2 true, Some (fns |> List.map KnownType.Ident)
       | AnonymousInterface a ->
-        let index =
+        let info =
           ctx |> TyperContext.bindCurrentSourceInfo (fun info -> info.anonymousInterfacesMap |> Map.tryFind a)
-        Choice1Of2 true, Option.map (KnownType.AnonymousInterface >> List.singleton) index
+        Choice1Of2 true,
+        match info with
+        | None -> None
+        | Some info -> Some [KnownType.AnonymousInterface (a, info)]
       | _ ->
         Choice1Of2 true, None
     ) stmts |> Seq.concat |> Set.ofSeq
@@ -984,7 +999,7 @@ module Statement =
         let ctx =
           match c.name with
           | Name name -> ctx |> ctxOfChildNamespace name
-          | ExportDefaultClass -> ctx
+          | ExportDefaultUnnamedClass -> ctx
         Class (mapInClass mapping ctx c)
       | Enum e -> Enum e
       | Import i -> Import i
@@ -1605,7 +1620,9 @@ let createRootContext (srcs: SourceFile list) (baseCtx: IContext<'Options>) : Ty
         ctx._info |> Map.map (fun _ v ->
           let stmts = v.sourceFile.statements
           let tlm = Statement.getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
-          let aim = Statement.getAnonymousInterfaces stmts |> Seq.mapi (fun i c -> c, i) |> Map.ofSeq
+          let aim =
+            Statement.getAnonymousInterfaces stmts
+            |> Seq.mapi (fun i (c, ns) -> c, { id = i; path = ns }) |> Map.ofSeq
           let uit = Statement.getUnknownIdentTypes ctx stmts
           { v with
               typeLiteralsMap = tlm

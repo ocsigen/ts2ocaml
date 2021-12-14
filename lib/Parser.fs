@@ -693,7 +693,7 @@ module private ParserImpl =
     let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
     {
       comments = readCommentsForNamedDeclaration ctx i
-      name = i.name |> Option.map (fun id -> Name id.text) |> Option.defaultValue ExportDefaultClass
+      name = i.name |> Option.map (fun id -> Name id.text) |> Option.defaultValue ExportDefaultUnnamedClass
       accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
       typeParams = typrms
       implements = readInherits typrmsSet ctx i.heritageClauses

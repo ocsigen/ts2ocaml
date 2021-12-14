@@ -7,6 +7,10 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Yargs
 
+
+[<Obsolete("TODO")>]
+let inline TODO (msg: string) = failwithf "TODO: %s" msg
+
 type Argv<'T> with
   member private argv.addImpl<'a> (key: string, descr: string option, ?demand: bool, ?missingMsg: string, ?dv:'a, ?dd:string, ?alias:string) =
     let argv = match descr with None -> argv | Some d -> argv.describe(!^key, d)

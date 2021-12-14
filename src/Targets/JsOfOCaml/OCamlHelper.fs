@@ -26,9 +26,6 @@ let docCommentStr text =tprintf "(** %s *)" text
 
 let [<Literal>] pv_head = "`"
 
-[<Obsolete("TODO")>]
-let inline TODO<'a> = failwith "TODO"
-
 [<RequireQualifiedAccess>]
 module Attr =
   type Category = Normal | Block | Floating
@@ -325,7 +322,7 @@ module Naming =
 
   let reservedModuleNames =
     Set.ofList [
-      "Export"; "Default"
+      "Export"
     ] |> Set.union Naming.Keywords.keywords
 
   let moduleName (name: string) =

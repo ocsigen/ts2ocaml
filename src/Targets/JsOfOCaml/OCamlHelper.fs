@@ -268,6 +268,10 @@ let typeAlias name tyargs ty =
   + (if List.isEmpty tyargs then str name else Type.app (str name) tyargs)
   +@ " = " + ty
 
+let moduleAlias name target =
+  let text = tprintf "module %s = %s" name target
+  Attr.js_stop_start_implem_oneliner text text
+
 let val_ name ty =
   tprintf "val %s: " name + ty
 
@@ -381,3 +385,9 @@ module Naming =
     jsModuleName
     |> jsModuleNameToOCamlName
     |> moduleName
+
+  let exportDefaultClassStubName = "__export_default_class__"
+
+module Kind =
+  let generatesOCamlModule kind =
+    Set.intersect kind (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not

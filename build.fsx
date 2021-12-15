@@ -80,6 +80,9 @@ Target.create "Prepare" ignore
 Target.create "BuildOnly" <| fun _ ->
   dotnetExec "fable" $"{srcDir} --sourceMaps --run webpack --mode=production"
 
+Target.create "TestBuild" <| fun _ ->
+  dotnetExec "fable" $"{srcDir} --sourceMaps --define DEBUG --run webpack --mode=development"
+
 Target.create "Build" ignore
 
 Target.create "Watch" <| fun _ ->
@@ -97,6 +100,10 @@ Target.create "Watch" <| fun _ ->
 
 "Prepare"
   ?=> "Watch"
+
+"Prepare"
+  ?=> "TestBuild"
+  ?=> "BuildOnly"
 
 // Test targets
 
@@ -153,7 +160,7 @@ Target.create "TestJsooGenerateBindings" <| fun _ -> Test.Jsoo.generateBindings 
 Target.create "TestJsooBuild" <| fun _ -> Test.Jsoo.build ()
 Target.create "TestJsoo" ignore
 
-"BuildOnly"
+"TestBuild"
   ==> "TestJsooClean"
   ==> "TestJsooGenerateBindings"
   ==> "TestJsooBuild"

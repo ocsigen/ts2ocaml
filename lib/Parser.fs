@@ -1100,7 +1100,6 @@ let parse (ctx: ParserContext) : Input =
         |> Seq.toList
       { statements = statements
         fileName = src.fileName
-        moduleName = src.moduleName
         hasNoDefaultLib = src.hasNoDefaultLib
         references = references })
 

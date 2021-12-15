@@ -62,7 +62,6 @@ let private run (input: Input) (baseCtx: IContext<Options>) =
       for src in input.sources do
         yield
           {| file = src.fileName;
-             moduleName = src.moduleName;
              statements = src.statements |> List.toArray |}
     |]
     Node.Api.fs.writeFileSync(output, stringify o)

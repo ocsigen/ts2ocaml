@@ -161,6 +161,8 @@ module TyperContext =
     ctx._info |> Map.tryFind ctx._currentSourceFile |> Option.map f
 
   let bindCurrentSourceInfo (f: SourceFileInfo -> _ option) (ctx: TyperContext<'a, 's>) =
+    if ctx._info |> Map.containsKey ctx._currentSourceFile |> not then
+      ctx.logger.errorf "%s not in [%s]" ctx._currentSourceFile (ctx._info |> Map.toSeq |> Seq.map fst |> String.concat ", ")
     ctx._info |> Map.tryFind ctx._currentSourceFile |> Option.bind f
 
 module FullName =
@@ -1190,14 +1192,14 @@ module Transform =
       for stmt in stmts do
         match stmt with
         | Variable (v & { name = name; typ = Ident { name = [intfName] } }) ->
-          if name = intfName then valDict.Add(name, v)
-          else if (name + "Constructor") = intfName then ctorValDict.Add(name, v)
+          if name = intfName then valDict[name] <- v
+          else if (name + "Constructor") = intfName then ctorValDict[name] <- v
         | Class (intf & { name = Name name; isInterface = true }) ->
           if name <> "Constructor" && name.EndsWith("Constructor") then
             let origName = name.Substring(0, name.Length - "Constructor".Length)
-            ctorIntfDict.Add(origName, intf)
+            ctorIntfDict[origName] <- intf
           else
-            intfDict.Add(name, intf)
+            intfDict[name] <- intf
         | _ -> ()
 
       let intersect (other: string seq) (set: MutableSet<string>) =
@@ -1688,8 +1690,7 @@ let mergeESLibDefinitions (srcs: SourceFile list) =
   { fileName = "lib.es.d.ts"
     statements = stmts
     references = []
-    hasNoDefaultLib = true
-    moduleName = None }
+    hasNoDefaultLib = true }
 
 let runAll (srcs: SourceFile list) (baseCtx: IContext<#TyperOptions>) =
   let inline mapStatements f (src: SourceFile) =

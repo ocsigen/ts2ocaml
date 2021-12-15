@@ -7,8 +7,7 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Yargs
 
-
-[<Obsolete("TODO")>]
+[<CompilerMessage("TODO", 24)>]
 let inline TODO (msg: string) = failwithf "TODO: %s" msg
 
 type Argv<'T> with

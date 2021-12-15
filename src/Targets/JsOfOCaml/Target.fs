@@ -36,11 +36,9 @@ let private run (input: Input) (ctx: IContext<Options>) =
       else []
     if List.isEmpty input.sources then result
     else if ctx.options.stdlib then
-      failwith "TODO"
-      // result @ emitStdlib input ctx
+      result @ emitStdlib input ctx
     else
-      failwith "TODO"
-      // result @ emit input ctx
+      result @ emit input ctx
 
   if results = [] then
     ctx.logger.warnf "no input files are given."

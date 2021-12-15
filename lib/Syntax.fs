@@ -16,15 +16,15 @@ type [<RequireQualifiedAccess>] Kind =
   /// child of a module.
   | Statement
 with
-  static member OfTypeAlias = [Kind.Type; Kind.TypeAlias; Kind.Statement]
-  static member OfInterface = [Kind.Type; Kind.ClassLike; Kind.Statement]
-  static member OfClass = [Kind.Value; Kind.Type; Kind.ClassLike; Kind.Statement]
-  static member OfEnum = [Kind.Value; Kind.Type; Kind.Enum; Kind.Statement]
-  static member OfEnumCase = [Kind.Value; Kind.Type; Kind.EnumCase]
-  static member OfNamespace = [Kind.Module; Kind.Statement]
-  static member OfModule = [Kind.Value; Kind.Module; Kind.Statement]
-  static member OfValue = [Kind.Value; Kind.Statement]
-  static member OfMember = [Kind.Value; Kind.Member]
+  static member OfTypeAlias = [Type; TypeAlias; Statement]
+  static member OfInterface = [Type; ClassLike; Statement]
+  static member OfClass = [Value; Type; ClassLike; Statement]
+  static member OfEnum = [Value; Type; Enum; Statement]
+  static member OfEnumCase = [Value; Type; EnumCase]
+  static member OfNamespace = [Module; Statement]
+  static member OfModule = [Value; Module; Statement]
+  static member OfValue = [Value; Statement]
+  static member OfMember = [Value; Member]
 
 [<CustomEquality; CustomComparison; StructuredFormatDisplay("{AsString}")>]
 type Location =
@@ -668,7 +668,6 @@ and SourceFile = {
   /// /// <reference no-default-lib="..."/>
   /// ```
   hasNoDefaultLib: bool
-  moduleName: string option
 }
 
 type PackageInfo = {

@@ -222,19 +222,23 @@ let deriveModuleName (info: Syntax.PackageInfo option) (srcs: Path.Absolute list
       else
         fallback ()
 
+let tryGetActualFileNameFromRelativeImportPath (currentFile: Path.Absolute) (allFiles: Path.Absolute list) (path: string) =
+  let path = Path.join [Path.dirname currentFile; path]
+  if not <| path.EndsWith(".ts") then
+    let tryFind p = if allFiles |> List.contains p then Some p else None
+    tryFind $"{path}.d.ts"
+    |> Option.orElseWith (fun () -> tryFind (Path.join [path; "index.d.ts"]))
+    |> Option.orElseWith (fun () -> allFiles |> List.tryFind (fun p -> p.StartsWith(path)))
+  else
+    if allFiles |> List.contains path then Some path
+    else None
+
 let resolveRelativeImportPath (info: Syntax.PackageInfo option) (currentFile: Path.Absolute) (allFiles: Path.Absolute list) (path: string) =
   if path.StartsWith(".") then
     let targetPath =
-      let path = Path.join [Path.dirname currentFile; path]
-      if not <| path.EndsWith(".ts") then
-        let tryFind p =
-          if allFiles |> List.contains p then Some p
-          else None
-        tryFind $"{path}.d.ts"
-        |> Option.orElseWith (fun () -> tryFind (Path.join [path; "index.d.ts"]))
-        |> Option.orElseWith (fun () -> allFiles |> List.tryFind (fun p -> p.StartsWith(path)))
-        |> Option.defaultWith (fun () -> Path.join [path; "index.d.ts"])
-      else path
+      match tryGetActualFileNameFromRelativeImportPath currentFile allFiles path with
+      | Some path -> path
+      | None -> Path.join [Path.dirname currentFile; path; "index.d.ts"]
     getJsModuleName info targetPath
   else
     Valid path

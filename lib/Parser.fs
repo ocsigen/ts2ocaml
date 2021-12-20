@@ -1037,6 +1037,53 @@ let private getAllLocalReferences (ctx: #IContext<#IOptions>) (sourceFiles: Ts.S
 
   sourceFilesMap.Values |> Seq.toArray |> Array.map (fun v -> v.fileName, v) |> Array.unzip
 
+open DataTypes
+
+let createDependencyGraph (sourceFiles: Ts.SourceFile seq) =
+  let sourceFiles = Array.ofSeq sourceFiles
+  let files = sourceFiles |> Array.map (fun sf -> sf.fileName, sf) |> Map.ofArray
+  let mutable graph = Graph.empty
+
+  let tryFindDefinitionFile (sourceFile: Ts.SourceFile) relativePath =
+    let tryGet name =
+      files |> Map.tryFind (Path.join [Path.dirname sourceFile.fileName; name])
+    tryGet $"{relativePath}.d.ts"
+    |> Option.orElseWith (fun () -> tryGet (Path.join [relativePath; "index.d.ts"]))
+
+  let handleModuleSpecifier (sourceFile: Ts.SourceFile) (e: Ts.Expression) =
+    if e.kind = Ts.SyntaxKind.StringLiteral then
+      let specifier = (!!e : Ts.StringLiteral).text
+      if specifier.StartsWith(".") then
+        tryFindDefinitionFile sourceFile specifier
+        |> Option.map (fun target ->
+          graph <- graph |> Graph.add sourceFile.fileName target.fileName
+          target)
+      else None
+    else None
+
+  let rec go (sourceFile: Ts.SourceFile) (n: Ts.Node) : unit option =
+    match n.kind with
+    | Ts.SyntaxKind.ImportEqualsDeclaration ->
+      let n = n :?> Ts.ImportEqualsDeclaration
+      if (!!n.moduleReference : Ts.Node).kind = Ts.SyntaxKind.ExternalModuleReference then
+        (!!n.moduleReference : Ts.ExternalModuleReference).expression
+        |> handleModuleSpecifier sourceFile
+        |> Option.iter goSourceFile
+    | Ts.SyntaxKind.ImportDeclaration ->
+      let n = n :?> Ts.ImportDeclaration
+      n.moduleSpecifier
+      |> handleModuleSpecifier sourceFile
+      |> Option.iter goSourceFile
+    | _ -> ()
+    n.forEachChild(go sourceFile)
+
+  and goSourceFile (sourceFile: Ts.SourceFile) =
+    for statement in sourceFile.statements do
+      go sourceFile statement |> ignore
+
+  for sourceFile in sourceFiles do goSourceFile sourceFile
+  graph
+
 let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileNames: string[]) : ParserContext =
   let fileNames, program =
     let fileNames =
@@ -1108,4 +1155,13 @@ let parse (ctx: ParserContext) : Input =
     | example :: _ -> JsHelper.getPackageInfo example.fileName
     | [] -> None
 
-  { sources = sources; info = info }
+  let dependencyGraph =
+    let g = createDependencyGraph srcs
+    Graph.stronglyConnectedComponents g (List.ofArray ctx.fileNames)
+
+  for group in dependencyGraph do
+    match group with
+    | [] | [_] -> ()
+    | _ -> ctx.logger.warnf "there are mutually-referencing source files: %s" (group |> String.concat ", ")
+
+  { sources = sources; info = info; dependencyGraph = dependencyGraph }

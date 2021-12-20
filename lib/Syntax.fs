@@ -488,6 +488,16 @@ and Module = {
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
 
+and Export = {
+  comments: Comment list
+  clauses: ExportClause list
+  loc: Location
+  origText: string
+} with
+  interface ICommented<Export> with
+    member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
+
 and ExportClause =
   /// ```ts
   /// export = ident;
@@ -552,16 +562,6 @@ and ExportClause =
   ///   const whatever = require("path");
   /// ```
   | NamespaceExport of ns:string
-
-and Export = {
-  comments: Comment list
-  clauses: ExportClause list
-  loc: Location
-  origText: string
-} with
-  interface ICommented<Export> with
-    member this.getComments() = this.comments
-    member this.mapComments f = { this with comments = f this.comments }
 
 and [<RequireQualifiedAccess>] Exported =
   | No
@@ -688,6 +688,12 @@ type PackageInfo = {
 type Input = {
   sources: SourceFile list
   info: PackageInfo option
+  /// a list of groups of filenames.
+  ///
+  /// if a group has more than one filenames, the files are mutually-referencing.
+  ///
+  /// the files in later groups reference the files in former groups.
+  dependencyGraph: Path.Absolute list list
 }
 
 module Literal =

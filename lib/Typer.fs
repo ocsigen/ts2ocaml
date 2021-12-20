@@ -196,6 +196,8 @@ module FullName =
   let isDefinedInCurrentSource (ctx: TyperContext<_, _>) (fullName: FullName) : bool =
     fullName.source = ctx.currentSourceFile
 
+  let mapSource f (fullName: FullName) = { fullName with source = f fullName.source }
+
 module Ident =
   let getDefinitions (ctx: TyperContext<_, _>) (ident: Ident) =
     ident.fullName |> List.collect (FullName.getDefinitions ctx)
@@ -224,6 +226,9 @@ module Ident =
 
   let isDefinedInCurrentSource (ctx: TyperContext<_, _>) (ident: Ident) =
     ident.fullName |> List.exists (FullName.isDefinedInCurrentSource ctx)
+
+  let mapSource f (ident: Ident) =
+    { ident with fullName = ident.fullName |> List.map (FullName.mapSource f) }
 
 module Type =
   let rec mapInTypeParam mapping (ctx: 'Context) (tp: TypeParam) =
@@ -264,19 +269,56 @@ module Type =
   let mapInTupleType mapping (ctx: 'Context) (ts: TupleType) =
     { ts with types = ts.types |> List.map (fun t -> {| t with value = mapping ctx t.value|})}
 
+  let mapInUnion mapping ctx (u: UnionType) : UnionType =
+    { types = u.types |> List.map (mapping ctx) }
+
+  let mapInIntersection mapping ctx (i: IntersectionType) : IntersectionType =
+    { types = i.types |> List.map (mapping ctx) }
+
+  let rec mapIdent f = function
+    | Intrinsic -> Intrinsic | PolymorphicThis -> PolymorphicThis
+    | Ident i -> Ident (f i)
+    | TypeVar v -> TypeVar v | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
+    | AnonymousInterface i -> AnonymousInterface (i |> mapInClass (fun () -> mapIdent f) ())
+    | Union u -> Union (mapInUnion (fun () -> mapIdent f) () u)
+    | Intersection i -> Intersection (mapInIntersection (fun () -> mapIdent f) () i)
+    | Tuple t -> Tuple (mapInTupleType (fun () -> mapIdent f) () t)
+    | Func (ft, ts, loc) ->
+      Func (
+        ft |> mapInFuncType (fun () -> mapIdent f) (),
+        ts |> List.map (mapInTypeParam (fun () -> mapIdent f) ()),
+        loc
+      )
+    | NewableFunc (ft, ts, loc) ->
+      NewableFunc (
+        ft |> mapInFuncType (fun () -> mapIdent f) (),
+        ts |> List.map (mapInTypeParam (fun () -> mapIdent f) ()),
+        loc
+      )
+    | App (AIdent i, ts, loc) -> App (AIdent (f i), ts |> List.map (mapIdent f), loc)
+    | App (APrim p, ts, loc) -> App (APrim p, ts |> List.map (mapIdent f), loc)
+    | App (AAnonymousInterface i, ts, loc) ->
+      App (
+        AAnonymousInterface (i |> mapInClass (fun () -> mapIdent f) ()),
+        ts |> List.map (mapIdent f),
+        loc
+      )
+    | Erased (e, loc, origText) ->
+      let e =
+        match e with
+        | IndexedAccess (t1, t2) -> IndexedAccess (mapIdent f t1, mapIdent f t2)
+        | TypeQuery i -> TypeQuery (f i)
+        | Keyof t -> Keyof (mapIdent f t)
+      Erased (e, loc, origText)
+    | UnknownType msg -> UnknownType msg
+
   let rec substTypeVar (subst: Map<string, Type>) _ctx = function
     | TypeVar v ->
       match subst |> Map.tryFind v with
       | Some t -> t
       | None -> TypeVar v
-    | Union u ->
-      Union {
-        types = u.types |> List.map (substTypeVar subst _ctx);
-      }
-    | Intersection i ->
-      Intersection {
-        types = i.types |> List.map (substTypeVar subst _ctx);
-      }
+    | Union u -> Union (mapInUnion (substTypeVar subst) _ctx u)
+    | Intersection i -> Intersection (mapInIntersection (substTypeVar subst) _ctx i)
     | Tuple ts -> Tuple (ts |> mapInTupleType (substTypeVar subst) _ctx)
     | AnonymousInterface c -> AnonymousInterface (mapInClass (substTypeVar subst) _ctx c)
     | Func (f, typrms, loc) ->
@@ -1037,287 +1079,22 @@ module Statement =
   let resolveErasedTypes (ctx: TyperContext<#TyperOptions, _>) (stmts: Statement list) =
     mapType resolveErasedType TyperContext.ofChildNamespace ctx stmts
 
-module Transform =
-  let rec merge (stmts: Statement list) =
-    let mutable result : Choice<Statement, Class ref, Module ref> list = []
-
-    let mutable intfMap = Map.empty
-    let mutable nsMap = Map.empty
-    let mutable otherStmtSet = Set.empty
-    let mergeTypeParams tps1 tps2 =
-      let rec go acc = function
-        | [], [] -> List.rev acc
-        | tp1 :: rest1, tp2 :: rest2 ->
-          let inline check t1 t2 =
-            match t1, t2 with
-            | Some t, None | None, Some t -> Some t
-            | None, None -> None
-            | Some t1, Some t2 ->
-              assert (t1 = t2)
-              Some t1
-          let extends = check tp1.extends tp2.extends
-          let defaultType = check tp1.defaultType tp2.defaultType
-          assert (tp1.name = tp2.name)
-          let tp = { name = tp1.name; extends = extends; defaultType = defaultType }
-          go (tp :: acc) (rest1, rest2)
-        | tp :: rest1, rest2
-        | rest1, tp :: rest2 ->
-          let tp =
-            match tp.defaultType with
-            | Some _ -> tp
-            | None -> { tp with defaultType = Some (Prim Any) }
-          go (tp :: acc) (rest1, rest2)
-      go [] (tps1, tps2)
-
-    for stmt in stmts do
-      match stmt with
-      | Class i (* when i.isInterface *) ->
-        match intfMap |> Map.tryFind i.name with
-        | None ->
-          let iref = ref i
-          intfMap <- (intfMap |> Map.add i.name iref)
-          result <- Choice2Of3 iref :: result
-        | Some iref' ->
-          let i' = iref'.Value
-          assert (i.accessibility = i'.accessibility)
-          let i =
-            { i with
-                isInterface = i.isInterface && i'.isInterface
-                comments = i.comments @ i'.comments |> List.distinct
-                loc = i.loc ++ i'.loc
-                typeParams = mergeTypeParams i.typeParams i'.typeParams
-                implements = List.distinct (i.implements @ i'.implements)
-                members = i.members @ i'.members }
-          iref'.Value <- i
-      | Module n (* when n.isNamespace *) ->
-        match nsMap |> Map.tryFind n.name with
-        | None ->
-          let nref = ref n
-          nsMap <- (nsMap |> Map.add n.name nref)
-          result <- Choice3Of3 nref :: result
-        | Some nref' ->
-          let n' = nref'.Value
-          nref'.Value <-
-            { n with
-                loc = n.loc ++ n'.loc
-                comments = n.comments @ n'.comments |> List.distinct
-                statements = n'.statements @ n.statements }
-      | stmt ->
-        if otherStmtSet |> Set.contains stmt |> not then
-          otherStmtSet <- otherStmtSet |> Set.add stmt
-          result <- Choice1Of3 stmt :: result
-    result
-    |> List.rev
-    |> List.map (function
-      | Choice1Of3 s -> s
-      | Choice2Of3 i -> Class i.Value
-      | Choice3Of3 n ->
-        Module { n.Value with statements = merge n.Value.statements }
-    )
-
-  let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statement list) : Statement list =
-    let opts = ctx.options
-    let rec go stmts =
-      stmts |> List.map (function
-        | Class (c & { name = Name name }) ->
-          let inherits = ResizeArray(c.implements)
-
-          let has tyName =
-            name = tyName || inherits.Exists(fun t ->
-              match t with
-              | Ident { name = [name'] }
-              | App (AIdent { name = [name'] }, _, _) -> tyName = name'
-              | _ -> false
-            )
-
-          let inline app t ts loc =
-            App (AIdent { name = [t]; kind = Some (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Statement]); fullName = []; loc = loc; parent = None}, ts, loc)
-
-          for ma, m in c.members do
-            match m with
-            // iterator & iterable iterator
-            | SymbolIndexer ("iterator", { returnType = ty }, _) when opts.inheritIterable ->
-              match ty with
-              | App (AIdent { name = ["Iterator"] }, [argTy], _) when not (has "Iterable") ->
-                inherits.Add(app "Iterable" [argTy] ma.loc)
-              | App (AIdent { name = ["IterableIterator"] }, [argTy], _) when not (has "IterableIterator") ->
-                inherits.Add(app "IterableIterator" [argTy] ma.loc)
-              | _ -> ()
-
-            // async iterator & iterable iterator
-            | SymbolIndexer ("asyncIterator", { returnType = ty }, _) when opts.inheritIterable ->
-              match ty with
-              | App (AIdent { name = ["AsyncIterator"] }, [argTy], _) when not (has "AsyncIterable") ->
-                inherits.Add(app "AsyncIterable" [argTy] ma.loc)
-              | App (AIdent { name = ["AsyncIterableIterator"] }, [argTy], _) when not (has "AsyncIterableIterator") ->
-                inherits.Add(app "AsyncIterableIterator" [argTy] ma.loc)
-              | _ -> ()
-
-            // ArrayLike
-            | Indexer ({ args = [Choice1Of2 { value = Prim Number } | Choice2Of2 (Prim Number)]; returnType = retTy }, _)
-              when opts.inheritArraylike && not (has "ArrayLike") -> inherits.Add(app "ArrayLike" [retTy] ma.loc)
-
-            // PromiseLike
-            | Method ("then", { args = [Choice1Of2 { name = "onfulfilled"; value = onfulfilled }; Choice1Of2 { name = "onrejected" }] }, _)
-              when opts.inheritPromiselike && not (has "PromiseLike") ->
-              match onfulfilled with
-              | Func ({ args = [Choice1Of2 { value = t } | Choice2Of2 t] }, _, _) ->
-                inherits.Add(app "PromiseLike" [t] ma.loc)
-              | Union { types = ts } ->
-                for t in ts do
-                  match t with
-                  | Func ({ args = [Choice1Of2 { value = t } | Choice2Of2 t] }, _, _) ->
-                    inherits.Add(app "PromiseLike" [t] ma.loc)
-                  | _ -> ()
-              | _ -> ()
-
-            | _ -> ()
-
-          Class { c with implements = List.ofSeq inherits |> List.distinct }
-        | x -> x
-      )
-    go stmts
-
-  let detectPatterns (stmts: Statement list) : Statement list =
-    let rec go stmts =
-      // declare var Foo: Foo
-      let valDict = new MutableMap<string, Variable>()
-      // interface Foo { .. }
-      let intfDict = new MutableMap<string, Class>()
-      // declare var Foo: FooConstructor
-      let ctorValDict = new MutableMap<string, Variable>()
-      // interface FooConstructor { .. }
-      let ctorIntfDict = new MutableMap<string, Class>()
-
-      for stmt in stmts do
-        match stmt with
-        | Variable (v & { name = name; typ = Ident { name = [intfName] } }) ->
-          if name = intfName then valDict[name] <- v
-          else if (name + "Constructor") = intfName then ctorValDict[name] <- v
-        | Class (intf & { name = Name name; isInterface = true }) ->
-          if name <> "Constructor" && name.EndsWith("Constructor") then
-            let origName = name.Substring(0, name.Length - "Constructor".Length)
-            ctorIntfDict[origName] <- intf
-          else
-            intfDict[name] <- intf
-        | _ -> ()
-
-      let intersect (other: string seq) (set: MutableSet<string>) =
-        let otherSet = new MutableSet<string>(other)
-        for s in set do
-          if not <| otherSet.Contains(s) then
-            set.Remove(s) |> ignore
-        set
-
-      let immediateInstances =
-        new MutableSet<string>(valDict.Keys)
-        |> intersect intfDict.Keys
-      let immediateCtors =
-        new MutableSet<string>(intfDict.Keys)
-        |> intersect ctorValDict.Keys
-        |> intersect ctorIntfDict.Keys
-
-      stmts |> List.choose (function
-        | Variable (v & { name = name; typ = Ident { name = [intfName] } }) ->
-          if name = intfName && immediateInstances.Contains name && valDict.[name] = v then
-            let intf = intfDict.[name]
-            Some (Pattern (ImmediateInstance (intf, v)))
-          else if name + "Constructor" = intfName && immediateCtors.Contains name && ctorValDict.[name] = v then
-            let baseIntf = intfDict.[name]
-            let ctorIntf = ctorIntfDict.[name]
-            Some (Pattern (ImmediateConstructor (baseIntf, ctorIntf, v)))
-          else
-            Some (Variable v)
-        | Class (intf & { name = Name name; isInterface = true }) ->
-          if   (immediateInstances.Contains name || immediateCtors.Contains name) then None
-          else if name <> "Constructor" && name.EndsWith("Constructor") then
-            let origName = name.Substring(0, name.Length - "Constructor".Length)
-            if immediateCtors.Contains origName then None
-            else Some (Class intf)
-          else Some (Class intf)
-        | Module m -> Some (Module { m with statements = go m.statements })
-        | x -> Some x
-      )
-    go stmts
-
-  let replaceAliasToFunction (ctx: #IContext<#TyperOptions>) stmts =
-    let rec go = function
-      | Module m ->
-        Module { m with statements = List.map go m.statements }
-      | TypeAlias ta ->
-        match ta.target with
-        | Func (f, typrms, loc) ->
-          Class {
-            name = Name ta.name
-            isInterface = true
-            comments = ta.comments
-            accessibility = Protected
-            isExported = Exported.No
-            implements = []
-            typeParams = ta.typeParams
-            members = [
-              { comments = []; loc = loc; accessibility = Public; isStatic = false },
-              Callable (f, typrms)
-            ]
-            loc = loc
-          }
-        | _ -> TypeAlias ta
-      | x -> x
-    if ctx.options.replaceAliasToFunction then
-      List.map go stmts
-    else
-      stmts
-
-  let replaceFunctions (ctx: #IContext<#TyperOptions>) (stmts: Statement list) =
-    let rec goType (ctx: #IContext<#TyperOptions>) = function
-      | Func (f, [], loc) -> Func (Type.mapInFuncType goType ctx f, [], loc)
-      | Func (f, typrms, loc) ->
-        let f = Type.mapInFuncType goType ctx f
-        let typrms = typrms |> List.map (Type.mapInTypeParam goType ctx)
-        if ctx.options.replaceRankNFunction then
-          Type.createFunctionInterface [{| ty = f; typrms = typrms; loc = loc; isNewable = false; comments = [] |}]
-        else
-          Func (f, typrms, loc)
-      | NewableFunc (f, [], loc) when not ctx.options.replaceNewableFunction ->
-        NewableFunc (Type.mapInFuncType goType ctx f, [], loc)
-      | NewableFunc (f, typrms, loc) ->
-        let f = Type.mapInFuncType goType ctx f
-        let typrms = typrms |> List.map (Type.mapInTypeParam goType ctx)
-        if ctx.options.replaceRankNFunction || ctx.options.replaceNewableFunction then
-          Type.createFunctionInterface [{| ty = f; typrms = typrms; loc = loc; isNewable = true; comments = [] |}]
-        else
-          NewableFunc (f, typrms, loc)
-      | TypeVar v -> TypeVar v
-      | Union u -> Union { u with types = u.types |> List.map (goType ctx) }
-      | Intersection i -> Intersection { i with types = i.types |> List.map (goType ctx) }
-      | Tuple t -> Tuple (Type.mapInTupleType goType ctx t)
-      | AnonymousInterface c -> AnonymousInterface (Type.mapInClass goType ctx c)
-      | App (t, ts, loc) ->
-        let t =
-          match t with
-          | AAnonymousInterface i -> AAnonymousInterface (Type.mapInClass goType ctx i)
-          | _ -> t
-        App (t, ts |> List.map (goType ctx), loc)
-      | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
-      | PolymorphicThis -> PolymorphicThis | Intrinsic -> Intrinsic
-      | Erased (e, loc, origText) ->
-        let e' =
-          match e with
-          | IndexedAccess (t1, t2) -> IndexedAccess (goType ctx t1, goType ctx t2)
-          | TypeQuery i -> TypeQuery i
-          | Keyof t -> Keyof (goType ctx t)
-        Erased (e', loc, origText)
-      | UnknownType msgo -> UnknownType msgo
-    let rec goStatement (ctx: #IContext<#TyperOptions>) = function
-      | Variable { name = name; typ = Func (f, typrms, _); isConst = true; isExported = isExported;
-                   accessibility = accessibility; comments = comments; loc = loc }
-        when List.length typrms > 1 && ctx.options.replaceRankNFunction ->
-          let typ = Type.mapInFuncType goType ctx f
-          let typrms = typrms |> List.map (Type.mapInTypeParam goType ctx)
-          Function { name = name; typ = typ; typeParams = typrms;
-                     isExported = isExported; accessibility = accessibility; comments = comments; loc = loc } |> Some
+  let mapIdent f stmts =
+    let orf _ = function
+      | Export e ->
+        let g = function
+          | CommonJsExport i -> CommonJsExport (f i)
+          | ES6DefaultExport i -> ES6DefaultExport (f i)
+          | ES6Export e -> ES6Export {| e with target = f e.target |}
+          | NamespaceExport ns -> NamespaceExport ns
+        Export { e with clauses = e.clauses |> List.map g } |> Some
+      | Import i ->
+        let g = function
+          | LocalImport l -> LocalImport {| l with target = f l.target |}
+          | x -> x
+        Import { i with clauses = i.clauses |> List.map g } |> Some
       | _ -> None
-    Statement.mapTypeWith goStatement goType (fun _ x -> x) ctx stmts
+    mapTypeWith orf (fun () -> mapIdent f) (fun _ -> id) () stmts
 
 type [<RequireQualifiedAccess>] Typeofable = Number | String | Boolean | Symbol | BigInt
 module TypeofableType =
@@ -1599,6 +1376,303 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
+let rec mergeStatements (stmts: Statement list) =
+  let mutable result : Choice<Statement, Class ref, Module ref> list = []
+
+  let mutable intfMap = Map.empty
+  let mutable nsMap = Map.empty
+  let mutable otherStmtSet = Set.empty
+  let mergeTypeParams tps1 tps2 =
+    let rec go acc = function
+      | [], [] -> List.rev acc
+      | tp1 :: rest1, tp2 :: rest2 ->
+        let inline check t1 t2 =
+          match t1, t2 with
+          | Some t, None | None, Some t -> Some t
+          | None, None -> None
+          | Some t1, Some t2 ->
+            assert (t1 = t2)
+            Some t1
+        let extends = check tp1.extends tp2.extends
+        let defaultType = check tp1.defaultType tp2.defaultType
+        assert (tp1.name = tp2.name)
+        let tp = { name = tp1.name; extends = extends; defaultType = defaultType }
+        go (tp :: acc) (rest1, rest2)
+      | tp :: rest1, rest2
+      | rest1, tp :: rest2 ->
+        let tp =
+          match tp.defaultType with
+          | Some _ -> tp
+          | None -> { tp with defaultType = Some (Prim Any) }
+        go (tp :: acc) (rest1, rest2)
+    go [] (tps1, tps2)
+
+  for stmt in stmts do
+    match stmt with
+    | Class i (* when i.isInterface *) ->
+      match intfMap |> Map.tryFind i.name with
+      | None ->
+        let iref = ref i
+        intfMap <- (intfMap |> Map.add i.name iref)
+        result <- Choice2Of3 iref :: result
+      | Some iref' ->
+        let i' = iref'.Value
+        assert (i.accessibility = i'.accessibility)
+        let i =
+          { i with
+              isInterface = i.isInterface && i'.isInterface
+              comments = i.comments @ i'.comments |> List.distinct
+              loc = i.loc ++ i'.loc
+              typeParams = mergeTypeParams i.typeParams i'.typeParams
+              implements = List.distinct (i.implements @ i'.implements)
+              members = i.members @ i'.members }
+        iref'.Value <- i
+    | Module n (* when n.isNamespace *) ->
+      match nsMap |> Map.tryFind n.name with
+      | None ->
+        let nref = ref n
+        nsMap <- (nsMap |> Map.add n.name nref)
+        result <- Choice3Of3 nref :: result
+      | Some nref' ->
+        let n' = nref'.Value
+        nref'.Value <-
+          { n with
+              loc = n.loc ++ n'.loc
+              comments = n.comments @ n'.comments |> List.distinct
+              statements = n'.statements @ n.statements }
+    | stmt ->
+      if otherStmtSet |> Set.contains stmt |> not then
+        otherStmtSet <- otherStmtSet |> Set.add stmt
+        result <- Choice1Of3 stmt :: result
+  result
+  |> List.rev
+  |> List.map (function
+    | Choice1Of3 s -> s
+    | Choice2Of3 i -> Class i.Value
+    | Choice3Of3 n ->
+      Module { n.Value with statements = mergeStatements n.Value.statements }
+  )
+
+let mergeSources newFileName (srcs: SourceFile list) =
+  let sourceMapping =
+    srcs |> List.map (fun src -> src.fileName, newFileName) |> Map.ofList
+  let f (i: Ident) =
+    i |> Ident.mapSource (fun path ->
+      sourceMapping |> Map.tryFind path |> Option.defaultValue path
+    )
+  let statements =
+    srcs
+    |> List.collect (fun src -> src.statements |> Statement.mapIdent f)
+    |> mergeStatements
+  { fileName = newFileName
+    statements = statements
+    references = srcs |> List.collect (fun src -> src.references) |> List.distinct
+    hasNoDefaultLib = srcs |> List.exists (fun src -> src.hasNoDefaultLib) }
+
+let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statement list) : Statement list =
+  let opts = ctx.options
+  let rec go stmts =
+    stmts |> List.map (function
+      | Class (c & { name = Name name }) ->
+        let inherits = ResizeArray(c.implements)
+
+        let has tyName =
+          name = tyName || inherits.Exists(fun t ->
+            match t with
+            | Ident { name = [name'] }
+            | App (AIdent { name = [name'] }, _, _) -> tyName = name'
+            | _ -> false
+          )
+
+        let inline app t ts loc =
+          App (AIdent { name = [t]; kind = Some (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Statement]); fullName = []; loc = loc; parent = None}, ts, loc)
+
+        for ma, m in c.members do
+          match m with
+          // iterator & iterable iterator
+          | SymbolIndexer ("iterator", { returnType = ty }, _) when opts.inheritIterable ->
+            match ty with
+            | App (AIdent { name = ["Iterator"] }, [argTy], _) when not (has "Iterable") ->
+              inherits.Add(app "Iterable" [argTy] ma.loc)
+            | App (AIdent { name = ["IterableIterator"] }, [argTy], _) when not (has "IterableIterator") ->
+              inherits.Add(app "IterableIterator" [argTy] ma.loc)
+            | _ -> ()
+
+          // async iterator & iterable iterator
+          | SymbolIndexer ("asyncIterator", { returnType = ty }, _) when opts.inheritIterable ->
+            match ty with
+            | App (AIdent { name = ["AsyncIterator"] }, [argTy], _) when not (has "AsyncIterable") ->
+              inherits.Add(app "AsyncIterable" [argTy] ma.loc)
+            | App (AIdent { name = ["AsyncIterableIterator"] }, [argTy], _) when not (has "AsyncIterableIterator") ->
+              inherits.Add(app "AsyncIterableIterator" [argTy] ma.loc)
+            | _ -> ()
+
+          // ArrayLike
+          | Indexer ({ args = [Choice1Of2 { value = Prim Number } | Choice2Of2 (Prim Number)]; returnType = retTy }, _)
+            when opts.inheritArraylike && not (has "ArrayLike") -> inherits.Add(app "ArrayLike" [retTy] ma.loc)
+
+          // PromiseLike
+          | Method ("then", { args = [Choice1Of2 { name = "onfulfilled"; value = onfulfilled }; Choice1Of2 { name = "onrejected" }] }, _)
+            when opts.inheritPromiselike && not (has "PromiseLike") ->
+            match onfulfilled with
+            | Func ({ args = [Choice1Of2 { value = t } | Choice2Of2 t] }, _, _) ->
+              inherits.Add(app "PromiseLike" [t] ma.loc)
+            | Union { types = ts } ->
+              for t in ts do
+                match t with
+                | Func ({ args = [Choice1Of2 { value = t } | Choice2Of2 t] }, _, _) ->
+                  inherits.Add(app "PromiseLike" [t] ma.loc)
+                | _ -> ()
+            | _ -> ()
+
+          | _ -> ()
+
+        Class { c with implements = List.ofSeq inherits |> List.distinct }
+      | x -> x
+    )
+  go stmts
+
+let detectPatterns (stmts: Statement list) : Statement list =
+  let rec go stmts =
+    // declare var Foo: Foo
+    let valDict = new MutableMap<string, Variable>()
+    // interface Foo { .. }
+    let intfDict = new MutableMap<string, Class>()
+    // declare var Foo: FooConstructor
+    let ctorValDict = new MutableMap<string, Variable>()
+    // interface FooConstructor { .. }
+    let ctorIntfDict = new MutableMap<string, Class>()
+
+    for stmt in stmts do
+      match stmt with
+      | Variable (v & { name = name; typ = Ident { name = [intfName] } }) ->
+        if name = intfName then valDict[name] <- v
+        else if (name + "Constructor") = intfName then ctorValDict[name] <- v
+      | Class (intf & { name = Name name; isInterface = true }) ->
+        if name <> "Constructor" && name.EndsWith("Constructor") then
+          let origName = name.Substring(0, name.Length - "Constructor".Length)
+          ctorIntfDict[origName] <- intf
+        else
+          intfDict[name] <- intf
+      | _ -> ()
+
+    let intersect (other: string seq) (set: MutableSet<string>) =
+      let otherSet = new MutableSet<string>(other)
+      for s in set do
+        if not <| otherSet.Contains(s) then
+          set.Remove(s) |> ignore
+      set
+
+    let immediateInstances =
+      new MutableSet<string>(valDict.Keys)
+      |> intersect intfDict.Keys
+    let immediateCtors =
+      new MutableSet<string>(intfDict.Keys)
+      |> intersect ctorValDict.Keys
+      |> intersect ctorIntfDict.Keys
+
+    stmts |> List.choose (function
+      | Variable (v & { name = name; typ = Ident { name = [intfName] } }) ->
+        if name = intfName && immediateInstances.Contains name && valDict.[name] = v then
+          let intf = intfDict.[name]
+          Some (Pattern (ImmediateInstance (intf, v)))
+        else if name + "Constructor" = intfName && immediateCtors.Contains name && ctorValDict.[name] = v then
+          let baseIntf = intfDict.[name]
+          let ctorIntf = ctorIntfDict.[name]
+          Some (Pattern (ImmediateConstructor (baseIntf, ctorIntf, v)))
+        else
+          Some (Variable v)
+      | Class (intf & { name = Name name; isInterface = true }) ->
+        if   (immediateInstances.Contains name || immediateCtors.Contains name) then None
+        else if name <> "Constructor" && name.EndsWith("Constructor") then
+          let origName = name.Substring(0, name.Length - "Constructor".Length)
+          if immediateCtors.Contains origName then None
+          else Some (Class intf)
+        else Some (Class intf)
+      | Module m -> Some (Module { m with statements = go m.statements })
+      | x -> Some x
+    )
+  go stmts
+
+let replaceAliasToFunction (ctx: #IContext<#TyperOptions>) stmts =
+  let rec go = function
+    | Module m ->
+      Module { m with statements = List.map go m.statements }
+    | TypeAlias ta ->
+      match ta.target with
+      | Func (f, typrms, loc) ->
+        Class {
+          name = Name ta.name
+          isInterface = true
+          comments = ta.comments
+          accessibility = Protected
+          isExported = Exported.No
+          implements = []
+          typeParams = ta.typeParams
+          members = [
+            { comments = []; loc = loc; accessibility = Public; isStatic = false },
+            Callable (f, typrms)
+          ]
+          loc = loc
+        }
+      | _ -> TypeAlias ta
+    | x -> x
+  if ctx.options.replaceAliasToFunction then
+    List.map go stmts
+  else
+    stmts
+
+let replaceFunctions (ctx: #IContext<#TyperOptions>) (stmts: Statement list) =
+  let rec goType (ctx: #IContext<#TyperOptions>) = function
+    | Func (f, [], loc) -> Func (Type.mapInFuncType goType ctx f, [], loc)
+    | Func (f, typrms, loc) ->
+      let f = Type.mapInFuncType goType ctx f
+      let typrms = typrms |> List.map (Type.mapInTypeParam goType ctx)
+      if ctx.options.replaceRankNFunction then
+        Type.createFunctionInterface [{| ty = f; typrms = typrms; loc = loc; isNewable = false; comments = [] |}]
+      else
+        Func (f, typrms, loc)
+    | NewableFunc (f, [], loc) when not ctx.options.replaceNewableFunction ->
+      NewableFunc (Type.mapInFuncType goType ctx f, [], loc)
+    | NewableFunc (f, typrms, loc) ->
+      let f = Type.mapInFuncType goType ctx f
+      let typrms = typrms |> List.map (Type.mapInTypeParam goType ctx)
+      if ctx.options.replaceRankNFunction || ctx.options.replaceNewableFunction then
+        Type.createFunctionInterface [{| ty = f; typrms = typrms; loc = loc; isNewable = true; comments = [] |}]
+      else
+        NewableFunc (f, typrms, loc)
+    | TypeVar v -> TypeVar v
+    | Union u -> Union (u |> Type.mapInUnion goType ctx)
+    | Intersection i -> Intersection (i |> Type.mapInIntersection goType ctx)
+    | Tuple t -> Tuple (Type.mapInTupleType goType ctx t)
+    | AnonymousInterface c -> AnonymousInterface (Type.mapInClass goType ctx c)
+    | App (t, ts, loc) ->
+      let t =
+        match t with
+        | AAnonymousInterface i -> AAnonymousInterface (Type.mapInClass goType ctx i)
+        | _ -> t
+      App (t, ts |> List.map (goType ctx), loc)
+    | Ident i -> Ident i | Prim p -> Prim p | TypeLiteral l -> TypeLiteral l
+    | PolymorphicThis -> PolymorphicThis | Intrinsic -> Intrinsic
+    | Erased (e, loc, origText) ->
+      let e' =
+        match e with
+        | IndexedAccess (t1, t2) -> IndexedAccess (goType ctx t1, goType ctx t2)
+        | TypeQuery i -> TypeQuery i
+        | Keyof t -> Keyof (goType ctx t)
+      Erased (e', loc, origText)
+    | UnknownType msgo -> UnknownType msgo
+  let rec goStatement (ctx: #IContext<#TyperOptions>) = function
+    | Variable { name = name; typ = Func (f, typrms, _); isConst = true; isExported = isExported;
+                  accessibility = accessibility; comments = comments; loc = loc }
+      when List.length typrms > 0 && ctx.options.replaceRankNFunction ->
+        let typ = Type.mapInFuncType goType ctx f
+        let typrms = typrms |> List.map (Type.mapInTypeParam goType ctx)
+        Function { name = name; typ = typ; typeParams = typrms;
+                    isExported = isExported; accessibility = accessibility; comments = comments; loc = loc } |> Some
+    | _ -> None
+  Statement.mapTypeWith goStatement goType (fun _ x -> x) ctx stmts
+
 let private createRootContextForTyper (srcs: SourceFile list) (baseCtx: IContext<'Options>) : TyperContext<'Options, unit> =
   let info =
     srcs
@@ -1681,16 +1755,8 @@ let mergeESLibDefinitions (srcs: SourceFile list) =
     | Class c -> Class { c with members = c.members |> List.map (fun (a, m) -> map vo a.loc a |> snd, m) }
     | _ -> s
 
-  let stmts =
-    srcs
-    |> List.collect (fun src -> src.statements)
-    |> Transform.merge
-    |> List.map mapStmt
-
-  { fileName = "lib.es.d.ts"
-    statements = stmts
-    references = []
-    hasNoDefaultLib = true }
+  let newSrc = srcs |> mergeSources "lib.es.d.ts"
+  { newSrc with statements = newSrc.statements |> List.map mapStmt }
 
 let runAll (srcs: SourceFile list) (baseCtx: IContext<#TyperOptions>) =
   let inline mapStatements f (src: SourceFile) =
@@ -1699,34 +1765,26 @@ let runAll (srcs: SourceFile list) (baseCtx: IContext<#TyperOptions>) =
   let inline withSourceFileContext ctx f (src: SourceFile) =
     f (ctx |> TyperContext.ofSourceFileRoot src.fileName) src
 
-  baseCtx.logger.tracef "* normalizing syntax trees..."
-  let result =
-    srcs
-    |> List.map (
-      mapStatements (fun stmts ->
-        stmts
-        // merge modules, interfaces, etc
-        |> Transform.merge
-        // add common inheritances which tends not to be defined by `extends` or `implements`
-        |> Transform.introduceAdditionalInheritance baseCtx
-        // group statements with pattern
-        |> Transform.detectPatterns
-        // replace alias to function type with a function interface
-        |> Transform.replaceAliasToFunction baseCtx
-        // replace N-rank and/or newable function type with an interface
-        |> Transform.replaceFunctions baseCtx
-      )
-    )
+  let result = srcs |> List.map (mapStatements mergeStatements)
 
   // build a context
   let ctx = createRootContextForTyper result baseCtx
 
-  // resolve every erased types
-  ctx.logger.tracef "* evaluating type expressions..."
   let result =
     result |> List.map (
       withSourceFileContext ctx (fun ctx src ->
-        { src with statements = Statement.resolveErasedTypes ctx src.statements }))
+        src |> mapStatements (fun stmts ->
+          stmts
+          |> Statement.resolveErasedTypes ctx
+          // add common inheritances which tends not to be defined by `extends` or `implements`
+          |> introduceAdditionalInheritance ctx
+          // group statements with pattern
+          |> detectPatterns
+          // replace alias to function type with a function interface
+          |> replaceAliasToFunction ctx
+          // replace N-rank and/or newable function type with an interface
+          |> replaceFunctions ctx
+        )))
 
   // rebuild the context because resolveErasedTypes may introduce additional anonymous interfaces
   let ctx = createRootContext result ctx

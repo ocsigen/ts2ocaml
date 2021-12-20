@@ -434,8 +434,8 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
       | [t] -> emitTypeImpl flags overrideFunc ctx t.value
       | ts  -> Type.tuple (ts |> List.map (fun x -> emitTypeImpl flags overrideFunc ctx x.value))
     | Erased (_, loc, origText) -> failwithf "impossible_emitTypeImpl_erased: %s (%s)" loc.AsString origText
-    | Func (_, _ :: _, loc) -> failwithf "impossible_emitTypeImpl_Func_poly: %s" loc.AsString
-    | NewableFunc (_, _, loc) -> failwithf "impossible_emitTypeImpl_NewableFunc: %s" loc.AsString
+    | Func (_, _ :: _, loc) -> failwithf "impossible_emitTypeImpl_Func_poly: %s (%s)" loc.AsString (Type.pp ty)
+    | NewableFunc (_, _, loc) -> failwithf "impossible_emitTypeImpl_NewableFunc: %s (%s)" loc.AsString (Type.pp ty)
     | UnknownType msgo ->
       match msgo with None -> commentStr "FIXME: unknown type" + Type.any | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + Type.any
 
@@ -539,16 +539,18 @@ and StructuredTextNode = {|
   docCommentLines: text list
   exports: ExportItem list
   knownTypes: Set<KnownType>
+  anonymousInterfaces: Set<AnonymousInterface>
 |}
 module StructuredTextNode =
   let empty : StructuredTextNode =
-    {| scoped = Scoped.No; items = []; docCommentLines = []; exports = []; knownTypes = Set.empty |}
+    {| scoped = Scoped.No; items = []; docCommentLines = []; exports = []; knownTypes = Set.empty; anonymousInterfaces = Set.empty |}
   let union (a: StructuredTextNode) (b: StructuredTextNode) : StructuredTextNode =
     {| scoped = Scoped.union a.scoped b.scoped
        items = List.append a.items b.items
        docCommentLines = List.append a.docCommentLines b.docCommentLines
        exports = List.append a.exports b.exports
-       knownTypes = Set.union a.knownTypes b.knownTypes |}
+       knownTypes = Set.union a.knownTypes b.knownTypes
+       anonymousInterfaces = Set.union a.anonymousInterfaces b.anonymousInterfaces |}
 
 type StructuredText = Trie<string, StructuredTextNode>
 
@@ -1256,8 +1258,15 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       |> Seq.choose (function KnownType.AnonymousInterface (a, info) -> Some (a, info) | _ -> None)
       |> Seq.filter (fun (_, info) -> info.path = ctx.currentNamespace)
       |> Seq.filter (fun (a, _) -> ais |> List.contains a |> not)
-      |> Seq.fold (fun current (a, _) ->
-        emitClass emitTypeFlags OverrideFunc.noOverride ctx current (a.MapName Choice2Of2) ((fun _ _ _ -> []), Set.empty, None)
+      |> Seq.fold (fun (current: StructuredText) (a, _) ->
+        let shouldSkip =
+          current.value
+          |> Option.map (fun v -> v.anonymousInterfaces |> Set.contains a)
+          |> Option.defaultValue false
+        if shouldSkip then current
+        else
+          emitClass emitTypeFlags OverrideFunc.noOverride ctx current (a.MapName Choice2Of2) ((fun _ _ _ -> []), Set.empty, None)
+          |> Trie.setOrUpdate {| StructuredTextNode.empty with anonymousInterfaces = Set.singleton a |} StructuredTextNode.union
       ) current
     let addAnonymousInterface current = addAnonymousInterfaceExcluding [] current
 
@@ -1364,7 +1373,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
               knownTypes = knownTypes
               scoped = Scoped.Yes |} StructuredTextNode.union
         |> addExport value.name Kind.OfValue (if value.isConst then "const" else "let")
-        |> addAnonymousInterfaceExcluding [intf]
+        |> addAnonymousInterface
       | Ident (i & { loc = loc }) & Dummy tyargs
       | App (AIdent i, tyargs, loc) when Simplify.Has(ctx.options.simplify, Simplify.NamedInterfaceValue) ->
         let intf =
@@ -1472,19 +1481,23 @@ let rec emitExportModule (moduleEmitter: ModuleEmitter) (ctx: Context) (exports:
       let acc = acc |> addItems (emitComment isFirst export)
       go false (go' acc clauses) rest
 
-  let result = go true Trie.empty exports
-  let emitted = result |> emitStructuredText moduleEmitter ctx
+  let st = go true Trie.empty exports
+  let emitted = st |> emitStructuredText true moduleEmitter ctx
   emitted.content
 
-and private emitStructuredText (moduleEmitter: ModuleEmitter) (ctx: Context) (st: StructuredText) : {| scoped: Scoped; content: text list; docCommentBody: text list |} =
+and private emitStructuredText (reserved: bool) (moduleEmitter: ModuleEmitter) (ctx: Context) (st: StructuredText) : {| scoped: Scoped; content: text list; docCommentBody: text list |} =
   let renamer = new OverloadRenamer()
   let modules : TextModuleSig list =
     st.children
     |> Map.toList
     |> List.map (fun (k, v) ->
-      let name = Naming.moduleName k |> renamer.Rename "module"
+      let name =
+        let name =
+          if reserved then Naming.moduleNameReserved k
+          else Naming.moduleName k
+        name |> renamer.Rename "module"
       let ctx = ctx |> TyperContext.ofChildNamespace k
-      let result = emitStructuredText moduleEmitter ctx v
+      let result = emitStructuredText reserved moduleEmitter ctx v
       {|
         name = name
         origName = k
@@ -1618,7 +1631,7 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
 
 let emitStatementsWithStructuredText (ctx: Context) (stmts: Statement list) (st: StructuredText) =
   let moduleEmitter = ModuleEmitter.fromOption ctx.options
-  let result = st |> emitStructuredText moduleEmitter ctx
+  let result = st |> emitStructuredText false moduleEmitter ctx
   let content =
     if List.isEmpty result.docCommentBody then result.content
     else
@@ -1637,6 +1650,14 @@ let header =
   [ str "[@@@ocaml.warning \"-7-11-32-33-39\"]"
     Attr.js_implem_floating (str "[@@@ocaml.warning \"-7-11-32-33-39\"]") ]
 
+let setTyperOptions (ctx: IContext<Options>) =
+  ctx.options.inheritArraylike <- true
+  ctx.options.inheritIterable <- true
+  ctx.options.inheritPromiselike <- true
+  ctx.options.replaceAliasToFunction <- true
+  ctx.options.replaceNewableFunction <- true
+  ctx.options.replaceRankNFunction <- true
+
 let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
   let srcs = input.sources
 
@@ -1647,35 +1668,34 @@ let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
     |> mergeESLibDefinitions
 
   let domSrc =
-    let stmts =
-      srcs
-      |> List.filter (fun src -> src.fileName.Contains("lib.dom") && src.fileName.EndsWith(".d.ts"))
-      |> List.collect (fun src -> src.statements)
-      |> Transform.merge
-    { fileName = "lib.dom.d.ts"; statements = stmts; references = []; hasNoDefaultLib = false }
+    srcs
+    |> List.filter (fun src -> src.fileName.Contains("lib.dom") && src.fileName.EndsWith(".d.ts"))
+    |> mergeSources "lib.dom.d.ts"
 
   let webworkerSrc =
-    let stmts =
-      srcs
-      |> List.filter (fun src -> src.fileName.Contains("lib.webworker") && src.fileName.EndsWith(".d.ts"))
-      |> List.collect (fun src -> src.statements)
-      |> Transform.merge
-    { fileName = "lib.webworker.d.ts"; statements = stmts; references = []; hasNoDefaultLib = false }
+    srcs
+    |> List.filter (fun src -> src.fileName.Contains("lib.webworker") && src.fileName.EndsWith(".d.ts"))
+    |> mergeSources "lib.webworker.d.ts"
+    |> fun src ->
+      let statements =
+        src.statements |> Statement.mapIdent (fun i ->
+          i |> Ident.mapSource (fun path ->
+            // webworker does not depend on DOM but fullnames can still refer to it
+            if path.Contains("lib.dom") && src.fileName.EndsWith(".d.ts") then "lib.webworker.d.ts"
+            else path
+          )
+        )
+      { src with statements = statements }
 
   ctx.logger.tracef "* running typer..."
 
+  setTyperOptions ctx
   let opts = ctx.options
   opts.simplify <- [Simplify.All]
   opts.inheritWithTags <- FeatureFlag.Full
   opts.safeArity <- FeatureFlag.Full
   opts.recModule <- RecModule.Optimized
   opts.subtyping <- [Subtyping.Tag]
-  opts.inheritArraylike <- true
-  opts.inheritIterable <- true
-  opts.inheritPromiselike <- true
-  opts.replaceAliasToFunction <- true
-  opts.replaceNewableFunction <- true
-  opts.replaceRankNFunction <- true
 
   let esCtx, esSrc = runAll [esSrc] ctx
   let domCtx, domSrc = runAll [domSrc] ctx
@@ -1807,23 +1827,28 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
     JsHelper.deriveModuleName info (sources |> List.map (fun s -> s.fileName))
     |> JsHelper.InferenceResult.unwrap "package"
 
+  let fileNames = sources |> List.map (fun s -> s.fileName)
+
   let info =
     match info with
     | Some info -> Ok info
     | None -> Error (Some derivedModuleName)
 
-  ctx.logger.tracef "* running typer..."
-  ctx.options.inheritArraylike <- true
-  ctx.options.inheritIterable <- true
-  ctx.options.inheritPromiselike <- true
-  ctx.options.replaceAliasToFunction <- true
-  ctx.options.replaceNewableFunction <- true
-  ctx.options.replaceRankNFunction <- true
-  let ctx, srcs = runAll sources ctx
-  let ctx =
-    ctx |> TyperContext.mapState (fun _ -> State.create (srcs |> List.map (fun s -> s.fileName)) info)
+  let sources, mergedFileName =
+    match sources with
+    | [] -> failwith "impossible_emitImpl (empty sources)"
+    | [src] -> [src], src.fileName
+    | _ -> [mergeSources "input.d.ts" sources], "input.d.ts"
 
-  let stmts = srcs |> List.collect (fun x -> x.statements)
+  ctx.logger.tracef "* running typer..."
+  setTyperOptions ctx
+  let ctx, sources = runAll sources ctx
+
+  let ctx =
+    ctx
+    |> TyperContext.mapState (fun _ -> State.create fileNames info)
+    |> TyperContext.ofSourceFileRoot mergedFileName
+  let stmts = sources |> List.collect (fun x -> x.statements)
   let structuredText = createStructuredText ctx stmts
   let exported = handleExports derivedModuleName ctx structuredText
 
@@ -1837,7 +1862,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
         yield tprintf "[@@@js.scope \"%s\"]" scope
 
       yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; "Ts2ocaml.WebWorker" ]
-      for src in srcs do
+      for src in sources do
         yield! emitReferenceTypeDirectives ctx src
         yield! emitReferenceFileDirectives ctx src
 

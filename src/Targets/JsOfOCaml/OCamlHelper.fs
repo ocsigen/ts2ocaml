@@ -326,17 +326,19 @@ module Naming =
 
   let reservedModuleNames =
     Set.ofList [
-      "Export"
+      "Export"; "Default"
     ] |> Set.union Naming.Keywords.keywords
 
-  let moduleName (name: string) =
+  let moduleNameReserved (name: string) =
     let name = removeInvalidChars name
-    let result =
-      if Char.IsLower name.[0] then
-        sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
-      else if name.[0] = '_' then
-        "M" + name
-      else name
+    if Char.IsLower name.[0] then
+      sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
+    else if name.[0] = '_' then
+      "M" + name
+    else name
+
+  let moduleName (name: string) =
+    let result = moduleNameReserved name
     if reservedModuleNames |> Set.contains result then result + "_" else result
 
   let constructorName (name: string list) =

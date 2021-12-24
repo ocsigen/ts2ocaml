@@ -71,7 +71,10 @@ let getPackageInfo (exampleFilePath: string) : Syntax.PackageInfo option =
       | Some exports ->
         [
           for k, v in JS.Constructors.Object.entries exports do
-            if isIn "types" v then
+            if JS.jsTypeof v = "string" then
+              let v = !!v : string
+              if v.EndsWith(".d.ts") then yield k, v
+            else if isIn "types" v then
               if JS.jsTypeof v?types = "string" then
                 yield k, v?types
               else if isIn "default" v?types then

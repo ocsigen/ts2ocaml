@@ -34,7 +34,7 @@
     "@babel/core": "7.16.5",
     "@types/react-modal": "3.13.1",
     "@types/semver": "7.3.9",
-    "@types/yargs": "17.0.7",
+    "@types/yargs": "17.0.8",
     "monaco-editor": "0.31.1",
     "react-player": "2.9.0",
     "webpack": "5.65.0",

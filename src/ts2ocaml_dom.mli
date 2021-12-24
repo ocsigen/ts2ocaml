@@ -31,6 +31,15 @@ and[@js.scope "URLSearchParams"] URLSearchParams : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
+  (** Returns an array of key, value pairs for every entry in the search params. *)
+  val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
+  
+  (** Returns a list of keys in the search params. *)
+  val keys: 'tags this -> string IterableIterator.t_1 [@@js.call "keys"]
+  
+  (** Returns a list of values in the search params. *)
+  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
+  
   (** Appends a specified key/value pair as a new search parameter. *)
   val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
   
@@ -53,15 +62,6 @@ and[@js.scope "URLSearchParams"] URLSearchParams : sig
   (** Returns a string containing a query string suitable for use in a URL. Does not include the question mark. *)
   val toString: 'tags this -> string [@@js.call "toString"]
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  
-  (** Returns an array of key, value pairs for every entry in the search params. *)
-  val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
-  
-  (** Returns a list of keys in the search params. *)
-  val keys: 'tags this -> string IterableIterator.t_1 [@@js.call "keys"]
-  
-  (** Returns a list of values in the search params. *)
-  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:((t, (string, string) Record.t_2) union2, string list) or_array or_string -> unit -> t [@@js.create]
@@ -7829,7 +7829,8 @@ module WEBGL_draw_buffers : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val drawBuffersWEBGL: 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffersWEBGL"]
+  val drawBuffersWEBGL: 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffersWEBGL"]
+  val drawBuffersWEBGL': 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffersWEBGL"]
   val get_COLOR_ATTACHMENT0_WEBGL: 'tags this -> GLenum.t [@@js.get "COLOR_ATTACHMENT0_WEBGL"]
   val get_COLOR_ATTACHMENT10_WEBGL: 'tags this -> GLenum.t [@@js.get "COLOR_ATTACHMENT10_WEBGL"]
   val get_COLOR_ATTACHMENT11_WEBGL: 'tags this -> GLenum.t [@@js.get "COLOR_ATTACHMENT11_WEBGL"]
@@ -7864,7 +7865,6 @@ module WEBGL_draw_buffers : sig
   val get_DRAW_BUFFER9_WEBGL: 'tags this -> GLenum.t [@@js.get "DRAW_BUFFER9_WEBGL"]
   val get_MAX_COLOR_ATTACHMENTS_WEBGL: 'tags this -> GLenum.t [@@js.get "MAX_COLOR_ATTACHMENTS_WEBGL"]
   val get_MAX_DRAW_BUFFERS_WEBGL: 'tags this -> GLenum.t [@@js.get "MAX_DRAW_BUFFERS_WEBGL"]
-  val drawBuffersWEBGL': 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffersWEBGL"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -9961,6 +9961,7 @@ module CanvasPathDrawingStyles : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val setLineDash: 'tags this -> segments:float Iterable.t_1 -> unit [@@js.call "setLineDash"]
   val get_lineCap: 'tags this -> CanvasLineCap.t [@@js.get "lineCap"]
   val set_lineCap: 'tags this -> CanvasLineCap.t -> unit [@@js.set "lineCap"]
   val get_lineDashOffset: 'tags this -> float [@@js.get "lineDashOffset"]
@@ -9972,8 +9973,7 @@ module CanvasPathDrawingStyles : sig
   val get_miterLimit: 'tags this -> float [@@js.get "miterLimit"]
   val set_miterLimit: 'tags this -> float -> unit [@@js.set "miterLimit"]
   val getLineDash: 'tags this -> float list [@@js.call "getLineDash"]
-  val setLineDash: 'tags this -> segments:float list -> unit [@@js.call "setLineDash"]
-  val setLineDash': 'tags this -> segments:float Iterable.t_1 -> unit [@@js.call "setLineDash"]
+  val setLineDash': 'tags this -> segments:float list -> unit [@@js.call "setLineDash"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module ImageSmoothingQuality : sig
@@ -10780,6 +10780,9 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
+  (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
+  val transaction: 'tags this -> storeNames:string Iterable.t_1 or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
+  
   (** Returns the name of the database. *)
   val get_name: 'tags this -> string [@@js.get "name"]
   
@@ -10815,7 +10818,7 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   val deleteObjectStore: 'tags this -> name:string -> unit [@@js.call "deleteObjectStore"]
   
   (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
-  val transaction: 'tags this -> storeNames:string list or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
+  val transaction': 'tags this -> storeNames:string list or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -10856,9 +10859,6 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
-  val transaction': 'tags this -> storeNames:string Iterable.t_1 or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -10965,6 +10965,13 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
+  (**
+    Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
+    
+    Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
+  *)
+  val createIndex: 'tags this -> name:string -> keyPath:string Iterable.t_1 or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
+  
   (** Returns true if the store has a key generator, and false otherwise. *)
   val get_autoIncrement: 'tags this -> bool [@@js.get "autoIncrement"]
   
@@ -11013,7 +11020,7 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     
     Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
   *)
-  val createIndex: 'tags this -> name:string -> keyPath:string list or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
+  val createIndex': 'tags this -> name:string -> keyPath:string list or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
   
   (**
     Deletes records in store with the given key or in the given key range in query.
@@ -11082,13 +11089,6 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     If successful, request's result will be the record's key.
   *)
   val put: 'tags this -> value:any -> ?key:IDBValidKey.t -> unit -> IDBValidKey.t IDBRequest.t [@@js.call "put"]
-  
-  (**
-    Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
-    
-    Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
-  *)
-  val createIndex': 'tags this -> name:string -> keyPath:string Iterable.t_1 or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -12066,29 +12066,29 @@ and[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val deriveKey: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
+  val generateKey: 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
+  val importKey: 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
   val decrypt: 'tags this -> algorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "decrypt"]
   val deriveBits: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> length:float -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "deriveBits"]
-  val deriveKey: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
+  val deriveKey': 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
   val digest: 'tags this -> algorithm:AlgorithmIdentifier.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "digest"]
   val encrypt: 'tags this -> algorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "encrypt"]
   val exportKey: 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t_1 [@@js.call "exportKey"]
   val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> key:CryptoKey.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "exportKey"]
-  val generateKey: 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
-  val importKey: 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val sign: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "sign"]
-  val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
-  val verify: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t_1 [@@js.call "verify"]
-  val wrapKey: 'tags this -> format:KeyFormat.t -> key:CryptoKey.t -> wrappingKey:CryptoKey.t -> wrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "wrapKey"]
-  val deriveKey': 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
   val generateKey''': 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
   val generateKey'''': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
+  val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
   val importKey'': 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
+  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val sign: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "sign"]
+  val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
+  val verify: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t_1 [@@js.call "verify"]
+  val wrapKey: 'tags this -> format:KeyFormat.t -> key:CryptoKey.t -> wrappingKey:CryptoKey.t -> wrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "wrapKey"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -12205,12 +12205,6 @@ and[@js.scope "Headers"] Headers : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
-  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
-  val get_: 'tags this -> name:string -> string or_null [@@js.call "get"]
-  val has: 'tags this -> name:string -> bool [@@js.call "has"]
-  val set_: 'tags this -> name:string -> value:string -> unit [@@js.call "set"]
-  val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   
   (** Returns an iterator allowing to go through all key/value pairs contained in this object. *)
   val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
@@ -12220,6 +12214,12 @@ and[@js.scope "Headers"] Headers : sig
   
   (** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. *)
   val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
+  val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
+  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
+  val get_: 'tags this -> name:string -> string or_null [@@js.call "get"]
+  val has: 'tags this -> name:string -> bool [@@js.call "has"]
+  val set_: 'tags this -> name:string -> value:string -> unit [@@js.call "set"]
+  val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:HeadersInit.t -> unit -> t [@@js.create]
@@ -14451,13 +14451,13 @@ and[@js.scope "MediaKeyStatusMap"] MediaKeyStatusMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val entries: 'tags this -> (BufferSource.t * MediaKeyStatus.t) IterableIterator.t_1 [@@js.call "entries"]
+  val keys: 'tags this -> BufferSource.t IterableIterator.t_1 [@@js.call "keys"]
+  val values: 'tags this -> MediaKeyStatus.t IterableIterator.t_1 [@@js.call "values"]
   val get_size: 'tags this -> float [@@js.get "size"]
   val get_: 'tags this -> keyId:BufferSource.t -> MediaKeyStatus.t or_undefined [@@js.call "get"]
   val has: 'tags this -> keyId:BufferSource.t -> bool [@@js.call "has"]
   val forEach: 'tags this -> callbackfn:(value:MediaKeyStatus.t -> key:BufferSource.t -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val entries: 'tags this -> (BufferSource.t * MediaKeyStatus.t) IterableIterator.t_1 [@@js.call "entries"]
-  val keys: 'tags this -> BufferSource.t IterableIterator.t_1 [@@js.call "keys"]
-  val values: 'tags this -> MediaKeyStatus.t IterableIterator.t_1 [@@js.call "values"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -17210,6 +17210,9 @@ and[@js.scope "DOMTokenList"] DOMTokenList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val entries: 'tags this -> (float * string) IterableIterator.t_1 [@@js.call "entries"]
+  val keys: 'tags this -> float IterableIterator.t_1 [@@js.call "keys"]
+  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
   
   (** Returns the number of tokens. *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -17284,9 +17287,6 @@ and[@js.scope "DOMTokenList"] DOMTokenList : sig
   val forEach: 'tags this -> callbackfn:(value:string -> key:float -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
-  val entries: 'tags this -> (float * string) IterableIterator.t_1 [@@js.call "entries"]
-  val keys: 'tags this -> float IterableIterator.t_1 [@@js.call "keys"]
-  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -21182,14 +21182,14 @@ and[@js.scope "Cache"] Cache : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val addAll: 'tags this -> requests:RequestInfo.t Iterable.t_1 -> unit Promise.t_1 [@@js.call "addAll"]
   val add: 'tags this -> request:RequestInfo.t -> unit Promise.t_1 [@@js.call "add"]
-  val addAll: 'tags this -> requests:RequestInfo.t list -> unit Promise.t_1 [@@js.call "addAll"]
+  val addAll': 'tags this -> requests:RequestInfo.t list -> unit Promise.t_1 [@@js.call "addAll"]
   val delete: 'tags this -> request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> bool Promise.t_1 [@@js.call "delete"]
   val keys: 'tags this -> ?request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Request.t list Promise.t_1 [@@js.call "keys"]
   val match_: 'tags this -> request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Response.t or_undefined Promise.t_1 [@@js.call "match"]
   val matchAll: 'tags this -> ?request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Response.t list Promise.t_1 [@@js.call "matchAll"]
   val put: 'tags this -> request:RequestInfo.t -> response:Response.t -> unit Promise.t_1 [@@js.call "put"]
-  val addAll': 'tags this -> requests:RequestInfo.t Iterable.t_1 -> unit Promise.t_1 [@@js.call "addAll"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -22869,13 +22869,6 @@ and[@js.scope "FormData"] FormData : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val append: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "append"]
-  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
-  val get_: 'tags this -> name:string -> FormDataEntryValue.t or_null [@@js.call "get"]
-  val getAll: 'tags this -> name:string -> FormDataEntryValue.t list [@@js.call "getAll"]
-  val has: 'tags this -> name:string -> bool [@@js.call "has"]
-  val set_: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "set"]
-  val forEach: 'tags this -> callbackfn:(value:FormDataEntryValue.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   
   (** Returns an array of key, value pairs for every entry in the list. *)
   val entries: 'tags this -> (string * FormDataEntryValue.t) IterableIterator.t_1 [@@js.call "entries"]
@@ -22885,6 +22878,13 @@ and[@js.scope "FormData"] FormData : sig
   
   (** Returns a list of values in the list. *)
   val values: 'tags this -> FormDataEntryValue.t IterableIterator.t_1 [@@js.call "values"]
+  val append: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "append"]
+  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
+  val get_: 'tags this -> name:string -> FormDataEntryValue.t or_null [@@js.call "get"]
+  val getAll: 'tags this -> name:string -> FormDataEntryValue.t list [@@js.call "getAll"]
+  val has: 'tags this -> name:string -> bool [@@js.call "has"]
+  val set_: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "set"]
+  val forEach: 'tags this -> callbackfn:(value:FormDataEntryValue.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?form:HTMLFormElement.t -> unit -> t [@@js.create]
@@ -25561,6 +25561,9 @@ and[@js.scope "MessageEvent"] MessageEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
+  (** @deprecated  *)
+  val initMessageEvent: ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t Iterable.t_1 -> unit -> unit [@@js.call "initMessageEvent"]
+  
   (** Returns the data of the message. *)
   val get_data: ('tags, 'T) this -> 'T [@@js.get "data"]
   
@@ -25577,10 +25580,7 @@ and[@js.scope "MessageEvent"] MessageEvent : sig
   val get_source: ('tags, 'T) this -> MessageEventSource.t or_null [@@js.get "source"]
   
   (** @deprecated  *)
-  val initMessageEvent: ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
-  
-  (** @deprecated  *)
-  val initMessageEvent': ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t Iterable.t_1 -> unit -> unit [@@js.call "initMessageEvent"]
+  val initMessageEvent': ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:'T MessageEventInit.t -> unit -> 'T t [@@js.create]
@@ -25891,6 +25891,10 @@ and[@js.scope "Navigator"] Navigator : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (** Available only in secure contexts. *)
+  val requestMediaKeySystemAccess: 'tags this -> keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.call "requestMediaKeySystemAccess"]
+  val vibrate: 'tags this -> pattern:float Iterable.t_1 -> bool [@@js.call "vibrate"]
+  
+  (** Available only in secure contexts. *)
   val get_clipboard: 'tags this -> Clipboard.t [@@js.get "clipboard"]
   
   (** Available only in secure contexts. *)
@@ -25913,16 +25917,12 @@ and[@js.scope "Navigator"] Navigator : sig
   val getGamepads: 'tags this -> Gamepad.t or_null list [@@js.call "getGamepads"]
   
   (** Available only in secure contexts. *)
-  val requestMediaKeySystemAccess: 'tags this -> keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.call "requestMediaKeySystemAccess"]
+  val requestMediaKeySystemAccess': 'tags this -> keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.call "requestMediaKeySystemAccess"]
   val sendBeacon: 'tags this -> url:URL.t or_string -> ?data:BodyInit.t or_null -> unit -> bool [@@js.call "sendBeacon"]
   
   (** Available only in secure contexts. *)
   val share: 'tags this -> ?data:ShareData.t -> unit -> unit Promise.t_1 [@@js.call "share"]
-  val vibrate: 'tags this -> pattern:VibratePattern.t -> bool [@@js.call "vibrate"]
-  
-  (** Available only in secure contexts. *)
-  val requestMediaKeySystemAccess': 'tags this -> keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.call "requestMediaKeySystemAccess"]
-  val vibrate': 'tags this -> pattern:float Iterable.t_1 -> bool [@@js.call "vibrate"]
+  val vibrate': 'tags this -> pattern:VibratePattern.t -> bool [@@js.call "vibrate"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -26181,6 +26181,15 @@ and[@js.scope "NodeList"] NodeList : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
+  (** Returns an array of key, value pairs for every entry in the list. *)
+  val entries: 'tags this -> (float * Node.t) IterableIterator.t_1 [@@js.call "entries"]
+  
+  (** Returns an list of keys in the list. *)
+  val keys: 'tags this -> float IterableIterator.t_1 [@@js.call "keys"]
+  
+  (** Returns an list of values in the list. *)
+  val values: 'tags this -> Node.t IterableIterator.t_1 [@@js.call "values"]
+  
   (** Returns the number of nodes in the collection. *)
   val get_length: 'tags this -> float [@@js.get "length"]
   
@@ -26195,15 +26204,6 @@ and[@js.scope "NodeList"] NodeList : sig
   val forEach: 'tags this -> callbackfn:(value:Node.t -> key:float -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: 'tags this -> float -> Node.t [@@js.index_get]
   val set: 'tags this -> float -> Node.t -> unit [@@js.index_set]
-  
-  (** Returns an array of key, value pairs for every entry in the list. *)
-  val entries: 'tags this -> (float * Node.t) IterableIterator.t_1 [@@js.call "entries"]
-  
-  (** Returns an list of keys in the list. *)
-  val keys: 'tags this -> float IterableIterator.t_1 [@@js.call "keys"]
-  
-  (** Returns an list of values in the list. *)
-  val values: 'tags this -> Node.t IterableIterator.t_1 [@@js.call "values"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -26225,6 +26225,15 @@ and NodeListOf : sig
   val t_1_to_js: ('TNode -> Ojs.t) -> 'TNode t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'TNode) -> Ojs.t -> 'TNode t_1
   
+  (** Returns an array of key, value pairs for every entry in the list. *)
+  val entries: ('tags, 'TNode) this -> (float * 'TNode) IterableIterator.t_1 [@@js.call "entries"]
+  
+  (** Returns an list of keys in the list. *)
+  val keys: ('tags, 'TNode) this -> float IterableIterator.t_1 [@@js.call "keys"]
+  
+  (** Returns an list of values in the list. *)
+  val values: ('tags, 'TNode) this -> 'TNode IterableIterator.t_1 [@@js.call "values"]
+  
   (** Returns the node with index index from the collection. The nodes are sorted in tree order. *)
   val item: ('tags, 'TNode) this -> index:float -> 'TNode [@@js.call "item"]
   
@@ -26236,15 +26245,6 @@ and NodeListOf : sig
   val forEach: ('tags, 'TNode) this -> callbackfn:(value:'TNode -> key:float -> parent:'TNode t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: ('tags, 'TNode) this -> float -> 'TNode [@@js.index_get]
   val set: ('tags, 'TNode) this -> float -> 'TNode -> unit [@@js.index_set]
-  
-  (** Returns an array of key, value pairs for every entry in the list. *)
-  val entries: ('tags, 'TNode) this -> (float * 'TNode) IterableIterator.t_1 [@@js.call "entries"]
-  
-  (** Returns an list of keys in the list. *)
-  val keys: ('tags, 'TNode) this -> float IterableIterator.t_1 [@@js.call "keys"]
-  
-  (** Returns an list of values in the list. *)
-  val values: ('tags, 'TNode) this -> 'TNode IterableIterator.t_1 [@@js.call "values"]
   val cast_from: (('tags, 'TNode) this -> 'TNode t) [@@js.custom let cast_from = Obj.magic]
 end
 and NonDocumentTypeChildNode : sig
@@ -29476,6 +29476,27 @@ and WebGL2RenderingContextBase : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val clearBufferfv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
+  val clearBufferiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
+  val clearBufferuiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
+  val drawBuffers: 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffers"]
+  val getActiveUniforms: 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t Iterable.t_1 -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
+  val getUniformIndices: 'tags this -> program:WebGLProgram.t -> uniformNames:string Iterable.t_1 -> GLuint.t Iterable.t_1 or_null [@@js.call "getUniformIndices"]
+  val invalidateFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> unit [@@js.call "invalidateFramebuffer"]
+  val invalidateSubFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
+  val transformFeedbackVaryings: 'tags this -> program:WebGLProgram.t -> varyings:string Iterable.t_1 -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
+  val uniform1uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
+  val uniform2uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
+  val uniform3uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
+  val uniform4uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
+  val uniformMatrix2x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
+  val uniformMatrix2x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
+  val uniformMatrix3x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
+  val uniformMatrix3x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
+  val uniformMatrix4x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
+  val uniformMatrix4x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
+  val vertexAttribI4iv: 'tags this -> index:GLuint.t -> values:GLint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4iv"]
+  val vertexAttribI4uiv: 'tags this -> index:GLuint.t -> values:GLuint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4uiv"]
   val beginQuery: 'tags this -> target:GLenum.t -> query:WebGLQuery.t -> unit [@@js.call "beginQuery"]
   val beginTransformFeedback: 'tags this -> primitiveMode:GLenum.t -> unit [@@js.call "beginTransformFeedback"]
   val bindBufferBase: 'tags this -> target:GLenum.t -> index:GLuint.t -> buffer:WebGLBuffer.t or_null -> unit [@@js.call "bindBufferBase"]
@@ -29485,9 +29506,9 @@ and WebGL2RenderingContextBase : sig
   val bindVertexArray: 'tags this -> array:WebGLVertexArrayObject.t or_null -> unit [@@js.call "bindVertexArray"]
   val blitFramebuffer: 'tags this -> srcX0:GLint.t -> srcY0:GLint.t -> srcX1:GLint.t -> srcY1:GLint.t -> dstX0:GLint.t -> dstY0:GLint.t -> dstX1:GLint.t -> dstY1:GLint.t -> mask:GLbitfield.t -> filter:GLenum.t -> unit [@@js.call "blitFramebuffer"]
   val clearBufferfi: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> depth:GLfloat.t -> stencil:GLint.t -> unit [@@js.call "clearBufferfi"]
-  val clearBufferfv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Float32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
-  val clearBufferiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Int32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
-  val clearBufferuiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Uint32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
+  val clearBufferfv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Float32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
+  val clearBufferiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Int32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
+  val clearBufferuiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Uint32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
   val clientWaitSync: 'tags this -> sync:WebGLSync.t -> flags:GLbitfield.t -> timeout:GLuint64.t -> GLenum.t [@@js.call "clientWaitSync"]
   val compressedTexImage3D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> imageSize:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "compressedTexImage3D"]
   val compressedTexImage3D': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> srcData:ArrayBufferView.t_0 -> ?srcOffset:GLuint.t -> ?srcLengthOverride:GLuint.t -> unit -> unit [@@js.call "compressedTexImage3D"]
@@ -29505,7 +29526,7 @@ and WebGL2RenderingContextBase : sig
   val deleteTransformFeedback: 'tags this -> tf:WebGLTransformFeedback.t or_null -> unit [@@js.call "deleteTransformFeedback"]
   val deleteVertexArray: 'tags this -> vertexArray:WebGLVertexArrayObject.t or_null -> unit [@@js.call "deleteVertexArray"]
   val drawArraysInstanced: 'tags this -> mode:GLenum.t -> first:GLint.t -> count:GLsizei.t -> instanceCount:GLsizei.t -> unit [@@js.call "drawArraysInstanced"]
-  val drawBuffers: 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffers"]
+  val drawBuffers': 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffers"]
   val drawElementsInstanced: 'tags this -> mode:GLenum.t -> count:GLsizei.t -> type_:GLenum.t -> offset:GLintptr.t -> instanceCount:GLsizei.t -> unit [@@js.call "drawElementsInstanced"]
   val drawRangeElements: 'tags this -> mode:GLenum.t -> start:GLuint.t -> end_:GLuint.t -> count:GLsizei.t -> type_:GLenum.t -> offset:GLintptr.t -> unit [@@js.call "drawRangeElements"]
   val endQuery: 'tags this -> target:GLenum.t -> unit [@@js.call "endQuery"]
@@ -29514,7 +29535,7 @@ and WebGL2RenderingContextBase : sig
   val framebufferTextureLayer: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> texture:WebGLTexture.t or_null -> level:GLint.t -> layer:GLint.t -> unit [@@js.call "framebufferTextureLayer"]
   val getActiveUniformBlockName: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> string or_null [@@js.call "getActiveUniformBlockName"]
   val getActiveUniformBlockParameter: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> pname:GLenum.t -> any [@@js.call "getActiveUniformBlockParameter"]
-  val getActiveUniforms: 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t list -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
+  val getActiveUniforms': 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t list -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
   val getBufferSubData: 'tags this -> target:GLenum.t -> srcByteOffset:GLintptr.t -> dstBuffer:ArrayBufferView.t_0 -> ?dstOffset:GLuint.t -> ?length:GLuint.t -> unit -> unit [@@js.call "getBufferSubData"]
   val getFragDataLocation: 'tags this -> program:WebGLProgram.t -> name:string -> GLint.t [@@js.call "getFragDataLocation"]
   val getIndexedParameter: 'tags this -> target:GLenum.t -> index:GLuint.t -> any [@@js.call "getIndexedParameter"]
@@ -29525,9 +29546,9 @@ and WebGL2RenderingContextBase : sig
   val getSyncParameter: 'tags this -> sync:WebGLSync.t -> pname:GLenum.t -> any [@@js.call "getSyncParameter"]
   val getTransformFeedbackVarying: 'tags this -> program:WebGLProgram.t -> index:GLuint.t -> WebGLActiveInfo.t or_null [@@js.call "getTransformFeedbackVarying"]
   val getUniformBlockIndex: 'tags this -> program:WebGLProgram.t -> uniformBlockName:string -> GLuint.t [@@js.call "getUniformBlockIndex"]
-  val getUniformIndices: 'tags this -> program:WebGLProgram.t -> uniformNames:string list -> GLuint.t list or_null [@@js.call "getUniformIndices"]
-  val invalidateFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> unit [@@js.call "invalidateFramebuffer"]
-  val invalidateSubFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
+  val getUniformIndices': 'tags this -> program:WebGLProgram.t -> uniformNames:string list -> GLuint.t list or_null [@@js.call "getUniformIndices"]
+  val invalidateFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> unit [@@js.call "invalidateFramebuffer"]
+  val invalidateSubFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
   val isQuery: 'tags this -> query:WebGLQuery.t or_null -> GLboolean.t [@@js.call "isQuery"]
   val isSampler: 'tags this -> sampler:WebGLSampler.t or_null -> GLboolean.t [@@js.call "isSampler"]
   val isSync: 'tags this -> sync:WebGLSync.t or_null -> GLboolean.t [@@js.call "isSync"]
@@ -29548,27 +29569,27 @@ and WebGL2RenderingContextBase : sig
   val texSubImage3D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pboOffset:GLintptr.t -> unit [@@js.call "texSubImage3D"]
   val texSubImage3D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage3D"]
   val texSubImage3D'': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 or_null -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "texSubImage3D"]
-  val transformFeedbackVaryings: 'tags this -> program:WebGLProgram.t -> varyings:string list -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
+  val transformFeedbackVaryings': 'tags this -> program:WebGLProgram.t -> varyings:string list -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
   val uniform1ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> unit [@@js.call "uniform1ui"]
-  val uniform1uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
+  val uniform1uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
   val uniform2ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> v1:GLuint.t -> unit [@@js.call "uniform2ui"]
-  val uniform2uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
+  val uniform2uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
   val uniform3ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> unit [@@js.call "uniform3ui"]
-  val uniform3uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
+  val uniform3uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
   val uniform4ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> v3:GLuint.t -> unit [@@js.call "uniform4ui"]
-  val uniform4uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
+  val uniform4uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
   val uniformBlockBinding: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> uniformBlockBinding:GLuint.t -> unit [@@js.call "uniformBlockBinding"]
-  val uniformMatrix2x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
-  val uniformMatrix2x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
-  val uniformMatrix3x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
-  val uniformMatrix3x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
-  val uniformMatrix4x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
-  val uniformMatrix4x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
+  val uniformMatrix2x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
+  val uniformMatrix2x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
+  val uniformMatrix3x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
+  val uniformMatrix3x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
+  val uniformMatrix4x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
+  val uniformMatrix4x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
   val vertexAttribDivisor: 'tags this -> index:GLuint.t -> divisor:GLuint.t -> unit [@@js.call "vertexAttribDivisor"]
   val vertexAttribI4i: 'tags this -> index:GLuint.t -> x:GLint.t -> y:GLint.t -> z:GLint.t -> w:GLint.t -> unit [@@js.call "vertexAttribI4i"]
-  val vertexAttribI4iv: 'tags this -> index:GLuint.t -> values:Int32List.t -> unit [@@js.call "vertexAttribI4iv"]
+  val vertexAttribI4iv': 'tags this -> index:GLuint.t -> values:Int32List.t -> unit [@@js.call "vertexAttribI4iv"]
   val vertexAttribI4ui: 'tags this -> index:GLuint.t -> x:GLuint.t -> y:GLuint.t -> z:GLuint.t -> w:GLuint.t -> unit [@@js.call "vertexAttribI4ui"]
-  val vertexAttribI4uiv: 'tags this -> index:GLuint.t -> values:Uint32List.t -> unit [@@js.call "vertexAttribI4uiv"]
+  val vertexAttribI4uiv': 'tags this -> index:GLuint.t -> values:Uint32List.t -> unit [@@js.call "vertexAttribI4uiv"]
   val vertexAttribIPointer: 'tags this -> index:GLuint.t -> size:GLint.t -> type_:GLenum.t -> stride:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "vertexAttribIPointer"]
   val waitSync: 'tags this -> sync:WebGLSync.t -> flags:GLbitfield.t -> timeout:GLint64.t -> unit [@@js.call "waitSync"]
   val get_ACTIVE_UNIFORM_BLOCKS: 'tags this -> GLenum.t [@@js.get "ACTIVE_UNIFORM_BLOCKS"]
@@ -29834,27 +29855,6 @@ and WebGL2RenderingContextBase : sig
   val get_VERTEX_ATTRIB_ARRAY_DIVISOR: 'tags this -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_DIVISOR"]
   val get_VERTEX_ATTRIB_ARRAY_INTEGER: 'tags this -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_INTEGER"]
   val get_WAIT_FAILED: 'tags this -> GLenum.t [@@js.get "WAIT_FAILED"]
-  val clearBufferfv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
-  val clearBufferiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
-  val clearBufferuiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
-  val drawBuffers': 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffers"]
-  val getActiveUniforms': 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t Iterable.t_1 -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
-  val getUniformIndices': 'tags this -> program:WebGLProgram.t -> uniformNames:string Iterable.t_1 -> GLuint.t Iterable.t_1 or_null [@@js.call "getUniformIndices"]
-  val invalidateFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> unit [@@js.call "invalidateFramebuffer"]
-  val invalidateSubFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
-  val transformFeedbackVaryings': 'tags this -> program:WebGLProgram.t -> varyings:string Iterable.t_1 -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
-  val uniform1uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
-  val uniform2uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
-  val uniform3uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
-  val uniform4uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
-  val uniformMatrix2x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
-  val uniformMatrix2x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
-  val uniformMatrix3x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
-  val uniformMatrix3x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
-  val uniformMatrix4x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
-  val uniformMatrix4x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
-  val vertexAttribI4iv': 'tags this -> index:GLuint.t -> values:GLint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4iv"]
-  val vertexAttribI4uiv': 'tags this -> index:GLuint.t -> values:GLuint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4uiv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 and WebGL2RenderingContextOverloads : sig
@@ -29873,6 +29873,17 @@ and WebGL2RenderingContextOverloads : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
+  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
+  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
+  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
+  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
+  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
+  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
+  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
   val bufferData: 'tags this -> target:GLenum.t -> size:GLsizeiptr.t -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferData': 'tags this -> target:GLenum.t -> srcData:BufferSource.t or_null -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferData'': 'tags this -> target:GLenum.t -> srcData:ArrayBufferView.t_0 -> usage:GLenum.t -> srcOffset:GLuint.t -> ?length:GLuint.t -> unit -> unit [@@js.call "bufferData"]
@@ -29895,28 +29906,17 @@ and WebGL2RenderingContextOverloads : sig
   val texSubImage2D'': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pboOffset:GLintptr.t -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D''': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D'''': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 -> srcOffset:GLuint.t -> unit [@@js.call "texSubImage2D"]
-  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
-  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
-  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
-  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
-  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
-  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
-  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
-  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
-  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
-  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
-  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
-  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
-  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
-  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
-  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
-  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
+  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
+  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
+  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
+  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
+  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
+  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
+  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
+  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -30253,6 +30253,10 @@ and WebGLRenderingContextBase : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val vertexAttrib1fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib1fv"]
+  val vertexAttrib2fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib2fv"]
+  val vertexAttrib3fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib3fv"]
+  val vertexAttrib4fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib4fv"]
   val get_canvas: 'tags this -> HTMLCanvasElement.t [@@js.get "canvas"]
   val get_drawingBufferHeight: 'tags this -> GLsizei.t [@@js.get "drawingBufferHeight"]
   val get_drawingBufferWidth: 'tags this -> GLsizei.t [@@js.get "drawingBufferWidth"]
@@ -30395,13 +30399,13 @@ and WebGLRenderingContextBase : sig
   val useProgram: 'tags this -> program:WebGLProgram.t or_null -> unit [@@js.call "useProgram"]
   val validateProgram: 'tags this -> program:WebGLProgram.t -> unit [@@js.call "validateProgram"]
   val vertexAttrib1f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> unit [@@js.call "vertexAttrib1f"]
-  val vertexAttrib1fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib1fv"]
+  val vertexAttrib1fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib1fv"]
   val vertexAttrib2f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> unit [@@js.call "vertexAttrib2f"]
-  val vertexAttrib2fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib2fv"]
+  val vertexAttrib2fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib2fv"]
   val vertexAttrib3f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> unit [@@js.call "vertexAttrib3f"]
-  val vertexAttrib3fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib3fv"]
+  val vertexAttrib3fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib3fv"]
   val vertexAttrib4f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> w:GLfloat.t -> unit [@@js.call "vertexAttrib4f"]
-  val vertexAttrib4fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib4fv"]
+  val vertexAttrib4fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib4fv"]
   val vertexAttribPointer: 'tags this -> index:GLuint.t -> size:GLint.t -> type_:GLenum.t -> normalized:GLboolean.t -> stride:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "vertexAttribPointer"]
   val viewport: 'tags this -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "viewport"]
   val get_ACTIVE_ATTRIBUTES: 'tags this -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
@@ -30700,10 +30704,6 @@ and WebGLRenderingContextBase : sig
   val get_VERTEX_SHADER: 'tags this -> GLenum.t [@@js.get "VERTEX_SHADER"]
   val get_VIEWPORT: 'tags this -> GLenum.t [@@js.get "VIEWPORT"]
   val get_ZERO: 'tags this -> GLenum.t [@@js.get "ZERO"]
-  val vertexAttrib1fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib1fv"]
-  val vertexAttrib2fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib2fv"]
-  val vertexAttrib3fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib3fv"]
-  val vertexAttrib4fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib4fv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 and WebGLRenderingContextOverloads : sig
@@ -30722,6 +30722,17 @@ and WebGLRenderingContextOverloads : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform1fv"]
+  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform1iv"]
+  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform2fv"]
+  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform2iv"]
+  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform3fv"]
+  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform3iv"]
+  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform4fv"]
+  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix4fv"]
   val bufferData: 'tags this -> target:GLenum.t -> size:GLsizeiptr.t -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferData': 'tags this -> target:GLenum.t -> data:BufferSource.t or_null -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferSubData: 'tags this -> target:GLenum.t -> offset:GLintptr.t -> data:BufferSource.t -> unit [@@js.call "bufferSubData"]
@@ -30732,28 +30743,17 @@ and WebGLRenderingContextOverloads : sig
   val texImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texImage2D"]
   val texSubImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 or_null -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage2D"]
-  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform1fv"]
-  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform1iv"]
-  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform2fv"]
-  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform2iv"]
-  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform3fv"]
-  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform3iv"]
-  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform4fv"]
-  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
-  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform1fv"]
-  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform1iv"]
-  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform2fv"]
-  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform2iv"]
-  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform3fv"]
-  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform3iv"]
-  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform4fv"]
-  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix4fv"]
+  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform1fv"]
+  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform1iv"]
+  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform2fv"]
+  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform2iv"]
+  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform3fv"]
+  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform3iv"]
+  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform4fv"]
+  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -31325,6 +31325,10 @@ end
 module[@js.scope "navigator"] NavigatorStatic : sig
   
   (** Available only in secure contexts. *)
+  val requestMediaKeySystemAccess: keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
+  val vibrate: float Iterable.t_1 -> bool [@@js.global "vibrate"]
+  
+  (** Available only in secure contexts. *)
   val clipboard: unit -> Clipboard.t [@@js.get "clipboard"]
   
   (** Available only in secure contexts. *)
@@ -31347,16 +31351,12 @@ module[@js.scope "navigator"] NavigatorStatic : sig
   val getGamepads: unit -> Gamepad.t or_null list [@@js.global "getGamepads"]
   
   (** Available only in secure contexts. *)
-  val requestMediaKeySystemAccess: keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
+  val requestMediaKeySystemAccess': keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
   val sendBeacon: url:URL.t or_string -> ?data:BodyInit.t or_null -> unit -> bool [@@js.global "sendBeacon"]
   
   (** Available only in secure contexts. *)
   val share: ?data:ShareData.t -> unit -> unit Promise.t_1 [@@js.global "share"]
-  val vibrate: VibratePattern.t -> bool [@@js.global "vibrate"]
-  
-  (** Available only in secure contexts. *)
-  val requestMediaKeySystemAccess': keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
-  val vibrate': float Iterable.t_1 -> bool [@@js.global "vibrate"]
+  val vibrate': VibratePattern.t -> bool [@@js.global "vibrate"]
 end
 module[@js.scope "menubar"] MenubarStatic : sig
   val visible: unit -> bool [@@js.get "visible"]
@@ -32134,6 +32134,10 @@ end
 module[@js.scope "clientInformation"] ClientInformationStatic : sig
   
   (** Available only in secure contexts. *)
+  val requestMediaKeySystemAccess: keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
+  val vibrate: float Iterable.t_1 -> bool [@@js.global "vibrate"]
+  
+  (** Available only in secure contexts. *)
   val clipboard: unit -> Clipboard.t [@@js.get "clipboard"]
   
   (** Available only in secure contexts. *)
@@ -32156,16 +32160,12 @@ module[@js.scope "clientInformation"] ClientInformationStatic : sig
   val getGamepads: unit -> Gamepad.t or_null list [@@js.global "getGamepads"]
   
   (** Available only in secure contexts. *)
-  val requestMediaKeySystemAccess: keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
+  val requestMediaKeySystemAccess': keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t list -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
   val sendBeacon: url:URL.t or_string -> ?data:BodyInit.t or_null -> unit -> bool [@@js.global "sendBeacon"]
   
   (** Available only in secure contexts. *)
   val share: ?data:ShareData.t -> unit -> unit Promise.t_1 [@@js.global "share"]
-  val vibrate: VibratePattern.t -> bool [@@js.global "vibrate"]
-  
-  (** Available only in secure contexts. *)
-  val requestMediaKeySystemAccess': keySystem:string -> supportedConfigurations:MediaKeySystemConfiguration.t Iterable.t_1 -> MediaKeySystemAccess.t Promise.t_1 [@@js.global "requestMediaKeySystemAccess"]
-  val vibrate': float Iterable.t_1 -> bool [@@js.global "vibrate"]
+  val vibrate': VibratePattern.t -> bool [@@js.global "vibrate"]
 end
 module[@js.scope "caches"] CachesStatic : sig
   val delete: string -> bool Promise.t_1 [@@js.global "delete"]
@@ -51465,6 +51465,7 @@ and[@js.scope "AudioParam"] AudioParam : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val setValueCurveAtTime: 'tags this -> values:float Iterable.t_1 -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
   val get_automationRate: 'tags this -> AutomationRate.t [@@js.get "automationRate"]
   val set_automationRate: 'tags this -> AutomationRate.t -> unit [@@js.set "automationRate"]
   val get_defaultValue: 'tags this -> float [@@js.get "defaultValue"]
@@ -51478,8 +51479,7 @@ and[@js.scope "AudioParam"] AudioParam : sig
   val linearRampToValueAtTime: 'tags this -> value:float -> endTime:float -> t [@@js.call "linearRampToValueAtTime"]
   val setTargetAtTime: 'tags this -> target:float -> startTime:float -> timeConstant:float -> t [@@js.call "setTargetAtTime"]
   val setValueAtTime: 'tags this -> value:float -> startTime:float -> t [@@js.call "setValueAtTime"]
-  val setValueCurveAtTime: 'tags this -> values:(Float32Array.t_0, float) or_array -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
-  val setValueCurveAtTime': 'tags this -> values:float Iterable.t_1 -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
+  val setValueCurveAtTime': 'tags this -> values:(Float32Array.t_0, float) or_array -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -52012,6 +52012,8 @@ and[@js.scope "BaseAudioContext"] BaseAudioContext : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val createIIRFilter: 'tags this -> feedforward:float Iterable.t_1 -> feedback:float Iterable.t_1 -> IIRFilterNode.t [@@js.call "createIIRFilter"]
+  val createPeriodicWave: 'tags this -> real:float Iterable.t_1 -> imag:float Iterable.t_1 -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
   
   (** Available only in secure contexts. *)
   val get_audioWorklet: 'tags this -> AudioWorklet.t [@@js.get "audioWorklet"]
@@ -52033,10 +52035,10 @@ and[@js.scope "BaseAudioContext"] BaseAudioContext : sig
   val createDelay: 'tags this -> ?maxDelayTime:float -> unit -> DelayNode.t [@@js.call "createDelay"]
   val createDynamicsCompressor: 'tags this -> DynamicsCompressorNode.t [@@js.call "createDynamicsCompressor"]
   val createGain: 'tags this -> GainNode.t [@@js.call "createGain"]
-  val createIIRFilter: 'tags this -> feedforward:float list -> feedback:float list -> IIRFilterNode.t [@@js.call "createIIRFilter"]
+  val createIIRFilter': 'tags this -> feedforward:float list -> feedback:float list -> IIRFilterNode.t [@@js.call "createIIRFilter"]
   val createOscillator: 'tags this -> OscillatorNode.t [@@js.call "createOscillator"]
   val createPanner: 'tags this -> PannerNode.t [@@js.call "createPanner"]
-  val createPeriodicWave: 'tags this -> real:(Float32Array.t_0, float) or_array -> imag:(Float32Array.t_0, float) or_array -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
+  val createPeriodicWave': 'tags this -> real:(Float32Array.t_0, float) or_array -> imag:(Float32Array.t_0, float) or_array -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
   
   (** @deprecated  *)
   val createScriptProcessor: 'tags this -> ?bufferSize:float -> ?numberOfInputChannels:float -> ?numberOfOutputChannels:float -> unit -> ScriptProcessorNode.t [@@js.call "createScriptProcessor"]
@@ -52083,8 +52085,6 @@ and[@js.scope "BaseAudioContext"] BaseAudioContext : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val createIIRFilter': 'tags this -> feedforward:float Iterable.t_1 -> feedback:float Iterable.t_1 -> IIRFilterNode.t [@@js.call "createIIRFilter"]
-  val createPeriodicWave': 'tags this -> real:float Iterable.t_1 -> imag:float Iterable.t_1 -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]

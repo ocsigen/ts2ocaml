@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2021-12-24
+- Fix a bug which prevented ts2ocaml from handling enum types without explicit values.
+- Fix a bug which prevented ts2ocaml from parsing package.json correctly.
+
 ## [1.3.0] - 2021-12-10
 - Upgrade gen\_js\_api to 1.0.9.
 - Ts2ocaml now merges enum case names if they have the same value.

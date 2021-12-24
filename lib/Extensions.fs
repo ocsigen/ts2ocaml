@@ -51,6 +51,11 @@ module String =
       state.Replace(e, "\\" + e)
     ) s
 
+module Option =
+  let iterNone f = function
+    | Some x -> Some x
+    | None -> f (); None
+
 module Result =
   let toOption result =
     match result with Ok x -> Some x | Error _ -> None
@@ -101,7 +106,11 @@ open Fable.Core.JsInterop
 
 type JS.ObjectConstructor with
   [<Emit("$0.entries($1)")>]
-  member __.entries (x: 'a) : (string * obj) [] = jsNative
+  member __.entries (_: 'a) : (string * obj) [] = jsNative
+
+type JS.NumberConstructor with
+  [<Emit("$0.isSafeInteger($1)")>]
+  member __.isSafeInteger (_: float) : bool = jsNative
 
 type JSRecord<'TKey, 'TValue> =
   [<EmitIndexer>]
@@ -156,6 +165,9 @@ module Path =
 
   let dirname (path: string) : string =
     Node.path.dirname(path)
+
+  let basename (path: string) : string =
+    Node.path.basename(path)
 
   let join (paths: string list) : string =
     Node.path.join(Array.ofList paths)

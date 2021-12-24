@@ -45,7 +45,7 @@ type IPackageJson =
   abstract version: string
   abstract types: string option
   abstract typings: string option
-  abstract exports: JSRecord<string, IPackageExportItem> option
+  abstract exports: JSRecord<string, U2<string, IPackageExportItem>> option
 
 let getPackageInfo (exampleFilePath: string) : Syntax.PackageInfo option =
   nodeOnly <| fun () ->
@@ -77,23 +77,28 @@ let getPackageInfo (exampleFilePath: string) : Syntax.PackageInfo option =
         | Some exports ->
           [
             for k, v in exports.entries do
-              match v.types with
-              | None -> ()
-              | Some types ->
-                if JS.typeof types = "string" then
-                  yield k, !!types
-                else
-                  let types = !!types : IPackageExportItemEntry
-                  match types.``default`` with
-                  | Some v -> yield k, v
-                  | None ->
-                    yield!
-                      types.entries
-                      |> Array.tryPick (fun (_, v) ->
-                        if JS.typeof v = "string" && v.EndsWith(".d.ts") then Some v
-                        else None)
-                      |> Option.map (fun v -> k, v)
-                      |> Option.toList
+              if JS.typeof v = "string" then
+                let v = !!v : string
+                if v.EndsWith(".d.ts") then yield k, v
+              else
+                let v = !!v : IPackageExportItem
+                match v.types with
+                | None -> ()
+                | Some types ->
+                  if JS.typeof types = "string" then
+                    yield k, !!types
+                  else
+                    let types = !!types : IPackageExportItemEntry
+                    match types.``default`` with
+                    | Some v -> yield k, v
+                    | None ->
+                      yield!
+                        types.entries
+                        |> Array.tryPick (fun (_, v) ->
+                          if JS.typeof v = "string" && v.EndsWith(".d.ts") then Some v
+                          else None)
+                        |> Option.map (fun v -> k, v)
+                        |> Option.toList
           ]
 
       let indexFile =
@@ -141,18 +146,18 @@ let inferPackageInfoFromFileName (sourceFile: Path.Absolute) : {| name: string; 
       |> fun x ->
         let inm = x.LastIndexOf "node_modules"
         if inm = -1 then x
-        else x.Substring(inm+13)
+        else x.Substring(inm)
       |> String.split "/"
       |> List.ofArray
   match parts with
-  | [] -> None
-  | "@types" :: name :: rest ->
+  | "node_modules" :: "@types" :: name :: rest ->
     let name = if name.Contains("__") then "@" + name.Replace("__", "/") else name
     Some {| name = name; isDefinitelyTyped = true; rest = rest |}
-  | user :: name :: rest when user.StartsWith("@") ->
-    Some {| name = user + "/" + name; isDefinitelyTyped = true; rest = rest |}
-  | name :: rest ->
-    Some {| name = name; isDefinitelyTyped = true; rest = rest |}
+  | "node_modules" :: user :: name :: rest when user.StartsWith("@") ->
+    Some {| name = user + "/" + name; isDefinitelyTyped = false; rest = rest |}
+  | "node_modules" :: name :: rest ->
+    Some {| name = name; isDefinitelyTyped = false; rest = rest |}
+  | _ -> None
 
 let inline stripExtension path =
   path |> String.replace ".ts" "" |> String.replace ".d" ""
@@ -184,7 +189,8 @@ let getJsModuleName (info: Syntax.PackageInfo option) (sourceFile: Path.Absolute
           Path.join [info.name; submodule] |> Heuristic
   | None ->
     match inferPackageInfoFromFileName sourceFile with
-    | None -> Unknown
+    | None ->
+      Path.basename sourceFile |> stripExtension |> Heuristic
     | Some info ->
       if info.isDefinitelyTyped then
         let rest =

@@ -1376,6 +1376,25 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
+let inferEnumCaseValue (stmts: Statement list) : Statement list =
+  let rec go = function
+    | Enum e ->
+      let f (state: Literal option) (c: EnumCase) : EnumCase * Literal option =
+        match c.value with
+        | Some v -> c, Some v
+        | None ->
+          let v =
+            match state with
+            | None -> Some (LInt 0)
+            | Some (LInt n) -> Some (LInt (n+1))
+            | Some (LFloat f) -> Some (LFloat (f+1.0))
+            | Some _ -> None
+          { c with value = v }, v
+      Enum { e with cases = e.cases |> List.mapFold f None |> fst }
+    | Module m -> Module { m with statements = m.statements |> List.map go }
+    | s -> s
+  stmts |> List.map go
+
 let rec mergeStatements (stmts: Statement list) =
   let mutable result : Choice<Statement, Class ref, Module ref> list = []
 
@@ -1765,7 +1784,7 @@ let runAll (srcs: SourceFile list) (baseCtx: IContext<#TyperOptions>) =
   let inline withSourceFileContext ctx f (src: SourceFile) =
     f (ctx |> TyperContext.ofSourceFileRoot src.fileName) src
 
-  let result = srcs |> List.map (mapStatements mergeStatements)
+  let result = srcs |> List.map (mapStatements (inferEnumCaseValue >> mergeStatements))
 
   // build a context
   let ctx = createRootContextForTyper result baseCtx

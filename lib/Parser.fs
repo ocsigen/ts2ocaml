@@ -707,12 +707,21 @@ module private ParserImpl =
     match getPropertyName em.name with
     | Some name ->
       let value =
+        let inline fallback () =
+          match ctx.checker.getConstantValue(!^em) with
+          | None -> None
+          | Some (U2.Case1 str) -> Some (LString str)
+          | Some (U2.Case2 num) ->
+            if Fable.Core.JS.Constructors.Number.isSafeInteger(num) then Some (LInt (int num))
+            else Some (LFloat num)
         match em.initializer with
-        | None -> None
+        | None -> fallback ()
         | Some ep ->
           match readLiteral ep with
-          | Some ((LInt _ | LString _) as l) -> Some l
-          | _ -> nodeWarn ctx ep "enum value '%s' for case '%s' not supported" (ep.getText()) name; None
+          | Some ((LInt _ | LFloat _ | LString _) as l) -> Some l
+          | _ ->
+            fallback () |> Option.iterNone (fun () ->
+              nodeWarn ctx ep "enum value '%s' for case '%s' not supported" (ep.getText()) name)
       let comments = readCommentsForNamedDeclaration ctx em
       Some { comments = comments; loc = Node.location em; name = name; value = value }
     | None -> nodeWarn ctx em "unsupported enum case name '%s'" (getText em.name); None

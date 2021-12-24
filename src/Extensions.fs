@@ -144,6 +144,9 @@ module Path =
   let dirname (path: string) : string =
     Node.path.dirname(path)
 
+  let basename (path: string) : string =
+    Node.path.basename(path)
+
   let join (paths: string list) : string =
     Node.path.join(Array.ofList paths)
 

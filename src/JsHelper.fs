@@ -132,18 +132,18 @@ let inferPackageInfoFromFileName (sourceFile: Path.Relative) : {| name: string; 
       |> fun x ->
         let inm = x.LastIndexOf "node_modules"
         if inm = -1 then x
-        else x.Substring(inm+13)
+        else x.Substring(inm)
       |> String.split "/"
       |> List.ofArray
   match parts with
-  | [] -> None
-  | "@types" :: name :: rest ->
+  | "node_modules" :: "@types" :: name :: rest ->
     let name = if name.Contains("__") then "@" + name.Replace("__", "/") else name
     Some {| name = name; isDefinitelyTyped = true; rest = rest |}
-  | user :: name :: rest when user.StartsWith("@") ->
-    Some {| name = user + "/" + name; isDefinitelyTyped = true; rest = rest |}
-  | name :: rest ->
-    Some {| name = name; isDefinitelyTyped = true; rest = rest |}
+  | "node_modules" :: user :: name :: rest when user.StartsWith("@") ->
+    Some {| name = user + "/" + name; isDefinitelyTyped = false; rest = rest |}
+  | "node_modules" :: name :: rest ->
+    Some {| name = name; isDefinitelyTyped = false; rest = rest |}
+  | _ -> None
 
 let inline stripExtension path =
   path |> String.replace ".ts" "" |> String.replace ".d" ""
@@ -175,7 +175,10 @@ let getJsModuleName (info: Syntax.PackageInfo option) (sourceFile: Path.Relative
           Path.join [info.name; submodule] |> Heuristic
   | None ->
     match inferPackageInfoFromFileName sourceFile with
-    | None -> Unknown
+    | None ->
+      Path.basename sourceFile
+      |> stripExtension
+      |> Heuristic
     | Some info ->
       if info.isDefinitelyTyped then
         let rest =

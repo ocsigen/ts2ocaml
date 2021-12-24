@@ -634,12 +634,19 @@ let readEnumCase (ctx: ParserContext) (em: Ts.EnumMember) : EnumCase option =
   match getPropertyName em.name with
   | Some name ->
     let value =
+      let inline fallback whenNone =
+        match ctx.checker.getConstantValue(!^em) with
+        | None -> whenNone ()
+        | Some (U2.Case1 str) -> Some (LString str)
+        | Some (U2.Case2 num) -> Some (LFloat num)
       match em.initializer with
-      | None -> None
+      | None -> fallback (fun () -> None)
       | Some ep ->
         match readLiteral ep with
-        | Some ((LInt _ | LString _) as l) -> Some l
-        | _ -> nodeWarn ctx ep "enum value '%s' for case '%s' not supported" (ep.getText()) name; None
+        | Some ((LInt _ | LFloat _ | LString _) as l) -> Some l
+        | _ ->
+          fallback <| fun () ->
+            nodeWarn ctx ep "enum value '%s' for case '%s' not supported" (ep.getText()) name; None
     let comments = readCommentsForNamedDeclaration ctx em
     Some { comments = comments; loc = Node.location em; name = name; value = value }
   | None -> nodeWarn ctx em "unsupported enum case name '%s'" (getText em.name); None

@@ -22,15 +22,7 @@ type ICompilerHost =
 let options =
   jsOptions<Ts.CompilerOptions>(fun o ->
     o.target <- Some Ts.ScriptTarget.Latest
-    o.``module`` <- Some Ts.ModuleKind.None
-    o.incremental <- Some false
-    o.checkJs <- Some true
-    o.lib <- Some (ResizeArray ["ESNext"; "DOM"])
     o.noEmit <- Some true
-    o.alwaysStrict <- Some true
-    o.strict <- Some true
-    o.skipLibCheck <- Some true
-    o.allowJs <- Some true
   )
 
 let createProgram (tsPaths: string[]) (sourceFiles: Ts.SourceFile[]) =

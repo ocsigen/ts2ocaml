@@ -945,6 +945,25 @@ module Statement =
         Module { !n with statements = merge (!n).statements }
     )
 
+  let inferEnumCaseValue (stmts: Statement list) : Statement list =
+    let rec go = function
+      | EnumDef e ->
+        let f (state: Literal option) (c: EnumCase) : EnumCase * Literal option =
+          match c.value with
+          | Some v -> c, Some v
+          | None ->
+            let v =
+              match state with
+              | None -> Some (LInt 0)
+              | Some (LInt n) -> Some (LInt (n+1))
+              | Some (LFloat f) -> Some (LFloat (f+1.0))
+              | Some _ -> None
+            { c with value = v }, v
+        EnumDef { e with cases = e.cases |> List.mapFold f None |> fst }
+      | Module m -> Module { m with statements = m.statements |> List.map go }
+      | s -> s
+    stmts |> List.map go
+
   let extractNamedDefinitions (stmts: Statement list) : Trie<string, Statement list> =
     let rec go (ns: string list) trie s =
       match s with
@@ -1687,6 +1706,7 @@ let runAll (srcs: SourceFile list) (opts: TyperOptions) =
     |> List.map (
       mapStatements (fun stmts ->
         stmts
+              |> Statement.inferEnumCaseValue // infer enum case values when not specified
               |> Statement.merge // merge modules, interfaces, etc
               |> Statement.introduceAdditionalInheritance opts // add common inheritances which tends not to be defined by `extends` or `implements`
               |> Statement.detectPatterns // group statements with pattern

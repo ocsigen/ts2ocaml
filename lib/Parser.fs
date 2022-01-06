@@ -148,6 +148,26 @@ module private ParserImpl =
           ] |> Some
       go s
 
+  let normalizeQualifiedName (fileNames: string list) (s: string) =
+    s
+    |> String.split "."
+    |> List.ofArray
+    |> function
+      | x :: xs when x.StartsWith("\"") ->
+        let basenames = fileNames |> List.map JsHelper.stripExtension
+        if basenames |> List.exists (fun basename -> x.EndsWith(basename + "\"")) then xs
+        else x.Trim('"') :: xs
+      | xs -> xs
+
+  let getFullName (ctx: ParserContext) (nd: Node) =
+    match ctx.checker.getSymbolAtLocation nd with
+    | None -> None
+    | Some s ->
+      let source = ctx.currentSource.fileName
+      let fullName =
+        ctx.checker.getFullyQualifiedName s |> normalizeQualifiedName [source]
+      Some { source = source; name = fullName }
+
   let getFullNames (ctx: ParserContext) (nd: Node) =
     let getSources (s: Ts.Symbol) =
       s.declarations
@@ -166,17 +186,6 @@ module private ParserImpl =
       with
         _ -> ()
       roots.ToArray()
-
-    let normalizeQualifiedName (fileNames: string list) (s: string) =
-      s
-      |> String.split "."
-      |> List.ofArray
-      |> function
-        | x :: xs when x.StartsWith("\"") ->
-          let basenames = fileNames |> List.map JsHelper.stripExtension
-          if basenames |> List.exists (fun basename -> x.EndsWith(basename + "\"")) then xs
-          else x.Trim('"') :: xs
-        | xs -> xs
 
     match ctx.checker.getSymbolAtLocation nd with
     | None -> []
@@ -921,11 +930,15 @@ module private ParserImpl =
     | [] -> None
     | xs -> FloatingComment {| comments = xs; loc = Node.location doc |} |> Some
 
-  let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Module =
+  let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Statement =
     let name =
       match (!!md.name : Ts.Node).kind with
-      | Kind.Identifier -> (!!md.name : Ts.Identifier).text
-      | Kind.StringLiteral -> (!!md.name : Ts.StringLiteral).text
+      | Kind.GlobalKeyword -> None
+      | Kind.Identifier ->
+        match (!!md.name : Ts.Identifier).text with
+        | "global" -> None
+        | name -> Some name
+      | Kind.StringLiteral -> (!!md.name : Ts.StringLiteral).text |> Some
       | _ -> nodeError ctx !!md.name "unsupported module name '%s'" (getText md.name)
     let check kind =
       md.getChildren() |> Seq.exists (fun nd -> nd.kind = kind)
@@ -943,7 +956,7 @@ module private ParserImpl =
         | Kind.DeclareKeyword | Kind.StringLiteral | Kind.DotToken | Kind.SyntaxList | Kind.ModuleKeyword -> []
         | Kind.JSDocComment -> []
         | Kind.ModuleDeclaration ->
-          [ Module (readModule ctx (nd :?> Ts.ModuleDeclaration)) ]
+          [ readModule ctx (nd :?> Ts.ModuleDeclaration) ]
         | _ ->
           nodeWarn ctx nd "unknown kind in ModuleDeclaration: %s" (Enum.pp nd.kind)
           [])
@@ -952,7 +965,11 @@ module private ParserImpl =
       |> Seq.filter (fun nd -> nd.kind = Kind.JSDocComment)
       |> List.ofSeq
       |> List.collect (fun nd -> nd :?> Ts.JSDoc |> readJSDocImpl ctx)
-    { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements; comments = comments; loc = Node.location md }
+    match name with
+    | Some name ->
+      Module { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements; comments = comments; loc = Node.location md }
+    | None ->
+      Global { isExported = isExported; isNamespace = isNamespace; name = (); statements = statements; comments = comments; loc = Node.location md }
 
   and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
     let onError () =
@@ -964,7 +981,7 @@ module private ParserImpl =
       | Kind.InterfaceDeclaration -> [readInterface ctx (stmt :?> _) |> Class]
       | Kind.ClassDeclaration -> [readClass ctx (stmt :?> _) |> Class]
       | Kind.EnumDeclaration -> [readEnum ctx (stmt :?> _) |> Enum]
-      | Kind.ModuleDeclaration -> [readModule ctx (stmt :?> _) |> Module]
+      | Kind.ModuleDeclaration -> [readModule ctx (stmt :?> _)]
       | Kind.VariableStatement -> readVariable ctx (stmt :?> _)
       | Kind.FunctionDeclaration -> [readFunction ctx (stmt :?> _) |> Option.map Function |> Option.defaultWith onError]
       | Kind.ExportAssignment -> [readExportAssignment ctx (stmt :?> _) |> Option.defaultWith onError]

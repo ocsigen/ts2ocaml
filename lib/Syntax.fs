@@ -365,6 +365,10 @@ and Statement =
   /// ```
   | Module of Module
   /// ```ts
+  /// namespace global { ... }
+  /// ```
+  | Global of Global
+  /// ```ts
   /// var name: Type
   /// ```
   /// or
@@ -394,7 +398,7 @@ and Statement =
   member this.loc =
     match this with
     | TypeAlias ta -> ta.loc | Class c -> c.loc | Enum e -> e.loc
-    | Module m -> m.loc | Variable v -> v.loc | Function f -> f.loc
+    | Module m -> m.loc | Global m -> m.loc | Variable v -> v.loc | Function f -> f.loc
     | Import i -> i.loc | Export e -> e.loc
     | Pattern p -> p.loc
     | UnknownStatement u -> u.loc | FloatingComment c -> c.loc
@@ -405,12 +409,12 @@ and Statement =
     | Variable { isExported = i } | Function { isExported = i }
     | Import { isExported = i } -> i
     | Pattern p -> p.isExported
-    | Export _ | UnknownStatement _ | FloatingComment _ -> Exported.No
+    | Export _ | UnknownStatement _ | FloatingComment _ | Global _ -> Exported.No
   interface ICommented<Statement> with
     member this.getComments() =
       match this with
       | TypeAlias ta -> ta.comments | Class c -> c.comments
-      | Enum e -> e.comments | Module m -> m.comments
+      | Enum e -> e.comments | Module m -> m.comments | Global m -> m.comments
       | Variable v -> v.comments | Function f -> f.comments
       | Import i -> i.comments
       | Export e -> e.comments
@@ -424,6 +428,7 @@ and Statement =
       | Class c -> Class (map f c)
       | Enum e -> Enum (map f e)
       | Module m -> Module (map f m)
+      | Global m -> Global (map f m)
       | Variable v -> Variable (map f v)
       | Function g -> Function (map f g)
       | Import i -> Import (map f i)
@@ -476,17 +481,20 @@ and Pattern =
       | ImmediateConstructor (bi, ci, v) ->
         ImmediateConstructor ((bi :> ICommented<_>).mapComments f, (ci :> ICommented<_>).mapComments f, (v :> ICommented<_>).mapComments f)
 
-and Module = {
-  name: string
+and Module<'name> = {
+  name: 'name
   isExported: Exported
   isNamespace: bool
   statements: Statement list
   comments: Comment list
   loc: Location
 } with
-  interface ICommented<Module> with
+  interface ICommented<Module<'name>> with
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
+
+and Module = Module<string>
+and Global = Module<unit>
 
 and Export = {
   comments: Comment list

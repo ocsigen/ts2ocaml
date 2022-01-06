@@ -125,6 +125,9 @@ module TyperContext =
   let ofSourceFileRoot source (ctx: TyperContext<'a, 's>) : TyperContext<'a, 's> =
     { ctx with _currentSourceFile = source; _currentNamespace = [] }
 
+  let ofRoot (ctx: TyperContext<'a, 's>) : TyperContext<'a, 's> =
+    { ctx with _currentNamespace = [] }
+
   let ofLocation (fullName: FullName) (ctx: TyperContext<'a, 's>) : TyperContext<'a, 's> =
     { ctx with _currentSourceFile = fullName.source; _currentNamespace = List.rev fullName.name }
 
@@ -948,6 +951,8 @@ module Statement =
         m.statements
         |> List.fold (go (m.name :: ns)) trie
         |> add ns m.name (Definition.Module m)
+      | Global m ->
+        m.statements |> List.fold (go []) trie
     stmts |> List.fold (go []) Trie.empty
 
   let findTypesInStatements pred (stmts: Statement list) : 'a seq =
@@ -967,8 +972,8 @@ module Statement =
           for _, m in c.members do
             yield! findTypesInClassMember (pred (List.rev ns)) m
         }
-      | Module m ->
-        m.statements |> Seq.collect (go (m.name :: ns))
+      | Module m -> m.statements |> Seq.collect (go (m.name :: ns))
+      | Global m -> m.statements |> Seq.collect (go [])
       | Variable v -> findTypes (pred (List.rev ns)) v.typ
       | Function f ->
         seq {
@@ -1011,8 +1016,6 @@ module Statement =
   let getKnownTypes (ctx: TyperContext<_, _>) stmts =
     let (|Dummy|) _ = []
     findTypesInStatements (fun _ -> function
-      | App (AIdent { fullName = fns }, ts, _) ->
-        Choice2Of2 ts, Some (fns |> List.map KnownType.Ident)
       | Ident { fullName = fns } ->
         Choice1Of2 true, Some (fns |> List.map KnownType.Ident)
       | AnonymousInterface a ->
@@ -1026,7 +1029,7 @@ module Statement =
         Choice1Of2 true, None
     ) stmts |> Seq.concat |> Set.ofSeq
 
-  let rec mapTypeWith overrideFunc mapping ctxOfChildNamespace ctx stmts =
+  let rec mapTypeWith overrideFunc mapping ctxOfChildNamespace ctxOfRoot ctx stmts =
     let mapVariable (v: Variable) = { v with typ = mapping ctx v.typ }
     let mapFunction f =
       { f with
@@ -1058,7 +1061,20 @@ module Statement =
                 overrideFunc
                 mapping
                 ctxOfChildNamespace
+                ctxOfRoot
                 (ctx |> ctxOfChildNamespace m.name)
+                m.statements
+        }
+      | Global m ->
+        Global {
+          m with
+            statements =
+              mapTypeWith
+                overrideFunc
+                mapping
+                ctxOfChildNamespace
+                ctxOfRoot
+                (ctx |> ctxOfRoot)
                 m.statements
         }
       | UnknownStatement u -> UnknownStatement u
@@ -1077,7 +1093,7 @@ module Statement =
     mapTypeWith (fun _ _ -> None) mapping ctxOfChildNamespace ctx stmts
 
   let resolveErasedTypes (ctx: TyperContext<#TyperOptions, _>) (stmts: Statement list) =
-    mapType resolveErasedType TyperContext.ofChildNamespace ctx stmts
+    mapType resolveErasedType TyperContext.ofChildNamespace TyperContext.ofRoot ctx stmts
 
   let mapIdent f stmts =
     let orf _ = function
@@ -1094,7 +1110,7 @@ module Statement =
           | x -> x
         Import { i with clauses = i.clauses |> List.map g } |> Some
       | _ -> None
-    mapTypeWith orf (fun () -> mapIdent f) (fun _ -> id) () stmts
+    mapTypeWith orf (fun () -> mapIdent f) (fun _ -> id) id () stmts
 
 type [<RequireQualifiedAccess>] Typeofable = Number | String | Boolean | Symbol | BigInt
 module TypeofableType =
@@ -1690,7 +1706,7 @@ let replaceFunctions (ctx: #IContext<#TyperOptions>) (stmts: Statement list) =
         Function { name = name; typ = typ; typeParams = typrms;
                     isExported = isExported; accessibility = accessibility; comments = comments; loc = loc } |> Some
     | _ -> None
-  Statement.mapTypeWith goStatement goType (fun _ x -> x) ctx stmts
+  Statement.mapTypeWith goStatement goType (fun _ x -> x) id ctx stmts
 
 let private createRootContextForTyper (srcs: SourceFile list) (baseCtx: IContext<'Options>) : TyperContext<'Options, unit> =
   let info =

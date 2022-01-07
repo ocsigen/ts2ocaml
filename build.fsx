@@ -77,16 +77,18 @@ Target.create "YarnInstall" <| fun _ ->
 
 Target.create "Prepare" ignore
 
-Target.create "BuildOnly" <| fun _ ->
+Target.create "BuildForPublish" <| fun _ ->
   dotnetExec "fable" $"{srcDir} --sourceMaps --run webpack --mode=production"
 
-Target.create "TestBuild" <| fun _ ->
+Target.create "BuildForTest" <| fun _ ->
   dotnetExec "fable" $"{srcDir} --sourceMaps --define DEBUG --run webpack --mode=development"
 
 Target.create "Build" ignore
 
 Target.create "Watch" <| fun _ ->
   dotnetExec "fable" $"watch {srcDir} --sourceMaps --define DEBUG --run webpack -w --mode=development"
+
+Target.create "TestComplete" ignore
 
 "Clean"
   ==> "YarnInstall"
@@ -95,15 +97,13 @@ Target.create "Watch" <| fun _ ->
   ==> "Build"
 
 "Prepare"
-  ?=> "BuildOnly"
+  ?=> "BuildForTest"
+  ?=> "TestComplete"
+  ?=> "BuildForPublish"
   ==> "Build"
 
 "Prepare"
   ?=> "Watch"
-
-"Prepare"
-  ?=> "TestBuild"
-  ?=> "BuildOnly"
 
 // Test targets
 
@@ -160,7 +160,7 @@ Target.create "TestJsooGenerateBindings" <| fun _ -> Test.Jsoo.generateBindings 
 Target.create "TestJsooBuild" <| fun _ -> Test.Jsoo.build ()
 Target.create "TestJsoo" ignore
 
-"TestBuild"
+"BuildForTest"
   ==> "TestJsooClean"
   ==> "TestJsooGenerateBindings"
   ==> "TestJsooBuild"
@@ -171,9 +171,8 @@ Target.create "TestOnly" ignore
 
 "TestJsoo"
   ==> "TestOnly"
+  ==> "TestComplete"
   ==> "Test"
-
-"Build" ==> "Test"
 
 // Publish targets
 
@@ -232,7 +231,7 @@ Target.create "PublishJsoo" <| fun _ ->
   Publish.Jsoo.updateVersion ()
   Publish.Jsoo.testBuild ()
 
-"BuildOnly"
+"BuildForPublish"
   ==> "PublishNpm"
   ==> "PublishJsoo"
   ==> "PublishOnly"
@@ -240,7 +239,7 @@ Target.create "PublishJsoo" <| fun _ ->
 
 "TestJsoo" ==> "PublishJsoo"
 
-"Build" ==> "Publish"
+"Build" ?=> "Test" ?=> "Publish"
 
 Target.create "All" ignore
 

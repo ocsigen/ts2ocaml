@@ -1,6 +1,7 @@
 // partly borrowed from https://github.com/fable-compiler/ts2fable/
-module Naming
+module Ts2Ml.Naming
 
+open Ts2Ml.Extensions
 open System
 
 type Case =

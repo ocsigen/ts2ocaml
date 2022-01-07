@@ -1,5 +1,7 @@
 namespace DataTypes
 
+open Ts2Ml.Extensions
+
 [<StructuredFormatDisplay("{AsString}")>]
 type text =
   private

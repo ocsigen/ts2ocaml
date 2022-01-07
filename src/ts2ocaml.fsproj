@@ -3,19 +3,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Bindings/TypeScript.fs" />
     <Compile Include="Bindings/YargsParser.fs" />
     <Compile Include="Bindings/Yargs.fs" />
     <Compile Include="Extensions.fs" />
-    <Compile Include="DataTypes/Text.fs" />
-    <Compile Include="DataTypes/Trie.fs" />
-    <Compile Include="DataTypes/Graph.fs" />
     <Compile Include="Common.fs" />
-    <Compile Include="Syntax.fs" />
-    <Compile Include="Naming.fs" />
-    <Compile Include="JsHelper.fs" />
-    <Compile Include="Typer.fs" />
-    <Compile Include="Parser.fs" />
     <Compile Include="Target.fs" />
     <Compile Include="Targets/ParserTest.fs" />
     <Compile Include="Targets/JsOfOCaml/Common.fs" />
@@ -26,7 +17,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fable.Browser.Dom" Version="1.1.0" />
-    <PackageReference Include="Fable.Core" Version="3.1.5" />
+    <PackageReference Include="Fable.Core" Version="3.6.1" />
     <PackageReference Include="Fable.Node" Version="1.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\lib\ts2ml.fsproj" />
   </ItemGroup>
 </Project>

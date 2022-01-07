@@ -1,5 +1,7 @@
 module Target
 
+open Ts2Ml
+open Common
 open Syntax
 open Yargs
 
@@ -7,10 +9,13 @@ type ITarget<'Options when 'Options :> GlobalOptions> =
   abstract Command: string
   abstract Description: string
   abstract Builder: (Argv<'Options> -> Argv<'Options>)
-  abstract Run: input: Input * options:'Options -> unit
+  abstract Run: input: Input * baseCtx:IContext<'Options> -> unit
 
 open Fable.Core
 open Fable.Core.JsInterop
+
+let inline has name value =
+  isIn name value
 
 let register (parse: GlobalOptions -> string[] -> Input) (target: ITarget<'TargetOptions>) (argv: Argv<'Options>) : Argv<'Options>
   when 'Options :> GlobalOptions
@@ -25,7 +30,8 @@ let register (parse: GlobalOptions -> string[] -> Input) (target: ITarget<'Targe
       let inputs = argv.["inputs"] :?> string[]
       try
         let input = parse !!argv.Options inputs
-        target.Run(input, !!argv.Options)
+        let baseCtx = createBaseContext !!argv.Options
+        target.Run(input, baseCtx)
       with
         e ->
           eprintfn "%s" e.StackTrace

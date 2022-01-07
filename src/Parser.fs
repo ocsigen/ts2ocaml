@@ -117,33 +117,90 @@ let rec extractNestedName (node: Node) =
         yield! extractNestedName child
   }
 
+let getKindFromSymbol (ctx: ParserContext) (s: Ts.Symbol) =
+  let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
+  let rec go (symbol: Ts.Symbol) =
+    let flags = symbol.getFlags()
+    if flags = Ts.SymbolFlags.Alias then
+      try
+        let symbol = ctx.checker.getAliasedSymbol symbol
+        if isNullOrUndefined symbol then None
+        else
+          go symbol
+      with _ -> None
+    else if check Ts.SymbolFlags.Transient flags then None
+    else
+      let kinds = [
+        if flags |> check Ts.SymbolFlags.Type then Kind.Type
+        if flags |> check Ts.SymbolFlags.Value then Kind.Value
+        if flags |> check (Ts.SymbolFlags.Class ||| Ts.SymbolFlags.Interface) then Kind.ClassLike
+        if flags |> check Ts.SymbolFlags.ClassMember then Kind.ClassLikeMember
+        if flags |> check Ts.SymbolFlags.Enum then Kind.Enum
+        if flags |> check Ts.SymbolFlags.Module then Kind.Module
+        if flags |> check Ts.SymbolFlags.EnumMember then Kind.EnumCase
+      ]
+      Some (Set.ofList kinds)
+  go s
+
+let getFullName (ctx: ParserContext) (nd: Node) =
+  match ctx.checker.getSymbolAtLocation nd with
+  | None ->
+    printfn "  x %s" (nd.getText())
+    None
+  | Some s ->
+    let normalizeQualifiedName (fileNames: string list) (s: string) =
+      s
+      |> String.split "."
+      |> List.ofArray
+      |> function
+        | x :: xs when x.StartsWith("\"") ->
+          let basenames = fileNames |> List.map JsHelper.stripExtension
+          if basenames |> List.exists (fun basename -> x.EndsWith(basename + "\"")) then xs
+          else x.Trim('"') :: xs
+        | xs -> xs
+    let rec go indent (s: Ts.Symbol) =
+      let getSources (s: Ts.Symbol) =
+        s.declarations
+        |> Option.toList
+        |> List.collect (fun decs ->
+          decs |> Seq.map (fun dec -> dec.getSourceFile()) |> List.ofSeq)
+        |> List.map (fun x -> Path.relative x.fileName)
+        |> List.distinct
+      let sources = getSources s
+      let fullName =
+        ctx.checker.getFullyQualifiedName s
+        |> normalizeQualifiedName sources
+      let kinds = getKindFromSymbol ctx s
+      let kindText =
+        match kinds with
+        | None -> "unknown"
+        | Some xs -> xs |> Set.toList |> List.map Enum.pp |> String.concat ", "
+      if sources = [Path.relative ctx.sourceFile.fileName] then
+        printfn "%s- %s (%s)" (String.replicate indent "  ") (fullName |> String.concat ".") kindText
+      else
+        printfn "%s- %s (%s) from %A" (String.replicate indent "  ") (fullName |> String.concat ".") kindText sources
+      let roots = ctx.checker.getRootSymbols(s)
+      try
+        let s = ctx.checker.getAliasedSymbol(s)
+        if not (ctx.checker.isUnknownSymbol s || ctx.checker.isUndefinedSymbol s) then
+          roots.Add(s)
+      with
+        _ -> ()
+      for s' in roots do
+        if getSources s' <> sources then
+          go (indent+1) s' |> ignore
+      fullName
+
+    let s = ctx.checker.getExportSymbolOfSymbol s
+    let fullName = go 1 s
+    Some fullName
+
 let getKindFromIdentifier (ctx: ParserContext) (i: Ts.Identifier) : Set<Syntax.Kind> option =
   match ctx.checker.getSymbolAtLocation i with
   | None ->
     nodeWarn ctx i "failed to get the kind of an imported identifier '%s'" i.text
     None
-  | Some s ->
-    let inline check (superset: Ts.SymbolFlags) (subset: Ts.SymbolFlags) = int (subset &&& superset) > 0
-    let rec go (symbol: Ts.Symbol) =
-      let flags = symbol.getFlags()
-      if flags = Ts.SymbolFlags.Alias then
-        try
-          let symbol = ctx.checker.getAliasedSymbol symbol
-          if isNullOrUndefined symbol then None
-          else
-            go symbol
-        with _ -> None
-      else if check Ts.SymbolFlags.Transient flags then None
-      else
-        let kinds = [
-          if flags |> check Ts.SymbolFlags.Type then Kind.Type
-          if flags |> check Ts.SymbolFlags.Value then Kind.Value
-          if flags |> check (Ts.SymbolFlags.Class ||| Ts.SymbolFlags.Interface) then Kind.ClassLike
-          if flags |> check Ts.SymbolFlags.Enum then Kind.Enum
-          if flags |> check Ts.SymbolFlags.Module then Kind.Module
-        ]
-        Some (Set.ofList kinds)
-    go s
+  | Some s -> getKindFromSymbol ctx s
 
 let sanitizeCommentText str : string list =
   str |> String.toLines |> List.ofArray
@@ -306,7 +363,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     | [] -> nodeError lhs "cannot parse node '%s' as identifier" (lhs.getText())
     | ts ->
       let loc = Node.location lhs
-      let lt = { name = ts; fullName = None; loc = loc  }
+      let lt = { name = ts; fullName = getFullName ctx lhs; loc = loc  }
       match t.typeArguments with
       | None -> Ident lt
       | Some args -> App (AIdent lt, args |> Seq.map (readTypeNode typrm ctx) |> List.ofSeq, Node.location t)
@@ -386,7 +443,7 @@ let rec readTypeNode (typrm: Set<string>) (ctx: ParserContext) (t: Ts.TypeNode) 
     let t = t :?> Ts.TypeQueryNode
     let nameNode = box t.exprName :?> Node
     let name = extractNestedName nameNode
-    Erased (TypeQuery ({ name = List.ofSeq name; fullName = None; loc = Node.location nameNode }), Node.location t, t.getText())
+    Erased (TypeQuery ({ name = List.ofSeq name; fullName = getFullName ctx nameNode; loc = Node.location nameNode }), Node.location t, t.getText())
   // fallbacks
   | Kind.TypePredicate ->
     nodeWarn ctx t "type predicate is not supported and treated as boolean"
@@ -672,7 +729,7 @@ let readVariable (ctx: ParserContext) (v: Ts.VariableStatement) : Statement list
     match getBindingName vd.name with
     | None ->
       nodeWarn ctx vd "name is not defined for variable"
-      UnknownStatement {| msg = Some (vd.getText()); loc = Node.location vd; comments = comments |}
+      UnknownStatement {| origText = Some (vd.getText()); loc = Node.location vd; comments = comments |}
     | Some name ->
       let ty =
         match vd.``type`` with
@@ -723,7 +780,7 @@ let readExportAssignment (ctx: ParserContext) (e: Ts.ExportAssignment) : Stateme
   match extractNestedName e.expression |> Seq.toList with
   | [] -> nodeWarn ctx e.expression "cannot parse node '%s' as identifier" (e.expression.getText()); None
   | ts ->
-    let ident = { name = ts; fullName = None; loc = Node.location e.expression }
+    let ident = { name = ts; fullName = getFullName ctx e.expression; loc = Node.location e.expression }
     match e.isExportEquals with
     | Some true -> Export { clause = CommonJsExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
     | _ -> Export { clause = ES6DefaultExport ident; loc = Node.location e; comments = comments; origText = e.getText() } |> Some
@@ -744,7 +801,7 @@ let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : State
       let nes = bindings |> box :?> Ts.NamedExports
       nes.elements
       |> Seq.map (fun x ->
-        let ident (name: Ts.Identifier) = { name = [name.text]; fullName = None; loc = Node.location name }
+        let ident (name: Ts.Identifier) = { name = [name.text]; fullName = getFullName ctx name; loc = Node.location name }
         match x.propertyName with
         | None -> {| target = ident x.name; renameAs = None |}
         | Some propertyName -> {| target = ident propertyName; renameAs = Some x.name.text  |})
@@ -872,7 +929,7 @@ let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Module =
 and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
   let onError () =
     let comments = readCommentsForNamedDeclaration ctx (stmt :?> Ts.DeclarationStatement)
-    UnknownStatement {| msg = Some (stmt.getText()); loc = Node.location stmt; comments = comments |}
+    UnknownStatement {| origText = Some (stmt.getText()); loc = Node.location stmt; comments = comments |}
   try
     match stmt.kind with
     | Kind.TypeAliasDeclaration -> [readTypeAlias ctx (stmt :?> _) |> TypeAlias]

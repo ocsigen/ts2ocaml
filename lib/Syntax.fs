@@ -1,5 +1,30 @@
-module Syntax
+module Ts2Ml.Syntax
+
 open TypeScript
+
+type [<RequireQualifiedAccess>] Kind =
+  /// variable or member.
+  | Value
+  | Type
+  | TypeAlias
+  /// class or interface.
+  | ClassLike
+  | Member
+  | Module
+  | Enum
+  | EnumCase
+  /// child of a module.
+  | Statement
+with
+  static member OfTypeAlias = [Type; TypeAlias; Statement]
+  static member OfInterface = [Type; ClassLike; Statement]
+  static member OfClass = [Value; Type; ClassLike; Statement]
+  static member OfEnum = [Value; Type; Enum; Statement]
+  static member OfEnumCase = [Value; Type; EnumCase]
+  static member OfNamespace = [Module; Statement]
+  static member OfModule = [Value; Module; Statement]
+  static member OfValue = [Value; Statement]
+  static member OfMember = [Value; Member]
 
 [<CustomEquality; CustomComparison; StructuredFormatDisplay("{AsString}")>]
 type Location =
@@ -81,18 +106,12 @@ and ICommented<'a> =
   abstract getComments: unit -> Comment list
   abstract mapComments: (Comment list -> Comment list) -> 'a
 
-and [<RequireQualifiedAccess>] Kind =
-  | Value
-  | Type
-  | ClassLike
-  | Module
-  | Enum
-
 and PrimType =
   | String | Bool | Number
   | Any | Void | Unknown
   | Null | Never | Undefined
   | Object | UntypedFunction
+  /// `unique symbol` if `isUnique = true`.
   | Symbol of isUnique:bool
   | RegExp
   | Array | ReadonlyArray
@@ -148,46 +167,49 @@ and EnumCase = {
 and Type =
   | Intrinsic
   | PolymorphicThis
-  | Ident of IdentType
+  | Ident of Ident
   | TypeVar of string
   | Prim of PrimType
   | TypeLiteral of Literal
-  | AnonymousInterface of Class
+  | AnonymousInterface of AnonymousInterface
   | Union of UnionType | Intersection of IntersectionType
   | Tuple of TupleType
-  | Function of FuncType<Type>
+  | Func of FuncType<Type> * TypeParam list * Location
+  | NewableFunc of FuncType<Type> * TypeParam list * Location
   | App of AppLeftHandSide * Type list * Location
   | Erased of ErasedType * Location * origText:string
   | UnknownType of string option
 
 and AppLeftHandSide =
-  | AIdent of IdentType
+  | AIdent of Ident
   | APrim of PrimType
-  | AAnonymousInterface of Class
+  | AAnonymousInterface of AnonymousInterface
 
 and ErasedType =
   | IndexedAccess of Type * Type
-  | TypeQuery of IdentType
+  | TypeQuery of Ident
   | Keyof of Type
-  | NewableFunction of FuncType<Type> * TypeParam list
 
-and UnionType = {
-  types: Type list
-}
+and UnionType = { types: Type list }
 
-and IntersectionType = {
-  types: Type list
-}
+and IntersectionType = { types: Type list }
 
 and TupleType = {
   types: {| value: Type; name: string option |} list
   isReadOnly: bool
 }
 
-and IdentType = {
+and Ident = {
   name: string list
-  fullName: string list option
+  kind: Set<Kind> option
+  fullName: FullName list
   loc: Location
+  parent: Ident option
+}
+
+and [<StructuralEquality; StructuralComparison>] FullName = {
+  source: Path.Absolute
+  name: string list
 }
 
 and FieldLike = { name:string; isOptional:bool; value:Type }
@@ -203,8 +225,8 @@ and TypeParam = {
   defaultType: Type option
 }
 
-and Class = {
-  name: string option
+and Class<'name> = {
+  name: 'name
   accessibility: Accessibility
   isInterface: bool
   isExported: Exported
@@ -214,20 +236,60 @@ and Class = {
   comments: Comment list
   loc: Location
 } with
-  interface ICommented<Class> with
+  member this.MapName f =
+    { name = f this.name; accessibility = this.accessibility; isInterface = this.isInterface; isExported = this.isExported;
+      implements = this.implements; typeParams = this.typeParams; members = this.members; comments = this.comments; loc = this.loc }
+  interface ICommented<Class<'name>> with
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
 
+and ClassName = Name of string | ExportDefaultUnnamedClass
+and Class = Class<ClassName>
+and Anonymous = Anonymous
+and AnonymousInterface = Class<Anonymous>
+and ClassOrAnonymousInterface = Class<Choice<ClassName, Anonymous>>
+
 and Member =
-  | Field of FieldLike * Mutability * TypeParam list
+  /// ```ts
+  /// class { name: Type }
+  /// ```
+  | Field of FieldLike * Mutability
+  /// ```ts
+  /// class { name(...): Type }
+  /// ```
   | Method of string * FuncType<Type> * TypeParam list
-  | FunctionInterface of FuncType<Type> * TypeParam list
+  /// ```ts
+  /// interface { (...): Type }
+  /// ```
+  /// Never static.
+  | Callable of FuncType<Type> * TypeParam list
+  /// ```ts
+  /// interface { new (...): Type }
+  /// ```
+  /// Never static.
+  | Newable of FuncType<Type> * TypeParam list
+  /// ```ts
+  /// class { [key: string]: number }
+  /// ```
   | Indexer of FuncType<Type> * Mutability
-  | Getter of FieldLike | Setter of FieldLike
+  /// ```ts
+  /// class { get name(): Type }
+  /// ```
+  | Getter of FieldLike
+  /// ```ts
+  /// class { set name(value: Type) }
+  /// ```
+  | Setter of FieldLike
+  /// ```ts
+  /// class { constructor (...) }
+  /// ```
+  /// Always static.
   | Constructor of FuncType<unit> * TypeParam list
-  | New of FuncType<Type> * TypeParam list
+  /// ```ts
+  /// class { [Symbol.symbolName](...): Type }
+  /// ```
   | SymbolIndexer of symbolName:string * FuncType<Type> * Mutability
-  | UnknownMember of string option
+  | UnknownMember of origText:string option
 
 and MemberAttribute = {
   comments: Comment list
@@ -239,17 +301,29 @@ and MemberAttribute = {
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
 
-and Value = {
+and Variable = {
   name: string
   typ: Type
-  typeParams: TypeParam list
   isConst: bool
   isExported: Exported
   accessibility : Accessibility option
   comments: Comment list
   loc: Location
 } with
-  interface ICommented<Value> with
+  interface ICommented<Variable> with
+    member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
+
+and Function = {
+  name: string
+  typ: FuncType<Type>
+  typeParams: TypeParam list
+  isExported: Exported
+  accessibility : Accessibility option
+  comments: Comment list
+  loc: Location
+} with
+  interface ICommented<Function> with
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
 
@@ -266,37 +340,82 @@ and TypeAlias = {
     member this.mapComments f = { this with comments = f this.comments }
 
 and Statement =
+  /// ```ts
+  /// type Name = ...
+  /// ```
   | TypeAlias of TypeAlias
-  | ClassDef of Class
-  | EnumDef of Enum
+  /// ```ts
+  /// class Name { ... }
+  /// ```
+  /// or
+  /// ```ts
+  /// interface Name { ... }
+  /// ```
+  | Class of Class
+  /// ```ts
+  /// enum Name { ... }
+  /// ```
+  | Enum of Enum
+  /// ```ts
+  /// module Name { ... }
+  /// ```
+  /// or
+  /// ```ts
+  /// namespace Name { ... }
+  /// ```
   | Module of Module
-  | Value of Value
+  /// ```ts
+  /// namespace global { ... }
+  /// ```
+  | Global of Global
+  /// ```ts
+  /// var name: Type
+  /// ```
+  /// or
+  /// ```ts
+  /// const name: Type
+  /// ```
+  | Variable of Variable
+  /// ```ts
+  /// function name(..): Type
+  /// ```
+  | Function of Function
+  /// ```ts
+  /// import ...
+  /// ```
   | Import of Import
+  /// ```ts
+  /// export ...
+  /// ```
   | Export of Export
   | Pattern of Pattern
-  | UnknownStatement of {| msg: string option; comments: Comment list; loc: Location |}
+  | UnknownStatement of {| origText: string option; comments: Comment list; loc: Location |}
+  /// ```ts
+  /// /// some floating comment
+  /// ```
   | FloatingComment of {| comments: Comment list; loc: Location |}
   with
   member this.loc =
     match this with
-    | TypeAlias ta -> ta.loc | ClassDef c -> c.loc | EnumDef e -> e.loc
-    | Module m -> m.loc | Value v -> v.loc
+    | TypeAlias ta -> ta.loc | Class c -> c.loc | Enum e -> e.loc
+    | Module m -> m.loc | Global m -> m.loc | Variable v -> v.loc | Function f -> f.loc
     | Import i -> i.loc | Export e -> e.loc
     | Pattern p -> p.loc
     | UnknownStatement u -> u.loc | FloatingComment c -> c.loc
   member this.isExported =
     match this with
-    | TypeAlias { isExported = i } | ClassDef { isExported = i }
-    | EnumDef { isExported = i } | Module { isExported = i }
-    | Value { isExported = i } | Import { isExported = i } -> i
+    | TypeAlias { isExported = i } | Class { isExported = i }
+    | Enum { isExported = i } | Module { isExported = i }
+    | Variable { isExported = i } | Function { isExported = i }
+    | Import { isExported = i } -> i
     | Pattern p -> p.isExported
-    | Export _ | UnknownStatement _ | FloatingComment _ -> Exported.No
+    | Export _ | UnknownStatement _ | FloatingComment _ | Global _ -> Exported.No
   interface ICommented<Statement> with
     member this.getComments() =
       match this with
-      | TypeAlias ta -> ta.comments | ClassDef c -> c.comments
-      | EnumDef e -> e.comments | Module m -> m.comments
-      | Value v -> v.comments
+      | TypeAlias ta -> ta.comments | Class c -> c.comments
+      | Enum e -> e.comments | Module m -> m.comments | Global m -> m.comments
+      | Variable v -> v.comments | Function f -> f.comments
       | Import i -> i.comments
       | Export e -> e.comments
       | UnknownStatement s -> s.comments
@@ -306,10 +425,12 @@ and Statement =
       let inline map f (x: #ICommented<'a>) = x.mapComments f
       match this with
       | TypeAlias ta -> TypeAlias (map f ta)
-      | ClassDef c -> ClassDef (map f c)
-      | EnumDef e -> EnumDef (map f e)
+      | Class c -> Class (map f c)
+      | Enum e -> Enum (map f e)
       | Module m -> Module (map f m)
-      | Value v -> Value (map f v)
+      | Global m -> Global (map f m)
+      | Variable v -> Variable (map f v)
+      | Function g -> Function (map f g)
       | Import i -> Import (map f i)
       | Export e -> Export (map f e)
       | Pattern p -> Pattern ((p :> ICommented<_>).mapComments f)
@@ -323,7 +444,7 @@ and Pattern =
   ///   }
   ///   declare var Foo: Foo;
   /// ```
-  | ImmediateInstance of intf:Class * value:Value
+  | ImmediateInstance of intf:Class<ClassName> * var:Variable
   /// ```typescript
   /// interface Foo {
   ///   ...
@@ -334,7 +455,7 @@ and Pattern =
   /// }
   /// declare var Foo: FooConstructor;
   /// ```
-  | ImmediateConstructor of baseIntf:Class * ctorIntf:Class * ctorValue:Value
+  | ImmediateConstructor of baseIntf:Class<ClassName> * ctorIntf:Class<ClassName> * ctorVar:Variable
   with
   member this.loc =
     match this with
@@ -346,8 +467,8 @@ and Pattern =
     | ImmediateConstructor (_, _, value) -> value.isExported
   member this.underlyingStatements =
     match this with
-    | ImmediateInstance (intf, value) -> [ClassDef intf; Value value]
-    | ImmediateConstructor (bi, ci, v) -> [ClassDef bi; ClassDef ci; Value v]
+    | ImmediateInstance (intf, value) -> [Class intf; Variable value]
+    | ImmediateConstructor (bi, ci, v) -> [Class bi; Class ci; Variable v]
   interface ICommented<Pattern> with
     member this.getComments() =
       match this with
@@ -360,15 +481,28 @@ and Pattern =
       | ImmediateConstructor (bi, ci, v) ->
         ImmediateConstructor ((bi :> ICommented<_>).mapComments f, (ci :> ICommented<_>).mapComments f, (v :> ICommented<_>).mapComments f)
 
-and Module = {
-  name: string
+and Module<'name> = {
+  name: 'name
   isExported: Exported
   isNamespace: bool
   statements: Statement list
   comments: Comment list
   loc: Location
 } with
-  interface ICommented<Module> with
+  interface ICommented<Module<'name>> with
+    member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
+
+and Module = Module<string>
+and Global = Module<unit>
+
+and Export = {
+  comments: Comment list
+  clauses: ExportClause list
+  loc: Location
+  origText: string
+} with
+  interface ICommented<Export> with
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
 
@@ -387,7 +521,7 @@ and ExportClause =
   /// ```js
   ///   const whatever = require("path");
   /// ```
-  | CommonJsExport of IdentType
+  | CommonJsExport of Ident
   /// ```ts
   /// export default ident;
   /// ```
@@ -402,7 +536,7 @@ and ExportClause =
   /// ```js
   /// const whatever = require("path").default;
   /// ```
-  | ES6DefaultExport of IdentType
+  | ES6DefaultExport of Ident
   /// ```ts
   /// export { target }; // name = target, when renameAs = None
   /// export { target as name }; // when renameAs = Some name
@@ -418,7 +552,7 @@ and ExportClause =
   /// ```js
   ///   const whatever = require("path").name;
   /// ```
-  | ES6Export of {| target: IdentType; renameAs: string option |}
+  | ES6Export of {| target: Ident; renameAs: string option |}
   /// ```ts
   /// export as namespace ns;
   /// ```
@@ -437,16 +571,6 @@ and ExportClause =
   /// ```
   | NamespaceExport of ns:string
 
-and Export = {
-  comments: Comment list
-  clause: ExportClause
-  loc: Location
-  origText: string
-} with
-  interface ICommented<Export> with
-    member this.getComments() = this.comments
-    member this.mapComments f = { this with comments = f this.comments }
-
 and [<RequireQualifiedAccess>] Exported =
   | No
   /// ```ts
@@ -456,13 +580,14 @@ and [<RequireQualifiedAccess>] Exported =
   /// ```ts
   /// export default class Foo { .. }
   /// ```
+  /// This class might not have a name.
   | Default
   /// ```ts
   /// declare class Foo { .. }
   /// ```
   | Declared
 with
-  member this.AsExport(ident: IdentType) =
+  member this.AsExport(ident: Ident) =
     match this with
     | No | Declared -> None
     | Yes -> ES6Export {| target = ident; renameAs = None |} |> Some
@@ -472,8 +597,7 @@ and Import = {
   comments: Comment list
   isTypeOnly: bool
   isExported: Exported
-  moduleSpecifier: string
-  clause: ImportClause
+  clauses: ImportClause list
   loc: Location
   origText: string
 } with
@@ -481,14 +605,14 @@ and Import = {
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
   member this.Identifiers =
-    match this.clause with
-    | NamespaceImport i -> [{| name = i.name; kind = i.kind |}]
-    | ES6WildcardImport -> []
-    | ES6Import i ->
-      let xs = i.bindings |> List.map (fun x -> {| name = (match x.renameAs with Some name -> name | None -> x.name); kind = x.kind |})
-      match i.defaultImport with
-      | None -> xs
-      | Some x -> x :: xs
+    this.clauses
+    |> List.collect (function
+      | NamespaceImport i -> [{| name = i.name; kind = i.kind |}]
+      | ES6WildcardImport _ -> []
+      | ES6Import i -> [{| name = i.name; kind = i.kind |}]
+      | ES6DefaultImport i -> [{| name = i.name; kind = i.kind |}]
+      | LocalImport i -> [{| name = i.name; kind = i.kind |}]
+    )
 
 and ImportClause =
   /// one of:
@@ -497,32 +621,61 @@ and ImportClause =
   ///
   /// import * as name from 'moduleSpecifier'
   /// ```
-  | NamespaceImport of {| name: string; kind: Set<Kind> option; isES6Import: bool |}
+  | NamespaceImport of {| name: string; kind: Set<Kind> option; isES6Import: bool; specifier: string |}
   /// ES6 namespace import but without a name.
   /// ```ts
   /// import * from 'moduleSpecifier'
   /// ```
-  | ES6WildcardImport
+  | ES6WildcardImport of specifier:string
   /// ```ts
-  /// import defaultImport, { name1, name2 as renameAs, .. } from 'moduleSpecifier'
+  /// import { name as renameAs } from 'moduleSpecifier'
   /// ```
-  | ES6Import of
-    {|
-      defaultImport: {| name: string; kind: Set<Kind> option |} option
-      bindings:      {| name: string; kind: Set<Kind> option; renameAs: string option |} list
-    |}
+  | ES6Import of {| name: string; kind: Set<Kind> option; renameAs: string option; specifier: string |}
+  /// ```ts
+  /// import defaultImport from 'moduleSpecifier'
+  /// ```
+  | ES6DefaultImport of {| name: string; kind: Set<Kind> option; specifier: string |}
+  /// ```ts
+  /// import name = identifier
+  /// ```
+  | LocalImport of {| name: string; kind: Set<Kind> option; target: Ident |}
+  member this.kind =
+    match this with
+    | NamespaceImport i -> i.kind
+    | ES6WildcardImport _ -> None
+    | ES6Import i -> i.kind
+    | ES6DefaultImport i -> i.kind
+    | LocalImport i -> i.kind
+  member this.moduleSpecifier =
+    match this with
+    | NamespaceImport i -> Some i.specifier
+    | ES6WildcardImport s -> Some s
+    | ES6Import i -> Some i.specifier
+    | ES6DefaultImport i -> Some i.specifier
+    | LocalImport _ -> None
 
 and Reference =
+  /// ```ts
+  /// /// <reference path="..." />
+  /// ```
   | FileReference of string
+  /// ```ts
+  /// /// <reference types="..." />
+  /// ```
   | TypeReference of string
+  /// ```ts
+  /// /// <reference lib="..." />
+  /// ```
   | LibReference of string
 
 and SourceFile = {
-  fileName: Path.Relative
+  fileName: Path.Absolute
   statements: Statement list
   references: Reference list
+  /// ```ts
+  /// /// <reference no-default-lib="..."/>
+  /// ```
   hasNoDefaultLib: bool
-  moduleName: string option
 }
 
 type PackageInfo = {
@@ -536,13 +689,19 @@ type PackageInfo = {
   /// absolute path
   rootPath: Path.Absolute
   /// `index.d.ts` or the one specified in `package.json`.
-  indexFile: Path.Relative option
-  exports: {| submodule: string; file: Path.Relative |} list
+  indexFile: Path.Absolute option
+  exports: {| submodule: string; file: Path.Absolute |} list
 }
 
 type Input = {
   sources: SourceFile list
   info: PackageInfo option
+  /// a list of groups of filenames.
+  ///
+  /// if a group has more than one filenames, the files are mutually-referencing.
+  ///
+  /// the files in later groups reference the files in former groups.
+  dependencyGraph: Path.Absolute list list
 }
 
 module Literal =
@@ -574,7 +733,7 @@ module Type =
   let rec pp = function
     | Intrinsic -> "intrinsic"
     | PolymorphicThis -> "this"
-    | Ident i -> (if Option.isNone i.fullName then "?" else "") + (i.name |> String.concat ".")
+    | Ident i -> i.name |> String.concat "."
     | TypeVar v -> "'" + v
     | Prim p -> sprintf "%A" p
     | TypeLiteral l -> Literal.toString l
@@ -587,27 +746,27 @@ module Type =
         |> List.map (fun t -> (match t.name with Some n -> n + ":" | None -> "") + pp t.value)
         |> String.concat ", "
       ) + ")"
-    | Function f ->
+    | Func (f, typrms, _) ->
+      let typrms =
+        if List.isEmpty typrms then ""
+        else
+          let args =
+            typrms |> List.map (fun x -> sprintf "'%s" x.name)
+          sprintf "<%s>" (args |> String.concat ", ")
       let args =
         f.args
         |> List.map (function
           | Choice1Of2 a -> sprintf "%s%s:%s" (if a.isOptional then "?" else "~") a.name (pp a.value)
           | Choice2Of2 t -> pp t)
-      "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"
+      typrms + "(" + (args @ [pp f.returnType] |> String.concat " -> ") + ")"
+    | NewableFunc (f, typrms, loc) ->
+      "new " + (pp (Func (f, typrms, loc)))
     | App (t, ts, _) -> pp (ofAppLeftHandSide t) + "<" + (ts |> List.map pp |> String.concat ", ") + ">"
     | Erased (e, _, _) ->
       match e with
       | IndexedAccess (t, u) -> sprintf "%s[%s]" (pp t) (pp u)
       | TypeQuery i -> sprintf "typeof %s" (String.concat "." i.name)
       | Keyof t -> sprintf "keyof %s" (pp t)
-      | NewableFunction (f, typrms) ->
-        let typrms =
-          if List.isEmpty typrms then ""
-          else
-            let args =
-              typrms |> List.map (fun x -> sprintf "'%s" x.name)
-            sprintf "<%s>" (args |> String.concat ", ")
-        sprintf "new %s%s" typrms (pp (Function f))
     | UnknownType None -> "?"
     | UnknownType (Some msg) -> sprintf "?(%s)" msg
 

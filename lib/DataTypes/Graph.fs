@@ -3,6 +3,22 @@ namespace DataTypes
 type Graph<'node when 'node: comparison> = Map<'node, 'node list>
 
 module Graph =
+  let empty : Graph<_> = Map.empty
+
+  let add origin target (graph: Graph<_>) : Graph<_> =
+    match graph |> Map.tryFind origin with
+    | None -> graph |> Map.add origin [target]
+    | Some targets -> graph |> Map.add origin (target :: targets |> List.distinct)
+
+  let addEdge (origin, target) (graph: Graph<_>) : Graph<_> = add origin target graph
+
+  let remove origin target (graph: Graph<_>) : Graph<_> =
+    match graph |> Map.tryFind origin with
+    | Some targets -> graph |> Map.add origin (targets |> List.except [target])
+    | None -> graph
+
+  let removeEdge (origin, target) (graph: Graph<_>) : Graph<_> = remove origin target graph
+
   let rec private dfsImpl' g (used, ordRev) v =
     let used = used |> Set.add v
     let used, ordRev =
@@ -19,11 +35,13 @@ module Graph =
 
   let ofEdges (edges: ('a * 'a) list) : Graph<_> =
     edges
+    |> List.distinct
     |> List.groupBy fst
     |> List.fold (fun state (k, xs) -> state |> Map.add k (xs |> List.map snd)) Map.empty
 
   let ofEdgesRev (edges: ('a * 'a) list) : Graph<_> =
     edges
+    |> List.distinct
     |> List.groupBy snd
     |> List.fold (fun state (k, xs) -> state |> Map.add k (xs |> List.map fst)) Map.empty
 

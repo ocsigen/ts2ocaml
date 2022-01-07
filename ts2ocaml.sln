@@ -5,6 +5,8 @@ VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ts2ocaml", "src\ts2ocaml.fsproj", "{F9ECC86F-B4DA-4173-9EF6-32B230083625}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ts2ml", "lib\ts2ml.fsproj", "{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{F9ECC86F-B4DA-4173-9EF6-32B230083625}.Release|x64.Build.0 = Release|Any CPU
 		{F9ECC86F-B4DA-4173-9EF6-32B230083625}.Release|x86.ActiveCfg = Release|Any CPU
 		{F9ECC86F-B4DA-4173-9EF6-32B230083625}.Release|x86.Build.0 = Release|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Debug|x64.Build.0 = Debug|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Debug|x86.Build.0 = Debug|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Release|x64.ActiveCfg = Release|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Release|x64.Build.0 = Release|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Release|x86.ActiveCfg = Release|Any CPU
+		{EAC815EE-8CCA-4E25-A82D-F9F2D46D9CC9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

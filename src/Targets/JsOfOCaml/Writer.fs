@@ -226,14 +226,12 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
       else
         let maxArity = List.length typrms
         let tyName = Naming.createTypeNameOfArity arity (Some maxArity) "t"
-        let simple () =
-          Naming.structured Naming.moduleName i.name + "." + tyName |> str |> withTyargs
-        if fn.source <> ctx.currentSourceFile then simple ()
+        let simple name =
+          Naming.structured Naming.moduleName name + "." + tyName |> str |> withTyargs
+        if fn.source <> ctx.currentSourceFile then simple fn.name
         else
           match ctx |> Context.getRelativeNameTo fn.name with
-          | Ok relativeName ->
-            assert (relativeName = fn.name)
-            simple ()
+          | Ok relativeName -> simple relativeName
           | Error [] -> // the type is the current namespace
             tyName |> str |> withTyargs
           | Error diff ->
@@ -1233,12 +1231,19 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         | SymbolIndexer _ | UnknownMember None -> () ]
 
   let rec folder ctx (current: StructuredText) (s: Statement) : StructuredText =
-    let getModule name =
-      match current |> Trie.getSubTrie [name] with
-      | Some t -> t
-      | None -> Trie.empty
-    let setModule name trie = current |> Trie.setSubTrie [name] trie
-    let setNode node = current |> Trie.setOrUpdate node StructuredTextNode.union
+    let getTrie name current =
+      current |> Trie.getSubTrie name |> Option.defaultValue Trie.empty
+    let setTrie name trie current =
+      current |> Trie.setSubTrie name trie
+    let inTrie name f current =
+      let m =
+        current
+        |> Trie.getSubTrie name
+        |> Option.defaultValue Trie.empty
+        |> f
+      current |> Trie.setSubTrie name m
+    let set node current = current |> Trie.setOrUpdate node StructuredTextNode.union
+    let add name node current = current |> Trie.addOrUpdate name node StructuredTextNode.union
 
     let comments =
       match (s :> ICommented<_>).getComments() with
@@ -1249,7 +1254,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     let addExport name kind kindString current =
       match getExportFromStatement ctx name kind kindString s with
       | None -> current
-      | Some e -> current |> Trie.setOrUpdate {| StructuredTextNode.empty with exports = [e] |} StructuredTextNode.union
+      | Some e -> current |> set {| StructuredTextNode.empty with exports = [e] |}
     let addAnonymousInterfaceExcluding ais current =
       knownTypes ()
       |> Seq.choose (function KnownType.AnonymousInterface (a, info) -> Some (a, info) | _ -> None)
@@ -1263,7 +1268,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         if shouldSkip then current
         else
           emitClass emitTypeFlags OverrideFunc.noOverride ctx current (a.MapName Choice2Of2) ((fun _ _ _ -> []), Set.empty, None)
-          |> Trie.setOrUpdate {| StructuredTextNode.empty with anonymousInterfaces = Set.singleton a |} StructuredTextNode.union
+          |> set {| StructuredTextNode.empty with anonymousInterfaces = Set.singleton a |}
       ) current
     let addAnonymousInterface current = addAnonymousInterfaceExcluding [] current
 
@@ -1271,45 +1276,46 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | Module m ->
       let module' =
         let node = {| StructuredTextNode.empty with docCommentLines = comments; knownTypes = knownTypes () |}
-        let module' = getModule m.name |> Trie.setOrUpdate node StructuredTextNode.union
+        let module' = current |> getTrie [m.name] |> set node
         let ctx = ctx |> Context.ofChildNamespace m.name
         m.statements |> List.fold (folder ctx) module'
-      let result = setModule m.name module'
+      let current =
+        current |> setTrie [m.name] module'
       match module'.value with
-      | None -> result
+      | None -> current
       | Some v ->
         let kind =
           if v.scoped <> Scoped.No then Kind.OfModule
           else Kind.OfNamespace
-        result |> addExport m.name kind (if m.isNamespace then "namespace" else "module")
+        current |> addExport m.name kind (if m.isNamespace then "namespace" else "module")
     | Global m -> m.statements |> List.fold (folder ctx) current
     | Class c ->
       emitClass emitTypeFlags OverrideFunc.noOverride ctx current (c.MapName Choice1Of2) ((fun _ _ _ -> []), Set.empty, None)
       |> addAnonymousInterface
     | Enum e ->
-      let module' =
+      current
+      |> inTrie [e.name] (fun module' ->
         let ctx = ctx |> Context.ofChildNamespace e.name
         let items = emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e e.cases)
-        let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
         let module' =
-          getModule e.name |> Trie.setOrUpdate node StructuredTextNode.union
+          let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
+          module' |> set node
         e.cases |> List.fold (fun state c ->
           let ctx = ctx |> Context.ofChildNamespace c.name
           let comments = List.map emitCommentBody c.comments
           let items =
             emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e [c])
           let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
-          state |> Trie.addOrUpdate [c.name] node StructuredTextNode.union
-        ) module'
-      setModule e.name module' |> addExport e.name Kind.OfEnum "enum"
+          state |> add [c.name] node
+        ) module')
+      |> addExport e.name Kind.OfEnum "enum"
     | TypeAlias ta ->
       let ctx = ctx |> Context.ofChildNamespace ta.name
       let items =
         emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target)
       let node = {| StructuredTextNode.empty with items = items; docCommentLines = comments; knownTypes = knownTypes () |}
-      let module' =
-        getModule ta.name |> Trie.setOrUpdate node StructuredTextNode.union
-      setModule ta.name module'
+      current
+      |> inTrie [ta.name] (set node)
       |> addExport ta.name Kind.OfTypeAlias "type"
       |> addAnonymousInterface
     | Pattern p ->
@@ -1326,10 +1332,9 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         if knownTypesInMembers |> Set.contains (KnownType.Ident (ctx |> Context.getFullName [intfName])) then
           fallback current
         else
-          getModule value.name
-          |> Trie.setOrUpdate (createModule ()) StructuredTextNode.union
-          |> setModule value.name
-          |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = Scoped.Yes |} StructuredTextNode.union
+          current
+          |> inTrie [value.name] (set (createModule ()))
+          |> set {| StructuredTextNode.empty with scoped = Scoped.Yes |}
           |> addExport value.name Kind.OfClass "interface"
           |> addAnonymousInterface
       | ImmediateConstructor (baseIntf, ctorIntf, ctorValue) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateConstructor) ->
@@ -1343,7 +1348,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
             knownTypes = knownTypes ()
             scoped = Scoped.Yes |}
       current
-      |> Trie.setOrUpdate node StructuredTextNode.union
+      |> set node
       |> addExport func.name Kind.OfValue "function"
       |> addAnonymousInterface
     | Variable value ->
@@ -1354,7 +1359,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
               knownTypes = knownTypes ()
               scoped = Scoped.Yes |}
         current
-        |> Trie.setOrUpdate node StructuredTextNode.union
+        |> set node
         |> addExport value.name Kind.OfValue (if value.isConst then "const" else "let")
         |> addAnonymousInterface
       let inline (|Dummy|) _ = []
@@ -1362,14 +1367,16 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       | AnonymousInterface intf when Simplify.Has(ctx.options.simplify, Simplify.AnonymousInterfaceValue) ->
         let knownTypes = knownTypes ()
         let items = intfToStmts intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
-        getModule value.name
-        |> Trie.setOrUpdate {| StructuredTextNode.empty with items = items; knownTypes = knownTypes; scoped = Scoped.Force value.name |} StructuredTextNode.union
-        |> setModule value.name
-        |> Trie.setOrUpdate
+        current
+        |> inTrie [value.name]
+          (set
+            {| StructuredTextNode.empty with
+                items = items; knownTypes = knownTypes; scoped = Scoped.Force value.name |})
+        |> set
           {| StructuredTextNode.empty with
               items = emitVariable emitTypeFlags overrideFunc ctx value
               knownTypes = knownTypes
-              scoped = Scoped.Yes |} StructuredTextNode.union
+              scoped = Scoped.Yes |}
         |> addExport value.name Kind.OfValue (if value.isConst then "const" else "let")
         |> addAnonymousInterface
       | Ident (i & { loc = loc }) & Dummy tyargs
@@ -1386,29 +1393,31 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           let createModule () =
             let items = intfToStmts intf ctx emitTypeFlags overrideFunc
             {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scoped = Scoped.Force value.name |}
-          getModule name
-          |> Trie.setOrUpdate (createModule ()) StructuredTextNode.union
-          |> setModule name
-          |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = Scoped.Yes |} StructuredTextNode.union
+          current
+          |> inTrie [name] (set (createModule ()))
+          |> set {| StructuredTextNode.empty with scoped = Scoped.Yes |}
           |> addExport name Kind.OfValue (if value.isConst then "const" else "let")
           |> fallback
       | _ -> fallback current
     | Import i ->
-      setNode {| StructuredTextNode.empty with items = emitImport ctx i |}
+      current |> set {| StructuredTextNode.empty with items = emitImport ctx i |}
     | Export e ->
       let getKind = function
         | CommonJsExport i | ES6DefaultExport i -> i |> Ident.getKind ctx
         | ES6Export x -> x.target |> Ident.getKind ctx
         | NamespaceExport _ -> Set.empty
-      setNode {| StructuredTextNode.empty with exports = [ExportItem.Statement {| e with clauses = e.clauses |> List.map (fun c -> c, getKind c) |}] |}
+      current
+      |> set
+        {| StructuredTextNode.empty with
+            exports = [ExportItem.Statement {| e with clauses = e.clauses |> List.map (fun c -> c, getKind c) |}] |}
     | UnknownStatement u ->
       let cmt =
         match u.origText with
         | Some s -> commentStr s | None -> commentStr "unknown statement"
-      setNode {| StructuredTextNode.empty with items = [ScopeIndependent cmt] |}
+      current |> set {| StructuredTextNode.empty with items = [ScopeIndependent cmt] |}
     | FloatingComment c ->
       let cmt = ScopeIndependent empty :: (c.comments |> List.map (emitCommentBody >> comment >> ScopeIndependent))
-      setNode {| StructuredTextNode.empty with items = ScopeIndependent empty :: cmt |}
+      current |> set {| StructuredTextNode.empty with items = ScopeIndependent empty :: cmt |}
   and folder' ctx stmt node = folder ctx node stmt
 
   stmts |> List.fold (folder rootCtx) Trie.empty

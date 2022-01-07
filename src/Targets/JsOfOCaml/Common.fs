@@ -117,12 +117,12 @@ module Options =
       | Some p ->
         Log.tracef opts "* using the preset '%s'." !!p
 
-        if opts.simplify = [] then
-          opts.simplify <- [Simplify.All]
         let subtypingIsDefault =
           opts.subtyping = []
 
-        if p = Preset.Minimal || p = Preset.Full then
+        if p = Preset.Minimal || p = Preset.Safe || p = Preset.Full then
+          if opts.simplify = [] then
+            opts.simplify <- [Simplify.All]
           if opts.recModule = RecModule.Default then
             opts.recModule <- RecModule.Optimized
 

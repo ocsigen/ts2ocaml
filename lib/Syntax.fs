@@ -388,6 +388,7 @@ and Statement =
   /// export ...
   /// ```
   | Export of Export
+  | ReExport of ReExport
   | Pattern of Pattern
   | UnknownStatement of {| origText: string option; comments: Comment list; loc: Location |}
   /// ```ts
@@ -399,7 +400,7 @@ and Statement =
     match this with
     | TypeAlias ta -> ta.loc | Class c -> c.loc | Enum e -> e.loc
     | Module m -> m.loc | Global m -> m.loc | Variable v -> v.loc | Function f -> f.loc
-    | Import i -> i.loc | Export e -> e.loc
+    | Import i -> i.loc | Export e -> e.loc | ReExport e -> e.loc
     | Pattern p -> p.loc
     | UnknownStatement u -> u.loc | FloatingComment c -> c.loc
   member this.isExported =
@@ -409,7 +410,7 @@ and Statement =
     | Variable { isExported = i } | Function { isExported = i }
     | Import { isExported = i } -> i
     | Pattern p -> p.isExported
-    | Export _ | UnknownStatement _ | FloatingComment _ | Global _ -> Exported.No
+    | Export _ | ReExport _ | UnknownStatement _ | FloatingComment _ | Global _ -> Exported.No
   interface ICommented<Statement> with
     member this.getComments() =
       match this with
@@ -417,7 +418,7 @@ and Statement =
       | Enum e -> e.comments | Module m -> m.comments | Global m -> m.comments
       | Variable v -> v.comments | Function f -> f.comments
       | Import i -> i.comments
-      | Export e -> e.comments
+      | Export e -> e.comments | ReExport e -> e.comments
       | UnknownStatement s -> s.comments
       | Pattern p -> (p :> ICommented<_>).getComments()
       | FloatingComment c -> c.comments
@@ -433,6 +434,7 @@ and Statement =
       | Function g -> Function (map f g)
       | Import i -> Import (map f i)
       | Export e -> Export (map f e)
+      | ReExport e -> ReExport (map f e)
       | Pattern p -> Pattern ((p :> ICommented<_>).mapComments f)
       | UnknownStatement s -> UnknownStatement {| s with comments = f s.comments |}
       | FloatingComment c -> FloatingComment {| c with comments = f c.comments |}
@@ -592,6 +594,32 @@ with
     | No | Declared -> None
     | Yes -> ES6Export {| target = ident; renameAs = None |} |> Some
     | Default -> ES6DefaultExport ident |> Some
+
+and ReExport = {
+  comments: Comment list
+  clauses: ReExportClause list
+  loc: Location
+  specifier: string
+  origText: string
+} with
+  interface ICommented<ReExport> with
+    member this.getComments() = this.comments
+    member this.mapComments f = { this with comments = f this.comments }
+
+and ReExportClause =
+  /// ```ts
+  /// export { target } from 'specifier'; // when renameAs = None
+  /// export { target as name } from 'specifier'; // when renameAs = Some name
+  /// ```
+  | ES6ReExport of {| target: Ident; renameAs: string option |}
+  /// ```ts
+  /// export * as name from 'specifier'
+  /// ```
+  | ES6NamespaceReExport of name:string
+  /// ```ts
+  /// export * from 'specifier';
+  /// ```
+  | ES6WildcardReExport
 
 and Import = {
   comments: Comment list

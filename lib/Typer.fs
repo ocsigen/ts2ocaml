@@ -913,6 +913,7 @@ module Statement =
     let rec go (ns: string list) trie s =
       match s with
       | Export _
+      | ReExport _
       | UnknownStatement _
       | FloatingComment _ -> trie
       | Import import ->
@@ -984,7 +985,7 @@ module Statement =
       | Enum e ->
         e.cases |> Seq.choose (fun c -> c.value)
                 |> Seq.collect (fun l -> findTypes (pred (List.rev ns)) (TypeLiteral l))
-      | Import _ | Export _ | UnknownStatement _ | FloatingComment _ -> Seq.empty
+      | Import _ | Export _ | ReExport _ | UnknownStatement _ | FloatingComment _ -> Seq.empty
       | Pattern p ->
         seq {
           for stmt in p.underlyingStatements do
@@ -1051,6 +1052,7 @@ module Statement =
       | Enum e -> Enum e
       | Import i -> Import i
       | Export e -> Export e
+      | ReExport e -> ReExport e
       | Variable v -> Variable (mapVariable v)
       | Function f -> Function (mapFunction f)
       | Module m ->
@@ -1104,6 +1106,12 @@ module Statement =
           | ES6Export e -> ES6Export {| e with target = f e.target |}
           | NamespaceExport ns -> NamespaceExport ns
         Export { e with clauses = e.clauses |> List.map g } |> Some
+      | ReExport e ->
+        let g = function
+          | ES6ReExport e -> ES6ReExport {| e with target = f e.target |}
+          | ES6NamespaceReExport ns -> ES6NamespaceReExport ns
+          | ES6WildcardReExport -> ES6WildcardReExport
+        ReExport { e with clauses = e.clauses |> List.map g } |> Some
       | Import i ->
         let g = function
           | LocalImport l -> LocalImport {| l with target = f l.target |}

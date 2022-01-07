@@ -515,7 +515,8 @@ type StructuredTextItem =
   | OverloadedText of (OverloadRenamer -> text list)
 
 type [<RequireQualifiedAccess>] ExportItem =
-  | Statement of {| comments: Comment list; clauses: (ExportClause * Set<Kind>) list; loc: Location; origText: string |}
+  | Export of {| comments: Comment list; clauses: (ExportClause * Set<Kind>) list; loc: Location; origText: string |}
+  | ReExport of {| comments: Comment list; clauses: (ReExportClause * Set<Kind>) list; loc: Location; specifier: string; origText: string |}
   | DefaultUnnamedClass of StructuredTextNode
 
 and [<RequireQualifiedAccess>] Scoped =
@@ -843,7 +844,7 @@ let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kind
       match clause with
       | ES6DefaultExport _ -> "export default"
       | _ -> "export"
-    Some (ExportItem.Statement {| comments = []; clauses = [clause, Set.ofList kind]; loc = s.loc; origText = sprintf "%s %s %s" prefix kindString name |})
+    Some (ExportItem.Export {| comments = []; clauses = [clause, Set.ofList kind]; loc = s.loc; origText = sprintf "%s %s %s" prefix kindString name |})
 
 type [<RequireQualifiedAccess>] ClassKind<'a, 'b, 'c> =
   | NormalClass of 'a
@@ -1409,7 +1410,15 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       current
       |> set
         {| StructuredTextNode.empty with
-            exports = [ExportItem.Statement {| e with clauses = e.clauses |> List.map (fun c -> c, getKind c) |}] |}
+            exports = [ExportItem.Export {| e with clauses = e.clauses |> List.map (fun c -> c, getKind c) |}] |}
+    | ReExport e ->
+      let getKind = function
+        | ES6ReExport x -> x.target |> Ident.getKind ctx
+        | ES6NamespaceReExport _ | ES6WildcardReExport -> Set.empty
+      current
+      |> set
+        {| StructuredTextNode.empty with
+            exports = [ExportItem.ReExport {| e with clauses = e.clauses |> List.map (fun c -> c, getKind c) |}] |}
     | UnknownStatement u ->
       let cmt =
         match u.origText with
@@ -1446,12 +1455,12 @@ module ModuleEmitter =
 type ExportWithKind = {| comments: Comment list; clauses: (ExportClause * Set<Kind>) list; loc: Location; origText: string |}
 
 let rec emitExportModule (moduleEmitter: ModuleEmitter) (ctx: Context) (exports: ExportItem list) : text list =
-  let emitComment isFirst (e: ExportWithKind) = [
-    let hasDocComment = not (List.isEmpty e.comments)
+  let emitComment isFirst comments origText = [
+    let hasDocComment = not (List.isEmpty comments)
     if not isFirst && hasDocComment then yield ScopeIndependent empty
-    yield commentStr e.origText |> ScopeIndependent
+    yield commentStr origText |> ScopeIndependent
     if hasDocComment then
-      yield e.comments |> List.map emitCommentBody |> concat newline |> comment |> ScopeIndependent
+      yield comments |> List.map emitCommentBody |> concat newline |> comment |> ScopeIndependent
   ]
 
   let emitModuleAlias name (i: Ident) =
@@ -1472,12 +1481,12 @@ let rec emitExportModule (moduleEmitter: ModuleEmitter) (ctx: Context) (exports:
     | [] -> acc
     | ExportItem.DefaultUnnamedClass node :: rest ->
       go false (acc |> Trie.addOrUpdate ["Export"; "Default"] node StructuredTextNode.union) rest
-    | ExportItem.Statement export :: rest ->
+    | ExportItem.Export export :: rest ->
       let clauses = export.clauses |> List.map fst
       let rec go' acc = function
         | [] -> acc
         | NamespaceExport _ :: rest -> go' acc rest
-        | CommonJsExport i :: rest -> // CommonJS export
+        | CommonJsExport i :: rest ->
           go' (acc |> addItems (emitModuleAlias "Export" i)) rest
         | ES6DefaultExport e :: rest ->
           go' (acc |> setItems ["Export"] (emitModuleAlias "Default" e)) rest
@@ -1488,10 +1497,15 @@ let rec emitExportModule (moduleEmitter: ModuleEmitter) (ctx: Context) (exports:
         let generatesExportModule =
           clauses |> List.exists (function ES6Export _ | ES6DefaultExport _ -> true | _ -> false)
         if generatesExportModule then
-          acc |> setItems ["Export"] (emitComment isFirst export)
+          acc |> setItems ["Export"] (emitComment isFirst export.comments export.origText)
         else
-          acc |> addItems (emitComment isFirst export)
+          acc |> addItems (emitComment isFirst export.comments export.origText)
       go false (go' acc clauses) rest
+    | ExportItem.ReExport export :: rest ->
+      // TODO
+      let acc =
+        acc |> setItems ["Export"] (emitComment isFirst export.comments export.origText)
+      go isFirst acc rest
 
   let st = go true Trie.empty exports
   let emitted = st |> emitStructuredText true moduleEmitter ctx
@@ -1617,6 +1631,7 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
     | Function _
     | Module _
     | Export _
+    | ReExport _
     | UnknownStatement _
     | FloatingComment _ -> []
 
@@ -1768,7 +1783,8 @@ let handleExports moduleName (ctx: Context) (str: StructuredText) : {| stubLines
         | ExportItem.DefaultUnnamedClass _ ->
           stubBinding [moduleName; Naming.exportDefaultClassStubName] (sprintf "require('%s').default /* need Babel */" moduleName) :: stubLines,
           Some moduleName
-        | ExportItem.Statement e ->
+        | ExportItem.ReExport _ -> stubLines, topLevelScope // no stub line needed for re-exports
+        | ExportItem.Export e ->
           e.clauses |> List.fold (fun (stubLines, topLevelScope) -> function
             | (CommonJsExport _ as clause, _) ->
               let stub =

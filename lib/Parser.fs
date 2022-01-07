@@ -817,9 +817,35 @@ module private ParserImpl =
   let readExportDeclaration (ctx: ParserContext) (e: Ts.ExportDeclaration) : Statement list option =
     let comments = readCommentsForNamedDeclaration ctx e
     match e.exportClause, e.moduleSpecifier with
-    | None, _
-    | _, Some _ ->
-      nodeWarn ctx e "re-exporting an external module is not supported."; None
+    | None, Some specifier when specifier.kind = Kind.StringLiteral ->
+      let specifier = specifier :?> Ts.StringLiteral
+      ReExport { specifier = specifier.text; clauses = [ES6WildcardReExport]; loc = Node.location e; comments = comments; origText = e.getText() } |> List.singleton |> Some
+    | Some bindings, Some specifier when specifier.kind = Kind.StringLiteral ->
+      let specifier = specifier :?> Ts.StringLiteral
+      let clauses =
+        let kind = (bindings |> box :?> Ts.Node).kind
+        match kind with
+        | Kind.NamespaceExport ->
+          let ne = bindings |> box :?> Ts.NamespaceExport
+          Some [ES6NamespaceReExport ne.name.text]
+        | Kind.NamedExports ->
+          let nes = bindings |> box :?> Ts.NamedExports
+          let clauses =
+            nes.elements
+            |> Seq.map (fun x ->
+              let inline ident (name: Ts.Identifier) = readIdent ctx name
+              match x.propertyName with
+              | None -> ES6ReExport {| target = ident x.name; renameAs = None |}
+              | Some propertyName -> ES6ReExport {| target = ident propertyName; renameAs = Some x.name.text  |})
+            |> Seq.toList
+          Some clauses
+        | _ -> nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
+      clauses |> Option.map (fun clauses ->
+        ReExport {
+          specifier = specifier.text; clauses = clauses;
+          loc = Node.location e; comments = comments; origText = e.getText()
+        } |> List.singleton
+      )
     | Some bindings, None ->
       let kind = (bindings |> box :?> Ts.Node).kind
       match kind with
@@ -837,8 +863,8 @@ module private ParserImpl =
             | Some propertyName -> ES6Export {| target = ident propertyName; renameAs = Some x.name.text  |})
           |> Seq.toList
         Some [Export { clauses = clauses; loc = Node.location nes; comments = comments; origText = e.getText() }]
-      | _ ->
-        nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
+      | _ -> nodeWarn ctx e "invalid syntax kind '%s' for an export declaration" (Enum.pp kind); None
+    | _, _ -> nodeWarn ctx e "this kind of export statement is not supported."; None
 
   let readNamespaceExportDeclaration (ctx: ParserContext) (e: Ts.NamespaceExportDeclaration) : Statement =
     Export { clauses = [NamespaceExport e.name.text]; loc = Node.location e; comments = readCommentsForNamedDeclaration ctx e; origText = e.getText() }

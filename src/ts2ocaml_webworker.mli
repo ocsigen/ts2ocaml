@@ -39,17 +39,9 @@ module PerformanceMeasureOptions : sig
   val set_start: 'tags this -> DOMHighResTimeStamp.t or_string -> unit [@@js.set "start"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface71 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceEntry.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceEntry.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceEntry.t [@@js.apply_newable]
-end
 
 (** Encapsulates a single performance metric that is part of the performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries are also created in indirect ways such as loading a resource (such as an image). *)
-and[@js.scope "PerformanceEntry"] PerformanceEntry : sig
+module[@js.scope "PerformanceEntry"] PerformanceEntry : sig
   type t = [`PerformanceEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -74,17 +66,9 @@ and[@js.scope "PerformanceEntry"] PerformanceEntry : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface73 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceMeasure.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceMeasure.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceMeasure.t [@@js.apply_newable]
-end
 
 (** PerformanceMeasure is an abstract interface for PerformanceEntry objects with an entryType of "measure". Entries of this type are created by calling performance.measure() to add a named DOMHighResTimeStamp (the measure) between two marks to the browser's performance timeline. *)
-and[@js.scope "PerformanceMeasure"] PerformanceMeasure : sig
+module[@js.scope "PerformanceMeasure"] PerformanceMeasure : sig
   type t = [`PerformanceEntry | `PerformanceMeasure] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -127,17 +111,9 @@ module PerformanceMarkOptions : sig
   val set_startTime: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "startTime"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface72 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceMark.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceMark.t -> unit [@@js.set "prototype"]
-  val create: t -> markName:string -> ?markOptions:PerformanceMarkOptions.t -> unit -> PerformanceMark.t [@@js.apply_newable]
-end
 
 (** PerformanceMark is an abstract interface for PerformanceEntry objects with an entryType of "mark". Entries of this type are created by calling performance.mark() to add a named DOMHighResTimeStamp (the mark) to the browser's performance timeline. *)
-and[@js.scope "PerformanceMark"] PerformanceMark : sig
+module[@js.scope "PerformanceMark"] PerformanceMark : sig
   type t = [`PerformanceEntry | `PerformanceMark] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -300,34 +276,6 @@ and AddEventListenerOptions : sig
   val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
   val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-and AnonymousInterface1 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AbortSignal.t [@@js.get "prototype"]
-  val set_prototype: t -> AbortSignal.t -> unit [@@js.set "prototype"]
-  val create: t -> AbortSignal.t [@@js.apply_newable]
-end
-and AnonymousInterface28 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Event.t [@@js.get "prototype"]
-  val set_prototype: t -> Event.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:EventInit.t -> unit -> Event.t [@@js.apply_newable]
-  val get_AT_TARGET: t -> float [@@js.get "AT_TARGET"]
-  val get_BUBBLING_PHASE: t -> float [@@js.get "BUBBLING_PHASE"]
-  val get_CAPTURING_PHASE: t -> float [@@js.get "CAPTURING_PHASE"]
-  val get_NONE: t -> float [@@js.get "NONE"]
-end
-and AnonymousInterface30 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> EventTarget.t [@@js.get "prototype"]
-  val set_prototype: t -> EventTarget.t -> unit [@@js.set "prototype"]
-  val create: t -> EventTarget.t [@@js.apply_newable]
 end
 
 (** An event which takes place in the DOM. *)
@@ -506,17 +454,9 @@ and[@js.scope "EventTarget"] EventTarget : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface70 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Performance.t [@@js.get "prototype"]
-  val set_prototype: t -> Performance.t -> unit [@@js.set "prototype"]
-  val create: t -> Performance.t [@@js.apply_newable]
-end
 
 (** Provides access to performance-related information for the current page. It's part of the High Resolution Time API, but is enhanced by the Performance Timeline API, the Navigation Timing API, the User Timing API, and the Resource Timing API. *)
-and[@js.scope "Performance"] Performance : sig
+module[@js.scope "Performance"] Performance : sig
   type t = [`EventTarget | `Performance] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -667,17 +607,9 @@ module StorageEstimate : sig
   val set_usage: 'tags this -> float -> unit [@@js.set "usage"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface99 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> StorageManager.t [@@js.get "prototype"]
-  val set_prototype: t -> StorageManager.t -> unit [@@js.set "prototype"]
-  val create: t -> StorageManager.t [@@js.apply_newable]
-end
 
 (** Available only in secure contexts. *)
-and[@js.scope "StorageManager"] StorageManager : sig
+module[@js.scope "StorageManager"] StorageManager : sig
   type t = [`StorageManager] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -747,15 +679,7 @@ module ConnectionType : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface66 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> NetworkInformation.t [@@js.get "prototype"]
-  val set_prototype: t -> NetworkInformation.t -> unit [@@js.set "prototype"]
-  val create: t -> NetworkInformation.t [@@js.apply_newable]
-end
-and[@js.scope "NetworkInformation"] NetworkInformation : sig
+module[@js.scope "NetworkInformation"] NetworkInformation : sig
   type t = [`EventTarget | `NetworkInformation] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -1098,15 +1022,7 @@ module MediaCapabilitiesDecodingInfo : sig
   val set_configuration: 'tags this -> MediaDecodingConfiguration.t -> unit [@@js.set "configuration"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface60 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaCapabilities.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaCapabilities.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaCapabilities.t [@@js.apply_newable]
-end
-and[@js.scope "MediaCapabilities"] MediaCapabilities : sig
+module[@js.scope "MediaCapabilities"] MediaCapabilities : sig
   type t = [`MediaCapabilities] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -1165,17 +1081,9 @@ module IDBVersionChangeEventInit : sig
   val set_oldVersion: 'tags this -> float -> unit [@@js.set "oldVersion"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface54 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBVersionChangeEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBVersionChangeEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:IDBVersionChangeEventInit.t -> unit -> IDBVersionChangeEvent.t [@@js.apply_newable]
-end
 
 (** This IndexedDB API interface indicates that the version of the database has changed, as the result of an IDBOpenDBRequest.onupgradeneeded event handler function. *)
-and[@js.scope "IDBVersionChangeEvent"] IDBVersionChangeEvent : sig
+module[@js.scope "IDBVersionChangeEvent"] IDBVersionChangeEvent : sig
   type t = [`Event | `IDBVersionChangeEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -1242,7 +1150,7 @@ module IDBIndexParameters : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module BufferSource : sig
-  type t = (ArrayBuffer.t_0, ArrayBufferView.t_0) union2
+  type t = never
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1250,7 +1158,7 @@ module BufferSource : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module IDBValidKey : sig
-  type t = ((BufferSource.t, Date.t_0) union2, t) or_array or_string or_number
+  type t = t list or_string or_number
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1273,50 +1181,17 @@ module IDBRequestReadyState : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface17 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMException.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMException.t -> unit [@@js.set "prototype"]
-  val create: t -> ?message:string -> ?name:string -> unit -> DOMException.t [@@js.apply_newable]
-  val get_ABORT_ERR: t -> float [@@js.get "ABORT_ERR"]
-  val get_DATA_CLONE_ERR: t -> float [@@js.get "DATA_CLONE_ERR"]
-  val get_DOMSTRING_SIZE_ERR: t -> float [@@js.get "DOMSTRING_SIZE_ERR"]
-  val get_HIERARCHY_REQUEST_ERR: t -> float [@@js.get "HIERARCHY_REQUEST_ERR"]
-  val get_INDEX_SIZE_ERR: t -> float [@@js.get "INDEX_SIZE_ERR"]
-  val get_INUSE_ATTRIBUTE_ERR: t -> float [@@js.get "INUSE_ATTRIBUTE_ERR"]
-  val get_INVALID_ACCESS_ERR: t -> float [@@js.get "INVALID_ACCESS_ERR"]
-  val get_INVALID_CHARACTER_ERR: t -> float [@@js.get "INVALID_CHARACTER_ERR"]
-  val get_INVALID_MODIFICATION_ERR: t -> float [@@js.get "INVALID_MODIFICATION_ERR"]
-  val get_INVALID_NODE_TYPE_ERR: t -> float [@@js.get "INVALID_NODE_TYPE_ERR"]
-  val get_INVALID_STATE_ERR: t -> float [@@js.get "INVALID_STATE_ERR"]
-  val get_NAMESPACE_ERR: t -> float [@@js.get "NAMESPACE_ERR"]
-  val get_NETWORK_ERR: t -> float [@@js.get "NETWORK_ERR"]
-  val get_NOT_FOUND_ERR: t -> float [@@js.get "NOT_FOUND_ERR"]
-  val get_NOT_SUPPORTED_ERR: t -> float [@@js.get "NOT_SUPPORTED_ERR"]
-  val get_NO_DATA_ALLOWED_ERR: t -> float [@@js.get "NO_DATA_ALLOWED_ERR"]
-  val get_NO_MODIFICATION_ALLOWED_ERR: t -> float [@@js.get "NO_MODIFICATION_ALLOWED_ERR"]
-  val get_QUOTA_EXCEEDED_ERR: t -> float [@@js.get "QUOTA_EXCEEDED_ERR"]
-  val get_SECURITY_ERR: t -> float [@@js.get "SECURITY_ERR"]
-  val get_SYNTAX_ERR: t -> float [@@js.get "SYNTAX_ERR"]
-  val get_TIMEOUT_ERR: t -> float [@@js.get "TIMEOUT_ERR"]
-  val get_TYPE_MISMATCH_ERR: t -> float [@@js.get "TYPE_MISMATCH_ERR"]
-  val get_URL_MISMATCH_ERR: t -> float [@@js.get "URL_MISMATCH_ERR"]
-  val get_VALIDATION_ERR: t -> float [@@js.get "VALIDATION_ERR"]
-  val get_WRONG_DOCUMENT_ERR: t -> float [@@js.get "WRONG_DOCUMENT_ERR"]
-end
 
 (** An abnormal event (called an exception) which occurs as a result of calling a method or accessing a property of a web API. *)
-and[@js.scope "DOMException"] DOMException : sig
-  type t = [`DOMException | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module[@js.scope "DOMException"] DOMException : sig
+  type t = [`DOMException] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`DOMException | Error.tags_0]
+  type tags = [`DOMException]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`DOMException | Error.tags_0]
+    type tags = [`DOMException]
     type tags_0 = tags
   ]
   type 'tags this = 'tags intf constraint 'tags = [> `DOMException ]
@@ -1381,29 +1256,9 @@ and[@js.scope "DOMException"] DOMException : sig
   val validation_err: unit -> float [@@js.get "VALIDATION_ERR"]
   val wrong_document_err: unit -> float [@@js.get "WRONG_DOCUMENT_ERR"]
 end
-module rec AnonymousInterface49 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBKeyRange.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBKeyRange.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBKeyRange.t [@@js.apply_newable]
-  
-  (** Returns a new IDBKeyRange spanning from lower to upper. If lowerOpen is true, lower is not included in the range. If upperOpen is true, upper is not included in the range. *)
-  val bound: t -> lower:any -> upper:any -> ?lowerOpen:bool -> ?upperOpen:bool -> unit -> IDBKeyRange.t [@@js.call "bound"]
-  
-  (** Returns a new IDBKeyRange starting at key with no upper bound. If open is true, key is not included in the range. *)
-  val lowerBound: t -> lower:any -> ?open_:bool -> unit -> IDBKeyRange.t [@@js.call "lowerBound"]
-  
-  (** Returns a new IDBKeyRange spanning only key. *)
-  val only: t -> value:any -> IDBKeyRange.t [@@js.call "only"]
-  
-  (** Returns a new IDBKeyRange with no lower bound and ending at key. If open is true, key is not included in the range. *)
-  val upperBound: t -> upper:any -> ?open_:bool -> unit -> IDBKeyRange.t [@@js.call "upperBound"]
-end
 
 (** A key range can be a single value or a range with upper and lower bounds or endpoints. If the key range has both upper and lower bounds, then it is bounded; if it has no bounds, it is unbounded. A bounded key range can either be open (the endpoints are excluded) or closed (the endpoints are included). To retrieve all keys within a certain range, you can use the following code constructs: *)
-and[@js.scope "IDBKeyRange"] IDBKeyRange : sig
+module[@js.scope "IDBKeyRange"] IDBKeyRange : sig
   type t = [`IDBKeyRange] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -1458,17 +1313,9 @@ module IDBCursorDirection : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface25 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMStringList.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMStringList.t -> unit [@@js.set "prototype"]
-  val create: t -> DOMStringList.t [@@js.apply_newable]
-end
 
 (** A type returned by some APIs which contains a list of DOMString (strings). *)
-and[@js.scope "DOMStringList"] DOMStringList : sig
+module[@js.scope "DOMStringList"] DOMStringList : sig
   type t = [`DOMStringList | string ArrayLike.tags_1 | string IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -1499,65 +1346,9 @@ and[@js.scope "DOMStringList"] DOMStringList : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface44 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBCursor.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBCursor.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBCursor.t [@@js.apply_newable]
-end
-and AnonymousInterface45 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBCursorWithValue.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBCursorWithValue.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBCursorWithValue.t [@@js.apply_newable]
-end
-and AnonymousInterface46 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBDatabase.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBDatabase.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBDatabase.t [@@js.apply_newable]
-end
-and AnonymousInterface48 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBIndex.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBIndex.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBIndex.t [@@js.apply_newable]
-end
-and AnonymousInterface50 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBObjectStore.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBObjectStore.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBObjectStore.t [@@js.apply_newable]
-end
-and AnonymousInterface52 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBRequest.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> IDBRequest.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> IDBRequest.t_0 [@@js.apply_newable]
-end
-and AnonymousInterface53 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBTransaction.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBTransaction.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBTransaction.t [@@js.apply_newable]
-end
 
 (** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. *)
-and[@js.scope "IDBCursor"] IDBCursor : sig
+module[@js.scope "IDBCursor"] rec IDBCursor : sig
   type t = [`IDBCursor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -2143,17 +1934,9 @@ and[@js.scope "IDBTransaction"] IDBTransaction : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface51 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBOpenDBRequest.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBOpenDBRequest.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBOpenDBRequest.t [@@js.apply_newable]
-end
 
 (** Also inherits methods from its parents IDBRequest and EventTarget. *)
-and[@js.scope "IDBOpenDBRequest"] IDBOpenDBRequest : sig
+module[@js.scope "IDBOpenDBRequest"] IDBOpenDBRequest : sig
   type t = [`EventTarget | `IDBOpenDBRequest | `IDBRequest of IDBDatabase.t] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -2304,22 +2087,14 @@ module FontFaceDescriptors : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module BinaryData : sig
-  type t = (ArrayBuffer.t_0, ArrayBufferView.t_0) union2
+  type t = never
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface38 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FontFace.t [@@js.get "prototype"]
-  val set_prototype: t -> FontFace.t -> unit [@@js.set "prototype"]
-  val create: t -> family:string -> source:BinaryData.t or_string -> ?descriptors:FontFaceDescriptors.t -> unit -> FontFace.t [@@js.apply_newable]
-end
-and[@js.scope "FontFace"] FontFace : sig
+module[@js.scope "FontFace"] FontFace : sig
   type t = [`FontFace] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -2366,23 +2141,15 @@ and[@js.scope "FontFace"] FontFace : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: family:string -> source:BinaryData.t or_string -> ?descriptors:FontFaceDescriptors.t -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface39 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FontFaceSet.t [@@js.get "prototype"]
-  val set_prototype: t -> FontFaceSet.t -> unit [@@js.set "prototype"]
-  val create: t -> initialFaces:FontFace.t list -> FontFaceSet.t [@@js.apply_newable]
-end
-and[@js.scope "FontFaceSet"] FontFaceSet : sig
-  type t = [`EventTarget | `FontFaceSet | FontFace.t Set.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module[@js.scope "FontFaceSet"] FontFaceSet : sig
+  type t = [`EventTarget | `FontFaceSet] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`EventTarget | `FontFaceSet | FontFace.t Set.tags_1]
+  type tags = [`EventTarget | `FontFaceSet]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`EventTarget | `FontFaceSet | FontFace.t Set.tags_1]
+    type tags = [`EventTarget | `FontFaceSet]
     type tags_0 = tags
   ]
   type 'tags this = 'tags intf constraint 'tags = [> `FontFaceSet ]
@@ -2875,20 +2642,12 @@ module KeyAlgorithm : sig
   val set_name: 'tags this -> string -> unit [@@js.set "name"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface15 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CryptoKey.t [@@js.get "prototype"]
-  val set_prototype: t -> CryptoKey.t -> unit [@@js.set "prototype"]
-  val create: t -> CryptoKey.t [@@js.apply_newable]
-end
 
 (**
   The CryptoKey dictionary of the Web Crypto API represents a cryptographic key.
   Available only in secure contexts.
 *)
-and[@js.scope "CryptoKey"] CryptoKey : sig
+module[@js.scope "CryptoKey"] CryptoKey : sig
   type t = [`CryptoKey] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -3128,20 +2887,12 @@ module AesCbcParams : sig
   val set_iv: 'tags this -> BufferSource.t -> unit [@@js.set "iv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface100 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SubtleCrypto.t [@@js.get "prototype"]
-  val set_prototype: t -> SubtleCrypto.t -> unit [@@js.set "prototype"]
-  val create: t -> SubtleCrypto.t [@@js.apply_newable]
-end
 
 (**
   This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto).
   Available only in secure contexts.
 *)
-and[@js.scope "SubtleCrypto"] SubtleCrypto : sig
+module[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   type t = [`SubtleCrypto] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -3191,25 +2942,280 @@ module[@js.scope "crypto"] CryptoStatic : sig
   val getRandomValues: 'T -> 'T [@@js.global "getRandomValues"]
 end
 module[@js.scope "console"] ConsoleStatic : sig
+  
+  (**
+    `console.assert()` writes a message if `value` is \[falsy\](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) or omitted. It only
+    writes a message and does not otherwise affect execution. The output always
+    starts with `"Assertion failed"`. If provided, `message` is formatted using `util.format()`.
+    
+    If `value` is \[truthy\](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), nothing happens.
+    
+    ```js
+    console.assert(true, 'does nothing');
+    
+    console.assert(false, 'Whoops %s work', 'didn\'t');
+    // Assertion failed: Whoops didn't work
+    
+    console.assert();
+    // Assertion failed
+    ```
+  *)
   val assert_: ?condition:bool -> data:(any list [@js.variadic]) -> unit -> unit [@@js.global "assert"]
+  
+  (**
+    When `stdout` is a TTY, calling `console.clear()` will attempt to clear the
+    TTY. When `stdout` is not a TTY, this method does nothing.
+    
+    The specific operation of `console.clear()` can vary across operating systems
+    and terminal types. For most Linux operating systems, `console.clear()`operates similarly to the `clear` shell command. On Windows, `console.clear()`will clear only the output in the
+    current terminal viewport for the Node.js
+    binary.
+  *)
   val clear: unit -> unit [@@js.global "clear"]
+  
+  (**
+    Maintains an internal counter specific to `label` and outputs to `stdout` the
+    number of times `console.count()` has been called with the given `label`.
+    
+    ```js
+    > console.count()
+    default: 1
+    undefined
+    > console.count('default')
+    default: 2
+    undefined
+    > console.count('abc')
+    abc: 1
+    undefined
+    > console.count('xyz')
+    xyz: 1
+    undefined
+    > console.count('abc')
+    abc: 2
+    undefined
+    > console.count()
+    default: 3
+    undefined
+    >
+    ```
+  *)
   val count: ?label:string -> unit -> unit [@@js.global "count"]
+  
+  (**
+    Resets the internal counter specific to `label`.
+    
+    ```js
+    > console.count('abc');
+    abc: 1
+    undefined
+    > console.countReset('abc');
+    undefined
+    > console.count('abc');
+    abc: 1
+    undefined
+    >
+    ```
+  *)
   val countReset: ?label:string -> unit -> unit [@@js.global "countReset"]
+  
+  (**
+    The `console.debug()` function is an alias for 
+    \{\@link 
+    log
+    \}
+    .
+  *)
   val debug: (any list [@js.variadic]) -> unit [@@js.global "debug"]
+  
+  (**
+    Uses `util.inspect()` on `obj` and prints the resulting string to `stdout`.
+    This function bypasses any custom `inspect()` function defined on `obj`.
+  *)
   val dir: ?item:any -> ?options:any -> unit -> unit [@@js.global "dir"]
+  
+  (**
+    This method calls `console.log()` passing it the arguments received.
+    This method does not produce any XML formatting.
+  *)
   val dirxml: (any list [@js.variadic]) -> unit [@@js.global "dirxml"]
+  
+  (**
+    Prints to `stderr` with newline. Multiple arguments can be passed, with the
+    first used as the primary message and all additional used as substitution
+    values similar to \[`printf(3)`\](http://man7.org/linux/man-pages/man3/printf.3.html) (the arguments are all passed to `util.format()`).
+    
+    ```js
+    const code = 5;
+    console.error('error #%d', code);
+    // Prints: error #5, to stderr
+    console.error('error', code);
+    // Prints: error 5, to stderr
+    ```
+    
+    If formatting elements (e.g. `%d`) are not found in the first string then `util.inspect()` is called on each argument and the resulting string
+    values are concatenated. See `util.format()` for more information.
+  *)
   val error: (any list [@js.variadic]) -> unit [@@js.global "error"]
+  
+  (**
+    Increases indentation of subsequent lines by spaces for `groupIndentation`length.
+    
+    If one or more `label`s are provided, those are printed first without the
+    additional indentation.
+  *)
   val group: (any list [@js.variadic]) -> unit [@@js.global "group"]
+  
+  (**
+    An alias for 
+    \{\@link 
+    group
+    \}
+    .
+  *)
   val groupCollapsed: (any list [@js.variadic]) -> unit [@@js.global "groupCollapsed"]
+  
+  (** Decreases indentation of subsequent lines by spaces for `groupIndentation`length. *)
   val groupEnd: unit -> unit [@@js.global "groupEnd"]
+  
+  (**
+    The `console.info()` function is an alias for 
+    \{\@link 
+    log
+    \}
+    .
+  *)
   val info: (any list [@js.variadic]) -> unit [@@js.global "info"]
+  
+  (**
+    Prints to `stdout` with newline. Multiple arguments can be passed, with the
+    first used as the primary message and all additional used as substitution
+    values similar to \[`printf(3)`\](http://man7.org/linux/man-pages/man3/printf.3.html) (the arguments are all passed to `util.format()`).
+    
+    ```js
+    const count = 5;
+    console.log('count: %d', count);
+    // Prints: count: 5, to stdout
+    console.log('count:', count);
+    // Prints: count: 5, to stdout
+    ```
+    
+    See `util.format()` for more information.
+  *)
   val log: (any list [@js.variadic]) -> unit [@@js.global "log"]
+  
+  (**
+    Try to construct a table with the columns of the properties of `tabularData`(or use `properties`) and rows of `tabularData` and log it. Falls back to just
+    logging the argument if it can’t be parsed as tabular.
+    
+    ```js
+    // These can't be parsed as tabular data
+    console.table(Symbol());
+    // Symbol()
+    
+    console.table(undefined);
+    // undefined
+    
+    console.table(\[\{ a: 1, b: 'Y' \}, \{ a: 'Z', b: 2 \}\]);
+    // ┌─────────┬─────┬─────┐
+    // │ (index) │  a  │  b  │
+    // ├─────────┼─────┼─────┤
+    // │    0    │  1  │ 'Y' │
+    // │    1    │ 'Z' │  2  │
+    // └─────────┴─────┴─────┘
+    
+    console.table(\[\{ a: 1, b: 'Y' \}, \{ a: 'Z', b: 2 \}\], \['a'\]);
+    // ┌─────────┬─────┐
+    // │ (index) │  a  │
+    // ├─────────┼─────┤
+    // │    0    │  1  │
+    // │    1    │ 'Z' │
+    // └─────────┴─────┘
+    ```
+  *)
   val table: ?tabularData:any -> ?properties:string list -> unit -> unit [@@js.global "table"]
+  
+  (**
+    Starts a timer that can be used to compute the duration of an operation. Timers
+    are identified by a unique `label`. Use the same `label` when calling 
+    \{\@link 
+    timeEnd
+    \}
+     to stop the timer and output the elapsed time in
+    suitable time units to `stdout`. For example, if the elapsed
+    time is 3869ms, `console.timeEnd()` displays "3.869s".
+  *)
   val time: ?label:string -> unit -> unit [@@js.global "time"]
+  
+  (**
+    Stops a timer that was previously started by calling 
+    \{\@link 
+    time
+    \}
+     and
+    prints the result to `stdout`:
+    
+    ```js
+    console.time('100-elements');
+    for (let i = 0; i < 100; i++) \{\}
+    console.timeEnd('100-elements');
+    // prints 100-elements: 225.438ms
+    ```
+  *)
   val timeEnd: ?label:string -> unit -> unit [@@js.global "timeEnd"]
+  
+  (**
+    For a timer that was previously started by calling 
+    \{\@link 
+    time
+    \}
+    , prints
+    the elapsed time and other `data` arguments to `stdout`:
+    
+    ```js
+    console.time('process');
+    const value = expensiveProcess1(); // Returns 42
+    console.timeLog('process', value);
+    // Prints "process: 365.227ms 42".
+    doExpensiveProcess2(value);
+    console.timeEnd('process');
+    ```
+  *)
   val timeLog: ?label:string -> data:(any list [@js.variadic]) -> unit -> unit [@@js.global "timeLog"]
+  
+  (**
+    This method does not display anything unless used in the inspector.
+     Adds an event with the label `label` to the Timeline panel of the inspector.
+  *)
   val timeStamp: ?label:string -> unit -> unit [@@js.global "timeStamp"]
+  
+  (**
+    Prints to `stderr` the string `'Trace: '`, followed by the `util.format()` formatted message and stack trace to the current position in the code.
+    
+    ```js
+    console.trace('Show me');
+    // Prints: (stack trace will vary based on where trace is called)
+    //  Trace: Show me
+    //    at repl:2:9
+    //    at REPLServer.defaultEval (repl.js:248:27)
+    //    at bound (domain.js:287:14)
+    //    at REPLServer.runBound \[as eval\] (domain.js:300:12)
+    //    at REPLServer.<anonymous> (repl.js:412:12)
+    //    at emitOne (events.js:82:20)
+    //    at REPLServer.emit (events.js:169:7)
+    //    at REPLServer.Interface._onLine (readline.js:210:10)
+    //    at REPLServer.Interface._line (readline.js:549:8)
+    //    at REPLServer.Interface._ttyWrite (readline.js:826:14)
+    ```
+  *)
   val trace: (any list [@js.variadic]) -> unit [@@js.global "trace"]
+  
+  (**
+    The `console.warn()` function is an alias for 
+    \{\@link 
+    error
+    \}
+    .
+  *)
   val warn: (any list [@js.variadic]) -> unit [@@js.global "warn"]
 end
 module CacheQueryOptions : sig
@@ -3256,65 +3262,17 @@ module MultiCacheQueryOptions : sig
   val set_cacheName: 'tags this -> string -> unit [@@js.set "cacheName"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module RequestDestination : sig
-  type t = ([`L_s0[@js ""] | `L_s109_manifest[@js "manifest"] | `L_s132_object[@js "object"] | `L_s145_paintworklet[@js "paintworklet"] | `L_s169_report[@js "report"] | `L_s174_script[@js "script"] | `L_s176_sharedworker[@js "sharedworker"] | `L_s187_style[@js "style"] | `L_s193_track[@js "track"] | `L_s204_video[@js "video"] | `L_s209_worker[@js "worker"] | `L_s212_xslt[@js "xslt"] | `L_s38_audio[@js "audio"] | `L_s39_audioworklet[@js "audioworklet"] | `L_s62_document[@js "document"] | `L_s64_embed[@js "embed"] | `L_s76_font[@js "font"] | `L_s78_frame[@js "frame"] | `L_s89_iframe[@js "iframe"] | `L_s90_image[@js "image"]] [@js.enum])
+module ResponseType : sig
+  type t = ([`L_s137_opaque[@js "opaque"] | `L_s138_opaqueredirect[@js "opaqueredirect"] | `L_s43_basic[@js "basic"] | `L_s55_cors[@js "cors"] | `L_s57_default[@js "default"] | `L_s67_error[@js "error"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-end
-module RequestRedirect : sig
-  type t = ([`L_s110_manual[@js "manual"] | `L_s67_error[@js "error"] | `L_s75_follow[@js "follow"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RequestMode : sig
-  type t = ([`L_s119_navigate[@js "navigate"] | `L_s124_no_cors[@js "no-cors"] | `L_s172_same_origin[@js "same-origin"] | `L_s55_cors[@js "cors"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RequestCache : sig
-  type t = ([`L_s123_no_cache[@js "no-cache"] | `L_s127_no_store[@js "no-store"] | `L_s136_only_if_cached[@js "only-if-cached"] | `L_s168_reload[@js "reload"] | `L_s57_default[@js "default"] | `L_s77_force_cache[@js "force-cache"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module ReferrerPolicy : sig
-  type t = ([`L_s0[@js ""] | `L_s125_no_referrer[@js "no-referrer"] | `L_s126_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s140_origin[@js "origin"] | `L_s141_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s172_same_origin[@js "same-origin"] | `L_s185_strict_origin[@js "strict-origin"] | `L_s186_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s198_unsafe_url[@js "unsafe-url"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RequestCredentials : sig
-  type t = ([`L_s134_omit[@js "omit"] | `L_s172_same_origin[@js "same-origin"] | `L_s92_include[@js "include"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module rec AnonymousInterface43 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Headers.t [@@js.get "prototype"]
-  val set_prototype: t -> Headers.t -> unit [@@js.set "prototype"]
-  val create: t -> ?init:HeadersInit.t -> unit -> Headers.t [@@js.apply_newable]
 end
 
 (** This Fetch API interface allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists of zero or more name and value pairs.  You can add to this using methods like append() (see Examples.) In all methods of this interface, header names are matched by case-insensitive byte sequence. *)
-and[@js.scope "Headers"] Headers : sig
+module[@js.scope "Headers"] rec Headers : sig
   type t = [`Headers | (string * string) IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -3350,12 +3308,36 @@ and[@js.scope "Headers"] Headers : sig
   val create: ?init:HeadersInit.t -> unit -> t [@@js.create]
 end
 and HeadersInit : sig
-  type t = ((Headers.t, (string, string) Record.t_2) union2, string list) or_array
+  type t = (Headers.t, string list) or_array
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+end
+module ResponseInit : sig
+  type t = [`ResponseInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ResponseInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ResponseInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ResponseInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_headers: 'tags this -> HeadersInit.t [@@js.get "headers"]
+  val set_headers: 'tags this -> HeadersInit.t -> unit [@@js.set "headers"]
+  val get_status: 'tags this -> float [@@js.get "status"]
+  val set_status: 'tags this -> float -> unit [@@js.set "status"]
+  val get_statusText: 'tags this -> string [@@js.get "statusText"]
+  val set_statusText: 'tags this -> string -> unit [@@js.set "statusText"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module EndingType : sig
   type t = ([`L_s118_native[@js "native"] | `L_s194_transparent[@js "transparent"]] [@js.enum])
@@ -3406,6 +3388,131 @@ module FilePropertyBag : sig
   val get_lastModified: 'tags this -> float [@@js.get "lastModified"]
   val set_lastModified: 'tags this -> float -> unit [@@js.set "lastModified"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "ReadableStreamDefaultController"] ReadableStreamDefaultController : sig
+  type 'R t = [`ReadableStreamDefaultController of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'R tags = [`ReadableStreamDefaultController of 'R]
+  type 'R tags_1 = 'R tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`ReadableStreamDefaultController of 'R]
+    type 'R tags_1 = 'R tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultController of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_desiredSize: ('tags, 'R) this -> float or_null [@@js.get "desiredSize"]
+  val close: ('tags, 'R) this -> unit [@@js.call "close"]
+  val enqueue: ('tags, 'R) this -> ?chunk:'R -> unit -> unit [@@js.call "enqueue"]
+  val error: ('tags, 'R) this -> ?e:any -> unit -> unit [@@js.call "error"]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t_0 [@@js.get "prototype"]
+  val create: unit -> t_0 [@@js.create]
+end
+module ReadableStreamController : sig
+  type 'T t = 'T ReadableStreamDefaultController.t
+  type 'T t_1 = 'T t
+  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
+  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+end
+module UnderlyingSourceStartCallback : sig
+  type 'R t = [`UnderlyingSourceStartCallback of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  [@@@js.stop]
+  type 'R tags = [`UnderlyingSourceStartCallback of 'R]
+  type 'R tags_1 = 'R tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`UnderlyingSourceStartCallback of 'R]
+    type 'R tags_1 = 'R tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSourceStartCallback of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> any [@@js.apply]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSourcePullCallback : sig
+  type 'R t = [`UnderlyingSourcePullCallback of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  [@@@js.stop]
+  type 'R tags = [`UnderlyingSourcePullCallback of 'R]
+  type 'R tags_1 = 'R tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`UnderlyingSourcePullCallback of 'R]
+    type 'R tags_1 = 'R tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSourcePullCallback of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> unit [@@js.apply]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSourceCancelCallback : sig
+  type t = [`UnderlyingSourceCancelCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`UnderlyingSourceCancelCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`UnderlyingSourceCancelCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSourceCancelCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> ?reason:any -> unit -> unit [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module UnderlyingSource : sig
+  type 'R t = [`UnderlyingSource of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
+  type 'R t_1 = 'R t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'R tags = [`UnderlyingSource of 'R]
+  type 'R tags_1 = 'R tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'R tags = [`UnderlyingSource of 'R]
+    type 'R tags_1 = 'R tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSource of 'R ]
+  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
+  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_cancel: ('tags, 'R) this -> UnderlyingSourceCancelCallback.t [@@js.get "cancel"]
+  val set_cancel: ('tags, 'R) this -> UnderlyingSourceCancelCallback.t -> unit [@@js.set "cancel"]
+  val get_pull: ('tags, 'R) this -> 'R UnderlyingSourcePullCallback.t [@@js.get "pull"]
+  val set_pull: ('tags, 'R) this -> 'R UnderlyingSourcePullCallback.t -> unit [@@js.set "pull"]
+  val get_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t [@@js.get "start"]
+  val set_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t -> unit [@@js.set "start"]
+  val get_type: ('tags, 'R) this -> never or_undefined [@@js.get "type"]
+  val set_type: ('tags, 'R) this -> never or_undefined -> unit [@@js.set "type"]
+  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
 end
 module StreamPipeOptions : sig
   type t = [`StreamPipeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3469,17 +3576,9 @@ module StreamPipeOptions : sig
   val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface135 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WritableStreamDefaultController.t [@@js.get "prototype"]
-  val set_prototype: t -> WritableStreamDefaultController.t -> unit [@@js.set "prototype"]
-  val create: t -> WritableStreamDefaultController.t [@@js.apply_newable]
-end
 
 (** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. *)
-and[@js.scope "WritableStreamDefaultController"] WritableStreamDefaultController : sig
+module[@js.scope "WritableStreamDefaultController"] WritableStreamDefaultController : sig
   type t = [`WritableStreamDefaultController] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -3516,7 +3615,7 @@ module UnderlyingSinkWriteCallback : sig
   val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
   val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
-  val apply: ('tags, 'W) this -> chunk:'W -> controller:WritableStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val apply: ('tags, 'W) this -> chunk:'W -> controller:WritableStreamDefaultController.t -> unit [@@js.apply]
   val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSinkStartCallback : sig
@@ -3554,7 +3653,7 @@ module UnderlyingSinkCloseCallback : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val apply: 'tags this -> unit [@@js.apply]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSinkAbortCallback : sig
@@ -3573,7 +3672,7 @@ module UnderlyingSinkAbortCallback : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val apply: 'tags this -> ?reason:any -> unit -> unit [@@js.apply]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSink : sig
@@ -3660,25 +3759,9 @@ module QueuingStrategy : sig
   val set_size: ('tags, 'T) this -> 'T QueuingStrategySize.t -> unit [@@js.set "size"]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface134 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WritableStream.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> WritableStream.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ?underlyingSink:'W UnderlyingSink.t -> ?strategy:'W QueuingStrategy.t -> unit -> 'W WritableStream.t [@@js.apply_newable]
-end
-and AnonymousInterface136 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WritableStreamDefaultWriter.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> WritableStreamDefaultWriter.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> stream:'W WritableStream.t -> 'W WritableStreamDefaultWriter.t [@@js.apply_newable]
-end
 
 (** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. *)
-and[@js.scope "WritableStream"] WritableStream : sig
+module[@js.scope "WritableStream"] rec WritableStream : sig
   type 'W t = [`WritableStream of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
   type 'W t_1 = 'W t
   type t_0 = any t
@@ -3813,158 +3896,9 @@ module ReadableStreamDefaultReadResult : sig
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
 end
-module rec AnonymousInterface88 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ReadableStreamDefaultController.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ReadableStreamDefaultController.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ReadableStreamDefaultController.t_0 [@@js.apply_newable]
-end
-and[@js.scope "ReadableStreamDefaultController"] ReadableStreamDefaultController : sig
-  type 'R t = [`ReadableStreamDefaultController of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'R tags = [`ReadableStreamDefaultController of 'R]
-  type 'R tags_1 = 'R tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`ReadableStreamDefaultController of 'R]
-    type 'R tags_1 = 'R tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `ReadableStreamDefaultController of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_desiredSize: ('tags, 'R) this -> float or_null [@@js.get "desiredSize"]
-  val close: ('tags, 'R) this -> unit [@@js.call "close"]
-  val enqueue: ('tags, 'R) this -> ?chunk:'R -> unit -> unit [@@js.call "enqueue"]
-  val error: ('tags, 'R) this -> ?e:any -> unit -> unit [@@js.call "error"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: unit -> t_0 [@@js.create]
-end
-module ReadableStreamController : sig
-  type 'T t = 'T ReadableStreamDefaultController.t
-  type 'T t_1 = 'T t
-  val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
-  val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
-end
-module UnderlyingSourceStartCallback : sig
-  type 'R t = [`UnderlyingSourceStartCallback of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  [@@@js.stop]
-  type 'R tags = [`UnderlyingSourceStartCallback of 'R]
-  type 'R tags_1 = 'R tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`UnderlyingSourceStartCallback of 'R]
-    type 'R tags_1 = 'R tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSourceStartCallback of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> any [@@js.apply]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSourcePullCallback : sig
-  type 'R t = [`UnderlyingSourcePullCallback of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  [@@@js.stop]
-  type 'R tags = [`UnderlyingSourcePullCallback of 'R]
-  type 'R tags_1 = 'R tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`UnderlyingSourcePullCallback of 'R]
-    type 'R tags_1 = 'R tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSourcePullCallback of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSourceCancelCallback : sig
-  type t = [`UnderlyingSourceCancelCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`UnderlyingSourceCancelCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`UnderlyingSourceCancelCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `UnderlyingSourceCancelCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module UnderlyingSource : sig
-  type 'R t = [`UnderlyingSource of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
-  type 'R t_1 = 'R t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'R tags = [`UnderlyingSource of 'R]
-  type 'R tags_1 = 'R tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'R tags = [`UnderlyingSource of 'R]
-    type 'R tags_1 = 'R tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'R) this = 'tags intf constraint 'tags = [> `UnderlyingSource of 'R ]
-  val t_to_js: ('R -> Ojs.t) -> 'R t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
-  val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_cancel: ('tags, 'R) this -> UnderlyingSourceCancelCallback.t [@@js.get "cancel"]
-  val set_cancel: ('tags, 'R) this -> UnderlyingSourceCancelCallback.t -> unit [@@js.set "cancel"]
-  val get_pull: ('tags, 'R) this -> 'R UnderlyingSourcePullCallback.t [@@js.get "pull"]
-  val set_pull: ('tags, 'R) this -> 'R UnderlyingSourcePullCallback.t -> unit [@@js.set "pull"]
-  val get_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t [@@js.get "start"]
-  val set_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t -> unit [@@js.set "start"]
-  val get_type: ('tags, 'R) this -> never or_undefined [@@js.get "type"]
-  val set_type: ('tags, 'R) this -> never or_undefined -> unit [@@js.set "type"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface87 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ReadableStream.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ReadableStream.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ?underlyingSource:'R UnderlyingSource.t -> ?strategy:'R QueuingStrategy.t -> unit -> 'R ReadableStream.t [@@js.apply_newable]
-end
-and AnonymousInterface89 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ReadableStreamDefaultReader.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ReadableStreamDefaultReader.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> stream:'R ReadableStream.t -> 'R ReadableStreamDefaultReader.t [@@js.apply_newable]
-end
 
 (** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. *)
-and[@js.scope "ReadableStream"] ReadableStream : sig
+module[@js.scope "ReadableStream"] rec ReadableStream : sig
   type 'R t = [`ReadableStream of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
   type 'R t_1 = 'R t
   type t_0 = any t
@@ -4066,17 +4000,9 @@ and ReadableWritablePair : sig
   val set_writable: ('tags, 'R, 'W) this -> 'W WritableStream.t -> unit [@@js.set "writable"]
   val cast_from: (('tags, 'R, 'W) this -> ('R, 'W) t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface2 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Blob.t [@@js.get "prototype"]
-  val set_prototype: t -> Blob.t -> unit [@@js.set "prototype"]
-  val create: t -> ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> Blob.t [@@js.apply_newable]
-end
 
 (** A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system. *)
-and[@js.scope "Blob"] Blob : sig
+module[@js.scope "Blob"] rec Blob : sig
   type t = [`Blob] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -4103,24 +4029,16 @@ and[@js.scope "Blob"] Blob : sig
   val create: ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> t [@@js.create]
 end
 and BlobPart : sig
-  type t = (Blob.t, BufferSource.t) union2 or_string
+  type t = Blob.t or_string
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface34 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> File.t [@@js.get "prototype"]
-  val set_prototype: t -> File.t -> unit [@@js.set "prototype"]
-  val create: t -> fileBits:BlobPart.t list -> fileName:string -> ?options:FilePropertyBag.t -> unit -> File.t [@@js.apply_newable]
-end
 
 (** Provides information about files and allows JavaScript in a web page to access their content. *)
-and[@js.scope "File"] File : sig
+module[@js.scope "File"] File : sig
   type t = [`Blob | `File] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -4151,17 +4069,9 @@ module FormDataEntryValue : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface41 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FormData.t [@@js.get "prototype"]
-  val set_prototype: t -> FormData.t -> unit [@@js.set "prototype"]
-  val create: t -> FormData.t [@@js.apply_newable]
-end
 
 (** Provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to "multipart/form-data". *)
-and[@js.scope "FormData"] FormData : sig
+module[@js.scope "FormData"] FormData : sig
   type t = [`FormData | (string * FormDataEntryValue.t) IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -4197,16 +4107,7 @@ and[@js.scope "FormData"] FormData : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface110 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> URLSearchParams.t [@@js.get "prototype"]
-  val set_prototype: t -> URLSearchParams.t -> unit [@@js.set "prototype"]
-  val create: t -> ?init:((URLSearchParams.t, (string, string) Record.t_2) union2, string list) or_array or_string -> unit -> URLSearchParams.t [@@js.apply_newable]
-  val toString: t -> string [@@js.call "toString"]
-end
-and[@js.scope "URLSearchParams"] URLSearchParams : sig
+module[@js.scope "URLSearchParams"] URLSearchParams : sig
   type t = [`URLSearchParams | (string * string) IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -4256,11 +4157,11 @@ and[@js.scope "URLSearchParams"] URLSearchParams : sig
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?init:((t, (string, string) Record.t_2) union2, string list) or_array or_string -> unit -> t [@@js.create]
+  val create: ?init:(t, string list) or_array or_string -> unit -> t [@@js.create]
   val toString': unit -> string [@@js.global "toString"]
 end
 module XMLHttpRequestBodyInit : sig
-  type t = (Blob.t, BufferSource.t, FormData.t, URLSearchParams.t) union4 or_string
+  type t = (Blob.t, FormData.t, URLSearchParams.t) union3 or_string
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4269,6 +4170,151 @@ module XMLHttpRequestBodyInit : sig
 end
 module BodyInit : sig
   type t = (ReadableStream.t_0, XMLHttpRequestBodyInit.t) union2
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module Body : sig
+  type t = [`Body] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Body]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Body]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `Body ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_body: 'tags this -> Uint8Array.t_0 ReadableStream.t or_null [@@js.get "body"]
+  val get_bodyUsed: 'tags this -> bool [@@js.get "bodyUsed"]
+  val arrayBuffer: 'tags this -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "arrayBuffer"]
+  val blob: 'tags this -> Blob.t Promise.t_1 [@@js.call "blob"]
+  val formData: 'tags this -> FormData.t Promise.t_1 [@@js.call "formData"]
+  val json: 'tags this -> any Promise.t_1 [@@js.call "json"]
+  val text: 'tags this -> string Promise.t_1 [@@js.call "text"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** The URL interface represents an object providing static methods used for creating object URLs. *)
+module[@js.scope "URL"] URL : sig
+  type t = [`URL] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`URL]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`URL]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `URL ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_hash: 'tags this -> string [@@js.get "hash"]
+  val set_hash: 'tags this -> string -> unit [@@js.set "hash"]
+  val get_host: 'tags this -> string [@@js.get "host"]
+  val set_host: 'tags this -> string -> unit [@@js.set "host"]
+  val get_hostname: 'tags this -> string [@@js.get "hostname"]
+  val set_hostname: 'tags this -> string -> unit [@@js.set "hostname"]
+  val get_href: 'tags this -> string [@@js.get "href"]
+  val set_href: 'tags this -> string -> unit [@@js.set "href"]
+  val toString: 'tags this -> string [@@js.call "toString"]
+  val get_origin: 'tags this -> string [@@js.get "origin"]
+  val get_password: 'tags this -> string [@@js.get "password"]
+  val set_password: 'tags this -> string -> unit [@@js.set "password"]
+  val get_pathname: 'tags this -> string [@@js.get "pathname"]
+  val set_pathname: 'tags this -> string -> unit [@@js.set "pathname"]
+  val get_port: 'tags this -> string [@@js.get "port"]
+  val set_port: 'tags this -> string -> unit [@@js.set "port"]
+  val get_protocol: 'tags this -> string [@@js.get "protocol"]
+  val set_protocol: 'tags this -> string -> unit [@@js.set "protocol"]
+  val get_search: 'tags this -> string [@@js.get "search"]
+  val set_search: 'tags this -> string -> unit [@@js.set "search"]
+  val get_searchParams: 'tags this -> URLSearchParams.t [@@js.get "searchParams"]
+  val get_username: 'tags this -> string [@@js.get "username"]
+  val set_username: 'tags this -> string -> unit [@@js.set "username"]
+  val toJSON: 'tags this -> string [@@js.call "toJSON"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: url:t or_string -> ?base:t or_string -> unit -> t [@@js.create]
+  val createObjectURL: Blob.t -> string [@@js.global "createObjectURL"]
+  val revokeObjectURL: string -> unit [@@js.global "revokeObjectURL"]
+end
+
+(** This Fetch API interface represents the response to a request. *)
+module[@js.scope "Response"] Response : sig
+  type t = [`Body | `Response] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Body | `Response]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Body | `Response]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `Response ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_headers: 'tags this -> Headers.t [@@js.get "headers"]
+  val get_ok: 'tags this -> bool [@@js.get "ok"]
+  val get_redirected: 'tags this -> bool [@@js.get "redirected"]
+  val get_status: 'tags this -> float [@@js.get "status"]
+  val get_statusText: 'tags this -> string [@@js.get "statusText"]
+  val get_type: 'tags this -> ResponseType.t [@@js.get "type"]
+  val get_url: 'tags this -> string [@@js.get "url"]
+  val clone: 'tags this -> t [@@js.call "clone"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: ?body:BodyInit.t or_null -> ?init:ResponseInit.t -> unit -> t [@@js.create]
+  val error: unit -> t [@@js.global "error"]
+  val redirect: url:URL.t or_string -> ?status:float -> unit -> t [@@js.global "redirect"]
+end
+module RequestRedirect : sig
+  type t = ([`L_s110_manual[@js "manual"] | `L_s67_error[@js "error"] | `L_s75_follow[@js "follow"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RequestMode : sig
+  type t = ([`L_s119_navigate[@js "navigate"] | `L_s124_no_cors[@js "no-cors"] | `L_s172_same_origin[@js "same-origin"] | `L_s55_cors[@js "cors"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RequestCache : sig
+  type t = ([`L_s123_no_cache[@js "no-cache"] | `L_s127_no_store[@js "no-store"] | `L_s136_only_if_cached[@js "only-if-cached"] | `L_s168_reload[@js "reload"] | `L_s57_default[@js "default"] | `L_s77_force_cache[@js "force-cache"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module ReferrerPolicy : sig
+  type t = ([`L_s0[@js ""] | `L_s125_no_referrer[@js "no-referrer"] | `L_s126_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s140_origin[@js "origin"] | `L_s141_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s172_same_origin[@js "same-origin"] | `L_s185_strict_origin[@js "strict-origin"] | `L_s186_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s198_unsafe_url[@js "unsafe-url"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RequestCredentials : sig
+  type t = ([`L_s134_omit[@js "omit"] | `L_s172_same_origin[@js "same-origin"] | `L_s92_include[@js "include"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4371,42 +4417,17 @@ module RequestInit : sig
   val set_window: 'tags this -> never or_null -> unit [@@js.set "window"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module Body : sig
-  type t = [`Body] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module RequestDestination : sig
+  type t = ([`L_s0[@js ""] | `L_s109_manifest[@js "manifest"] | `L_s132_object[@js "object"] | `L_s145_paintworklet[@js "paintworklet"] | `L_s169_report[@js "report"] | `L_s174_script[@js "script"] | `L_s176_sharedworker[@js "sharedworker"] | `L_s187_style[@js "style"] | `L_s193_track[@js "track"] | `L_s204_video[@js "video"] | `L_s209_worker[@js "worker"] | `L_s212_xslt[@js "xslt"] | `L_s38_audio[@js "audio"] | `L_s39_audioworklet[@js "audioworklet"] | `L_s62_document[@js "document"] | `L_s64_embed[@js "embed"] | `L_s76_font[@js "font"] | `L_s78_frame[@js "frame"] | `L_s89_iframe[@js "iframe"] | `L_s90_image[@js "image"]] [@js.enum])
   type t_0 = t
-  [@@@js.stop]
-  type tags = [`Body]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Body]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `Body ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_body: 'tags this -> Uint8Array.t_0 ReadableStream.t or_null [@@js.get "body"]
-  val get_bodyUsed: 'tags this -> bool [@@js.get "bodyUsed"]
-  val arrayBuffer: 'tags this -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "arrayBuffer"]
-  val blob: 'tags this -> Blob.t Promise.t_1 [@@js.call "blob"]
-  val formData: 'tags this -> FormData.t Promise.t_1 [@@js.call "formData"]
-  val json: 'tags this -> any Promise.t_1 [@@js.call "json"]
-  val text: 'tags this -> string Promise.t_1 [@@js.call "text"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface90 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Request.t [@@js.get "prototype"]
-  val set_prototype: t -> Request.t -> unit [@@js.set "prototype"]
-  val create: t -> input:RequestInfo.t -> ?init:RequestInit.t -> unit -> Request.t [@@js.apply_newable]
 end
 
 (** This Fetch API interface represents a resource request. *)
-and[@js.scope "Request"] Request : sig
+module[@js.scope "Request"] rec Request : sig
   type t = [`Body | `Request] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -4474,152 +4495,12 @@ and RequestInfo : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module ResponseType : sig
-  type t = ([`L_s137_opaque[@js "opaque"] | `L_s138_opaqueredirect[@js "opaqueredirect"] | `L_s43_basic[@js "basic"] | `L_s55_cors[@js "cors"] | `L_s57_default[@js "default"] | `L_s67_error[@js "error"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module ResponseInit : sig
-  type t = [`ResponseInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ResponseInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ResponseInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ResponseInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_headers: 'tags this -> HeadersInit.t [@@js.get "headers"]
-  val set_headers: 'tags this -> HeadersInit.t -> unit [@@js.set "headers"]
-  val get_status: 'tags this -> float [@@js.get "status"]
-  val set_status: 'tags this -> float -> unit [@@js.set "status"]
-  val get_statusText: 'tags this -> string [@@js.get "statusText"]
-  val set_statusText: 'tags this -> string -> unit [@@js.set "statusText"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface109 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> URL.t [@@js.get "prototype"]
-  val set_prototype: t -> URL.t -> unit [@@js.set "prototype"]
-  val create: t -> url:URL.t or_string -> ?base:URL.t or_string -> unit -> URL.t [@@js.apply_newable]
-  val createObjectURL: t -> obj:Blob.t -> string [@@js.call "createObjectURL"]
-  val revokeObjectURL: t -> url:string -> unit [@@js.call "revokeObjectURL"]
-end
-
-(** The URL interface represents an object providing static methods used for creating object URLs. *)
-and[@js.scope "URL"] URL : sig
-  type t = [`URL] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`URL]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`URL]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `URL ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_hash: 'tags this -> string [@@js.get "hash"]
-  val set_hash: 'tags this -> string -> unit [@@js.set "hash"]
-  val get_host: 'tags this -> string [@@js.get "host"]
-  val set_host: 'tags this -> string -> unit [@@js.set "host"]
-  val get_hostname: 'tags this -> string [@@js.get "hostname"]
-  val set_hostname: 'tags this -> string -> unit [@@js.set "hostname"]
-  val get_href: 'tags this -> string [@@js.get "href"]
-  val set_href: 'tags this -> string -> unit [@@js.set "href"]
-  val toString: 'tags this -> string [@@js.call "toString"]
-  val get_origin: 'tags this -> string [@@js.get "origin"]
-  val get_password: 'tags this -> string [@@js.get "password"]
-  val set_password: 'tags this -> string -> unit [@@js.set "password"]
-  val get_pathname: 'tags this -> string [@@js.get "pathname"]
-  val set_pathname: 'tags this -> string -> unit [@@js.set "pathname"]
-  val get_port: 'tags this -> string [@@js.get "port"]
-  val set_port: 'tags this -> string -> unit [@@js.set "port"]
-  val get_protocol: 'tags this -> string [@@js.get "protocol"]
-  val set_protocol: 'tags this -> string -> unit [@@js.set "protocol"]
-  val get_search: 'tags this -> string [@@js.get "search"]
-  val set_search: 'tags this -> string -> unit [@@js.set "search"]
-  val get_searchParams: 'tags this -> URLSearchParams.t [@@js.get "searchParams"]
-  val get_username: 'tags this -> string [@@js.get "username"]
-  val set_username: 'tags this -> string -> unit [@@js.set "username"]
-  val toJSON: 'tags this -> string [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: url:t or_string -> ?base:t or_string -> unit -> t [@@js.create]
-  val createObjectURL: Blob.t -> string [@@js.global "createObjectURL"]
-  val revokeObjectURL: string -> unit [@@js.global "revokeObjectURL"]
-end
-module rec AnonymousInterface91 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Response.t [@@js.get "prototype"]
-  val set_prototype: t -> Response.t -> unit [@@js.set "prototype"]
-  val create: t -> ?body:BodyInit.t or_null -> ?init:ResponseInit.t -> unit -> Response.t [@@js.apply_newable]
-  val error: t -> Response.t [@@js.call "error"]
-  val redirect: t -> url:URL.t or_string -> ?status:float -> unit -> Response.t [@@js.call "redirect"]
-end
-
-(** This Fetch API interface represents the response to a request. *)
-and[@js.scope "Response"] Response : sig
-  type t = [`Body | `Response] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`Body | `Response]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Body | `Response]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `Response ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_headers: 'tags this -> Headers.t [@@js.get "headers"]
-  val get_ok: 'tags this -> bool [@@js.get "ok"]
-  val get_redirected: 'tags this -> bool [@@js.get "redirected"]
-  val get_status: 'tags this -> float [@@js.get "status"]
-  val get_statusText: 'tags this -> string [@@js.get "statusText"]
-  val get_type: 'tags this -> ResponseType.t [@@js.get "type"]
-  val get_url: 'tags this -> string [@@js.get "url"]
-  val clone: 'tags this -> t [@@js.call "clone"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?body:BodyInit.t or_null -> ?init:ResponseInit.t -> unit -> t [@@js.create]
-  val error: unit -> t [@@js.global "error"]
-  val redirect: url:URL.t or_string -> ?status:float -> unit -> t [@@js.global "redirect"]
-end
-module rec AnonymousInterface5 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Cache.t [@@js.get "prototype"]
-  val set_prototype: t -> Cache.t -> unit [@@js.set "prototype"]
-  val create: t -> Cache.t [@@js.apply_newable]
-end
 
 (**
   Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
   Available only in secure contexts.
 *)
-and[@js.scope "Cache"] Cache : sig
+module[@js.scope "Cache"] Cache : sig
   type t = [`Cache] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -4686,17 +4567,9 @@ module ProgressEventInit : sig
   val set_total: 'tags this -> float -> unit [@@js.set "total"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface80 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ProgressEvent.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ProgressEvent.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:ProgressEventInit.t -> unit -> ProgressEvent.t_0 [@@js.apply_newable]
-end
 
 (** Events measuring progress of an underlying process, like an HTTP request (for an XMLHttpRequest, or the loading of the underlying resource of an <img>, <audio>, <video>, <style> or <link>). *)
-and[@js.scope "ProgressEvent"] ProgressEvent : sig
+module[@js.scope "ProgressEvent"] ProgressEvent : sig
   type 'T t = [`Event | `ProgressEvent of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
   type 'T t_1 = 'T t
   type t_0 = EventTarget.t t
@@ -4727,38 +4600,9 @@ and[@js.scope "ProgressEvent"] ProgressEvent : sig
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:ProgressEventInit.t -> unit -> t_0 [@@js.create]
 end
-module rec AnonymousInterface137 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XMLHttpRequest.t [@@js.get "prototype"]
-  val set_prototype: t -> XMLHttpRequest.t -> unit [@@js.set "prototype"]
-  val create: t -> XMLHttpRequest.t [@@js.apply_newable]
-  val get_DONE: t -> float [@@js.get "DONE"]
-  val get_HEADERS_RECEIVED: t -> float [@@js.get "HEADERS_RECEIVED"]
-  val get_LOADING: t -> float [@@js.get "LOADING"]
-  val get_OPENED: t -> float [@@js.get "OPENED"]
-  val get_UNSENT: t -> float [@@js.get "UNSENT"]
-end
-and AnonymousInterface138 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XMLHttpRequestEventTarget.t [@@js.get "prototype"]
-  val set_prototype: t -> XMLHttpRequestEventTarget.t -> unit [@@js.set "prototype"]
-  val create: t -> XMLHttpRequestEventTarget.t [@@js.apply_newable]
-end
-and AnonymousInterface139 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XMLHttpRequestUpload.t [@@js.get "prototype"]
-  val set_prototype: t -> XMLHttpRequestUpload.t -> unit [@@js.set "prototype"]
-  val create: t -> XMLHttpRequestUpload.t [@@js.apply_newable]
-end
 
 (** Use XMLHttpRequest (XHR) objects to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing. *)
-and[@js.scope "XMLHttpRequest"] XMLHttpRequest : sig
+module[@js.scope "XMLHttpRequest"] rec XMLHttpRequest : sig
   type t = [`EventTarget | `XMLHttpRequest | `XMLHttpRequestEventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -5147,15 +4991,7 @@ module ServiceWorkerState : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface55 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ImageBitmap.t [@@js.get "prototype"]
-  val set_prototype: t -> ImageBitmap.t -> unit [@@js.set "prototype"]
-  val create: t -> ImageBitmap.t [@@js.apply_newable]
-end
-and[@js.scope "ImageBitmap"] ImageBitmap : sig
+module[@js.scope "ImageBitmap"] ImageBitmap : sig
   type t = [`ImageBitmap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -5232,17 +5068,9 @@ module ErrorEventInit : sig
   val set_message: 'tags this -> string -> unit [@@js.set "message"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface27 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ErrorEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> ErrorEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:ErrorEventInit.t -> unit -> ErrorEvent.t [@@js.apply_newable]
-end
 
 (** Events providing information related to errors in scripts or in files. *)
-and[@js.scope "ErrorEvent"] ErrorEvent : sig
+module[@js.scope "ErrorEvent"] ErrorEvent : sig
   type t = [`ErrorEvent | `Event] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -5291,33 +5119,9 @@ module AbstractWorker : sig
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface63 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MessageEvent.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> MessageEvent.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:'T MessageEventInit.t -> unit -> 'T MessageEvent.t [@@js.apply_newable]
-end
-and AnonymousInterface64 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MessagePort.t [@@js.get "prototype"]
-  val set_prototype: t -> MessagePort.t -> unit [@@js.set "prototype"]
-  val create: t -> MessagePort.t [@@js.apply_newable]
-end
-and AnonymousInterface94 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ServiceWorker.t [@@js.get "prototype"]
-  val set_prototype: t -> ServiceWorker.t -> unit [@@js.set "prototype"]
-  val create: t -> ServiceWorker.t [@@js.apply_newable]
-end
 
 (** A message received by a target object. *)
-and[@js.scope "MessageEvent"] MessageEvent : sig
+module[@js.scope "MessageEvent"] rec MessageEvent : sig
   type 'T t = [`Event | `MessageEvent of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
   type 'T t_1 = 'T t
   type t_0 = any t
@@ -5562,7 +5366,7 @@ and[@js.scope "ServiceWorker"] ServiceWorker : sig
   val create: unit -> t [@@js.create]
 end
 and Transferable : sig
-  type t = (ArrayBuffer.t_0, ImageBitmap.t, MessagePort.t) union3
+  type t = (ImageBitmap.t, MessagePort.t) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5635,17 +5439,9 @@ module CloseEventInit : sig
   val set_wasClean: 'tags this -> bool -> unit [@@js.set "wasClean"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface11 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CloseEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> CloseEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:CloseEventInit.t -> unit -> CloseEvent.t [@@js.apply_newable]
-end
 
 (** A CloseEvent is sent to clients using WebSockets when the connection is closed. This is delivered to the listener indicated by the WebSocket object's onclose attribute. *)
-and[@js.scope "CloseEvent"] CloseEvent : sig
+module[@js.scope "CloseEvent"] CloseEvent : sig
   type t = [`CloseEvent | `Event] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -5700,6 +5496,470 @@ module WebSocketEventMap : sig
   val set_open: 'tags this -> Event.t -> unit [@@js.set "open"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module[@js.scope "WebAssembly"] WebAssembly : sig
+  module ImportExportKind : sig
+    type t = ([`L_s113_memory[@js "memory"] | `L_s189_table[@js "table"] | `L_s79_function[@js "function"] | `L_s81_global[@js "global"]] [@js.enum])
+    type t_0 = t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module ModuleImportDescriptor : sig
+    type t = [`WebAssembly_ModuleImportDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_ModuleImportDescriptor]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_ModuleImportDescriptor]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_ModuleImportDescriptor ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_kind: 'tags this -> ImportExportKind.t [@@js.get "kind"]
+    val set_kind: 'tags this -> ImportExportKind.t -> unit [@@js.set "kind"]
+    val get_module: 'tags this -> string [@@js.get "module"]
+    val set_module: 'tags this -> string -> unit [@@js.set "module"]
+    val get_name: 'tags this -> string [@@js.get "name"]
+    val set_name: 'tags this -> string -> unit [@@js.set "name"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  end
+  module ModuleExportDescriptor : sig
+    type t = [`WebAssembly_ModuleExportDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_ModuleExportDescriptor]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_ModuleExportDescriptor]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_ModuleExportDescriptor ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_kind: 'tags this -> ImportExportKind.t [@@js.get "kind"]
+    val set_kind: 'tags this -> ImportExportKind.t -> unit [@@js.set "kind"]
+    val get_name: 'tags this -> string [@@js.get "name"]
+    val set_name: 'tags this -> string -> unit [@@js.set "name"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  end
+  module[@js.scope "Module"] Module : sig
+    type t = [`WebAssembly_Module] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_Module]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_Module]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Module ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t [@@js.get "prototype"]
+    val create: BufferSource.t -> t [@@js.create]
+    val customSections: moduleObject:t -> sectionName:string -> ArrayBuffer.t_0 list [@@js.global "customSections"]
+    val exports: t -> ModuleExportDescriptor.t list [@@js.global "exports"]
+    val imports: t -> ModuleImportDescriptor.t list [@@js.global "imports"]
+  end
+  module MemoryDescriptor : sig
+    type t = [`WebAssembly_MemoryDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_MemoryDescriptor]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_MemoryDescriptor]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_MemoryDescriptor ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_initial: 'tags this -> float [@@js.get "initial"]
+    val set_initial: 'tags this -> float -> unit [@@js.set "initial"]
+    val get_maximum: 'tags this -> float [@@js.get "maximum"]
+    val set_maximum: 'tags this -> float -> unit [@@js.set "maximum"]
+    val get_shared: 'tags this -> bool [@@js.get "shared"]
+    val set_shared: 'tags this -> bool -> unit [@@js.set "shared"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  end
+  module[@js.scope "Memory"] Memory : sig
+    type t = [`WebAssembly_Memory] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_Memory]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_Memory]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Memory ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_buffer: 'tags this -> ArrayBuffer.t_0 [@@js.get "buffer"]
+    val grow: 'tags this -> delta:float -> float [@@js.call "grow"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t [@@js.get "prototype"]
+    val create: MemoryDescriptor.t -> t [@@js.create]
+  end
+  module ValueType : sig
+    type t = ([`L_s36_anyfunc[@js "anyfunc"] | `L_s69_externref[@js "externref"] | `L_s70_f32[@js "f32"] | `L_s71_f64[@js "f64"] | `L_s87_i32[@js "i32"] | `L_s88_i64[@js "i64"]] [@js.enum])
+    type t_0 = t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module GlobalDescriptor : sig
+    type t = [`WebAssembly_GlobalDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_GlobalDescriptor]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_GlobalDescriptor]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_GlobalDescriptor ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_mutable: 'tags this -> bool [@@js.get "mutable"]
+    val set_mutable: 'tags this -> bool -> unit [@@js.set "mutable"]
+    val get_value: 'tags this -> ValueType.t [@@js.get "value"]
+    val set_value: 'tags this -> ValueType.t -> unit [@@js.set "value"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  end
+  module[@js.scope "Global"] Global : sig
+    type t = [`WebAssembly_Global] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_Global]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_Global]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Global ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_value: 'tags this -> any [@@js.get "value"]
+    val set_value: 'tags this -> any -> unit [@@js.set "value"]
+    val valueOf: 'tags this -> any [@@js.call "valueOf"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t [@@js.get "prototype"]
+    val create: descriptor:GlobalDescriptor.t -> ?v:any -> unit -> t [@@js.create]
+  end
+  module TableKind : sig
+    type t = ([`L_s36_anyfunc[@js "anyfunc"] | `L_s69_externref[@js "externref"]] [@js.enum])
+    type t_0 = t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module TableDescriptor : sig
+    type t = [`WebAssembly_TableDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_TableDescriptor]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_TableDescriptor]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_TableDescriptor ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_element: 'tags this -> TableKind.t [@@js.get "element"]
+    val set_element: 'tags this -> TableKind.t -> unit [@@js.set "element"]
+    val get_initial: 'tags this -> float [@@js.get "initial"]
+    val set_initial: 'tags this -> float -> unit [@@js.set "initial"]
+    val get_maximum: 'tags this -> float [@@js.get "maximum"]
+    val set_maximum: 'tags this -> float -> unit [@@js.set "maximum"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  end
+  module[@js.scope "Table"] Table : sig
+    type t = [`WebAssembly_Table] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_Table]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_Table]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Table ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_length: 'tags this -> float [@@js.get "length"]
+    val get_: 'tags this -> index:float -> any [@@js.call "get"]
+    val grow: 'tags this -> delta:float -> ?value:any -> unit -> float [@@js.call "grow"]
+    val set_: 'tags this -> index:float -> ?value:any -> unit -> unit [@@js.call "set"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t [@@js.get "prototype"]
+    val create: descriptor:TableDescriptor.t -> ?value:any -> unit -> t [@@js.create]
+  end
+  module ExportValue : sig
+    type t = (Global.t, Memory.t, Table.t) union3
+    type t_0 = t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module Exports : sig
+    type t = (string, ExportValue.t) Record.t_2
+    type t_0 = t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module ImportValue : sig
+    type t = ExportValue.t or_number
+    type t_0 = t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module ModuleImports : sig
+    type t = (string, ImportValue.t) Record.t_2
+    type t_0 = t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module Imports : sig
+    type t = (string, ModuleImports.t) Record.t_2
+    type t_0 = t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module[@js.scope "Instance"] Instance : sig
+    type t = [`WebAssembly_Instance] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_Instance]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_Instance]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Instance ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_exports: 'tags this -> Exports.t [@@js.get "exports"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t [@@js.get "prototype"]
+    val create: module_:Module.t -> ?importObject:Imports.t -> unit -> t [@@js.create]
+  end
+  module WebAssemblyInstantiatedSource : sig
+    type t = [`WebAssembly_WebAssemblyInstantiatedSource] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_WebAssemblyInstantiatedSource]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_WebAssemblyInstantiatedSource]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_WebAssemblyInstantiatedSource ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val get_instance: 'tags this -> Instance.t [@@js.get "instance"]
+    val set_instance: 'tags this -> Instance.t -> unit [@@js.set "instance"]
+    val get_module: 'tags this -> Module.t [@@js.get "module"]
+    val set_module: 'tags this -> Module.t -> unit [@@js.set "module"]
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  end
+  module[@js.scope "RuntimeError"] RuntimeError : sig
+    type t = [`WebAssembly_RuntimeError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_RuntimeError]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_RuntimeError]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_RuntimeError ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t [@@js.get "prototype"]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
+  end
+  module AnonymousInterface92 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val get_prototype: t -> RuntimeError.t [@@js.get "prototype"]
+    val set_prototype: t -> RuntimeError.t -> unit [@@js.set "prototype"]
+    val create: t -> ?message:string -> unit -> RuntimeError.t [@@js.apply_newable]
+    val apply: t -> ?message:string -> unit -> RuntimeError.t [@@js.apply]
+  end
+  module AnonymousInterface65 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val get_prototype: t -> Module.t [@@js.get "prototype"]
+    val set_prototype: t -> Module.t -> unit [@@js.set "prototype"]
+    val create: t -> bytes:BufferSource.t -> Module.t [@@js.apply_newable]
+    val customSections: t -> moduleObject:Module.t -> sectionName:string -> ArrayBuffer.t_0 list [@@js.call "customSections"]
+    val exports: t -> moduleObject:Module.t -> ModuleExportDescriptor.t list [@@js.call "exports"]
+    val imports: t -> moduleObject:Module.t -> ModuleImportDescriptor.t list [@@js.call "imports"]
+  end
+  module AnonymousInterface61 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val get_prototype: t -> Memory.t [@@js.get "prototype"]
+    val set_prototype: t -> Memory.t -> unit [@@js.set "prototype"]
+    val create: t -> descriptor:MemoryDescriptor.t -> Memory.t [@@js.apply_newable]
+  end
+  module[@js.scope "LinkError"] LinkError : sig
+    type t = [`WebAssembly_LinkError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_LinkError]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_LinkError]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_LinkError ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t [@@js.get "prototype"]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
+  end
+  module AnonymousInterface59 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val get_prototype: t -> LinkError.t [@@js.get "prototype"]
+    val set_prototype: t -> LinkError.t -> unit [@@js.set "prototype"]
+    val create: t -> ?message:string -> unit -> LinkError.t [@@js.apply_newable]
+    val apply: t -> ?message:string -> unit -> LinkError.t [@@js.apply]
+  end
+  module AnonymousInterface58 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val get_prototype: t -> Instance.t [@@js.get "prototype"]
+    val set_prototype: t -> Instance.t -> unit [@@js.set "prototype"]
+    val create: t -> module_:Module.t -> ?importObject:Imports.t -> unit -> Instance.t [@@js.apply_newable]
+  end
+  module AnonymousInterface42 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val get_prototype: t -> Global.t [@@js.get "prototype"]
+    val set_prototype: t -> Global.t -> unit [@@js.set "prototype"]
+    val create: t -> descriptor:GlobalDescriptor.t -> ?v:any -> unit -> Global.t [@@js.apply_newable]
+  end
+  module[@js.scope "CompileError"] CompileError : sig
+    type t = [`WebAssembly_CompileError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_CompileError]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_CompileError]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_CompileError ]
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t [@@js.get "prototype"]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
+  end
+  module AnonymousInterface12 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val get_prototype: t -> CompileError.t [@@js.get "prototype"]
+    val set_prototype: t -> CompileError.t -> unit [@@js.set "prototype"]
+    val create: t -> ?message:string -> unit -> CompileError.t [@@js.apply_newable]
+    val apply: t -> ?message:string -> unit -> CompileError.t [@@js.apply]
+  end
+  module AnonymousInterface101 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val get_prototype: t -> Table.t [@@js.get "prototype"]
+    val set_prototype: t -> Table.t -> unit [@@js.set "prototype"]
+    val create: t -> descriptor:TableDescriptor.t -> ?value:any -> unit -> Table.t [@@js.apply_newable]
+  end
+  val compileError: unit -> AnonymousInterface12.t [@@js.get "CompileError"]
+  val global: unit -> AnonymousInterface42.t [@@js.get "Global"]
+  val instance: unit -> AnonymousInterface58.t [@@js.get "Instance"]
+  val linkError: unit -> AnonymousInterface59.t [@@js.get "LinkError"]
+  val memory: unit -> AnonymousInterface61.t [@@js.get "Memory"]
+  val module_: unit -> AnonymousInterface65.t [@@js.get "Module"]
+  val runtimeError: unit -> AnonymousInterface92.t [@@js.get "RuntimeError"]
+  val table: unit -> AnonymousInterface101.t [@@js.get "Table"]
+  val compile: BufferSource.t -> Module.t Promise.t_1 [@@js.global "compile"]
+  val compileStreaming: Response.t -> Module.t Promise.t_1 [@@js.global "compileStreaming"]
+  val instantiate: bytes:BufferSource.t -> ?importObject:Imports.t -> unit -> WebAssemblyInstantiatedSource.t Promise.t_1 [@@js.global "instantiate"]
+  val instantiate': moduleObject:Module.t -> ?importObject:Imports.t -> unit -> Instance.t Promise.t_1 [@@js.global "instantiate"]
+  val instantiateStreaming: source:Response.t -> ?importObject:Imports.t -> unit -> WebAssemblyInstantiatedSource.t Promise.t_1 [@@js.global "instantiateStreaming"]
+  val validate: BufferSource.t -> bool [@@js.global "validate"]
+end
 module PromiseRejectionEventInit : sig
   type t = [`EventInit | `PromiseRejectionEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -5722,15 +5982,7 @@ module PromiseRejectionEventInit : sig
   val set_reason: 'tags this -> any -> unit [@@js.set "reason"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface81 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PromiseRejectionEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> PromiseRejectionEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:PromiseRejectionEventInit.t -> PromiseRejectionEvent.t [@@js.apply_newable]
-end
-and[@js.scope "PromiseRejectionEvent"] PromiseRejectionEvent : sig
+module[@js.scope "PromiseRejectionEvent"] PromiseRejectionEvent : sig
   type t = [`Event | `PromiseRejectionEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -5822,20 +6074,12 @@ module ServiceWorkerRegistrationEventMap : sig
   val set_updatefound: 'tags this -> Event.t -> unit [@@js.set "updatefound"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface84 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PushMessageData.t [@@js.get "prototype"]
-  val set_prototype: t -> PushMessageData.t -> unit [@@js.set "prototype"]
-  val create: t -> PushMessageData.t [@@js.apply_newable]
-end
 
 (**
   This Push API interface provides methods which let you retrieve the push data sent by a server in various formats.
   Available only in secure contexts.
 *)
-and[@js.scope "PushMessageData"] PushMessageData : sig
+module[@js.scope "PushMessageData"] PushMessageData : sig
   type t = [`PushMessageData] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -5905,17 +6149,9 @@ module PushEventInit : sig
   val set_data: 'tags this -> PushMessageDataInit.t -> unit [@@js.set "data"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface31 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ExtendableEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> ExtendableEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:ExtendableEventInit.t -> unit -> ExtendableEvent.t [@@js.apply_newable]
-end
 
 (** Extends the lifetime of the install and activate events dispatched on the global scope as part of the service worker lifecycle. This ensures that any functional events (like FetchEvent) are not dispatched until it upgrades database schemas and deletes the outdated cache entries. *)
-and[@js.scope "ExtendableEvent"] ExtendableEvent : sig
+module[@js.scope "ExtendableEvent"] ExtendableEvent : sig
   type t = [`Event | `ExtendableEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -5936,20 +6172,12 @@ and[@js.scope "ExtendableEvent"] ExtendableEvent : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:ExtendableEventInit.t -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface82 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PushEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> PushEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:PushEventInit.t -> unit -> PushEvent.t [@@js.apply_newable]
-end
 
 (**
   This Push API interface represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription.
   Available only in secure contexts.
 *)
-and[@js.scope "PushEvent"] PushEvent : sig
+module[@js.scope "PushEvent"] PushEvent : sig
   type t = [`Event | `ExtendableEvent | `PushEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -6072,18 +6300,9 @@ module NotificationOptions : sig
   val set_vibrate: 'tags this -> VibratePattern.t -> unit [@@js.set "vibrate"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface67 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Notification.t [@@js.get "prototype"]
-  val set_prototype: t -> Notification.t -> unit [@@js.set "prototype"]
-  val create: t -> title:string -> ?options:NotificationOptions.t -> unit -> Notification.t [@@js.apply_newable]
-  val get_permission: t -> NotificationPermission.t [@@js.get "permission"]
-end
 
 (** This Notifications API interface is used to configure and display desktop notifications to the user. *)
-and[@js.scope "Notification"] Notification : sig
+module[@js.scope "Notification"] Notification : sig
   type t = [`EventTarget | `Notification] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -6182,17 +6401,9 @@ module NotificationEventInit : sig
   val set_notification: 'tags this -> Notification.t -> unit [@@js.set "notification"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface68 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> NotificationEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> NotificationEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:NotificationEventInit.t -> NotificationEvent.t [@@js.apply_newable]
-end
 
 (** The parameter passed into the onnotificationclick handler, the NotificationEvent interface represents a notification click event that is dispatched on the ServiceWorkerGlobalScope of a ServiceWorker. *)
-and[@js.scope "NotificationEvent"] NotificationEvent : sig
+module[@js.scope "NotificationEvent"] NotificationEvent : sig
   type t = [`Event | `ExtendableEvent | `NotificationEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -6244,17 +6455,9 @@ module FetchEventInit : sig
   val set_resultingClientId: 'tags this -> string -> unit [@@js.set "resultingClientId"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface33 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FetchEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> FetchEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:FetchEventInit.t -> FetchEvent.t [@@js.apply_newable]
-end
 
 (** This is the event type for fetch events dispatched on the service worker global scope. It contains information about the fetch, including the request and how the receiver will treat the response. It provides the event.respondWith() method, which allows us to provide a response to this fetch. *)
-and[@js.scope "FetchEvent"] FetchEvent : sig
+module[@js.scope "FetchEvent"] FetchEvent : sig
   type t = [`Event | `ExtendableEvent | `FetchEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -6274,7 +6477,7 @@ and[@js.scope "FetchEvent"] FetchEvent : sig
   val get_handled: 'tags this -> never or_undefined Promise.t_1 [@@js.get "handled"]
   val get_request: 'tags this -> Request.t [@@js.get "request"]
   val get_resultingClientId: 'tags this -> string [@@js.get "resultingClientId"]
-  val respondWith: 'tags this -> r:(Response.t, Response.t PromiseLike.t_1) union2 -> unit [@@js.call "respondWith"]
+  val respondWith: 'tags this -> r:Response.t -> unit [@@js.call "respondWith"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> eventInitDict:FetchEventInit.t -> t [@@js.create]
@@ -6295,17 +6498,9 @@ module ClientTypes : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface9 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Client.t [@@js.get "prototype"]
-  val set_prototype: t -> Client.t -> unit [@@js.set "prototype"]
-  val create: t -> Client.t [@@js.apply_newable]
-end
 
 (** The Client interface represents an executable context such as a Worker, or a SharedWorker. Window clients are represented by the more-specific WindowClient. You can get Client/WindowClient objects from methods such as Clients.matchAll() and Clients.get(). *)
-and[@js.scope "Client"] Client : sig
+module[@js.scope "Client"] Client : sig
   type t = [`Client] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -6359,17 +6554,9 @@ module ExtendableMessageEventInit : sig
   val set_source: 'tags this -> ((([`U_s42_auxiliary of Client.t  | `U_s120_nested of Client.t  | `U_s128_none of Client.t  | `U_s192_top_level of Client.t ] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t  | `U_s34_activating of ServiceWorker.t  | `U_s94_installed of ServiceWorker.t  | `U_s95_installing of ServiceWorker.t  | `U_s146_parsed of ServiceWorker.t  | `U_s166_redundant of ServiceWorker.t ] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null -> unit [@@js.set "source"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface32 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ExtendableMessageEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> ExtendableMessageEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:ExtendableMessageEventInit.t -> unit -> ExtendableMessageEvent.t [@@js.apply_newable]
-end
 
 (** This ServiceWorker API interface represents the event object of a message event fired on a service worker (when a channel message is received on the ServiceWorkerGlobalScope from another context) — extends the lifetime of such events. *)
-and[@js.scope "ExtendableMessageEvent"] ExtendableMessageEvent : sig
+module[@js.scope "ExtendableMessageEvent"] ExtendableMessageEvent : sig
   type t = [`Event | `ExtendableEvent | `ExtendableMessageEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -6778,20 +6965,9 @@ module FontFaceSetEventMap : sig
   val set_loadingerror: 'tags this -> Event.t -> unit [@@js.set "loadingerror"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface36 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileReader.t [@@js.get "prototype"]
-  val set_prototype: t -> FileReader.t -> unit [@@js.set "prototype"]
-  val create: t -> FileReader.t [@@js.apply_newable]
-  val get_DONE: t -> float [@@js.get "DONE"]
-  val get_EMPTY: t -> float [@@js.get "EMPTY"]
-  val get_LOADING: t -> float [@@js.get "LOADING"]
-end
 
 (** Lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read. *)
-and[@js.scope "FileReader"] FileReader : sig
+module[@js.scope "FileReader"] FileReader : sig
   type t = [`EventTarget | `FileReader] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -6999,25 +7175,280 @@ module Console : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    `console.assert()` writes a message if `value` is \[falsy\](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) or omitted. It only
+    writes a message and does not otherwise affect execution. The output always
+    starts with `"Assertion failed"`. If provided, `message` is formatted using `util.format()`.
+    
+    If `value` is \[truthy\](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), nothing happens.
+    
+    ```js
+    console.assert(true, 'does nothing');
+    
+    console.assert(false, 'Whoops %s work', 'didn\'t');
+    // Assertion failed: Whoops didn't work
+    
+    console.assert();
+    // Assertion failed
+    ```
+  *)
   val assert_: 'tags this -> ?condition:bool -> data:(any list [@js.variadic]) -> unit -> unit [@@js.call "assert"]
+  
+  (**
+    When `stdout` is a TTY, calling `console.clear()` will attempt to clear the
+    TTY. When `stdout` is not a TTY, this method does nothing.
+    
+    The specific operation of `console.clear()` can vary across operating systems
+    and terminal types. For most Linux operating systems, `console.clear()`operates similarly to the `clear` shell command. On Windows, `console.clear()`will clear only the output in the
+    current terminal viewport for the Node.js
+    binary.
+  *)
   val clear: 'tags this -> unit [@@js.call "clear"]
+  
+  (**
+    Maintains an internal counter specific to `label` and outputs to `stdout` the
+    number of times `console.count()` has been called with the given `label`.
+    
+    ```js
+    > console.count()
+    default: 1
+    undefined
+    > console.count('default')
+    default: 2
+    undefined
+    > console.count('abc')
+    abc: 1
+    undefined
+    > console.count('xyz')
+    xyz: 1
+    undefined
+    > console.count('abc')
+    abc: 2
+    undefined
+    > console.count()
+    default: 3
+    undefined
+    >
+    ```
+  *)
   val count: 'tags this -> ?label:string -> unit -> unit [@@js.call "count"]
+  
+  (**
+    Resets the internal counter specific to `label`.
+    
+    ```js
+    > console.count('abc');
+    abc: 1
+    undefined
+    > console.countReset('abc');
+    undefined
+    > console.count('abc');
+    abc: 1
+    undefined
+    >
+    ```
+  *)
   val countReset: 'tags this -> ?label:string -> unit -> unit [@@js.call "countReset"]
+  
+  (**
+    The `console.debug()` function is an alias for 
+    \{\@link 
+    log
+    \}
+    .
+  *)
   val debug: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "debug"]
+  
+  (**
+    Uses `util.inspect()` on `obj` and prints the resulting string to `stdout`.
+    This function bypasses any custom `inspect()` function defined on `obj`.
+  *)
   val dir: 'tags this -> ?item:any -> ?options:any -> unit -> unit [@@js.call "dir"]
+  
+  (**
+    This method calls `console.log()` passing it the arguments received.
+    This method does not produce any XML formatting.
+  *)
   val dirxml: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "dirxml"]
+  
+  (**
+    Prints to `stderr` with newline. Multiple arguments can be passed, with the
+    first used as the primary message and all additional used as substitution
+    values similar to \[`printf(3)`\](http://man7.org/linux/man-pages/man3/printf.3.html) (the arguments are all passed to `util.format()`).
+    
+    ```js
+    const code = 5;
+    console.error('error #%d', code);
+    // Prints: error #5, to stderr
+    console.error('error', code);
+    // Prints: error 5, to stderr
+    ```
+    
+    If formatting elements (e.g. `%d`) are not found in the first string then `util.inspect()` is called on each argument and the resulting string
+    values are concatenated. See `util.format()` for more information.
+  *)
   val error: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "error"]
+  
+  (**
+    Increases indentation of subsequent lines by spaces for `groupIndentation`length.
+    
+    If one or more `label`s are provided, those are printed first without the
+    additional indentation.
+  *)
   val group: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "group"]
+  
+  (**
+    An alias for 
+    \{\@link 
+    group
+    \}
+    .
+  *)
   val groupCollapsed: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "groupCollapsed"]
+  
+  (** Decreases indentation of subsequent lines by spaces for `groupIndentation`length. *)
   val groupEnd: 'tags this -> unit [@@js.call "groupEnd"]
+  
+  (**
+    The `console.info()` function is an alias for 
+    \{\@link 
+    log
+    \}
+    .
+  *)
   val info: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "info"]
+  
+  (**
+    Prints to `stdout` with newline. Multiple arguments can be passed, with the
+    first used as the primary message and all additional used as substitution
+    values similar to \[`printf(3)`\](http://man7.org/linux/man-pages/man3/printf.3.html) (the arguments are all passed to `util.format()`).
+    
+    ```js
+    const count = 5;
+    console.log('count: %d', count);
+    // Prints: count: 5, to stdout
+    console.log('count:', count);
+    // Prints: count: 5, to stdout
+    ```
+    
+    See `util.format()` for more information.
+  *)
   val log: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "log"]
+  
+  (**
+    Try to construct a table with the columns of the properties of `tabularData`(or use `properties`) and rows of `tabularData` and log it. Falls back to just
+    logging the argument if it can’t be parsed as tabular.
+    
+    ```js
+    // These can't be parsed as tabular data
+    console.table(Symbol());
+    // Symbol()
+    
+    console.table(undefined);
+    // undefined
+    
+    console.table(\[\{ a: 1, b: 'Y' \}, \{ a: 'Z', b: 2 \}\]);
+    // ┌─────────┬─────┬─────┐
+    // │ (index) │  a  │  b  │
+    // ├─────────┼─────┼─────┤
+    // │    0    │  1  │ 'Y' │
+    // │    1    │ 'Z' │  2  │
+    // └─────────┴─────┴─────┘
+    
+    console.table(\[\{ a: 1, b: 'Y' \}, \{ a: 'Z', b: 2 \}\], \['a'\]);
+    // ┌─────────┬─────┐
+    // │ (index) │  a  │
+    // ├─────────┼─────┤
+    // │    0    │  1  │
+    // │    1    │ 'Z' │
+    // └─────────┴─────┘
+    ```
+  *)
   val table: 'tags this -> ?tabularData:any -> ?properties:string list -> unit -> unit [@@js.call "table"]
+  
+  (**
+    Starts a timer that can be used to compute the duration of an operation. Timers
+    are identified by a unique `label`. Use the same `label` when calling 
+    \{\@link 
+    timeEnd
+    \}
+     to stop the timer and output the elapsed time in
+    suitable time units to `stdout`. For example, if the elapsed
+    time is 3869ms, `console.timeEnd()` displays "3.869s".
+  *)
   val time: 'tags this -> ?label:string -> unit -> unit [@@js.call "time"]
+  
+  (**
+    Stops a timer that was previously started by calling 
+    \{\@link 
+    time
+    \}
+     and
+    prints the result to `stdout`:
+    
+    ```js
+    console.time('100-elements');
+    for (let i = 0; i < 100; i++) \{\}
+    console.timeEnd('100-elements');
+    // prints 100-elements: 225.438ms
+    ```
+  *)
   val timeEnd: 'tags this -> ?label:string -> unit -> unit [@@js.call "timeEnd"]
+  
+  (**
+    For a timer that was previously started by calling 
+    \{\@link 
+    time
+    \}
+    , prints
+    the elapsed time and other `data` arguments to `stdout`:
+    
+    ```js
+    console.time('process');
+    const value = expensiveProcess1(); // Returns 42
+    console.timeLog('process', value);
+    // Prints "process: 365.227ms 42".
+    doExpensiveProcess2(value);
+    console.timeEnd('process');
+    ```
+  *)
   val timeLog: 'tags this -> ?label:string -> data:(any list [@js.variadic]) -> unit -> unit [@@js.call "timeLog"]
+  
+  (**
+    This method does not display anything unless used in the inspector.
+     Adds an event with the label `label` to the Timeline panel of the inspector.
+  *)
   val timeStamp: 'tags this -> ?label:string -> unit -> unit [@@js.call "timeStamp"]
+  
+  (**
+    Prints to `stderr` the string `'Trace: '`, followed by the `util.format()` formatted message and stack trace to the current position in the code.
+    
+    ```js
+    console.trace('Show me');
+    // Prints: (stack trace will vary based on where trace is called)
+    //  Trace: Show me
+    //    at repl:2:9
+    //    at REPLServer.defaultEval (repl.js:248:27)
+    //    at bound (domain.js:287:14)
+    //    at REPLServer.runBound \[as eval\] (domain.js:300:12)
+    //    at REPLServer.<anonymous> (repl.js:412:12)
+    //    at emitOne (events.js:82:20)
+    //    at REPLServer.emit (events.js:169:7)
+    //    at REPLServer.Interface._onLine (readline.js:210:10)
+    //    at REPLServer.Interface._line (readline.js:549:8)
+    //    at REPLServer.Interface._ttyWrite (readline.js:826:14)
+    ```
+  *)
   val trace: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "trace"]
+  
+  (**
+    The `console.warn()` function is an alias for 
+    \{\@link 
+    error
+    \}
+    .
+  *)
   val warn: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "warn"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
@@ -7043,17 +7474,17 @@ module BroadcastChannelEventMap : sig
   val set_messageerror: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "messageerror"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface133 : sig
+module AnonymousInterface99 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WorkerNavigator.t [@@js.get "prototype"]
-  val set_prototype: t -> WorkerNavigator.t -> unit [@@js.set "prototype"]
-  val create: t -> WorkerNavigator.t [@@js.apply_newable]
+  val get_prototype: t -> StorageManager.t [@@js.get "prototype"]
+  val set_prototype: t -> StorageManager.t -> unit [@@js.set "prototype"]
+  val create: t -> StorageManager.t [@@js.apply_newable]
 end
 
 (** A subset of the Navigator interface allowed to be accessed from a Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.navigator property obtained by calling window.self.navigator. *)
-and[@js.scope "WorkerNavigator"] WorkerNavigator : sig
+module[@js.scope "WorkerNavigator"] WorkerNavigator : sig
   type t = [`NavigatorConcurrentHardware | `NavigatorID | `NavigatorLanguage | `NavigatorNetworkInformation | `NavigatorOnLine | `NavigatorStorage | `WorkerNavigator] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7074,17 +7505,9 @@ and[@js.scope "WorkerNavigator"] WorkerNavigator : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface132 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WorkerLocation.t [@@js.get "prototype"]
-  val set_prototype: t -> WorkerLocation.t -> unit [@@js.set "prototype"]
-  val create: t -> WorkerLocation.t [@@js.apply_newable]
-end
 
 (** The absolute location of the script executed by the Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.location property obtained by calling self.location. *)
-and[@js.scope "WorkerLocation"] WorkerLocation : sig
+module[@js.scope "WorkerLocation"] WorkerLocation : sig
   type t = [`WorkerLocation] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7197,18 +7620,9 @@ module ImageDataSettings : sig
   val set_colorSpace: 'tags this -> PredefinedColorSpace.t -> unit [@@js.set "colorSpace"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface57 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ImageData.t [@@js.get "prototype"]
-  val set_prototype: t -> ImageData.t -> unit [@@js.set "prototype"]
-  val create: t -> sw:float -> sh:float -> ?settings:ImageDataSettings.t -> unit -> ImageData.t [@@js.apply_newable]
-  val create': t -> data:Uint8ClampedArray.t_0 -> sw:float -> ?sh:float -> ?settings:ImageDataSettings.t -> unit -> ImageData.t [@@js.apply_newable]
-end
 
 (** The underlying pixel data of an area of a <canvas> element. It is created using the ImageData() constructor or creator methods on the CanvasRenderingContext2D object associated with a canvas: createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData(). *)
-and[@js.scope "ImageData"] ImageData : sig
+module[@js.scope "ImageData"] ImageData : sig
   type t = [`ImageData] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7308,17 +7722,9 @@ module ImageBitmapOptions : sig
   val set_resizeWidth: 'tags this -> float -> unit [@@js.set "resizeWidth"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface47 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBFactory.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBFactory.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBFactory.t [@@js.apply_newable]
-end
 
 (** In the following code snippet, we make a request to open a database, and include handlers for the success and error cases. For a full working example, see our To-do Notifications app (view example live.) *)
-and[@js.scope "IDBFactory"] IDBFactory : sig
+module[@js.scope "IDBFactory"] IDBFactory : sig
   type t = [`IDBFactory] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7352,17 +7758,9 @@ and[@js.scope "IDBFactory"] IDBFactory : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface14 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Crypto.t [@@js.get "prototype"]
-  val set_prototype: t -> Crypto.t -> unit [@@js.set "prototype"]
-  val create: t -> Crypto.t [@@js.apply_newable]
-end
 
 (** Basic cryptography features available in the current context. It allows access to a cryptographically strong random number generator and to cryptographic primitives. *)
-and[@js.scope "Crypto"] Crypto : sig
+module[@js.scope "Crypto"] Crypto : sig
   type t = [`Crypto] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7386,20 +7784,12 @@ and[@js.scope "Crypto"] Crypto : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface6 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CacheStorage.t [@@js.get "prototype"]
-  val set_prototype: t -> CacheStorage.t -> unit [@@js.set "prototype"]
-  val create: t -> CacheStorage.t [@@js.apply_newable]
-end
 
 (**
   The storage for Cache objects.
   Available only in secure contexts.
 *)
-and[@js.scope "CacheStorage"] CacheStorage : sig
+module[@js.scope "CacheStorage"] CacheStorage : sig
   type t = [`CacheStorage] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7480,17 +7870,9 @@ module FontFaceSource : sig
   val get_fonts: 'tags this -> FontFaceSet.t [@@js.get "fonts"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface131 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WorkerGlobalScope.t [@@js.get "prototype"]
-  val set_prototype: t -> WorkerGlobalScope.t -> unit [@@js.set "prototype"]
-  val create: t -> WorkerGlobalScope.t [@@js.apply_newable]
-end
 
 (** This Web Workers API interface is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop. *)
-and[@js.scope "WorkerGlobalScope"] WorkerGlobalScope : sig
+module[@js.scope "WorkerGlobalScope"] WorkerGlobalScope : sig
   type t = [`EventTarget | `FontFaceSource | `WindowOrWorkerGlobalScope | `WorkerGlobalScope] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7574,15 +7956,7 @@ and[@js.scope "WorkerGlobalScope"] WorkerGlobalScope : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface98 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SharedWorkerGlobalScope.t [@@js.get "prototype"]
-  val set_prototype: t -> SharedWorkerGlobalScope.t -> unit [@@js.set "prototype"]
-  val create: t -> SharedWorkerGlobalScope.t [@@js.apply_newable]
-end
-and[@js.scope "SharedWorkerGlobalScope"] SharedWorkerGlobalScope : sig
+module[@js.scope "SharedWorkerGlobalScope"] SharedWorkerGlobalScope : sig
   type t = [`EventTarget | `FontFaceSource | `SharedWorkerGlobalScope | `WindowOrWorkerGlobalScope | `WorkerGlobalScope] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7650,6 +8024,14 @@ and[@js.scope "SharedWorkerGlobalScope"] SharedWorkerGlobalScope : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+module AnonymousInterface98 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> SharedWorkerGlobalScope.t [@@js.get "prototype"]
+  val set_prototype: t -> SharedWorkerGlobalScope.t -> unit [@@js.set "prototype"]
+  val create: t -> SharedWorkerGlobalScope.t [@@js.apply_newable]
+end
 module GetNotificationOptions : sig
   type t = [`GetNotificationOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -7700,17 +8082,9 @@ module PushSubscriptionOptionsInit : sig
   val set_userVisibleOnly: 'tags this -> bool -> unit [@@js.set "userVisibleOnly"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface86 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PushSubscriptionOptions.t [@@js.get "prototype"]
-  val set_prototype: t -> PushSubscriptionOptions.t -> unit [@@js.set "prototype"]
-  val create: t -> PushSubscriptionOptions.t [@@js.apply_newable]
-end
 
 (** Available only in secure contexts. *)
-and[@js.scope "PushSubscriptionOptions"] PushSubscriptionOptions : sig
+module[@js.scope "PushSubscriptionOptions"] PushSubscriptionOptions : sig
   type t = [`PushSubscriptionOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7763,20 +8137,12 @@ module PushEncryptionKeyName : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface85 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PushSubscription.t [@@js.get "prototype"]
-  val set_prototype: t -> PushSubscription.t -> unit [@@js.set "prototype"]
-  val create: t -> PushSubscription.t [@@js.apply_newable]
-end
 
 (**
   This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service.
   Available only in secure contexts.
 *)
-and[@js.scope "PushSubscription"] PushSubscription : sig
+module[@js.scope "PushSubscription"] PushSubscription : sig
   type t = [`PushSubscription] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7809,21 +8175,12 @@ module PushPermissionState : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface83 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PushManager.t [@@js.get "prototype"]
-  val set_prototype: t -> PushManager.t -> unit [@@js.set "prototype"]
-  val create: t -> PushManager.t [@@js.apply_newable]
-  val get_supportedContentEncodings: t -> string list [@@js.get "supportedContentEncodings"]
-end
 
 (**
   This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications.
   Available only in secure contexts.
 *)
-and[@js.scope "PushManager"] PushManager : sig
+module[@js.scope "PushManager"] PushManager : sig
   type t = [`PushManager] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7847,20 +8204,12 @@ and[@js.scope "PushManager"] PushManager : sig
   val create: unit -> t [@@js.create]
   val supportedContentEncodings: unit -> string list [@@js.get "supportedContentEncodings"]
 end
-module rec AnonymousInterface97 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ServiceWorkerRegistration.t [@@js.get "prototype"]
-  val set_prototype: t -> ServiceWorkerRegistration.t -> unit [@@js.set "prototype"]
-  val create: t -> ServiceWorkerRegistration.t [@@js.apply_newable]
-end
 
 (**
   This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin.
   Available only in secure contexts.
 *)
-and[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
+module[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
   type t = [`EventTarget | `ServiceWorkerRegistration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7932,6 +8281,14 @@ and[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+module AnonymousInterface97 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ServiceWorkerRegistration.t [@@js.get "prototype"]
+  val set_prototype: t -> ServiceWorkerRegistration.t -> unit [@@js.set "prototype"]
+  val create: t -> ServiceWorkerRegistration.t [@@js.apply_newable]
+end
 module VisibilityState : sig
   type t = ([`L_s205_visible[@js "visible"] | `L_s83_hidden[@js "hidden"]] [@js.enum])
   type t_0 = t
@@ -7940,17 +8297,9 @@ module VisibilityState : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface129 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WindowClient.t [@@js.get "prototype"]
-  val set_prototype: t -> WindowClient.t -> unit [@@js.set "prototype"]
-  val create: t -> WindowClient.t [@@js.apply_newable]
-end
 
 (** This ServiceWorker API interface represents the scope of a service worker client that is a document in a browser context, controlled by an active worker. The service worker client independently selects and uses a service worker for its own loading and sub-resources. *)
-and[@js.scope "WindowClient"] WindowClient : sig
+module[@js.scope "WindowClient"] WindowClient : sig
   type t = [`Client | `WindowClient] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -7996,17 +8345,9 @@ module ClientQueryOptions : sig
   val set_type: 'tags this -> ClientTypes.t -> unit [@@js.set "type"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface10 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Clients.t [@@js.get "prototype"]
-  val set_prototype: t -> Clients.t -> unit [@@js.set "prototype"]
-  val create: t -> Clients.t [@@js.apply_newable]
-end
 
 (** Provides access to Client objects. Access it via self.clients within a service worker. *)
-and[@js.scope "Clients"] Clients : sig
+module[@js.scope "Clients"] Clients : sig
   type t = [`Clients] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8030,17 +8371,9 @@ and[@js.scope "Clients"] Clients : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface96 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ServiceWorkerGlobalScope.t [@@js.get "prototype"]
-  val set_prototype: t -> ServiceWorkerGlobalScope.t -> unit [@@js.set "prototype"]
-  val create: t -> ServiceWorkerGlobalScope.t [@@js.apply_newable]
-end
 
 (** This ServiceWorker API interface represents the global execution context of a service worker. *)
-and[@js.scope "ServiceWorkerGlobalScope"] ServiceWorkerGlobalScope : sig
+module[@js.scope "ServiceWorkerGlobalScope"] ServiceWorkerGlobalScope : sig
   type t = [`EventTarget | `FontFaceSource | `ServiceWorkerGlobalScope | `WindowOrWorkerGlobalScope | `WorkerGlobalScope] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8119,6 +8452,14 @@ and[@js.scope "ServiceWorkerGlobalScope"] ServiceWorkerGlobalScope : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+module AnonymousInterface96 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ServiceWorkerGlobalScope.t [@@js.get "prototype"]
+  val set_prototype: t -> ServiceWorkerGlobalScope.t -> unit [@@js.set "prototype"]
+  val create: t -> ServiceWorkerGlobalScope.t [@@js.apply_newable]
+end
 module WorkerType : sig
   type t = ([`L_s117_module[@js "module"] | `L_s49_classic[@js "classic"]] [@js.enum])
   type t_0 = t
@@ -8151,20 +8492,12 @@ module RegistrationOptions : sig
   val set_updateViaCache: 'tags this -> ServiceWorkerUpdateViaCache.t -> unit [@@js.set "updateViaCache"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface95 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ServiceWorkerContainer.t [@@js.get "prototype"]
-  val set_prototype: t -> ServiceWorkerContainer.t -> unit [@@js.set "prototype"]
-  val create: t -> ServiceWorkerContainer.t [@@js.apply_newable]
-end
 
 (**
   The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations.
   Available only in secure contexts.
 *)
-and[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
+module[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   type t = [`EventTarget | `ServiceWorkerContainer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8236,6 +8569,22 @@ and[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+module AnonymousInterface95 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ServiceWorkerContainer.t [@@js.get "prototype"]
+  val set_prototype: t -> ServiceWorkerContainer.t -> unit [@@js.set "prototype"]
+  val create: t -> ServiceWorkerContainer.t [@@js.apply_newable]
+end
+module AnonymousInterface94 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ServiceWorker.t [@@js.get "prototype"]
+  val set_prototype: t -> ServiceWorker.t -> unit [@@js.set "prototype"]
+  val create: t -> ServiceWorker.t [@@js.apply_newable]
+end
 module SecurityPolicyViolationEventDisposition : sig
   type t = ([`L_s169_report[@js "report"] | `L_s66_enforce[@js "enforce"]] [@js.enum])
   type t_0 = t
@@ -8286,17 +8635,9 @@ module SecurityPolicyViolationEventInit : sig
   val set_violatedDirective: 'tags this -> string -> unit [@@js.set "violatedDirective"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface93 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SecurityPolicyViolationEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> SecurityPolicyViolationEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:SecurityPolicyViolationEventInit.t -> unit -> SecurityPolicyViolationEvent.t [@@js.apply_newable]
-end
 
 (** Inherits from Event, and represents the event object of an event sent on a document or worker when its content security policy is violated. *)
-and[@js.scope "SecurityPolicyViolationEvent"] SecurityPolicyViolationEvent : sig
+module[@js.scope "SecurityPolicyViolationEvent"] SecurityPolicyViolationEvent : sig
   type t = [`Event | `SecurityPolicyViolationEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8327,6 +8668,121 @@ and[@js.scope "SecurityPolicyViolationEvent"] SecurityPolicyViolationEvent : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:SecurityPolicyViolationEventInit.t -> unit -> t [@@js.create]
+end
+module AnonymousInterface93 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> SecurityPolicyViolationEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> SecurityPolicyViolationEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:SecurityPolicyViolationEventInit.t -> unit -> SecurityPolicyViolationEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface91 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Response.t [@@js.get "prototype"]
+  val set_prototype: t -> Response.t -> unit [@@js.set "prototype"]
+  val create: t -> ?body:BodyInit.t or_null -> ?init:ResponseInit.t -> unit -> Response.t [@@js.apply_newable]
+  val error: t -> Response.t [@@js.call "error"]
+  val redirect: t -> url:URL.t or_string -> ?status:float -> unit -> Response.t [@@js.call "redirect"]
+end
+module AnonymousInterface90 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Request.t [@@js.get "prototype"]
+  val set_prototype: t -> Request.t -> unit [@@js.set "prototype"]
+  val create: t -> input:RequestInfo.t -> ?init:RequestInit.t -> unit -> Request.t [@@js.apply_newable]
+end
+module AnonymousInterface9 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Client.t [@@js.get "prototype"]
+  val set_prototype: t -> Client.t -> unit [@@js.set "prototype"]
+  val create: t -> Client.t [@@js.apply_newable]
+end
+module AnonymousInterface89 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ReadableStreamDefaultReader.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> ReadableStreamDefaultReader.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> stream:'R ReadableStream.t -> 'R ReadableStreamDefaultReader.t [@@js.apply_newable]
+end
+module AnonymousInterface88 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ReadableStreamDefaultController.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> ReadableStreamDefaultController.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> ReadableStreamDefaultController.t_0 [@@js.apply_newable]
+end
+module AnonymousInterface87 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ReadableStream.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> ReadableStream.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> ?underlyingSource:'R UnderlyingSource.t -> ?strategy:'R QueuingStrategy.t -> unit -> 'R ReadableStream.t [@@js.apply_newable]
+end
+module AnonymousInterface86 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PushSubscriptionOptions.t [@@js.get "prototype"]
+  val set_prototype: t -> PushSubscriptionOptions.t -> unit [@@js.set "prototype"]
+  val create: t -> PushSubscriptionOptions.t [@@js.apply_newable]
+end
+module AnonymousInterface85 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PushSubscription.t [@@js.get "prototype"]
+  val set_prototype: t -> PushSubscription.t -> unit [@@js.set "prototype"]
+  val create: t -> PushSubscription.t [@@js.apply_newable]
+end
+module AnonymousInterface84 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PushMessageData.t [@@js.get "prototype"]
+  val set_prototype: t -> PushMessageData.t -> unit [@@js.set "prototype"]
+  val create: t -> PushMessageData.t [@@js.apply_newable]
+end
+module AnonymousInterface83 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PushManager.t [@@js.get "prototype"]
+  val set_prototype: t -> PushManager.t -> unit [@@js.set "prototype"]
+  val create: t -> PushManager.t [@@js.apply_newable]
+  val get_supportedContentEncodings: t -> string list [@@js.get "supportedContentEncodings"]
+end
+module AnonymousInterface82 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PushEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> PushEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:PushEventInit.t -> unit -> PushEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface81 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PromiseRejectionEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> PromiseRejectionEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> eventInitDict:PromiseRejectionEventInit.t -> PromiseRejectionEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface80 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ProgressEvent.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> ProgressEvent.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:ProgressEventInit.t -> unit -> ProgressEvent.t_0 [@@js.apply_newable]
 end
 module DOMMatrix2DInit : sig
   type t = [`DOMMatrix2DInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8370,17 +8826,9 @@ module DOMMatrix2DInit : sig
   val set_m42: 'tags this -> float -> unit [@@js.set "m42"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface8 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CanvasPattern.t [@@js.get "prototype"]
-  val set_prototype: t -> CanvasPattern.t -> unit [@@js.set "prototype"]
-  val create: t -> CanvasPattern.t [@@js.apply_newable]
-end
 
 (** An opaque object describing a pattern, based on an image, a canvas, or a video, created by the CanvasRenderingContext2D.createPattern() method. *)
-and[@js.scope "CanvasPattern"] CanvasPattern : sig
+module[@js.scope "CanvasPattern"] CanvasPattern : sig
   type t = [`CanvasPattern] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8402,6 +8850,14 @@ and[@js.scope "CanvasPattern"] CanvasPattern : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
+end
+module AnonymousInterface8 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> CanvasPattern.t [@@js.get "prototype"]
+  val set_prototype: t -> CanvasPattern.t -> unit [@@js.set "prototype"]
+  val create: t -> CanvasPattern.t [@@js.apply_newable]
 end
 module PermissionName : sig
   type t = ([`L_s131_notifications[@js "notifications"] | `L_s148_persistent_storage[@js "persistent-storage"] | `L_s159_push[@js "push"] | `L_s173_screen_wake_lock[@js "screen-wake-lock"] | `L_s211_xr_spatial_tracking[@js "xr-spatial-tracking"] | `L_s80_geolocation[@js "geolocation"]] [@js.enum])
@@ -8439,15 +8895,7 @@ module PermissionState : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface78 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PermissionStatus.t [@@js.get "prototype"]
-  val set_prototype: t -> PermissionStatus.t -> unit [@@js.set "prototype"]
-  val create: t -> PermissionStatus.t [@@js.apply_newable]
-end
-and[@js.scope "PermissionStatus"] PermissionStatus : sig
+module[@js.scope "PermissionStatus"] PermissionStatus : sig
   type t = [`EventTarget | `PermissionStatus] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8510,15 +8958,7 @@ and[@js.scope "PermissionStatus"] PermissionStatus : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface79 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Permissions.t [@@js.get "prototype"]
-  val set_prototype: t -> Permissions.t -> unit [@@js.set "prototype"]
-  val create: t -> Permissions.t [@@js.apply_newable]
-end
-and[@js.scope "Permissions"] Permissions : sig
+module[@js.scope "Permissions"] Permissions : sig
   type t = [`Permissions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8539,15 +8979,23 @@ and[@js.scope "Permissions"] Permissions : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface77 : sig
+module AnonymousInterface79 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceServerTiming.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceServerTiming.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceServerTiming.t [@@js.apply_newable]
+  val get_prototype: t -> Permissions.t [@@js.get "prototype"]
+  val set_prototype: t -> Permissions.t -> unit [@@js.set "prototype"]
+  val create: t -> Permissions.t [@@js.apply_newable]
 end
-and[@js.scope "PerformanceServerTiming"] PerformanceServerTiming : sig
+module AnonymousInterface78 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PermissionStatus.t [@@js.get "prototype"]
+  val set_prototype: t -> PermissionStatus.t -> unit [@@js.set "prototype"]
+  val create: t -> PermissionStatus.t [@@js.apply_newable]
+end
+module[@js.scope "PerformanceServerTiming"] PerformanceServerTiming : sig
   type t = [`PerformanceServerTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8571,17 +9019,17 @@ and[@js.scope "PerformanceServerTiming"] PerformanceServerTiming : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface76 : sig
+module AnonymousInterface77 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceResourceTiming.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceResourceTiming.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceResourceTiming.t [@@js.apply_newable]
+  val get_prototype: t -> PerformanceServerTiming.t [@@js.get "prototype"]
+  val set_prototype: t -> PerformanceServerTiming.t -> unit [@@js.set "prototype"]
+  val create: t -> PerformanceServerTiming.t [@@js.apply_newable]
 end
 
 (** Enables retrieval and analysis of detailed network timing data regarding the loading of an application's resources. An application can use the timing metrics to determine, for example, the length of time it takes to fetch a specific resource, such as an XMLHttpRequest, <SVG>, image, or script. *)
-and[@js.scope "PerformanceResourceTiming"] PerformanceResourceTiming : sig
+module[@js.scope "PerformanceResourceTiming"] PerformanceResourceTiming : sig
   type t = [`PerformanceEntry | `PerformanceResourceTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8620,6 +9068,45 @@ and[@js.scope "PerformanceResourceTiming"] PerformanceResourceTiming : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+module AnonymousInterface76 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PerformanceResourceTiming.t [@@js.get "prototype"]
+  val set_prototype: t -> PerformanceResourceTiming.t -> unit [@@js.set "prototype"]
+  val create: t -> PerformanceResourceTiming.t [@@js.apply_newable]
+end
+module[@js.scope "PerformanceObserverEntryList"] PerformanceObserverEntryList : sig
+  type t = [`PerformanceObserverEntryList] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceObserverEntryList]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceObserverEntryList]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserverEntryList ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val getEntries: 'tags this -> PerformanceEntryList.t [@@js.call "getEntries"]
+  val getEntriesByName: 'tags this -> name:string -> ?type_:string -> unit -> PerformanceEntryList.t [@@js.call "getEntriesByName"]
+  val getEntriesByType: 'tags this -> type_:string -> PerformanceEntryList.t [@@js.call "getEntriesByType"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AnonymousInterface75 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PerformanceObserverEntryList.t [@@js.get "prototype"]
+  val set_prototype: t -> PerformanceObserverEntryList.t -> unit [@@js.set "prototype"]
+  val create: t -> PerformanceObserverEntryList.t [@@js.apply_newable]
+end
 module PerformanceObserverInit : sig
   type t = [`PerformanceObserverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -8644,47 +9131,7 @@ module PerformanceObserverInit : sig
   val set_type: 'tags this -> string -> unit [@@js.set "type"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface75 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceObserverEntryList.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceObserverEntryList.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceObserverEntryList.t [@@js.apply_newable]
-end
-and[@js.scope "PerformanceObserverEntryList"] PerformanceObserverEntryList : sig
-  type t = [`PerformanceObserverEntryList] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PerformanceObserverEntryList]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PerformanceObserverEntryList]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserverEntryList ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val getEntries: 'tags this -> PerformanceEntryList.t [@@js.call "getEntries"]
-  val getEntriesByName: 'tags this -> name:string -> ?type_:string -> unit -> PerformanceEntryList.t [@@js.call "getEntriesByName"]
-  val getEntriesByType: 'tags this -> type_:string -> PerformanceEntryList.t [@@js.call "getEntriesByType"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface74 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceObserver.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceObserver.t -> unit [@@js.set "prototype"]
-  val create: t -> callback:PerformanceObserverCallback.t -> PerformanceObserver.t [@@js.apply_newable]
-  val get_supportedEntryTypes: t -> string list [@@js.get "supportedEntryTypes"]
-end
-and[@js.scope "PerformanceObserver"] PerformanceObserver : sig
+module[@js.scope "PerformanceObserver"] rec PerformanceObserver : sig
   type t = [`PerformanceObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8727,17 +9174,50 @@ and PerformanceObserverCallback : sig
   val apply: 'tags this -> entries:PerformanceObserverEntryList.t -> observer:PerformanceObserver.t -> unit [@@js.apply]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface7 : sig
+module AnonymousInterface74 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CanvasGradient.t [@@js.get "prototype"]
-  val set_prototype: t -> CanvasGradient.t -> unit [@@js.set "prototype"]
-  val create: t -> CanvasGradient.t [@@js.apply_newable]
+  val get_prototype: t -> PerformanceObserver.t [@@js.get "prototype"]
+  val set_prototype: t -> PerformanceObserver.t -> unit [@@js.set "prototype"]
+  val create: t -> callback:PerformanceObserverCallback.t -> PerformanceObserver.t [@@js.apply_newable]
+  val get_supportedEntryTypes: t -> string list [@@js.get "supportedEntryTypes"]
+end
+module AnonymousInterface73 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PerformanceMeasure.t [@@js.get "prototype"]
+  val set_prototype: t -> PerformanceMeasure.t -> unit [@@js.set "prototype"]
+  val create: t -> PerformanceMeasure.t [@@js.apply_newable]
+end
+module AnonymousInterface72 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PerformanceMark.t [@@js.get "prototype"]
+  val set_prototype: t -> PerformanceMark.t -> unit [@@js.set "prototype"]
+  val create: t -> markName:string -> ?markOptions:PerformanceMarkOptions.t -> unit -> PerformanceMark.t [@@js.apply_newable]
+end
+module AnonymousInterface71 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> PerformanceEntry.t [@@js.get "prototype"]
+  val set_prototype: t -> PerformanceEntry.t -> unit [@@js.set "prototype"]
+  val create: t -> PerformanceEntry.t [@@js.apply_newable]
+end
+module AnonymousInterface70 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Performance.t [@@js.get "prototype"]
+  val set_prototype: t -> Performance.t -> unit [@@js.set "prototype"]
+  val create: t -> Performance.t [@@js.apply_newable]
 end
 
 (** An opaque object describing a gradient. It is returned by the methods CanvasRenderingContext2D.createLinearGradient() or CanvasRenderingContext2D.createRadialGradient(). *)
-and[@js.scope "CanvasGradient"] CanvasGradient : sig
+module[@js.scope "CanvasGradient"] CanvasGradient : sig
   type t = [`CanvasGradient] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8763,6 +9243,14 @@ and[@js.scope "CanvasGradient"] CanvasGradient : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
+end
+module AnonymousInterface7 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> CanvasGradient.t [@@js.get "prototype"]
+  val set_prototype: t -> CanvasGradient.t -> unit [@@js.set "prototype"]
+  val create: t -> CanvasGradient.t [@@js.apply_newable]
 end
 module CanvasPath : sig
   type t = [`CanvasPath] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8791,17 +9279,9 @@ module CanvasPath : sig
   val rect: 'tags this -> x:float -> y:float -> w:float -> h:float -> unit [@@js.call "rect"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface69 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Path2D.t [@@js.get "prototype"]
-  val set_prototype: t -> Path2D.t -> unit [@@js.set "prototype"]
-  val create: t -> ?path:Path2D.t or_string -> unit -> Path2D.t [@@js.apply_newable]
-end
 
 (** This Canvas 2D API interface is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired. *)
-and[@js.scope "Path2D"] Path2D : sig
+module[@js.scope "Path2D"] Path2D : sig
   type t = [`CanvasPath | `Path2D] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8824,17 +9304,58 @@ and[@js.scope "Path2D"] Path2D : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?path:t or_string -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface62 : sig
+module AnonymousInterface69 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MessageChannel.t [@@js.get "prototype"]
-  val set_prototype: t -> MessageChannel.t -> unit [@@js.set "prototype"]
-  val create: t -> MessageChannel.t [@@js.apply_newable]
+  val get_prototype: t -> Path2D.t [@@js.get "prototype"]
+  val set_prototype: t -> Path2D.t -> unit [@@js.set "prototype"]
+  val create: t -> ?path:Path2D.t or_string -> unit -> Path2D.t [@@js.apply_newable]
+end
+module AnonymousInterface68 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> NotificationEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> NotificationEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> eventInitDict:NotificationEventInit.t -> NotificationEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface67 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Notification.t [@@js.get "prototype"]
+  val set_prototype: t -> Notification.t -> unit [@@js.set "prototype"]
+  val create: t -> title:string -> ?options:NotificationOptions.t -> unit -> Notification.t [@@js.apply_newable]
+  val get_permission: t -> NotificationPermission.t [@@js.get "permission"]
+end
+module AnonymousInterface66 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> NetworkInformation.t [@@js.get "prototype"]
+  val set_prototype: t -> NetworkInformation.t -> unit [@@js.set "prototype"]
+  val create: t -> NetworkInformation.t [@@js.apply_newable]
+end
+module AnonymousInterface64 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> MessagePort.t [@@js.get "prototype"]
+  val set_prototype: t -> MessagePort.t -> unit [@@js.set "prototype"]
+  val create: t -> MessagePort.t [@@js.apply_newable]
+end
+module AnonymousInterface63 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> MessageEvent.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> MessageEvent.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:'T MessageEventInit.t -> unit -> 'T MessageEvent.t [@@js.apply_newable]
 end
 
 (** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. *)
-and[@js.scope "MessageChannel"] MessageChannel : sig
+module[@js.scope "MessageChannel"] MessageChannel : sig
   type t = [`MessageChannel] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8860,15 +9381,40 @@ and[@js.scope "MessageChannel"] MessageChannel : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface56 : sig
+module AnonymousInterface62 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ImageBitmapRenderingContext.t [@@js.get "prototype"]
-  val set_prototype: t -> ImageBitmapRenderingContext.t -> unit [@@js.set "prototype"]
-  val create: t -> ImageBitmapRenderingContext.t [@@js.apply_newable]
+  val get_prototype: t -> MessageChannel.t [@@js.get "prototype"]
+  val set_prototype: t -> MessageChannel.t -> unit [@@js.set "prototype"]
+  val create: t -> MessageChannel.t [@@js.apply_newable]
 end
-and[@js.scope "ImageBitmapRenderingContext"] ImageBitmapRenderingContext : sig
+module AnonymousInterface60 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> MediaCapabilities.t [@@js.get "prototype"]
+  val set_prototype: t -> MediaCapabilities.t -> unit [@@js.set "prototype"]
+  val create: t -> MediaCapabilities.t [@@js.apply_newable]
+end
+module AnonymousInterface6 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> CacheStorage.t [@@js.get "prototype"]
+  val set_prototype: t -> CacheStorage.t -> unit [@@js.set "prototype"]
+  val create: t -> CacheStorage.t [@@js.apply_newable]
+end
+module AnonymousInterface57 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ImageData.t [@@js.get "prototype"]
+  val set_prototype: t -> ImageData.t -> unit [@@js.set "prototype"]
+  val create: t -> sw:float -> sh:float -> ?settings:ImageDataSettings.t -> unit -> ImageData.t [@@js.apply_newable]
+  val create': t -> data:Uint8ClampedArray.t_0 -> sw:float -> ?sh:float -> ?settings:ImageDataSettings.t -> unit -> ImageData.t [@@js.apply_newable]
+end
+module[@js.scope "ImageBitmapRenderingContext"] ImageBitmapRenderingContext : sig
   type t = [`ImageBitmapRenderingContext] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8891,6 +9437,146 @@ and[@js.scope "ImageBitmapRenderingContext"] ImageBitmapRenderingContext : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+module AnonymousInterface56 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ImageBitmapRenderingContext.t [@@js.get "prototype"]
+  val set_prototype: t -> ImageBitmapRenderingContext.t -> unit [@@js.set "prototype"]
+  val create: t -> ImageBitmapRenderingContext.t [@@js.apply_newable]
+end
+module AnonymousInterface55 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ImageBitmap.t [@@js.get "prototype"]
+  val set_prototype: t -> ImageBitmap.t -> unit [@@js.set "prototype"]
+  val create: t -> ImageBitmap.t [@@js.apply_newable]
+end
+module AnonymousInterface54 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBVersionChangeEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBVersionChangeEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:IDBVersionChangeEventInit.t -> unit -> IDBVersionChangeEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface53 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBTransaction.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBTransaction.t -> unit [@@js.set "prototype"]
+  val create: t -> IDBTransaction.t [@@js.apply_newable]
+end
+module AnonymousInterface52 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBRequest.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> IDBRequest.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> IDBRequest.t_0 [@@js.apply_newable]
+end
+module AnonymousInterface51 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBOpenDBRequest.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBOpenDBRequest.t -> unit [@@js.set "prototype"]
+  val create: t -> IDBOpenDBRequest.t [@@js.apply_newable]
+end
+module AnonymousInterface50 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBObjectStore.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBObjectStore.t -> unit [@@js.set "prototype"]
+  val create: t -> IDBObjectStore.t [@@js.apply_newable]
+end
+module AnonymousInterface5 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Cache.t [@@js.get "prototype"]
+  val set_prototype: t -> Cache.t -> unit [@@js.set "prototype"]
+  val create: t -> Cache.t [@@js.apply_newable]
+end
+module AnonymousInterface49 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBKeyRange.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBKeyRange.t -> unit [@@js.set "prototype"]
+  val create: t -> IDBKeyRange.t [@@js.apply_newable]
+  
+  (** Returns a new IDBKeyRange spanning from lower to upper. If lowerOpen is true, lower is not included in the range. If upperOpen is true, upper is not included in the range. *)
+  val bound: t -> lower:any -> upper:any -> ?lowerOpen:bool -> ?upperOpen:bool -> unit -> IDBKeyRange.t [@@js.call "bound"]
+  
+  (** Returns a new IDBKeyRange starting at key with no upper bound. If open is true, key is not included in the range. *)
+  val lowerBound: t -> lower:any -> ?open_:bool -> unit -> IDBKeyRange.t [@@js.call "lowerBound"]
+  
+  (** Returns a new IDBKeyRange spanning only key. *)
+  val only: t -> value:any -> IDBKeyRange.t [@@js.call "only"]
+  
+  (** Returns a new IDBKeyRange with no lower bound and ending at key. If open is true, key is not included in the range. *)
+  val upperBound: t -> upper:any -> ?open_:bool -> unit -> IDBKeyRange.t [@@js.call "upperBound"]
+end
+module AnonymousInterface48 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBIndex.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBIndex.t -> unit [@@js.set "prototype"]
+  val create: t -> IDBIndex.t [@@js.apply_newable]
+end
+module AnonymousInterface47 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBFactory.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBFactory.t -> unit [@@js.set "prototype"]
+  val create: t -> IDBFactory.t [@@js.apply_newable]
+end
+module AnonymousInterface46 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBDatabase.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBDatabase.t -> unit [@@js.set "prototype"]
+  val create: t -> IDBDatabase.t [@@js.apply_newable]
+end
+module AnonymousInterface45 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBCursorWithValue.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBCursorWithValue.t -> unit [@@js.set "prototype"]
+  val create: t -> IDBCursorWithValue.t [@@js.apply_newable]
+end
+module AnonymousInterface44 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> IDBCursor.t [@@js.get "prototype"]
+  val set_prototype: t -> IDBCursor.t -> unit [@@js.set "prototype"]
+  val create: t -> IDBCursor.t [@@js.apply_newable]
+end
+module AnonymousInterface43 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Headers.t [@@js.get "prototype"]
+  val set_prototype: t -> Headers.t -> unit [@@js.set "prototype"]
+  val create: t -> ?init:HeadersInit.t -> unit -> Headers.t [@@js.apply_newable]
+end
+module AnonymousInterface41 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> FormData.t [@@js.get "prototype"]
+  val set_prototype: t -> FormData.t -> unit [@@js.set "prototype"]
+  val create: t -> FormData.t [@@js.apply_newable]
+end
 module FontFaceSetLoadEventInit : sig
   type t = [`EventInit | `FontFaceSetLoadEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -8911,15 +9597,7 @@ module FontFaceSetLoadEventInit : sig
   val set_fontfaces: 'tags this -> FontFace.t list -> unit [@@js.set "fontfaces"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface40 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FontFaceSetLoadEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> FontFaceSetLoadEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:FontFaceSetLoadEventInit.t -> unit -> FontFaceSetLoadEvent.t [@@js.apply_newable]
-end
-and[@js.scope "FontFaceSetLoadEvent"] FontFaceSetLoadEvent : sig
+module[@js.scope "FontFaceSetLoadEvent"] FontFaceSetLoadEvent : sig
   type t = [`Event | `FontFaceSetLoadEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -8939,6 +9617,14 @@ and[@js.scope "FontFaceSetLoadEvent"] FontFaceSetLoadEvent : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:FontFaceSetLoadEventInit.t -> unit -> t [@@js.create]
+end
+module AnonymousInterface40 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> FontFaceSetLoadEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> FontFaceSetLoadEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:FontFaceSetLoadEventInit.t -> unit -> FontFaceSetLoadEvent.t [@@js.apply_newable]
 end
 module QueuingStrategyInit : sig
   type t = [`QueuingStrategyInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8972,17 +9658,9 @@ module QueuingStrategyInit : sig
   val set_highWaterMark: 'tags this -> float -> unit [@@js.set "highWaterMark"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface4 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ByteLengthQueuingStrategy.t [@@js.get "prototype"]
-  val set_prototype: t -> ByteLengthQueuingStrategy.t -> unit [@@js.set "prototype"]
-  val create: t -> init:QueuingStrategyInit.t -> ByteLengthQueuingStrategy.t [@@js.apply_newable]
-end
 
 (** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
-and[@js.scope "ByteLengthQueuingStrategy"] ByteLengthQueuingStrategy : sig
+module[@js.scope "ByteLengthQueuingStrategy"] ByteLengthQueuingStrategy : sig
   type t = [`ByteLengthQueuingStrategy | `QueuingStrategy of ArrayBufferView.t_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9004,17 +9682,33 @@ and[@js.scope "ByteLengthQueuingStrategy"] ByteLengthQueuingStrategy : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: QueuingStrategyInit.t -> t [@@js.create]
 end
-module rec AnonymousInterface37 : sig
+module AnonymousInterface4 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileReaderSync.t [@@js.get "prototype"]
-  val set_prototype: t -> FileReaderSync.t -> unit [@@js.set "prototype"]
-  val create: t -> FileReaderSync.t [@@js.apply_newable]
+  val get_prototype: t -> ByteLengthQueuingStrategy.t [@@js.get "prototype"]
+  val set_prototype: t -> ByteLengthQueuingStrategy.t -> unit [@@js.set "prototype"]
+  val create: t -> init:QueuingStrategyInit.t -> ByteLengthQueuingStrategy.t [@@js.apply_newable]
+end
+module AnonymousInterface39 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> FontFaceSet.t [@@js.get "prototype"]
+  val set_prototype: t -> FontFaceSet.t -> unit [@@js.set "prototype"]
+  val create: t -> initialFaces:FontFace.t list -> FontFaceSet.t [@@js.apply_newable]
+end
+module AnonymousInterface38 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> FontFace.t [@@js.get "prototype"]
+  val set_prototype: t -> FontFace.t -> unit [@@js.set "prototype"]
+  val create: t -> family:string -> source:BinaryData.t or_string -> ?descriptors:FontFaceDescriptors.t -> unit -> FontFace.t [@@js.apply_newable]
 end
 
 (** Allows to read File or Blob objects in a synchronous way. *)
-and[@js.scope "FileReaderSync"] FileReaderSync : sig
+module[@js.scope "FileReaderSync"] FileReaderSync : sig
   type t = [`FileReaderSync] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9040,17 +9734,28 @@ and[@js.scope "FileReaderSync"] FileReaderSync : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface35 : sig
+module AnonymousInterface37 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileList.t [@@js.get "prototype"]
-  val set_prototype: t -> FileList.t -> unit [@@js.set "prototype"]
-  val create: t -> FileList.t [@@js.apply_newable]
+  val get_prototype: t -> FileReaderSync.t [@@js.get "prototype"]
+  val set_prototype: t -> FileReaderSync.t -> unit [@@js.set "prototype"]
+  val create: t -> FileReaderSync.t [@@js.apply_newable]
+end
+module AnonymousInterface36 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> FileReader.t [@@js.get "prototype"]
+  val set_prototype: t -> FileReader.t -> unit [@@js.set "prototype"]
+  val create: t -> FileReader.t [@@js.apply_newable]
+  val get_DONE: t -> float [@@js.get "DONE"]
+  val get_EMPTY: t -> float [@@js.get "EMPTY"]
+  val get_LOADING: t -> float [@@js.get "LOADING"]
 end
 
 (** An object of this type is returned by the files property of the HTML <input> element; this lets you access the list of files selected with the <input type="file"> element. It's also used for a list of files dropped into web content when using the drag and drop API; see the DataTransfer object for details on this usage. *)
-and[@js.scope "FileList"] FileList : sig
+module[@js.scope "FileList"] FileList : sig
   type t = [`FileList | File.t ArrayLike.tags_1 | File.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9074,15 +9779,55 @@ and[@js.scope "FileList"] FileList : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface3 : sig
+module AnonymousInterface35 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> BroadcastChannel.t [@@js.get "prototype"]
-  val set_prototype: t -> BroadcastChannel.t -> unit [@@js.set "prototype"]
-  val create: t -> name:string -> BroadcastChannel.t [@@js.apply_newable]
+  val get_prototype: t -> FileList.t [@@js.get "prototype"]
+  val set_prototype: t -> FileList.t -> unit [@@js.set "prototype"]
+  val create: t -> FileList.t [@@js.apply_newable]
 end
-and[@js.scope "BroadcastChannel"] BroadcastChannel : sig
+module AnonymousInterface34 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> File.t [@@js.get "prototype"]
+  val set_prototype: t -> File.t -> unit [@@js.set "prototype"]
+  val create: t -> fileBits:BlobPart.t list -> fileName:string -> ?options:FilePropertyBag.t -> unit -> File.t [@@js.apply_newable]
+end
+module AnonymousInterface33 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> FetchEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> FetchEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> eventInitDict:FetchEventInit.t -> FetchEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface32 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ExtendableMessageEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> ExtendableMessageEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:ExtendableMessageEventInit.t -> unit -> ExtendableMessageEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface31 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ExtendableEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> ExtendableEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:ExtendableEventInit.t -> unit -> ExtendableEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface30 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> EventTarget.t [@@js.get "prototype"]
+  val set_prototype: t -> EventTarget.t -> unit [@@js.set "prototype"]
+  val create: t -> EventTarget.t [@@js.apply_newable]
+end
+module[@js.scope "BroadcastChannel"] BroadcastChannel : sig
   type t = [`BroadcastChannel | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9155,6 +9900,14 @@ and[@js.scope "BroadcastChannel"] BroadcastChannel : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: string -> t [@@js.create]
 end
+module AnonymousInterface3 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> BroadcastChannel.t [@@js.get "prototype"]
+  val set_prototype: t -> BroadcastChannel.t -> unit [@@js.set "prototype"]
+  val create: t -> name:string -> BroadcastChannel.t [@@js.apply_newable]
+end
 module EventSourceInit : sig
   type t = [`EventSourceInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -9175,18 +9928,7 @@ module EventSourceInit : sig
   val set_withCredentials: 'tags this -> bool -> unit [@@js.set "withCredentials"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface29 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> EventSource.t [@@js.get "prototype"]
-  val set_prototype: t -> EventSource.t -> unit [@@js.set "prototype"]
-  val create: t -> url:URL.t or_string -> ?eventSourceInitDict:EventSourceInit.t -> unit -> EventSource.t [@@js.apply_newable]
-  val get_CLOSED: t -> float [@@js.get "CLOSED"]
-  val get_CONNECTING: t -> float [@@js.get "CONNECTING"]
-  val get_OPEN: t -> float [@@js.get "OPEN"]
-end
-and[@js.scope "EventSource"] EventSource : sig
+module[@js.scope "EventSource"] EventSource : sig
   type t = [`EventSource | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9270,6 +10012,37 @@ and[@js.scope "EventSource"] EventSource : sig
   val connecting: unit -> float [@@js.get "CONNECTING"]
   val open_: unit -> float [@@js.get "OPEN"]
 end
+module AnonymousInterface29 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> EventSource.t [@@js.get "prototype"]
+  val set_prototype: t -> EventSource.t -> unit [@@js.set "prototype"]
+  val create: t -> url:URL.t or_string -> ?eventSourceInitDict:EventSourceInit.t -> unit -> EventSource.t [@@js.apply_newable]
+  val get_CLOSED: t -> float [@@js.get "CLOSED"]
+  val get_CONNECTING: t -> float [@@js.get "CONNECTING"]
+  val get_OPEN: t -> float [@@js.get "OPEN"]
+end
+module AnonymousInterface28 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Event.t [@@js.get "prototype"]
+  val set_prototype: t -> Event.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:EventInit.t -> unit -> Event.t [@@js.apply_newable]
+  val get_AT_TARGET: t -> float [@@js.get "AT_TARGET"]
+  val get_BUBBLING_PHASE: t -> float [@@js.get "BUBBLING_PHASE"]
+  val get_CAPTURING_PHASE: t -> float [@@js.get "CAPTURING_PHASE"]
+  val get_NONE: t -> float [@@js.get "NONE"]
+end
+module AnonymousInterface27 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> ErrorEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> ErrorEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:ErrorEventInit.t -> unit -> ErrorEvent.t [@@js.apply_newable]
+end
 module FrameRequestCallback : sig
   type t = [`FrameRequestCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -9309,17 +10082,9 @@ module AnimationFrameProvider : sig
   val requestAnimationFrame: 'tags this -> callback:FrameRequestCallback.t -> float [@@js.call "requestAnimationFrame"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface26 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DedicatedWorkerGlobalScope.t [@@js.get "prototype"]
-  val set_prototype: t -> DedicatedWorkerGlobalScope.t -> unit [@@js.set "prototype"]
-  val create: t -> DedicatedWorkerGlobalScope.t [@@js.apply_newable]
-end
 
 (** (the Worker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See also: Functions available to workers. *)
-and[@js.scope "DedicatedWorkerGlobalScope"] DedicatedWorkerGlobalScope : sig
+module[@js.scope "DedicatedWorkerGlobalScope"] DedicatedWorkerGlobalScope : sig
   type t = [`AnimationFrameProvider | `DedicatedWorkerGlobalScope | `EventTarget | `FontFaceSource | `WindowOrWorkerGlobalScope | `WorkerGlobalScope] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9395,6 +10160,22 @@ and[@js.scope "DedicatedWorkerGlobalScope"] DedicatedWorkerGlobalScope : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+module AnonymousInterface26 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> DedicatedWorkerGlobalScope.t [@@js.get "prototype"]
+  val set_prototype: t -> DedicatedWorkerGlobalScope.t -> unit [@@js.set "prototype"]
+  val create: t -> DedicatedWorkerGlobalScope.t [@@js.apply_newable]
+end
+module AnonymousInterface25 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> DOMStringList.t [@@js.get "prototype"]
+  val set_prototype: t -> DOMStringList.t -> unit [@@js.set "prototype"]
+  val create: t -> DOMStringList.t [@@js.apply_newable]
+end
 module DOMRectInit : sig
   type t = [`DOMRectInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -9421,16 +10202,7 @@ module DOMRectInit : sig
   val set_y: 'tags this -> float -> unit [@@js.set "y"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface24 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMRectReadOnly.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMRectReadOnly.t -> unit [@@js.set "prototype"]
-  val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> DOMRectReadOnly.t [@@js.apply_newable]
-  val fromRect: t -> ?other:DOMRectInit.t -> unit -> DOMRectReadOnly.t [@@js.call "fromRect"]
-end
-and[@js.scope "DOMRectReadOnly"] DOMRectReadOnly : sig
+module[@js.scope "DOMRectReadOnly"] DOMRectReadOnly : sig
   type t = [`DOMRectReadOnly] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9460,16 +10232,16 @@ and[@js.scope "DOMRectReadOnly"] DOMRectReadOnly : sig
   val create: ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> t [@@js.create]
   val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
 end
-module rec AnonymousInterface23 : sig
+module AnonymousInterface24 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMRect.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMRect.t -> unit [@@js.set "prototype"]
-  val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> DOMRect.t [@@js.apply_newable]
-  val fromRect: t -> ?other:DOMRectInit.t -> unit -> DOMRect.t [@@js.call "fromRect"]
+  val get_prototype: t -> DOMRectReadOnly.t [@@js.get "prototype"]
+  val set_prototype: t -> DOMRectReadOnly.t -> unit [@@js.set "prototype"]
+  val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> DOMRectReadOnly.t [@@js.apply_newable]
+  val fromRect: t -> ?other:DOMRectInit.t -> unit -> DOMRectReadOnly.t [@@js.call "fromRect"]
 end
-and[@js.scope "DOMRect"] DOMRect : sig
+module[@js.scope "DOMRect"] DOMRect : sig
   type t = [`DOMRect | `DOMRectReadOnly] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9497,6 +10269,15 @@ and[@js.scope "DOMRect"] DOMRect : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> t [@@js.create]
   val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
+end
+module AnonymousInterface23 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> DOMRect.t [@@js.get "prototype"]
+  val set_prototype: t -> DOMRect.t -> unit [@@js.set "prototype"]
+  val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> DOMRect.t [@@js.apply_newable]
+  val fromRect: t -> ?other:DOMRectInit.t -> unit -> DOMRect.t [@@js.call "fromRect"]
 end
 module DOMPointInit : sig
   type t = [`DOMPointInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -9590,25 +10371,7 @@ module DOMMatrixInit : sig
   val set_m44: 'tags this -> float -> unit [@@js.set "m44"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface20 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMPoint.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMPoint.t -> unit [@@js.set "prototype"]
-  val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> DOMPoint.t [@@js.apply_newable]
-  val fromPoint: t -> ?other:DOMPointInit.t -> unit -> DOMPoint.t [@@js.call "fromPoint"]
-end
-and AnonymousInterface21 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMPointReadOnly.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMPointReadOnly.t -> unit [@@js.set "prototype"]
-  val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> DOMPointReadOnly.t [@@js.apply_newable]
-  val fromPoint: t -> ?other:DOMPointInit.t -> unit -> DOMPointReadOnly.t [@@js.call "fromPoint"]
-end
-and[@js.scope "DOMPoint"] DOMPoint : sig
+module[@js.scope "DOMPoint"] rec DOMPoint : sig
   type t = [`DOMPoint | `DOMPointReadOnly] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9664,17 +10427,7 @@ and[@js.scope "DOMPointReadOnly"] DOMPointReadOnly : sig
   val create: ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> t [@@js.create]
   val fromPoint: ?other:DOMPointInit.t -> unit -> t [@@js.global "fromPoint"]
 end
-module rec AnonymousInterface22 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMQuad.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMQuad.t -> unit [@@js.set "prototype"]
-  val create: t -> ?p1:DOMPointInit.t -> ?p2:DOMPointInit.t -> ?p3:DOMPointInit.t -> ?p4:DOMPointInit.t -> unit -> DOMQuad.t [@@js.apply_newable]
-  val fromQuad: t -> ?other:DOMQuadInit.t -> unit -> DOMQuad.t [@@js.call "fromQuad"]
-  val fromRect: t -> ?other:DOMRectInit.t -> unit -> DOMQuad.t [@@js.call "fromRect"]
-end
-and[@js.scope "DOMQuad"] DOMQuad : sig
+module[@js.scope "DOMQuad"] DOMQuad : sig
   type t = [`DOMQuad] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9702,29 +10455,43 @@ and[@js.scope "DOMQuad"] DOMQuad : sig
   val fromQuad: ?other:DOMQuadInit.t -> unit -> t [@@js.global "fromQuad"]
   val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
 end
-module rec AnonymousInterface18 : sig
+module AnonymousInterface22 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMMatrix.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMMatrix.t -> unit [@@js.set "prototype"]
-  val create: t -> ?init:float list or_string -> unit -> DOMMatrix.t [@@js.apply_newable]
-  val fromFloat32Array: t -> array32:Float32Array.t_0 -> DOMMatrix.t [@@js.call "fromFloat32Array"]
-  val fromFloat64Array: t -> array64:Float64Array.t_0 -> DOMMatrix.t [@@js.call "fromFloat64Array"]
-  val fromMatrix: t -> ?other:DOMMatrixInit.t -> unit -> DOMMatrix.t [@@js.call "fromMatrix"]
+  val get_prototype: t -> DOMQuad.t [@@js.get "prototype"]
+  val set_prototype: t -> DOMQuad.t -> unit [@@js.set "prototype"]
+  val create: t -> ?p1:DOMPointInit.t -> ?p2:DOMPointInit.t -> ?p3:DOMPointInit.t -> ?p4:DOMPointInit.t -> unit -> DOMQuad.t [@@js.apply_newable]
+  val fromQuad: t -> ?other:DOMQuadInit.t -> unit -> DOMQuad.t [@@js.call "fromQuad"]
+  val fromRect: t -> ?other:DOMRectInit.t -> unit -> DOMQuad.t [@@js.call "fromRect"]
 end
-and AnonymousInterface19 : sig
+module AnonymousInterface21 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMMatrixReadOnly.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMMatrixReadOnly.t -> unit [@@js.set "prototype"]
-  val create: t -> ?init:float list or_string -> unit -> DOMMatrixReadOnly.t [@@js.apply_newable]
-  val fromFloat32Array: t -> array32:Float32Array.t_0 -> DOMMatrixReadOnly.t [@@js.call "fromFloat32Array"]
-  val fromFloat64Array: t -> array64:Float64Array.t_0 -> DOMMatrixReadOnly.t [@@js.call "fromFloat64Array"]
-  val fromMatrix: t -> ?other:DOMMatrixInit.t -> unit -> DOMMatrixReadOnly.t [@@js.call "fromMatrix"]
+  val get_prototype: t -> DOMPointReadOnly.t [@@js.get "prototype"]
+  val set_prototype: t -> DOMPointReadOnly.t -> unit [@@js.set "prototype"]
+  val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> DOMPointReadOnly.t [@@js.apply_newable]
+  val fromPoint: t -> ?other:DOMPointInit.t -> unit -> DOMPointReadOnly.t [@@js.call "fromPoint"]
 end
-and[@js.scope "DOMMatrix"] DOMMatrix : sig
+module AnonymousInterface20 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> DOMPoint.t [@@js.get "prototype"]
+  val set_prototype: t -> DOMPoint.t -> unit [@@js.set "prototype"]
+  val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> DOMPoint.t [@@js.apply_newable]
+  val fromPoint: t -> ?other:DOMPointInit.t -> unit -> DOMPoint.t [@@js.call "fromPoint"]
+end
+module AnonymousInterface2 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Blob.t [@@js.get "prototype"]
+  val set_prototype: t -> Blob.t -> unit [@@js.set "prototype"]
+  val create: t -> ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> Blob.t [@@js.apply_newable]
+end
+module[@js.scope "DOMMatrix"] rec DOMMatrix : sig
   type t = [`DOMMatrix | `DOMMatrixReadOnly] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -9868,6 +10635,61 @@ and[@js.scope "DOMMatrixReadOnly"] DOMMatrixReadOnly : sig
   val fromFloat64Array: Float64Array.t_0 -> t [@@js.global "fromFloat64Array"]
   val fromMatrix: ?other:DOMMatrixInit.t -> unit -> t [@@js.global "fromMatrix"]
 end
+module AnonymousInterface19 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> DOMMatrixReadOnly.t [@@js.get "prototype"]
+  val set_prototype: t -> DOMMatrixReadOnly.t -> unit [@@js.set "prototype"]
+  val create: t -> ?init:float list or_string -> unit -> DOMMatrixReadOnly.t [@@js.apply_newable]
+  val fromFloat32Array: t -> array32:Float32Array.t_0 -> DOMMatrixReadOnly.t [@@js.call "fromFloat32Array"]
+  val fromFloat64Array: t -> array64:Float64Array.t_0 -> DOMMatrixReadOnly.t [@@js.call "fromFloat64Array"]
+  val fromMatrix: t -> ?other:DOMMatrixInit.t -> unit -> DOMMatrixReadOnly.t [@@js.call "fromMatrix"]
+end
+module AnonymousInterface18 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> DOMMatrix.t [@@js.get "prototype"]
+  val set_prototype: t -> DOMMatrix.t -> unit [@@js.set "prototype"]
+  val create: t -> ?init:float list or_string -> unit -> DOMMatrix.t [@@js.apply_newable]
+  val fromFloat32Array: t -> array32:Float32Array.t_0 -> DOMMatrix.t [@@js.call "fromFloat32Array"]
+  val fromFloat64Array: t -> array64:Float64Array.t_0 -> DOMMatrix.t [@@js.call "fromFloat64Array"]
+  val fromMatrix: t -> ?other:DOMMatrixInit.t -> unit -> DOMMatrix.t [@@js.call "fromMatrix"]
+end
+module AnonymousInterface17 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> DOMException.t [@@js.get "prototype"]
+  val set_prototype: t -> DOMException.t -> unit [@@js.set "prototype"]
+  val create: t -> ?message:string -> ?name:string -> unit -> DOMException.t [@@js.apply_newable]
+  val get_ABORT_ERR: t -> float [@@js.get "ABORT_ERR"]
+  val get_DATA_CLONE_ERR: t -> float [@@js.get "DATA_CLONE_ERR"]
+  val get_DOMSTRING_SIZE_ERR: t -> float [@@js.get "DOMSTRING_SIZE_ERR"]
+  val get_HIERARCHY_REQUEST_ERR: t -> float [@@js.get "HIERARCHY_REQUEST_ERR"]
+  val get_INDEX_SIZE_ERR: t -> float [@@js.get "INDEX_SIZE_ERR"]
+  val get_INUSE_ATTRIBUTE_ERR: t -> float [@@js.get "INUSE_ATTRIBUTE_ERR"]
+  val get_INVALID_ACCESS_ERR: t -> float [@@js.get "INVALID_ACCESS_ERR"]
+  val get_INVALID_CHARACTER_ERR: t -> float [@@js.get "INVALID_CHARACTER_ERR"]
+  val get_INVALID_MODIFICATION_ERR: t -> float [@@js.get "INVALID_MODIFICATION_ERR"]
+  val get_INVALID_NODE_TYPE_ERR: t -> float [@@js.get "INVALID_NODE_TYPE_ERR"]
+  val get_INVALID_STATE_ERR: t -> float [@@js.get "INVALID_STATE_ERR"]
+  val get_NAMESPACE_ERR: t -> float [@@js.get "NAMESPACE_ERR"]
+  val get_NETWORK_ERR: t -> float [@@js.get "NETWORK_ERR"]
+  val get_NOT_FOUND_ERR: t -> float [@@js.get "NOT_FOUND_ERR"]
+  val get_NOT_SUPPORTED_ERR: t -> float [@@js.get "NOT_SUPPORTED_ERR"]
+  val get_NO_DATA_ALLOWED_ERR: t -> float [@@js.get "NO_DATA_ALLOWED_ERR"]
+  val get_NO_MODIFICATION_ALLOWED_ERR: t -> float [@@js.get "NO_MODIFICATION_ALLOWED_ERR"]
+  val get_QUOTA_EXCEEDED_ERR: t -> float [@@js.get "QUOTA_EXCEEDED_ERR"]
+  val get_SECURITY_ERR: t -> float [@@js.get "SECURITY_ERR"]
+  val get_SYNTAX_ERR: t -> float [@@js.get "SYNTAX_ERR"]
+  val get_TIMEOUT_ERR: t -> float [@@js.get "TIMEOUT_ERR"]
+  val get_TYPE_MISMATCH_ERR: t -> float [@@js.get "TYPE_MISMATCH_ERR"]
+  val get_URL_MISMATCH_ERR: t -> float [@@js.get "URL_MISMATCH_ERR"]
+  val get_VALIDATION_ERR: t -> float [@@js.get "VALIDATION_ERR"]
+  val get_WRONG_DOCUMENT_ERR: t -> float [@@js.get "WRONG_DOCUMENT_ERR"]
+end
 module CustomEventInit : sig
   type 'T t = [`CustomEventInit of 'T | `EventInit] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
   type 'T t_1 = 'T t
@@ -9893,15 +10715,7 @@ module CustomEventInit : sig
   val set_detail: ('tags, 'T) this -> 'T -> unit [@@js.set "detail"]
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface16 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CustomEvent.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> CustomEvent.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:'T CustomEventInit.t -> unit -> 'T CustomEvent.t [@@js.apply_newable]
-end
-and[@js.scope "CustomEvent"] CustomEvent : sig
+module[@js.scope "CustomEvent"] CustomEvent : sig
   type 'T t = [`CustomEvent of 'T | `Event] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
   type 'T t_1 = 'T t
   type t_0 = any t
@@ -9932,6 +10746,107 @@ and[@js.scope "CustomEvent"] CustomEvent : sig
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:'T CustomEventInit.t -> unit -> 'T t [@@js.create]
 end
+module AnonymousInterface16 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> CustomEvent.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> CustomEvent.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:'T CustomEventInit.t -> unit -> 'T CustomEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface15 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> CryptoKey.t [@@js.get "prototype"]
+  val set_prototype: t -> CryptoKey.t -> unit [@@js.set "prototype"]
+  val create: t -> CryptoKey.t [@@js.apply_newable]
+end
+module AnonymousInterface14 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> Crypto.t [@@js.get "prototype"]
+  val set_prototype: t -> Crypto.t -> unit [@@js.set "prototype"]
+  val create: t -> Crypto.t [@@js.apply_newable]
+end
+module AnonymousInterface139 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> XMLHttpRequestUpload.t [@@js.get "prototype"]
+  val set_prototype: t -> XMLHttpRequestUpload.t -> unit [@@js.set "prototype"]
+  val create: t -> XMLHttpRequestUpload.t [@@js.apply_newable]
+end
+module AnonymousInterface138 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> XMLHttpRequestEventTarget.t [@@js.get "prototype"]
+  val set_prototype: t -> XMLHttpRequestEventTarget.t -> unit [@@js.set "prototype"]
+  val create: t -> XMLHttpRequestEventTarget.t [@@js.apply_newable]
+end
+module AnonymousInterface137 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> XMLHttpRequest.t [@@js.get "prototype"]
+  val set_prototype: t -> XMLHttpRequest.t -> unit [@@js.set "prototype"]
+  val create: t -> XMLHttpRequest.t [@@js.apply_newable]
+  val get_DONE: t -> float [@@js.get "DONE"]
+  val get_HEADERS_RECEIVED: t -> float [@@js.get "HEADERS_RECEIVED"]
+  val get_LOADING: t -> float [@@js.get "LOADING"]
+  val get_OPENED: t -> float [@@js.get "OPENED"]
+  val get_UNSENT: t -> float [@@js.get "UNSENT"]
+end
+module AnonymousInterface136 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WritableStreamDefaultWriter.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> WritableStreamDefaultWriter.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> stream:'W WritableStream.t -> 'W WritableStreamDefaultWriter.t [@@js.apply_newable]
+end
+module AnonymousInterface135 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WritableStreamDefaultController.t [@@js.get "prototype"]
+  val set_prototype: t -> WritableStreamDefaultController.t -> unit [@@js.set "prototype"]
+  val create: t -> WritableStreamDefaultController.t [@@js.apply_newable]
+end
+module AnonymousInterface134 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WritableStream.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> WritableStream.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> ?underlyingSink:'W UnderlyingSink.t -> ?strategy:'W QueuingStrategy.t -> unit -> 'W WritableStream.t [@@js.apply_newable]
+end
+module AnonymousInterface133 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WorkerNavigator.t [@@js.get "prototype"]
+  val set_prototype: t -> WorkerNavigator.t -> unit [@@js.set "prototype"]
+  val create: t -> WorkerNavigator.t [@@js.apply_newable]
+end
+module AnonymousInterface132 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WorkerLocation.t [@@js.get "prototype"]
+  val set_prototype: t -> WorkerLocation.t -> unit [@@js.set "prototype"]
+  val create: t -> WorkerLocation.t [@@js.apply_newable]
+end
+module AnonymousInterface131 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WorkerGlobalScope.t [@@js.get "prototype"]
+  val set_prototype: t -> WorkerGlobalScope.t -> unit [@@js.set "prototype"]
+  val create: t -> WorkerGlobalScope.t [@@js.apply_newable]
+end
 module WorkerOptions : sig
   type t = [`WorkerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -9956,17 +10871,9 @@ module WorkerOptions : sig
   val set_type: 'tags this -> WorkerType.t -> unit [@@js.set "type"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface130 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Worker.t [@@js.get "prototype"]
-  val set_prototype: t -> Worker.t -> unit [@@js.set "prototype"]
-  val create: t -> scriptURL:URL.t or_string -> ?options:WorkerOptions.t -> unit -> Worker.t [@@js.apply_newable]
-end
 
 (** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. *)
-and[@js.scope "Worker"] Worker : sig
+module[@js.scope "Worker"] Worker : sig
   type t = [`AbstractWorker | `EventTarget | `Worker] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -10039,17 +10946,17 @@ and[@js.scope "Worker"] Worker : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: scriptURL:URL.t or_string -> ?options:WorkerOptions.t -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface13 : sig
+module AnonymousInterface130 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CountQueuingStrategy.t [@@js.get "prototype"]
-  val set_prototype: t -> CountQueuingStrategy.t -> unit [@@js.set "prototype"]
-  val create: t -> init:QueuingStrategyInit.t -> CountQueuingStrategy.t [@@js.apply_newable]
+  val get_prototype: t -> Worker.t [@@js.get "prototype"]
+  val set_prototype: t -> Worker.t -> unit [@@js.set "prototype"]
+  val create: t -> scriptURL:URL.t or_string -> ?options:WorkerOptions.t -> unit -> Worker.t [@@js.apply_newable]
 end
 
 (** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
-and[@js.scope "CountQueuingStrategy"] CountQueuingStrategy : sig
+module[@js.scope "CountQueuingStrategy"] CountQueuingStrategy : sig
   type t = [`CountQueuingStrategy | `QueuingStrategy of any] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -10071,6 +10978,22 @@ and[@js.scope "CountQueuingStrategy"] CountQueuingStrategy : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: QueuingStrategyInit.t -> t [@@js.create]
 end
+module AnonymousInterface13 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> CountQueuingStrategy.t [@@js.get "prototype"]
+  val set_prototype: t -> CountQueuingStrategy.t -> unit [@@js.set "prototype"]
+  val create: t -> init:QueuingStrategyInit.t -> CountQueuingStrategy.t [@@js.apply_newable]
+end
+module AnonymousInterface129 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WindowClient.t [@@js.get "prototype"]
+  val set_prototype: t -> WindowClient.t -> unit [@@js.set "prototype"]
+  val create: t -> WindowClient.t [@@js.apply_newable]
+end
 module BinaryType : sig
   type t = ([`L_s37_arraybuffer[@js "arraybuffer"] | `L_s44_blob[@js "blob"]] [@js.enum])
   type t_0 = t
@@ -10079,21 +11002,9 @@ module BinaryType : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module rec AnonymousInterface128 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebSocket.t [@@js.get "prototype"]
-  val set_prototype: t -> WebSocket.t -> unit [@@js.set "prototype"]
-  val create: t -> url:URL.t or_string -> ?protocols:string list or_string -> unit -> WebSocket.t [@@js.apply_newable]
-  val get_CLOSED: t -> float [@@js.get "CLOSED"]
-  val get_CLOSING: t -> float [@@js.get "CLOSING"]
-  val get_CONNECTING: t -> float [@@js.get "CONNECTING"]
-  val get_OPEN: t -> float [@@js.get "OPEN"]
-end
 
 (** Provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection. *)
-and[@js.scope "WebSocket"] WebSocket : sig
+module[@js.scope "WebSocket"] WebSocket : sig
   type t = [`EventTarget | `WebSocket] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -10155,7 +11066,7 @@ and[@js.scope "WebSocket"] WebSocket : sig
   val close: 'tags this -> ?code:float -> ?reason:string -> unit -> unit [@@js.call "close"]
   
   (** Transmits data using the WebSocket connection. data can be a string, a Blob, an ArrayBuffer, or an ArrayBufferView. *)
-  val send: 'tags this -> data:(ArrayBufferLike.t_0, ArrayBufferView.t_0, Blob.t) union3 or_string -> unit [@@js.call "send"]
+  val send: 'tags this -> data:Blob.t or_string -> unit [@@js.call "send"]
   val get_CLOSED: 'tags this -> float [@@js.get "CLOSED"]
   val get_CLOSING: 'tags this -> float [@@js.get "CLOSING"]
   val get_CONNECTING: 'tags this -> float [@@js.get "CONNECTING"]
@@ -10208,17 +11119,49 @@ and[@js.scope "WebSocket"] WebSocket : sig
   val connecting: unit -> float [@@js.get "CONNECTING"]
   val open_: unit -> float [@@js.get "OPEN"]
 end
-module rec AnonymousInterface126 : sig
+module AnonymousInterface128 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLUniformLocation.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLUniformLocation.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLUniformLocation.t [@@js.apply_newable]
+  val get_prototype: t -> WebSocket.t [@@js.get "prototype"]
+  val set_prototype: t -> WebSocket.t -> unit [@@js.set "prototype"]
+  val create: t -> url:URL.t or_string -> ?protocols:string list or_string -> unit -> WebSocket.t [@@js.apply_newable]
+  val get_CLOSED: t -> float [@@js.get "CLOSED"]
+  val get_CLOSING: t -> float [@@js.get "CLOSING"]
+  val get_CONNECTING: t -> float [@@js.get "CONNECTING"]
+  val get_OPEN: t -> float [@@js.get "OPEN"]
+end
+module[@js.scope "WebGLVertexArrayObject"] WebGLVertexArrayObject : sig
+  type t = [`WebGLVertexArrayObject] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WebGLVertexArrayObject]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebGLVertexArrayObject]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebGLVertexArrayObject ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AnonymousInterface127 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLVertexArrayObject.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLVertexArrayObject.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLVertexArrayObject.t [@@js.apply_newable]
 end
 
 (** Part of the WebGL API and represents the location of a uniform variable in a shader program. *)
-and[@js.scope "WebGLUniformLocation"] WebGLUniformLocation : sig
+module[@js.scope "WebGLUniformLocation"] WebGLUniformLocation : sig
   type t = [`WebGLUniformLocation] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -10238,16 +11181,201 @@ and[@js.scope "WebGLUniformLocation"] WebGLUniformLocation : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module TexImageSource : sig
-  type t = (ImageBitmap.t, ImageData.t, OffscreenCanvas.t) union3
+module AnonymousInterface126 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLUniformLocation.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLUniformLocation.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLUniformLocation.t [@@js.apply_newable]
+end
+module[@js.scope "WebGLTransformFeedback"] WebGLTransformFeedback : sig
+  type t = [`WebGLTransformFeedback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WebGLTransformFeedback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebGLTransformFeedback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebGLTransformFeedback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AnonymousInterface125 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLTransformFeedback.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLTransformFeedback.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLTransformFeedback.t [@@js.apply_newable]
+end
+
+(** Part of the WebGL API and represents an opaque texture object providing storage and state for texturing operations. *)
+module[@js.scope "WebGLTexture"] WebGLTexture : sig
+  type t = [`WebGLTexture] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WebGLTexture]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebGLTexture]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebGLTexture ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AnonymousInterface124 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLTexture.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLTexture.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLTexture.t [@@js.apply_newable]
+end
+module[@js.scope "WebGLSync"] WebGLSync : sig
+  type t = [`WebGLSync] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WebGLSync]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebGLSync]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebGLSync ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AnonymousInterface123 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLSync.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLSync.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLSync.t [@@js.apply_newable]
+end
+module GLint : sig
+  type t = float
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-module GLint : sig
-  type t = float
+
+(** Part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getShaderPrecisionFormat() method. *)
+module[@js.scope "WebGLShaderPrecisionFormat"] WebGLShaderPrecisionFormat : sig
+  type t = [`WebGLShaderPrecisionFormat] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WebGLShaderPrecisionFormat]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebGLShaderPrecisionFormat]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebGLShaderPrecisionFormat ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_precision: 'tags this -> GLint.t [@@js.get "precision"]
+  val get_rangeMax: 'tags this -> GLint.t [@@js.get "rangeMax"]
+  val get_rangeMin: 'tags this -> GLint.t [@@js.get "rangeMin"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AnonymousInterface122 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLShaderPrecisionFormat.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLShaderPrecisionFormat.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLShaderPrecisionFormat.t [@@js.apply_newable]
+end
+
+(** The WebGLShader is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders. *)
+module[@js.scope "WebGLShader"] WebGLShader : sig
+  type t = [`WebGLShader] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WebGLShader]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebGLShader]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebGLShader ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AnonymousInterface121 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLShader.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLShader.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLShader.t [@@js.apply_newable]
+end
+module[@js.scope "WebGLSampler"] WebGLSampler : sig
+  type t = [`WebGLSampler] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WebGLSampler]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebGLSampler]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebGLSampler ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AnonymousInterface120 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLSampler.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLSampler.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLSampler.t [@@js.apply_newable]
+end
+module TexImageSource : sig
+  type t = (ImageBitmap.t, ImageData.t, OffscreenCanvas.t) union3
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10360,50 +11488,9 @@ module WebGLRenderingContextOverloads : sig
   val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface122 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLShaderPrecisionFormat.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLShaderPrecisionFormat.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLShaderPrecisionFormat.t [@@js.apply_newable]
-end
-
-(** Part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getShaderPrecisionFormat() method. *)
-and[@js.scope "WebGLShaderPrecisionFormat"] WebGLShaderPrecisionFormat : sig
-  type t = [`WebGLShaderPrecisionFormat] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WebGLShaderPrecisionFormat]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WebGLShaderPrecisionFormat]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WebGLShaderPrecisionFormat ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_precision: 'tags this -> GLint.t [@@js.get "precision"]
-  val get_rangeMax: 'tags this -> GLint.t [@@js.get "rangeMax"]
-  val get_rangeMin: 'tags this -> GLint.t [@@js.get "rangeMin"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface118 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLRenderbuffer.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLRenderbuffer.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLRenderbuffer.t [@@js.apply_newable]
-end
 
 (** Part of the WebGL API and represents a buffer that can contain an image, or can be source or target of an rendering operation. *)
-and[@js.scope "WebGLRenderbuffer"] WebGLRenderbuffer : sig
+module[@js.scope "WebGLRenderbuffer"] WebGLRenderbuffer : sig
   type t = [`WebGLRenderbuffer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -10423,17 +11510,9 @@ and[@js.scope "WebGLRenderbuffer"] WebGLRenderbuffer : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface115 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLFramebuffer.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLFramebuffer.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLFramebuffer.t [@@js.apply_newable]
-end
 
 (** Part of the WebGL API and represents a collection of buffers that serve as a rendering destination. *)
-and[@js.scope "WebGLFramebuffer"] WebGLFramebuffer : sig
+module[@js.scope "WebGLFramebuffer"] WebGLFramebuffer : sig
   type t = [`WebGLFramebuffer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -10591,36 +11670,6 @@ module WEBGL_depth_texture : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_UNSIGNED_INT_24_8_WEBGL: 'tags this -> GLenum.t [@@js.get "UNSIGNED_INT_24_8_WEBGL"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface121 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLShader.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLShader.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLShader.t [@@js.apply_newable]
-end
-
-(** The WebGLShader is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders. *)
-and[@js.scope "WebGLShader"] WebGLShader : sig
-  type t = [`WebGLShader] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WebGLShader]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WebGLShader]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WebGLShader ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
 end
 module WEBGL_debug_shaders : sig
   type t = [`WEBGL_debug_shaders] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10845,36 +11894,6 @@ module WEBGL_color_buffer_float : sig
   val get_RGBA32F_EXT: 'tags this -> GLenum.t [@@js.get "RGBA32F_EXT"]
   val get_UNSIGNED_NORMALIZED_EXT: 'tags this -> GLenum.t [@@js.get "UNSIGNED_NORMALIZED_EXT"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface124 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLTexture.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLTexture.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLTexture.t [@@js.apply_newable]
-end
-
-(** Part of the WebGL API and represents an opaque texture object providing storage and state for texturing operations. *)
-and[@js.scope "WebGLTexture"] WebGLTexture : sig
-  type t = [`WebGLTexture] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WebGLTexture]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WebGLTexture]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WebGLTexture ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
 end
 module OVR_multiview2 : sig
   type t = [`OVR_multiview2] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11249,17 +12268,9 @@ module EXT_blend_minmax : sig
   val get_MIN_EXT: 'tags this -> GLenum.t [@@js.get "MIN_EXT"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface116 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLProgram.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLProgram.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLProgram.t [@@js.apply_newable]
-end
 
 (** The WebGLProgram is part of the WebGL API and is a combination of two compiled WebGLShaders consisting of a vertex shader and a fragment shader (both written in GLSL). *)
-and[@js.scope "WebGLProgram"] WebGLProgram : sig
+module[@js.scope "WebGLProgram"] WebGLProgram : sig
   type t = [`WebGLProgram] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -11279,17 +12290,9 @@ and[@js.scope "WebGLProgram"] WebGLProgram : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface113 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLBuffer.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLBuffer.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLBuffer.t [@@js.apply_newable]
-end
 
 (** Part of the WebGL API and represents an opaque buffer object storing data such as vertices or colors. *)
-and[@js.scope "WebGLBuffer"] WebGLBuffer : sig
+module[@js.scope "WebGLBuffer"] WebGLBuffer : sig
   type t = [`WebGLBuffer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -11309,17 +12312,9 @@ and[@js.scope "WebGLBuffer"] WebGLBuffer : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module rec AnonymousInterface112 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLActiveInfo.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLActiveInfo.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLActiveInfo.t [@@js.apply_newable]
-end
 
 (** Part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getActiveAttrib() and WebGLRenderingContext.getActiveUniform() methods. *)
-and[@js.scope "WebGLActiveInfo"] WebGLActiveInfo : sig
+module[@js.scope "WebGLActiveInfo"] WebGLActiveInfo : sig
   type t = [`WebGLActiveInfo] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -11850,313 +12845,9 @@ module WebGLRenderingContextBase : sig
   val get_ZERO: 'tags this -> GLenum.t [@@js.get "ZERO"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface119 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLRenderingContext.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLRenderingContext.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLRenderingContext.t [@@js.apply_newable]
-  val get_ACTIVE_ATTRIBUTES: t -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
-  val get_ACTIVE_TEXTURE: t -> GLenum.t [@@js.get "ACTIVE_TEXTURE"]
-  val get_ACTIVE_UNIFORMS: t -> GLenum.t [@@js.get "ACTIVE_UNIFORMS"]
-  val get_ALIASED_LINE_WIDTH_RANGE: t -> GLenum.t [@@js.get "ALIASED_LINE_WIDTH_RANGE"]
-  val get_ALIASED_POINT_SIZE_RANGE: t -> GLenum.t [@@js.get "ALIASED_POINT_SIZE_RANGE"]
-  val get_ALPHA: t -> GLenum.t [@@js.get "ALPHA"]
-  val get_ALPHA_BITS: t -> GLenum.t [@@js.get "ALPHA_BITS"]
-  val get_ALWAYS: t -> GLenum.t [@@js.get "ALWAYS"]
-  val get_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ARRAY_BUFFER"]
-  val get_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ARRAY_BUFFER_BINDING"]
-  val get_ATTACHED_SHADERS: t -> GLenum.t [@@js.get "ATTACHED_SHADERS"]
-  val get_BACK: t -> GLenum.t [@@js.get "BACK"]
-  val get_BLEND: t -> GLenum.t [@@js.get "BLEND"]
-  val get_BLEND_COLOR: t -> GLenum.t [@@js.get "BLEND_COLOR"]
-  val get_BLEND_DST_ALPHA: t -> GLenum.t [@@js.get "BLEND_DST_ALPHA"]
-  val get_BLEND_DST_RGB: t -> GLenum.t [@@js.get "BLEND_DST_RGB"]
-  val get_BLEND_EQUATION: t -> GLenum.t [@@js.get "BLEND_EQUATION"]
-  val get_BLEND_EQUATION_ALPHA: t -> GLenum.t [@@js.get "BLEND_EQUATION_ALPHA"]
-  val get_BLEND_EQUATION_RGB: t -> GLenum.t [@@js.get "BLEND_EQUATION_RGB"]
-  val get_BLEND_SRC_ALPHA: t -> GLenum.t [@@js.get "BLEND_SRC_ALPHA"]
-  val get_BLEND_SRC_RGB: t -> GLenum.t [@@js.get "BLEND_SRC_RGB"]
-  val get_BLUE_BITS: t -> GLenum.t [@@js.get "BLUE_BITS"]
-  val get_BOOL: t -> GLenum.t [@@js.get "BOOL"]
-  val get_BOOL_VEC2: t -> GLenum.t [@@js.get "BOOL_VEC2"]
-  val get_BOOL_VEC3: t -> GLenum.t [@@js.get "BOOL_VEC3"]
-  val get_BOOL_VEC4: t -> GLenum.t [@@js.get "BOOL_VEC4"]
-  val get_BROWSER_DEFAULT_WEBGL: t -> GLenum.t [@@js.get "BROWSER_DEFAULT_WEBGL"]
-  val get_BUFFER_SIZE: t -> GLenum.t [@@js.get "BUFFER_SIZE"]
-  val get_BUFFER_USAGE: t -> GLenum.t [@@js.get "BUFFER_USAGE"]
-  val get_BYTE: t -> GLenum.t [@@js.get "BYTE"]
-  val get_CCW: t -> GLenum.t [@@js.get "CCW"]
-  val get_CLAMP_TO_EDGE: t -> GLenum.t [@@js.get "CLAMP_TO_EDGE"]
-  val get_COLOR_ATTACHMENT0: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT0"]
-  val get_COLOR_BUFFER_BIT: t -> GLenum.t [@@js.get "COLOR_BUFFER_BIT"]
-  val get_COLOR_CLEAR_VALUE: t -> GLenum.t [@@js.get "COLOR_CLEAR_VALUE"]
-  val get_COLOR_WRITEMASK: t -> GLenum.t [@@js.get "COLOR_WRITEMASK"]
-  val get_COMPILE_STATUS: t -> GLenum.t [@@js.get "COMPILE_STATUS"]
-  val get_COMPRESSED_TEXTURE_FORMATS: t -> GLenum.t [@@js.get "COMPRESSED_TEXTURE_FORMATS"]
-  val get_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "CONSTANT_ALPHA"]
-  val get_CONSTANT_COLOR: t -> GLenum.t [@@js.get "CONSTANT_COLOR"]
-  val get_CONTEXT_LOST_WEBGL: t -> GLenum.t [@@js.get "CONTEXT_LOST_WEBGL"]
-  val get_CULL_FACE: t -> GLenum.t [@@js.get "CULL_FACE"]
-  val get_CULL_FACE_MODE: t -> GLenum.t [@@js.get "CULL_FACE_MODE"]
-  val get_CURRENT_PROGRAM: t -> GLenum.t [@@js.get "CURRENT_PROGRAM"]
-  val get_CURRENT_VERTEX_ATTRIB: t -> GLenum.t [@@js.get "CURRENT_VERTEX_ATTRIB"]
-  val get_CW: t -> GLenum.t [@@js.get "CW"]
-  val get_DECR: t -> GLenum.t [@@js.get "DECR"]
-  val get_DECR_WRAP: t -> GLenum.t [@@js.get "DECR_WRAP"]
-  val get_DELETE_STATUS: t -> GLenum.t [@@js.get "DELETE_STATUS"]
-  val get_DEPTH_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_ATTACHMENT"]
-  val get_DEPTH_BITS: t -> GLenum.t [@@js.get "DEPTH_BITS"]
-  val get_DEPTH_BUFFER_BIT: t -> GLenum.t [@@js.get "DEPTH_BUFFER_BIT"]
-  val get_DEPTH_CLEAR_VALUE: t -> GLenum.t [@@js.get "DEPTH_CLEAR_VALUE"]
-  val get_DEPTH_COMPONENT: t -> GLenum.t [@@js.get "DEPTH_COMPONENT"]
-  val get_DEPTH_COMPONENT16: t -> GLenum.t [@@js.get "DEPTH_COMPONENT16"]
-  val get_DEPTH_FUNC: t -> GLenum.t [@@js.get "DEPTH_FUNC"]
-  val get_DEPTH_RANGE: t -> GLenum.t [@@js.get "DEPTH_RANGE"]
-  val get_DEPTH_STENCIL: t -> GLenum.t [@@js.get "DEPTH_STENCIL"]
-  val get_DEPTH_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_STENCIL_ATTACHMENT"]
-  val get_DEPTH_TEST: t -> GLenum.t [@@js.get "DEPTH_TEST"]
-  val get_DEPTH_WRITEMASK: t -> GLenum.t [@@js.get "DEPTH_WRITEMASK"]
-  val get_DITHER: t -> GLenum.t [@@js.get "DITHER"]
-  val get_DONT_CARE: t -> GLenum.t [@@js.get "DONT_CARE"]
-  val get_DST_ALPHA: t -> GLenum.t [@@js.get "DST_ALPHA"]
-  val get_DST_COLOR: t -> GLenum.t [@@js.get "DST_COLOR"]
-  val get_DYNAMIC_DRAW: t -> GLenum.t [@@js.get "DYNAMIC_DRAW"]
-  val get_ELEMENT_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER"]
-  val get_ELEMENT_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER_BINDING"]
-  val get_EQUAL: t -> GLenum.t [@@js.get "EQUAL"]
-  val get_FASTEST: t -> GLenum.t [@@js.get "FASTEST"]
-  val get_FLOAT: t -> GLenum.t [@@js.get "FLOAT"]
-  val get_FLOAT_MAT2: t -> GLenum.t [@@js.get "FLOAT_MAT2"]
-  val get_FLOAT_MAT3: t -> GLenum.t [@@js.get "FLOAT_MAT3"]
-  val get_FLOAT_MAT4: t -> GLenum.t [@@js.get "FLOAT_MAT4"]
-  val get_FLOAT_VEC2: t -> GLenum.t [@@js.get "FLOAT_VEC2"]
-  val get_FLOAT_VEC3: t -> GLenum.t [@@js.get "FLOAT_VEC3"]
-  val get_FLOAT_VEC4: t -> GLenum.t [@@js.get "FLOAT_VEC4"]
-  val get_FRAGMENT_SHADER: t -> GLenum.t [@@js.get "FRAGMENT_SHADER"]
-  val get_FRAMEBUFFER: t -> GLenum.t [@@js.get "FRAMEBUFFER"]
-  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_NAME"]
-  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL"]
-  val get_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "FRAMEBUFFER_BINDING"]
-  val get_FRAMEBUFFER_COMPLETE: t -> GLenum.t [@@js.get "FRAMEBUFFER_COMPLETE"]
-  val get_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_ATTACHMENT"]
-  val get_FRAMEBUFFER_INCOMPLETE_DIMENSIONS: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_DIMENSIONS"]
-  val get_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"]
-  val get_FRAMEBUFFER_UNSUPPORTED: t -> GLenum.t [@@js.get "FRAMEBUFFER_UNSUPPORTED"]
-  val get_FRONT: t -> GLenum.t [@@js.get "FRONT"]
-  val get_FRONT_AND_BACK: t -> GLenum.t [@@js.get "FRONT_AND_BACK"]
-  val get_FRONT_FACE: t -> GLenum.t [@@js.get "FRONT_FACE"]
-  val get_FUNC_ADD: t -> GLenum.t [@@js.get "FUNC_ADD"]
-  val get_FUNC_REVERSE_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_REVERSE_SUBTRACT"]
-  val get_FUNC_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_SUBTRACT"]
-  val get_GENERATE_MIPMAP_HINT: t -> GLenum.t [@@js.get "GENERATE_MIPMAP_HINT"]
-  val get_GEQUAL: t -> GLenum.t [@@js.get "GEQUAL"]
-  val get_GREATER: t -> GLenum.t [@@js.get "GREATER"]
-  val get_GREEN_BITS: t -> GLenum.t [@@js.get "GREEN_BITS"]
-  val get_HIGH_FLOAT: t -> GLenum.t [@@js.get "HIGH_FLOAT"]
-  val get_HIGH_INT: t -> GLenum.t [@@js.get "HIGH_INT"]
-  val get_IMPLEMENTATION_COLOR_READ_FORMAT: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_FORMAT"]
-  val get_IMPLEMENTATION_COLOR_READ_TYPE: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_TYPE"]
-  val get_INCR: t -> GLenum.t [@@js.get "INCR"]
-  val get_INCR_WRAP: t -> GLenum.t [@@js.get "INCR_WRAP"]
-  val get_INT: t -> GLenum.t [@@js.get "INT"]
-  val get_INT_VEC2: t -> GLenum.t [@@js.get "INT_VEC2"]
-  val get_INT_VEC3: t -> GLenum.t [@@js.get "INT_VEC3"]
-  val get_INT_VEC4: t -> GLenum.t [@@js.get "INT_VEC4"]
-  val get_INVALID_ENUM: t -> GLenum.t [@@js.get "INVALID_ENUM"]
-  val get_INVALID_FRAMEBUFFER_OPERATION: t -> GLenum.t [@@js.get "INVALID_FRAMEBUFFER_OPERATION"]
-  val get_INVALID_OPERATION: t -> GLenum.t [@@js.get "INVALID_OPERATION"]
-  val get_INVALID_VALUE: t -> GLenum.t [@@js.get "INVALID_VALUE"]
-  val get_INVERT: t -> GLenum.t [@@js.get "INVERT"]
-  val get_KEEP: t -> GLenum.t [@@js.get "KEEP"]
-  val get_LEQUAL: t -> GLenum.t [@@js.get "LEQUAL"]
-  val get_LESS: t -> GLenum.t [@@js.get "LESS"]
-  val get_LINEAR: t -> GLenum.t [@@js.get "LINEAR"]
-  val get_LINEAR_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_LINEAR"]
-  val get_LINEAR_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_NEAREST"]
-  val get_LINES: t -> GLenum.t [@@js.get "LINES"]
-  val get_LINE_LOOP: t -> GLenum.t [@@js.get "LINE_LOOP"]
-  val get_LINE_STRIP: t -> GLenum.t [@@js.get "LINE_STRIP"]
-  val get_LINE_WIDTH: t -> GLenum.t [@@js.get "LINE_WIDTH"]
-  val get_LINK_STATUS: t -> GLenum.t [@@js.get "LINK_STATUS"]
-  val get_LOW_FLOAT: t -> GLenum.t [@@js.get "LOW_FLOAT"]
-  val get_LOW_INT: t -> GLenum.t [@@js.get "LOW_INT"]
-  val get_LUMINANCE: t -> GLenum.t [@@js.get "LUMINANCE"]
-  val get_LUMINANCE_ALPHA: t -> GLenum.t [@@js.get "LUMINANCE_ALPHA"]
-  val get_MAX_COMBINED_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_COMBINED_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_CUBE_MAP_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_CUBE_MAP_TEXTURE_SIZE"]
-  val get_MAX_FRAGMENT_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_VECTORS"]
-  val get_MAX_RENDERBUFFER_SIZE: t -> GLenum.t [@@js.get "MAX_RENDERBUFFER_SIZE"]
-  val get_MAX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_TEXTURE_SIZE"]
-  val get_MAX_VARYING_VECTORS: t -> GLenum.t [@@js.get "MAX_VARYING_VECTORS"]
-  val get_MAX_VERTEX_ATTRIBS: t -> GLenum.t [@@js.get "MAX_VERTEX_ATTRIBS"]
-  val get_MAX_VERTEX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_VERTEX_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_VERTEX_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_VECTORS"]
-  val get_MAX_VIEWPORT_DIMS: t -> GLenum.t [@@js.get "MAX_VIEWPORT_DIMS"]
-  val get_MEDIUM_FLOAT: t -> GLenum.t [@@js.get "MEDIUM_FLOAT"]
-  val get_MEDIUM_INT: t -> GLenum.t [@@js.get "MEDIUM_INT"]
-  val get_MIRRORED_REPEAT: t -> GLenum.t [@@js.get "MIRRORED_REPEAT"]
-  val get_NEAREST: t -> GLenum.t [@@js.get "NEAREST"]
-  val get_NEAREST_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_LINEAR"]
-  val get_NEAREST_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_NEAREST"]
-  val get_NEVER: t -> GLenum.t [@@js.get "NEVER"]
-  val get_NICEST: t -> GLenum.t [@@js.get "NICEST"]
-  val get_NONE: t -> GLenum.t [@@js.get "NONE"]
-  val get_NOTEQUAL: t -> GLenum.t [@@js.get "NOTEQUAL"]
-  val get_NO_ERROR: t -> GLenum.t [@@js.get "NO_ERROR"]
-  val get_ONE: t -> GLenum.t [@@js.get "ONE"]
-  val get_ONE_MINUS_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_ALPHA"]
-  val get_ONE_MINUS_CONSTANT_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_COLOR"]
-  val get_ONE_MINUS_DST_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_DST_ALPHA"]
-  val get_ONE_MINUS_DST_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_DST_COLOR"]
-  val get_ONE_MINUS_SRC_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_ALPHA"]
-  val get_ONE_MINUS_SRC_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_COLOR"]
-  val get_OUT_OF_MEMORY: t -> GLenum.t [@@js.get "OUT_OF_MEMORY"]
-  val get_PACK_ALIGNMENT: t -> GLenum.t [@@js.get "PACK_ALIGNMENT"]
-  val get_POINTS: t -> GLenum.t [@@js.get "POINTS"]
-  val get_POLYGON_OFFSET_FACTOR: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FACTOR"]
-  val get_POLYGON_OFFSET_FILL: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FILL"]
-  val get_POLYGON_OFFSET_UNITS: t -> GLenum.t [@@js.get "POLYGON_OFFSET_UNITS"]
-  val get_RED_BITS: t -> GLenum.t [@@js.get "RED_BITS"]
-  val get_RENDERBUFFER: t -> GLenum.t [@@js.get "RENDERBUFFER"]
-  val get_RENDERBUFFER_ALPHA_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_ALPHA_SIZE"]
-  val get_RENDERBUFFER_BINDING: t -> GLenum.t [@@js.get "RENDERBUFFER_BINDING"]
-  val get_RENDERBUFFER_BLUE_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_BLUE_SIZE"]
-  val get_RENDERBUFFER_DEPTH_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_DEPTH_SIZE"]
-  val get_RENDERBUFFER_GREEN_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_GREEN_SIZE"]
-  val get_RENDERBUFFER_HEIGHT: t -> GLenum.t [@@js.get "RENDERBUFFER_HEIGHT"]
-  val get_RENDERBUFFER_INTERNAL_FORMAT: t -> GLenum.t [@@js.get "RENDERBUFFER_INTERNAL_FORMAT"]
-  val get_RENDERBUFFER_RED_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_RED_SIZE"]
-  val get_RENDERBUFFER_STENCIL_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_STENCIL_SIZE"]
-  val get_RENDERBUFFER_WIDTH: t -> GLenum.t [@@js.get "RENDERBUFFER_WIDTH"]
-  val get_RENDERER: t -> GLenum.t [@@js.get "RENDERER"]
-  val get_REPEAT: t -> GLenum.t [@@js.get "REPEAT"]
-  val get_REPLACE: t -> GLenum.t [@@js.get "REPLACE"]
-  val get_RGB: t -> GLenum.t [@@js.get "RGB"]
-  val get_RGB565: t -> GLenum.t [@@js.get "RGB565"]
-  val get_RGB5_A1: t -> GLenum.t [@@js.get "RGB5_A1"]
-  val get_RGBA: t -> GLenum.t [@@js.get "RGBA"]
-  val get_RGBA4: t -> GLenum.t [@@js.get "RGBA4"]
-  val get_SAMPLER_2D: t -> GLenum.t [@@js.get "SAMPLER_2D"]
-  val get_SAMPLER_CUBE: t -> GLenum.t [@@js.get "SAMPLER_CUBE"]
-  val get_SAMPLES: t -> GLenum.t [@@js.get "SAMPLES"]
-  val get_SAMPLE_ALPHA_TO_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_ALPHA_TO_COVERAGE"]
-  val get_SAMPLE_BUFFERS: t -> GLenum.t [@@js.get "SAMPLE_BUFFERS"]
-  val get_SAMPLE_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE"]
-  val get_SAMPLE_COVERAGE_INVERT: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_INVERT"]
-  val get_SAMPLE_COVERAGE_VALUE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_VALUE"]
-  val get_SCISSOR_BOX: t -> GLenum.t [@@js.get "SCISSOR_BOX"]
-  val get_SCISSOR_TEST: t -> GLenum.t [@@js.get "SCISSOR_TEST"]
-  val get_SHADER_TYPE: t -> GLenum.t [@@js.get "SHADER_TYPE"]
-  val get_SHADING_LANGUAGE_VERSION: t -> GLenum.t [@@js.get "SHADING_LANGUAGE_VERSION"]
-  val get_SHORT: t -> GLenum.t [@@js.get "SHORT"]
-  val get_SRC_ALPHA: t -> GLenum.t [@@js.get "SRC_ALPHA"]
-  val get_SRC_ALPHA_SATURATE: t -> GLenum.t [@@js.get "SRC_ALPHA_SATURATE"]
-  val get_SRC_COLOR: t -> GLenum.t [@@js.get "SRC_COLOR"]
-  val get_STATIC_DRAW: t -> GLenum.t [@@js.get "STATIC_DRAW"]
-  val get_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "STENCIL_ATTACHMENT"]
-  val get_STENCIL_BACK_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_FAIL"]
-  val get_STENCIL_BACK_FUNC: t -> GLenum.t [@@js.get "STENCIL_BACK_FUNC"]
-  val get_STENCIL_BACK_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_FAIL"]
-  val get_STENCIL_BACK_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_PASS"]
-  val get_STENCIL_BACK_REF: t -> GLenum.t [@@js.get "STENCIL_BACK_REF"]
-  val get_STENCIL_BACK_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_BACK_VALUE_MASK"]
-  val get_STENCIL_BACK_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_BACK_WRITEMASK"]
-  val get_STENCIL_BITS: t -> GLenum.t [@@js.get "STENCIL_BITS"]
-  val get_STENCIL_BUFFER_BIT: t -> GLenum.t [@@js.get "STENCIL_BUFFER_BIT"]
-  val get_STENCIL_CLEAR_VALUE: t -> GLenum.t [@@js.get "STENCIL_CLEAR_VALUE"]
-  val get_STENCIL_FAIL: t -> GLenum.t [@@js.get "STENCIL_FAIL"]
-  val get_STENCIL_FUNC: t -> GLenum.t [@@js.get "STENCIL_FUNC"]
-  val get_STENCIL_INDEX8: t -> GLenum.t [@@js.get "STENCIL_INDEX8"]
-  val get_STENCIL_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_FAIL"]
-  val get_STENCIL_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_PASS"]
-  val get_STENCIL_REF: t -> GLenum.t [@@js.get "STENCIL_REF"]
-  val get_STENCIL_TEST: t -> GLenum.t [@@js.get "STENCIL_TEST"]
-  val get_STENCIL_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_VALUE_MASK"]
-  val get_STENCIL_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_WRITEMASK"]
-  val get_STREAM_DRAW: t -> GLenum.t [@@js.get "STREAM_DRAW"]
-  val get_SUBPIXEL_BITS: t -> GLenum.t [@@js.get "SUBPIXEL_BITS"]
-  val get_TEXTURE: t -> GLenum.t [@@js.get "TEXTURE"]
-  val get_TEXTURE0: t -> GLenum.t [@@js.get "TEXTURE0"]
-  val get_TEXTURE1: t -> GLenum.t [@@js.get "TEXTURE1"]
-  val get_TEXTURE10: t -> GLenum.t [@@js.get "TEXTURE10"]
-  val get_TEXTURE11: t -> GLenum.t [@@js.get "TEXTURE11"]
-  val get_TEXTURE12: t -> GLenum.t [@@js.get "TEXTURE12"]
-  val get_TEXTURE13: t -> GLenum.t [@@js.get "TEXTURE13"]
-  val get_TEXTURE14: t -> GLenum.t [@@js.get "TEXTURE14"]
-  val get_TEXTURE15: t -> GLenum.t [@@js.get "TEXTURE15"]
-  val get_TEXTURE16: t -> GLenum.t [@@js.get "TEXTURE16"]
-  val get_TEXTURE17: t -> GLenum.t [@@js.get "TEXTURE17"]
-  val get_TEXTURE18: t -> GLenum.t [@@js.get "TEXTURE18"]
-  val get_TEXTURE19: t -> GLenum.t [@@js.get "TEXTURE19"]
-  val get_TEXTURE2: t -> GLenum.t [@@js.get "TEXTURE2"]
-  val get_TEXTURE20: t -> GLenum.t [@@js.get "TEXTURE20"]
-  val get_TEXTURE21: t -> GLenum.t [@@js.get "TEXTURE21"]
-  val get_TEXTURE22: t -> GLenum.t [@@js.get "TEXTURE22"]
-  val get_TEXTURE23: t -> GLenum.t [@@js.get "TEXTURE23"]
-  val get_TEXTURE24: t -> GLenum.t [@@js.get "TEXTURE24"]
-  val get_TEXTURE25: t -> GLenum.t [@@js.get "TEXTURE25"]
-  val get_TEXTURE26: t -> GLenum.t [@@js.get "TEXTURE26"]
-  val get_TEXTURE27: t -> GLenum.t [@@js.get "TEXTURE27"]
-  val get_TEXTURE28: t -> GLenum.t [@@js.get "TEXTURE28"]
-  val get_TEXTURE29: t -> GLenum.t [@@js.get "TEXTURE29"]
-  val get_TEXTURE3: t -> GLenum.t [@@js.get "TEXTURE3"]
-  val get_TEXTURE30: t -> GLenum.t [@@js.get "TEXTURE30"]
-  val get_TEXTURE31: t -> GLenum.t [@@js.get "TEXTURE31"]
-  val get_TEXTURE4: t -> GLenum.t [@@js.get "TEXTURE4"]
-  val get_TEXTURE5: t -> GLenum.t [@@js.get "TEXTURE5"]
-  val get_TEXTURE6: t -> GLenum.t [@@js.get "TEXTURE6"]
-  val get_TEXTURE7: t -> GLenum.t [@@js.get "TEXTURE7"]
-  val get_TEXTURE8: t -> GLenum.t [@@js.get "TEXTURE8"]
-  val get_TEXTURE9: t -> GLenum.t [@@js.get "TEXTURE9"]
-  val get_TEXTURE_2D: t -> GLenum.t [@@js.get "TEXTURE_2D"]
-  val get_TEXTURE_BINDING_2D: t -> GLenum.t [@@js.get "TEXTURE_BINDING_2D"]
-  val get_TEXTURE_BINDING_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_BINDING_CUBE_MAP"]
-  val get_TEXTURE_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_X"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Y"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Z"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_X"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Y"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Z"]
-  val get_TEXTURE_MAG_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MAG_FILTER"]
-  val get_TEXTURE_MIN_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MIN_FILTER"]
-  val get_TEXTURE_WRAP_S: t -> GLenum.t [@@js.get "TEXTURE_WRAP_S"]
-  val get_TEXTURE_WRAP_T: t -> GLenum.t [@@js.get "TEXTURE_WRAP_T"]
-  val get_TRIANGLES: t -> GLenum.t [@@js.get "TRIANGLES"]
-  val get_TRIANGLE_FAN: t -> GLenum.t [@@js.get "TRIANGLE_FAN"]
-  val get_TRIANGLE_STRIP: t -> GLenum.t [@@js.get "TRIANGLE_STRIP"]
-  val get_UNPACK_ALIGNMENT: t -> GLenum.t [@@js.get "UNPACK_ALIGNMENT"]
-  val get_UNPACK_COLORSPACE_CONVERSION_WEBGL: t -> GLenum.t [@@js.get "UNPACK_COLORSPACE_CONVERSION_WEBGL"]
-  val get_UNPACK_FLIP_Y_WEBGL: t -> GLenum.t [@@js.get "UNPACK_FLIP_Y_WEBGL"]
-  val get_UNPACK_PREMULTIPLY_ALPHA_WEBGL: t -> GLenum.t [@@js.get "UNPACK_PREMULTIPLY_ALPHA_WEBGL"]
-  val get_UNSIGNED_BYTE: t -> GLenum.t [@@js.get "UNSIGNED_BYTE"]
-  val get_UNSIGNED_INT: t -> GLenum.t [@@js.get "UNSIGNED_INT"]
-  val get_UNSIGNED_SHORT: t -> GLenum.t [@@js.get "UNSIGNED_SHORT"]
-  val get_UNSIGNED_SHORT_4_4_4_4: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_4_4_4_4"]
-  val get_UNSIGNED_SHORT_5_5_5_1: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_5_5_1"]
-  val get_UNSIGNED_SHORT_5_6_5: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_6_5"]
-  val get_VALIDATE_STATUS: t -> GLenum.t [@@js.get "VALIDATE_STATUS"]
-  val get_VENDOR: t -> GLenum.t [@@js.get "VENDOR"]
-  val get_VERSION: t -> GLenum.t [@@js.get "VERSION"]
-  val get_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"]
-  val get_VERTEX_ATTRIB_ARRAY_ENABLED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_ENABLED"]
-  val get_VERTEX_ATTRIB_ARRAY_NORMALIZED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_NORMALIZED"]
-  val get_VERTEX_ATTRIB_ARRAY_POINTER: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_POINTER"]
-  val get_VERTEX_ATTRIB_ARRAY_SIZE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_SIZE"]
-  val get_VERTEX_ATTRIB_ARRAY_STRIDE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_STRIDE"]
-  val get_VERTEX_ATTRIB_ARRAY_TYPE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_TYPE"]
-  val get_VERTEX_SHADER: t -> GLenum.t [@@js.get "VERTEX_SHADER"]
-  val get_VIEWPORT: t -> GLenum.t [@@js.get "VIEWPORT"]
-  val get_ZERO: t -> GLenum.t [@@js.get "ZERO"]
-end
 
 (** Provides an interface to the OpenGL ES 2.0 graphics rendering context for the drawing surface of an HTML <canvas> element. *)
-and[@js.scope "WebGLRenderingContext"] WebGLRenderingContext : sig
+module[@js.scope "WebGLRenderingContext"] WebGLRenderingContext : sig
   type t = [`WebGLRenderingContext | `WebGLRenderingContextBase | `WebGLRenderingContextOverloads] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -12472,6 +13163,362 @@ and[@js.scope "WebGLRenderingContext"] WebGLRenderingContext : sig
   val viewport: unit -> GLenum.t [@@js.get "VIEWPORT"]
   val zero: unit -> GLenum.t [@@js.get "ZERO"]
 end
+module AnonymousInterface119 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLRenderingContext.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLRenderingContext.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLRenderingContext.t [@@js.apply_newable]
+  val get_ACTIVE_ATTRIBUTES: t -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
+  val get_ACTIVE_TEXTURE: t -> GLenum.t [@@js.get "ACTIVE_TEXTURE"]
+  val get_ACTIVE_UNIFORMS: t -> GLenum.t [@@js.get "ACTIVE_UNIFORMS"]
+  val get_ALIASED_LINE_WIDTH_RANGE: t -> GLenum.t [@@js.get "ALIASED_LINE_WIDTH_RANGE"]
+  val get_ALIASED_POINT_SIZE_RANGE: t -> GLenum.t [@@js.get "ALIASED_POINT_SIZE_RANGE"]
+  val get_ALPHA: t -> GLenum.t [@@js.get "ALPHA"]
+  val get_ALPHA_BITS: t -> GLenum.t [@@js.get "ALPHA_BITS"]
+  val get_ALWAYS: t -> GLenum.t [@@js.get "ALWAYS"]
+  val get_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ARRAY_BUFFER"]
+  val get_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ARRAY_BUFFER_BINDING"]
+  val get_ATTACHED_SHADERS: t -> GLenum.t [@@js.get "ATTACHED_SHADERS"]
+  val get_BACK: t -> GLenum.t [@@js.get "BACK"]
+  val get_BLEND: t -> GLenum.t [@@js.get "BLEND"]
+  val get_BLEND_COLOR: t -> GLenum.t [@@js.get "BLEND_COLOR"]
+  val get_BLEND_DST_ALPHA: t -> GLenum.t [@@js.get "BLEND_DST_ALPHA"]
+  val get_BLEND_DST_RGB: t -> GLenum.t [@@js.get "BLEND_DST_RGB"]
+  val get_BLEND_EQUATION: t -> GLenum.t [@@js.get "BLEND_EQUATION"]
+  val get_BLEND_EQUATION_ALPHA: t -> GLenum.t [@@js.get "BLEND_EQUATION_ALPHA"]
+  val get_BLEND_EQUATION_RGB: t -> GLenum.t [@@js.get "BLEND_EQUATION_RGB"]
+  val get_BLEND_SRC_ALPHA: t -> GLenum.t [@@js.get "BLEND_SRC_ALPHA"]
+  val get_BLEND_SRC_RGB: t -> GLenum.t [@@js.get "BLEND_SRC_RGB"]
+  val get_BLUE_BITS: t -> GLenum.t [@@js.get "BLUE_BITS"]
+  val get_BOOL: t -> GLenum.t [@@js.get "BOOL"]
+  val get_BOOL_VEC2: t -> GLenum.t [@@js.get "BOOL_VEC2"]
+  val get_BOOL_VEC3: t -> GLenum.t [@@js.get "BOOL_VEC3"]
+  val get_BOOL_VEC4: t -> GLenum.t [@@js.get "BOOL_VEC4"]
+  val get_BROWSER_DEFAULT_WEBGL: t -> GLenum.t [@@js.get "BROWSER_DEFAULT_WEBGL"]
+  val get_BUFFER_SIZE: t -> GLenum.t [@@js.get "BUFFER_SIZE"]
+  val get_BUFFER_USAGE: t -> GLenum.t [@@js.get "BUFFER_USAGE"]
+  val get_BYTE: t -> GLenum.t [@@js.get "BYTE"]
+  val get_CCW: t -> GLenum.t [@@js.get "CCW"]
+  val get_CLAMP_TO_EDGE: t -> GLenum.t [@@js.get "CLAMP_TO_EDGE"]
+  val get_COLOR_ATTACHMENT0: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT0"]
+  val get_COLOR_BUFFER_BIT: t -> GLenum.t [@@js.get "COLOR_BUFFER_BIT"]
+  val get_COLOR_CLEAR_VALUE: t -> GLenum.t [@@js.get "COLOR_CLEAR_VALUE"]
+  val get_COLOR_WRITEMASK: t -> GLenum.t [@@js.get "COLOR_WRITEMASK"]
+  val get_COMPILE_STATUS: t -> GLenum.t [@@js.get "COMPILE_STATUS"]
+  val get_COMPRESSED_TEXTURE_FORMATS: t -> GLenum.t [@@js.get "COMPRESSED_TEXTURE_FORMATS"]
+  val get_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "CONSTANT_ALPHA"]
+  val get_CONSTANT_COLOR: t -> GLenum.t [@@js.get "CONSTANT_COLOR"]
+  val get_CONTEXT_LOST_WEBGL: t -> GLenum.t [@@js.get "CONTEXT_LOST_WEBGL"]
+  val get_CULL_FACE: t -> GLenum.t [@@js.get "CULL_FACE"]
+  val get_CULL_FACE_MODE: t -> GLenum.t [@@js.get "CULL_FACE_MODE"]
+  val get_CURRENT_PROGRAM: t -> GLenum.t [@@js.get "CURRENT_PROGRAM"]
+  val get_CURRENT_VERTEX_ATTRIB: t -> GLenum.t [@@js.get "CURRENT_VERTEX_ATTRIB"]
+  val get_CW: t -> GLenum.t [@@js.get "CW"]
+  val get_DECR: t -> GLenum.t [@@js.get "DECR"]
+  val get_DECR_WRAP: t -> GLenum.t [@@js.get "DECR_WRAP"]
+  val get_DELETE_STATUS: t -> GLenum.t [@@js.get "DELETE_STATUS"]
+  val get_DEPTH_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_ATTACHMENT"]
+  val get_DEPTH_BITS: t -> GLenum.t [@@js.get "DEPTH_BITS"]
+  val get_DEPTH_BUFFER_BIT: t -> GLenum.t [@@js.get "DEPTH_BUFFER_BIT"]
+  val get_DEPTH_CLEAR_VALUE: t -> GLenum.t [@@js.get "DEPTH_CLEAR_VALUE"]
+  val get_DEPTH_COMPONENT: t -> GLenum.t [@@js.get "DEPTH_COMPONENT"]
+  val get_DEPTH_COMPONENT16: t -> GLenum.t [@@js.get "DEPTH_COMPONENT16"]
+  val get_DEPTH_FUNC: t -> GLenum.t [@@js.get "DEPTH_FUNC"]
+  val get_DEPTH_RANGE: t -> GLenum.t [@@js.get "DEPTH_RANGE"]
+  val get_DEPTH_STENCIL: t -> GLenum.t [@@js.get "DEPTH_STENCIL"]
+  val get_DEPTH_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_STENCIL_ATTACHMENT"]
+  val get_DEPTH_TEST: t -> GLenum.t [@@js.get "DEPTH_TEST"]
+  val get_DEPTH_WRITEMASK: t -> GLenum.t [@@js.get "DEPTH_WRITEMASK"]
+  val get_DITHER: t -> GLenum.t [@@js.get "DITHER"]
+  val get_DONT_CARE: t -> GLenum.t [@@js.get "DONT_CARE"]
+  val get_DST_ALPHA: t -> GLenum.t [@@js.get "DST_ALPHA"]
+  val get_DST_COLOR: t -> GLenum.t [@@js.get "DST_COLOR"]
+  val get_DYNAMIC_DRAW: t -> GLenum.t [@@js.get "DYNAMIC_DRAW"]
+  val get_ELEMENT_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER"]
+  val get_ELEMENT_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER_BINDING"]
+  val get_EQUAL: t -> GLenum.t [@@js.get "EQUAL"]
+  val get_FASTEST: t -> GLenum.t [@@js.get "FASTEST"]
+  val get_FLOAT: t -> GLenum.t [@@js.get "FLOAT"]
+  val get_FLOAT_MAT2: t -> GLenum.t [@@js.get "FLOAT_MAT2"]
+  val get_FLOAT_MAT3: t -> GLenum.t [@@js.get "FLOAT_MAT3"]
+  val get_FLOAT_MAT4: t -> GLenum.t [@@js.get "FLOAT_MAT4"]
+  val get_FLOAT_VEC2: t -> GLenum.t [@@js.get "FLOAT_VEC2"]
+  val get_FLOAT_VEC3: t -> GLenum.t [@@js.get "FLOAT_VEC3"]
+  val get_FLOAT_VEC4: t -> GLenum.t [@@js.get "FLOAT_VEC4"]
+  val get_FRAGMENT_SHADER: t -> GLenum.t [@@js.get "FRAGMENT_SHADER"]
+  val get_FRAMEBUFFER: t -> GLenum.t [@@js.get "FRAMEBUFFER"]
+  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_NAME"]
+  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE"]
+  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE"]
+  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL"]
+  val get_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "FRAMEBUFFER_BINDING"]
+  val get_FRAMEBUFFER_COMPLETE: t -> GLenum.t [@@js.get "FRAMEBUFFER_COMPLETE"]
+  val get_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_ATTACHMENT"]
+  val get_FRAMEBUFFER_INCOMPLETE_DIMENSIONS: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_DIMENSIONS"]
+  val get_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"]
+  val get_FRAMEBUFFER_UNSUPPORTED: t -> GLenum.t [@@js.get "FRAMEBUFFER_UNSUPPORTED"]
+  val get_FRONT: t -> GLenum.t [@@js.get "FRONT"]
+  val get_FRONT_AND_BACK: t -> GLenum.t [@@js.get "FRONT_AND_BACK"]
+  val get_FRONT_FACE: t -> GLenum.t [@@js.get "FRONT_FACE"]
+  val get_FUNC_ADD: t -> GLenum.t [@@js.get "FUNC_ADD"]
+  val get_FUNC_REVERSE_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_REVERSE_SUBTRACT"]
+  val get_FUNC_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_SUBTRACT"]
+  val get_GENERATE_MIPMAP_HINT: t -> GLenum.t [@@js.get "GENERATE_MIPMAP_HINT"]
+  val get_GEQUAL: t -> GLenum.t [@@js.get "GEQUAL"]
+  val get_GREATER: t -> GLenum.t [@@js.get "GREATER"]
+  val get_GREEN_BITS: t -> GLenum.t [@@js.get "GREEN_BITS"]
+  val get_HIGH_FLOAT: t -> GLenum.t [@@js.get "HIGH_FLOAT"]
+  val get_HIGH_INT: t -> GLenum.t [@@js.get "HIGH_INT"]
+  val get_IMPLEMENTATION_COLOR_READ_FORMAT: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_FORMAT"]
+  val get_IMPLEMENTATION_COLOR_READ_TYPE: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_TYPE"]
+  val get_INCR: t -> GLenum.t [@@js.get "INCR"]
+  val get_INCR_WRAP: t -> GLenum.t [@@js.get "INCR_WRAP"]
+  val get_INT: t -> GLenum.t [@@js.get "INT"]
+  val get_INT_VEC2: t -> GLenum.t [@@js.get "INT_VEC2"]
+  val get_INT_VEC3: t -> GLenum.t [@@js.get "INT_VEC3"]
+  val get_INT_VEC4: t -> GLenum.t [@@js.get "INT_VEC4"]
+  val get_INVALID_ENUM: t -> GLenum.t [@@js.get "INVALID_ENUM"]
+  val get_INVALID_FRAMEBUFFER_OPERATION: t -> GLenum.t [@@js.get "INVALID_FRAMEBUFFER_OPERATION"]
+  val get_INVALID_OPERATION: t -> GLenum.t [@@js.get "INVALID_OPERATION"]
+  val get_INVALID_VALUE: t -> GLenum.t [@@js.get "INVALID_VALUE"]
+  val get_INVERT: t -> GLenum.t [@@js.get "INVERT"]
+  val get_KEEP: t -> GLenum.t [@@js.get "KEEP"]
+  val get_LEQUAL: t -> GLenum.t [@@js.get "LEQUAL"]
+  val get_LESS: t -> GLenum.t [@@js.get "LESS"]
+  val get_LINEAR: t -> GLenum.t [@@js.get "LINEAR"]
+  val get_LINEAR_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_LINEAR"]
+  val get_LINEAR_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_NEAREST"]
+  val get_LINES: t -> GLenum.t [@@js.get "LINES"]
+  val get_LINE_LOOP: t -> GLenum.t [@@js.get "LINE_LOOP"]
+  val get_LINE_STRIP: t -> GLenum.t [@@js.get "LINE_STRIP"]
+  val get_LINE_WIDTH: t -> GLenum.t [@@js.get "LINE_WIDTH"]
+  val get_LINK_STATUS: t -> GLenum.t [@@js.get "LINK_STATUS"]
+  val get_LOW_FLOAT: t -> GLenum.t [@@js.get "LOW_FLOAT"]
+  val get_LOW_INT: t -> GLenum.t [@@js.get "LOW_INT"]
+  val get_LUMINANCE: t -> GLenum.t [@@js.get "LUMINANCE"]
+  val get_LUMINANCE_ALPHA: t -> GLenum.t [@@js.get "LUMINANCE_ALPHA"]
+  val get_MAX_COMBINED_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_COMBINED_TEXTURE_IMAGE_UNITS"]
+  val get_MAX_CUBE_MAP_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_CUBE_MAP_TEXTURE_SIZE"]
+  val get_MAX_FRAGMENT_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_VECTORS"]
+  val get_MAX_RENDERBUFFER_SIZE: t -> GLenum.t [@@js.get "MAX_RENDERBUFFER_SIZE"]
+  val get_MAX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_TEXTURE_IMAGE_UNITS"]
+  val get_MAX_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_TEXTURE_SIZE"]
+  val get_MAX_VARYING_VECTORS: t -> GLenum.t [@@js.get "MAX_VARYING_VECTORS"]
+  val get_MAX_VERTEX_ATTRIBS: t -> GLenum.t [@@js.get "MAX_VERTEX_ATTRIBS"]
+  val get_MAX_VERTEX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_VERTEX_TEXTURE_IMAGE_UNITS"]
+  val get_MAX_VERTEX_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_VECTORS"]
+  val get_MAX_VIEWPORT_DIMS: t -> GLenum.t [@@js.get "MAX_VIEWPORT_DIMS"]
+  val get_MEDIUM_FLOAT: t -> GLenum.t [@@js.get "MEDIUM_FLOAT"]
+  val get_MEDIUM_INT: t -> GLenum.t [@@js.get "MEDIUM_INT"]
+  val get_MIRRORED_REPEAT: t -> GLenum.t [@@js.get "MIRRORED_REPEAT"]
+  val get_NEAREST: t -> GLenum.t [@@js.get "NEAREST"]
+  val get_NEAREST_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_LINEAR"]
+  val get_NEAREST_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_NEAREST"]
+  val get_NEVER: t -> GLenum.t [@@js.get "NEVER"]
+  val get_NICEST: t -> GLenum.t [@@js.get "NICEST"]
+  val get_NONE: t -> GLenum.t [@@js.get "NONE"]
+  val get_NOTEQUAL: t -> GLenum.t [@@js.get "NOTEQUAL"]
+  val get_NO_ERROR: t -> GLenum.t [@@js.get "NO_ERROR"]
+  val get_ONE: t -> GLenum.t [@@js.get "ONE"]
+  val get_ONE_MINUS_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_ALPHA"]
+  val get_ONE_MINUS_CONSTANT_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_COLOR"]
+  val get_ONE_MINUS_DST_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_DST_ALPHA"]
+  val get_ONE_MINUS_DST_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_DST_COLOR"]
+  val get_ONE_MINUS_SRC_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_ALPHA"]
+  val get_ONE_MINUS_SRC_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_COLOR"]
+  val get_OUT_OF_MEMORY: t -> GLenum.t [@@js.get "OUT_OF_MEMORY"]
+  val get_PACK_ALIGNMENT: t -> GLenum.t [@@js.get "PACK_ALIGNMENT"]
+  val get_POINTS: t -> GLenum.t [@@js.get "POINTS"]
+  val get_POLYGON_OFFSET_FACTOR: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FACTOR"]
+  val get_POLYGON_OFFSET_FILL: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FILL"]
+  val get_POLYGON_OFFSET_UNITS: t -> GLenum.t [@@js.get "POLYGON_OFFSET_UNITS"]
+  val get_RED_BITS: t -> GLenum.t [@@js.get "RED_BITS"]
+  val get_RENDERBUFFER: t -> GLenum.t [@@js.get "RENDERBUFFER"]
+  val get_RENDERBUFFER_ALPHA_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_ALPHA_SIZE"]
+  val get_RENDERBUFFER_BINDING: t -> GLenum.t [@@js.get "RENDERBUFFER_BINDING"]
+  val get_RENDERBUFFER_BLUE_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_BLUE_SIZE"]
+  val get_RENDERBUFFER_DEPTH_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_DEPTH_SIZE"]
+  val get_RENDERBUFFER_GREEN_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_GREEN_SIZE"]
+  val get_RENDERBUFFER_HEIGHT: t -> GLenum.t [@@js.get "RENDERBUFFER_HEIGHT"]
+  val get_RENDERBUFFER_INTERNAL_FORMAT: t -> GLenum.t [@@js.get "RENDERBUFFER_INTERNAL_FORMAT"]
+  val get_RENDERBUFFER_RED_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_RED_SIZE"]
+  val get_RENDERBUFFER_STENCIL_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_STENCIL_SIZE"]
+  val get_RENDERBUFFER_WIDTH: t -> GLenum.t [@@js.get "RENDERBUFFER_WIDTH"]
+  val get_RENDERER: t -> GLenum.t [@@js.get "RENDERER"]
+  val get_REPEAT: t -> GLenum.t [@@js.get "REPEAT"]
+  val get_REPLACE: t -> GLenum.t [@@js.get "REPLACE"]
+  val get_RGB: t -> GLenum.t [@@js.get "RGB"]
+  val get_RGB565: t -> GLenum.t [@@js.get "RGB565"]
+  val get_RGB5_A1: t -> GLenum.t [@@js.get "RGB5_A1"]
+  val get_RGBA: t -> GLenum.t [@@js.get "RGBA"]
+  val get_RGBA4: t -> GLenum.t [@@js.get "RGBA4"]
+  val get_SAMPLER_2D: t -> GLenum.t [@@js.get "SAMPLER_2D"]
+  val get_SAMPLER_CUBE: t -> GLenum.t [@@js.get "SAMPLER_CUBE"]
+  val get_SAMPLES: t -> GLenum.t [@@js.get "SAMPLES"]
+  val get_SAMPLE_ALPHA_TO_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_ALPHA_TO_COVERAGE"]
+  val get_SAMPLE_BUFFERS: t -> GLenum.t [@@js.get "SAMPLE_BUFFERS"]
+  val get_SAMPLE_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE"]
+  val get_SAMPLE_COVERAGE_INVERT: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_INVERT"]
+  val get_SAMPLE_COVERAGE_VALUE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_VALUE"]
+  val get_SCISSOR_BOX: t -> GLenum.t [@@js.get "SCISSOR_BOX"]
+  val get_SCISSOR_TEST: t -> GLenum.t [@@js.get "SCISSOR_TEST"]
+  val get_SHADER_TYPE: t -> GLenum.t [@@js.get "SHADER_TYPE"]
+  val get_SHADING_LANGUAGE_VERSION: t -> GLenum.t [@@js.get "SHADING_LANGUAGE_VERSION"]
+  val get_SHORT: t -> GLenum.t [@@js.get "SHORT"]
+  val get_SRC_ALPHA: t -> GLenum.t [@@js.get "SRC_ALPHA"]
+  val get_SRC_ALPHA_SATURATE: t -> GLenum.t [@@js.get "SRC_ALPHA_SATURATE"]
+  val get_SRC_COLOR: t -> GLenum.t [@@js.get "SRC_COLOR"]
+  val get_STATIC_DRAW: t -> GLenum.t [@@js.get "STATIC_DRAW"]
+  val get_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "STENCIL_ATTACHMENT"]
+  val get_STENCIL_BACK_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_FAIL"]
+  val get_STENCIL_BACK_FUNC: t -> GLenum.t [@@js.get "STENCIL_BACK_FUNC"]
+  val get_STENCIL_BACK_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_FAIL"]
+  val get_STENCIL_BACK_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_PASS"]
+  val get_STENCIL_BACK_REF: t -> GLenum.t [@@js.get "STENCIL_BACK_REF"]
+  val get_STENCIL_BACK_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_BACK_VALUE_MASK"]
+  val get_STENCIL_BACK_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_BACK_WRITEMASK"]
+  val get_STENCIL_BITS: t -> GLenum.t [@@js.get "STENCIL_BITS"]
+  val get_STENCIL_BUFFER_BIT: t -> GLenum.t [@@js.get "STENCIL_BUFFER_BIT"]
+  val get_STENCIL_CLEAR_VALUE: t -> GLenum.t [@@js.get "STENCIL_CLEAR_VALUE"]
+  val get_STENCIL_FAIL: t -> GLenum.t [@@js.get "STENCIL_FAIL"]
+  val get_STENCIL_FUNC: t -> GLenum.t [@@js.get "STENCIL_FUNC"]
+  val get_STENCIL_INDEX8: t -> GLenum.t [@@js.get "STENCIL_INDEX8"]
+  val get_STENCIL_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_FAIL"]
+  val get_STENCIL_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_PASS"]
+  val get_STENCIL_REF: t -> GLenum.t [@@js.get "STENCIL_REF"]
+  val get_STENCIL_TEST: t -> GLenum.t [@@js.get "STENCIL_TEST"]
+  val get_STENCIL_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_VALUE_MASK"]
+  val get_STENCIL_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_WRITEMASK"]
+  val get_STREAM_DRAW: t -> GLenum.t [@@js.get "STREAM_DRAW"]
+  val get_SUBPIXEL_BITS: t -> GLenum.t [@@js.get "SUBPIXEL_BITS"]
+  val get_TEXTURE: t -> GLenum.t [@@js.get "TEXTURE"]
+  val get_TEXTURE0: t -> GLenum.t [@@js.get "TEXTURE0"]
+  val get_TEXTURE1: t -> GLenum.t [@@js.get "TEXTURE1"]
+  val get_TEXTURE10: t -> GLenum.t [@@js.get "TEXTURE10"]
+  val get_TEXTURE11: t -> GLenum.t [@@js.get "TEXTURE11"]
+  val get_TEXTURE12: t -> GLenum.t [@@js.get "TEXTURE12"]
+  val get_TEXTURE13: t -> GLenum.t [@@js.get "TEXTURE13"]
+  val get_TEXTURE14: t -> GLenum.t [@@js.get "TEXTURE14"]
+  val get_TEXTURE15: t -> GLenum.t [@@js.get "TEXTURE15"]
+  val get_TEXTURE16: t -> GLenum.t [@@js.get "TEXTURE16"]
+  val get_TEXTURE17: t -> GLenum.t [@@js.get "TEXTURE17"]
+  val get_TEXTURE18: t -> GLenum.t [@@js.get "TEXTURE18"]
+  val get_TEXTURE19: t -> GLenum.t [@@js.get "TEXTURE19"]
+  val get_TEXTURE2: t -> GLenum.t [@@js.get "TEXTURE2"]
+  val get_TEXTURE20: t -> GLenum.t [@@js.get "TEXTURE20"]
+  val get_TEXTURE21: t -> GLenum.t [@@js.get "TEXTURE21"]
+  val get_TEXTURE22: t -> GLenum.t [@@js.get "TEXTURE22"]
+  val get_TEXTURE23: t -> GLenum.t [@@js.get "TEXTURE23"]
+  val get_TEXTURE24: t -> GLenum.t [@@js.get "TEXTURE24"]
+  val get_TEXTURE25: t -> GLenum.t [@@js.get "TEXTURE25"]
+  val get_TEXTURE26: t -> GLenum.t [@@js.get "TEXTURE26"]
+  val get_TEXTURE27: t -> GLenum.t [@@js.get "TEXTURE27"]
+  val get_TEXTURE28: t -> GLenum.t [@@js.get "TEXTURE28"]
+  val get_TEXTURE29: t -> GLenum.t [@@js.get "TEXTURE29"]
+  val get_TEXTURE3: t -> GLenum.t [@@js.get "TEXTURE3"]
+  val get_TEXTURE30: t -> GLenum.t [@@js.get "TEXTURE30"]
+  val get_TEXTURE31: t -> GLenum.t [@@js.get "TEXTURE31"]
+  val get_TEXTURE4: t -> GLenum.t [@@js.get "TEXTURE4"]
+  val get_TEXTURE5: t -> GLenum.t [@@js.get "TEXTURE5"]
+  val get_TEXTURE6: t -> GLenum.t [@@js.get "TEXTURE6"]
+  val get_TEXTURE7: t -> GLenum.t [@@js.get "TEXTURE7"]
+  val get_TEXTURE8: t -> GLenum.t [@@js.get "TEXTURE8"]
+  val get_TEXTURE9: t -> GLenum.t [@@js.get "TEXTURE9"]
+  val get_TEXTURE_2D: t -> GLenum.t [@@js.get "TEXTURE_2D"]
+  val get_TEXTURE_BINDING_2D: t -> GLenum.t [@@js.get "TEXTURE_BINDING_2D"]
+  val get_TEXTURE_BINDING_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_BINDING_CUBE_MAP"]
+  val get_TEXTURE_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP"]
+  val get_TEXTURE_CUBE_MAP_NEGATIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_X"]
+  val get_TEXTURE_CUBE_MAP_NEGATIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Y"]
+  val get_TEXTURE_CUBE_MAP_NEGATIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Z"]
+  val get_TEXTURE_CUBE_MAP_POSITIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_X"]
+  val get_TEXTURE_CUBE_MAP_POSITIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Y"]
+  val get_TEXTURE_CUBE_MAP_POSITIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Z"]
+  val get_TEXTURE_MAG_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MAG_FILTER"]
+  val get_TEXTURE_MIN_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MIN_FILTER"]
+  val get_TEXTURE_WRAP_S: t -> GLenum.t [@@js.get "TEXTURE_WRAP_S"]
+  val get_TEXTURE_WRAP_T: t -> GLenum.t [@@js.get "TEXTURE_WRAP_T"]
+  val get_TRIANGLES: t -> GLenum.t [@@js.get "TRIANGLES"]
+  val get_TRIANGLE_FAN: t -> GLenum.t [@@js.get "TRIANGLE_FAN"]
+  val get_TRIANGLE_STRIP: t -> GLenum.t [@@js.get "TRIANGLE_STRIP"]
+  val get_UNPACK_ALIGNMENT: t -> GLenum.t [@@js.get "UNPACK_ALIGNMENT"]
+  val get_UNPACK_COLORSPACE_CONVERSION_WEBGL: t -> GLenum.t [@@js.get "UNPACK_COLORSPACE_CONVERSION_WEBGL"]
+  val get_UNPACK_FLIP_Y_WEBGL: t -> GLenum.t [@@js.get "UNPACK_FLIP_Y_WEBGL"]
+  val get_UNPACK_PREMULTIPLY_ALPHA_WEBGL: t -> GLenum.t [@@js.get "UNPACK_PREMULTIPLY_ALPHA_WEBGL"]
+  val get_UNSIGNED_BYTE: t -> GLenum.t [@@js.get "UNSIGNED_BYTE"]
+  val get_UNSIGNED_INT: t -> GLenum.t [@@js.get "UNSIGNED_INT"]
+  val get_UNSIGNED_SHORT: t -> GLenum.t [@@js.get "UNSIGNED_SHORT"]
+  val get_UNSIGNED_SHORT_4_4_4_4: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_4_4_4_4"]
+  val get_UNSIGNED_SHORT_5_5_5_1: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_5_5_1"]
+  val get_UNSIGNED_SHORT_5_6_5: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_6_5"]
+  val get_VALIDATE_STATUS: t -> GLenum.t [@@js.get "VALIDATE_STATUS"]
+  val get_VENDOR: t -> GLenum.t [@@js.get "VENDOR"]
+  val get_VERSION: t -> GLenum.t [@@js.get "VERSION"]
+  val get_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"]
+  val get_VERTEX_ATTRIB_ARRAY_ENABLED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_ENABLED"]
+  val get_VERTEX_ATTRIB_ARRAY_NORMALIZED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_NORMALIZED"]
+  val get_VERTEX_ATTRIB_ARRAY_POINTER: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_POINTER"]
+  val get_VERTEX_ATTRIB_ARRAY_SIZE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_SIZE"]
+  val get_VERTEX_ATTRIB_ARRAY_STRIDE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_STRIDE"]
+  val get_VERTEX_ATTRIB_ARRAY_TYPE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_TYPE"]
+  val get_VERTEX_SHADER: t -> GLenum.t [@@js.get "VERTEX_SHADER"]
+  val get_VIEWPORT: t -> GLenum.t [@@js.get "VIEWPORT"]
+  val get_ZERO: t -> GLenum.t [@@js.get "ZERO"]
+end
+module AnonymousInterface118 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLRenderbuffer.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLRenderbuffer.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLRenderbuffer.t [@@js.apply_newable]
+end
+module[@js.scope "WebGLQuery"] WebGLQuery : sig
+  type t = [`WebGLQuery] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WebGLQuery]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WebGLQuery]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebGLQuery ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AnonymousInterface117 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLQuery.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLQuery.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLQuery.t [@@js.apply_newable]
+end
+module AnonymousInterface116 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLProgram.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLProgram.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLProgram.t [@@js.apply_newable]
+end
+module AnonymousInterface115 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLFramebuffer.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLFramebuffer.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLFramebuffer.t [@@js.apply_newable]
+end
 module WebGLContextEventInit : sig
   type t = [`EventInit | `WebGLContextEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -12492,17 +13539,9 @@ module WebGLContextEventInit : sig
   val set_statusMessage: 'tags this -> string -> unit [@@js.set "statusMessage"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface114 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLContextEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLContextEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInit:WebGLContextEventInit.t -> unit -> WebGLContextEvent.t [@@js.apply_newable]
-end
 
 (** The WebContextEvent interface is part of the WebGL API and is an interface for an event that is generated in response to a status change to the WebGL rendering context. *)
-and[@js.scope "WebGLContextEvent"] WebGLContextEvent : sig
+module[@js.scope "WebGLContextEvent"] WebGLContextEvent : sig
   type t = [`Event | `WebGLContextEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -12522,6 +13561,30 @@ and[@js.scope "WebGLContextEvent"] WebGLContextEvent : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInit:WebGLContextEventInit.t -> unit -> t [@@js.create]
+end
+module AnonymousInterface114 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLContextEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLContextEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInit:WebGLContextEventInit.t -> unit -> WebGLContextEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface113 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLBuffer.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLBuffer.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLBuffer.t [@@js.apply_newable]
+end
+module AnonymousInterface112 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> WebGLActiveInfo.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGLActiveInfo.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGLActiveInfo.t [@@js.apply_newable]
 end
 module WebGL2RenderingContextOverloads : sig
   type t = [`WebGL2RenderingContextOverloads] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12584,146 +13647,6 @@ module WebGL2RenderingContextOverloads : sig
   val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
   val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec AnonymousInterface127 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLVertexArrayObject.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLVertexArrayObject.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLVertexArrayObject.t [@@js.apply_newable]
-end
-and[@js.scope "WebGLVertexArrayObject"] WebGLVertexArrayObject : sig
-  type t = [`WebGLVertexArrayObject] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WebGLVertexArrayObject]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WebGLVertexArrayObject]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WebGLVertexArrayObject ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface125 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLTransformFeedback.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLTransformFeedback.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLTransformFeedback.t [@@js.apply_newable]
-end
-and[@js.scope "WebGLTransformFeedback"] WebGLTransformFeedback : sig
-  type t = [`WebGLTransformFeedback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WebGLTransformFeedback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WebGLTransformFeedback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WebGLTransformFeedback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface123 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLSync.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLSync.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLSync.t [@@js.apply_newable]
-end
-and[@js.scope "WebGLSync"] WebGLSync : sig
-  type t = [`WebGLSync] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WebGLSync]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WebGLSync]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WebGLSync ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface120 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLSampler.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLSampler.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLSampler.t [@@js.apply_newable]
-end
-and[@js.scope "WebGLSampler"] WebGLSampler : sig
-  type t = [`WebGLSampler] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WebGLSampler]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WebGLSampler]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WebGLSampler ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module rec AnonymousInterface117 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLQuery.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLQuery.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLQuery.t [@@js.apply_newable]
-end
-and[@js.scope "WebGLQuery"] WebGLQuery : sig
-  type t = [`WebGLQuery] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WebGLQuery]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WebGLQuery]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WebGLQuery ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
 end
 module Uint32List : sig
   type t = (Uint32Array.t_0, GLuint.t) or_array
@@ -13146,574 +14069,7 @@ module WebGL2RenderingContextBase : sig
   val get_WAIT_FAILED: 'tags this -> GLenum.t [@@js.get "WAIT_FAILED"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface111 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGL2RenderingContext.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGL2RenderingContext.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGL2RenderingContext.t [@@js.apply_newable]
-  val get_ACTIVE_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "ACTIVE_UNIFORM_BLOCKS"]
-  val get_ALREADY_SIGNALED: t -> GLenum.t [@@js.get "ALREADY_SIGNALED"]
-  val get_ANY_SAMPLES_PASSED: t -> GLenum.t [@@js.get "ANY_SAMPLES_PASSED"]
-  val get_ANY_SAMPLES_PASSED_CONSERVATIVE: t -> GLenum.t [@@js.get "ANY_SAMPLES_PASSED_CONSERVATIVE"]
-  val get_COLOR: t -> GLenum.t [@@js.get "COLOR"]
-  val get_COLOR_ATTACHMENT1: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT1"]
-  val get_COLOR_ATTACHMENT10: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT10"]
-  val get_COLOR_ATTACHMENT11: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT11"]
-  val get_COLOR_ATTACHMENT12: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT12"]
-  val get_COLOR_ATTACHMENT13: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT13"]
-  val get_COLOR_ATTACHMENT14: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT14"]
-  val get_COLOR_ATTACHMENT15: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT15"]
-  val get_COLOR_ATTACHMENT2: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT2"]
-  val get_COLOR_ATTACHMENT3: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT3"]
-  val get_COLOR_ATTACHMENT4: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT4"]
-  val get_COLOR_ATTACHMENT5: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT5"]
-  val get_COLOR_ATTACHMENT6: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT6"]
-  val get_COLOR_ATTACHMENT7: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT7"]
-  val get_COLOR_ATTACHMENT8: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT8"]
-  val get_COLOR_ATTACHMENT9: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT9"]
-  val get_COMPARE_REF_TO_TEXTURE: t -> GLenum.t [@@js.get "COMPARE_REF_TO_TEXTURE"]
-  val get_CONDITION_SATISFIED: t -> GLenum.t [@@js.get "CONDITION_SATISFIED"]
-  val get_COPY_READ_BUFFER: t -> GLenum.t [@@js.get "COPY_READ_BUFFER"]
-  val get_COPY_READ_BUFFER_BINDING: t -> GLenum.t [@@js.get "COPY_READ_BUFFER_BINDING"]
-  val get_COPY_WRITE_BUFFER: t -> GLenum.t [@@js.get "COPY_WRITE_BUFFER"]
-  val get_COPY_WRITE_BUFFER_BINDING: t -> GLenum.t [@@js.get "COPY_WRITE_BUFFER_BINDING"]
-  val get_CURRENT_QUERY: t -> GLenum.t [@@js.get "CURRENT_QUERY"]
-  val get_DEPTH: t -> GLenum.t [@@js.get "DEPTH"]
-  val get_DEPTH24_STENCIL8: t -> GLenum.t [@@js.get "DEPTH24_STENCIL8"]
-  val get_DEPTH32F_STENCIL8: t -> GLenum.t [@@js.get "DEPTH32F_STENCIL8"]
-  val get_DEPTH_COMPONENT24: t -> GLenum.t [@@js.get "DEPTH_COMPONENT24"]
-  val get_DEPTH_COMPONENT32F: t -> GLenum.t [@@js.get "DEPTH_COMPONENT32F"]
-  val get_DRAW_BUFFER0: t -> GLenum.t [@@js.get "DRAW_BUFFER0"]
-  val get_DRAW_BUFFER1: t -> GLenum.t [@@js.get "DRAW_BUFFER1"]
-  val get_DRAW_BUFFER10: t -> GLenum.t [@@js.get "DRAW_BUFFER10"]
-  val get_DRAW_BUFFER11: t -> GLenum.t [@@js.get "DRAW_BUFFER11"]
-  val get_DRAW_BUFFER12: t -> GLenum.t [@@js.get "DRAW_BUFFER12"]
-  val get_DRAW_BUFFER13: t -> GLenum.t [@@js.get "DRAW_BUFFER13"]
-  val get_DRAW_BUFFER14: t -> GLenum.t [@@js.get "DRAW_BUFFER14"]
-  val get_DRAW_BUFFER15: t -> GLenum.t [@@js.get "DRAW_BUFFER15"]
-  val get_DRAW_BUFFER2: t -> GLenum.t [@@js.get "DRAW_BUFFER2"]
-  val get_DRAW_BUFFER3: t -> GLenum.t [@@js.get "DRAW_BUFFER3"]
-  val get_DRAW_BUFFER4: t -> GLenum.t [@@js.get "DRAW_BUFFER4"]
-  val get_DRAW_BUFFER5: t -> GLenum.t [@@js.get "DRAW_BUFFER5"]
-  val get_DRAW_BUFFER6: t -> GLenum.t [@@js.get "DRAW_BUFFER6"]
-  val get_DRAW_BUFFER7: t -> GLenum.t [@@js.get "DRAW_BUFFER7"]
-  val get_DRAW_BUFFER8: t -> GLenum.t [@@js.get "DRAW_BUFFER8"]
-  val get_DRAW_BUFFER9: t -> GLenum.t [@@js.get "DRAW_BUFFER9"]
-  val get_DRAW_FRAMEBUFFER: t -> GLenum.t [@@js.get "DRAW_FRAMEBUFFER"]
-  val get_DRAW_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "DRAW_FRAMEBUFFER_BINDING"]
-  val get_DYNAMIC_COPY: t -> GLenum.t [@@js.get "DYNAMIC_COPY"]
-  val get_DYNAMIC_READ: t -> GLenum.t [@@js.get "DYNAMIC_READ"]
-  val get_FLOAT_32_UNSIGNED_INT_24_8_REV: t -> GLenum.t [@@js.get "FLOAT_32_UNSIGNED_INT_24_8_REV"]
-  val get_FLOAT_MAT2x3: t -> GLenum.t [@@js.get "FLOAT_MAT2x3"]
-  val get_FLOAT_MAT2x4: t -> GLenum.t [@@js.get "FLOAT_MAT2x4"]
-  val get_FLOAT_MAT3x2: t -> GLenum.t [@@js.get "FLOAT_MAT3x2"]
-  val get_FLOAT_MAT3x4: t -> GLenum.t [@@js.get "FLOAT_MAT3x4"]
-  val get_FLOAT_MAT4x2: t -> GLenum.t [@@js.get "FLOAT_MAT4x2"]
-  val get_FLOAT_MAT4x3: t -> GLenum.t [@@js.get "FLOAT_MAT4x3"]
-  val get_FRAGMENT_SHADER_DERIVATIVE_HINT: t -> GLenum.t [@@js.get "FRAGMENT_SHADER_DERIVATIVE_HINT"]
-  val get_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_BLUE_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING"]
-  val get_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE"]
-  val get_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_GREEN_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_RED_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_RED_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER"]
-  val get_FRAMEBUFFER_DEFAULT: t -> GLenum.t [@@js.get "FRAMEBUFFER_DEFAULT"]
-  val get_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_MULTISAMPLE"]
-  val get_HALF_FLOAT: t -> GLenum.t [@@js.get "HALF_FLOAT"]
-  val get_INTERLEAVED_ATTRIBS: t -> GLenum.t [@@js.get "INTERLEAVED_ATTRIBS"]
-  val get_INT_2_10_10_10_REV: t -> GLenum.t [@@js.get "INT_2_10_10_10_REV"]
-  val get_INT_SAMPLER_2D: t -> GLenum.t [@@js.get "INT_SAMPLER_2D"]
-  val get_INT_SAMPLER_2D_ARRAY: t -> GLenum.t [@@js.get "INT_SAMPLER_2D_ARRAY"]
-  val get_INT_SAMPLER_3D: t -> GLenum.t [@@js.get "INT_SAMPLER_3D"]
-  val get_INT_SAMPLER_CUBE: t -> GLenum.t [@@js.get "INT_SAMPLER_CUBE"]
-  val get_INVALID_INDEX: t -> GLenum.t [@@js.get "INVALID_INDEX"]
-  val get_MAX: t -> GLenum.t [@@js.get "MAX"]
-  val get_MAX_3D_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_3D_TEXTURE_SIZE"]
-  val get_MAX_ARRAY_TEXTURE_LAYERS: t -> GLenum.t [@@js.get "MAX_ARRAY_TEXTURE_LAYERS"]
-  val get_MAX_CLIENT_WAIT_TIMEOUT_WEBGL: t -> GLenum.t [@@js.get "MAX_CLIENT_WAIT_TIMEOUT_WEBGL"]
-  val get_MAX_COLOR_ATTACHMENTS: t -> GLenum.t [@@js.get "MAX_COLOR_ATTACHMENTS"]
-  val get_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS"]
-  val get_MAX_COMBINED_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "MAX_COMBINED_UNIFORM_BLOCKS"]
-  val get_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS"]
-  val get_MAX_DRAW_BUFFERS: t -> GLenum.t [@@js.get "MAX_DRAW_BUFFERS"]
-  val get_MAX_ELEMENTS_INDICES: t -> GLenum.t [@@js.get "MAX_ELEMENTS_INDICES"]
-  val get_MAX_ELEMENTS_VERTICES: t -> GLenum.t [@@js.get "MAX_ELEMENTS_VERTICES"]
-  val get_MAX_ELEMENT_INDEX: t -> GLenum.t [@@js.get "MAX_ELEMENT_INDEX"]
-  val get_MAX_FRAGMENT_INPUT_COMPONENTS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_INPUT_COMPONENTS"]
-  val get_MAX_FRAGMENT_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_BLOCKS"]
-  val get_MAX_FRAGMENT_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_COMPONENTS"]
-  val get_MAX_PROGRAM_TEXEL_OFFSET: t -> GLenum.t [@@js.get "MAX_PROGRAM_TEXEL_OFFSET"]
-  val get_MAX_SAMPLES: t -> GLenum.t [@@js.get "MAX_SAMPLES"]
-  val get_MAX_SERVER_WAIT_TIMEOUT: t -> GLenum.t [@@js.get "MAX_SERVER_WAIT_TIMEOUT"]
-  val get_MAX_TEXTURE_LOD_BIAS: t -> GLenum.t [@@js.get "MAX_TEXTURE_LOD_BIAS"]
-  val get_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: t -> GLenum.t [@@js.get "MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS"]
-  val get_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: t -> GLenum.t [@@js.get "MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS"]
-  val get_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: t -> GLenum.t [@@js.get "MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS"]
-  val get_MAX_UNIFORM_BLOCK_SIZE: t -> GLenum.t [@@js.get "MAX_UNIFORM_BLOCK_SIZE"]
-  val get_MAX_UNIFORM_BUFFER_BINDINGS: t -> GLenum.t [@@js.get "MAX_UNIFORM_BUFFER_BINDINGS"]
-  val get_MAX_VARYING_COMPONENTS: t -> GLenum.t [@@js.get "MAX_VARYING_COMPONENTS"]
-  val get_MAX_VERTEX_OUTPUT_COMPONENTS: t -> GLenum.t [@@js.get "MAX_VERTEX_OUTPUT_COMPONENTS"]
-  val get_MAX_VERTEX_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_BLOCKS"]
-  val get_MAX_VERTEX_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_COMPONENTS"]
-  val get_MIN: t -> GLenum.t [@@js.get "MIN"]
-  val get_MIN_PROGRAM_TEXEL_OFFSET: t -> GLenum.t [@@js.get "MIN_PROGRAM_TEXEL_OFFSET"]
-  val get_OBJECT_TYPE: t -> GLenum.t [@@js.get "OBJECT_TYPE"]
-  val get_PACK_ROW_LENGTH: t -> GLenum.t [@@js.get "PACK_ROW_LENGTH"]
-  val get_PACK_SKIP_PIXELS: t -> GLenum.t [@@js.get "PACK_SKIP_PIXELS"]
-  val get_PACK_SKIP_ROWS: t -> GLenum.t [@@js.get "PACK_SKIP_ROWS"]
-  val get_PIXEL_PACK_BUFFER: t -> GLenum.t [@@js.get "PIXEL_PACK_BUFFER"]
-  val get_PIXEL_PACK_BUFFER_BINDING: t -> GLenum.t [@@js.get "PIXEL_PACK_BUFFER_BINDING"]
-  val get_PIXEL_UNPACK_BUFFER: t -> GLenum.t [@@js.get "PIXEL_UNPACK_BUFFER"]
-  val get_PIXEL_UNPACK_BUFFER_BINDING: t -> GLenum.t [@@js.get "PIXEL_UNPACK_BUFFER_BINDING"]
-  val get_QUERY_RESULT: t -> GLenum.t [@@js.get "QUERY_RESULT"]
-  val get_QUERY_RESULT_AVAILABLE: t -> GLenum.t [@@js.get "QUERY_RESULT_AVAILABLE"]
-  val get_R11F_G11F_B10F: t -> GLenum.t [@@js.get "R11F_G11F_B10F"]
-  val get_R16F: t -> GLenum.t [@@js.get "R16F"]
-  val get_R16I: t -> GLenum.t [@@js.get "R16I"]
-  val get_R16UI: t -> GLenum.t [@@js.get "R16UI"]
-  val get_R32F: t -> GLenum.t [@@js.get "R32F"]
-  val get_R32I: t -> GLenum.t [@@js.get "R32I"]
-  val get_R32UI: t -> GLenum.t [@@js.get "R32UI"]
-  val get_R8: t -> GLenum.t [@@js.get "R8"]
-  val get_R8I: t -> GLenum.t [@@js.get "R8I"]
-  val get_R8UI: t -> GLenum.t [@@js.get "R8UI"]
-  val get_R8_SNORM: t -> GLenum.t [@@js.get "R8_SNORM"]
-  val get_RASTERIZER_DISCARD: t -> GLenum.t [@@js.get "RASTERIZER_DISCARD"]
-  val get_READ_BUFFER: t -> GLenum.t [@@js.get "READ_BUFFER"]
-  val get_READ_FRAMEBUFFER: t -> GLenum.t [@@js.get "READ_FRAMEBUFFER"]
-  val get_READ_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "READ_FRAMEBUFFER_BINDING"]
-  val get_RED: t -> GLenum.t [@@js.get "RED"]
-  val get_RED_INTEGER: t -> GLenum.t [@@js.get "RED_INTEGER"]
-  val get_RENDERBUFFER_SAMPLES: t -> GLenum.t [@@js.get "RENDERBUFFER_SAMPLES"]
-  val get_RG: t -> GLenum.t [@@js.get "RG"]
-  val get_RG16F: t -> GLenum.t [@@js.get "RG16F"]
-  val get_RG16I: t -> GLenum.t [@@js.get "RG16I"]
-  val get_RG16UI: t -> GLenum.t [@@js.get "RG16UI"]
-  val get_RG32F: t -> GLenum.t [@@js.get "RG32F"]
-  val get_RG32I: t -> GLenum.t [@@js.get "RG32I"]
-  val get_RG32UI: t -> GLenum.t [@@js.get "RG32UI"]
-  val get_RG8: t -> GLenum.t [@@js.get "RG8"]
-  val get_RG8I: t -> GLenum.t [@@js.get "RG8I"]
-  val get_RG8UI: t -> GLenum.t [@@js.get "RG8UI"]
-  val get_RG8_SNORM: t -> GLenum.t [@@js.get "RG8_SNORM"]
-  val get_RGB10_A2: t -> GLenum.t [@@js.get "RGB10_A2"]
-  val get_RGB10_A2UI: t -> GLenum.t [@@js.get "RGB10_A2UI"]
-  val get_RGB16F: t -> GLenum.t [@@js.get "RGB16F"]
-  val get_RGB16I: t -> GLenum.t [@@js.get "RGB16I"]
-  val get_RGB16UI: t -> GLenum.t [@@js.get "RGB16UI"]
-  val get_RGB32F: t -> GLenum.t [@@js.get "RGB32F"]
-  val get_RGB32I: t -> GLenum.t [@@js.get "RGB32I"]
-  val get_RGB32UI: t -> GLenum.t [@@js.get "RGB32UI"]
-  val get_RGB8: t -> GLenum.t [@@js.get "RGB8"]
-  val get_RGB8I: t -> GLenum.t [@@js.get "RGB8I"]
-  val get_RGB8UI: t -> GLenum.t [@@js.get "RGB8UI"]
-  val get_RGB8_SNORM: t -> GLenum.t [@@js.get "RGB8_SNORM"]
-  val get_RGB9_E5: t -> GLenum.t [@@js.get "RGB9_E5"]
-  val get_RGBA16F: t -> GLenum.t [@@js.get "RGBA16F"]
-  val get_RGBA16I: t -> GLenum.t [@@js.get "RGBA16I"]
-  val get_RGBA16UI: t -> GLenum.t [@@js.get "RGBA16UI"]
-  val get_RGBA32F: t -> GLenum.t [@@js.get "RGBA32F"]
-  val get_RGBA32I: t -> GLenum.t [@@js.get "RGBA32I"]
-  val get_RGBA32UI: t -> GLenum.t [@@js.get "RGBA32UI"]
-  val get_RGBA8: t -> GLenum.t [@@js.get "RGBA8"]
-  val get_RGBA8I: t -> GLenum.t [@@js.get "RGBA8I"]
-  val get_RGBA8UI: t -> GLenum.t [@@js.get "RGBA8UI"]
-  val get_RGBA8_SNORM: t -> GLenum.t [@@js.get "RGBA8_SNORM"]
-  val get_RGBA_INTEGER: t -> GLenum.t [@@js.get "RGBA_INTEGER"]
-  val get_RGB_INTEGER: t -> GLenum.t [@@js.get "RGB_INTEGER"]
-  val get_RG_INTEGER: t -> GLenum.t [@@js.get "RG_INTEGER"]
-  val get_SAMPLER_2D_ARRAY: t -> GLenum.t [@@js.get "SAMPLER_2D_ARRAY"]
-  val get_SAMPLER_2D_ARRAY_SHADOW: t -> GLenum.t [@@js.get "SAMPLER_2D_ARRAY_SHADOW"]
-  val get_SAMPLER_2D_SHADOW: t -> GLenum.t [@@js.get "SAMPLER_2D_SHADOW"]
-  val get_SAMPLER_3D: t -> GLenum.t [@@js.get "SAMPLER_3D"]
-  val get_SAMPLER_BINDING: t -> GLenum.t [@@js.get "SAMPLER_BINDING"]
-  val get_SAMPLER_CUBE_SHADOW: t -> GLenum.t [@@js.get "SAMPLER_CUBE_SHADOW"]
-  val get_SEPARATE_ATTRIBS: t -> GLenum.t [@@js.get "SEPARATE_ATTRIBS"]
-  val get_SIGNALED: t -> GLenum.t [@@js.get "SIGNALED"]
-  val get_SIGNED_NORMALIZED: t -> GLenum.t [@@js.get "SIGNED_NORMALIZED"]
-  val get_SRGB: t -> GLenum.t [@@js.get "SRGB"]
-  val get_SRGB8: t -> GLenum.t [@@js.get "SRGB8"]
-  val get_SRGB8_ALPHA8: t -> GLenum.t [@@js.get "SRGB8_ALPHA8"]
-  val get_STATIC_COPY: t -> GLenum.t [@@js.get "STATIC_COPY"]
-  val get_STATIC_READ: t -> GLenum.t [@@js.get "STATIC_READ"]
-  val get_STENCIL: t -> GLenum.t [@@js.get "STENCIL"]
-  val get_STREAM_COPY: t -> GLenum.t [@@js.get "STREAM_COPY"]
-  val get_STREAM_READ: t -> GLenum.t [@@js.get "STREAM_READ"]
-  val get_SYNC_CONDITION: t -> GLenum.t [@@js.get "SYNC_CONDITION"]
-  val get_SYNC_FENCE: t -> GLenum.t [@@js.get "SYNC_FENCE"]
-  val get_SYNC_FLAGS: t -> GLenum.t [@@js.get "SYNC_FLAGS"]
-  val get_SYNC_FLUSH_COMMANDS_BIT: t -> GLenum.t [@@js.get "SYNC_FLUSH_COMMANDS_BIT"]
-  val get_SYNC_GPU_COMMANDS_COMPLETE: t -> GLenum.t [@@js.get "SYNC_GPU_COMMANDS_COMPLETE"]
-  val get_SYNC_STATUS: t -> GLenum.t [@@js.get "SYNC_STATUS"]
-  val get_TEXTURE_2D_ARRAY: t -> GLenum.t [@@js.get "TEXTURE_2D_ARRAY"]
-  val get_TEXTURE_3D: t -> GLenum.t [@@js.get "TEXTURE_3D"]
-  val get_TEXTURE_BASE_LEVEL: t -> GLenum.t [@@js.get "TEXTURE_BASE_LEVEL"]
-  val get_TEXTURE_BINDING_2D_ARRAY: t -> GLenum.t [@@js.get "TEXTURE_BINDING_2D_ARRAY"]
-  val get_TEXTURE_BINDING_3D: t -> GLenum.t [@@js.get "TEXTURE_BINDING_3D"]
-  val get_TEXTURE_COMPARE_FUNC: t -> GLenum.t [@@js.get "TEXTURE_COMPARE_FUNC"]
-  val get_TEXTURE_COMPARE_MODE: t -> GLenum.t [@@js.get "TEXTURE_COMPARE_MODE"]
-  val get_TEXTURE_IMMUTABLE_FORMAT: t -> GLenum.t [@@js.get "TEXTURE_IMMUTABLE_FORMAT"]
-  val get_TEXTURE_IMMUTABLE_LEVELS: t -> GLenum.t [@@js.get "TEXTURE_IMMUTABLE_LEVELS"]
-  val get_TEXTURE_MAX_LEVEL: t -> GLenum.t [@@js.get "TEXTURE_MAX_LEVEL"]
-  val get_TEXTURE_MAX_LOD: t -> GLenum.t [@@js.get "TEXTURE_MAX_LOD"]
-  val get_TEXTURE_MIN_LOD: t -> GLenum.t [@@js.get "TEXTURE_MIN_LOD"]
-  val get_TEXTURE_WRAP_R: t -> GLenum.t [@@js.get "TEXTURE_WRAP_R"]
-  val get_TIMEOUT_EXPIRED: t -> GLenum.t [@@js.get "TIMEOUT_EXPIRED"]
-  val get_TIMEOUT_IGNORED: t -> GLint64.t [@@js.get "TIMEOUT_IGNORED"]
-  val get_TRANSFORM_FEEDBACK: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK"]
-  val get_TRANSFORM_FEEDBACK_ACTIVE: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_ACTIVE"]
-  val get_TRANSFORM_FEEDBACK_BINDING: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BINDING"]
-  val get_TRANSFORM_FEEDBACK_BUFFER: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER"]
-  val get_TRANSFORM_FEEDBACK_BUFFER_BINDING: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_BINDING"]
-  val get_TRANSFORM_FEEDBACK_BUFFER_MODE: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_MODE"]
-  val get_TRANSFORM_FEEDBACK_BUFFER_SIZE: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_SIZE"]
-  val get_TRANSFORM_FEEDBACK_BUFFER_START: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_START"]
-  val get_TRANSFORM_FEEDBACK_PAUSED: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_PAUSED"]
-  val get_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN"]
-  val get_TRANSFORM_FEEDBACK_VARYINGS: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_VARYINGS"]
-  val get_UNIFORM_ARRAY_STRIDE: t -> GLenum.t [@@js.get "UNIFORM_ARRAY_STRIDE"]
-  val get_UNIFORM_BLOCK_ACTIVE_UNIFORMS: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_ACTIVE_UNIFORMS"]
-  val get_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES"]
-  val get_UNIFORM_BLOCK_BINDING: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_BINDING"]
-  val get_UNIFORM_BLOCK_DATA_SIZE: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_DATA_SIZE"]
-  val get_UNIFORM_BLOCK_INDEX: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_INDEX"]
-  val get_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER"]
-  val get_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER"]
-  val get_UNIFORM_BUFFER: t -> GLenum.t [@@js.get "UNIFORM_BUFFER"]
-  val get_UNIFORM_BUFFER_BINDING: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_BINDING"]
-  val get_UNIFORM_BUFFER_OFFSET_ALIGNMENT: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_OFFSET_ALIGNMENT"]
-  val get_UNIFORM_BUFFER_SIZE: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_SIZE"]
-  val get_UNIFORM_BUFFER_START: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_START"]
-  val get_UNIFORM_IS_ROW_MAJOR: t -> GLenum.t [@@js.get "UNIFORM_IS_ROW_MAJOR"]
-  val get_UNIFORM_MATRIX_STRIDE: t -> GLenum.t [@@js.get "UNIFORM_MATRIX_STRIDE"]
-  val get_UNIFORM_OFFSET: t -> GLenum.t [@@js.get "UNIFORM_OFFSET"]
-  val get_UNIFORM_SIZE: t -> GLenum.t [@@js.get "UNIFORM_SIZE"]
-  val get_UNIFORM_TYPE: t -> GLenum.t [@@js.get "UNIFORM_TYPE"]
-  val get_UNPACK_IMAGE_HEIGHT: t -> GLenum.t [@@js.get "UNPACK_IMAGE_HEIGHT"]
-  val get_UNPACK_ROW_LENGTH: t -> GLenum.t [@@js.get "UNPACK_ROW_LENGTH"]
-  val get_UNPACK_SKIP_IMAGES: t -> GLenum.t [@@js.get "UNPACK_SKIP_IMAGES"]
-  val get_UNPACK_SKIP_PIXELS: t -> GLenum.t [@@js.get "UNPACK_SKIP_PIXELS"]
-  val get_UNPACK_SKIP_ROWS: t -> GLenum.t [@@js.get "UNPACK_SKIP_ROWS"]
-  val get_UNSIGNALED: t -> GLenum.t [@@js.get "UNSIGNALED"]
-  val get_UNSIGNED_INT_10F_11F_11F_REV: t -> GLenum.t [@@js.get "UNSIGNED_INT_10F_11F_11F_REV"]
-  val get_UNSIGNED_INT_24_8: t -> GLenum.t [@@js.get "UNSIGNED_INT_24_8"]
-  val get_UNSIGNED_INT_2_10_10_10_REV: t -> GLenum.t [@@js.get "UNSIGNED_INT_2_10_10_10_REV"]
-  val get_UNSIGNED_INT_5_9_9_9_REV: t -> GLenum.t [@@js.get "UNSIGNED_INT_5_9_9_9_REV"]
-  val get_UNSIGNED_INT_SAMPLER_2D: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_2D"]
-  val get_UNSIGNED_INT_SAMPLER_2D_ARRAY: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_2D_ARRAY"]
-  val get_UNSIGNED_INT_SAMPLER_3D: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_3D"]
-  val get_UNSIGNED_INT_SAMPLER_CUBE: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_CUBE"]
-  val get_UNSIGNED_INT_VEC2: t -> GLenum.t [@@js.get "UNSIGNED_INT_VEC2"]
-  val get_UNSIGNED_INT_VEC3: t -> GLenum.t [@@js.get "UNSIGNED_INT_VEC3"]
-  val get_UNSIGNED_INT_VEC4: t -> GLenum.t [@@js.get "UNSIGNED_INT_VEC4"]
-  val get_UNSIGNED_NORMALIZED: t -> GLenum.t [@@js.get "UNSIGNED_NORMALIZED"]
-  val get_VERTEX_ARRAY_BINDING: t -> GLenum.t [@@js.get "VERTEX_ARRAY_BINDING"]
-  val get_VERTEX_ATTRIB_ARRAY_DIVISOR: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_DIVISOR"]
-  val get_VERTEX_ATTRIB_ARRAY_INTEGER: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_INTEGER"]
-  val get_WAIT_FAILED: t -> GLenum.t [@@js.get "WAIT_FAILED"]
-  val get_ACTIVE_ATTRIBUTES: t -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
-  val get_ACTIVE_TEXTURE: t -> GLenum.t [@@js.get "ACTIVE_TEXTURE"]
-  val get_ACTIVE_UNIFORMS: t -> GLenum.t [@@js.get "ACTIVE_UNIFORMS"]
-  val get_ALIASED_LINE_WIDTH_RANGE: t -> GLenum.t [@@js.get "ALIASED_LINE_WIDTH_RANGE"]
-  val get_ALIASED_POINT_SIZE_RANGE: t -> GLenum.t [@@js.get "ALIASED_POINT_SIZE_RANGE"]
-  val get_ALPHA: t -> GLenum.t [@@js.get "ALPHA"]
-  val get_ALPHA_BITS: t -> GLenum.t [@@js.get "ALPHA_BITS"]
-  val get_ALWAYS: t -> GLenum.t [@@js.get "ALWAYS"]
-  val get_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ARRAY_BUFFER"]
-  val get_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ARRAY_BUFFER_BINDING"]
-  val get_ATTACHED_SHADERS: t -> GLenum.t [@@js.get "ATTACHED_SHADERS"]
-  val get_BACK: t -> GLenum.t [@@js.get "BACK"]
-  val get_BLEND: t -> GLenum.t [@@js.get "BLEND"]
-  val get_BLEND_COLOR: t -> GLenum.t [@@js.get "BLEND_COLOR"]
-  val get_BLEND_DST_ALPHA: t -> GLenum.t [@@js.get "BLEND_DST_ALPHA"]
-  val get_BLEND_DST_RGB: t -> GLenum.t [@@js.get "BLEND_DST_RGB"]
-  val get_BLEND_EQUATION: t -> GLenum.t [@@js.get "BLEND_EQUATION"]
-  val get_BLEND_EQUATION_ALPHA: t -> GLenum.t [@@js.get "BLEND_EQUATION_ALPHA"]
-  val get_BLEND_EQUATION_RGB: t -> GLenum.t [@@js.get "BLEND_EQUATION_RGB"]
-  val get_BLEND_SRC_ALPHA: t -> GLenum.t [@@js.get "BLEND_SRC_ALPHA"]
-  val get_BLEND_SRC_RGB: t -> GLenum.t [@@js.get "BLEND_SRC_RGB"]
-  val get_BLUE_BITS: t -> GLenum.t [@@js.get "BLUE_BITS"]
-  val get_BOOL: t -> GLenum.t [@@js.get "BOOL"]
-  val get_BOOL_VEC2: t -> GLenum.t [@@js.get "BOOL_VEC2"]
-  val get_BOOL_VEC3: t -> GLenum.t [@@js.get "BOOL_VEC3"]
-  val get_BOOL_VEC4: t -> GLenum.t [@@js.get "BOOL_VEC4"]
-  val get_BROWSER_DEFAULT_WEBGL: t -> GLenum.t [@@js.get "BROWSER_DEFAULT_WEBGL"]
-  val get_BUFFER_SIZE: t -> GLenum.t [@@js.get "BUFFER_SIZE"]
-  val get_BUFFER_USAGE: t -> GLenum.t [@@js.get "BUFFER_USAGE"]
-  val get_BYTE: t -> GLenum.t [@@js.get "BYTE"]
-  val get_CCW: t -> GLenum.t [@@js.get "CCW"]
-  val get_CLAMP_TO_EDGE: t -> GLenum.t [@@js.get "CLAMP_TO_EDGE"]
-  val get_COLOR_ATTACHMENT0: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT0"]
-  val get_COLOR_BUFFER_BIT: t -> GLenum.t [@@js.get "COLOR_BUFFER_BIT"]
-  val get_COLOR_CLEAR_VALUE: t -> GLenum.t [@@js.get "COLOR_CLEAR_VALUE"]
-  val get_COLOR_WRITEMASK: t -> GLenum.t [@@js.get "COLOR_WRITEMASK"]
-  val get_COMPILE_STATUS: t -> GLenum.t [@@js.get "COMPILE_STATUS"]
-  val get_COMPRESSED_TEXTURE_FORMATS: t -> GLenum.t [@@js.get "COMPRESSED_TEXTURE_FORMATS"]
-  val get_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "CONSTANT_ALPHA"]
-  val get_CONSTANT_COLOR: t -> GLenum.t [@@js.get "CONSTANT_COLOR"]
-  val get_CONTEXT_LOST_WEBGL: t -> GLenum.t [@@js.get "CONTEXT_LOST_WEBGL"]
-  val get_CULL_FACE: t -> GLenum.t [@@js.get "CULL_FACE"]
-  val get_CULL_FACE_MODE: t -> GLenum.t [@@js.get "CULL_FACE_MODE"]
-  val get_CURRENT_PROGRAM: t -> GLenum.t [@@js.get "CURRENT_PROGRAM"]
-  val get_CURRENT_VERTEX_ATTRIB: t -> GLenum.t [@@js.get "CURRENT_VERTEX_ATTRIB"]
-  val get_CW: t -> GLenum.t [@@js.get "CW"]
-  val get_DECR: t -> GLenum.t [@@js.get "DECR"]
-  val get_DECR_WRAP: t -> GLenum.t [@@js.get "DECR_WRAP"]
-  val get_DELETE_STATUS: t -> GLenum.t [@@js.get "DELETE_STATUS"]
-  val get_DEPTH_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_ATTACHMENT"]
-  val get_DEPTH_BITS: t -> GLenum.t [@@js.get "DEPTH_BITS"]
-  val get_DEPTH_BUFFER_BIT: t -> GLenum.t [@@js.get "DEPTH_BUFFER_BIT"]
-  val get_DEPTH_CLEAR_VALUE: t -> GLenum.t [@@js.get "DEPTH_CLEAR_VALUE"]
-  val get_DEPTH_COMPONENT: t -> GLenum.t [@@js.get "DEPTH_COMPONENT"]
-  val get_DEPTH_COMPONENT16: t -> GLenum.t [@@js.get "DEPTH_COMPONENT16"]
-  val get_DEPTH_FUNC: t -> GLenum.t [@@js.get "DEPTH_FUNC"]
-  val get_DEPTH_RANGE: t -> GLenum.t [@@js.get "DEPTH_RANGE"]
-  val get_DEPTH_STENCIL: t -> GLenum.t [@@js.get "DEPTH_STENCIL"]
-  val get_DEPTH_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_STENCIL_ATTACHMENT"]
-  val get_DEPTH_TEST: t -> GLenum.t [@@js.get "DEPTH_TEST"]
-  val get_DEPTH_WRITEMASK: t -> GLenum.t [@@js.get "DEPTH_WRITEMASK"]
-  val get_DITHER: t -> GLenum.t [@@js.get "DITHER"]
-  val get_DONT_CARE: t -> GLenum.t [@@js.get "DONT_CARE"]
-  val get_DST_ALPHA: t -> GLenum.t [@@js.get "DST_ALPHA"]
-  val get_DST_COLOR: t -> GLenum.t [@@js.get "DST_COLOR"]
-  val get_DYNAMIC_DRAW: t -> GLenum.t [@@js.get "DYNAMIC_DRAW"]
-  val get_ELEMENT_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER"]
-  val get_ELEMENT_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER_BINDING"]
-  val get_EQUAL: t -> GLenum.t [@@js.get "EQUAL"]
-  val get_FASTEST: t -> GLenum.t [@@js.get "FASTEST"]
-  val get_FLOAT: t -> GLenum.t [@@js.get "FLOAT"]
-  val get_FLOAT_MAT2: t -> GLenum.t [@@js.get "FLOAT_MAT2"]
-  val get_FLOAT_MAT3: t -> GLenum.t [@@js.get "FLOAT_MAT3"]
-  val get_FLOAT_MAT4: t -> GLenum.t [@@js.get "FLOAT_MAT4"]
-  val get_FLOAT_VEC2: t -> GLenum.t [@@js.get "FLOAT_VEC2"]
-  val get_FLOAT_VEC3: t -> GLenum.t [@@js.get "FLOAT_VEC3"]
-  val get_FLOAT_VEC4: t -> GLenum.t [@@js.get "FLOAT_VEC4"]
-  val get_FRAGMENT_SHADER: t -> GLenum.t [@@js.get "FRAGMENT_SHADER"]
-  val get_FRAMEBUFFER: t -> GLenum.t [@@js.get "FRAMEBUFFER"]
-  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_NAME"]
-  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL"]
-  val get_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "FRAMEBUFFER_BINDING"]
-  val get_FRAMEBUFFER_COMPLETE: t -> GLenum.t [@@js.get "FRAMEBUFFER_COMPLETE"]
-  val get_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_ATTACHMENT"]
-  val get_FRAMEBUFFER_INCOMPLETE_DIMENSIONS: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_DIMENSIONS"]
-  val get_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"]
-  val get_FRAMEBUFFER_UNSUPPORTED: t -> GLenum.t [@@js.get "FRAMEBUFFER_UNSUPPORTED"]
-  val get_FRONT: t -> GLenum.t [@@js.get "FRONT"]
-  val get_FRONT_AND_BACK: t -> GLenum.t [@@js.get "FRONT_AND_BACK"]
-  val get_FRONT_FACE: t -> GLenum.t [@@js.get "FRONT_FACE"]
-  val get_FUNC_ADD: t -> GLenum.t [@@js.get "FUNC_ADD"]
-  val get_FUNC_REVERSE_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_REVERSE_SUBTRACT"]
-  val get_FUNC_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_SUBTRACT"]
-  val get_GENERATE_MIPMAP_HINT: t -> GLenum.t [@@js.get "GENERATE_MIPMAP_HINT"]
-  val get_GEQUAL: t -> GLenum.t [@@js.get "GEQUAL"]
-  val get_GREATER: t -> GLenum.t [@@js.get "GREATER"]
-  val get_GREEN_BITS: t -> GLenum.t [@@js.get "GREEN_BITS"]
-  val get_HIGH_FLOAT: t -> GLenum.t [@@js.get "HIGH_FLOAT"]
-  val get_HIGH_INT: t -> GLenum.t [@@js.get "HIGH_INT"]
-  val get_IMPLEMENTATION_COLOR_READ_FORMAT: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_FORMAT"]
-  val get_IMPLEMENTATION_COLOR_READ_TYPE: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_TYPE"]
-  val get_INCR: t -> GLenum.t [@@js.get "INCR"]
-  val get_INCR_WRAP: t -> GLenum.t [@@js.get "INCR_WRAP"]
-  val get_INT: t -> GLenum.t [@@js.get "INT"]
-  val get_INT_VEC2: t -> GLenum.t [@@js.get "INT_VEC2"]
-  val get_INT_VEC3: t -> GLenum.t [@@js.get "INT_VEC3"]
-  val get_INT_VEC4: t -> GLenum.t [@@js.get "INT_VEC4"]
-  val get_INVALID_ENUM: t -> GLenum.t [@@js.get "INVALID_ENUM"]
-  val get_INVALID_FRAMEBUFFER_OPERATION: t -> GLenum.t [@@js.get "INVALID_FRAMEBUFFER_OPERATION"]
-  val get_INVALID_OPERATION: t -> GLenum.t [@@js.get "INVALID_OPERATION"]
-  val get_INVALID_VALUE: t -> GLenum.t [@@js.get "INVALID_VALUE"]
-  val get_INVERT: t -> GLenum.t [@@js.get "INVERT"]
-  val get_KEEP: t -> GLenum.t [@@js.get "KEEP"]
-  val get_LEQUAL: t -> GLenum.t [@@js.get "LEQUAL"]
-  val get_LESS: t -> GLenum.t [@@js.get "LESS"]
-  val get_LINEAR: t -> GLenum.t [@@js.get "LINEAR"]
-  val get_LINEAR_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_LINEAR"]
-  val get_LINEAR_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_NEAREST"]
-  val get_LINES: t -> GLenum.t [@@js.get "LINES"]
-  val get_LINE_LOOP: t -> GLenum.t [@@js.get "LINE_LOOP"]
-  val get_LINE_STRIP: t -> GLenum.t [@@js.get "LINE_STRIP"]
-  val get_LINE_WIDTH: t -> GLenum.t [@@js.get "LINE_WIDTH"]
-  val get_LINK_STATUS: t -> GLenum.t [@@js.get "LINK_STATUS"]
-  val get_LOW_FLOAT: t -> GLenum.t [@@js.get "LOW_FLOAT"]
-  val get_LOW_INT: t -> GLenum.t [@@js.get "LOW_INT"]
-  val get_LUMINANCE: t -> GLenum.t [@@js.get "LUMINANCE"]
-  val get_LUMINANCE_ALPHA: t -> GLenum.t [@@js.get "LUMINANCE_ALPHA"]
-  val get_MAX_COMBINED_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_COMBINED_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_CUBE_MAP_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_CUBE_MAP_TEXTURE_SIZE"]
-  val get_MAX_FRAGMENT_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_VECTORS"]
-  val get_MAX_RENDERBUFFER_SIZE: t -> GLenum.t [@@js.get "MAX_RENDERBUFFER_SIZE"]
-  val get_MAX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_TEXTURE_SIZE"]
-  val get_MAX_VARYING_VECTORS: t -> GLenum.t [@@js.get "MAX_VARYING_VECTORS"]
-  val get_MAX_VERTEX_ATTRIBS: t -> GLenum.t [@@js.get "MAX_VERTEX_ATTRIBS"]
-  val get_MAX_VERTEX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_VERTEX_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_VERTEX_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_VECTORS"]
-  val get_MAX_VIEWPORT_DIMS: t -> GLenum.t [@@js.get "MAX_VIEWPORT_DIMS"]
-  val get_MEDIUM_FLOAT: t -> GLenum.t [@@js.get "MEDIUM_FLOAT"]
-  val get_MEDIUM_INT: t -> GLenum.t [@@js.get "MEDIUM_INT"]
-  val get_MIRRORED_REPEAT: t -> GLenum.t [@@js.get "MIRRORED_REPEAT"]
-  val get_NEAREST: t -> GLenum.t [@@js.get "NEAREST"]
-  val get_NEAREST_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_LINEAR"]
-  val get_NEAREST_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_NEAREST"]
-  val get_NEVER: t -> GLenum.t [@@js.get "NEVER"]
-  val get_NICEST: t -> GLenum.t [@@js.get "NICEST"]
-  val get_NONE: t -> GLenum.t [@@js.get "NONE"]
-  val get_NOTEQUAL: t -> GLenum.t [@@js.get "NOTEQUAL"]
-  val get_NO_ERROR: t -> GLenum.t [@@js.get "NO_ERROR"]
-  val get_ONE: t -> GLenum.t [@@js.get "ONE"]
-  val get_ONE_MINUS_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_ALPHA"]
-  val get_ONE_MINUS_CONSTANT_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_COLOR"]
-  val get_ONE_MINUS_DST_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_DST_ALPHA"]
-  val get_ONE_MINUS_DST_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_DST_COLOR"]
-  val get_ONE_MINUS_SRC_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_ALPHA"]
-  val get_ONE_MINUS_SRC_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_COLOR"]
-  val get_OUT_OF_MEMORY: t -> GLenum.t [@@js.get "OUT_OF_MEMORY"]
-  val get_PACK_ALIGNMENT: t -> GLenum.t [@@js.get "PACK_ALIGNMENT"]
-  val get_POINTS: t -> GLenum.t [@@js.get "POINTS"]
-  val get_POLYGON_OFFSET_FACTOR: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FACTOR"]
-  val get_POLYGON_OFFSET_FILL: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FILL"]
-  val get_POLYGON_OFFSET_UNITS: t -> GLenum.t [@@js.get "POLYGON_OFFSET_UNITS"]
-  val get_RED_BITS: t -> GLenum.t [@@js.get "RED_BITS"]
-  val get_RENDERBUFFER: t -> GLenum.t [@@js.get "RENDERBUFFER"]
-  val get_RENDERBUFFER_ALPHA_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_ALPHA_SIZE"]
-  val get_RENDERBUFFER_BINDING: t -> GLenum.t [@@js.get "RENDERBUFFER_BINDING"]
-  val get_RENDERBUFFER_BLUE_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_BLUE_SIZE"]
-  val get_RENDERBUFFER_DEPTH_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_DEPTH_SIZE"]
-  val get_RENDERBUFFER_GREEN_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_GREEN_SIZE"]
-  val get_RENDERBUFFER_HEIGHT: t -> GLenum.t [@@js.get "RENDERBUFFER_HEIGHT"]
-  val get_RENDERBUFFER_INTERNAL_FORMAT: t -> GLenum.t [@@js.get "RENDERBUFFER_INTERNAL_FORMAT"]
-  val get_RENDERBUFFER_RED_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_RED_SIZE"]
-  val get_RENDERBUFFER_STENCIL_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_STENCIL_SIZE"]
-  val get_RENDERBUFFER_WIDTH: t -> GLenum.t [@@js.get "RENDERBUFFER_WIDTH"]
-  val get_RENDERER: t -> GLenum.t [@@js.get "RENDERER"]
-  val get_REPEAT: t -> GLenum.t [@@js.get "REPEAT"]
-  val get_REPLACE: t -> GLenum.t [@@js.get "REPLACE"]
-  val get_RGB: t -> GLenum.t [@@js.get "RGB"]
-  val get_RGB565: t -> GLenum.t [@@js.get "RGB565"]
-  val get_RGB5_A1: t -> GLenum.t [@@js.get "RGB5_A1"]
-  val get_RGBA: t -> GLenum.t [@@js.get "RGBA"]
-  val get_RGBA4: t -> GLenum.t [@@js.get "RGBA4"]
-  val get_SAMPLER_2D: t -> GLenum.t [@@js.get "SAMPLER_2D"]
-  val get_SAMPLER_CUBE: t -> GLenum.t [@@js.get "SAMPLER_CUBE"]
-  val get_SAMPLES: t -> GLenum.t [@@js.get "SAMPLES"]
-  val get_SAMPLE_ALPHA_TO_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_ALPHA_TO_COVERAGE"]
-  val get_SAMPLE_BUFFERS: t -> GLenum.t [@@js.get "SAMPLE_BUFFERS"]
-  val get_SAMPLE_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE"]
-  val get_SAMPLE_COVERAGE_INVERT: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_INVERT"]
-  val get_SAMPLE_COVERAGE_VALUE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_VALUE"]
-  val get_SCISSOR_BOX: t -> GLenum.t [@@js.get "SCISSOR_BOX"]
-  val get_SCISSOR_TEST: t -> GLenum.t [@@js.get "SCISSOR_TEST"]
-  val get_SHADER_TYPE: t -> GLenum.t [@@js.get "SHADER_TYPE"]
-  val get_SHADING_LANGUAGE_VERSION: t -> GLenum.t [@@js.get "SHADING_LANGUAGE_VERSION"]
-  val get_SHORT: t -> GLenum.t [@@js.get "SHORT"]
-  val get_SRC_ALPHA: t -> GLenum.t [@@js.get "SRC_ALPHA"]
-  val get_SRC_ALPHA_SATURATE: t -> GLenum.t [@@js.get "SRC_ALPHA_SATURATE"]
-  val get_SRC_COLOR: t -> GLenum.t [@@js.get "SRC_COLOR"]
-  val get_STATIC_DRAW: t -> GLenum.t [@@js.get "STATIC_DRAW"]
-  val get_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "STENCIL_ATTACHMENT"]
-  val get_STENCIL_BACK_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_FAIL"]
-  val get_STENCIL_BACK_FUNC: t -> GLenum.t [@@js.get "STENCIL_BACK_FUNC"]
-  val get_STENCIL_BACK_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_FAIL"]
-  val get_STENCIL_BACK_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_PASS"]
-  val get_STENCIL_BACK_REF: t -> GLenum.t [@@js.get "STENCIL_BACK_REF"]
-  val get_STENCIL_BACK_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_BACK_VALUE_MASK"]
-  val get_STENCIL_BACK_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_BACK_WRITEMASK"]
-  val get_STENCIL_BITS: t -> GLenum.t [@@js.get "STENCIL_BITS"]
-  val get_STENCIL_BUFFER_BIT: t -> GLenum.t [@@js.get "STENCIL_BUFFER_BIT"]
-  val get_STENCIL_CLEAR_VALUE: t -> GLenum.t [@@js.get "STENCIL_CLEAR_VALUE"]
-  val get_STENCIL_FAIL: t -> GLenum.t [@@js.get "STENCIL_FAIL"]
-  val get_STENCIL_FUNC: t -> GLenum.t [@@js.get "STENCIL_FUNC"]
-  val get_STENCIL_INDEX8: t -> GLenum.t [@@js.get "STENCIL_INDEX8"]
-  val get_STENCIL_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_FAIL"]
-  val get_STENCIL_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_PASS"]
-  val get_STENCIL_REF: t -> GLenum.t [@@js.get "STENCIL_REF"]
-  val get_STENCIL_TEST: t -> GLenum.t [@@js.get "STENCIL_TEST"]
-  val get_STENCIL_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_VALUE_MASK"]
-  val get_STENCIL_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_WRITEMASK"]
-  val get_STREAM_DRAW: t -> GLenum.t [@@js.get "STREAM_DRAW"]
-  val get_SUBPIXEL_BITS: t -> GLenum.t [@@js.get "SUBPIXEL_BITS"]
-  val get_TEXTURE: t -> GLenum.t [@@js.get "TEXTURE"]
-  val get_TEXTURE0: t -> GLenum.t [@@js.get "TEXTURE0"]
-  val get_TEXTURE1: t -> GLenum.t [@@js.get "TEXTURE1"]
-  val get_TEXTURE10: t -> GLenum.t [@@js.get "TEXTURE10"]
-  val get_TEXTURE11: t -> GLenum.t [@@js.get "TEXTURE11"]
-  val get_TEXTURE12: t -> GLenum.t [@@js.get "TEXTURE12"]
-  val get_TEXTURE13: t -> GLenum.t [@@js.get "TEXTURE13"]
-  val get_TEXTURE14: t -> GLenum.t [@@js.get "TEXTURE14"]
-  val get_TEXTURE15: t -> GLenum.t [@@js.get "TEXTURE15"]
-  val get_TEXTURE16: t -> GLenum.t [@@js.get "TEXTURE16"]
-  val get_TEXTURE17: t -> GLenum.t [@@js.get "TEXTURE17"]
-  val get_TEXTURE18: t -> GLenum.t [@@js.get "TEXTURE18"]
-  val get_TEXTURE19: t -> GLenum.t [@@js.get "TEXTURE19"]
-  val get_TEXTURE2: t -> GLenum.t [@@js.get "TEXTURE2"]
-  val get_TEXTURE20: t -> GLenum.t [@@js.get "TEXTURE20"]
-  val get_TEXTURE21: t -> GLenum.t [@@js.get "TEXTURE21"]
-  val get_TEXTURE22: t -> GLenum.t [@@js.get "TEXTURE22"]
-  val get_TEXTURE23: t -> GLenum.t [@@js.get "TEXTURE23"]
-  val get_TEXTURE24: t -> GLenum.t [@@js.get "TEXTURE24"]
-  val get_TEXTURE25: t -> GLenum.t [@@js.get "TEXTURE25"]
-  val get_TEXTURE26: t -> GLenum.t [@@js.get "TEXTURE26"]
-  val get_TEXTURE27: t -> GLenum.t [@@js.get "TEXTURE27"]
-  val get_TEXTURE28: t -> GLenum.t [@@js.get "TEXTURE28"]
-  val get_TEXTURE29: t -> GLenum.t [@@js.get "TEXTURE29"]
-  val get_TEXTURE3: t -> GLenum.t [@@js.get "TEXTURE3"]
-  val get_TEXTURE30: t -> GLenum.t [@@js.get "TEXTURE30"]
-  val get_TEXTURE31: t -> GLenum.t [@@js.get "TEXTURE31"]
-  val get_TEXTURE4: t -> GLenum.t [@@js.get "TEXTURE4"]
-  val get_TEXTURE5: t -> GLenum.t [@@js.get "TEXTURE5"]
-  val get_TEXTURE6: t -> GLenum.t [@@js.get "TEXTURE6"]
-  val get_TEXTURE7: t -> GLenum.t [@@js.get "TEXTURE7"]
-  val get_TEXTURE8: t -> GLenum.t [@@js.get "TEXTURE8"]
-  val get_TEXTURE9: t -> GLenum.t [@@js.get "TEXTURE9"]
-  val get_TEXTURE_2D: t -> GLenum.t [@@js.get "TEXTURE_2D"]
-  val get_TEXTURE_BINDING_2D: t -> GLenum.t [@@js.get "TEXTURE_BINDING_2D"]
-  val get_TEXTURE_BINDING_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_BINDING_CUBE_MAP"]
-  val get_TEXTURE_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_X"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Y"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Z"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_X"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Y"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Z"]
-  val get_TEXTURE_MAG_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MAG_FILTER"]
-  val get_TEXTURE_MIN_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MIN_FILTER"]
-  val get_TEXTURE_WRAP_S: t -> GLenum.t [@@js.get "TEXTURE_WRAP_S"]
-  val get_TEXTURE_WRAP_T: t -> GLenum.t [@@js.get "TEXTURE_WRAP_T"]
-  val get_TRIANGLES: t -> GLenum.t [@@js.get "TRIANGLES"]
-  val get_TRIANGLE_FAN: t -> GLenum.t [@@js.get "TRIANGLE_FAN"]
-  val get_TRIANGLE_STRIP: t -> GLenum.t [@@js.get "TRIANGLE_STRIP"]
-  val get_UNPACK_ALIGNMENT: t -> GLenum.t [@@js.get "UNPACK_ALIGNMENT"]
-  val get_UNPACK_COLORSPACE_CONVERSION_WEBGL: t -> GLenum.t [@@js.get "UNPACK_COLORSPACE_CONVERSION_WEBGL"]
-  val get_UNPACK_FLIP_Y_WEBGL: t -> GLenum.t [@@js.get "UNPACK_FLIP_Y_WEBGL"]
-  val get_UNPACK_PREMULTIPLY_ALPHA_WEBGL: t -> GLenum.t [@@js.get "UNPACK_PREMULTIPLY_ALPHA_WEBGL"]
-  val get_UNSIGNED_BYTE: t -> GLenum.t [@@js.get "UNSIGNED_BYTE"]
-  val get_UNSIGNED_INT: t -> GLenum.t [@@js.get "UNSIGNED_INT"]
-  val get_UNSIGNED_SHORT: t -> GLenum.t [@@js.get "UNSIGNED_SHORT"]
-  val get_UNSIGNED_SHORT_4_4_4_4: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_4_4_4_4"]
-  val get_UNSIGNED_SHORT_5_5_5_1: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_5_5_1"]
-  val get_UNSIGNED_SHORT_5_6_5: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_6_5"]
-  val get_VALIDATE_STATUS: t -> GLenum.t [@@js.get "VALIDATE_STATUS"]
-  val get_VENDOR: t -> GLenum.t [@@js.get "VENDOR"]
-  val get_VERSION: t -> GLenum.t [@@js.get "VERSION"]
-  val get_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"]
-  val get_VERTEX_ATTRIB_ARRAY_ENABLED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_ENABLED"]
-  val get_VERTEX_ATTRIB_ARRAY_NORMALIZED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_NORMALIZED"]
-  val get_VERTEX_ATTRIB_ARRAY_POINTER: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_POINTER"]
-  val get_VERTEX_ATTRIB_ARRAY_SIZE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_SIZE"]
-  val get_VERTEX_ATTRIB_ARRAY_STRIDE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_STRIDE"]
-  val get_VERTEX_ATTRIB_ARRAY_TYPE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_TYPE"]
-  val get_VERTEX_SHADER: t -> GLenum.t [@@js.get "VERTEX_SHADER"]
-  val get_VIEWPORT: t -> GLenum.t [@@js.get "VIEWPORT"]
-  val get_ZERO: t -> GLenum.t [@@js.get "ZERO"]
-end
-and[@js.scope "WebGL2RenderingContext"] WebGL2RenderingContext : sig
+module[@js.scope "WebGL2RenderingContext"] WebGL2RenderingContext : sig
   type t = [`WebGL2RenderingContext | `WebGL2RenderingContextBase | `WebGL2RenderingContextOverloads | `WebGLRenderingContextBase] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -14292,15 +14648,601 @@ and[@js.scope "WebGL2RenderingContext"] WebGL2RenderingContext : sig
   val viewport: unit -> GLenum.t [@@js.get "VIEWPORT"]
   val zero: unit -> GLenum.t [@@js.get "ZERO"]
 end
-module rec AnonymousInterface108 : sig
+module AnonymousInterface111 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TransformStreamDefaultController.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> TransformStreamDefaultController.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> TransformStreamDefaultController.t_0 [@@js.apply_newable]
+  val get_prototype: t -> WebGL2RenderingContext.t [@@js.get "prototype"]
+  val set_prototype: t -> WebGL2RenderingContext.t -> unit [@@js.set "prototype"]
+  val create: t -> WebGL2RenderingContext.t [@@js.apply_newable]
+  val get_ACTIVE_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "ACTIVE_UNIFORM_BLOCKS"]
+  val get_ALREADY_SIGNALED: t -> GLenum.t [@@js.get "ALREADY_SIGNALED"]
+  val get_ANY_SAMPLES_PASSED: t -> GLenum.t [@@js.get "ANY_SAMPLES_PASSED"]
+  val get_ANY_SAMPLES_PASSED_CONSERVATIVE: t -> GLenum.t [@@js.get "ANY_SAMPLES_PASSED_CONSERVATIVE"]
+  val get_COLOR: t -> GLenum.t [@@js.get "COLOR"]
+  val get_COLOR_ATTACHMENT1: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT1"]
+  val get_COLOR_ATTACHMENT10: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT10"]
+  val get_COLOR_ATTACHMENT11: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT11"]
+  val get_COLOR_ATTACHMENT12: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT12"]
+  val get_COLOR_ATTACHMENT13: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT13"]
+  val get_COLOR_ATTACHMENT14: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT14"]
+  val get_COLOR_ATTACHMENT15: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT15"]
+  val get_COLOR_ATTACHMENT2: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT2"]
+  val get_COLOR_ATTACHMENT3: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT3"]
+  val get_COLOR_ATTACHMENT4: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT4"]
+  val get_COLOR_ATTACHMENT5: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT5"]
+  val get_COLOR_ATTACHMENT6: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT6"]
+  val get_COLOR_ATTACHMENT7: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT7"]
+  val get_COLOR_ATTACHMENT8: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT8"]
+  val get_COLOR_ATTACHMENT9: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT9"]
+  val get_COMPARE_REF_TO_TEXTURE: t -> GLenum.t [@@js.get "COMPARE_REF_TO_TEXTURE"]
+  val get_CONDITION_SATISFIED: t -> GLenum.t [@@js.get "CONDITION_SATISFIED"]
+  val get_COPY_READ_BUFFER: t -> GLenum.t [@@js.get "COPY_READ_BUFFER"]
+  val get_COPY_READ_BUFFER_BINDING: t -> GLenum.t [@@js.get "COPY_READ_BUFFER_BINDING"]
+  val get_COPY_WRITE_BUFFER: t -> GLenum.t [@@js.get "COPY_WRITE_BUFFER"]
+  val get_COPY_WRITE_BUFFER_BINDING: t -> GLenum.t [@@js.get "COPY_WRITE_BUFFER_BINDING"]
+  val get_CURRENT_QUERY: t -> GLenum.t [@@js.get "CURRENT_QUERY"]
+  val get_DEPTH: t -> GLenum.t [@@js.get "DEPTH"]
+  val get_DEPTH24_STENCIL8: t -> GLenum.t [@@js.get "DEPTH24_STENCIL8"]
+  val get_DEPTH32F_STENCIL8: t -> GLenum.t [@@js.get "DEPTH32F_STENCIL8"]
+  val get_DEPTH_COMPONENT24: t -> GLenum.t [@@js.get "DEPTH_COMPONENT24"]
+  val get_DEPTH_COMPONENT32F: t -> GLenum.t [@@js.get "DEPTH_COMPONENT32F"]
+  val get_DRAW_BUFFER0: t -> GLenum.t [@@js.get "DRAW_BUFFER0"]
+  val get_DRAW_BUFFER1: t -> GLenum.t [@@js.get "DRAW_BUFFER1"]
+  val get_DRAW_BUFFER10: t -> GLenum.t [@@js.get "DRAW_BUFFER10"]
+  val get_DRAW_BUFFER11: t -> GLenum.t [@@js.get "DRAW_BUFFER11"]
+  val get_DRAW_BUFFER12: t -> GLenum.t [@@js.get "DRAW_BUFFER12"]
+  val get_DRAW_BUFFER13: t -> GLenum.t [@@js.get "DRAW_BUFFER13"]
+  val get_DRAW_BUFFER14: t -> GLenum.t [@@js.get "DRAW_BUFFER14"]
+  val get_DRAW_BUFFER15: t -> GLenum.t [@@js.get "DRAW_BUFFER15"]
+  val get_DRAW_BUFFER2: t -> GLenum.t [@@js.get "DRAW_BUFFER2"]
+  val get_DRAW_BUFFER3: t -> GLenum.t [@@js.get "DRAW_BUFFER3"]
+  val get_DRAW_BUFFER4: t -> GLenum.t [@@js.get "DRAW_BUFFER4"]
+  val get_DRAW_BUFFER5: t -> GLenum.t [@@js.get "DRAW_BUFFER5"]
+  val get_DRAW_BUFFER6: t -> GLenum.t [@@js.get "DRAW_BUFFER6"]
+  val get_DRAW_BUFFER7: t -> GLenum.t [@@js.get "DRAW_BUFFER7"]
+  val get_DRAW_BUFFER8: t -> GLenum.t [@@js.get "DRAW_BUFFER8"]
+  val get_DRAW_BUFFER9: t -> GLenum.t [@@js.get "DRAW_BUFFER9"]
+  val get_DRAW_FRAMEBUFFER: t -> GLenum.t [@@js.get "DRAW_FRAMEBUFFER"]
+  val get_DRAW_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "DRAW_FRAMEBUFFER_BINDING"]
+  val get_DYNAMIC_COPY: t -> GLenum.t [@@js.get "DYNAMIC_COPY"]
+  val get_DYNAMIC_READ: t -> GLenum.t [@@js.get "DYNAMIC_READ"]
+  val get_FLOAT_32_UNSIGNED_INT_24_8_REV: t -> GLenum.t [@@js.get "FLOAT_32_UNSIGNED_INT_24_8_REV"]
+  val get_FLOAT_MAT2x3: t -> GLenum.t [@@js.get "FLOAT_MAT2x3"]
+  val get_FLOAT_MAT2x4: t -> GLenum.t [@@js.get "FLOAT_MAT2x4"]
+  val get_FLOAT_MAT3x2: t -> GLenum.t [@@js.get "FLOAT_MAT3x2"]
+  val get_FLOAT_MAT3x4: t -> GLenum.t [@@js.get "FLOAT_MAT3x4"]
+  val get_FLOAT_MAT4x2: t -> GLenum.t [@@js.get "FLOAT_MAT4x2"]
+  val get_FLOAT_MAT4x3: t -> GLenum.t [@@js.get "FLOAT_MAT4x3"]
+  val get_FRAGMENT_SHADER_DERIVATIVE_HINT: t -> GLenum.t [@@js.get "FRAGMENT_SHADER_DERIVATIVE_HINT"]
+  val get_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE"]
+  val get_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_BLUE_SIZE"]
+  val get_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING"]
+  val get_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE"]
+  val get_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE"]
+  val get_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_GREEN_SIZE"]
+  val get_FRAMEBUFFER_ATTACHMENT_RED_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_RED_SIZE"]
+  val get_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE"]
+  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER"]
+  val get_FRAMEBUFFER_DEFAULT: t -> GLenum.t [@@js.get "FRAMEBUFFER_DEFAULT"]
+  val get_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_MULTISAMPLE"]
+  val get_HALF_FLOAT: t -> GLenum.t [@@js.get "HALF_FLOAT"]
+  val get_INTERLEAVED_ATTRIBS: t -> GLenum.t [@@js.get "INTERLEAVED_ATTRIBS"]
+  val get_INT_2_10_10_10_REV: t -> GLenum.t [@@js.get "INT_2_10_10_10_REV"]
+  val get_INT_SAMPLER_2D: t -> GLenum.t [@@js.get "INT_SAMPLER_2D"]
+  val get_INT_SAMPLER_2D_ARRAY: t -> GLenum.t [@@js.get "INT_SAMPLER_2D_ARRAY"]
+  val get_INT_SAMPLER_3D: t -> GLenum.t [@@js.get "INT_SAMPLER_3D"]
+  val get_INT_SAMPLER_CUBE: t -> GLenum.t [@@js.get "INT_SAMPLER_CUBE"]
+  val get_INVALID_INDEX: t -> GLenum.t [@@js.get "INVALID_INDEX"]
+  val get_MAX: t -> GLenum.t [@@js.get "MAX"]
+  val get_MAX_3D_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_3D_TEXTURE_SIZE"]
+  val get_MAX_ARRAY_TEXTURE_LAYERS: t -> GLenum.t [@@js.get "MAX_ARRAY_TEXTURE_LAYERS"]
+  val get_MAX_CLIENT_WAIT_TIMEOUT_WEBGL: t -> GLenum.t [@@js.get "MAX_CLIENT_WAIT_TIMEOUT_WEBGL"]
+  val get_MAX_COLOR_ATTACHMENTS: t -> GLenum.t [@@js.get "MAX_COLOR_ATTACHMENTS"]
+  val get_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS"]
+  val get_MAX_COMBINED_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "MAX_COMBINED_UNIFORM_BLOCKS"]
+  val get_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS"]
+  val get_MAX_DRAW_BUFFERS: t -> GLenum.t [@@js.get "MAX_DRAW_BUFFERS"]
+  val get_MAX_ELEMENTS_INDICES: t -> GLenum.t [@@js.get "MAX_ELEMENTS_INDICES"]
+  val get_MAX_ELEMENTS_VERTICES: t -> GLenum.t [@@js.get "MAX_ELEMENTS_VERTICES"]
+  val get_MAX_ELEMENT_INDEX: t -> GLenum.t [@@js.get "MAX_ELEMENT_INDEX"]
+  val get_MAX_FRAGMENT_INPUT_COMPONENTS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_INPUT_COMPONENTS"]
+  val get_MAX_FRAGMENT_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_BLOCKS"]
+  val get_MAX_FRAGMENT_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_COMPONENTS"]
+  val get_MAX_PROGRAM_TEXEL_OFFSET: t -> GLenum.t [@@js.get "MAX_PROGRAM_TEXEL_OFFSET"]
+  val get_MAX_SAMPLES: t -> GLenum.t [@@js.get "MAX_SAMPLES"]
+  val get_MAX_SERVER_WAIT_TIMEOUT: t -> GLenum.t [@@js.get "MAX_SERVER_WAIT_TIMEOUT"]
+  val get_MAX_TEXTURE_LOD_BIAS: t -> GLenum.t [@@js.get "MAX_TEXTURE_LOD_BIAS"]
+  val get_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: t -> GLenum.t [@@js.get "MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS"]
+  val get_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: t -> GLenum.t [@@js.get "MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS"]
+  val get_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: t -> GLenum.t [@@js.get "MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS"]
+  val get_MAX_UNIFORM_BLOCK_SIZE: t -> GLenum.t [@@js.get "MAX_UNIFORM_BLOCK_SIZE"]
+  val get_MAX_UNIFORM_BUFFER_BINDINGS: t -> GLenum.t [@@js.get "MAX_UNIFORM_BUFFER_BINDINGS"]
+  val get_MAX_VARYING_COMPONENTS: t -> GLenum.t [@@js.get "MAX_VARYING_COMPONENTS"]
+  val get_MAX_VERTEX_OUTPUT_COMPONENTS: t -> GLenum.t [@@js.get "MAX_VERTEX_OUTPUT_COMPONENTS"]
+  val get_MAX_VERTEX_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_BLOCKS"]
+  val get_MAX_VERTEX_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_COMPONENTS"]
+  val get_MIN: t -> GLenum.t [@@js.get "MIN"]
+  val get_MIN_PROGRAM_TEXEL_OFFSET: t -> GLenum.t [@@js.get "MIN_PROGRAM_TEXEL_OFFSET"]
+  val get_OBJECT_TYPE: t -> GLenum.t [@@js.get "OBJECT_TYPE"]
+  val get_PACK_ROW_LENGTH: t -> GLenum.t [@@js.get "PACK_ROW_LENGTH"]
+  val get_PACK_SKIP_PIXELS: t -> GLenum.t [@@js.get "PACK_SKIP_PIXELS"]
+  val get_PACK_SKIP_ROWS: t -> GLenum.t [@@js.get "PACK_SKIP_ROWS"]
+  val get_PIXEL_PACK_BUFFER: t -> GLenum.t [@@js.get "PIXEL_PACK_BUFFER"]
+  val get_PIXEL_PACK_BUFFER_BINDING: t -> GLenum.t [@@js.get "PIXEL_PACK_BUFFER_BINDING"]
+  val get_PIXEL_UNPACK_BUFFER: t -> GLenum.t [@@js.get "PIXEL_UNPACK_BUFFER"]
+  val get_PIXEL_UNPACK_BUFFER_BINDING: t -> GLenum.t [@@js.get "PIXEL_UNPACK_BUFFER_BINDING"]
+  val get_QUERY_RESULT: t -> GLenum.t [@@js.get "QUERY_RESULT"]
+  val get_QUERY_RESULT_AVAILABLE: t -> GLenum.t [@@js.get "QUERY_RESULT_AVAILABLE"]
+  val get_R11F_G11F_B10F: t -> GLenum.t [@@js.get "R11F_G11F_B10F"]
+  val get_R16F: t -> GLenum.t [@@js.get "R16F"]
+  val get_R16I: t -> GLenum.t [@@js.get "R16I"]
+  val get_R16UI: t -> GLenum.t [@@js.get "R16UI"]
+  val get_R32F: t -> GLenum.t [@@js.get "R32F"]
+  val get_R32I: t -> GLenum.t [@@js.get "R32I"]
+  val get_R32UI: t -> GLenum.t [@@js.get "R32UI"]
+  val get_R8: t -> GLenum.t [@@js.get "R8"]
+  val get_R8I: t -> GLenum.t [@@js.get "R8I"]
+  val get_R8UI: t -> GLenum.t [@@js.get "R8UI"]
+  val get_R8_SNORM: t -> GLenum.t [@@js.get "R8_SNORM"]
+  val get_RASTERIZER_DISCARD: t -> GLenum.t [@@js.get "RASTERIZER_DISCARD"]
+  val get_READ_BUFFER: t -> GLenum.t [@@js.get "READ_BUFFER"]
+  val get_READ_FRAMEBUFFER: t -> GLenum.t [@@js.get "READ_FRAMEBUFFER"]
+  val get_READ_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "READ_FRAMEBUFFER_BINDING"]
+  val get_RED: t -> GLenum.t [@@js.get "RED"]
+  val get_RED_INTEGER: t -> GLenum.t [@@js.get "RED_INTEGER"]
+  val get_RENDERBUFFER_SAMPLES: t -> GLenum.t [@@js.get "RENDERBUFFER_SAMPLES"]
+  val get_RG: t -> GLenum.t [@@js.get "RG"]
+  val get_RG16F: t -> GLenum.t [@@js.get "RG16F"]
+  val get_RG16I: t -> GLenum.t [@@js.get "RG16I"]
+  val get_RG16UI: t -> GLenum.t [@@js.get "RG16UI"]
+  val get_RG32F: t -> GLenum.t [@@js.get "RG32F"]
+  val get_RG32I: t -> GLenum.t [@@js.get "RG32I"]
+  val get_RG32UI: t -> GLenum.t [@@js.get "RG32UI"]
+  val get_RG8: t -> GLenum.t [@@js.get "RG8"]
+  val get_RG8I: t -> GLenum.t [@@js.get "RG8I"]
+  val get_RG8UI: t -> GLenum.t [@@js.get "RG8UI"]
+  val get_RG8_SNORM: t -> GLenum.t [@@js.get "RG8_SNORM"]
+  val get_RGB10_A2: t -> GLenum.t [@@js.get "RGB10_A2"]
+  val get_RGB10_A2UI: t -> GLenum.t [@@js.get "RGB10_A2UI"]
+  val get_RGB16F: t -> GLenum.t [@@js.get "RGB16F"]
+  val get_RGB16I: t -> GLenum.t [@@js.get "RGB16I"]
+  val get_RGB16UI: t -> GLenum.t [@@js.get "RGB16UI"]
+  val get_RGB32F: t -> GLenum.t [@@js.get "RGB32F"]
+  val get_RGB32I: t -> GLenum.t [@@js.get "RGB32I"]
+  val get_RGB32UI: t -> GLenum.t [@@js.get "RGB32UI"]
+  val get_RGB8: t -> GLenum.t [@@js.get "RGB8"]
+  val get_RGB8I: t -> GLenum.t [@@js.get "RGB8I"]
+  val get_RGB8UI: t -> GLenum.t [@@js.get "RGB8UI"]
+  val get_RGB8_SNORM: t -> GLenum.t [@@js.get "RGB8_SNORM"]
+  val get_RGB9_E5: t -> GLenum.t [@@js.get "RGB9_E5"]
+  val get_RGBA16F: t -> GLenum.t [@@js.get "RGBA16F"]
+  val get_RGBA16I: t -> GLenum.t [@@js.get "RGBA16I"]
+  val get_RGBA16UI: t -> GLenum.t [@@js.get "RGBA16UI"]
+  val get_RGBA32F: t -> GLenum.t [@@js.get "RGBA32F"]
+  val get_RGBA32I: t -> GLenum.t [@@js.get "RGBA32I"]
+  val get_RGBA32UI: t -> GLenum.t [@@js.get "RGBA32UI"]
+  val get_RGBA8: t -> GLenum.t [@@js.get "RGBA8"]
+  val get_RGBA8I: t -> GLenum.t [@@js.get "RGBA8I"]
+  val get_RGBA8UI: t -> GLenum.t [@@js.get "RGBA8UI"]
+  val get_RGBA8_SNORM: t -> GLenum.t [@@js.get "RGBA8_SNORM"]
+  val get_RGBA_INTEGER: t -> GLenum.t [@@js.get "RGBA_INTEGER"]
+  val get_RGB_INTEGER: t -> GLenum.t [@@js.get "RGB_INTEGER"]
+  val get_RG_INTEGER: t -> GLenum.t [@@js.get "RG_INTEGER"]
+  val get_SAMPLER_2D_ARRAY: t -> GLenum.t [@@js.get "SAMPLER_2D_ARRAY"]
+  val get_SAMPLER_2D_ARRAY_SHADOW: t -> GLenum.t [@@js.get "SAMPLER_2D_ARRAY_SHADOW"]
+  val get_SAMPLER_2D_SHADOW: t -> GLenum.t [@@js.get "SAMPLER_2D_SHADOW"]
+  val get_SAMPLER_3D: t -> GLenum.t [@@js.get "SAMPLER_3D"]
+  val get_SAMPLER_BINDING: t -> GLenum.t [@@js.get "SAMPLER_BINDING"]
+  val get_SAMPLER_CUBE_SHADOW: t -> GLenum.t [@@js.get "SAMPLER_CUBE_SHADOW"]
+  val get_SEPARATE_ATTRIBS: t -> GLenum.t [@@js.get "SEPARATE_ATTRIBS"]
+  val get_SIGNALED: t -> GLenum.t [@@js.get "SIGNALED"]
+  val get_SIGNED_NORMALIZED: t -> GLenum.t [@@js.get "SIGNED_NORMALIZED"]
+  val get_SRGB: t -> GLenum.t [@@js.get "SRGB"]
+  val get_SRGB8: t -> GLenum.t [@@js.get "SRGB8"]
+  val get_SRGB8_ALPHA8: t -> GLenum.t [@@js.get "SRGB8_ALPHA8"]
+  val get_STATIC_COPY: t -> GLenum.t [@@js.get "STATIC_COPY"]
+  val get_STATIC_READ: t -> GLenum.t [@@js.get "STATIC_READ"]
+  val get_STENCIL: t -> GLenum.t [@@js.get "STENCIL"]
+  val get_STREAM_COPY: t -> GLenum.t [@@js.get "STREAM_COPY"]
+  val get_STREAM_READ: t -> GLenum.t [@@js.get "STREAM_READ"]
+  val get_SYNC_CONDITION: t -> GLenum.t [@@js.get "SYNC_CONDITION"]
+  val get_SYNC_FENCE: t -> GLenum.t [@@js.get "SYNC_FENCE"]
+  val get_SYNC_FLAGS: t -> GLenum.t [@@js.get "SYNC_FLAGS"]
+  val get_SYNC_FLUSH_COMMANDS_BIT: t -> GLenum.t [@@js.get "SYNC_FLUSH_COMMANDS_BIT"]
+  val get_SYNC_GPU_COMMANDS_COMPLETE: t -> GLenum.t [@@js.get "SYNC_GPU_COMMANDS_COMPLETE"]
+  val get_SYNC_STATUS: t -> GLenum.t [@@js.get "SYNC_STATUS"]
+  val get_TEXTURE_2D_ARRAY: t -> GLenum.t [@@js.get "TEXTURE_2D_ARRAY"]
+  val get_TEXTURE_3D: t -> GLenum.t [@@js.get "TEXTURE_3D"]
+  val get_TEXTURE_BASE_LEVEL: t -> GLenum.t [@@js.get "TEXTURE_BASE_LEVEL"]
+  val get_TEXTURE_BINDING_2D_ARRAY: t -> GLenum.t [@@js.get "TEXTURE_BINDING_2D_ARRAY"]
+  val get_TEXTURE_BINDING_3D: t -> GLenum.t [@@js.get "TEXTURE_BINDING_3D"]
+  val get_TEXTURE_COMPARE_FUNC: t -> GLenum.t [@@js.get "TEXTURE_COMPARE_FUNC"]
+  val get_TEXTURE_COMPARE_MODE: t -> GLenum.t [@@js.get "TEXTURE_COMPARE_MODE"]
+  val get_TEXTURE_IMMUTABLE_FORMAT: t -> GLenum.t [@@js.get "TEXTURE_IMMUTABLE_FORMAT"]
+  val get_TEXTURE_IMMUTABLE_LEVELS: t -> GLenum.t [@@js.get "TEXTURE_IMMUTABLE_LEVELS"]
+  val get_TEXTURE_MAX_LEVEL: t -> GLenum.t [@@js.get "TEXTURE_MAX_LEVEL"]
+  val get_TEXTURE_MAX_LOD: t -> GLenum.t [@@js.get "TEXTURE_MAX_LOD"]
+  val get_TEXTURE_MIN_LOD: t -> GLenum.t [@@js.get "TEXTURE_MIN_LOD"]
+  val get_TEXTURE_WRAP_R: t -> GLenum.t [@@js.get "TEXTURE_WRAP_R"]
+  val get_TIMEOUT_EXPIRED: t -> GLenum.t [@@js.get "TIMEOUT_EXPIRED"]
+  val get_TIMEOUT_IGNORED: t -> GLint64.t [@@js.get "TIMEOUT_IGNORED"]
+  val get_TRANSFORM_FEEDBACK: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK"]
+  val get_TRANSFORM_FEEDBACK_ACTIVE: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_ACTIVE"]
+  val get_TRANSFORM_FEEDBACK_BINDING: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BINDING"]
+  val get_TRANSFORM_FEEDBACK_BUFFER: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER"]
+  val get_TRANSFORM_FEEDBACK_BUFFER_BINDING: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_BINDING"]
+  val get_TRANSFORM_FEEDBACK_BUFFER_MODE: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_MODE"]
+  val get_TRANSFORM_FEEDBACK_BUFFER_SIZE: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_SIZE"]
+  val get_TRANSFORM_FEEDBACK_BUFFER_START: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_START"]
+  val get_TRANSFORM_FEEDBACK_PAUSED: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_PAUSED"]
+  val get_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN"]
+  val get_TRANSFORM_FEEDBACK_VARYINGS: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_VARYINGS"]
+  val get_UNIFORM_ARRAY_STRIDE: t -> GLenum.t [@@js.get "UNIFORM_ARRAY_STRIDE"]
+  val get_UNIFORM_BLOCK_ACTIVE_UNIFORMS: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_ACTIVE_UNIFORMS"]
+  val get_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES"]
+  val get_UNIFORM_BLOCK_BINDING: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_BINDING"]
+  val get_UNIFORM_BLOCK_DATA_SIZE: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_DATA_SIZE"]
+  val get_UNIFORM_BLOCK_INDEX: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_INDEX"]
+  val get_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER"]
+  val get_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER"]
+  val get_UNIFORM_BUFFER: t -> GLenum.t [@@js.get "UNIFORM_BUFFER"]
+  val get_UNIFORM_BUFFER_BINDING: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_BINDING"]
+  val get_UNIFORM_BUFFER_OFFSET_ALIGNMENT: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_OFFSET_ALIGNMENT"]
+  val get_UNIFORM_BUFFER_SIZE: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_SIZE"]
+  val get_UNIFORM_BUFFER_START: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_START"]
+  val get_UNIFORM_IS_ROW_MAJOR: t -> GLenum.t [@@js.get "UNIFORM_IS_ROW_MAJOR"]
+  val get_UNIFORM_MATRIX_STRIDE: t -> GLenum.t [@@js.get "UNIFORM_MATRIX_STRIDE"]
+  val get_UNIFORM_OFFSET: t -> GLenum.t [@@js.get "UNIFORM_OFFSET"]
+  val get_UNIFORM_SIZE: t -> GLenum.t [@@js.get "UNIFORM_SIZE"]
+  val get_UNIFORM_TYPE: t -> GLenum.t [@@js.get "UNIFORM_TYPE"]
+  val get_UNPACK_IMAGE_HEIGHT: t -> GLenum.t [@@js.get "UNPACK_IMAGE_HEIGHT"]
+  val get_UNPACK_ROW_LENGTH: t -> GLenum.t [@@js.get "UNPACK_ROW_LENGTH"]
+  val get_UNPACK_SKIP_IMAGES: t -> GLenum.t [@@js.get "UNPACK_SKIP_IMAGES"]
+  val get_UNPACK_SKIP_PIXELS: t -> GLenum.t [@@js.get "UNPACK_SKIP_PIXELS"]
+  val get_UNPACK_SKIP_ROWS: t -> GLenum.t [@@js.get "UNPACK_SKIP_ROWS"]
+  val get_UNSIGNALED: t -> GLenum.t [@@js.get "UNSIGNALED"]
+  val get_UNSIGNED_INT_10F_11F_11F_REV: t -> GLenum.t [@@js.get "UNSIGNED_INT_10F_11F_11F_REV"]
+  val get_UNSIGNED_INT_24_8: t -> GLenum.t [@@js.get "UNSIGNED_INT_24_8"]
+  val get_UNSIGNED_INT_2_10_10_10_REV: t -> GLenum.t [@@js.get "UNSIGNED_INT_2_10_10_10_REV"]
+  val get_UNSIGNED_INT_5_9_9_9_REV: t -> GLenum.t [@@js.get "UNSIGNED_INT_5_9_9_9_REV"]
+  val get_UNSIGNED_INT_SAMPLER_2D: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_2D"]
+  val get_UNSIGNED_INT_SAMPLER_2D_ARRAY: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_2D_ARRAY"]
+  val get_UNSIGNED_INT_SAMPLER_3D: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_3D"]
+  val get_UNSIGNED_INT_SAMPLER_CUBE: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_CUBE"]
+  val get_UNSIGNED_INT_VEC2: t -> GLenum.t [@@js.get "UNSIGNED_INT_VEC2"]
+  val get_UNSIGNED_INT_VEC3: t -> GLenum.t [@@js.get "UNSIGNED_INT_VEC3"]
+  val get_UNSIGNED_INT_VEC4: t -> GLenum.t [@@js.get "UNSIGNED_INT_VEC4"]
+  val get_UNSIGNED_NORMALIZED: t -> GLenum.t [@@js.get "UNSIGNED_NORMALIZED"]
+  val get_VERTEX_ARRAY_BINDING: t -> GLenum.t [@@js.get "VERTEX_ARRAY_BINDING"]
+  val get_VERTEX_ATTRIB_ARRAY_DIVISOR: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_DIVISOR"]
+  val get_VERTEX_ATTRIB_ARRAY_INTEGER: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_INTEGER"]
+  val get_WAIT_FAILED: t -> GLenum.t [@@js.get "WAIT_FAILED"]
+  val get_ACTIVE_ATTRIBUTES: t -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
+  val get_ACTIVE_TEXTURE: t -> GLenum.t [@@js.get "ACTIVE_TEXTURE"]
+  val get_ACTIVE_UNIFORMS: t -> GLenum.t [@@js.get "ACTIVE_UNIFORMS"]
+  val get_ALIASED_LINE_WIDTH_RANGE: t -> GLenum.t [@@js.get "ALIASED_LINE_WIDTH_RANGE"]
+  val get_ALIASED_POINT_SIZE_RANGE: t -> GLenum.t [@@js.get "ALIASED_POINT_SIZE_RANGE"]
+  val get_ALPHA: t -> GLenum.t [@@js.get "ALPHA"]
+  val get_ALPHA_BITS: t -> GLenum.t [@@js.get "ALPHA_BITS"]
+  val get_ALWAYS: t -> GLenum.t [@@js.get "ALWAYS"]
+  val get_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ARRAY_BUFFER"]
+  val get_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ARRAY_BUFFER_BINDING"]
+  val get_ATTACHED_SHADERS: t -> GLenum.t [@@js.get "ATTACHED_SHADERS"]
+  val get_BACK: t -> GLenum.t [@@js.get "BACK"]
+  val get_BLEND: t -> GLenum.t [@@js.get "BLEND"]
+  val get_BLEND_COLOR: t -> GLenum.t [@@js.get "BLEND_COLOR"]
+  val get_BLEND_DST_ALPHA: t -> GLenum.t [@@js.get "BLEND_DST_ALPHA"]
+  val get_BLEND_DST_RGB: t -> GLenum.t [@@js.get "BLEND_DST_RGB"]
+  val get_BLEND_EQUATION: t -> GLenum.t [@@js.get "BLEND_EQUATION"]
+  val get_BLEND_EQUATION_ALPHA: t -> GLenum.t [@@js.get "BLEND_EQUATION_ALPHA"]
+  val get_BLEND_EQUATION_RGB: t -> GLenum.t [@@js.get "BLEND_EQUATION_RGB"]
+  val get_BLEND_SRC_ALPHA: t -> GLenum.t [@@js.get "BLEND_SRC_ALPHA"]
+  val get_BLEND_SRC_RGB: t -> GLenum.t [@@js.get "BLEND_SRC_RGB"]
+  val get_BLUE_BITS: t -> GLenum.t [@@js.get "BLUE_BITS"]
+  val get_BOOL: t -> GLenum.t [@@js.get "BOOL"]
+  val get_BOOL_VEC2: t -> GLenum.t [@@js.get "BOOL_VEC2"]
+  val get_BOOL_VEC3: t -> GLenum.t [@@js.get "BOOL_VEC3"]
+  val get_BOOL_VEC4: t -> GLenum.t [@@js.get "BOOL_VEC4"]
+  val get_BROWSER_DEFAULT_WEBGL: t -> GLenum.t [@@js.get "BROWSER_DEFAULT_WEBGL"]
+  val get_BUFFER_SIZE: t -> GLenum.t [@@js.get "BUFFER_SIZE"]
+  val get_BUFFER_USAGE: t -> GLenum.t [@@js.get "BUFFER_USAGE"]
+  val get_BYTE: t -> GLenum.t [@@js.get "BYTE"]
+  val get_CCW: t -> GLenum.t [@@js.get "CCW"]
+  val get_CLAMP_TO_EDGE: t -> GLenum.t [@@js.get "CLAMP_TO_EDGE"]
+  val get_COLOR_ATTACHMENT0: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT0"]
+  val get_COLOR_BUFFER_BIT: t -> GLenum.t [@@js.get "COLOR_BUFFER_BIT"]
+  val get_COLOR_CLEAR_VALUE: t -> GLenum.t [@@js.get "COLOR_CLEAR_VALUE"]
+  val get_COLOR_WRITEMASK: t -> GLenum.t [@@js.get "COLOR_WRITEMASK"]
+  val get_COMPILE_STATUS: t -> GLenum.t [@@js.get "COMPILE_STATUS"]
+  val get_COMPRESSED_TEXTURE_FORMATS: t -> GLenum.t [@@js.get "COMPRESSED_TEXTURE_FORMATS"]
+  val get_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "CONSTANT_ALPHA"]
+  val get_CONSTANT_COLOR: t -> GLenum.t [@@js.get "CONSTANT_COLOR"]
+  val get_CONTEXT_LOST_WEBGL: t -> GLenum.t [@@js.get "CONTEXT_LOST_WEBGL"]
+  val get_CULL_FACE: t -> GLenum.t [@@js.get "CULL_FACE"]
+  val get_CULL_FACE_MODE: t -> GLenum.t [@@js.get "CULL_FACE_MODE"]
+  val get_CURRENT_PROGRAM: t -> GLenum.t [@@js.get "CURRENT_PROGRAM"]
+  val get_CURRENT_VERTEX_ATTRIB: t -> GLenum.t [@@js.get "CURRENT_VERTEX_ATTRIB"]
+  val get_CW: t -> GLenum.t [@@js.get "CW"]
+  val get_DECR: t -> GLenum.t [@@js.get "DECR"]
+  val get_DECR_WRAP: t -> GLenum.t [@@js.get "DECR_WRAP"]
+  val get_DELETE_STATUS: t -> GLenum.t [@@js.get "DELETE_STATUS"]
+  val get_DEPTH_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_ATTACHMENT"]
+  val get_DEPTH_BITS: t -> GLenum.t [@@js.get "DEPTH_BITS"]
+  val get_DEPTH_BUFFER_BIT: t -> GLenum.t [@@js.get "DEPTH_BUFFER_BIT"]
+  val get_DEPTH_CLEAR_VALUE: t -> GLenum.t [@@js.get "DEPTH_CLEAR_VALUE"]
+  val get_DEPTH_COMPONENT: t -> GLenum.t [@@js.get "DEPTH_COMPONENT"]
+  val get_DEPTH_COMPONENT16: t -> GLenum.t [@@js.get "DEPTH_COMPONENT16"]
+  val get_DEPTH_FUNC: t -> GLenum.t [@@js.get "DEPTH_FUNC"]
+  val get_DEPTH_RANGE: t -> GLenum.t [@@js.get "DEPTH_RANGE"]
+  val get_DEPTH_STENCIL: t -> GLenum.t [@@js.get "DEPTH_STENCIL"]
+  val get_DEPTH_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_STENCIL_ATTACHMENT"]
+  val get_DEPTH_TEST: t -> GLenum.t [@@js.get "DEPTH_TEST"]
+  val get_DEPTH_WRITEMASK: t -> GLenum.t [@@js.get "DEPTH_WRITEMASK"]
+  val get_DITHER: t -> GLenum.t [@@js.get "DITHER"]
+  val get_DONT_CARE: t -> GLenum.t [@@js.get "DONT_CARE"]
+  val get_DST_ALPHA: t -> GLenum.t [@@js.get "DST_ALPHA"]
+  val get_DST_COLOR: t -> GLenum.t [@@js.get "DST_COLOR"]
+  val get_DYNAMIC_DRAW: t -> GLenum.t [@@js.get "DYNAMIC_DRAW"]
+  val get_ELEMENT_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER"]
+  val get_ELEMENT_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER_BINDING"]
+  val get_EQUAL: t -> GLenum.t [@@js.get "EQUAL"]
+  val get_FASTEST: t -> GLenum.t [@@js.get "FASTEST"]
+  val get_FLOAT: t -> GLenum.t [@@js.get "FLOAT"]
+  val get_FLOAT_MAT2: t -> GLenum.t [@@js.get "FLOAT_MAT2"]
+  val get_FLOAT_MAT3: t -> GLenum.t [@@js.get "FLOAT_MAT3"]
+  val get_FLOAT_MAT4: t -> GLenum.t [@@js.get "FLOAT_MAT4"]
+  val get_FLOAT_VEC2: t -> GLenum.t [@@js.get "FLOAT_VEC2"]
+  val get_FLOAT_VEC3: t -> GLenum.t [@@js.get "FLOAT_VEC3"]
+  val get_FLOAT_VEC4: t -> GLenum.t [@@js.get "FLOAT_VEC4"]
+  val get_FRAGMENT_SHADER: t -> GLenum.t [@@js.get "FRAGMENT_SHADER"]
+  val get_FRAMEBUFFER: t -> GLenum.t [@@js.get "FRAMEBUFFER"]
+  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_NAME"]
+  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE"]
+  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE"]
+  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL"]
+  val get_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "FRAMEBUFFER_BINDING"]
+  val get_FRAMEBUFFER_COMPLETE: t -> GLenum.t [@@js.get "FRAMEBUFFER_COMPLETE"]
+  val get_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_ATTACHMENT"]
+  val get_FRAMEBUFFER_INCOMPLETE_DIMENSIONS: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_DIMENSIONS"]
+  val get_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"]
+  val get_FRAMEBUFFER_UNSUPPORTED: t -> GLenum.t [@@js.get "FRAMEBUFFER_UNSUPPORTED"]
+  val get_FRONT: t -> GLenum.t [@@js.get "FRONT"]
+  val get_FRONT_AND_BACK: t -> GLenum.t [@@js.get "FRONT_AND_BACK"]
+  val get_FRONT_FACE: t -> GLenum.t [@@js.get "FRONT_FACE"]
+  val get_FUNC_ADD: t -> GLenum.t [@@js.get "FUNC_ADD"]
+  val get_FUNC_REVERSE_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_REVERSE_SUBTRACT"]
+  val get_FUNC_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_SUBTRACT"]
+  val get_GENERATE_MIPMAP_HINT: t -> GLenum.t [@@js.get "GENERATE_MIPMAP_HINT"]
+  val get_GEQUAL: t -> GLenum.t [@@js.get "GEQUAL"]
+  val get_GREATER: t -> GLenum.t [@@js.get "GREATER"]
+  val get_GREEN_BITS: t -> GLenum.t [@@js.get "GREEN_BITS"]
+  val get_HIGH_FLOAT: t -> GLenum.t [@@js.get "HIGH_FLOAT"]
+  val get_HIGH_INT: t -> GLenum.t [@@js.get "HIGH_INT"]
+  val get_IMPLEMENTATION_COLOR_READ_FORMAT: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_FORMAT"]
+  val get_IMPLEMENTATION_COLOR_READ_TYPE: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_TYPE"]
+  val get_INCR: t -> GLenum.t [@@js.get "INCR"]
+  val get_INCR_WRAP: t -> GLenum.t [@@js.get "INCR_WRAP"]
+  val get_INT: t -> GLenum.t [@@js.get "INT"]
+  val get_INT_VEC2: t -> GLenum.t [@@js.get "INT_VEC2"]
+  val get_INT_VEC3: t -> GLenum.t [@@js.get "INT_VEC3"]
+  val get_INT_VEC4: t -> GLenum.t [@@js.get "INT_VEC4"]
+  val get_INVALID_ENUM: t -> GLenum.t [@@js.get "INVALID_ENUM"]
+  val get_INVALID_FRAMEBUFFER_OPERATION: t -> GLenum.t [@@js.get "INVALID_FRAMEBUFFER_OPERATION"]
+  val get_INVALID_OPERATION: t -> GLenum.t [@@js.get "INVALID_OPERATION"]
+  val get_INVALID_VALUE: t -> GLenum.t [@@js.get "INVALID_VALUE"]
+  val get_INVERT: t -> GLenum.t [@@js.get "INVERT"]
+  val get_KEEP: t -> GLenum.t [@@js.get "KEEP"]
+  val get_LEQUAL: t -> GLenum.t [@@js.get "LEQUAL"]
+  val get_LESS: t -> GLenum.t [@@js.get "LESS"]
+  val get_LINEAR: t -> GLenum.t [@@js.get "LINEAR"]
+  val get_LINEAR_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_LINEAR"]
+  val get_LINEAR_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_NEAREST"]
+  val get_LINES: t -> GLenum.t [@@js.get "LINES"]
+  val get_LINE_LOOP: t -> GLenum.t [@@js.get "LINE_LOOP"]
+  val get_LINE_STRIP: t -> GLenum.t [@@js.get "LINE_STRIP"]
+  val get_LINE_WIDTH: t -> GLenum.t [@@js.get "LINE_WIDTH"]
+  val get_LINK_STATUS: t -> GLenum.t [@@js.get "LINK_STATUS"]
+  val get_LOW_FLOAT: t -> GLenum.t [@@js.get "LOW_FLOAT"]
+  val get_LOW_INT: t -> GLenum.t [@@js.get "LOW_INT"]
+  val get_LUMINANCE: t -> GLenum.t [@@js.get "LUMINANCE"]
+  val get_LUMINANCE_ALPHA: t -> GLenum.t [@@js.get "LUMINANCE_ALPHA"]
+  val get_MAX_COMBINED_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_COMBINED_TEXTURE_IMAGE_UNITS"]
+  val get_MAX_CUBE_MAP_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_CUBE_MAP_TEXTURE_SIZE"]
+  val get_MAX_FRAGMENT_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_VECTORS"]
+  val get_MAX_RENDERBUFFER_SIZE: t -> GLenum.t [@@js.get "MAX_RENDERBUFFER_SIZE"]
+  val get_MAX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_TEXTURE_IMAGE_UNITS"]
+  val get_MAX_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_TEXTURE_SIZE"]
+  val get_MAX_VARYING_VECTORS: t -> GLenum.t [@@js.get "MAX_VARYING_VECTORS"]
+  val get_MAX_VERTEX_ATTRIBS: t -> GLenum.t [@@js.get "MAX_VERTEX_ATTRIBS"]
+  val get_MAX_VERTEX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_VERTEX_TEXTURE_IMAGE_UNITS"]
+  val get_MAX_VERTEX_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_VECTORS"]
+  val get_MAX_VIEWPORT_DIMS: t -> GLenum.t [@@js.get "MAX_VIEWPORT_DIMS"]
+  val get_MEDIUM_FLOAT: t -> GLenum.t [@@js.get "MEDIUM_FLOAT"]
+  val get_MEDIUM_INT: t -> GLenum.t [@@js.get "MEDIUM_INT"]
+  val get_MIRRORED_REPEAT: t -> GLenum.t [@@js.get "MIRRORED_REPEAT"]
+  val get_NEAREST: t -> GLenum.t [@@js.get "NEAREST"]
+  val get_NEAREST_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_LINEAR"]
+  val get_NEAREST_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_NEAREST"]
+  val get_NEVER: t -> GLenum.t [@@js.get "NEVER"]
+  val get_NICEST: t -> GLenum.t [@@js.get "NICEST"]
+  val get_NONE: t -> GLenum.t [@@js.get "NONE"]
+  val get_NOTEQUAL: t -> GLenum.t [@@js.get "NOTEQUAL"]
+  val get_NO_ERROR: t -> GLenum.t [@@js.get "NO_ERROR"]
+  val get_ONE: t -> GLenum.t [@@js.get "ONE"]
+  val get_ONE_MINUS_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_ALPHA"]
+  val get_ONE_MINUS_CONSTANT_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_COLOR"]
+  val get_ONE_MINUS_DST_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_DST_ALPHA"]
+  val get_ONE_MINUS_DST_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_DST_COLOR"]
+  val get_ONE_MINUS_SRC_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_ALPHA"]
+  val get_ONE_MINUS_SRC_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_COLOR"]
+  val get_OUT_OF_MEMORY: t -> GLenum.t [@@js.get "OUT_OF_MEMORY"]
+  val get_PACK_ALIGNMENT: t -> GLenum.t [@@js.get "PACK_ALIGNMENT"]
+  val get_POINTS: t -> GLenum.t [@@js.get "POINTS"]
+  val get_POLYGON_OFFSET_FACTOR: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FACTOR"]
+  val get_POLYGON_OFFSET_FILL: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FILL"]
+  val get_POLYGON_OFFSET_UNITS: t -> GLenum.t [@@js.get "POLYGON_OFFSET_UNITS"]
+  val get_RED_BITS: t -> GLenum.t [@@js.get "RED_BITS"]
+  val get_RENDERBUFFER: t -> GLenum.t [@@js.get "RENDERBUFFER"]
+  val get_RENDERBUFFER_ALPHA_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_ALPHA_SIZE"]
+  val get_RENDERBUFFER_BINDING: t -> GLenum.t [@@js.get "RENDERBUFFER_BINDING"]
+  val get_RENDERBUFFER_BLUE_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_BLUE_SIZE"]
+  val get_RENDERBUFFER_DEPTH_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_DEPTH_SIZE"]
+  val get_RENDERBUFFER_GREEN_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_GREEN_SIZE"]
+  val get_RENDERBUFFER_HEIGHT: t -> GLenum.t [@@js.get "RENDERBUFFER_HEIGHT"]
+  val get_RENDERBUFFER_INTERNAL_FORMAT: t -> GLenum.t [@@js.get "RENDERBUFFER_INTERNAL_FORMAT"]
+  val get_RENDERBUFFER_RED_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_RED_SIZE"]
+  val get_RENDERBUFFER_STENCIL_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_STENCIL_SIZE"]
+  val get_RENDERBUFFER_WIDTH: t -> GLenum.t [@@js.get "RENDERBUFFER_WIDTH"]
+  val get_RENDERER: t -> GLenum.t [@@js.get "RENDERER"]
+  val get_REPEAT: t -> GLenum.t [@@js.get "REPEAT"]
+  val get_REPLACE: t -> GLenum.t [@@js.get "REPLACE"]
+  val get_RGB: t -> GLenum.t [@@js.get "RGB"]
+  val get_RGB565: t -> GLenum.t [@@js.get "RGB565"]
+  val get_RGB5_A1: t -> GLenum.t [@@js.get "RGB5_A1"]
+  val get_RGBA: t -> GLenum.t [@@js.get "RGBA"]
+  val get_RGBA4: t -> GLenum.t [@@js.get "RGBA4"]
+  val get_SAMPLER_2D: t -> GLenum.t [@@js.get "SAMPLER_2D"]
+  val get_SAMPLER_CUBE: t -> GLenum.t [@@js.get "SAMPLER_CUBE"]
+  val get_SAMPLES: t -> GLenum.t [@@js.get "SAMPLES"]
+  val get_SAMPLE_ALPHA_TO_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_ALPHA_TO_COVERAGE"]
+  val get_SAMPLE_BUFFERS: t -> GLenum.t [@@js.get "SAMPLE_BUFFERS"]
+  val get_SAMPLE_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE"]
+  val get_SAMPLE_COVERAGE_INVERT: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_INVERT"]
+  val get_SAMPLE_COVERAGE_VALUE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_VALUE"]
+  val get_SCISSOR_BOX: t -> GLenum.t [@@js.get "SCISSOR_BOX"]
+  val get_SCISSOR_TEST: t -> GLenum.t [@@js.get "SCISSOR_TEST"]
+  val get_SHADER_TYPE: t -> GLenum.t [@@js.get "SHADER_TYPE"]
+  val get_SHADING_LANGUAGE_VERSION: t -> GLenum.t [@@js.get "SHADING_LANGUAGE_VERSION"]
+  val get_SHORT: t -> GLenum.t [@@js.get "SHORT"]
+  val get_SRC_ALPHA: t -> GLenum.t [@@js.get "SRC_ALPHA"]
+  val get_SRC_ALPHA_SATURATE: t -> GLenum.t [@@js.get "SRC_ALPHA_SATURATE"]
+  val get_SRC_COLOR: t -> GLenum.t [@@js.get "SRC_COLOR"]
+  val get_STATIC_DRAW: t -> GLenum.t [@@js.get "STATIC_DRAW"]
+  val get_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "STENCIL_ATTACHMENT"]
+  val get_STENCIL_BACK_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_FAIL"]
+  val get_STENCIL_BACK_FUNC: t -> GLenum.t [@@js.get "STENCIL_BACK_FUNC"]
+  val get_STENCIL_BACK_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_FAIL"]
+  val get_STENCIL_BACK_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_PASS"]
+  val get_STENCIL_BACK_REF: t -> GLenum.t [@@js.get "STENCIL_BACK_REF"]
+  val get_STENCIL_BACK_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_BACK_VALUE_MASK"]
+  val get_STENCIL_BACK_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_BACK_WRITEMASK"]
+  val get_STENCIL_BITS: t -> GLenum.t [@@js.get "STENCIL_BITS"]
+  val get_STENCIL_BUFFER_BIT: t -> GLenum.t [@@js.get "STENCIL_BUFFER_BIT"]
+  val get_STENCIL_CLEAR_VALUE: t -> GLenum.t [@@js.get "STENCIL_CLEAR_VALUE"]
+  val get_STENCIL_FAIL: t -> GLenum.t [@@js.get "STENCIL_FAIL"]
+  val get_STENCIL_FUNC: t -> GLenum.t [@@js.get "STENCIL_FUNC"]
+  val get_STENCIL_INDEX8: t -> GLenum.t [@@js.get "STENCIL_INDEX8"]
+  val get_STENCIL_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_FAIL"]
+  val get_STENCIL_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_PASS"]
+  val get_STENCIL_REF: t -> GLenum.t [@@js.get "STENCIL_REF"]
+  val get_STENCIL_TEST: t -> GLenum.t [@@js.get "STENCIL_TEST"]
+  val get_STENCIL_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_VALUE_MASK"]
+  val get_STENCIL_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_WRITEMASK"]
+  val get_STREAM_DRAW: t -> GLenum.t [@@js.get "STREAM_DRAW"]
+  val get_SUBPIXEL_BITS: t -> GLenum.t [@@js.get "SUBPIXEL_BITS"]
+  val get_TEXTURE: t -> GLenum.t [@@js.get "TEXTURE"]
+  val get_TEXTURE0: t -> GLenum.t [@@js.get "TEXTURE0"]
+  val get_TEXTURE1: t -> GLenum.t [@@js.get "TEXTURE1"]
+  val get_TEXTURE10: t -> GLenum.t [@@js.get "TEXTURE10"]
+  val get_TEXTURE11: t -> GLenum.t [@@js.get "TEXTURE11"]
+  val get_TEXTURE12: t -> GLenum.t [@@js.get "TEXTURE12"]
+  val get_TEXTURE13: t -> GLenum.t [@@js.get "TEXTURE13"]
+  val get_TEXTURE14: t -> GLenum.t [@@js.get "TEXTURE14"]
+  val get_TEXTURE15: t -> GLenum.t [@@js.get "TEXTURE15"]
+  val get_TEXTURE16: t -> GLenum.t [@@js.get "TEXTURE16"]
+  val get_TEXTURE17: t -> GLenum.t [@@js.get "TEXTURE17"]
+  val get_TEXTURE18: t -> GLenum.t [@@js.get "TEXTURE18"]
+  val get_TEXTURE19: t -> GLenum.t [@@js.get "TEXTURE19"]
+  val get_TEXTURE2: t -> GLenum.t [@@js.get "TEXTURE2"]
+  val get_TEXTURE20: t -> GLenum.t [@@js.get "TEXTURE20"]
+  val get_TEXTURE21: t -> GLenum.t [@@js.get "TEXTURE21"]
+  val get_TEXTURE22: t -> GLenum.t [@@js.get "TEXTURE22"]
+  val get_TEXTURE23: t -> GLenum.t [@@js.get "TEXTURE23"]
+  val get_TEXTURE24: t -> GLenum.t [@@js.get "TEXTURE24"]
+  val get_TEXTURE25: t -> GLenum.t [@@js.get "TEXTURE25"]
+  val get_TEXTURE26: t -> GLenum.t [@@js.get "TEXTURE26"]
+  val get_TEXTURE27: t -> GLenum.t [@@js.get "TEXTURE27"]
+  val get_TEXTURE28: t -> GLenum.t [@@js.get "TEXTURE28"]
+  val get_TEXTURE29: t -> GLenum.t [@@js.get "TEXTURE29"]
+  val get_TEXTURE3: t -> GLenum.t [@@js.get "TEXTURE3"]
+  val get_TEXTURE30: t -> GLenum.t [@@js.get "TEXTURE30"]
+  val get_TEXTURE31: t -> GLenum.t [@@js.get "TEXTURE31"]
+  val get_TEXTURE4: t -> GLenum.t [@@js.get "TEXTURE4"]
+  val get_TEXTURE5: t -> GLenum.t [@@js.get "TEXTURE5"]
+  val get_TEXTURE6: t -> GLenum.t [@@js.get "TEXTURE6"]
+  val get_TEXTURE7: t -> GLenum.t [@@js.get "TEXTURE7"]
+  val get_TEXTURE8: t -> GLenum.t [@@js.get "TEXTURE8"]
+  val get_TEXTURE9: t -> GLenum.t [@@js.get "TEXTURE9"]
+  val get_TEXTURE_2D: t -> GLenum.t [@@js.get "TEXTURE_2D"]
+  val get_TEXTURE_BINDING_2D: t -> GLenum.t [@@js.get "TEXTURE_BINDING_2D"]
+  val get_TEXTURE_BINDING_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_BINDING_CUBE_MAP"]
+  val get_TEXTURE_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP"]
+  val get_TEXTURE_CUBE_MAP_NEGATIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_X"]
+  val get_TEXTURE_CUBE_MAP_NEGATIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Y"]
+  val get_TEXTURE_CUBE_MAP_NEGATIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Z"]
+  val get_TEXTURE_CUBE_MAP_POSITIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_X"]
+  val get_TEXTURE_CUBE_MAP_POSITIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Y"]
+  val get_TEXTURE_CUBE_MAP_POSITIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Z"]
+  val get_TEXTURE_MAG_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MAG_FILTER"]
+  val get_TEXTURE_MIN_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MIN_FILTER"]
+  val get_TEXTURE_WRAP_S: t -> GLenum.t [@@js.get "TEXTURE_WRAP_S"]
+  val get_TEXTURE_WRAP_T: t -> GLenum.t [@@js.get "TEXTURE_WRAP_T"]
+  val get_TRIANGLES: t -> GLenum.t [@@js.get "TRIANGLES"]
+  val get_TRIANGLE_FAN: t -> GLenum.t [@@js.get "TRIANGLE_FAN"]
+  val get_TRIANGLE_STRIP: t -> GLenum.t [@@js.get "TRIANGLE_STRIP"]
+  val get_UNPACK_ALIGNMENT: t -> GLenum.t [@@js.get "UNPACK_ALIGNMENT"]
+  val get_UNPACK_COLORSPACE_CONVERSION_WEBGL: t -> GLenum.t [@@js.get "UNPACK_COLORSPACE_CONVERSION_WEBGL"]
+  val get_UNPACK_FLIP_Y_WEBGL: t -> GLenum.t [@@js.get "UNPACK_FLIP_Y_WEBGL"]
+  val get_UNPACK_PREMULTIPLY_ALPHA_WEBGL: t -> GLenum.t [@@js.get "UNPACK_PREMULTIPLY_ALPHA_WEBGL"]
+  val get_UNSIGNED_BYTE: t -> GLenum.t [@@js.get "UNSIGNED_BYTE"]
+  val get_UNSIGNED_INT: t -> GLenum.t [@@js.get "UNSIGNED_INT"]
+  val get_UNSIGNED_SHORT: t -> GLenum.t [@@js.get "UNSIGNED_SHORT"]
+  val get_UNSIGNED_SHORT_4_4_4_4: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_4_4_4_4"]
+  val get_UNSIGNED_SHORT_5_5_5_1: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_5_5_1"]
+  val get_UNSIGNED_SHORT_5_6_5: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_6_5"]
+  val get_VALIDATE_STATUS: t -> GLenum.t [@@js.get "VALIDATE_STATUS"]
+  val get_VENDOR: t -> GLenum.t [@@js.get "VENDOR"]
+  val get_VERSION: t -> GLenum.t [@@js.get "VERSION"]
+  val get_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"]
+  val get_VERTEX_ATTRIB_ARRAY_ENABLED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_ENABLED"]
+  val get_VERTEX_ATTRIB_ARRAY_NORMALIZED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_NORMALIZED"]
+  val get_VERTEX_ATTRIB_ARRAY_POINTER: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_POINTER"]
+  val get_VERTEX_ATTRIB_ARRAY_SIZE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_SIZE"]
+  val get_VERTEX_ATTRIB_ARRAY_STRIDE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_STRIDE"]
+  val get_VERTEX_ATTRIB_ARRAY_TYPE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_TYPE"]
+  val get_VERTEX_SHADER: t -> GLenum.t [@@js.get "VERTEX_SHADER"]
+  val get_VIEWPORT: t -> GLenum.t [@@js.get "VIEWPORT"]
+  val get_ZERO: t -> GLenum.t [@@js.get "ZERO"]
 end
-and[@js.scope "TransformStreamDefaultController"] TransformStreamDefaultController : sig
+module AnonymousInterface110 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> URLSearchParams.t [@@js.get "prototype"]
+  val set_prototype: t -> URLSearchParams.t -> unit [@@js.set "prototype"]
+  val create: t -> ?init:(URLSearchParams.t, string list) or_array or_string -> unit -> URLSearchParams.t [@@js.apply_newable]
+  val toString: t -> string [@@js.call "toString"]
+end
+module AnonymousInterface11 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> CloseEvent.t [@@js.get "prototype"]
+  val set_prototype: t -> CloseEvent.t -> unit [@@js.set "prototype"]
+  val create: t -> type_:string -> ?eventInitDict:CloseEventInit.t -> unit -> CloseEvent.t [@@js.apply_newable]
+end
+module AnonymousInterface109 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> URL.t [@@js.get "prototype"]
+  val set_prototype: t -> URL.t -> unit [@@js.set "prototype"]
+  val create: t -> url:URL.t or_string -> ?base:URL.t or_string -> unit -> URL.t [@@js.apply_newable]
+  val createObjectURL: t -> obj:Blob.t -> string [@@js.call "createObjectURL"]
+  val revokeObjectURL: t -> url:string -> unit [@@js.call "revokeObjectURL"]
+end
+module[@js.scope "TransformStreamDefaultController"] TransformStreamDefaultController : sig
   type 'O t = [`TransformStreamDefaultController of 'O] intf [@@js.custom { of_js=(fun _O -> Obj.magic); to_js=(fun _O -> Obj.magic) }]
   type 'O t_1 = 'O t
   type t_0 = any t
@@ -14329,6 +15271,14 @@ and[@js.scope "TransformStreamDefaultController"] TransformStreamDefaultControll
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: unit -> t_0 [@@js.create]
 end
+module AnonymousInterface108 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> TransformStreamDefaultController.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> TransformStreamDefaultController.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> TransformStreamDefaultController.t_0 [@@js.apply_newable]
+end
 module TransformerTransformCallback : sig
   type ('I, 'O) t = [`TransformerTransformCallback of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
   type ('I, 'O) t_2 = ('I, 'O) t
@@ -14345,7 +15295,7 @@ module TransformerTransformCallback : sig
   val t_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t
   val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
-  val apply: ('tags, 'I, 'O) this -> chunk:'I -> controller:'O TransformStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val apply: ('tags, 'I, 'O) this -> chunk:'I -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
   val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
 end
 module TransformerStartCallback : sig
@@ -14383,7 +15333,7 @@ module TransformerFlushCallback : sig
   val t_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t
   val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
-  val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+  val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
   val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
 end
 module Transformer : sig
@@ -14424,15 +15374,7 @@ module Transformer : sig
   val set_writableType: ('tags, 'I, 'O) this -> never or_undefined -> unit [@@js.set "writableType"]
   val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface107 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TransformStream.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> TransformStream.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ?transformer:('I, 'O) Transformer.t -> ?writableStrategy:'I QueuingStrategy.t -> ?readableStrategy:'O QueuingStrategy.t -> unit -> ('I, 'O) TransformStream.t [@@js.apply_newable]
-end
-and[@js.scope "TransformStream"] TransformStream : sig
+module[@js.scope "TransformStream"] TransformStream : sig
   type ('I, 'O) t = [`TransformStream of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
   type ('I, 'O) t_2 = ('I, 'O) t
   type 'I t_1 = ('I, any) t
@@ -14464,17 +15406,17 @@ and[@js.scope "TransformStream"] TransformStream : sig
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: ?transformer:('I, 'O) Transformer.t -> ?writableStrategy:'I QueuingStrategy.t -> ?readableStrategy:'O QueuingStrategy.t -> unit -> ('I, 'O) t [@@js.create]
 end
-module rec AnonymousInterface106 : sig
+module AnonymousInterface107 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextMetrics.t [@@js.get "prototype"]
-  val set_prototype: t -> TextMetrics.t -> unit [@@js.set "prototype"]
-  val create: t -> TextMetrics.t [@@js.apply_newable]
+  val get_prototype: t -> TransformStream.t_0 [@@js.get "prototype"]
+  val set_prototype: t -> TransformStream.t_0 -> unit [@@js.set "prototype"]
+  val create: t -> ?transformer:('I, 'O) Transformer.t -> ?writableStrategy:'I QueuingStrategy.t -> ?readableStrategy:'O QueuingStrategy.t -> unit -> ('I, 'O) TransformStream.t [@@js.apply_newable]
 end
 
 (** The dimensions of a piece of text in the canvas, as created by the CanvasRenderingContext2D.measureText() method. *)
-and[@js.scope "TextMetrics"] TextMetrics : sig
+module[@js.scope "TextMetrics"] TextMetrics : sig
   type t = [`TextMetrics] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -14514,6 +15456,14 @@ and[@js.scope "TextMetrics"] TextMetrics : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
+end
+module AnonymousInterface106 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> TextMetrics.t [@@js.get "prototype"]
+  val set_prototype: t -> TextMetrics.t -> unit [@@js.set "prototype"]
+  val create: t -> TextMetrics.t [@@js.apply_newable]
 end
 module TextEncoderCommon : sig
   type t = [`TextEncoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14556,15 +15506,7 @@ module GenericTransformStream : sig
   val get_writable: 'tags this -> WritableStream.t_0 [@@js.get "writable"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface105 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextEncoderStream.t [@@js.get "prototype"]
-  val set_prototype: t -> TextEncoderStream.t -> unit [@@js.set "prototype"]
-  val create: t -> TextEncoderStream.t [@@js.apply_newable]
-end
-and[@js.scope "TextEncoderStream"] TextEncoderStream : sig
+module[@js.scope "TextEncoderStream"] TextEncoderStream : sig
   type t = [`GenericTransformStream | `TextEncoderCommon | `TextEncoderStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -14585,6 +15527,14 @@ and[@js.scope "TextEncoderStream"] TextEncoderStream : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
+end
+module AnonymousInterface105 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> TextEncoderStream.t [@@js.get "prototype"]
+  val set_prototype: t -> TextEncoderStream.t -> unit [@@js.set "prototype"]
+  val create: t -> TextEncoderStream.t [@@js.apply_newable]
 end
 module TextEncoderEncodeIntoResult : sig
   type t = [`TextEncoderEncodeIntoResult] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14608,17 +15558,9 @@ module TextEncoderEncodeIntoResult : sig
   val set_written: 'tags this -> float -> unit [@@js.set "written"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface104 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextEncoder.t [@@js.get "prototype"]
-  val set_prototype: t -> TextEncoder.t -> unit [@@js.set "prototype"]
-  val create: t -> TextEncoder.t [@@js.apply_newable]
-end
 
 (** TextEncoder takes a stream of code points as input and emits a stream of bytes. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
-and[@js.scope "TextEncoder"] TextEncoder : sig
+module[@js.scope "TextEncoder"] TextEncoder : sig
   type t = [`TextEncoder | `TextEncoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -14643,6 +15585,14 @@ and[@js.scope "TextEncoder"] TextEncoder : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
+end
+module AnonymousInterface104 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> TextEncoder.t [@@js.get "prototype"]
+  val set_prototype: t -> TextEncoder.t -> unit [@@js.set "prototype"]
+  val create: t -> TextEncoder.t [@@js.apply_newable]
 end
 module TextDecoderOptions : sig
   type t = [`TextDecoderOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14693,15 +15643,7 @@ module TextDecoderCommon : sig
   val get_ignoreBOM: 'tags this -> bool [@@js.get "ignoreBOM"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface103 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextDecoderStream.t [@@js.get "prototype"]
-  val set_prototype: t -> TextDecoderStream.t -> unit [@@js.set "prototype"]
-  val create: t -> ?label:string -> ?options:TextDecoderOptions.t -> unit -> TextDecoderStream.t [@@js.apply_newable]
-end
-and[@js.scope "TextDecoderStream"] TextDecoderStream : sig
+module[@js.scope "TextDecoderStream"] TextDecoderStream : sig
   type t = [`GenericTransformStream | `TextDecoderCommon | `TextDecoderStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -14723,6 +15665,14 @@ and[@js.scope "TextDecoderStream"] TextDecoderStream : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
 end
+module AnonymousInterface103 : sig
+  type t = private Ojs.t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val get_prototype: t -> TextDecoderStream.t [@@js.get "prototype"]
+  val set_prototype: t -> TextDecoderStream.t -> unit [@@js.set "prototype"]
+  val create: t -> ?label:string -> ?options:TextDecoderOptions.t -> unit -> TextDecoderStream.t [@@js.apply_newable]
+end
 module TextDecodeOptions : sig
   type t = [`TextDecodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -14743,17 +15693,9 @@ module TextDecodeOptions : sig
   val set_stream: 'tags this -> bool -> unit [@@js.set "stream"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-module rec AnonymousInterface102 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextDecoder.t [@@js.get "prototype"]
-  val set_prototype: t -> TextDecoder.t -> unit [@@js.set "prototype"]
-  val create: t -> ?label:string -> ?options:TextDecoderOptions.t -> unit -> TextDecoder.t [@@js.apply_newable]
-end
 
 (** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
-and[@js.scope "TextDecoder"] TextDecoder : sig
+module[@js.scope "TextDecoder"] TextDecoder : sig
   type t = [`TextDecoder | `TextDecoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -14788,493 +15730,41 @@ and[@js.scope "TextDecoder"] TextDecoder : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
 end
-module rec AnonymousInterface101 : sig
+module AnonymousInterface102 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebAssembly.Table.t [@@js.get "prototype"]
-  val set_prototype: t -> WebAssembly.Table.t -> unit [@@js.set "prototype"]
-  val create: t -> descriptor:WebAssembly.TableDescriptor.t -> ?value:any -> unit -> WebAssembly.Table.t [@@js.apply_newable]
+  val get_prototype: t -> TextDecoder.t [@@js.get "prototype"]
+  val set_prototype: t -> TextDecoder.t -> unit [@@js.set "prototype"]
+  val create: t -> ?label:string -> ?options:TextDecoderOptions.t -> unit -> TextDecoder.t [@@js.apply_newable]
 end
-and AnonymousInterface12 : sig
+module AnonymousInterface100 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebAssembly.CompileError.t [@@js.get "prototype"]
-  val set_prototype: t -> WebAssembly.CompileError.t -> unit [@@js.set "prototype"]
-  val create: t -> ?message:string -> unit -> WebAssembly.CompileError.t [@@js.apply_newable]
-  val apply: t -> ?message:string -> unit -> WebAssembly.CompileError.t [@@js.apply]
+  val get_prototype: t -> SubtleCrypto.t [@@js.get "prototype"]
+  val set_prototype: t -> SubtleCrypto.t -> unit [@@js.set "prototype"]
+  val create: t -> SubtleCrypto.t [@@js.apply_newable]
 end
-and AnonymousInterface42 : sig
+module AnonymousInterface10 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebAssembly.Global.t [@@js.get "prototype"]
-  val set_prototype: t -> WebAssembly.Global.t -> unit [@@js.set "prototype"]
-  val create: t -> descriptor:WebAssembly.GlobalDescriptor.t -> ?v:any -> unit -> WebAssembly.Global.t [@@js.apply_newable]
+  val get_prototype: t -> Clients.t [@@js.get "prototype"]
+  val set_prototype: t -> Clients.t -> unit [@@js.set "prototype"]
+  val create: t -> Clients.t [@@js.apply_newable]
 end
-and AnonymousInterface58 : sig
+module AnonymousInterface1 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebAssembly.Instance.t [@@js.get "prototype"]
-  val set_prototype: t -> WebAssembly.Instance.t -> unit [@@js.set "prototype"]
-  val create: t -> module_:WebAssembly.Module.t -> ?importObject:WebAssembly.Imports.t -> unit -> WebAssembly.Instance.t [@@js.apply_newable]
-end
-and AnonymousInterface59 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebAssembly.LinkError.t [@@js.get "prototype"]
-  val set_prototype: t -> WebAssembly.LinkError.t -> unit [@@js.set "prototype"]
-  val create: t -> ?message:string -> unit -> WebAssembly.LinkError.t [@@js.apply_newable]
-  val apply: t -> ?message:string -> unit -> WebAssembly.LinkError.t [@@js.apply]
-end
-and AnonymousInterface61 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebAssembly.Memory.t [@@js.get "prototype"]
-  val set_prototype: t -> WebAssembly.Memory.t -> unit [@@js.set "prototype"]
-  val create: t -> descriptor:WebAssembly.MemoryDescriptor.t -> WebAssembly.Memory.t [@@js.apply_newable]
-end
-and AnonymousInterface65 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebAssembly.Module.t [@@js.get "prototype"]
-  val set_prototype: t -> WebAssembly.Module.t -> unit [@@js.set "prototype"]
-  val create: t -> bytes:BufferSource.t -> WebAssembly.Module.t [@@js.apply_newable]
-  val customSections: t -> moduleObject:WebAssembly.Module.t -> sectionName:string -> ArrayBuffer.t_0 list [@@js.call "customSections"]
-  val exports: t -> moduleObject:WebAssembly.Module.t -> WebAssembly.ModuleExportDescriptor.t list [@@js.call "exports"]
-  val imports: t -> moduleObject:WebAssembly.Module.t -> WebAssembly.ModuleImportDescriptor.t list [@@js.call "imports"]
-end
-and AnonymousInterface92 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebAssembly.RuntimeError.t [@@js.get "prototype"]
-  val set_prototype: t -> WebAssembly.RuntimeError.t -> unit [@@js.set "prototype"]
-  val create: t -> ?message:string -> unit -> WebAssembly.RuntimeError.t [@@js.apply_newable]
-  val apply: t -> ?message:string -> unit -> WebAssembly.RuntimeError.t [@@js.apply]
-end
-and[@js.scope "WebAssembly"] WebAssembly : sig
-  module ImportExportKind : sig
-    type t = ([`L_s113_memory[@js "memory"] | `L_s189_table[@js "table"] | `L_s79_function[@js "function"] | `L_s81_global[@js "global"]] [@js.enum])
-    type t_0 = t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
-  module ModuleImportDescriptor : sig
-    type t = [`WebAssembly_ModuleImportDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_ModuleImportDescriptor]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_ModuleImportDescriptor]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_ModuleImportDescriptor ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_kind: 'tags this -> ImportExportKind.t [@@js.get "kind"]
-    val set_kind: 'tags this -> ImportExportKind.t -> unit [@@js.set "kind"]
-    val get_module: 'tags this -> string [@@js.get "module"]
-    val set_module: 'tags this -> string -> unit [@@js.set "module"]
-    val get_name: 'tags this -> string [@@js.get "name"]
-    val set_name: 'tags this -> string -> unit [@@js.set "name"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  end
-  module ModuleExportDescriptor : sig
-    type t = [`WebAssembly_ModuleExportDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_ModuleExportDescriptor]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_ModuleExportDescriptor]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_ModuleExportDescriptor ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_kind: 'tags this -> ImportExportKind.t [@@js.get "kind"]
-    val set_kind: 'tags this -> ImportExportKind.t -> unit [@@js.set "kind"]
-    val get_name: 'tags this -> string [@@js.get "name"]
-    val set_name: 'tags this -> string -> unit [@@js.set "name"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  end
-  module[@js.scope "Module"] Module : sig
-    type t = [`WebAssembly_Module] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_Module]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_Module]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Module ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: BufferSource.t -> t [@@js.create]
-    val customSections: moduleObject:t -> sectionName:string -> ArrayBuffer.t_0 list [@@js.global "customSections"]
-    val exports: t -> ModuleExportDescriptor.t list [@@js.global "exports"]
-    val imports: t -> ModuleImportDescriptor.t list [@@js.global "imports"]
-  end
-  module TableKind : sig
-    type t = ([`L_s36_anyfunc[@js "anyfunc"] | `L_s69_externref[@js "externref"]] [@js.enum])
-    type t_0 = t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
-  module TableDescriptor : sig
-    type t = [`WebAssembly_TableDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_TableDescriptor]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_TableDescriptor]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_TableDescriptor ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_element: 'tags this -> TableKind.t [@@js.get "element"]
-    val set_element: 'tags this -> TableKind.t -> unit [@@js.set "element"]
-    val get_initial: 'tags this -> float [@@js.get "initial"]
-    val set_initial: 'tags this -> float -> unit [@@js.set "initial"]
-    val get_maximum: 'tags this -> float [@@js.get "maximum"]
-    val set_maximum: 'tags this -> float -> unit [@@js.set "maximum"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  end
-  module[@js.scope "Table"] Table : sig
-    type t = [`WebAssembly_Table] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_Table]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_Table]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Table ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_length: 'tags this -> float [@@js.get "length"]
-    val get_: 'tags this -> index:float -> any [@@js.call "get"]
-    val grow: 'tags this -> delta:float -> ?value:any -> unit -> float [@@js.call "grow"]
-    val set_: 'tags this -> index:float -> ?value:any -> unit -> unit [@@js.call "set"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: descriptor:TableDescriptor.t -> ?value:any -> unit -> t [@@js.create]
-  end
-  module MemoryDescriptor : sig
-    type t = [`WebAssembly_MemoryDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_MemoryDescriptor]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_MemoryDescriptor]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_MemoryDescriptor ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_initial: 'tags this -> float [@@js.get "initial"]
-    val set_initial: 'tags this -> float -> unit [@@js.set "initial"]
-    val get_maximum: 'tags this -> float [@@js.get "maximum"]
-    val set_maximum: 'tags this -> float -> unit [@@js.set "maximum"]
-    val get_shared: 'tags this -> bool [@@js.get "shared"]
-    val set_shared: 'tags this -> bool -> unit [@@js.set "shared"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  end
-  module[@js.scope "Memory"] Memory : sig
-    type t = [`WebAssembly_Memory] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_Memory]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_Memory]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Memory ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_buffer: 'tags this -> ArrayBuffer.t_0 [@@js.get "buffer"]
-    val grow: 'tags this -> delta:float -> float [@@js.call "grow"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: MemoryDescriptor.t -> t [@@js.create]
-  end
-  module ValueType : sig
-    type t = ([`L_s36_anyfunc[@js "anyfunc"] | `L_s69_externref[@js "externref"] | `L_s70_f32[@js "f32"] | `L_s71_f64[@js "f64"] | `L_s87_i32[@js "i32"] | `L_s88_i64[@js "i64"]] [@js.enum])
-    type t_0 = t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
-  module GlobalDescriptor : sig
-    type t = [`WebAssembly_GlobalDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_GlobalDescriptor]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_GlobalDescriptor]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_GlobalDescriptor ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_mutable: 'tags this -> bool [@@js.get "mutable"]
-    val set_mutable: 'tags this -> bool -> unit [@@js.set "mutable"]
-    val get_value: 'tags this -> ValueType.t [@@js.get "value"]
-    val set_value: 'tags this -> ValueType.t -> unit [@@js.set "value"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  end
-  module[@js.scope "Global"] Global : sig
-    type t = [`WebAssembly_Global] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_Global]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_Global]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Global ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_value: 'tags this -> any [@@js.get "value"]
-    val set_value: 'tags this -> any -> unit [@@js.set "value"]
-    val valueOf: 'tags this -> any [@@js.call "valueOf"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: descriptor:GlobalDescriptor.t -> ?v:any -> unit -> t [@@js.create]
-  end
-  module ExportValue : sig
-    type t = (untyped_function, Global.t, Memory.t, Table.t) union4
-    type t_0 = t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
-  module ImportValue : sig
-    type t = ExportValue.t or_number
-    type t_0 = t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
-  module ModuleImports : sig
-    type t = (string, ImportValue.t) Record.t_2
-    type t_0 = t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
-  module Imports : sig
-    type t = (string, ModuleImports.t) Record.t_2
-    type t_0 = t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
-  module Exports : sig
-    type t = (string, ExportValue.t) Record.t_2
-    type t_0 = t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
-  module[@js.scope "Instance"] Instance : sig
-    type t = [`WebAssembly_Instance] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_Instance]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_Instance]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_Instance ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_exports: 'tags this -> Exports.t [@@js.get "exports"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: module_:Module.t -> ?importObject:Imports.t -> unit -> t [@@js.create]
-  end
-  module WebAssemblyInstantiatedSource : sig
-    type t = [`WebAssembly_WebAssemblyInstantiatedSource] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_WebAssemblyInstantiatedSource]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_WebAssemblyInstantiatedSource]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_WebAssemblyInstantiatedSource ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val get_instance: 'tags this -> Instance.t [@@js.get "instance"]
-    val set_instance: 'tags this -> Instance.t -> unit [@@js.set "instance"]
-    val get_module: 'tags this -> Module.t [@@js.get "module"]
-    val set_module: 'tags this -> Module.t -> unit [@@js.set "module"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  end
-  module[@js.scope "RuntimeError"] RuntimeError : sig
-    type t = [`WebAssembly_RuntimeError | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_RuntimeError | Error.tags_0]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_RuntimeError | Error.tags_0]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_RuntimeError ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: ?message:string -> unit -> t [@@js.create]
-    val invoke: ?message:string -> unit -> t [@@js.invoke]
-  end
-  module[@js.scope "LinkError"] LinkError : sig
-    type t = [`WebAssembly_LinkError | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_LinkError | Error.tags_0]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_LinkError | Error.tags_0]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_LinkError ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: ?message:string -> unit -> t [@@js.create]
-    val invoke: ?message:string -> unit -> t [@@js.invoke]
-  end
-  module[@js.scope "CompileError"] CompileError : sig
-    type t = [`WebAssembly_CompileError | Error.tags_0] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_CompileError | Error.tags_0]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_CompileError | Error.tags_0]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_CompileError ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: ?message:string -> unit -> t [@@js.create]
-    val invoke: ?message:string -> unit -> t [@@js.invoke]
-  end
-  val compileError: unit -> AnonymousInterface12.t [@@js.get "CompileError"]
-  val global: unit -> AnonymousInterface42.t [@@js.get "Global"]
-  val instance: unit -> AnonymousInterface58.t [@@js.get "Instance"]
-  val linkError: unit -> AnonymousInterface59.t [@@js.get "LinkError"]
-  val memory: unit -> AnonymousInterface61.t [@@js.get "Memory"]
-  val module_: unit -> AnonymousInterface65.t [@@js.get "Module"]
-  val runtimeError: unit -> AnonymousInterface92.t [@@js.get "RuntimeError"]
-  val table: unit -> AnonymousInterface101.t [@@js.get "Table"]
-  val compile: BufferSource.t -> Module.t Promise.t_1 [@@js.global "compile"]
-  val compileStreaming: (Response.t, Response.t PromiseLike.t_1) union2 -> Module.t Promise.t_1 [@@js.global "compileStreaming"]
-  val instantiate: bytes:BufferSource.t -> ?importObject:Imports.t -> unit -> WebAssemblyInstantiatedSource.t Promise.t_1 [@@js.global "instantiate"]
-  val instantiate': moduleObject:Module.t -> ?importObject:Imports.t -> unit -> Instance.t Promise.t_1 [@@js.global "instantiate"]
-  val instantiateStreaming: source:(Response.t, Response.t PromiseLike.t_1) union2 -> ?importObject:Imports.t -> unit -> WebAssemblyInstantiatedSource.t Promise.t_1 [@@js.global "instantiateStreaming"]
-  val validate: BufferSource.t -> bool [@@js.global "validate"]
-end
-module AbortSignalEventMap : sig
-  type t = [`AbortSignalEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AbortSignalEventMap]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AbortSignalEventMap]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AbortSignalEventMap ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_abort: 'tags this -> Event.t [@@js.get "abort"]
-  val set_abort: 'tags this -> Event.t -> unit [@@js.set "abort"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val get_prototype: t -> AbortSignal.t [@@js.get "prototype"]
+  val set_prototype: t -> AbortSignal.t -> unit [@@js.set "prototype"]
+  val create: t -> AbortSignal.t [@@js.apply_newable]
 end
 
 (** A controller object that allows you to abort one or more DOM requests as and when desired. *)
-module[@js.scope "AbortController"] rec AbortController : sig
+module[@js.scope "AbortController"] AbortController : sig
   type t = [`AbortController] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
@@ -15300,7 +15790,7 @@ module[@js.scope "AbortController"] rec AbortController : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-and AnonymousInterface0 : sig
+module AnonymousInterface0 : sig
   type t = private Ojs.t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15308,6 +15798,29 @@ and AnonymousInterface0 : sig
   val set_prototype: t -> AbortController.t -> unit [@@js.set "prototype"]
   val create: t -> AbortController.t [@@js.apply_newable]
 end
+module AbortSignalEventMap : sig
+  type t = [`AbortSignalEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AbortSignalEventMap]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AbortSignalEventMap]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AbortSignalEventMap ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_abort: 'tags this -> Event.t [@@js.get "abort"]
+  val set_abort: 'tags this -> Event.t -> unit [@@js.set "abort"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
+val importScripts: (string list [@js.variadic]) -> unit [@@js.global "importScripts"]
 
 (** A controller object that allows you to abort one or more DOM requests as and when desired. *)
 val abortController: unit -> AnonymousInterface0.t [@@js.get "AbortController"]
@@ -15657,6 +16170,63 @@ val writableStreamDefaultWriter: unit -> AnonymousInterface136.t [@@js.get "Writ
 val xMLHttpRequest: unit -> AnonymousInterface137.t [@@js.get "XMLHttpRequest"]
 val xMLHttpRequestEventTarget: unit -> AnonymousInterface138.t [@@js.get "XMLHttpRequestEventTarget"]
 val xMLHttpRequestUpload: unit -> AnonymousInterface139.t [@@js.get "XMLHttpRequestUpload"]
+
+(**
+  The `console` module provides a simple debugging console that is similar to the
+  JavaScript console mechanism provided by web browsers.
+  
+  The module exports two specific components:
+  
+  * A `Console` class with methods such as `console.log()`, `console.error()` and`console.warn()` that can be used to write to any Node.js stream.
+  * A global `console` instance configured to write to `process.stdout` and `process.stderr`. The global `console` can be used without calling`require('console')`.
+  
+  _**Warning**_: The global console object's methods are neither consistently
+  synchronous like the browser APIs they resemble, nor are they consistently
+  asynchronous like all other Node.js streams. See the `note on process I/O` for
+  more information.
+  
+  Example using the global `console`:
+  
+  ```js
+  console.log('hello world');
+  // Prints: hello world, to stdout
+  console.log('hello %s', 'world');
+  // Prints: hello world, to stdout
+  console.error(new Error('Whoops, something bad happened'));
+  // Prints error message and stack trace to stderr:
+  //   Error: Whoops, something bad happened
+  //     at \[eval\]:5:15
+  //     at Script.runInThisContext (node:vm:132:18)
+  //     at Object.runInThisContext (node:vm:309:38)
+  //     at node:internal/process/execution:77:19
+  //     at \[eval\]-wrapper:6:22
+  //     at evalScript (node:internal/process/execution:76:60)
+  //     at node:internal/main/eval_string:23:3
+  
+  const name = 'Will Robinson';
+  console.warn(`Danger $\{name\}! Danger!`);
+  // Prints: Danger Will Robinson! Danger!, to stderr
+  ```
+  
+  Example using the `Console` class:
+  
+  ```js
+  const out = getStreamSomehow();
+  const err = getStreamSomehow();
+  const myConsole = new console.Console(out, err);
+  
+  myConsole.log('hello world');
+  // Prints: hello world, to out
+  myConsole.log('hello %s', 'world');
+  // Prints: hello world, to out
+  myConsole.error(new Error('Whoops, something bad happened'));
+  // Prints: \[Error: Whoops, something bad happened\], to err
+  
+  const name = 'Will Robinson';
+  myConsole.warn(`Danger $\{name\}! Danger!`);
+  // Prints: Danger Will Robinson! Danger!, to err
+  ```
+*)
 val console: unit -> Console.t [@@js.get "console"]
 
 (** Returns dedicatedWorkerGlobal's name, i.e. the value given to the Worker constructor. Primarily useful for debugging. *)
@@ -15671,9 +16241,6 @@ val close: unit -> unit [@@js.global "close"]
 val postMessage: message:any -> transfer:Transferable.t list -> unit [@@js.global "postMessage"]
 
 (**
-  Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
-  
-  
   Posts a message to the given window. Messages can be structured objects, e.g. nested objects and arrays, can contain JavaScript values (strings, numbers, Date objects, etc), and can contain certain data objects such as File Blob, FileList, and ArrayBuffer objects.
   
   Objects listed in the transfer member of options are transferred, not just cloned, meaning that they are no longer usable on the sending side.
@@ -15683,6 +16250,9 @@ val postMessage: message:any -> transfer:Transferable.t list -> unit [@@js.globa
   If the origin of the target window doesn't match the given target origin, the message is discarded, to avoid information leakage. To send the message to the target regardless of origin, set the target origin to "*".
   
   Throws a "DataCloneError" DOMException if transfer array contains duplicate objects or if message could not be cloned.
+  
+  
+  Clones message and transmits it to the Worker object associated with dedicatedWorkerGlobal. transfer can be passed as a list of objects that are to be transferred rather than cloned.
 *)
 val postMessage': message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.global "postMessage"]
 
@@ -15707,7 +16277,7 @@ val onunhandledrejection: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Promi
 val self: unit -> (WorkerGlobalScope.t, (* FIXME: unknown type 'typeof globalThis' *)any) intersection2 [@@js.get "self"]
 
 (** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
-val importScripts: (URL.t or_string list [@js.variadic]) -> unit [@@js.global "importScripts"]
+val importScripts': (URL.t or_string list [@js.variadic]) -> unit [@@js.global "importScripts"]
 val fonts: unit -> FontFaceSet.t [@@js.get "fonts"]
 
 (** Available only in secure contexts. *)
@@ -15718,7 +16288,33 @@ val indexedDB: unit -> IDBFactory.t [@@js.get "indexedDB"]
 val isSecureContext: unit -> bool [@@js.get "isSecureContext"]
 val origin: unit -> string [@@js.get "origin"]
 val performance': unit -> Performance.t [@@js.get "performance"]
+
+(**
+  Decodes a string of Base64-encoded data into bytes, and encodes those bytes
+  into a string using Latin-1 (ISO-8859-1).
+  
+  The `data` may be any JavaScript-value that can be coerced into a string.
+  
+  **This function is only provided for compatibility with legacy web platform APIs**
+  **and should never be used in new code, because they use strings to represent**
+  **binary data and predate the introduction of typed arrays in JavaScript.**
+  **For code running using Node.js APIs, converting between base64-encoded strings**
+  **and binary data should be performed using `Buffer.from(str, 'base64')` and`buf.toString('base64')`.**
+*)
 val atob: string -> string [@@js.global "atob"]
+
+(**
+  Decodes a string into bytes using Latin-1 (ISO-8859), and encodes those bytes
+  into a string using Base64.
+  
+  The `data` may be any JavaScript-value that can be coerced into a string.
+  
+  **This function is only provided for compatibility with legacy web platform APIs**
+  **and should never be used in new code, because they use strings to represent**
+  **binary data and predate the introduction of typed arrays in JavaScript.**
+  **For code running using Node.js APIs, converting between base64-encoded strings**
+  **and binary data should be performed using `Buffer.from(str, 'base64')` and`buf.toString('base64')`.**
+*)
 val btoa: string -> string [@@js.global "btoa"]
 val clearInterval: ?handle:float -> unit -> unit [@@js.global "clearInterval"]
 val clearTimeout: ?handle:float -> unit -> unit [@@js.global "clearTimeout"]
@@ -15734,6 +16330,3 @@ val addEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t ->
 val addEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.global "addEventListener"]
 val removeEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
 val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
-
-(** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
-val importScripts': (string list [@js.variadic]) -> unit [@@js.global "importScripts"]

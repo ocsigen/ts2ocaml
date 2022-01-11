@@ -239,7 +239,7 @@ module Type =
         extends = Option.map (mapping ctx) tp.extends
         defaultType = Option.map (mapping ctx) tp.defaultType }
 
-  and private mapInArg mapping ctx (arg: Choice<FieldLike, Type>) =
+  and mapInArg mapping ctx (arg: Choice<FieldLike, Type>) =
     match arg with
     | Choice1Of2 a -> mapInFieldLike mapping ctx a |> Choice1Of2
     | Choice2Of2 t -> mapping ctx t |> Choice2Of2
@@ -254,7 +254,7 @@ module Type =
       | Field (f, m) -> Field (mapInFieldLike mapping ctx f, m)
       | Callable (f, tps) -> Callable (mapInFuncType mapping ctx f, List.map (mapInTypeParam mapping ctx) tps)
       | Indexer (f, m) -> Indexer (mapInFuncType mapping ctx f, m)
-      | Constructor (c, tps) -> Constructor ({ c with args = List.map (mapInArg mapping ctx) c.args }, List.map (mapInTypeParam mapping ctx) tps)
+      | Constructor c -> Constructor { c with args = List.map (mapInArg mapping ctx) c.args }
       | Getter f -> Getter (mapInFieldLike mapping ctx f)
       | Setter f -> Setter (mapInFieldLike mapping ctx f)
       | Newable (f, tps) -> Newable (mapInFuncType mapping ctx f, List.map (mapInTypeParam mapping ctx) tps)
@@ -379,13 +379,12 @@ module Type =
     | Indexer (ft, _) | SymbolIndexer (_, ft, _) ->
       seq { yield! findTypesInFuncType pred ft }
     | Getter fl | Setter fl -> seq { yield! findTypesInFieldLike pred fl }
-    | Constructor (ft, tps) ->
+    | Constructor ft ->
       seq {
         for arg in ft.args do
           match arg with
           | Choice1Of2 fl -> yield! findTypesInFieldLike pred fl
           | Choice2Of2 t -> yield! findTypes pred t
-        for tp in tps do yield! findTypesInTypeParam pred tp
       }
     | UnknownMember _ -> Seq.empty
   and findTypes (pred: Type -> Choice<bool, Type list> * 'a option) (t: Type) : 'a seq =
@@ -445,9 +444,9 @@ module Type =
           | Field (fl, _) -> findTypesInFieldLike getFreeTypeVarsPredicate fl |> Set.unionMany
           | Method (_, ft, tps) | Callable (ft, tps) | Newable (ft, tps) ->
             Set.difference (findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
-          | Constructor (ft, tps) ->
+          | Constructor ft ->
             let ft = ft |> FuncType.map (fun _ -> PolymorphicThis)
-            Set.difference (findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
+            findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany
           | Indexer (ft, _) | SymbolIndexer (_, ft, _) -> findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany
           | Getter fl | Setter fl -> findTypesInFieldLike getFreeTypeVarsPredicate fl |> Set.unionMany
           | UnknownMember _ -> Set.empty
@@ -684,7 +683,7 @@ module Type =
                     else Some (Choice2Of2 fl.value)
                   | Method (name', ft, typrms) when name = name' ->
                     Some (Choice1Of2 {| ty = ft; typrms = typrms; comments = comments; loc = loc; isNewable = false |})
-                  | Constructor (_, _) when name = "constructor" -> Some (Choice2Of2 (Prim UntypedFunction))
+                  | Constructor _ when name = "constructor" -> Some (Choice2Of2 (Prim UntypedFunction))
                   | _ -> None)
                 |> List.splitChoice2
               let funcs =
@@ -712,7 +711,7 @@ module Type =
             TypeLiteral (LString name) when fl.name = name ->
             if fl.isOptional then Some (Union { types = [fl.value; Prim Undefined] })
             else Some fl.value
-          | Constructor (_, _), TypeLiteral (LString name) when name = "constructor" ->
+          | Constructor _, TypeLiteral (LString name) when name = "constructor" ->
             Some (Prim UntypedFunction)
           | Indexer (ft, _), (Prim Number | TypeLiteral (LInt _)) -> Some ft.returnType
           | Method (name', ft, typrms), TypeLiteral (LString name) when name = name' ->
@@ -1512,6 +1511,64 @@ let mergeSources newFileName (srcs: SourceFile list) =
     references = srcs |> List.collect (fun src -> src.references) |> List.distinct
     hasNoDefaultLib = srcs |> List.exists (fun src -> src.hasNoDefaultLib) }
 
+let addDefaultConstructorToClass (ctx: TyperContext<_, _>) (stmts: Statement list) : Statement list =
+  let m = new MutableMap<Location, Class * _ list>()
+  let getConstructors (c: Class) = c.members |> List.choose (function (ma, Constructor ft) -> Some (ma, ft) | _ -> None)
+  let substInConstructors mapping cs =
+    cs |> List.map (fun (ma, ft) ->
+      let args =
+        ft.args |> List.map (Type.mapInArg (Type.substTypeVar mapping) ())
+      ma, { ft with args = args }
+    )
+  let rec addConstructors (c: Class) =
+    let constructors = getConstructors c
+    if not (List.isEmpty constructors) then
+      c, constructors
+    else
+      match m.TryGetValue(c.loc) with
+      | true, (c, cs) -> c, cs
+      | false, _ ->
+        let parentConstructors =
+          let (|Dummy|) _ = []
+          let rec picker = function
+            | (Ident ({ loc = loc } & i) & Dummy ts) | App (AIdent i, ts, loc) ->
+              let pick = function
+                | Definition.TypeAlias a ->
+                  if List.isEmpty ts then picker a.target
+                  else
+                    let bindings = Type.createBindings i.name loc a.typeParams ts
+                    picker a.target |> Option.map (substInConstructors bindings)
+                | Definition.Class c when not c.isInterface ->
+                  if List.isEmpty ts then Some (addConstructors c |> snd)
+                  else
+                    let c, constructors = addConstructors c
+                    let bindings = Type.createBindings i.name loc c.typeParams ts
+                    Some (constructors |> substInConstructors bindings)
+                | _ -> None
+              Ident.pickDefinition ctx i pick
+            | Intersection i -> i.types |> List.tryPick picker
+            | _ -> None
+          c.implements |> List.tryPick picker
+        let c, cs =
+          match parentConstructors with
+          | None -> // add default constructor
+            let cft = { args = []; isVariadic = false; loc = c.loc; returnType = () }
+            let cma, cm =
+              { comments = []; isStatic = true; accessibility = Public; loc = c.loc },
+              Constructor cft
+            { c with members = (cma, cm) :: c.members }, [cma, cft]
+          | Some cs -> // inherit constructors from parent
+            { c with members = (cs |> List.map (fun (cma, cm) -> cma, Constructor cm)) @ c.members }, cs
+        m[c.loc] <- (c, cs)
+        (c, cs)
+  let rec go stmts =
+    stmts |> List.map (function
+      | Class c when not c.isInterface ->
+        Class (addConstructors c |> fst)
+      | Module m -> Module { m with statements = go m.statements }
+      | x -> x)
+  go stmts
+
 let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statement list) : Statement list =
   let opts = ctx.options
   let rec go stmts =
@@ -1571,6 +1628,7 @@ let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statem
           | _ -> ()
 
         Class { c with implements = List.ofSeq inherits |> List.distinct }
+      | Module m -> Module { m with statements = go m.statements }
       | x -> x
     )
   go stmts
@@ -1821,6 +1879,8 @@ let runAll (srcs: SourceFile list) (baseCtx: IContext<#TyperOptions>) =
           |> Statement.resolveErasedTypes ctx
           // add common inheritances which tends not to be defined by `extends` or `implements`
           |> introduceAdditionalInheritance ctx
+          // add default constructors to class if not explicitly defined
+          |> addDefaultConstructorToClass ctx
           // group statements with pattern
           |> detectPatterns
           // replace alias to function type with a function interface

@@ -629,7 +629,7 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (selfTy: Type) (ma: MemberAttri
     OverloadedText (fun renamer -> f (renamer.Rename "value"))
 
   match m with
-  | Constructor (ft, _typrm) ->
+  | Constructor ft ->
     let ty = func { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy; loc = ft.loc } |> emitType_ ctx
     yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "create") ty + str " " + Attr.js_create])

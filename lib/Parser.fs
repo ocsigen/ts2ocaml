@@ -627,9 +627,11 @@ module private ParserImpl =
       let nd = nd :?> Ts.ConstructorDeclaration
       let localTyprm, retTy = extractType nd
       assert (match retTy with UnknownType _ -> true | _ -> false)
-      let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
+      if not (List.isEmpty localTyprm) then
+        nodeWarn ctx nd "constructor should not have type parameters"
+      // let typrm = Set.union typrm (localTyprm |> List.map (fun x -> x.name) |> Set.ofList)
       let ty = readParameters typrm ctx nd.parameters nd ()
-      { attr with isStatic = true }, Constructor (ty, localTyprm)
+      { attr with isStatic = true }, Constructor ty
     | Kind.GetAccessor ->
       let nd = nd :?> Ts.GetAccessorDeclaration
       match getPropertyName nd.name with

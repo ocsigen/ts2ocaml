@@ -284,7 +284,7 @@ and Member =
   /// class { constructor (...) }
   /// ```
   /// Always static.
-  | Constructor of FuncType<unit> * TypeParam list
+  | Constructor of FuncType<unit>
   /// ```ts
   /// class { [Symbol.symbolName](...): Type }
   /// ```

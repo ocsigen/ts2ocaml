@@ -62,9 +62,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MESSAGE: "Build ({sha}) {msg}"
 
-      - name: NPM Publish
-        if: success()
+      - name: NPM Publish as "latest"
+        if: success() && !github.event.release.prerelease
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
           check-version: true
+
+      - name: NPM Publish as "beta"
+        if: success() && github.event.release.prerelease
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          check-version: true
+          tag: "beta"

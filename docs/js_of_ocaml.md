@@ -262,12 +262,6 @@ module TypeScript = Typescript.Export
 $ ts2ocaml jsoo [options] <inputs..>
 ```
 
-When multiple input files are given, `ts2ocaml` will merge it to one source file.
-
-`ts2ocaml` will *not* resolve imports and exports between input files, so it can result in a broken binding.
-
-We recommend you to **create one binding for each `.d.ts`**. It works in most of the cases, and it is easy to fix when the binding is broken.
-
 > See also [the common options](common_options.md).
 
 # General Options

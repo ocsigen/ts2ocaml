@@ -846,12 +846,26 @@ let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kind
       | _ -> "export"
     Some (ExportItem.Export {| comments = []; clauses = [clause, Set.ofList kind]; loc = s.loc; origText = sprintf "%s %s %s" prefix kindString name |})
 
+let getTrie name current =
+  current |> Trie.getSubTrie name |> Option.defaultValue Trie.empty
+let setTrie name trie current =
+  current |> Trie.setSubTrie name trie
+let inTrie name f current =
+  let m =
+    current
+    |> Trie.getSubTrie name
+    |> Option.defaultValue Trie.empty
+    |> f
+  current |> Trie.setSubTrie name m
+let set node current = current |> Trie.setOrUpdate node StructuredTextNode.union
+let add name node current = current |> Trie.addOrUpdate name node StructuredTextNode.union
+
 type [<RequireQualifiedAccess>] ClassKind<'a, 'b, 'c> =
   | NormalClass of 'a
   | ExportDefaultClass of 'b
   | AnonymousInterface of 'c
 
-let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: ClassOrAnonymousInterface) (additionalMembers: Context -> EmitTypeFlags -> OverrideFunc -> list<StructuredTextItem>, additionalKnownTypes: Set<KnownType>, forceScoped: Scoped option) =
+let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: ClassOrAnonymousInterface) (additionalMembers: Context -> EmitTypeFlags -> OverrideFunc -> list<StructuredTextItem>, additionalKnownTypes: Set<KnownType>, forceScoped: Scoped option) =
   let emitType orf ctx ty = emitTypeImpl flags orf ctx ty
 
   let typrms = List.map (fun (tp: TypeParam) -> TypeVar tp.name) c.typeParams
@@ -1072,19 +1086,38 @@ let emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c: Cl
 
   let addAsNode (name: string) =
     current
-    |> Trie.addOrUpdate [name] node StructuredTextNode.union
-    |> Trie.setOrUpdate {| StructuredTextNode.empty with scoped = (if node.scoped <> Scoped.No then Scoped.Yes else Scoped.No); exports = Option.toList export |} StructuredTextNode.union
+    |> add [name] node
+    |> inTrie [name] (addAnonymousInterface flags ctx knownTypes)
+    |> set {| StructuredTextNode.empty with scoped = (if node.scoped <> Scoped.No then Scoped.Yes else Scoped.No); exports = Option.toList export |}
 
   match kind with
   | ClassKind.NormalClass x -> addAsNode x.name
   | ClassKind.AnonymousInterface x -> addAsNode x.name
   | ClassKind.ExportDefaultClass _ ->
     current
-    |> Trie.setOrUpdate {|
+    |> set {|
         StructuredTextNode.empty with
           scoped = Scoped.Force Naming.exportDefaultClassStubName
           exports = [ExportItem.DefaultUnnamedClass node]
-        |} StructuredTextNode.union
+        |}
+    |> addAnonymousInterface flags ctx knownTypes
+
+and addAnonymousInterfaceExcluding emitTypeFlags (ctx: Context) knownTypes ais (current: StructuredText) =
+  knownTypes
+  |> Seq.choose (function KnownType.AnonymousInterface (a, info) -> Some (a, info) | _ -> None)
+  |> Seq.filter (fun (_, info) -> info.path = ctx.currentNamespace)
+  |> Seq.filter (fun (a, _) -> ais |> List.contains a |> not)
+  |> Seq.fold (fun (current: StructuredText) (a, _) ->
+    let shouldSkip =
+      current.value
+      |> Option.map (fun v -> v.anonymousInterfaces |> Set.contains a)
+      |> Option.defaultValue false
+    if shouldSkip then current
+    else
+      emitClass emitTypeFlags OverrideFunc.noOverride ctx current (a.MapName Choice2Of2) ((fun _ _ _ -> []), Set.empty, None)
+      |> set {| StructuredTextNode.empty with anonymousInterfaces = Set.singleton a |}
+  ) current
+and addAnonymousInterface emitTypeFlags ctx knownTypes (current: StructuredText) = addAnonymousInterfaceExcluding emitTypeFlags ctx knownTypes [] current
 
 let emitVariable flags overrideFunc ctx (v: Variable) =
   let emitType = emitTypeImpl flags
@@ -1232,20 +1265,6 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         | SymbolIndexer _ | UnknownMember None -> () ]
 
   let rec folder ctx (current: StructuredText) (s: Statement) : StructuredText =
-    let getTrie name current =
-      current |> Trie.getSubTrie name |> Option.defaultValue Trie.empty
-    let setTrie name trie current =
-      current |> Trie.setSubTrie name trie
-    let inTrie name f current =
-      let m =
-        current
-        |> Trie.getSubTrie name
-        |> Option.defaultValue Trie.empty
-        |> f
-      current |> Trie.setSubTrie name m
-    let set node current = current |> Trie.setOrUpdate node StructuredTextNode.union
-    let add name node current = current |> Trie.addOrUpdate name node StructuredTextNode.union
-
     let comments =
       match (s :> ICommented<_>).getComments() with
       | [] -> []
@@ -1256,22 +1275,10 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       match getExportFromStatement ctx name kind kindString s with
       | None -> current
       | Some e -> current |> set {| StructuredTextNode.empty with exports = [e] |}
-    let addAnonymousInterfaceExcluding ais current =
-      knownTypes ()
-      |> Seq.choose (function KnownType.AnonymousInterface (a, info) -> Some (a, info) | _ -> None)
-      |> Seq.filter (fun (_, info) -> info.path = ctx.currentNamespace)
-      |> Seq.filter (fun (a, _) -> ais |> List.contains a |> not)
-      |> Seq.fold (fun (current: StructuredText) (a, _) ->
-        let shouldSkip =
-          current.value
-          |> Option.map (fun v -> v.anonymousInterfaces |> Set.contains a)
-          |> Option.defaultValue false
-        if shouldSkip then current
-        else
-          emitClass emitTypeFlags OverrideFunc.noOverride ctx current (a.MapName Choice2Of2) ((fun _ _ _ -> []), Set.empty, None)
-          |> set {| StructuredTextNode.empty with anonymousInterfaces = Set.singleton a |}
-      ) current
-    let addAnonymousInterface current = addAnonymousInterfaceExcluding [] current
+    let addAnonymousInterfaceWithKnownTypes knownTypes current = addAnonymousInterface emitTypeFlags ctx knownTypes current
+    let addAnonymousInterface current = addAnonymousInterfaceWithKnownTypes (knownTypes ()) current
+    let addAnonymousInterfaceExcludingWithKnownTypes knownTypes ais current = addAnonymousInterfaceExcluding emitTypeFlags ctx knownTypes ais current
+    let addAnonymousInterfaceExcluding ais current = addAnonymousInterfaceExcludingWithKnownTypes (knownTypes ()) ais current
 
     match s with
     | Module m ->
@@ -1292,7 +1299,6 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | Global m -> m.statements |> List.fold (folder ctx) current
     | Class c ->
       emitClass emitTypeFlags OverrideFunc.noOverride ctx current (c.MapName Choice1Of2) ((fun _ _ _ -> []), Set.empty, None)
-      |> addAnonymousInterface
     | Enum e ->
       current
       |> inTrie [e.name] (fun module' ->
@@ -1318,7 +1324,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       current
       |> inTrie [ta.name] (set node)
       |> addExport ta.name Kind.OfTypeAlias "type"
-      |> addAnonymousInterface
+      |> inTrie [ta.name] addAnonymousInterface
     | Pattern p ->
       let fallback current =
         p.underlyingStatements
@@ -1337,10 +1343,9 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           |> inTrie [value.name] (set (createModule ()))
           |> set {| StructuredTextNode.empty with scoped = Scoped.Yes |}
           |> addExport value.name Kind.OfClass "interface"
-          |> addAnonymousInterface
+          |> inTrie [value.name] addAnonymousInterface
       | ImmediateConstructor (baseIntf, ctorIntf, ctorValue) when Simplify.Has(ctx.options.simplify, Simplify.ImmediateConstructor) ->
         emitClass emitTypeFlags OverrideFunc.noOverride ctx current (baseIntf.MapName Choice1Of2) (intfToStmts ctorIntf, Statement.getKnownTypes ctx [Class ctorIntf], Some (Scoped.Force ctorValue.name))
-        |> addAnonymousInterface
       | _ -> fallback current
     | Function func ->
       let node =
@@ -1372,13 +1377,17 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         |> inTrie [value.name]
           (set
             {| StructuredTextNode.empty with
-                items = items; knownTypes = knownTypes; scoped = Scoped.Force value.name |})
+                items = items
+                knownTypes =
+                  knownTypes |> Set.filter (function KnownType.AnonymousInterface (ai, _) -> ai.loc <> intf.loc | _ -> true)
+                scoped = Scoped.Force value.name |})
         |> set
           {| StructuredTextNode.empty with
               items = emitVariable emitTypeFlags overrideFunc ctx value
               knownTypes = knownTypes
               scoped = Scoped.Yes |}
         |> addExport value.name Kind.OfValue (if value.isConst then "const" else "let")
+        |> inTrie [value.name] (addAnonymousInterfaceExcluding [intf])
         |> addAnonymousInterface
       | Ident (i & { loc = loc }) & Dummy tyargs
       | App (AIdent i, tyargs, loc) when Simplify.Has(ctx.options.simplify, Simplify.NamedInterfaceValue) ->
@@ -1398,6 +1407,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           |> inTrie [name] (set (createModule ()))
           |> set {| StructuredTextNode.empty with scoped = Scoped.Yes |}
           |> addExport name Kind.OfValue (if value.isConst then "const" else "let")
+          |> inTrie [name] (addAnonymousInterfaceWithKnownTypes knownTypesInMembers)
           |> fallback
       | _ -> fallback current
     | Import i ->

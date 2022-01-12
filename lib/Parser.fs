@@ -418,20 +418,22 @@ module private ParserImpl =
     // anonymous interface
     | Kind.TypeLiteral ->
       let t = t :?> Ts.TypeLiteralNode
-      let members = t.members |> List.ofSeq |> List.map (readNamedDeclaration typrm ctx)
-      let temp =
-        { name = Anonymous; isInterface = true; isExported = Exported.No
-          comments = []; implements = []; typeParams = []; accessibility = Public
-          members = members; loc = Node.location t }
-      let freeTypeVars = Typer.Type.getFreeTypeVars (AnonymousInterface temp)
-      let usedTyprms = Set.intersect typrm freeTypeVars
-      if Set.isEmpty usedTyprms then AnonymousInterface temp
+      if t.members.Count = 0 then Prim Object // treat {} as just object
       else
-        let usedTyprms = usedTyprms |> Set.toList
-        let typeParams = usedTyprms |> List.map (fun name -> { name = name; extends = None; defaultType = None })
-        let typeArgs = usedTyprms |> List.map TypeVar
-        let ai = { temp with typeParams = typeParams }
-        App (AAnonymousInterface ai, typeArgs, Node.location t)
+        let members = t.members |> List.ofSeq |> List.map (readNamedDeclaration typrm ctx)
+        let temp =
+          { name = Anonymous; isInterface = true; isExported = Exported.No
+            comments = []; implements = []; typeParams = []; accessibility = Public
+            members = members; loc = Node.location t }
+        let freeTypeVars = Typer.Type.getFreeTypeVars (AnonymousInterface temp)
+        let usedTyprms = Set.intersect typrm freeTypeVars
+        if Set.isEmpty usedTyprms then AnonymousInterface temp
+        else
+          let usedTyprms = usedTyprms |> Set.toList
+          let typeParams = usedTyprms |> List.map (fun name -> { name = name; extends = None; defaultType = None })
+          let typeArgs = usedTyprms |> List.map TypeVar
+          let ai = { temp with typeParams = typeParams }
+          App (AAnonymousInterface ai, typeArgs, Node.location t)
     // readonly types
     | Kind.TypeOperator ->
       let t = t :?> Ts.TypeOperatorNode

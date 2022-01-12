@@ -80,7 +80,11 @@ let private run (input: Input) (baseCtx: IContext<Options>) =
               o.[k] <- o'
               o'
           ) trie |> ignore
-        yield {| file = src; trie = trie |}
+        let ais = JSObj.empty
+        for _, ai in info.anonymousInterfacesMap |> Map.toArray do
+          ais.[string ai.id] <-
+            JSObj.box {| origin = ai.origin; path = ai.path |}
+        yield {| file = src; trie = trie; anonymousInterfaces = ais |}
     |]
     let o = {| sources = sources; info = info |}
     Node.Api.fs.writeFileSync(output, stringify o)

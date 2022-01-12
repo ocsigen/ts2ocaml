@@ -56,18 +56,23 @@ type [<RequireQualifiedAccess>] InheritingType =
   | Other of Type
   | UnknownIdent of {| name: string list; tyargs: Type list |}
 
+type AnonymousInterfaceOrigin = { valueName: string option; argName: string option } with
+  static member Empty = { valueName = None; argName = None }
+
 type AnonymousInterfaceInfo = {
-  /// A unique number assigned to the anonymous interface
+  /// a unique number assigned to the anonymous interface
   id: int
-  /// The namespace in which the anonymous interface appears
+  /// the namespace in which the anonymous interface appears
   path: string list
+  /// where the anonymous interface is used in
+  origin: AnonymousInterfaceOrigin
 }
 
 type SourceFileInfo = {
   sourceFile: SourceFile
   definitionsMap: Trie<string, Definition list>
   typeLiteralsMap: Map<Literal, int>
-  anonymousInterfacesMap: Map<Class<Anonymous>, AnonymousInterfaceInfo>
+  anonymousInterfacesMap: Map<AnonymousInterface, AnonymousInterfaceInfo>
   unknownIdentTypes: Trie<string, Set<int>>
 }
 
@@ -355,107 +360,109 @@ module Type =
         returnType = substTypeVar subst _ctx f.returnType;
         args = List.map (mapInArg (substTypeVar subst) _ctx) f.args }
 
-  let rec findTypesInFieldLike pred (fl: FieldLike) = findTypes pred fl.value
-  and findTypesInTypeParam pred (tp: TypeParam) =
+  type TypeFinder<'State, 'Result> =
+    'State -> Type -> Type list option  * 'State * 'Result seq
+
+  let rec findTypesInFieldLike pred s (fl: FieldLike) = findTypes pred s fl.value
+  and findTypesInTypeParam pred s (tp: TypeParam) =
     seq {
-      yield! tp.extends |> Option.map (findTypes pred) |> Option.defaultValue Seq.empty
-      yield! tp.defaultType |> Option.map (findTypes pred) |> Option.defaultValue Seq.empty
+      yield! tp.extends |> Option.map (findTypes pred s) |> Option.defaultValue Seq.empty
+      yield! tp.defaultType |> Option.map (findTypes pred s) |> Option.defaultValue Seq.empty
     }
-  and findTypesInFuncType pred (ft: FuncType<Type>) =
+  and findTypesInFuncType pred s (ft: FuncType<Type>) =
     seq {
       for arg in ft.args do
         match arg with
-        | Choice1Of2 fl -> yield! findTypesInFieldLike pred fl
-        | Choice2Of2 t -> yield! findTypes pred t
-      yield! findTypes pred ft.returnType
+        | Choice1Of2 fl -> yield! findTypesInFieldLike pred s fl
+        | Choice2Of2 t -> yield! findTypes pred s t
+      yield! findTypes pred s ft.returnType
     }
-  and findTypesInClassMember pred (m: Member) : 'a seq =
+  and findTypesInClassMember pred s (m: Member) : 'a seq =
     match m with
-    | Field (fl, _) -> findTypesInFieldLike pred fl
+    | Field (fl, _) -> findTypesInFieldLike pred s fl
     | Method (_, ft, tps)
     | Callable (ft, tps)
     | Newable (ft, tps) ->
-      seq { yield! findTypesInFuncType pred ft; for tp in tps do yield! findTypesInTypeParam pred tp }
+      seq { yield! findTypesInFuncType pred s ft; for tp in tps do yield! findTypesInTypeParam pred s tp }
     | Indexer (ft, _) | SymbolIndexer (_, ft, _) ->
-      seq { yield! findTypesInFuncType pred ft }
-    | Getter fl | Setter fl -> seq { yield! findTypesInFieldLike pred fl }
+      seq { yield! findTypesInFuncType pred s ft }
+    | Getter fl | Setter fl -> seq { yield! findTypesInFieldLike pred s fl }
     | Constructor ft ->
       seq {
         for arg in ft.args do
           match arg with
-          | Choice1Of2 fl -> yield! findTypesInFieldLike pred fl
-          | Choice2Of2 t -> yield! findTypes pred t
+          | Choice1Of2 fl -> yield! findTypesInFieldLike pred s fl
+          | Choice2Of2 t -> yield! findTypes pred s t
       }
     | UnknownMember _ -> Seq.empty
-  and findTypes (pred: Type -> Choice<bool, Type list> * 'a option) (t: Type) : 'a seq =
-    let rec go_t x =
+  and findTypes (pred: TypeFinder<'s, 'a>) (state: 's) (t: Type) : 'a seq =
+    let rec go_t s x =
       seq {
-        let cont, y = pred x
-        match y with Some v -> yield v | None -> ()
+        let cont, s, y = pred s x
+        yield! y
         match cont with
-        | Choice1Of2 false -> ()
-        | Choice2Of2 ts -> for t in ts do yield! go_t t
-        | Choice1Of2 true ->
+        | Some ts -> for t in ts do yield! go_t s t
+        | None ->
           match x with
           | App (t, ts, _) ->
-            yield! go_t (Type.ofAppLeftHandSide t)
-            for t in ts do yield! go_t t
+            yield! go_t s (Type.ofAppLeftHandSide t)
+            for t in ts do yield! go_t s t
           | Union { types = ts } | Intersection { types = ts } ->
-            for t in ts do yield! go_t t
+            for t in ts do yield! go_t s t
           | Tuple { types = ts } ->
-            for t in ts do yield! go_t t.value
+            for t in ts do yield! go_t s t.value
           | Func (f, tps, _) | NewableFunc (f, tps, _) ->
-            yield! findTypesInFuncType pred f
+            yield! findTypesInFuncType pred s f
             for tp in tps do
-              yield! findTypesInTypeParam pred tp
+              yield! findTypesInTypeParam pred s tp
           | Erased (e, _, _) ->
             match e with
             | IndexedAccess (t1, t2) ->
-              yield! go_t t1
-              yield! go_t t2
+              yield! go_t s t1
+              yield! go_t s t2
             | TypeQuery i ->
-              yield! findTypes pred (Ident i)
+              yield! findTypes pred s (Ident i)
             | Keyof t ->
-              yield! findTypes pred t
+              yield! findTypes pred s t
           | AnonymousInterface c ->
-            for impl in c.implements do yield! findTypes pred impl
-            for tp in c.typeParams do yield! findTypesInTypeParam pred tp
-            for _, m in c.members do yield! findTypesInClassMember pred m
+            for impl in c.implements do yield! findTypes pred s impl
+            for tp in c.typeParams do yield! findTypesInTypeParam pred s tp
+            for _, m in c.members do yield! findTypesInClassMember pred s m
           | Intrinsic | PolymorphicThis | Ident _ | TypeVar _ | Prim _ | TypeLiteral _ | UnknownType _ -> ()
       }
-    go_t t
+    go_t state t
 
   let getTypeVars ty =
-    findTypes (function
-      | TypeVar s -> Choice1Of2 false, Some s
-      | _ -> Choice1Of2 true, None
-    ) ty
+    findTypes (fun () -> function
+      | TypeVar s -> Some [], (), [s]
+      | _ -> None, (), []
+    ) () ty
 
-  let rec getFreeTypeVarsPredicate t =
+  let rec private getFreeTypeVarsPredicate () t =
     match t with
-    | TypeVar s -> Choice1Of2 true, Some (Set.singleton s)
+    | TypeVar s -> None, (), Seq.singleton s
     | Func (ft, tps, _) | NewableFunc (ft, tps, _) ->
-      let fvs = Set.difference (findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
-      Choice1Of2 false, Some fvs
+      let fvs = Set.difference (findTypesInFuncType getFreeTypeVarsPredicate () ft |> Set.ofSeq) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
+      Some [], (), fvs
     | AnonymousInterface a ->
       let memberFvs =
         a.members |> List.map (fun (_, m) ->
           match m with
-          | Field (fl, _) -> findTypesInFieldLike getFreeTypeVarsPredicate fl |> Set.unionMany
+          | Field (fl, _) -> findTypesInFieldLike getFreeTypeVarsPredicate () fl
           | Method (_, ft, tps) | Callable (ft, tps) | Newable (ft, tps) ->
-            Set.difference (findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
+            Set.difference (findTypesInFuncType getFreeTypeVarsPredicate () ft |> Set.ofSeq) (tps |> List.map (fun tp -> tp.name) |> Set.ofList)
           | Constructor ft ->
             let ft = ft |> FuncType.map (fun _ -> PolymorphicThis)
-            findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany
-          | Indexer (ft, _) | SymbolIndexer (_, ft, _) -> findTypesInFuncType getFreeTypeVarsPredicate ft |> Set.unionMany
-          | Getter fl | Setter fl -> findTypesInFieldLike getFreeTypeVarsPredicate fl |> Set.unionMany
+            findTypesInFuncType getFreeTypeVarsPredicate () ft
+          | Indexer (ft, _) | SymbolIndexer (_, ft, _) -> findTypesInFuncType getFreeTypeVarsPredicate () ft
+          | Getter fl | Setter fl -> findTypesInFieldLike getFreeTypeVarsPredicate () fl
           | UnknownMember _ -> Set.empty
-          ) |> Set.unionMany
+        ) |> Seq.concat |> Set.ofSeq
       let fvs = Set.difference memberFvs (a.typeParams |> List.map (fun tp -> tp.name) |> Set.ofList)
-      Choice1Of2 false, Some fvs
-    | _ -> Choice1Of2 true, None
+      Some [], (), fvs
+    | _ -> None, (), Set.empty
 
-  let getFreeTypeVars ty = findTypes getFreeTypeVarsPredicate ty |> Set.unionMany
+  let getFreeTypeVars ty = findTypes getFreeTypeVarsPredicate () ty |> Set.ofSeq
 
   let rec assignTypeParams (name: string list) (loc: Location) (typrms: TypeParam list) (xs: 'a list) (f: TypeParam -> 'a -> 'b) (g: TypeParam -> 'b) : 'b list =
     match typrms, xs with
@@ -956,79 +963,176 @@ module Statement =
         m.statements |> List.fold (go []) trie
     stmts |> List.fold (go []) Trie.empty
 
-  let findTypesInStatements pred (stmts: Statement list) : 'a seq =
-    let rec go ns = function
-      | TypeAlias ta ->
-        seq {
-          yield! findTypes (pred (List.rev ns)) ta.target;
+  type StatementFinder<'State, 'Result> =
+    string list -> 'State -> Statement -> Statement list option * 'State * 'Result seq
+
+  let findStatements (pred: StatementFinder<'s, 'a>) (state: 's) (stmts: Statement list) : 'a seq =
+    let rec go ns state stmts =
+      seq {
+        for stmt in stmts do
+          let stmts, state, result = pred (List.rev ns) state stmt
+          yield! result
+          match stmts with
+          | Some stmts ->
+            match stmt with
+            | Module { name = name } ->
+              yield! go (name :: ns) state stmts
+            | _ -> yield! go ns state stmts
+          | None ->
+            match stmt with
+            | Module { name = name; statements = statements } ->
+              yield! go (name :: ns) state statements
+            | Global { statements = statements } ->
+              yield! go [] state statements
+            | Pattern p ->
+              yield! go ns state p.underlyingStatements
+            | _ -> ()
+      }
+    go [] state stmts
+
+  let findTypesInStatements (pred: TypeFinder<{| state: 's; currentNamespace: string list |}, 'a>) (state: 's) (stmts: Statement list) : 'a seq =
+    let rec go (ns: string list) (state: 's) (stmt: Statement) : 'a seq =
+      let state' = {| state = state; currentNamespace = List.rev ns |}
+      seq {
+        match stmt with
+        | TypeAlias ta ->
+          yield! findTypes pred state' ta.target;
           for tp in ta.typeParams do
-            yield! findTypesInTypeParam (pred (List.rev ns)) tp
-        }
-      | Class c ->
-        seq {
+            yield! findTypesInTypeParam pred state' tp
+        | Class c ->
           for impl in c.implements do
-            yield! findTypes (pred (List.rev ns)) impl
+            yield! findTypes pred state' impl
           for tp in c.typeParams do
-            yield! findTypesInTypeParam (pred (List.rev ns)) tp
+            yield! findTypesInTypeParam pred state' tp
           for _, m in c.members do
-            yield! findTypesInClassMember (pred (List.rev ns)) m
-        }
-      | Module m -> m.statements |> Seq.collect (go (m.name :: ns))
-      | Global m -> m.statements |> Seq.collect (go [])
-      | Variable v -> findTypes (pred (List.rev ns)) v.typ
-      | Function f ->
-        seq {
-          yield! findTypesInFuncType (pred (List.rev ns)) f.typ
+            yield! findTypesInClassMember pred state' m
+        | Variable v -> yield! findTypes pred state' v.typ
+        | Function f ->
+          yield! findTypesInFuncType pred state' f.typ
           for tp in f.typeParams do
-            yield! findTypesInTypeParam (pred (List.rev ns)) tp
-        }
-      | Enum e ->
-        e.cases |> Seq.choose (fun c -> c.value)
-                |> Seq.collect (fun l -> findTypes (pred (List.rev ns)) (TypeLiteral l))
-      | Import _ | Export _ | ReExport _ | UnknownStatement _ | FloatingComment _ -> Seq.empty
-      | Pattern p ->
-        seq {
+            yield! findTypesInTypeParam pred state' tp
+        | Enum e ->
+          yield!
+            e.cases |> Seq.choose (fun c -> c.value)
+                    |> Seq.collect (fun l -> findTypes pred state' (TypeLiteral l))
+        | Import _ | Export _ | ReExport _ | UnknownStatement _ | FloatingComment _ -> ()
+        | Pattern p ->
           for stmt in p.underlyingStatements do
-            yield! go ns stmt
-        }
-    stmts |> Seq.collect (go [])
+            yield! go ns state stmt
+        | Module m ->
+          for stmt in m.statements do
+            yield! go (m.name :: ns) state stmt
+        | Global m ->
+          for stmt in m.statements do
+            yield! go [] state stmt
+      }
+    stmts |> Seq.collect (go [] state)
 
   let getTypeLiterals stmts =
-    findTypesInStatements (fun _ -> function TypeLiteral l -> Choice1Of2 true, Some l | _ -> Choice1Of2 true, None) stmts |> Set.ofSeq
+    findTypesInStatements
+      (fun ctx -> function TypeLiteral l -> None, ctx, [l] | _ -> None, ctx, [])
+      () stmts |> Set.ofSeq
 
-  let getAnonymousInterfaces stmts =
-    findTypesInStatements (fun ns -> function
-      | AnonymousInterface c -> Choice1Of2 true, Some (c, ns)
-      | _ -> Choice1Of2 true, None
-    ) stmts |> Set.ofSeq
+  let getAnonymousInterfaces' stmts : Set<AnonymousInterface * {| origin: AnonymousInterfaceOrigin; path: string list |}> =
+    let rec treatFuncType (state: {| origin: AnonymousInterfaceOrigin; path: string list |}) (ft: FuncType<Type>) tps =
+      seq {
+        for arg in ft.args do
+          let ty, origin =
+            match arg with
+            | Choice1Of2 fl -> fl.value, { state.origin with argName = Some fl.name }
+            | Choice2Of2 t -> t, state.origin
+          yield! findTypes typeFinder {| state with origin = origin |} ty
+        yield! findTypes typeFinder state ft.returnType
+        for tp in tps do
+          yield! tp.extends |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
+          yield! tp.defaultType |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
+      }
+    and treatNamed (state: {| origin: AnonymousInterfaceOrigin; path: string list |}) name value =
+      findTypes typeFinder {| state with origin = { state.origin with valueName = Some name } |} value
+    and typeFinder (state: {| origin: AnonymousInterfaceOrigin; path: string list |}) ty =
+      let inline resultMany xs = Some [], state, xs
+      match ty with
+      | App (AAnonymousInterface i, _, _) ->
+        None, {| state with origin = AnonymousInterfaceOrigin.Empty |}, Seq.singleton (i, state)
+      | AnonymousInterface i ->
+        None, {| state with origin = AnonymousInterfaceOrigin.Empty |}, Seq.singleton (i, state)
+      | Func (ft, tps, _) | NewableFunc (ft, tps, _) ->
+        treatFuncType state ft tps |> resultMany
+      | Union { types = types } | Intersection { types = types } ->
+        Some types, state, Seq.empty
+      | _ -> None, {| state with origin = AnonymousInterfaceOrigin.Empty |}, Seq.empty
+
+    findStatements (fun currentNamespace state stmt ->
+      let inline result_ x = Some [], state, x
+      let state' = {| origin = state; path = currentNamespace |}
+      match stmt with
+      | Variable v ->
+        treatNamed state' v.name v.typ |> result_
+      | Function f ->
+        treatFuncType {| state' with origin = { state'.origin with valueName = Some f.name } |} f.typ f.typeParams |> result_
+      | Class c ->
+        let path =
+          match c.name with Name n -> currentNamespace @ [n] | _ -> currentNamespace
+        let state = {| state' with path = path |}
+        seq {
+          for _, m in c.members do
+            match m with
+            | Method (name, ft, tps) ->
+              yield! treatFuncType {| state with origin = { state.origin with valueName = Some name } |} ft tps
+            | Newable (ft, tps) | Callable (ft, tps) -> yield! treatFuncType state ft tps
+            | Field (fl, _) | Getter fl | Setter fl -> yield! treatNamed state fl.name fl.value
+            | Indexer (ft, _) -> yield! treatFuncType state ft []
+            | SymbolIndexer (name, ft, _) ->
+              yield! treatFuncType {| state with origin = { state.origin with valueName = Some name } |} ft []
+            | Constructor ft ->
+              for arg in ft.args do
+                let ty, origin =
+                  match arg with
+                  | Choice1Of2 fl -> fl.value, { state.origin with argName = Some fl.name }
+                  | Choice2Of2 t -> t, state.origin
+                yield! findTypes typeFinder {| state with origin = origin |} ty
+            | UnknownMember _ -> ()
+          for t in c.implements do
+            yield! findTypes typeFinder state t
+          for tp in c.typeParams do
+            yield! tp.extends |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
+            yield! tp.defaultType |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
+        } |> result_
+      | _ -> None, state, Seq.empty
+    ) AnonymousInterfaceOrigin.Empty stmts |> Set.ofSeq
+
+  let getAnonymousInterfaces stmts : Set<AnonymousInterface * {| origin: AnonymousInterfaceOrigin; path: string list |}> =
+    findTypesInStatements (fun state -> function
+      | AnonymousInterface c -> None, state, Seq.singleton (c, {| origin = AnonymousInterfaceOrigin.Empty; path = state.currentNamespace |})
+      | _ -> None, state, Seq.empty
+    ) () stmts |> Set.ofSeq
 
   let getUnknownIdentTypes ctx stmts =
     let (|Dummy|) _ = []
-    findTypesInStatements (fun _ -> function
+    findTypesInStatements (fun state -> function
       | App (AIdent { name = name; fullName = [] }, ts, _)
       | (Ident { name = name; fullName = [] } & Dummy ts) ->
-        Choice2Of2 ts, Some (name, Set.singleton (List.length ts))
+        Some ts, state, [name, Set.singleton (List.length ts)]
       | App (AIdent i, ts, _)
       | (Ident i & Dummy ts) when not (Ident.isType ctx i) ->
-        Choice2Of2 ts, Some (i.name, Set.singleton (List.length ts))
-      | _ -> Choice1Of2 true, None
-    ) stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
+        Some ts, state, [i.name, Set.singleton (List.length ts)]
+      | _ -> None, state, []
+    ) () stmts |> Seq.fold (fun state (k, v) -> Trie.addOrUpdate k v Set.union state) Trie.empty
 
   let getKnownTypes (ctx: TyperContext<_, _>) stmts =
     let (|Dummy|) _ = []
-    findTypesInStatements (fun _ -> function
+    findTypesInStatements (fun state -> function
       | Ident { fullName = fns } ->
-        Choice1Of2 true, Some (fns |> List.map KnownType.Ident)
+        None, state, List.map KnownType.Ident fns
       | AnonymousInterface a ->
         let info =
           ctx |> TyperContext.bindCurrentSourceInfo (fun info -> info.anonymousInterfacesMap |> Map.tryFind a)
-        Choice1Of2 true,
+        None, state,
         match info with
-        | None -> None
-        | Some info -> Some [KnownType.AnonymousInterface (a, info)]
-      | _ ->
-        Choice1Of2 true, None
-    ) stmts |> Seq.concat |> Set.ofSeq
+        | None -> []
+        | Some info -> [KnownType.AnonymousInterface (a, info)]
+      | _ -> None, state, []
+    ) () stmts |> Set.ofSeq
 
   let rec mapTypeWith overrideFunc mapping ctxOfChildNamespace ctxOfRoot ctx stmts =
     let mapVariable (v: Variable) = { v with typ = mapping ctx v.typ }
@@ -1091,8 +1195,8 @@ module Statement =
       | None -> f stmt
     )
 
-  let rec mapType mapping ctxOfChildNamespace ctx stmts =
-    mapTypeWith (fun _ _ -> None) mapping ctxOfChildNamespace ctx stmts
+  let rec mapType mapping ctxOfChildNamespace ctxOfRoot ctx stmts =
+    mapTypeWith (fun _ _ -> None) mapping ctxOfChildNamespace ctxOfRoot ctx stmts
 
   let resolveErasedTypes (ctx: TyperContext<#TyperOptions, _>) (stmts: Statement list) =
     mapType resolveErasedType TyperContext.ofChildNamespace TyperContext.ofRoot ctx stmts
@@ -1817,7 +1921,7 @@ let createRootContext (srcs: SourceFile list) (baseCtx: IContext<'Options>) : Ty
           let tlm = Statement.getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
           let aim =
             Statement.getAnonymousInterfaces stmts
-            |> Seq.mapi (fun i (c, ns) -> c, { id = i; path = ns }) |> Map.ofSeq
+            |> Seq.mapi (fun i (c, info) -> c, { id = i; path = info.path; origin = info.origin }) |> Map.ofSeq
           let uit = Statement.getUnknownIdentTypes ctx stmts
           { v with
               typeLiteralsMap = tlm

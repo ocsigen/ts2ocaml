@@ -3,6 +3,7 @@ module Targets.ParserTest
 open Ts2Ml
 open Syntax
 open Target
+open DataTypes
 
 type Options =
   inherit GlobalOptions
@@ -44,12 +45,15 @@ let private run (input: Input) (baseCtx: IContext<Options>) =
   baseCtx.options.replaceAliasToFunction <- true
   baseCtx.options.replaceNewableFunction <- true
   baseCtx.options.replaceRankNFunction <- true
+  baseCtx.options.inheritArraylike <- true
+  baseCtx.options.inheritIterable <- true
+  baseCtx.options.inheritPromiselike <- true
 
-  let srcs =
+  let ctx, srcs =
     if baseCtx.options.typing then
-      Typer.runAll input.sources baseCtx |> snd
+      Typer.runAll input.sources baseCtx
     else
-      input.sources
+      Typer.createRootContext input.sources baseCtx, input.sources
   let moduleName =
     JsHelper.deriveModuleName input.info (srcs |> List.map (fun src -> src.fileName))
   printfn "package info: %A" (JS.stringify input.info)
@@ -58,12 +62,27 @@ let private run (input: Input) (baseCtx: IContext<Options>) =
   match baseCtx.options.dumpAst with
   | None -> ()
   | Some output ->
-    let o = [|
+    let sources = [|
       for src in input.sources do
         yield
           {| file = src.fileName;
              statements = src.statements |> List.toArray |}
     |]
+    let info = [|
+      for KeyValue(src, info) in ctx.info do
+        let trie = JSObj.empty
+        for key in info.definitionsMap |> Trie.keys do
+          key |> List.fold (fun (o: JSObj) k ->
+            match o.[k] with
+            | Some o -> o
+            | None ->
+              let o' = JSObj.empty
+              o.[k] <- o'
+              o'
+          ) trie |> ignore
+        yield {| file = src; trie = trie |}
+    |]
+    let o = {| sources = sources; info = info |}
     Node.Api.fs.writeFileSync(output, stringify o)
 
 let target =

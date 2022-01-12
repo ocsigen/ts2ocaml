@@ -68,7 +68,7 @@ with
     match yo with
     | :? Location as y -> true
     | _ -> false
-  override x.GetHashCode() = 0
+  override x.GetHashCode() = x.AsComparable.GetHashCode()
   interface System.IComparable with
     member x.CompareTo(yo) =
       match yo with

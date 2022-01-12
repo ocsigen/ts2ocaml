@@ -908,7 +908,8 @@ module Statement =
 
   let createDefinitionsMap (stmts: Statement list) : Trie<string, Definition list> =
     let add ns name x trie =
-      trie |> Trie.addOrUpdate (List.rev (name :: ns)) [x] List.append
+      let key = List.rev (name :: ns)
+      trie |> Trie.addOrUpdate key [x] List.append
     let rec go (ns: string list) trie s =
       match s with
       | Export _
@@ -1415,14 +1416,16 @@ let inferEnumCaseValue (stmts: Statement list) : Statement list =
           { c with value = v }, v
       Enum { e with cases = e.cases |> List.mapFold f None |> fst }
     | Module m -> Module { m with statements = m.statements |> List.map go }
+    | Global m -> Global { m with statements = m.statements |> List.map go }
     | s -> s
   stmts |> List.map go
 
 let rec mergeStatements (stmts: Statement list) =
-  let mutable result : Choice<Statement, Class ref, Module ref> list = []
+  let mutable result : Choice<Statement, Class ref, Module ref, Global ref> list = []
 
   let mutable intfMap = Map.empty
   let mutable nsMap = Map.empty
+  let mutable globalM = None
   let mutable otherStmtSet = Set.empty
   let mergeTypeParams tps1 tps2 =
     let rec go acc = function
@@ -1456,7 +1459,7 @@ let rec mergeStatements (stmts: Statement list) =
       | None ->
         let iref = ref i
         intfMap <- (intfMap |> Map.add i.name iref)
-        result <- Choice2Of3 iref :: result
+        result <- Choice2Of4 iref :: result
       | Some iref' ->
         let i' = iref'.Value
         assert (i.accessibility = i'.accessibility)
@@ -1474,7 +1477,7 @@ let rec mergeStatements (stmts: Statement list) =
       | None ->
         let nref = ref n
         nsMap <- (nsMap |> Map.add n.name nref)
-        result <- Choice3Of3 nref :: result
+        result <- Choice3Of4 nref :: result
       | Some nref' ->
         let n' = nref'.Value
         nref'.Value <-
@@ -1482,17 +1485,30 @@ let rec mergeStatements (stmts: Statement list) =
               loc = n.loc ++ n'.loc
               comments = n.comments @ n'.comments |> List.distinct
               statements = n'.statements @ n.statements }
+    | Global n ->
+      match globalM with
+      | None ->
+        let nref = ref n
+        globalM <- Some nref
+        result <- Choice4Of4 nref :: result
+      | Some nref ->
+        let n' = nref.Value
+        nref.Value <-
+          { n with
+              loc = n.loc ++ n'.loc
+              comments = n.comments @ n'.comments |> List.distinct
+              statements = n'.statements @ n.statements }
     | stmt ->
       if otherStmtSet |> Set.contains stmt |> not then
         otherStmtSet <- otherStmtSet |> Set.add stmt
-        result <- Choice1Of3 stmt :: result
+        result <- Choice1Of4 stmt :: result
   result
   |> List.rev
   |> List.map (function
-    | Choice1Of3 s -> s
-    | Choice2Of3 i -> Class i.Value
-    | Choice3Of3 n ->
-      Module { n.Value with statements = mergeStatements n.Value.statements }
+    | Choice1Of4 s -> s
+    | Choice2Of4 i -> Class i.Value
+    | Choice3Of4 n -> Module { n.Value with statements = mergeStatements n.Value.statements }
+    | Choice4Of4 n -> Global { n.Value with statements = mergeStatements n.Value.statements }
   )
 
 let mergeSources newFileName (srcs: SourceFile list) =
@@ -1527,7 +1543,7 @@ let addDefaultConstructorToClass (ctx: TyperContext<_, _>) (stmts: Statement lis
     else
       match m.TryGetValue(c.loc) with
       | true, (c, cs) -> c, cs
-      | false, _ ->
+      | _, _ ->
         let parentConstructors =
           let (|Dummy|) _ = []
           let rec picker = function
@@ -1563,9 +1579,9 @@ let addDefaultConstructorToClass (ctx: TyperContext<_, _>) (stmts: Statement lis
         (c, cs)
   let rec go stmts =
     stmts |> List.map (function
-      | Class c when not c.isInterface ->
-        Class (addConstructors c |> fst)
+      | Class c when not c.isInterface -> Class (addConstructors c |> fst)
       | Module m -> Module { m with statements = go m.statements }
+      | Global m -> Global { m with statements = go m.statements }
       | x -> x)
   go stmts
 
@@ -1629,6 +1645,7 @@ let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statem
 
         Class { c with implements = List.ofSeq inherits |> List.distinct }
       | Module m -> Module { m with statements = go m.statements }
+      | Global m -> Global { m with statements = go m.statements }
       | x -> x
     )
   go stmts
@@ -1691,14 +1708,15 @@ let detectPatterns (stmts: Statement list) : Statement list =
           else Some (Class intf)
         else Some (Class intf)
       | Module m -> Some (Module { m with statements = go m.statements })
+      | Global m -> Global { m with statements = go m.statements } |> Some
       | x -> Some x
     )
   go stmts
 
 let replaceAliasToFunction (ctx: #IContext<#TyperOptions>) stmts =
   let rec go = function
-    | Module m ->
-      Module { m with statements = List.map go m.statements }
+    | Module m -> Module { m with statements = List.map go m.statements }
+    | Global m -> Global { m with statements = List.map go m.statements }
     | TypeAlias ta ->
       match ta.target with
       | Func (f, typrms, loc) ->
@@ -1852,6 +1870,7 @@ let mergeESLibDefinitions (srcs: SourceFile list) =
     let vo, s = map None s.loc s
     match s with
     | Module m -> Module { m with statements = List.map mapStmt m.statements }
+    | Global m -> Global { m with statements = List.map mapStmt m.statements }
     | Enum e -> Enum { e with cases = e.cases |> List.map (fun c -> map vo c.loc c |> snd) }
     | Class c -> Class { c with members = c.members |> List.map (fun (a, m) -> map vo a.loc a |> snd, m) }
     | _ -> s

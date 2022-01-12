@@ -126,6 +126,32 @@ type JSRecord<'TKey, 'TValue> =
   [<Emit("$1 in $0")>]
   abstract member hasKey: 'TKey -> bool
 
+module JSRecord =
+  [<Emit("{}")>]
+  let empty<'TKey, 'TValue> : JSRecord<'TKey, 'TValue> = jsNative
+
+type JSObj =
+  [<EmitIndexer>]
+  abstract member Item: string -> JSObj option with get
+  [<EmitIndexer>]
+  abstract member Item: string -> JSObj with set
+  [<Emit("Object.keys($0)")>]
+  abstract member keys: string[]
+  [<Emit("Object.values($0)")>]
+  abstract member values: JSObj[]
+  [<Emit("Object.entries($0)")>]
+  abstract member entries: (string * JSObj)[]
+  [<Emit("$1 in $0")>]
+  abstract member hasKey: string -> bool
+
+module JSObj =
+  [<Emit("{}")>]
+  let empty : JSObj = jsNative
+  [<Emit("$0")>]
+  let box _ : JSObj = jsNative
+  [<Emit("$0")>]
+  let unbox (_: JSObj) : 'a = jsNative
+
 module JS =
   [<Emit("typeof $0")>]
   let typeof (_: 'a) : string = jsNative

@@ -80,6 +80,11 @@
   (action (run %{bin:gen_js_api} %{deps})))
 
 (rule
+  (targets vscode.ml)
+  (deps vscode.mli)
+  (action (run %{bin:gen_js_api} %{deps})))
+
+(rule
   (targets main.js)
   (deps main.bc.js)
   (action (run cp %{deps} %{targets})))

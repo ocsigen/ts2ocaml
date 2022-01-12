@@ -13,6 +13,7 @@ module TypeScript = Typescript.Export
 module Yargs = Yargs.Export
 module React = React.Export
 module React_modal = React_modal.Export
+module VSCode = Vscode.Vscode.Export
 
 let () =
   Printf.printf "typescript version: %s\n" (TypeScript.version ())

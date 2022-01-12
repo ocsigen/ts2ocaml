@@ -142,6 +142,8 @@ module Test =
          // "safe" package which depends on another "safe" package
          "safe", !! "node_modules/@types/yargs-parser/index.d.ts", [];
          "safe", !! "node_modules/@types/yargs/index.d.ts", ["--rec-module=off"];
+
+         "minimal", !! "node_modules/@types/vscode/index.d.ts", ["--safe-arity=full "];
       ]
 
       for preset, package, additionalOptions in packages do

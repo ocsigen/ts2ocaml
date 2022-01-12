@@ -36,6 +36,7 @@
     "@babel/core": "7.16.7",
     "@types/react-modal": "3.13.1",
     "@types/semver": "7.3.9",
+    "@types/vscode": "^1.63.1",
     "@types/yargs": "17.0.8",
     "cassandra-driver": "^4.6.3",
     "monaco-editor": "0.31.1",

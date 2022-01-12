@@ -5,10 +5,6 @@ open Fable.Core.JsInterop
 
 module Node = Node.Api
 
-let inline nodeOnly (f: unit -> 'a option) : 'a option =
-  if not BrowserOrNode.isNode then None
-  else f ()
-
 let getPackageJsonPath (exampleFilePath: string) =
   nodeOnly <| fun () ->
     let parts =

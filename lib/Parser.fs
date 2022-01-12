@@ -1138,14 +1138,26 @@ let createDependencyGraph (sourceFiles: Ts.SourceFile seq) =
   for sourceFile in sourceFiles do goSourceFile sourceFile
   graph
 
+let assertFileExistsAndHasCorrectExtension (fileName: string) =
+  assertNode ()
+  if not <| Node.fs.existsSync(!^fileName) then
+    failwithf "file '%s' does not exist" fileName
+  if fileName.EndsWith(".d.ts") |> not then
+    failwithf "file '%s' is not a TypeScript declaration file" fileName
+  fileName
+
 let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileNames: string[]) : ParserContext =
+  assertNode ()
   let fileNames, program =
     let fileNames =
       if not ctx.options.followRelativeReferences then
-        fileNames |> Array.map Path.absolute
+        fileNames
+        |> Array.map Path.absolute
+        |> Array.map assertFileExistsAndHasCorrectExtension
       else
         fileNames
         |> Seq.map Path.absolute
+        |> Seq.map assertFileExistsAndHasCorrectExtension
         |> Seq.map (fun a -> a, Node.fs.readFileSync(a, "utf-8"))
         |> Seq.map (fun (a, i) ->
           ts.createSourceFile (a, i, Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
@@ -1162,7 +1174,7 @@ let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileName
     currentSource = (null : Ts.SourceFile)
   |}
 
-let createSourceFileFromString (ctx: #IContext<#IOptions>) compilerOptions (files: {| fileName: string; text: string |} seq) : ParserContext =
+let createContextFromString (ctx: #IContext<#IOptions>) compilerOptions (files: {| fileName: string; text: string |} seq) : ParserContext =
   let sourceFiles =
     files
     |> Seq.map (fun x -> ts.createSourceFile (x.fileName, x.text, Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))

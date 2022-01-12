@@ -173,6 +173,13 @@ module JS =
         value
     ))
 
+let inline nodeOnly (f: unit -> 'a option) : 'a option =
+  if not BrowserOrNode.isNode then None
+  else f ()
+
+let inline assertNode () =
+  assert BrowserOrNode.isNode
+
 module Path =
   module Node = Node.Api
 

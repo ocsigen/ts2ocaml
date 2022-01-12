@@ -26,13 +26,14 @@ let register (parse: GlobalOptions -> string[] -> Input) (target: ITarget<'Targe
     builder = U3.Case2 (fun argv ->
       (target.Builder !!argv).positional("inputs", {| describe = ".d.ts files to generate a binding" |})
     ),
-    handler = (fun (argv: Arguments<'Options>) ->
-      let inputs = argv.["inputs"] :?> string[]
+    handler = (fun (args: Arguments<'Options>) ->
+      let inputs = args.["inputs"] :?> string[]
       try
-        let input = parse !!argv.Options inputs
-        let baseCtx = createBaseContext !!argv.Options
+        let input = parse !!args.Options inputs
+        let baseCtx = createBaseContext !!args.Options
         target.Run(input, baseCtx)
       with
         e ->
           eprintfn "%s" e.StackTrace
+          argv.exit(-1, e)
       ))

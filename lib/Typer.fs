@@ -56,14 +56,29 @@ type [<RequireQualifiedAccess>] InheritingType =
   | Other of Type
   | UnknownIdent of {| name: string list; tyargs: Type list |}
 
-type AnonymousInterfaceOrigin = { valueName: string option; argName: string option } with
-  static member Empty = { valueName = None; argName = None }
+type AnonymousInterfaceOrigin = {
+  // the name of the type containing the anonymous interface.
+  //
+  // will be `Some` only when it is used "directly"; will be `None` if it is in a tuple type, one of the arguments of a type application, etc.
+  typeName: string option;
+
+  // the name of the value containing the anonymous interface.
+  //
+  // will be `Some` only when it is used "directly"; will be `None` if it is in a tuple type, one of the arguments of a type application, etc.
+  valueName: string option;
+
+  // the name of the argument containing the anonymous interface.
+  //
+  // will be `Some` only when it is used "directly"; will be `None` if it is in a tuple type, one of the arguments of a type application, etc.
+  argName: string option
+} with
+  static member Empty = { typeName = None; valueName = None; argName = None }
 
 type AnonymousInterfaceInfo = {
   /// a unique number assigned to the anonymous interface
   id: int
   /// the namespace in which the anonymous interface appears
-  path: string list
+  namespace_: string list
   /// where the anonymous interface is used in
   origin: AnonymousInterfaceOrigin
 }
@@ -1033,8 +1048,8 @@ module Statement =
       (fun ctx -> function TypeLiteral l -> None, ctx, [l] | _ -> None, ctx, [])
       () stmts |> Set.ofSeq
 
-  let getAnonymousInterfaces' stmts : Set<AnonymousInterface * {| origin: AnonymousInterfaceOrigin; path: string list |}> =
-    let rec treatFuncType (state: {| origin: AnonymousInterfaceOrigin; path: string list |}) (ft: FuncType<Type>) tps =
+  let getAnonymousInterfaces stmts : Set<AnonymousInterface * {| origin: AnonymousInterfaceOrigin; namespace_: string list |}> =
+    let rec treatFuncType (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) (ft: FuncType<Type>) tps =
       seq {
         for arg in ft.args do
           let ty, origin =
@@ -1043,13 +1058,17 @@ module Statement =
             | Choice2Of2 t -> t, state.origin
           yield! findTypes typeFinder {| state with origin = origin |} ty
         yield! findTypes typeFinder state ft.returnType
+        yield! treatTypeParameters state tps
+      }
+    and treatTypeParameters (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) (tps: TypeParam list) =
+      seq {
         for tp in tps do
           yield! tp.extends |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
           yield! tp.defaultType |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
       }
-    and treatNamed (state: {| origin: AnonymousInterfaceOrigin; path: string list |}) name value =
+    and treatNamed (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) name value =
       findTypes typeFinder {| state with origin = { state.origin with valueName = Some name } |} value
-    and typeFinder (state: {| origin: AnonymousInterfaceOrigin; path: string list |}) ty =
+    and typeFinder (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) ty =
       let inline resultMany xs = Some [], state, xs
       match ty with
       | App (AAnonymousInterface i, _, _) ->
@@ -1064,16 +1083,22 @@ module Statement =
 
     findStatements (fun currentNamespace state stmt ->
       let inline result_ x = Some [], state, x
-      let state' = {| origin = state; path = currentNamespace |}
+      let state = {| origin = state; namespace_ = currentNamespace |}
       match stmt with
+      | TypeAlias ta ->
+        let state = {| state with origin = { state.origin with typeName = Some ta.name } |}
+        seq {
+          yield! findTypes typeFinder state ta.target
+          yield! treatTypeParameters state ta.typeParams
+        } |> result_
       | Variable v ->
-        treatNamed state' v.name v.typ |> result_
+        treatNamed state v.name v.typ |> result_
       | Function f ->
-        treatFuncType {| state' with origin = { state'.origin with valueName = Some f.name } |} f.typ f.typeParams |> result_
+        treatFuncType {| state with origin = { state.origin with valueName = Some f.name } |} f.typ f.typeParams |> result_
       | Class c ->
-        let path =
-          match c.name with Name n -> currentNamespace @ [n] | _ -> currentNamespace
-        let state = {| state' with path = path |}
+        let typeName =
+          match c.name with Name n -> Some n | _ -> None
+        let state = {| state with namespace_ = currentNamespace; origin = { state.origin with typeName = typeName } |}
         seq {
           for _, m in c.members do
             match m with
@@ -1094,18 +1119,10 @@ module Statement =
             | UnknownMember _ -> ()
           for t in c.implements do
             yield! findTypes typeFinder state t
-          for tp in c.typeParams do
-            yield! tp.extends |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
-            yield! tp.defaultType |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
+          yield! treatTypeParameters state c.typeParams
         } |> result_
-      | _ -> None, state, Seq.empty
+      | _ -> None, state.origin, Seq.empty
     ) AnonymousInterfaceOrigin.Empty stmts |> Set.ofSeq
-
-  let getAnonymousInterfaces stmts : Set<AnonymousInterface * {| origin: AnonymousInterfaceOrigin; path: string list |}> =
-    findTypesInStatements (fun state -> function
-      | AnonymousInterface c -> None, state, Seq.singleton (c, {| origin = AnonymousInterfaceOrigin.Empty; path = state.currentNamespace |})
-      | _ -> None, state, Seq.empty
-    ) () stmts |> Set.ofSeq
 
   let getUnknownIdentTypes ctx stmts =
     let (|Dummy|) _ = []
@@ -1921,7 +1938,7 @@ let createRootContext (srcs: SourceFile list) (baseCtx: IContext<'Options>) : Ty
           let tlm = Statement.getTypeLiterals stmts |> Seq.mapi (fun i l -> l, i) |> Map.ofSeq
           let aim =
             Statement.getAnonymousInterfaces stmts
-            |> Seq.mapi (fun i (c, info) -> c, { id = i; path = info.path; origin = info.origin }) |> Map.ofSeq
+            |> Seq.mapi (fun i (c, info) -> c, { id = i; namespace_ = info.namespace_; origin = info.origin }) |> Map.ofSeq
           let uit = Statement.getUnknownIdentTypes ctx stmts
           { v with
               typeLiteralsMap = tlm

@@ -78,49 +78,53 @@ let isCase (case: Case) (str: string) =
   | OtherCase, _ -> true
   | _, _ -> false
 
-let toCase (case: Case) (str: string) =
+let getWords (str: string) =
   if String.IsNullOrWhiteSpace str then invalidArg "str" "string is null or whitespace"
-  let words =
-    str.Split('_', '-')
-    |> Array.collect (fun s ->
-      if s.Length = 0 then [||]
-      else if s.Length = 1 then [|s|]
-      else
-        let h, t = s.[0], s.[1..]
-        let sb = StringBuilder().Append(h)
-        let sb, words =
-          t |> Seq.fold (fun (sb: StringBuilder, words) c ->
-            if Char.IsUpper c then
-              let word = sb.ToString()
-              sb.Clear().Append(c), word :: words
-            else
-              sb.Append(c), words
-          ) (sb, [])
-        sb.ToString() :: words |> List.rev |> List.toArray
-    )
+  let chars = str.ToCharArray() |> List.ofArray
+  let rec go words acc = function
+    | [] ->
+      acc :: words
+      |> List.filter (List.isEmpty >> not)
+      |> List.map (fun word -> new String(List.rev word |> Array.ofList))
+      |> List.rev
+      |> Array.ofList
+    | c :: rest when not (Char.IsLetterOrDigit c) -> go (acc :: words) [] rest
+    | c1 :: c2 :: rest when Char.IsUpper c1 && Char.IsLower c2 ->
+      go (acc :: words) [c1] (c2 :: rest)
+    | c1 :: c2 :: rest when not (Char.IsUpper c1) && Char.IsUpper c2 ->
+      go ((c1 :: acc) :: words) [] (c2 :: rest)
+    | c :: rest -> go words (c :: acc) rest
+  go [] [] chars
+
+let wordsToCase (case: Case) (words: string[]) =
   let toLower (s: string) = s.ToLowerInvariant()
   let toUpper (s: string) = s.ToUpperInvariant()
   let toPascal (s: string) : string =
     s.ToCharArray()
     |> Array.mapi (fun i c -> if i = 0 then Char.ToUpperInvariant c else Char.ToLowerInvariant c)
     |> String
+  match case with
+  | LowerCase -> words |> String.concat "" |> toLower
+  | UpperCase -> words |> String.concat "" |> toUpper
+  | PascalCase -> words |> Array.map toPascal |> String.Concat
+  | DromedaryCase -> words |> Array.mapi (fun i s -> if i = 0 then toLower s else toPascal s) |> String.Concat
+  | LowerSnakeCase -> words |> Array.map toLower |> String.concat "_"
+  | UpperSnakeCase -> words |> Array.map toUpper |> String.concat "_"
+  | (PascalSnakeCase | MixedSnakeCase) -> words |> Array.map toPascal |> String.concat "_"
+  | KebabCase -> words |> Array.map toLower |> String.concat "-"
+  | UpperTrainCase -> words |> Array.map toUpper |> String.concat "-"
+  | (PascalTrainCase | MixedTrainCase) -> words |> Array.map toPascal |> String.concat "-"
+  | OtherCase -> words |> String.concat ""
+
+let toCase (case: Case) (str: string) =
+  let words = getWords str
   match case, getCase str with
   | c1, c2 when c1 = c2 -> str
   | (DromedaryCase | LowerSnakeCase | KebabCase), LowerCase -> str
   | (UpperSnakeCase | UpperTrainCase), UpperCase -> str
   | MixedSnakeCase, (LowerSnakeCase | UpperSnakeCase | PascalSnakeCase) -> str
   | MixedTrainCase, (KebabCase | UpperTrainCase | PascalTrainCase) -> str
-  | LowerCase, _ -> str.Replace("_","").Replace("-","") |> toLower
-  | UpperCase, _ -> str.Replace("_","").Replace("-","") |> toUpper
-  | PascalCase, _ -> words |> Array.map toPascal |> String.Concat
-  | DromedaryCase, _ -> words |> Array.mapi (fun i s -> if i = 0 then toLower s else toPascal s) |> String.Concat
-  | LowerSnakeCase, _ -> words |> Array.map toLower |> String.concat "_"
-  | UpperSnakeCase, _ -> words |> Array.map toUpper |> String.concat "_"
-  | (PascalSnakeCase | MixedSnakeCase), _ -> words |> Array.map toPascal |> String.concat "_"
-  | KebabCase, _ -> words |> Array.map toLower |> String.concat "-"
-  | UpperTrainCase, _ -> words |> Array.map toUpper |> String.concat "-"
-  | (PascalTrainCase | MixedTrainCase), _ -> words |> Array.map toPascal |> String.concat "-"
-  | OtherCase, _ -> str
+  | _, _ -> wordsToCase case words
 
 module Keywords =
   let keywords =

@@ -116,6 +116,7 @@ module Iterable : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (* [Symbol.iterator]: unit -> 'T Iterator.t_1 *)
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -136,6 +137,7 @@ module[@js.scope "WeakSet"] WeakSet : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (* [Symbol.toStringTag]: unit -> string *)
   val add: ('tags, 'T) this -> value:'T -> ('tags, 'T) this [@@js.call "add"]
   val delete: ('tags, 'T) this -> value:'T -> bool [@@js.call "delete"]
   val has: ('tags, 'T) this -> value:'T -> bool [@@js.call "has"]
@@ -162,12 +164,14 @@ module[@js.scope "WeakRef"] WeakRef : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (* [Symbol.toStringTag]: unit -> ([`L_s20_WeakRef[@js "WeakRef"]] [@js.enum]) *)
   
   (**
     Returns the WeakRef instance's target object, or undefined if the target object has been
     reclaimed.
   *)
   val deref: ('tags, 'T) this -> 'T or_undefined [@@js.call "deref"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s20_WeakRef[@js "WeakRef"]] [@js.enum]) *)
   
   (**
     Returns the WeakRef instance's target object, or undefined if the target object has been
@@ -208,6 +212,7 @@ module[@js.scope "WeakMap"] WeakMap : sig
   val t_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t
   val t_2_to_js: ('K -> Ojs.t) -> ('V -> Ojs.t) -> ('K, 'V) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t_2
+  (* [Symbol.toStringTag]: unit -> string *)
   val delete: ('tags, 'K, 'V) this -> key:'K -> bool [@@js.call "delete"]
   val get_: ('tags, 'K, 'V) this -> key:'K -> 'V or_undefined [@@js.call "get"]
   val has: ('tags, 'K, 'V) this -> key:'K -> bool [@@js.call "has"]
@@ -261,6 +266,8 @@ module[@js.scope "SharedArrayBuffer"] SharedArrayBuffer : sig
   
   (** Returns a section of an SharedArrayBuffer. *)
   val slice: 'tags this -> begin_:float -> ?end_:float -> unit -> t [@@js.call "slice"]
+  (* [Symbol.species]: unit -> t *)
+  (* [Symbol.toStringTag]: unit -> ([`L_s15_SharedArrayBuffer[@js "SharedArrayBuffer"]] [@js.enum]) *)
   val prototype: unit -> t [@@js.get "prototype"]
   val create: float -> t [@@js.create]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
@@ -283,6 +290,7 @@ module[@js.scope "ArrayBuffer"] ArrayBuffer : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.toStringTag]: unit -> string *)
   
   (** Read-only. The length of the ArrayBuffer (in bytes). *)
   val get_byteLength: 'tags this -> float [@@js.get "byteLength"]
@@ -322,6 +330,7 @@ module IterableIterator : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (* [Symbol.iterator]: unit -> 'T t *)
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -372,6 +381,8 @@ module[@js.scope "Uint8ClampedArray"] Uint8ClampedArray : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s19_Uint8ClampedArray[@js "Uint8ClampedArray"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -832,6 +843,7 @@ module ReadonlyArray : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: ('tags, 'T) this -> searchElement:'T -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.iterator]: unit -> 'T IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -1094,6 +1106,8 @@ module[@js.scope "Symbol"] Symbol : sig
     Expose the \[\[Description\]\] internal slot of a symbol directly.
   *)
   val get_description: 'tags this -> string or_undefined [@@js.get "description"]
+  (* [Symbol.toPrimitive]: string -> symbol *)
+  (* [Symbol.toStringTag]: unit -> string *)
   
   (** Returns a string representation of an object. *)
   val toString: 'tags this -> string [@@js.call "toString"]
@@ -1270,6 +1284,8 @@ module[@js.scope "Array"] Array : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: ('tags, 'T) this -> searchElement:'T -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.unscopables]: unit -> AnonymousInterface0.t *)
+  (* [Symbol.iterator]: unit -> 'T IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -1606,7 +1622,7 @@ end
 
 
 module RegExpMatchArray : sig
-  module AnonymousInterface12 : sig
+  module AnonymousInterface16 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -1630,10 +1646,10 @@ module RegExpMatchArray : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (** language version: ES2018 *)
-  val get_groups: 'tags this -> AnonymousInterface12.t [@@js.get "groups"]
+  val get_groups: 'tags this -> AnonymousInterface16.t [@@js.get "groups"]
   
   (** language version: ES2018 *)
-  val set_groups: 'tags this -> AnonymousInterface12.t -> unit [@@js.set "groups"]
+  val set_groups: 'tags this -> AnonymousInterface16.t -> unit [@@js.set "groups"]
   val get_index: 'tags this -> float [@@js.get "index"]
   val set_index: 'tags this -> float -> unit [@@js.set "index"]
   val get_input: 'tags this -> string [@@js.get "input"]
@@ -1643,7 +1659,7 @@ end
 
 
 module RegExpExecArray : sig
-  module AnonymousInterface12 : sig
+  module AnonymousInterface16 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -1667,10 +1683,10 @@ module RegExpExecArray : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (** language version: ES2018 *)
-  val get_groups: 'tags this -> AnonymousInterface12.t [@@js.get "groups"]
+  val get_groups: 'tags this -> AnonymousInterface16.t [@@js.get "groups"]
   
   (** language version: ES2018 *)
-  val set_groups: 'tags this -> AnonymousInterface12.t -> unit [@@js.set "groups"]
+  val set_groups: 'tags this -> AnonymousInterface16.t -> unit [@@js.set "groups"]
   val get_index: 'tags this -> float [@@js.get "index"]
   val set_index: 'tags this -> float -> unit [@@js.set "index"]
   val get_input: 'tags this -> string [@@js.get "input"]
@@ -1695,6 +1711,7 @@ module[@js.scope "RegExp"] RegExp : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.matchAll]: string -> RegExpMatchArray.t IterableIterator.t *)
   
   (**
     language version: ES2018
@@ -1702,6 +1719,11 @@ module[@js.scope "RegExp"] RegExp : sig
     Default is false. Read-only.
   *)
   val get_dotAll: 'tags this -> bool [@@js.get "dotAll"]
+  (* [Symbol.match]: string -> RegExpMatchArray.t or_null *)
+  (* [Symbol.replace]: string:string -> replaceValue:string -> string *)
+  (* [Symbol.replace]: string:string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string *)
+  (* [Symbol.search]: string -> float *)
+  (* [Symbol.split]: string:string -> ?limit:float -> unit -> string list *)
   
   (**
     language version: ES2015
@@ -1860,6 +1882,10 @@ module[@js.scope "Date"] rec Date : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.toPrimitive]: ([`L_s33_default[@js "default"]] [@js.enum]) -> string *)
+  (* [Symbol.toPrimitive]: ([`L_s90_string[@js "string"]] [@js.enum]) -> string *)
+  (* [Symbol.toPrimitive]: ([`L_s71_number[@js "number"]] [@js.enum]) -> float *)
+  (* [Symbol.toPrimitive]: string -> string or_number *)
   
   (**
     Converts a date and time to a string by using the current or specified locale.
@@ -2429,7 +2455,7 @@ and[@js.scope "Intl"] Intl : sig
   
   (** language version: ES2018 *)
   module[@js.scope "PluralRules"] PluralRules : sig
-    module AnonymousInterface2 : sig
+    module AnonymousInterface4 : sig
       type t = private Ojs.t
       val t_to_js: t -> Ojs.t
       val t_of_js: Ojs.t -> t
@@ -2456,7 +2482,7 @@ and[@js.scope "Intl"] Intl : sig
     val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
     val create: ?locales:string list or_string -> ?options:PluralRulesOptions.t -> unit -> t [@@js.create]
     val invoke: ?locales:string list or_string -> ?options:PluralRulesOptions.t -> unit -> t [@@js.invoke]
-    val supportedLocalesOf: locales:string list or_string -> ?options:AnonymousInterface2.t -> unit -> string list [@@js.global "supportedLocalesOf"]
+    val supportedLocalesOf: locales:string list or_string -> ?options:AnonymousInterface4.t -> unit -> string list [@@js.global "supportedLocalesOf"]
   end
   
   
@@ -2867,7 +2893,7 @@ and[@js.scope "Intl"] Intl : sig
   
   (** language version: ES2020 *)
   module[@js.scope "DisplayNames"] DisplayNames : sig
-    module AnonymousInterface1 : sig
+    module AnonymousInterface2 : sig
       type t = private Ojs.t
       val t_to_js: t -> Ojs.t
       val t_of_js: Ojs.t -> t
@@ -2936,7 +2962,7 @@ and[@js.scope "Intl"] Intl : sig
       
       \[MDN\](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/supportedLocalesOf).
     *)
-    val supportedLocalesOf: locales:(BCP47LanguageTag.t, BCP47LanguageTag.t) or_array -> ?options:AnonymousInterface1.t -> unit -> BCP47LanguageTag.t list [@@js.global "supportedLocalesOf"]
+    val supportedLocalesOf: locales:(BCP47LanguageTag.t, BCP47LanguageTag.t) or_array -> ?options:AnonymousInterface2.t -> unit -> BCP47LanguageTag.t list [@@js.global "supportedLocalesOf"]
   end
   
   
@@ -3291,37 +3317,42 @@ end
 
 
 module[@js.scope "String"] String : sig
-  module AnonymousInterface4 : sig
+  module AnonymousInterface6 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
     val get_raw: t -> (string ArrayLike.t, string list) union2 [@@js.get "raw"]
     val set_raw: t -> (string ArrayLike.t, string list) union2 -> unit [@@js.set "raw"]
   end
+  module AnonymousInterface22 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    (* [Symbol.split]: string:string -> ?limit:float -> unit -> string list *)
+  end
+  module AnonymousInterface21 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    (* [Symbol.search]: string -> float *)
+  end
+  module AnonymousInterface20 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    (* [Symbol.replace]: string:string -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string *)
+  end
+  module AnonymousInterface19 : sig
+    type t = private Ojs.t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    (* [Symbol.replace]: string:string -> replaceValue:string -> string *)
+  end
   module AnonymousInterface18 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
-  end
-  module AnonymousInterface17 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-  end
-  module AnonymousInterface16 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-  end
-  module AnonymousInterface15 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-  end
-  module AnonymousInterface14 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
+    (* [Symbol.match]: string -> RegExpMatchArray.t or_null *)
   end
   type t = [`String | string ArrayLike.tags_1 | string IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -3435,7 +3466,7 @@ module[@js.scope "String"] String : sig
     containing the results of that search, or null if no matches are found.
     @param matcher An object that supports being matched against.
   *)
-  val match_: 'tags this -> matcher:AnonymousInterface14.t -> RegExpMatchArray.t or_null [@@js.call "match"]
+  val match_: 'tags this -> matcher:AnonymousInterface18.t -> RegExpMatchArray.t or_null [@@js.call "match"]
   
   (**
     language version: ES2015
@@ -3443,7 +3474,7 @@ module[@js.scope "String"] String : sig
     @param searchValue A string or RegExp search value.
     @param replaceValue A string containing the text to replace for match.
   *)
-  val replace: 'tags this -> searchValue:AnonymousInterface15.t -> replaceValue:string -> string [@@js.call "replace"]
+  val replace: 'tags this -> searchValue:AnonymousInterface19.t -> replaceValue:string -> string [@@js.call "replace"]
   
   (**
     language version: ES2015
@@ -3451,14 +3482,14 @@ module[@js.scope "String"] String : sig
     @param searchValue A object can search for and replace matches within a string.
     @param replacer A function that returns the replacement text.
   *)
-  val replace': 'tags this -> searchValue:AnonymousInterface16.t -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replace"]
+  val replace': 'tags this -> searchValue:AnonymousInterface20.t -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replace"]
   
   (**
     language version: ES2015
     Finds the first substring match in a regular expression search.
     @param searcher An object which supports searching within a string.
   *)
-  val search: 'tags this -> searcher:AnonymousInterface17.t -> float [@@js.call "search"]
+  val search: 'tags this -> searcher:AnonymousInterface21.t -> float [@@js.call "search"]
   
   (**
     language version: ES2015
@@ -3466,7 +3497,8 @@ module[@js.scope "String"] String : sig
     @param splitter An object that can split a string.
     @param limit A value used to limit the number of elements returned in the array.
   *)
-  val split: 'tags this -> splitter:AnonymousInterface18.t -> ?limit:float -> unit -> string list [@@js.call "split"]
+  val split: 'tags this -> splitter:AnonymousInterface22.t -> ?limit:float -> unit -> string list [@@js.call "split"]
+  (* [Symbol.iterator]: unit -> string IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -3774,7 +3806,7 @@ module[@js.scope "String"] String : sig
     @param template A well-formed template string call site representation.
     @param substitutions A set of substitution values.
   *)
-  val raw: template:AnonymousInterface4.t -> substitutions:(any list [@js.variadic]) -> string [@@js.global "raw"]
+  val raw: template:AnonymousInterface6.t -> substitutions:(any list [@js.variadic]) -> string [@@js.global "raw"]
   val create: ?value:any -> unit -> t [@@js.create]
   val invoke: ?value:any -> unit -> string [@@js.invoke]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -3799,6 +3831,8 @@ module[@js.scope "Set"] Set : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (* [Symbol.toStringTag]: unit -> string *)
+  (* [Symbol.iterator]: unit -> 'T IterableIterator.t *)
   
   (** Returns an iterable of \[v,v\] pairs for every value `v` in the set. *)
   val entries: ('tags, 'T) this -> ('T * 'T) IterableIterator.t [@@js.call "entries"]
@@ -3899,6 +3933,7 @@ module[@js.scope "Function"] Function : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.hasInstance]: any -> bool *)
   
   (**
     language version: ES2015
@@ -4119,6 +4154,7 @@ module ReadonlySet : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (* [Symbol.iterator]: unit -> 'T IterableIterator.t *)
   
   (** Returns an iterable of \[v,v\] pairs for every value `v` in the set. *)
   val entries: ('tags, 'T) this -> ('T * 'T) IterableIterator.t [@@js.call "entries"]
@@ -4151,6 +4187,7 @@ module ReadonlyMap : sig
   val t_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t
   val t_2_to_js: ('K -> Ojs.t) -> ('V -> Ojs.t) -> ('K, 'V) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t_2
+  (* [Symbol.iterator]: unit -> ('K * 'V) IterableIterator.t *)
   
   (** Returns an iterable of key, value pairs for every entry in the map. *)
   val entries: ('tags, 'K, 'V) this -> ('K * 'V) IterableIterator.t [@@js.call "entries"]
@@ -4223,7 +4260,7 @@ module ProxyHandler : sig
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "Proxy"] ProxyStatic : sig
-  module AnonymousInterface27 : sig
+  module AnonymousInterface41 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
@@ -4231,13 +4268,13 @@ module[@js.scope "Proxy"] ProxyStatic : sig
     val set_proxy: 'T t -> 'T -> unit [@@js.set "proxy"]
     val revoke: 'T t -> unit [@@js.call "revoke"]
   end
-  val revocable: target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface27.t [@@js.global "revocable"]
+  val revocable: target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface41.t [@@js.global "revocable"]
   val create: target:'T -> handler:'T ProxyHandler.t -> 'T [@@js.create]
 end
 
 (** language version: ES2015 *)
 module ProxyConstructor : sig
-  module AnonymousInterface27 : sig
+  module AnonymousInterface41 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
@@ -4260,7 +4297,7 @@ module ProxyConstructor : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val revocable: 'tags this -> target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface27.t [@@js.call "revocable"]
+  val revocable: 'tags this -> target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface41.t [@@js.call "revocable"]
   val create: 'tags this -> target:'T -> handler:'T ProxyHandler.t -> 'T [@@js.apply_newable]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
@@ -4321,21 +4358,21 @@ end
 
 
 module[@js.scope "Object"] Object : sig
-  module AnonymousInterface30 : sig
+  module AnonymousInterface48 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
     val get: 'T t -> string -> 'T [@@js.index_get]
     val set: 'T t -> string -> 'T -> unit [@@js.index_set]
   end
-  module AnonymousInterface29 : sig
+  module AnonymousInterface45 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
     val get: 'T t -> string -> 'T [@@js.index_get]
     val set: 'T t -> string -> 'T -> unit [@@js.index_set]
   end
-  module AnonymousInterface13 : sig
+  module AnonymousInterface17 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -4396,7 +4433,7 @@ module[@js.scope "Object"] Object : sig
     Returns an object created by key-value entries for properties and methods
     @param entries An iterable object that contains key-value entries for properties and methods.
   *)
-  val fromEntries: (PropertyKey.t * 'T) Iterable.t -> 'T AnonymousInterface29.t [@@js.global "fromEntries"]
+  val fromEntries: (PropertyKey.t * 'T) Iterable.t -> 'T AnonymousInterface45.t [@@js.global "fromEntries"]
   
   (**
     language version: ES2019
@@ -4410,7 +4447,7 @@ module[@js.scope "Object"] Object : sig
     Returns an array of values of the enumerable properties of an object
     @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
   *)
-  val values: ('T ArrayLike.t, 'T AnonymousInterface30.t) union2 -> 'T list [@@js.global "values"]
+  val values: ('T ArrayLike.t, 'T AnonymousInterface48.t) union2 -> 'T list [@@js.global "values"]
   
   (**
     language version: ES2017
@@ -4424,7 +4461,7 @@ module[@js.scope "Object"] Object : sig
     Returns an array of key/values of the enumerable properties of an object
     @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
   *)
-  val entries: ('T ArrayLike.t, 'T AnonymousInterface30.t) union2 -> (string * 'T) list [@@js.global "entries"]
+  val entries: ('T ArrayLike.t, 'T AnonymousInterface48.t) union2 -> (string * 'T) list [@@js.global "entries"]
   
   (**
     language version: ES2017
@@ -4438,7 +4475,7 @@ module[@js.scope "Object"] Object : sig
     Returns an object containing all own property descriptors of an object
     @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
   *)
-  val getOwnPropertyDescriptors: 'T -> ((* FIXME: unknown type '{[P in keyof T]: TypedPropertyDescriptor<T[P]>}' *)any, AnonymousInterface13.t) intersection2 [@@js.global "getOwnPropertyDescriptors"]
+  val getOwnPropertyDescriptors: 'T -> ((* FIXME: unknown type '{[P in keyof T]: TypedPropertyDescriptor<T[P]>}' *)any, AnonymousInterface17.t) intersection2 [@@js.global "getOwnPropertyDescriptors"]
   
   (**
     language version: ES2015
@@ -4671,13 +4708,13 @@ end
 
 
 module PromiseConstructorLike : sig
-  module AnonymousInterface6 : sig
+  module AnonymousInterface9 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
     val create: t -> executor:(resolve:(('T, 'T PromiseLike.t) union2 -> unit) -> reject:(?reason:any -> unit -> unit) -> unit) -> 'T PromiseLike.t [@@js.apply_newable]
   end
-  type t = AnonymousInterface6.t
+  type t = AnonymousInterface9.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4914,49 +4951,49 @@ end
 
 
 module NewableFunction : sig
-  module AnonymousInterface28 : sig
+  module AnonymousInterface43 : sig
     type 'T t = private Ojs.t
     val t_to_js: ('T -> Ojs.t) -> 'T t -> Ojs.t
     val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
     val create: 'T t -> 'T [@@js.apply_newable]
   end
-  module AnonymousInterface26 : sig
+  module AnonymousInterface39 : sig
     type ('AX, 'R) t = private Ojs.t
     val t_to_js: ('AX -> Ojs.t) -> ('R -> Ojs.t) -> ('AX, 'R) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'AX) -> (Ojs.t -> 'R) -> Ojs.t -> ('AX, 'R) t
     val create: ('AX, 'R) t -> args:('AX list [@js.variadic]) -> 'R [@@js.apply_newable]
   end
-  module AnonymousInterface25 : sig
+  module AnonymousInterface36 : sig
     type ('A, 'T) t = private Ojs.t
     val t_to_js: ('A -> Ojs.t) -> ('T -> Ojs.t) -> ('A, 'T) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'T) -> Ojs.t -> ('A, 'T) t
     val create: ('A, 'T) t -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'T [@@js.apply_newable]
   end
-  module AnonymousInterface24 : sig
+  module AnonymousInterface33 : sig
     type ('A, 'R) t = private Ojs.t
     val t_to_js: ('A -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'R) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'R) t
     val create: ('A, 'R) t -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply_newable]
   end
-  module AnonymousInterface23 : sig
+  module AnonymousInterface31 : sig
     type ('A, 'A0, 'R) t = private Ojs.t
     val t_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'R) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'R) t
     val create: ('A, 'A0, 'R) t -> arg0:'A0 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply_newable]
   end
-  module AnonymousInterface22 : sig
+  module AnonymousInterface29 : sig
     type ('A, 'A0, 'A1, 'R) t = private Ojs.t
     val t_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'R) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'R) t
     val create: ('A, 'A0, 'A1, 'R) t -> arg0:'A0 -> arg1:'A1 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply_newable]
   end
-  module AnonymousInterface21 : sig
+  module AnonymousInterface27 : sig
     type ('A, 'A0, 'A1, 'A2, 'R) t = private Ojs.t
     val t_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('A2 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'A2, 'R) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'A2) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'A2, 'R) t
     val create: ('A, 'A0, 'A1, 'A2, 'R) t -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> 'R [@@js.apply_newable]
   end
-  module AnonymousInterface20 : sig
+  module AnonymousInterface25 : sig
     type ('A, 'A0, 'A1, 'A2, 'A3, 'R) t = private Ojs.t
     val t_to_js: ('A -> Ojs.t) -> ('A0 -> Ojs.t) -> ('A1 -> Ojs.t) -> ('A2 -> Ojs.t) -> ('A3 -> Ojs.t) -> ('R -> Ojs.t) -> ('A, 'A0, 'A1, 'A2, 'A3, 'R) t -> Ojs.t
     val t_of_js: (Ojs.t -> 'A) -> (Ojs.t -> 'A0) -> (Ojs.t -> 'A1) -> (Ojs.t -> 'A2) -> (Ojs.t -> 'A3) -> (Ojs.t -> 'R) -> Ojs.t -> ('A, 'A0, 'A1, 'A2, 'A3, 'R) t
@@ -4983,17 +5020,17 @@ module NewableFunction : sig
     @param thisArg The object to be used as the this object.
     @param args An array of argument values to be passed to the function.
   *)
-  val apply_: 'tags this -> this:'T AnonymousInterface28.t -> thisArg:'T -> unit [@@js.call "apply"]
+  val apply_: 'tags this -> this:'T AnonymousInterface43.t -> thisArg:'T -> unit [@@js.call "apply"]
   
   (** Calls the function, substituting the specified object for the this value of the function, and the specified array for the arguments of the function. *)
-  val apply_': 'tags this -> this:('A, 'T) AnonymousInterface25.t -> thisArg:'T -> args:'A -> unit [@@js.call "apply"]
+  val apply_': 'tags this -> this:('A, 'T) AnonymousInterface36.t -> thisArg:'T -> args:'A -> unit [@@js.call "apply"]
   
   (**
     Calls the function with the specified object as the this value and the specified rest arguments as the arguments.
     @param thisArg The object to be used as the this object.
     @param args Argument values to be passed to the function.
   *)
-  val call: 'tags this -> this:('A, 'T) AnonymousInterface25.t -> thisArg:'T -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> unit [@@js.call "call"]
+  val call: 'tags this -> this:('A, 'T) AnonymousInterface36.t -> thisArg:'T -> args:((* FIXME: type ''A' cannot be used for variadic argument *)any list [@js.variadic]) -> unit [@@js.call "call"]
   
   (**
     For a given function, creates a bound function that has the same body as the original function.
@@ -5007,31 +5044,31 @@ module NewableFunction : sig
     For a given function, creates a bound function that has the same body as the original function.
     The this object of the bound function is associated with the specified object, and has the specified initial parameters.
   *)
-  val bind': 'tags this -> this:('A, 'A0, 'R) AnonymousInterface23.t -> thisArg:any -> arg0:'A0 -> ('A, 'R) AnonymousInterface24.t [@@js.call "bind"]
+  val bind': 'tags this -> this:('A, 'A0, 'R) AnonymousInterface31.t -> thisArg:any -> arg0:'A0 -> ('A, 'R) AnonymousInterface33.t [@@js.call "bind"]
   
   (**
     For a given function, creates a bound function that has the same body as the original function.
     The this object of the bound function is associated with the specified object, and has the specified initial parameters.
   *)
-  val bind'': 'tags this -> this:('A, 'A0, 'A1, 'R) AnonymousInterface22.t -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> ('A, 'R) AnonymousInterface24.t [@@js.call "bind"]
+  val bind'': 'tags this -> this:('A, 'A0, 'A1, 'R) AnonymousInterface29.t -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> ('A, 'R) AnonymousInterface33.t [@@js.call "bind"]
   
   (**
     For a given function, creates a bound function that has the same body as the original function.
     The this object of the bound function is associated with the specified object, and has the specified initial parameters.
   *)
-  val bind''': 'tags this -> this:('A, 'A0, 'A1, 'A2, 'R) AnonymousInterface21.t -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> ('A, 'R) AnonymousInterface24.t [@@js.call "bind"]
+  val bind''': 'tags this -> this:('A, 'A0, 'A1, 'A2, 'R) AnonymousInterface27.t -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> ('A, 'R) AnonymousInterface33.t [@@js.call "bind"]
   
   (**
     For a given function, creates a bound function that has the same body as the original function.
     The this object of the bound function is associated with the specified object, and has the specified initial parameters.
   *)
-  val bind'''': 'tags this -> this:('A, 'A0, 'A1, 'A2, 'A3, 'R) AnonymousInterface20.t -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> ('A, 'R) AnonymousInterface24.t [@@js.call "bind"]
+  val bind'''': 'tags this -> this:('A, 'A0, 'A1, 'A2, 'A3, 'R) AnonymousInterface25.t -> thisArg:any -> arg0:'A0 -> arg1:'A1 -> arg2:'A2 -> arg3:'A3 -> ('A, 'R) AnonymousInterface33.t [@@js.call "bind"]
   
   (**
     For a given function, creates a bound function that has the same body as the original function.
     The this object of the bound function is associated with the specified object, and has the specified initial parameters.
   *)
-  val bind''''': 'tags this -> this:('AX, 'R) AnonymousInterface26.t -> thisArg:any -> args:('AX list [@js.variadic]) -> ('AX, 'R) AnonymousInterface26.t [@@js.call "bind"]
+  val bind''''': 'tags this -> this:('AX, 'R) AnonymousInterface39.t -> thisArg:any -> args:('AX list [@js.variadic]) -> ('AX, 'R) AnonymousInterface39.t [@@js.call "bind"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -5365,6 +5402,8 @@ module[@js.scope "Map"] Map : sig
   val t_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t
   val t_2_to_js: ('K -> Ojs.t) -> ('V -> Ojs.t) -> ('K, 'V) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'K) -> (Ojs.t -> 'V) -> Ojs.t -> ('K, 'V) t_2
+  (* [Symbol.toStringTag]: unit -> string *)
+  (* [Symbol.iterator]: unit -> ('K * 'V) IterableIterator.t *)
   
   (** Returns an iterable of key, value pairs for every entry in the map. *)
   val entries: ('tags, 'K, 'V) this -> ('K * 'V) IterableIterator.t [@@js.call "entries"]
@@ -5426,7 +5465,7 @@ end
 
 
 module InstanceType : sig
-  module AnonymousInterface5 : sig
+  module AnonymousInterface8 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -5521,6 +5560,7 @@ module IArguments : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> any IterableIterator.t *)
   val get: 'tags this -> float -> any [@@js.index_get]
   val set: 'tags this -> float -> any -> unit [@@js.index_set]
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -5565,6 +5605,7 @@ module Generator : sig
   val next: ('tags, 'T, 'TReturn, 'TNext) this -> args:((* FIXME: type 'union<() | ('TNext)>' cannot be used for variadic argument *)any list [@js.variadic]) -> ('T, 'TReturn) IteratorResult.t [@@js.call "next"]
   val return: ('tags, 'T, 'TReturn, 'TNext) this -> value:'TReturn -> ('T, 'TReturn) IteratorResult.t [@@js.call "return"]
   val throw: ('tags, 'T, 'TReturn, 'TNext) this -> e:any -> ('T, 'TReturn) IteratorResult.t [@@js.call "throw"]
+  (* [Symbol.iterator]: unit -> ('T, 'TReturn, 'TNext) t *)
   val cast_from: (('tags, 'T, 'TReturn, 'TNext) this -> ('T, 'TReturn, 'TNext) t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -5585,6 +5626,7 @@ module GeneratorFunction : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.toStringTag]: unit -> string *)
   
   (**
     Creates a new Generator object.
@@ -5675,6 +5717,8 @@ module[@js.scope "Float64Array"] Float64Array : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s7_Float64Array[@js "Float64Array"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -5995,6 +6039,8 @@ module[@js.scope "Float32Array"] Float32Array : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s6_Float32Array[@js "Float32Array"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -6318,6 +6364,7 @@ module[@js.scope "FinalizationRegistry"] FinalizationRegistry : sig
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.toStringTag]: unit -> ([`L_s5_FinalizationRegistry[@js "FinalizationRegistry"]] [@js.enum]) *)
   
   (**
     Registers an object with the registry.
@@ -6336,6 +6383,7 @@ module[@js.scope "FinalizationRegistry"] FinalizationRegistry : sig
     register to register the target object.
   *)
   val unregister: ('tags, 'T) this -> unregisterToken:untyped_object -> unit [@@js.call "unregister"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s5_FinalizationRegistry[@js "FinalizationRegistry"]] [@js.enum]) *)
   
   (**
     Registers an object with the registry.
@@ -6457,6 +6505,7 @@ module[@js.scope "DataView"] DataView : sig
     otherwise a little-endian value should be written.
   *)
   val setBigUint64: 'tags this -> byteOffset:float -> value:bigint -> ?littleEndian:bool -> unit -> unit [@@js.call "setBigUint64"]
+  (* [Symbol.toStringTag]: unit -> string *)
   val get_buffer: 'tags this -> ArrayBuffer.t [@@js.get "buffer"]
   val get_byteLength: 'tags this -> float [@@js.get "byteLength"]
   val get_byteOffset: 'tags this -> float [@@js.get "byteOffset"]
@@ -6591,7 +6640,7 @@ end
 
 
 module ConstructorParameters : sig
-  module AnonymousInterface5 : sig
+  module AnonymousInterface8 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -6964,6 +7013,7 @@ module[@js.scope "BigInt"] BigInt : sig
   
   (** Returns the primitive value of the specified object. *)
   val valueOf: 'tags this -> bigint [@@js.call "valueOf"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s2_BigInt[@js "BigInt"]] [@js.enum]) *)
   val invoke: bigint or_boolean or_string or_number -> bigint [@@js.invoke]
   val prototype: unit -> t [@@js.get "prototype"]
   
@@ -7010,6 +7060,8 @@ module[@js.scope "Uint8Array"] Uint8Array : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s18_Uint8Array[@js "Uint8Array"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -7336,6 +7388,8 @@ module[@js.scope "Uint32Array"] Uint32Array : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s17_Uint32Array[@js "Uint32Array"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -7662,6 +7716,8 @@ module[@js.scope "Uint16Array"] Uint16Array : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s16_Uint16Array[@js "Uint16Array"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -7988,6 +8044,8 @@ module[@js.scope "Int8Array"] Int8Array : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s10_Int8Array[@js "Int8Array"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -8314,6 +8372,8 @@ module[@js.scope "Int32Array"] Int32Array : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s9_Int32Array[@js "Int32Array"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -8640,6 +8700,8 @@ module[@js.scope "Int16Array"] Int16Array : sig
     @param fromIndex The position in this array at which to begin searching for searchElement.
   *)
   val includes: 'tags this -> searchElement:float -> ?fromIndex:float -> unit -> bool [@@js.call "includes"]
+  (* [Symbol.toStringTag]: unit -> ([`L_s8_Int16Array[@js "Int16Array"]] [@js.enum]) *)
+  (* [Symbol.iterator]: unit -> float IterableIterator.t *)
   
   (**
     language version: ES2015
@@ -9191,6 +9253,8 @@ module[@js.scope "BigUint64Array"] BigUint64Array : sig
   
   (** Yields each value in the array. *)
   val values: 'tags this -> bigint IterableIterator.t [@@js.call "values"]
+  (* [Symbol.iterator]: unit -> bigint IterableIterator.t *)
+  (* [Symbol.toStringTag]: unit -> ([`L_s4_BigUint64Array[@js "BigUint64Array"]] [@js.enum]) *)
   val get: 'tags this -> float -> bigint [@@js.index_get]
   val set: 'tags this -> float -> bigint -> unit [@@js.index_set]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -9470,6 +9534,8 @@ module[@js.scope "BigInt64Array"] BigInt64Array : sig
   
   (** Yields each value in the array. *)
   val values: 'tags this -> bigint IterableIterator.t [@@js.call "values"]
+  (* [Symbol.iterator]: unit -> bigint IterableIterator.t *)
+  (* [Symbol.toStringTag]: unit -> ([`L_s3_BigInt64Array[@js "BigInt64Array"]] [@js.enum]) *)
   val get: 'tags this -> float -> bigint [@@js.index_get]
   val set: 'tags this -> float -> bigint -> unit [@@js.index_set]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -9774,6 +9840,7 @@ module[@js.scope "Promise"] Promise : sig
     @return A Promise for the completion of the callback.
   *)
   val finally: ('tags, 'T) this -> ?onfinally:(unit -> unit) or_null_or_undefined -> unit -> 'T t [@@js.call "finally"]
+  (* [Symbol.toStringTag]: unit -> string *)
   
   (**
     Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9947,6 +10014,7 @@ module AsyncIterableIterator : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (* [Symbol.asyncIterator]: unit -> 'T t *)
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -9967,6 +10035,7 @@ module AsyncIterable : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (* [Symbol.asyncIterator]: unit -> 'T AsyncIterator.t_1 *)
   val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -10005,6 +10074,7 @@ module AsyncGenerator : sig
   val next: ('tags, 'T, 'TReturn, 'TNext) this -> args:((* FIXME: type 'union<() | ('TNext)>' cannot be used for variadic argument *)any list [@js.variadic]) -> ('T, 'TReturn) IteratorResult.t Promise.t [@@js.call "next"]
   val return: ('tags, 'T, 'TReturn, 'TNext) this -> value:('TReturn, 'TReturn PromiseLike.t) union2 -> ('T, 'TReturn) IteratorResult.t Promise.t [@@js.call "return"]
   val throw: ('tags, 'T, 'TReturn, 'TNext) this -> e:any -> ('T, 'TReturn) IteratorResult.t Promise.t [@@js.call "throw"]
+  (* [Symbol.asyncIterator]: unit -> ('T, 'TReturn, 'TNext) t *)
   val cast_from: (('tags, 'T, 'TReturn, 'TNext) this -> ('T, 'TReturn, 'TNext) t) [@@js.custom let cast_from = Obj.magic]
 end
 

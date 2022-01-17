@@ -4454,7 +4454,7 @@ module Array =
   end
 module RegExpMatchArray =
   struct
-    module AnonymousInterface12 =
+    module AnonymousInterface16 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x1531 : Ojs.t) -> x1531
@@ -4492,15 +4492,15 @@ module RegExpMatchArray =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x1539 : __tags intf) -> intf_to_js __tags_to_js x1539
-    let (get_groups : 'tags this -> AnonymousInterface12.t) =
+    let (get_groups : 'tags this -> AnonymousInterface16.t) =
       fun (x1543 : 'tags this) ->
-        AnonymousInterface12.t_of_js
+        AnonymousInterface16.t_of_js
           (Ojs.get_prop_ascii (this_to_js Obj.magic x1543) "groups")
-    let (set_groups : 'tags this -> AnonymousInterface12.t -> unit) =
+    let (set_groups : 'tags this -> AnonymousInterface16.t -> unit) =
       fun (x1545 : 'tags this) ->
-        fun (x1546 : AnonymousInterface12.t) ->
+        fun (x1546 : AnonymousInterface16.t) ->
           Ojs.set_prop_ascii (this_to_js Obj.magic x1545) "groups"
-            (AnonymousInterface12.t_to_js x1546)
+            (AnonymousInterface16.t_to_js x1546)
     let (get_index : 'tags this -> float) =
       fun (x1548 : 'tags this) ->
         Ojs.float_of_js
@@ -4523,7 +4523,7 @@ module RegExpMatchArray =
   end
 module RegExpExecArray =
   struct
-    module AnonymousInterface12 =
+    module AnonymousInterface16 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x1559 : Ojs.t) -> x1559
@@ -4561,15 +4561,15 @@ module RegExpExecArray =
       (type __tags) ->
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x1567 : __tags intf) -> intf_to_js __tags_to_js x1567
-    let (get_groups : 'tags this -> AnonymousInterface12.t) =
+    let (get_groups : 'tags this -> AnonymousInterface16.t) =
       fun (x1571 : 'tags this) ->
-        AnonymousInterface12.t_of_js
+        AnonymousInterface16.t_of_js
           (Ojs.get_prop_ascii (this_to_js Obj.magic x1571) "groups")
-    let (set_groups : 'tags this -> AnonymousInterface12.t -> unit) =
+    let (set_groups : 'tags this -> AnonymousInterface16.t -> unit) =
       fun (x1573 : 'tags this) ->
-        fun (x1574 : AnonymousInterface12.t) ->
+        fun (x1574 : AnonymousInterface16.t) ->
           Ojs.set_prop_ascii (this_to_js Obj.magic x1573) "groups"
-            (AnonymousInterface12.t_to_js x1574)
+            (AnonymousInterface16.t_to_js x1574)
     let (get_index : 'tags this -> float) =
       fun (x1576 : 'tags this) ->
         Ojs.float_of_js
@@ -5985,7 +5985,7 @@ module rec
          end
          module PluralRules :
          sig
-           module AnonymousInterface2 :
+           module AnonymousInterface4 :
            sig
              type t = private Ojs.t
              val t_to_js : t -> Ojs.t
@@ -6020,7 +6020,7 @@ module rec
                ?options:PluralRulesOptions.t -> unit -> t
            val supportedLocalesOf :
              locales:string list or_string ->
-               ?options:AnonymousInterface2.t -> unit -> string list
+               ?options:AnonymousInterface4.t -> unit -> string list
          end
          module ResolvedNumberFormatOptions :
          sig
@@ -6403,7 +6403,7 @@ module rec
          end
          module DisplayNames :
          sig
-           module AnonymousInterface1 :
+           module AnonymousInterface2 :
            sig
              type t = private Ojs.t
              val t_to_js : t -> Ojs.t
@@ -6436,7 +6436,7 @@ module rec
                ?options:DisplayNamesOptions.t Partial.t -> unit -> t
            val supportedLocalesOf :
              locales:(BCP47LanguageTag.t, BCP47LanguageTag.t) or_array ->
-               ?options:AnonymousInterface1.t ->
+               ?options:AnonymousInterface2.t ->
                  unit -> BCP47LanguageTag.t list
          end
          module ResolvedDateTimeFormatOptions :
@@ -7553,7 +7553,7 @@ module rec
       end
     module PluralRules =
       struct
-        module AnonymousInterface2 =
+        module AnonymousInterface4 =
           struct
             type t = Ojs.t
             let rec t_of_js : Ojs.t -> t = fun (x2126 : Ojs.t) -> x2126
@@ -7673,10 +7673,10 @@ module rec
                                   x2151))|])
         let (supportedLocalesOf :
           locales:string list or_string ->
-            ?options:AnonymousInterface2.t -> unit -> string list)
+            ?options:AnonymousInterface4.t -> unit -> string list)
           =
           fun ~locales:(x2156 : string list or_string) ->
-            fun ?options:(x2157 : AnonymousInterface2.t option) ->
+            fun ?options:(x2157 : AnonymousInterface4.t option) ->
               fun () ->
                 Ojs.list_of_js Ojs.string_of_js
                   (let x2162 =
@@ -7698,7 +7698,7 @@ module rec
                                 | Some x2159 ->
                                     ignore
                                       (Ojs.call x2158 "push"
-                                         [|(AnonymousInterface2.t_to_js x2159)|])
+                                         [|(AnonymousInterface4.t_to_js x2159)|])
                                 | None -> ());
                                x2158))|])
       end
@@ -8943,7 +8943,7 @@ module rec
       end
     module DisplayNames =
       struct
-        module AnonymousInterface1 =
+        module AnonymousInterface2 =
           struct
             type t = Ojs.t
             let rec t_of_js : Ojs.t -> t = fun (x2583 : Ojs.t) -> x2583
@@ -9031,13 +9031,13 @@ module rec
                       x2600))
         let (supportedLocalesOf :
           locales:(BCP47LanguageTag.t, BCP47LanguageTag.t) or_array ->
-            ?options:AnonymousInterface1.t -> unit -> BCP47LanguageTag.t list)
+            ?options:AnonymousInterface2.t -> unit -> BCP47LanguageTag.t list)
           =
           fun
             ~locales:(x2606 :
                        (BCP47LanguageTag.t, BCP47LanguageTag.t) or_array)
             ->
-            fun ?options:(x2607 : AnonymousInterface1.t option) ->
+            fun ?options:(x2607 : AnonymousInterface2.t option) ->
               fun () ->
                 Ojs.list_of_js BCP47LanguageTag.t_of_js
                   (let x2612 =
@@ -9058,7 +9058,7 @@ module rec
                                 | Some x2609 ->
                                     ignore
                                       (Ojs.call x2608 "push"
-                                         [|(AnonymousInterface1.t_to_js x2609)|])
+                                         [|(AnonymousInterface2.t_to_js x2609)|])
                                 | None -> ());
                                x2608))|])
       end
@@ -10591,7 +10591,7 @@ module rec
   end
 module String =
   struct
-    module AnonymousInterface4 =
+    module AnonymousInterface6 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x3110 : Ojs.t) -> x3110
@@ -10614,31 +10614,31 @@ module String =
                    (fun (x3120 : string list) ->
                       Ojs.list_to_js Ojs.string_to_js x3120) x3117)
       end
-    module AnonymousInterface18 =
+    module AnonymousInterface22 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x3123 : Ojs.t) -> x3123
         and t_to_js : t -> Ojs.t = fun (x3122 : Ojs.t) -> x3122
       end
-    module AnonymousInterface17 =
+    module AnonymousInterface21 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x3125 : Ojs.t) -> x3125
         and t_to_js : t -> Ojs.t = fun (x3124 : Ojs.t) -> x3124
       end
-    module AnonymousInterface16 =
+    module AnonymousInterface20 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x3127 : Ojs.t) -> x3127
         and t_to_js : t -> Ojs.t = fun (x3126 : Ojs.t) -> x3126
       end
-    module AnonymousInterface15 =
+    module AnonymousInterface19 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x3129 : Ojs.t) -> x3129
         and t_to_js : t -> Ojs.t = fun (x3128 : Ojs.t) -> x3128
       end
-    module AnonymousInterface14 =
+    module AnonymousInterface18 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x3131 : Ojs.t) -> x3131
@@ -10808,36 +10808,36 @@ module String =
                              x3183))|])
     let (match_ :
       'tags this ->
-        matcher:AnonymousInterface14.t -> RegExpMatchArray.t or_null)
+        matcher:AnonymousInterface18.t -> RegExpMatchArray.t or_null)
       =
       fun (x3189 : 'tags this) ->
-        fun ~matcher:(x3188 : AnonymousInterface14.t) ->
+        fun ~matcher:(x3188 : AnonymousInterface18.t) ->
           or_null_of_js RegExpMatchArray.t_of_js
             (Ojs.call (this_to_js Obj.magic x3189) "match"
-               [|(AnonymousInterface14.t_to_js x3188)|])
+               [|(AnonymousInterface18.t_to_js x3188)|])
     let (replace :
       'tags this ->
-        searchValue:AnonymousInterface15.t -> replaceValue:string -> string)
+        searchValue:AnonymousInterface19.t -> replaceValue:string -> string)
       =
       fun (x3194 : 'tags this) ->
-        fun ~searchValue:(x3192 : AnonymousInterface15.t) ->
+        fun ~searchValue:(x3192 : AnonymousInterface19.t) ->
           fun ~replaceValue:(x3193 : string) ->
             Ojs.string_of_js
               (Ojs.call (this_to_js Obj.magic x3194) "replace"
-                 [|(AnonymousInterface15.t_to_js x3192);(Ojs.string_to_js
+                 [|(AnonymousInterface19.t_to_js x3192);(Ojs.string_to_js
                                                            x3193)|])
     let (replace' :
       'tags this ->
-        searchValue:AnonymousInterface16.t ->
+        searchValue:AnonymousInterface20.t ->
           replacer:(substring:string -> args:any list -> string) -> string)
       =
       fun (x3200 : 'tags this) ->
-        fun ~searchValue:(x3196 : AnonymousInterface16.t) ->
+        fun ~searchValue:(x3196 : AnonymousInterface20.t) ->
           fun ~replacer:(x3197 : substring:string -> args:any list -> string)
             ->
             Ojs.string_of_js
               (Ojs.call (this_to_js Obj.magic x3200) "replace"
-                 [|(AnonymousInterface16.t_to_js x3196);(Ojs.fun_to_js_args
+                 [|(AnonymousInterface20.t_to_js x3196);(Ojs.fun_to_js_args
                                                            (fun (x3198 : _)
                                                               ->
                                                               Ojs.string_to_js
@@ -10850,19 +10850,19 @@ module String =
                                                                    Ojs.list_of_js_from
                                                                     any_of_js
                                                                     x3198 1))))|])
-    let (search : 'tags this -> searcher:AnonymousInterface17.t -> float) =
+    let (search : 'tags this -> searcher:AnonymousInterface21.t -> float) =
       fun (x3203 : 'tags this) ->
-        fun ~searcher:(x3202 : AnonymousInterface17.t) ->
+        fun ~searcher:(x3202 : AnonymousInterface21.t) ->
           Ojs.float_of_js
             (Ojs.call (this_to_js Obj.magic x3203) "search"
-               [|(AnonymousInterface17.t_to_js x3202)|])
+               [|(AnonymousInterface21.t_to_js x3202)|])
     let (split :
       'tags this ->
-        splitter:AnonymousInterface18.t ->
+        splitter:AnonymousInterface22.t ->
           ?limit:float -> unit -> string list)
       =
       fun (x3209 : 'tags this) ->
-        fun ~splitter:(x3205 : AnonymousInterface18.t) ->
+        fun ~splitter:(x3205 : AnonymousInterface22.t) ->
           fun ?limit:(x3206 : float option) ->
             fun () ->
               Ojs.list_of_js Ojs.string_of_js
@@ -10874,7 +10874,7 @@ module String =
                                  [||] in
                              ignore
                                (Ojs.call x3207 "push"
-                                  [|(AnonymousInterface18.t_to_js x3205)|]);
+                                  [|(AnonymousInterface22.t_to_js x3205)|]);
                              (match x3206 with
                               | Some x3208 ->
                                   ignore
@@ -11416,8 +11416,8 @@ module String =
                                  [|(Ojs.float_to_js x3408)|])) x3406;
                        x3407))|])
     let (raw :
-      template:AnonymousInterface4.t -> substitutions:any list -> string) =
-      fun ~template:(x3410 : AnonymousInterface4.t) ->
+      template:AnonymousInterface6.t -> substitutions:any list -> string) =
+      fun ~template:(x3410 : AnonymousInterface6.t) ->
         fun ~substitutions:(x3411 : any list) ->
           Ojs.string_of_js
             (let x3414 = Ojs.get_prop_ascii Ojs.global "String" in
@@ -11428,7 +11428,7 @@ module String =
                              [||] in
                          ignore
                            (Ojs.call x3412 "push"
-                              [|(AnonymousInterface4.t_to_js x3410)|]);
+                              [|(AnonymousInterface6.t_to_js x3410)|]);
                          List.iter
                            (fun (x3413 : any) ->
                               ignore
@@ -12591,7 +12591,7 @@ module ProxyHandler =
   end
 module ProxyStatic =
   struct
-    module AnonymousInterface27 =
+    module AnonymousInterface41 =
       struct
         type 'T t = Ojs.t
         let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t = fun (type
@@ -12612,10 +12612,10 @@ module ProxyStatic =
             ignore (Ojs.call (t_to_js Obj.magic x3865) "revoke" [||])
       end
     let (revocable :
-      target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface27.t) =
+      target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface41.t) =
       fun ~target:(x3867 : 'T) ->
         fun ~handler:(x3868 : 'T ProxyHandler.t) ->
-          AnonymousInterface27.t_of_js Obj.magic
+          AnonymousInterface41.t_of_js Obj.magic
             (Ojs.call (Ojs.get_prop_ascii Ojs.global "Proxy") "revocable"
                [|(Obj.magic x3867);(ProxyHandler.t_to_js Obj.magic x3868)|])
     let (create : target:'T -> handler:'T ProxyHandler.t -> 'T) =
@@ -12627,7 +12627,7 @@ module ProxyStatic =
   end
 module ProxyConstructor =
   struct
-    module AnonymousInterface27 =
+    module AnonymousInterface41 =
       struct
         type 'T t = Ojs.t
         let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t = fun (type
@@ -12666,12 +12666,12 @@ module ProxyConstructor =
         fun (x3885 : __tags intf) -> intf_to_js __tags_to_js x3885
     let (revocable :
       'tags this ->
-        target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface27.t)
+        target:'T -> handler:'T ProxyHandler.t -> 'T AnonymousInterface41.t)
       =
       fun (x3892 : 'tags this) ->
         fun ~target:(x3889 : 'T) ->
           fun ~handler:(x3890 : 'T ProxyHandler.t) ->
-            AnonymousInterface27.t_of_js Obj.magic
+            AnonymousInterface41.t_of_js Obj.magic
               (Ojs.call (this_to_js Obj.magic x3892) "revocable"
                  [|(Obj.magic x3889);(ProxyHandler.t_to_js Obj.magic x3890)|])
     let (create : 'tags this -> target:'T -> handler:'T ProxyHandler.t -> 'T)
@@ -12771,7 +12771,7 @@ module PropertyDescriptorMap =
   end
 module Object =
   struct
-    module AnonymousInterface30 =
+    module AnonymousInterface48 =
       struct
         type 'T t = Ojs.t
         let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t = fun (type
@@ -12792,7 +12792,7 @@ module Object =
                 Ojs.set_prop (t_to_js Obj.magic x3932)
                   (Ojs.string_to_js x3934) (Obj.magic x3935)
       end
-    module AnonymousInterface29 =
+    module AnonymousInterface45 =
       struct
         type 'T t = Ojs.t
         let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t = fun (type
@@ -12813,7 +12813,7 @@ module Object =
                 Ojs.set_prop (t_to_js Obj.magic x3941)
                   (Ojs.string_to_js x3943) (Obj.magic x3944)
       end
-    module AnonymousInterface13 =
+    module AnonymousInterface17 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x3946 : Ojs.t) -> x3946
@@ -12886,9 +12886,9 @@ module Object =
             (Ojs.call (this_to_js Obj.magic x3976) "propertyIsEnumerable"
                [|(PropertyKey.t_to_js x3975)|])
     let (fromEntries :
-      (PropertyKey.t * 'T) Iterable.t -> 'T AnonymousInterface29.t) =
+      (PropertyKey.t * 'T) Iterable.t -> 'T AnonymousInterface45.t) =
       fun (x3978 : (PropertyKey.t * 'T) Iterable.t) ->
-        AnonymousInterface29.t_of_js Obj.magic
+        AnonymousInterface45.t_of_js Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "fromEntries"
              [|(Iterable.t_to_js
                   (fun (x3979 : (PropertyKey.t * 'T)) ->
@@ -12905,25 +12905,25 @@ module Object =
                   (fun (x3985 : any list) -> Ojs.list_to_js any_to_js x3985)
                   x3984)|])
     let (values :
-      ('T ArrayLike.t, 'T AnonymousInterface30.t) union2 -> 'T list) =
-      fun (x3987 : ('T ArrayLike.t, 'T AnonymousInterface30.t) union2) ->
+      ('T ArrayLike.t, 'T AnonymousInterface48.t) union2 -> 'T list) =
+      fun (x3987 : ('T ArrayLike.t, 'T AnonymousInterface48.t) union2) ->
         Ojs.list_of_js Obj.magic
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "values"
              [|(union2_to_js
                   (fun (x3988 : 'T ArrayLike.t) ->
                      ArrayLike.t_to_js Obj.magic x3988)
-                  (fun (x3990 : 'T AnonymousInterface30.t) ->
-                     AnonymousInterface30.t_to_js Obj.magic x3990) x3987)|])
+                  (fun (x3990 : 'T AnonymousInterface48.t) ->
+                     AnonymousInterface48.t_to_js Obj.magic x3990) x3987)|])
     let (values' : untyped_object -> any list) =
       fun (x3993 : untyped_object) ->
         Ojs.list_of_js any_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "values"
              [|(untyped_object_to_js x3993)|])
     let (entries :
-      ('T ArrayLike.t, 'T AnonymousInterface30.t) union2 ->
+      ('T ArrayLike.t, 'T AnonymousInterface48.t) union2 ->
         (string * 'T) list)
       =
-      fun (x3995 : ('T ArrayLike.t, 'T AnonymousInterface30.t) union2) ->
+      fun (x3995 : ('T ArrayLike.t, 'T AnonymousInterface48.t) union2) ->
         Ojs.list_of_js
           (fun (x4000 : Ojs.t) ->
              let x4001 = x4000 in
@@ -12933,8 +12933,8 @@ module Object =
              [|(union2_to_js
                   (fun (x3996 : 'T ArrayLike.t) ->
                      ArrayLike.t_to_js Obj.magic x3996)
-                  (fun (x3998 : 'T AnonymousInterface30.t) ->
-                     AnonymousInterface30.t_to_js Obj.magic x3998) x3995)|])
+                  (fun (x3998 : 'T AnonymousInterface48.t) ->
+                     AnonymousInterface48.t_to_js Obj.magic x3998) x3995)|])
     let (entries' : untyped_object -> (string * any) list) =
       fun (x4002 : untyped_object) ->
         Ojs.list_of_js
@@ -12945,9 +12945,9 @@ module Object =
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object") "entries"
              [|(untyped_object_to_js x4002)|])
     let (getOwnPropertyDescriptors :
-      'T -> (any, AnonymousInterface13.t) intersection2) =
+      'T -> (any, AnonymousInterface17.t) intersection2) =
       fun (x4005 : 'T) ->
-        intersection2_of_js any_of_js AnonymousInterface13.t_of_js
+        intersection2_of_js any_of_js AnonymousInterface17.t_of_js
           (Ojs.call (Ojs.get_prop_ascii Ojs.global "Object")
              "getOwnPropertyDescriptors" [|(Obj.magic x4005)|])
     let (assign : target:'T -> source:'U -> ('T, 'U) intersection2) =
@@ -13328,7 +13328,7 @@ module PromiseLike =
   end
 module PromiseConstructorLike =
   struct
-    module AnonymousInterface6 =
+    module AnonymousInterface9 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x4124 : Ojs.t) -> x4124
@@ -13389,12 +13389,12 @@ module PromiseConstructorLike =
                                                                | None -> ());
                                                               x4133))|]))))|])
       end
-    type t = AnonymousInterface6.t
+    type t = AnonymousInterface9.t
     let rec t_of_js : Ojs.t -> t =
-      fun (x4138 : Ojs.t) -> AnonymousInterface6.t_of_js x4138
+      fun (x4138 : Ojs.t) -> AnonymousInterface9.t_of_js x4138
     and t_to_js : t -> Ojs.t =
-      fun (x4137 : AnonymousInterface6.t) ->
-        AnonymousInterface6.t_to_js x4137
+      fun (x4137 : AnonymousInterface9.t) ->
+        AnonymousInterface9.t_to_js x4137
     type t_0 = t
     let rec t_0_of_js : Ojs.t -> t_0 = fun (x4140 : Ojs.t) -> t_of_js x4140
     and t_0_to_js : t_0 -> Ojs.t = fun (x4139 : t) -> t_to_js x4139
@@ -13812,7 +13812,7 @@ module NonNullable =
   end
 module NewableFunction =
   struct
-    module AnonymousInterface28 =
+    module AnonymousInterface43 =
       struct
         type 'T t = Ojs.t
         let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t = fun (type
@@ -13824,7 +13824,7 @@ module NewableFunction =
           fun (x4257 : 'T t) ->
             Obj.magic (Ojs.new_obj (t_to_js Obj.magic x4257) [||])
       end
-    module AnonymousInterface26 =
+    module AnonymousInterface39 =
       struct
         type ('AX, 'R) t = Ojs.t
         let rec t_of_js :
@@ -13851,7 +13851,7 @@ module NewableFunction =
                       x4261;
                     x4262))
       end
-    module AnonymousInterface25 =
+    module AnonymousInterface36 =
       struct
         type ('A, 'T) t = Ojs.t
         let rec t_of_js :
@@ -13878,7 +13878,7 @@ module NewableFunction =
                       x4269;
                     x4270))
       end
-    module AnonymousInterface24 =
+    module AnonymousInterface33 =
       struct
         type ('A, 'R) t = Ojs.t
         let rec t_of_js :
@@ -13905,7 +13905,7 @@ module NewableFunction =
                       x4277;
                     x4278))
       end
-    module AnonymousInterface23 =
+    module AnonymousInterface31 =
       struct
         type ('A, 'A0, 'R) t = Ojs.t
         let rec t_of_js :
@@ -13942,7 +13942,7 @@ module NewableFunction =
                         x4286;
                       x4287))
       end
-    module AnonymousInterface22 =
+    module AnonymousInterface29 =
       struct
         type ('A, 'A0, 'A1, 'R) t = Ojs.t
         let rec t_of_js :
@@ -13993,7 +13993,7 @@ module NewableFunction =
                           x4297;
                         x4298))
       end
-    module AnonymousInterface21 =
+    module AnonymousInterface27 =
       struct
         type ('A, 'A0, 'A1, 'A2, 'R) t = Ojs.t
         let rec t_of_js :
@@ -14056,7 +14056,7 @@ module NewableFunction =
                             x4310;
                           x4311))
       end
-    module AnonymousInterface20 =
+    module AnonymousInterface25 =
       struct
         type ('A, 'A0, 'A1, 'A2, 'A3, 'R) t = Ojs.t
         let rec t_of_js :
@@ -14147,33 +14147,33 @@ module NewableFunction =
       fun (__tags_to_js : __tags -> Ojs.t) ->
         fun (x4337 : __tags intf) -> intf_to_js __tags_to_js x4337
     let (apply_ :
-      'tags this -> this:'T AnonymousInterface28.t -> thisArg:'T -> unit) =
+      'tags this -> this:'T AnonymousInterface43.t -> thisArg:'T -> unit) =
       fun (x4344 : 'tags this) ->
-        fun ~this:(x4341 : 'T AnonymousInterface28.t) ->
+        fun ~this:(x4341 : 'T AnonymousInterface43.t) ->
           fun ~thisArg:(x4343 : 'T) ->
             ignore
               (Ojs.call (this_to_js Obj.magic x4344) "apply"
-                 [|(AnonymousInterface28.t_to_js Obj.magic x4341);(Obj.magic
+                 [|(AnonymousInterface43.t_to_js Obj.magic x4341);(Obj.magic
                                                                     x4343)|])
     let (apply_' :
       'tags this ->
-        this:('A, 'T) AnonymousInterface25.t -> thisArg:'T -> args:'A -> unit)
+        this:('A, 'T) AnonymousInterface36.t -> thisArg:'T -> args:'A -> unit)
       =
       fun (x4351 : 'tags this) ->
-        fun ~this:(x4346 : ('A, 'T) AnonymousInterface25.t) ->
+        fun ~this:(x4346 : ('A, 'T) AnonymousInterface36.t) ->
           fun ~thisArg:(x4349 : 'T) ->
             fun ~args:(x4350 : 'A) ->
               ignore
                 (Ojs.call (this_to_js Obj.magic x4351) "apply"
-                   [|(AnonymousInterface25.t_to_js Obj.magic Obj.magic x4346);(
+                   [|(AnonymousInterface36.t_to_js Obj.magic Obj.magic x4346);(
                      Obj.magic x4349);(Obj.magic x4350)|])
     let (call :
       'tags this ->
-        this:('A, 'T) AnonymousInterface25.t ->
+        this:('A, 'T) AnonymousInterface36.t ->
           thisArg:'T -> args:any list -> unit)
       =
       fun (x4360 : 'tags this) ->
-        fun ~this:(x4353 : ('A, 'T) AnonymousInterface25.t) ->
+        fun ~this:(x4353 : ('A, 'T) AnonymousInterface36.t) ->
           fun ~thisArg:(x4354 : 'T) ->
             fun ~args:(x4355 : any list) ->
               ignore
@@ -14185,7 +14185,7 @@ module NewableFunction =
                                  [||] in
                              ignore
                                (Ojs.call x4356 "push"
-                                  [|(AnonymousInterface25.t_to_js Obj.magic
+                                  [|(AnonymousInterface36.t_to_js Obj.magic
                                        Obj.magic x4353)|]);
                              ignore
                                (Ojs.call x4356 "push" [|(Obj.magic x4354)|]);
@@ -14204,86 +14204,86 @@ module NewableFunction =
                  [|(Obj.magic x4363);(any_to_js x4364)|])
     let (bind' :
       'tags this ->
-        this:('A, 'A0, 'R) AnonymousInterface23.t ->
-          thisArg:any -> arg0:'A0 -> ('A, 'R) AnonymousInterface24.t)
+        this:('A, 'A0, 'R) AnonymousInterface31.t ->
+          thisArg:any -> arg0:'A0 -> ('A, 'R) AnonymousInterface33.t)
       =
       fun (x4373 : 'tags this) ->
-        fun ~this:(x4367 : ('A, 'A0, 'R) AnonymousInterface23.t) ->
+        fun ~this:(x4367 : ('A, 'A0, 'R) AnonymousInterface31.t) ->
           fun ~thisArg:(x4371 : any) ->
             fun ~arg0:(x4372 : 'A0) ->
-              AnonymousInterface24.t_of_js Obj.magic Obj.magic
+              AnonymousInterface33.t_of_js Obj.magic Obj.magic
                 (Ojs.call (this_to_js Obj.magic x4373) "bind"
-                   [|(AnonymousInterface23.t_to_js Obj.magic Obj.magic
+                   [|(AnonymousInterface31.t_to_js Obj.magic Obj.magic
                         Obj.magic x4367);(any_to_js x4371);(Obj.magic x4372)|])
     let (bind'' :
       'tags this ->
-        this:('A, 'A0, 'A1, 'R) AnonymousInterface22.t ->
+        this:('A, 'A0, 'A1, 'R) AnonymousInterface29.t ->
           thisArg:any ->
-            arg0:'A0 -> arg1:'A1 -> ('A, 'R) AnonymousInterface24.t)
+            arg0:'A0 -> arg1:'A1 -> ('A, 'R) AnonymousInterface33.t)
       =
       fun (x4385 : 'tags this) ->
-        fun ~this:(x4377 : ('A, 'A0, 'A1, 'R) AnonymousInterface22.t) ->
+        fun ~this:(x4377 : ('A, 'A0, 'A1, 'R) AnonymousInterface29.t) ->
           fun ~thisArg:(x4382 : any) ->
             fun ~arg0:(x4383 : 'A0) ->
               fun ~arg1:(x4384 : 'A1) ->
-                AnonymousInterface24.t_of_js Obj.magic Obj.magic
+                AnonymousInterface33.t_of_js Obj.magic Obj.magic
                   (Ojs.call (this_to_js Obj.magic x4385) "bind"
-                     [|(AnonymousInterface22.t_to_js Obj.magic Obj.magic
+                     [|(AnonymousInterface29.t_to_js Obj.magic Obj.magic
                           Obj.magic Obj.magic x4377);(any_to_js x4382);(
                        Obj.magic x4383);(Obj.magic x4384)|])
     let (bind''' :
       'tags this ->
-        this:('A, 'A0, 'A1, 'A2, 'R) AnonymousInterface21.t ->
+        this:('A, 'A0, 'A1, 'A2, 'R) AnonymousInterface27.t ->
           thisArg:any ->
             arg0:'A0 ->
-              arg1:'A1 -> arg2:'A2 -> ('A, 'R) AnonymousInterface24.t)
+              arg1:'A1 -> arg2:'A2 -> ('A, 'R) AnonymousInterface33.t)
       =
       fun (x4399 : 'tags this) ->
-        fun ~this:(x4389 : ('A, 'A0, 'A1, 'A2, 'R) AnonymousInterface21.t) ->
+        fun ~this:(x4389 : ('A, 'A0, 'A1, 'A2, 'R) AnonymousInterface27.t) ->
           fun ~thisArg:(x4395 : any) ->
             fun ~arg0:(x4396 : 'A0) ->
               fun ~arg1:(x4397 : 'A1) ->
                 fun ~arg2:(x4398 : 'A2) ->
-                  AnonymousInterface24.t_of_js Obj.magic Obj.magic
+                  AnonymousInterface33.t_of_js Obj.magic Obj.magic
                     (Ojs.call (this_to_js Obj.magic x4399) "bind"
-                       [|(AnonymousInterface21.t_to_js Obj.magic Obj.magic
+                       [|(AnonymousInterface27.t_to_js Obj.magic Obj.magic
                             Obj.magic Obj.magic Obj.magic x4389);(any_to_js
                                                                     x4395);(
                          Obj.magic x4396);(Obj.magic x4397);(Obj.magic x4398)|])
     let (bind'''' :
       'tags this ->
-        this:('A, 'A0, 'A1, 'A2, 'A3, 'R) AnonymousInterface20.t ->
+        this:('A, 'A0, 'A1, 'A2, 'A3, 'R) AnonymousInterface25.t ->
           thisArg:any ->
             arg0:'A0 ->
               arg1:'A1 ->
-                arg2:'A2 -> arg3:'A3 -> ('A, 'R) AnonymousInterface24.t)
+                arg2:'A2 -> arg3:'A3 -> ('A, 'R) AnonymousInterface33.t)
       =
       fun (x4415 : 'tags this) ->
         fun
-          ~this:(x4403 : ('A, 'A0, 'A1, 'A2, 'A3, 'R) AnonymousInterface20.t)
+          ~this:(x4403 : ('A, 'A0, 'A1, 'A2, 'A3, 'R) AnonymousInterface25.t)
           ->
           fun ~thisArg:(x4410 : any) ->
             fun ~arg0:(x4411 : 'A0) ->
               fun ~arg1:(x4412 : 'A1) ->
                 fun ~arg2:(x4413 : 'A2) ->
                   fun ~arg3:(x4414 : 'A3) ->
-                    AnonymousInterface24.t_of_js Obj.magic Obj.magic
+                    AnonymousInterface33.t_of_js Obj.magic Obj.magic
                       (Ojs.call (this_to_js Obj.magic x4415) "bind"
-                         [|(AnonymousInterface20.t_to_js Obj.magic Obj.magic
+                         [|(AnonymousInterface25.t_to_js Obj.magic Obj.magic
                               Obj.magic Obj.magic Obj.magic Obj.magic x4403);(
                            any_to_js x4410);(Obj.magic x4411);(Obj.magic
                                                                  x4412);(
                            Obj.magic x4413);(Obj.magic x4414)|])
     let (bind''''' :
       'tags this ->
-        this:('AX, 'R) AnonymousInterface26.t ->
-          thisArg:any -> args:'AX list -> ('AX, 'R) AnonymousInterface26.t)
+        this:('AX, 'R) AnonymousInterface39.t ->
+          thisArg:any -> args:'AX list -> ('AX, 'R) AnonymousInterface39.t)
       =
       fun (x4426 : 'tags this) ->
-        fun ~this:(x4419 : ('AX, 'R) AnonymousInterface26.t) ->
+        fun ~this:(x4419 : ('AX, 'R) AnonymousInterface39.t) ->
           fun ~thisArg:(x4420 : any) ->
             fun ~args:(x4421 : 'AX list) ->
-              AnonymousInterface26.t_of_js Obj.magic Obj.magic
+              AnonymousInterface39.t_of_js Obj.magic Obj.magic
                 (let x4428 = this_to_js Obj.magic x4426 in
                  Ojs.call (Ojs.get_prop_ascii x4428 "bind") "apply"
                    [|x4428;((let x4422 =
@@ -14292,7 +14292,7 @@ module NewableFunction =
                                  [||] in
                              ignore
                                (Ojs.call x4422 "push"
-                                  [|(AnonymousInterface26.t_to_js Obj.magic
+                                  [|(AnonymousInterface39.t_to_js Obj.magic
                                        Obj.magic x4419)|]);
                              ignore
                                (Ojs.call x4422 "push" [|(any_to_js x4420)|]);
@@ -14995,7 +14995,7 @@ module JSON =
   end
 module InstanceType =
   struct
-    module AnonymousInterface5 =
+    module AnonymousInterface8 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x4667 : Ojs.t) -> x4667
@@ -18018,7 +18018,7 @@ module DataView =
   end
 module ConstructorParameters =
   struct
-    module AnonymousInterface5 =
+    module AnonymousInterface8 =
       struct
         type t = Ojs.t
         let rec t_of_js : Ojs.t -> t = fun (x5603 : Ojs.t) -> x5603

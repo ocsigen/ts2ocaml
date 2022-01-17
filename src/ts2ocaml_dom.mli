@@ -21,6 +21,7 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t_1 *)
   
   (** Returns an array of key, value pairs for every entry in the search params. *)
   val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
@@ -537,6 +538,7 @@ module[@js.scope "SourceBufferList"] SourceBufferList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> SourceBuffer.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val get_onaddsourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onaddsourcebuffer"]
   val set_onaddsourcebuffer: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onaddsourcebuffer"]
@@ -2442,13 +2444,13 @@ module GetRootNodeOptions : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 module XPathNSResolver : sig
-  module AnonymousInterface534 : sig
+  module AnonymousInterface539 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
     val lookupNamespaceURI: t -> prefix:string or_null -> string or_null [@@js.call "lookupNamespaceURI"]
   end
-  type t = (AnonymousInterface534.t, (string or_null -> string or_null)) union2
+  type t = (AnonymousInterface539.t, (string or_null -> string or_null)) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5395,6 +5397,7 @@ module[@js.scope "TouchList"] TouchList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> Touch.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val item: 'tags this -> index:float -> Touch.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> Touch.t [@@js.index_get]
@@ -5647,6 +5650,7 @@ module[@js.scope "SVGStringList"] SVGStringList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> string IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val get_numberOfItems: 'tags this -> float [@@js.get "numberOfItems"]
   val appendItem: 'tags this -> newItem:string -> string [@@js.call "appendItem"]
@@ -5793,6 +5797,7 @@ module[@js.scope "SVGNumberList"] SVGNumberList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> SVGNumber.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val get_numberOfItems: 'tags this -> float [@@js.get "numberOfItems"]
   val appendItem: 'tags this -> newItem:SVGNumber.t -> SVGNumber.t [@@js.call "appendItem"]
@@ -5903,6 +5908,7 @@ module[@js.scope "SVGLengthList"] SVGLengthList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> SVGLength.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val get_numberOfItems: 'tags this -> float [@@js.get "numberOfItems"]
   val appendItem: 'tags this -> newItem:SVGLength.t -> SVGLength.t [@@js.call "appendItem"]
@@ -6122,6 +6128,7 @@ module[@js.scope "SVGPointList"] SVGPointList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> DOMPoint.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val get_numberOfItems: 'tags this -> float [@@js.get "numberOfItems"]
   val appendItem: 'tags this -> newItem:DOMPoint.t -> DOMPoint.t [@@js.call "appendItem"]
@@ -6737,6 +6744,7 @@ module[@js.scope "SVGTransformList"] SVGTransformList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> SVGTransform.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val get_numberOfItems: 'tags this -> float [@@js.get "numberOfItems"]
   val appendItem: 'tags this -> newItem:SVGTransform.t -> SVGTransform.t [@@js.call "appendItem"]
@@ -8250,6 +8258,7 @@ and[@js.scope "TextTrackCueList"] TextTrackCueList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> TextTrackCue.t IterableIterator.t_1 *)
   
   (** Returns the number of cues in the list. *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -8327,6 +8336,7 @@ module[@js.scope "TextTrackList"] TextTrackList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> TextTrack.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val get_onaddtrack: 'tags this -> (this:t -> ev:TrackEvent.t -> any) or_null [@@js.get "onaddtrack"]
   val set_onaddtrack: 'tags this -> (this:t -> ev:TrackEvent.t -> any) or_null -> unit [@@js.set "onaddtrack"]
@@ -9494,6 +9504,7 @@ module[@js.scope "DOMStringList"] DOMStringList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> string IterableIterator.t_1 *)
   
   (** Returns the number of strings in strings. *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -10990,6 +11001,7 @@ module[@js.scope "Headers"] rec Headers : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t_1 *)
   
   (** Returns an iterator allowing to go through all key/value pairs contained in this object. *)
   val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
@@ -12434,6 +12446,7 @@ and[@js.scope "Plugin"] Plugin : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> MimeType.t IterableIterator.t_1 *)
   
   (**
     Returns the plugin's description.
@@ -12491,6 +12504,7 @@ module[@js.scope "PluginArray"] PluginArray : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> Plugin.t IterableIterator.t_1 *)
   
   (** @deprecated  *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -12527,6 +12541,7 @@ module[@js.scope "MimeTypeArray"] MimeTypeArray : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> MimeType.t IterableIterator.t_1 *)
   
   (** @deprecated  *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -13001,6 +13016,7 @@ module[@js.scope "MediaKeyStatusMap"] MediaKeyStatusMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> (BufferSource.t * MediaKeyStatus.t) IterableIterator.t_1 *)
   val entries: 'tags this -> (BufferSource.t * MediaKeyStatus.t) IterableIterator.t_1 [@@js.call "entries"]
   val keys: 'tags this -> BufferSource.t IterableIterator.t_1 [@@js.call "keys"]
   val values: 'tags this -> MediaKeyStatus.t IterableIterator.t_1 [@@js.call "values"]
@@ -15120,6 +15136,7 @@ module[@js.scope "MediaList"] MediaList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> string IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val get_mediaText: 'tags this -> string [@@js.get "mediaText"]
   val set_mediaText: 'tags this -> string -> unit [@@js.set "mediaText"]
@@ -15175,6 +15192,7 @@ module[@js.scope "FileList"] FileList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> File.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val item: 'tags this -> index:float -> File.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> File.t [@@js.index_get]
@@ -15426,6 +15444,7 @@ module[@js.scope "DataTransferItemList"] DataTransferItemList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> DataTransferItem.t IterableIterator.t_1 *)
   
   (** Returns the number of items in the drag data store. *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -15493,6 +15512,7 @@ module[@js.scope "DOMTokenList"] DOMTokenList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> string IterableIterator.t_1 *)
   val entries: 'tags this -> (float * string) IterableIterator.t_1 [@@js.call "entries"]
   val keys: 'tags this -> float IterableIterator.t_1 [@@js.call "keys"]
   val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
@@ -15590,6 +15610,7 @@ module[@js.scope "DOMRectList"] DOMRectList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> DOMRect.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val item: 'tags this -> index:float -> DOMRect.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> DOMRect.t [@@js.index_get]
@@ -16419,6 +16440,7 @@ and[@js.scope "CSSRuleList"] CSSRuleList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> CSSRule.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val item: 'tags this -> index:float -> CSSRule.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> CSSRule.t [@@js.index_get]
@@ -16445,6 +16467,7 @@ and[@js.scope "CSSStyleDeclaration"] CSSStyleDeclaration : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> string IterableIterator.t_1 *)
   val get_accentColor: 'tags this -> string [@@js.get "accentColor"]
   val set_accentColor: 'tags this -> string -> unit [@@js.set "accentColor"]
   val get_alignContent: 'tags this -> string [@@js.get "alignContent"]
@@ -19373,6 +19396,7 @@ and[@js.scope "FormData"] FormData : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> (string * FormDataEntryValue.t) IterableIterator.t_1 *)
   
   (** Returns an array of key, value pairs for every entry in the list. *)
   val entries: 'tags this -> (string * FormDataEntryValue.t) IterableIterator.t_1 [@@js.call "entries"]
@@ -20116,6 +20140,7 @@ and[@js.scope "HTMLAllCollection"] HTMLAllCollection : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> Element.t IterableIterator.t_1 *)
   
   (** Returns the number of elements in the collection. *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -20576,6 +20601,7 @@ and HTMLCollectionBase : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> Element.t IterableIterator.t_1 *)
   
   (** Sets or retrieves the number of objects in a collection. *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -20602,6 +20628,7 @@ and HTMLCollectionOf : sig
   val t_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t
   val t_1_to_js: ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
+  (* [Symbol.iterator]: unit -> 'T IterableIterator.t_1 *)
   
   (** Retrieves an object from various collections. *)
   val item: ('tags, 'T) this -> index:float -> 'T or_null [@@js.call "item"]
@@ -20862,6 +20889,7 @@ and[@js.scope "HTMLFormElement"] HTMLFormElement : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> Element.t IterableIterator.t_1 *)
   
   (** Sets or retrieves a list of character encodings for input data that must be accepted by the server processing the form. *)
   val get_acceptCharset: 'tags this -> string [@@js.get "acceptCharset"]
@@ -22361,6 +22389,7 @@ and[@js.scope "NamedNodeMap"] NamedNodeMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> Attr.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val getNamedItem: 'tags this -> qualifiedName:string -> Attr.t or_null [@@js.call "getNamedItem"]
   val getNamedItemNS: 'tags this -> namespace:string or_null -> localName:string -> Attr.t or_null [@@js.call "getNamedItemNS"]
@@ -22611,13 +22640,13 @@ and[@js.scope "Node"] Node : sig
   val text_node: unit -> float [@@js.get "TEXT_NODE"]
 end
 and[@js.scope "NodeFilter"] NodeFilter : sig
-  module AnonymousInterface533 : sig
+  module AnonymousInterface538 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
     val acceptNode: t -> node:Node.t -> float [@@js.call "acceptNode"]
   end
-  type t = (AnonymousInterface533.t, (Node.t -> float)) union2
+  type t = (AnonymousInterface538.t, (Node.t -> float)) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -22690,6 +22719,7 @@ and[@js.scope "NodeList"] NodeList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> Node.t IterableIterator.t_1 *)
   
   (** Returns an array of key, value pairs for every entry in the list. *)
   val entries: 'tags this -> (float * Node.t) IterableIterator.t_1 [@@js.call "entries"]
@@ -22734,6 +22764,7 @@ and NodeListOf : sig
   val t_of_js: (Ojs.t -> 'TNode) -> Ojs.t -> 'TNode t
   val t_1_to_js: ('TNode -> Ojs.t) -> 'TNode t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'TNode) -> Ojs.t -> 'TNode t_1
+  (* [Symbol.iterator]: unit -> 'TNode IterableIterator.t_1 *)
   
   (** Returns an array of key, value pairs for every entry in the list. *)
   val entries: ('tags, 'TNode) this -> (float * 'TNode) IterableIterator.t_1 [@@js.call "entries"]
@@ -25151,6 +25182,7 @@ and[@js.scope "StyleSheetList"] StyleSheetList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> CSSStyleSheet.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val item: 'tags this -> index:float -> CSSStyleSheet.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> CSSStyleSheet.t [@@js.index_get]
@@ -31162,6 +31194,7 @@ module[@js.scope "SpeechRecognitionResult"] SpeechRecognitionResult : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> SpeechRecognitionAlternative.t IterableIterator.t_1 *)
   val get_isFinal: 'tags this -> bool [@@js.get "isFinal"]
   val get_length: 'tags this -> float [@@js.get "length"]
   val item: 'tags this -> index:float -> SpeechRecognitionAlternative.t [@@js.call "item"]
@@ -31187,6 +31220,7 @@ module[@js.scope "SpeechRecognitionResultList"] SpeechRecognitionResultList : si
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> SpeechRecognitionResult.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
   val item: 'tags this -> index:float -> SpeechRecognitionResult.t [@@js.call "item"]
   val get: 'tags this -> float -> SpeechRecognitionResult.t [@@js.index_get]
@@ -43466,6 +43500,7 @@ module[@js.scope "HTMLSelectElement"] HTMLSelectElement : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> HTMLOptionElement.t IterableIterator.t_1 *)
   val get_autocomplete: 'tags this -> string [@@js.get "autocomplete"]
   val set_autocomplete: 'tags this -> string -> unit [@@js.set "autocomplete"]
   val get_disabled: 'tags this -> bool [@@js.get "disabled"]

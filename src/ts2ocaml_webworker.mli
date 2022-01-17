@@ -1267,6 +1267,7 @@ module[@js.scope "DOMStringList"] DOMStringList : sig
   val item: 'tags this -> index:float -> string or_null [@@js.call "item"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
+  (* [Symbol.iterator]: unit -> string IterableIterator.t_1 *)
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -3301,6 +3302,7 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   (** Returns a string containing a query string suitable for use in a URL. Does not include the question mark. *)
   val toString: 'tags this -> string [@@js.call "toString"]
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t_1 *)
   
   (** Returns an array of key, value pairs for every entry in the search params. *)
   val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
@@ -4072,6 +4074,7 @@ module[@js.scope "Headers"] rec Headers : sig
   val has: 'tags this -> name:string -> bool [@@js.call "has"]
   val set_: 'tags this -> name:string -> value:string -> unit [@@js.call "set"]
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t_1 *)
   
   (** Returns an iterator allowing to go through all key/value pairs contained in this object. *)
   val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
@@ -4195,6 +4198,7 @@ module[@js.scope "FormData"] FormData : sig
   val has: 'tags this -> name:string -> bool [@@js.call "has"]
   val set_: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "set"]
   val forEach: 'tags this -> callbackfn:(value:FormDataEntryValue.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
+  (* [Symbol.iterator]: unit -> (string * FormDataEntryValue.t) IterableIterator.t_1 *)
   
   (** Returns an array of key, value pairs for every entry in the list. *)
   val entries: 'tags this -> (string * FormDataEntryValue.t) IterableIterator.t_1 [@@js.call "entries"]
@@ -12428,6 +12432,7 @@ module[@js.scope "FileList"] FileList : sig
   val item: 'tags this -> index:float -> File.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> File.t [@@js.index_get]
   val set: 'tags this -> float -> File.t -> unit [@@js.index_set]
+  (* [Symbol.iterator]: unit -> File.t IterableIterator.t_1 *)
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]

@@ -86,14 +86,18 @@ let literalToIdentifier (ctx: Context) (l: Literal) : text =
   | LFloat l -> tprintf "n_%s" (formatNumber l)
   | LBool true -> str "b_true" | LBool false -> str "b_false"
 
-let anonymousInterfaceModuleName (info: AnonymousInterfaceInfo) =
-  sprintf "AnonymousInterface%d" info.id
+let anonymousInterfaceModuleName (ctx: Context) (info: AnonymousInterfaceInfo) =
+  match info.origin.valueName, info.origin.argName with
+  | _, Some s | Some s, None when ctx.options.humanReadableAnonymousInterfaceNames ->
+    sprintf "%s%d" (Naming.toCase Naming.PascalCase s) info.id
+  | _, _ ->
+    sprintf "AnonymousInterface%d" info.id
 
 let anonymousInterfaceToIdentifier (ctx: Context) (a: AnonymousInterface) : text =
   match ctx |> Context.bindCurrentSourceInfo (fun i -> i.anonymousInterfacesMap |> Map.tryFind a) with
   | Some i ->
     if not ctx.options.recModule.IsOffOrDefault then
-      tprintf "%s.t" (anonymousInterfaceModuleName i)
+      tprintf "%s.t" (anonymousInterfaceModuleName ctx i)
     else
       tprintf "anonymous_interface_%d" i.id
   | None -> failwithf "impossible_anonymousInterfaceToIdentifier(%s)" a.loc.AsString
@@ -576,7 +580,7 @@ module StructuredText =
           |> Set.fold (fun state -> function
             | KnownType.Ident fn when fn.source = ctx.currentSourceFile -> state |> WeakTrie.add fn.name
             | KnownType.AnonymousInterface (_, i) ->
-              state |> WeakTrie.add (i.namespace_ @ [anonymousInterfaceModuleName i])
+              state |> WeakTrie.add (i.namespace_ @ [anonymousInterfaceModuleName ctx i])
             | _ -> state
           ) WeakTrie.empty)
         |> Option.defaultValue WeakTrie.empty
@@ -701,7 +705,9 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (selfTy: Type) (ma: MemberAttri
   | Indexer (ft, Mutable) ->
     yield! emitMembers emitType_ ctx selfTy ma (Indexer (ft, ReadOnly))
     yield! emitMembers emitType_ ctx selfTy ma (Indexer (ft, WriteOnly))
-  | SymbolIndexer _ -> ()
+  | SymbolIndexer (symbol, ft, _) ->
+    let ft = func ft |> emitType_ ctx
+    yield comment (tprintf "[Symbol.%s]: " symbol + ft) |> ScopeIndependent
   | UnknownMember msgo ->
     yield! comments ()
     match msgo with
@@ -908,7 +914,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
             Some (Type.appOpt (str "t") (ts |> List.map (_emitType _ctx)))
           | _ -> None
         ClassKind.AnonymousInterface {|
-          name = anonymousInterfaceModuleName i
+          name = anonymousInterfaceModuleName ctx i
           orig = c.MapName(fun _ -> Anonymous)
         |},
         selfTy,

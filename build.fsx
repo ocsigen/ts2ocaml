@@ -136,8 +136,8 @@ module Test =
          "safe", !! "node_modules/@types/scheduler/tracing.d.ts", [];
          "full", !! "node_modules/csstype/index.d.ts", [];
          "safe", !! "node_modules/@types/prop-types/index.d.ts", ["--rec-module=off"];
-         "full", !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts", [];
-         "full", !! "node_modules/@types/react-modal/index.d.ts", [];
+         "full", !! "node_modules/@types/react/index.d.ts" ++ "node_modules/@types/react/global.d.ts", ["--readable-names"];
+         "full", !! "node_modules/@types/react-modal/index.d.ts", ["--readable-names"];
 
          // "safe" package which depends on another "safe" package
          "safe", !! "node_modules/@types/yargs-parser/index.d.ts", [];

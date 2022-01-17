@@ -1105,7 +1105,6 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
 and addAnonymousInterfaceExcluding emitTypeFlags (ctx: Context) knownTypes ais (current: StructuredText) =
   knownTypes
   |> Seq.choose (function KnownType.AnonymousInterface (a, info) -> Some (a, info) | _ -> None)
-  |> Seq.filter (fun (_, info) -> info.path = ctx.currentNamespace)
   |> Seq.filter (fun (a, _) -> ais |> List.contains a |> not)
   |> Seq.fold (fun (current: StructuredText) (a, _) ->
     let shouldSkip =
@@ -1381,14 +1380,9 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
                 knownTypes =
                   knownTypes |> Set.filter (function KnownType.AnonymousInterface (ai, _) -> ai.loc <> intf.loc | _ -> true)
                 scoped = Scoped.Force value.name |})
-        |> set
-          {| StructuredTextNode.empty with
-              items = emitVariable emitTypeFlags overrideFunc ctx value
-              knownTypes = knownTypes
-              scoped = Scoped.Yes |}
-        |> addExport value.name Kind.OfValue (if value.isConst then "const" else "let")
+        |> set {| StructuredTextNode.empty with scoped = Scoped.Yes |}
+        |> addExport value.name Kind.OfClass (if value.isConst then "const" else "let")
         |> inTrie [value.name] (addAnonymousInterfaceExcluding [intf])
-        |> addAnonymousInterface
       | Ident (i & { loc = loc }) & Dummy tyargs
       | App (AIdent i, tyargs, loc) when Simplify.Has(ctx.options.simplify, Simplify.NamedInterfaceValue) ->
         let intf =
@@ -1405,8 +1399,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
             {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scoped = Scoped.Force value.name |}
           current
           |> inTrie [name] (set (createModule ()))
-          |> set {| StructuredTextNode.empty with scoped = Scoped.Yes |}
-          |> addExport name Kind.OfValue (if value.isConst then "const" else "let")
+          |> addExport name Kind.OfClass (if value.isConst then "const" else "let")
           |> inTrie [name] (addAnonymousInterfaceWithKnownTypes knownTypesInMembers)
           |> fallback
       | _ -> fallback current
@@ -1908,7 +1901,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
       | Some scope ->
         yield tprintf "[@@@js.scope \"%s\"]" scope
 
-      yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; "Ts2ocaml.WebWorker" ]
+      yield open_ [ "Ts2ocaml"; "Ts2ocaml.Dom"; ]
       for src in sources do
         yield! emitReferenceTypeDirectives ctx src
         yield! emitReferenceFileDirectives ctx src

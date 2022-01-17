@@ -28939,6 +28939,81 @@ module[@js.scope "caches"] CachesStatic : sig
   val match_: request:RequestInfo.t -> ?options:MultiCacheQueryOptions.t -> unit -> Response.t or_undefined Promise.t_1 [@@js.global "match"]
   val open_: string -> Cache.t Promise.t_1 [@@js.global "open"]
 end
+
+(** An XSLTProcessor applies an XSLT stylesheet transformation to an XML document to produce a new XML document as output. It has methods to load the XSLT stylesheet, to manipulate <xsl:param> parameter values, and to apply the transformation to documents. *)
+module[@js.scope "XSLTProcessor"] XSLTProcessor : sig
+  type t = [`XSLTProcessor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`XSLTProcessor]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`XSLTProcessor]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `XSLTProcessor ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val clearParameters: 'tags this -> unit [@@js.call "clearParameters"]
+  val getParameter: 'tags this -> namespaceURI:string or_null -> localName:string -> any [@@js.call "getParameter"]
+  val importStylesheet: 'tags this -> style:Node.t -> unit [@@js.call "importStylesheet"]
+  val removeParameter: 'tags this -> namespaceURI:string or_null -> localName:string -> unit [@@js.call "removeParameter"]
+  val reset: 'tags this -> unit [@@js.call "reset"]
+  val setParameter: 'tags this -> namespaceURI:string or_null -> localName:string -> value:any -> unit [@@js.call "setParameter"]
+  val transformToDocument: 'tags this -> source:Node.t -> Document.t [@@js.call "transformToDocument"]
+  val transformToFragment: 'tags this -> source:Node.t -> output:Document.t -> DocumentFragment.t [@@js.call "transformToFragment"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** The XPathEvaluator interface allows to compile and evaluate XPath expressions. *)
+module[@js.scope "XPathEvaluator"] XPathEvaluator : sig
+  type t = [`XPathEvaluator | `XPathEvaluatorBase] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`XPathEvaluator | `XPathEvaluatorBase]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`XPathEvaluator | `XPathEvaluatorBase]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `XPathEvaluator ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** Provides the serializeToString() method to construct an XML string representing a DOM tree. *)
+module[@js.scope "XMLSerializer"] XMLSerializer : sig
+  type t = [`XMLSerializer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`XMLSerializer]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`XMLSerializer]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `XMLSerializer ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val serializeToString: 'tags this -> root:Node.t -> string [@@js.call "serializeToString"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
 module XMLHttpRequestResponseType : sig
   type t = ([`L_s0[@js ""] | `L_s127_arraybuffer[@js "arraybuffer"] | `L_s161_blob[@js "blob"] | `L_s262_document[@js "document"] | `L_s425_json[@js "json"] | `L_s755_text[@js "text"]] [@js.enum])
   type t_0 = t
@@ -29379,6 +29454,105 @@ module WorkerEventMap : sig
   val set_messageerror: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "messageerror"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module WorkerOptions : sig
+  type t = [`WorkerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WorkerOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WorkerOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WorkerOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_credentials: 'tags this -> RequestCredentials.t [@@js.get "credentials"]
+  val set_credentials: 'tags this -> RequestCredentials.t -> unit [@@js.set "credentials"]
+  val get_name: 'tags this -> string [@@js.get "name"]
+  val set_name: 'tags this -> string -> unit [@@js.set "name"]
+  val get_type: 'tags this -> WorkerType.t [@@js.get "type"]
+  val set_type: 'tags this -> WorkerType.t -> unit [@@js.set "type"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. *)
+module[@js.scope "Worker"] Worker : sig
+  type t = [`AbstractWorker | `EventTarget | `Worker] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AbstractWorker | `EventTarget | `Worker]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AbstractWorker | `EventTarget | `Worker]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `Worker ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
+  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
+  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessageerror"]
+  
+  (** Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned. *)
+  val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
+  
+  (** Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned. *)
+  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
+  
+  (** Aborts worker's associated global environment. *)
+  val terminate: 'tags this -> unit [@@js.call "terminate"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: scriptURL:URL.t or_string -> ?options:WorkerOptions.t -> unit -> t [@@js.create]
+end
 module WindowEventHandlersEventMap : sig
   type t = [`WindowEventHandlersEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -29693,6 +29867,123 @@ module WebSocketEventMap : sig
   val set_open: 'tags this -> Event.t -> unit [@@js.set "open"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+
+(** Provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection. *)
+module[@js.scope "WebSocket"] WebSocket : sig
+  type t = [`EventTarget | `WebSocket] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `WebSocket]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `WebSocket]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WebSocket ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    Returns a string that indicates how binary data from the WebSocket object is exposed to scripts:
+    
+    Can be set, to change how binary data is returned. The default is "blob".
+  *)
+  val get_binaryType: 'tags this -> BinaryType.t [@@js.get "binaryType"]
+  
+  (**
+    Returns a string that indicates how binary data from the WebSocket object is exposed to scripts:
+    
+    Can be set, to change how binary data is returned. The default is "blob".
+  *)
+  val set_binaryType: 'tags this -> BinaryType.t -> unit [@@js.set "binaryType"]
+  
+  (**
+    Returns the number of bytes of application data (UTF-8 text and binary data) that have been queued using send() but not yet been transmitted to the network.
+    
+    If the WebSocket connection is closed, this attribute's value will only increase with each call to the send() method. (The number does not reset to zero once the connection closes.)
+  *)
+  val get_bufferedAmount: 'tags this -> float [@@js.get "bufferedAmount"]
+  
+  (** Returns the extensions selected by the server, if any. *)
+  val get_extensions: 'tags this -> string [@@js.get "extensions"]
+  val get_onclose: 'tags this -> (this:t -> ev:CloseEvent.t -> any) or_null [@@js.get "onclose"]
+  val set_onclose: 'tags this -> (this:t -> ev:CloseEvent.t -> any) or_null -> unit [@@js.set "onclose"]
+  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
+  val get_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onopen"]
+  val set_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onopen"]
+  
+  (** Returns the subprotocol selected by the server, if any. It can be used in conjunction with the array form of the constructor's second argument to perform subprotocol negotiation. *)
+  val get_protocol: 'tags this -> string [@@js.get "protocol"]
+  
+  (** Returns the state of the WebSocket object's connection. It can have the values described below. *)
+  val get_readyState: 'tags this -> float [@@js.get "readyState"]
+  
+  (** Returns the URL that was used to establish the WebSocket connection. *)
+  val get_url: 'tags this -> string [@@js.get "url"]
+  
+  (** Closes the WebSocket connection, optionally using code as the the WebSocket connection close code and reason as the the WebSocket connection close reason. *)
+  val close: 'tags this -> ?code:float -> ?reason:string -> unit -> unit [@@js.call "close"]
+  
+  (** Transmits data using the WebSocket connection. data can be a string, a Blob, an ArrayBuffer, or an ArrayBufferView. *)
+  val send: 'tags this -> data:Blob.t or_string -> unit [@@js.call "send"]
+  val get_CLOSED: 'tags this -> float [@@js.get "CLOSED"]
+  val get_CLOSING: 'tags this -> float [@@js.get "CLOSING"]
+  val get_CONNECTING: 'tags this -> float [@@js.get "CONNECTING"]
+  val get_OPEN: 'tags this -> float [@@js.get "OPEN"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WebSocketEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WebSocketEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: url:URL.t or_string -> ?protocols:string list or_string -> unit -> t [@@js.create]
+  val closed: unit -> float [@@js.get "CLOSED"]
+  val closing: unit -> float [@@js.get "CLOSING"]
+  val connecting: unit -> float [@@js.get "CONNECTING"]
+  val open_: unit -> float [@@js.get "OPEN"]
+end
 module[@js.scope "WebKitCSSMatrix"] WebKitCSSMatrix : sig
   type t = DOMMatrix.t
   type t_0 = t
@@ -29947,14 +30238,6 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
   end
-  module Exports : sig
-    type t = (string, ExportValue.t) Record.t_2
-    type t_0 = t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-  end
   module ImportValue : sig
     type t = ExportValue.t or_number
     type t_0 = t
@@ -29973,6 +30256,14 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
   end
   module Imports : sig
     type t = (string, ModuleImports.t) Record.t_2
+    type t_0 = t
+    val t_to_js: t -> Ojs.t
+    val t_of_js: Ojs.t -> t
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+  end
+  module Exports : sig
+    type t = (string, ExportValue.t) Record.t_2
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -30022,44 +30313,6 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val set_module: 'tags this -> Module.t -> unit [@@js.set "module"]
     val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   end
-  module[@js.scope "CompileError"] CompileError : sig
-    type t = [`WebAssembly_CompileError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-    type t_0 = t
-    [@@@js.stop]
-    type tags = [`WebAssembly_CompileError]
-    type tags_0 = tags
-    [@@@js.start]
-    [@@@js.implem 
-      type tags = [`WebAssembly_CompileError]
-      type tags_0 = tags
-    ]
-    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_CompileError ]
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val t_0_to_js: t_0 -> Ojs.t
-    val t_0_of_js: Ojs.t -> t_0
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-    val prototype: unit -> t [@@js.get "prototype"]
-    val create: ?message:string -> unit -> t [@@js.create]
-    val invoke: ?message:string -> unit -> t [@@js.invoke]
-  end
-  module AnonymousInterface66 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val get_prototype: t -> CompileError.t [@@js.get "prototype"]
-    val set_prototype: t -> CompileError.t -> unit [@@js.set "prototype"]
-    val create: t -> ?message:string -> unit -> CompileError.t [@@js.apply_newable]
-    val apply: t -> ?message:string -> unit -> CompileError.t [@@js.apply]
-  end
-  module AnonymousInterface470 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val get_prototype: t -> Table.t [@@js.get "prototype"]
-    val set_prototype: t -> Table.t -> unit [@@js.set "prototype"]
-    val create: t -> descriptor:TableDescriptor.t -> ?value:any -> unit -> Table.t [@@js.apply_newable]
-  end
   module[@js.scope "RuntimeError"] RuntimeError : sig
     type t = [`WebAssembly_RuntimeError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
     type t_0 = t
@@ -30080,34 +30333,6 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val prototype: unit -> t [@@js.get "prototype"]
     val create: ?message:string -> unit -> t [@@js.create]
     val invoke: ?message:string -> unit -> t [@@js.invoke]
-  end
-  module AnonymousInterface346 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val get_prototype: t -> RuntimeError.t [@@js.get "prototype"]
-    val set_prototype: t -> RuntimeError.t -> unit [@@js.set "prototype"]
-    val create: t -> ?message:string -> unit -> RuntimeError.t [@@js.apply_newable]
-    val apply: t -> ?message:string -> unit -> RuntimeError.t [@@js.apply]
-  end
-  module AnonymousInterface267 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val get_prototype: t -> Module.t [@@js.get "prototype"]
-    val set_prototype: t -> Module.t -> unit [@@js.set "prototype"]
-    val create: t -> bytes:BufferSource.t -> Module.t [@@js.apply_newable]
-    val customSections: t -> moduleObject:Module.t -> sectionName:string -> ArrayBuffer.t_0 list [@@js.call "customSections"]
-    val exports: t -> moduleObject:Module.t -> ModuleExportDescriptor.t list [@@js.call "exports"]
-    val imports: t -> moduleObject:Module.t -> ModuleImportDescriptor.t list [@@js.call "imports"]
-  end
-  module AnonymousInterface261 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val get_prototype: t -> Memory.t [@@js.get "prototype"]
-    val set_prototype: t -> Memory.t -> unit [@@js.set "prototype"]
-    val create: t -> descriptor:MemoryDescriptor.t -> Memory.t [@@js.apply_newable]
   end
   module[@js.scope "LinkError"] LinkError : sig
     type t = [`WebAssembly_LinkError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30130,39 +30355,27 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val create: ?message:string -> unit -> t [@@js.create]
     val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
-  module AnonymousInterface234 : sig
-    type t = private Ojs.t
+  module[@js.scope "CompileError"] CompileError : sig
+    type t = [`WebAssembly_CompileError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+    type t_0 = t
+    [@@@js.stop]
+    type tags = [`WebAssembly_CompileError]
+    type tags_0 = tags
+    [@@@js.start]
+    [@@@js.implem 
+      type tags = [`WebAssembly_CompileError]
+      type tags_0 = tags
+    ]
+    type 'tags this = 'tags intf constraint 'tags = [> `WebAssembly_CompileError ]
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
-    val get_prototype: t -> LinkError.t [@@js.get "prototype"]
-    val set_prototype: t -> LinkError.t -> unit [@@js.set "prototype"]
-    val create: t -> ?message:string -> unit -> LinkError.t [@@js.apply_newable]
-    val apply: t -> ?message:string -> unit -> LinkError.t [@@js.apply]
+    val t_0_to_js: t_0 -> Ojs.t
+    val t_0_of_js: Ojs.t -> t_0
+    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val prototype: unit -> t [@@js.get "prototype"]
+    val create: ?message:string -> unit -> t [@@js.create]
+    val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
-  module AnonymousInterface229 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val get_prototype: t -> Instance.t [@@js.get "prototype"]
-    val set_prototype: t -> Instance.t -> unit [@@js.set "prototype"]
-    val create: t -> module_:Module.t -> ?importObject:Imports.t -> unit -> Instance.t [@@js.apply_newable]
-  end
-  module AnonymousInterface133 : sig
-    type t = private Ojs.t
-    val t_to_js: t -> Ojs.t
-    val t_of_js: Ojs.t -> t
-    val get_prototype: t -> Global.t [@@js.get "prototype"]
-    val set_prototype: t -> Global.t -> unit [@@js.set "prototype"]
-    val create: t -> descriptor:GlobalDescriptor.t -> ?v:any -> unit -> Global.t [@@js.apply_newable]
-  end
-  val compileError: unit -> AnonymousInterface66.t [@@js.get "CompileError"]
-  val global: unit -> AnonymousInterface133.t [@@js.get "Global"]
-  val instance: unit -> AnonymousInterface229.t [@@js.get "Instance"]
-  val linkError: unit -> AnonymousInterface234.t [@@js.get "LinkError"]
-  val memory: unit -> AnonymousInterface261.t [@@js.get "Memory"]
-  val module_: unit -> AnonymousInterface267.t [@@js.get "Module"]
-  val runtimeError: unit -> AnonymousInterface346.t [@@js.get "RuntimeError"]
-  val table: unit -> AnonymousInterface470.t [@@js.get "Table"]
   val compile: BufferSource.t -> Module.t Promise.t_1 [@@js.global "compile"]
   val compileStreaming: Response.t -> Module.t Promise.t_1 [@@js.global "compileStreaming"]
   val instantiate: bytes:BufferSource.t -> ?importObject:Imports.t -> unit -> WebAssemblyInstantiatedSource.t Promise.t_1 [@@js.global "instantiate"]
@@ -30199,6 +30412,335 @@ module VideoFacingModeEnum : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+end
+module ScrollSetting : sig
+  type t = ([`L_s0[@js ""] | `L_s803_up[@js "up"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module[@js.scope "VTTRegion"] VTTRegion : sig
+  type t = [`VTTRegion] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`VTTRegion]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`VTTRegion]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `VTTRegion ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_id: 'tags this -> string [@@js.get "id"]
+  val set_id: 'tags this -> string -> unit [@@js.set "id"]
+  val get_lines: 'tags this -> float [@@js.get "lines"]
+  val set_lines: 'tags this -> float -> unit [@@js.set "lines"]
+  val get_regionAnchorX: 'tags this -> float [@@js.get "regionAnchorX"]
+  val set_regionAnchorX: 'tags this -> float -> unit [@@js.set "regionAnchorX"]
+  val get_regionAnchorY: 'tags this -> float [@@js.get "regionAnchorY"]
+  val set_regionAnchorY: 'tags this -> float -> unit [@@js.set "regionAnchorY"]
+  val get_scroll: 'tags this -> ScrollSetting.t [@@js.get "scroll"]
+  val set_scroll: 'tags this -> ScrollSetting.t -> unit [@@js.set "scroll"]
+  val get_viewportAnchorX: 'tags this -> float [@@js.get "viewportAnchorX"]
+  val set_viewportAnchorX: 'tags this -> float -> unit [@@js.set "viewportAnchorX"]
+  val get_viewportAnchorY: 'tags this -> float [@@js.get "viewportAnchorY"]
+  val set_viewportAnchorY: 'tags this -> float -> unit [@@js.set "viewportAnchorY"]
+  val get_width: 'tags this -> float [@@js.get "width"]
+  val set_width: 'tags this -> float -> unit [@@js.set "width"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module PositionAlignSetting : sig
+  type t = ([`L_s141_auto[@js "auto"] | `L_s185_center[@js "center"] | `L_s447_line_left[@js "line-left"] | `L_s448_line_right[@js "line-right"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module AutoKeyword : sig
+  type t = ([`L_s141_auto[@js "auto"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module LineAndPositionSetting : sig
+  type t = AutoKeyword.t or_number
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module LineAlignSetting : sig
+  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s723_start[@js "start"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module DirectionSetting : sig
+  type t = ([`L_s0[@js ""] | `L_s470_lr[@js "lr"] | `L_s659_rl[@js "rl"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module AlignSetting : sig
+  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s440_left[@js "left"] | `L_s658_right[@js "right"] | `L_s723_start[@js "start"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module[@js.scope "VTTCue"] VTTCue : sig
+  type t = [`EventTarget | `TextTrackCue | `VTTCue] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `TextTrackCue | `VTTCue]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `TextTrackCue | `VTTCue]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `VTTCue ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_align: 'tags this -> AlignSetting.t [@@js.get "align"]
+  val set_align: 'tags this -> AlignSetting.t -> unit [@@js.set "align"]
+  val get_line: 'tags this -> LineAndPositionSetting.t [@@js.get "line"]
+  val set_line: 'tags this -> LineAndPositionSetting.t -> unit [@@js.set "line"]
+  val get_lineAlign: 'tags this -> LineAlignSetting.t [@@js.get "lineAlign"]
+  val set_lineAlign: 'tags this -> LineAlignSetting.t -> unit [@@js.set "lineAlign"]
+  val get_position: 'tags this -> LineAndPositionSetting.t [@@js.get "position"]
+  val set_position: 'tags this -> LineAndPositionSetting.t -> unit [@@js.set "position"]
+  val get_positionAlign: 'tags this -> PositionAlignSetting.t [@@js.get "positionAlign"]
+  val set_positionAlign: 'tags this -> PositionAlignSetting.t -> unit [@@js.set "positionAlign"]
+  val get_region: 'tags this -> VTTRegion.t or_null [@@js.get "region"]
+  val set_region: 'tags this -> VTTRegion.t or_null -> unit [@@js.set "region"]
+  val get_size: 'tags this -> float [@@js.get "size"]
+  val set_size: 'tags this -> float -> unit [@@js.set "size"]
+  val get_snapToLines: 'tags this -> bool [@@js.get "snapToLines"]
+  val set_snapToLines: 'tags this -> bool -> unit [@@js.set "snapToLines"]
+  val get_text: 'tags this -> string [@@js.get "text"]
+  val set_text: 'tags this -> string -> unit [@@js.set "text"]
+  val get_vertical: 'tags this -> DirectionSetting.t [@@js.get "vertical"]
+  val set_vertical: 'tags this -> DirectionSetting.t -> unit [@@js.set "vertical"]
+  val getCueAsHTML: 'tags this -> DocumentFragment.t [@@js.call "getCueAsHTML"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'TextTrackCueEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'TextTrackCueEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: startTime:float -> endTime:float -> text:string -> t [@@js.create]
+end
+module[@js.scope "TransformStreamDefaultController"] TransformStreamDefaultController : sig
+  type 'O t = [`TransformStreamDefaultController of 'O] intf [@@js.custom { of_js=(fun _O -> Obj.magic); to_js=(fun _O -> Obj.magic) }]
+  type 'O t_1 = 'O t
+  type t_0 = any t
+  [@@@js.stop]
+  type 'O tags = [`TransformStreamDefaultController of 'O]
+  type 'O tags_1 = 'O tags
+  type tags_0 = any tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'O tags = [`TransformStreamDefaultController of 'O]
+    type 'O tags_1 = 'O tags
+    type tags_0 = any tags
+  ]
+  type ('tags, 'O) this = 'tags intf constraint 'tags = [> `TransformStreamDefaultController of 'O ]
+  val t_to_js: ('O -> Ojs.t) -> 'O t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t
+  val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_desiredSize: ('tags, 'O) this -> float or_null [@@js.get "desiredSize"]
+  val enqueue: ('tags, 'O) this -> ?chunk:'O -> unit -> unit [@@js.call "enqueue"]
+  val error: ('tags, 'O) this -> ?reason:any -> unit -> unit [@@js.call "error"]
+  val terminate: ('tags, 'O) this -> unit [@@js.call "terminate"]
+  val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t_0 [@@js.get "prototype"]
+  val create: unit -> t_0 [@@js.create]
+end
+module TransformerTransformCallback : sig
+  type ('I, 'O) t = [`TransformerTransformCallback of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
+  type ('I, 'O) t_2 = ('I, 'O) t
+  [@@@js.stop]
+  type ('I, 'O) tags = [`TransformerTransformCallback of ('I * 'O)]
+  type ('I, 'O) tags_2 = ('I, 'O) tags
+  [@@@js.start]
+  [@@@js.implem 
+    type ('I, 'O) tags = [`TransformerTransformCallback of ('I * 'O)]
+    type ('I, 'O) tags_2 = ('I, 'O) tags
+  ]
+  type ('tags, 'I, 'O) this = 'tags intf constraint 'tags = [> `TransformerTransformCallback of ('I * 'O) ]
+  val t_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t
+  val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
+  val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
+  val apply: ('tags, 'I, 'O) this -> chunk:'I -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
+  val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
+end
+module TransformerStartCallback : sig
+  type 'O t = [`TransformerStartCallback of 'O] intf [@@js.custom { of_js=(fun _O -> Obj.magic); to_js=(fun _O -> Obj.magic) }]
+  type 'O t_1 = 'O t
+  [@@@js.stop]
+  type 'O tags = [`TransformerStartCallback of 'O]
+  type 'O tags_1 = 'O tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'O tags = [`TransformerStartCallback of 'O]
+    type 'O tags_1 = 'O tags
+  ]
+  type ('tags, 'O) this = 'tags intf constraint 'tags = [> `TransformerStartCallback of 'O ]
+  val t_to_js: ('O -> Ojs.t) -> 'O t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t
+  val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
+  val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> any [@@js.apply]
+  val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
+end
+module TransformerFlushCallback : sig
+  type 'O t = [`TransformerFlushCallback of 'O] intf [@@js.custom { of_js=(fun _O -> Obj.magic); to_js=(fun _O -> Obj.magic) }]
+  type 'O t_1 = 'O t
+  [@@@js.stop]
+  type 'O tags = [`TransformerFlushCallback of 'O]
+  type 'O tags_1 = 'O tags
+  [@@@js.start]
+  [@@@js.implem 
+    type 'O tags = [`TransformerFlushCallback of 'O]
+    type 'O tags_1 = 'O tags
+  ]
+  type ('tags, 'O) this = 'tags intf constraint 'tags = [> `TransformerFlushCallback of 'O ]
+  val t_to_js: ('O -> Ojs.t) -> 'O t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t
+  val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
+  val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
+  val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
+end
+module Transformer : sig
+  type ('I, 'O) t = [`Transformer of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
+  type ('I, 'O) t_2 = ('I, 'O) t
+  type 'I t_1 = ('I, any) t
+  type t_0 = (any, any) t
+  [@@@js.stop]
+  type ('I, 'O) tags = [`Transformer of ('I * 'O)]
+  type ('I, 'O) tags_2 = ('I, 'O) tags
+  type 'I tags_1 = ('I, any) tags
+  type tags_0 = (any, any) tags
+  [@@@js.start]
+  [@@@js.implem 
+    type ('I, 'O) tags = [`Transformer of ('I * 'O)]
+    type ('I, 'O) tags_2 = ('I, 'O) tags
+    type 'I tags_1 = ('I, any) tags
+    type tags_0 = (any, any) tags
+  ]
+  type ('tags, 'I, 'O) this = 'tags intf constraint 'tags = [> `Transformer of ('I * 'O) ]
+  val t_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t
+  val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
+  val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
+  val t_1_to_js: ('I -> Ojs.t) -> 'I t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'I) -> Ojs.t -> 'I t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_flush: ('tags, 'I, 'O) this -> 'O TransformerFlushCallback.t [@@js.get "flush"]
+  val set_flush: ('tags, 'I, 'O) this -> 'O TransformerFlushCallback.t -> unit [@@js.set "flush"]
+  val get_readableType: ('tags, 'I, 'O) this -> never or_undefined [@@js.get "readableType"]
+  val set_readableType: ('tags, 'I, 'O) this -> never or_undefined -> unit [@@js.set "readableType"]
+  val get_start: ('tags, 'I, 'O) this -> 'O TransformerStartCallback.t [@@js.get "start"]
+  val set_start: ('tags, 'I, 'O) this -> 'O TransformerStartCallback.t -> unit [@@js.set "start"]
+  val get_transform: ('tags, 'I, 'O) this -> ('I, 'O) TransformerTransformCallback.t [@@js.get "transform"]
+  val set_transform: ('tags, 'I, 'O) this -> ('I, 'O) TransformerTransformCallback.t -> unit [@@js.set "transform"]
+  val get_writableType: ('tags, 'I, 'O) this -> never or_undefined [@@js.get "writableType"]
+  val set_writableType: ('tags, 'I, 'O) this -> never or_undefined -> unit [@@js.set "writableType"]
+  val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "TransformStream"] TransformStream : sig
+  type ('I, 'O) t = [`TransformStream of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
+  type ('I, 'O) t_2 = ('I, 'O) t
+  type 'I t_1 = ('I, any) t
+  type t_0 = (any, any) t
+  [@@@js.stop]
+  type ('I, 'O) tags = [`TransformStream of ('I * 'O)]
+  type ('I, 'O) tags_2 = ('I, 'O) tags
+  type 'I tags_1 = ('I, any) tags
+  type tags_0 = (any, any) tags
+  [@@@js.start]
+  [@@@js.implem 
+    type ('I, 'O) tags = [`TransformStream of ('I * 'O)]
+    type ('I, 'O) tags_2 = ('I, 'O) tags
+    type 'I tags_1 = ('I, any) tags
+    type tags_0 = (any, any) tags
+  ]
+  type ('tags, 'I, 'O) this = 'tags intf constraint 'tags = [> `TransformStream of ('I * 'O) ]
+  val t_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t
+  val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
+  val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
+  val t_1_to_js: ('I -> Ojs.t) -> 'I t_1 -> Ojs.t
+  val t_1_of_js: (Ojs.t -> 'I) -> Ojs.t -> 'I t_1
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_readable: ('tags, 'I, 'O) this -> 'O ReadableStream.t [@@js.get "readable"]
+  val get_writable: ('tags, 'I, 'O) this -> 'I WritableStream.t [@@js.get "writable"]
+  val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t_0 [@@js.get "prototype"]
+  val create: ?transformer:('I, 'O) Transformer.t -> ?writableStrategy:'I QueuingStrategy.t -> ?readableStrategy:'O QueuingStrategy.t -> unit -> ('I, 'O) t [@@js.create]
 end
 module TextTrackListEventMap : sig
   type t = [`TextTrackListEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30265,6 +30807,247 @@ module TextTrackCueEventMap : sig
   val get_exit: 'tags this -> Event.t [@@js.get "exit"]
   val set_exit: 'tags this -> Event.t -> unit [@@js.set "exit"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module TextEncoderCommon : sig
+  type t = [`TextEncoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`TextEncoderCommon]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`TextEncoderCommon]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TextEncoderCommon ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Returns "utf-8". *)
+  val get_encoding: 'tags this -> string [@@js.get "encoding"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module GenericTransformStream : sig
+  type t = [`GenericTransformStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`GenericTransformStream]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`GenericTransformStream]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `GenericTransformStream ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_readable: 'tags this -> ReadableStream.t_0 [@@js.get "readable"]
+  val get_writable: 'tags this -> WritableStream.t_0 [@@js.get "writable"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "TextEncoderStream"] TextEncoderStream : sig
+  type t = [`GenericTransformStream | `TextEncoderCommon | `TextEncoderStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`GenericTransformStream | `TextEncoderCommon | `TextEncoderStream]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`GenericTransformStream | `TextEncoderCommon | `TextEncoderStream]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TextEncoderStream ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_readable: 'tags this -> Uint8Array.t_0 ReadableStream.t [@@js.get "readable"]
+  val get_writable: 'tags this -> string WritableStream.t [@@js.get "writable"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module TextEncoderEncodeIntoResult : sig
+  type t = [`TextEncoderEncodeIntoResult] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`TextEncoderEncodeIntoResult]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`TextEncoderEncodeIntoResult]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TextEncoderEncodeIntoResult ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_read: 'tags this -> float [@@js.get "read"]
+  val set_read: 'tags this -> float -> unit [@@js.set "read"]
+  val get_written: 'tags this -> float [@@js.get "written"]
+  val set_written: 'tags this -> float -> unit [@@js.set "written"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** TextEncoder takes a stream of code points as input and emits a stream of bytes. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
+module[@js.scope "TextEncoder"] TextEncoder : sig
+  type t = [`TextEncoder | `TextEncoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`TextEncoder | `TextEncoderCommon]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`TextEncoder | `TextEncoderCommon]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TextEncoder ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Returns the result of running UTF-8's encoder. *)
+  val encode: 'tags this -> ?input:string -> unit -> Uint8Array.t_0 [@@js.call "encode"]
+  
+  (** Runs the UTF-8 encoder on source, stores the result of that operation into destination, and returns the progress made as an object wherein read is the number of converted code units of source and written is the number of bytes modified in destination. *)
+  val encodeInto: 'tags this -> source:string -> destination:Uint8Array.t_0 -> TextEncoderEncodeIntoResult.t [@@js.call "encodeInto"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module TextDecoderOptions : sig
+  type t = [`TextDecoderOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`TextDecoderOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`TextDecoderOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TextDecoderOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_fatal: 'tags this -> bool [@@js.get "fatal"]
+  val set_fatal: 'tags this -> bool -> unit [@@js.set "fatal"]
+  val get_ignoreBOM: 'tags this -> bool [@@js.get "ignoreBOM"]
+  val set_ignoreBOM: 'tags this -> bool -> unit [@@js.set "ignoreBOM"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module TextDecoderCommon : sig
+  type t = [`TextDecoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`TextDecoderCommon]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`TextDecoderCommon]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TextDecoderCommon ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Returns encoding's name, lowercased. *)
+  val get_encoding: 'tags this -> string [@@js.get "encoding"]
+  
+  (** Returns true if error mode is "fatal", otherwise false. *)
+  val get_fatal: 'tags this -> bool [@@js.get "fatal"]
+  
+  (** Returns the value of ignore BOM. *)
+  val get_ignoreBOM: 'tags this -> bool [@@js.get "ignoreBOM"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "TextDecoderStream"] TextDecoderStream : sig
+  type t = [`GenericTransformStream | `TextDecoderCommon | `TextDecoderStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`GenericTransformStream | `TextDecoderCommon | `TextDecoderStream]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`GenericTransformStream | `TextDecoderCommon | `TextDecoderStream]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TextDecoderStream ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_readable: 'tags this -> string ReadableStream.t [@@js.get "readable"]
+  val get_writable: 'tags this -> BufferSource.t WritableStream.t [@@js.get "writable"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
+end
+module TextDecodeOptions : sig
+  type t = [`TextDecodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`TextDecodeOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`TextDecodeOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TextDecodeOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_stream: 'tags this -> bool [@@js.get "stream"]
+  val set_stream: 'tags this -> bool -> unit [@@js.set "stream"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
+module[@js.scope "TextDecoder"] TextDecoder : sig
+  type t = [`TextDecoder | `TextDecoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`TextDecoder | `TextDecoderCommon]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`TextDecoder | `TextDecoderCommon]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `TextDecoder ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    Returns the result of running encoding's decoder. The method can be invoked zero or more times with options's stream set to true, and then once without options's stream (or set to false), to process a fragmented input. If the invocation without options's stream (or set to false) has no input, it's clearest to omit both arguments.
+    
+    ```
+    var string = "", decoder = new TextDecoder(encoding), buffer;
+    while(buffer = next_chunk()) \{
+      string += decoder.decode(buffer, \{stream:true\});
+    \}
+    string += decoder.decode(); // end-of-queue
+    ```
+    
+    If the error mode is "fatal" and encoding's decoder returns error, throws a TypeError.
+  *)
+  val decode: 'tags this -> ?input:BufferSource.t -> ?options:TextDecodeOptions.t -> unit -> string [@@js.call "decode"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
 end
 
 (** @deprecated  *)
@@ -30341,6 +31124,77 @@ module SpeechSynthesisEventMap : sig
   val set_voiceschanged: 'tags this -> Event.t -> unit [@@js.set "voiceschanged"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module[@js.scope "SpeechRecognitionAlternative"] SpeechRecognitionAlternative : sig
+  type t = [`SpeechRecognitionAlternative] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`SpeechRecognitionAlternative]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`SpeechRecognitionAlternative]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SpeechRecognitionAlternative ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_confidence: 'tags this -> float [@@js.get "confidence"]
+  val get_transcript: 'tags this -> string [@@js.get "transcript"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module[@js.scope "SpeechRecognitionResult"] SpeechRecognitionResult : sig
+  type t = [`SpeechRecognitionResult | SpeechRecognitionAlternative.t ArrayLike.tags_1 | SpeechRecognitionAlternative.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`SpeechRecognitionResult | SpeechRecognitionAlternative.t ArrayLike.tags_1 | SpeechRecognitionAlternative.t IterableIterator.tags_1]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`SpeechRecognitionResult | SpeechRecognitionAlternative.t ArrayLike.tags_1 | SpeechRecognitionAlternative.t IterableIterator.tags_1]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SpeechRecognitionResult ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_isFinal: 'tags this -> bool [@@js.get "isFinal"]
+  val get_length: 'tags this -> float [@@js.get "length"]
+  val item: 'tags this -> index:float -> SpeechRecognitionAlternative.t [@@js.call "item"]
+  val get: 'tags this -> float -> SpeechRecognitionAlternative.t [@@js.index_get]
+  val set: 'tags this -> float -> SpeechRecognitionAlternative.t -> unit [@@js.index_set]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module[@js.scope "SpeechRecognitionResultList"] SpeechRecognitionResultList : sig
+  type t = [`SpeechRecognitionResultList | SpeechRecognitionResult.t ArrayLike.tags_1 | SpeechRecognitionResult.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`SpeechRecognitionResultList | SpeechRecognitionResult.t ArrayLike.tags_1 | SpeechRecognitionResult.t IterableIterator.tags_1]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`SpeechRecognitionResultList | SpeechRecognitionResult.t ArrayLike.tags_1 | SpeechRecognitionResult.t IterableIterator.tags_1]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SpeechRecognitionResultList ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_length: 'tags this -> float [@@js.get "length"]
+  val item: 'tags this -> index:float -> SpeechRecognitionResult.t [@@js.call "item"]
+  val get: 'tags this -> float -> SpeechRecognitionResult.t [@@js.index_get]
+  val set: 'tags this -> float -> SpeechRecognitionResult.t -> unit [@@js.index_set]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
 module SourceBufferListEventMap : sig
   type t = [`SourceBufferListEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -30390,6 +31244,69 @@ module SourceBufferEventMap : sig
   val get_updatestart: 'tags this -> Event.t [@@js.get "updatestart"]
   val set_updatestart: 'tags this -> Event.t -> unit [@@js.set "updatestart"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "SharedWorker"] SharedWorker : sig
+  type t = [`AbstractWorker | `EventTarget | `SharedWorker] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AbstractWorker | `EventTarget | `SharedWorker]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AbstractWorker | `EventTarget | `SharedWorker]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SharedWorker ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Returns sharedWorker's MessagePort object which can be used to communicate with the global environment. *)
+  val get_port: 'tags this -> MessagePort.t [@@js.get "port"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbstractWorkerEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbstractWorkerEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: scriptURL:URL.t or_string -> ?options:WorkerOptions.t or_string -> unit -> t [@@js.create]
 end
 module ServiceWorkerRegistrationEventMap : sig
   type t = [`ServiceWorkerRegistrationEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30494,6 +31411,34 @@ module ScreenOrientationEventMap : sig
   val get_change: 'tags this -> Event.t [@@js.get "change"]
   val set_change: 'tags this -> Event.t -> unit [@@js.set "change"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** A commonly used set of constants used for reflecting gradientUnits, patternContentUnits and other similar attributes. *)
+module[@js.scope "SVGUnitTypes"] SVGUnitTypes : sig
+  type t = [`SVGUnitTypes] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`SVGUnitTypes]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`SVGUnitTypes]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SVGUnitTypes ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: 'tags this -> float [@@js.get "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX"]
+  val get_SVG_UNIT_TYPE_UNKNOWN: 'tags this -> float [@@js.get "SVG_UNIT_TYPE_UNKNOWN"]
+  val get_SVG_UNIT_TYPE_USERSPACEONUSE: 'tags this -> float [@@js.get "SVG_UNIT_TYPE_USERSPACEONUSE"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+  val svg_unit_type_objectboundingbox: unit -> float [@@js.get "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX"]
+  val svg_unit_type_unknown: unit -> float [@@js.get "SVG_UNIT_TYPE_UNKNOWN"]
+  val svg_unit_type_userspaceonuse: unit -> float [@@js.get "SVG_UNIT_TYPE_USERSPACEONUSE"]
 end
 module ElementEventMap : sig
   type t = [`ElementEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30654,6 +31599,122 @@ module RsaHashedKeyAlgorithm : sig
   val set_hash: 'tags this -> KeyAlgorithm.t -> unit [@@js.set "hash"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module ResizeObserverBoxOptions : sig
+  type t = ([`L_s167_border_box[@js "border-box"] | `L_s216_content_box[@js "content-box"] | `L_s246_device_pixel_content_box[@js "device-pixel-content-box"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module ResizeObserverOptions : sig
+  type t = [`ResizeObserverOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ResizeObserverOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ResizeObserverOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserverOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_box: 'tags this -> ResizeObserverBoxOptions.t [@@js.get "box"]
+  val set_box: 'tags this -> ResizeObserverBoxOptions.t -> unit [@@js.set "box"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "ResizeObserverSize"] ResizeObserverSize : sig
+  type t = [`ResizeObserverSize] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ResizeObserverSize]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ResizeObserverSize]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserverSize ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_blockSize: 'tags this -> float [@@js.get "blockSize"]
+  val get_inlineSize: 'tags this -> float [@@js.get "inlineSize"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module[@js.scope "ResizeObserverEntry"] ResizeObserverEntry : sig
+  type t = [`ResizeObserverEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ResizeObserverEntry]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ResizeObserverEntry]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserverEntry ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_borderBoxSize: 'tags this -> ResizeObserverSize.t list [@@js.get "borderBoxSize"]
+  val get_contentBoxSize: 'tags this -> ResizeObserverSize.t list [@@js.get "contentBoxSize"]
+  val get_contentRect: 'tags this -> DOMRectReadOnly.t [@@js.get "contentRect"]
+  val get_target: 'tags this -> Element.t [@@js.get "target"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module[@js.scope "ResizeObserver"] rec ResizeObserver : sig
+  type t = [`ResizeObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ResizeObserver]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ResizeObserver]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserver ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
+  val observe: 'tags this -> target:Element.t -> ?options:ResizeObserverOptions.t -> unit -> unit [@@js.call "observe"]
+  val unobserve: 'tags this -> target:Element.t -> unit [@@js.call "unobserve"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: ResizeObserverCallback.t -> t [@@js.create]
+end
+and ResizeObserverCallback : sig
+  type t = [`ResizeObserverCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ResizeObserverCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ResizeObserverCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserverCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> entries:ResizeObserverEntry.t list -> observer:ResizeObserver.t -> unit [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
 module RemotePlaybackEventMap : sig
   type t = [`RemotePlaybackEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -30792,6 +31853,523 @@ module RTCPeerConnectionEventMap : sig
   val set_track: 'tags this -> RTCTrackEvent.t -> unit [@@js.set "track"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module RTCSignalingState : sig
+  type t = ([`L_s199_closed[@js "closed"] | `L_s372_have_local_offer[@js "have-local-offer"] | `L_s373_have_local_pranswer[@js "have-local-pranswer"] | `L_s374_have_remote_offer[@js "have-remote-offer"] | `L_s375_have_remote_pranswer[@js "have-remote-pranswer"] | `L_s720_stable[@js "stable"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCSdpType : sig
+  type t = ([`L_s120_answer[@js "answer"] | `L_s536_offer[@js "offer"] | `L_s605_pranswer[@js "pranswer"] | `L_s660_rollback[@js "rollback"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCSessionDescriptionInit : sig
+  type t = [`RTCSessionDescriptionInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCSessionDescriptionInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCSessionDescriptionInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCSessionDescriptionInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_sdp: 'tags this -> string [@@js.get "sdp"]
+  val set_sdp: 'tags this -> string -> unit [@@js.set "sdp"]
+  val get_type: 'tags this -> RTCSdpType.t [@@js.get "type"]
+  val set_type: 'tags this -> RTCSdpType.t -> unit [@@js.set "type"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCSessionDescriptionCallback : sig
+  type t = [`RTCSessionDescriptionCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCSessionDescriptionCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCSessionDescriptionCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCSessionDescriptionCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> description:RTCSessionDescriptionInit.t -> unit [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** One end of a connection—or potential connection—and how it's configured. Each RTCSessionDescription consists of a description type indicating which part of the offer/answer negotiation process it describes and of the SDP descriptor of the session. *)
+module[@js.scope "RTCSessionDescription"] RTCSessionDescription : sig
+  type t = [`RTCSessionDescription] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCSessionDescription]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCSessionDescription]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCSessionDescription ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_sdp: 'tags this -> string [@@js.get "sdp"]
+  val get_type: 'tags this -> RTCSdpType.t [@@js.get "type"]
+  val toJSON: 'tags this -> any [@@js.call "toJSON"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: RTCSessionDescriptionInit.t -> t [@@js.create]
+end
+module RTCRtpTransceiverInit : sig
+  type t = [`RTCRtpTransceiverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCRtpTransceiverInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCRtpTransceiverInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCRtpTransceiverInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_direction: 'tags this -> RTCRtpTransceiverDirection.t [@@js.get "direction"]
+  val set_direction: 'tags this -> RTCRtpTransceiverDirection.t -> unit [@@js.set "direction"]
+  val get_sendEncodings: 'tags this -> RTCRtpEncodingParameters.t list [@@js.get "sendEncodings"]
+  val set_sendEncodings: 'tags this -> RTCRtpEncodingParameters.t list -> unit [@@js.set "sendEncodings"]
+  val get_streams: 'tags this -> MediaStream.t list [@@js.get "streams"]
+  val set_streams: 'tags this -> MediaStream.t list -> unit [@@js.set "streams"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCPeerConnectionState : sig
+  type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCPeerConnectionErrorCallback : sig
+  type t = [`RTCPeerConnectionErrorCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCPeerConnectionErrorCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCPeerConnectionErrorCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCPeerConnectionErrorCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> error:DOMException.t -> unit [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCOfferAnswerOptions : sig
+  type t = [`RTCOfferAnswerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCOfferAnswerOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCOfferAnswerOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCOfferAnswerOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCOfferOptions : sig
+  type t = [`RTCOfferAnswerOptions | `RTCOfferOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCOfferAnswerOptions | `RTCOfferOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCOfferAnswerOptions | `RTCOfferOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCOfferOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_iceRestart: 'tags this -> bool [@@js.get "iceRestart"]
+  val set_iceRestart: 'tags this -> bool -> unit [@@js.set "iceRestart"]
+  val get_offerToReceiveAudio: 'tags this -> bool [@@js.get "offerToReceiveAudio"]
+  val set_offerToReceiveAudio: 'tags this -> bool -> unit [@@js.set "offerToReceiveAudio"]
+  val get_offerToReceiveVideo: 'tags this -> bool [@@js.get "offerToReceiveVideo"]
+  val set_offerToReceiveVideo: 'tags this -> bool -> unit [@@js.set "offerToReceiveVideo"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCLocalSessionDescriptionInit : sig
+  type t = [`RTCLocalSessionDescriptionInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCLocalSessionDescriptionInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCLocalSessionDescriptionInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCLocalSessionDescriptionInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_sdp: 'tags this -> string [@@js.get "sdp"]
+  val set_sdp: 'tags this -> string -> unit [@@js.set "sdp"]
+  val get_type: 'tags this -> RTCSdpType.t [@@js.get "type"]
+  val set_type: 'tags this -> RTCSdpType.t -> unit [@@js.set "type"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCIceGatheringState : sig
+  type t = ([`L_s206_complete[@js "complete"] | `L_s356_gathering[@js "gathering"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCIceConnectionState : sig
+  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCDataChannelInit : sig
+  type t = [`RTCDataChannelInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCDataChannelInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCDataChannelInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCDataChannelInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_id: 'tags this -> float [@@js.get "id"]
+  val set_id: 'tags this -> float -> unit [@@js.set "id"]
+  val get_maxPacketLifeTime: 'tags this -> float [@@js.get "maxPacketLifeTime"]
+  val set_maxPacketLifeTime: 'tags this -> float -> unit [@@js.set "maxPacketLifeTime"]
+  val get_maxRetransmits: 'tags this -> float [@@js.get "maxRetransmits"]
+  val set_maxRetransmits: 'tags this -> float -> unit [@@js.set "maxRetransmits"]
+  val get_negotiated: 'tags this -> bool [@@js.get "negotiated"]
+  val set_negotiated: 'tags this -> bool -> unit [@@js.set "negotiated"]
+  val get_ordered: 'tags this -> bool [@@js.get "ordered"]
+  val set_ordered: 'tags this -> bool -> unit [@@js.set "ordered"]
+  val get_protocol: 'tags this -> string [@@js.get "protocol"]
+  val set_protocol: 'tags this -> string -> unit [@@js.set "protocol"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCRtcpMuxPolicy : sig
+  type t = ([`L_s650_require[@js "require"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCIceTransportPolicy : sig
+  type t = ([`L_s106_all[@js "all"] | `L_s637_relay[@js "relay"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCIceCredentialType : sig
+  type t = ([`L_s567_password[@js "password"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCIceServer : sig
+  type t = [`RTCIceServer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCIceServer]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCIceServer]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCIceServer ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_credential: 'tags this -> string [@@js.get "credential"]
+  val set_credential: 'tags this -> string -> unit [@@js.set "credential"]
+  val get_credentialType: 'tags this -> RTCIceCredentialType.t [@@js.get "credentialType"]
+  val set_credentialType: 'tags this -> RTCIceCredentialType.t -> unit [@@js.set "credentialType"]
+  val get_urls: 'tags this -> string list or_string [@@js.get "urls"]
+  val set_urls: 'tags this -> string list or_string -> unit [@@js.set "urls"]
+  val get_username: 'tags this -> string [@@js.get "username"]
+  val set_username: 'tags this -> string -> unit [@@js.set "username"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCDtlsFingerprint : sig
+  type t = [`RTCDtlsFingerprint] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCDtlsFingerprint]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCDtlsFingerprint]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCDtlsFingerprint ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_algorithm: 'tags this -> string [@@js.get "algorithm"]
+  val set_algorithm: 'tags this -> string -> unit [@@js.set "algorithm"]
+  val get_value: 'tags this -> string [@@js.get "value"]
+  val set_value: 'tags this -> string -> unit [@@js.set "value"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "RTCCertificate"] RTCCertificate : sig
+  type t = [`RTCCertificate] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCCertificate]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCCertificate]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCCertificate ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_expires: 'tags this -> DOMTimeStamp.t [@@js.get "expires"]
+  val getFingerprints: 'tags this -> RTCDtlsFingerprint.t list [@@js.call "getFingerprints"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module RTCBundlePolicy : sig
+  type t = ([`L_s147_balanced[@js "balanced"] | `L_s483_max_bundle[@js "max-bundle"] | `L_s484_max_compat[@js "max-compat"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCConfiguration : sig
+  type t = [`RTCConfiguration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCConfiguration]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCConfiguration]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCConfiguration ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_bundlePolicy: 'tags this -> RTCBundlePolicy.t [@@js.get "bundlePolicy"]
+  val set_bundlePolicy: 'tags this -> RTCBundlePolicy.t -> unit [@@js.set "bundlePolicy"]
+  val get_certificates: 'tags this -> RTCCertificate.t list [@@js.get "certificates"]
+  val set_certificates: 'tags this -> RTCCertificate.t list -> unit [@@js.set "certificates"]
+  val get_iceCandidatePoolSize: 'tags this -> float [@@js.get "iceCandidatePoolSize"]
+  val set_iceCandidatePoolSize: 'tags this -> float -> unit [@@js.set "iceCandidatePoolSize"]
+  val get_iceServers: 'tags this -> RTCIceServer.t list [@@js.get "iceServers"]
+  val set_iceServers: 'tags this -> RTCIceServer.t list -> unit [@@js.set "iceServers"]
+  val get_iceTransportPolicy: 'tags this -> RTCIceTransportPolicy.t [@@js.get "iceTransportPolicy"]
+  val set_iceTransportPolicy: 'tags this -> RTCIceTransportPolicy.t -> unit [@@js.set "iceTransportPolicy"]
+  val get_rtcpMuxPolicy: 'tags this -> RTCRtcpMuxPolicy.t [@@js.get "rtcpMuxPolicy"]
+  val set_rtcpMuxPolicy: 'tags this -> RTCRtcpMuxPolicy.t -> unit [@@js.set "rtcpMuxPolicy"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCAnswerOptions : sig
+  type t = [`RTCAnswerOptions | `RTCOfferAnswerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`RTCAnswerOptions | `RTCOfferAnswerOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`RTCAnswerOptions | `RTCOfferAnswerOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCAnswerOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** A WebRTC connection between the local computer and a remote peer. It provides methods to connect to a remote peer, maintain and monitor the connection, and close the connection once it's no longer needed. *)
+module[@js.scope "RTCPeerConnection"] RTCPeerConnection : sig
+  type t = [`EventTarget | `RTCPeerConnection] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `RTCPeerConnection]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `RTCPeerConnection]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCPeerConnection ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_canTrickleIceCandidates: 'tags this -> bool or_null [@@js.get "canTrickleIceCandidates"]
+  val get_connectionState: 'tags this -> RTCPeerConnectionState.t [@@js.get "connectionState"]
+  val get_currentLocalDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "currentLocalDescription"]
+  val get_currentRemoteDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "currentRemoteDescription"]
+  val get_iceConnectionState: 'tags this -> RTCIceConnectionState.t [@@js.get "iceConnectionState"]
+  val get_iceGatheringState: 'tags this -> RTCIceGatheringState.t [@@js.get "iceGatheringState"]
+  val get_localDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "localDescription"]
+  val get_onconnectionstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onconnectionstatechange"]
+  val set_onconnectionstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onconnectionstatechange"]
+  val get_ondatachannel: 'tags this -> (this:t -> ev:RTCDataChannelEvent.t -> any) or_null [@@js.get "ondatachannel"]
+  val set_ondatachannel: 'tags this -> (this:t -> ev:RTCDataChannelEvent.t -> any) or_null -> unit [@@js.set "ondatachannel"]
+  val get_onicecandidate: 'tags this -> (this:t -> ev:RTCPeerConnectionIceEvent.t -> any) or_null [@@js.get "onicecandidate"]
+  val set_onicecandidate: 'tags this -> (this:t -> ev:RTCPeerConnectionIceEvent.t -> any) or_null -> unit [@@js.set "onicecandidate"]
+  val get_onicecandidateerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onicecandidateerror"]
+  val set_onicecandidateerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onicecandidateerror"]
+  val get_oniceconnectionstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "oniceconnectionstatechange"]
+  val set_oniceconnectionstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "oniceconnectionstatechange"]
+  val get_onicegatheringstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onicegatheringstatechange"]
+  val set_onicegatheringstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onicegatheringstatechange"]
+  val get_onnegotiationneeded: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onnegotiationneeded"]
+  val set_onnegotiationneeded: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onnegotiationneeded"]
+  val get_onsignalingstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onsignalingstatechange"]
+  val set_onsignalingstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsignalingstatechange"]
+  val get_ontrack: 'tags this -> (this:t -> ev:RTCTrackEvent.t -> any) or_null [@@js.get "ontrack"]
+  val set_ontrack: 'tags this -> (this:t -> ev:RTCTrackEvent.t -> any) or_null -> unit [@@js.set "ontrack"]
+  val get_pendingLocalDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "pendingLocalDescription"]
+  val get_pendingRemoteDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "pendingRemoteDescription"]
+  val get_remoteDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "remoteDescription"]
+  val get_signalingState: 'tags this -> RTCSignalingState.t [@@js.get "signalingState"]
+  val addIceCandidate: 'tags this -> ?candidate:RTCIceCandidateInit.t -> unit -> unit Promise.t_1 [@@js.call "addIceCandidate"]
+  
+  (** @deprecated  *)
+  val addIceCandidate': 'tags this -> candidate:RTCIceCandidateInit.t -> successCallback:VoidFunction.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> unit Promise.t_1 [@@js.call "addIceCandidate"]
+  val addTrack: 'tags this -> track:MediaStreamTrack.t -> streams:(MediaStream.t list [@js.variadic]) -> RTCRtpSender.t [@@js.call "addTrack"]
+  val addTransceiver: 'tags this -> trackOrKind:MediaStreamTrack.t or_string -> ?init:RTCRtpTransceiverInit.t -> unit -> RTCRtpTransceiver.t [@@js.call "addTransceiver"]
+  val close: 'tags this -> unit [@@js.call "close"]
+  val createAnswer: 'tags this -> ?options:RTCAnswerOptions.t -> unit -> RTCSessionDescriptionInit.t Promise.t_1 [@@js.call "createAnswer"]
+  
+  (** @deprecated  *)
+  val createAnswer': 'tags this -> successCallback:RTCSessionDescriptionCallback.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> unit Promise.t_1 [@@js.call "createAnswer"]
+  val createDataChannel: 'tags this -> label:string -> ?dataChannelDict:RTCDataChannelInit.t -> unit -> RTCDataChannel.t [@@js.call "createDataChannel"]
+  val createOffer: 'tags this -> ?options:RTCOfferOptions.t -> unit -> RTCSessionDescriptionInit.t Promise.t_1 [@@js.call "createOffer"]
+  
+  (** @deprecated  *)
+  val createOffer': 'tags this -> successCallback:RTCSessionDescriptionCallback.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> ?options:RTCOfferOptions.t -> unit -> unit Promise.t_1 [@@js.call "createOffer"]
+  val getConfiguration: 'tags this -> RTCConfiguration.t [@@js.call "getConfiguration"]
+  val getReceivers: 'tags this -> RTCRtpReceiver.t list [@@js.call "getReceivers"]
+  val getSenders: 'tags this -> RTCRtpSender.t list [@@js.call "getSenders"]
+  val getStats: 'tags this -> ?selector:MediaStreamTrack.t or_null -> unit -> RTCStatsReport.t Promise.t_1 [@@js.call "getStats"]
+  val getTransceivers: 'tags this -> RTCRtpTransceiver.t list [@@js.call "getTransceivers"]
+  val removeTrack: 'tags this -> sender:RTCRtpSender.t -> unit [@@js.call "removeTrack"]
+  val restartIce: 'tags this -> unit [@@js.call "restartIce"]
+  val setConfiguration: 'tags this -> ?configuration:RTCConfiguration.t -> unit -> unit [@@js.call "setConfiguration"]
+  val setLocalDescription: 'tags this -> ?description:RTCLocalSessionDescriptionInit.t -> unit -> unit Promise.t_1 [@@js.call "setLocalDescription"]
+  
+  (** @deprecated  *)
+  val setLocalDescription': 'tags this -> description:RTCLocalSessionDescriptionInit.t -> successCallback:VoidFunction.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> unit Promise.t_1 [@@js.call "setLocalDescription"]
+  val setRemoteDescription: 'tags this -> description:RTCSessionDescriptionInit.t -> unit Promise.t_1 [@@js.call "setRemoteDescription"]
+  
+  (** @deprecated  *)
+  val setRemoteDescription': 'tags this -> description:RTCSessionDescriptionInit.t -> successCallback:VoidFunction.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> unit Promise.t_1 [@@js.call "setRemoteDescription"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'RTCPeerConnectionEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'RTCPeerConnectionEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: ?configuration:RTCConfiguration.t -> unit -> t [@@js.create]
+  val generateCertificate: AlgorithmIdentifier.t -> RTCCertificate.t Promise.t_1 [@@js.global "generateCertificate"]
+end
 module RTCRtpStreamStats : sig
   type t = [`RTCRtpStreamStats | `RTCStats] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -30925,6 +32503,46 @@ module RTCInboundRtpStreamStats : sig
   val get_remoteId: 'tags this -> string [@@js.get "remoteId"]
   val set_remoteId: 'tags this -> string -> unit [@@js.set "remoteId"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module RTCIceTransportState : sig
+  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module RTCIceGathererState : sig
+  type t = ([`L_s206_complete[@js "complete"] | `L_s356_gathering[@js "gathering"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+
+(** Provides access to information about the ICE transport layer over which the data is being sent and received. *)
+module[@js.scope "RTCIceTransport"] RTCIceTransport : sig
+  type t = [`EventTarget | `RTCIceTransport] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `RTCIceTransport]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `RTCIceTransport]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `RTCIceTransport ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_gatheringState: 'tags this -> RTCIceGathererState.t [@@js.get "gatheringState"]
+  val get_state: 'tags this -> RTCIceTransportState.t [@@js.get "state"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
 end
 module RTCStatsIceCandidatePairState : sig
   type t = ([`L_s301_failed[@js "failed"] | `L_s349_frozen[@js "frozen"] | `L_s405_in_progress[@js "in-progress"] | `L_s413_inprogress[@js "inprogress"] | `L_s737_succeeded[@js "succeeded"] | `L_s827_waiting[@js "waiting"]] [@js.enum])
@@ -31070,6 +32688,115 @@ module RTCCertificateExpiration : sig
   val set_expires: 'tags this -> DOMTimeStamp.t -> unit [@@js.set "expires"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+
+(** Available only in secure contexts. *)
+module[@js.scope "AuthenticatorResponse"] AuthenticatorResponse : sig
+  type t = [`AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AuthenticatorResponse]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AuthenticatorResponse]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticatorResponse ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_clientDataJSON: 'tags this -> ArrayBuffer.t_0 [@@js.get "clientDataJSON"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module UvmEntry : sig
+  type t = float list
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module UvmEntries : sig
+  type t = UvmEntry.t list
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module CredentialPropertiesOutput : sig
+  type t = [`CredentialPropertiesOutput] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`CredentialPropertiesOutput]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`CredentialPropertiesOutput]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `CredentialPropertiesOutput ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_rk: 'tags this -> bool [@@js.get "rk"]
+  val set_rk: 'tags this -> bool -> unit [@@js.set "rk"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module AuthenticationExtensionsClientOutputs : sig
+  type t = [`AuthenticationExtensionsClientOutputs] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AuthenticationExtensionsClientOutputs]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AuthenticationExtensionsClientOutputs]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticationExtensionsClientOutputs ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_appid: 'tags this -> bool [@@js.get "appid"]
+  val set_appid: 'tags this -> bool -> unit [@@js.set "appid"]
+  val get_credProps: 'tags this -> CredentialPropertiesOutput.t [@@js.get "credProps"]
+  val set_credProps: 'tags this -> CredentialPropertiesOutput.t -> unit [@@js.set "credProps"]
+  val get_uvm: 'tags this -> UvmEntries.t [@@js.get "uvm"]
+  val set_uvm: 'tags this -> UvmEntries.t -> unit [@@js.set "uvm"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** Available only in secure contexts. *)
+module[@js.scope "PublicKeyCredential"] PublicKeyCredential : sig
+  type t = [`Credential | `PublicKeyCredential] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Credential | `PublicKeyCredential]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Credential | `PublicKeyCredential]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PublicKeyCredential ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_rawId: 'tags this -> ArrayBuffer.t_0 [@@js.get "rawId"]
+  val get_response: 'tags this -> AuthenticatorResponse.t [@@js.get "response"]
+  val getClientExtensionResults: 'tags this -> AuthenticationExtensionsClientOutputs.t [@@js.call "getClientExtensionResults"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+  val isUserVerifyingPlatformAuthenticatorAvailable: unit -> bool Promise.t_1 [@@js.global "isUserVerifyingPlatformAuthenticatorAvailable"]
+end
 module PictureInPictureWindowEventMap : sig
   type t = [`PictureInPictureWindowEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -31110,6 +32837,246 @@ module PermissionStatusEventMap : sig
   val set_change: 'tags this -> Event.t -> unit [@@js.set "change"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module[@js.scope "PerformancePaintTiming"] PerformancePaintTiming : sig
+  type t = [`PerformanceEntry | `PerformancePaintTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceEntry | `PerformancePaintTiming]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceEntry | `PerformancePaintTiming]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformancePaintTiming ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module PerformanceObserverInit : sig
+  type t = [`PerformanceObserverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceObserverInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceObserverInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserverInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_buffered: 'tags this -> bool [@@js.get "buffered"]
+  val set_buffered: 'tags this -> bool -> unit [@@js.set "buffered"]
+  val get_entryTypes: 'tags this -> string list [@@js.get "entryTypes"]
+  val set_entryTypes: 'tags this -> string list -> unit [@@js.set "entryTypes"]
+  val get_type: 'tags this -> string [@@js.get "type"]
+  val set_type: 'tags this -> string -> unit [@@js.set "type"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "PerformanceObserverEntryList"] PerformanceObserverEntryList : sig
+  type t = [`PerformanceObserverEntryList] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceObserverEntryList]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceObserverEntryList]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserverEntryList ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val getEntries: 'tags this -> PerformanceEntryList.t [@@js.call "getEntries"]
+  val getEntriesByName: 'tags this -> name:string -> ?type_:string -> unit -> PerformanceEntryList.t [@@js.call "getEntriesByName"]
+  val getEntriesByType: 'tags this -> type_:string -> PerformanceEntryList.t [@@js.call "getEntriesByType"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module[@js.scope "PerformanceObserver"] rec PerformanceObserver : sig
+  type t = [`PerformanceObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceObserver]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceObserver]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserver ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
+  val observe: 'tags this -> ?options:PerformanceObserverInit.t -> unit -> unit [@@js.call "observe"]
+  val takeRecords: 'tags this -> PerformanceEntryList.t [@@js.call "takeRecords"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: PerformanceObserverCallback.t -> t [@@js.create]
+  val supportedEntryTypes: unit -> string list [@@js.get "supportedEntryTypes"]
+end
+and PerformanceObserverCallback : sig
+  type t = [`PerformanceObserverCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceObserverCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceObserverCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserverCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> entries:PerformanceObserverEntryList.t -> observer:PerformanceObserver.t -> unit [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "PerformanceServerTiming"] PerformanceServerTiming : sig
+  type t = [`PerformanceServerTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceServerTiming]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceServerTiming]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceServerTiming ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_description: 'tags this -> string [@@js.get "description"]
+  val get_duration: 'tags this -> DOMHighResTimeStamp.t [@@js.get "duration"]
+  val get_name: 'tags this -> string [@@js.get "name"]
+  val toJSON: 'tags this -> any [@@js.call "toJSON"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** Enables retrieval and analysis of detailed network timing data regarding the loading of an application's resources. An application can use the timing metrics to determine, for example, the length of time it takes to fetch a specific resource, such as an XMLHttpRequest, <SVG>, image, or script. *)
+module[@js.scope "PerformanceResourceTiming"] PerformanceResourceTiming : sig
+  type t = [`PerformanceEntry | `PerformanceResourceTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceEntry | `PerformanceResourceTiming]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceEntry | `PerformanceResourceTiming]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceResourceTiming ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_connectEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "connectEnd"]
+  val get_connectStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "connectStart"]
+  val get_decodedBodySize: 'tags this -> float [@@js.get "decodedBodySize"]
+  val get_domainLookupEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domainLookupEnd"]
+  val get_domainLookupStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domainLookupStart"]
+  val get_encodedBodySize: 'tags this -> float [@@js.get "encodedBodySize"]
+  val get_fetchStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "fetchStart"]
+  val get_initiatorType: 'tags this -> string [@@js.get "initiatorType"]
+  val get_nextHopProtocol: 'tags this -> string [@@js.get "nextHopProtocol"]
+  val get_redirectEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "redirectEnd"]
+  val get_redirectStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "redirectStart"]
+  val get_requestStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "requestStart"]
+  val get_responseEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "responseEnd"]
+  val get_responseStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "responseStart"]
+  val get_secureConnectionStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "secureConnectionStart"]
+  val get_serverTiming: 'tags this -> PerformanceServerTiming.t list [@@js.get "serverTiming"]
+  val get_transferSize: 'tags this -> float [@@js.get "transferSize"]
+  val get_workerStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "workerStart"]
+  val toJSON: 'tags this -> any [@@js.call "toJSON"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module NavigationType : sig
+  type t = ([`L_s144_back_forward[@js "back_forward"] | `L_s514_navigate[@js "navigate"] | `L_s609_prerender[@js "prerender"] | `L_s640_reload[@js "reload"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+
+(** Provides methods and properties to store and retrieve metrics regarding the browser's document navigation events. For example, this interface can be used to determine how much time it takes to load or unload a document. *)
+module[@js.scope "PerformanceNavigationTiming"] PerformanceNavigationTiming : sig
+  type t = [`PerformanceEntry | `PerformanceNavigationTiming | `PerformanceResourceTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceEntry | `PerformanceNavigationTiming | `PerformanceResourceTiming]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceEntry | `PerformanceNavigationTiming | `PerformanceResourceTiming]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceNavigationTiming ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_domComplete: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domComplete"]
+  val get_domContentLoadedEventEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domContentLoadedEventEnd"]
+  val get_domContentLoadedEventStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domContentLoadedEventStart"]
+  val get_domInteractive: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domInteractive"]
+  val get_loadEventEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "loadEventEnd"]
+  val get_loadEventStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "loadEventStart"]
+  val get_redirectCount: 'tags this -> float [@@js.get "redirectCount"]
+  val get_type: 'tags this -> NavigationType.t [@@js.get "type"]
+  val get_unloadEventEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "unloadEventEnd"]
+  val get_unloadEventStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "unloadEventStart"]
+  val toJSON: 'tags this -> any [@@js.call "toJSON"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module[@js.scope "PerformanceEventTiming"] PerformanceEventTiming : sig
+  type t = [`PerformanceEntry | `PerformanceEventTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PerformanceEntry | `PerformanceEventTiming]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PerformanceEntry | `PerformanceEventTiming]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceEventTiming ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_cancelable: 'tags this -> bool [@@js.get "cancelable"]
+  val get_processingEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "processingEnd"]
+  val get_processingStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "processingStart"]
+  val get_target: 'tags this -> Node.t or_null [@@js.get "target"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
 module PerformanceEventMap : sig
   type t = [`PerformanceEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -31149,6 +33116,203 @@ module PaymentRequestEventMap : sig
   val get_paymentmethodchange: 'tags this -> Event.t [@@js.get "paymentmethodchange"]
   val set_paymentmethodchange: 'tags this -> Event.t -> unit [@@js.set "paymentmethodchange"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module PaymentValidationErrors : sig
+  type t = [`PaymentValidationErrors] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PaymentValidationErrors]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PaymentValidationErrors]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PaymentValidationErrors ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_error: 'tags this -> string [@@js.get "error"]
+  val set_error: 'tags this -> string -> unit [@@js.set "error"]
+  val get_paymentMethod: 'tags this -> any [@@js.get "paymentMethod"]
+  val set_paymentMethod: 'tags this -> any -> unit [@@js.set "paymentMethod"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module PaymentComplete : sig
+  type t = ([`L_s300_fail[@js "fail"] | `L_s738_success[@js "success"] | `L_s796_unknown[@js "unknown"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+
+(**
+  This Payment Request API interface is returned after a user selects a payment method and approves a payment request.
+  Available only in secure contexts.
+*)
+module[@js.scope "PaymentResponse"] PaymentResponse : sig
+  type t = [`EventTarget | `PaymentResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `PaymentResponse]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `PaymentResponse]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PaymentResponse ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_details: 'tags this -> any [@@js.get "details"]
+  val get_methodName: 'tags this -> string [@@js.get "methodName"]
+  val get_requestId: 'tags this -> string [@@js.get "requestId"]
+  val complete: 'tags this -> ?result:PaymentComplete.t -> unit -> unit Promise.t_1 [@@js.call "complete"]
+  val retry: 'tags this -> ?errorFields:PaymentValidationErrors.t -> unit -> unit Promise.t_1 [@@js.call "retry"]
+  val toJSON: 'tags this -> any [@@js.call "toJSON"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module PaymentMethodData : sig
+  type t = [`PaymentMethodData] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PaymentMethodData]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PaymentMethodData]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PaymentMethodData ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_data: 'tags this -> any [@@js.get "data"]
+  val set_data: 'tags this -> any -> unit [@@js.set "data"]
+  val get_supportedMethods: 'tags this -> string [@@js.get "supportedMethods"]
+  val set_supportedMethods: 'tags this -> string -> unit [@@js.set "supportedMethods"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module PaymentDetailsInit : sig
+  type t = [`PaymentDetailsBase | `PaymentDetailsInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PaymentDetailsBase | `PaymentDetailsInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PaymentDetailsBase | `PaymentDetailsInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PaymentDetailsInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_id: 'tags this -> string [@@js.get "id"]
+  val set_id: 'tags this -> string -> unit [@@js.set "id"]
+  val get_total: 'tags this -> PaymentItem.t [@@js.get "total"]
+  val set_total: 'tags this -> PaymentItem.t -> unit [@@js.set "total"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(**
+  This Payment Request API interface is the primary access point into the API, and lets web content and apps accept payments from the end user.
+  Available only in secure contexts.
+*)
+module[@js.scope "PaymentRequest"] PaymentRequest : sig
+  type t = [`EventTarget | `PaymentRequest] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `PaymentRequest]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `PaymentRequest]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PaymentRequest ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_id: 'tags this -> string [@@js.get "id"]
+  val get_onpaymentmethodchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onpaymentmethodchange"]
+  val set_onpaymentmethodchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onpaymentmethodchange"]
+  val abort: 'tags this -> unit Promise.t_1 [@@js.call "abort"]
+  val canMakePayment: 'tags this -> bool Promise.t_1 [@@js.call "canMakePayment"]
+  val show: 'tags this -> ?detailsPromise:PaymentDetailsUpdate.t -> unit -> PaymentResponse.t Promise.t_1 [@@js.call "show"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PaymentRequestEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PaymentRequestEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: methodData:PaymentMethodData.t list -> details:PaymentDetailsInit.t -> t [@@js.create]
+end
+module[@js.scope "OverconstrainedError"] OverconstrainedError : sig
+  type t = [`OverconstrainedError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`OverconstrainedError]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`OverconstrainedError]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `OverconstrainedError ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_constraint: 'tags this -> string [@@js.get "constraint"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: constraint_:string -> ?message:string -> unit -> t [@@js.create]
 end
 
 (** <option> elements and inherits all classes and methods of the HTMLElement interface. *)
@@ -31332,6 +33496,1638 @@ module OfflineAudioContextEventMap : sig
   val set_complete: 'tags this -> OfflineAudioCompletionEvent.t -> unit [@@js.set "complete"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module OfflineAudioContextOptions : sig
+  type t = [`OfflineAudioContextOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`OfflineAudioContextOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`OfflineAudioContextOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `OfflineAudioContextOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_length: 'tags this -> float [@@js.get "length"]
+  val set_length: 'tags this -> float -> unit [@@js.set "length"]
+  val get_numberOfChannels: 'tags this -> float [@@js.get "numberOfChannels"]
+  val set_numberOfChannels: 'tags this -> float -> unit [@@js.set "numberOfChannels"]
+  val get_sampleRate: 'tags this -> float [@@js.get "sampleRate"]
+  val set_sampleRate: 'tags this -> float -> unit [@@js.set "sampleRate"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module OverSampleType : sig
+  type t = ([`L_s2_2x[@js "2x"] | `L_s3_4x[@js "4x"] | `L_s528_none[@js "none"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module ChannelInterpretation : sig
+  type t = ([`L_s258_discrete[@js "discrete"] | `L_s715_speakers[@js "speakers"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module ChannelCountMode : sig
+  type t = ([`L_s194_clamped_max[@js "clamped-max"] | `L_s293_explicit[@js "explicit"] | `L_s482_max[@js "max"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module AudioNodeOptions : sig
+  type t = [`AudioNodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioNodeOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_channelCount: 'tags this -> float [@@js.get "channelCount"]
+  val set_channelCount: 'tags this -> float -> unit [@@js.set "channelCount"]
+  val get_channelCountMode: 'tags this -> ChannelCountMode.t [@@js.get "channelCountMode"]
+  val set_channelCountMode: 'tags this -> ChannelCountMode.t -> unit [@@js.set "channelCountMode"]
+  val get_channelInterpretation: 'tags this -> ChannelInterpretation.t [@@js.get "channelInterpretation"]
+  val set_channelInterpretation: 'tags this -> ChannelInterpretation.t -> unit [@@js.set "channelInterpretation"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module WaveShaperOptions : sig
+  type t = [`AudioNodeOptions | `WaveShaperOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `WaveShaperOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `WaveShaperOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WaveShaperOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_curve: 'tags this -> (Float32Array.t_0, float) or_array [@@js.get "curve"]
+  val set_curve: 'tags this -> (Float32Array.t_0, float) or_array -> unit [@@js.set "curve"]
+  val get_oversample: 'tags this -> OverSampleType.t [@@js.get "oversample"]
+  val set_oversample: 'tags this -> OverSampleType.t -> unit [@@js.set "oversample"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module StereoPannerOptions : sig
+  type t = [`AudioNodeOptions | `StereoPannerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `StereoPannerOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `StereoPannerOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `StereoPannerOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_pan: 'tags this -> float [@@js.get "pan"]
+  val set_pan: 'tags this -> float -> unit [@@js.set "pan"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module PanningModelType : sig
+  type t = ([`L_s286_equalpower[@js "equalpower"] | `L_s30_HRTF[@js "HRTF"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module DistanceModelType : sig
+  type t = ([`L_s294_exponential[@js "exponential"] | `L_s424_inverse[@js "inverse"] | `L_s449_linear[@js "linear"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module PannerOptions : sig
+  type t = [`AudioNodeOptions | `PannerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `PannerOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `PannerOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PannerOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_coneInnerAngle: 'tags this -> float [@@js.get "coneInnerAngle"]
+  val set_coneInnerAngle: 'tags this -> float -> unit [@@js.set "coneInnerAngle"]
+  val get_coneOuterAngle: 'tags this -> float [@@js.get "coneOuterAngle"]
+  val set_coneOuterAngle: 'tags this -> float -> unit [@@js.set "coneOuterAngle"]
+  val get_coneOuterGain: 'tags this -> float [@@js.get "coneOuterGain"]
+  val set_coneOuterGain: 'tags this -> float -> unit [@@js.set "coneOuterGain"]
+  val get_distanceModel: 'tags this -> DistanceModelType.t [@@js.get "distanceModel"]
+  val set_distanceModel: 'tags this -> DistanceModelType.t -> unit [@@js.set "distanceModel"]
+  val get_maxDistance: 'tags this -> float [@@js.get "maxDistance"]
+  val set_maxDistance: 'tags this -> float -> unit [@@js.set "maxDistance"]
+  val get_orientationX: 'tags this -> float [@@js.get "orientationX"]
+  val set_orientationX: 'tags this -> float -> unit [@@js.set "orientationX"]
+  val get_orientationY: 'tags this -> float [@@js.get "orientationY"]
+  val set_orientationY: 'tags this -> float -> unit [@@js.set "orientationY"]
+  val get_orientationZ: 'tags this -> float [@@js.get "orientationZ"]
+  val set_orientationZ: 'tags this -> float -> unit [@@js.set "orientationZ"]
+  val get_panningModel: 'tags this -> PanningModelType.t [@@js.get "panningModel"]
+  val set_panningModel: 'tags this -> PanningModelType.t -> unit [@@js.set "panningModel"]
+  val get_positionX: 'tags this -> float [@@js.get "positionX"]
+  val set_positionX: 'tags this -> float -> unit [@@js.set "positionX"]
+  val get_positionY: 'tags this -> float [@@js.get "positionY"]
+  val set_positionY: 'tags this -> float -> unit [@@js.set "positionY"]
+  val get_positionZ: 'tags this -> float [@@js.get "positionZ"]
+  val set_positionZ: 'tags this -> float -> unit [@@js.set "positionZ"]
+  val get_refDistance: 'tags this -> float [@@js.get "refDistance"]
+  val set_refDistance: 'tags this -> float -> unit [@@js.set "refDistance"]
+  val get_rolloffFactor: 'tags this -> float [@@js.get "rolloffFactor"]
+  val set_rolloffFactor: 'tags this -> float -> unit [@@js.set "rolloffFactor"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module PeriodicWaveConstraints : sig
+  type t = [`PeriodicWaveConstraints] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PeriodicWaveConstraints]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PeriodicWaveConstraints]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PeriodicWaveConstraints ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_disableNormalization: 'tags this -> bool [@@js.get "disableNormalization"]
+  val set_disableNormalization: 'tags this -> bool -> unit [@@js.set "disableNormalization"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module PeriodicWaveOptions : sig
+  type t = [`PeriodicWaveConstraints | `PeriodicWaveOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PeriodicWaveConstraints | `PeriodicWaveOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PeriodicWaveConstraints | `PeriodicWaveOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PeriodicWaveOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_imag: 'tags this -> (Float32Array.t_0, float) or_array [@@js.get "imag"]
+  val set_imag: 'tags this -> (Float32Array.t_0, float) or_array -> unit [@@js.set "imag"]
+  val get_real: 'tags this -> (Float32Array.t_0, float) or_array [@@js.get "real"]
+  val set_real: 'tags this -> (Float32Array.t_0, float) or_array -> unit [@@js.set "real"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module OscillatorType : sig
+  type t = ([`L_s226_custom[@js "custom"] | `L_s672_sawtooth[@js "sawtooth"] | `L_s700_sine[@js "sine"] | `L_s717_square[@js "square"] | `L_s786_triangle[@js "triangle"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module IIRFilterOptions : sig
+  type t = [`AudioNodeOptions | `IIRFilterOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `IIRFilterOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `IIRFilterOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `IIRFilterOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_feedback: 'tags this -> float list [@@js.get "feedback"]
+  val set_feedback: 'tags this -> float list -> unit [@@js.set "feedback"]
+  val get_feedforward: 'tags this -> float list [@@js.get "feedforward"]
+  val set_feedforward: 'tags this -> float list -> unit [@@js.set "feedforward"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module GainOptions : sig
+  type t = [`AudioNodeOptions | `GainOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `GainOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `GainOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `GainOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_gain: 'tags this -> float [@@js.get "gain"]
+  val set_gain: 'tags this -> float -> unit [@@js.set "gain"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module DynamicsCompressorOptions : sig
+  type t = [`AudioNodeOptions | `DynamicsCompressorOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `DynamicsCompressorOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `DynamicsCompressorOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DynamicsCompressorOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_attack: 'tags this -> float [@@js.get "attack"]
+  val set_attack: 'tags this -> float -> unit [@@js.set "attack"]
+  val get_knee: 'tags this -> float [@@js.get "knee"]
+  val set_knee: 'tags this -> float -> unit [@@js.set "knee"]
+  val get_ratio: 'tags this -> float [@@js.get "ratio"]
+  val set_ratio: 'tags this -> float -> unit [@@js.set "ratio"]
+  val get_release: 'tags this -> float [@@js.get "release"]
+  val set_release: 'tags this -> float -> unit [@@js.set "release"]
+  val get_threshold: 'tags this -> float [@@js.get "threshold"]
+  val set_threshold: 'tags this -> float -> unit [@@js.set "threshold"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module DelayOptions : sig
+  type t = [`AudioNodeOptions | `DelayOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `DelayOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `DelayOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DelayOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_delayTime: 'tags this -> float [@@js.get "delayTime"]
+  val set_delayTime: 'tags this -> float -> unit [@@js.set "delayTime"]
+  val get_maxDelayTime: 'tags this -> float [@@js.get "maxDelayTime"]
+  val set_maxDelayTime: 'tags this -> float -> unit [@@js.set "maxDelayTime"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module DecodeSuccessCallback : sig
+  type t = [`DecodeSuccessCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`DecodeSuccessCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`DecodeSuccessCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DecodeSuccessCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> decodedData:AudioBuffer.t -> unit [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module DecodeErrorCallback : sig
+  type t = [`DecodeErrorCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`DecodeErrorCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`DecodeErrorCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DecodeErrorCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> error:DOMException.t -> unit [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module ConvolverOptions : sig
+  type t = [`AudioNodeOptions | `ConvolverOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `ConvolverOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `ConvolverOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ConvolverOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_buffer: 'tags this -> AudioBuffer.t or_null [@@js.get "buffer"]
+  val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
+  val get_disableNormalization: 'tags this -> bool [@@js.get "disableNormalization"]
+  val set_disableNormalization: 'tags this -> bool -> unit [@@js.set "disableNormalization"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module ConstantSourceOptions : sig
+  type t = [`ConstantSourceOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ConstantSourceOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ConstantSourceOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ConstantSourceOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_offset: 'tags this -> float [@@js.get "offset"]
+  val set_offset: 'tags this -> float -> unit [@@js.set "offset"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module ChannelSplitterOptions : sig
+  type t = [`AudioNodeOptions | `ChannelSplitterOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `ChannelSplitterOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `ChannelSplitterOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ChannelSplitterOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_numberOfOutputs: 'tags this -> float [@@js.get "numberOfOutputs"]
+  val set_numberOfOutputs: 'tags this -> float -> unit [@@js.set "numberOfOutputs"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module ChannelMergerOptions : sig
+  type t = [`AudioNodeOptions | `ChannelMergerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `ChannelMergerOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `ChannelMergerOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ChannelMergerOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_numberOfInputs: 'tags this -> float [@@js.get "numberOfInputs"]
+  val set_numberOfInputs: 'tags this -> float -> unit [@@js.set "numberOfInputs"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module BiquadFilterType : sig
+  type t = ([`L_s109_allpass[@js "allpass"] | `L_s148_bandpass[@js "bandpass"] | `L_s383_highpass[@js "highpass"] | `L_s384_highshelf[@js "highshelf"] | `L_s468_lowpass[@js "lowpass"] | `L_s469_lowshelf[@js "lowshelf"] | `L_s533_notch[@js "notch"] | `L_s574_peaking[@js "peaking"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module BiquadFilterOptions : sig
+  type t = [`AudioNodeOptions | `BiquadFilterOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `BiquadFilterOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `BiquadFilterOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `BiquadFilterOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_Q: 'tags this -> float [@@js.get "Q"]
+  val set_Q: 'tags this -> float -> unit [@@js.set "Q"]
+  val get_detune: 'tags this -> float [@@js.get "detune"]
+  val set_detune: 'tags this -> float -> unit [@@js.set "detune"]
+  val get_frequency: 'tags this -> float [@@js.get "frequency"]
+  val set_frequency: 'tags this -> float -> unit [@@js.set "frequency"]
+  val get_gain: 'tags this -> float [@@js.get "gain"]
+  val set_gain: 'tags this -> float -> unit [@@js.set "gain"]
+  val get_type: 'tags this -> BiquadFilterType.t [@@js.get "type"]
+  val set_type: 'tags this -> BiquadFilterType.t -> unit [@@js.set "type"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module WorkletOptions : sig
+  type t = [`WorkletOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WorkletOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WorkletOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WorkletOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_credentials: 'tags this -> RequestCredentials.t [@@js.get "credentials"]
+  val set_credentials: 'tags this -> RequestCredentials.t -> unit [@@js.set "credentials"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** Available only in secure contexts. *)
+module[@js.scope "Worklet"] Worklet : sig
+  type t = [`Worklet] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Worklet]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Worklet]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `Worklet ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    Loads and executes the module script given by moduleURL into all of worklet's global scopes. It can also create additional global scopes as part of this process, depending on the worklet type. The returned promise will fulfill once the script has been successfully loaded and run in all global scopes.
+    
+    The credentials option can be set to a credentials mode to modify the script-fetching process. It defaults to "same-origin".
+    
+    Any failures in fetching the script or its dependencies will cause the returned promise to be rejected with an "AbortError" DOMException. Any errors in parsing the script or its dependencies will cause the returned promise to be rejected with the exception generated during parsing.
+  *)
+  val addModule: 'tags this -> moduleURL:URL.t or_string -> ?options:WorkletOptions.t -> unit -> unit Promise.t_1 [@@js.call "addModule"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** Available only in secure contexts. *)
+module[@js.scope "AudioWorklet"] AudioWorklet : sig
+  type t = [`AudioWorklet | `Worklet] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioWorklet | `Worklet]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioWorklet | `Worklet]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioWorklet ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AutomationRate : sig
+  type t = ([`L_s427_k_rate[@js "k-rate"] | `L_s92_a_rate[@js "a-rate"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+
+(** The Web Audio API's AudioParam interface represents an audio-related parameter, usually a parameter of an AudioNode (such as GainNode.gain). *)
+module[@js.scope "AudioParam"] AudioParam : sig
+  type t = [`AudioParam] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioParam]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioParam]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioParam ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val setValueCurveAtTime: 'tags this -> values:float Iterable.t_1 -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
+  val get_automationRate: 'tags this -> AutomationRate.t [@@js.get "automationRate"]
+  val set_automationRate: 'tags this -> AutomationRate.t -> unit [@@js.set "automationRate"]
+  val get_defaultValue: 'tags this -> float [@@js.get "defaultValue"]
+  val get_maxValue: 'tags this -> float [@@js.get "maxValue"]
+  val get_minValue: 'tags this -> float [@@js.get "minValue"]
+  val get_value: 'tags this -> float [@@js.get "value"]
+  val set_value: 'tags this -> float -> unit [@@js.set "value"]
+  val cancelAndHoldAtTime: 'tags this -> cancelTime:float -> t [@@js.call "cancelAndHoldAtTime"]
+  val cancelScheduledValues: 'tags this -> cancelTime:float -> t [@@js.call "cancelScheduledValues"]
+  val exponentialRampToValueAtTime: 'tags this -> value:float -> endTime:float -> t [@@js.call "exponentialRampToValueAtTime"]
+  val linearRampToValueAtTime: 'tags this -> value:float -> endTime:float -> t [@@js.call "linearRampToValueAtTime"]
+  val setTargetAtTime: 'tags this -> target:float -> startTime:float -> timeConstant:float -> t [@@js.call "setTargetAtTime"]
+  val setValueAtTime: 'tags this -> value:float -> startTime:float -> t [@@js.call "setValueAtTime"]
+  val setValueCurveAtTime': 'tags this -> values:(Float32Array.t_0, float) or_array -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** The position and orientation of the unique person listening to the audio scene, and is used in audio spatialization. All PannerNodes spatialize in relation to the AudioListener stored in the BaseAudioContext.listener attribute. *)
+module[@js.scope "AudioListener"] AudioListener : sig
+  type t = [`AudioListener] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioListener]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioListener]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioListener ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_forwardX: 'tags this -> AudioParam.t [@@js.get "forwardX"]
+  val get_forwardY: 'tags this -> AudioParam.t [@@js.get "forwardY"]
+  val get_forwardZ: 'tags this -> AudioParam.t [@@js.get "forwardZ"]
+  val get_positionX: 'tags this -> AudioParam.t [@@js.get "positionX"]
+  val get_positionY: 'tags this -> AudioParam.t [@@js.get "positionY"]
+  val get_positionZ: 'tags this -> AudioParam.t [@@js.get "positionZ"]
+  val get_upX: 'tags this -> AudioParam.t [@@js.get "upX"]
+  val get_upY: 'tags this -> AudioParam.t [@@js.get "upY"]
+  val get_upZ: 'tags this -> AudioParam.t [@@js.get "upZ"]
+  
+  (** @deprecated  *)
+  val setOrientation: 'tags this -> x:float -> y:float -> z:float -> xUp:float -> yUp:float -> zUp:float -> unit [@@js.call "setOrientation"]
+  
+  (** @deprecated  *)
+  val setPosition: 'tags this -> x:float -> y:float -> z:float -> unit [@@js.call "setPosition"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module AudioContextState : sig
+  type t = ([`L_s199_closed[@js "closed"] | `L_s668_running[@js "running"] | `L_s742_suspended[@js "suspended"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module AudioBufferSourceOptions : sig
+  type t = [`AudioBufferSourceOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioBufferSourceOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioBufferSourceOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioBufferSourceOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_buffer: 'tags this -> AudioBuffer.t or_null [@@js.get "buffer"]
+  val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
+  val get_detune: 'tags this -> float [@@js.get "detune"]
+  val set_detune: 'tags this -> float -> unit [@@js.set "detune"]
+  val get_loop: 'tags this -> bool [@@js.get "loop"]
+  val set_loop: 'tags this -> bool -> unit [@@js.set "loop"]
+  val get_loopEnd: 'tags this -> float [@@js.get "loopEnd"]
+  val set_loopEnd: 'tags this -> float -> unit [@@js.set "loopEnd"]
+  val get_loopStart: 'tags this -> float [@@js.get "loopStart"]
+  val set_loopStart: 'tags this -> float -> unit [@@js.set "loopStart"]
+  val get_playbackRate: 'tags this -> float [@@js.get "playbackRate"]
+  val set_playbackRate: 'tags this -> float -> unit [@@js.set "playbackRate"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module AnalyserOptions : sig
+  type t = [`AnalyserOptions | `AudioNodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AnalyserOptions | `AudioNodeOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AnalyserOptions | `AudioNodeOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AnalyserOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_fftSize: 'tags this -> float [@@js.get "fftSize"]
+  val set_fftSize: 'tags this -> float -> unit [@@js.set "fftSize"]
+  val get_maxDecibels: 'tags this -> float [@@js.get "maxDecibels"]
+  val set_maxDecibels: 'tags this -> float -> unit [@@js.set "maxDecibels"]
+  val get_minDecibels: 'tags this -> float [@@js.get "minDecibels"]
+  val set_minDecibels: 'tags this -> float -> unit [@@js.set "minDecibels"]
+  val get_smoothingTimeConstant: 'tags this -> float [@@js.get "smoothingTimeConstant"]
+  val set_smoothingTimeConstant: 'tags this -> float -> unit [@@js.set "smoothingTimeConstant"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** A node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations. *)
+module[@js.scope "AnalyserNode"] rec AnalyserNode : sig
+  type t = [`AnalyserNode | `AudioNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AnalyserNode | `AudioNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AnalyserNode | `AudioNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AnalyserNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_fftSize: 'tags this -> float [@@js.get "fftSize"]
+  val set_fftSize: 'tags this -> float -> unit [@@js.set "fftSize"]
+  val get_frequencyBinCount: 'tags this -> float [@@js.get "frequencyBinCount"]
+  val get_maxDecibels: 'tags this -> float [@@js.get "maxDecibels"]
+  val set_maxDecibels: 'tags this -> float -> unit [@@js.set "maxDecibels"]
+  val get_minDecibels: 'tags this -> float [@@js.get "minDecibels"]
+  val set_minDecibels: 'tags this -> float -> unit [@@js.set "minDecibels"]
+  val get_smoothingTimeConstant: 'tags this -> float [@@js.get "smoothingTimeConstant"]
+  val set_smoothingTimeConstant: 'tags this -> float -> unit [@@js.set "smoothingTimeConstant"]
+  val getByteFrequencyData: 'tags this -> array:Uint8Array.t_0 -> unit [@@js.call "getByteFrequencyData"]
+  val getByteTimeDomainData: 'tags this -> array:Uint8Array.t_0 -> unit [@@js.call "getByteTimeDomainData"]
+  val getFloatFrequencyData: 'tags this -> array:Float32Array.t_0 -> unit [@@js.call "getFloatFrequencyData"]
+  val getFloatTimeDomainData: 'tags this -> array:Float32Array.t_0 -> unit [@@js.call "getFloatTimeDomainData"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:AnalyserOptions.t -> unit -> t [@@js.create]
+end
+
+(** An AudioScheduledSourceNode which represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It's especially useful for playing back audio which has particularly stringent timing accuracy requirements, such as for sounds that must match a specific rhythm and can be kept in memory rather than being played from disk or the network. *)
+and[@js.scope "AudioBufferSourceNode"] AudioBufferSourceNode : sig
+  type t = [`AudioBufferSourceNode | `AudioNode | `AudioScheduledSourceNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioBufferSourceNode | `AudioNode | `AudioScheduledSourceNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioBufferSourceNode | `AudioNode | `AudioScheduledSourceNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioBufferSourceNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_buffer: 'tags this -> AudioBuffer.t or_null [@@js.get "buffer"]
+  val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
+  val get_detune: 'tags this -> AudioParam.t [@@js.get "detune"]
+  val get_loop: 'tags this -> bool [@@js.get "loop"]
+  val set_loop: 'tags this -> bool -> unit [@@js.set "loop"]
+  val get_loopEnd: 'tags this -> float [@@js.get "loopEnd"]
+  val set_loopEnd: 'tags this -> float -> unit [@@js.set "loopEnd"]
+  val get_loopStart: 'tags this -> float [@@js.get "loopStart"]
+  val set_loopStart: 'tags this -> float -> unit [@@js.set "loopStart"]
+  val get_playbackRate: 'tags this -> AudioParam.t [@@js.get "playbackRate"]
+  val start: 'tags this -> ?when_:float -> ?offset:float -> ?duration:float -> unit -> unit [@@js.call "start"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:AudioBufferSourceOptions.t -> unit -> t [@@js.create]
+end
+
+(** AudioDestinationNode has no output (as it is the output, no more AudioNode can be linked after it in the audio graph) and one input. The number of channels in the input must be between 0 and the maxChannelCount value or an exception is raised. *)
+and[@js.scope "AudioDestinationNode"] AudioDestinationNode : sig
+  type t = [`AudioDestinationNode | `AudioNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioDestinationNode | `AudioNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioDestinationNode | `AudioNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioDestinationNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_maxChannelCount: 'tags this -> float [@@js.get "maxChannelCount"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** A generic interface for representing an audio processing module. Examples include: *)
+and[@js.scope "AudioNode"] AudioNode : sig
+  type t = [`AudioNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_channelCount: 'tags this -> float [@@js.get "channelCount"]
+  val set_channelCount: 'tags this -> float -> unit [@@js.set "channelCount"]
+  val get_channelCountMode: 'tags this -> ChannelCountMode.t [@@js.get "channelCountMode"]
+  val set_channelCountMode: 'tags this -> ChannelCountMode.t -> unit [@@js.set "channelCountMode"]
+  val get_channelInterpretation: 'tags this -> ChannelInterpretation.t [@@js.get "channelInterpretation"]
+  val set_channelInterpretation: 'tags this -> ChannelInterpretation.t -> unit [@@js.set "channelInterpretation"]
+  val get_context: 'tags this -> BaseAudioContext.t [@@js.get "context"]
+  val get_numberOfInputs: 'tags this -> float [@@js.get "numberOfInputs"]
+  val get_numberOfOutputs: 'tags this -> float [@@js.get "numberOfOutputs"]
+  val connect: 'tags this -> destinationNode:t -> ?output:float -> ?input:float -> unit -> t [@@js.call "connect"]
+  val connect': 'tags this -> destinationParam:AudioParam.t -> ?output:float -> unit -> unit [@@js.call "connect"]
+  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
+  val disconnect': 'tags this -> output:float -> unit [@@js.call "disconnect"]
+  val disconnect'': 'tags this -> destinationNode:t -> unit [@@js.call "disconnect"]
+  val disconnect''': 'tags this -> destinationNode:t -> output:float -> unit [@@js.call "disconnect"]
+  val disconnect'''': 'tags this -> destinationNode:t -> output:float -> input:float -> unit [@@js.call "disconnect"]
+  val disconnect''''': 'tags this -> destinationParam:AudioParam.t -> unit [@@js.call "disconnect"]
+  val disconnect'''''': 'tags this -> destinationParam:AudioParam.t -> output:float -> unit [@@js.call "disconnect"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+and[@js.scope "AudioScheduledSourceNode"] AudioScheduledSourceNode : sig
+  type t = [`AudioNode | `AudioScheduledSourceNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `AudioScheduledSourceNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `AudioScheduledSourceNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioScheduledSourceNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_onended: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onended"]
+  val set_onended: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onended"]
+  val start: 'tags this -> ?when_:float -> unit -> unit [@@js.call "start"]
+  val stop: 'tags this -> ?when_:float -> unit -> unit [@@js.call "stop"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+and[@js.scope "BaseAudioContext"] BaseAudioContext : sig
+  type t = [`BaseAudioContext | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`BaseAudioContext | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`BaseAudioContext | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `BaseAudioContext ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val createIIRFilter: 'tags this -> feedforward:float Iterable.t_1 -> feedback:float Iterable.t_1 -> IIRFilterNode.t [@@js.call "createIIRFilter"]
+  val createPeriodicWave: 'tags this -> real:float Iterable.t_1 -> imag:float Iterable.t_1 -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
+  
+  (** Available only in secure contexts. *)
+  val get_audioWorklet: 'tags this -> AudioWorklet.t [@@js.get "audioWorklet"]
+  val get_currentTime: 'tags this -> float [@@js.get "currentTime"]
+  val get_destination: 'tags this -> AudioDestinationNode.t [@@js.get "destination"]
+  val get_listener: 'tags this -> AudioListener.t [@@js.get "listener"]
+  val get_onstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onstatechange"]
+  val set_onstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onstatechange"]
+  val get_sampleRate: 'tags this -> float [@@js.get "sampleRate"]
+  val get_state: 'tags this -> AudioContextState.t [@@js.get "state"]
+  val createAnalyser: 'tags this -> AnalyserNode.t [@@js.call "createAnalyser"]
+  val createBiquadFilter: 'tags this -> BiquadFilterNode.t [@@js.call "createBiquadFilter"]
+  val createBuffer: 'tags this -> numberOfChannels:float -> length:float -> sampleRate:float -> AudioBuffer.t [@@js.call "createBuffer"]
+  val createBufferSource: 'tags this -> AudioBufferSourceNode.t [@@js.call "createBufferSource"]
+  val createChannelMerger: 'tags this -> ?numberOfInputs:float -> unit -> ChannelMergerNode.t [@@js.call "createChannelMerger"]
+  val createChannelSplitter: 'tags this -> ?numberOfOutputs:float -> unit -> ChannelSplitterNode.t [@@js.call "createChannelSplitter"]
+  val createConstantSource: 'tags this -> ConstantSourceNode.t [@@js.call "createConstantSource"]
+  val createConvolver: 'tags this -> ConvolverNode.t [@@js.call "createConvolver"]
+  val createDelay: 'tags this -> ?maxDelayTime:float -> unit -> DelayNode.t [@@js.call "createDelay"]
+  val createDynamicsCompressor: 'tags this -> DynamicsCompressorNode.t [@@js.call "createDynamicsCompressor"]
+  val createGain: 'tags this -> GainNode.t [@@js.call "createGain"]
+  val createIIRFilter': 'tags this -> feedforward:float list -> feedback:float list -> IIRFilterNode.t [@@js.call "createIIRFilter"]
+  val createOscillator: 'tags this -> OscillatorNode.t [@@js.call "createOscillator"]
+  val createPanner: 'tags this -> PannerNode.t [@@js.call "createPanner"]
+  val createPeriodicWave': 'tags this -> real:(Float32Array.t_0, float) or_array -> imag:(Float32Array.t_0, float) or_array -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
+  
+  (** @deprecated  *)
+  val createScriptProcessor: 'tags this -> ?bufferSize:float -> ?numberOfInputChannels:float -> ?numberOfOutputChannels:float -> unit -> ScriptProcessorNode.t [@@js.call "createScriptProcessor"]
+  val createStereoPanner: 'tags this -> StereoPannerNode.t [@@js.call "createStereoPanner"]
+  val createWaveShaper: 'tags this -> WaveShaperNode.t [@@js.call "createWaveShaper"]
+  val decodeAudioData: 'tags this -> audioData:ArrayBuffer.t_0 -> ?successCallback:DecodeSuccessCallback.t or_null -> ?errorCallback:DecodeErrorCallback.t or_null -> unit -> AudioBuffer.t Promise.t_1 [@@js.call "decodeAudioData"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'BaseAudioContextEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'BaseAudioContextEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** A simple low-order filter, and is created using the AudioContext.createBiquadFilter() method. It is an AudioNode that can represent different kinds of filters, tone control devices, and graphic equalizers. *)
+and[@js.scope "BiquadFilterNode"] BiquadFilterNode : sig
+  type t = [`AudioNode | `BiquadFilterNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `BiquadFilterNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `BiquadFilterNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `BiquadFilterNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_Q: 'tags this -> AudioParam.t [@@js.get "Q"]
+  val get_detune: 'tags this -> AudioParam.t [@@js.get "detune"]
+  val get_frequency: 'tags this -> AudioParam.t [@@js.get "frequency"]
+  val get_gain: 'tags this -> AudioParam.t [@@js.get "gain"]
+  val get_type: 'tags this -> BiquadFilterType.t [@@js.get "type"]
+  val set_type: 'tags this -> BiquadFilterType.t -> unit [@@js.set "type"]
+  val getFrequencyResponse: 'tags this -> frequencyHz:Float32Array.t_0 -> magResponse:Float32Array.t_0 -> phaseResponse:Float32Array.t_0 -> unit [@@js.call "getFrequencyResponse"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:BiquadFilterOptions.t -> unit -> t [@@js.create]
+end
+
+(** The ChannelMergerNode interface, often used in conjunction with its opposite, ChannelSplitterNode, reunites different mono inputs into a single output. Each input is used to fill a channel of the output. This is useful for accessing each channels separately, e.g. for performing channel mixing where gain must be separately controlled on each channel. *)
+and[@js.scope "ChannelMergerNode"] ChannelMergerNode : sig
+  type t = [`AudioNode | `ChannelMergerNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `ChannelMergerNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `ChannelMergerNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ChannelMergerNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:ChannelMergerOptions.t -> unit -> t [@@js.create]
+end
+
+(** The ChannelSplitterNode interface, often used in conjunction with its opposite, ChannelMergerNode, separates the different channels of an audio source into a set of mono outputs. This is useful for accessing each channel separately, e.g. for performing channel mixing where gain must be separately controlled on each channel. *)
+and[@js.scope "ChannelSplitterNode"] ChannelSplitterNode : sig
+  type t = [`AudioNode | `ChannelSplitterNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `ChannelSplitterNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `ChannelSplitterNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ChannelSplitterNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:ChannelSplitterOptions.t -> unit -> t [@@js.create]
+end
+and[@js.scope "ConstantSourceNode"] ConstantSourceNode : sig
+  type t = [`AudioNode | `AudioScheduledSourceNode | `ConstantSourceNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `AudioScheduledSourceNode | `ConstantSourceNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `AudioScheduledSourceNode | `ConstantSourceNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ConstantSourceNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_offset: 'tags this -> AudioParam.t [@@js.get "offset"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:ConstantSourceOptions.t -> unit -> t [@@js.create]
+end
+
+(** An AudioNode that performs a Linear Convolution on a given AudioBuffer, often used to achieve a reverb effect. A ConvolverNode always has exactly one input and one output. *)
+and[@js.scope "ConvolverNode"] ConvolverNode : sig
+  type t = [`AudioNode | `ConvolverNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `ConvolverNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `ConvolverNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ConvolverNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_buffer: 'tags this -> AudioBuffer.t or_null [@@js.get "buffer"]
+  val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
+  val get_normalize: 'tags this -> bool [@@js.get "normalize"]
+  val set_normalize: 'tags this -> bool -> unit [@@js.set "normalize"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:ConvolverOptions.t -> unit -> t [@@js.create]
+end
+
+(** A delay-line; an AudioNode audio-processing module that causes a delay between the arrival of an input data and its propagation to the output. *)
+and[@js.scope "DelayNode"] DelayNode : sig
+  type t = [`AudioNode | `DelayNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `DelayNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `DelayNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DelayNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_delayTime: 'tags this -> AudioParam.t [@@js.get "delayTime"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:DelayOptions.t -> unit -> t [@@js.create]
+end
+
+(** Inherits properties from its parent, AudioNode. *)
+and[@js.scope "DynamicsCompressorNode"] DynamicsCompressorNode : sig
+  type t = [`AudioNode | `DynamicsCompressorNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `DynamicsCompressorNode | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `DynamicsCompressorNode | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DynamicsCompressorNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_attack: 'tags this -> AudioParam.t [@@js.get "attack"]
+  val get_knee: 'tags this -> AudioParam.t [@@js.get "knee"]
+  val get_ratio: 'tags this -> AudioParam.t [@@js.get "ratio"]
+  val get_reduction: 'tags this -> float [@@js.get "reduction"]
+  val get_release: 'tags this -> AudioParam.t [@@js.get "release"]
+  val get_threshold: 'tags this -> AudioParam.t [@@js.get "threshold"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:DynamicsCompressorOptions.t -> unit -> t [@@js.create]
+end
+
+(** A change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same number of channels. *)
+and[@js.scope "GainNode"] GainNode : sig
+  type t = [`AudioNode | `EventTarget | `GainNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `EventTarget | `GainNode]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `EventTarget | `GainNode]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `GainNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_gain: 'tags this -> AudioParam.t [@@js.get "gain"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:GainOptions.t -> unit -> t [@@js.create]
+end
+
+(** The IIRFilterNode interface of the Web Audio API is a AudioNode processor which implements a general infinite impulse response (IIR)  filter; this type of filter can be used to implement tone control devices and graphic equalizers as well. It lets the parameters of the filter response be specified, so that it can be tuned as needed. *)
+and[@js.scope "IIRFilterNode"] IIRFilterNode : sig
+  type t = [`AudioNode | `EventTarget | `IIRFilterNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `EventTarget | `IIRFilterNode]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `EventTarget | `IIRFilterNode]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `IIRFilterNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val getFrequencyResponse: 'tags this -> frequencyHz:Float32Array.t_0 -> magResponse:Float32Array.t_0 -> phaseResponse:Float32Array.t_0 -> unit [@@js.call "getFrequencyResponse"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> options:IIRFilterOptions.t -> t [@@js.create]
+end
+
+(** The OscillatorNode interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone. *)
+and[@js.scope "OscillatorNode"] OscillatorNode : sig
+  type t = [`AudioNode | `AudioScheduledSourceNode | `EventTarget | `OscillatorNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `AudioScheduledSourceNode | `EventTarget | `OscillatorNode]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `AudioScheduledSourceNode | `EventTarget | `OscillatorNode]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `OscillatorNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_detune: 'tags this -> AudioParam.t [@@js.get "detune"]
+  val get_frequency: 'tags this -> AudioParam.t [@@js.get "frequency"]
+  val get_type: 'tags this -> OscillatorType.t [@@js.get "type"]
+  val set_type: 'tags this -> OscillatorType.t -> unit [@@js.set "type"]
+  val setPeriodicWave: 'tags this -> periodicWave:PeriodicWave.t -> unit [@@js.call "setPeriodicWave"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:OscillatorOptions.t -> unit -> t [@@js.create]
+end
+and OscillatorOptions : sig
+  type t = [`AudioNodeOptions | `OscillatorOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `OscillatorOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `OscillatorOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `OscillatorOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_detune: 'tags this -> float [@@js.get "detune"]
+  val set_detune: 'tags this -> float -> unit [@@js.set "detune"]
+  val get_frequency: 'tags this -> float [@@js.get "frequency"]
+  val set_frequency: 'tags this -> float -> unit [@@js.set "frequency"]
+  val get_periodicWave: 'tags this -> PeriodicWave.t [@@js.get "periodicWave"]
+  val set_periodicWave: 'tags this -> PeriodicWave.t -> unit [@@js.set "periodicWave"]
+  val get_type: 'tags this -> OscillatorType.t [@@js.get "type"]
+  val set_type: 'tags this -> OscillatorType.t -> unit [@@js.set "type"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** A PannerNode always has exactly one input and one output: the input can be mono or stereo but the output is always stereo (2 channels); you can't have panning effects without at least two audio channels! *)
+and[@js.scope "PannerNode"] PannerNode : sig
+  type t = [`AudioNode | `EventTarget | `PannerNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `EventTarget | `PannerNode]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `EventTarget | `PannerNode]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PannerNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_coneInnerAngle: 'tags this -> float [@@js.get "coneInnerAngle"]
+  val set_coneInnerAngle: 'tags this -> float -> unit [@@js.set "coneInnerAngle"]
+  val get_coneOuterAngle: 'tags this -> float [@@js.get "coneOuterAngle"]
+  val set_coneOuterAngle: 'tags this -> float -> unit [@@js.set "coneOuterAngle"]
+  val get_coneOuterGain: 'tags this -> float [@@js.get "coneOuterGain"]
+  val set_coneOuterGain: 'tags this -> float -> unit [@@js.set "coneOuterGain"]
+  val get_distanceModel: 'tags this -> DistanceModelType.t [@@js.get "distanceModel"]
+  val set_distanceModel: 'tags this -> DistanceModelType.t -> unit [@@js.set "distanceModel"]
+  val get_maxDistance: 'tags this -> float [@@js.get "maxDistance"]
+  val set_maxDistance: 'tags this -> float -> unit [@@js.set "maxDistance"]
+  val get_orientationX: 'tags this -> AudioParam.t [@@js.get "orientationX"]
+  val get_orientationY: 'tags this -> AudioParam.t [@@js.get "orientationY"]
+  val get_orientationZ: 'tags this -> AudioParam.t [@@js.get "orientationZ"]
+  val get_panningModel: 'tags this -> PanningModelType.t [@@js.get "panningModel"]
+  val set_panningModel: 'tags this -> PanningModelType.t -> unit [@@js.set "panningModel"]
+  val get_positionX: 'tags this -> AudioParam.t [@@js.get "positionX"]
+  val get_positionY: 'tags this -> AudioParam.t [@@js.get "positionY"]
+  val get_positionZ: 'tags this -> AudioParam.t [@@js.get "positionZ"]
+  val get_refDistance: 'tags this -> float [@@js.get "refDistance"]
+  val set_refDistance: 'tags this -> float -> unit [@@js.set "refDistance"]
+  val get_rolloffFactor: 'tags this -> float [@@js.get "rolloffFactor"]
+  val set_rolloffFactor: 'tags this -> float -> unit [@@js.set "rolloffFactor"]
+  
+  (** @deprecated  *)
+  val setOrientation: 'tags this -> x:float -> y:float -> z:float -> unit [@@js.call "setOrientation"]
+  
+  (** @deprecated  *)
+  val setPosition: 'tags this -> x:float -> y:float -> z:float -> unit [@@js.call "setPosition"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:PannerOptions.t -> unit -> t [@@js.create]
+end
+
+(** PeriodicWave has no inputs or outputs; it is used to define custom oscillators when calling OscillatorNode.setPeriodicWave(). The PeriodicWave itself is created/returned by AudioContext.createPeriodicWave(). *)
+and[@js.scope "PeriodicWave"] PeriodicWave : sig
+  type t = [`PeriodicWave] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`PeriodicWave]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`PeriodicWave]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `PeriodicWave ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:PeriodicWaveOptions.t -> unit -> t [@@js.create]
+end
+
+(** Allows the generation, processing, or analyzing of audio using JavaScript. *)
+and[@js.scope "ScriptProcessorNode"] ScriptProcessorNode : sig
+  type t = [`AudioNode | `EventTarget | `ScriptProcessorNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `EventTarget | `ScriptProcessorNode]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `EventTarget | `ScriptProcessorNode]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ScriptProcessorNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** @deprecated  *)
+  val get_bufferSize: 'tags this -> float [@@js.get "bufferSize"]
+  
+  (** @deprecated  *)
+  val get_onaudioprocess: 'tags this -> (this:t -> ev:AudioProcessingEvent.t -> any) or_null [@@js.get "onaudioprocess"]
+  
+  (** @deprecated  *)
+  val set_onaudioprocess: 'tags this -> (this:t -> ev:AudioProcessingEvent.t -> any) or_null -> unit [@@js.set "onaudioprocess"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ScriptProcessorNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ScriptProcessorNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** The pan property takes a unitless value between -1 (full left pan) and 1 (full right pan). This interface was introduced as a much simpler way to apply a simple panning effect than having to use a full PannerNode. *)
+and[@js.scope "StereoPannerNode"] StereoPannerNode : sig
+  type t = [`AudioNode | `EventTarget | `StereoPannerNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `EventTarget | `StereoPannerNode]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `EventTarget | `StereoPannerNode]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `StereoPannerNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_pan: 'tags this -> AudioParam.t [@@js.get "pan"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:StereoPannerOptions.t -> unit -> t [@@js.create]
+end
+
+(** A WaveShaperNode always has exactly one input and one output. *)
+and[@js.scope "WaveShaperNode"] WaveShaperNode : sig
+  type t = [`AudioNode | `EventTarget | `WaveShaperNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNode | `EventTarget | `WaveShaperNode]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNode | `EventTarget | `WaveShaperNode]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WaveShaperNode ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_curve: 'tags this -> Float32Array.t_0 or_null [@@js.get "curve"]
+  val set_curve: 'tags this -> Float32Array.t_0 or_null -> unit [@@js.set "curve"]
+  val get_oversample: 'tags this -> OverSampleType.t [@@js.get "oversample"]
+  val set_oversample: 'tags this -> OverSampleType.t -> unit [@@js.set "oversample"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: context:BaseAudioContext.t -> ?options:WaveShaperOptions.t -> unit -> t [@@js.create]
+end
+
+(** An AudioContext interface representing an audio-processing graph built from linked together AudioNodes. In contrast with a standard AudioContext, an OfflineAudioContext doesn't render the audio to the device hardware; instead, it generates it, as fast as it can, and outputs the result to an AudioBuffer. *)
+module[@js.scope "OfflineAudioContext"] OfflineAudioContext : sig
+  type t = [`BaseAudioContext | `EventTarget | `OfflineAudioContext] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`BaseAudioContext | `EventTarget | `OfflineAudioContext]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`BaseAudioContext | `EventTarget | `OfflineAudioContext]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `OfflineAudioContext ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_length: 'tags this -> float [@@js.get "length"]
+  val get_oncomplete: 'tags this -> (this:t -> ev:OfflineAudioCompletionEvent.t -> any) or_null [@@js.get "oncomplete"]
+  val set_oncomplete: 'tags this -> (this:t -> ev:OfflineAudioCompletionEvent.t -> any) or_null -> unit [@@js.set "oncomplete"]
+  val resume: 'tags this -> unit Promise.t_1 [@@js.call "resume"]
+  val startRendering: 'tags this -> AudioBuffer.t Promise.t_1 [@@js.call "startRendering"]
+  val suspend: 'tags this -> suspendTime:float -> unit Promise.t_1 [@@js.call "suspend"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'OfflineAudioContextEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'OfflineAudioContextEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: OfflineAudioContextOptions.t -> t [@@js.create]
+  val create': numberOfChannels:float -> length:float -> sampleRate:float -> t [@@js.create]
+end
 module OES_fbo_render_mipmap : sig
   type t = [`OES_fbo_render_mipmap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -31376,6 +35172,177 @@ module NotificationEventMap : sig
   val set_show: 'tags this -> Event.t -> unit [@@js.set "show"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module MutationRecordType : sig
+  type t = ([`L_s132_attributes[@js "attributes"] | `L_s189_characterData[@js "characterData"] | `L_s191_childList[@js "childList"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+
+(** A MutationRecord represents an individual DOM mutation. It is the object that is passed to MutationObserver's callback. *)
+module[@js.scope "MutationRecord"] MutationRecord : sig
+  type t = [`MutationRecord] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`MutationRecord]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`MutationRecord]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `MutationRecord ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Return the nodes added and removed respectively. *)
+  val get_addedNodes: 'tags this -> NodeList.t [@@js.get "addedNodes"]
+  
+  (** Returns the local name of the changed attribute, and null otherwise. *)
+  val get_attributeName: 'tags this -> string or_null [@@js.get "attributeName"]
+  
+  (** Returns the namespace of the changed attribute, and null otherwise. *)
+  val get_attributeNamespace: 'tags this -> string or_null [@@js.get "attributeNamespace"]
+  
+  (** Return the previous and next sibling respectively of the added or removed nodes, and null otherwise. *)
+  val get_nextSibling: 'tags this -> Node.t or_null [@@js.get "nextSibling"]
+  
+  (** The return value depends on type. For "attributes", it is the value of the changed attribute before the change. For "characterData", it is the data of the changed node before the change. For "childList", it is null. *)
+  val get_oldValue: 'tags this -> string or_null [@@js.get "oldValue"]
+  
+  (** Return the previous and next sibling respectively of the added or removed nodes, and null otherwise. *)
+  val get_previousSibling: 'tags this -> Node.t or_null [@@js.get "previousSibling"]
+  
+  (** Return the nodes added and removed respectively. *)
+  val get_removedNodes: 'tags this -> NodeList.t [@@js.get "removedNodes"]
+  
+  (** Returns the node the mutation affected, depending on the type. For "attributes", it is the element whose attribute changed. For "characterData", it is the CharacterData node. For "childList", it is the node whose children changed. *)
+  val get_target: 'tags this -> Node.t [@@js.get "target"]
+  
+  (** Returns "attributes" if it was an attribute mutation. "characterData" if it was a mutation to a CharacterData node. And "childList" if it was a mutation to the tree of nodes. *)
+  val get_type: 'tags this -> MutationRecordType.t [@@js.get "type"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module MutationObserverInit : sig
+  type t = [`MutationObserverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`MutationObserverInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`MutationObserverInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `MutationObserverInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Set to a list of attribute local names (without namespace) if not all attribute mutations need to be observed and attributes is true or omitted. *)
+  val get_attributeFilter: 'tags this -> string list [@@js.get "attributeFilter"]
+  
+  (** Set to a list of attribute local names (without namespace) if not all attribute mutations need to be observed and attributes is true or omitted. *)
+  val set_attributeFilter: 'tags this -> string list -> unit [@@js.set "attributeFilter"]
+  
+  (** Set to true if attributes is true or omitted and target's attribute value before the mutation needs to be recorded. *)
+  val get_attributeOldValue: 'tags this -> bool [@@js.get "attributeOldValue"]
+  
+  (** Set to true if attributes is true or omitted and target's attribute value before the mutation needs to be recorded. *)
+  val set_attributeOldValue: 'tags this -> bool -> unit [@@js.set "attributeOldValue"]
+  
+  (** Set to true if mutations to target's attributes are to be observed. Can be omitted if attributeOldValue or attributeFilter is specified. *)
+  val get_attributes: 'tags this -> bool [@@js.get "attributes"]
+  
+  (** Set to true if mutations to target's attributes are to be observed. Can be omitted if attributeOldValue or attributeFilter is specified. *)
+  val set_attributes: 'tags this -> bool -> unit [@@js.set "attributes"]
+  
+  (** Set to true if mutations to target's data are to be observed. Can be omitted if characterDataOldValue is specified. *)
+  val get_characterData: 'tags this -> bool [@@js.get "characterData"]
+  
+  (** Set to true if mutations to target's data are to be observed. Can be omitted if characterDataOldValue is specified. *)
+  val set_characterData: 'tags this -> bool -> unit [@@js.set "characterData"]
+  
+  (** Set to true if characterData is set to true or omitted and target's data before the mutation needs to be recorded. *)
+  val get_characterDataOldValue: 'tags this -> bool [@@js.get "characterDataOldValue"]
+  
+  (** Set to true if characterData is set to true or omitted and target's data before the mutation needs to be recorded. *)
+  val set_characterDataOldValue: 'tags this -> bool -> unit [@@js.set "characterDataOldValue"]
+  
+  (** Set to true if mutations to target's children are to be observed. *)
+  val get_childList: 'tags this -> bool [@@js.get "childList"]
+  
+  (** Set to true if mutations to target's children are to be observed. *)
+  val set_childList: 'tags this -> bool -> unit [@@js.set "childList"]
+  
+  (** Set to true if mutations to not just target, but also target's descendants are to be observed. *)
+  val get_subtree: 'tags this -> bool [@@js.get "subtree"]
+  
+  (** Set to true if mutations to not just target, but also target's descendants are to be observed. *)
+  val set_subtree: 'tags this -> bool -> unit [@@js.set "subtree"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module rec MutationCallback : sig
+  type t = [`MutationCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`MutationCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`MutationCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `MutationCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> mutations:MutationRecord.t list -> observer:MutationObserver.t -> unit [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** Provides the ability to watch for changes being made to the DOM tree. It is designed as a replacement for the older Mutation Events feature which was part of the DOM3 Events specification. *)
+and[@js.scope "MutationObserver"] MutationObserver : sig
+  type t = [`MutationObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`MutationObserver]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`MutationObserver]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `MutationObserver ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Stops observer from observing any mutations. Until the observe() method is used again, observer's callback will not be invoked. *)
+  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
+  
+  (**
+    Instructs the user agent to observe a given target (a node) and report any mutations based on the criteria given by options (an object).
+    
+    The options argument allows for setting mutation observation options via object members.
+  *)
+  val observe: 'tags this -> target:Node.t -> ?options:MutationObserverInit.t -> unit -> unit [@@js.call "observe"]
+  
+  (** Empties the record queue and returns what was in there. *)
+  val takeRecords: 'tags this -> MutationRecord.t list [@@js.call "takeRecords"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: MutationCallback.t -> t [@@js.create]
+end
 module MessagePortEventMap : sig
   type t = [`MessagePortEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -31397,6 +35364,34 @@ module MessagePortEventMap : sig
   val get_messageerror: 'tags this -> MessageEvent.t_0 [@@js.get "messageerror"]
   val set_messageerror: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "messageerror"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. *)
+module[@js.scope "MessageChannel"] MessageChannel : sig
+  type t = [`MessageChannel] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`MessageChannel]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`MessageChannel]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `MessageChannel ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Returns the first MessagePort object. *)
+  val get_port1: 'tags this -> MessagePort.t [@@js.get "port1"]
+  
+  (** Returns the second MessagePort object. *)
+  val get_port2: 'tags this -> MessagePort.t [@@js.get "port2"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
 end
 module MediaStreamTrackEventMap : sig
   type t = [`MediaStreamTrackEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31498,6 +35493,123 @@ module MediaRecorderEventMap : sig
   val set_stop: 'tags this -> Event.t -> unit [@@js.set "stop"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+module RecordingState : sig
+  type t = ([`L_s406_inactive[@js "inactive"] | `L_s572_paused[@js "paused"] | `L_s632_recording[@js "recording"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module MediaRecorderOptions : sig
+  type t = [`MediaRecorderOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`MediaRecorderOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`MediaRecorderOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `MediaRecorderOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_audioBitsPerSecond: 'tags this -> float [@@js.get "audioBitsPerSecond"]
+  val set_audioBitsPerSecond: 'tags this -> float -> unit [@@js.set "audioBitsPerSecond"]
+  val get_bitsPerSecond: 'tags this -> float [@@js.get "bitsPerSecond"]
+  val set_bitsPerSecond: 'tags this -> float -> unit [@@js.set "bitsPerSecond"]
+  val get_mimeType: 'tags this -> string [@@js.get "mimeType"]
+  val set_mimeType: 'tags this -> string -> unit [@@js.set "mimeType"]
+  val get_videoBitsPerSecond: 'tags this -> float [@@js.get "videoBitsPerSecond"]
+  val set_videoBitsPerSecond: 'tags this -> float -> unit [@@js.set "videoBitsPerSecond"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "MediaRecorder"] MediaRecorder : sig
+  type t = [`EventTarget | `MediaRecorder] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventTarget | `MediaRecorder]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventTarget | `MediaRecorder]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `MediaRecorder ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_audioBitsPerSecond: 'tags this -> float [@@js.get "audioBitsPerSecond"]
+  val get_mimeType: 'tags this -> string [@@js.get "mimeType"]
+  val get_ondataavailable: 'tags this -> (this:t -> ev:BlobEvent.t -> any) or_null [@@js.get "ondataavailable"]
+  val set_ondataavailable: 'tags this -> (this:t -> ev:BlobEvent.t -> any) or_null -> unit [@@js.set "ondataavailable"]
+  val get_onerror: 'tags this -> (this:t -> ev:MediaRecorderErrorEvent.t -> any) or_null [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:MediaRecorderErrorEvent.t -> any) or_null -> unit [@@js.set "onerror"]
+  val get_onpause: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onpause"]
+  val set_onpause: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onpause"]
+  val get_onresume: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onresume"]
+  val set_onresume: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onresume"]
+  val get_onstart: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onstart"]
+  val set_onstart: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onstart"]
+  val get_onstop: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onstop"]
+  val set_onstop: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onstop"]
+  val get_state: 'tags this -> RecordingState.t [@@js.get "state"]
+  val get_stream: 'tags this -> MediaStream.t [@@js.get "stream"]
+  val get_videoBitsPerSecond: 'tags this -> float [@@js.get "videoBitsPerSecond"]
+  val pause: 'tags this -> unit [@@js.call "pause"]
+  val requestData: 'tags this -> unit [@@js.call "requestData"]
+  val resume: 'tags this -> unit [@@js.call "resume"]
+  val start: 'tags this -> ?timeslice:float -> unit -> unit [@@js.call "start"]
+  val stop: 'tags this -> unit [@@js.call "stop"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaRecorderEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaRecorderEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: stream:MediaStream.t -> ?options:MediaRecorderOptions.t -> unit -> t [@@js.create]
+  val isTypeSupported: string -> bool [@@js.global "isTypeSupported"]
+end
 module MediaQueryListEventMap : sig
   type t = [`MediaQueryListEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -31576,6 +35688,258 @@ module MathMLElementEventMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "MathMLElement"] MathMLElement : sig
+  type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `MathMLElement | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `MathMLElement | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `MathMLElement | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `MathMLElement ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MathMLElementEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MathMLElementEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module ComputedKeyframe : sig
+  type t = [`ComputedKeyframe] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ComputedKeyframe]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ComputedKeyframe]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ComputedKeyframe ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_composite: 'tags this -> CompositeOperationOrAuto.t [@@js.get "composite"]
+  val set_composite: 'tags this -> CompositeOperationOrAuto.t -> unit [@@js.set "composite"]
+  val get_computedOffset: 'tags this -> float [@@js.get "computedOffset"]
+  val set_computedOffset: 'tags this -> float -> unit [@@js.set "computedOffset"]
+  val get_easing: 'tags this -> string [@@js.get "easing"]
+  val set_easing: 'tags this -> string -> unit [@@js.set "easing"]
+  val get_offset: 'tags this -> float or_null [@@js.get "offset"]
+  val set_offset: 'tags this -> float or_null -> unit [@@js.set "offset"]
+  val get: 'tags this -> string -> string or_number or_null_or_undefined [@@js.index_get]
+  val set: 'tags this -> string -> string or_number or_null_or_undefined -> unit [@@js.index_set]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "KeyframeEffect"] KeyframeEffect : sig
+  type t = [`AnimationEffect | `KeyframeEffect] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AnimationEffect | `KeyframeEffect]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AnimationEffect | `KeyframeEffect]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `KeyframeEffect ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_composite: 'tags this -> CompositeOperation.t [@@js.get "composite"]
+  val set_composite: 'tags this -> CompositeOperation.t -> unit [@@js.set "composite"]
+  val get_iterationComposite: 'tags this -> IterationCompositeOperation.t [@@js.get "iterationComposite"]
+  val set_iterationComposite: 'tags this -> IterationCompositeOperation.t -> unit [@@js.set "iterationComposite"]
+  val get_pseudoElement: 'tags this -> string or_null [@@js.get "pseudoElement"]
+  val set_pseudoElement: 'tags this -> string or_null -> unit [@@js.set "pseudoElement"]
+  val get_target: 'tags this -> Element.t or_null [@@js.get "target"]
+  val set_target: 'tags this -> Element.t or_null -> unit [@@js.set "target"]
+  val getKeyframes: 'tags this -> ComputedKeyframe.t list [@@js.call "getKeyframes"]
+  val setKeyframes: 'tags this -> keyframes:(PropertyIndexedKeyframes.t, Keyframe.t) or_array or_null -> unit [@@js.call "setKeyframes"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: target:Element.t or_null -> keyframes:(PropertyIndexedKeyframes.t, Keyframe.t) or_array or_null -> ?options:KeyframeEffectOptions.t or_number -> unit -> t [@@js.create]
+  val create': t -> t [@@js.create]
+end
+module IntersectionObserverInit : sig
+  type t = [`IntersectionObserverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`IntersectionObserverInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`IntersectionObserverInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserverInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_root: 'tags this -> (Document.t, Element.t) union2 or_null [@@js.get "root"]
+  val set_root: 'tags this -> (Document.t, Element.t) union2 or_null -> unit [@@js.set "root"]
+  val get_rootMargin: 'tags this -> string [@@js.get "rootMargin"]
+  val set_rootMargin: 'tags this -> string -> unit [@@js.set "rootMargin"]
+  val get_threshold: 'tags this -> float list or_number [@@js.get "threshold"]
+  val set_threshold: 'tags this -> float list or_number -> unit [@@js.set "threshold"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module IntersectionObserverEntryInit : sig
+  type t = [`IntersectionObserverEntryInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`IntersectionObserverEntryInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`IntersectionObserverEntryInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserverEntryInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_boundingClientRect: 'tags this -> DOMRectInit.t [@@js.get "boundingClientRect"]
+  val set_boundingClientRect: 'tags this -> DOMRectInit.t -> unit [@@js.set "boundingClientRect"]
+  val get_intersectionRatio: 'tags this -> float [@@js.get "intersectionRatio"]
+  val set_intersectionRatio: 'tags this -> float -> unit [@@js.set "intersectionRatio"]
+  val get_intersectionRect: 'tags this -> DOMRectInit.t [@@js.get "intersectionRect"]
+  val set_intersectionRect: 'tags this -> DOMRectInit.t -> unit [@@js.set "intersectionRect"]
+  val get_isIntersecting: 'tags this -> bool [@@js.get "isIntersecting"]
+  val set_isIntersecting: 'tags this -> bool -> unit [@@js.set "isIntersecting"]
+  val get_rootBounds: 'tags this -> DOMRectInit.t or_null [@@js.get "rootBounds"]
+  val set_rootBounds: 'tags this -> DOMRectInit.t or_null -> unit [@@js.set "rootBounds"]
+  val get_target: 'tags this -> Element.t [@@js.get "target"]
+  val set_target: 'tags this -> Element.t -> unit [@@js.set "target"]
+  val get_time: 'tags this -> DOMHighResTimeStamp.t [@@js.get "time"]
+  val set_time: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "time"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** This Intersection Observer API interface describes the intersection between the target element and its root container at a specific moment of transition. *)
+module[@js.scope "IntersectionObserverEntry"] IntersectionObserverEntry : sig
+  type t = [`IntersectionObserverEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`IntersectionObserverEntry]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`IntersectionObserverEntry]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserverEntry ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_boundingClientRect: 'tags this -> DOMRectReadOnly.t [@@js.get "boundingClientRect"]
+  val get_intersectionRatio: 'tags this -> float [@@js.get "intersectionRatio"]
+  val get_intersectionRect: 'tags this -> DOMRectReadOnly.t [@@js.get "intersectionRect"]
+  val get_isIntersecting: 'tags this -> bool [@@js.get "isIntersecting"]
+  val get_rootBounds: 'tags this -> DOMRectReadOnly.t or_null [@@js.get "rootBounds"]
+  val get_target: 'tags this -> Element.t [@@js.get "target"]
+  val get_time: 'tags this -> DOMHighResTimeStamp.t [@@js.get "time"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: IntersectionObserverEntryInit.t -> t [@@js.create]
+end
+
+(** provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with a top-level document's viewport. *)
+module[@js.scope "IntersectionObserver"] rec IntersectionObserver : sig
+  type t = [`IntersectionObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`IntersectionObserver]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`IntersectionObserver]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserver ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_root: 'tags this -> (Document.t, Element.t) union2 or_null [@@js.get "root"]
+  val get_rootMargin: 'tags this -> string [@@js.get "rootMargin"]
+  val get_thresholds: 'tags this -> float list [@@js.get "thresholds"]
+  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
+  val observe: 'tags this -> target:Element.t -> unit [@@js.call "observe"]
+  val takeRecords: 'tags this -> IntersectionObserverEntry.t list [@@js.call "takeRecords"]
+  val unobserve: 'tags this -> target:Element.t -> unit [@@js.call "unobserve"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: callback:IntersectionObserverCallback.t -> ?options:IntersectionObserverInit.t -> unit -> t [@@js.create]
+end
+and IntersectionObserverCallback : sig
+  type t = [`IntersectionObserverCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`IntersectionObserverCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`IntersectionObserverCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserverCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> entries:IntersectionObserverEntry.t list -> observer:IntersectionObserver.t -> unit [@@js.apply]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -31785,6 +36149,80 @@ module HTMLVideoElementEventMap : sig
   val get_leavepictureinpicture: 'tags this -> Event.t [@@js.get "leavepictureinpicture"]
   val set_leavepictureinpicture: 'tags this -> Event.t -> unit [@@js.set "leavepictureinpicture"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** An invalid HTML element and derives from the HTMLElement interface, but without implementing any additional properties or methods. *)
+module[@js.scope "HTMLUnknownElement"] HTMLUnknownElement : sig
+  type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLUnknownElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLUnknownElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLUnknownElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `HTMLUnknownElement ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    
+    
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'HTMLElementEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    
+    
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    
+    
+    Removes the event listener in target's event listener list with the same type, callback, and options.
+  *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'HTMLElementEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (**
+    
+    
+    Removes the event listener in target's event listener list with the same type, callback, and options.
+  *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
 end
 
 (** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of table cells, either header or data cells, in an HTML document. *)
@@ -32247,6 +36685,80 @@ module HTMLElementDeprecatedTagNameMap : sig
   val set_xmp: 'tags this -> HTMLPreElement.t -> unit [@@js.set "xmp"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
+
+(** @deprecated use Document *)
+module[@js.scope "HTMLDocument"] HTMLDocument : sig
+  type t = [`Document | `DocumentAndElementEventHandlers | `DocumentOrShadowRoot | `EventTarget | `FontFaceSource | `GlobalEventHandlers | `HTMLDocument | `Node | `NonElementParentNode | `ParentNode | `XPathEvaluatorBase] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Document | `DocumentAndElementEventHandlers | `DocumentOrShadowRoot | `EventTarget | `FontFaceSource | `GlobalEventHandlers | `HTMLDocument | `Node | `NonElementParentNode | `ParentNode | `XPathEvaluatorBase]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Document | `DocumentAndElementEventHandlers | `DocumentOrShadowRoot | `EventTarget | `FontFaceSource | `GlobalEventHandlers | `HTMLDocument | `Node | `NonElementParentNode | `ParentNode | `XPathEvaluatorBase]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `HTMLDocument ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    
+    
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'DocumentEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    
+    
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    
+    
+    Removes the event listener in target's event listener list with the same type, callback, and options.
+  *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'DocumentEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (**
+    
+    
+    Removes the event listener in target's event listener list with the same type, callback, and options.
+  *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
 module HTMLBodyElementEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLBodyElementEventMap | `HTMLElementEventMap | `WindowEventHandlersEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -32290,6 +36802,46 @@ module FontFaceSetEventMap : sig
   val get_loadingerror: 'tags this -> Event.t [@@js.get "loadingerror"]
   val set_loadingerror: 'tags this -> Event.t -> unit [@@js.set "loadingerror"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module FileCallback : sig
+  type t = [`FileCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`FileCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`FileCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `FileCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> file:File.t -> unit [@@js.apply]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "FileSystemFileEntry"] FileSystemFileEntry : sig
+  type t = [`FileSystemEntry | `FileSystemFileEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`FileSystemEntry | `FileSystemFileEntry]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`FileSystemEntry | `FileSystemFileEntry]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `FileSystemFileEntry ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val file: 'tags this -> successCallback:FileCallback.t -> ?errorCallback:ErrorCallback.t -> unit -> unit [@@js.call "file"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
 end
 
 (** Lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read. *)
@@ -32432,6 +36984,110 @@ module EventSourceEventMap : sig
   val get_open: 'tags this -> Event.t [@@js.get "open"]
   val set_open: 'tags this -> Event.t -> unit [@@js.set "open"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module EventSourceInit : sig
+  type t = [`EventSourceInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventSourceInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventSourceInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `EventSourceInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_withCredentials: 'tags this -> bool [@@js.get "withCredentials"]
+  val set_withCredentials: 'tags this -> bool -> unit [@@js.set "withCredentials"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "EventSource"] EventSource : sig
+  type t = [`EventSource | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventSource | `EventTarget]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventSource | `EventTarget]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `EventSource ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
+  val get_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onopen"]
+  val set_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onopen"]
+  
+  (** Returns the state of this EventSource object's connection. It can have the values described below. *)
+  val get_readyState: 'tags this -> float [@@js.get "readyState"]
+  
+  (** Returns the URL providing the event stream. *)
+  val get_url: 'tags this -> string [@@js.get "url"]
+  
+  (** Returns true if the credentials mode for connection requests to the URL providing the event stream is set to "include", and false otherwise. *)
+  val get_withCredentials: 'tags this -> bool [@@js.get "withCredentials"]
+  
+  (** Aborts any instances of the fetch algorithm started for this EventSource object, and sets the readyState attribute to CLOSED. *)
+  val close: 'tags this -> unit [@@js.call "close"]
+  val get_CLOSED: 'tags this -> float [@@js.get "CLOSED"]
+  val get_CONNECTING: 'tags this -> float [@@js.get "CONNECTING"]
+  val get_OPEN: 'tags this -> float [@@js.get "OPEN"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'EventSourceEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'EventSourceEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: url:URL.t or_string -> ?eventSourceInitDict:EventSourceInit.t -> unit -> t [@@js.create]
+  val closed: unit -> float [@@js.get "CLOSED"]
+  val connecting: unit -> float [@@js.get "CONNECTING"]
+  val open_: unit -> float [@@js.get "OPEN"]
 end
 
 (** Provides access to the properties of <view> elements, as well as methods to manipulate them. *)
@@ -34100,29 +38756,6 @@ module[@js.scope "SVGFilterElement"] SVGFilterElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module SVGFilterPrimitiveStandardAttributes : sig
-  type t = [`SVGFilterPrimitiveStandardAttributes] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`SVGFilterPrimitiveStandardAttributes]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`SVGFilterPrimitiveStandardAttributes]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SVGFilterPrimitiveStandardAttributes ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_height: 'tags this -> SVGAnimatedLength.t [@@js.get "height"]
-  val get_result: 'tags this -> SVGAnimatedString.t [@@js.get "result"]
-  val get_width: 'tags this -> SVGAnimatedLength.t [@@js.get "width"]
-  val get_x: 'tags this -> SVGAnimatedLength.t [@@js.get "x"]
-  val get_y: 'tags this -> SVGAnimatedLength.t [@@js.get "y"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
 
 (** Used for attributes of basic type <integer> which can be animated. *)
 module[@js.scope "SVGAnimatedInteger"] SVGAnimatedInteger : sig
@@ -34147,6 +38780,29 @@ module[@js.scope "SVGAnimatedInteger"] SVGAnimatedInteger : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
+end
+module SVGFilterPrimitiveStandardAttributes : sig
+  type t = [`SVGFilterPrimitiveStandardAttributes] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`SVGFilterPrimitiveStandardAttributes]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`SVGFilterPrimitiveStandardAttributes]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SVGFilterPrimitiveStandardAttributes ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_height: 'tags this -> SVGAnimatedLength.t [@@js.get "height"]
+  val get_result: 'tags this -> SVGAnimatedString.t [@@js.get "result"]
+  val get_width: 'tags this -> SVGAnimatedLength.t [@@js.get "width"]
+  val get_x: 'tags this -> SVGAnimatedLength.t [@@js.get "x"]
+  val get_y: 'tags this -> SVGAnimatedLength.t [@@js.get "y"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Corresponds to the <feTurbulence> element. *)
@@ -36949,78 +41605,6 @@ module SVGElementTagNameMap : sig
   val set_use: 'tags this -> SVGUseElement.t -> unit [@@js.set "use"]
   val get_view: 'tags this -> SVGViewElement.t [@@js.get "view"]
   val set_view: 'tags this -> SVGViewElement.t -> unit [@@js.set "view"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** @deprecated this is not available in most browsers *)
-module HTMLDialogElement : sig
-  type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLDialogElement | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLDialogElement | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLDialogElement | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `HTMLDialogElement ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    
-    
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'HTMLElementEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    
-    
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    
-    
-    Removes the event listener in target's event listener list with the same type, callback, and options.
-  *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'HTMLElementEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (**
-    
-    
-    Removes the event listener in target's event listener list with the same type, callback, and options.
-  *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -42301,6 +46885,78 @@ module[@js.scope "HTMLDirectoryElement"] HTMLDirectoryElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+
+(** @deprecated this is not available in most browsers *)
+module HTMLDialogElement : sig
+  type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLDialogElement | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLDialogElement | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLDialogElement | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `HTMLDialogElement ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    
+    
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'HTMLElementEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    
+    
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    
+    
+    Removes the event listener in target's event listener list with the same type, callback, and options.
+  *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'HTMLElementEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (**
+    
+    
+    Removes the event listener in target's event listener list with the same type, callback, and options.
+  *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
 module[@js.scope "HTMLDetailsElement"] HTMLDetailsElement : sig
   type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLDetailsElement | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -43459,6 +48115,157 @@ module DisplayCaptureSurfaceType : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
+module DOMQuadInit : sig
+  type t = [`DOMQuadInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`DOMQuadInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`DOMQuadInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DOMQuadInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_p1: 'tags this -> DOMPointInit.t [@@js.get "p1"]
+  val set_p1: 'tags this -> DOMPointInit.t -> unit [@@js.set "p1"]
+  val get_p2: 'tags this -> DOMPointInit.t [@@js.get "p2"]
+  val set_p2: 'tags this -> DOMPointInit.t -> unit [@@js.set "p2"]
+  val get_p3: 'tags this -> DOMPointInit.t [@@js.get "p3"]
+  val set_p3: 'tags this -> DOMPointInit.t -> unit [@@js.set "p3"]
+  val get_p4: 'tags this -> DOMPointInit.t [@@js.get "p4"]
+  val set_p4: 'tags this -> DOMPointInit.t -> unit [@@js.set "p4"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "DOMQuad"] DOMQuad : sig
+  type t = [`DOMQuad] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`DOMQuad]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`DOMQuad]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DOMQuad ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_p1: 'tags this -> DOMPoint.t [@@js.get "p1"]
+  val get_p2: 'tags this -> DOMPoint.t [@@js.get "p2"]
+  val get_p3: 'tags this -> DOMPoint.t [@@js.get "p3"]
+  val get_p4: 'tags this -> DOMPoint.t [@@js.get "p4"]
+  val getBounds: 'tags this -> DOMRect.t [@@js.call "getBounds"]
+  val toJSON: 'tags this -> any [@@js.call "toJSON"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: ?p1:DOMPointInit.t -> ?p2:DOMPointInit.t -> ?p3:DOMPointInit.t -> ?p4:DOMPointInit.t -> unit -> t [@@js.create]
+  val fromQuad: ?other:DOMQuadInit.t -> unit -> t [@@js.global "fromQuad"]
+  val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
+end
+module DOMParserSupportedType : sig
+  type t = ([`L_s124_application_xhtml_xml[@js "application/xhtml+xml"] | `L_s125_application_xml[@js "application/xml"] | `L_s402_image_svg_xml[@js "image/svg+xml"] | `L_s757_text_html[@js "text/html"] | `L_s758_text_xml[@js "text/xml"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+
+(** Provides the ability to parse XML or HTML source code from a string into a DOM Document. *)
+module[@js.scope "DOMParser"] DOMParser : sig
+  type t = [`DOMParser] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`DOMParser]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`DOMParser]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `DOMParser ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    Parses string using either the HTML or XML parser, according to type, and returns the resulting Document. type can be "text/html" (which will invoke the HTML parser), or any of "text/xml", "application/xml", "application/xhtml+xml", or "image/svg+xml" (which will invoke the XML parser).
+    
+    For the XML parser, if string cannot be parsed, then the returned Document will contain elements describing the resulting error.
+    
+    Note that script elements are not evaluated during parsing, and the resulting document's encoding will always be UTF-8.
+    
+    Values other than the above for type will cause a TypeError exception to be thrown.
+  *)
+  val parseFromString: 'tags this -> string:string -> type_:DOMParserSupportedType.t -> Document.t [@@js.call "parseFromString"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+module QueuingStrategyInit : sig
+  type t = [`QueuingStrategyInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`QueuingStrategyInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`QueuingStrategyInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `QueuingStrategyInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (**
+    Creates a new ByteLengthQueuingStrategy with the provided high water mark.
+    
+    Note that the provided high water mark will not be validated ahead of time. Instead, if it is negative, NaN, or not a number, the resulting ByteLengthQueuingStrategy will cause the corresponding stream constructor to throw.
+  *)
+  val get_highWaterMark: 'tags this -> float [@@js.get "highWaterMark"]
+  
+  (**
+    Creates a new ByteLengthQueuingStrategy with the provided high water mark.
+    
+    Note that the provided high water mark will not be validated ahead of time. Instead, if it is negative, NaN, or not a number, the resulting ByteLengthQueuingStrategy will cause the corresponding stream constructor to throw.
+  *)
+  val set_highWaterMark: 'tags this -> float -> unit [@@js.set "highWaterMark"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+
+(** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
+module[@js.scope "CountQueuingStrategy"] CountQueuingStrategy : sig
+  type t = [`CountQueuingStrategy | `QueuingStrategy of any] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`CountQueuingStrategy | `QueuingStrategy of any]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`CountQueuingStrategy | `QueuingStrategy of any]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `CountQueuingStrategy ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_highWaterMark: 'tags this -> float [@@js.get "highWaterMark"]
+  val get_size: 'tags this -> QueuingStrategySize.t_0 [@@js.get "size"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: QueuingStrategyInit.t -> t [@@js.create]
+end
 module Console : sig
   type t = [`Console] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -43842,2418 +48649,6 @@ module CanvasFontKerning : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
 end
-
-(** Holds useful CSS-related methods. No object with this interface are implemented: it contains only static methods and therefore is a utilitarian interface. *)
-module[@js.scope "CSS"] CSS : sig
-  val escape: string -> string [@@js.global "escape"]
-  val supports: property:string -> value:string -> bool [@@js.global "supports"]
-  val supports': string -> bool [@@js.global "supports"]
-end
-module BroadcastChannelEventMap : sig
-  type t = [`BroadcastChannelEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`BroadcastChannelEventMap]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`BroadcastChannelEventMap]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `BroadcastChannelEventMap ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_message: 'tags this -> MessageEvent.t_0 [@@js.get "message"]
-  val set_message: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "message"]
-  val get_messageerror: 'tags this -> MessageEvent.t_0 [@@js.get "messageerror"]
-  val set_messageerror: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "messageerror"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module AudioWorkletNodeEventMap : sig
-  type t = [`AudioWorkletNodeEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioWorkletNodeEventMap]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioWorkletNodeEventMap]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioWorkletNodeEventMap ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_processorerror: 'tags this -> Event.t [@@js.get "processorerror"]
-  val set_processorerror: 'tags this -> Event.t -> unit [@@js.set "processorerror"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module AudioScheduledSourceNodeEventMap : sig
-  type t = [`AudioScheduledSourceNodeEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioScheduledSourceNodeEventMap]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioScheduledSourceNodeEventMap]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioScheduledSourceNodeEventMap ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_ended: 'tags this -> Event.t [@@js.get "ended"]
-  val set_ended: 'tags this -> Event.t -> unit [@@js.set "ended"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "Audio"] Audio : sig
-  val create: ?src:string -> unit -> HTMLAudioElement.t [@@js.create]
-end
-module AnonymousInterface99 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DocumentTimeline.t [@@js.get "prototype"]
-  val set_prototype: t -> DocumentTimeline.t -> unit [@@js.set "prototype"]
-  val create: t -> ?options:DocumentTimelineOptions.t -> unit -> DocumentTimeline.t [@@js.apply_newable]
-end
-module AnonymousInterface98 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DocumentFragment.t [@@js.get "prototype"]
-  val set_prototype: t -> DocumentFragment.t -> unit [@@js.set "prototype"]
-  val create: t -> DocumentFragment.t [@@js.apply_newable]
-end
-module AnonymousInterface97 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Document.t [@@js.get "prototype"]
-  val set_prototype: t -> Document.t -> unit [@@js.set "prototype"]
-  val create: t -> Document.t [@@js.apply_newable]
-end
-module AnonymousInterface96 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DeviceOrientationEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> DeviceOrientationEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:DeviceOrientationEventInit.t -> unit -> DeviceOrientationEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface95 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DeviceMotionEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> DeviceMotionEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:DeviceMotionEventInit.t -> unit -> DeviceMotionEvent.t [@@js.apply_newable]
-end
-module OverSampleType : sig
-  type t = ([`L_s2_2x[@js "2x"] | `L_s3_4x[@js "4x"] | `L_s528_none[@js "none"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module ChannelInterpretation : sig
-  type t = ([`L_s258_discrete[@js "discrete"] | `L_s715_speakers[@js "speakers"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module ChannelCountMode : sig
-  type t = ([`L_s194_clamped_max[@js "clamped-max"] | `L_s293_explicit[@js "explicit"] | `L_s482_max[@js "max"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module AudioNodeOptions : sig
-  type t = [`AudioNodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioNodeOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_channelCount: 'tags this -> float [@@js.get "channelCount"]
-  val set_channelCount: 'tags this -> float -> unit [@@js.set "channelCount"]
-  val get_channelCountMode: 'tags this -> ChannelCountMode.t [@@js.get "channelCountMode"]
-  val set_channelCountMode: 'tags this -> ChannelCountMode.t -> unit [@@js.set "channelCountMode"]
-  val get_channelInterpretation: 'tags this -> ChannelInterpretation.t [@@js.get "channelInterpretation"]
-  val set_channelInterpretation: 'tags this -> ChannelInterpretation.t -> unit [@@js.set "channelInterpretation"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module WaveShaperOptions : sig
-  type t = [`AudioNodeOptions | `WaveShaperOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `WaveShaperOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `WaveShaperOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WaveShaperOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_curve: 'tags this -> (Float32Array.t_0, float) or_array [@@js.get "curve"]
-  val set_curve: 'tags this -> (Float32Array.t_0, float) or_array -> unit [@@js.set "curve"]
-  val get_oversample: 'tags this -> OverSampleType.t [@@js.get "oversample"]
-  val set_oversample: 'tags this -> OverSampleType.t -> unit [@@js.set "oversample"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module StereoPannerOptions : sig
-  type t = [`AudioNodeOptions | `StereoPannerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `StereoPannerOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `StereoPannerOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `StereoPannerOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_pan: 'tags this -> float [@@js.get "pan"]
-  val set_pan: 'tags this -> float -> unit [@@js.set "pan"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module PanningModelType : sig
-  type t = ([`L_s286_equalpower[@js "equalpower"] | `L_s30_HRTF[@js "HRTF"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module DistanceModelType : sig
-  type t = ([`L_s294_exponential[@js "exponential"] | `L_s424_inverse[@js "inverse"] | `L_s449_linear[@js "linear"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module PannerOptions : sig
-  type t = [`AudioNodeOptions | `PannerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `PannerOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `PannerOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PannerOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_coneInnerAngle: 'tags this -> float [@@js.get "coneInnerAngle"]
-  val set_coneInnerAngle: 'tags this -> float -> unit [@@js.set "coneInnerAngle"]
-  val get_coneOuterAngle: 'tags this -> float [@@js.get "coneOuterAngle"]
-  val set_coneOuterAngle: 'tags this -> float -> unit [@@js.set "coneOuterAngle"]
-  val get_coneOuterGain: 'tags this -> float [@@js.get "coneOuterGain"]
-  val set_coneOuterGain: 'tags this -> float -> unit [@@js.set "coneOuterGain"]
-  val get_distanceModel: 'tags this -> DistanceModelType.t [@@js.get "distanceModel"]
-  val set_distanceModel: 'tags this -> DistanceModelType.t -> unit [@@js.set "distanceModel"]
-  val get_maxDistance: 'tags this -> float [@@js.get "maxDistance"]
-  val set_maxDistance: 'tags this -> float -> unit [@@js.set "maxDistance"]
-  val get_orientationX: 'tags this -> float [@@js.get "orientationX"]
-  val set_orientationX: 'tags this -> float -> unit [@@js.set "orientationX"]
-  val get_orientationY: 'tags this -> float [@@js.get "orientationY"]
-  val set_orientationY: 'tags this -> float -> unit [@@js.set "orientationY"]
-  val get_orientationZ: 'tags this -> float [@@js.get "orientationZ"]
-  val set_orientationZ: 'tags this -> float -> unit [@@js.set "orientationZ"]
-  val get_panningModel: 'tags this -> PanningModelType.t [@@js.get "panningModel"]
-  val set_panningModel: 'tags this -> PanningModelType.t -> unit [@@js.set "panningModel"]
-  val get_positionX: 'tags this -> float [@@js.get "positionX"]
-  val set_positionX: 'tags this -> float -> unit [@@js.set "positionX"]
-  val get_positionY: 'tags this -> float [@@js.get "positionY"]
-  val set_positionY: 'tags this -> float -> unit [@@js.set "positionY"]
-  val get_positionZ: 'tags this -> float [@@js.get "positionZ"]
-  val set_positionZ: 'tags this -> float -> unit [@@js.set "positionZ"]
-  val get_refDistance: 'tags this -> float [@@js.get "refDistance"]
-  val set_refDistance: 'tags this -> float -> unit [@@js.set "refDistance"]
-  val get_rolloffFactor: 'tags this -> float [@@js.get "rolloffFactor"]
-  val set_rolloffFactor: 'tags this -> float -> unit [@@js.set "rolloffFactor"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module PeriodicWaveConstraints : sig
-  type t = [`PeriodicWaveConstraints] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PeriodicWaveConstraints]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PeriodicWaveConstraints]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PeriodicWaveConstraints ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_disableNormalization: 'tags this -> bool [@@js.get "disableNormalization"]
-  val set_disableNormalization: 'tags this -> bool -> unit [@@js.set "disableNormalization"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module PeriodicWaveOptions : sig
-  type t = [`PeriodicWaveConstraints | `PeriodicWaveOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PeriodicWaveConstraints | `PeriodicWaveOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PeriodicWaveConstraints | `PeriodicWaveOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PeriodicWaveOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_imag: 'tags this -> (Float32Array.t_0, float) or_array [@@js.get "imag"]
-  val set_imag: 'tags this -> (Float32Array.t_0, float) or_array -> unit [@@js.set "imag"]
-  val get_real: 'tags this -> (Float32Array.t_0, float) or_array [@@js.get "real"]
-  val set_real: 'tags this -> (Float32Array.t_0, float) or_array -> unit [@@js.set "real"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module OscillatorType : sig
-  type t = ([`L_s226_custom[@js "custom"] | `L_s672_sawtooth[@js "sawtooth"] | `L_s700_sine[@js "sine"] | `L_s717_square[@js "square"] | `L_s786_triangle[@js "triangle"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module IIRFilterOptions : sig
-  type t = [`AudioNodeOptions | `IIRFilterOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `IIRFilterOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `IIRFilterOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `IIRFilterOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_feedback: 'tags this -> float list [@@js.get "feedback"]
-  val set_feedback: 'tags this -> float list -> unit [@@js.set "feedback"]
-  val get_feedforward: 'tags this -> float list [@@js.get "feedforward"]
-  val set_feedforward: 'tags this -> float list -> unit [@@js.set "feedforward"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module GainOptions : sig
-  type t = [`AudioNodeOptions | `GainOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `GainOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `GainOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `GainOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_gain: 'tags this -> float [@@js.get "gain"]
-  val set_gain: 'tags this -> float -> unit [@@js.set "gain"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module DynamicsCompressorOptions : sig
-  type t = [`AudioNodeOptions | `DynamicsCompressorOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `DynamicsCompressorOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `DynamicsCompressorOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `DynamicsCompressorOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_attack: 'tags this -> float [@@js.get "attack"]
-  val set_attack: 'tags this -> float -> unit [@@js.set "attack"]
-  val get_knee: 'tags this -> float [@@js.get "knee"]
-  val set_knee: 'tags this -> float -> unit [@@js.set "knee"]
-  val get_ratio: 'tags this -> float [@@js.get "ratio"]
-  val set_ratio: 'tags this -> float -> unit [@@js.set "ratio"]
-  val get_release: 'tags this -> float [@@js.get "release"]
-  val set_release: 'tags this -> float -> unit [@@js.set "release"]
-  val get_threshold: 'tags this -> float [@@js.get "threshold"]
-  val set_threshold: 'tags this -> float -> unit [@@js.set "threshold"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module DelayOptions : sig
-  type t = [`AudioNodeOptions | `DelayOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `DelayOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `DelayOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `DelayOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_delayTime: 'tags this -> float [@@js.get "delayTime"]
-  val set_delayTime: 'tags this -> float -> unit [@@js.set "delayTime"]
-  val get_maxDelayTime: 'tags this -> float [@@js.get "maxDelayTime"]
-  val set_maxDelayTime: 'tags this -> float -> unit [@@js.set "maxDelayTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module DecodeSuccessCallback : sig
-  type t = [`DecodeSuccessCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`DecodeSuccessCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`DecodeSuccessCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `DecodeSuccessCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> decodedData:AudioBuffer.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module DecodeErrorCallback : sig
-  type t = [`DecodeErrorCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`DecodeErrorCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`DecodeErrorCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `DecodeErrorCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> error:DOMException.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module ConvolverOptions : sig
-  type t = [`AudioNodeOptions | `ConvolverOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `ConvolverOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `ConvolverOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ConvolverOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_buffer: 'tags this -> AudioBuffer.t or_null [@@js.get "buffer"]
-  val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
-  val get_disableNormalization: 'tags this -> bool [@@js.get "disableNormalization"]
-  val set_disableNormalization: 'tags this -> bool -> unit [@@js.set "disableNormalization"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module ConstantSourceOptions : sig
-  type t = [`ConstantSourceOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ConstantSourceOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ConstantSourceOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ConstantSourceOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_offset: 'tags this -> float [@@js.get "offset"]
-  val set_offset: 'tags this -> float -> unit [@@js.set "offset"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module ChannelSplitterOptions : sig
-  type t = [`AudioNodeOptions | `ChannelSplitterOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `ChannelSplitterOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `ChannelSplitterOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ChannelSplitterOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_numberOfOutputs: 'tags this -> float [@@js.get "numberOfOutputs"]
-  val set_numberOfOutputs: 'tags this -> float -> unit [@@js.set "numberOfOutputs"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module ChannelMergerOptions : sig
-  type t = [`AudioNodeOptions | `ChannelMergerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `ChannelMergerOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `ChannelMergerOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ChannelMergerOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_numberOfInputs: 'tags this -> float [@@js.get "numberOfInputs"]
-  val set_numberOfInputs: 'tags this -> float -> unit [@@js.set "numberOfInputs"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module BiquadFilterType : sig
-  type t = ([`L_s109_allpass[@js "allpass"] | `L_s148_bandpass[@js "bandpass"] | `L_s383_highpass[@js "highpass"] | `L_s384_highshelf[@js "highshelf"] | `L_s468_lowpass[@js "lowpass"] | `L_s469_lowshelf[@js "lowshelf"] | `L_s533_notch[@js "notch"] | `L_s574_peaking[@js "peaking"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module BiquadFilterOptions : sig
-  type t = [`AudioNodeOptions | `BiquadFilterOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `BiquadFilterOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `BiquadFilterOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `BiquadFilterOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_Q: 'tags this -> float [@@js.get "Q"]
-  val set_Q: 'tags this -> float -> unit [@@js.set "Q"]
-  val get_detune: 'tags this -> float [@@js.get "detune"]
-  val set_detune: 'tags this -> float -> unit [@@js.set "detune"]
-  val get_frequency: 'tags this -> float [@@js.get "frequency"]
-  val set_frequency: 'tags this -> float -> unit [@@js.set "frequency"]
-  val get_gain: 'tags this -> float [@@js.get "gain"]
-  val set_gain: 'tags this -> float -> unit [@@js.set "gain"]
-  val get_type: 'tags this -> BiquadFilterType.t [@@js.get "type"]
-  val set_type: 'tags this -> BiquadFilterType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module WorkletOptions : sig
-  type t = [`WorkletOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WorkletOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WorkletOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WorkletOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_credentials: 'tags this -> RequestCredentials.t [@@js.get "credentials"]
-  val set_credentials: 'tags this -> RequestCredentials.t -> unit [@@js.set "credentials"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** Available only in secure contexts. *)
-module[@js.scope "Worklet"] Worklet : sig
-  type t = [`Worklet] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`Worklet]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Worklet]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `Worklet ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    Loads and executes the module script given by moduleURL into all of worklet's global scopes. It can also create additional global scopes as part of this process, depending on the worklet type. The returned promise will fulfill once the script has been successfully loaded and run in all global scopes.
-    
-    The credentials option can be set to a credentials mode to modify the script-fetching process. It defaults to "same-origin".
-    
-    Any failures in fetching the script or its dependencies will cause the returned promise to be rejected with an "AbortError" DOMException. Any errors in parsing the script or its dependencies will cause the returned promise to be rejected with the exception generated during parsing.
-  *)
-  val addModule: 'tags this -> moduleURL:URL.t or_string -> ?options:WorkletOptions.t -> unit -> unit Promise.t_1 [@@js.call "addModule"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-
-(** Available only in secure contexts. *)
-module[@js.scope "AudioWorklet"] AudioWorklet : sig
-  type t = [`AudioWorklet | `Worklet] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioWorklet | `Worklet]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioWorklet | `Worklet]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioWorklet ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AutomationRate : sig
-  type t = ([`L_s427_k_rate[@js "k-rate"] | `L_s92_a_rate[@js "a-rate"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-
-(** The Web Audio API's AudioParam interface represents an audio-related parameter, usually a parameter of an AudioNode (such as GainNode.gain). *)
-module[@js.scope "AudioParam"] AudioParam : sig
-  type t = [`AudioParam] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioParam]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioParam]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioParam ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val setValueCurveAtTime: 'tags this -> values:float Iterable.t_1 -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
-  val get_automationRate: 'tags this -> AutomationRate.t [@@js.get "automationRate"]
-  val set_automationRate: 'tags this -> AutomationRate.t -> unit [@@js.set "automationRate"]
-  val get_defaultValue: 'tags this -> float [@@js.get "defaultValue"]
-  val get_maxValue: 'tags this -> float [@@js.get "maxValue"]
-  val get_minValue: 'tags this -> float [@@js.get "minValue"]
-  val get_value: 'tags this -> float [@@js.get "value"]
-  val set_value: 'tags this -> float -> unit [@@js.set "value"]
-  val cancelAndHoldAtTime: 'tags this -> cancelTime:float -> t [@@js.call "cancelAndHoldAtTime"]
-  val cancelScheduledValues: 'tags this -> cancelTime:float -> t [@@js.call "cancelScheduledValues"]
-  val exponentialRampToValueAtTime: 'tags this -> value:float -> endTime:float -> t [@@js.call "exponentialRampToValueAtTime"]
-  val linearRampToValueAtTime: 'tags this -> value:float -> endTime:float -> t [@@js.call "linearRampToValueAtTime"]
-  val setTargetAtTime: 'tags this -> target:float -> startTime:float -> timeConstant:float -> t [@@js.call "setTargetAtTime"]
-  val setValueAtTime: 'tags this -> value:float -> startTime:float -> t [@@js.call "setValueAtTime"]
-  val setValueCurveAtTime': 'tags this -> values:(Float32Array.t_0, float) or_array -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-
-(** The position and orientation of the unique person listening to the audio scene, and is used in audio spatialization. All PannerNodes spatialize in relation to the AudioListener stored in the BaseAudioContext.listener attribute. *)
-module[@js.scope "AudioListener"] AudioListener : sig
-  type t = [`AudioListener] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioListener]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioListener]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioListener ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_forwardX: 'tags this -> AudioParam.t [@@js.get "forwardX"]
-  val get_forwardY: 'tags this -> AudioParam.t [@@js.get "forwardY"]
-  val get_forwardZ: 'tags this -> AudioParam.t [@@js.get "forwardZ"]
-  val get_positionX: 'tags this -> AudioParam.t [@@js.get "positionX"]
-  val get_positionY: 'tags this -> AudioParam.t [@@js.get "positionY"]
-  val get_positionZ: 'tags this -> AudioParam.t [@@js.get "positionZ"]
-  val get_upX: 'tags this -> AudioParam.t [@@js.get "upX"]
-  val get_upY: 'tags this -> AudioParam.t [@@js.get "upY"]
-  val get_upZ: 'tags this -> AudioParam.t [@@js.get "upZ"]
-  
-  (** @deprecated  *)
-  val setOrientation: 'tags this -> x:float -> y:float -> z:float -> xUp:float -> yUp:float -> zUp:float -> unit [@@js.call "setOrientation"]
-  
-  (** @deprecated  *)
-  val setPosition: 'tags this -> x:float -> y:float -> z:float -> unit [@@js.call "setPosition"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AudioContextState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s668_running[@js "running"] | `L_s742_suspended[@js "suspended"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module AudioBufferSourceOptions : sig
-  type t = [`AudioBufferSourceOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioBufferSourceOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioBufferSourceOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioBufferSourceOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_buffer: 'tags this -> AudioBuffer.t or_null [@@js.get "buffer"]
-  val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
-  val get_detune: 'tags this -> float [@@js.get "detune"]
-  val set_detune: 'tags this -> float -> unit [@@js.set "detune"]
-  val get_loop: 'tags this -> bool [@@js.get "loop"]
-  val set_loop: 'tags this -> bool -> unit [@@js.set "loop"]
-  val get_loopEnd: 'tags this -> float [@@js.get "loopEnd"]
-  val set_loopEnd: 'tags this -> float -> unit [@@js.set "loopEnd"]
-  val get_loopStart: 'tags this -> float [@@js.get "loopStart"]
-  val set_loopStart: 'tags this -> float -> unit [@@js.set "loopStart"]
-  val get_playbackRate: 'tags this -> float [@@js.get "playbackRate"]
-  val set_playbackRate: 'tags this -> float -> unit [@@js.set "playbackRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module AnalyserOptions : sig
-  type t = [`AnalyserOptions | `AudioNodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AnalyserOptions | `AudioNodeOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AnalyserOptions | `AudioNodeOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AnalyserOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_fftSize: 'tags this -> float [@@js.get "fftSize"]
-  val set_fftSize: 'tags this -> float -> unit [@@js.set "fftSize"]
-  val get_maxDecibels: 'tags this -> float [@@js.get "maxDecibels"]
-  val set_maxDecibels: 'tags this -> float -> unit [@@js.set "maxDecibels"]
-  val get_minDecibels: 'tags this -> float [@@js.get "minDecibels"]
-  val set_minDecibels: 'tags this -> float -> unit [@@js.set "minDecibels"]
-  val get_smoothingTimeConstant: 'tags this -> float [@@js.get "smoothingTimeConstant"]
-  val set_smoothingTimeConstant: 'tags this -> float -> unit [@@js.set "smoothingTimeConstant"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** A node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations. *)
-module[@js.scope "AnalyserNode"] rec AnalyserNode : sig
-  type t = [`AnalyserNode | `AudioNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AnalyserNode | `AudioNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AnalyserNode | `AudioNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AnalyserNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_fftSize: 'tags this -> float [@@js.get "fftSize"]
-  val set_fftSize: 'tags this -> float -> unit [@@js.set "fftSize"]
-  val get_frequencyBinCount: 'tags this -> float [@@js.get "frequencyBinCount"]
-  val get_maxDecibels: 'tags this -> float [@@js.get "maxDecibels"]
-  val set_maxDecibels: 'tags this -> float -> unit [@@js.set "maxDecibels"]
-  val get_minDecibels: 'tags this -> float [@@js.get "minDecibels"]
-  val set_minDecibels: 'tags this -> float -> unit [@@js.set "minDecibels"]
-  val get_smoothingTimeConstant: 'tags this -> float [@@js.get "smoothingTimeConstant"]
-  val set_smoothingTimeConstant: 'tags this -> float -> unit [@@js.set "smoothingTimeConstant"]
-  val getByteFrequencyData: 'tags this -> array:Uint8Array.t_0 -> unit [@@js.call "getByteFrequencyData"]
-  val getByteTimeDomainData: 'tags this -> array:Uint8Array.t_0 -> unit [@@js.call "getByteTimeDomainData"]
-  val getFloatFrequencyData: 'tags this -> array:Float32Array.t_0 -> unit [@@js.call "getFloatFrequencyData"]
-  val getFloatTimeDomainData: 'tags this -> array:Float32Array.t_0 -> unit [@@js.call "getFloatTimeDomainData"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:AnalyserOptions.t -> unit -> t [@@js.create]
-end
-
-(** An AudioScheduledSourceNode which represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It's especially useful for playing back audio which has particularly stringent timing accuracy requirements, such as for sounds that must match a specific rhythm and can be kept in memory rather than being played from disk or the network. *)
-and[@js.scope "AudioBufferSourceNode"] AudioBufferSourceNode : sig
-  type t = [`AudioBufferSourceNode | `AudioNode | `AudioScheduledSourceNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioBufferSourceNode | `AudioNode | `AudioScheduledSourceNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioBufferSourceNode | `AudioNode | `AudioScheduledSourceNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioBufferSourceNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_buffer: 'tags this -> AudioBuffer.t or_null [@@js.get "buffer"]
-  val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
-  val get_detune: 'tags this -> AudioParam.t [@@js.get "detune"]
-  val get_loop: 'tags this -> bool [@@js.get "loop"]
-  val set_loop: 'tags this -> bool -> unit [@@js.set "loop"]
-  val get_loopEnd: 'tags this -> float [@@js.get "loopEnd"]
-  val set_loopEnd: 'tags this -> float -> unit [@@js.set "loopEnd"]
-  val get_loopStart: 'tags this -> float [@@js.get "loopStart"]
-  val set_loopStart: 'tags this -> float -> unit [@@js.set "loopStart"]
-  val get_playbackRate: 'tags this -> AudioParam.t [@@js.get "playbackRate"]
-  val start: 'tags this -> ?when_:float -> ?offset:float -> ?duration:float -> unit -> unit [@@js.call "start"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:AudioBufferSourceOptions.t -> unit -> t [@@js.create]
-end
-
-(** AudioDestinationNode has no output (as it is the output, no more AudioNode can be linked after it in the audio graph) and one input. The number of channels in the input must be between 0 and the maxChannelCount value or an exception is raised. *)
-and[@js.scope "AudioDestinationNode"] AudioDestinationNode : sig
-  type t = [`AudioDestinationNode | `AudioNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioDestinationNode | `AudioNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioDestinationNode | `AudioNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioDestinationNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_maxChannelCount: 'tags this -> float [@@js.get "maxChannelCount"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-
-(** A generic interface for representing an audio processing module. Examples include: *)
-and[@js.scope "AudioNode"] AudioNode : sig
-  type t = [`AudioNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_channelCount: 'tags this -> float [@@js.get "channelCount"]
-  val set_channelCount: 'tags this -> float -> unit [@@js.set "channelCount"]
-  val get_channelCountMode: 'tags this -> ChannelCountMode.t [@@js.get "channelCountMode"]
-  val set_channelCountMode: 'tags this -> ChannelCountMode.t -> unit [@@js.set "channelCountMode"]
-  val get_channelInterpretation: 'tags this -> ChannelInterpretation.t [@@js.get "channelInterpretation"]
-  val set_channelInterpretation: 'tags this -> ChannelInterpretation.t -> unit [@@js.set "channelInterpretation"]
-  val get_context: 'tags this -> BaseAudioContext.t [@@js.get "context"]
-  val get_numberOfInputs: 'tags this -> float [@@js.get "numberOfInputs"]
-  val get_numberOfOutputs: 'tags this -> float [@@js.get "numberOfOutputs"]
-  val connect: 'tags this -> destinationNode:t -> ?output:float -> ?input:float -> unit -> t [@@js.call "connect"]
-  val connect': 'tags this -> destinationParam:AudioParam.t -> ?output:float -> unit -> unit [@@js.call "connect"]
-  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
-  val disconnect': 'tags this -> output:float -> unit [@@js.call "disconnect"]
-  val disconnect'': 'tags this -> destinationNode:t -> unit [@@js.call "disconnect"]
-  val disconnect''': 'tags this -> destinationNode:t -> output:float -> unit [@@js.call "disconnect"]
-  val disconnect'''': 'tags this -> destinationNode:t -> output:float -> input:float -> unit [@@js.call "disconnect"]
-  val disconnect''''': 'tags this -> destinationParam:AudioParam.t -> unit [@@js.call "disconnect"]
-  val disconnect'''''': 'tags this -> destinationParam:AudioParam.t -> output:float -> unit [@@js.call "disconnect"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-and[@js.scope "AudioScheduledSourceNode"] AudioScheduledSourceNode : sig
-  type t = [`AudioNode | `AudioScheduledSourceNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `AudioScheduledSourceNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `AudioScheduledSourceNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioScheduledSourceNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_onended: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onended"]
-  val set_onended: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onended"]
-  val start: 'tags this -> ?when_:float -> unit -> unit [@@js.call "start"]
-  val stop: 'tags this -> ?when_:float -> unit -> unit [@@js.call "stop"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-and[@js.scope "BaseAudioContext"] BaseAudioContext : sig
-  type t = [`BaseAudioContext | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`BaseAudioContext | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`BaseAudioContext | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `BaseAudioContext ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val createIIRFilter: 'tags this -> feedforward:float Iterable.t_1 -> feedback:float Iterable.t_1 -> IIRFilterNode.t [@@js.call "createIIRFilter"]
-  val createPeriodicWave: 'tags this -> real:float Iterable.t_1 -> imag:float Iterable.t_1 -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
-  
-  (** Available only in secure contexts. *)
-  val get_audioWorklet: 'tags this -> AudioWorklet.t [@@js.get "audioWorklet"]
-  val get_currentTime: 'tags this -> float [@@js.get "currentTime"]
-  val get_destination: 'tags this -> AudioDestinationNode.t [@@js.get "destination"]
-  val get_listener: 'tags this -> AudioListener.t [@@js.get "listener"]
-  val get_onstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onstatechange"]
-  val set_onstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onstatechange"]
-  val get_sampleRate: 'tags this -> float [@@js.get "sampleRate"]
-  val get_state: 'tags this -> AudioContextState.t [@@js.get "state"]
-  val createAnalyser: 'tags this -> AnalyserNode.t [@@js.call "createAnalyser"]
-  val createBiquadFilter: 'tags this -> BiquadFilterNode.t [@@js.call "createBiquadFilter"]
-  val createBuffer: 'tags this -> numberOfChannels:float -> length:float -> sampleRate:float -> AudioBuffer.t [@@js.call "createBuffer"]
-  val createBufferSource: 'tags this -> AudioBufferSourceNode.t [@@js.call "createBufferSource"]
-  val createChannelMerger: 'tags this -> ?numberOfInputs:float -> unit -> ChannelMergerNode.t [@@js.call "createChannelMerger"]
-  val createChannelSplitter: 'tags this -> ?numberOfOutputs:float -> unit -> ChannelSplitterNode.t [@@js.call "createChannelSplitter"]
-  val createConstantSource: 'tags this -> ConstantSourceNode.t [@@js.call "createConstantSource"]
-  val createConvolver: 'tags this -> ConvolverNode.t [@@js.call "createConvolver"]
-  val createDelay: 'tags this -> ?maxDelayTime:float -> unit -> DelayNode.t [@@js.call "createDelay"]
-  val createDynamicsCompressor: 'tags this -> DynamicsCompressorNode.t [@@js.call "createDynamicsCompressor"]
-  val createGain: 'tags this -> GainNode.t [@@js.call "createGain"]
-  val createIIRFilter': 'tags this -> feedforward:float list -> feedback:float list -> IIRFilterNode.t [@@js.call "createIIRFilter"]
-  val createOscillator: 'tags this -> OscillatorNode.t [@@js.call "createOscillator"]
-  val createPanner: 'tags this -> PannerNode.t [@@js.call "createPanner"]
-  val createPeriodicWave': 'tags this -> real:(Float32Array.t_0, float) or_array -> imag:(Float32Array.t_0, float) or_array -> ?constraints:PeriodicWaveConstraints.t -> unit -> PeriodicWave.t [@@js.call "createPeriodicWave"]
-  
-  (** @deprecated  *)
-  val createScriptProcessor: 'tags this -> ?bufferSize:float -> ?numberOfInputChannels:float -> ?numberOfOutputChannels:float -> unit -> ScriptProcessorNode.t [@@js.call "createScriptProcessor"]
-  val createStereoPanner: 'tags this -> StereoPannerNode.t [@@js.call "createStereoPanner"]
-  val createWaveShaper: 'tags this -> WaveShaperNode.t [@@js.call "createWaveShaper"]
-  val decodeAudioData: 'tags this -> audioData:ArrayBuffer.t_0 -> ?successCallback:DecodeSuccessCallback.t or_null -> ?errorCallback:DecodeErrorCallback.t or_null -> unit -> AudioBuffer.t Promise.t_1 [@@js.call "decodeAudioData"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'BaseAudioContextEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'BaseAudioContextEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-
-(** A simple low-order filter, and is created using the AudioContext.createBiquadFilter() method. It is an AudioNode that can represent different kinds of filters, tone control devices, and graphic equalizers. *)
-and[@js.scope "BiquadFilterNode"] BiquadFilterNode : sig
-  type t = [`AudioNode | `BiquadFilterNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `BiquadFilterNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `BiquadFilterNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `BiquadFilterNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_Q: 'tags this -> AudioParam.t [@@js.get "Q"]
-  val get_detune: 'tags this -> AudioParam.t [@@js.get "detune"]
-  val get_frequency: 'tags this -> AudioParam.t [@@js.get "frequency"]
-  val get_gain: 'tags this -> AudioParam.t [@@js.get "gain"]
-  val get_type: 'tags this -> BiquadFilterType.t [@@js.get "type"]
-  val set_type: 'tags this -> BiquadFilterType.t -> unit [@@js.set "type"]
-  val getFrequencyResponse: 'tags this -> frequencyHz:Float32Array.t_0 -> magResponse:Float32Array.t_0 -> phaseResponse:Float32Array.t_0 -> unit [@@js.call "getFrequencyResponse"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:BiquadFilterOptions.t -> unit -> t [@@js.create]
-end
-
-(** The ChannelMergerNode interface, often used in conjunction with its opposite, ChannelSplitterNode, reunites different mono inputs into a single output. Each input is used to fill a channel of the output. This is useful for accessing each channels separately, e.g. for performing channel mixing where gain must be separately controlled on each channel. *)
-and[@js.scope "ChannelMergerNode"] ChannelMergerNode : sig
-  type t = [`AudioNode | `ChannelMergerNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `ChannelMergerNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `ChannelMergerNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ChannelMergerNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:ChannelMergerOptions.t -> unit -> t [@@js.create]
-end
-
-(** The ChannelSplitterNode interface, often used in conjunction with its opposite, ChannelMergerNode, separates the different channels of an audio source into a set of mono outputs. This is useful for accessing each channel separately, e.g. for performing channel mixing where gain must be separately controlled on each channel. *)
-and[@js.scope "ChannelSplitterNode"] ChannelSplitterNode : sig
-  type t = [`AudioNode | `ChannelSplitterNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `ChannelSplitterNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `ChannelSplitterNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ChannelSplitterNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:ChannelSplitterOptions.t -> unit -> t [@@js.create]
-end
-and[@js.scope "ConstantSourceNode"] ConstantSourceNode : sig
-  type t = [`AudioNode | `AudioScheduledSourceNode | `ConstantSourceNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `AudioScheduledSourceNode | `ConstantSourceNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `AudioScheduledSourceNode | `ConstantSourceNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ConstantSourceNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_offset: 'tags this -> AudioParam.t [@@js.get "offset"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:ConstantSourceOptions.t -> unit -> t [@@js.create]
-end
-
-(** An AudioNode that performs a Linear Convolution on a given AudioBuffer, often used to achieve a reverb effect. A ConvolverNode always has exactly one input and one output. *)
-and[@js.scope "ConvolverNode"] ConvolverNode : sig
-  type t = [`AudioNode | `ConvolverNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `ConvolverNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `ConvolverNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ConvolverNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_buffer: 'tags this -> AudioBuffer.t or_null [@@js.get "buffer"]
-  val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
-  val get_normalize: 'tags this -> bool [@@js.get "normalize"]
-  val set_normalize: 'tags this -> bool -> unit [@@js.set "normalize"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:ConvolverOptions.t -> unit -> t [@@js.create]
-end
-
-(** A delay-line; an AudioNode audio-processing module that causes a delay between the arrival of an input data and its propagation to the output. *)
-and[@js.scope "DelayNode"] DelayNode : sig
-  type t = [`AudioNode | `DelayNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `DelayNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `DelayNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `DelayNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_delayTime: 'tags this -> AudioParam.t [@@js.get "delayTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:DelayOptions.t -> unit -> t [@@js.create]
-end
-
-(** Inherits properties from its parent, AudioNode. *)
-and[@js.scope "DynamicsCompressorNode"] DynamicsCompressorNode : sig
-  type t = [`AudioNode | `DynamicsCompressorNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `DynamicsCompressorNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `DynamicsCompressorNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `DynamicsCompressorNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_attack: 'tags this -> AudioParam.t [@@js.get "attack"]
-  val get_knee: 'tags this -> AudioParam.t [@@js.get "knee"]
-  val get_ratio: 'tags this -> AudioParam.t [@@js.get "ratio"]
-  val get_reduction: 'tags this -> float [@@js.get "reduction"]
-  val get_release: 'tags this -> AudioParam.t [@@js.get "release"]
-  val get_threshold: 'tags this -> AudioParam.t [@@js.get "threshold"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:DynamicsCompressorOptions.t -> unit -> t [@@js.create]
-end
-
-(** A change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same number of channels. *)
-and[@js.scope "GainNode"] GainNode : sig
-  type t = [`AudioNode | `EventTarget | `GainNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `EventTarget | `GainNode]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `EventTarget | `GainNode]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `GainNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_gain: 'tags this -> AudioParam.t [@@js.get "gain"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:GainOptions.t -> unit -> t [@@js.create]
-end
-
-(** The IIRFilterNode interface of the Web Audio API is a AudioNode processor which implements a general infinite impulse response (IIR)  filter; this type of filter can be used to implement tone control devices and graphic equalizers as well. It lets the parameters of the filter response be specified, so that it can be tuned as needed. *)
-and[@js.scope "IIRFilterNode"] IIRFilterNode : sig
-  type t = [`AudioNode | `EventTarget | `IIRFilterNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `EventTarget | `IIRFilterNode]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `EventTarget | `IIRFilterNode]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `IIRFilterNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val getFrequencyResponse: 'tags this -> frequencyHz:Float32Array.t_0 -> magResponse:Float32Array.t_0 -> phaseResponse:Float32Array.t_0 -> unit [@@js.call "getFrequencyResponse"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> options:IIRFilterOptions.t -> t [@@js.create]
-end
-
-(** The OscillatorNode interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone. *)
-and[@js.scope "OscillatorNode"] OscillatorNode : sig
-  type t = [`AudioNode | `AudioScheduledSourceNode | `EventTarget | `OscillatorNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `AudioScheduledSourceNode | `EventTarget | `OscillatorNode]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `AudioScheduledSourceNode | `EventTarget | `OscillatorNode]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `OscillatorNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_detune: 'tags this -> AudioParam.t [@@js.get "detune"]
-  val get_frequency: 'tags this -> AudioParam.t [@@js.get "frequency"]
-  val get_type: 'tags this -> OscillatorType.t [@@js.get "type"]
-  val set_type: 'tags this -> OscillatorType.t -> unit [@@js.set "type"]
-  val setPeriodicWave: 'tags this -> periodicWave:PeriodicWave.t -> unit [@@js.call "setPeriodicWave"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioScheduledSourceNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:OscillatorOptions.t -> unit -> t [@@js.create]
-end
-and OscillatorOptions : sig
-  type t = [`AudioNodeOptions | `OscillatorOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `OscillatorOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `OscillatorOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `OscillatorOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_detune: 'tags this -> float [@@js.get "detune"]
-  val set_detune: 'tags this -> float -> unit [@@js.set "detune"]
-  val get_frequency: 'tags this -> float [@@js.get "frequency"]
-  val set_frequency: 'tags this -> float -> unit [@@js.set "frequency"]
-  val get_periodicWave: 'tags this -> PeriodicWave.t [@@js.get "periodicWave"]
-  val set_periodicWave: 'tags this -> PeriodicWave.t -> unit [@@js.set "periodicWave"]
-  val get_type: 'tags this -> OscillatorType.t [@@js.get "type"]
-  val set_type: 'tags this -> OscillatorType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** A PannerNode always has exactly one input and one output: the input can be mono or stereo but the output is always stereo (2 channels); you can't have panning effects without at least two audio channels! *)
-and[@js.scope "PannerNode"] PannerNode : sig
-  type t = [`AudioNode | `EventTarget | `PannerNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `EventTarget | `PannerNode]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `EventTarget | `PannerNode]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PannerNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_coneInnerAngle: 'tags this -> float [@@js.get "coneInnerAngle"]
-  val set_coneInnerAngle: 'tags this -> float -> unit [@@js.set "coneInnerAngle"]
-  val get_coneOuterAngle: 'tags this -> float [@@js.get "coneOuterAngle"]
-  val set_coneOuterAngle: 'tags this -> float -> unit [@@js.set "coneOuterAngle"]
-  val get_coneOuterGain: 'tags this -> float [@@js.get "coneOuterGain"]
-  val set_coneOuterGain: 'tags this -> float -> unit [@@js.set "coneOuterGain"]
-  val get_distanceModel: 'tags this -> DistanceModelType.t [@@js.get "distanceModel"]
-  val set_distanceModel: 'tags this -> DistanceModelType.t -> unit [@@js.set "distanceModel"]
-  val get_maxDistance: 'tags this -> float [@@js.get "maxDistance"]
-  val set_maxDistance: 'tags this -> float -> unit [@@js.set "maxDistance"]
-  val get_orientationX: 'tags this -> AudioParam.t [@@js.get "orientationX"]
-  val get_orientationY: 'tags this -> AudioParam.t [@@js.get "orientationY"]
-  val get_orientationZ: 'tags this -> AudioParam.t [@@js.get "orientationZ"]
-  val get_panningModel: 'tags this -> PanningModelType.t [@@js.get "panningModel"]
-  val set_panningModel: 'tags this -> PanningModelType.t -> unit [@@js.set "panningModel"]
-  val get_positionX: 'tags this -> AudioParam.t [@@js.get "positionX"]
-  val get_positionY: 'tags this -> AudioParam.t [@@js.get "positionY"]
-  val get_positionZ: 'tags this -> AudioParam.t [@@js.get "positionZ"]
-  val get_refDistance: 'tags this -> float [@@js.get "refDistance"]
-  val set_refDistance: 'tags this -> float -> unit [@@js.set "refDistance"]
-  val get_rolloffFactor: 'tags this -> float [@@js.get "rolloffFactor"]
-  val set_rolloffFactor: 'tags this -> float -> unit [@@js.set "rolloffFactor"]
-  
-  (** @deprecated  *)
-  val setOrientation: 'tags this -> x:float -> y:float -> z:float -> unit [@@js.call "setOrientation"]
-  
-  (** @deprecated  *)
-  val setPosition: 'tags this -> x:float -> y:float -> z:float -> unit [@@js.call "setPosition"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:PannerOptions.t -> unit -> t [@@js.create]
-end
-
-(** PeriodicWave has no inputs or outputs; it is used to define custom oscillators when calling OscillatorNode.setPeriodicWave(). The PeriodicWave itself is created/returned by AudioContext.createPeriodicWave(). *)
-and[@js.scope "PeriodicWave"] PeriodicWave : sig
-  type t = [`PeriodicWave] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PeriodicWave]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PeriodicWave]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PeriodicWave ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:PeriodicWaveOptions.t -> unit -> t [@@js.create]
-end
-
-(** Allows the generation, processing, or analyzing of audio using JavaScript. *)
-and[@js.scope "ScriptProcessorNode"] ScriptProcessorNode : sig
-  type t = [`AudioNode | `EventTarget | `ScriptProcessorNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `EventTarget | `ScriptProcessorNode]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `EventTarget | `ScriptProcessorNode]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ScriptProcessorNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** @deprecated  *)
-  val get_bufferSize: 'tags this -> float [@@js.get "bufferSize"]
-  
-  (** @deprecated  *)
-  val get_onaudioprocess: 'tags this -> (this:t -> ev:AudioProcessingEvent.t -> any) or_null [@@js.get "onaudioprocess"]
-  
-  (** @deprecated  *)
-  val set_onaudioprocess: 'tags this -> (this:t -> ev:AudioProcessingEvent.t -> any) or_null -> unit [@@js.set "onaudioprocess"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ScriptProcessorNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ScriptProcessorNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-
-(** The pan property takes a unitless value between -1 (full left pan) and 1 (full right pan). This interface was introduced as a much simpler way to apply a simple panning effect than having to use a full PannerNode. *)
-and[@js.scope "StereoPannerNode"] StereoPannerNode : sig
-  type t = [`AudioNode | `EventTarget | `StereoPannerNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `EventTarget | `StereoPannerNode]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `EventTarget | `StereoPannerNode]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `StereoPannerNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_pan: 'tags this -> AudioParam.t [@@js.get "pan"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:StereoPannerOptions.t -> unit -> t [@@js.create]
-end
-
-(** A WaveShaperNode always has exactly one input and one output. *)
-and[@js.scope "WaveShaperNode"] WaveShaperNode : sig
-  type t = [`AudioNode | `EventTarget | `WaveShaperNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `EventTarget | `WaveShaperNode]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `EventTarget | `WaveShaperNode]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WaveShaperNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_curve: 'tags this -> Float32Array.t_0 or_null [@@js.get "curve"]
-  val set_curve: 'tags this -> Float32Array.t_0 or_null -> unit [@@js.set "curve"]
-  val get_oversample: 'tags this -> OverSampleType.t [@@js.get "oversample"]
-  val set_oversample: 'tags this -> OverSampleType.t -> unit [@@js.set "oversample"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:WaveShaperOptions.t -> unit -> t [@@js.create]
-end
-module AnonymousInterface94 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DelayNode.t [@@js.get "prototype"]
-  val set_prototype: t -> DelayNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:DelayOptions.t -> unit -> DelayNode.t [@@js.apply_newable]
-end
-module AnonymousInterface93 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DataTransferItemList.t [@@js.get "prototype"]
-  val set_prototype: t -> DataTransferItemList.t -> unit [@@js.set "prototype"]
-  val create: t -> DataTransferItemList.t [@@js.apply_newable]
-end
-module AnonymousInterface92 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DataTransferItem.t [@@js.get "prototype"]
-  val set_prototype: t -> DataTransferItem.t -> unit [@@js.set "prototype"]
-  val create: t -> DataTransferItem.t [@@js.apply_newable]
-end
-module AnonymousInterface91 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DataTransfer.t [@@js.get "prototype"]
-  val set_prototype: t -> DataTransfer.t -> unit [@@js.set "prototype"]
-  val create: t -> DataTransfer.t [@@js.apply_newable]
-end
-module AnonymousInterface90 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMTokenList.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMTokenList.t -> unit [@@js.set "prototype"]
-  val create: t -> DOMTokenList.t [@@js.apply_newable]
-end
-module AnonymousInterface9 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AnimationTimeline.t [@@js.get "prototype"]
-  val set_prototype: t -> AnimationTimeline.t -> unit [@@js.set "prototype"]
-  val create: t -> AnimationTimeline.t [@@js.apply_newable]
-end
-module AnonymousInterface89 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMStringMap.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMStringMap.t -> unit [@@js.set "prototype"]
-  val create: t -> DOMStringMap.t [@@js.apply_newable]
-end
-module AnonymousInterface88 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMStringList.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMStringList.t -> unit [@@js.set "prototype"]
-  val create: t -> DOMStringList.t [@@js.apply_newable]
-end
-module AnonymousInterface87 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMRectReadOnly.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMRectReadOnly.t -> unit [@@js.set "prototype"]
-  val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> DOMRectReadOnly.t [@@js.apply_newable]
-  val fromRect: t -> ?other:DOMRectInit.t -> unit -> DOMRectReadOnly.t [@@js.call "fromRect"]
-end
-module AnonymousInterface86 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMRectList.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMRectList.t -> unit [@@js.set "prototype"]
-  val create: t -> DOMRectList.t [@@js.apply_newable]
-end
-module AnonymousInterface85 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMRect.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMRect.t -> unit [@@js.set "prototype"]
-  val create: t -> ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> DOMRect.t [@@js.apply_newable]
-  val fromRect: t -> ?other:DOMRectInit.t -> unit -> DOMRect.t [@@js.call "fromRect"]
-end
-module DOMQuadInit : sig
-  type t = [`DOMQuadInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`DOMQuadInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`DOMQuadInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `DOMQuadInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_p1: 'tags this -> DOMPointInit.t [@@js.get "p1"]
-  val set_p1: 'tags this -> DOMPointInit.t -> unit [@@js.set "p1"]
-  val get_p2: 'tags this -> DOMPointInit.t [@@js.get "p2"]
-  val set_p2: 'tags this -> DOMPointInit.t -> unit [@@js.set "p2"]
-  val get_p3: 'tags this -> DOMPointInit.t [@@js.get "p3"]
-  val set_p3: 'tags this -> DOMPointInit.t -> unit [@@js.set "p3"]
-  val get_p4: 'tags this -> DOMPointInit.t [@@js.get "p4"]
-  val set_p4: 'tags this -> DOMPointInit.t -> unit [@@js.set "p4"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "DOMQuad"] DOMQuad : sig
-  type t = [`DOMQuad] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`DOMQuad]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`DOMQuad]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `DOMQuad ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_p1: 'tags this -> DOMPoint.t [@@js.get "p1"]
-  val get_p2: 'tags this -> DOMPoint.t [@@js.get "p2"]
-  val get_p3: 'tags this -> DOMPoint.t [@@js.get "p3"]
-  val get_p4: 'tags this -> DOMPoint.t [@@js.get "p4"]
-  val getBounds: 'tags this -> DOMRect.t [@@js.call "getBounds"]
-  val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?p1:DOMPointInit.t -> ?p2:DOMPointInit.t -> ?p3:DOMPointInit.t -> ?p4:DOMPointInit.t -> unit -> t [@@js.create]
-  val fromQuad: ?other:DOMQuadInit.t -> unit -> t [@@js.global "fromQuad"]
-  val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
-end
-module AnonymousInterface84 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMQuad.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMQuad.t -> unit [@@js.set "prototype"]
-  val create: t -> ?p1:DOMPointInit.t -> ?p2:DOMPointInit.t -> ?p3:DOMPointInit.t -> ?p4:DOMPointInit.t -> unit -> DOMQuad.t [@@js.apply_newable]
-  val fromQuad: t -> ?other:DOMQuadInit.t -> unit -> DOMQuad.t [@@js.call "fromQuad"]
-  val fromRect: t -> ?other:DOMRectInit.t -> unit -> DOMQuad.t [@@js.call "fromRect"]
-end
-module AnonymousInterface83 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMPointReadOnly.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMPointReadOnly.t -> unit [@@js.set "prototype"]
-  val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> DOMPointReadOnly.t [@@js.apply_newable]
-  val fromPoint: t -> ?other:DOMPointInit.t -> unit -> DOMPointReadOnly.t [@@js.call "fromPoint"]
-end
-module AnonymousInterface82 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMPoint.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMPoint.t -> unit [@@js.set "prototype"]
-  val create: t -> ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> DOMPoint.t [@@js.apply_newable]
-  val fromPoint: t -> ?other:DOMPointInit.t -> unit -> DOMPoint.t [@@js.call "fromPoint"]
-end
-module DOMParserSupportedType : sig
-  type t = ([`L_s124_application_xhtml_xml[@js "application/xhtml+xml"] | `L_s125_application_xml[@js "application/xml"] | `L_s402_image_svg_xml[@js "image/svg+xml"] | `L_s757_text_html[@js "text/html"] | `L_s758_text_xml[@js "text/xml"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-
-(** Provides the ability to parse XML or HTML source code from a string into a DOM Document. *)
-module[@js.scope "DOMParser"] DOMParser : sig
-  type t = [`DOMParser] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`DOMParser]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`DOMParser]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `DOMParser ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    Parses string using either the HTML or XML parser, according to type, and returns the resulting Document. type can be "text/html" (which will invoke the HTML parser), or any of "text/xml", "application/xml", "application/xhtml+xml", or "image/svg+xml" (which will invoke the XML parser).
-    
-    For the XML parser, if string cannot be parsed, then the returned Document will contain elements describing the resulting error.
-    
-    Note that script elements are not evaluated during parsing, and the resulting document's encoding will always be UTF-8.
-    
-    Values other than the above for type will cause a TypeError exception to be thrown.
-  *)
-  val parseFromString: 'tags this -> string:string -> type_:DOMParserSupportedType.t -> Document.t [@@js.call "parseFromString"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface81 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMParser.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMParser.t -> unit [@@js.set "prototype"]
-  val create: t -> DOMParser.t [@@js.apply_newable]
-end
-module AnonymousInterface80 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMMatrixReadOnly.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMMatrixReadOnly.t -> unit [@@js.set "prototype"]
-  val create: t -> ?init:float list or_string -> unit -> DOMMatrixReadOnly.t [@@js.apply_newable]
-  val fromFloat32Array: t -> array32:Float32Array.t_0 -> DOMMatrixReadOnly.t [@@js.call "fromFloat32Array"]
-  val fromFloat64Array: t -> array64:Float64Array.t_0 -> DOMMatrixReadOnly.t [@@js.call "fromFloat64Array"]
-  val fromMatrix: t -> ?other:DOMMatrixInit.t -> unit -> DOMMatrixReadOnly.t [@@js.call "fromMatrix"]
-  val toString: t -> string [@@js.call "toString"]
-end
-module AnonymousInterface8 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AnimationPlaybackEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> AnimationPlaybackEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:AnimationPlaybackEventInit.t -> unit -> AnimationPlaybackEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface79 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMMatrix.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMMatrix.t -> unit [@@js.set "prototype"]
-  val create: t -> ?init:float list or_string -> unit -> DOMMatrix.t [@@js.apply_newable]
-  val fromFloat32Array: t -> array32:Float32Array.t_0 -> DOMMatrix.t [@@js.call "fromFloat32Array"]
-  val fromFloat64Array: t -> array64:Float64Array.t_0 -> DOMMatrix.t [@@js.call "fromFloat64Array"]
-  val fromMatrix: t -> ?other:DOMMatrixInit.t -> unit -> DOMMatrix.t [@@js.call "fromMatrix"]
-end
-module AnonymousInterface78 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMImplementation.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMImplementation.t -> unit [@@js.set "prototype"]
-  val create: t -> DOMImplementation.t [@@js.apply_newable]
-end
-module AnonymousInterface77 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DOMException.t [@@js.get "prototype"]
-  val set_prototype: t -> DOMException.t -> unit [@@js.set "prototype"]
-  val create: t -> ?message:string -> ?name:string -> unit -> DOMException.t [@@js.apply_newable]
-  val get_ABORT_ERR: t -> float [@@js.get "ABORT_ERR"]
-  val get_DATA_CLONE_ERR: t -> float [@@js.get "DATA_CLONE_ERR"]
-  val get_DOMSTRING_SIZE_ERR: t -> float [@@js.get "DOMSTRING_SIZE_ERR"]
-  val get_HIERARCHY_REQUEST_ERR: t -> float [@@js.get "HIERARCHY_REQUEST_ERR"]
-  val get_INDEX_SIZE_ERR: t -> float [@@js.get "INDEX_SIZE_ERR"]
-  val get_INUSE_ATTRIBUTE_ERR: t -> float [@@js.get "INUSE_ATTRIBUTE_ERR"]
-  val get_INVALID_ACCESS_ERR: t -> float [@@js.get "INVALID_ACCESS_ERR"]
-  val get_INVALID_CHARACTER_ERR: t -> float [@@js.get "INVALID_CHARACTER_ERR"]
-  val get_INVALID_MODIFICATION_ERR: t -> float [@@js.get "INVALID_MODIFICATION_ERR"]
-  val get_INVALID_NODE_TYPE_ERR: t -> float [@@js.get "INVALID_NODE_TYPE_ERR"]
-  val get_INVALID_STATE_ERR: t -> float [@@js.get "INVALID_STATE_ERR"]
-  val get_NAMESPACE_ERR: t -> float [@@js.get "NAMESPACE_ERR"]
-  val get_NETWORK_ERR: t -> float [@@js.get "NETWORK_ERR"]
-  val get_NOT_FOUND_ERR: t -> float [@@js.get "NOT_FOUND_ERR"]
-  val get_NOT_SUPPORTED_ERR: t -> float [@@js.get "NOT_SUPPORTED_ERR"]
-  val get_NO_DATA_ALLOWED_ERR: t -> float [@@js.get "NO_DATA_ALLOWED_ERR"]
-  val get_NO_MODIFICATION_ALLOWED_ERR: t -> float [@@js.get "NO_MODIFICATION_ALLOWED_ERR"]
-  val get_QUOTA_EXCEEDED_ERR: t -> float [@@js.get "QUOTA_EXCEEDED_ERR"]
-  val get_SECURITY_ERR: t -> float [@@js.get "SECURITY_ERR"]
-  val get_SYNTAX_ERR: t -> float [@@js.get "SYNTAX_ERR"]
-  val get_TIMEOUT_ERR: t -> float [@@js.get "TIMEOUT_ERR"]
-  val get_TYPE_MISMATCH_ERR: t -> float [@@js.get "TYPE_MISMATCH_ERR"]
-  val get_URL_MISMATCH_ERR: t -> float [@@js.get "URL_MISMATCH_ERR"]
-  val get_VALIDATION_ERR: t -> float [@@js.get "VALIDATION_ERR"]
-  val get_WRONG_DOCUMENT_ERR: t -> float [@@js.get "WRONG_DOCUMENT_ERR"]
-end
-module AnonymousInterface76 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CustomEvent.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> CustomEvent.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:'T CustomEventInit.t -> unit -> 'T CustomEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface75 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CustomElementRegistry.t [@@js.get "prototype"]
-  val set_prototype: t -> CustomElementRegistry.t -> unit [@@js.set "prototype"]
-  val create: t -> CustomElementRegistry.t [@@js.apply_newable]
-end
-module AnonymousInterface74 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CryptoKey.t [@@js.get "prototype"]
-  val set_prototype: t -> CryptoKey.t -> unit [@@js.set "prototype"]
-  val create: t -> CryptoKey.t [@@js.apply_newable]
-end
-module AnonymousInterface73 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Crypto.t [@@js.get "prototype"]
-  val set_prototype: t -> Crypto.t -> unit [@@js.set "prototype"]
-  val create: t -> Crypto.t [@@js.apply_newable]
-end
-module AnonymousInterface72 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CredentialsContainer.t [@@js.get "prototype"]
-  val set_prototype: t -> CredentialsContainer.t -> unit [@@js.set "prototype"]
-  val create: t -> CredentialsContainer.t [@@js.apply_newable]
-end
-module AnonymousInterface71 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Credential.t [@@js.get "prototype"]
-  val set_prototype: t -> Credential.t -> unit [@@js.set "prototype"]
-  val create: t -> Credential.t [@@js.apply_newable]
-end
-module QueuingStrategyInit : sig
-  type t = [`QueuingStrategyInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`QueuingStrategyInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`QueuingStrategyInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `QueuingStrategyInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    Creates a new ByteLengthQueuingStrategy with the provided high water mark.
-    
-    Note that the provided high water mark will not be validated ahead of time. Instead, if it is negative, NaN, or not a number, the resulting ByteLengthQueuingStrategy will cause the corresponding stream constructor to throw.
-  *)
-  val get_highWaterMark: 'tags this -> float [@@js.get "highWaterMark"]
-  
-  (**
-    Creates a new ByteLengthQueuingStrategy with the provided high water mark.
-    
-    Note that the provided high water mark will not be validated ahead of time. Instead, if it is negative, NaN, or not a number, the resulting ByteLengthQueuingStrategy will cause the corresponding stream constructor to throw.
-  *)
-  val set_highWaterMark: 'tags this -> float -> unit [@@js.set "highWaterMark"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
-module[@js.scope "CountQueuingStrategy"] CountQueuingStrategy : sig
-  type t = [`CountQueuingStrategy | `QueuingStrategy of any] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`CountQueuingStrategy | `QueuingStrategy of any]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`CountQueuingStrategy | `QueuingStrategy of any]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `CountQueuingStrategy ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_highWaterMark: 'tags this -> float [@@js.get "highWaterMark"]
-  val get_size: 'tags this -> QueuingStrategySize.t_0 [@@js.get "size"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: QueuingStrategyInit.t -> t [@@js.create]
-end
-module AnonymousInterface70 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CountQueuingStrategy.t [@@js.get "prototype"]
-  val set_prototype: t -> CountQueuingStrategy.t -> unit [@@js.set "prototype"]
-  val create: t -> init:QueuingStrategyInit.t -> CountQueuingStrategy.t [@@js.apply_newable]
-end
-module AnonymousInterface7 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AnimationEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> AnimationEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?animationEventInitDict:AnimationEventInit.t -> unit -> AnimationEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface69 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ConvolverNode.t [@@js.get "prototype"]
-  val set_prototype: t -> ConvolverNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:ConvolverOptions.t -> unit -> ConvolverNode.t [@@js.apply_newable]
-end
-module AnonymousInterface68 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ConstantSourceNode.t [@@js.get "prototype"]
-  val set_prototype: t -> ConstantSourceNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:ConstantSourceOptions.t -> unit -> ConstantSourceNode.t [@@js.apply_newable]
-end
-module AnonymousInterface67 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CompositionEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> CompositionEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:CompositionEventInit.t -> unit -> CompositionEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface65 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Comment.t [@@js.get "prototype"]
-  val set_prototype: t -> Comment.t -> unit [@@js.set "prototype"]
-  val create: t -> ?data:string -> unit -> Comment.t [@@js.apply_newable]
-end
-module AnonymousInterface64 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CloseEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> CloseEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:CloseEventInit.t -> unit -> CloseEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface63 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ClipboardItem.t [@@js.get "prototype"]
-  val set_prototype: t -> ClipboardItem.t -> unit [@@js.set "prototype"]
-  val create: t -> items:(string, ClipboardItemDataType.t) Record.t_2 -> ?options:ClipboardItemOptions.t -> unit -> ClipboardItem.t [@@js.apply_newable]
-end
-module AnonymousInterface62 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ClipboardEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> ClipboardEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:ClipboardEventInit.t -> unit -> ClipboardEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface61 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Clipboard.t [@@js.get "prototype"]
-  val set_prototype: t -> Clipboard.t -> unit [@@js.set "prototype"]
-  val create: t -> Clipboard.t [@@js.apply_newable]
-end
-module AnonymousInterface60 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CharacterData.t [@@js.get "prototype"]
-  val set_prototype: t -> CharacterData.t -> unit [@@js.set "prototype"]
-  val create: t -> CharacterData.t [@@js.apply_newable]
-end
-module AnonymousInterface6 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AnimationEffect.t [@@js.get "prototype"]
-  val set_prototype: t -> AnimationEffect.t -> unit [@@js.set "prototype"]
-  val create: t -> AnimationEffect.t [@@js.apply_newable]
-end
-module AnonymousInterface59 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ChannelSplitterNode.t [@@js.get "prototype"]
-  val set_prototype: t -> ChannelSplitterNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:ChannelSplitterOptions.t -> unit -> ChannelSplitterNode.t [@@js.apply_newable]
-end
-module AnonymousInterface58 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ChannelMergerNode.t [@@js.get "prototype"]
-  val set_prototype: t -> ChannelMergerNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:ChannelMergerOptions.t -> unit -> ChannelMergerNode.t [@@js.apply_newable]
-end
-module AnonymousInterface57 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CanvasRenderingContext2D.t [@@js.get "prototype"]
-  val set_prototype: t -> CanvasRenderingContext2D.t -> unit [@@js.set "prototype"]
-  val create: t -> CanvasRenderingContext2D.t [@@js.apply_newable]
-end
-module AnonymousInterface56 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CanvasPattern.t [@@js.get "prototype"]
-  val set_prototype: t -> CanvasPattern.t -> unit [@@js.set "prototype"]
-  val create: t -> CanvasPattern.t [@@js.apply_newable]
-end
-module AnonymousInterface55 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CanvasGradient.t [@@js.get "prototype"]
-  val set_prototype: t -> CanvasGradient.t -> unit [@@js.set "prototype"]
-  val create: t -> CanvasGradient.t [@@js.apply_newable]
-end
-module AnonymousInterface54 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CacheStorage.t [@@js.get "prototype"]
-  val set_prototype: t -> CacheStorage.t -> unit [@@js.set "prototype"]
-  val create: t -> CacheStorage.t [@@js.apply_newable]
-end
-module AnonymousInterface537 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val create: t -> ?width:float -> ?height:float -> unit -> HTMLImageElement.t [@@js.apply_newable]
-end
-module AnonymousInterface536 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val create: t -> ?text:string -> ?value:string -> ?defaultSelected:bool -> ?selected:bool -> unit -> HTMLOptionElement.t [@@js.apply_newable]
-end
-module AnonymousInterface535 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val create: t -> ?src:string -> unit -> HTMLAudioElement.t [@@js.apply_newable]
-end
-
-(** An XSLTProcessor applies an XSLT stylesheet transformation to an XML document to produce a new XML document as output. It has methods to load the XSLT stylesheet, to manipulate <xsl:param> parameter values, and to apply the transformation to documents. *)
-module[@js.scope "XSLTProcessor"] XSLTProcessor : sig
-  type t = [`XSLTProcessor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`XSLTProcessor]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`XSLTProcessor]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `XSLTProcessor ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val clearParameters: 'tags this -> unit [@@js.call "clearParameters"]
-  val getParameter: 'tags this -> namespaceURI:string or_null -> localName:string -> any [@@js.call "getParameter"]
-  val importStylesheet: 'tags this -> style:Node.t -> unit [@@js.call "importStylesheet"]
-  val removeParameter: 'tags this -> namespaceURI:string or_null -> localName:string -> unit [@@js.call "removeParameter"]
-  val reset: 'tags this -> unit [@@js.call "reset"]
-  val setParameter: 'tags this -> namespaceURI:string or_null -> localName:string -> value:any -> unit [@@js.call "setParameter"]
-  val transformToDocument: 'tags this -> source:Node.t -> Document.t [@@js.call "transformToDocument"]
-  val transformToFragment: 'tags this -> source:Node.t -> output:Document.t -> DocumentFragment.t [@@js.call "transformToFragment"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface532 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XSLTProcessor.t [@@js.get "prototype"]
-  val set_prototype: t -> XSLTProcessor.t -> unit [@@js.set "prototype"]
-  val create: t -> XSLTProcessor.t [@@js.apply_newable]
-end
-module AnonymousInterface531 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XPathResult.t [@@js.get "prototype"]
-  val set_prototype: t -> XPathResult.t -> unit [@@js.set "prototype"]
-  val create: t -> XPathResult.t [@@js.apply_newable]
-  val get_ANY_TYPE: t -> float [@@js.get "ANY_TYPE"]
-  val get_ANY_UNORDERED_NODE_TYPE: t -> float [@@js.get "ANY_UNORDERED_NODE_TYPE"]
-  val get_BOOLEAN_TYPE: t -> float [@@js.get "BOOLEAN_TYPE"]
-  val get_FIRST_ORDERED_NODE_TYPE: t -> float [@@js.get "FIRST_ORDERED_NODE_TYPE"]
-  val get_NUMBER_TYPE: t -> float [@@js.get "NUMBER_TYPE"]
-  val get_ORDERED_NODE_ITERATOR_TYPE: t -> float [@@js.get "ORDERED_NODE_ITERATOR_TYPE"]
-  val get_ORDERED_NODE_SNAPSHOT_TYPE: t -> float [@@js.get "ORDERED_NODE_SNAPSHOT_TYPE"]
-  val get_STRING_TYPE: t -> float [@@js.get "STRING_TYPE"]
-  val get_UNORDERED_NODE_ITERATOR_TYPE: t -> float [@@js.get "UNORDERED_NODE_ITERATOR_TYPE"]
-  val get_UNORDERED_NODE_SNAPSHOT_TYPE: t -> float [@@js.get "UNORDERED_NODE_SNAPSHOT_TYPE"]
-end
-module AnonymousInterface530 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XPathExpression.t [@@js.get "prototype"]
-  val set_prototype: t -> XPathExpression.t -> unit [@@js.set "prototype"]
-  val create: t -> XPathExpression.t [@@js.apply_newable]
-end
-module AnonymousInterface53 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Cache.t [@@js.get "prototype"]
-  val set_prototype: t -> Cache.t -> unit [@@js.set "prototype"]
-  val create: t -> Cache.t [@@js.apply_newable]
-end
-
-(** The XPathEvaluator interface allows to compile and evaluate XPath expressions. *)
-module[@js.scope "XPathEvaluator"] XPathEvaluator : sig
-  type t = [`XPathEvaluator | `XPathEvaluatorBase] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`XPathEvaluator | `XPathEvaluatorBase]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`XPathEvaluator | `XPathEvaluatorBase]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `XPathEvaluator ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface529 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XPathEvaluator.t [@@js.get "prototype"]
-  val set_prototype: t -> XPathEvaluator.t -> unit [@@js.set "prototype"]
-  val create: t -> XPathEvaluator.t [@@js.apply_newable]
-end
-
-(** Provides the serializeToString() method to construct an XML string representing a DOM tree. *)
-module[@js.scope "XMLSerializer"] XMLSerializer : sig
-  type t = [`XMLSerializer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`XMLSerializer]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`XMLSerializer]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `XMLSerializer ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val serializeToString: 'tags this -> root:Node.t -> string [@@js.call "serializeToString"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface528 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XMLSerializer.t [@@js.get "prototype"]
-  val set_prototype: t -> XMLSerializer.t -> unit [@@js.set "prototype"]
-  val create: t -> XMLSerializer.t [@@js.apply_newable]
-end
-module AnonymousInterface527 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XMLHttpRequestUpload.t [@@js.get "prototype"]
-  val set_prototype: t -> XMLHttpRequestUpload.t -> unit [@@js.set "prototype"]
-  val create: t -> XMLHttpRequestUpload.t [@@js.apply_newable]
-end
-module AnonymousInterface526 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XMLHttpRequestEventTarget.t [@@js.get "prototype"]
-  val set_prototype: t -> XMLHttpRequestEventTarget.t -> unit [@@js.set "prototype"]
-  val create: t -> XMLHttpRequestEventTarget.t [@@js.apply_newable]
-end
-module AnonymousInterface525 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XMLHttpRequest.t [@@js.get "prototype"]
-  val set_prototype: t -> XMLHttpRequest.t -> unit [@@js.set "prototype"]
-  val create: t -> XMLHttpRequest.t [@@js.apply_newable]
-  val get_DONE: t -> float [@@js.get "DONE"]
-  val get_HEADERS_RECEIVED: t -> float [@@js.get "HEADERS_RECEIVED"]
-  val get_LOADING: t -> float [@@js.get "LOADING"]
-  val get_OPENED: t -> float [@@js.get "OPENED"]
-  val get_UNSENT: t -> float [@@js.get "UNSENT"]
-end
-module AnonymousInterface524 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> XMLDocument.t [@@js.get "prototype"]
-  val set_prototype: t -> XMLDocument.t -> unit [@@js.set "prototype"]
-  val create: t -> XMLDocument.t [@@js.apply_newable]
-end
-module AnonymousInterface523 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WritableStreamDefaultWriter.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> WritableStreamDefaultWriter.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> stream:'W WritableStream.t -> 'W WritableStreamDefaultWriter.t [@@js.apply_newable]
-end
-module AnonymousInterface522 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WritableStreamDefaultController.t [@@js.get "prototype"]
-  val set_prototype: t -> WritableStreamDefaultController.t -> unit [@@js.set "prototype"]
-  val create: t -> WritableStreamDefaultController.t [@@js.apply_newable]
-end
-module AnonymousInterface521 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WritableStream.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> WritableStream.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ?underlyingSink:'W UnderlyingSink.t -> ?strategy:'W QueuingStrategy.t -> unit -> 'W WritableStream.t [@@js.apply_newable]
-end
-module AnonymousInterface520 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Worklet.t [@@js.get "prototype"]
-  val set_prototype: t -> Worklet.t -> unit [@@js.set "prototype"]
-  val create: t -> Worklet.t [@@js.apply_newable]
-end
 module[@js.scope "CSSTransition"] CSSTransition : sig
   type t = [`Animation | `CSSTransition | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -46314,317 +48709,6 @@ module[@js.scope "CSSTransition"] CSSTransition : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
-end
-module AnonymousInterface52 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSTransition.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSTransition.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSTransition.t [@@js.apply_newable]
-end
-module WorkerOptions : sig
-  type t = [`WorkerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`WorkerOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`WorkerOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WorkerOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_credentials: 'tags this -> RequestCredentials.t [@@js.get "credentials"]
-  val set_credentials: 'tags this -> RequestCredentials.t -> unit [@@js.set "credentials"]
-  val get_name: 'tags this -> string [@@js.get "name"]
-  val set_name: 'tags this -> string -> unit [@@js.set "name"]
-  val get_type: 'tags this -> WorkerType.t [@@js.get "type"]
-  val set_type: 'tags this -> WorkerType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. *)
-module[@js.scope "Worker"] Worker : sig
-  type t = [`AbstractWorker | `EventTarget | `Worker] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AbstractWorker | `EventTarget | `Worker]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AbstractWorker | `EventTarget | `Worker]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `Worker ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
-  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessageerror"]
-  
-  (** Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned. *)
-  val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
-  
-  (** Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned. *)
-  val postMessage': 'tags this -> message:any -> ?options:StructuredSerializeOptions.t -> unit -> unit [@@js.call "postMessage"]
-  
-  (** Aborts worker's associated global environment. *)
-  val terminate: 'tags this -> unit [@@js.call "terminate"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: scriptURL:URL.t or_string -> ?options:WorkerOptions.t -> unit -> t [@@js.create]
-end
-module AnonymousInterface519 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Worker.t [@@js.get "prototype"]
-  val set_prototype: t -> Worker.t -> unit [@@js.set "prototype"]
-  val create: t -> scriptURL:URL.t or_string -> ?options:WorkerOptions.t -> unit -> Worker.t [@@js.apply_newable]
-end
-module AnonymousInterface518 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Window.t [@@js.get "prototype"]
-  val set_prototype: t -> Window.t -> unit [@@js.set "prototype"]
-  val create: t -> Window.t [@@js.apply_newable]
-end
-module AnonymousInterface517 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WheelEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> WheelEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:WheelEventInit.t -> unit -> WheelEvent.t [@@js.apply_newable]
-  val get_DOM_DELTA_LINE: t -> float [@@js.get "DOM_DELTA_LINE"]
-  val get_DOM_DELTA_PAGE: t -> float [@@js.get "DOM_DELTA_PAGE"]
-  val get_DOM_DELTA_PIXEL: t -> float [@@js.get "DOM_DELTA_PIXEL"]
-end
-
-(** Provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection. *)
-module[@js.scope "WebSocket"] WebSocket : sig
-  type t = [`EventTarget | `WebSocket] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `WebSocket]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `WebSocket]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WebSocket ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    Returns a string that indicates how binary data from the WebSocket object is exposed to scripts:
-    
-    Can be set, to change how binary data is returned. The default is "blob".
-  *)
-  val get_binaryType: 'tags this -> BinaryType.t [@@js.get "binaryType"]
-  
-  (**
-    Returns a string that indicates how binary data from the WebSocket object is exposed to scripts:
-    
-    Can be set, to change how binary data is returned. The default is "blob".
-  *)
-  val set_binaryType: 'tags this -> BinaryType.t -> unit [@@js.set "binaryType"]
-  
-  (**
-    Returns the number of bytes of application data (UTF-8 text and binary data) that have been queued using send() but not yet been transmitted to the network.
-    
-    If the WebSocket connection is closed, this attribute's value will only increase with each call to the send() method. (The number does not reset to zero once the connection closes.)
-  *)
-  val get_bufferedAmount: 'tags this -> float [@@js.get "bufferedAmount"]
-  
-  (** Returns the extensions selected by the server, if any. *)
-  val get_extensions: 'tags this -> string [@@js.get "extensions"]
-  val get_onclose: 'tags this -> (this:t -> ev:CloseEvent.t -> any) or_null [@@js.get "onclose"]
-  val set_onclose: 'tags this -> (this:t -> ev:CloseEvent.t -> any) or_null -> unit [@@js.set "onclose"]
-  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onopen"]
-  val set_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onopen"]
-  
-  (** Returns the subprotocol selected by the server, if any. It can be used in conjunction with the array form of the constructor's second argument to perform subprotocol negotiation. *)
-  val get_protocol: 'tags this -> string [@@js.get "protocol"]
-  
-  (** Returns the state of the WebSocket object's connection. It can have the values described below. *)
-  val get_readyState: 'tags this -> float [@@js.get "readyState"]
-  
-  (** Returns the URL that was used to establish the WebSocket connection. *)
-  val get_url: 'tags this -> string [@@js.get "url"]
-  
-  (** Closes the WebSocket connection, optionally using code as the the WebSocket connection close code and reason as the the WebSocket connection close reason. *)
-  val close: 'tags this -> ?code:float -> ?reason:string -> unit -> unit [@@js.call "close"]
-  
-  (** Transmits data using the WebSocket connection. data can be a string, a Blob, an ArrayBuffer, or an ArrayBufferView. *)
-  val send: 'tags this -> data:Blob.t or_string -> unit [@@js.call "send"]
-  val get_CLOSED: 'tags this -> float [@@js.get "CLOSED"]
-  val get_CLOSING: 'tags this -> float [@@js.get "CLOSING"]
-  val get_CONNECTING: 'tags this -> float [@@js.get "CONNECTING"]
-  val get_OPEN: 'tags this -> float [@@js.get "OPEN"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WebSocketEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WebSocketEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: url:URL.t or_string -> ?protocols:string list or_string -> unit -> t [@@js.create]
-  val closed: unit -> float [@@js.get "CLOSED"]
-  val closing: unit -> float [@@js.get "CLOSING"]
-  val connecting: unit -> float [@@js.get "CONNECTING"]
-  val open_: unit -> float [@@js.get "OPEN"]
-end
-module AnonymousInterface516 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebSocket.t [@@js.get "prototype"]
-  val set_prototype: t -> WebSocket.t -> unit [@@js.set "prototype"]
-  val create: t -> url:URL.t or_string -> ?protocols:string list or_string -> unit -> WebSocket.t [@@js.apply_newable]
-  val get_CLOSED: t -> float [@@js.get "CLOSED"]
-  val get_CLOSING: t -> float [@@js.get "CLOSING"]
-  val get_CONNECTING: t -> float [@@js.get "CONNECTING"]
-  val get_OPEN: t -> float [@@js.get "OPEN"]
-end
-module AnonymousInterface515 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLVertexArrayObject.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLVertexArrayObject.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLVertexArrayObject.t [@@js.apply_newable]
-end
-module AnonymousInterface514 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLUniformLocation.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLUniformLocation.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLUniformLocation.t [@@js.apply_newable]
-end
-module AnonymousInterface513 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLTransformFeedback.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLTransformFeedback.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLTransformFeedback.t [@@js.apply_newable]
-end
-module AnonymousInterface512 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLTexture.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLTexture.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLTexture.t [@@js.apply_newable]
-end
-module AnonymousInterface511 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLSync.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLSync.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLSync.t [@@js.apply_newable]
-end
-module AnonymousInterface510 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLShaderPrecisionFormat.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLShaderPrecisionFormat.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLShaderPrecisionFormat.t [@@js.apply_newable]
 end
 
 (** Any CSS at-rule that contains other rules nested within it. *)
@@ -46697,1221 +48781,6 @@ module[@js.scope "CSSSupportsRule"] CSSSupportsRule : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module AnonymousInterface51 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSSupportsRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSSupportsRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSSupportsRule.t [@@js.apply_newable]
-end
-module AnonymousInterface509 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLShader.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLShader.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLShader.t [@@js.apply_newable]
-end
-module AnonymousInterface508 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLSampler.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLSampler.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLSampler.t [@@js.apply_newable]
-end
-module AnonymousInterface507 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLRenderingContext.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLRenderingContext.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLRenderingContext.t [@@js.apply_newable]
-  val get_ACTIVE_ATTRIBUTES: t -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
-  val get_ACTIVE_TEXTURE: t -> GLenum.t [@@js.get "ACTIVE_TEXTURE"]
-  val get_ACTIVE_UNIFORMS: t -> GLenum.t [@@js.get "ACTIVE_UNIFORMS"]
-  val get_ALIASED_LINE_WIDTH_RANGE: t -> GLenum.t [@@js.get "ALIASED_LINE_WIDTH_RANGE"]
-  val get_ALIASED_POINT_SIZE_RANGE: t -> GLenum.t [@@js.get "ALIASED_POINT_SIZE_RANGE"]
-  val get_ALPHA: t -> GLenum.t [@@js.get "ALPHA"]
-  val get_ALPHA_BITS: t -> GLenum.t [@@js.get "ALPHA_BITS"]
-  val get_ALWAYS: t -> GLenum.t [@@js.get "ALWAYS"]
-  val get_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ARRAY_BUFFER"]
-  val get_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ARRAY_BUFFER_BINDING"]
-  val get_ATTACHED_SHADERS: t -> GLenum.t [@@js.get "ATTACHED_SHADERS"]
-  val get_BACK: t -> GLenum.t [@@js.get "BACK"]
-  val get_BLEND: t -> GLenum.t [@@js.get "BLEND"]
-  val get_BLEND_COLOR: t -> GLenum.t [@@js.get "BLEND_COLOR"]
-  val get_BLEND_DST_ALPHA: t -> GLenum.t [@@js.get "BLEND_DST_ALPHA"]
-  val get_BLEND_DST_RGB: t -> GLenum.t [@@js.get "BLEND_DST_RGB"]
-  val get_BLEND_EQUATION: t -> GLenum.t [@@js.get "BLEND_EQUATION"]
-  val get_BLEND_EQUATION_ALPHA: t -> GLenum.t [@@js.get "BLEND_EQUATION_ALPHA"]
-  val get_BLEND_EQUATION_RGB: t -> GLenum.t [@@js.get "BLEND_EQUATION_RGB"]
-  val get_BLEND_SRC_ALPHA: t -> GLenum.t [@@js.get "BLEND_SRC_ALPHA"]
-  val get_BLEND_SRC_RGB: t -> GLenum.t [@@js.get "BLEND_SRC_RGB"]
-  val get_BLUE_BITS: t -> GLenum.t [@@js.get "BLUE_BITS"]
-  val get_BOOL: t -> GLenum.t [@@js.get "BOOL"]
-  val get_BOOL_VEC2: t -> GLenum.t [@@js.get "BOOL_VEC2"]
-  val get_BOOL_VEC3: t -> GLenum.t [@@js.get "BOOL_VEC3"]
-  val get_BOOL_VEC4: t -> GLenum.t [@@js.get "BOOL_VEC4"]
-  val get_BROWSER_DEFAULT_WEBGL: t -> GLenum.t [@@js.get "BROWSER_DEFAULT_WEBGL"]
-  val get_BUFFER_SIZE: t -> GLenum.t [@@js.get "BUFFER_SIZE"]
-  val get_BUFFER_USAGE: t -> GLenum.t [@@js.get "BUFFER_USAGE"]
-  val get_BYTE: t -> GLenum.t [@@js.get "BYTE"]
-  val get_CCW: t -> GLenum.t [@@js.get "CCW"]
-  val get_CLAMP_TO_EDGE: t -> GLenum.t [@@js.get "CLAMP_TO_EDGE"]
-  val get_COLOR_ATTACHMENT0: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT0"]
-  val get_COLOR_BUFFER_BIT: t -> GLenum.t [@@js.get "COLOR_BUFFER_BIT"]
-  val get_COLOR_CLEAR_VALUE: t -> GLenum.t [@@js.get "COLOR_CLEAR_VALUE"]
-  val get_COLOR_WRITEMASK: t -> GLenum.t [@@js.get "COLOR_WRITEMASK"]
-  val get_COMPILE_STATUS: t -> GLenum.t [@@js.get "COMPILE_STATUS"]
-  val get_COMPRESSED_TEXTURE_FORMATS: t -> GLenum.t [@@js.get "COMPRESSED_TEXTURE_FORMATS"]
-  val get_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "CONSTANT_ALPHA"]
-  val get_CONSTANT_COLOR: t -> GLenum.t [@@js.get "CONSTANT_COLOR"]
-  val get_CONTEXT_LOST_WEBGL: t -> GLenum.t [@@js.get "CONTEXT_LOST_WEBGL"]
-  val get_CULL_FACE: t -> GLenum.t [@@js.get "CULL_FACE"]
-  val get_CULL_FACE_MODE: t -> GLenum.t [@@js.get "CULL_FACE_MODE"]
-  val get_CURRENT_PROGRAM: t -> GLenum.t [@@js.get "CURRENT_PROGRAM"]
-  val get_CURRENT_VERTEX_ATTRIB: t -> GLenum.t [@@js.get "CURRENT_VERTEX_ATTRIB"]
-  val get_CW: t -> GLenum.t [@@js.get "CW"]
-  val get_DECR: t -> GLenum.t [@@js.get "DECR"]
-  val get_DECR_WRAP: t -> GLenum.t [@@js.get "DECR_WRAP"]
-  val get_DELETE_STATUS: t -> GLenum.t [@@js.get "DELETE_STATUS"]
-  val get_DEPTH_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_ATTACHMENT"]
-  val get_DEPTH_BITS: t -> GLenum.t [@@js.get "DEPTH_BITS"]
-  val get_DEPTH_BUFFER_BIT: t -> GLenum.t [@@js.get "DEPTH_BUFFER_BIT"]
-  val get_DEPTH_CLEAR_VALUE: t -> GLenum.t [@@js.get "DEPTH_CLEAR_VALUE"]
-  val get_DEPTH_COMPONENT: t -> GLenum.t [@@js.get "DEPTH_COMPONENT"]
-  val get_DEPTH_COMPONENT16: t -> GLenum.t [@@js.get "DEPTH_COMPONENT16"]
-  val get_DEPTH_FUNC: t -> GLenum.t [@@js.get "DEPTH_FUNC"]
-  val get_DEPTH_RANGE: t -> GLenum.t [@@js.get "DEPTH_RANGE"]
-  val get_DEPTH_STENCIL: t -> GLenum.t [@@js.get "DEPTH_STENCIL"]
-  val get_DEPTH_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_STENCIL_ATTACHMENT"]
-  val get_DEPTH_TEST: t -> GLenum.t [@@js.get "DEPTH_TEST"]
-  val get_DEPTH_WRITEMASK: t -> GLenum.t [@@js.get "DEPTH_WRITEMASK"]
-  val get_DITHER: t -> GLenum.t [@@js.get "DITHER"]
-  val get_DONT_CARE: t -> GLenum.t [@@js.get "DONT_CARE"]
-  val get_DST_ALPHA: t -> GLenum.t [@@js.get "DST_ALPHA"]
-  val get_DST_COLOR: t -> GLenum.t [@@js.get "DST_COLOR"]
-  val get_DYNAMIC_DRAW: t -> GLenum.t [@@js.get "DYNAMIC_DRAW"]
-  val get_ELEMENT_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER"]
-  val get_ELEMENT_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER_BINDING"]
-  val get_EQUAL: t -> GLenum.t [@@js.get "EQUAL"]
-  val get_FASTEST: t -> GLenum.t [@@js.get "FASTEST"]
-  val get_FLOAT: t -> GLenum.t [@@js.get "FLOAT"]
-  val get_FLOAT_MAT2: t -> GLenum.t [@@js.get "FLOAT_MAT2"]
-  val get_FLOAT_MAT3: t -> GLenum.t [@@js.get "FLOAT_MAT3"]
-  val get_FLOAT_MAT4: t -> GLenum.t [@@js.get "FLOAT_MAT4"]
-  val get_FLOAT_VEC2: t -> GLenum.t [@@js.get "FLOAT_VEC2"]
-  val get_FLOAT_VEC3: t -> GLenum.t [@@js.get "FLOAT_VEC3"]
-  val get_FLOAT_VEC4: t -> GLenum.t [@@js.get "FLOAT_VEC4"]
-  val get_FRAGMENT_SHADER: t -> GLenum.t [@@js.get "FRAGMENT_SHADER"]
-  val get_FRAMEBUFFER: t -> GLenum.t [@@js.get "FRAMEBUFFER"]
-  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_NAME"]
-  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL"]
-  val get_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "FRAMEBUFFER_BINDING"]
-  val get_FRAMEBUFFER_COMPLETE: t -> GLenum.t [@@js.get "FRAMEBUFFER_COMPLETE"]
-  val get_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_ATTACHMENT"]
-  val get_FRAMEBUFFER_INCOMPLETE_DIMENSIONS: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_DIMENSIONS"]
-  val get_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"]
-  val get_FRAMEBUFFER_UNSUPPORTED: t -> GLenum.t [@@js.get "FRAMEBUFFER_UNSUPPORTED"]
-  val get_FRONT: t -> GLenum.t [@@js.get "FRONT"]
-  val get_FRONT_AND_BACK: t -> GLenum.t [@@js.get "FRONT_AND_BACK"]
-  val get_FRONT_FACE: t -> GLenum.t [@@js.get "FRONT_FACE"]
-  val get_FUNC_ADD: t -> GLenum.t [@@js.get "FUNC_ADD"]
-  val get_FUNC_REVERSE_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_REVERSE_SUBTRACT"]
-  val get_FUNC_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_SUBTRACT"]
-  val get_GENERATE_MIPMAP_HINT: t -> GLenum.t [@@js.get "GENERATE_MIPMAP_HINT"]
-  val get_GEQUAL: t -> GLenum.t [@@js.get "GEQUAL"]
-  val get_GREATER: t -> GLenum.t [@@js.get "GREATER"]
-  val get_GREEN_BITS: t -> GLenum.t [@@js.get "GREEN_BITS"]
-  val get_HIGH_FLOAT: t -> GLenum.t [@@js.get "HIGH_FLOAT"]
-  val get_HIGH_INT: t -> GLenum.t [@@js.get "HIGH_INT"]
-  val get_IMPLEMENTATION_COLOR_READ_FORMAT: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_FORMAT"]
-  val get_IMPLEMENTATION_COLOR_READ_TYPE: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_TYPE"]
-  val get_INCR: t -> GLenum.t [@@js.get "INCR"]
-  val get_INCR_WRAP: t -> GLenum.t [@@js.get "INCR_WRAP"]
-  val get_INT: t -> GLenum.t [@@js.get "INT"]
-  val get_INT_VEC2: t -> GLenum.t [@@js.get "INT_VEC2"]
-  val get_INT_VEC3: t -> GLenum.t [@@js.get "INT_VEC3"]
-  val get_INT_VEC4: t -> GLenum.t [@@js.get "INT_VEC4"]
-  val get_INVALID_ENUM: t -> GLenum.t [@@js.get "INVALID_ENUM"]
-  val get_INVALID_FRAMEBUFFER_OPERATION: t -> GLenum.t [@@js.get "INVALID_FRAMEBUFFER_OPERATION"]
-  val get_INVALID_OPERATION: t -> GLenum.t [@@js.get "INVALID_OPERATION"]
-  val get_INVALID_VALUE: t -> GLenum.t [@@js.get "INVALID_VALUE"]
-  val get_INVERT: t -> GLenum.t [@@js.get "INVERT"]
-  val get_KEEP: t -> GLenum.t [@@js.get "KEEP"]
-  val get_LEQUAL: t -> GLenum.t [@@js.get "LEQUAL"]
-  val get_LESS: t -> GLenum.t [@@js.get "LESS"]
-  val get_LINEAR: t -> GLenum.t [@@js.get "LINEAR"]
-  val get_LINEAR_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_LINEAR"]
-  val get_LINEAR_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_NEAREST"]
-  val get_LINES: t -> GLenum.t [@@js.get "LINES"]
-  val get_LINE_LOOP: t -> GLenum.t [@@js.get "LINE_LOOP"]
-  val get_LINE_STRIP: t -> GLenum.t [@@js.get "LINE_STRIP"]
-  val get_LINE_WIDTH: t -> GLenum.t [@@js.get "LINE_WIDTH"]
-  val get_LINK_STATUS: t -> GLenum.t [@@js.get "LINK_STATUS"]
-  val get_LOW_FLOAT: t -> GLenum.t [@@js.get "LOW_FLOAT"]
-  val get_LOW_INT: t -> GLenum.t [@@js.get "LOW_INT"]
-  val get_LUMINANCE: t -> GLenum.t [@@js.get "LUMINANCE"]
-  val get_LUMINANCE_ALPHA: t -> GLenum.t [@@js.get "LUMINANCE_ALPHA"]
-  val get_MAX_COMBINED_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_COMBINED_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_CUBE_MAP_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_CUBE_MAP_TEXTURE_SIZE"]
-  val get_MAX_FRAGMENT_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_VECTORS"]
-  val get_MAX_RENDERBUFFER_SIZE: t -> GLenum.t [@@js.get "MAX_RENDERBUFFER_SIZE"]
-  val get_MAX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_TEXTURE_SIZE"]
-  val get_MAX_VARYING_VECTORS: t -> GLenum.t [@@js.get "MAX_VARYING_VECTORS"]
-  val get_MAX_VERTEX_ATTRIBS: t -> GLenum.t [@@js.get "MAX_VERTEX_ATTRIBS"]
-  val get_MAX_VERTEX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_VERTEX_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_VERTEX_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_VECTORS"]
-  val get_MAX_VIEWPORT_DIMS: t -> GLenum.t [@@js.get "MAX_VIEWPORT_DIMS"]
-  val get_MEDIUM_FLOAT: t -> GLenum.t [@@js.get "MEDIUM_FLOAT"]
-  val get_MEDIUM_INT: t -> GLenum.t [@@js.get "MEDIUM_INT"]
-  val get_MIRRORED_REPEAT: t -> GLenum.t [@@js.get "MIRRORED_REPEAT"]
-  val get_NEAREST: t -> GLenum.t [@@js.get "NEAREST"]
-  val get_NEAREST_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_LINEAR"]
-  val get_NEAREST_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_NEAREST"]
-  val get_NEVER: t -> GLenum.t [@@js.get "NEVER"]
-  val get_NICEST: t -> GLenum.t [@@js.get "NICEST"]
-  val get_NONE: t -> GLenum.t [@@js.get "NONE"]
-  val get_NOTEQUAL: t -> GLenum.t [@@js.get "NOTEQUAL"]
-  val get_NO_ERROR: t -> GLenum.t [@@js.get "NO_ERROR"]
-  val get_ONE: t -> GLenum.t [@@js.get "ONE"]
-  val get_ONE_MINUS_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_ALPHA"]
-  val get_ONE_MINUS_CONSTANT_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_COLOR"]
-  val get_ONE_MINUS_DST_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_DST_ALPHA"]
-  val get_ONE_MINUS_DST_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_DST_COLOR"]
-  val get_ONE_MINUS_SRC_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_ALPHA"]
-  val get_ONE_MINUS_SRC_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_COLOR"]
-  val get_OUT_OF_MEMORY: t -> GLenum.t [@@js.get "OUT_OF_MEMORY"]
-  val get_PACK_ALIGNMENT: t -> GLenum.t [@@js.get "PACK_ALIGNMENT"]
-  val get_POINTS: t -> GLenum.t [@@js.get "POINTS"]
-  val get_POLYGON_OFFSET_FACTOR: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FACTOR"]
-  val get_POLYGON_OFFSET_FILL: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FILL"]
-  val get_POLYGON_OFFSET_UNITS: t -> GLenum.t [@@js.get "POLYGON_OFFSET_UNITS"]
-  val get_RED_BITS: t -> GLenum.t [@@js.get "RED_BITS"]
-  val get_RENDERBUFFER: t -> GLenum.t [@@js.get "RENDERBUFFER"]
-  val get_RENDERBUFFER_ALPHA_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_ALPHA_SIZE"]
-  val get_RENDERBUFFER_BINDING: t -> GLenum.t [@@js.get "RENDERBUFFER_BINDING"]
-  val get_RENDERBUFFER_BLUE_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_BLUE_SIZE"]
-  val get_RENDERBUFFER_DEPTH_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_DEPTH_SIZE"]
-  val get_RENDERBUFFER_GREEN_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_GREEN_SIZE"]
-  val get_RENDERBUFFER_HEIGHT: t -> GLenum.t [@@js.get "RENDERBUFFER_HEIGHT"]
-  val get_RENDERBUFFER_INTERNAL_FORMAT: t -> GLenum.t [@@js.get "RENDERBUFFER_INTERNAL_FORMAT"]
-  val get_RENDERBUFFER_RED_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_RED_SIZE"]
-  val get_RENDERBUFFER_STENCIL_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_STENCIL_SIZE"]
-  val get_RENDERBUFFER_WIDTH: t -> GLenum.t [@@js.get "RENDERBUFFER_WIDTH"]
-  val get_RENDERER: t -> GLenum.t [@@js.get "RENDERER"]
-  val get_REPEAT: t -> GLenum.t [@@js.get "REPEAT"]
-  val get_REPLACE: t -> GLenum.t [@@js.get "REPLACE"]
-  val get_RGB: t -> GLenum.t [@@js.get "RGB"]
-  val get_RGB565: t -> GLenum.t [@@js.get "RGB565"]
-  val get_RGB5_A1: t -> GLenum.t [@@js.get "RGB5_A1"]
-  val get_RGBA: t -> GLenum.t [@@js.get "RGBA"]
-  val get_RGBA4: t -> GLenum.t [@@js.get "RGBA4"]
-  val get_SAMPLER_2D: t -> GLenum.t [@@js.get "SAMPLER_2D"]
-  val get_SAMPLER_CUBE: t -> GLenum.t [@@js.get "SAMPLER_CUBE"]
-  val get_SAMPLES: t -> GLenum.t [@@js.get "SAMPLES"]
-  val get_SAMPLE_ALPHA_TO_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_ALPHA_TO_COVERAGE"]
-  val get_SAMPLE_BUFFERS: t -> GLenum.t [@@js.get "SAMPLE_BUFFERS"]
-  val get_SAMPLE_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE"]
-  val get_SAMPLE_COVERAGE_INVERT: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_INVERT"]
-  val get_SAMPLE_COVERAGE_VALUE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_VALUE"]
-  val get_SCISSOR_BOX: t -> GLenum.t [@@js.get "SCISSOR_BOX"]
-  val get_SCISSOR_TEST: t -> GLenum.t [@@js.get "SCISSOR_TEST"]
-  val get_SHADER_TYPE: t -> GLenum.t [@@js.get "SHADER_TYPE"]
-  val get_SHADING_LANGUAGE_VERSION: t -> GLenum.t [@@js.get "SHADING_LANGUAGE_VERSION"]
-  val get_SHORT: t -> GLenum.t [@@js.get "SHORT"]
-  val get_SRC_ALPHA: t -> GLenum.t [@@js.get "SRC_ALPHA"]
-  val get_SRC_ALPHA_SATURATE: t -> GLenum.t [@@js.get "SRC_ALPHA_SATURATE"]
-  val get_SRC_COLOR: t -> GLenum.t [@@js.get "SRC_COLOR"]
-  val get_STATIC_DRAW: t -> GLenum.t [@@js.get "STATIC_DRAW"]
-  val get_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "STENCIL_ATTACHMENT"]
-  val get_STENCIL_BACK_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_FAIL"]
-  val get_STENCIL_BACK_FUNC: t -> GLenum.t [@@js.get "STENCIL_BACK_FUNC"]
-  val get_STENCIL_BACK_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_FAIL"]
-  val get_STENCIL_BACK_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_PASS"]
-  val get_STENCIL_BACK_REF: t -> GLenum.t [@@js.get "STENCIL_BACK_REF"]
-  val get_STENCIL_BACK_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_BACK_VALUE_MASK"]
-  val get_STENCIL_BACK_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_BACK_WRITEMASK"]
-  val get_STENCIL_BITS: t -> GLenum.t [@@js.get "STENCIL_BITS"]
-  val get_STENCIL_BUFFER_BIT: t -> GLenum.t [@@js.get "STENCIL_BUFFER_BIT"]
-  val get_STENCIL_CLEAR_VALUE: t -> GLenum.t [@@js.get "STENCIL_CLEAR_VALUE"]
-  val get_STENCIL_FAIL: t -> GLenum.t [@@js.get "STENCIL_FAIL"]
-  val get_STENCIL_FUNC: t -> GLenum.t [@@js.get "STENCIL_FUNC"]
-  val get_STENCIL_INDEX8: t -> GLenum.t [@@js.get "STENCIL_INDEX8"]
-  val get_STENCIL_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_FAIL"]
-  val get_STENCIL_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_PASS"]
-  val get_STENCIL_REF: t -> GLenum.t [@@js.get "STENCIL_REF"]
-  val get_STENCIL_TEST: t -> GLenum.t [@@js.get "STENCIL_TEST"]
-  val get_STENCIL_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_VALUE_MASK"]
-  val get_STENCIL_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_WRITEMASK"]
-  val get_STREAM_DRAW: t -> GLenum.t [@@js.get "STREAM_DRAW"]
-  val get_SUBPIXEL_BITS: t -> GLenum.t [@@js.get "SUBPIXEL_BITS"]
-  val get_TEXTURE: t -> GLenum.t [@@js.get "TEXTURE"]
-  val get_TEXTURE0: t -> GLenum.t [@@js.get "TEXTURE0"]
-  val get_TEXTURE1: t -> GLenum.t [@@js.get "TEXTURE1"]
-  val get_TEXTURE10: t -> GLenum.t [@@js.get "TEXTURE10"]
-  val get_TEXTURE11: t -> GLenum.t [@@js.get "TEXTURE11"]
-  val get_TEXTURE12: t -> GLenum.t [@@js.get "TEXTURE12"]
-  val get_TEXTURE13: t -> GLenum.t [@@js.get "TEXTURE13"]
-  val get_TEXTURE14: t -> GLenum.t [@@js.get "TEXTURE14"]
-  val get_TEXTURE15: t -> GLenum.t [@@js.get "TEXTURE15"]
-  val get_TEXTURE16: t -> GLenum.t [@@js.get "TEXTURE16"]
-  val get_TEXTURE17: t -> GLenum.t [@@js.get "TEXTURE17"]
-  val get_TEXTURE18: t -> GLenum.t [@@js.get "TEXTURE18"]
-  val get_TEXTURE19: t -> GLenum.t [@@js.get "TEXTURE19"]
-  val get_TEXTURE2: t -> GLenum.t [@@js.get "TEXTURE2"]
-  val get_TEXTURE20: t -> GLenum.t [@@js.get "TEXTURE20"]
-  val get_TEXTURE21: t -> GLenum.t [@@js.get "TEXTURE21"]
-  val get_TEXTURE22: t -> GLenum.t [@@js.get "TEXTURE22"]
-  val get_TEXTURE23: t -> GLenum.t [@@js.get "TEXTURE23"]
-  val get_TEXTURE24: t -> GLenum.t [@@js.get "TEXTURE24"]
-  val get_TEXTURE25: t -> GLenum.t [@@js.get "TEXTURE25"]
-  val get_TEXTURE26: t -> GLenum.t [@@js.get "TEXTURE26"]
-  val get_TEXTURE27: t -> GLenum.t [@@js.get "TEXTURE27"]
-  val get_TEXTURE28: t -> GLenum.t [@@js.get "TEXTURE28"]
-  val get_TEXTURE29: t -> GLenum.t [@@js.get "TEXTURE29"]
-  val get_TEXTURE3: t -> GLenum.t [@@js.get "TEXTURE3"]
-  val get_TEXTURE30: t -> GLenum.t [@@js.get "TEXTURE30"]
-  val get_TEXTURE31: t -> GLenum.t [@@js.get "TEXTURE31"]
-  val get_TEXTURE4: t -> GLenum.t [@@js.get "TEXTURE4"]
-  val get_TEXTURE5: t -> GLenum.t [@@js.get "TEXTURE5"]
-  val get_TEXTURE6: t -> GLenum.t [@@js.get "TEXTURE6"]
-  val get_TEXTURE7: t -> GLenum.t [@@js.get "TEXTURE7"]
-  val get_TEXTURE8: t -> GLenum.t [@@js.get "TEXTURE8"]
-  val get_TEXTURE9: t -> GLenum.t [@@js.get "TEXTURE9"]
-  val get_TEXTURE_2D: t -> GLenum.t [@@js.get "TEXTURE_2D"]
-  val get_TEXTURE_BINDING_2D: t -> GLenum.t [@@js.get "TEXTURE_BINDING_2D"]
-  val get_TEXTURE_BINDING_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_BINDING_CUBE_MAP"]
-  val get_TEXTURE_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_X"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Y"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Z"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_X"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Y"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Z"]
-  val get_TEXTURE_MAG_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MAG_FILTER"]
-  val get_TEXTURE_MIN_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MIN_FILTER"]
-  val get_TEXTURE_WRAP_S: t -> GLenum.t [@@js.get "TEXTURE_WRAP_S"]
-  val get_TEXTURE_WRAP_T: t -> GLenum.t [@@js.get "TEXTURE_WRAP_T"]
-  val get_TRIANGLES: t -> GLenum.t [@@js.get "TRIANGLES"]
-  val get_TRIANGLE_FAN: t -> GLenum.t [@@js.get "TRIANGLE_FAN"]
-  val get_TRIANGLE_STRIP: t -> GLenum.t [@@js.get "TRIANGLE_STRIP"]
-  val get_UNPACK_ALIGNMENT: t -> GLenum.t [@@js.get "UNPACK_ALIGNMENT"]
-  val get_UNPACK_COLORSPACE_CONVERSION_WEBGL: t -> GLenum.t [@@js.get "UNPACK_COLORSPACE_CONVERSION_WEBGL"]
-  val get_UNPACK_FLIP_Y_WEBGL: t -> GLenum.t [@@js.get "UNPACK_FLIP_Y_WEBGL"]
-  val get_UNPACK_PREMULTIPLY_ALPHA_WEBGL: t -> GLenum.t [@@js.get "UNPACK_PREMULTIPLY_ALPHA_WEBGL"]
-  val get_UNSIGNED_BYTE: t -> GLenum.t [@@js.get "UNSIGNED_BYTE"]
-  val get_UNSIGNED_INT: t -> GLenum.t [@@js.get "UNSIGNED_INT"]
-  val get_UNSIGNED_SHORT: t -> GLenum.t [@@js.get "UNSIGNED_SHORT"]
-  val get_UNSIGNED_SHORT_4_4_4_4: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_4_4_4_4"]
-  val get_UNSIGNED_SHORT_5_5_5_1: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_5_5_1"]
-  val get_UNSIGNED_SHORT_5_6_5: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_6_5"]
-  val get_VALIDATE_STATUS: t -> GLenum.t [@@js.get "VALIDATE_STATUS"]
-  val get_VENDOR: t -> GLenum.t [@@js.get "VENDOR"]
-  val get_VERSION: t -> GLenum.t [@@js.get "VERSION"]
-  val get_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"]
-  val get_VERTEX_ATTRIB_ARRAY_ENABLED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_ENABLED"]
-  val get_VERTEX_ATTRIB_ARRAY_NORMALIZED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_NORMALIZED"]
-  val get_VERTEX_ATTRIB_ARRAY_POINTER: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_POINTER"]
-  val get_VERTEX_ATTRIB_ARRAY_SIZE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_SIZE"]
-  val get_VERTEX_ATTRIB_ARRAY_STRIDE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_STRIDE"]
-  val get_VERTEX_ATTRIB_ARRAY_TYPE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_TYPE"]
-  val get_VERTEX_SHADER: t -> GLenum.t [@@js.get "VERTEX_SHADER"]
-  val get_VIEWPORT: t -> GLenum.t [@@js.get "VIEWPORT"]
-  val get_ZERO: t -> GLenum.t [@@js.get "ZERO"]
-end
-module AnonymousInterface506 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLRenderbuffer.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLRenderbuffer.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLRenderbuffer.t [@@js.apply_newable]
-end
-module AnonymousInterface505 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLQuery.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLQuery.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLQuery.t [@@js.apply_newable]
-end
-module AnonymousInterface504 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLProgram.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLProgram.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLProgram.t [@@js.apply_newable]
-end
-module AnonymousInterface503 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLFramebuffer.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLFramebuffer.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLFramebuffer.t [@@js.apply_newable]
-end
-module AnonymousInterface502 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLContextEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLContextEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInit:WebGLContextEventInit.t -> unit -> WebGLContextEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface501 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLBuffer.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLBuffer.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLBuffer.t [@@js.apply_newable]
-end
-module AnonymousInterface500 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGLActiveInfo.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGLActiveInfo.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGLActiveInfo.t [@@js.apply_newable]
-end
-module AnonymousInterface50 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSStyleSheet.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSStyleSheet.t -> unit [@@js.set "prototype"]
-  val create: t -> ?options:CSSStyleSheetInit.t -> unit -> CSSStyleSheet.t [@@js.apply_newable]
-end
-module AnonymousInterface5 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Animation.t [@@js.get "prototype"]
-  val set_prototype: t -> Animation.t -> unit [@@js.set "prototype"]
-  val create: t -> ?effect:AnimationEffect.t or_null -> ?timeline:AnimationTimeline.t or_null -> unit -> Animation.t [@@js.apply_newable]
-end
-module AnonymousInterface499 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WebGL2RenderingContext.t [@@js.get "prototype"]
-  val set_prototype: t -> WebGL2RenderingContext.t -> unit [@@js.set "prototype"]
-  val create: t -> WebGL2RenderingContext.t [@@js.apply_newable]
-  val get_ACTIVE_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "ACTIVE_UNIFORM_BLOCKS"]
-  val get_ALREADY_SIGNALED: t -> GLenum.t [@@js.get "ALREADY_SIGNALED"]
-  val get_ANY_SAMPLES_PASSED: t -> GLenum.t [@@js.get "ANY_SAMPLES_PASSED"]
-  val get_ANY_SAMPLES_PASSED_CONSERVATIVE: t -> GLenum.t [@@js.get "ANY_SAMPLES_PASSED_CONSERVATIVE"]
-  val get_COLOR: t -> GLenum.t [@@js.get "COLOR"]
-  val get_COLOR_ATTACHMENT1: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT1"]
-  val get_COLOR_ATTACHMENT10: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT10"]
-  val get_COLOR_ATTACHMENT11: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT11"]
-  val get_COLOR_ATTACHMENT12: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT12"]
-  val get_COLOR_ATTACHMENT13: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT13"]
-  val get_COLOR_ATTACHMENT14: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT14"]
-  val get_COLOR_ATTACHMENT15: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT15"]
-  val get_COLOR_ATTACHMENT2: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT2"]
-  val get_COLOR_ATTACHMENT3: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT3"]
-  val get_COLOR_ATTACHMENT4: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT4"]
-  val get_COLOR_ATTACHMENT5: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT5"]
-  val get_COLOR_ATTACHMENT6: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT6"]
-  val get_COLOR_ATTACHMENT7: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT7"]
-  val get_COLOR_ATTACHMENT8: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT8"]
-  val get_COLOR_ATTACHMENT9: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT9"]
-  val get_COMPARE_REF_TO_TEXTURE: t -> GLenum.t [@@js.get "COMPARE_REF_TO_TEXTURE"]
-  val get_CONDITION_SATISFIED: t -> GLenum.t [@@js.get "CONDITION_SATISFIED"]
-  val get_COPY_READ_BUFFER: t -> GLenum.t [@@js.get "COPY_READ_BUFFER"]
-  val get_COPY_READ_BUFFER_BINDING: t -> GLenum.t [@@js.get "COPY_READ_BUFFER_BINDING"]
-  val get_COPY_WRITE_BUFFER: t -> GLenum.t [@@js.get "COPY_WRITE_BUFFER"]
-  val get_COPY_WRITE_BUFFER_BINDING: t -> GLenum.t [@@js.get "COPY_WRITE_BUFFER_BINDING"]
-  val get_CURRENT_QUERY: t -> GLenum.t [@@js.get "CURRENT_QUERY"]
-  val get_DEPTH: t -> GLenum.t [@@js.get "DEPTH"]
-  val get_DEPTH24_STENCIL8: t -> GLenum.t [@@js.get "DEPTH24_STENCIL8"]
-  val get_DEPTH32F_STENCIL8: t -> GLenum.t [@@js.get "DEPTH32F_STENCIL8"]
-  val get_DEPTH_COMPONENT24: t -> GLenum.t [@@js.get "DEPTH_COMPONENT24"]
-  val get_DEPTH_COMPONENT32F: t -> GLenum.t [@@js.get "DEPTH_COMPONENT32F"]
-  val get_DRAW_BUFFER0: t -> GLenum.t [@@js.get "DRAW_BUFFER0"]
-  val get_DRAW_BUFFER1: t -> GLenum.t [@@js.get "DRAW_BUFFER1"]
-  val get_DRAW_BUFFER10: t -> GLenum.t [@@js.get "DRAW_BUFFER10"]
-  val get_DRAW_BUFFER11: t -> GLenum.t [@@js.get "DRAW_BUFFER11"]
-  val get_DRAW_BUFFER12: t -> GLenum.t [@@js.get "DRAW_BUFFER12"]
-  val get_DRAW_BUFFER13: t -> GLenum.t [@@js.get "DRAW_BUFFER13"]
-  val get_DRAW_BUFFER14: t -> GLenum.t [@@js.get "DRAW_BUFFER14"]
-  val get_DRAW_BUFFER15: t -> GLenum.t [@@js.get "DRAW_BUFFER15"]
-  val get_DRAW_BUFFER2: t -> GLenum.t [@@js.get "DRAW_BUFFER2"]
-  val get_DRAW_BUFFER3: t -> GLenum.t [@@js.get "DRAW_BUFFER3"]
-  val get_DRAW_BUFFER4: t -> GLenum.t [@@js.get "DRAW_BUFFER4"]
-  val get_DRAW_BUFFER5: t -> GLenum.t [@@js.get "DRAW_BUFFER5"]
-  val get_DRAW_BUFFER6: t -> GLenum.t [@@js.get "DRAW_BUFFER6"]
-  val get_DRAW_BUFFER7: t -> GLenum.t [@@js.get "DRAW_BUFFER7"]
-  val get_DRAW_BUFFER8: t -> GLenum.t [@@js.get "DRAW_BUFFER8"]
-  val get_DRAW_BUFFER9: t -> GLenum.t [@@js.get "DRAW_BUFFER9"]
-  val get_DRAW_FRAMEBUFFER: t -> GLenum.t [@@js.get "DRAW_FRAMEBUFFER"]
-  val get_DRAW_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "DRAW_FRAMEBUFFER_BINDING"]
-  val get_DYNAMIC_COPY: t -> GLenum.t [@@js.get "DYNAMIC_COPY"]
-  val get_DYNAMIC_READ: t -> GLenum.t [@@js.get "DYNAMIC_READ"]
-  val get_FLOAT_32_UNSIGNED_INT_24_8_REV: t -> GLenum.t [@@js.get "FLOAT_32_UNSIGNED_INT_24_8_REV"]
-  val get_FLOAT_MAT2x3: t -> GLenum.t [@@js.get "FLOAT_MAT2x3"]
-  val get_FLOAT_MAT2x4: t -> GLenum.t [@@js.get "FLOAT_MAT2x4"]
-  val get_FLOAT_MAT3x2: t -> GLenum.t [@@js.get "FLOAT_MAT3x2"]
-  val get_FLOAT_MAT3x4: t -> GLenum.t [@@js.get "FLOAT_MAT3x4"]
-  val get_FLOAT_MAT4x2: t -> GLenum.t [@@js.get "FLOAT_MAT4x2"]
-  val get_FLOAT_MAT4x3: t -> GLenum.t [@@js.get "FLOAT_MAT4x3"]
-  val get_FRAGMENT_SHADER_DERIVATIVE_HINT: t -> GLenum.t [@@js.get "FRAGMENT_SHADER_DERIVATIVE_HINT"]
-  val get_FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_BLUE_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING"]
-  val get_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE"]
-  val get_FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_GREEN_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_RED_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_RED_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER"]
-  val get_FRAMEBUFFER_DEFAULT: t -> GLenum.t [@@js.get "FRAMEBUFFER_DEFAULT"]
-  val get_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_MULTISAMPLE"]
-  val get_HALF_FLOAT: t -> GLenum.t [@@js.get "HALF_FLOAT"]
-  val get_INTERLEAVED_ATTRIBS: t -> GLenum.t [@@js.get "INTERLEAVED_ATTRIBS"]
-  val get_INT_2_10_10_10_REV: t -> GLenum.t [@@js.get "INT_2_10_10_10_REV"]
-  val get_INT_SAMPLER_2D: t -> GLenum.t [@@js.get "INT_SAMPLER_2D"]
-  val get_INT_SAMPLER_2D_ARRAY: t -> GLenum.t [@@js.get "INT_SAMPLER_2D_ARRAY"]
-  val get_INT_SAMPLER_3D: t -> GLenum.t [@@js.get "INT_SAMPLER_3D"]
-  val get_INT_SAMPLER_CUBE: t -> GLenum.t [@@js.get "INT_SAMPLER_CUBE"]
-  val get_INVALID_INDEX: t -> GLenum.t [@@js.get "INVALID_INDEX"]
-  val get_MAX: t -> GLenum.t [@@js.get "MAX"]
-  val get_MAX_3D_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_3D_TEXTURE_SIZE"]
-  val get_MAX_ARRAY_TEXTURE_LAYERS: t -> GLenum.t [@@js.get "MAX_ARRAY_TEXTURE_LAYERS"]
-  val get_MAX_CLIENT_WAIT_TIMEOUT_WEBGL: t -> GLenum.t [@@js.get "MAX_CLIENT_WAIT_TIMEOUT_WEBGL"]
-  val get_MAX_COLOR_ATTACHMENTS: t -> GLenum.t [@@js.get "MAX_COLOR_ATTACHMENTS"]
-  val get_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS"]
-  val get_MAX_COMBINED_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "MAX_COMBINED_UNIFORM_BLOCKS"]
-  val get_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS"]
-  val get_MAX_DRAW_BUFFERS: t -> GLenum.t [@@js.get "MAX_DRAW_BUFFERS"]
-  val get_MAX_ELEMENTS_INDICES: t -> GLenum.t [@@js.get "MAX_ELEMENTS_INDICES"]
-  val get_MAX_ELEMENTS_VERTICES: t -> GLenum.t [@@js.get "MAX_ELEMENTS_VERTICES"]
-  val get_MAX_ELEMENT_INDEX: t -> GLenum.t [@@js.get "MAX_ELEMENT_INDEX"]
-  val get_MAX_FRAGMENT_INPUT_COMPONENTS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_INPUT_COMPONENTS"]
-  val get_MAX_FRAGMENT_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_BLOCKS"]
-  val get_MAX_FRAGMENT_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_COMPONENTS"]
-  val get_MAX_PROGRAM_TEXEL_OFFSET: t -> GLenum.t [@@js.get "MAX_PROGRAM_TEXEL_OFFSET"]
-  val get_MAX_SAMPLES: t -> GLenum.t [@@js.get "MAX_SAMPLES"]
-  val get_MAX_SERVER_WAIT_TIMEOUT: t -> GLenum.t [@@js.get "MAX_SERVER_WAIT_TIMEOUT"]
-  val get_MAX_TEXTURE_LOD_BIAS: t -> GLenum.t [@@js.get "MAX_TEXTURE_LOD_BIAS"]
-  val get_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: t -> GLenum.t [@@js.get "MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS"]
-  val get_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: t -> GLenum.t [@@js.get "MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS"]
-  val get_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: t -> GLenum.t [@@js.get "MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS"]
-  val get_MAX_UNIFORM_BLOCK_SIZE: t -> GLenum.t [@@js.get "MAX_UNIFORM_BLOCK_SIZE"]
-  val get_MAX_UNIFORM_BUFFER_BINDINGS: t -> GLenum.t [@@js.get "MAX_UNIFORM_BUFFER_BINDINGS"]
-  val get_MAX_VARYING_COMPONENTS: t -> GLenum.t [@@js.get "MAX_VARYING_COMPONENTS"]
-  val get_MAX_VERTEX_OUTPUT_COMPONENTS: t -> GLenum.t [@@js.get "MAX_VERTEX_OUTPUT_COMPONENTS"]
-  val get_MAX_VERTEX_UNIFORM_BLOCKS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_BLOCKS"]
-  val get_MAX_VERTEX_UNIFORM_COMPONENTS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_COMPONENTS"]
-  val get_MIN: t -> GLenum.t [@@js.get "MIN"]
-  val get_MIN_PROGRAM_TEXEL_OFFSET: t -> GLenum.t [@@js.get "MIN_PROGRAM_TEXEL_OFFSET"]
-  val get_OBJECT_TYPE: t -> GLenum.t [@@js.get "OBJECT_TYPE"]
-  val get_PACK_ROW_LENGTH: t -> GLenum.t [@@js.get "PACK_ROW_LENGTH"]
-  val get_PACK_SKIP_PIXELS: t -> GLenum.t [@@js.get "PACK_SKIP_PIXELS"]
-  val get_PACK_SKIP_ROWS: t -> GLenum.t [@@js.get "PACK_SKIP_ROWS"]
-  val get_PIXEL_PACK_BUFFER: t -> GLenum.t [@@js.get "PIXEL_PACK_BUFFER"]
-  val get_PIXEL_PACK_BUFFER_BINDING: t -> GLenum.t [@@js.get "PIXEL_PACK_BUFFER_BINDING"]
-  val get_PIXEL_UNPACK_BUFFER: t -> GLenum.t [@@js.get "PIXEL_UNPACK_BUFFER"]
-  val get_PIXEL_UNPACK_BUFFER_BINDING: t -> GLenum.t [@@js.get "PIXEL_UNPACK_BUFFER_BINDING"]
-  val get_QUERY_RESULT: t -> GLenum.t [@@js.get "QUERY_RESULT"]
-  val get_QUERY_RESULT_AVAILABLE: t -> GLenum.t [@@js.get "QUERY_RESULT_AVAILABLE"]
-  val get_R11F_G11F_B10F: t -> GLenum.t [@@js.get "R11F_G11F_B10F"]
-  val get_R16F: t -> GLenum.t [@@js.get "R16F"]
-  val get_R16I: t -> GLenum.t [@@js.get "R16I"]
-  val get_R16UI: t -> GLenum.t [@@js.get "R16UI"]
-  val get_R32F: t -> GLenum.t [@@js.get "R32F"]
-  val get_R32I: t -> GLenum.t [@@js.get "R32I"]
-  val get_R32UI: t -> GLenum.t [@@js.get "R32UI"]
-  val get_R8: t -> GLenum.t [@@js.get "R8"]
-  val get_R8I: t -> GLenum.t [@@js.get "R8I"]
-  val get_R8UI: t -> GLenum.t [@@js.get "R8UI"]
-  val get_R8_SNORM: t -> GLenum.t [@@js.get "R8_SNORM"]
-  val get_RASTERIZER_DISCARD: t -> GLenum.t [@@js.get "RASTERIZER_DISCARD"]
-  val get_READ_BUFFER: t -> GLenum.t [@@js.get "READ_BUFFER"]
-  val get_READ_FRAMEBUFFER: t -> GLenum.t [@@js.get "READ_FRAMEBUFFER"]
-  val get_READ_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "READ_FRAMEBUFFER_BINDING"]
-  val get_RED: t -> GLenum.t [@@js.get "RED"]
-  val get_RED_INTEGER: t -> GLenum.t [@@js.get "RED_INTEGER"]
-  val get_RENDERBUFFER_SAMPLES: t -> GLenum.t [@@js.get "RENDERBUFFER_SAMPLES"]
-  val get_RG: t -> GLenum.t [@@js.get "RG"]
-  val get_RG16F: t -> GLenum.t [@@js.get "RG16F"]
-  val get_RG16I: t -> GLenum.t [@@js.get "RG16I"]
-  val get_RG16UI: t -> GLenum.t [@@js.get "RG16UI"]
-  val get_RG32F: t -> GLenum.t [@@js.get "RG32F"]
-  val get_RG32I: t -> GLenum.t [@@js.get "RG32I"]
-  val get_RG32UI: t -> GLenum.t [@@js.get "RG32UI"]
-  val get_RG8: t -> GLenum.t [@@js.get "RG8"]
-  val get_RG8I: t -> GLenum.t [@@js.get "RG8I"]
-  val get_RG8UI: t -> GLenum.t [@@js.get "RG8UI"]
-  val get_RG8_SNORM: t -> GLenum.t [@@js.get "RG8_SNORM"]
-  val get_RGB10_A2: t -> GLenum.t [@@js.get "RGB10_A2"]
-  val get_RGB10_A2UI: t -> GLenum.t [@@js.get "RGB10_A2UI"]
-  val get_RGB16F: t -> GLenum.t [@@js.get "RGB16F"]
-  val get_RGB16I: t -> GLenum.t [@@js.get "RGB16I"]
-  val get_RGB16UI: t -> GLenum.t [@@js.get "RGB16UI"]
-  val get_RGB32F: t -> GLenum.t [@@js.get "RGB32F"]
-  val get_RGB32I: t -> GLenum.t [@@js.get "RGB32I"]
-  val get_RGB32UI: t -> GLenum.t [@@js.get "RGB32UI"]
-  val get_RGB8: t -> GLenum.t [@@js.get "RGB8"]
-  val get_RGB8I: t -> GLenum.t [@@js.get "RGB8I"]
-  val get_RGB8UI: t -> GLenum.t [@@js.get "RGB8UI"]
-  val get_RGB8_SNORM: t -> GLenum.t [@@js.get "RGB8_SNORM"]
-  val get_RGB9_E5: t -> GLenum.t [@@js.get "RGB9_E5"]
-  val get_RGBA16F: t -> GLenum.t [@@js.get "RGBA16F"]
-  val get_RGBA16I: t -> GLenum.t [@@js.get "RGBA16I"]
-  val get_RGBA16UI: t -> GLenum.t [@@js.get "RGBA16UI"]
-  val get_RGBA32F: t -> GLenum.t [@@js.get "RGBA32F"]
-  val get_RGBA32I: t -> GLenum.t [@@js.get "RGBA32I"]
-  val get_RGBA32UI: t -> GLenum.t [@@js.get "RGBA32UI"]
-  val get_RGBA8: t -> GLenum.t [@@js.get "RGBA8"]
-  val get_RGBA8I: t -> GLenum.t [@@js.get "RGBA8I"]
-  val get_RGBA8UI: t -> GLenum.t [@@js.get "RGBA8UI"]
-  val get_RGBA8_SNORM: t -> GLenum.t [@@js.get "RGBA8_SNORM"]
-  val get_RGBA_INTEGER: t -> GLenum.t [@@js.get "RGBA_INTEGER"]
-  val get_RGB_INTEGER: t -> GLenum.t [@@js.get "RGB_INTEGER"]
-  val get_RG_INTEGER: t -> GLenum.t [@@js.get "RG_INTEGER"]
-  val get_SAMPLER_2D_ARRAY: t -> GLenum.t [@@js.get "SAMPLER_2D_ARRAY"]
-  val get_SAMPLER_2D_ARRAY_SHADOW: t -> GLenum.t [@@js.get "SAMPLER_2D_ARRAY_SHADOW"]
-  val get_SAMPLER_2D_SHADOW: t -> GLenum.t [@@js.get "SAMPLER_2D_SHADOW"]
-  val get_SAMPLER_3D: t -> GLenum.t [@@js.get "SAMPLER_3D"]
-  val get_SAMPLER_BINDING: t -> GLenum.t [@@js.get "SAMPLER_BINDING"]
-  val get_SAMPLER_CUBE_SHADOW: t -> GLenum.t [@@js.get "SAMPLER_CUBE_SHADOW"]
-  val get_SEPARATE_ATTRIBS: t -> GLenum.t [@@js.get "SEPARATE_ATTRIBS"]
-  val get_SIGNALED: t -> GLenum.t [@@js.get "SIGNALED"]
-  val get_SIGNED_NORMALIZED: t -> GLenum.t [@@js.get "SIGNED_NORMALIZED"]
-  val get_SRGB: t -> GLenum.t [@@js.get "SRGB"]
-  val get_SRGB8: t -> GLenum.t [@@js.get "SRGB8"]
-  val get_SRGB8_ALPHA8: t -> GLenum.t [@@js.get "SRGB8_ALPHA8"]
-  val get_STATIC_COPY: t -> GLenum.t [@@js.get "STATIC_COPY"]
-  val get_STATIC_READ: t -> GLenum.t [@@js.get "STATIC_READ"]
-  val get_STENCIL: t -> GLenum.t [@@js.get "STENCIL"]
-  val get_STREAM_COPY: t -> GLenum.t [@@js.get "STREAM_COPY"]
-  val get_STREAM_READ: t -> GLenum.t [@@js.get "STREAM_READ"]
-  val get_SYNC_CONDITION: t -> GLenum.t [@@js.get "SYNC_CONDITION"]
-  val get_SYNC_FENCE: t -> GLenum.t [@@js.get "SYNC_FENCE"]
-  val get_SYNC_FLAGS: t -> GLenum.t [@@js.get "SYNC_FLAGS"]
-  val get_SYNC_FLUSH_COMMANDS_BIT: t -> GLenum.t [@@js.get "SYNC_FLUSH_COMMANDS_BIT"]
-  val get_SYNC_GPU_COMMANDS_COMPLETE: t -> GLenum.t [@@js.get "SYNC_GPU_COMMANDS_COMPLETE"]
-  val get_SYNC_STATUS: t -> GLenum.t [@@js.get "SYNC_STATUS"]
-  val get_TEXTURE_2D_ARRAY: t -> GLenum.t [@@js.get "TEXTURE_2D_ARRAY"]
-  val get_TEXTURE_3D: t -> GLenum.t [@@js.get "TEXTURE_3D"]
-  val get_TEXTURE_BASE_LEVEL: t -> GLenum.t [@@js.get "TEXTURE_BASE_LEVEL"]
-  val get_TEXTURE_BINDING_2D_ARRAY: t -> GLenum.t [@@js.get "TEXTURE_BINDING_2D_ARRAY"]
-  val get_TEXTURE_BINDING_3D: t -> GLenum.t [@@js.get "TEXTURE_BINDING_3D"]
-  val get_TEXTURE_COMPARE_FUNC: t -> GLenum.t [@@js.get "TEXTURE_COMPARE_FUNC"]
-  val get_TEXTURE_COMPARE_MODE: t -> GLenum.t [@@js.get "TEXTURE_COMPARE_MODE"]
-  val get_TEXTURE_IMMUTABLE_FORMAT: t -> GLenum.t [@@js.get "TEXTURE_IMMUTABLE_FORMAT"]
-  val get_TEXTURE_IMMUTABLE_LEVELS: t -> GLenum.t [@@js.get "TEXTURE_IMMUTABLE_LEVELS"]
-  val get_TEXTURE_MAX_LEVEL: t -> GLenum.t [@@js.get "TEXTURE_MAX_LEVEL"]
-  val get_TEXTURE_MAX_LOD: t -> GLenum.t [@@js.get "TEXTURE_MAX_LOD"]
-  val get_TEXTURE_MIN_LOD: t -> GLenum.t [@@js.get "TEXTURE_MIN_LOD"]
-  val get_TEXTURE_WRAP_R: t -> GLenum.t [@@js.get "TEXTURE_WRAP_R"]
-  val get_TIMEOUT_EXPIRED: t -> GLenum.t [@@js.get "TIMEOUT_EXPIRED"]
-  val get_TIMEOUT_IGNORED: t -> GLint64.t [@@js.get "TIMEOUT_IGNORED"]
-  val get_TRANSFORM_FEEDBACK: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK"]
-  val get_TRANSFORM_FEEDBACK_ACTIVE: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_ACTIVE"]
-  val get_TRANSFORM_FEEDBACK_BINDING: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BINDING"]
-  val get_TRANSFORM_FEEDBACK_BUFFER: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER"]
-  val get_TRANSFORM_FEEDBACK_BUFFER_BINDING: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_BINDING"]
-  val get_TRANSFORM_FEEDBACK_BUFFER_MODE: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_MODE"]
-  val get_TRANSFORM_FEEDBACK_BUFFER_SIZE: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_SIZE"]
-  val get_TRANSFORM_FEEDBACK_BUFFER_START: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_BUFFER_START"]
-  val get_TRANSFORM_FEEDBACK_PAUSED: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_PAUSED"]
-  val get_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN"]
-  val get_TRANSFORM_FEEDBACK_VARYINGS: t -> GLenum.t [@@js.get "TRANSFORM_FEEDBACK_VARYINGS"]
-  val get_UNIFORM_ARRAY_STRIDE: t -> GLenum.t [@@js.get "UNIFORM_ARRAY_STRIDE"]
-  val get_UNIFORM_BLOCK_ACTIVE_UNIFORMS: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_ACTIVE_UNIFORMS"]
-  val get_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES"]
-  val get_UNIFORM_BLOCK_BINDING: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_BINDING"]
-  val get_UNIFORM_BLOCK_DATA_SIZE: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_DATA_SIZE"]
-  val get_UNIFORM_BLOCK_INDEX: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_INDEX"]
-  val get_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER"]
-  val get_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: t -> GLenum.t [@@js.get "UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER"]
-  val get_UNIFORM_BUFFER: t -> GLenum.t [@@js.get "UNIFORM_BUFFER"]
-  val get_UNIFORM_BUFFER_BINDING: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_BINDING"]
-  val get_UNIFORM_BUFFER_OFFSET_ALIGNMENT: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_OFFSET_ALIGNMENT"]
-  val get_UNIFORM_BUFFER_SIZE: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_SIZE"]
-  val get_UNIFORM_BUFFER_START: t -> GLenum.t [@@js.get "UNIFORM_BUFFER_START"]
-  val get_UNIFORM_IS_ROW_MAJOR: t -> GLenum.t [@@js.get "UNIFORM_IS_ROW_MAJOR"]
-  val get_UNIFORM_MATRIX_STRIDE: t -> GLenum.t [@@js.get "UNIFORM_MATRIX_STRIDE"]
-  val get_UNIFORM_OFFSET: t -> GLenum.t [@@js.get "UNIFORM_OFFSET"]
-  val get_UNIFORM_SIZE: t -> GLenum.t [@@js.get "UNIFORM_SIZE"]
-  val get_UNIFORM_TYPE: t -> GLenum.t [@@js.get "UNIFORM_TYPE"]
-  val get_UNPACK_IMAGE_HEIGHT: t -> GLenum.t [@@js.get "UNPACK_IMAGE_HEIGHT"]
-  val get_UNPACK_ROW_LENGTH: t -> GLenum.t [@@js.get "UNPACK_ROW_LENGTH"]
-  val get_UNPACK_SKIP_IMAGES: t -> GLenum.t [@@js.get "UNPACK_SKIP_IMAGES"]
-  val get_UNPACK_SKIP_PIXELS: t -> GLenum.t [@@js.get "UNPACK_SKIP_PIXELS"]
-  val get_UNPACK_SKIP_ROWS: t -> GLenum.t [@@js.get "UNPACK_SKIP_ROWS"]
-  val get_UNSIGNALED: t -> GLenum.t [@@js.get "UNSIGNALED"]
-  val get_UNSIGNED_INT_10F_11F_11F_REV: t -> GLenum.t [@@js.get "UNSIGNED_INT_10F_11F_11F_REV"]
-  val get_UNSIGNED_INT_24_8: t -> GLenum.t [@@js.get "UNSIGNED_INT_24_8"]
-  val get_UNSIGNED_INT_2_10_10_10_REV: t -> GLenum.t [@@js.get "UNSIGNED_INT_2_10_10_10_REV"]
-  val get_UNSIGNED_INT_5_9_9_9_REV: t -> GLenum.t [@@js.get "UNSIGNED_INT_5_9_9_9_REV"]
-  val get_UNSIGNED_INT_SAMPLER_2D: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_2D"]
-  val get_UNSIGNED_INT_SAMPLER_2D_ARRAY: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_2D_ARRAY"]
-  val get_UNSIGNED_INT_SAMPLER_3D: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_3D"]
-  val get_UNSIGNED_INT_SAMPLER_CUBE: t -> GLenum.t [@@js.get "UNSIGNED_INT_SAMPLER_CUBE"]
-  val get_UNSIGNED_INT_VEC2: t -> GLenum.t [@@js.get "UNSIGNED_INT_VEC2"]
-  val get_UNSIGNED_INT_VEC3: t -> GLenum.t [@@js.get "UNSIGNED_INT_VEC3"]
-  val get_UNSIGNED_INT_VEC4: t -> GLenum.t [@@js.get "UNSIGNED_INT_VEC4"]
-  val get_UNSIGNED_NORMALIZED: t -> GLenum.t [@@js.get "UNSIGNED_NORMALIZED"]
-  val get_VERTEX_ARRAY_BINDING: t -> GLenum.t [@@js.get "VERTEX_ARRAY_BINDING"]
-  val get_VERTEX_ATTRIB_ARRAY_DIVISOR: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_DIVISOR"]
-  val get_VERTEX_ATTRIB_ARRAY_INTEGER: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_INTEGER"]
-  val get_WAIT_FAILED: t -> GLenum.t [@@js.get "WAIT_FAILED"]
-  val get_ACTIVE_ATTRIBUTES: t -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
-  val get_ACTIVE_TEXTURE: t -> GLenum.t [@@js.get "ACTIVE_TEXTURE"]
-  val get_ACTIVE_UNIFORMS: t -> GLenum.t [@@js.get "ACTIVE_UNIFORMS"]
-  val get_ALIASED_LINE_WIDTH_RANGE: t -> GLenum.t [@@js.get "ALIASED_LINE_WIDTH_RANGE"]
-  val get_ALIASED_POINT_SIZE_RANGE: t -> GLenum.t [@@js.get "ALIASED_POINT_SIZE_RANGE"]
-  val get_ALPHA: t -> GLenum.t [@@js.get "ALPHA"]
-  val get_ALPHA_BITS: t -> GLenum.t [@@js.get "ALPHA_BITS"]
-  val get_ALWAYS: t -> GLenum.t [@@js.get "ALWAYS"]
-  val get_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ARRAY_BUFFER"]
-  val get_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ARRAY_BUFFER_BINDING"]
-  val get_ATTACHED_SHADERS: t -> GLenum.t [@@js.get "ATTACHED_SHADERS"]
-  val get_BACK: t -> GLenum.t [@@js.get "BACK"]
-  val get_BLEND: t -> GLenum.t [@@js.get "BLEND"]
-  val get_BLEND_COLOR: t -> GLenum.t [@@js.get "BLEND_COLOR"]
-  val get_BLEND_DST_ALPHA: t -> GLenum.t [@@js.get "BLEND_DST_ALPHA"]
-  val get_BLEND_DST_RGB: t -> GLenum.t [@@js.get "BLEND_DST_RGB"]
-  val get_BLEND_EQUATION: t -> GLenum.t [@@js.get "BLEND_EQUATION"]
-  val get_BLEND_EQUATION_ALPHA: t -> GLenum.t [@@js.get "BLEND_EQUATION_ALPHA"]
-  val get_BLEND_EQUATION_RGB: t -> GLenum.t [@@js.get "BLEND_EQUATION_RGB"]
-  val get_BLEND_SRC_ALPHA: t -> GLenum.t [@@js.get "BLEND_SRC_ALPHA"]
-  val get_BLEND_SRC_RGB: t -> GLenum.t [@@js.get "BLEND_SRC_RGB"]
-  val get_BLUE_BITS: t -> GLenum.t [@@js.get "BLUE_BITS"]
-  val get_BOOL: t -> GLenum.t [@@js.get "BOOL"]
-  val get_BOOL_VEC2: t -> GLenum.t [@@js.get "BOOL_VEC2"]
-  val get_BOOL_VEC3: t -> GLenum.t [@@js.get "BOOL_VEC3"]
-  val get_BOOL_VEC4: t -> GLenum.t [@@js.get "BOOL_VEC4"]
-  val get_BROWSER_DEFAULT_WEBGL: t -> GLenum.t [@@js.get "BROWSER_DEFAULT_WEBGL"]
-  val get_BUFFER_SIZE: t -> GLenum.t [@@js.get "BUFFER_SIZE"]
-  val get_BUFFER_USAGE: t -> GLenum.t [@@js.get "BUFFER_USAGE"]
-  val get_BYTE: t -> GLenum.t [@@js.get "BYTE"]
-  val get_CCW: t -> GLenum.t [@@js.get "CCW"]
-  val get_CLAMP_TO_EDGE: t -> GLenum.t [@@js.get "CLAMP_TO_EDGE"]
-  val get_COLOR_ATTACHMENT0: t -> GLenum.t [@@js.get "COLOR_ATTACHMENT0"]
-  val get_COLOR_BUFFER_BIT: t -> GLenum.t [@@js.get "COLOR_BUFFER_BIT"]
-  val get_COLOR_CLEAR_VALUE: t -> GLenum.t [@@js.get "COLOR_CLEAR_VALUE"]
-  val get_COLOR_WRITEMASK: t -> GLenum.t [@@js.get "COLOR_WRITEMASK"]
-  val get_COMPILE_STATUS: t -> GLenum.t [@@js.get "COMPILE_STATUS"]
-  val get_COMPRESSED_TEXTURE_FORMATS: t -> GLenum.t [@@js.get "COMPRESSED_TEXTURE_FORMATS"]
-  val get_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "CONSTANT_ALPHA"]
-  val get_CONSTANT_COLOR: t -> GLenum.t [@@js.get "CONSTANT_COLOR"]
-  val get_CONTEXT_LOST_WEBGL: t -> GLenum.t [@@js.get "CONTEXT_LOST_WEBGL"]
-  val get_CULL_FACE: t -> GLenum.t [@@js.get "CULL_FACE"]
-  val get_CULL_FACE_MODE: t -> GLenum.t [@@js.get "CULL_FACE_MODE"]
-  val get_CURRENT_PROGRAM: t -> GLenum.t [@@js.get "CURRENT_PROGRAM"]
-  val get_CURRENT_VERTEX_ATTRIB: t -> GLenum.t [@@js.get "CURRENT_VERTEX_ATTRIB"]
-  val get_CW: t -> GLenum.t [@@js.get "CW"]
-  val get_DECR: t -> GLenum.t [@@js.get "DECR"]
-  val get_DECR_WRAP: t -> GLenum.t [@@js.get "DECR_WRAP"]
-  val get_DELETE_STATUS: t -> GLenum.t [@@js.get "DELETE_STATUS"]
-  val get_DEPTH_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_ATTACHMENT"]
-  val get_DEPTH_BITS: t -> GLenum.t [@@js.get "DEPTH_BITS"]
-  val get_DEPTH_BUFFER_BIT: t -> GLenum.t [@@js.get "DEPTH_BUFFER_BIT"]
-  val get_DEPTH_CLEAR_VALUE: t -> GLenum.t [@@js.get "DEPTH_CLEAR_VALUE"]
-  val get_DEPTH_COMPONENT: t -> GLenum.t [@@js.get "DEPTH_COMPONENT"]
-  val get_DEPTH_COMPONENT16: t -> GLenum.t [@@js.get "DEPTH_COMPONENT16"]
-  val get_DEPTH_FUNC: t -> GLenum.t [@@js.get "DEPTH_FUNC"]
-  val get_DEPTH_RANGE: t -> GLenum.t [@@js.get "DEPTH_RANGE"]
-  val get_DEPTH_STENCIL: t -> GLenum.t [@@js.get "DEPTH_STENCIL"]
-  val get_DEPTH_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "DEPTH_STENCIL_ATTACHMENT"]
-  val get_DEPTH_TEST: t -> GLenum.t [@@js.get "DEPTH_TEST"]
-  val get_DEPTH_WRITEMASK: t -> GLenum.t [@@js.get "DEPTH_WRITEMASK"]
-  val get_DITHER: t -> GLenum.t [@@js.get "DITHER"]
-  val get_DONT_CARE: t -> GLenum.t [@@js.get "DONT_CARE"]
-  val get_DST_ALPHA: t -> GLenum.t [@@js.get "DST_ALPHA"]
-  val get_DST_COLOR: t -> GLenum.t [@@js.get "DST_COLOR"]
-  val get_DYNAMIC_DRAW: t -> GLenum.t [@@js.get "DYNAMIC_DRAW"]
-  val get_ELEMENT_ARRAY_BUFFER: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER"]
-  val get_ELEMENT_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "ELEMENT_ARRAY_BUFFER_BINDING"]
-  val get_EQUAL: t -> GLenum.t [@@js.get "EQUAL"]
-  val get_FASTEST: t -> GLenum.t [@@js.get "FASTEST"]
-  val get_FLOAT: t -> GLenum.t [@@js.get "FLOAT"]
-  val get_FLOAT_MAT2: t -> GLenum.t [@@js.get "FLOAT_MAT2"]
-  val get_FLOAT_MAT3: t -> GLenum.t [@@js.get "FLOAT_MAT3"]
-  val get_FLOAT_MAT4: t -> GLenum.t [@@js.get "FLOAT_MAT4"]
-  val get_FLOAT_VEC2: t -> GLenum.t [@@js.get "FLOAT_VEC2"]
-  val get_FLOAT_VEC3: t -> GLenum.t [@@js.get "FLOAT_VEC3"]
-  val get_FLOAT_VEC4: t -> GLenum.t [@@js.get "FLOAT_VEC4"]
-  val get_FRAGMENT_SHADER: t -> GLenum.t [@@js.get "FRAGMENT_SHADER"]
-  val get_FRAMEBUFFER: t -> GLenum.t [@@js.get "FRAMEBUFFER"]
-  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_NAME"]
-  val get_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE"]
-  val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: t -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL"]
-  val get_FRAMEBUFFER_BINDING: t -> GLenum.t [@@js.get "FRAMEBUFFER_BINDING"]
-  val get_FRAMEBUFFER_COMPLETE: t -> GLenum.t [@@js.get "FRAMEBUFFER_COMPLETE"]
-  val get_FRAMEBUFFER_INCOMPLETE_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_ATTACHMENT"]
-  val get_FRAMEBUFFER_INCOMPLETE_DIMENSIONS: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_DIMENSIONS"]
-  val get_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: t -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT"]
-  val get_FRAMEBUFFER_UNSUPPORTED: t -> GLenum.t [@@js.get "FRAMEBUFFER_UNSUPPORTED"]
-  val get_FRONT: t -> GLenum.t [@@js.get "FRONT"]
-  val get_FRONT_AND_BACK: t -> GLenum.t [@@js.get "FRONT_AND_BACK"]
-  val get_FRONT_FACE: t -> GLenum.t [@@js.get "FRONT_FACE"]
-  val get_FUNC_ADD: t -> GLenum.t [@@js.get "FUNC_ADD"]
-  val get_FUNC_REVERSE_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_REVERSE_SUBTRACT"]
-  val get_FUNC_SUBTRACT: t -> GLenum.t [@@js.get "FUNC_SUBTRACT"]
-  val get_GENERATE_MIPMAP_HINT: t -> GLenum.t [@@js.get "GENERATE_MIPMAP_HINT"]
-  val get_GEQUAL: t -> GLenum.t [@@js.get "GEQUAL"]
-  val get_GREATER: t -> GLenum.t [@@js.get "GREATER"]
-  val get_GREEN_BITS: t -> GLenum.t [@@js.get "GREEN_BITS"]
-  val get_HIGH_FLOAT: t -> GLenum.t [@@js.get "HIGH_FLOAT"]
-  val get_HIGH_INT: t -> GLenum.t [@@js.get "HIGH_INT"]
-  val get_IMPLEMENTATION_COLOR_READ_FORMAT: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_FORMAT"]
-  val get_IMPLEMENTATION_COLOR_READ_TYPE: t -> GLenum.t [@@js.get "IMPLEMENTATION_COLOR_READ_TYPE"]
-  val get_INCR: t -> GLenum.t [@@js.get "INCR"]
-  val get_INCR_WRAP: t -> GLenum.t [@@js.get "INCR_WRAP"]
-  val get_INT: t -> GLenum.t [@@js.get "INT"]
-  val get_INT_VEC2: t -> GLenum.t [@@js.get "INT_VEC2"]
-  val get_INT_VEC3: t -> GLenum.t [@@js.get "INT_VEC3"]
-  val get_INT_VEC4: t -> GLenum.t [@@js.get "INT_VEC4"]
-  val get_INVALID_ENUM: t -> GLenum.t [@@js.get "INVALID_ENUM"]
-  val get_INVALID_FRAMEBUFFER_OPERATION: t -> GLenum.t [@@js.get "INVALID_FRAMEBUFFER_OPERATION"]
-  val get_INVALID_OPERATION: t -> GLenum.t [@@js.get "INVALID_OPERATION"]
-  val get_INVALID_VALUE: t -> GLenum.t [@@js.get "INVALID_VALUE"]
-  val get_INVERT: t -> GLenum.t [@@js.get "INVERT"]
-  val get_KEEP: t -> GLenum.t [@@js.get "KEEP"]
-  val get_LEQUAL: t -> GLenum.t [@@js.get "LEQUAL"]
-  val get_LESS: t -> GLenum.t [@@js.get "LESS"]
-  val get_LINEAR: t -> GLenum.t [@@js.get "LINEAR"]
-  val get_LINEAR_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_LINEAR"]
-  val get_LINEAR_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "LINEAR_MIPMAP_NEAREST"]
-  val get_LINES: t -> GLenum.t [@@js.get "LINES"]
-  val get_LINE_LOOP: t -> GLenum.t [@@js.get "LINE_LOOP"]
-  val get_LINE_STRIP: t -> GLenum.t [@@js.get "LINE_STRIP"]
-  val get_LINE_WIDTH: t -> GLenum.t [@@js.get "LINE_WIDTH"]
-  val get_LINK_STATUS: t -> GLenum.t [@@js.get "LINK_STATUS"]
-  val get_LOW_FLOAT: t -> GLenum.t [@@js.get "LOW_FLOAT"]
-  val get_LOW_INT: t -> GLenum.t [@@js.get "LOW_INT"]
-  val get_LUMINANCE: t -> GLenum.t [@@js.get "LUMINANCE"]
-  val get_LUMINANCE_ALPHA: t -> GLenum.t [@@js.get "LUMINANCE_ALPHA"]
-  val get_MAX_COMBINED_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_COMBINED_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_CUBE_MAP_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_CUBE_MAP_TEXTURE_SIZE"]
-  val get_MAX_FRAGMENT_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_FRAGMENT_UNIFORM_VECTORS"]
-  val get_MAX_RENDERBUFFER_SIZE: t -> GLenum.t [@@js.get "MAX_RENDERBUFFER_SIZE"]
-  val get_MAX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_TEXTURE_SIZE: t -> GLenum.t [@@js.get "MAX_TEXTURE_SIZE"]
-  val get_MAX_VARYING_VECTORS: t -> GLenum.t [@@js.get "MAX_VARYING_VECTORS"]
-  val get_MAX_VERTEX_ATTRIBS: t -> GLenum.t [@@js.get "MAX_VERTEX_ATTRIBS"]
-  val get_MAX_VERTEX_TEXTURE_IMAGE_UNITS: t -> GLenum.t [@@js.get "MAX_VERTEX_TEXTURE_IMAGE_UNITS"]
-  val get_MAX_VERTEX_UNIFORM_VECTORS: t -> GLenum.t [@@js.get "MAX_VERTEX_UNIFORM_VECTORS"]
-  val get_MAX_VIEWPORT_DIMS: t -> GLenum.t [@@js.get "MAX_VIEWPORT_DIMS"]
-  val get_MEDIUM_FLOAT: t -> GLenum.t [@@js.get "MEDIUM_FLOAT"]
-  val get_MEDIUM_INT: t -> GLenum.t [@@js.get "MEDIUM_INT"]
-  val get_MIRRORED_REPEAT: t -> GLenum.t [@@js.get "MIRRORED_REPEAT"]
-  val get_NEAREST: t -> GLenum.t [@@js.get "NEAREST"]
-  val get_NEAREST_MIPMAP_LINEAR: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_LINEAR"]
-  val get_NEAREST_MIPMAP_NEAREST: t -> GLenum.t [@@js.get "NEAREST_MIPMAP_NEAREST"]
-  val get_NEVER: t -> GLenum.t [@@js.get "NEVER"]
-  val get_NICEST: t -> GLenum.t [@@js.get "NICEST"]
-  val get_NONE: t -> GLenum.t [@@js.get "NONE"]
-  val get_NOTEQUAL: t -> GLenum.t [@@js.get "NOTEQUAL"]
-  val get_NO_ERROR: t -> GLenum.t [@@js.get "NO_ERROR"]
-  val get_ONE: t -> GLenum.t [@@js.get "ONE"]
-  val get_ONE_MINUS_CONSTANT_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_ALPHA"]
-  val get_ONE_MINUS_CONSTANT_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_CONSTANT_COLOR"]
-  val get_ONE_MINUS_DST_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_DST_ALPHA"]
-  val get_ONE_MINUS_DST_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_DST_COLOR"]
-  val get_ONE_MINUS_SRC_ALPHA: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_ALPHA"]
-  val get_ONE_MINUS_SRC_COLOR: t -> GLenum.t [@@js.get "ONE_MINUS_SRC_COLOR"]
-  val get_OUT_OF_MEMORY: t -> GLenum.t [@@js.get "OUT_OF_MEMORY"]
-  val get_PACK_ALIGNMENT: t -> GLenum.t [@@js.get "PACK_ALIGNMENT"]
-  val get_POINTS: t -> GLenum.t [@@js.get "POINTS"]
-  val get_POLYGON_OFFSET_FACTOR: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FACTOR"]
-  val get_POLYGON_OFFSET_FILL: t -> GLenum.t [@@js.get "POLYGON_OFFSET_FILL"]
-  val get_POLYGON_OFFSET_UNITS: t -> GLenum.t [@@js.get "POLYGON_OFFSET_UNITS"]
-  val get_RED_BITS: t -> GLenum.t [@@js.get "RED_BITS"]
-  val get_RENDERBUFFER: t -> GLenum.t [@@js.get "RENDERBUFFER"]
-  val get_RENDERBUFFER_ALPHA_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_ALPHA_SIZE"]
-  val get_RENDERBUFFER_BINDING: t -> GLenum.t [@@js.get "RENDERBUFFER_BINDING"]
-  val get_RENDERBUFFER_BLUE_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_BLUE_SIZE"]
-  val get_RENDERBUFFER_DEPTH_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_DEPTH_SIZE"]
-  val get_RENDERBUFFER_GREEN_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_GREEN_SIZE"]
-  val get_RENDERBUFFER_HEIGHT: t -> GLenum.t [@@js.get "RENDERBUFFER_HEIGHT"]
-  val get_RENDERBUFFER_INTERNAL_FORMAT: t -> GLenum.t [@@js.get "RENDERBUFFER_INTERNAL_FORMAT"]
-  val get_RENDERBUFFER_RED_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_RED_SIZE"]
-  val get_RENDERBUFFER_STENCIL_SIZE: t -> GLenum.t [@@js.get "RENDERBUFFER_STENCIL_SIZE"]
-  val get_RENDERBUFFER_WIDTH: t -> GLenum.t [@@js.get "RENDERBUFFER_WIDTH"]
-  val get_RENDERER: t -> GLenum.t [@@js.get "RENDERER"]
-  val get_REPEAT: t -> GLenum.t [@@js.get "REPEAT"]
-  val get_REPLACE: t -> GLenum.t [@@js.get "REPLACE"]
-  val get_RGB: t -> GLenum.t [@@js.get "RGB"]
-  val get_RGB565: t -> GLenum.t [@@js.get "RGB565"]
-  val get_RGB5_A1: t -> GLenum.t [@@js.get "RGB5_A1"]
-  val get_RGBA: t -> GLenum.t [@@js.get "RGBA"]
-  val get_RGBA4: t -> GLenum.t [@@js.get "RGBA4"]
-  val get_SAMPLER_2D: t -> GLenum.t [@@js.get "SAMPLER_2D"]
-  val get_SAMPLER_CUBE: t -> GLenum.t [@@js.get "SAMPLER_CUBE"]
-  val get_SAMPLES: t -> GLenum.t [@@js.get "SAMPLES"]
-  val get_SAMPLE_ALPHA_TO_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_ALPHA_TO_COVERAGE"]
-  val get_SAMPLE_BUFFERS: t -> GLenum.t [@@js.get "SAMPLE_BUFFERS"]
-  val get_SAMPLE_COVERAGE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE"]
-  val get_SAMPLE_COVERAGE_INVERT: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_INVERT"]
-  val get_SAMPLE_COVERAGE_VALUE: t -> GLenum.t [@@js.get "SAMPLE_COVERAGE_VALUE"]
-  val get_SCISSOR_BOX: t -> GLenum.t [@@js.get "SCISSOR_BOX"]
-  val get_SCISSOR_TEST: t -> GLenum.t [@@js.get "SCISSOR_TEST"]
-  val get_SHADER_TYPE: t -> GLenum.t [@@js.get "SHADER_TYPE"]
-  val get_SHADING_LANGUAGE_VERSION: t -> GLenum.t [@@js.get "SHADING_LANGUAGE_VERSION"]
-  val get_SHORT: t -> GLenum.t [@@js.get "SHORT"]
-  val get_SRC_ALPHA: t -> GLenum.t [@@js.get "SRC_ALPHA"]
-  val get_SRC_ALPHA_SATURATE: t -> GLenum.t [@@js.get "SRC_ALPHA_SATURATE"]
-  val get_SRC_COLOR: t -> GLenum.t [@@js.get "SRC_COLOR"]
-  val get_STATIC_DRAW: t -> GLenum.t [@@js.get "STATIC_DRAW"]
-  val get_STENCIL_ATTACHMENT: t -> GLenum.t [@@js.get "STENCIL_ATTACHMENT"]
-  val get_STENCIL_BACK_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_FAIL"]
-  val get_STENCIL_BACK_FUNC: t -> GLenum.t [@@js.get "STENCIL_BACK_FUNC"]
-  val get_STENCIL_BACK_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_FAIL"]
-  val get_STENCIL_BACK_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_BACK_PASS_DEPTH_PASS"]
-  val get_STENCIL_BACK_REF: t -> GLenum.t [@@js.get "STENCIL_BACK_REF"]
-  val get_STENCIL_BACK_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_BACK_VALUE_MASK"]
-  val get_STENCIL_BACK_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_BACK_WRITEMASK"]
-  val get_STENCIL_BITS: t -> GLenum.t [@@js.get "STENCIL_BITS"]
-  val get_STENCIL_BUFFER_BIT: t -> GLenum.t [@@js.get "STENCIL_BUFFER_BIT"]
-  val get_STENCIL_CLEAR_VALUE: t -> GLenum.t [@@js.get "STENCIL_CLEAR_VALUE"]
-  val get_STENCIL_FAIL: t -> GLenum.t [@@js.get "STENCIL_FAIL"]
-  val get_STENCIL_FUNC: t -> GLenum.t [@@js.get "STENCIL_FUNC"]
-  val get_STENCIL_INDEX8: t -> GLenum.t [@@js.get "STENCIL_INDEX8"]
-  val get_STENCIL_PASS_DEPTH_FAIL: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_FAIL"]
-  val get_STENCIL_PASS_DEPTH_PASS: t -> GLenum.t [@@js.get "STENCIL_PASS_DEPTH_PASS"]
-  val get_STENCIL_REF: t -> GLenum.t [@@js.get "STENCIL_REF"]
-  val get_STENCIL_TEST: t -> GLenum.t [@@js.get "STENCIL_TEST"]
-  val get_STENCIL_VALUE_MASK: t -> GLenum.t [@@js.get "STENCIL_VALUE_MASK"]
-  val get_STENCIL_WRITEMASK: t -> GLenum.t [@@js.get "STENCIL_WRITEMASK"]
-  val get_STREAM_DRAW: t -> GLenum.t [@@js.get "STREAM_DRAW"]
-  val get_SUBPIXEL_BITS: t -> GLenum.t [@@js.get "SUBPIXEL_BITS"]
-  val get_TEXTURE: t -> GLenum.t [@@js.get "TEXTURE"]
-  val get_TEXTURE0: t -> GLenum.t [@@js.get "TEXTURE0"]
-  val get_TEXTURE1: t -> GLenum.t [@@js.get "TEXTURE1"]
-  val get_TEXTURE10: t -> GLenum.t [@@js.get "TEXTURE10"]
-  val get_TEXTURE11: t -> GLenum.t [@@js.get "TEXTURE11"]
-  val get_TEXTURE12: t -> GLenum.t [@@js.get "TEXTURE12"]
-  val get_TEXTURE13: t -> GLenum.t [@@js.get "TEXTURE13"]
-  val get_TEXTURE14: t -> GLenum.t [@@js.get "TEXTURE14"]
-  val get_TEXTURE15: t -> GLenum.t [@@js.get "TEXTURE15"]
-  val get_TEXTURE16: t -> GLenum.t [@@js.get "TEXTURE16"]
-  val get_TEXTURE17: t -> GLenum.t [@@js.get "TEXTURE17"]
-  val get_TEXTURE18: t -> GLenum.t [@@js.get "TEXTURE18"]
-  val get_TEXTURE19: t -> GLenum.t [@@js.get "TEXTURE19"]
-  val get_TEXTURE2: t -> GLenum.t [@@js.get "TEXTURE2"]
-  val get_TEXTURE20: t -> GLenum.t [@@js.get "TEXTURE20"]
-  val get_TEXTURE21: t -> GLenum.t [@@js.get "TEXTURE21"]
-  val get_TEXTURE22: t -> GLenum.t [@@js.get "TEXTURE22"]
-  val get_TEXTURE23: t -> GLenum.t [@@js.get "TEXTURE23"]
-  val get_TEXTURE24: t -> GLenum.t [@@js.get "TEXTURE24"]
-  val get_TEXTURE25: t -> GLenum.t [@@js.get "TEXTURE25"]
-  val get_TEXTURE26: t -> GLenum.t [@@js.get "TEXTURE26"]
-  val get_TEXTURE27: t -> GLenum.t [@@js.get "TEXTURE27"]
-  val get_TEXTURE28: t -> GLenum.t [@@js.get "TEXTURE28"]
-  val get_TEXTURE29: t -> GLenum.t [@@js.get "TEXTURE29"]
-  val get_TEXTURE3: t -> GLenum.t [@@js.get "TEXTURE3"]
-  val get_TEXTURE30: t -> GLenum.t [@@js.get "TEXTURE30"]
-  val get_TEXTURE31: t -> GLenum.t [@@js.get "TEXTURE31"]
-  val get_TEXTURE4: t -> GLenum.t [@@js.get "TEXTURE4"]
-  val get_TEXTURE5: t -> GLenum.t [@@js.get "TEXTURE5"]
-  val get_TEXTURE6: t -> GLenum.t [@@js.get "TEXTURE6"]
-  val get_TEXTURE7: t -> GLenum.t [@@js.get "TEXTURE7"]
-  val get_TEXTURE8: t -> GLenum.t [@@js.get "TEXTURE8"]
-  val get_TEXTURE9: t -> GLenum.t [@@js.get "TEXTURE9"]
-  val get_TEXTURE_2D: t -> GLenum.t [@@js.get "TEXTURE_2D"]
-  val get_TEXTURE_BINDING_2D: t -> GLenum.t [@@js.get "TEXTURE_BINDING_2D"]
-  val get_TEXTURE_BINDING_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_BINDING_CUBE_MAP"]
-  val get_TEXTURE_CUBE_MAP: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_X"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Y"]
-  val get_TEXTURE_CUBE_MAP_NEGATIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_NEGATIVE_Z"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_X: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_X"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_Y: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Y"]
-  val get_TEXTURE_CUBE_MAP_POSITIVE_Z: t -> GLenum.t [@@js.get "TEXTURE_CUBE_MAP_POSITIVE_Z"]
-  val get_TEXTURE_MAG_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MAG_FILTER"]
-  val get_TEXTURE_MIN_FILTER: t -> GLenum.t [@@js.get "TEXTURE_MIN_FILTER"]
-  val get_TEXTURE_WRAP_S: t -> GLenum.t [@@js.get "TEXTURE_WRAP_S"]
-  val get_TEXTURE_WRAP_T: t -> GLenum.t [@@js.get "TEXTURE_WRAP_T"]
-  val get_TRIANGLES: t -> GLenum.t [@@js.get "TRIANGLES"]
-  val get_TRIANGLE_FAN: t -> GLenum.t [@@js.get "TRIANGLE_FAN"]
-  val get_TRIANGLE_STRIP: t -> GLenum.t [@@js.get "TRIANGLE_STRIP"]
-  val get_UNPACK_ALIGNMENT: t -> GLenum.t [@@js.get "UNPACK_ALIGNMENT"]
-  val get_UNPACK_COLORSPACE_CONVERSION_WEBGL: t -> GLenum.t [@@js.get "UNPACK_COLORSPACE_CONVERSION_WEBGL"]
-  val get_UNPACK_FLIP_Y_WEBGL: t -> GLenum.t [@@js.get "UNPACK_FLIP_Y_WEBGL"]
-  val get_UNPACK_PREMULTIPLY_ALPHA_WEBGL: t -> GLenum.t [@@js.get "UNPACK_PREMULTIPLY_ALPHA_WEBGL"]
-  val get_UNSIGNED_BYTE: t -> GLenum.t [@@js.get "UNSIGNED_BYTE"]
-  val get_UNSIGNED_INT: t -> GLenum.t [@@js.get "UNSIGNED_INT"]
-  val get_UNSIGNED_SHORT: t -> GLenum.t [@@js.get "UNSIGNED_SHORT"]
-  val get_UNSIGNED_SHORT_4_4_4_4: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_4_4_4_4"]
-  val get_UNSIGNED_SHORT_5_5_5_1: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_5_5_1"]
-  val get_UNSIGNED_SHORT_5_6_5: t -> GLenum.t [@@js.get "UNSIGNED_SHORT_5_6_5"]
-  val get_VALIDATE_STATUS: t -> GLenum.t [@@js.get "VALIDATE_STATUS"]
-  val get_VENDOR: t -> GLenum.t [@@js.get "VENDOR"]
-  val get_VERSION: t -> GLenum.t [@@js.get "VERSION"]
-  val get_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_BUFFER_BINDING"]
-  val get_VERTEX_ATTRIB_ARRAY_ENABLED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_ENABLED"]
-  val get_VERTEX_ATTRIB_ARRAY_NORMALIZED: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_NORMALIZED"]
-  val get_VERTEX_ATTRIB_ARRAY_POINTER: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_POINTER"]
-  val get_VERTEX_ATTRIB_ARRAY_SIZE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_SIZE"]
-  val get_VERTEX_ATTRIB_ARRAY_STRIDE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_STRIDE"]
-  val get_VERTEX_ATTRIB_ARRAY_TYPE: t -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_TYPE"]
-  val get_VERTEX_SHADER: t -> GLenum.t [@@js.get "VERTEX_SHADER"]
-  val get_VIEWPORT: t -> GLenum.t [@@js.get "VIEWPORT"]
-  val get_ZERO: t -> GLenum.t [@@js.get "ZERO"]
-end
-module AnonymousInterface498 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> WaveShaperNode.t [@@js.get "prototype"]
-  val set_prototype: t -> WaveShaperNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:WaveShaperOptions.t -> unit -> WaveShaperNode.t [@@js.apply_newable]
-end
-module AnonymousInterface497 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> VisualViewport.t [@@js.get "prototype"]
-  val set_prototype: t -> VisualViewport.t -> unit [@@js.set "prototype"]
-  val create: t -> VisualViewport.t [@@js.apply_newable]
-end
-module AnonymousInterface496 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> VideoPlaybackQuality.t [@@js.get "prototype"]
-  val set_prototype: t -> VideoPlaybackQuality.t -> unit [@@js.set "prototype"]
-  val create: t -> VideoPlaybackQuality.t [@@js.apply_newable]
-end
-module AnonymousInterface495 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ValidityState.t [@@js.get "prototype"]
-  val set_prototype: t -> ValidityState.t -> unit [@@js.set "prototype"]
-  val create: t -> ValidityState.t [@@js.apply_newable]
-end
-module ScrollSetting : sig
-  type t = ([`L_s0[@js ""] | `L_s803_up[@js "up"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module[@js.scope "VTTRegion"] VTTRegion : sig
-  type t = [`VTTRegion] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`VTTRegion]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`VTTRegion]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `VTTRegion ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_id: 'tags this -> string [@@js.get "id"]
-  val set_id: 'tags this -> string -> unit [@@js.set "id"]
-  val get_lines: 'tags this -> float [@@js.get "lines"]
-  val set_lines: 'tags this -> float -> unit [@@js.set "lines"]
-  val get_regionAnchorX: 'tags this -> float [@@js.get "regionAnchorX"]
-  val set_regionAnchorX: 'tags this -> float -> unit [@@js.set "regionAnchorX"]
-  val get_regionAnchorY: 'tags this -> float [@@js.get "regionAnchorY"]
-  val set_regionAnchorY: 'tags this -> float -> unit [@@js.set "regionAnchorY"]
-  val get_scroll: 'tags this -> ScrollSetting.t [@@js.get "scroll"]
-  val set_scroll: 'tags this -> ScrollSetting.t -> unit [@@js.set "scroll"]
-  val get_viewportAnchorX: 'tags this -> float [@@js.get "viewportAnchorX"]
-  val set_viewportAnchorX: 'tags this -> float -> unit [@@js.set "viewportAnchorX"]
-  val get_viewportAnchorY: 'tags this -> float [@@js.get "viewportAnchorY"]
-  val set_viewportAnchorY: 'tags this -> float -> unit [@@js.set "viewportAnchorY"]
-  val get_width: 'tags this -> float [@@js.get "width"]
-  val set_width: 'tags this -> float -> unit [@@js.set "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface494 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> VTTRegion.t [@@js.get "prototype"]
-  val set_prototype: t -> VTTRegion.t -> unit [@@js.set "prototype"]
-  val create: t -> VTTRegion.t [@@js.apply_newable]
-end
-module PositionAlignSetting : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s185_center[@js "center"] | `L_s447_line_left[@js "line-left"] | `L_s448_line_right[@js "line-right"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module AutoKeyword : sig
-  type t = ([`L_s141_auto[@js "auto"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module LineAndPositionSetting : sig
-  type t = AutoKeyword.t or_number
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module LineAlignSetting : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s723_start[@js "start"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module DirectionSetting : sig
-  type t = ([`L_s0[@js ""] | `L_s470_lr[@js "lr"] | `L_s659_rl[@js "rl"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module AlignSetting : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s440_left[@js "left"] | `L_s658_right[@js "right"] | `L_s723_start[@js "start"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module[@js.scope "VTTCue"] VTTCue : sig
-  type t = [`EventTarget | `TextTrackCue | `VTTCue] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `TextTrackCue | `VTTCue]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `TextTrackCue | `VTTCue]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `VTTCue ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_align: 'tags this -> AlignSetting.t [@@js.get "align"]
-  val set_align: 'tags this -> AlignSetting.t -> unit [@@js.set "align"]
-  val get_line: 'tags this -> LineAndPositionSetting.t [@@js.get "line"]
-  val set_line: 'tags this -> LineAndPositionSetting.t -> unit [@@js.set "line"]
-  val get_lineAlign: 'tags this -> LineAlignSetting.t [@@js.get "lineAlign"]
-  val set_lineAlign: 'tags this -> LineAlignSetting.t -> unit [@@js.set "lineAlign"]
-  val get_position: 'tags this -> LineAndPositionSetting.t [@@js.get "position"]
-  val set_position: 'tags this -> LineAndPositionSetting.t -> unit [@@js.set "position"]
-  val get_positionAlign: 'tags this -> PositionAlignSetting.t [@@js.get "positionAlign"]
-  val set_positionAlign: 'tags this -> PositionAlignSetting.t -> unit [@@js.set "positionAlign"]
-  val get_region: 'tags this -> VTTRegion.t or_null [@@js.get "region"]
-  val set_region: 'tags this -> VTTRegion.t or_null -> unit [@@js.set "region"]
-  val get_size: 'tags this -> float [@@js.get "size"]
-  val set_size: 'tags this -> float -> unit [@@js.set "size"]
-  val get_snapToLines: 'tags this -> bool [@@js.get "snapToLines"]
-  val set_snapToLines: 'tags this -> bool -> unit [@@js.set "snapToLines"]
-  val get_text: 'tags this -> string [@@js.get "text"]
-  val set_text: 'tags this -> string -> unit [@@js.set "text"]
-  val get_vertical: 'tags this -> DirectionSetting.t [@@js.get "vertical"]
-  val set_vertical: 'tags this -> DirectionSetting.t -> unit [@@js.set "vertical"]
-  val getCueAsHTML: 'tags this -> DocumentFragment.t [@@js.call "getCueAsHTML"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'TextTrackCueEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'TextTrackCueEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: startTime:float -> endTime:float -> text:string -> t [@@js.create]
-end
-module AnonymousInterface493 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> VTTCue.t [@@js.get "prototype"]
-  val set_prototype: t -> VTTCue.t -> unit [@@js.set "prototype"]
-  val create: t -> startTime:float -> endTime:float -> text:string -> VTTCue.t [@@js.apply_newable]
-end
-module AnonymousInterface492 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> URLSearchParams.t [@@js.get "prototype"]
-  val set_prototype: t -> URLSearchParams.t -> unit [@@js.set "prototype"]
-  val create: t -> ?init:(URLSearchParams.t, string list) or_array or_string -> unit -> URLSearchParams.t [@@js.apply_newable]
-  val toString: t -> string [@@js.call "toString"]
-end
-module AnonymousInterface491 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> URL.t [@@js.get "prototype"]
-  val set_prototype: t -> URL.t -> unit [@@js.set "prototype"]
-  val create: t -> url:URL.t or_string -> ?base:URL.t or_string -> unit -> URL.t [@@js.apply_newable]
-  val createObjectURL: t -> obj:(Blob.t, MediaSource.t) union2 -> string [@@js.call "createObjectURL"]
-  val revokeObjectURL: t -> url:string -> unit [@@js.call "revokeObjectURL"]
-end
-module AnonymousInterface490 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> UIEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> UIEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:UIEventInit.t -> unit -> UIEvent.t [@@js.apply_newable]
-end
 
 (** CSSStyleRule represents a single CSS style rule. It implements the CSSRule interface with a type value of 1 (CSSRule.STYLE_RULE). *)
 module[@js.scope "CSSStyleRule"] CSSStyleRule : sig
@@ -47936,891 +48805,6 @@ module[@js.scope "CSSStyleRule"] CSSStyleRule : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
-end
-module AnonymousInterface49 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSStyleRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSStyleRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSStyleRule.t [@@js.apply_newable]
-end
-module AnonymousInterface489 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TreeWalker.t [@@js.get "prototype"]
-  val set_prototype: t -> TreeWalker.t -> unit [@@js.set "prototype"]
-  val create: t -> TreeWalker.t [@@js.apply_newable]
-end
-module AnonymousInterface488 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TransitionEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> TransitionEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?transitionEventInitDict:TransitionEventInit.t -> unit -> TransitionEvent.t [@@js.apply_newable]
-end
-module[@js.scope "TransformStreamDefaultController"] TransformStreamDefaultController : sig
-  type 'O t = [`TransformStreamDefaultController of 'O] intf [@@js.custom { of_js=(fun _O -> Obj.magic); to_js=(fun _O -> Obj.magic) }]
-  type 'O t_1 = 'O t
-  type t_0 = any t
-  [@@@js.stop]
-  type 'O tags = [`TransformStreamDefaultController of 'O]
-  type 'O tags_1 = 'O tags
-  type tags_0 = any tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'O tags = [`TransformStreamDefaultController of 'O]
-    type 'O tags_1 = 'O tags
-    type tags_0 = any tags
-  ]
-  type ('tags, 'O) this = 'tags intf constraint 'tags = [> `TransformStreamDefaultController of 'O ]
-  val t_to_js: ('O -> Ojs.t) -> 'O t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t
-  val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_desiredSize: ('tags, 'O) this -> float or_null [@@js.get "desiredSize"]
-  val enqueue: ('tags, 'O) this -> ?chunk:'O -> unit -> unit [@@js.call "enqueue"]
-  val error: ('tags, 'O) this -> ?reason:any -> unit -> unit [@@js.call "error"]
-  val terminate: ('tags, 'O) this -> unit [@@js.call "terminate"]
-  val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: unit -> t_0 [@@js.create]
-end
-module AnonymousInterface487 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TransformStreamDefaultController.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> TransformStreamDefaultController.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> TransformStreamDefaultController.t_0 [@@js.apply_newable]
-end
-module TransformerTransformCallback : sig
-  type ('I, 'O) t = [`TransformerTransformCallback of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
-  type ('I, 'O) t_2 = ('I, 'O) t
-  [@@@js.stop]
-  type ('I, 'O) tags = [`TransformerTransformCallback of ('I * 'O)]
-  type ('I, 'O) tags_2 = ('I, 'O) tags
-  [@@@js.start]
-  [@@@js.implem 
-    type ('I, 'O) tags = [`TransformerTransformCallback of ('I * 'O)]
-    type ('I, 'O) tags_2 = ('I, 'O) tags
-  ]
-  type ('tags, 'I, 'O) this = 'tags intf constraint 'tags = [> `TransformerTransformCallback of ('I * 'O) ]
-  val t_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t
-  val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
-  val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
-  val apply: ('tags, 'I, 'O) this -> chunk:'I -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
-  val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
-end
-module TransformerStartCallback : sig
-  type 'O t = [`TransformerStartCallback of 'O] intf [@@js.custom { of_js=(fun _O -> Obj.magic); to_js=(fun _O -> Obj.magic) }]
-  type 'O t_1 = 'O t
-  [@@@js.stop]
-  type 'O tags = [`TransformerStartCallback of 'O]
-  type 'O tags_1 = 'O tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'O tags = [`TransformerStartCallback of 'O]
-    type 'O tags_1 = 'O tags
-  ]
-  type ('tags, 'O) this = 'tags intf constraint 'tags = [> `TransformerStartCallback of 'O ]
-  val t_to_js: ('O -> Ojs.t) -> 'O t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t
-  val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
-  val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> any [@@js.apply]
-  val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
-end
-module TransformerFlushCallback : sig
-  type 'O t = [`TransformerFlushCallback of 'O] intf [@@js.custom { of_js=(fun _O -> Obj.magic); to_js=(fun _O -> Obj.magic) }]
-  type 'O t_1 = 'O t
-  [@@@js.stop]
-  type 'O tags = [`TransformerFlushCallback of 'O]
-  type 'O tags_1 = 'O tags
-  [@@@js.start]
-  [@@@js.implem 
-    type 'O tags = [`TransformerFlushCallback of 'O]
-    type 'O tags_1 = 'O tags
-  ]
-  type ('tags, 'O) this = 'tags intf constraint 'tags = [> `TransformerFlushCallback of 'O ]
-  val t_to_js: ('O -> Ojs.t) -> 'O t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t
-  val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
-  val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
-  val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
-end
-module Transformer : sig
-  type ('I, 'O) t = [`Transformer of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
-  type ('I, 'O) t_2 = ('I, 'O) t
-  type 'I t_1 = ('I, any) t
-  type t_0 = (any, any) t
-  [@@@js.stop]
-  type ('I, 'O) tags = [`Transformer of ('I * 'O)]
-  type ('I, 'O) tags_2 = ('I, 'O) tags
-  type 'I tags_1 = ('I, any) tags
-  type tags_0 = (any, any) tags
-  [@@@js.start]
-  [@@@js.implem 
-    type ('I, 'O) tags = [`Transformer of ('I * 'O)]
-    type ('I, 'O) tags_2 = ('I, 'O) tags
-    type 'I tags_1 = ('I, any) tags
-    type tags_0 = (any, any) tags
-  ]
-  type ('tags, 'I, 'O) this = 'tags intf constraint 'tags = [> `Transformer of ('I * 'O) ]
-  val t_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t
-  val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
-  val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
-  val t_1_to_js: ('I -> Ojs.t) -> 'I t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'I) -> Ojs.t -> 'I t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_flush: ('tags, 'I, 'O) this -> 'O TransformerFlushCallback.t [@@js.get "flush"]
-  val set_flush: ('tags, 'I, 'O) this -> 'O TransformerFlushCallback.t -> unit [@@js.set "flush"]
-  val get_readableType: ('tags, 'I, 'O) this -> never or_undefined [@@js.get "readableType"]
-  val set_readableType: ('tags, 'I, 'O) this -> never or_undefined -> unit [@@js.set "readableType"]
-  val get_start: ('tags, 'I, 'O) this -> 'O TransformerStartCallback.t [@@js.get "start"]
-  val set_start: ('tags, 'I, 'O) this -> 'O TransformerStartCallback.t -> unit [@@js.set "start"]
-  val get_transform: ('tags, 'I, 'O) this -> ('I, 'O) TransformerTransformCallback.t [@@js.get "transform"]
-  val set_transform: ('tags, 'I, 'O) this -> ('I, 'O) TransformerTransformCallback.t -> unit [@@js.set "transform"]
-  val get_writableType: ('tags, 'I, 'O) this -> never or_undefined [@@js.get "writableType"]
-  val set_writableType: ('tags, 'I, 'O) this -> never or_undefined -> unit [@@js.set "writableType"]
-  val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "TransformStream"] TransformStream : sig
-  type ('I, 'O) t = [`TransformStream of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
-  type ('I, 'O) t_2 = ('I, 'O) t
-  type 'I t_1 = ('I, any) t
-  type t_0 = (any, any) t
-  [@@@js.stop]
-  type ('I, 'O) tags = [`TransformStream of ('I * 'O)]
-  type ('I, 'O) tags_2 = ('I, 'O) tags
-  type 'I tags_1 = ('I, any) tags
-  type tags_0 = (any, any) tags
-  [@@@js.start]
-  [@@@js.implem 
-    type ('I, 'O) tags = [`TransformStream of ('I * 'O)]
-    type ('I, 'O) tags_2 = ('I, 'O) tags
-    type 'I tags_1 = ('I, any) tags
-    type tags_0 = (any, any) tags
-  ]
-  type ('tags, 'I, 'O) this = 'tags intf constraint 'tags = [> `TransformStream of ('I * 'O) ]
-  val t_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t
-  val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
-  val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
-  val t_1_to_js: ('I -> Ojs.t) -> 'I t_1 -> Ojs.t
-  val t_1_of_js: (Ojs.t -> 'I) -> Ojs.t -> 'I t_1
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_readable: ('tags, 'I, 'O) this -> 'O ReadableStream.t [@@js.get "readable"]
-  val get_writable: ('tags, 'I, 'O) this -> 'I WritableStream.t [@@js.get "writable"]
-  val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: ?transformer:('I, 'O) Transformer.t -> ?writableStrategy:'I QueuingStrategy.t -> ?readableStrategy:'O QueuingStrategy.t -> unit -> ('I, 'O) t [@@js.create]
-end
-module AnonymousInterface486 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TransformStream.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> TransformStream.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ?transformer:('I, 'O) Transformer.t -> ?writableStrategy:'I QueuingStrategy.t -> ?readableStrategy:'O QueuingStrategy.t -> unit -> ('I, 'O) TransformStream.t [@@js.apply_newable]
-end
-module AnonymousInterface485 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TrackEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> TrackEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:TrackEventInit.t -> unit -> TrackEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface484 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TouchList.t [@@js.get "prototype"]
-  val set_prototype: t -> TouchList.t -> unit [@@js.set "prototype"]
-  val create: t -> TouchList.t [@@js.apply_newable]
-end
-module AnonymousInterface483 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TouchEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> TouchEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:TouchEventInit.t -> unit -> TouchEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface482 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Touch.t [@@js.get "prototype"]
-  val set_prototype: t -> Touch.t -> unit [@@js.set "prototype"]
-  val create: t -> touchInitDict:TouchInit.t -> Touch.t [@@js.apply_newable]
-end
-module AnonymousInterface481 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TimeRanges.t [@@js.get "prototype"]
-  val set_prototype: t -> TimeRanges.t -> unit [@@js.set "prototype"]
-  val create: t -> TimeRanges.t [@@js.apply_newable]
-end
-module AnonymousInterface480 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextTrackList.t [@@js.get "prototype"]
-  val set_prototype: t -> TextTrackList.t -> unit [@@js.set "prototype"]
-  val create: t -> TextTrackList.t [@@js.apply_newable]
-end
-module AnonymousInterface48 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSStyleDeclaration.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSStyleDeclaration.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSStyleDeclaration.t [@@js.apply_newable]
-end
-module AnonymousInterface479 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextTrackCueList.t [@@js.get "prototype"]
-  val set_prototype: t -> TextTrackCueList.t -> unit [@@js.set "prototype"]
-  val create: t -> TextTrackCueList.t [@@js.apply_newable]
-end
-module AnonymousInterface478 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextTrackCue.t [@@js.get "prototype"]
-  val set_prototype: t -> TextTrackCue.t -> unit [@@js.set "prototype"]
-  val create: t -> TextTrackCue.t [@@js.apply_newable]
-end
-module AnonymousInterface477 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextTrack.t [@@js.get "prototype"]
-  val set_prototype: t -> TextTrack.t -> unit [@@js.set "prototype"]
-  val create: t -> TextTrack.t [@@js.apply_newable]
-end
-module AnonymousInterface476 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextMetrics.t [@@js.get "prototype"]
-  val set_prototype: t -> TextMetrics.t -> unit [@@js.set "prototype"]
-  val create: t -> TextMetrics.t [@@js.apply_newable]
-end
-module TextEncoderCommon : sig
-  type t = [`TextEncoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`TextEncoderCommon]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`TextEncoderCommon]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TextEncoderCommon ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Returns "utf-8". *)
-  val get_encoding: 'tags this -> string [@@js.get "encoding"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module GenericTransformStream : sig
-  type t = [`GenericTransformStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`GenericTransformStream]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`GenericTransformStream]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `GenericTransformStream ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_readable: 'tags this -> ReadableStream.t_0 [@@js.get "readable"]
-  val get_writable: 'tags this -> WritableStream.t_0 [@@js.get "writable"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "TextEncoderStream"] TextEncoderStream : sig
-  type t = [`GenericTransformStream | `TextEncoderCommon | `TextEncoderStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`GenericTransformStream | `TextEncoderCommon | `TextEncoderStream]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`GenericTransformStream | `TextEncoderCommon | `TextEncoderStream]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TextEncoderStream ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_readable: 'tags this -> Uint8Array.t_0 ReadableStream.t [@@js.get "readable"]
-  val get_writable: 'tags this -> string WritableStream.t [@@js.get "writable"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface475 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextEncoderStream.t [@@js.get "prototype"]
-  val set_prototype: t -> TextEncoderStream.t -> unit [@@js.set "prototype"]
-  val create: t -> TextEncoderStream.t [@@js.apply_newable]
-end
-module TextEncoderEncodeIntoResult : sig
-  type t = [`TextEncoderEncodeIntoResult] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`TextEncoderEncodeIntoResult]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`TextEncoderEncodeIntoResult]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TextEncoderEncodeIntoResult ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_read: 'tags this -> float [@@js.get "read"]
-  val set_read: 'tags this -> float -> unit [@@js.set "read"]
-  val get_written: 'tags this -> float [@@js.get "written"]
-  val set_written: 'tags this -> float -> unit [@@js.set "written"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** TextEncoder takes a stream of code points as input and emits a stream of bytes. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
-module[@js.scope "TextEncoder"] TextEncoder : sig
-  type t = [`TextEncoder | `TextEncoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`TextEncoder | `TextEncoderCommon]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`TextEncoder | `TextEncoderCommon]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TextEncoder ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Returns the result of running UTF-8's encoder. *)
-  val encode: 'tags this -> ?input:string -> unit -> Uint8Array.t_0 [@@js.call "encode"]
-  
-  (** Runs the UTF-8 encoder on source, stores the result of that operation into destination, and returns the progress made as an object wherein read is the number of converted code units of source and written is the number of bytes modified in destination. *)
-  val encodeInto: 'tags this -> source:string -> destination:Uint8Array.t_0 -> TextEncoderEncodeIntoResult.t [@@js.call "encodeInto"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface474 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextEncoder.t [@@js.get "prototype"]
-  val set_prototype: t -> TextEncoder.t -> unit [@@js.set "prototype"]
-  val create: t -> TextEncoder.t [@@js.apply_newable]
-end
-module TextDecoderOptions : sig
-  type t = [`TextDecoderOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`TextDecoderOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`TextDecoderOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TextDecoderOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_fatal: 'tags this -> bool [@@js.get "fatal"]
-  val set_fatal: 'tags this -> bool -> unit [@@js.set "fatal"]
-  val get_ignoreBOM: 'tags this -> bool [@@js.get "ignoreBOM"]
-  val set_ignoreBOM: 'tags this -> bool -> unit [@@js.set "ignoreBOM"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module TextDecoderCommon : sig
-  type t = [`TextDecoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`TextDecoderCommon]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`TextDecoderCommon]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TextDecoderCommon ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Returns encoding's name, lowercased. *)
-  val get_encoding: 'tags this -> string [@@js.get "encoding"]
-  
-  (** Returns true if error mode is "fatal", otherwise false. *)
-  val get_fatal: 'tags this -> bool [@@js.get "fatal"]
-  
-  (** Returns the value of ignore BOM. *)
-  val get_ignoreBOM: 'tags this -> bool [@@js.get "ignoreBOM"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "TextDecoderStream"] TextDecoderStream : sig
-  type t = [`GenericTransformStream | `TextDecoderCommon | `TextDecoderStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`GenericTransformStream | `TextDecoderCommon | `TextDecoderStream]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`GenericTransformStream | `TextDecoderCommon | `TextDecoderStream]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TextDecoderStream ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_readable: 'tags this -> string ReadableStream.t [@@js.get "readable"]
-  val get_writable: 'tags this -> BufferSource.t WritableStream.t [@@js.get "writable"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
-end
-module AnonymousInterface473 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextDecoderStream.t [@@js.get "prototype"]
-  val set_prototype: t -> TextDecoderStream.t -> unit [@@js.set "prototype"]
-  val create: t -> ?label:string -> ?options:TextDecoderOptions.t -> unit -> TextDecoderStream.t [@@js.apply_newable]
-end
-module TextDecodeOptions : sig
-  type t = [`TextDecodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`TextDecodeOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`TextDecodeOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TextDecodeOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_stream: 'tags this -> bool [@@js.get "stream"]
-  val set_stream: 'tags this -> bool -> unit [@@js.set "stream"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
-module[@js.scope "TextDecoder"] TextDecoder : sig
-  type t = [`TextDecoder | `TextDecoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`TextDecoder | `TextDecoderCommon]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`TextDecoder | `TextDecoderCommon]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `TextDecoder ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    Returns the result of running encoding's decoder. The method can be invoked zero or more times with options's stream set to true, and then once without options's stream (or set to false), to process a fragmented input. If the invocation without options's stream (or set to false) has no input, it's clearest to omit both arguments.
-    
-    ```
-    var string = "", decoder = new TextDecoder(encoding), buffer;
-    while(buffer = next_chunk()) \{
-      string += decoder.decode(buffer, \{stream:true\});
-    \}
-    string += decoder.decode(); // end-of-queue
-    ```
-    
-    If the error mode is "fatal" and encoding's decoder returns error, throws a TypeError.
-  *)
-  val decode: 'tags this -> ?input:BufferSource.t -> ?options:TextDecodeOptions.t -> unit -> string [@@js.call "decode"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
-end
-module AnonymousInterface472 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> TextDecoder.t [@@js.get "prototype"]
-  val set_prototype: t -> TextDecoder.t -> unit [@@js.set "prototype"]
-  val create: t -> ?label:string -> ?options:TextDecoderOptions.t -> unit -> TextDecoder.t [@@js.apply_newable]
-end
-module AnonymousInterface471 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Text.t [@@js.get "prototype"]
-  val set_prototype: t -> Text.t -> unit [@@js.set "prototype"]
-  val create: t -> ?data:string -> unit -> Text.t [@@js.apply_newable]
-end
-module AnonymousInterface47 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSRuleList.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSRuleList.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSRuleList.t [@@js.apply_newable]
-end
-module AnonymousInterface469 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SubtleCrypto.t [@@js.get "prototype"]
-  val set_prototype: t -> SubtleCrypto.t -> unit [@@js.set "prototype"]
-  val create: t -> SubtleCrypto.t [@@js.apply_newable]
-end
-module AnonymousInterface468 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SubmitEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> SubmitEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:SubmitEventInit.t -> unit -> SubmitEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface467 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> StyleSheetList.t [@@js.get "prototype"]
-  val set_prototype: t -> StyleSheetList.t -> unit [@@js.set "prototype"]
-  val create: t -> StyleSheetList.t [@@js.apply_newable]
-end
-module AnonymousInterface466 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> StyleSheet.t [@@js.get "prototype"]
-  val set_prototype: t -> StyleSheet.t -> unit [@@js.set "prototype"]
-  val create: t -> StyleSheet.t [@@js.apply_newable]
-end
-module AnonymousInterface465 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> StorageManager.t [@@js.get "prototype"]
-  val set_prototype: t -> StorageManager.t -> unit [@@js.set "prototype"]
-  val create: t -> StorageManager.t [@@js.apply_newable]
-end
-module AnonymousInterface464 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> StorageEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> StorageEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:StorageEventInit.t -> unit -> StorageEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface463 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Storage.t [@@js.get "prototype"]
-  val set_prototype: t -> Storage.t -> unit [@@js.set "prototype"]
-  val create: t -> Storage.t [@@js.apply_newable]
-end
-module AnonymousInterface462 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> StereoPannerNode.t [@@js.get "prototype"]
-  val set_prototype: t -> StereoPannerNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:StereoPannerOptions.t -> unit -> StereoPannerNode.t [@@js.apply_newable]
-end
-module AnonymousInterface461 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> StaticRange.t [@@js.get "prototype"]
-  val set_prototype: t -> StaticRange.t -> unit [@@js.set "prototype"]
-  val create: t -> init:StaticRangeInit.t -> StaticRange.t [@@js.apply_newable]
-end
-module AnonymousInterface460 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SpeechSynthesisVoice.t [@@js.get "prototype"]
-  val set_prototype: t -> SpeechSynthesisVoice.t -> unit [@@js.set "prototype"]
-  val create: t -> SpeechSynthesisVoice.t [@@js.apply_newable]
-end
-module AnonymousInterface46 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSRule.t [@@js.apply_newable]
-  val get_CHARSET_RULE: t -> float [@@js.get "CHARSET_RULE"]
-  val get_FONT_FACE_RULE: t -> float [@@js.get "FONT_FACE_RULE"]
-  val get_IMPORT_RULE: t -> float [@@js.get "IMPORT_RULE"]
-  val get_KEYFRAMES_RULE: t -> float [@@js.get "KEYFRAMES_RULE"]
-  val get_KEYFRAME_RULE: t -> float [@@js.get "KEYFRAME_RULE"]
-  val get_MEDIA_RULE: t -> float [@@js.get "MEDIA_RULE"]
-  val get_NAMESPACE_RULE: t -> float [@@js.get "NAMESPACE_RULE"]
-  val get_PAGE_RULE: t -> float [@@js.get "PAGE_RULE"]
-  val get_STYLE_RULE: t -> float [@@js.get "STYLE_RULE"]
-  val get_SUPPORTS_RULE: t -> float [@@js.get "SUPPORTS_RULE"]
-end
-module AnonymousInterface459 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SpeechSynthesisUtterance.t [@@js.get "prototype"]
-  val set_prototype: t -> SpeechSynthesisUtterance.t -> unit [@@js.set "prototype"]
-  val create: t -> ?text:string -> unit -> SpeechSynthesisUtterance.t [@@js.apply_newable]
-end
-module AnonymousInterface458 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SpeechSynthesisEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> SpeechSynthesisEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:SpeechSynthesisEventInit.t -> SpeechSynthesisEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface457 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SpeechSynthesisErrorEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> SpeechSynthesisErrorEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:SpeechSynthesisErrorEventInit.t -> SpeechSynthesisErrorEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface456 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SpeechSynthesis.t [@@js.get "prototype"]
-  val set_prototype: t -> SpeechSynthesis.t -> unit [@@js.set "prototype"]
-  val create: t -> SpeechSynthesis.t [@@js.apply_newable]
-end
-module[@js.scope "SpeechRecognitionAlternative"] SpeechRecognitionAlternative : sig
-  type t = [`SpeechRecognitionAlternative] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`SpeechRecognitionAlternative]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`SpeechRecognitionAlternative]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SpeechRecognitionAlternative ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_confidence: 'tags this -> float [@@js.get "confidence"]
-  val get_transcript: 'tags this -> string [@@js.get "transcript"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module[@js.scope "SpeechRecognitionResult"] SpeechRecognitionResult : sig
-  type t = [`SpeechRecognitionResult | SpeechRecognitionAlternative.t ArrayLike.tags_1 | SpeechRecognitionAlternative.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`SpeechRecognitionResult | SpeechRecognitionAlternative.t ArrayLike.tags_1 | SpeechRecognitionAlternative.t IterableIterator.tags_1]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`SpeechRecognitionResult | SpeechRecognitionAlternative.t ArrayLike.tags_1 | SpeechRecognitionAlternative.t IterableIterator.tags_1]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SpeechRecognitionResult ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_isFinal: 'tags this -> bool [@@js.get "isFinal"]
-  val get_length: 'tags this -> float [@@js.get "length"]
-  val item: 'tags this -> index:float -> SpeechRecognitionAlternative.t [@@js.call "item"]
-  val get: 'tags this -> float -> SpeechRecognitionAlternative.t [@@js.index_get]
-  val set: 'tags this -> float -> SpeechRecognitionAlternative.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module[@js.scope "SpeechRecognitionResultList"] SpeechRecognitionResultList : sig
-  type t = [`SpeechRecognitionResultList | SpeechRecognitionResult.t ArrayLike.tags_1 | SpeechRecognitionResult.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`SpeechRecognitionResultList | SpeechRecognitionResult.t ArrayLike.tags_1 | SpeechRecognitionResult.t IterableIterator.tags_1]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`SpeechRecognitionResultList | SpeechRecognitionResult.t ArrayLike.tags_1 | SpeechRecognitionResult.t IterableIterator.tags_1]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SpeechRecognitionResultList ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_length: 'tags this -> float [@@js.get "length"]
-  val item: 'tags this -> index:float -> SpeechRecognitionResult.t [@@js.call "item"]
-  val get: 'tags this -> float -> SpeechRecognitionResult.t [@@js.index_get]
-  val set: 'tags this -> float -> SpeechRecognitionResult.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface455 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SpeechRecognitionResultList.t [@@js.get "prototype"]
-  val set_prototype: t -> SpeechRecognitionResultList.t -> unit [@@js.set "prototype"]
-  val create: t -> SpeechRecognitionResultList.t [@@js.apply_newable]
-end
-module AnonymousInterface454 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SpeechRecognitionResult.t [@@js.get "prototype"]
-  val set_prototype: t -> SpeechRecognitionResult.t -> unit [@@js.set "prototype"]
-  val create: t -> SpeechRecognitionResult.t [@@js.apply_newable]
-end
-module AnonymousInterface453 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SpeechRecognitionAlternative.t [@@js.get "prototype"]
-  val set_prototype: t -> SpeechRecognitionAlternative.t -> unit [@@js.set "prototype"]
-  val create: t -> SpeechRecognitionAlternative.t [@@js.apply_newable]
-end
-module AnonymousInterface452 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SourceBufferList.t [@@js.get "prototype"]
-  val set_prototype: t -> SourceBufferList.t -> unit [@@js.set "prototype"]
-  val create: t -> SourceBufferList.t [@@js.apply_newable]
-end
-module AnonymousInterface451 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SourceBuffer.t [@@js.get "prototype"]
-  val set_prototype: t -> SourceBuffer.t -> unit [@@js.set "prototype"]
-  val create: t -> SourceBuffer.t [@@js.apply_newable]
-end
-module[@js.scope "SharedWorker"] SharedWorker : sig
-  type t = [`AbstractWorker | `EventTarget | `SharedWorker] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AbstractWorker | `EventTarget | `SharedWorker]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AbstractWorker | `EventTarget | `SharedWorker]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SharedWorker ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Returns sharedWorker's MessagePort object which can be used to communicate with the global environment. *)
-  val get_port: 'tags this -> MessagePort.t [@@js.get "port"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbstractWorkerEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbstractWorkerEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: scriptURL:URL.t or_string -> ?options:WorkerOptions.t or_string -> unit -> t [@@js.create]
-end
-module AnonymousInterface450 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SharedWorker.t [@@js.get "prototype"]
-  val set_prototype: t -> SharedWorker.t -> unit [@@js.set "prototype"]
-  val create: t -> scriptURL:URL.t or_string -> ?options:WorkerOptions.t or_string -> unit -> SharedWorker.t [@@js.apply_newable]
 end
 
 (** CSSPageRule is an interface representing a single CSS \@page rule. It implements the CSSRule interface with a type value of 6 (CSSRule.PAGE_RULE). *)
@@ -48847,95 +48831,6 @@ module[@js.scope "CSSPageRule"] CSSPageRule : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module AnonymousInterface45 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSPageRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSPageRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSPageRule.t [@@js.apply_newable]
-end
-module AnonymousInterface449 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ShadowRoot.t [@@js.get "prototype"]
-  val set_prototype: t -> ShadowRoot.t -> unit [@@js.set "prototype"]
-  val create: t -> ShadowRoot.t [@@js.apply_newable]
-end
-module AnonymousInterface448 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ServiceWorkerRegistration.t [@@js.get "prototype"]
-  val set_prototype: t -> ServiceWorkerRegistration.t -> unit [@@js.set "prototype"]
-  val create: t -> ServiceWorkerRegistration.t [@@js.apply_newable]
-end
-module AnonymousInterface447 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ServiceWorkerContainer.t [@@js.get "prototype"]
-  val set_prototype: t -> ServiceWorkerContainer.t -> unit [@@js.set "prototype"]
-  val create: t -> ServiceWorkerContainer.t [@@js.apply_newable]
-end
-module AnonymousInterface446 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ServiceWorker.t [@@js.get "prototype"]
-  val set_prototype: t -> ServiceWorker.t -> unit [@@js.set "prototype"]
-  val create: t -> ServiceWorker.t [@@js.apply_newable]
-end
-module AnonymousInterface445 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Selection.t [@@js.get "prototype"]
-  val set_prototype: t -> Selection.t -> unit [@@js.set "prototype"]
-  val create: t -> Selection.t [@@js.apply_newable]
-  val toString: t -> string [@@js.call "toString"]
-end
-module AnonymousInterface444 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SecurityPolicyViolationEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> SecurityPolicyViolationEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:SecurityPolicyViolationEventInit.t -> unit -> SecurityPolicyViolationEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface443 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ScriptProcessorNode.t [@@js.get "prototype"]
-  val set_prototype: t -> ScriptProcessorNode.t -> unit [@@js.set "prototype"]
-  val create: t -> ScriptProcessorNode.t [@@js.apply_newable]
-end
-module AnonymousInterface442 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ScreenOrientation.t [@@js.get "prototype"]
-  val set_prototype: t -> ScreenOrientation.t -> unit [@@js.set "prototype"]
-  val create: t -> ScreenOrientation.t [@@js.apply_newable]
-end
-module AnonymousInterface441 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Screen.t [@@js.get "prototype"]
-  val set_prototype: t -> Screen.t -> unit [@@js.set "prototype"]
-  val create: t -> Screen.t [@@js.apply_newable]
-end
-module AnonymousInterface440 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGViewElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGViewElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGViewElement.t [@@js.apply_newable]
-end
 
 (** An object representing a single CSS \@namespace at-rule. It implements the CSSRule interface, with a type value of 10 (CSSRule.NAMESPACE_RULE). *)
 module[@js.scope "CSSNamespaceRule"] CSSNamespaceRule : sig
@@ -48960,141 +48855,6 @@ module[@js.scope "CSSNamespaceRule"] CSSNamespaceRule : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module AnonymousInterface44 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSNamespaceRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSNamespaceRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSNamespaceRule.t [@@js.apply_newable]
-end
-module AnonymousInterface439 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGUseElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGUseElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGUseElement.t [@@js.apply_newable]
-end
-
-(** A commonly used set of constants used for reflecting gradientUnits, patternContentUnits and other similar attributes. *)
-module[@js.scope "SVGUnitTypes"] SVGUnitTypes : sig
-  type t = [`SVGUnitTypes] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`SVGUnitTypes]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`SVGUnitTypes]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SVGUnitTypes ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: 'tags this -> float [@@js.get "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX"]
-  val get_SVG_UNIT_TYPE_UNKNOWN: 'tags this -> float [@@js.get "SVG_UNIT_TYPE_UNKNOWN"]
-  val get_SVG_UNIT_TYPE_USERSPACEONUSE: 'tags this -> float [@@js.get "SVG_UNIT_TYPE_USERSPACEONUSE"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-  val svg_unit_type_objectboundingbox: unit -> float [@@js.get "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX"]
-  val svg_unit_type_unknown: unit -> float [@@js.get "SVG_UNIT_TYPE_UNKNOWN"]
-  val svg_unit_type_userspaceonuse: unit -> float [@@js.get "SVG_UNIT_TYPE_USERSPACEONUSE"]
-end
-module AnonymousInterface438 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGUnitTypes.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGUnitTypes.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGUnitTypes.t [@@js.apply_newable]
-  val get_SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: t -> float [@@js.get "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX"]
-  val get_SVG_UNIT_TYPE_UNKNOWN: t -> float [@@js.get "SVG_UNIT_TYPE_UNKNOWN"]
-  val get_SVG_UNIT_TYPE_USERSPACEONUSE: t -> float [@@js.get "SVG_UNIT_TYPE_USERSPACEONUSE"]
-end
-module AnonymousInterface437 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGTransformList.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGTransformList.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGTransformList.t [@@js.apply_newable]
-end
-module AnonymousInterface436 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGTransform.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGTransform.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGTransform.t [@@js.apply_newable]
-  val get_SVG_TRANSFORM_MATRIX: t -> float [@@js.get "SVG_TRANSFORM_MATRIX"]
-  val get_SVG_TRANSFORM_ROTATE: t -> float [@@js.get "SVG_TRANSFORM_ROTATE"]
-  val get_SVG_TRANSFORM_SCALE: t -> float [@@js.get "SVG_TRANSFORM_SCALE"]
-  val get_SVG_TRANSFORM_SKEWX: t -> float [@@js.get "SVG_TRANSFORM_SKEWX"]
-  val get_SVG_TRANSFORM_SKEWY: t -> float [@@js.get "SVG_TRANSFORM_SKEWY"]
-  val get_SVG_TRANSFORM_TRANSLATE: t -> float [@@js.get "SVG_TRANSFORM_TRANSLATE"]
-  val get_SVG_TRANSFORM_UNKNOWN: t -> float [@@js.get "SVG_TRANSFORM_UNKNOWN"]
-end
-module AnonymousInterface435 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGTitleElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGTitleElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGTitleElement.t [@@js.apply_newable]
-end
-module AnonymousInterface434 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGTextPositioningElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGTextPositioningElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGTextPositioningElement.t [@@js.apply_newable]
-end
-module AnonymousInterface433 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGTextPathElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGTextPathElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGTextPathElement.t [@@js.apply_newable]
-  val get_TEXTPATH_METHODTYPE_ALIGN: t -> float [@@js.get "TEXTPATH_METHODTYPE_ALIGN"]
-  val get_TEXTPATH_METHODTYPE_STRETCH: t -> float [@@js.get "TEXTPATH_METHODTYPE_STRETCH"]
-  val get_TEXTPATH_METHODTYPE_UNKNOWN: t -> float [@@js.get "TEXTPATH_METHODTYPE_UNKNOWN"]
-  val get_TEXTPATH_SPACINGTYPE_AUTO: t -> float [@@js.get "TEXTPATH_SPACINGTYPE_AUTO"]
-  val get_TEXTPATH_SPACINGTYPE_EXACT: t -> float [@@js.get "TEXTPATH_SPACINGTYPE_EXACT"]
-  val get_TEXTPATH_SPACINGTYPE_UNKNOWN: t -> float [@@js.get "TEXTPATH_SPACINGTYPE_UNKNOWN"]
-end
-module AnonymousInterface432 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGTextElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGTextElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGTextElement.t [@@js.apply_newable]
-end
-module AnonymousInterface431 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGTextContentElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGTextContentElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGTextContentElement.t [@@js.apply_newable]
-  val get_LENGTHADJUST_SPACING: t -> float [@@js.get "LENGTHADJUST_SPACING"]
-  val get_LENGTHADJUST_SPACINGANDGLYPHS: t -> float [@@js.get "LENGTHADJUST_SPACINGANDGLYPHS"]
-  val get_LENGTHADJUST_UNKNOWN: t -> float [@@js.get "LENGTHADJUST_UNKNOWN"]
-end
-module AnonymousInterface430 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGTSpanElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGTSpanElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGTSpanElement.t [@@js.apply_newable]
-end
 
 (** A single CSS \@media rule. It implements the CSSConditionRule interface, and therefore the CSSGroupingRule and the CSSRule interface with a type value of 4 (CSSRule.MEDIA_RULE). *)
 module[@js.scope "CSSMediaRule"] CSSMediaRule : sig
@@ -49117,94 +48877,6 @@ module[@js.scope "CSSMediaRule"] CSSMediaRule : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
-end
-module AnonymousInterface43 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSMediaRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSMediaRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSMediaRule.t [@@js.apply_newable]
-end
-module AnonymousInterface429 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGSymbolElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGSymbolElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGSymbolElement.t [@@js.apply_newable]
-end
-module AnonymousInterface428 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGSwitchElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGSwitchElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGSwitchElement.t [@@js.apply_newable]
-end
-module AnonymousInterface427 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGStyleElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGStyleElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGStyleElement.t [@@js.apply_newable]
-end
-module AnonymousInterface426 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGStringList.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGStringList.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGStringList.t [@@js.apply_newable]
-end
-module AnonymousInterface425 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGStopElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGStopElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGStopElement.t [@@js.apply_newable]
-end
-module AnonymousInterface424 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGSetElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGSetElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGSetElement.t [@@js.apply_newable]
-end
-module AnonymousInterface423 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGScriptElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGScriptElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGScriptElement.t [@@js.apply_newable]
-end
-module AnonymousInterface422 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGSVGElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGSVGElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGSVGElement.t [@@js.apply_newable]
-end
-module AnonymousInterface421 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGRectElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGRectElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGRectElement.t [@@js.apply_newable]
-end
-module AnonymousInterface420 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGRadialGradientElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGRadialGradientElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGRadialGradientElement.t [@@js.apply_newable]
 end
 
 (** An object representing a set of style for a given keyframe. It corresponds to the contains of a single keyframe of a \@keyframes at-rule. It implements the CSSRule interface with a type value of 8 (CSSRule.KEYFRAME_RULE). *)
@@ -49259,217 +48931,6 @@ module[@js.scope "CSSKeyframesRule"] CSSKeyframesRule : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module AnonymousInterface42 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSKeyframesRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSKeyframesRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSKeyframesRule.t [@@js.apply_newable]
-end
-module AnonymousInterface419 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGPreserveAspectRatio.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGPreserveAspectRatio.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGPreserveAspectRatio.t [@@js.apply_newable]
-  val get_SVG_MEETORSLICE_MEET: t -> float [@@js.get "SVG_MEETORSLICE_MEET"]
-  val get_SVG_MEETORSLICE_SLICE: t -> float [@@js.get "SVG_MEETORSLICE_SLICE"]
-  val get_SVG_MEETORSLICE_UNKNOWN: t -> float [@@js.get "SVG_MEETORSLICE_UNKNOWN"]
-  val get_SVG_PRESERVEASPECTRATIO_NONE: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_NONE"]
-  val get_SVG_PRESERVEASPECTRATIO_UNKNOWN: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_UNKNOWN"]
-  val get_SVG_PRESERVEASPECTRATIO_XMAXYMAX: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMAXYMAX"]
-  val get_SVG_PRESERVEASPECTRATIO_XMAXYMID: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMAXYMID"]
-  val get_SVG_PRESERVEASPECTRATIO_XMAXYMIN: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMAXYMIN"]
-  val get_SVG_PRESERVEASPECTRATIO_XMIDYMAX: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMIDYMAX"]
-  val get_SVG_PRESERVEASPECTRATIO_XMIDYMID: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMIDYMID"]
-  val get_SVG_PRESERVEASPECTRATIO_XMIDYMIN: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMIDYMIN"]
-  val get_SVG_PRESERVEASPECTRATIO_XMINYMAX: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMINYMAX"]
-  val get_SVG_PRESERVEASPECTRATIO_XMINYMID: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMINYMID"]
-  val get_SVG_PRESERVEASPECTRATIO_XMINYMIN: t -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMINYMIN"]
-end
-module AnonymousInterface418 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGPolylineElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGPolylineElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGPolylineElement.t [@@js.apply_newable]
-end
-module AnonymousInterface417 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGPolygonElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGPolygonElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGPolygonElement.t [@@js.apply_newable]
-end
-module AnonymousInterface416 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGPointList.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGPointList.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGPointList.t [@@js.apply_newable]
-end
-module AnonymousInterface415 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGPatternElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGPatternElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGPatternElement.t [@@js.apply_newable]
-end
-module AnonymousInterface414 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGPathElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGPathElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGPathElement.t [@@js.apply_newable]
-end
-module AnonymousInterface413 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGNumberList.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGNumberList.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGNumberList.t [@@js.apply_newable]
-end
-module AnonymousInterface412 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGNumber.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGNumber.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGNumber.t [@@js.apply_newable]
-end
-module AnonymousInterface411 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGMetadataElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGMetadataElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGMetadataElement.t [@@js.apply_newable]
-end
-module AnonymousInterface410 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGMaskElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGMaskElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGMaskElement.t [@@js.apply_newable]
-end
-module AnonymousInterface41 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSKeyframeRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSKeyframeRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSKeyframeRule.t [@@js.apply_newable]
-end
-module AnonymousInterface409 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGMarkerElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGMarkerElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGMarkerElement.t [@@js.apply_newable]
-  val get_SVG_MARKERUNITS_STROKEWIDTH: t -> float [@@js.get "SVG_MARKERUNITS_STROKEWIDTH"]
-  val get_SVG_MARKERUNITS_UNKNOWN: t -> float [@@js.get "SVG_MARKERUNITS_UNKNOWN"]
-  val get_SVG_MARKERUNITS_USERSPACEONUSE: t -> float [@@js.get "SVG_MARKERUNITS_USERSPACEONUSE"]
-  val get_SVG_MARKER_ORIENT_ANGLE: t -> float [@@js.get "SVG_MARKER_ORIENT_ANGLE"]
-  val get_SVG_MARKER_ORIENT_AUTO: t -> float [@@js.get "SVG_MARKER_ORIENT_AUTO"]
-  val get_SVG_MARKER_ORIENT_UNKNOWN: t -> float [@@js.get "SVG_MARKER_ORIENT_UNKNOWN"]
-end
-module AnonymousInterface408 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGMPathElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGMPathElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGMPathElement.t [@@js.apply_newable]
-end
-module AnonymousInterface407 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGLinearGradientElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGLinearGradientElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGLinearGradientElement.t [@@js.apply_newable]
-end
-module AnonymousInterface406 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGLineElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGLineElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGLineElement.t [@@js.apply_newable]
-end
-module AnonymousInterface405 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGLengthList.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGLengthList.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGLengthList.t [@@js.apply_newable]
-end
-module AnonymousInterface404 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGLength.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGLength.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGLength.t [@@js.apply_newable]
-  val get_SVG_LENGTHTYPE_CM: t -> float [@@js.get "SVG_LENGTHTYPE_CM"]
-  val get_SVG_LENGTHTYPE_EMS: t -> float [@@js.get "SVG_LENGTHTYPE_EMS"]
-  val get_SVG_LENGTHTYPE_EXS: t -> float [@@js.get "SVG_LENGTHTYPE_EXS"]
-  val get_SVG_LENGTHTYPE_IN: t -> float [@@js.get "SVG_LENGTHTYPE_IN"]
-  val get_SVG_LENGTHTYPE_MM: t -> float [@@js.get "SVG_LENGTHTYPE_MM"]
-  val get_SVG_LENGTHTYPE_NUMBER: t -> float [@@js.get "SVG_LENGTHTYPE_NUMBER"]
-  val get_SVG_LENGTHTYPE_PC: t -> float [@@js.get "SVG_LENGTHTYPE_PC"]
-  val get_SVG_LENGTHTYPE_PERCENTAGE: t -> float [@@js.get "SVG_LENGTHTYPE_PERCENTAGE"]
-  val get_SVG_LENGTHTYPE_PT: t -> float [@@js.get "SVG_LENGTHTYPE_PT"]
-  val get_SVG_LENGTHTYPE_PX: t -> float [@@js.get "SVG_LENGTHTYPE_PX"]
-  val get_SVG_LENGTHTYPE_UNKNOWN: t -> float [@@js.get "SVG_LENGTHTYPE_UNKNOWN"]
-end
-module AnonymousInterface403 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGImageElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGImageElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGImageElement.t [@@js.apply_newable]
-end
-module AnonymousInterface402 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGGraphicsElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGGraphicsElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGGraphicsElement.t [@@js.apply_newable]
-end
-module AnonymousInterface401 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGGradientElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGGradientElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGGradientElement.t [@@js.apply_newable]
-  val get_SVG_SPREADMETHOD_PAD: t -> float [@@js.get "SVG_SPREADMETHOD_PAD"]
-  val get_SVG_SPREADMETHOD_REFLECT: t -> float [@@js.get "SVG_SPREADMETHOD_REFLECT"]
-  val get_SVG_SPREADMETHOD_REPEAT: t -> float [@@js.get "SVG_SPREADMETHOD_REPEAT"]
-  val get_SVG_SPREADMETHOD_UNKNOWN: t -> float [@@js.get "SVG_SPREADMETHOD_UNKNOWN"]
-end
-module AnonymousInterface400 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGGeometryElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGGeometryElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGGeometryElement.t [@@js.apply_newable]
-end
 module[@js.scope "CSSImportRule"] CSSImportRule : sig
   type t = [`CSSImportRule | `CSSRule] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -49493,199 +48954,6 @@ module[@js.scope "CSSImportRule"] CSSImportRule : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module AnonymousInterface40 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSImportRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSImportRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSImportRule.t [@@js.apply_newable]
-end
-module AnonymousInterface4 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AnalyserNode.t [@@js.get "prototype"]
-  val set_prototype: t -> AnalyserNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:AnalyserOptions.t -> unit -> AnalyserNode.t [@@js.apply_newable]
-end
-module AnonymousInterface399 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGGElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGGElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGGElement.t [@@js.apply_newable]
-end
-module AnonymousInterface398 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGForeignObjectElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGForeignObjectElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGForeignObjectElement.t [@@js.apply_newable]
-end
-module AnonymousInterface397 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFilterElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFilterElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFilterElement.t [@@js.apply_newable]
-end
-module AnonymousInterface396 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFETurbulenceElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFETurbulenceElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFETurbulenceElement.t [@@js.apply_newable]
-  val get_SVG_STITCHTYPE_NOSTITCH: t -> float [@@js.get "SVG_STITCHTYPE_NOSTITCH"]
-  val get_SVG_STITCHTYPE_STITCH: t -> float [@@js.get "SVG_STITCHTYPE_STITCH"]
-  val get_SVG_STITCHTYPE_UNKNOWN: t -> float [@@js.get "SVG_STITCHTYPE_UNKNOWN"]
-  val get_SVG_TURBULENCE_TYPE_FRACTALNOISE: t -> float [@@js.get "SVG_TURBULENCE_TYPE_FRACTALNOISE"]
-  val get_SVG_TURBULENCE_TYPE_TURBULENCE: t -> float [@@js.get "SVG_TURBULENCE_TYPE_TURBULENCE"]
-  val get_SVG_TURBULENCE_TYPE_UNKNOWN: t -> float [@@js.get "SVG_TURBULENCE_TYPE_UNKNOWN"]
-end
-module AnonymousInterface395 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFETileElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFETileElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFETileElement.t [@@js.apply_newable]
-end
-module AnonymousInterface394 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFESpotLightElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFESpotLightElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFESpotLightElement.t [@@js.apply_newable]
-end
-module AnonymousInterface393 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFESpecularLightingElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFESpecularLightingElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFESpecularLightingElement.t [@@js.apply_newable]
-end
-module AnonymousInterface392 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEPointLightElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEPointLightElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEPointLightElement.t [@@js.apply_newable]
-end
-module AnonymousInterface391 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEOffsetElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEOffsetElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEOffsetElement.t [@@js.apply_newable]
-end
-module AnonymousInterface390 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEMorphologyElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEMorphologyElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEMorphologyElement.t [@@js.apply_newable]
-  val get_SVG_MORPHOLOGY_OPERATOR_DILATE: t -> float [@@js.get "SVG_MORPHOLOGY_OPERATOR_DILATE"]
-  val get_SVG_MORPHOLOGY_OPERATOR_ERODE: t -> float [@@js.get "SVG_MORPHOLOGY_OPERATOR_ERODE"]
-  val get_SVG_MORPHOLOGY_OPERATOR_UNKNOWN: t -> float [@@js.get "SVG_MORPHOLOGY_OPERATOR_UNKNOWN"]
-end
-module AnonymousInterface39 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSGroupingRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSGroupingRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSGroupingRule.t [@@js.apply_newable]
-end
-module AnonymousInterface389 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEMergeNodeElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEMergeNodeElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEMergeNodeElement.t [@@js.apply_newable]
-end
-module AnonymousInterface388 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEMergeElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEMergeElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEMergeElement.t [@@js.apply_newable]
-end
-module AnonymousInterface387 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEImageElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEImageElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEImageElement.t [@@js.apply_newable]
-end
-module AnonymousInterface386 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEGaussianBlurElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEGaussianBlurElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEGaussianBlurElement.t [@@js.apply_newable]
-end
-module AnonymousInterface385 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEFuncRElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEFuncRElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEFuncRElement.t [@@js.apply_newable]
-end
-module AnonymousInterface384 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEFuncGElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEFuncGElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEFuncGElement.t [@@js.apply_newable]
-end
-module AnonymousInterface383 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEFuncBElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEFuncBElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEFuncBElement.t [@@js.apply_newable]
-end
-module AnonymousInterface382 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEFuncAElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEFuncAElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEFuncAElement.t [@@js.apply_newable]
-end
-module AnonymousInterface381 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEFloodElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEFloodElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEFloodElement.t [@@js.apply_newable]
-end
-module AnonymousInterface380 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEDropShadowElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEDropShadowElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEDropShadowElement.t [@@js.apply_newable]
-end
 module[@js.scope "CSSFontFaceRule"] CSSFontFaceRule : sig
   type t = [`CSSFontFaceRule | `CSSRule] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -49706,132 +48974,6 @@ module[@js.scope "CSSFontFaceRule"] CSSFontFaceRule : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
-end
-module AnonymousInterface38 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSFontFaceRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSFontFaceRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSFontFaceRule.t [@@js.apply_newable]
-end
-module AnonymousInterface379 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEDistantLightElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEDistantLightElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEDistantLightElement.t [@@js.apply_newable]
-end
-module AnonymousInterface378 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEDisplacementMapElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEDisplacementMapElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEDisplacementMapElement.t [@@js.apply_newable]
-  val get_SVG_CHANNEL_A: t -> float [@@js.get "SVG_CHANNEL_A"]
-  val get_SVG_CHANNEL_B: t -> float [@@js.get "SVG_CHANNEL_B"]
-  val get_SVG_CHANNEL_G: t -> float [@@js.get "SVG_CHANNEL_G"]
-  val get_SVG_CHANNEL_R: t -> float [@@js.get "SVG_CHANNEL_R"]
-  val get_SVG_CHANNEL_UNKNOWN: t -> float [@@js.get "SVG_CHANNEL_UNKNOWN"]
-end
-module AnonymousInterface377 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEDiffuseLightingElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEDiffuseLightingElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEDiffuseLightingElement.t [@@js.apply_newable]
-end
-module AnonymousInterface376 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEConvolveMatrixElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEConvolveMatrixElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEConvolveMatrixElement.t [@@js.apply_newable]
-  val get_SVG_EDGEMODE_DUPLICATE: t -> float [@@js.get "SVG_EDGEMODE_DUPLICATE"]
-  val get_SVG_EDGEMODE_NONE: t -> float [@@js.get "SVG_EDGEMODE_NONE"]
-  val get_SVG_EDGEMODE_UNKNOWN: t -> float [@@js.get "SVG_EDGEMODE_UNKNOWN"]
-  val get_SVG_EDGEMODE_WRAP: t -> float [@@js.get "SVG_EDGEMODE_WRAP"]
-end
-module AnonymousInterface375 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFECompositeElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFECompositeElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFECompositeElement.t [@@js.apply_newable]
-  val get_SVG_FECOMPOSITE_OPERATOR_ARITHMETIC: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_ARITHMETIC"]
-  val get_SVG_FECOMPOSITE_OPERATOR_ATOP: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_ATOP"]
-  val get_SVG_FECOMPOSITE_OPERATOR_IN: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_IN"]
-  val get_SVG_FECOMPOSITE_OPERATOR_OUT: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_OUT"]
-  val get_SVG_FECOMPOSITE_OPERATOR_OVER: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_OVER"]
-  val get_SVG_FECOMPOSITE_OPERATOR_UNKNOWN: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_UNKNOWN"]
-  val get_SVG_FECOMPOSITE_OPERATOR_XOR: t -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_XOR"]
-end
-module AnonymousInterface374 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEComponentTransferElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEComponentTransferElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEComponentTransferElement.t [@@js.apply_newable]
-end
-module AnonymousInterface373 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEColorMatrixElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEColorMatrixElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEColorMatrixElement.t [@@js.apply_newable]
-  val get_SVG_FECOLORMATRIX_TYPE_HUEROTATE: t -> float [@@js.get "SVG_FECOLORMATRIX_TYPE_HUEROTATE"]
-  val get_SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA: t -> float [@@js.get "SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA"]
-  val get_SVG_FECOLORMATRIX_TYPE_MATRIX: t -> float [@@js.get "SVG_FECOLORMATRIX_TYPE_MATRIX"]
-  val get_SVG_FECOLORMATRIX_TYPE_SATURATE: t -> float [@@js.get "SVG_FECOLORMATRIX_TYPE_SATURATE"]
-  val get_SVG_FECOLORMATRIX_TYPE_UNKNOWN: t -> float [@@js.get "SVG_FECOLORMATRIX_TYPE_UNKNOWN"]
-end
-module AnonymousInterface372 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGFEBlendElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGFEBlendElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGFEBlendElement.t [@@js.apply_newable]
-  val get_SVG_FEBLEND_MODE_COLOR: t -> float [@@js.get "SVG_FEBLEND_MODE_COLOR"]
-  val get_SVG_FEBLEND_MODE_COLOR_BURN: t -> float [@@js.get "SVG_FEBLEND_MODE_COLOR_BURN"]
-  val get_SVG_FEBLEND_MODE_COLOR_DODGE: t -> float [@@js.get "SVG_FEBLEND_MODE_COLOR_DODGE"]
-  val get_SVG_FEBLEND_MODE_DARKEN: t -> float [@@js.get "SVG_FEBLEND_MODE_DARKEN"]
-  val get_SVG_FEBLEND_MODE_DIFFERENCE: t -> float [@@js.get "SVG_FEBLEND_MODE_DIFFERENCE"]
-  val get_SVG_FEBLEND_MODE_EXCLUSION: t -> float [@@js.get "SVG_FEBLEND_MODE_EXCLUSION"]
-  val get_SVG_FEBLEND_MODE_HARD_LIGHT: t -> float [@@js.get "SVG_FEBLEND_MODE_HARD_LIGHT"]
-  val get_SVG_FEBLEND_MODE_HUE: t -> float [@@js.get "SVG_FEBLEND_MODE_HUE"]
-  val get_SVG_FEBLEND_MODE_LIGHTEN: t -> float [@@js.get "SVG_FEBLEND_MODE_LIGHTEN"]
-  val get_SVG_FEBLEND_MODE_LUMINOSITY: t -> float [@@js.get "SVG_FEBLEND_MODE_LUMINOSITY"]
-  val get_SVG_FEBLEND_MODE_MULTIPLY: t -> float [@@js.get "SVG_FEBLEND_MODE_MULTIPLY"]
-  val get_SVG_FEBLEND_MODE_NORMAL: t -> float [@@js.get "SVG_FEBLEND_MODE_NORMAL"]
-  val get_SVG_FEBLEND_MODE_OVERLAY: t -> float [@@js.get "SVG_FEBLEND_MODE_OVERLAY"]
-  val get_SVG_FEBLEND_MODE_SATURATION: t -> float [@@js.get "SVG_FEBLEND_MODE_SATURATION"]
-  val get_SVG_FEBLEND_MODE_SCREEN: t -> float [@@js.get "SVG_FEBLEND_MODE_SCREEN"]
-  val get_SVG_FEBLEND_MODE_SOFT_LIGHT: t -> float [@@js.get "SVG_FEBLEND_MODE_SOFT_LIGHT"]
-  val get_SVG_FEBLEND_MODE_UNKNOWN: t -> float [@@js.get "SVG_FEBLEND_MODE_UNKNOWN"]
-end
-module AnonymousInterface371 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGEllipseElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGEllipseElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGEllipseElement.t [@@js.apply_newable]
-end
-module AnonymousInterface370 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGElement.t [@@js.apply_newable]
 end
 module[@js.scope "CSSCounterStyleRule"] CSSCounterStyleRule : sig
   type t = [`CSSCounterStyleRule | `CSSRule] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49874,188 +49016,6 @@ module[@js.scope "CSSCounterStyleRule"] CSSCounterStyleRule : sig
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
-end
-module AnonymousInterface37 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSCounterStyleRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSCounterStyleRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSCounterStyleRule.t [@@js.apply_newable]
-end
-module AnonymousInterface369 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGDescElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGDescElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGDescElement.t [@@js.apply_newable]
-end
-module AnonymousInterface368 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGDefsElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGDefsElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGDefsElement.t [@@js.apply_newable]
-end
-module AnonymousInterface367 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGComponentTransferFunctionElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGComponentTransferFunctionElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGComponentTransferFunctionElement.t [@@js.apply_newable]
-  val get_SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE: t -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE"]
-  val get_SVG_FECOMPONENTTRANSFER_TYPE_GAMMA: t -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_GAMMA"]
-  val get_SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY: t -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY"]
-  val get_SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: t -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_LINEAR"]
-  val get_SVG_FECOMPONENTTRANSFER_TYPE_TABLE: t -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_TABLE"]
-  val get_SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: t -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN"]
-end
-module AnonymousInterface366 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGClipPathElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGClipPathElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGClipPathElement.t [@@js.apply_newable]
-end
-module AnonymousInterface365 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGCircleElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGCircleElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGCircleElement.t [@@js.apply_newable]
-end
-module AnonymousInterface364 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimationElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimationElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimationElement.t [@@js.apply_newable]
-end
-module AnonymousInterface363 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedTransformList.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedTransformList.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedTransformList.t [@@js.apply_newable]
-end
-module AnonymousInterface362 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedString.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedString.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedString.t [@@js.apply_newable]
-end
-module AnonymousInterface361 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedRect.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedRect.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedRect.t [@@js.apply_newable]
-end
-module AnonymousInterface360 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedPreserveAspectRatio.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedPreserveAspectRatio.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedPreserveAspectRatio.t [@@js.apply_newable]
-end
-module AnonymousInterface36 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSConditionRule.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSConditionRule.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSConditionRule.t [@@js.apply_newable]
-end
-module AnonymousInterface359 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedNumberList.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedNumberList.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedNumberList.t [@@js.apply_newable]
-end
-module AnonymousInterface358 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedNumber.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedNumber.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedNumber.t [@@js.apply_newable]
-end
-module AnonymousInterface357 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedLengthList.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedLengthList.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedLengthList.t [@@js.apply_newable]
-end
-module AnonymousInterface356 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedLength.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedLength.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedLength.t [@@js.apply_newable]
-end
-module AnonymousInterface355 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedInteger.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedInteger.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedInteger.t [@@js.apply_newable]
-end
-module AnonymousInterface354 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedEnumeration.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedEnumeration.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedEnumeration.t [@@js.apply_newable]
-end
-module AnonymousInterface353 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedBoolean.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedBoolean.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedBoolean.t [@@js.apply_newable]
-end
-module AnonymousInterface352 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimatedAngle.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimatedAngle.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimatedAngle.t [@@js.apply_newable]
-end
-module AnonymousInterface351 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimateTransformElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimateTransformElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimateTransformElement.t [@@js.apply_newable]
-end
-module AnonymousInterface350 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimateMotionElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimateMotionElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimateMotionElement.t [@@js.apply_newable]
 end
 module[@js.scope "CSSAnimation"] CSSAnimation : sig
   type t = [`Animation | `CSSAnimation | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -50118,357 +49078,12 @@ module[@js.scope "CSSAnimation"] CSSAnimation : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module AnonymousInterface35 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CSSAnimation.t [@@js.get "prototype"]
-  val set_prototype: t -> CSSAnimation.t -> unit [@@js.set "prototype"]
-  val create: t -> CSSAnimation.t [@@js.apply_newable]
-end
-module AnonymousInterface349 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAnimateElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAnimateElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAnimateElement.t [@@js.apply_newable]
-end
-module AnonymousInterface348 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAngle.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAngle.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAngle.t [@@js.apply_newable]
-  val get_SVG_ANGLETYPE_DEG: t -> float [@@js.get "SVG_ANGLETYPE_DEG"]
-  val get_SVG_ANGLETYPE_GRAD: t -> float [@@js.get "SVG_ANGLETYPE_GRAD"]
-  val get_SVG_ANGLETYPE_RAD: t -> float [@@js.get "SVG_ANGLETYPE_RAD"]
-  val get_SVG_ANGLETYPE_UNKNOWN: t -> float [@@js.get "SVG_ANGLETYPE_UNKNOWN"]
-  val get_SVG_ANGLETYPE_UNSPECIFIED: t -> float [@@js.get "SVG_ANGLETYPE_UNSPECIFIED"]
-end
-module AnonymousInterface347 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> SVGAElement.t [@@js.get "prototype"]
-  val set_prototype: t -> SVGAElement.t -> unit [@@js.set "prototype"]
-  val create: t -> SVGAElement.t [@@js.apply_newable]
-end
-module AnonymousInterface345 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Response.t [@@js.get "prototype"]
-  val set_prototype: t -> Response.t -> unit [@@js.set "prototype"]
-  val create: t -> ?body:BodyInit.t or_null -> ?init:ResponseInit.t -> unit -> Response.t [@@js.apply_newable]
-  val error: t -> Response.t [@@js.call "error"]
-  val redirect: t -> url:URL.t or_string -> ?status:float -> unit -> Response.t [@@js.call "redirect"]
-end
-module[@js.scope "ResizeObserverSize"] ResizeObserverSize : sig
-  type t = [`ResizeObserverSize] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ResizeObserverSize]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ResizeObserverSize]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserverSize ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_blockSize: 'tags this -> float [@@js.get "blockSize"]
-  val get_inlineSize: 'tags this -> float [@@js.get "inlineSize"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface344 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ResizeObserverSize.t [@@js.get "prototype"]
-  val set_prototype: t -> ResizeObserverSize.t -> unit [@@js.set "prototype"]
-  val create: t -> ResizeObserverSize.t [@@js.apply_newable]
-end
-module[@js.scope "ResizeObserverEntry"] ResizeObserverEntry : sig
-  type t = [`ResizeObserverEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ResizeObserverEntry]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ResizeObserverEntry]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserverEntry ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_borderBoxSize: 'tags this -> ResizeObserverSize.t list [@@js.get "borderBoxSize"]
-  val get_contentBoxSize: 'tags this -> ResizeObserverSize.t list [@@js.get "contentBoxSize"]
-  val get_contentRect: 'tags this -> DOMRectReadOnly.t [@@js.get "contentRect"]
-  val get_target: 'tags this -> Element.t [@@js.get "target"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface343 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ResizeObserverEntry.t [@@js.get "prototype"]
-  val set_prototype: t -> ResizeObserverEntry.t -> unit [@@js.set "prototype"]
-  val create: t -> ResizeObserverEntry.t [@@js.apply_newable]
-end
-module ResizeObserverBoxOptions : sig
-  type t = ([`L_s167_border_box[@js "border-box"] | `L_s216_content_box[@js "content-box"] | `L_s246_device_pixel_content_box[@js "device-pixel-content-box"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module ResizeObserverOptions : sig
-  type t = [`ResizeObserverOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ResizeObserverOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ResizeObserverOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserverOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_box: 'tags this -> ResizeObserverBoxOptions.t [@@js.get "box"]
-  val set_box: 'tags this -> ResizeObserverBoxOptions.t -> unit [@@js.set "box"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "ResizeObserver"] rec ResizeObserver : sig
-  type t = [`ResizeObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ResizeObserver]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ResizeObserver]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserver ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
-  val observe: 'tags this -> target:Element.t -> ?options:ResizeObserverOptions.t -> unit -> unit [@@js.call "observe"]
-  val unobserve: 'tags this -> target:Element.t -> unit [@@js.call "unobserve"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: ResizeObserverCallback.t -> t [@@js.create]
-end
-and ResizeObserverCallback : sig
-  type t = [`ResizeObserverCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ResizeObserverCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ResizeObserverCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ResizeObserverCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> entries:ResizeObserverEntry.t list -> observer:ResizeObserver.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module AnonymousInterface342 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ResizeObserver.t [@@js.get "prototype"]
-  val set_prototype: t -> ResizeObserver.t -> unit [@@js.set "prototype"]
-  val create: t -> callback:ResizeObserverCallback.t -> ResizeObserver.t [@@js.apply_newable]
-end
-module AnonymousInterface341 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Request.t [@@js.get "prototype"]
-  val set_prototype: t -> Request.t -> unit [@@js.set "prototype"]
-  val create: t -> input:RequestInfo.t -> ?init:RequestInit.t -> unit -> Request.t [@@js.apply_newable]
-end
-module AnonymousInterface340 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RemotePlayback.t [@@js.get "prototype"]
-  val set_prototype: t -> RemotePlayback.t -> unit [@@js.set "prototype"]
-  val create: t -> RemotePlayback.t [@@js.apply_newable]
-end
-module AnonymousInterface34 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> CDATASection.t [@@js.get "prototype"]
-  val set_prototype: t -> CDATASection.t -> unit [@@js.set "prototype"]
-  val create: t -> CDATASection.t [@@js.apply_newable]
-end
-module AnonymousInterface339 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ReadableStreamDefaultReader.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ReadableStreamDefaultReader.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> stream:'R ReadableStream.t -> 'R ReadableStreamDefaultReader.t [@@js.apply_newable]
-end
-module AnonymousInterface338 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ReadableStreamDefaultController.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ReadableStreamDefaultController.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ReadableStreamDefaultController.t_0 [@@js.apply_newable]
-end
-module AnonymousInterface337 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ReadableStream.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ReadableStream.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> ?underlyingSource:'R UnderlyingSource.t -> ?strategy:'R QueuingStrategy.t -> unit -> 'R ReadableStream.t [@@js.apply_newable]
-end
-module AnonymousInterface336 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Range.t [@@js.get "prototype"]
-  val set_prototype: t -> Range.t -> unit [@@js.set "prototype"]
-  val create: t -> Range.t [@@js.apply_newable]
-  val get_END_TO_END: t -> float [@@js.get "END_TO_END"]
-  val get_END_TO_START: t -> float [@@js.get "END_TO_START"]
-  val get_START_TO_END: t -> float [@@js.get "START_TO_END"]
-  val get_START_TO_START: t -> float [@@js.get "START_TO_START"]
-  val toString: t -> string [@@js.call "toString"]
-end
-module AnonymousInterface335 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RadioNodeList.t [@@js.get "prototype"]
-  val set_prototype: t -> RadioNodeList.t -> unit [@@js.set "prototype"]
-  val create: t -> RadioNodeList.t [@@js.apply_newable]
-end
-module AnonymousInterface334 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCTrackEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCTrackEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:RTCTrackEventInit.t -> RTCTrackEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface333 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCStatsReport.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCStatsReport.t -> unit [@@js.set "prototype"]
-  val create: t -> RTCStatsReport.t [@@js.apply_newable]
-end
-module RTCSdpType : sig
-  type t = ([`L_s120_answer[@js "answer"] | `L_s536_offer[@js "offer"] | `L_s605_pranswer[@js "pranswer"] | `L_s660_rollback[@js "rollback"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCSessionDescriptionInit : sig
-  type t = [`RTCSessionDescriptionInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCSessionDescriptionInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCSessionDescriptionInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCSessionDescriptionInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_sdp: 'tags this -> string [@@js.get "sdp"]
-  val set_sdp: 'tags this -> string -> unit [@@js.set "sdp"]
-  val get_type: 'tags this -> RTCSdpType.t [@@js.get "type"]
-  val set_type: 'tags this -> RTCSdpType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
 
-(** One end of a connection—or potential connection—and how it's configured. Each RTCSessionDescription consists of a description type indicating which part of the offer/answer negotiation process it describes and of the SDP descriptor of the session. *)
-module[@js.scope "RTCSessionDescription"] RTCSessionDescription : sig
-  type t = [`RTCSessionDescription] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCSessionDescription]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCSessionDescription]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCSessionDescription ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_sdp: 'tags this -> string [@@js.get "sdp"]
-  val get_type: 'tags this -> RTCSdpType.t [@@js.get "type"]
-  val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: RTCSessionDescriptionInit.t -> t [@@js.create]
-end
-module AnonymousInterface332 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCSessionDescription.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCSessionDescription.t -> unit [@@js.set "prototype"]
-  val create: t -> descriptionInitDict:RTCSessionDescriptionInit.t -> RTCSessionDescription.t [@@js.apply_newable]
-end
-module AnonymousInterface331 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCRtpTransceiver.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCRtpTransceiver.t -> unit [@@js.set "prototype"]
-  val create: t -> RTCRtpTransceiver.t [@@js.apply_newable]
-end
-module AnonymousInterface330 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCRtpSender.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCRtpSender.t -> unit [@@js.set "prototype"]
-  val create: t -> RTCRtpSender.t [@@js.apply_newable]
-  val getCapabilities: t -> kind:string -> RTCRtpCapabilities.t or_null [@@js.call "getCapabilities"]
+(** Holds useful CSS-related methods. No object with this interface are implemented: it contains only static methods and therefore is a utilitarian interface. *)
+module[@js.scope "CSS"] CSS : sig
+  val escape: string -> string [@@js.global "escape"]
+  val supports: property:string -> value:string -> bool [@@js.global "supports"]
+  val supports': string -> bool [@@js.global "supports"]
 end
 
 (** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
@@ -50494,597 +49109,27 @@ module[@js.scope "ByteLengthQueuingStrategy"] ByteLengthQueuingStrategy : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: QueuingStrategyInit.t -> t [@@js.create]
 end
-module AnonymousInterface33 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ByteLengthQueuingStrategy.t [@@js.get "prototype"]
-  val set_prototype: t -> ByteLengthQueuingStrategy.t -> unit [@@js.set "prototype"]
-  val create: t -> init:QueuingStrategyInit.t -> ByteLengthQueuingStrategy.t [@@js.apply_newable]
-end
-module AnonymousInterface329 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCRtpReceiver.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCRtpReceiver.t -> unit [@@js.set "prototype"]
-  val create: t -> RTCRtpReceiver.t [@@js.apply_newable]
-  val getCapabilities: t -> kind:string -> RTCRtpCapabilities.t or_null [@@js.call "getCapabilities"]
-end
-module AnonymousInterface328 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCPeerConnectionIceEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCPeerConnectionIceEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:RTCPeerConnectionIceEventInit.t -> unit -> RTCPeerConnectionIceEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface327 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCPeerConnectionIceErrorEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCPeerConnectionIceErrorEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:RTCPeerConnectionIceErrorEventInit.t -> RTCPeerConnectionIceErrorEvent.t [@@js.apply_newable]
-end
-module RTCSignalingState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s372_have_local_offer[@js "have-local-offer"] | `L_s373_have_local_pranswer[@js "have-local-pranswer"] | `L_s374_have_remote_offer[@js "have-remote-offer"] | `L_s375_have_remote_pranswer[@js "have-remote-pranswer"] | `L_s720_stable[@js "stable"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCSessionDescriptionCallback : sig
-  type t = [`RTCSessionDescriptionCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module BroadcastChannelEventMap : sig
+  type t = [`BroadcastChannelEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`RTCSessionDescriptionCallback]
+  type tags = [`BroadcastChannelEventMap]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`RTCSessionDescriptionCallback]
+    type tags = [`BroadcastChannelEventMap]
     type tags_0 = tags
   ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCSessionDescriptionCallback ]
+  type 'tags this = 'tags intf constraint 'tags = [> `BroadcastChannelEventMap ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> description:RTCSessionDescriptionInit.t -> unit [@@js.apply]
+  val get_message: 'tags this -> MessageEvent.t_0 [@@js.get "message"]
+  val set_message: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "message"]
+  val get_messageerror: 'tags this -> MessageEvent.t_0 [@@js.get "messageerror"]
+  val set_messageerror: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "messageerror"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module RTCRtpTransceiverInit : sig
-  type t = [`RTCRtpTransceiverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCRtpTransceiverInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCRtpTransceiverInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCRtpTransceiverInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_direction: 'tags this -> RTCRtpTransceiverDirection.t [@@js.get "direction"]
-  val set_direction: 'tags this -> RTCRtpTransceiverDirection.t -> unit [@@js.set "direction"]
-  val get_sendEncodings: 'tags this -> RTCRtpEncodingParameters.t list [@@js.get "sendEncodings"]
-  val set_sendEncodings: 'tags this -> RTCRtpEncodingParameters.t list -> unit [@@js.set "sendEncodings"]
-  val get_streams: 'tags this -> MediaStream.t list [@@js.get "streams"]
-  val set_streams: 'tags this -> MediaStream.t list -> unit [@@js.set "streams"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module RTCPeerConnectionState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCPeerConnectionErrorCallback : sig
-  type t = [`RTCPeerConnectionErrorCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCPeerConnectionErrorCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCPeerConnectionErrorCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCPeerConnectionErrorCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> error:DOMException.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module RTCOfferAnswerOptions : sig
-  type t = [`RTCOfferAnswerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCOfferAnswerOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCOfferAnswerOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCOfferAnswerOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module RTCOfferOptions : sig
-  type t = [`RTCOfferAnswerOptions | `RTCOfferOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCOfferAnswerOptions | `RTCOfferOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCOfferAnswerOptions | `RTCOfferOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCOfferOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_iceRestart: 'tags this -> bool [@@js.get "iceRestart"]
-  val set_iceRestart: 'tags this -> bool -> unit [@@js.set "iceRestart"]
-  val get_offerToReceiveAudio: 'tags this -> bool [@@js.get "offerToReceiveAudio"]
-  val set_offerToReceiveAudio: 'tags this -> bool -> unit [@@js.set "offerToReceiveAudio"]
-  val get_offerToReceiveVideo: 'tags this -> bool [@@js.get "offerToReceiveVideo"]
-  val set_offerToReceiveVideo: 'tags this -> bool -> unit [@@js.set "offerToReceiveVideo"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module RTCLocalSessionDescriptionInit : sig
-  type t = [`RTCLocalSessionDescriptionInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCLocalSessionDescriptionInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCLocalSessionDescriptionInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCLocalSessionDescriptionInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_sdp: 'tags this -> string [@@js.get "sdp"]
-  val set_sdp: 'tags this -> string -> unit [@@js.set "sdp"]
-  val get_type: 'tags this -> RTCSdpType.t [@@js.get "type"]
-  val set_type: 'tags this -> RTCSdpType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module RTCIceGatheringState : sig
-  type t = ([`L_s206_complete[@js "complete"] | `L_s356_gathering[@js "gathering"] | `L_s518_new[@js "new"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCIceConnectionState : sig
-  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCDataChannelInit : sig
-  type t = [`RTCDataChannelInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCDataChannelInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCDataChannelInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCDataChannelInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_id: 'tags this -> float [@@js.get "id"]
-  val set_id: 'tags this -> float -> unit [@@js.set "id"]
-  val get_maxPacketLifeTime: 'tags this -> float [@@js.get "maxPacketLifeTime"]
-  val set_maxPacketLifeTime: 'tags this -> float -> unit [@@js.set "maxPacketLifeTime"]
-  val get_maxRetransmits: 'tags this -> float [@@js.get "maxRetransmits"]
-  val set_maxRetransmits: 'tags this -> float -> unit [@@js.set "maxRetransmits"]
-  val get_negotiated: 'tags this -> bool [@@js.get "negotiated"]
-  val set_negotiated: 'tags this -> bool -> unit [@@js.set "negotiated"]
-  val get_ordered: 'tags this -> bool [@@js.get "ordered"]
-  val set_ordered: 'tags this -> bool -> unit [@@js.set "ordered"]
-  val get_protocol: 'tags this -> string [@@js.get "protocol"]
-  val set_protocol: 'tags this -> string -> unit [@@js.set "protocol"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module RTCAnswerOptions : sig
-  type t = [`RTCAnswerOptions | `RTCOfferAnswerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCAnswerOptions | `RTCOfferAnswerOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCAnswerOptions | `RTCOfferAnswerOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCAnswerOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module RTCRtcpMuxPolicy : sig
-  type t = ([`L_s650_require[@js "require"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCIceTransportPolicy : sig
-  type t = ([`L_s106_all[@js "all"] | `L_s637_relay[@js "relay"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCIceCredentialType : sig
-  type t = ([`L_s567_password[@js "password"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCIceServer : sig
-  type t = [`RTCIceServer] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCIceServer]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCIceServer]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCIceServer ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_credential: 'tags this -> string [@@js.get "credential"]
-  val set_credential: 'tags this -> string -> unit [@@js.set "credential"]
-  val get_credentialType: 'tags this -> RTCIceCredentialType.t [@@js.get "credentialType"]
-  val set_credentialType: 'tags this -> RTCIceCredentialType.t -> unit [@@js.set "credentialType"]
-  val get_urls: 'tags this -> string list or_string [@@js.get "urls"]
-  val set_urls: 'tags this -> string list or_string -> unit [@@js.set "urls"]
-  val get_username: 'tags this -> string [@@js.get "username"]
-  val set_username: 'tags this -> string -> unit [@@js.set "username"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module RTCBundlePolicy : sig
-  type t = ([`L_s147_balanced[@js "balanced"] | `L_s483_max_bundle[@js "max-bundle"] | `L_s484_max_compat[@js "max-compat"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCDtlsFingerprint : sig
-  type t = [`RTCDtlsFingerprint] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCDtlsFingerprint]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCDtlsFingerprint]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCDtlsFingerprint ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_algorithm: 'tags this -> string [@@js.get "algorithm"]
-  val set_algorithm: 'tags this -> string -> unit [@@js.set "algorithm"]
-  val get_value: 'tags this -> string [@@js.get "value"]
-  val set_value: 'tags this -> string -> unit [@@js.set "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "RTCCertificate"] RTCCertificate : sig
-  type t = [`RTCCertificate] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCCertificate]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCCertificate]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCCertificate ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_expires: 'tags this -> DOMTimeStamp.t [@@js.get "expires"]
-  val getFingerprints: 'tags this -> RTCDtlsFingerprint.t list [@@js.call "getFingerprints"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module RTCConfiguration : sig
-  type t = [`RTCConfiguration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`RTCConfiguration]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`RTCConfiguration]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCConfiguration ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_bundlePolicy: 'tags this -> RTCBundlePolicy.t [@@js.get "bundlePolicy"]
-  val set_bundlePolicy: 'tags this -> RTCBundlePolicy.t -> unit [@@js.set "bundlePolicy"]
-  val get_certificates: 'tags this -> RTCCertificate.t list [@@js.get "certificates"]
-  val set_certificates: 'tags this -> RTCCertificate.t list -> unit [@@js.set "certificates"]
-  val get_iceCandidatePoolSize: 'tags this -> float [@@js.get "iceCandidatePoolSize"]
-  val set_iceCandidatePoolSize: 'tags this -> float -> unit [@@js.set "iceCandidatePoolSize"]
-  val get_iceServers: 'tags this -> RTCIceServer.t list [@@js.get "iceServers"]
-  val set_iceServers: 'tags this -> RTCIceServer.t list -> unit [@@js.set "iceServers"]
-  val get_iceTransportPolicy: 'tags this -> RTCIceTransportPolicy.t [@@js.get "iceTransportPolicy"]
-  val set_iceTransportPolicy: 'tags this -> RTCIceTransportPolicy.t -> unit [@@js.set "iceTransportPolicy"]
-  val get_rtcpMuxPolicy: 'tags this -> RTCRtcpMuxPolicy.t [@@js.get "rtcpMuxPolicy"]
-  val set_rtcpMuxPolicy: 'tags this -> RTCRtcpMuxPolicy.t -> unit [@@js.set "rtcpMuxPolicy"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** A WebRTC connection between the local computer and a remote peer. It provides methods to connect to a remote peer, maintain and monitor the connection, and close the connection once it's no longer needed. *)
-module[@js.scope "RTCPeerConnection"] RTCPeerConnection : sig
-  type t = [`EventTarget | `RTCPeerConnection] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `RTCPeerConnection]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `RTCPeerConnection]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCPeerConnection ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_canTrickleIceCandidates: 'tags this -> bool or_null [@@js.get "canTrickleIceCandidates"]
-  val get_connectionState: 'tags this -> RTCPeerConnectionState.t [@@js.get "connectionState"]
-  val get_currentLocalDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "currentLocalDescription"]
-  val get_currentRemoteDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "currentRemoteDescription"]
-  val get_iceConnectionState: 'tags this -> RTCIceConnectionState.t [@@js.get "iceConnectionState"]
-  val get_iceGatheringState: 'tags this -> RTCIceGatheringState.t [@@js.get "iceGatheringState"]
-  val get_localDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "localDescription"]
-  val get_onconnectionstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onconnectionstatechange"]
-  val set_onconnectionstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onconnectionstatechange"]
-  val get_ondatachannel: 'tags this -> (this:t -> ev:RTCDataChannelEvent.t -> any) or_null [@@js.get "ondatachannel"]
-  val set_ondatachannel: 'tags this -> (this:t -> ev:RTCDataChannelEvent.t -> any) or_null -> unit [@@js.set "ondatachannel"]
-  val get_onicecandidate: 'tags this -> (this:t -> ev:RTCPeerConnectionIceEvent.t -> any) or_null [@@js.get "onicecandidate"]
-  val set_onicecandidate: 'tags this -> (this:t -> ev:RTCPeerConnectionIceEvent.t -> any) or_null -> unit [@@js.set "onicecandidate"]
-  val get_onicecandidateerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onicecandidateerror"]
-  val set_onicecandidateerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onicecandidateerror"]
-  val get_oniceconnectionstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "oniceconnectionstatechange"]
-  val set_oniceconnectionstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "oniceconnectionstatechange"]
-  val get_onicegatheringstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onicegatheringstatechange"]
-  val set_onicegatheringstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onicegatheringstatechange"]
-  val get_onnegotiationneeded: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onnegotiationneeded"]
-  val set_onnegotiationneeded: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onnegotiationneeded"]
-  val get_onsignalingstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onsignalingstatechange"]
-  val set_onsignalingstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsignalingstatechange"]
-  val get_ontrack: 'tags this -> (this:t -> ev:RTCTrackEvent.t -> any) or_null [@@js.get "ontrack"]
-  val set_ontrack: 'tags this -> (this:t -> ev:RTCTrackEvent.t -> any) or_null -> unit [@@js.set "ontrack"]
-  val get_pendingLocalDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "pendingLocalDescription"]
-  val get_pendingRemoteDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "pendingRemoteDescription"]
-  val get_remoteDescription: 'tags this -> RTCSessionDescription.t or_null [@@js.get "remoteDescription"]
-  val get_signalingState: 'tags this -> RTCSignalingState.t [@@js.get "signalingState"]
-  val addIceCandidate: 'tags this -> ?candidate:RTCIceCandidateInit.t -> unit -> unit Promise.t_1 [@@js.call "addIceCandidate"]
-  
-  (** @deprecated  *)
-  val addIceCandidate': 'tags this -> candidate:RTCIceCandidateInit.t -> successCallback:VoidFunction.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> unit Promise.t_1 [@@js.call "addIceCandidate"]
-  val addTrack: 'tags this -> track:MediaStreamTrack.t -> streams:(MediaStream.t list [@js.variadic]) -> RTCRtpSender.t [@@js.call "addTrack"]
-  val addTransceiver: 'tags this -> trackOrKind:MediaStreamTrack.t or_string -> ?init:RTCRtpTransceiverInit.t -> unit -> RTCRtpTransceiver.t [@@js.call "addTransceiver"]
-  val close: 'tags this -> unit [@@js.call "close"]
-  val createAnswer: 'tags this -> ?options:RTCAnswerOptions.t -> unit -> RTCSessionDescriptionInit.t Promise.t_1 [@@js.call "createAnswer"]
-  
-  (** @deprecated  *)
-  val createAnswer': 'tags this -> successCallback:RTCSessionDescriptionCallback.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> unit Promise.t_1 [@@js.call "createAnswer"]
-  val createDataChannel: 'tags this -> label:string -> ?dataChannelDict:RTCDataChannelInit.t -> unit -> RTCDataChannel.t [@@js.call "createDataChannel"]
-  val createOffer: 'tags this -> ?options:RTCOfferOptions.t -> unit -> RTCSessionDescriptionInit.t Promise.t_1 [@@js.call "createOffer"]
-  
-  (** @deprecated  *)
-  val createOffer': 'tags this -> successCallback:RTCSessionDescriptionCallback.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> ?options:RTCOfferOptions.t -> unit -> unit Promise.t_1 [@@js.call "createOffer"]
-  val getConfiguration: 'tags this -> RTCConfiguration.t [@@js.call "getConfiguration"]
-  val getReceivers: 'tags this -> RTCRtpReceiver.t list [@@js.call "getReceivers"]
-  val getSenders: 'tags this -> RTCRtpSender.t list [@@js.call "getSenders"]
-  val getStats: 'tags this -> ?selector:MediaStreamTrack.t or_null -> unit -> RTCStatsReport.t Promise.t_1 [@@js.call "getStats"]
-  val getTransceivers: 'tags this -> RTCRtpTransceiver.t list [@@js.call "getTransceivers"]
-  val removeTrack: 'tags this -> sender:RTCRtpSender.t -> unit [@@js.call "removeTrack"]
-  val restartIce: 'tags this -> unit [@@js.call "restartIce"]
-  val setConfiguration: 'tags this -> ?configuration:RTCConfiguration.t -> unit -> unit [@@js.call "setConfiguration"]
-  val setLocalDescription: 'tags this -> ?description:RTCLocalSessionDescriptionInit.t -> unit -> unit Promise.t_1 [@@js.call "setLocalDescription"]
-  
-  (** @deprecated  *)
-  val setLocalDescription': 'tags this -> description:RTCLocalSessionDescriptionInit.t -> successCallback:VoidFunction.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> unit Promise.t_1 [@@js.call "setLocalDescription"]
-  val setRemoteDescription: 'tags this -> description:RTCSessionDescriptionInit.t -> unit Promise.t_1 [@@js.call "setRemoteDescription"]
-  
-  (** @deprecated  *)
-  val setRemoteDescription': 'tags this -> description:RTCSessionDescriptionInit.t -> successCallback:VoidFunction.t -> failureCallback:RTCPeerConnectionErrorCallback.t -> unit Promise.t_1 [@@js.call "setRemoteDescription"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'RTCPeerConnectionEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'RTCPeerConnectionEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?configuration:RTCConfiguration.t -> unit -> t [@@js.create]
-  val generateCertificate: AlgorithmIdentifier.t -> RTCCertificate.t Promise.t_1 [@@js.global "generateCertificate"]
-end
-module AnonymousInterface326 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCPeerConnection.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCPeerConnection.t -> unit [@@js.set "prototype"]
-  val create: t -> ?configuration:RTCConfiguration.t -> unit -> RTCPeerConnection.t [@@js.apply_newable]
-  val generateCertificate: t -> keygenAlgorithm:AlgorithmIdentifier.t -> RTCCertificate.t Promise.t_1 [@@js.call "generateCertificate"]
-end
-module RTCIceTransportState : sig
-  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module RTCIceGathererState : sig
-  type t = ([`L_s206_complete[@js "complete"] | `L_s356_gathering[@js "gathering"] | `L_s518_new[@js "new"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-
-(** Provides access to information about the ICE transport layer over which the data is being sent and received. *)
-module[@js.scope "RTCIceTransport"] RTCIceTransport : sig
-  type t = [`EventTarget | `RTCIceTransport] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `RTCIceTransport]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `RTCIceTransport]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `RTCIceTransport ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_gatheringState: 'tags this -> RTCIceGathererState.t [@@js.get "gatheringState"]
-  val get_state: 'tags this -> RTCIceTransportState.t [@@js.get "state"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface325 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCIceTransport.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCIceTransport.t -> unit [@@js.set "prototype"]
-  val create: t -> RTCIceTransport.t [@@js.apply_newable]
-end
-module AnonymousInterface324 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCIceCandidate.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCIceCandidate.t -> unit [@@js.set "prototype"]
-  val create: t -> ?candidateInitDict:RTCIceCandidateInit.t -> unit -> RTCIceCandidate.t [@@js.apply_newable]
-end
-module AnonymousInterface323 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCDtlsTransport.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCDtlsTransport.t -> unit [@@js.set "prototype"]
-  val create: t -> RTCDtlsTransport.t [@@js.apply_newable]
-end
-module AnonymousInterface322 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCDataChannelEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCDataChannelEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:RTCDataChannelEventInit.t -> RTCDataChannelEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface321 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCDataChannel.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCDataChannel.t -> unit [@@js.set "prototype"]
-  val create: t -> RTCDataChannel.t [@@js.apply_newable]
-end
-module AnonymousInterface320 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCDTMFToneChangeEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCDTMFToneChangeEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:RTCDTMFToneChangeEventInit.t -> unit -> RTCDTMFToneChangeEvent.t [@@js.apply_newable]
 end
 module[@js.scope "BroadcastChannel"] BroadcastChannel : sig
   type t = [`BroadcastChannel | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -51159,790 +49204,145 @@ module[@js.scope "BroadcastChannel"] BroadcastChannel : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: string -> t [@@js.create]
 end
-module AnonymousInterface32 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> BroadcastChannel.t [@@js.get "prototype"]
-  val set_prototype: t -> BroadcastChannel.t -> unit [@@js.set "prototype"]
-  val create: t -> name:string -> BroadcastChannel.t [@@js.apply_newable]
-end
-module AnonymousInterface319 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCDTMFSender.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCDTMFSender.t -> unit [@@js.set "prototype"]
-  val create: t -> RTCDTMFSender.t [@@js.apply_newable]
-end
-module AnonymousInterface318 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> RTCCertificate.t [@@js.get "prototype"]
-  val set_prototype: t -> RTCCertificate.t -> unit [@@js.set "prototype"]
-  val create: t -> RTCCertificate.t [@@js.apply_newable]
-end
-module AnonymousInterface317 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PushSubscriptionOptions.t [@@js.get "prototype"]
-  val set_prototype: t -> PushSubscriptionOptions.t -> unit [@@js.set "prototype"]
-  val create: t -> PushSubscriptionOptions.t [@@js.apply_newable]
-end
-module AnonymousInterface316 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PushSubscription.t [@@js.get "prototype"]
-  val set_prototype: t -> PushSubscription.t -> unit [@@js.set "prototype"]
-  val create: t -> PushSubscription.t [@@js.apply_newable]
-end
-module AnonymousInterface315 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PushManager.t [@@js.get "prototype"]
-  val set_prototype: t -> PushManager.t -> unit [@@js.set "prototype"]
-  val create: t -> PushManager.t [@@js.apply_newable]
-  val get_supportedContentEncodings: t -> string list [@@js.get "supportedContentEncodings"]
-end
-module UvmEntry : sig
-  type t = float list
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module UvmEntries : sig
-  type t = UvmEntry.t list
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module CredentialPropertiesOutput : sig
-  type t = [`CredentialPropertiesOutput] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`CredentialPropertiesOutput]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`CredentialPropertiesOutput]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `CredentialPropertiesOutput ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_rk: 'tags this -> bool [@@js.get "rk"]
-  val set_rk: 'tags this -> bool -> unit [@@js.set "rk"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module AuthenticationExtensionsClientOutputs : sig
-  type t = [`AuthenticationExtensionsClientOutputs] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AuthenticationExtensionsClientOutputs]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AuthenticationExtensionsClientOutputs]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticationExtensionsClientOutputs ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_appid: 'tags this -> bool [@@js.get "appid"]
-  val set_appid: 'tags this -> bool -> unit [@@js.set "appid"]
-  val get_credProps: 'tags this -> CredentialPropertiesOutput.t [@@js.get "credProps"]
-  val set_credProps: 'tags this -> CredentialPropertiesOutput.t -> unit [@@js.set "credProps"]
-  val get_uvm: 'tags this -> UvmEntries.t [@@js.get "uvm"]
-  val set_uvm: 'tags this -> UvmEntries.t -> unit [@@js.set "uvm"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
 
 (** Available only in secure contexts. *)
-module[@js.scope "AuthenticatorResponse"] AuthenticatorResponse : sig
-  type t = [`AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module[@js.scope "AuthenticatorAttestationResponse"] AuthenticatorAttestationResponse : sig
+  type t = [`AuthenticatorAttestationResponse | `AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`AuthenticatorResponse]
+  type tags = [`AuthenticatorAttestationResponse | `AuthenticatorResponse]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`AuthenticatorResponse]
+    type tags = [`AuthenticatorAttestationResponse | `AuthenticatorResponse]
     type tags_0 = tags
   ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticatorResponse ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticatorAttestationResponse ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_clientDataJSON: 'tags this -> ArrayBuffer.t_0 [@@js.get "clientDataJSON"]
+  val get_attestationObject: 'tags this -> ArrayBuffer.t_0 [@@js.get "attestationObject"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
 
 (** Available only in secure contexts. *)
-module[@js.scope "PublicKeyCredential"] PublicKeyCredential : sig
-  type t = [`Credential | `PublicKeyCredential] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module[@js.scope "AuthenticatorAssertionResponse"] AuthenticatorAssertionResponse : sig
+  type t = [`AuthenticatorAssertionResponse | `AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`Credential | `PublicKeyCredential]
+  type tags = [`AuthenticatorAssertionResponse | `AuthenticatorResponse]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`Credential | `PublicKeyCredential]
+    type tags = [`AuthenticatorAssertionResponse | `AuthenticatorResponse]
     type tags_0 = tags
   ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PublicKeyCredential ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticatorAssertionResponse ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_rawId: 'tags this -> ArrayBuffer.t_0 [@@js.get "rawId"]
-  val get_response: 'tags this -> AuthenticatorResponse.t [@@js.get "response"]
-  val getClientExtensionResults: 'tags this -> AuthenticationExtensionsClientOutputs.t [@@js.call "getClientExtensionResults"]
+  val get_authenticatorData: 'tags this -> ArrayBuffer.t_0 [@@js.get "authenticatorData"]
+  val get_signature: 'tags this -> ArrayBuffer.t_0 [@@js.get "signature"]
+  val get_userHandle: 'tags this -> ArrayBuffer.t_0 or_null [@@js.get "userHandle"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
-  val isUserVerifyingPlatformAuthenticatorAvailable: unit -> bool Promise.t_1 [@@js.global "isUserVerifyingPlatformAuthenticatorAvailable"]
 end
-module AnonymousInterface314 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PublicKeyCredential.t [@@js.get "prototype"]
-  val set_prototype: t -> PublicKeyCredential.t -> unit [@@js.set "prototype"]
-  val create: t -> PublicKeyCredential.t [@@js.apply_newable]
-  val isUserVerifyingPlatformAuthenticatorAvailable: t -> bool Promise.t_1 [@@js.call "isUserVerifyingPlatformAuthenticatorAvailable"]
-end
-module AnonymousInterface313 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PromiseRejectionEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> PromiseRejectionEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:PromiseRejectionEventInit.t -> PromiseRejectionEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface312 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ProgressEvent.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> ProgressEvent.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:ProgressEventInit.t -> unit -> ProgressEvent.t_0 [@@js.apply_newable]
-end
-module AnonymousInterface311 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ProcessingInstruction.t [@@js.get "prototype"]
-  val set_prototype: t -> ProcessingInstruction.t -> unit [@@js.set "prototype"]
-  val create: t -> ProcessingInstruction.t [@@js.apply_newable]
-end
-module AnonymousInterface310 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PopStateEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> PopStateEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:PopStateEventInit.t -> unit -> PopStateEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface31 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> BlobEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> BlobEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:BlobEventInit.t -> BlobEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface309 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PointerEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> PointerEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:PointerEventInit.t -> unit -> PointerEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface308 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PluginArray.t [@@js.get "prototype"]
-  val set_prototype: t -> PluginArray.t -> unit [@@js.set "prototype"]
-  val create: t -> PluginArray.t [@@js.apply_newable]
-end
-module AnonymousInterface307 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Plugin.t [@@js.get "prototype"]
-  val set_prototype: t -> Plugin.t -> unit [@@js.set "prototype"]
-  val create: t -> Plugin.t [@@js.apply_newable]
-end
-module AnonymousInterface306 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PictureInPictureWindow.t [@@js.get "prototype"]
-  val set_prototype: t -> PictureInPictureWindow.t -> unit [@@js.set "prototype"]
-  val create: t -> PictureInPictureWindow.t [@@js.apply_newable]
-end
-module AnonymousInterface305 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Permissions.t [@@js.get "prototype"]
-  val set_prototype: t -> Permissions.t -> unit [@@js.set "prototype"]
-  val create: t -> Permissions.t [@@js.apply_newable]
-end
-module AnonymousInterface304 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PermissionStatus.t [@@js.get "prototype"]
-  val set_prototype: t -> PermissionStatus.t -> unit [@@js.set "prototype"]
-  val create: t -> PermissionStatus.t [@@js.apply_newable]
-end
-module AnonymousInterface303 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PeriodicWave.t [@@js.get "prototype"]
-  val set_prototype: t -> PeriodicWave.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:PeriodicWaveOptions.t -> unit -> PeriodicWave.t [@@js.apply_newable]
-end
-module AnonymousInterface302 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceTiming.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceTiming.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceTiming.t [@@js.apply_newable]
-end
-module[@js.scope "PerformanceServerTiming"] PerformanceServerTiming : sig
-  type t = [`PerformanceServerTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module AudioWorkletNodeEventMap : sig
+  type t = [`AudioWorkletNodeEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`PerformanceServerTiming]
+  type tags = [`AudioWorkletNodeEventMap]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`PerformanceServerTiming]
+    type tags = [`AudioWorkletNodeEventMap]
     type tags_0 = tags
   ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceServerTiming ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioWorkletNodeEventMap ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_description: 'tags this -> string [@@js.get "description"]
-  val get_duration: 'tags this -> DOMHighResTimeStamp.t [@@js.get "duration"]
-  val get_name: 'tags this -> string [@@js.get "name"]
-  val toJSON: 'tags this -> any [@@js.call "toJSON"]
+  val get_processorerror: 'tags this -> Event.t [@@js.get "processorerror"]
+  val set_processorerror: 'tags this -> Event.t -> unit [@@js.set "processorerror"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module AudioWorkletNodeOptions : sig
+  type t = [`AudioNodeOptions | `AudioWorkletNodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioNodeOptions | `AudioWorkletNodeOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioNodeOptions | `AudioWorkletNodeOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioWorkletNodeOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_numberOfInputs: 'tags this -> float [@@js.get "numberOfInputs"]
+  val set_numberOfInputs: 'tags this -> float -> unit [@@js.set "numberOfInputs"]
+  val get_numberOfOutputs: 'tags this -> float [@@js.get "numberOfOutputs"]
+  val set_numberOfOutputs: 'tags this -> float -> unit [@@js.set "numberOfOutputs"]
+  val get_outputChannelCount: 'tags this -> float list [@@js.get "outputChannelCount"]
+  val set_outputChannelCount: 'tags this -> float list -> unit [@@js.set "outputChannelCount"]
+  val get_parameterData: 'tags this -> (string, float) Record.t_2 [@@js.get "parameterData"]
+  val set_parameterData: 'tags this -> (string, float) Record.t_2 -> unit [@@js.set "parameterData"]
+  val get_processorOptions: 'tags this -> any [@@js.get "processorOptions"]
+  val set_processorOptions: 'tags this -> any -> unit [@@js.set "processorOptions"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "AudioParamMap"] AudioParamMap : sig
+  type t = [`AudioParamMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AudioParamMap]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AudioParamMap]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioParamMap ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val forEach: 'tags this -> callbackfn:(value:AudioParam.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
-end
-module AnonymousInterface301 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceServerTiming.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceServerTiming.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceServerTiming.t [@@js.apply_newable]
 end
 
-(** Enables retrieval and analysis of detailed network timing data regarding the loading of an application's resources. An application can use the timing metrics to determine, for example, the length of time it takes to fetch a specific resource, such as an XMLHttpRequest, <SVG>, image, or script. *)
-module[@js.scope "PerformanceResourceTiming"] PerformanceResourceTiming : sig
-  type t = [`PerformanceEntry | `PerformanceResourceTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+(** Available only in secure contexts. *)
+module[@js.scope "AudioWorkletNode"] AudioWorkletNode : sig
+  type t = [`AudioNode | `AudioWorkletNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`PerformanceEntry | `PerformanceResourceTiming]
+  type tags = [`AudioNode | `AudioWorkletNode | `EventTarget]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`PerformanceEntry | `PerformanceResourceTiming]
+    type tags = [`AudioNode | `AudioWorkletNode | `EventTarget]
     type tags_0 = tags
   ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceResourceTiming ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioWorkletNode ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_connectEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "connectEnd"]
-  val get_connectStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "connectStart"]
-  val get_decodedBodySize: 'tags this -> float [@@js.get "decodedBodySize"]
-  val get_domainLookupEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domainLookupEnd"]
-  val get_domainLookupStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domainLookupStart"]
-  val get_encodedBodySize: 'tags this -> float [@@js.get "encodedBodySize"]
-  val get_fetchStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "fetchStart"]
-  val get_initiatorType: 'tags this -> string [@@js.get "initiatorType"]
-  val get_nextHopProtocol: 'tags this -> string [@@js.get "nextHopProtocol"]
-  val get_redirectEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "redirectEnd"]
-  val get_redirectStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "redirectStart"]
-  val get_requestStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "requestStart"]
-  val get_responseEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "responseEnd"]
-  val get_responseStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "responseStart"]
-  val get_secureConnectionStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "secureConnectionStart"]
-  val get_serverTiming: 'tags this -> PerformanceServerTiming.t list [@@js.get "serverTiming"]
-  val get_transferSize: 'tags this -> float [@@js.get "transferSize"]
-  val get_workerStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "workerStart"]
-  val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface300 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceResourceTiming.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceResourceTiming.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceResourceTiming.t [@@js.apply_newable]
-end
-module AnonymousInterface30 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Blob.t [@@js.get "prototype"]
-  val set_prototype: t -> Blob.t -> unit [@@js.set "prototype"]
-  val create: t -> ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> Blob.t [@@js.apply_newable]
-end
-module AnonymousInterface3 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AbstractRange.t [@@js.get "prototype"]
-  val set_prototype: t -> AbstractRange.t -> unit [@@js.set "prototype"]
-  val create: t -> AbstractRange.t [@@js.apply_newable]
-end
-module[@js.scope "PerformancePaintTiming"] PerformancePaintTiming : sig
-  type t = [`PerformanceEntry | `PerformancePaintTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PerformanceEntry | `PerformancePaintTiming]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PerformanceEntry | `PerformancePaintTiming]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformancePaintTiming ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface299 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformancePaintTiming.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformancePaintTiming.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformancePaintTiming.t [@@js.apply_newable]
-end
-module[@js.scope "PerformanceObserverEntryList"] PerformanceObserverEntryList : sig
-  type t = [`PerformanceObserverEntryList] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PerformanceObserverEntryList]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PerformanceObserverEntryList]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserverEntryList ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val getEntries: 'tags this -> PerformanceEntryList.t [@@js.call "getEntries"]
-  val getEntriesByName: 'tags this -> name:string -> ?type_:string -> unit -> PerformanceEntryList.t [@@js.call "getEntriesByName"]
-  val getEntriesByType: 'tags this -> type_:string -> PerformanceEntryList.t [@@js.call "getEntriesByType"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface298 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceObserverEntryList.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceObserverEntryList.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceObserverEntryList.t [@@js.apply_newable]
-end
-module PerformanceObserverInit : sig
-  type t = [`PerformanceObserverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PerformanceObserverInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PerformanceObserverInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserverInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_buffered: 'tags this -> bool [@@js.get "buffered"]
-  val set_buffered: 'tags this -> bool -> unit [@@js.set "buffered"]
-  val get_entryTypes: 'tags this -> string list [@@js.get "entryTypes"]
-  val set_entryTypes: 'tags this -> string list -> unit [@@js.set "entryTypes"]
-  val get_type: 'tags this -> string [@@js.get "type"]
-  val set_type: 'tags this -> string -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "PerformanceObserver"] rec PerformanceObserver : sig
-  type t = [`PerformanceObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PerformanceObserver]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PerformanceObserver]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserver ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
-  val observe: 'tags this -> ?options:PerformanceObserverInit.t -> unit -> unit [@@js.call "observe"]
-  val takeRecords: 'tags this -> PerformanceEntryList.t [@@js.call "takeRecords"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: PerformanceObserverCallback.t -> t [@@js.create]
-  val supportedEntryTypes: unit -> string list [@@js.get "supportedEntryTypes"]
-end
-and PerformanceObserverCallback : sig
-  type t = [`PerformanceObserverCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PerformanceObserverCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PerformanceObserverCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserverCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> entries:PerformanceObserverEntryList.t -> observer:PerformanceObserver.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module AnonymousInterface297 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceObserver.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceObserver.t -> unit [@@js.set "prototype"]
-  val create: t -> callback:PerformanceObserverCallback.t -> PerformanceObserver.t [@@js.apply_newable]
-  val get_supportedEntryTypes: t -> string list [@@js.get "supportedEntryTypes"]
-end
-module NavigationType : sig
-  type t = ([`L_s144_back_forward[@js "back_forward"] | `L_s514_navigate[@js "navigate"] | `L_s609_prerender[@js "prerender"] | `L_s640_reload[@js "reload"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-
-(** Provides methods and properties to store and retrieve metrics regarding the browser's document navigation events. For example, this interface can be used to determine how much time it takes to load or unload a document. *)
-module[@js.scope "PerformanceNavigationTiming"] PerformanceNavigationTiming : sig
-  type t = [`PerformanceEntry | `PerformanceNavigationTiming | `PerformanceResourceTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PerformanceEntry | `PerformanceNavigationTiming | `PerformanceResourceTiming]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PerformanceEntry | `PerformanceNavigationTiming | `PerformanceResourceTiming]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceNavigationTiming ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_domComplete: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domComplete"]
-  val get_domContentLoadedEventEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domContentLoadedEventEnd"]
-  val get_domContentLoadedEventStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domContentLoadedEventStart"]
-  val get_domInteractive: 'tags this -> DOMHighResTimeStamp.t [@@js.get "domInteractive"]
-  val get_loadEventEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "loadEventEnd"]
-  val get_loadEventStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "loadEventStart"]
-  val get_redirectCount: 'tags this -> float [@@js.get "redirectCount"]
-  val get_type: 'tags this -> NavigationType.t [@@js.get "type"]
-  val get_unloadEventEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "unloadEventEnd"]
-  val get_unloadEventStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "unloadEventStart"]
-  val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface296 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceNavigationTiming.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceNavigationTiming.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceNavigationTiming.t [@@js.apply_newable]
-end
-module AnonymousInterface295 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceNavigation.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceNavigation.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceNavigation.t [@@js.apply_newable]
-  val get_TYPE_BACK_FORWARD: t -> float [@@js.get "TYPE_BACK_FORWARD"]
-  val get_TYPE_NAVIGATE: t -> float [@@js.get "TYPE_NAVIGATE"]
-  val get_TYPE_RELOAD: t -> float [@@js.get "TYPE_RELOAD"]
-  val get_TYPE_RESERVED: t -> float [@@js.get "TYPE_RESERVED"]
-end
-module AnonymousInterface294 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceMeasure.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceMeasure.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceMeasure.t [@@js.apply_newable]
-end
-module AnonymousInterface293 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceMark.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceMark.t -> unit [@@js.set "prototype"]
-  val create: t -> markName:string -> ?markOptions:PerformanceMarkOptions.t -> unit -> PerformanceMark.t [@@js.apply_newable]
-end
-module[@js.scope "PerformanceEventTiming"] PerformanceEventTiming : sig
-  type t = [`PerformanceEntry | `PerformanceEventTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PerformanceEntry | `PerformanceEventTiming]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PerformanceEntry | `PerformanceEventTiming]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PerformanceEventTiming ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_cancelable: 'tags this -> bool [@@js.get "cancelable"]
-  val get_processingEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "processingEnd"]
-  val get_processingStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "processingStart"]
-  val get_target: 'tags this -> Node.t or_null [@@js.get "target"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface292 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceEventTiming.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceEventTiming.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceEventTiming.t [@@js.apply_newable]
-end
-module AnonymousInterface291 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PerformanceEntry.t [@@js.get "prototype"]
-  val set_prototype: t -> PerformanceEntry.t -> unit [@@js.set "prototype"]
-  val create: t -> PerformanceEntry.t [@@js.apply_newable]
-end
-module AnonymousInterface290 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Performance.t [@@js.get "prototype"]
-  val set_prototype: t -> Performance.t -> unit [@@js.set "prototype"]
-  val create: t -> Performance.t [@@js.apply_newable]
-end
-module AnonymousInterface29 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> BiquadFilterNode.t [@@js.get "prototype"]
-  val set_prototype: t -> BiquadFilterNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:BiquadFilterOptions.t -> unit -> BiquadFilterNode.t [@@js.apply_newable]
-end
-module PaymentValidationErrors : sig
-  type t = [`PaymentValidationErrors] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PaymentValidationErrors]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PaymentValidationErrors]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PaymentValidationErrors ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_error: 'tags this -> string [@@js.get "error"]
-  val set_error: 'tags this -> string -> unit [@@js.set "error"]
-  val get_paymentMethod: 'tags this -> any [@@js.get "paymentMethod"]
-  val set_paymentMethod: 'tags this -> any -> unit [@@js.set "paymentMethod"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module PaymentComplete : sig
-  type t = ([`L_s300_fail[@js "fail"] | `L_s738_success[@js "success"] | `L_s796_unknown[@js "unknown"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-
-(**
-  This Payment Request API interface is returned after a user selects a payment method and approves a payment request.
-  Available only in secure contexts.
-*)
-module[@js.scope "PaymentResponse"] PaymentResponse : sig
-  type t = [`EventTarget | `PaymentResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `PaymentResponse]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `PaymentResponse]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PaymentResponse ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_details: 'tags this -> any [@@js.get "details"]
-  val get_methodName: 'tags this -> string [@@js.get "methodName"]
-  val get_requestId: 'tags this -> string [@@js.get "requestId"]
-  val complete: 'tags this -> ?result:PaymentComplete.t -> unit -> unit Promise.t_1 [@@js.call "complete"]
-  val retry: 'tags this -> ?errorFields:PaymentValidationErrors.t -> unit -> unit Promise.t_1 [@@js.call "retry"]
-  val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface289 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PaymentResponse.t [@@js.get "prototype"]
-  val set_prototype: t -> PaymentResponse.t -> unit [@@js.set "prototype"]
-  val create: t -> PaymentResponse.t [@@js.apply_newable]
-end
-module AnonymousInterface288 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PaymentRequestUpdateEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> PaymentRequestUpdateEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:PaymentRequestUpdateEventInit.t -> unit -> PaymentRequestUpdateEvent.t [@@js.apply_newable]
-end
-module PaymentMethodData : sig
-  type t = [`PaymentMethodData] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PaymentMethodData]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PaymentMethodData]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PaymentMethodData ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_data: 'tags this -> any [@@js.get "data"]
-  val set_data: 'tags this -> any -> unit [@@js.set "data"]
-  val get_supportedMethods: 'tags this -> string [@@js.get "supportedMethods"]
-  val set_supportedMethods: 'tags this -> string -> unit [@@js.set "supportedMethods"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module PaymentDetailsInit : sig
-  type t = [`PaymentDetailsBase | `PaymentDetailsInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`PaymentDetailsBase | `PaymentDetailsInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`PaymentDetailsBase | `PaymentDetailsInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PaymentDetailsInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_id: 'tags this -> string [@@js.get "id"]
-  val set_id: 'tags this -> string -> unit [@@js.set "id"]
-  val get_total: 'tags this -> PaymentItem.t [@@js.get "total"]
-  val set_total: 'tags this -> PaymentItem.t -> unit [@@js.set "total"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(**
-  This Payment Request API interface is the primary access point into the API, and lets web content and apps accept payments from the end user.
-  Available only in secure contexts.
-*)
-module[@js.scope "PaymentRequest"] PaymentRequest : sig
-  type t = [`EventTarget | `PaymentRequest] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `PaymentRequest]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `PaymentRequest]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `PaymentRequest ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_id: 'tags this -> string [@@js.get "id"]
-  val get_onpaymentmethodchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onpaymentmethodchange"]
-  val set_onpaymentmethodchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onpaymentmethodchange"]
-  val abort: 'tags this -> unit Promise.t_1 [@@js.call "abort"]
-  val canMakePayment: 'tags this -> bool Promise.t_1 [@@js.call "canMakePayment"]
-  val show: 'tags this -> ?detailsPromise:PaymentDetailsUpdate.t -> unit -> PaymentResponse.t Promise.t_1 [@@js.call "show"]
+  val get_onprocessorerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onprocessorerror"]
+  val set_onprocessorerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onprocessorerror"]
+  val get_parameters: 'tags this -> AudioParamMap.t [@@js.get "parameters"]
+  val get_port: 'tags this -> MessagePort.t [@@js.get "port"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -51959,7 +49359,7 @@ module[@js.scope "PaymentRequest"] PaymentRequest : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PaymentRequestEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioWorkletNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -51979,616 +49379,33 @@ module[@js.scope "PaymentRequest"] PaymentRequest : sig
   val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PaymentRequestEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioWorkletNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: methodData:PaymentMethodData.t list -> details:PaymentDetailsInit.t -> t [@@js.create]
+  val create: context:BaseAudioContext.t -> name:string -> ?options:AudioWorkletNodeOptions.t -> unit -> t [@@js.create]
 end
-module AnonymousInterface287 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PaymentRequest.t [@@js.get "prototype"]
-  val set_prototype: t -> PaymentRequest.t -> unit [@@js.set "prototype"]
-  val create: t -> methodData:PaymentMethodData.t list -> details:PaymentDetailsInit.t -> PaymentRequest.t [@@js.apply_newable]
-end
-module AnonymousInterface286 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PaymentMethodChangeEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> PaymentMethodChangeEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:PaymentMethodChangeEventInit.t -> unit -> PaymentMethodChangeEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface285 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Path2D.t [@@js.get "prototype"]
-  val set_prototype: t -> Path2D.t -> unit [@@js.set "prototype"]
-  val create: t -> ?path:Path2D.t or_string -> unit -> Path2D.t [@@js.apply_newable]
-end
-module AnonymousInterface284 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PannerNode.t [@@js.get "prototype"]
-  val set_prototype: t -> PannerNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:PannerOptions.t -> unit -> PannerNode.t [@@js.apply_newable]
-end
-module AnonymousInterface283 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> PageTransitionEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> PageTransitionEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:PageTransitionEventInit.t -> unit -> PageTransitionEvent.t [@@js.apply_newable]
-end
-module[@js.scope "OverconstrainedError"] OverconstrainedError : sig
-  type t = [`OverconstrainedError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+module AudioScheduledSourceNodeEventMap : sig
+  type t = [`AudioScheduledSourceNodeEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
   [@@@js.stop]
-  type tags = [`OverconstrainedError]
+  type tags = [`AudioScheduledSourceNodeEventMap]
   type tags_0 = tags
   [@@@js.start]
   [@@@js.implem 
-    type tags = [`OverconstrainedError]
+    type tags = [`AudioScheduledSourceNodeEventMap]
     type tags_0 = tags
   ]
-  type 'tags this = 'tags intf constraint 'tags = [> `OverconstrainedError ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AudioScheduledSourceNodeEventMap ]
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_constraint: 'tags this -> string [@@js.get "constraint"]
+  val get_ended: 'tags this -> Event.t [@@js.get "ended"]
+  val set_ended: 'tags this -> Event.t -> unit [@@js.set "ended"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: constraint_:string -> ?message:string -> unit -> t [@@js.create]
-end
-module AnonymousInterface282 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> OverconstrainedError.t [@@js.get "prototype"]
-  val set_prototype: t -> OverconstrainedError.t -> unit [@@js.set "prototype"]
-  val create: t -> constraint_:string -> ?message:string -> unit -> OverconstrainedError.t [@@js.apply_newable]
-end
-module AnonymousInterface281 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> OscillatorNode.t [@@js.get "prototype"]
-  val set_prototype: t -> OscillatorNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:OscillatorOptions.t -> unit -> OscillatorNode.t [@@js.apply_newable]
-end
-module OfflineAudioContextOptions : sig
-  type t = [`OfflineAudioContextOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`OfflineAudioContextOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`OfflineAudioContextOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `OfflineAudioContextOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_length: 'tags this -> float [@@js.get "length"]
-  val set_length: 'tags this -> float -> unit [@@js.set "length"]
-  val get_numberOfChannels: 'tags this -> float [@@js.get "numberOfChannels"]
-  val set_numberOfChannels: 'tags this -> float -> unit [@@js.set "numberOfChannels"]
-  val get_sampleRate: 'tags this -> float [@@js.get "sampleRate"]
-  val set_sampleRate: 'tags this -> float -> unit [@@js.set "sampleRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** An AudioContext interface representing an audio-processing graph built from linked together AudioNodes. In contrast with a standard AudioContext, an OfflineAudioContext doesn't render the audio to the device hardware; instead, it generates it, as fast as it can, and outputs the result to an AudioBuffer. *)
-module[@js.scope "OfflineAudioContext"] OfflineAudioContext : sig
-  type t = [`BaseAudioContext | `EventTarget | `OfflineAudioContext] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`BaseAudioContext | `EventTarget | `OfflineAudioContext]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`BaseAudioContext | `EventTarget | `OfflineAudioContext]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `OfflineAudioContext ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_length: 'tags this -> float [@@js.get "length"]
-  val get_oncomplete: 'tags this -> (this:t -> ev:OfflineAudioCompletionEvent.t -> any) or_null [@@js.get "oncomplete"]
-  val set_oncomplete: 'tags this -> (this:t -> ev:OfflineAudioCompletionEvent.t -> any) or_null -> unit [@@js.set "oncomplete"]
-  val resume: 'tags this -> unit Promise.t_1 [@@js.call "resume"]
-  val startRendering: 'tags this -> AudioBuffer.t Promise.t_1 [@@js.call "startRendering"]
-  val suspend: 'tags this -> suspendTime:float -> unit Promise.t_1 [@@js.call "suspend"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'OfflineAudioContextEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'OfflineAudioContextEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: OfflineAudioContextOptions.t -> t [@@js.create]
-  val create': numberOfChannels:float -> length:float -> sampleRate:float -> t [@@js.create]
-end
-module AnonymousInterface280 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> OfflineAudioContext.t [@@js.get "prototype"]
-  val set_prototype: t -> OfflineAudioContext.t -> unit [@@js.set "prototype"]
-  val create: t -> contextOptions:OfflineAudioContextOptions.t -> OfflineAudioContext.t [@@js.apply_newable]
-  val create': t -> numberOfChannels:float -> length:float -> sampleRate:float -> OfflineAudioContext.t [@@js.apply_newable]
-end
-module AnonymousInterface28 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> BeforeUnloadEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> BeforeUnloadEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> BeforeUnloadEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface279 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> OfflineAudioCompletionEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> OfflineAudioCompletionEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:OfflineAudioCompletionEventInit.t -> OfflineAudioCompletionEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface278 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Notification.t [@@js.get "prototype"]
-  val set_prototype: t -> Notification.t -> unit [@@js.set "prototype"]
-  val create: t -> title:string -> ?options:NotificationOptions.t -> unit -> Notification.t [@@js.apply_newable]
-  val get_permission: t -> NotificationPermission.t [@@js.get "permission"]
-  val requestPermission: t -> ?deprecatedCallback:NotificationPermissionCallback.t -> unit -> NotificationPermission.t Promise.t_1 [@@js.call "requestPermission"]
-end
-module AnonymousInterface277 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> NodeList.t [@@js.get "prototype"]
-  val set_prototype: t -> NodeList.t -> unit [@@js.set "prototype"]
-  val create: t -> NodeList.t [@@js.apply_newable]
-end
-module AnonymousInterface276 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> NodeIterator.t [@@js.get "prototype"]
-  val set_prototype: t -> NodeIterator.t -> unit [@@js.set "prototype"]
-  val create: t -> NodeIterator.t [@@js.apply_newable]
-end
-module AnonymousInterface275 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Node.t [@@js.get "prototype"]
-  val set_prototype: t -> Node.t -> unit [@@js.set "prototype"]
-  val create: t -> Node.t [@@js.apply_newable]
-  val get_ATTRIBUTE_NODE: t -> float [@@js.get "ATTRIBUTE_NODE"]
-  
-  (** node is a CDATASection node. *)
-  val get_CDATA_SECTION_NODE: t -> float [@@js.get "CDATA_SECTION_NODE"]
-  
-  (** node is a Comment node. *)
-  val get_COMMENT_NODE: t -> float [@@js.get "COMMENT_NODE"]
-  
-  (** node is a DocumentFragment node. *)
-  val get_DOCUMENT_FRAGMENT_NODE: t -> float [@@js.get "DOCUMENT_FRAGMENT_NODE"]
-  
-  (** node is a document. *)
-  val get_DOCUMENT_NODE: t -> float [@@js.get "DOCUMENT_NODE"]
-  
-  (** Set when other is a descendant of node. *)
-  val get_DOCUMENT_POSITION_CONTAINED_BY: t -> float [@@js.get "DOCUMENT_POSITION_CONTAINED_BY"]
-  
-  (** Set when other is an ancestor of node. *)
-  val get_DOCUMENT_POSITION_CONTAINS: t -> float [@@js.get "DOCUMENT_POSITION_CONTAINS"]
-  
-  (** Set when node and other are not in the same tree. *)
-  val get_DOCUMENT_POSITION_DISCONNECTED: t -> float [@@js.get "DOCUMENT_POSITION_DISCONNECTED"]
-  
-  (** Set when other is following node. *)
-  val get_DOCUMENT_POSITION_FOLLOWING: t -> float [@@js.get "DOCUMENT_POSITION_FOLLOWING"]
-  val get_DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: t -> float [@@js.get "DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC"]
-  
-  (** Set when other is preceding node. *)
-  val get_DOCUMENT_POSITION_PRECEDING: t -> float [@@js.get "DOCUMENT_POSITION_PRECEDING"]
-  
-  (** node is a doctype. *)
-  val get_DOCUMENT_TYPE_NODE: t -> float [@@js.get "DOCUMENT_TYPE_NODE"]
-  
-  (** node is an element. *)
-  val get_ELEMENT_NODE: t -> float [@@js.get "ELEMENT_NODE"]
-  val get_ENTITY_NODE: t -> float [@@js.get "ENTITY_NODE"]
-  val get_ENTITY_REFERENCE_NODE: t -> float [@@js.get "ENTITY_REFERENCE_NODE"]
-  val get_NOTATION_NODE: t -> float [@@js.get "NOTATION_NODE"]
-  
-  (** node is a ProcessingInstruction node. *)
-  val get_PROCESSING_INSTRUCTION_NODE: t -> float [@@js.get "PROCESSING_INSTRUCTION_NODE"]
-  
-  (** node is a Text node. *)
-  val get_TEXT_NODE: t -> float [@@js.get "TEXT_NODE"]
-end
-module AnonymousInterface274 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> NetworkInformation.t [@@js.get "prototype"]
-  val set_prototype: t -> NetworkInformation.t -> unit [@@js.set "prototype"]
-  val create: t -> NetworkInformation.t [@@js.apply_newable]
-end
-module AnonymousInterface273 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Navigator.t [@@js.get "prototype"]
-  val set_prototype: t -> Navigator.t -> unit [@@js.set "prototype"]
-  val create: t -> Navigator.t [@@js.apply_newable]
-end
-module AnonymousInterface272 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> NamedNodeMap.t [@@js.get "prototype"]
-  val set_prototype: t -> NamedNodeMap.t -> unit [@@js.set "prototype"]
-  val create: t -> NamedNodeMap.t [@@js.apply_newable]
-end
-module MutationRecordType : sig
-  type t = ([`L_s132_attributes[@js "attributes"] | `L_s189_characterData[@js "characterData"] | `L_s191_childList[@js "childList"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-
-(** A MutationRecord represents an individual DOM mutation. It is the object that is passed to MutationObserver's callback. *)
-module[@js.scope "MutationRecord"] MutationRecord : sig
-  type t = [`MutationRecord] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`MutationRecord]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`MutationRecord]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `MutationRecord ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Return the nodes added and removed respectively. *)
-  val get_addedNodes: 'tags this -> NodeList.t [@@js.get "addedNodes"]
-  
-  (** Returns the local name of the changed attribute, and null otherwise. *)
-  val get_attributeName: 'tags this -> string or_null [@@js.get "attributeName"]
-  
-  (** Returns the namespace of the changed attribute, and null otherwise. *)
-  val get_attributeNamespace: 'tags this -> string or_null [@@js.get "attributeNamespace"]
-  
-  (** Return the previous and next sibling respectively of the added or removed nodes, and null otherwise. *)
-  val get_nextSibling: 'tags this -> Node.t or_null [@@js.get "nextSibling"]
-  
-  (** The return value depends on type. For "attributes", it is the value of the changed attribute before the change. For "characterData", it is the data of the changed node before the change. For "childList", it is null. *)
-  val get_oldValue: 'tags this -> string or_null [@@js.get "oldValue"]
-  
-  (** Return the previous and next sibling respectively of the added or removed nodes, and null otherwise. *)
-  val get_previousSibling: 'tags this -> Node.t or_null [@@js.get "previousSibling"]
-  
-  (** Return the nodes added and removed respectively. *)
-  val get_removedNodes: 'tags this -> NodeList.t [@@js.get "removedNodes"]
-  
-  (** Returns the node the mutation affected, depending on the type. For "attributes", it is the element whose attribute changed. For "characterData", it is the CharacterData node. For "childList", it is the node whose children changed. *)
-  val get_target: 'tags this -> Node.t [@@js.get "target"]
-  
-  (** Returns "attributes" if it was an attribute mutation. "characterData" if it was a mutation to a CharacterData node. And "childList" if it was a mutation to the tree of nodes. *)
-  val get_type: 'tags this -> MutationRecordType.t [@@js.get "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface271 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MutationRecord.t [@@js.get "prototype"]
-  val set_prototype: t -> MutationRecord.t -> unit [@@js.set "prototype"]
-  val create: t -> MutationRecord.t [@@js.apply_newable]
-end
-module MutationObserverInit : sig
-  type t = [`MutationObserverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`MutationObserverInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`MutationObserverInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `MutationObserverInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Set to a list of attribute local names (without namespace) if not all attribute mutations need to be observed and attributes is true or omitted. *)
-  val get_attributeFilter: 'tags this -> string list [@@js.get "attributeFilter"]
-  
-  (** Set to a list of attribute local names (without namespace) if not all attribute mutations need to be observed and attributes is true or omitted. *)
-  val set_attributeFilter: 'tags this -> string list -> unit [@@js.set "attributeFilter"]
-  
-  (** Set to true if attributes is true or omitted and target's attribute value before the mutation needs to be recorded. *)
-  val get_attributeOldValue: 'tags this -> bool [@@js.get "attributeOldValue"]
-  
-  (** Set to true if attributes is true or omitted and target's attribute value before the mutation needs to be recorded. *)
-  val set_attributeOldValue: 'tags this -> bool -> unit [@@js.set "attributeOldValue"]
-  
-  (** Set to true if mutations to target's attributes are to be observed. Can be omitted if attributeOldValue or attributeFilter is specified. *)
-  val get_attributes: 'tags this -> bool [@@js.get "attributes"]
-  
-  (** Set to true if mutations to target's attributes are to be observed. Can be omitted if attributeOldValue or attributeFilter is specified. *)
-  val set_attributes: 'tags this -> bool -> unit [@@js.set "attributes"]
-  
-  (** Set to true if mutations to target's data are to be observed. Can be omitted if characterDataOldValue is specified. *)
-  val get_characterData: 'tags this -> bool [@@js.get "characterData"]
-  
-  (** Set to true if mutations to target's data are to be observed. Can be omitted if characterDataOldValue is specified. *)
-  val set_characterData: 'tags this -> bool -> unit [@@js.set "characterData"]
-  
-  (** Set to true if characterData is set to true or omitted and target's data before the mutation needs to be recorded. *)
-  val get_characterDataOldValue: 'tags this -> bool [@@js.get "characterDataOldValue"]
-  
-  (** Set to true if characterData is set to true or omitted and target's data before the mutation needs to be recorded. *)
-  val set_characterDataOldValue: 'tags this -> bool -> unit [@@js.set "characterDataOldValue"]
-  
-  (** Set to true if mutations to target's children are to be observed. *)
-  val get_childList: 'tags this -> bool [@@js.get "childList"]
-  
-  (** Set to true if mutations to target's children are to be observed. *)
-  val set_childList: 'tags this -> bool -> unit [@@js.set "childList"]
-  
-  (** Set to true if mutations to not just target, but also target's descendants are to be observed. *)
-  val get_subtree: 'tags this -> bool [@@js.get "subtree"]
-  
-  (** Set to true if mutations to not just target, but also target's descendants are to be observed. *)
-  val set_subtree: 'tags this -> bool -> unit [@@js.set "subtree"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module rec MutationCallback : sig
-  type t = [`MutationCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`MutationCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`MutationCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `MutationCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> mutations:MutationRecord.t list -> observer:MutationObserver.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** Provides the ability to watch for changes being made to the DOM tree. It is designed as a replacement for the older Mutation Events feature which was part of the DOM3 Events specification. *)
-and[@js.scope "MutationObserver"] MutationObserver : sig
-  type t = [`MutationObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`MutationObserver]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`MutationObserver]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `MutationObserver ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Stops observer from observing any mutations. Until the observe() method is used again, observer's callback will not be invoked. *)
-  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
-  
-  (**
-    Instructs the user agent to observe a given target (a node) and report any mutations based on the criteria given by options (an object).
-    
-    The options argument allows for setting mutation observation options via object members.
-  *)
-  val observe: 'tags this -> target:Node.t -> ?options:MutationObserverInit.t -> unit -> unit [@@js.call "observe"]
-  
-  (** Empties the record queue and returns what was in there. *)
-  val takeRecords: 'tags this -> MutationRecord.t list [@@js.call "takeRecords"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: MutationCallback.t -> t [@@js.create]
-end
-module AnonymousInterface270 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MutationObserver.t [@@js.get "prototype"]
-  val set_prototype: t -> MutationObserver.t -> unit [@@js.set "prototype"]
-  val create: t -> callback:MutationCallback.t -> MutationObserver.t [@@js.apply_newable]
-end
-module AnonymousInterface27 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> BaseAudioContext.t [@@js.get "prototype"]
-  val set_prototype: t -> BaseAudioContext.t -> unit [@@js.set "prototype"]
-  val create: t -> BaseAudioContext.t [@@js.apply_newable]
-end
-module AnonymousInterface269 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MutationEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> MutationEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> MutationEvent.t [@@js.apply_newable]
-  val get_ADDITION: t -> float [@@js.get "ADDITION"]
-  val get_MODIFICATION: t -> float [@@js.get "MODIFICATION"]
-  val get_REMOVAL: t -> float [@@js.get "REMOVAL"]
-end
-module AnonymousInterface268 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MouseEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> MouseEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:MouseEventInit.t -> unit -> MouseEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface266 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MimeTypeArray.t [@@js.get "prototype"]
-  val set_prototype: t -> MimeTypeArray.t -> unit [@@js.set "prototype"]
-  val create: t -> MimeTypeArray.t [@@js.apply_newable]
-end
-module AnonymousInterface265 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MimeType.t [@@js.get "prototype"]
-  val set_prototype: t -> MimeType.t -> unit [@@js.set "prototype"]
-  val create: t -> MimeType.t [@@js.apply_newable]
-end
-module AnonymousInterface264 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MessagePort.t [@@js.get "prototype"]
-  val set_prototype: t -> MessagePort.t -> unit [@@js.set "prototype"]
-  val create: t -> MessagePort.t [@@js.apply_newable]
-end
-module AnonymousInterface263 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MessageEvent.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> MessageEvent.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:'T MessageEventInit.t -> unit -> 'T MessageEvent.t [@@js.apply_newable]
-end
-
-(** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. *)
-module[@js.scope "MessageChannel"] MessageChannel : sig
-  type t = [`MessageChannel] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`MessageChannel]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`MessageChannel]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `MessageChannel ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Returns the first MessagePort object. *)
-  val get_port1: 'tags this -> MessagePort.t [@@js.get "port1"]
-  
-  (** Returns the second MessagePort object. *)
-  val get_port2: 'tags this -> MessagePort.t [@@js.get "port2"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface262 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MessageChannel.t [@@js.get "prototype"]
-  val set_prototype: t -> MessageChannel.t -> unit [@@js.set "prototype"]
-  val create: t -> MessageChannel.t [@@js.apply_newable]
-end
-module AnonymousInterface260 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaStreamTrackEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaStreamTrackEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:MediaStreamTrackEventInit.t -> MediaStreamTrackEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface26 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> BarProp.t [@@js.get "prototype"]
-  val set_prototype: t -> BarProp.t -> unit [@@js.set "prototype"]
-  val create: t -> BarProp.t [@@js.apply_newable]
-end
-module AnonymousInterface259 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaStreamTrack.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaStreamTrack.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaStreamTrack.t [@@js.apply_newable]
 end
 module MediaStreamAudioSourceOptions : sig
   type t = [`MediaStreamAudioSourceOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -52819,2322 +49636,8 @@ and[@js.scope "MediaStreamAudioSourceNode"] MediaStreamAudioSourceNode : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:AudioContext.t -> options:MediaStreamAudioSourceOptions.t -> t [@@js.create]
 end
-module AnonymousInterface258 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaStreamAudioSourceNode.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaStreamAudioSourceNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:AudioContext.t -> options:MediaStreamAudioSourceOptions.t -> MediaStreamAudioSourceNode.t [@@js.apply_newable]
-end
-module AnonymousInterface257 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaStreamAudioDestinationNode.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaStreamAudioDestinationNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:AudioContext.t -> ?options:AudioNodeOptions.t -> unit -> MediaStreamAudioDestinationNode.t [@@js.apply_newable]
-end
-module AnonymousInterface256 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaStream.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaStream.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaStream.t [@@js.apply_newable]
-  val create': t -> stream:MediaStream.t -> MediaStream.t [@@js.apply_newable]
-  val create'': t -> tracks:MediaStreamTrack.t list -> MediaStream.t [@@js.apply_newable]
-end
-module AnonymousInterface255 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaSource.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaSource.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaSource.t [@@js.apply_newable]
-  val isTypeSupported: t -> type_:string -> bool [@@js.call "isTypeSupported"]
-end
-module AnonymousInterface254 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaSession.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaSession.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaSession.t [@@js.apply_newable]
-end
-module AnonymousInterface253 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaRecorderErrorEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaRecorderErrorEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:MediaRecorderErrorEventInit.t -> MediaRecorderErrorEvent.t [@@js.apply_newable]
-end
-module RecordingState : sig
-  type t = ([`L_s406_inactive[@js "inactive"] | `L_s572_paused[@js "paused"] | `L_s632_recording[@js "recording"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module MediaRecorderOptions : sig
-  type t = [`MediaRecorderOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`MediaRecorderOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`MediaRecorderOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `MediaRecorderOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_audioBitsPerSecond: 'tags this -> float [@@js.get "audioBitsPerSecond"]
-  val set_audioBitsPerSecond: 'tags this -> float -> unit [@@js.set "audioBitsPerSecond"]
-  val get_bitsPerSecond: 'tags this -> float [@@js.get "bitsPerSecond"]
-  val set_bitsPerSecond: 'tags this -> float -> unit [@@js.set "bitsPerSecond"]
-  val get_mimeType: 'tags this -> string [@@js.get "mimeType"]
-  val set_mimeType: 'tags this -> string -> unit [@@js.set "mimeType"]
-  val get_videoBitsPerSecond: 'tags this -> float [@@js.get "videoBitsPerSecond"]
-  val set_videoBitsPerSecond: 'tags this -> float -> unit [@@js.set "videoBitsPerSecond"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "MediaRecorder"] MediaRecorder : sig
-  type t = [`EventTarget | `MediaRecorder] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventTarget | `MediaRecorder]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventTarget | `MediaRecorder]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `MediaRecorder ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_audioBitsPerSecond: 'tags this -> float [@@js.get "audioBitsPerSecond"]
-  val get_mimeType: 'tags this -> string [@@js.get "mimeType"]
-  val get_ondataavailable: 'tags this -> (this:t -> ev:BlobEvent.t -> any) or_null [@@js.get "ondataavailable"]
-  val set_ondataavailable: 'tags this -> (this:t -> ev:BlobEvent.t -> any) or_null -> unit [@@js.set "ondataavailable"]
-  val get_onerror: 'tags this -> (this:t -> ev:MediaRecorderErrorEvent.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:MediaRecorderErrorEvent.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onpause: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onpause"]
-  val set_onpause: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onpause"]
-  val get_onresume: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onresume"]
-  val set_onresume: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onresume"]
-  val get_onstart: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onstart"]
-  val set_onstart: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onstart"]
-  val get_onstop: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onstop"]
-  val set_onstop: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onstop"]
-  val get_state: 'tags this -> RecordingState.t [@@js.get "state"]
-  val get_stream: 'tags this -> MediaStream.t [@@js.get "stream"]
-  val get_videoBitsPerSecond: 'tags this -> float [@@js.get "videoBitsPerSecond"]
-  val pause: 'tags this -> unit [@@js.call "pause"]
-  val requestData: 'tags this -> unit [@@js.call "requestData"]
-  val resume: 'tags this -> unit [@@js.call "resume"]
-  val start: 'tags this -> ?timeslice:float -> unit -> unit [@@js.call "start"]
-  val stop: 'tags this -> unit [@@js.call "stop"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaRecorderEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaRecorderEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: stream:MediaStream.t -> ?options:MediaRecorderOptions.t -> unit -> t [@@js.create]
-  val isTypeSupported: string -> bool [@@js.global "isTypeSupported"]
-end
-module AnonymousInterface252 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaRecorder.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaRecorder.t -> unit [@@js.set "prototype"]
-  val create: t -> stream:MediaStream.t -> ?options:MediaRecorderOptions.t -> unit -> MediaRecorder.t [@@js.apply_newable]
-  val isTypeSupported: t -> type_:string -> bool [@@js.call "isTypeSupported"]
-end
-module AnonymousInterface251 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaQueryListEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaQueryListEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:MediaQueryListEventInit.t -> unit -> MediaQueryListEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface250 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaQueryList.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaQueryList.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaQueryList.t [@@js.apply_newable]
-end
-module AnonymousInterface25 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AuthenticatorResponse.t [@@js.get "prototype"]
-  val set_prototype: t -> AuthenticatorResponse.t -> unit [@@js.set "prototype"]
-  val create: t -> AuthenticatorResponse.t [@@js.apply_newable]
-end
-module AnonymousInterface249 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaMetadata.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaMetadata.t -> unit [@@js.set "prototype"]
-  val create: t -> ?init:MediaMetadataInit.t -> unit -> MediaMetadata.t [@@js.apply_newable]
-end
-module AnonymousInterface248 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaList.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaList.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaList.t [@@js.apply_newable]
-end
-module AnonymousInterface247 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaKeys.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaKeys.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaKeys.t [@@js.apply_newable]
-end
-module AnonymousInterface246 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaKeySystemAccess.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaKeySystemAccess.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaKeySystemAccess.t [@@js.apply_newable]
-end
-module AnonymousInterface245 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaKeyStatusMap.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaKeyStatusMap.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaKeyStatusMap.t [@@js.apply_newable]
-end
-module AnonymousInterface244 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaKeySession.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaKeySession.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaKeySession.t [@@js.apply_newable]
-end
-module AnonymousInterface243 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaKeyMessageEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaKeyMessageEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:MediaKeyMessageEventInit.t -> MediaKeyMessageEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface242 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaError.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaError.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaError.t [@@js.apply_newable]
-  val get_MEDIA_ERR_ABORTED: t -> float [@@js.get "MEDIA_ERR_ABORTED"]
-  val get_MEDIA_ERR_DECODE: t -> float [@@js.get "MEDIA_ERR_DECODE"]
-  val get_MEDIA_ERR_NETWORK: t -> float [@@js.get "MEDIA_ERR_NETWORK"]
-  val get_MEDIA_ERR_SRC_NOT_SUPPORTED: t -> float [@@js.get "MEDIA_ERR_SRC_NOT_SUPPORTED"]
-end
-module AnonymousInterface241 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaEncryptedEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaEncryptedEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:MediaEncryptedEventInit.t -> unit -> MediaEncryptedEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface240 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaElementAudioSourceNode.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaElementAudioSourceNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:AudioContext.t -> options:MediaElementAudioSourceOptions.t -> MediaElementAudioSourceNode.t [@@js.apply_newable]
-end
-
-(** Available only in secure contexts. *)
-module[@js.scope "AuthenticatorAttestationResponse"] AuthenticatorAttestationResponse : sig
-  type t = [`AuthenticatorAttestationResponse | `AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AuthenticatorAttestationResponse | `AuthenticatorResponse]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AuthenticatorAttestationResponse | `AuthenticatorResponse]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticatorAttestationResponse ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_attestationObject: 'tags this -> ArrayBuffer.t_0 [@@js.get "attestationObject"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface24 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AuthenticatorAttestationResponse.t [@@js.get "prototype"]
-  val set_prototype: t -> AuthenticatorAttestationResponse.t -> unit [@@js.set "prototype"]
-  val create: t -> AuthenticatorAttestationResponse.t [@@js.apply_newable]
-end
-module AnonymousInterface239 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaDevices.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaDevices.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaDevices.t [@@js.apply_newable]
-end
-module AnonymousInterface238 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaDeviceInfo.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaDeviceInfo.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaDeviceInfo.t [@@js.apply_newable]
-end
-module AnonymousInterface237 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MediaCapabilities.t [@@js.get "prototype"]
-  val set_prototype: t -> MediaCapabilities.t -> unit [@@js.set "prototype"]
-  val create: t -> MediaCapabilities.t [@@js.apply_newable]
-end
-module[@js.scope "MathMLElement"] MathMLElement : sig
-  type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `MathMLElement | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `MathMLElement | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `MathMLElement | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `MathMLElement ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MathMLElementEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MathMLElementEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface236 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> MathMLElement.t [@@js.get "prototype"]
-  val set_prototype: t -> MathMLElement.t -> unit [@@js.set "prototype"]
-  val create: t -> MathMLElement.t [@@js.apply_newable]
-end
-module AnonymousInterface235 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Location.t [@@js.get "prototype"]
-  val set_prototype: t -> Location.t -> unit [@@js.set "prototype"]
-  val create: t -> Location.t [@@js.apply_newable]
-end
-module ComputedKeyframe : sig
-  type t = [`ComputedKeyframe] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ComputedKeyframe]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ComputedKeyframe]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `ComputedKeyframe ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_composite: 'tags this -> CompositeOperationOrAuto.t [@@js.get "composite"]
-  val set_composite: 'tags this -> CompositeOperationOrAuto.t -> unit [@@js.set "composite"]
-  val get_computedOffset: 'tags this -> float [@@js.get "computedOffset"]
-  val set_computedOffset: 'tags this -> float -> unit [@@js.set "computedOffset"]
-  val get_easing: 'tags this -> string [@@js.get "easing"]
-  val set_easing: 'tags this -> string -> unit [@@js.set "easing"]
-  val get_offset: 'tags this -> float or_null [@@js.get "offset"]
-  val set_offset: 'tags this -> float or_null -> unit [@@js.set "offset"]
-  val get: 'tags this -> string -> string or_number or_null_or_undefined [@@js.index_get]
-  val set: 'tags this -> string -> string or_number or_null_or_undefined -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "KeyframeEffect"] KeyframeEffect : sig
-  type t = [`AnimationEffect | `KeyframeEffect] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AnimationEffect | `KeyframeEffect]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AnimationEffect | `KeyframeEffect]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `KeyframeEffect ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_composite: 'tags this -> CompositeOperation.t [@@js.get "composite"]
-  val set_composite: 'tags this -> CompositeOperation.t -> unit [@@js.set "composite"]
-  val get_iterationComposite: 'tags this -> IterationCompositeOperation.t [@@js.get "iterationComposite"]
-  val set_iterationComposite: 'tags this -> IterationCompositeOperation.t -> unit [@@js.set "iterationComposite"]
-  val get_pseudoElement: 'tags this -> string or_null [@@js.get "pseudoElement"]
-  val set_pseudoElement: 'tags this -> string or_null -> unit [@@js.set "pseudoElement"]
-  val get_target: 'tags this -> Element.t or_null [@@js.get "target"]
-  val set_target: 'tags this -> Element.t or_null -> unit [@@js.set "target"]
-  val getKeyframes: 'tags this -> ComputedKeyframe.t list [@@js.call "getKeyframes"]
-  val setKeyframes: 'tags this -> keyframes:(PropertyIndexedKeyframes.t, Keyframe.t) or_array or_null -> unit [@@js.call "setKeyframes"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: target:Element.t or_null -> keyframes:(PropertyIndexedKeyframes.t, Keyframe.t) or_array or_null -> ?options:KeyframeEffectOptions.t or_number -> unit -> t [@@js.create]
-  val create': t -> t [@@js.create]
-end
-module AnonymousInterface233 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> KeyframeEffect.t [@@js.get "prototype"]
-  val set_prototype: t -> KeyframeEffect.t -> unit [@@js.set "prototype"]
-  val create: t -> target:Element.t or_null -> keyframes:(PropertyIndexedKeyframes.t, Keyframe.t) or_array or_null -> ?options:KeyframeEffectOptions.t or_number -> unit -> KeyframeEffect.t [@@js.apply_newable]
-  val create': t -> source:KeyframeEffect.t -> KeyframeEffect.t [@@js.apply_newable]
-end
-module AnonymousInterface232 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> KeyboardEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> KeyboardEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:KeyboardEventInit.t -> unit -> KeyboardEvent.t [@@js.apply_newable]
-  val get_DOM_KEY_LOCATION_LEFT: t -> float [@@js.get "DOM_KEY_LOCATION_LEFT"]
-  val get_DOM_KEY_LOCATION_NUMPAD: t -> float [@@js.get "DOM_KEY_LOCATION_NUMPAD"]
-  val get_DOM_KEY_LOCATION_RIGHT: t -> float [@@js.get "DOM_KEY_LOCATION_RIGHT"]
-  val get_DOM_KEY_LOCATION_STANDARD: t -> float [@@js.get "DOM_KEY_LOCATION_STANDARD"]
-end
-module IntersectionObserverEntryInit : sig
-  type t = [`IntersectionObserverEntryInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`IntersectionObserverEntryInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`IntersectionObserverEntryInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserverEntryInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_boundingClientRect: 'tags this -> DOMRectInit.t [@@js.get "boundingClientRect"]
-  val set_boundingClientRect: 'tags this -> DOMRectInit.t -> unit [@@js.set "boundingClientRect"]
-  val get_intersectionRatio: 'tags this -> float [@@js.get "intersectionRatio"]
-  val set_intersectionRatio: 'tags this -> float -> unit [@@js.set "intersectionRatio"]
-  val get_intersectionRect: 'tags this -> DOMRectInit.t [@@js.get "intersectionRect"]
-  val set_intersectionRect: 'tags this -> DOMRectInit.t -> unit [@@js.set "intersectionRect"]
-  val get_isIntersecting: 'tags this -> bool [@@js.get "isIntersecting"]
-  val set_isIntersecting: 'tags this -> bool -> unit [@@js.set "isIntersecting"]
-  val get_rootBounds: 'tags this -> DOMRectInit.t or_null [@@js.get "rootBounds"]
-  val set_rootBounds: 'tags this -> DOMRectInit.t or_null -> unit [@@js.set "rootBounds"]
-  val get_target: 'tags this -> Element.t [@@js.get "target"]
-  val set_target: 'tags this -> Element.t -> unit [@@js.set "target"]
-  val get_time: 'tags this -> DOMHighResTimeStamp.t [@@js.get "time"]
-  val set_time: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "time"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** This Intersection Observer API interface describes the intersection between the target element and its root container at a specific moment of transition. *)
-module[@js.scope "IntersectionObserverEntry"] IntersectionObserverEntry : sig
-  type t = [`IntersectionObserverEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`IntersectionObserverEntry]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`IntersectionObserverEntry]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserverEntry ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_boundingClientRect: 'tags this -> DOMRectReadOnly.t [@@js.get "boundingClientRect"]
-  val get_intersectionRatio: 'tags this -> float [@@js.get "intersectionRatio"]
-  val get_intersectionRect: 'tags this -> DOMRectReadOnly.t [@@js.get "intersectionRect"]
-  val get_isIntersecting: 'tags this -> bool [@@js.get "isIntersecting"]
-  val get_rootBounds: 'tags this -> DOMRectReadOnly.t or_null [@@js.get "rootBounds"]
-  val get_target: 'tags this -> Element.t [@@js.get "target"]
-  val get_time: 'tags this -> DOMHighResTimeStamp.t [@@js.get "time"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: IntersectionObserverEntryInit.t -> t [@@js.create]
-end
-module AnonymousInterface231 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IntersectionObserverEntry.t [@@js.get "prototype"]
-  val set_prototype: t -> IntersectionObserverEntry.t -> unit [@@js.set "prototype"]
-  val create: t -> intersectionObserverEntryInit:IntersectionObserverEntryInit.t -> IntersectionObserverEntry.t [@@js.apply_newable]
-end
-module IntersectionObserverInit : sig
-  type t = [`IntersectionObserverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`IntersectionObserverInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`IntersectionObserverInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserverInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_root: 'tags this -> (Document.t, Element.t) union2 or_null [@@js.get "root"]
-  val set_root: 'tags this -> (Document.t, Element.t) union2 or_null -> unit [@@js.set "root"]
-  val get_rootMargin: 'tags this -> string [@@js.get "rootMargin"]
-  val set_rootMargin: 'tags this -> string -> unit [@@js.set "rootMargin"]
-  val get_threshold: 'tags this -> float list or_number [@@js.get "threshold"]
-  val set_threshold: 'tags this -> float list or_number -> unit [@@js.set "threshold"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-
-(** provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with a top-level document's viewport. *)
-module[@js.scope "IntersectionObserver"] rec IntersectionObserver : sig
-  type t = [`IntersectionObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`IntersectionObserver]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`IntersectionObserver]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserver ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_root: 'tags this -> (Document.t, Element.t) union2 or_null [@@js.get "root"]
-  val get_rootMargin: 'tags this -> string [@@js.get "rootMargin"]
-  val get_thresholds: 'tags this -> float list [@@js.get "thresholds"]
-  val disconnect: 'tags this -> unit [@@js.call "disconnect"]
-  val observe: 'tags this -> target:Element.t -> unit [@@js.call "observe"]
-  val takeRecords: 'tags this -> IntersectionObserverEntry.t list [@@js.call "takeRecords"]
-  val unobserve: 'tags this -> target:Element.t -> unit [@@js.call "unobserve"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: callback:IntersectionObserverCallback.t -> ?options:IntersectionObserverInit.t -> unit -> t [@@js.create]
-end
-and IntersectionObserverCallback : sig
-  type t = [`IntersectionObserverCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`IntersectionObserverCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`IntersectionObserverCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `IntersectionObserverCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> entries:IntersectionObserverEntry.t list -> observer:IntersectionObserver.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module AnonymousInterface230 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IntersectionObserver.t [@@js.get "prototype"]
-  val set_prototype: t -> IntersectionObserver.t -> unit [@@js.set "prototype"]
-  val create: t -> callback:IntersectionObserverCallback.t -> ?options:IntersectionObserverInit.t -> unit -> IntersectionObserver.t [@@js.apply_newable]
-end
-
-(** Available only in secure contexts. *)
-module[@js.scope "AuthenticatorAssertionResponse"] AuthenticatorAssertionResponse : sig
-  type t = [`AuthenticatorAssertionResponse | `AuthenticatorResponse] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AuthenticatorAssertionResponse | `AuthenticatorResponse]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AuthenticatorAssertionResponse | `AuthenticatorResponse]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AuthenticatorAssertionResponse ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_authenticatorData: 'tags this -> ArrayBuffer.t_0 [@@js.get "authenticatorData"]
-  val get_signature: 'tags this -> ArrayBuffer.t_0 [@@js.get "signature"]
-  val get_userHandle: 'tags this -> ArrayBuffer.t_0 or_null [@@js.get "userHandle"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface23 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AuthenticatorAssertionResponse.t [@@js.get "prototype"]
-  val set_prototype: t -> AuthenticatorAssertionResponse.t -> unit [@@js.set "prototype"]
-  val create: t -> AuthenticatorAssertionResponse.t [@@js.apply_newable]
-end
-module AnonymousInterface228 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> InputEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> InputEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:InputEventInit.t -> unit -> InputEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface227 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ImageData.t [@@js.get "prototype"]
-  val set_prototype: t -> ImageData.t -> unit [@@js.set "prototype"]
-  val create: t -> sw:float -> sh:float -> ?settings:ImageDataSettings.t -> unit -> ImageData.t [@@js.apply_newable]
-  val create': t -> data:Uint8ClampedArray.t_0 -> sw:float -> ?sh:float -> ?settings:ImageDataSettings.t -> unit -> ImageData.t [@@js.apply_newable]
-end
-module AnonymousInterface226 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ImageBitmapRenderingContext.t [@@js.get "prototype"]
-  val set_prototype: t -> ImageBitmapRenderingContext.t -> unit [@@js.set "prototype"]
-  val create: t -> ImageBitmapRenderingContext.t [@@js.apply_newable]
-end
-module AnonymousInterface225 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ImageBitmap.t [@@js.get "prototype"]
-  val set_prototype: t -> ImageBitmap.t -> unit [@@js.set "prototype"]
-  val create: t -> ImageBitmap.t [@@js.apply_newable]
-end
-module AnonymousInterface224 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IdleDeadline.t [@@js.get "prototype"]
-  val set_prototype: t -> IdleDeadline.t -> unit [@@js.set "prototype"]
-  val create: t -> IdleDeadline.t [@@js.apply_newable]
-end
-module AnonymousInterface223 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IIRFilterNode.t [@@js.get "prototype"]
-  val set_prototype: t -> IIRFilterNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> options:IIRFilterOptions.t -> IIRFilterNode.t [@@js.apply_newable]
-end
-module AnonymousInterface222 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBVersionChangeEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBVersionChangeEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:IDBVersionChangeEventInit.t -> unit -> IDBVersionChangeEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface221 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBTransaction.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBTransaction.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBTransaction.t [@@js.apply_newable]
-end
-module AnonymousInterface220 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBRequest.t_0 [@@js.get "prototype"]
-  val set_prototype: t -> IDBRequest.t_0 -> unit [@@js.set "prototype"]
-  val create: t -> IDBRequest.t_0 [@@js.apply_newable]
-end
-module AudioWorkletNodeOptions : sig
-  type t = [`AudioNodeOptions | `AudioWorkletNodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNodeOptions | `AudioWorkletNodeOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNodeOptions | `AudioWorkletNodeOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioWorkletNodeOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_numberOfInputs: 'tags this -> float [@@js.get "numberOfInputs"]
-  val set_numberOfInputs: 'tags this -> float -> unit [@@js.set "numberOfInputs"]
-  val get_numberOfOutputs: 'tags this -> float [@@js.get "numberOfOutputs"]
-  val set_numberOfOutputs: 'tags this -> float -> unit [@@js.set "numberOfOutputs"]
-  val get_outputChannelCount: 'tags this -> float list [@@js.get "outputChannelCount"]
-  val set_outputChannelCount: 'tags this -> float list -> unit [@@js.set "outputChannelCount"]
-  val get_parameterData: 'tags this -> (string, float) Record.t_2 [@@js.get "parameterData"]
-  val set_parameterData: 'tags this -> (string, float) Record.t_2 -> unit [@@js.set "parameterData"]
-  val get_processorOptions: 'tags this -> any [@@js.get "processorOptions"]
-  val set_processorOptions: 'tags this -> any -> unit [@@js.set "processorOptions"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "AudioParamMap"] AudioParamMap : sig
-  type t = [`AudioParamMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioParamMap]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioParamMap]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioParamMap ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val forEach: 'tags this -> callbackfn:(value:AudioParam.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-
-(** Available only in secure contexts. *)
-module[@js.scope "AudioWorkletNode"] AudioWorkletNode : sig
-  type t = [`AudioNode | `AudioWorkletNode | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AudioNode | `AudioWorkletNode | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AudioNode | `AudioWorkletNode | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AudioWorkletNode ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_onprocessorerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onprocessorerror"]
-  val set_onprocessorerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onprocessorerror"]
-  val get_parameters: 'tags this -> AudioParamMap.t [@@js.get "parameters"]
-  val get_port: 'tags this -> MessagePort.t [@@js.get "port"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioWorkletNodeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AudioWorkletNodeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> name:string -> ?options:AudioWorkletNodeOptions.t -> unit -> t [@@js.create]
-end
-module AnonymousInterface22 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioWorkletNode.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioWorkletNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> name:string -> ?options:AudioWorkletNodeOptions.t -> unit -> AudioWorkletNode.t [@@js.apply_newable]
-end
-module AnonymousInterface219 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBOpenDBRequest.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBOpenDBRequest.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBOpenDBRequest.t [@@js.apply_newable]
-end
-module AnonymousInterface218 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBObjectStore.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBObjectStore.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBObjectStore.t [@@js.apply_newable]
-end
-module AnonymousInterface217 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBKeyRange.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBKeyRange.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBKeyRange.t [@@js.apply_newable]
-  
-  (** Returns a new IDBKeyRange spanning from lower to upper. If lowerOpen is true, lower is not included in the range. If upperOpen is true, upper is not included in the range. *)
-  val bound: t -> lower:any -> upper:any -> ?lowerOpen:bool -> ?upperOpen:bool -> unit -> IDBKeyRange.t [@@js.call "bound"]
-  
-  (** Returns a new IDBKeyRange starting at key with no upper bound. If open is true, key is not included in the range. *)
-  val lowerBound: t -> lower:any -> ?open_:bool -> unit -> IDBKeyRange.t [@@js.call "lowerBound"]
-  
-  (** Returns a new IDBKeyRange spanning only key. *)
-  val only: t -> value:any -> IDBKeyRange.t [@@js.call "only"]
-  
-  (** Returns a new IDBKeyRange with no lower bound and ending at key. If open is true, key is not included in the range. *)
-  val upperBound: t -> upper:any -> ?open_:bool -> unit -> IDBKeyRange.t [@@js.call "upperBound"]
-end
-module AnonymousInterface216 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBIndex.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBIndex.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBIndex.t [@@js.apply_newable]
-end
-module AnonymousInterface215 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBFactory.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBFactory.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBFactory.t [@@js.apply_newable]
-end
-module AnonymousInterface214 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBDatabase.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBDatabase.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBDatabase.t [@@js.apply_newable]
-end
-module AnonymousInterface213 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBCursorWithValue.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBCursorWithValue.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBCursorWithValue.t [@@js.apply_newable]
-end
-module AnonymousInterface212 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> IDBCursor.t [@@js.get "prototype"]
-  val set_prototype: t -> IDBCursor.t -> unit [@@js.set "prototype"]
-  val create: t -> IDBCursor.t [@@js.apply_newable]
-end
-module AnonymousInterface211 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> History.t [@@js.get "prototype"]
-  val set_prototype: t -> History.t -> unit [@@js.set "prototype"]
-  val create: t -> History.t [@@js.apply_newable]
-end
-module AnonymousInterface210 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Headers.t [@@js.get "prototype"]
-  val set_prototype: t -> Headers.t -> unit [@@js.set "prototype"]
-  val create: t -> ?init:HeadersInit.t -> unit -> Headers.t [@@js.apply_newable]
-end
-module AnonymousInterface21 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioWorklet.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioWorklet.t -> unit [@@js.set "prototype"]
-  val create: t -> AudioWorklet.t [@@js.apply_newable]
-end
-module AnonymousInterface209 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HashChangeEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> HashChangeEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:HashChangeEventInit.t -> unit -> HashChangeEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface208 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLVideoElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLVideoElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLVideoElement.t [@@js.apply_newable]
-end
-
-(** An invalid HTML element and derives from the HTMLElement interface, but without implementing any additional properties or methods. *)
-module[@js.scope "HTMLUnknownElement"] HTMLUnknownElement : sig
-  type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLUnknownElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLUnknownElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLElement | `HTMLOrSVGElement | `HTMLUnknownElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `HTMLUnknownElement ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    
-    
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'HTMLElementEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    
-    
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    
-    
-    Removes the event listener in target's event listener list with the same type, callback, and options.
-  *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'HTMLElementEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (**
-    
-    
-    Removes the event listener in target's event listener list with the same type, callback, and options.
-  *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface207 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLUnknownElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLUnknownElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLUnknownElement.t [@@js.apply_newable]
-end
-module AnonymousInterface206 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLUListElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLUListElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLUListElement.t [@@js.apply_newable]
-end
-module AnonymousInterface205 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTrackElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTrackElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTrackElement.t [@@js.apply_newable]
-  val get_ERROR: t -> float [@@js.get "ERROR"]
-  val get_LOADED: t -> float [@@js.get "LOADED"]
-  val get_LOADING: t -> float [@@js.get "LOADING"]
-  val get_NONE: t -> float [@@js.get "NONE"]
-end
-module AnonymousInterface204 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTitleElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTitleElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTitleElement.t [@@js.apply_newable]
-end
-module AnonymousInterface203 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTimeElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTimeElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTimeElement.t [@@js.apply_newable]
-end
-module AnonymousInterface202 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTextAreaElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTextAreaElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTextAreaElement.t [@@js.apply_newable]
-end
-module AnonymousInterface201 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTemplateElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTemplateElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTemplateElement.t [@@js.apply_newable]
-end
-module AnonymousInterface200 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTableSectionElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTableSectionElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTableSectionElement.t [@@js.apply_newable]
-end
-module AnonymousInterface20 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioScheduledSourceNode.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioScheduledSourceNode.t -> unit [@@js.set "prototype"]
-  val create: t -> AudioScheduledSourceNode.t [@@js.apply_newable]
-end
-module AnonymousInterface2 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AbortSignal.t [@@js.get "prototype"]
-  val set_prototype: t -> AbortSignal.t -> unit [@@js.set "prototype"]
-  val create: t -> AbortSignal.t [@@js.apply_newable]
-end
-module AnonymousInterface199 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTableRowElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTableRowElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTableRowElement.t [@@js.apply_newable]
-end
-module AnonymousInterface198 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTableElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTableElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTableElement.t [@@js.apply_newable]
-end
-module AnonymousInterface197 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTableColElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTableColElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTableColElement.t [@@js.apply_newable]
-end
-module AnonymousInterface196 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTableCellElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTableCellElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTableCellElement.t [@@js.apply_newable]
-end
-module AnonymousInterface195 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLTableCaptionElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLTableCaptionElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLTableCaptionElement.t [@@js.apply_newable]
-end
-module AnonymousInterface194 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLStyleElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLStyleElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLStyleElement.t [@@js.apply_newable]
-end
-module AnonymousInterface193 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLSpanElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLSpanElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLSpanElement.t [@@js.apply_newable]
-end
-module AnonymousInterface192 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLSourceElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLSourceElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLSourceElement.t [@@js.apply_newable]
-end
-module AnonymousInterface191 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLSlotElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLSlotElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLSlotElement.t [@@js.apply_newable]
-end
-module AnonymousInterface190 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLSelectElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLSelectElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLSelectElement.t [@@js.apply_newable]
-end
-module AnonymousInterface19 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioProcessingEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioProcessingEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:AudioProcessingEventInit.t -> AudioProcessingEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface189 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLScriptElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLScriptElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLScriptElement.t [@@js.apply_newable]
-end
-module AnonymousInterface188 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLQuoteElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLQuoteElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLQuoteElement.t [@@js.apply_newable]
-end
-module AnonymousInterface187 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLProgressElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLProgressElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLProgressElement.t [@@js.apply_newable]
-end
-module AnonymousInterface186 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLPreElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLPreElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLPreElement.t [@@js.apply_newable]
-end
-module AnonymousInterface185 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLPictureElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLPictureElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLPictureElement.t [@@js.apply_newable]
-end
-module AnonymousInterface184 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLParamElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLParamElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLParamElement.t [@@js.apply_newable]
-end
-module AnonymousInterface183 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLParagraphElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLParagraphElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLParagraphElement.t [@@js.apply_newable]
-end
-module AnonymousInterface182 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLOutputElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLOutputElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLOutputElement.t [@@js.apply_newable]
-end
-module AnonymousInterface181 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLOptionsCollection.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLOptionsCollection.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLOptionsCollection.t [@@js.apply_newable]
-end
-module AnonymousInterface180 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLOptionElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLOptionElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLOptionElement.t [@@js.apply_newable]
-end
-module AnonymousInterface18 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioParamMap.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioParamMap.t -> unit [@@js.set "prototype"]
-  val create: t -> AudioParamMap.t [@@js.apply_newable]
-end
-module AnonymousInterface179 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLOptGroupElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLOptGroupElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLOptGroupElement.t [@@js.apply_newable]
-end
-module AnonymousInterface178 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLObjectElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLObjectElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLObjectElement.t [@@js.apply_newable]
-end
-module AnonymousInterface177 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLOListElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLOListElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLOListElement.t [@@js.apply_newable]
-end
-module AnonymousInterface176 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLModElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLModElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLModElement.t [@@js.apply_newable]
-end
-module AnonymousInterface175 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLMeterElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLMeterElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLMeterElement.t [@@js.apply_newable]
-end
-module AnonymousInterface174 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLMetaElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLMetaElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLMetaElement.t [@@js.apply_newable]
-end
-module AnonymousInterface173 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLMenuElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLMenuElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLMenuElement.t [@@js.apply_newable]
-end
-module AnonymousInterface172 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLMediaElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLMediaElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLMediaElement.t [@@js.apply_newable]
-  val get_HAVE_CURRENT_DATA: t -> float [@@js.get "HAVE_CURRENT_DATA"]
-  val get_HAVE_ENOUGH_DATA: t -> float [@@js.get "HAVE_ENOUGH_DATA"]
-  val get_HAVE_FUTURE_DATA: t -> float [@@js.get "HAVE_FUTURE_DATA"]
-  val get_HAVE_METADATA: t -> float [@@js.get "HAVE_METADATA"]
-  val get_HAVE_NOTHING: t -> float [@@js.get "HAVE_NOTHING"]
-  val get_NETWORK_EMPTY: t -> float [@@js.get "NETWORK_EMPTY"]
-  val get_NETWORK_IDLE: t -> float [@@js.get "NETWORK_IDLE"]
-  val get_NETWORK_LOADING: t -> float [@@js.get "NETWORK_LOADING"]
-  val get_NETWORK_NO_SOURCE: t -> float [@@js.get "NETWORK_NO_SOURCE"]
-end
-module AnonymousInterface171 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLMarqueeElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLMarqueeElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLMarqueeElement.t [@@js.apply_newable]
-end
-module AnonymousInterface170 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLMapElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLMapElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLMapElement.t [@@js.apply_newable]
-end
-module AnonymousInterface17 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioParam.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioParam.t -> unit [@@js.set "prototype"]
-  val create: t -> AudioParam.t [@@js.apply_newable]
-end
-module AnonymousInterface169 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLLinkElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLLinkElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLLinkElement.t [@@js.apply_newable]
-end
-module AnonymousInterface168 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLLegendElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLLegendElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLLegendElement.t [@@js.apply_newable]
-end
-module AnonymousInterface167 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLLabelElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLLabelElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLLabelElement.t [@@js.apply_newable]
-end
-module AnonymousInterface166 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLLIElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLLIElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLLIElement.t [@@js.apply_newable]
-end
-module AnonymousInterface165 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLInputElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLInputElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLInputElement.t [@@js.apply_newable]
-end
-module AnonymousInterface164 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLImageElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLImageElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLImageElement.t [@@js.apply_newable]
-end
-module AnonymousInterface163 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLIFrameElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLIFrameElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLIFrameElement.t [@@js.apply_newable]
-end
-module AnonymousInterface162 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLHtmlElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLHtmlElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLHtmlElement.t [@@js.apply_newable]
-end
-module AnonymousInterface161 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLHeadingElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLHeadingElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLHeadingElement.t [@@js.apply_newable]
-end
-module AnonymousInterface160 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLHeadElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLHeadElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLHeadElement.t [@@js.apply_newable]
-end
-module AnonymousInterface16 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioNode.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioNode.t -> unit [@@js.set "prototype"]
-  val create: t -> AudioNode.t [@@js.apply_newable]
-end
-module AnonymousInterface159 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLHRElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLHRElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLHRElement.t [@@js.apply_newable]
-end
-module AnonymousInterface158 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLFrameSetElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLFrameSetElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLFrameSetElement.t [@@js.apply_newable]
-end
-module AnonymousInterface157 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLFrameElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLFrameElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLFrameElement.t [@@js.apply_newable]
-end
-module AnonymousInterface156 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLFormElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLFormElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLFormElement.t [@@js.apply_newable]
-end
-module AnonymousInterface155 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLFormControlsCollection.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLFormControlsCollection.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLFormControlsCollection.t [@@js.apply_newable]
-end
-module AnonymousInterface154 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLFontElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLFontElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLFontElement.t [@@js.apply_newable]
-end
-module AnonymousInterface153 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLFieldSetElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLFieldSetElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLFieldSetElement.t [@@js.apply_newable]
-end
-module AnonymousInterface152 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLEmbedElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLEmbedElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLEmbedElement.t [@@js.apply_newable]
-end
-module AnonymousInterface151 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLElement.t [@@js.apply_newable]
-end
-
-(** @deprecated use Document *)
-module[@js.scope "HTMLDocument"] HTMLDocument : sig
-  type t = [`Document | `DocumentAndElementEventHandlers | `DocumentOrShadowRoot | `EventTarget | `FontFaceSource | `GlobalEventHandlers | `HTMLDocument | `Node | `NonElementParentNode | `ParentNode | `XPathEvaluatorBase] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`Document | `DocumentAndElementEventHandlers | `DocumentOrShadowRoot | `EventTarget | `FontFaceSource | `GlobalEventHandlers | `HTMLDocument | `Node | `NonElementParentNode | `ParentNode | `XPathEvaluatorBase]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Document | `DocumentAndElementEventHandlers | `DocumentOrShadowRoot | `EventTarget | `FontFaceSource | `GlobalEventHandlers | `HTMLDocument | `Node | `NonElementParentNode | `ParentNode | `XPathEvaluatorBase]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `HTMLDocument ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    
-    
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'DocumentEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    
-    
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    
-    
-    Removes the event listener in target's event listener list with the same type, callback, and options.
-  *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'DocumentEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (**
-    
-    
-    Removes the event listener in target's event listener list with the same type, callback, and options.
-  *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface150 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLDocument.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLDocument.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLDocument.t [@@js.apply_newable]
-end
-module AnonymousInterface15 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioListener.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioListener.t -> unit [@@js.set "prototype"]
-  val create: t -> AudioListener.t [@@js.apply_newable]
-end
-module AnonymousInterface149 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLDivElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLDivElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLDivElement.t [@@js.apply_newable]
-end
-module AnonymousInterface148 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLDirectoryElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLDirectoryElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLDirectoryElement.t [@@js.apply_newable]
-end
-module AnonymousInterface147 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLDetailsElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLDetailsElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLDetailsElement.t [@@js.apply_newable]
-end
-module AnonymousInterface146 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLDataListElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLDataListElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLDataListElement.t [@@js.apply_newable]
-end
-module AnonymousInterface145 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLDataElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLDataElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLDataElement.t [@@js.apply_newable]
-end
-module AnonymousInterface144 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLDListElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLDListElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLDListElement.t [@@js.apply_newable]
-end
-module AnonymousInterface143 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLCollection.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLCollection.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLCollection.t [@@js.apply_newable]
-end
-module AnonymousInterface142 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLCanvasElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLCanvasElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLCanvasElement.t [@@js.apply_newable]
-end
-module AnonymousInterface141 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLButtonElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLButtonElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLButtonElement.t [@@js.apply_newable]
-end
-module AnonymousInterface140 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLBodyElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLBodyElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLBodyElement.t [@@js.apply_newable]
-end
-module AnonymousInterface14 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioDestinationNode.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioDestinationNode.t -> unit [@@js.set "prototype"]
-  val create: t -> AudioDestinationNode.t [@@js.apply_newable]
-end
-module AnonymousInterface139 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLBaseElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLBaseElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLBaseElement.t [@@js.apply_newable]
-end
-module AnonymousInterface138 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLBRElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLBRElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLBRElement.t [@@js.apply_newable]
-end
-module AnonymousInterface137 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLAudioElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLAudioElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLAudioElement.t [@@js.apply_newable]
-end
-module AnonymousInterface136 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLAreaElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLAreaElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLAreaElement.t [@@js.apply_newable]
-end
-module AnonymousInterface135 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLAnchorElement.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLAnchorElement.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLAnchorElement.t [@@js.apply_newable]
-end
-module AnonymousInterface134 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> HTMLAllCollection.t [@@js.get "prototype"]
-  val set_prototype: t -> HTMLAllCollection.t -> unit [@@js.set "prototype"]
-  val create: t -> HTMLAllCollection.t [@@js.apply_newable]
-end
-module AnonymousInterface132 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GeolocationPositionError.t [@@js.get "prototype"]
-  val set_prototype: t -> GeolocationPositionError.t -> unit [@@js.set "prototype"]
-  val create: t -> GeolocationPositionError.t [@@js.apply_newable]
-  val get_PERMISSION_DENIED: t -> float [@@js.get "PERMISSION_DENIED"]
-  val get_POSITION_UNAVAILABLE: t -> float [@@js.get "POSITION_UNAVAILABLE"]
-  val get_TIMEOUT: t -> float [@@js.get "TIMEOUT"]
-end
-module AnonymousInterface131 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GeolocationPosition.t [@@js.get "prototype"]
-  val set_prototype: t -> GeolocationPosition.t -> unit [@@js.set "prototype"]
-  val create: t -> GeolocationPosition.t [@@js.apply_newable]
-end
-module AnonymousInterface130 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GeolocationCoordinates.t [@@js.get "prototype"]
-  val set_prototype: t -> GeolocationCoordinates.t -> unit [@@js.set "prototype"]
-  val create: t -> GeolocationCoordinates.t [@@js.apply_newable]
-end
-module AnonymousInterface13 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioContext.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioContext.t -> unit [@@js.set "prototype"]
-  val create: t -> ?contextOptions:AudioContextOptions.t -> unit -> AudioContext.t [@@js.apply_newable]
-end
-module AnonymousInterface129 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Geolocation.t [@@js.get "prototype"]
-  val set_prototype: t -> Geolocation.t -> unit [@@js.set "prototype"]
-  val create: t -> Geolocation.t [@@js.apply_newable]
-end
-module AnonymousInterface128 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GamepadHapticActuator.t [@@js.get "prototype"]
-  val set_prototype: t -> GamepadHapticActuator.t -> unit [@@js.set "prototype"]
-  val create: t -> GamepadHapticActuator.t [@@js.apply_newable]
-end
-module AnonymousInterface127 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GamepadEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> GamepadEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:GamepadEventInit.t -> GamepadEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface126 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GamepadButton.t [@@js.get "prototype"]
-  val set_prototype: t -> GamepadButton.t -> unit [@@js.set "prototype"]
-  val create: t -> GamepadButton.t [@@js.apply_newable]
-end
-module AnonymousInterface125 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Gamepad.t [@@js.get "prototype"]
-  val set_prototype: t -> Gamepad.t -> unit [@@js.set "prototype"]
-  val create: t -> Gamepad.t [@@js.apply_newable]
-end
-module AnonymousInterface124 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> GainNode.t [@@js.get "prototype"]
-  val set_prototype: t -> GainNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:GainOptions.t -> unit -> GainNode.t [@@js.apply_newable]
-end
-module AnonymousInterface123 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FormDataEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> FormDataEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> eventInitDict:FormDataEventInit.t -> FormDataEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface122 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FormData.t [@@js.get "prototype"]
-  val set_prototype: t -> FormData.t -> unit [@@js.set "prototype"]
-  val create: t -> ?form:HTMLFormElement.t -> unit -> FormData.t [@@js.apply_newable]
-end
-module AnonymousInterface121 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FontFaceSetLoadEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> FontFaceSetLoadEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:FontFaceSetLoadEventInit.t -> unit -> FontFaceSetLoadEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface120 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FontFaceSet.t [@@js.get "prototype"]
-  val set_prototype: t -> FontFaceSet.t -> unit [@@js.set "prototype"]
-  val create: t -> initialFaces:FontFace.t list -> FontFaceSet.t [@@js.apply_newable]
-end
-module AnonymousInterface12 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioBufferSourceNode.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioBufferSourceNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:AudioBufferSourceOptions.t -> unit -> AudioBufferSourceNode.t [@@js.apply_newable]
-end
-module AnonymousInterface119 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FontFace.t [@@js.get "prototype"]
-  val set_prototype: t -> FontFace.t -> unit [@@js.set "prototype"]
-  val create: t -> family:string -> source:BinaryData.t or_string -> ?descriptors:FontFaceDescriptors.t -> unit -> FontFace.t [@@js.apply_newable]
-end
-module AnonymousInterface118 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FocusEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> FocusEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:FocusEventInit.t -> unit -> FocusEvent.t [@@js.apply_newable]
-end
-module FileCallback : sig
-  type t = [`FileCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`FileCallback]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`FileCallback]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `FileCallback ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> file:File.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "FileSystemFileEntry"] FileSystemFileEntry : sig
-  type t = [`FileSystemEntry | `FileSystemFileEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`FileSystemEntry | `FileSystemFileEntry]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`FileSystemEntry | `FileSystemFileEntry]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `FileSystemFileEntry ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val file: 'tags this -> successCallback:FileCallback.t -> ?errorCallback:ErrorCallback.t -> unit -> unit [@@js.call "file"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface117 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileSystemFileEntry.t [@@js.get "prototype"]
-  val set_prototype: t -> FileSystemFileEntry.t -> unit [@@js.set "prototype"]
-  val create: t -> FileSystemFileEntry.t [@@js.apply_newable]
-end
-module AnonymousInterface116 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileSystemEntry.t [@@js.get "prototype"]
-  val set_prototype: t -> FileSystemEntry.t -> unit [@@js.set "prototype"]
-  val create: t -> FileSystemEntry.t [@@js.apply_newable]
-end
-module AnonymousInterface115 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileSystemDirectoryReader.t [@@js.get "prototype"]
-  val set_prototype: t -> FileSystemDirectoryReader.t -> unit [@@js.set "prototype"]
-  val create: t -> FileSystemDirectoryReader.t [@@js.apply_newable]
-end
-module AnonymousInterface114 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileSystemDirectoryEntry.t [@@js.get "prototype"]
-  val set_prototype: t -> FileSystemDirectoryEntry.t -> unit [@@js.set "prototype"]
-  val create: t -> FileSystemDirectoryEntry.t [@@js.apply_newable]
-end
-module AnonymousInterface113 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileSystem.t [@@js.get "prototype"]
-  val set_prototype: t -> FileSystem.t -> unit [@@js.set "prototype"]
-  val create: t -> FileSystem.t [@@js.apply_newable]
-end
-module AnonymousInterface112 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileReader.t [@@js.get "prototype"]
-  val set_prototype: t -> FileReader.t -> unit [@@js.set "prototype"]
-  val create: t -> FileReader.t [@@js.apply_newable]
-  val get_DONE: t -> float [@@js.get "DONE"]
-  val get_EMPTY: t -> float [@@js.get "EMPTY"]
-  val get_LOADING: t -> float [@@js.get "LOADING"]
-end
-module AnonymousInterface111 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> FileList.t [@@js.get "prototype"]
-  val set_prototype: t -> FileList.t -> unit [@@js.set "prototype"]
-  val create: t -> FileList.t [@@js.apply_newable]
-end
-module AnonymousInterface110 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> File.t [@@js.get "prototype"]
-  val set_prototype: t -> File.t -> unit [@@js.set "prototype"]
-  val create: t -> fileBits:BlobPart.t list -> fileName:string -> ?options:FilePropertyBag.t -> unit -> File.t [@@js.apply_newable]
-end
-module AnonymousInterface11 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AudioBuffer.t [@@js.get "prototype"]
-  val set_prototype: t -> AudioBuffer.t -> unit [@@js.set "prototype"]
-  val create: t -> options:AudioBufferOptions.t -> AudioBuffer.t [@@js.apply_newable]
-end
-module AnonymousInterface109 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> External.t [@@js.get "prototype"]
-  val set_prototype: t -> External.t -> unit [@@js.set "prototype"]
-  val create: t -> External.t [@@js.apply_newable]
-end
-module AnonymousInterface108 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> EventTarget.t [@@js.get "prototype"]
-  val set_prototype: t -> EventTarget.t -> unit [@@js.set "prototype"]
-  val create: t -> EventTarget.t [@@js.apply_newable]
-end
-module EventSourceInit : sig
-  type t = [`EventSourceInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventSourceInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventSourceInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `EventSourceInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_withCredentials: 'tags this -> bool [@@js.get "withCredentials"]
-  val set_withCredentials: 'tags this -> bool -> unit [@@js.set "withCredentials"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-end
-module[@js.scope "EventSource"] EventSource : sig
-  type t = [`EventSource | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventSource | `EventTarget]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventSource | `EventTarget]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `EventSource ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onopen"]
-  val set_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onopen"]
-  
-  (** Returns the state of this EventSource object's connection. It can have the values described below. *)
-  val get_readyState: 'tags this -> float [@@js.get "readyState"]
-  
-  (** Returns the URL providing the event stream. *)
-  val get_url: 'tags this -> string [@@js.get "url"]
-  
-  (** Returns true if the credentials mode for connection requests to the URL providing the event stream is set to "include", and false otherwise. *)
-  val get_withCredentials: 'tags this -> bool [@@js.get "withCredentials"]
-  
-  (** Aborts any instances of the fetch algorithm started for this EventSource object, and sets the readyState attribute to CLOSED. *)
-  val close: 'tags this -> unit [@@js.call "close"]
-  val get_CLOSED: 'tags this -> float [@@js.get "CLOSED"]
-  val get_CONNECTING: 'tags this -> float [@@js.get "CONNECTING"]
-  val get_OPEN: 'tags this -> float [@@js.get "OPEN"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'EventSourceEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (**
-    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
-    
-    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
-    
-    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
-    
-    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
-    
-    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
-    
-    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
-    
-    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
-  *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'EventSourceEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: url:URL.t or_string -> ?eventSourceInitDict:EventSourceInit.t -> unit -> t [@@js.create]
-  val closed: unit -> float [@@js.get "CLOSED"]
-  val connecting: unit -> float [@@js.get "CONNECTING"]
-  val open_: unit -> float [@@js.get "OPEN"]
-end
-module AnonymousInterface107 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> EventSource.t [@@js.get "prototype"]
-  val set_prototype: t -> EventSource.t -> unit [@@js.set "prototype"]
-  val create: t -> url:URL.t or_string -> ?eventSourceInitDict:EventSourceInit.t -> unit -> EventSource.t [@@js.apply_newable]
-  val get_CLOSED: t -> float [@@js.get "CLOSED"]
-  val get_CONNECTING: t -> float [@@js.get "CONNECTING"]
-  val get_OPEN: t -> float [@@js.get "OPEN"]
-end
-module AnonymousInterface106 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Event.t [@@js.get "prototype"]
-  val set_prototype: t -> Event.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:EventInit.t -> unit -> Event.t [@@js.apply_newable]
-  val get_AT_TARGET: t -> float [@@js.get "AT_TARGET"]
-  val get_BUBBLING_PHASE: t -> float [@@js.get "BUBBLING_PHASE"]
-  val get_CAPTURING_PHASE: t -> float [@@js.get "CAPTURING_PHASE"]
-  val get_NONE: t -> float [@@js.get "NONE"]
-end
-module AnonymousInterface105 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ErrorEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> ErrorEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:ErrorEventInit.t -> unit -> ErrorEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface104 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> ElementInternals.t [@@js.get "prototype"]
-  val set_prototype: t -> ElementInternals.t -> unit [@@js.set "prototype"]
-  val create: t -> ElementInternals.t [@@js.apply_newable]
-end
-module AnonymousInterface103 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Element.t [@@js.get "prototype"]
-  val set_prototype: t -> Element.t -> unit [@@js.set "prototype"]
-  val create: t -> Element.t [@@js.apply_newable]
-end
-module AnonymousInterface102 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DynamicsCompressorNode.t [@@js.get "prototype"]
-  val set_prototype: t -> DynamicsCompressorNode.t -> unit [@@js.set "prototype"]
-  val create: t -> context:BaseAudioContext.t -> ?options:DynamicsCompressorOptions.t -> unit -> DynamicsCompressorNode.t [@@js.apply_newable]
-end
-module AnonymousInterface101 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DragEvent.t [@@js.get "prototype"]
-  val set_prototype: t -> DragEvent.t -> unit [@@js.set "prototype"]
-  val create: t -> type_:string -> ?eventInitDict:DragEventInit.t -> unit -> DragEvent.t [@@js.apply_newable]
-end
-module AnonymousInterface100 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> DocumentType.t [@@js.get "prototype"]
-  val set_prototype: t -> DocumentType.t -> unit [@@js.set "prototype"]
-  val create: t -> DocumentType.t [@@js.apply_newable]
-end
-module AnonymousInterface10 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> Attr.t [@@js.get "prototype"]
-  val set_prototype: t -> Attr.t -> unit [@@js.set "prototype"]
-  val create: t -> Attr.t [@@js.apply_newable]
-end
-
-(** A controller object that allows you to abort one or more DOM requests as and when desired. *)
-module[@js.scope "AbortController"] AbortController : sig
-  type t = [`AbortController] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`AbortController]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`AbortController]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `AbortController ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  
-  (** Returns the AbortSignal object associated with this object. *)
-  val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
-  
-  (** Invoking this method will set this object's AbortSignal's aborted flag and signal to any observers that the associated activity is to be aborted. *)
-  val abort: 'tags this -> unit [@@js.call "abort"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
-end
-module AnonymousInterface1 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_prototype: t -> AbortController.t [@@js.get "prototype"]
-  val set_prototype: t -> AbortController.t -> unit [@@js.set "prototype"]
-  val create: t -> AbortController.t [@@js.apply_newable]
-end
-module AnonymousInterface0 : sig
-  type t = private Ojs.t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val get_FILTER_ACCEPT: t -> float [@@js.get "FILTER_ACCEPT"]
-  val get_FILTER_REJECT: t -> float [@@js.get "FILTER_REJECT"]
-  val get_FILTER_SKIP: t -> float [@@js.get "FILTER_SKIP"]
-  val get_SHOW_ALL: t -> float [@@js.get "SHOW_ALL"]
-  val get_SHOW_ATTRIBUTE: t -> float [@@js.get "SHOW_ATTRIBUTE"]
-  val get_SHOW_CDATA_SECTION: t -> float [@@js.get "SHOW_CDATA_SECTION"]
-  val get_SHOW_COMMENT: t -> float [@@js.get "SHOW_COMMENT"]
-  val get_SHOW_DOCUMENT: t -> float [@@js.get "SHOW_DOCUMENT"]
-  val get_SHOW_DOCUMENT_FRAGMENT: t -> float [@@js.get "SHOW_DOCUMENT_FRAGMENT"]
-  val get_SHOW_DOCUMENT_TYPE: t -> float [@@js.get "SHOW_DOCUMENT_TYPE"]
-  val get_SHOW_ELEMENT: t -> float [@@js.get "SHOW_ELEMENT"]
-  val get_SHOW_ENTITY: t -> float [@@js.get "SHOW_ENTITY"]
-  val get_SHOW_ENTITY_REFERENCE: t -> float [@@js.get "SHOW_ENTITY_REFERENCE"]
-  val get_SHOW_NOTATION: t -> float [@@js.get "SHOW_NOTATION"]
-  val get_SHOW_PROCESSING_INSTRUCTION: t -> float [@@js.get "SHOW_PROCESSING_INSTRUCTION"]
-  val get_SHOW_TEXT: t -> float [@@js.get "SHOW_TEXT"]
+module[@js.scope "Audio"] Audio : sig
+  val create: ?src:string -> unit -> HTMLAudioElement.t [@@js.create]
 end
 module AnimationEventMap : sig
   type t = [`AnimationEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -55180,1440 +49683,34 @@ module AbortSignalEventMap : sig
   val set_abort: 'tags this -> Event.t -> unit [@@js.set "abort"]
   val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
 end
-val nodeFilter: unit -> AnonymousInterface0.t [@@js.get "NodeFilter"]
 
 (** A controller object that allows you to abort one or more DOM requests as and when desired. *)
-val abortController: unit -> AnonymousInterface1.t [@@js.get "AbortController"]
-
-(** A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object. *)
-val abortSignal: unit -> AnonymousInterface2.t [@@js.get "AbortSignal"]
-val abstractRange: unit -> AnonymousInterface3.t [@@js.get "AbstractRange"]
-
-(** A node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations. *)
-val analyserNode: unit -> AnonymousInterface4.t [@@js.get "AnalyserNode"]
-val animation: unit -> AnonymousInterface5.t [@@js.get "Animation"]
-val animationEffect: unit -> AnonymousInterface6.t [@@js.get "AnimationEffect"]
-
-(** Events providing information related to animations. *)
-val animationEvent: unit -> AnonymousInterface7.t [@@js.get "AnimationEvent"]
-val animationPlaybackEvent: unit -> AnonymousInterface8.t [@@js.get "AnimationPlaybackEvent"]
-val animationTimeline: unit -> AnonymousInterface9.t [@@js.get "AnimationTimeline"]
-
-(** A DOM element's attribute as an object. In most DOM methods, you will probably directly retrieve the attribute as a string (e.g., Element.getAttribute(), but certain functions (e.g., Element.getAttributeNode()) or means of iterating give Attr types. *)
-val attr: unit -> AnonymousInterface10.t [@@js.get "Attr"]
-
-(** A short audio asset residing in memory, created from an audio file using the AudioContext.decodeAudioData() method, or from raw data using AudioContext.createBuffer(). Once put into an AudioBuffer, the audio can then be played by being passed into an AudioBufferSourceNode. *)
-val audioBuffer: unit -> AnonymousInterface11.t [@@js.get "AudioBuffer"]
-
-(** An AudioScheduledSourceNode which represents an audio source consisting of in-memory audio data, stored in an AudioBuffer. It's especially useful for playing back audio which has particularly stringent timing accuracy requirements, such as for sounds that must match a specific rhythm and can be kept in memory rather than being played from disk or the network. *)
-val audioBufferSourceNode: unit -> AnonymousInterface12.t [@@js.get "AudioBufferSourceNode"]
-
-(** An audio-processing graph built from audio modules linked together, each represented by an AudioNode. *)
-val audioContext: unit -> AnonymousInterface13.t [@@js.get "AudioContext"]
-
-(** AudioDestinationNode has no output (as it is the output, no more AudioNode can be linked after it in the audio graph) and one input. The number of channels in the input must be between 0 and the maxChannelCount value or an exception is raised. *)
-val audioDestinationNode: unit -> AnonymousInterface14.t [@@js.get "AudioDestinationNode"]
-
-(** The position and orientation of the unique person listening to the audio scene, and is used in audio spatialization. All PannerNodes spatialize in relation to the AudioListener stored in the BaseAudioContext.listener attribute. *)
-val audioListener: unit -> AnonymousInterface15.t [@@js.get "AudioListener"]
-
-(** A generic interface for representing an audio processing module. Examples include: *)
-val audioNode: unit -> AnonymousInterface16.t [@@js.get "AudioNode"]
-
-(** The Web Audio API's AudioParam interface represents an audio-related parameter, usually a parameter of an AudioNode (such as GainNode.gain). *)
-val audioParam: unit -> AnonymousInterface17.t [@@js.get "AudioParam"]
-val audioParamMap: unit -> AnonymousInterface18.t [@@js.get "AudioParamMap"]
-
-(**
-  The Web Audio API events that occur when a ScriptProcessorNode input buffer is ready to be processed.
-  @deprecated 
-*)
-val audioProcessingEvent: unit -> AnonymousInterface19.t [@@js.get "AudioProcessingEvent"]
-val audioScheduledSourceNode: unit -> AnonymousInterface20.t [@@js.get "AudioScheduledSourceNode"]
-
-(** Available only in secure contexts. *)
-val audioWorklet: unit -> AnonymousInterface21.t [@@js.get "AudioWorklet"]
-
-(** Available only in secure contexts. *)
-val audioWorkletNode: unit -> AnonymousInterface22.t [@@js.get "AudioWorkletNode"]
-
-(** Available only in secure contexts. *)
-val authenticatorAssertionResponse: unit -> AnonymousInterface23.t [@@js.get "AuthenticatorAssertionResponse"]
-
-(** Available only in secure contexts. *)
-val authenticatorAttestationResponse: unit -> AnonymousInterface24.t [@@js.get "AuthenticatorAttestationResponse"]
-
-(** Available only in secure contexts. *)
-val authenticatorResponse: unit -> AnonymousInterface25.t [@@js.get "AuthenticatorResponse"]
-val barProp: unit -> AnonymousInterface26.t [@@js.get "BarProp"]
-val baseAudioContext: unit -> AnonymousInterface27.t [@@js.get "BaseAudioContext"]
-
-(** The beforeunload event is fired when the window, the document and its resources are about to be unloaded. *)
-val beforeUnloadEvent: unit -> AnonymousInterface28.t [@@js.get "BeforeUnloadEvent"]
-
-(** A simple low-order filter, and is created using the AudioContext.createBiquadFilter() method. It is an AudioNode that can represent different kinds of filters, tone control devices, and graphic equalizers. *)
-val biquadFilterNode: unit -> AnonymousInterface29.t [@@js.get "BiquadFilterNode"]
-
-(** A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system. *)
-val blob: unit -> AnonymousInterface30.t [@@js.get "Blob"]
-val blobEvent: unit -> AnonymousInterface31.t [@@js.get "BlobEvent"]
-val broadcastChannel: unit -> AnonymousInterface32.t [@@js.get "BroadcastChannel"]
-
-(** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
-val byteLengthQueuingStrategy: unit -> AnonymousInterface33.t [@@js.get "ByteLengthQueuingStrategy"]
-
-(** A CDATA section that can be used within XML to include extended portions of unescaped text. The symbols < and & don’t need escaping as they normally do when inside a CDATA section. *)
-val cDATASection: unit -> AnonymousInterface34.t [@@js.get "CDATASection"]
-val cSSAnimation: unit -> AnonymousInterface35.t [@@js.get "CSSAnimation"]
-
-(** A single condition CSS at-rule, which consists of a condition and a statement block. It is a child of CSSGroupingRule. *)
-val cSSConditionRule: unit -> AnonymousInterface36.t [@@js.get "CSSConditionRule"]
-val cSSCounterStyleRule: unit -> AnonymousInterface37.t [@@js.get "CSSCounterStyleRule"]
-val cSSFontFaceRule: unit -> AnonymousInterface38.t [@@js.get "CSSFontFaceRule"]
-
-(** Any CSS at-rule that contains other rules nested within it. *)
-val cSSGroupingRule: unit -> AnonymousInterface39.t [@@js.get "CSSGroupingRule"]
-val cSSImportRule: unit -> AnonymousInterface40.t [@@js.get "CSSImportRule"]
-
-(** An object representing a set of style for a given keyframe. It corresponds to the contains of a single keyframe of a \@keyframes at-rule. It implements the CSSRule interface with a type value of 8 (CSSRule.KEYFRAME_RULE). *)
-val cSSKeyframeRule: unit -> AnonymousInterface41.t [@@js.get "CSSKeyframeRule"]
-
-(** An object representing a complete set of keyframes for a CSS animation. It corresponds to the contains of a whole \@keyframes at-rule. It implements the CSSRule interface with a type value of 7 (CSSRule.KEYFRAMES_RULE). *)
-val cSSKeyframesRule: unit -> AnonymousInterface42.t [@@js.get "CSSKeyframesRule"]
-
-(** A single CSS \@media rule. It implements the CSSConditionRule interface, and therefore the CSSGroupingRule and the CSSRule interface with a type value of 4 (CSSRule.MEDIA_RULE). *)
-val cSSMediaRule: unit -> AnonymousInterface43.t [@@js.get "CSSMediaRule"]
-
-(** An object representing a single CSS \@namespace at-rule. It implements the CSSRule interface, with a type value of 10 (CSSRule.NAMESPACE_RULE). *)
-val cSSNamespaceRule: unit -> AnonymousInterface44.t [@@js.get "CSSNamespaceRule"]
-
-(** CSSPageRule is an interface representing a single CSS \@page rule. It implements the CSSRule interface with a type value of 6 (CSSRule.PAGE_RULE). *)
-val cSSPageRule: unit -> AnonymousInterface45.t [@@js.get "CSSPageRule"]
-
-(** A single CSS rule. There are several types of rules, listed in the Type constants section below. *)
-val cSSRule: unit -> AnonymousInterface46.t [@@js.get "CSSRule"]
-
-(** A CSSRuleList is an (indirect-modify only) array-like object containing an ordered collection of CSSRule objects. *)
-val cSSRuleList: unit -> AnonymousInterface47.t [@@js.get "CSSRuleList"]
-
-(** An object that is a CSS declaration block, and exposes style information and various style-related methods and properties. *)
-val cSSStyleDeclaration: unit -> AnonymousInterface48.t [@@js.get "CSSStyleDeclaration"]
-
-(** CSSStyleRule represents a single CSS style rule. It implements the CSSRule interface with a type value of 1 (CSSRule.STYLE_RULE). *)
-val cSSStyleRule: unit -> AnonymousInterface49.t [@@js.get "CSSStyleRule"]
-
-(** A single CSS style sheet. It inherits properties and methods from its parent, StyleSheet. *)
-val cSSStyleSheet: unit -> AnonymousInterface50.t [@@js.get "CSSStyleSheet"]
-
-(** An object representing a single CSS \@supports at-rule. It implements the CSSConditionRule interface, and therefore the CSSRule and CSSGroupingRule interfaces with a type value of 12 (CSSRule.SUPPORTS_RULE). *)
-val cSSSupportsRule: unit -> AnonymousInterface51.t [@@js.get "CSSSupportsRule"]
-val cSSTransition: unit -> AnonymousInterface52.t [@@js.get "CSSTransition"]
-
-(**
-  Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec.
-  Available only in secure contexts.
-*)
-val cache: unit -> AnonymousInterface53.t [@@js.get "Cache"]
-
-(**
-  The storage for Cache objects.
-  Available only in secure contexts.
-*)
-val cacheStorage: unit -> AnonymousInterface54.t [@@js.get "CacheStorage"]
-
-(** An opaque object describing a gradient. It is returned by the methods CanvasRenderingContext2D.createLinearGradient() or CanvasRenderingContext2D.createRadialGradient(). *)
-val canvasGradient: unit -> AnonymousInterface55.t [@@js.get "CanvasGradient"]
-
-(** An opaque object describing a pattern, based on an image, a canvas, or a video, created by the CanvasRenderingContext2D.createPattern() method. *)
-val canvasPattern: unit -> AnonymousInterface56.t [@@js.get "CanvasPattern"]
-
-(** The CanvasRenderingContext2D interface, part of the Canvas API, provides the 2D rendering context for the drawing surface of a <canvas> element. It is used for drawing shapes, text, images, and other objects. *)
-val canvasRenderingContext2D: unit -> AnonymousInterface57.t [@@js.get "CanvasRenderingContext2D"]
-
-(** The ChannelMergerNode interface, often used in conjunction with its opposite, ChannelSplitterNode, reunites different mono inputs into a single output. Each input is used to fill a channel of the output. This is useful for accessing each channels separately, e.g. for performing channel mixing where gain must be separately controlled on each channel. *)
-val channelMergerNode: unit -> AnonymousInterface58.t [@@js.get "ChannelMergerNode"]
-
-(** The ChannelSplitterNode interface, often used in conjunction with its opposite, ChannelMergerNode, separates the different channels of an audio source into a set of mono outputs. This is useful for accessing each channel separately, e.g. for performing channel mixing where gain must be separately controlled on each channel. *)
-val channelSplitterNode: unit -> AnonymousInterface59.t [@@js.get "ChannelSplitterNode"]
-
-(** The CharacterData abstract interface represents a Node object that contains characters. This is an abstract interface, meaning there aren't any object of type CharacterData: it is implemented by other interfaces, like Text, Comment, or ProcessingInstruction which aren't abstract. *)
-val characterData: unit -> AnonymousInterface60.t [@@js.get "CharacterData"]
-
-(** Available only in secure contexts. *)
-val clipboard: unit -> AnonymousInterface61.t [@@js.get "Clipboard"]
-
-(** Events providing information related to modification of the clipboard, that is cut, copy, and paste events. *)
-val clipboardEvent: unit -> AnonymousInterface62.t [@@js.get "ClipboardEvent"]
-val clipboardItem: unit -> AnonymousInterface63.t [@@js.get "ClipboardItem"]
-
-(** A CloseEvent is sent to clients using WebSockets when the connection is closed. This is delivered to the listener indicated by the WebSocket object's onclose attribute. *)
-val closeEvent: unit -> AnonymousInterface64.t [@@js.get "CloseEvent"]
-
-(** Textual notations within markup; although it is generally not visually shown, such comments are available to be read in the source view. *)
-val comment: unit -> AnonymousInterface65.t [@@js.get "Comment"]
-
-(** The DOM CompositionEvent represents events that occur due to the user indirectly entering text. *)
-val compositionEvent: unit -> AnonymousInterface67.t [@@js.get "CompositionEvent"]
-val constantSourceNode: unit -> AnonymousInterface68.t [@@js.get "ConstantSourceNode"]
-
-(** An AudioNode that performs a Linear Convolution on a given AudioBuffer, often used to achieve a reverb effect. A ConvolverNode always has exactly one input and one output. *)
-val convolverNode: unit -> AnonymousInterface69.t [@@js.get "ConvolverNode"]
-
-(** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
-val countQueuingStrategy: unit -> AnonymousInterface70.t [@@js.get "CountQueuingStrategy"]
-
-(** Available only in secure contexts. *)
-val credential: unit -> AnonymousInterface71.t [@@js.get "Credential"]
-
-(** Available only in secure contexts. *)
-val credentialsContainer: unit -> AnonymousInterface72.t [@@js.get "CredentialsContainer"]
-
-(** Basic cryptography features available in the current context. It allows access to a cryptographically strong random number generator and to cryptographic primitives. *)
-val crypto: unit -> AnonymousInterface73.t [@@js.get "Crypto"]
-
-(**
-  The CryptoKey dictionary of the Web Crypto API represents a cryptographic key.
-  Available only in secure contexts.
-*)
-val cryptoKey: unit -> AnonymousInterface74.t [@@js.get "CryptoKey"]
-val customElementRegistry: unit -> AnonymousInterface75.t [@@js.get "CustomElementRegistry"]
-val customEvent: unit -> AnonymousInterface76.t [@@js.get "CustomEvent"]
-
-(** An abnormal event (called an exception) which occurs as a result of calling a method or accessing a property of a web API. *)
-val dOMException: unit -> AnonymousInterface77.t [@@js.get "DOMException"]
-
-(** An object providing methods which are not dependent on any particular document. Such an object is returned by the Document.implementation property. *)
-val dOMImplementation: unit -> AnonymousInterface78.t [@@js.get "DOMImplementation"]
-val dOMMatrix: unit -> AnonymousInterface79.t [@@js.get "DOMMatrix"]
-val sVGMatrix: unit -> AnonymousInterface79.t [@@js.get "SVGMatrix"]
-val webKitCSSMatrix: unit -> AnonymousInterface79.t [@@js.get "WebKitCSSMatrix"]
-val dOMMatrixReadOnly: unit -> AnonymousInterface80.t [@@js.get "DOMMatrixReadOnly"]
-
-(** Provides the ability to parse XML or HTML source code from a string into a DOM Document. *)
-val dOMParser: unit -> AnonymousInterface81.t [@@js.get "DOMParser"]
-val dOMPoint: unit -> AnonymousInterface82.t [@@js.get "DOMPoint"]
-val sVGPoint: unit -> AnonymousInterface82.t [@@js.get "SVGPoint"]
-val dOMPointReadOnly: unit -> AnonymousInterface83.t [@@js.get "DOMPointReadOnly"]
-val dOMQuad: unit -> AnonymousInterface84.t [@@js.get "DOMQuad"]
-val dOMRect: unit -> AnonymousInterface85.t [@@js.get "DOMRect"]
-val sVGRect: unit -> AnonymousInterface85.t [@@js.get "SVGRect"]
-val dOMRectList: unit -> AnonymousInterface86.t [@@js.get "DOMRectList"]
-val dOMRectReadOnly: unit -> AnonymousInterface87.t [@@js.get "DOMRectReadOnly"]
-
-(** A type returned by some APIs which contains a list of DOMString (strings). *)
-val dOMStringList: unit -> AnonymousInterface88.t [@@js.get "DOMStringList"]
-
-(** Used by the dataset HTML attribute to represent data for custom attributes added to elements. *)
-val dOMStringMap: unit -> AnonymousInterface89.t [@@js.get "DOMStringMap"]
-
-(** A set of space-separated tokens. Such a set is returned by Element.classList, HTMLLinkElement.relList, HTMLAnchorElement.relList, HTMLAreaElement.relList, HTMLIframeElement.sandbox, or HTMLOutputElement.htmlFor. It is indexed beginning with 0 as with JavaScript Array objects. DOMTokenList is always case-sensitive. *)
-val dOMTokenList: unit -> AnonymousInterface90.t [@@js.get "DOMTokenList"]
-
-(** Used to hold the data that is being dragged during a drag and drop operation. It may hold one or more data items, each of one or more data types. For more information about drag and drop, see HTML Drag and Drop API. *)
-val dataTransfer: unit -> AnonymousInterface91.t [@@js.get "DataTransfer"]
-
-(** One drag data item. During a drag operation, each drag event has a dataTransfer property which contains a list of drag data items. Each item in the list is a DataTransferItem object. *)
-val dataTransferItem: unit -> AnonymousInterface92.t [@@js.get "DataTransferItem"]
-
-(** A list of DataTransferItem objects representing items being dragged. During a drag operation, each DragEvent has a dataTransfer property and that property is a DataTransferItemList. *)
-val dataTransferItemList: unit -> AnonymousInterface93.t [@@js.get "DataTransferItemList"]
-
-(** A delay-line; an AudioNode audio-processing module that causes a delay between the arrival of an input data and its propagation to the output. *)
-val delayNode: unit -> AnonymousInterface94.t [@@js.get "DelayNode"]
-
-(**
-  The DeviceMotionEvent provides web developers with information about the speed of changes for the device's position and orientation.
-  Available only in secure contexts.
-*)
-val deviceMotionEvent: unit -> AnonymousInterface95.t [@@js.get "DeviceMotionEvent"]
-
-(**
-  The DeviceOrientationEvent provides web developers with information from the physical orientation of the device running the web page.
-  Available only in secure contexts.
-*)
-val deviceOrientationEvent: unit -> AnonymousInterface96.t [@@js.get "DeviceOrientationEvent"]
-
-(** Any web page loaded in the browser and serves as an entry point into the web page's content, which is the DOM tree. *)
-val document: unit -> AnonymousInterface97.t [@@js.get "Document"]
-
-(** A minimal document object that has no parent. It is used as a lightweight version of Document that stores a segment of a document structure comprised of nodes just like a standard document. The key difference is that because the document fragment isn't part of the active document tree structure, changes made to the fragment don't affect the document, cause reflow, or incur any performance impact that can occur when changes are made. *)
-val documentFragment: unit -> AnonymousInterface98.t [@@js.get "DocumentFragment"]
-val documentTimeline: unit -> AnonymousInterface99.t [@@js.get "DocumentTimeline"]
-
-(** A Node containing a doctype. *)
-val documentType: unit -> AnonymousInterface100.t [@@js.get "DocumentType"]
-
-(** A DOM event that represents a drag and drop interaction. The user initiates a drag by placing a pointer device (such as a mouse) on the touch surface and then dragging the pointer to a new location (such as another DOM element). Applications are free to interpret a drag and drop interaction in an application-specific way. *)
-val dragEvent: unit -> AnonymousInterface101.t [@@js.get "DragEvent"]
-
-(** Inherits properties from its parent, AudioNode. *)
-val dynamicsCompressorNode: unit -> AnonymousInterface102.t [@@js.get "DynamicsCompressorNode"]
-
-(** Element is the most general base class from which all objects in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element. *)
-val element: unit -> AnonymousInterface103.t [@@js.get "Element"]
-val elementInternals: unit -> AnonymousInterface104.t [@@js.get "ElementInternals"]
-
-(** Events providing information related to errors in scripts or in files. *)
-val errorEvent: unit -> AnonymousInterface105.t [@@js.get "ErrorEvent"]
-
-(** An event which takes place in the DOM. *)
-val event: unit -> AnonymousInterface106.t [@@js.get "Event"]
-val eventSource: unit -> AnonymousInterface107.t [@@js.get "EventSource"]
-
-(** EventTarget is a DOM interface implemented by objects that can receive events and may have listeners for them. *)
-val eventTarget: unit -> AnonymousInterface108.t [@@js.get "EventTarget"]
-
-(** @deprecated  *)
-val external_: unit -> AnonymousInterface109.t [@@js.get "External"]
-
-(** Provides information about files and allows JavaScript in a web page to access their content. *)
-val file: unit -> AnonymousInterface110.t [@@js.get "File"]
-
-(** An object of this type is returned by the files property of the HTML <input> element; this lets you access the list of files selected with the <input type="file"> element. It's also used for a list of files dropped into web content when using the drag and drop API; see the DataTransfer object for details on this usage. *)
-val fileList: unit -> AnonymousInterface111.t [@@js.get "FileList"]
-
-(** Lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read. *)
-val fileReader: unit -> AnonymousInterface112.t [@@js.get "FileReader"]
-val fileSystem: unit -> AnonymousInterface113.t [@@js.get "FileSystem"]
-val fileSystemDirectoryEntry: unit -> AnonymousInterface114.t [@@js.get "FileSystemDirectoryEntry"]
-val fileSystemDirectoryReader: unit -> AnonymousInterface115.t [@@js.get "FileSystemDirectoryReader"]
-val fileSystemEntry: unit -> AnonymousInterface116.t [@@js.get "FileSystemEntry"]
-val fileSystemFileEntry: unit -> AnonymousInterface117.t [@@js.get "FileSystemFileEntry"]
-
-(** Focus-related events like focus, blur, focusin, or focusout. *)
-val focusEvent: unit -> AnonymousInterface118.t [@@js.get "FocusEvent"]
-val fontFace: unit -> AnonymousInterface119.t [@@js.get "FontFace"]
-val fontFaceSet: unit -> AnonymousInterface120.t [@@js.get "FontFaceSet"]
-val fontFaceSetLoadEvent: unit -> AnonymousInterface121.t [@@js.get "FontFaceSetLoadEvent"]
-
-(** Provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to "multipart/form-data". *)
-val formData: unit -> AnonymousInterface122.t [@@js.get "FormData"]
-val formDataEvent: unit -> AnonymousInterface123.t [@@js.get "FormDataEvent"]
-
-(** A change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same number of channels. *)
-val gainNode: unit -> AnonymousInterface124.t [@@js.get "GainNode"]
-
-(**
-  This Gamepad API interface defines an individual gamepad or other controller, allowing access to information such as button presses, axis positions, and id.
-  Available only in secure contexts.
-*)
-val gamepad: unit -> AnonymousInterface125.t [@@js.get "Gamepad"]
-
-(**
-  An individual button of a gamepad or other controller, allowing access to the current state of different types of buttons available on the control device.
-  Available only in secure contexts.
-*)
-val gamepadButton: unit -> AnonymousInterface126.t [@@js.get "GamepadButton"]
-
-(**
-  This Gamepad API interface contains references to gamepads connected to the system, which is what the gamepad events Window.gamepadconnected and Window.gamepaddisconnected are fired in response to.
-  Available only in secure contexts.
-*)
-val gamepadEvent: unit -> AnonymousInterface127.t [@@js.get "GamepadEvent"]
-
-(** This Gamepad API interface represents hardware in the controller designed to provide haptic feedback to the user (if available), most commonly vibration hardware. *)
-val gamepadHapticActuator: unit -> AnonymousInterface128.t [@@js.get "GamepadHapticActuator"]
-
-(** An object able to programmatically obtain the position of the device. It gives Web content access to the location of the device. This allows a Web site or app to offer customized results based on the user's location. *)
-val geolocation: unit -> AnonymousInterface129.t [@@js.get "Geolocation"]
-
-(** Available only in secure contexts. *)
-val geolocationCoordinates: unit -> AnonymousInterface130.t [@@js.get "GeolocationCoordinates"]
-
-(** Available only in secure contexts. *)
-val geolocationPosition: unit -> AnonymousInterface131.t [@@js.get "GeolocationPosition"]
-val geolocationPositionError: unit -> AnonymousInterface132.t [@@js.get "GeolocationPositionError"]
-val hTMLAllCollection: unit -> AnonymousInterface134.t [@@js.get "HTMLAllCollection"]
-
-(** Hyperlink elements and provides special properties and methods (beyond those of the regular HTMLElement object interface that they inherit from) for manipulating the layout and presentation of such elements. *)
-val hTMLAnchorElement: unit -> AnonymousInterface135.t [@@js.get "HTMLAnchorElement"]
-
-(** Provides special properties and methods (beyond those of the regular object HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <area> elements. *)
-val hTMLAreaElement: unit -> AnonymousInterface136.t [@@js.get "HTMLAreaElement"]
-
-(** Provides access to the properties of <audio> elements, as well as methods to manipulate them. It derives from the HTMLMediaElement interface. *)
-val hTMLAudioElement: unit -> AnonymousInterface137.t [@@js.get "HTMLAudioElement"]
-
-(** A HTML line break element (<br>). It inherits from HTMLElement. *)
-val hTMLBRElement: unit -> AnonymousInterface138.t [@@js.get "HTMLBRElement"]
-
-(** Contains the base URI for a document. This object inherits all of the properties and methods as described in the HTMLElement interface. *)
-val hTMLBaseElement: unit -> AnonymousInterface139.t [@@js.get "HTMLBaseElement"]
-
-(** Provides special properties (beyond those inherited from the regular HTMLElement interface) for manipulating <body> elements. *)
-val hTMLBodyElement: unit -> AnonymousInterface140.t [@@js.get "HTMLBodyElement"]
-
-(** Provides properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <button> elements. *)
-val hTMLButtonElement: unit -> AnonymousInterface141.t [@@js.get "HTMLButtonElement"]
-
-(** Provides properties and methods for manipulating the layout and presentation of <canvas> elements. The HTMLCanvasElement interface also inherits the properties and methods of the HTMLElement interface. *)
-val hTMLCanvasElement: unit -> AnonymousInterface142.t [@@js.get "HTMLCanvasElement"]
-val hTMLCollection: unit -> AnonymousInterface143.t [@@js.get "HTMLCollection"]
-
-(** Provides special properties (beyond those of the regular HTMLElement interface it also has available to it by inheritance) for manipulating definition list (<dl>) elements. *)
-val hTMLDListElement: unit -> AnonymousInterface144.t [@@js.get "HTMLDListElement"]
-
-(** Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <data> elements. *)
-val hTMLDataElement: unit -> AnonymousInterface145.t [@@js.get "HTMLDataElement"]
-
-(** Provides special properties (beyond the HTMLElement object interface it also has available to it by inheritance) to manipulate <datalist> elements and their content. *)
-val hTMLDataListElement: unit -> AnonymousInterface146.t [@@js.get "HTMLDataListElement"]
-val hTMLDetailsElement: unit -> AnonymousInterface147.t [@@js.get "HTMLDetailsElement"]
-
-(** @deprecated  *)
-val hTMLDirectoryElement: unit -> AnonymousInterface148.t [@@js.get "HTMLDirectoryElement"]
-
-(** Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <div> elements. *)
-val hTMLDivElement: unit -> AnonymousInterface149.t [@@js.get "HTMLDivElement"]
-
-(** @deprecated  *)
-val hTMLDocument: unit -> AnonymousInterface150.t [@@js.get "HTMLDocument"]
-
-(** Any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it. *)
-val hTMLElement: unit -> AnonymousInterface151.t [@@js.get "HTMLElement"]
-
-(** Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <embed> elements. *)
-val hTMLEmbedElement: unit -> AnonymousInterface152.t [@@js.get "HTMLEmbedElement"]
-
-(** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <fieldset> elements. *)
-val hTMLFieldSetElement: unit -> AnonymousInterface153.t [@@js.get "HTMLFieldSetElement"]
-
-(**
-  Implements the document object model (DOM) representation of the font element. The HTML Font Element <font> defines the font size, font face and color of text.
-  @deprecated 
-*)
-val hTMLFontElement: unit -> AnonymousInterface154.t [@@js.get "HTMLFontElement"]
-
-(** A collection of HTML form control elements. *)
-val hTMLFormControlsCollection: unit -> AnonymousInterface155.t [@@js.get "HTMLFormControlsCollection"]
-
-(** A <form> element in the DOM; it allows access to and in some cases modification of aspects of the form, as well as access to its component elements. *)
-val hTMLFormElement: unit -> AnonymousInterface156.t [@@js.get "HTMLFormElement"]
-
-(** @deprecated  *)
-val hTMLFrameElement: unit -> AnonymousInterface157.t [@@js.get "HTMLFrameElement"]
-
-(**
-  Provides special properties (beyond those of the regular HTMLElement interface they also inherit) for manipulating <frameset> elements.
-  @deprecated 
-*)
-val hTMLFrameSetElement: unit -> AnonymousInterface158.t [@@js.get "HTMLFrameSetElement"]
-
-(** Provides special properties (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating <hr> elements. *)
-val hTMLHRElement: unit -> AnonymousInterface159.t [@@js.get "HTMLHRElement"]
-
-(** Contains the descriptive information, or metadata, for a document. This object inherits all of the properties and methods described in the HTMLElement interface. *)
-val hTMLHeadElement: unit -> AnonymousInterface160.t [@@js.get "HTMLHeadElement"]
-
-(** The different heading elements. It inherits methods and properties from the HTMLElement interface. *)
-val hTMLHeadingElement: unit -> AnonymousInterface161.t [@@js.get "HTMLHeadingElement"]
-
-(** Serves as the root node for a given HTML document. This object inherits the properties and methods described in the HTMLElement interface. *)
-val hTMLHtmlElement: unit -> AnonymousInterface162.t [@@js.get "HTMLHtmlElement"]
-
-(** Provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements. *)
-val hTMLIFrameElement: unit -> AnonymousInterface163.t [@@js.get "HTMLIFrameElement"]
-
-(** Provides special properties and methods for manipulating <img> elements. *)
-val hTMLImageElement: unit -> AnonymousInterface164.t [@@js.get "HTMLImageElement"]
-
-(** Provides special properties and methods for manipulating the options, layout, and presentation of <input> elements. *)
-val hTMLInputElement: unit -> AnonymousInterface165.t [@@js.get "HTMLInputElement"]
-
-(** Exposes specific properties and methods (beyond those defined by regular HTMLElement interface it also has available to it by inheritance) for manipulating list elements. *)
-val hTMLLIElement: unit -> AnonymousInterface166.t [@@js.get "HTMLLIElement"]
-
-(** Gives access to properties specific to <label> elements. It inherits methods and properties from the base HTMLElement interface. *)
-val hTMLLabelElement: unit -> AnonymousInterface167.t [@@js.get "HTMLLabelElement"]
-
-(** The HTMLLegendElement is an interface allowing to access properties of the <legend> elements. It inherits properties and methods from the HTMLElement interface. *)
-val hTMLLegendElement: unit -> AnonymousInterface168.t [@@js.get "HTMLLegendElement"]
-
-(** Reference information for external resources and the relationship of those resources to a document and vice-versa. This object inherits all of the properties and methods of the HTMLElement interface. *)
-val hTMLLinkElement: unit -> AnonymousInterface169.t [@@js.get "HTMLLinkElement"]
-
-(** Provides special properties and methods (beyond those of the regular object HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of map elements. *)
-val hTMLMapElement: unit -> AnonymousInterface170.t [@@js.get "HTMLMapElement"]
-
-(**
-  Provides methods to manipulate <marquee> elements.
-  @deprecated 
-*)
-val hTMLMarqueeElement: unit -> AnonymousInterface171.t [@@js.get "HTMLMarqueeElement"]
-
-(** Adds to HTMLElement the properties and methods needed to support basic media-related capabilities that are common to audio and video. *)
-val hTMLMediaElement: unit -> AnonymousInterface172.t [@@js.get "HTMLMediaElement"]
-val hTMLMenuElement: unit -> AnonymousInterface173.t [@@js.get "HTMLMenuElement"]
-
-(** Contains descriptive metadata about a document. It inherits all of the properties and methods described in the HTMLElement interface. *)
-val hTMLMetaElement: unit -> AnonymousInterface174.t [@@js.get "HTMLMetaElement"]
-
-(** The HTML <meter> elements expose the HTMLMeterElement interface, which provides special properties and methods (beyond the HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of <meter> elements. *)
-val hTMLMeterElement: unit -> AnonymousInterface175.t [@@js.get "HTMLMeterElement"]
-
-(** Provides special properties (beyond the regular methods and properties available through the HTMLElement interface they also have available to them by inheritance) for manipulating modification elements, that is <del> and <ins>. *)
-val hTMLModElement: unit -> AnonymousInterface176.t [@@js.get "HTMLModElement"]
-
-(** Provides special properties (beyond those defined on the regular HTMLElement interface it also has available to it by inheritance) for manipulating ordered list elements. *)
-val hTMLOListElement: unit -> AnonymousInterface177.t [@@js.get "HTMLOListElement"]
-
-(** Provides special properties and methods (beyond those on the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <object> element, representing external resources. *)
-val hTMLObjectElement: unit -> AnonymousInterface178.t [@@js.get "HTMLObjectElement"]
-
-(** Provides special properties and methods (beyond the regular HTMLElement object interface they also have available to them by inheritance) for manipulating the layout and presentation of <optgroup> elements. *)
-val hTMLOptGroupElement: unit -> AnonymousInterface179.t [@@js.get "HTMLOptGroupElement"]
-
-(** <option> elements and inherits all classes and methods of the HTMLElement interface. *)
-val hTMLOptionElement: unit -> AnonymousInterface180.t [@@js.get "HTMLOptionElement"]
-
-(** HTMLOptionsCollection is an interface representing a collection of HTML option elements (in document order) and offers methods and properties for traversing the list as well as optionally altering its items. This type is returned solely by the "options" property of select. *)
-val hTMLOptionsCollection: unit -> AnonymousInterface181.t [@@js.get "HTMLOptionsCollection"]
-
-(** Provides properties and methods (beyond those inherited from HTMLElement) for manipulating the layout and presentation of <output> elements. *)
-val hTMLOutputElement: unit -> AnonymousInterface182.t [@@js.get "HTMLOutputElement"]
-
-(** Provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating <p> elements. *)
-val hTMLParagraphElement: unit -> AnonymousInterface183.t [@@js.get "HTMLParagraphElement"]
-
-(** Provides special properties (beyond those of the regular HTMLElement object interface it inherits) for manipulating <param> elements, representing a pair of a key and a value that acts as a parameter for an <object> element. *)
-val hTMLParamElement: unit -> AnonymousInterface184.t [@@js.get "HTMLParamElement"]
-
-(** A <picture> HTML element. It doesn't implement specific properties or methods. *)
-val hTMLPictureElement: unit -> AnonymousInterface185.t [@@js.get "HTMLPictureElement"]
-
-(** Exposes specific properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating a block of preformatted text (<pre>). *)
-val hTMLPreElement: unit -> AnonymousInterface186.t [@@js.get "HTMLPreElement"]
-
-(** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of <progress> elements. *)
-val hTMLProgressElement: unit -> AnonymousInterface187.t [@@js.get "HTMLProgressElement"]
-
-(** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating quoting elements, like <blockquote> and <q>, but not the <cite> element. *)
-val hTMLQuoteElement: unit -> AnonymousInterface188.t [@@js.get "HTMLQuoteElement"]
-
-(** HTML <script> elements expose the HTMLScriptElement interface, which provides special properties and methods for manipulating the behavior and execution of <script> elements (beyond the inherited HTMLElement interface). *)
-val hTMLScriptElement: unit -> AnonymousInterface189.t [@@js.get "HTMLScriptElement"]
-
-(** A <select> HTML Element. These elements also share all of the properties and methods of other HTML elements via the HTMLElement interface. *)
-val hTMLSelectElement: unit -> AnonymousInterface190.t [@@js.get "HTMLSelectElement"]
-val hTMLSlotElement: unit -> AnonymousInterface191.t [@@js.get "HTMLSlotElement"]
-
-(** Provides special properties (beyond the regular HTMLElement object interface it also has available to it by inheritance) for manipulating <source> elements. *)
-val hTMLSourceElement: unit -> AnonymousInterface192.t [@@js.get "HTMLSourceElement"]
-
-(** A <span> element and derives from the HTMLElement interface, but without implementing any additional properties or methods. *)
-val hTMLSpanElement: unit -> AnonymousInterface193.t [@@js.get "HTMLSpanElement"]
-
-(** A <style> element. It inherits properties and methods from its parent, HTMLElement, and from LinkStyle. *)
-val hTMLStyleElement: unit -> AnonymousInterface194.t [@@js.get "HTMLStyleElement"]
-
-(** Special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating table caption elements. *)
-val hTMLTableCaptionElement: unit -> AnonymousInterface195.t [@@js.get "HTMLTableCaptionElement"]
-
-(** Provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of table cells, either header or data cells, in an HTML document. *)
-val hTMLTableCellElement: unit -> AnonymousInterface196.t [@@js.get "HTMLTableCellElement"]
-
-(** Provides special properties (beyond the HTMLElement interface it also has available to it inheritance) for manipulating single or grouped table column elements. *)
-val hTMLTableColElement: unit -> AnonymousInterface197.t [@@js.get "HTMLTableColElement"]
-
-(** Provides special properties and methods (beyond the regular HTMLElement object interface it also has available to it by inheritance) for manipulating the layout and presentation of tables in an HTML document. *)
-val hTMLTableElement: unit -> AnonymousInterface198.t [@@js.get "HTMLTableElement"]
-
-(** Provides special properties and methods (beyond the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of rows in an HTML table. *)
-val hTMLTableRowElement: unit -> AnonymousInterface199.t [@@js.get "HTMLTableRowElement"]
-
-(** Provides special properties and methods (beyond the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of sections, that is headers, footers and bodies, in an HTML table. *)
-val hTMLTableSectionElement: unit -> AnonymousInterface200.t [@@js.get "HTMLTableSectionElement"]
-
-(** Enables access to the contents of an HTML <template> element. *)
-val hTMLTemplateElement: unit -> AnonymousInterface201.t [@@js.get "HTMLTemplateElement"]
-
-(** Provides special properties and methods for manipulating the layout and presentation of <textarea> elements. *)
-val hTMLTextAreaElement: unit -> AnonymousInterface202.t [@@js.get "HTMLTextAreaElement"]
-
-(** Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <time> elements. *)
-val hTMLTimeElement: unit -> AnonymousInterface203.t [@@js.get "HTMLTimeElement"]
-
-(** Contains the title for a document. This element inherits all of the properties and methods of the HTMLElement interface. *)
-val hTMLTitleElement: unit -> AnonymousInterface204.t [@@js.get "HTMLTitleElement"]
-
-(** The HTMLTrackElement *)
-val hTMLTrackElement: unit -> AnonymousInterface205.t [@@js.get "HTMLTrackElement"]
-
-(** Provides special properties (beyond those defined on the regular HTMLElement interface it also has available to it by inheritance) for manipulating unordered list elements. *)
-val hTMLUListElement: unit -> AnonymousInterface206.t [@@js.get "HTMLUListElement"]
-
-(** An invalid HTML element and derives from the HTMLElement interface, but without implementing any additional properties or methods. *)
-val hTMLUnknownElement: unit -> AnonymousInterface207.t [@@js.get "HTMLUnknownElement"]
-
-(** Provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement. *)
-val hTMLVideoElement: unit -> AnonymousInterface208.t [@@js.get "HTMLVideoElement"]
-
-(** Events that fire when the fragment identifier of the URL has changed. *)
-val hashChangeEvent: unit -> AnonymousInterface209.t [@@js.get "HashChangeEvent"]
-
-(** This Fetch API interface allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists of zero or more name and value pairs.  You can add to this using methods like append() (see Examples.) In all methods of this interface, header names are matched by case-insensitive byte sequence. *)
-val headers: unit -> AnonymousInterface210.t [@@js.get "Headers"]
-
-(** Allows manipulation of the browser session history, that is the pages visited in the tab or frame that the current page is loaded in. *)
-val history: unit -> AnonymousInterface211.t [@@js.get "History"]
-
-(** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. *)
-val iDBCursor: unit -> AnonymousInterface212.t [@@js.get "IDBCursor"]
-
-(** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. It is the same as the IDBCursor, except that it includes the value property. *)
-val iDBCursorWithValue: unit -> AnonymousInterface213.t [@@js.get "IDBCursorWithValue"]
-
-(** This IndexedDB API interface provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database. *)
-val iDBDatabase: unit -> AnonymousInterface214.t [@@js.get "IDBDatabase"]
-
-(** In the following code snippet, we make a request to open a database, and include handlers for the success and error cases. For a full working example, see our To-do Notifications app (view example live.) *)
-val iDBFactory: unit -> AnonymousInterface215.t [@@js.get "IDBFactory"]
-
-(** IDBIndex interface of the IndexedDB API provides asynchronous access to an index in a database. An index is a kind of object store for looking up records in another object store, called the referenced object store. You use this interface to retrieve data. *)
-val iDBIndex: unit -> AnonymousInterface216.t [@@js.get "IDBIndex"]
-
-(** A key range can be a single value or a range with upper and lower bounds or endpoints. If the key range has both upper and lower bounds, then it is bounded; if it has no bounds, it is unbounded. A bounded key range can either be open (the endpoints are excluded) or closed (the endpoints are included). To retrieve all keys within a certain range, you can use the following code constructs: *)
-val iDBKeyRange: unit -> AnonymousInterface217.t [@@js.get "IDBKeyRange"]
-
-(** This example shows a variety of different uses of object stores, from updating the data structure with IDBObjectStore.createIndex inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our To-do Notifications app (view example live.) *)
-val iDBObjectStore: unit -> AnonymousInterface218.t [@@js.get "IDBObjectStore"]
-
-(** Also inherits methods from its parents IDBRequest and EventTarget. *)
-val iDBOpenDBRequest: unit -> AnonymousInterface219.t [@@js.get "IDBOpenDBRequest"]
-
-(** The request object does not initially contain any information about the result of the operation, but once information becomes available, an event is fired on the request, and the information becomes available through the properties of the IDBRequest instance. *)
-val iDBRequest: unit -> AnonymousInterface220.t [@@js.get "IDBRequest"]
-val iDBTransaction: unit -> AnonymousInterface221.t [@@js.get "IDBTransaction"]
-
-(** This IndexedDB API interface indicates that the version of the database has changed, as the result of an IDBOpenDBRequest.onupgradeneeded event handler function. *)
-val iDBVersionChangeEvent: unit -> AnonymousInterface222.t [@@js.get "IDBVersionChangeEvent"]
-
-(** The IIRFilterNode interface of the Web Audio API is a AudioNode processor which implements a general infinite impulse response (IIR)  filter; this type of filter can be used to implement tone control devices and graphic equalizers as well. It lets the parameters of the filter response be specified, so that it can be tuned as needed. *)
-val iIRFilterNode: unit -> AnonymousInterface223.t [@@js.get "IIRFilterNode"]
-val idleDeadline: unit -> AnonymousInterface224.t [@@js.get "IdleDeadline"]
-val imageBitmap: unit -> AnonymousInterface225.t [@@js.get "ImageBitmap"]
-val imageBitmapRenderingContext: unit -> AnonymousInterface226.t [@@js.get "ImageBitmapRenderingContext"]
-
-(** The underlying pixel data of an area of a <canvas> element. It is created using the ImageData() constructor or creator methods on the CanvasRenderingContext2D object associated with a canvas: createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData(). *)
-val imageData: unit -> AnonymousInterface227.t [@@js.get "ImageData"]
-val inputEvent: unit -> AnonymousInterface228.t [@@js.get "InputEvent"]
-
-(** provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with a top-level document's viewport. *)
-val intersectionObserver: unit -> AnonymousInterface230.t [@@js.get "IntersectionObserver"]
-
-(** This Intersection Observer API interface describes the intersection between the target element and its root container at a specific moment of transition. *)
-val intersectionObserverEntry: unit -> AnonymousInterface231.t [@@js.get "IntersectionObserverEntry"]
-
-(** KeyboardEvent objects describe a user interaction with the keyboard; each event describes a single interaction between the user and a key (or combination of a key with modifier keys) on the keyboard. *)
-val keyboardEvent: unit -> AnonymousInterface232.t [@@js.get "KeyboardEvent"]
-val keyframeEffect: unit -> AnonymousInterface233.t [@@js.get "KeyframeEffect"]
-
-(** The location (URL) of the object it is linked to. Changes done on it are reflected on the object it relates to. Both the Document and Window interface have such a linked Location, accessible via Document.location and Window.location respectively. *)
-val location: unit -> AnonymousInterface235.t [@@js.get "Location"]
-val mathMLElement: unit -> AnonymousInterface236.t [@@js.get "MathMLElement"]
-val mediaCapabilities: unit -> AnonymousInterface237.t [@@js.get "MediaCapabilities"]
-
-(**
-  The MediaDevicesInfo interface contains information that describes a single media input or output device.
-  Available only in secure contexts.
-*)
-val mediaDeviceInfo: unit -> AnonymousInterface238.t [@@js.get "MediaDeviceInfo"]
-
-(**
-  Provides access to connected media input devices like cameras and microphones, as well as screen sharing. In essence, it lets you obtain access to any hardware source of media data.
-  Available only in secure contexts.
-*)
-val mediaDevices: unit -> AnonymousInterface239.t [@@js.get "MediaDevices"]
-
-(** A MediaElementSourceNode has no inputs and exactly one output, and is created using the AudioContext.createMediaElementSource method. The amount of channels in the output equals the number of channels of the audio referenced by the HTMLMediaElement used in the creation of the node, or is 1 if the HTMLMediaElement has no audio. *)
-val mediaElementAudioSourceNode: unit -> AnonymousInterface240.t [@@js.get "MediaElementAudioSourceNode"]
-val mediaEncryptedEvent: unit -> AnonymousInterface241.t [@@js.get "MediaEncryptedEvent"]
-
-(** An error which occurred while handling media in an HTML media element based on HTMLMediaElement, such as <audio> or <video>. *)
-val mediaError: unit -> AnonymousInterface242.t [@@js.get "MediaError"]
-
-(**
-  This EncryptedMediaExtensions API interface contains the content and related data when the content decryption module generates a message for the session.
-  Available only in secure contexts.
-*)
-val mediaKeyMessageEvent: unit -> AnonymousInterface243.t [@@js.get "MediaKeyMessageEvent"]
-
-(**
-  This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM).
-  Available only in secure contexts.
-*)
-val mediaKeySession: unit -> AnonymousInterface244.t [@@js.get "MediaKeySession"]
-
-(**
-  This EncryptedMediaExtensions API interface is a read-only map of media key statuses by key IDs.
-  Available only in secure contexts.
-*)
-val mediaKeyStatusMap: unit -> AnonymousInterface245.t [@@js.get "MediaKeyStatusMap"]
-
-(**
-  This EncryptedMediaExtensions API interface provides access to a Key System for decryption and/or a content protection provider. You can request an instance of this object using the Navigator.requestMediaKeySystemAccess method.
-  Available only in secure contexts.
-*)
-val mediaKeySystemAccess: unit -> AnonymousInterface246.t [@@js.get "MediaKeySystemAccess"]
-
-(**
-  This EncryptedMediaExtensions API interface the represents a set of keys that an associated HTMLMediaElement can use for decryption of media data during playback.
-  Available only in secure contexts.
-*)
-val mediaKeys: unit -> AnonymousInterface247.t [@@js.get "MediaKeys"]
-val mediaList: unit -> AnonymousInterface248.t [@@js.get "MediaList"]
-val mediaMetadata: unit -> AnonymousInterface249.t [@@js.get "MediaMetadata"]
-
-(** Stores information on a media query applied to a document, and handles sending notifications to listeners when the media query state change (i.e. when the media query test starts or stops evaluating to true). *)
-val mediaQueryList: unit -> AnonymousInterface250.t [@@js.get "MediaQueryList"]
-val mediaQueryListEvent: unit -> AnonymousInterface251.t [@@js.get "MediaQueryListEvent"]
-val mediaRecorder: unit -> AnonymousInterface252.t [@@js.get "MediaRecorder"]
-val mediaRecorderErrorEvent: unit -> AnonymousInterface253.t [@@js.get "MediaRecorderErrorEvent"]
-val mediaSession: unit -> AnonymousInterface254.t [@@js.get "MediaSession"]
-
-(** This Media Source Extensions API interface represents a source of media data for an HTMLMediaElement object. A MediaSource object can be attached to a HTMLMediaElement to be played in the user agent. *)
-val mediaSource: unit -> AnonymousInterface255.t [@@js.get "MediaSource"]
-
-(** A stream of media content. A stream consists of several tracks such as video or audio tracks. Each track is specified as an instance of MediaStreamTrack. *)
-val mediaStream: unit -> AnonymousInterface256.t [@@js.get "MediaStream"]
-val mediaStreamAudioDestinationNode: unit -> AnonymousInterface257.t [@@js.get "MediaStreamAudioDestinationNode"]
-
-(** A type of AudioNode which operates as an audio source whose media is received from a MediaStream obtained using the WebRTC or Media Capture and Streams APIs. *)
-val mediaStreamAudioSourceNode: unit -> AnonymousInterface258.t [@@js.get "MediaStreamAudioSourceNode"]
-
-(** A single media track within a stream; typically, these are audio or video tracks, but other track types may exist as well. *)
-val mediaStreamTrack: unit -> AnonymousInterface259.t [@@js.get "MediaStreamTrack"]
-
-(** Events which indicate that a MediaStream has had tracks added to or removed from the stream through calls to Media Stream API methods. These events are sent to the stream when these changes occur. *)
-val mediaStreamTrackEvent: unit -> AnonymousInterface260.t [@@js.get "MediaStreamTrackEvent"]
-
-(** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. *)
-val messageChannel: unit -> AnonymousInterface262.t [@@js.get "MessageChannel"]
-
-(** A message received by a target object. *)
-val messageEvent: unit -> AnonymousInterface263.t [@@js.get "MessageEvent"]
-
-(** This Channel Messaging API interface represents one of the two ports of a MessageChannel, allowing messages to be sent from one port and listening out for them arriving at the other. *)
-val messagePort: unit -> AnonymousInterface264.t [@@js.get "MessagePort"]
-
-(**
-  Provides contains information about a MIME type associated with a particular plugin. NavigatorPlugins.mimeTypes returns an array of this object.
-  @deprecated 
-*)
-val mimeType: unit -> AnonymousInterface265.t [@@js.get "MimeType"]
-
-(**
-  Returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by NavigatorPlugins.mimeTypes.
-  @deprecated 
-*)
-val mimeTypeArray: unit -> AnonymousInterface266.t [@@js.get "MimeTypeArray"]
-
-(** Events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown. *)
-val mouseEvent: unit -> AnonymousInterface268.t [@@js.get "MouseEvent"]
-
-(**
-  Provides event properties that are specific to modifications to the Document Object Model (DOM) hierarchy and nodes.
-  @deprecated 
-*)
-val mutationEvent: unit -> AnonymousInterface269.t [@@js.get "MutationEvent"]
-
-(** Provides the ability to watch for changes being made to the DOM tree. It is designed as a replacement for the older Mutation Events feature which was part of the DOM3 Events specification. *)
-val mutationObserver: unit -> AnonymousInterface270.t [@@js.get "MutationObserver"]
-
-(** A MutationRecord represents an individual DOM mutation. It is the object that is passed to MutationObserver's callback. *)
-val mutationRecord: unit -> AnonymousInterface271.t [@@js.get "MutationRecord"]
-
-(** A collection of Attr objects. Objects inside a NamedNodeMap are not in any particular order, unlike NodeList, although they may be accessed by an index as in an array. *)
-val namedNodeMap: unit -> AnonymousInterface272.t [@@js.get "NamedNodeMap"]
-
-(** The state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities. *)
-val navigator: unit -> AnonymousInterface273.t [@@js.get "Navigator"]
-val networkInformation: unit -> AnonymousInterface274.t [@@js.get "NetworkInformation"]
-
-(** Node is an interface from which a number of DOM API object types inherit. It allows those types to be treated similarly; for example, inheriting the same set of methods, or being tested in the same way. *)
-val node: unit -> AnonymousInterface275.t [@@js.get "Node"]
-
-(** An iterator over the members of a list of the nodes in a subtree of the DOM. The nodes will be returned in document order. *)
-val nodeIterator: unit -> AnonymousInterface276.t [@@js.get "NodeIterator"]
-
-(** NodeList objects are collections of nodes, usually returned by properties such as Node.childNodes and methods such as document.querySelectorAll(). *)
-val nodeList: unit -> AnonymousInterface277.t [@@js.get "NodeList"]
-
-(** This Notifications API interface is used to configure and display desktop notifications to the user. *)
-val notification: unit -> AnonymousInterface278.t [@@js.get "Notification"]
-
-(** The Web Audio API OfflineAudioCompletionEvent interface represents events that occur when the processing of an OfflineAudioContext is terminated. The complete event implements this interface. *)
-val offlineAudioCompletionEvent: unit -> AnonymousInterface279.t [@@js.get "OfflineAudioCompletionEvent"]
-
-(** An AudioContext interface representing an audio-processing graph built from linked together AudioNodes. In contrast with a standard AudioContext, an OfflineAudioContext doesn't render the audio to the device hardware; instead, it generates it, as fast as it can, and outputs the result to an AudioBuffer. *)
-val offlineAudioContext: unit -> AnonymousInterface280.t [@@js.get "OfflineAudioContext"]
-
-(** The OscillatorNode interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone. *)
-val oscillatorNode: unit -> AnonymousInterface281.t [@@js.get "OscillatorNode"]
-val overconstrainedError: unit -> AnonymousInterface282.t [@@js.get "OverconstrainedError"]
-
-(** The PageTransitionEvent is fired when a document is being loaded or unloaded. *)
-val pageTransitionEvent: unit -> AnonymousInterface283.t [@@js.get "PageTransitionEvent"]
-
-(** A PannerNode always has exactly one input and one output: the input can be mono or stereo but the output is always stereo (2 channels); you can't have panning effects without at least two audio channels! *)
-val pannerNode: unit -> AnonymousInterface284.t [@@js.get "PannerNode"]
-
-(** This Canvas 2D API interface is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired. *)
-val path2D: unit -> AnonymousInterface285.t [@@js.get "Path2D"]
-
-(** Available only in secure contexts. *)
-val paymentMethodChangeEvent: unit -> AnonymousInterface286.t [@@js.get "PaymentMethodChangeEvent"]
-
-(**
-  This Payment Request API interface is the primary access point into the API, and lets web content and apps accept payments from the end user.
-  Available only in secure contexts.
-*)
-val paymentRequest: unit -> AnonymousInterface287.t [@@js.get "PaymentRequest"]
-
-(**
-  This Payment Request API interface enables a web page to update the details of a PaymentRequest in response to a user action.
-  Available only in secure contexts.
-*)
-val paymentRequestUpdateEvent: unit -> AnonymousInterface288.t [@@js.get "PaymentRequestUpdateEvent"]
-
-(**
-  This Payment Request API interface is returned after a user selects a payment method and approves a payment request.
-  Available only in secure contexts.
-*)
-val paymentResponse: unit -> AnonymousInterface289.t [@@js.get "PaymentResponse"]
-
-(** Provides access to performance-related information for the current page. It's part of the High Resolution Time API, but is enhanced by the Performance Timeline API, the Navigation Timing API, the User Timing API, and the Resource Timing API. *)
-val performance: unit -> AnonymousInterface290.t [@@js.get "Performance"]
-
-(** Encapsulates a single performance metric that is part of the performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries are also created in indirect ways such as loading a resource (such as an image). *)
-val performanceEntry: unit -> AnonymousInterface291.t [@@js.get "PerformanceEntry"]
-val performanceEventTiming: unit -> AnonymousInterface292.t [@@js.get "PerformanceEventTiming"]
-
-(** PerformanceMark is an abstract interface for PerformanceEntry objects with an entryType of "mark". Entries of this type are created by calling performance.mark() to add a named DOMHighResTimeStamp (the mark) to the browser's performance timeline. *)
-val performanceMark: unit -> AnonymousInterface293.t [@@js.get "PerformanceMark"]
-
-(** PerformanceMeasure is an abstract interface for PerformanceEntry objects with an entryType of "measure". Entries of this type are created by calling performance.measure() to add a named DOMHighResTimeStamp (the measure) between two marks to the browser's performance timeline. *)
-val performanceMeasure: unit -> AnonymousInterface294.t [@@js.get "PerformanceMeasure"]
-
-(**
-  The legacy PerformanceNavigation interface represents information about how the navigation to the current document was done.
-  @deprecated 
-*)
-val performanceNavigation: unit -> AnonymousInterface295.t [@@js.get "PerformanceNavigation"]
-
-(** Provides methods and properties to store and retrieve metrics regarding the browser's document navigation events. For example, this interface can be used to determine how much time it takes to load or unload a document. *)
-val performanceNavigationTiming: unit -> AnonymousInterface296.t [@@js.get "PerformanceNavigationTiming"]
-val performanceObserver: unit -> AnonymousInterface297.t [@@js.get "PerformanceObserver"]
-val performanceObserverEntryList: unit -> AnonymousInterface298.t [@@js.get "PerformanceObserverEntryList"]
-val performancePaintTiming: unit -> AnonymousInterface299.t [@@js.get "PerformancePaintTiming"]
-
-(** Enables retrieval and analysis of detailed network timing data regarding the loading of an application's resources. An application can use the timing metrics to determine, for example, the length of time it takes to fetch a specific resource, such as an XMLHttpRequest, <SVG>, image, or script. *)
-val performanceResourceTiming: unit -> AnonymousInterface300.t [@@js.get "PerformanceResourceTiming"]
-val performanceServerTiming: unit -> AnonymousInterface301.t [@@js.get "PerformanceServerTiming"]
-
-(**
-  A legacy interface kept for backwards compatibility and contains properties that offer performance timing information for various events which occur during the loading and use of the current page. You get a PerformanceTiming object describing your page using the window.performance.timing property.
-  @deprecated 
-*)
-val performanceTiming: unit -> AnonymousInterface302.t [@@js.get "PerformanceTiming"]
-
-(** PeriodicWave has no inputs or outputs; it is used to define custom oscillators when calling OscillatorNode.setPeriodicWave(). The PeriodicWave itself is created/returned by AudioContext.createPeriodicWave(). *)
-val periodicWave: unit -> AnonymousInterface303.t [@@js.get "PeriodicWave"]
-val permissionStatus: unit -> AnonymousInterface304.t [@@js.get "PermissionStatus"]
-val permissions: unit -> AnonymousInterface305.t [@@js.get "Permissions"]
-val pictureInPictureWindow: unit -> AnonymousInterface306.t [@@js.get "PictureInPictureWindow"]
-
-(**
-  Provides information about a browser plugin.
-  @deprecated 
-*)
-val plugin: unit -> AnonymousInterface307.t [@@js.get "Plugin"]
-
-(**
-  Used to store a list of Plugin objects describing the available plugins; it's returned by the window.navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins\[2\]), as well as via item(index) and namedItem("name") methods.
-  @deprecated 
-*)
-val pluginArray: unit -> AnonymousInterface308.t [@@js.get "PluginArray"]
-
-(** The state of a DOM event produced by a pointer such as the geometry of the contact point, the device type that generated the event, the amount of pressure that was applied on the contact surface, etc. *)
-val pointerEvent: unit -> AnonymousInterface309.t [@@js.get "PointerEvent"]
-
-(** PopStateEvent is an event handler for the popstate event on the window. *)
-val popStateEvent: unit -> AnonymousInterface310.t [@@js.get "PopStateEvent"]
-
-(** A processing instruction embeds application-specific instructions in XML which can be ignored by other applications that don't recognize them. *)
-val processingInstruction: unit -> AnonymousInterface311.t [@@js.get "ProcessingInstruction"]
-
-(** Events measuring progress of an underlying process, like an HTTP request (for an XMLHttpRequest, or the loading of the underlying resource of an <img>, <audio>, <video>, <style> or <link>). *)
-val progressEvent: unit -> AnonymousInterface312.t [@@js.get "ProgressEvent"]
-val promiseRejectionEvent: unit -> AnonymousInterface313.t [@@js.get "PromiseRejectionEvent"]
-
-(** Available only in secure contexts. *)
-val publicKeyCredential: unit -> AnonymousInterface314.t [@@js.get "PublicKeyCredential"]
-
-(**
-  This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications.
-  Available only in secure contexts.
-*)
-val pushManager: unit -> AnonymousInterface315.t [@@js.get "PushManager"]
-
-(**
-  This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service.
-  Available only in secure contexts.
-*)
-val pushSubscription: unit -> AnonymousInterface316.t [@@js.get "PushSubscription"]
-
-(** Available only in secure contexts. *)
-val pushSubscriptionOptions: unit -> AnonymousInterface317.t [@@js.get "PushSubscriptionOptions"]
-val rTCCertificate: unit -> AnonymousInterface318.t [@@js.get "RTCCertificate"]
-val rTCDTMFSender: unit -> AnonymousInterface319.t [@@js.get "RTCDTMFSender"]
-
-(** Events sent to indicate that DTMF tones have started or finished playing. This interface is used by the tonechange event. *)
-val rTCDTMFToneChangeEvent: unit -> AnonymousInterface320.t [@@js.get "RTCDTMFToneChangeEvent"]
-val rTCDataChannel: unit -> AnonymousInterface321.t [@@js.get "RTCDataChannel"]
-val rTCDataChannelEvent: unit -> AnonymousInterface322.t [@@js.get "RTCDataChannelEvent"]
-val rTCDtlsTransport: unit -> AnonymousInterface323.t [@@js.get "RTCDtlsTransport"]
-
-(** The RTCIceCandidate interface—part of the WebRTC API—represents a candidate Internet Connectivity Establishment (ICE) configuration which may be used to establish an RTCPeerConnection. *)
-val rTCIceCandidate: unit -> AnonymousInterface324.t [@@js.get "RTCIceCandidate"]
-
-(** Provides access to information about the ICE transport layer over which the data is being sent and received. *)
-val rTCIceTransport: unit -> AnonymousInterface325.t [@@js.get "RTCIceTransport"]
-
-(** A WebRTC connection between the local computer and a remote peer. It provides methods to connect to a remote peer, maintain and monitor the connection, and close the connection once it's no longer needed. *)
-val rTCPeerConnection: unit -> AnonymousInterface326.t [@@js.get "RTCPeerConnection"]
-val rTCPeerConnectionIceErrorEvent: unit -> AnonymousInterface327.t [@@js.get "RTCPeerConnectionIceErrorEvent"]
-
-(** Events that occurs in relation to ICE candidates with the target, usually an RTCPeerConnection. Only one event is of this type: icecandidate. *)
-val rTCPeerConnectionIceEvent: unit -> AnonymousInterface328.t [@@js.get "RTCPeerConnectionIceEvent"]
-
-(** This WebRTC API interface manages the reception and decoding of data for a MediaStreamTrack on an RTCPeerConnection. *)
-val rTCRtpReceiver: unit -> AnonymousInterface329.t [@@js.get "RTCRtpReceiver"]
-
-(** Provides the ability to control and obtain details about how a particular MediaStreamTrack is encoded and sent to a remote peer. *)
-val rTCRtpSender: unit -> AnonymousInterface330.t [@@js.get "RTCRtpSender"]
-val rTCRtpTransceiver: unit -> AnonymousInterface331.t [@@js.get "RTCRtpTransceiver"]
-
-(** One end of a connection—or potential connection—and how it's configured. Each RTCSessionDescription consists of a description type indicating which part of the offer/answer negotiation process it describes and of the SDP descriptor of the session. *)
-val rTCSessionDescription: unit -> AnonymousInterface332.t [@@js.get "RTCSessionDescription"]
-val rTCStatsReport: unit -> AnonymousInterface333.t [@@js.get "RTCStatsReport"]
-val rTCTrackEvent: unit -> AnonymousInterface334.t [@@js.get "RTCTrackEvent"]
-val radioNodeList: unit -> AnonymousInterface335.t [@@js.get "RadioNodeList"]
-
-(** A fragment of a document that can contain nodes and parts of text nodes. *)
-val range: unit -> AnonymousInterface336.t [@@js.get "Range"]
-
-(** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. *)
-val readableStream: unit -> AnonymousInterface337.t [@@js.get "ReadableStream"]
-val readableStreamDefaultController: unit -> AnonymousInterface338.t [@@js.get "ReadableStreamDefaultController"]
-val readableStreamDefaultReader: unit -> AnonymousInterface339.t [@@js.get "ReadableStreamDefaultReader"]
-val remotePlayback: unit -> AnonymousInterface340.t [@@js.get "RemotePlayback"]
-
-(** This Fetch API interface represents a resource request. *)
-val request: unit -> AnonymousInterface341.t [@@js.get "Request"]
-val resizeObserver: unit -> AnonymousInterface342.t [@@js.get "ResizeObserver"]
-val resizeObserverEntry: unit -> AnonymousInterface343.t [@@js.get "ResizeObserverEntry"]
-val resizeObserverSize: unit -> AnonymousInterface344.t [@@js.get "ResizeObserverSize"]
-
-(** This Fetch API interface represents the response to a request. *)
-val response: unit -> AnonymousInterface345.t [@@js.get "Response"]
-
-(** Provides access to the properties of <a> element, as well as methods to manipulate them. *)
-val sVGAElement: unit -> AnonymousInterface347.t [@@js.get "SVGAElement"]
-
-(** Used to represent a value that can be an <angle> or <number> value. An SVGAngle reflected through the animVal attribute is always read only. *)
-val sVGAngle: unit -> AnonymousInterface348.t [@@js.get "SVGAngle"]
-val sVGAnimateElement: unit -> AnonymousInterface349.t [@@js.get "SVGAnimateElement"]
-val sVGAnimateMotionElement: unit -> AnonymousInterface350.t [@@js.get "SVGAnimateMotionElement"]
-val sVGAnimateTransformElement: unit -> AnonymousInterface351.t [@@js.get "SVGAnimateTransformElement"]
-
-(** Used for attributes of basic type <angle> which can be animated. *)
-val sVGAnimatedAngle: unit -> AnonymousInterface352.t [@@js.get "SVGAnimatedAngle"]
-
-(** Used for attributes of type boolean which can be animated. *)
-val sVGAnimatedBoolean: unit -> AnonymousInterface353.t [@@js.get "SVGAnimatedBoolean"]
-
-(** Used for attributes whose value must be a constant from a particular enumeration and which can be animated. *)
-val sVGAnimatedEnumeration: unit -> AnonymousInterface354.t [@@js.get "SVGAnimatedEnumeration"]
-
-(** Used for attributes of basic type <integer> which can be animated. *)
-val sVGAnimatedInteger: unit -> AnonymousInterface355.t [@@js.get "SVGAnimatedInteger"]
-
-(** Used for attributes of basic type <length> which can be animated. *)
-val sVGAnimatedLength: unit -> AnonymousInterface356.t [@@js.get "SVGAnimatedLength"]
-
-(** Used for attributes of type SVGLengthList which can be animated. *)
-val sVGAnimatedLengthList: unit -> AnonymousInterface357.t [@@js.get "SVGAnimatedLengthList"]
-
-(** Used for attributes of basic type <Number> which can be animated. *)
-val sVGAnimatedNumber: unit -> AnonymousInterface358.t [@@js.get "SVGAnimatedNumber"]
-
-(** The SVGAnimatedNumber interface is used for attributes which take a list of numbers and which can be animated. *)
-val sVGAnimatedNumberList: unit -> AnonymousInterface359.t [@@js.get "SVGAnimatedNumberList"]
-
-(** Used for attributes of type SVGPreserveAspectRatio which can be animated. *)
-val sVGAnimatedPreserveAspectRatio: unit -> AnonymousInterface360.t [@@js.get "SVGAnimatedPreserveAspectRatio"]
-
-(** Used for attributes of basic SVGRect which can be animated. *)
-val sVGAnimatedRect: unit -> AnonymousInterface361.t [@@js.get "SVGAnimatedRect"]
-
-(** The SVGAnimatedString interface represents string attributes which can be animated from each SVG declaration. You need to create SVG attribute before doing anything else, everything should be declared inside this. *)
-val sVGAnimatedString: unit -> AnonymousInterface362.t [@@js.get "SVGAnimatedString"]
-
-(** Used for attributes which take a list of numbers and which can be animated. *)
-val sVGAnimatedTransformList: unit -> AnonymousInterface363.t [@@js.get "SVGAnimatedTransformList"]
-val sVGAnimationElement: unit -> AnonymousInterface364.t [@@js.get "SVGAnimationElement"]
-
-(** An interface for the <circle> element. The circle element is defined by the cx and cy attributes that denote the coordinates of the centre of the circle. *)
-val sVGCircleElement: unit -> AnonymousInterface365.t [@@js.get "SVGCircleElement"]
-
-(** Provides access to the properties of <clipPath> elements, as well as methods to manipulate them. *)
-val sVGClipPathElement: unit -> AnonymousInterface366.t [@@js.get "SVGClipPathElement"]
-
-(** A base interface used by the component transfer function interfaces. *)
-val sVGComponentTransferFunctionElement: unit -> AnonymousInterface367.t [@@js.get "SVGComponentTransferFunctionElement"]
-
-(** Corresponds to the <defs> element. *)
-val sVGDefsElement: unit -> AnonymousInterface368.t [@@js.get "SVGDefsElement"]
-
-(** Corresponds to the <desc> element. *)
-val sVGDescElement: unit -> AnonymousInterface369.t [@@js.get "SVGDescElement"]
-
-(** All of the SVG DOM interfaces that correspond directly to elements in the SVG language derive from the SVGElement interface. *)
-val sVGElement: unit -> AnonymousInterface370.t [@@js.get "SVGElement"]
-
-(** Provides access to the properties of <ellipse> elements. *)
-val sVGEllipseElement: unit -> AnonymousInterface371.t [@@js.get "SVGEllipseElement"]
-
-(** Corresponds to the <feBlend> element. *)
-val sVGFEBlendElement: unit -> AnonymousInterface372.t [@@js.get "SVGFEBlendElement"]
-
-(** Corresponds to the <feColorMatrix> element. *)
-val sVGFEColorMatrixElement: unit -> AnonymousInterface373.t [@@js.get "SVGFEColorMatrixElement"]
-
-(** Corresponds to the <feComponentTransfer> element. *)
-val sVGFEComponentTransferElement: unit -> AnonymousInterface374.t [@@js.get "SVGFEComponentTransferElement"]
-
-(** Corresponds to the <feComposite> element. *)
-val sVGFECompositeElement: unit -> AnonymousInterface375.t [@@js.get "SVGFECompositeElement"]
-
-(** Corresponds to the <feConvolveMatrix> element. *)
-val sVGFEConvolveMatrixElement: unit -> AnonymousInterface376.t [@@js.get "SVGFEConvolveMatrixElement"]
-
-(** Corresponds to the <feDiffuseLighting> element. *)
-val sVGFEDiffuseLightingElement: unit -> AnonymousInterface377.t [@@js.get "SVGFEDiffuseLightingElement"]
-
-(** Corresponds to the <feDisplacementMap> element. *)
-val sVGFEDisplacementMapElement: unit -> AnonymousInterface378.t [@@js.get "SVGFEDisplacementMapElement"]
-
-(** Corresponds to the <feDistantLight> element. *)
-val sVGFEDistantLightElement: unit -> AnonymousInterface379.t [@@js.get "SVGFEDistantLightElement"]
-val sVGFEDropShadowElement: unit -> AnonymousInterface380.t [@@js.get "SVGFEDropShadowElement"]
-
-(** Corresponds to the <feFlood> element. *)
-val sVGFEFloodElement: unit -> AnonymousInterface381.t [@@js.get "SVGFEFloodElement"]
-
-(** Corresponds to the <feFuncA> element. *)
-val sVGFEFuncAElement: unit -> AnonymousInterface382.t [@@js.get "SVGFEFuncAElement"]
-
-(** Corresponds to the <feFuncB> element. *)
-val sVGFEFuncBElement: unit -> AnonymousInterface383.t [@@js.get "SVGFEFuncBElement"]
-
-(** Corresponds to the <feFuncG> element. *)
-val sVGFEFuncGElement: unit -> AnonymousInterface384.t [@@js.get "SVGFEFuncGElement"]
-
-(** Corresponds to the <feFuncR> element. *)
-val sVGFEFuncRElement: unit -> AnonymousInterface385.t [@@js.get "SVGFEFuncRElement"]
-
-(** Corresponds to the <feGaussianBlur> element. *)
-val sVGFEGaussianBlurElement: unit -> AnonymousInterface386.t [@@js.get "SVGFEGaussianBlurElement"]
-
-(** Corresponds to the <feImage> element. *)
-val sVGFEImageElement: unit -> AnonymousInterface387.t [@@js.get "SVGFEImageElement"]
-
-(** Corresponds to the <feMerge> element. *)
-val sVGFEMergeElement: unit -> AnonymousInterface388.t [@@js.get "SVGFEMergeElement"]
-
-(** Corresponds to the <feMergeNode> element. *)
-val sVGFEMergeNodeElement: unit -> AnonymousInterface389.t [@@js.get "SVGFEMergeNodeElement"]
-
-(** Corresponds to the <feMorphology> element. *)
-val sVGFEMorphologyElement: unit -> AnonymousInterface390.t [@@js.get "SVGFEMorphologyElement"]
-
-(** Corresponds to the <feOffset> element. *)
-val sVGFEOffsetElement: unit -> AnonymousInterface391.t [@@js.get "SVGFEOffsetElement"]
-
-(** Corresponds to the <fePointLight> element. *)
-val sVGFEPointLightElement: unit -> AnonymousInterface392.t [@@js.get "SVGFEPointLightElement"]
-
-(** Corresponds to the <feSpecularLighting> element. *)
-val sVGFESpecularLightingElement: unit -> AnonymousInterface393.t [@@js.get "SVGFESpecularLightingElement"]
-
-(** Corresponds to the <feSpotLight> element. *)
-val sVGFESpotLightElement: unit -> AnonymousInterface394.t [@@js.get "SVGFESpotLightElement"]
-
-(** Corresponds to the <feTile> element. *)
-val sVGFETileElement: unit -> AnonymousInterface395.t [@@js.get "SVGFETileElement"]
-
-(** Corresponds to the <feTurbulence> element. *)
-val sVGFETurbulenceElement: unit -> AnonymousInterface396.t [@@js.get "SVGFETurbulenceElement"]
-
-(** Provides access to the properties of <filter> elements, as well as methods to manipulate them. *)
-val sVGFilterElement: unit -> AnonymousInterface397.t [@@js.get "SVGFilterElement"]
-
-(** Provides access to the properties of <foreignObject> elements, as well as methods to manipulate them. *)
-val sVGForeignObjectElement: unit -> AnonymousInterface398.t [@@js.get "SVGForeignObjectElement"]
-
-(** Corresponds to the <g> element. *)
-val sVGGElement: unit -> AnonymousInterface399.t [@@js.get "SVGGElement"]
-val sVGGeometryElement: unit -> AnonymousInterface400.t [@@js.get "SVGGeometryElement"]
-
-(** The SVGGradient interface is a base interface used by SVGLinearGradientElement and SVGRadialGradientElement. *)
-val sVGGradientElement: unit -> AnonymousInterface401.t [@@js.get "SVGGradientElement"]
-
-(** SVG elements whose primary purpose is to directly render graphics into a group. *)
-val sVGGraphicsElement: unit -> AnonymousInterface402.t [@@js.get "SVGGraphicsElement"]
-
-(** Corresponds to the <image> element. *)
-val sVGImageElement: unit -> AnonymousInterface403.t [@@js.get "SVGImageElement"]
-
-(** Correspond to the <length> basic data type. *)
-val sVGLength: unit -> AnonymousInterface404.t [@@js.get "SVGLength"]
-
-(** The SVGLengthList defines a list of SVGLength objects. *)
-val sVGLengthList: unit -> AnonymousInterface405.t [@@js.get "SVGLengthList"]
-
-(** Provides access to the properties of <line> elements, as well as methods to manipulate them. *)
-val sVGLineElement: unit -> AnonymousInterface406.t [@@js.get "SVGLineElement"]
-
-(** Corresponds to the <linearGradient> element. *)
-val sVGLinearGradientElement: unit -> AnonymousInterface407.t [@@js.get "SVGLinearGradientElement"]
-val sVGMPathElement: unit -> AnonymousInterface408.t [@@js.get "SVGMPathElement"]
-val sVGMarkerElement: unit -> AnonymousInterface409.t [@@js.get "SVGMarkerElement"]
-
-(** Provides access to the properties of <mask> elements, as well as methods to manipulate them. *)
-val sVGMaskElement: unit -> AnonymousInterface410.t [@@js.get "SVGMaskElement"]
-
-(** Corresponds to the <metadata> element. *)
-val sVGMetadataElement: unit -> AnonymousInterface411.t [@@js.get "SVGMetadataElement"]
-
-(** Corresponds to the <number> basic data type. *)
-val sVGNumber: unit -> AnonymousInterface412.t [@@js.get "SVGNumber"]
-
-(** The SVGNumberList defines a list of SVGNumber objects. *)
-val sVGNumberList: unit -> AnonymousInterface413.t [@@js.get "SVGNumberList"]
-
-(** Corresponds to the <path> element. *)
-val sVGPathElement: unit -> AnonymousInterface414.t [@@js.get "SVGPathElement"]
-
-(** Corresponds to the <pattern> element. *)
-val sVGPatternElement: unit -> AnonymousInterface415.t [@@js.get "SVGPatternElement"]
-val sVGPointList: unit -> AnonymousInterface416.t [@@js.get "SVGPointList"]
-
-(** Provides access to the properties of <polygon> elements, as well as methods to manipulate them. *)
-val sVGPolygonElement: unit -> AnonymousInterface417.t [@@js.get "SVGPolygonElement"]
-
-(** Provides access to the properties of <polyline> elements, as well as methods to manipulate them. *)
-val sVGPolylineElement: unit -> AnonymousInterface418.t [@@js.get "SVGPolylineElement"]
-
-(** Corresponds to the preserveAspectRatio attribute, which is available for some of SVG's elements. *)
-val sVGPreserveAspectRatio: unit -> AnonymousInterface419.t [@@js.get "SVGPreserveAspectRatio"]
-
-(** Corresponds to the <RadialGradient> element. *)
-val sVGRadialGradientElement: unit -> AnonymousInterface420.t [@@js.get "SVGRadialGradientElement"]
-
-(** Provides access to the properties of <rect> elements, as well as methods to manipulate them. *)
-val sVGRectElement: unit -> AnonymousInterface421.t [@@js.get "SVGRectElement"]
-
-(** Provides access to the properties of <svg> elements, as well as methods to manipulate them. This interface contains also various miscellaneous commonly-used utility methods, such as matrix operations and the ability to control the time of redraw on visual rendering devices. *)
-val sVGSVGElement: unit -> AnonymousInterface422.t [@@js.get "SVGSVGElement"]
-
-(** Corresponds to the SVG <script> element. *)
-val sVGScriptElement: unit -> AnonymousInterface423.t [@@js.get "SVGScriptElement"]
-val sVGSetElement: unit -> AnonymousInterface424.t [@@js.get "SVGSetElement"]
-
-(** Corresponds to the <stop> element. *)
-val sVGStopElement: unit -> AnonymousInterface425.t [@@js.get "SVGStopElement"]
-
-(** The SVGStringList defines a list of DOMString objects. *)
-val sVGStringList: unit -> AnonymousInterface426.t [@@js.get "SVGStringList"]
-
-(** Corresponds to the SVG <style> element. *)
-val sVGStyleElement: unit -> AnonymousInterface427.t [@@js.get "SVGStyleElement"]
-
-(** Corresponds to the <switch> element. *)
-val sVGSwitchElement: unit -> AnonymousInterface428.t [@@js.get "SVGSwitchElement"]
-
-(** Corresponds to the <symbol> element. *)
-val sVGSymbolElement: unit -> AnonymousInterface429.t [@@js.get "SVGSymbolElement"]
-
-(** A <tspan> element. *)
-val sVGTSpanElement: unit -> AnonymousInterface430.t [@@js.get "SVGTSpanElement"]
-
-(** Implemented by elements that support rendering child text content. It is inherited by various text-related interfaces, such as SVGTextElement, SVGTSpanElement, SVGTRefElement, SVGAltGlyphElement and SVGTextPathElement. *)
-val sVGTextContentElement: unit -> AnonymousInterface431.t [@@js.get "SVGTextContentElement"]
-
-(** Corresponds to the <text> elements. *)
-val sVGTextElement: unit -> AnonymousInterface432.t [@@js.get "SVGTextElement"]
-
-(** Corresponds to the <textPath> element. *)
-val sVGTextPathElement: unit -> AnonymousInterface433.t [@@js.get "SVGTextPathElement"]
-
-(** Implemented by elements that support attributes that position individual text glyphs. It is inherited by SVGTextElement, SVGTSpanElement, SVGTRefElement and SVGAltGlyphElement. *)
-val sVGTextPositioningElement: unit -> AnonymousInterface434.t [@@js.get "SVGTextPositioningElement"]
-
-(** Corresponds to the <title> element. *)
-val sVGTitleElement: unit -> AnonymousInterface435.t [@@js.get "SVGTitleElement"]
-
-(** SVGTransform is the interface for one of the component transformations within an SVGTransformList; thus, an SVGTransform object corresponds to a single component (e.g., scale(…) or matrix(…)) within a transform attribute. *)
-val sVGTransform: unit -> AnonymousInterface436.t [@@js.get "SVGTransform"]
-
-(** The SVGTransformList defines a list of SVGTransform objects. *)
-val sVGTransformList: unit -> AnonymousInterface437.t [@@js.get "SVGTransformList"]
-
-(** A commonly used set of constants used for reflecting gradientUnits, patternContentUnits and other similar attributes. *)
-val sVGUnitTypes: unit -> AnonymousInterface438.t [@@js.get "SVGUnitTypes"]
-
-(** Corresponds to the <use> element. *)
-val sVGUseElement: unit -> AnonymousInterface439.t [@@js.get "SVGUseElement"]
-
-(** Provides access to the properties of <view> elements, as well as methods to manipulate them. *)
-val sVGViewElement: unit -> AnonymousInterface440.t [@@js.get "SVGViewElement"]
-
-(** A screen, usually the one on which the current window is being rendered, and is obtained using window.screen. *)
-val screen: unit -> AnonymousInterface441.t [@@js.get "Screen"]
-val screenOrientation: unit -> AnonymousInterface442.t [@@js.get "ScreenOrientation"]
-
-(**
-  Allows the generation, processing, or analyzing of audio using JavaScript.
-  @deprecated 
-*)
-val scriptProcessorNode: unit -> AnonymousInterface443.t [@@js.get "ScriptProcessorNode"]
-
-(** Inherits from Event, and represents the event object of an event sent on a document or worker when its content security policy is violated. *)
-val securityPolicyViolationEvent: unit -> AnonymousInterface444.t [@@js.get "SecurityPolicyViolationEvent"]
-
-(** A Selection object represents the range of text selected by the user or the current position of the caret. To obtain a Selection object for examination or modification, call Window.getSelection(). *)
-val selection: unit -> AnonymousInterface445.t [@@js.get "Selection"]
-
-(**
-  This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object.
-  Available only in secure contexts.
-*)
-val serviceWorker: unit -> AnonymousInterface446.t [@@js.get "ServiceWorker"]
-
-(**
-  The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations.
-  Available only in secure contexts.
-*)
-val serviceWorkerContainer: unit -> AnonymousInterface447.t [@@js.get "ServiceWorkerContainer"]
-
-(**
-  This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin.
-  Available only in secure contexts.
-*)
-val serviceWorkerRegistration: unit -> AnonymousInterface448.t [@@js.get "ServiceWorkerRegistration"]
-val shadowRoot: unit -> AnonymousInterface449.t [@@js.get "ShadowRoot"]
-val sharedWorker: unit -> AnonymousInterface450.t [@@js.get "SharedWorker"]
-
-(** A chunk of media to be passed into an HTMLMediaElement and played, via a MediaSource object. This can be made up of one or several media segments. *)
-val sourceBuffer: unit -> AnonymousInterface451.t [@@js.get "SourceBuffer"]
-
-(** A simple container list for multiple SourceBuffer objects. *)
-val sourceBufferList: unit -> AnonymousInterface452.t [@@js.get "SourceBufferList"]
-val speechRecognitionAlternative: unit -> AnonymousInterface453.t [@@js.get "SpeechRecognitionAlternative"]
-val speechRecognitionResult: unit -> AnonymousInterface454.t [@@js.get "SpeechRecognitionResult"]
-val speechRecognitionResultList: unit -> AnonymousInterface455.t [@@js.get "SpeechRecognitionResultList"]
-
-(** This Web Speech API interface is the controller interface for the speech service; this can be used to retrieve information about the synthesis voices available on the device, start and pause speech, and other commands besides. *)
-val speechSynthesis: unit -> AnonymousInterface456.t [@@js.get "SpeechSynthesis"]
-val speechSynthesisErrorEvent: unit -> AnonymousInterface457.t [@@js.get "SpeechSynthesisErrorEvent"]
-
-(** This Web Speech API interface contains information about the current state of SpeechSynthesisUtterance objects that have been processed in the speech service. *)
-val speechSynthesisEvent: unit -> AnonymousInterface458.t [@@js.get "SpeechSynthesisEvent"]
-
-(** This Web Speech API interface represents a speech request. It contains the content the speech service should read and information about how to read it (e.g. language, pitch and volume.) *)
-val speechSynthesisUtterance: unit -> AnonymousInterface459.t [@@js.get "SpeechSynthesisUtterance"]
-
-(** This Web Speech API interface represents a voice that the system supports. Every SpeechSynthesisVoice has its own relative speech service including information about language, name and URI. *)
-val speechSynthesisVoice: unit -> AnonymousInterface460.t [@@js.get "SpeechSynthesisVoice"]
-val staticRange: unit -> AnonymousInterface461.t [@@js.get "StaticRange"]
-
-(** The pan property takes a unitless value between -1 (full left pan) and 1 (full right pan). This interface was introduced as a much simpler way to apply a simple panning effect than having to use a full PannerNode. *)
-val stereoPannerNode: unit -> AnonymousInterface462.t [@@js.get "StereoPannerNode"]
-
-(** This Web Storage API interface provides access to a particular domain's session or local storage. It allows, for example, the addition, modification, or deletion of stored data items. *)
-val storage: unit -> AnonymousInterface463.t [@@js.get "Storage"]
-
-(** A StorageEvent is sent to a window when a storage area it has access to is changed within the context of another document. *)
-val storageEvent: unit -> AnonymousInterface464.t [@@js.get "StorageEvent"]
-
-(** Available only in secure contexts. *)
-val storageManager: unit -> AnonymousInterface465.t [@@js.get "StorageManager"]
-
-(** A single style sheet. CSS style sheets will further implement the more specialized CSSStyleSheet interface. *)
-val styleSheet: unit -> AnonymousInterface466.t [@@js.get "StyleSheet"]
-
-(** A list of StyleSheet. *)
-val styleSheetList: unit -> AnonymousInterface467.t [@@js.get "StyleSheetList"]
-val submitEvent: unit -> AnonymousInterface468.t [@@js.get "SubmitEvent"]
-
-(**
-  This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto).
-  Available only in secure contexts.
-*)
-val subtleCrypto: unit -> AnonymousInterface469.t [@@js.get "SubtleCrypto"]
-
-(** The textual content of Element or Attr. If an element has no markup within its content, it has a single child implementing Text that contains the element's text. However, if the element contains markup, it is parsed into information items and Text nodes that form its children. *)
-val text: unit -> AnonymousInterface471.t [@@js.get "Text"]
-
-(** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
-val textDecoder: unit -> AnonymousInterface472.t [@@js.get "TextDecoder"]
-val textDecoderStream: unit -> AnonymousInterface473.t [@@js.get "TextDecoderStream"]
-
-(** TextEncoder takes a stream of code points as input and emits a stream of bytes. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
-val textEncoder: unit -> AnonymousInterface474.t [@@js.get "TextEncoder"]
-val textEncoderStream: unit -> AnonymousInterface475.t [@@js.get "TextEncoderStream"]
-
-(** The dimensions of a piece of text in the canvas, as created by the CanvasRenderingContext2D.measureText() method. *)
-val textMetrics: unit -> AnonymousInterface476.t [@@js.get "TextMetrics"]
-
-(** This interface also inherits properties from EventTarget. *)
-val textTrack: unit -> AnonymousInterface477.t [@@js.get "TextTrack"]
-
-(** TextTrackCues represent a string of text that will be displayed for some duration of time on a TextTrack. This includes the start and end times that the cue will be displayed. A TextTrackCue cannot be used directly, instead one of the derived types (e.g. VTTCue) must be used. *)
-val textTrackCue: unit -> AnonymousInterface478.t [@@js.get "TextTrackCue"]
-val textTrackCueList: unit -> AnonymousInterface479.t [@@js.get "TextTrackCueList"]
-val textTrackList: unit -> AnonymousInterface480.t [@@js.get "TextTrackList"]
-
-(** Used to represent a set of time ranges, primarily for the purpose of tracking which portions of media have been buffered when loading it for use by the <audio> and <video> elements. *)
-val timeRanges: unit -> AnonymousInterface481.t [@@js.get "TimeRanges"]
-
-(** A single contact point on a touch-sensitive device. The contact point is commonly a finger or stylus and the device may be a touchscreen or trackpad. *)
-val touch: unit -> AnonymousInterface482.t [@@js.get "Touch"]
-
-(** An event sent when the state of contacts with a touch-sensitive surface changes. This surface can be a touch screen or trackpad, for example. The event can describe one or more points of contact with the screen and includes support for detecting movement, addition and removal of contact points, and so forth. *)
-val touchEvent: unit -> AnonymousInterface483.t [@@js.get "TouchEvent"]
-
-(** A list of contact points on a touch surface. For example, if the user has three fingers on the touch surface (such as a screen or trackpad), the corresponding TouchList object would have one Touch object for each finger, for a total of three entries. *)
-val touchList: unit -> AnonymousInterface484.t [@@js.get "TouchList"]
-
-(** The TrackEvent interface, part of the HTML DOM specification, is used for events which represent changes to the set of available tracks on an HTML media element; these events are addtrack and removetrack. *)
-val trackEvent: unit -> AnonymousInterface485.t [@@js.get "TrackEvent"]
-val transformStream: unit -> AnonymousInterface486.t [@@js.get "TransformStream"]
-val transformStreamDefaultController: unit -> AnonymousInterface487.t [@@js.get "TransformStreamDefaultController"]
-
-(** Events providing information related to transitions. *)
-val transitionEvent: unit -> AnonymousInterface488.t [@@js.get "TransitionEvent"]
-
-(** The nodes of a document subtree and a position within them. *)
-val treeWalker: unit -> AnonymousInterface489.t [@@js.get "TreeWalker"]
-
-(** Simple user interface events. *)
-val uIEvent: unit -> AnonymousInterface490.t [@@js.get "UIEvent"]
-
-(** The URL interface represents an object providing static methods used for creating object URLs. *)
-val url: unit -> AnonymousInterface491.t [@@js.get "URL"]
-val webkitURL: unit -> AnonymousInterface491.t [@@js.get "webkitURL"]
-val uRLSearchParams: unit -> AnonymousInterface492.t [@@js.get "URLSearchParams"]
-val vTTCue: unit -> AnonymousInterface493.t [@@js.get "VTTCue"]
-val vTTRegion: unit -> AnonymousInterface494.t [@@js.get "VTTRegion"]
-
-(** The validity states that an element can be in, with respect to constraint validation. Together, they help explain why an element's value fails to validate, if it's not valid. *)
-val validityState: unit -> AnonymousInterface495.t [@@js.get "ValidityState"]
-
-(** Returned by the HTMLVideoElement.getVideoPlaybackQuality() method and contains metrics that can be used to determine the playback quality of a video. *)
-val videoPlaybackQuality: unit -> AnonymousInterface496.t [@@js.get "VideoPlaybackQuality"]
-val visualViewport: unit -> AnonymousInterface497.t [@@js.get "VisualViewport"]
-
-(** A WaveShaperNode always has exactly one input and one output. *)
-val waveShaperNode: unit -> AnonymousInterface498.t [@@js.get "WaveShaperNode"]
-val webGL2RenderingContext: unit -> AnonymousInterface499.t [@@js.get "WebGL2RenderingContext"]
-
-(** Part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getActiveAttrib() and WebGLRenderingContext.getActiveUniform() methods. *)
-val webGLActiveInfo: unit -> AnonymousInterface500.t [@@js.get "WebGLActiveInfo"]
-
-(** Part of the WebGL API and represents an opaque buffer object storing data such as vertices or colors. *)
-val webGLBuffer: unit -> AnonymousInterface501.t [@@js.get "WebGLBuffer"]
-
-(** The WebContextEvent interface is part of the WebGL API and is an interface for an event that is generated in response to a status change to the WebGL rendering context. *)
-val webGLContextEvent: unit -> AnonymousInterface502.t [@@js.get "WebGLContextEvent"]
-
-(** Part of the WebGL API and represents a collection of buffers that serve as a rendering destination. *)
-val webGLFramebuffer: unit -> AnonymousInterface503.t [@@js.get "WebGLFramebuffer"]
-
-(** The WebGLProgram is part of the WebGL API and is a combination of two compiled WebGLShaders consisting of a vertex shader and a fragment shader (both written in GLSL). *)
-val webGLProgram: unit -> AnonymousInterface504.t [@@js.get "WebGLProgram"]
-val webGLQuery: unit -> AnonymousInterface505.t [@@js.get "WebGLQuery"]
-
-(** Part of the WebGL API and represents a buffer that can contain an image, or can be source or target of an rendering operation. *)
-val webGLRenderbuffer: unit -> AnonymousInterface506.t [@@js.get "WebGLRenderbuffer"]
-
-(** Provides an interface to the OpenGL ES 2.0 graphics rendering context for the drawing surface of an HTML <canvas> element. *)
-val webGLRenderingContext: unit -> AnonymousInterface507.t [@@js.get "WebGLRenderingContext"]
-val webGLSampler: unit -> AnonymousInterface508.t [@@js.get "WebGLSampler"]
-
-(** The WebGLShader is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders. *)
-val webGLShader: unit -> AnonymousInterface509.t [@@js.get "WebGLShader"]
-
-(** Part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getShaderPrecisionFormat() method. *)
-val webGLShaderPrecisionFormat: unit -> AnonymousInterface510.t [@@js.get "WebGLShaderPrecisionFormat"]
-val webGLSync: unit -> AnonymousInterface511.t [@@js.get "WebGLSync"]
-
-(** Part of the WebGL API and represents an opaque texture object providing storage and state for texturing operations. *)
-val webGLTexture: unit -> AnonymousInterface512.t [@@js.get "WebGLTexture"]
-val webGLTransformFeedback: unit -> AnonymousInterface513.t [@@js.get "WebGLTransformFeedback"]
-
-(** Part of the WebGL API and represents the location of a uniform variable in a shader program. *)
-val webGLUniformLocation: unit -> AnonymousInterface514.t [@@js.get "WebGLUniformLocation"]
-val webGLVertexArrayObject: unit -> AnonymousInterface515.t [@@js.get "WebGLVertexArrayObject"]
-
-(** Provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection. *)
-val webSocket: unit -> AnonymousInterface516.t [@@js.get "WebSocket"]
-
-(** Events that occur due to the user moving a mouse wheel or similar input device. *)
-val wheelEvent: unit -> AnonymousInterface517.t [@@js.get "WheelEvent"]
-
-(** A window containing a DOM document; the document property points to the DOM document loaded in that window. *)
-val window: unit -> AnonymousInterface518.t [@@js.get "Window"]
-
-(** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. *)
-val worker: unit -> AnonymousInterface519.t [@@js.get "Worker"]
-
-(** Available only in secure contexts. *)
-val worklet: unit -> AnonymousInterface520.t [@@js.get "Worklet"]
-
-(** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. *)
-val writableStream: unit -> AnonymousInterface521.t [@@js.get "WritableStream"]
-
-(** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. *)
-val writableStreamDefaultController: unit -> AnonymousInterface522.t [@@js.get "WritableStreamDefaultController"]
-
-(** This Streams API interface is the object returned by WritableStream.getWriter() and once created locks the < writer to the WritableStream ensuring that no other streams can write to the underlying sink. *)
-val writableStreamDefaultWriter: unit -> AnonymousInterface523.t [@@js.get "WritableStreamDefaultWriter"]
-
-(** An XML document. It inherits from the generic Document and does not add any specific methods or properties to it: nevertheless, several algorithms behave differently with the two types of documents. *)
-val xMLDocument: unit -> AnonymousInterface524.t [@@js.get "XMLDocument"]
-
-(** Use XMLHttpRequest (XHR) objects to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing. *)
-val xMLHttpRequest: unit -> AnonymousInterface525.t [@@js.get "XMLHttpRequest"]
-val xMLHttpRequestEventTarget: unit -> AnonymousInterface526.t [@@js.get "XMLHttpRequestEventTarget"]
-val xMLHttpRequestUpload: unit -> AnonymousInterface527.t [@@js.get "XMLHttpRequestUpload"]
-
-(** Provides the serializeToString() method to construct an XML string representing a DOM tree. *)
-val xMLSerializer: unit -> AnonymousInterface528.t [@@js.get "XMLSerializer"]
-
-(** The XPathEvaluator interface allows to compile and evaluate XPath expressions. *)
-val xPathEvaluator: unit -> AnonymousInterface529.t [@@js.get "XPathEvaluator"]
-
-(** This interface is a compiled XPath expression that can be evaluated on a document or specific node to return information its DOM tree. *)
-val xPathExpression: unit -> AnonymousInterface530.t [@@js.get "XPathExpression"]
-
-(** The results generated by evaluating an XPath expression within the context of a given node. *)
-val xPathResult: unit -> AnonymousInterface531.t [@@js.get "XPathResult"]
-
-(** An XSLTProcessor applies an XSLT stylesheet transformation to an XML document to produce a new XML document as output. It has methods to load the XSLT stylesheet, to manipulate <xsl:param> parameter values, and to apply the transformation to documents. *)
-val xSLTProcessor: unit -> AnonymousInterface532.t [@@js.get "XSLTProcessor"]
+module[@js.scope "AbortController"] AbortController : sig
+  type t = [`AbortController] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`AbortController]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`AbortController]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `AbortController ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  
+  (** Returns the AbortSignal object associated with this object. *)
+  val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
+  
+  (** Invoking this method will set this object's AbortSignal's aborted flag and signal to any observers that the associated activity is to be aborted. *)
+  val abort: 'tags this -> unit [@@js.call "abort"]
+  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
 
 (**
   The `console` module provides a simple debugging console that is similar to the
@@ -56672,9 +49769,6 @@ val xSLTProcessor: unit -> AnonymousInterface532.t [@@js.get "XSLTProcessor"]
   ```
 *)
 val console: unit -> Console.t [@@js.get "console"]
-val audio: unit -> AnonymousInterface535.t [@@js.get "Audio"]
-val image: unit -> AnonymousInterface537.t [@@js.get "Image"]
-val option: unit -> AnonymousInterface536.t [@@js.get "Option"]
 
 (** @deprecated This is a legacy alias of `navigator`. *)
 val clientInformation: unit -> Navigator.t [@@js.get "clientInformation"]
@@ -56685,22 +49779,22 @@ val closed: unit -> bool [@@js.get "closed"]
 (** Defines a new custom element, mapping the given name to the given constructor as an autonomous custom element. *)
 val customElements: unit -> CustomElementRegistry.t [@@js.get "customElements"]
 val devicePixelRatio: unit -> float [@@js.get "devicePixelRatio"]
-val document': unit -> Document.t [@@js.get "document"]
+val document: unit -> Document.t [@@js.get "document"]
 
 (** @deprecated  *)
-val event': unit -> Event.t or_undefined [@@js.get "event"]
+val event: unit -> Event.t or_undefined [@@js.get "event"]
 
 (** @deprecated  *)
-val external_': unit -> External.t [@@js.get "external"]
+val external_: unit -> External.t [@@js.get "external"]
 val frameElement: unit -> Element.t or_null [@@js.get "frameElement"]
 val frames: unit -> WindowProxy.t [@@js.get "frames"]
-val history': unit -> History.t [@@js.get "history"]
+val history: unit -> History.t [@@js.get "history"]
 val innerHeight: unit -> float [@@js.get "innerHeight"]
 val innerWidth: unit -> float [@@js.get "innerWidth"]
 val length: unit -> float [@@js.get "length"]
 
 (** Returns workerGlobal's WorkerLocation object. *)
-val location': unit -> Location.t [@@js.get "location"]
+val location: unit -> Location.t [@@js.get "location"]
 
 (** Returns true if the location bar is visible; otherwise, returns false. *)
 val locationbar: unit -> BarProp.t [@@js.get "locationbar"]
@@ -56712,7 +49806,7 @@ val menubar: unit -> BarProp.t [@@js.get "menubar"]
 val name: unit -> unit [@@js.get "name"]
 
 (** Returns workerGlobal's WorkerNavigator object. *)
-val navigator': unit -> Navigator.t [@@js.get "navigator"]
+val navigator: unit -> Navigator.t [@@js.get "navigator"]
 
 (** Available only in secure contexts. *)
 val ondevicemotion: unit -> (this:Window.t -> ev:DeviceMotionEvent.t -> any) or_null [@@js.get "ondevicemotion"]
@@ -56744,7 +49838,7 @@ val parent: unit -> WindowProxy.t [@@js.get "parent"]
 
 (** Returns true if the personal bar is visible; otherwise, returns false. *)
 val personalbar: unit -> BarProp.t [@@js.get "personalbar"]
-val screen': unit -> Screen.t [@@js.get "screen"]
+val screen: unit -> Screen.t [@@js.get "screen"]
 val screenLeft: unit -> float [@@js.get "screenLeft"]
 val screenTop: unit -> float [@@js.get "screenTop"]
 val screenX: unit -> float [@@js.get "screenX"]
@@ -56757,7 +49851,7 @@ val scrollbars: unit -> BarProp.t [@@js.get "scrollbars"]
 
 (** Returns workerGlobal. *)
 val self: unit -> (Window.t, (* FIXME: unknown type 'typeof globalThis' *)any) intersection2 [@@js.get "self"]
-val speechSynthesis': unit -> SpeechSynthesis.t [@@js.get "speechSynthesis"]
+val speechSynthesis: unit -> SpeechSynthesis.t [@@js.get "speechSynthesis"]
 
 (** @deprecated  *)
 val status: unit -> string [@@js.get "status"]
@@ -56768,8 +49862,8 @@ val statusbar: unit -> BarProp.t [@@js.get "statusbar"]
 (** Returns true if the toolbar is visible; otherwise, returns false. *)
 val toolbar: unit -> BarProp.t [@@js.get "toolbar"]
 val top: unit -> WindowProxy.t or_null [@@js.get "top"]
-val visualViewport': unit -> VisualViewport.t [@@js.get "visualViewport"]
-val window': unit -> (Window.t, (* FIXME: unknown type 'typeof globalThis' *)any) intersection2 [@@js.get "window"]
+val visualViewport: unit -> VisualViewport.t [@@js.get "visualViewport"]
+val window: unit -> (Window.t, (* FIXME: unknown type 'typeof globalThis' *)any) intersection2 [@@js.get "window"]
 val alert: ?message:any -> unit -> unit [@@js.global "alert"]
 val blur: unit -> unit [@@js.global "blur"]
 val cancelIdleCallback: float -> unit [@@js.global "cancelIdleCallback"]
@@ -57185,11 +50279,11 @@ val localStorage: unit -> Storage.t [@@js.get "localStorage"]
 (** Available only in secure contexts. *)
 val caches: unit -> CacheStorage.t [@@js.get "caches"]
 val crossOriginIsolated: unit -> bool [@@js.get "crossOriginIsolated"]
-val crypto': unit -> Crypto.t [@@js.get "crypto"]
+val crypto: unit -> Crypto.t [@@js.get "crypto"]
 val indexedDB: unit -> IDBFactory.t [@@js.get "indexedDB"]
 val isSecureContext: unit -> bool [@@js.get "isSecureContext"]
 val origin: unit -> string [@@js.get "origin"]
-val performance': unit -> Performance.t [@@js.get "performance"]
+val performance: unit -> Performance.t [@@js.get "performance"]
 
 (**
   Decodes a string of Base64-encoded data into bytes, and encodes those bytes

@@ -1,5 +1,7 @@
 module Targets.ReScript.Common
 
+open Ts2Ml
+
 type Options =
   inherit GlobalOptions
   inherit Typer.TyperOptions

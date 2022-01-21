@@ -1,6 +1,7 @@
 module Targets.ReScript.ReScriptHelper
 
 open System
+open Ts2Ml
 open Syntax
 open Targets.ReScript.Common
 open DataTypes

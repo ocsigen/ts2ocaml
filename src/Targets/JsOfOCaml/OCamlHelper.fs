@@ -397,7 +397,6 @@ module Kind =
 let jsBuilder name (fields: {| isOptional: bool; name: string; value: text |} list) (thisType: text) =
   let args =
     fields
-    |> List.sortByDescending (fun f -> f.isOptional) // place optional arguments first
     |> List.map (fun f ->
       let prefix = if f.isOptional then str "?" else empty
       let name = Naming.valueName f.name

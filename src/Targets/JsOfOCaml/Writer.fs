@@ -1101,7 +1101,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
               Some {| isOptional = false; name = name; value = value |}
             *)
             | _ -> None)
-        [overloaded (fun rename -> [jsBuilder (rename "make") fields selfTyText])]
+        [overloaded (fun rename -> [jsBuilder (rename "create") fields selfTyText])]
 
     let items = [
       yield! typeDefinition

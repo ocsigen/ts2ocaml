@@ -139,7 +139,7 @@ module Type =
     | xs -> concat sep xs |> between "(" ")"
 
   let tuple = many (str " * ")
-  let arrow = many (str " -> ")
+  let arrow xs = concat (str " -> ") xs
 
   let app t = function
     | [] -> failwith "type application with empty arguments"
@@ -393,3 +393,17 @@ module Naming =
 module Kind =
   let generatesOCamlModule kind =
     Set.intersect kind (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not
+
+let jsBuilder name (fields: {| isOptional: bool; name: string; value: text |} list) (thisType: text) =
+  let args =
+    fields
+    |> List.sortByDescending (fun f -> f.isOptional) // place optional arguments first
+    |> List.map (fun f ->
+      let prefix = if f.isOptional then str "?" else empty
+      let name = Naming.valueName f.name
+      let value =
+        if name = f.name then f.value
+        else
+          between "(" ")" (f.value + tprintf "[@js \"%s\"]" f.name)
+      prefix +@ name +@ ":" + value)
+  tprintf "val %s: " name + Type.arrow (args @ [Type.void_; thisType]) +@ " [@@js.builder]"

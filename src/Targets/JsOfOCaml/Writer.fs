@@ -943,6 +943,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
           // no need to generate t_n types for anonymous interfaces
           ctx.options |> JS.cloneWith (fun o -> o.safeArity <- o.safeArity.WithProvide(false)))
     let typrms = List.map (fun (tp: TypeParam) -> tprintf "'%s" tp.name) c.typeParams
+    let selfTyText = Type.appOpt (str "t") typrms
     let currentNamespace = innerCtx |> Context.getFullName []
 
     let labels =
@@ -966,7 +967,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       if useTags then
         Type.appOpt (str "this") (str "'tags" :: typrms)
       else
-        Type.appOpt (str "t") typrms
+        selfTyText
 
     let overrideFunc =
       OverrideFunc.combine overrideFunc <|
@@ -1043,7 +1044,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         let castTy =
           Type.arrow [
             polymorphicThis
-            Type.appOpt (str "t") typrms
+            selfTyText
           ]
         yield ScopeIndependent (val_ "cast_from" castTy +@ " " + Attr.js_custom_val (let_ "cast_from" [] None (str "Obj.magic")))
 
@@ -1072,11 +1073,42 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       | _ -> ()
     ]
 
+    let builder =
+      let emitType_ ctx ty =
+        emitTypeImpl { flags with needParen = true; variance = Contravariant } overrideFunc ctx ty
+      if not c.isPOJO then []
+      else
+        let field (fl: FieldLike) =
+          let value, isOptional =
+            match fl.value with
+            | Prim Null | Prim Undefined -> Prim Never, true
+            | Union u ->
+              let nulls, others =
+                u.types |> List.partition (function Prim Null | Prim Undefined -> true | _ -> false)
+              if List.isEmpty nulls then fl.value, fl.isOptional
+              else Union { types = others }, true
+            | _ -> fl.value, fl.isOptional
+          {| fl with value = value |> emitType_ innerCtx; isOptional = isOptional |}
+        let fields =
+          c.members
+          |> List.choose (fun (ma, m) ->
+            match m with
+            | Field (fl, (Mutable | ReadOnly)) -> Some (field fl)
+            | Getter fl -> Some (field fl)
+            (*
+            | Method (name, ft, _) ->
+              let value = emitType_ innerCtx (Func (ft, [], ma.loc))
+              Some {| isOptional = false; name = name; value = value |}
+            *)
+            | _ -> None)
+        [overloaded (fun rename -> [jsBuilder (rename "make") fields selfTyText])]
+
     let items = [
       yield! typeDefinition
       yield! tagsDefinition |> Option.toList
       yield! polymorphicThisDefinition |> Option.toList
       yield! members
+      yield! builder
       yield! castFunctions
     ]
 

@@ -1244,6 +1244,37 @@ module Statement =
       | _ -> None
     mapTypeWith orf (fun () -> mapIdent f) (fun _ -> id) id () stmts
 
+type Class<'a> with
+  /// check if an interface consists only of fields and properties (but not methods)
+  ///
+  /// setters are ignored
+  member this.isPOJO : bool =
+    this.isInterface &&
+    this.members |> List.exists (fun (_, m) -> match m with Field _ | Getter _ -> true | _ -> false) &&
+    this.members
+    |> List.filter (fun (_, m) -> match m with Setter _ | UnknownMember _ -> false | _ -> true)
+    |> List.forall (fun (_, m) ->
+      match m with
+      | Field _ | Getter _ -> true
+      | Method _ | Callable _ | Newable _ | Indexer _ | Constructor _ | SymbolIndexer _ -> false
+      | Setter _ | UnknownMember _ -> true // impossible
+    )
+
+  /// check if an interface consists only of fields, properties, and methods (but not callable, newable, etc)
+  ///
+  /// setters are ignored
+  member this.isPOJOWithMethods : bool =
+    this.isInterface &&
+    this.members |> List.exists (fun (_, m) -> match m with Field _ | Getter _ | Method _ -> true | _ -> false) &&
+    this.members
+    |> List.filter (fun (_, m) -> match m with Setter _ | UnknownMember _ -> false | _ -> true)
+    |> List.forall (fun (_, m) ->
+      match m with
+      | Field _ | Getter _ | Method _ -> true
+      | Callable _ | Newable _ | Indexer _ | Constructor _ | SymbolIndexer _ -> false
+      | Setter _ | UnknownMember _ -> true // impossible
+    )
+
 type [<RequireQualifiedAccess>] Typeofable = Number | String | Boolean | Symbol | BigInt
 module TypeofableType =
   let toType = function

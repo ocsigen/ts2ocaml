@@ -54,7 +54,7 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   (** Returns a string containing a query string suitable for use in a URL. Does not include the question mark. *)
   val toString: 'tags this -> string [@@js.call "toString"]
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:(t, string list) or_array or_string -> unit -> t [@@js.create]
   val toString': unit -> string [@@js.global "toString"]
@@ -94,7 +94,7 @@ module[@js.scope "TimeRanges"] TimeRanges : sig
     Throws an "IndexSizeError" DOMException if the index is out of range.
   *)
   val start: 'tags this -> index:float -> float [@@js.call "start"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -136,7 +136,8 @@ module EventInit : sig
   val set_cancelable: 'tags this -> bool -> unit [@@js.set "cancelable"]
   val get_composed: 'tags this -> bool [@@js.get "composed"]
   val set_composed: 'tags this -> bool -> unit [@@js.set "composed"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: bubbles:bool -> cancelable:bool -> composed:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DOMHighResTimeStamp : sig
   type t = float
@@ -164,7 +165,8 @@ module EventListenerOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_capture: 'tags this -> bool [@@js.get "capture"]
   val set_capture: 'tags this -> bool -> unit [@@js.set "capture"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: capture:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object. *)
@@ -229,7 +231,7 @@ module[@js.scope "AbortSignal"] rec AbortSignal : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -255,7 +257,8 @@ and AddEventListenerOptions : sig
   val set_passive: 'tags this -> bool -> unit [@@js.set "passive"]
   val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
   val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: once:bool -> passive:bool -> signal:AbortSignal.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** An event which takes place in the DOM. *)
@@ -335,7 +338,7 @@ and[@js.scope "Event"] Event : sig
   val get_BUBBLING_PHASE: 'tags this -> float [@@js.get "BUBBLING_PHASE"]
   val get_CAPTURING_PHASE: 'tags this -> float [@@js.get "CAPTURING_PHASE"]
   val get_NONE: 'tags this -> float [@@js.get "NONE"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:EventInit.t -> unit -> t [@@js.create]
   val at_target: unit -> float [@@js.get "AT_TARGET"]
@@ -360,7 +363,7 @@ and EventListener : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> evt:Event.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and EventListenerObject : sig
   type t = [`EventListenerObject] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -379,7 +382,7 @@ and EventListenerObject : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val handleEvent: 'tags this -> object_:Event.t -> unit [@@js.call "handleEvent"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and EventListenerOrEventListenerObject : sig
   type t = (EventListener.t, EventListenerObject.t) union2
@@ -430,7 +433,7 @@ and[@js.scope "EventTarget"] EventTarget : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener: 'tags this -> type_:string -> callback:EventListenerOrEventListenerObject.t or_null -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -516,7 +519,7 @@ module[@js.scope "SourceBuffer"] SourceBuffer : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -586,7 +589,7 @@ module[@js.scope "SourceBufferList"] SourceBufferList : sig
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val get: 'tags this -> float -> SourceBuffer.t [@@js.index_get]
   val set: 'tags this -> float -> SourceBuffer.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -680,7 +683,7 @@ module[@js.scope "MediaSource"] MediaSource : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val isTypeSupported: string -> bool [@@js.global "isTypeSupported"]
@@ -710,7 +713,7 @@ module[@js.scope "ReadableStreamDefaultController"] ReadableStreamDefaultControl
   val close: ('tags, 'R) this -> unit [@@js.call "close"]
   val enqueue: ('tags, 'R) this -> ?chunk:'R -> unit -> unit [@@js.call "enqueue"]
   val error: ('tags, 'R) this -> ?e:any -> unit -> unit [@@js.call "error"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'R) this -> 'R t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: unit -> t_0 [@@js.create]
 end
@@ -739,7 +742,7 @@ module UnderlyingSourceStartCallback : sig
   val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
   val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> any [@@js.apply]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'R) this -> 'R t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSourcePullCallback : sig
   type 'R t = [`UnderlyingSourcePullCallback of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
@@ -758,7 +761,7 @@ module UnderlyingSourcePullCallback : sig
   val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
   val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> unit [@@js.apply]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'R) this -> 'R t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSourceCancelCallback : sig
   type t = [`UnderlyingSourceCancelCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -777,7 +780,7 @@ module UnderlyingSourceCancelCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> ?reason:any -> unit -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSource : sig
   type 'R t = [`UnderlyingSource of 'R] intf [@@js.custom { of_js=(fun _R -> Obj.magic); to_js=(fun _R -> Obj.magic) }]
@@ -808,7 +811,8 @@ module UnderlyingSource : sig
   val set_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t -> unit [@@js.set "start"]
   val get_type: ('tags, 'R) this -> never or_undefined [@@js.get "type"]
   val set_type: ('tags, 'R) this -> never or_undefined -> unit [@@js.set "type"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val create: cancel:UnderlyingSourceCancelCallback.t -> pull:'R UnderlyingSourcePullCallback.t -> start:'R UnderlyingSourceStartCallback.t -> ?type_:(never[@js "type"]) -> unit -> 'R t [@@js.builder]
+  val cast_from: ('tags, 'R) this -> 'R t [@@js.custom let cast_from = Obj.magic]
 end
 module StreamPipeOptions : sig
   type t = [`StreamPipeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -870,7 +874,8 @@ module StreamPipeOptions : sig
   val set_preventClose: 'tags this -> bool -> unit [@@js.set "preventClose"]
   val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
   val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: preventAbort:bool -> preventCancel:bool -> preventClose:bool -> signal:AbortSignal.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. *)
@@ -891,7 +896,7 @@ module[@js.scope "WritableStreamDefaultController"] WritableStreamDefaultControl
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val error: 'tags this -> ?e:any -> unit -> unit [@@js.call "error"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -912,7 +917,7 @@ module UnderlyingSinkWriteCallback : sig
   val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
   val apply: ('tags, 'W) this -> chunk:'W -> controller:WritableStreamDefaultController.t -> unit [@@js.apply]
-  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'W) this -> 'W t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSinkStartCallback : sig
   type t = [`UnderlyingSinkStartCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -931,7 +936,7 @@ module UnderlyingSinkStartCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> controller:WritableStreamDefaultController.t -> any [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSinkCloseCallback : sig
   type t = [`UnderlyingSinkCloseCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -950,7 +955,7 @@ module UnderlyingSinkCloseCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSinkAbortCallback : sig
   type t = [`UnderlyingSinkAbortCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -969,7 +974,7 @@ module UnderlyingSinkAbortCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> ?reason:any -> unit -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSink : sig
   type 'W t = [`UnderlyingSink of 'W] intf [@@js.custom { of_js=(fun _W -> Obj.magic); to_js=(fun _W -> Obj.magic) }]
@@ -1002,7 +1007,8 @@ module UnderlyingSink : sig
   val set_type: ('tags, 'W) this -> never or_undefined -> unit [@@js.set "type"]
   val get_write: ('tags, 'W) this -> 'W UnderlyingSinkWriteCallback.t [@@js.get "write"]
   val set_write: ('tags, 'W) this -> 'W UnderlyingSinkWriteCallback.t -> unit [@@js.set "write"]
-  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
+  val create: abort:UnderlyingSinkAbortCallback.t -> close:UnderlyingSinkCloseCallback.t -> start:UnderlyingSinkStartCallback.t -> ?type_:(never[@js "type"]) -> write:'W UnderlyingSinkWriteCallback.t -> unit -> 'W t [@@js.builder]
+  val cast_from: ('tags, 'W) this -> 'W t [@@js.custom let cast_from = Obj.magic]
 end
 module QueuingStrategySize : sig
   type 'T t = [`QueuingStrategySize of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
@@ -1026,7 +1032,7 @@ module QueuingStrategySize : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: ('tags, 'T) this -> chunk:'T -> float [@@js.apply]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
 module QueuingStrategy : sig
   type 'T t = [`QueuingStrategy of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
@@ -1053,7 +1059,8 @@ module QueuingStrategy : sig
   val set_highWaterMark: ('tags, 'T) this -> float -> unit [@@js.set "highWaterMark"]
   val get_size: ('tags, 'T) this -> 'T QueuingStrategySize.t [@@js.get "size"]
   val set_size: ('tags, 'T) this -> 'T QueuingStrategySize.t -> unit [@@js.set "size"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val create: highWaterMark:float -> size:'T QueuingStrategySize.t -> unit -> 'T t [@@js.builder]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. *)
@@ -1082,7 +1089,7 @@ module[@js.scope "WritableStream"] rec WritableStream : sig
   val abort: ('tags, 'W) this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "abort"]
   val close: ('tags, 'W) this -> unit Promise.t_1 [@@js.call "close"]
   val getWriter: ('tags, 'W) this -> 'W WritableStreamDefaultWriter.t [@@js.call "getWriter"]
-  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'W) this -> 'W t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: ?underlyingSink:'W UnderlyingSink.t -> ?strategy:'W QueuingStrategy.t -> unit -> 'W t [@@js.create]
 end
@@ -1116,7 +1123,7 @@ and[@js.scope "WritableStreamDefaultWriter"] WritableStreamDefaultWriter : sig
   val close: ('tags, 'W) this -> unit Promise.t_1 [@@js.call "close"]
   val releaseLock: ('tags, 'W) this -> unit [@@js.call "releaseLock"]
   val write: ('tags, 'W) this -> ?chunk:'W -> unit -> unit Promise.t_1 [@@js.call "write"]
-  val cast_from: (('tags, 'W) this -> 'W t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'W) this -> 'W t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: 'W WritableStream.t -> 'W t [@@js.create]
 end
@@ -1138,7 +1145,7 @@ module ReadableStreamGenericReader : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_closed: 'tags this -> never or_undefined Promise.t_1 [@@js.get "closed"]
   val cancel: 'tags this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "cancel"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ReadableStreamDefaultReadValueResult : sig
   type 'T t = [`ReadableStreamDefaultReadValueResult of 'T] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
@@ -1160,7 +1167,8 @@ module ReadableStreamDefaultReadValueResult : sig
   val set_done: ('tags, 'T) this -> ([`L_b_false[@js false]] [@js.enum]) -> unit [@@js.set "done"]
   val get_value: ('tags, 'T) this -> 'T [@@js.get "value"]
   val set_value: ('tags, 'T) this -> 'T -> unit [@@js.set "value"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val create: done_:(([`L_b_false[@js false]] [@js.enum])[@js "done"]) -> value:'T -> unit -> 'T t [@@js.builder]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
 module ReadableStreamDefaultReadDoneResult : sig
   type t = [`ReadableStreamDefaultReadDoneResult] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -1182,7 +1190,8 @@ module ReadableStreamDefaultReadDoneResult : sig
   val set_done: 'tags this -> ([`L_b_true[@js true]] [@js.enum]) -> unit [@@js.set "done"]
   val get_value: 'tags this -> never or_undefined [@@js.get "value"]
   val set_value: 'tags this -> never or_undefined -> unit [@@js.set "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: done_:(([`L_b_true[@js true]] [@js.enum])[@js "done"]) -> ?value:never -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ReadableStreamDefaultReadResult : sig
   type 'T t = ([`U_b_false of 'T ReadableStreamDefaultReadValueResult.t [@js false] | `U_b_true of ReadableStreamDefaultReadDoneResult.t [@js true]] [@js.union on_field "done"])
@@ -1221,7 +1230,7 @@ module[@js.scope "ReadableStream"] rec ReadableStream : sig
   val pipeThrough: ('tags, 'R) this -> transform:('T, 'R) ReadableWritablePair.t -> ?options:StreamPipeOptions.t -> unit -> 'T t [@@js.call "pipeThrough"]
   val pipeTo: ('tags, 'R) this -> destination:'R WritableStream.t -> ?options:StreamPipeOptions.t -> unit -> unit Promise.t_1 [@@js.call "pipeTo"]
   val tee: ('tags, 'R) this -> ('R t * 'R t) [@@js.call "tee"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'R) this -> 'R t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: ?underlyingSource:'R UnderlyingSource.t -> ?strategy:'R QueuingStrategy.t -> unit -> 'R t [@@js.create]
 end
@@ -1248,7 +1257,7 @@ and[@js.scope "ReadableStreamDefaultReader"] ReadableStreamDefaultReader : sig
   val t_0_of_js: Ojs.t -> t_0
   val read: ('tags, 'R) this -> 'R ReadableStreamDefaultReadResult.t Promise.t_1 [@@js.call "read"]
   val releaseLock: ('tags, 'R) this -> unit [@@js.call "releaseLock"]
-  val cast_from: (('tags, 'R) this -> 'R t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'R) this -> 'R t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: 'R ReadableStream.t -> 'R t [@@js.create]
 end
@@ -1294,7 +1303,8 @@ and ReadableWritablePair : sig
     Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
   *)
   val set_writable: ('tags, 'R, 'W) this -> 'W WritableStream.t -> unit [@@js.set "writable"]
-  val cast_from: (('tags, 'R, 'W) this -> ('R, 'W) t) [@@js.custom let cast_from = Obj.magic]
+  val create: readable:'R ReadableStream.t -> writable:'W WritableStream.t -> unit -> ('R, 'W) t [@@js.builder]
+  val cast_from: ('tags, 'R, 'W) this -> ('R, 'W) t [@@js.custom let cast_from = Obj.magic]
 end
 module EndingType : sig
   type t = ([`L_s511_native[@js "native"] | `L_s784_transparent[@js "transparent"]] [@js.enum])
@@ -1324,7 +1334,8 @@ module BlobPropertyBag : sig
   val set_endings: 'tags this -> EndingType.t -> unit [@@js.set "endings"]
   val get_type: 'tags this -> string [@@js.get "type"]
   val set_type: 'tags this -> string -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: endings:EndingType.t -> type_:(string[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system. *)
@@ -1350,7 +1361,7 @@ module[@js.scope "Blob"] rec Blob : sig
   val slice: 'tags this -> ?start:float -> ?end_:float -> ?contentType:string -> unit -> t [@@js.call "slice"]
   val stream: 'tags this -> ReadableStream.t_0 [@@js.call "stream"]
   val text: 'tags this -> string Promise.t_1 [@@js.call "text"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> t [@@js.create]
 end
@@ -1404,7 +1415,7 @@ module[@js.scope "URL"] URL : sig
   val get_username: 'tags this -> string [@@js.get "username"]
   val set_username: 'tags this -> string -> unit [@@js.set "username"]
   val toJSON: 'tags this -> string [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: url:t or_string -> ?base:t or_string -> unit -> t [@@js.create]
   val createObjectURL: (Blob.t, MediaSource.t) union2 -> string [@@js.global "createObjectURL"]
@@ -1489,7 +1500,7 @@ module[@js.scope "VisualViewport"] VisualViewport : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -1573,9 +1584,10 @@ module[@js.scope "SpeechSynthesisVoice"] SpeechSynthesisVoice : sig
   val get_localService: 'tags this -> bool [@@js.get "localService"]
   val get_name: 'tags this -> string [@@js.get "name"]
   val get_voiceURI: 'tags this -> string [@@js.get "voiceURI"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: default:bool -> lang:string -> localService:bool -> name:string -> voiceURI:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module SpeechSynthesisErrorCode : sig
   type t = ([`L_s134_audio_busy[@js "audio-busy"] | `L_s135_audio_hardware[@js "audio-hardware"] | `L_s177_canceled[@js "canceled"] | `L_s421_interrupted[@js "interrupted"] | `L_s423_invalid_argument[@js "invalid-argument"] | `L_s437_language_unavailable[@js "language-unavailable"] | `L_s517_network[@js "network"] | `L_s532_not_allowed[@js "not-allowed"] | `L_s747_synthesis_failed[@js "synthesis-failed"] | `L_s748_synthesis_unavailable[@js "synthesis-unavailable"] | `L_s756_text_too_long[@js "text-too-long"] | `L_s824_voice_unavailable[@js "voice-unavailable"]] [@js.enum])
@@ -1602,9 +1614,10 @@ module[@js.scope "SpeechSynthesisErrorEvent"] rec SpeechSynthesisErrorEvent : si
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_error: 'tags this -> SpeechSynthesisErrorCode.t [@@js.get "error"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: error:SpeechSynthesisErrorCode.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:SpeechSynthesisErrorEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:SpeechSynthesisErrorEventInit.t -> t [@@js.create]
 end
 and SpeechSynthesisErrorEventInit : sig
   type t = [`EventInit | `SpeechSynthesisErrorEventInit | `SpeechSynthesisEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -1624,7 +1637,8 @@ and SpeechSynthesisErrorEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_error: 'tags this -> SpeechSynthesisErrorCode.t [@@js.get "error"]
   val set_error: 'tags this -> SpeechSynthesisErrorCode.t -> unit [@@js.set "error"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: error:SpeechSynthesisErrorCode.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Web Speech API interface contains information about the current state of SpeechSynthesisUtterance objects that have been processed in the speech service. *)
@@ -1649,9 +1663,10 @@ and[@js.scope "SpeechSynthesisEvent"] SpeechSynthesisEvent : sig
   val get_elapsedTime: 'tags this -> float [@@js.get "elapsedTime"]
   val get_name: 'tags this -> string [@@js.get "name"]
   val get_utterance: 'tags this -> SpeechSynthesisUtterance.t [@@js.get "utterance"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: charIndex:float -> charLength:float -> elapsedTime:float -> name:string -> utterance:SpeechSynthesisUtterance.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:SpeechSynthesisEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:SpeechSynthesisEventInit.t -> t [@@js.create]
 end
 and SpeechSynthesisEventInit : sig
   type t = [`EventInit | `SpeechSynthesisEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -1679,7 +1694,8 @@ and SpeechSynthesisEventInit : sig
   val set_name: 'tags this -> string -> unit [@@js.set "name"]
   val get_utterance: 'tags this -> SpeechSynthesisUtterance.t [@@js.get "utterance"]
   val set_utterance: 'tags this -> SpeechSynthesisUtterance.t -> unit [@@js.set "utterance"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: charIndex:float -> charLength:float -> elapsedTime:float -> name:string -> utterance:SpeechSynthesisUtterance.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Web Speech API interface represents a speech request. It contains the content the speech service should read and information about how to read it (e.g. language, pitch and volume.) *)
@@ -1765,7 +1781,7 @@ and[@js.scope "SpeechSynthesisUtterance"] SpeechSynthesisUtterance : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?text:string -> unit -> t [@@js.create]
 end
@@ -1837,7 +1853,7 @@ module[@js.scope "SpeechSynthesis"] SpeechSynthesis : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -2008,7 +2024,7 @@ module[@js.scope "ScreenOrientation"] ScreenOrientation : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -2108,7 +2124,7 @@ module[@js.scope "PerformanceTiming"] PerformanceTiming : sig
   
   (** @deprecated  *)
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -2143,7 +2159,7 @@ module[@js.scope "PerformanceNavigation"] PerformanceNavigation : sig
   val get_TYPE_NAVIGATE: 'tags this -> float [@@js.get "TYPE_NAVIGATE"]
   val get_TYPE_RELOAD: 'tags this -> float [@@js.get "TYPE_RELOAD"]
   val get_TYPE_RESERVED: 'tags this -> float [@@js.get "TYPE_RESERVED"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val type_back_forward: unit -> float [@@js.get "TYPE_BACK_FORWARD"]
@@ -2175,7 +2191,8 @@ module PerformanceMeasureOptions : sig
   val set_end: 'tags this -> DOMHighResTimeStamp.t or_string -> unit [@@js.set "end"]
   val get_start: 'tags this -> DOMHighResTimeStamp.t or_string [@@js.get "start"]
   val set_start: 'tags this -> DOMHighResTimeStamp.t or_string -> unit [@@js.set "start"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: detail:any -> duration:DOMHighResTimeStamp.t -> end_:(DOMHighResTimeStamp.t or_string[@js "end"]) -> start:DOMHighResTimeStamp.t or_string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Encapsulates a single performance metric that is part of the performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries are also created in indirect ways such as loading a resource (such as an image). *)
@@ -2200,7 +2217,7 @@ module[@js.scope "PerformanceEntry"] PerformanceEntry : sig
   val get_name: 'tags this -> string [@@js.get "name"]
   val get_startTime: 'tags this -> DOMHighResTimeStamp.t [@@js.get "startTime"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -2223,9 +2240,10 @@ module[@js.scope "PerformanceMeasure"] PerformanceMeasure : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_detail: 'tags this -> any [@@js.get "detail"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: detail:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module PerformanceMarkOptions : sig
   type t = [`PerformanceMarkOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2247,7 +2265,8 @@ module PerformanceMarkOptions : sig
   val set_detail: 'tags this -> any -> unit [@@js.set "detail"]
   val get_startTime: 'tags this -> DOMHighResTimeStamp.t [@@js.get "startTime"]
   val set_startTime: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "startTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: detail:any -> startTime:DOMHighResTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** PerformanceMark is an abstract interface for PerformanceEntry objects with an entryType of "mark". Entries of this type are created by calling performance.mark() to add a named DOMHighResTimeStamp (the mark) to the browser's performance timeline. *)
@@ -2268,9 +2287,10 @@ module[@js.scope "PerformanceMark"] PerformanceMark : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_detail: 'tags this -> any [@@js.get "detail"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: detail:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: markName:string -> ?markOptions:PerformanceMarkOptions.t -> unit -> t [@@js.create]
+  val create': markName:string -> ?markOptions:PerformanceMarkOptions.t -> unit -> t [@@js.create]
 end
 module PerformanceEntryList : sig
   type t = PerformanceEntry.t list
@@ -2358,7 +2378,7 @@ module[@js.scope "Performance"] Performance : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -2441,7 +2461,8 @@ module GetRootNodeOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_composed: 'tags this -> bool [@@js.get "composed"]
   val set_composed: 'tags this -> bool -> unit [@@js.set "composed"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: composed:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module XPathNSResolver : sig
   module AnonymousInterface539 : sig
@@ -2475,7 +2496,8 @@ module WebGLContextEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_statusMessage: 'tags this -> string [@@js.get "statusMessage"]
   val set_statusMessage: 'tags this -> string -> unit [@@js.set "statusMessage"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: statusMessage:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The WebContextEvent interface is part of the WebGL API and is an interface for an event that is generated in response to a status change to the WebGL rendering context. *)
@@ -2496,9 +2518,10 @@ module[@js.scope "WebGLContextEvent"] WebGLContextEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_statusMessage: 'tags this -> string [@@js.get "statusMessage"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: statusMessage:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInit:WebGLContextEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInit:WebGLContextEventInit.t -> unit -> t [@@js.create]
 end
 module VisibilityState : sig
   type t = ([`L_s379_hidden[@js "hidden"] | `L_s823_visible[@js "visible"]] [@js.enum])
@@ -2556,7 +2579,8 @@ module SecurityPolicyViolationEventInit : sig
   val set_statusCode: 'tags this -> float -> unit [@@js.set "statusCode"]
   val get_violatedDirective: 'tags this -> string [@@js.get "violatedDirective"]
   val set_violatedDirective: 'tags this -> string -> unit [@@js.set "violatedDirective"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: blockedURI:string -> columnNumber:float -> disposition:SecurityPolicyViolationEventDisposition.t -> documentURI:string -> effectiveDirective:string -> lineNumber:float -> originalPolicy:string -> referrer:string -> sample:string -> sourceFile:string -> statusCode:float -> violatedDirective:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Inherits from Event, and represents the event object of an event sent on a document or worker when its content security policy is violated. *)
@@ -2588,9 +2612,10 @@ module[@js.scope "SecurityPolicyViolationEvent"] SecurityPolicyViolationEvent : 
   val get_sourceFile: 'tags this -> string [@@js.get "sourceFile"]
   val get_statusCode: 'tags this -> float [@@js.get "statusCode"]
   val get_violatedDirective: 'tags this -> string [@@js.get "violatedDirective"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: blockedURI:string -> columnNumber:float -> disposition:SecurityPolicyViolationEventDisposition.t -> documentURI:string -> effectiveDirective:string -> lineNumber:float -> originalPolicy:string -> referrer:string -> sample:string -> sourceFile:string -> statusCode:float -> violatedDirective:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:SecurityPolicyViolationEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:SecurityPolicyViolationEventInit.t -> unit -> t [@@js.create]
 end
 module RTCRtpTransceiverDirection : sig
   type t = ([`L_s406_inactive[@js "inactive"] | `L_s634_recvonly[@js "recvonly"] | `L_s690_sendonly[@js "sendonly"] | `L_s691_sendrecv[@js "sendrecv"] | `L_s727_stopped[@js "stopped"]] [@js.enum])
@@ -2618,7 +2643,8 @@ module RTCRtpCodingParameters : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_rid: 'tags this -> string [@@js.get "rid"]
   val set_rid: 'tags this -> string -> unit [@@js.set "rid"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: rid:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCPriorityType : sig
   type t = ([`L_s381_high[@js "high"] | `L_s466_low[@js "low"] | `L_s487_medium[@js "medium"] | `L_s817_very_low[@js "very-low"]] [@js.enum])
@@ -2652,7 +2678,8 @@ module RTCRtpEncodingParameters : sig
   val set_priority: 'tags this -> RTCPriorityType.t -> unit [@@js.set "priority"]
   val get_scaleResolutionDownBy: 'tags this -> float [@@js.get "scaleResolutionDownBy"]
   val set_scaleResolutionDownBy: 'tags this -> float -> unit [@@js.set "scaleResolutionDownBy"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: active:bool -> maxBitrate:float -> priority:RTCPriorityType.t -> scaleResolutionDownBy:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDegradationPreference : sig
   type t = ([`L_s147_balanced[@js "balanced"] | `L_s473_maintain_framerate[@js "maintain-framerate"] | `L_s474_maintain_resolution[@js "maintain-resolution"]] [@js.enum])
@@ -2684,7 +2711,8 @@ module RTCRtpHeaderExtensionParameters : sig
   val set_id: 'tags this -> float -> unit [@@js.set "id"]
   val get_uri: 'tags this -> string [@@js.get "uri"]
   val set_uri: 'tags this -> string -> unit [@@js.set "uri"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: encrypted:bool -> id:float -> uri:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtpCodecParameters : sig
   type t = [`RTCRtpCodecParameters] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2712,7 +2740,8 @@ module RTCRtpCodecParameters : sig
   val set_payloadType: 'tags this -> float -> unit [@@js.set "payloadType"]
   val get_sdpFmtpLine: 'tags this -> string [@@js.get "sdpFmtpLine"]
   val set_sdpFmtpLine: 'tags this -> string -> unit [@@js.set "sdpFmtpLine"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: channels:float -> clockRate:float -> mimeType:string -> payloadType:float -> sdpFmtpLine:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtcpParameters : sig
   type t = [`RTCRtcpParameters] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2734,7 +2763,8 @@ module RTCRtcpParameters : sig
   val set_cname: 'tags this -> string -> unit [@@js.set "cname"]
   val get_reducedSize: 'tags this -> bool [@@js.get "reducedSize"]
   val set_reducedSize: 'tags this -> bool -> unit [@@js.set "reducedSize"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: cname:string -> reducedSize:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtpParameters : sig
   type t = [`RTCRtpParameters] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2758,7 +2788,8 @@ module RTCRtpParameters : sig
   val set_headerExtensions: 'tags this -> RTCRtpHeaderExtensionParameters.t list -> unit [@@js.set "headerExtensions"]
   val get_rtcp: 'tags this -> RTCRtcpParameters.t [@@js.get "rtcp"]
   val set_rtcp: 'tags this -> RTCRtcpParameters.t -> unit [@@js.set "rtcp"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: codecs:RTCRtpCodecParameters.t list -> headerExtensions:RTCRtpHeaderExtensionParameters.t list -> rtcp:RTCRtcpParameters.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtpSendParameters : sig
   type t = [`RTCRtpParameters | `RTCRtpSendParameters] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2782,7 +2813,8 @@ module RTCRtpSendParameters : sig
   val set_encodings: 'tags this -> RTCRtpEncodingParameters.t list -> unit [@@js.set "encodings"]
   val get_transactionId: 'tags this -> string [@@js.get "transactionId"]
   val set_transactionId: 'tags this -> string -> unit [@@js.set "transactionId"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: degradationPreference:RTCDegradationPreference.t -> encodings:RTCRtpEncodingParameters.t list -> transactionId:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDTMFToneChangeEventInit : sig
   type t = [`EventInit | `RTCDTMFToneChangeEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2802,7 +2834,8 @@ module RTCDTMFToneChangeEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_tone: 'tags this -> string [@@js.get "tone"]
   val set_tone: 'tags this -> string -> unit [@@js.set "tone"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: tone:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events sent to indicate that DTMF tones have started or finished playing. This interface is used by the tonechange event. *)
@@ -2823,9 +2856,10 @@ module[@js.scope "RTCDTMFToneChangeEvent"] RTCDTMFToneChangeEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_tone: 'tags this -> string [@@js.get "tone"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: tone:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:RTCDTMFToneChangeEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:RTCDTMFToneChangeEventInit.t -> unit -> t [@@js.create]
 end
 module[@js.scope "RTCDTMFSender"] RTCDTMFSender : sig
   type t = [`EventTarget | `RTCDTMFSender] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2888,7 +2922,7 @@ module[@js.scope "RTCDTMFSender"] RTCDTMFSender : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -2909,7 +2943,7 @@ module[@js.scope "RTCStatsReport"] RTCStatsReport : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val forEach: 'tags this -> callbackfn:(value:any -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -2931,7 +2965,8 @@ module RTCRtpHeaderExtensionCapability : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_uri: 'tags this -> string [@@js.get "uri"]
   val set_uri: 'tags this -> string -> unit [@@js.set "uri"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: uri:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtpCodecCapability : sig
   type t = [`RTCRtpCodecCapability] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2957,7 +2992,8 @@ module RTCRtpCodecCapability : sig
   val set_mimeType: 'tags this -> string -> unit [@@js.set "mimeType"]
   val get_sdpFmtpLine: 'tags this -> string [@@js.get "sdpFmtpLine"]
   val set_sdpFmtpLine: 'tags this -> string -> unit [@@js.set "sdpFmtpLine"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: channels:float -> clockRate:float -> mimeType:string -> sdpFmtpLine:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtpCapabilities : sig
   type t = [`RTCRtpCapabilities] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2979,7 +3015,8 @@ module RTCRtpCapabilities : sig
   val set_codecs: 'tags this -> RTCRtpCodecCapability.t list -> unit [@@js.set "codecs"]
   val get_headerExtensions: 'tags this -> RTCRtpHeaderExtensionCapability.t list [@@js.get "headerExtensions"]
   val set_headerExtensions: 'tags this -> RTCRtpHeaderExtensionCapability.t list -> unit [@@js.set "headerExtensions"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: codecs:RTCRtpCodecCapability.t list -> headerExtensions:RTCRtpHeaderExtensionCapability.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDtlsTransportState : sig
   type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
@@ -3048,7 +3085,7 @@ module[@js.scope "RTCDtlsTransport"] RTCDtlsTransport : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -3094,7 +3131,8 @@ module MediaTrackSettings : sig
   val set_sampleSize: 'tags this -> float -> unit [@@js.set "sampleSize"]
   val get_width: 'tags this -> float [@@js.get "width"]
   val set_width: 'tags this -> float -> unit [@@js.set "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: aspectRatio:float -> autoGainControl:bool -> deviceId:string -> echoCancellation:bool -> facingMode:string -> frameRate:float -> groupId:string -> height:float -> noiseSuppression:bool -> restrictOwnAudio:bool -> sampleRate:float -> sampleSize:float -> width:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ULongRange : sig
   type t = [`ULongRange] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3116,7 +3154,8 @@ module ULongRange : sig
   val set_max: 'tags this -> float -> unit [@@js.set "max"]
   val get_min: 'tags this -> float [@@js.get "min"]
   val set_min: 'tags this -> float -> unit [@@js.set "min"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: max:float -> min:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DoubleRange : sig
   type t = [`DoubleRange] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3138,7 +3177,8 @@ module DoubleRange : sig
   val set_max: 'tags this -> float -> unit [@@js.set "max"]
   val get_min: 'tags this -> float [@@js.get "min"]
   val set_min: 'tags this -> float -> unit [@@js.set "min"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: max:float -> min:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaTrackCapabilities : sig
   type t = [`MediaTrackCapabilities] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3192,7 +3232,8 @@ module MediaTrackCapabilities : sig
   val set_sampleSize: 'tags this -> ULongRange.t -> unit [@@js.set "sampleSize"]
   val get_width: 'tags this -> ULongRange.t [@@js.get "width"]
   val set_width: 'tags this -> ULongRange.t -> unit [@@js.set "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: aspectRatio:DoubleRange.t -> autoGainControl:bool list -> channelCount:ULongRange.t -> cursor:string list -> deviceId:string -> displaySurface:string -> echoCancellation:bool list -> facingMode:string list -> frameRate:DoubleRange.t -> groupId:string -> height:ULongRange.t -> latency:DoubleRange.t -> logicalSurface:bool -> noiseSuppression:bool list -> resizeMode:string list -> sampleRate:ULongRange.t -> sampleSize:ULongRange.t -> width:ULongRange.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaStreamTrackState : sig
   type t = ([`L_s280_ended[@js "ended"] | `L_s454_live[@js "live"]] [@js.enum])
@@ -3222,7 +3263,8 @@ module ConstrainULongRange : sig
   val set_exact: 'tags this -> float -> unit [@@js.set "exact"]
   val get_ideal: 'tags this -> float [@@js.get "ideal"]
   val set_ideal: 'tags this -> float -> unit [@@js.set "ideal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: exact:float -> ideal:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ConstrainULong : sig
   type t = ConstrainULongRange.t or_number
@@ -3252,7 +3294,8 @@ module ConstrainDoubleRange : sig
   val set_exact: 'tags this -> float -> unit [@@js.set "exact"]
   val get_ideal: 'tags this -> float [@@js.get "ideal"]
   val set_ideal: 'tags this -> float -> unit [@@js.set "ideal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: exact:float -> ideal:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ConstrainDouble : sig
   type t = ConstrainDoubleRange.t or_number
@@ -3282,7 +3325,8 @@ module ConstrainDOMStringParameters : sig
   val set_exact: 'tags this -> string list or_string -> unit [@@js.set "exact"]
   val get_ideal: 'tags this -> string list or_string [@@js.get "ideal"]
   val set_ideal: 'tags this -> string list or_string -> unit [@@js.set "ideal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: exact:string list or_string -> ideal:string list or_string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ConstrainDOMString : sig
   type t = (ConstrainDOMStringParameters.t, string) or_array or_string
@@ -3312,7 +3356,8 @@ module ConstrainBooleanParameters : sig
   val set_exact: 'tags this -> bool -> unit [@@js.set "exact"]
   val get_ideal: 'tags this -> bool [@@js.get "ideal"]
   val set_ideal: 'tags this -> bool -> unit [@@js.set "ideal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: exact:bool -> ideal:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ConstrainBoolean : sig
   type t = ConstrainBooleanParameters.t or_boolean
@@ -3368,7 +3413,8 @@ module MediaTrackConstraintSet : sig
   val set_suppressLocalAudioPlayback: 'tags this -> ConstrainBoolean.t -> unit [@@js.set "suppressLocalAudioPlayback"]
   val get_width: 'tags this -> ConstrainULong.t [@@js.get "width"]
   val set_width: 'tags this -> ConstrainULong.t -> unit [@@js.set "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: aspectRatio:ConstrainDouble.t -> autoGainControl:ConstrainBoolean.t -> channelCount:ConstrainULong.t -> deviceId:ConstrainDOMString.t -> echoCancellation:ConstrainBoolean.t -> facingMode:ConstrainDOMString.t -> frameRate:ConstrainDouble.t -> groupId:ConstrainDOMString.t -> height:ConstrainULong.t -> latency:ConstrainDouble.t -> noiseSuppression:ConstrainBoolean.t -> sampleRate:ConstrainULong.t -> sampleSize:ConstrainULong.t -> suppressLocalAudioPlayback:ConstrainBoolean.t -> width:ConstrainULong.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaTrackConstraints : sig
   type t = [`MediaTrackConstraintSet | `MediaTrackConstraints] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3388,7 +3434,8 @@ module MediaTrackConstraints : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_advanced: 'tags this -> MediaTrackConstraintSet.t list [@@js.get "advanced"]
   val set_advanced: 'tags this -> MediaTrackConstraintSet.t list -> unit [@@js.set "advanced"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: advanced:MediaTrackConstraintSet.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A single media track within a stream; typically, these are audio or video tracks, but other track types may exist as well. *)
@@ -3469,7 +3516,7 @@ module[@js.scope "MediaStreamTrack"] MediaStreamTrack : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -3491,7 +3538,8 @@ module MediaStreamTrackEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_track: 'tags this -> MediaStreamTrack.t [@@js.get "track"]
   val set_track: 'tags this -> MediaStreamTrack.t -> unit [@@js.set "track"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: track:MediaStreamTrack.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events which indicate that a MediaStream has had tracks added to or removed from the stream through calls to Media Stream API methods. These events are sent to the stream when these changes occur. *)
@@ -3512,9 +3560,10 @@ module[@js.scope "MediaStreamTrackEvent"] MediaStreamTrackEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_track: 'tags this -> MediaStreamTrack.t [@@js.get "track"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: track:MediaStreamTrack.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:MediaStreamTrackEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:MediaStreamTrackEventInit.t -> t [@@js.create]
 end
 
 (** A stream of media content. A stream consists of several tracks such as video or audio tracks. Each track is specified as an instance of MediaStreamTrack. *)
@@ -3587,7 +3636,7 @@ module[@js.scope "MediaStream"] MediaStream : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val create': t -> t [@@js.create]
@@ -3619,7 +3668,7 @@ module[@js.scope "RTCRtpSender"] RTCRtpSender : sig
   val replaceTrack: 'tags this -> withTrack:MediaStreamTrack.t or_null -> unit Promise.t_1 [@@js.call "replaceTrack"]
   val setParameters: 'tags this -> parameters:RTCRtpSendParameters.t -> unit Promise.t_1 [@@js.call "setParameters"]
   val setStreams: 'tags this -> streams:(MediaStream.t list [@js.variadic]) -> unit [@@js.call "setStreams"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val getCapabilities: string -> RTCRtpCapabilities.t or_null [@@js.global "getCapabilities"]
@@ -3648,7 +3697,8 @@ module RTCRtpContributingSource : sig
   val set_source: 'tags this -> float -> unit [@@js.set "source"]
   val get_timestamp: 'tags this -> DOMHighResTimeStamp.t [@@js.get "timestamp"]
   val set_timestamp: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "timestamp"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: audioLevel:float -> rtpTimestamp:float -> source:float -> timestamp:DOMHighResTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtpSynchronizationSource : sig
   type t = [`RTCRtpContributingSource | `RTCRtpSynchronizationSource] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3666,7 +3716,7 @@ module RTCRtpSynchronizationSource : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtpReceiveParameters : sig
   type t = [`RTCRtpParameters | `RTCRtpReceiveParameters] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3684,7 +3734,7 @@ module RTCRtpReceiveParameters : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This WebRTC API interface manages the reception and decoding of data for a MediaStreamTrack on an RTCPeerConnection. *)
@@ -3710,7 +3760,7 @@ module[@js.scope "RTCRtpReceiver"] RTCRtpReceiver : sig
   val getParameters: 'tags this -> RTCRtpReceiveParameters.t [@@js.call "getParameters"]
   val getStats: 'tags this -> RTCStatsReport.t Promise.t_1 [@@js.call "getStats"]
   val getSynchronizationSources: 'tags this -> RTCRtpSynchronizationSource.t list [@@js.call "getSynchronizationSources"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val getCapabilities: string -> RTCRtpCapabilities.t or_null [@@js.global "getCapabilities"]
@@ -3738,7 +3788,7 @@ module[@js.scope "RTCRtpTransceiver"] RTCRtpTransceiver : sig
   val get_receiver: 'tags this -> RTCRtpReceiver.t [@@js.get "receiver"]
   val get_sender: 'tags this -> RTCRtpSender.t [@@js.get "sender"]
   val stop: 'tags this -> unit [@@js.call "stop"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -3766,7 +3816,8 @@ module RTCTrackEventInit : sig
   val set_track: 'tags this -> MediaStreamTrack.t -> unit [@@js.set "track"]
   val get_transceiver: 'tags this -> RTCRtpTransceiver.t [@@js.get "transceiver"]
   val set_transceiver: 'tags this -> RTCRtpTransceiver.t -> unit [@@js.set "transceiver"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: receiver:RTCRtpReceiver.t -> streams:MediaStream.t list -> track:MediaStreamTrack.t -> transceiver:RTCRtpTransceiver.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "RTCTrackEvent"] RTCTrackEvent : sig
   type t = [`Event | `RTCTrackEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3788,9 +3839,10 @@ module[@js.scope "RTCTrackEvent"] RTCTrackEvent : sig
   val get_streams: 'tags this -> MediaStream.t list [@@js.get "streams"]
   val get_track: 'tags this -> MediaStreamTrack.t [@@js.get "track"]
   val get_transceiver: 'tags this -> RTCRtpTransceiver.t [@@js.get "transceiver"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: receiver:RTCRtpReceiver.t -> streams:MediaStream.t list -> track:MediaStreamTrack.t -> transceiver:RTCRtpTransceiver.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:RTCTrackEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:RTCTrackEventInit.t -> t [@@js.create]
 end
 module RTCIceTcpCandidateType : sig
   type t = ([`L_s566_passive[@js "passive"] | `L_s709_so[@js "so"] | `L_s98_active[@js "active"]] [@js.enum])
@@ -3848,7 +3900,8 @@ module RTCIceCandidateInit : sig
   val set_sdpMid: 'tags this -> string or_null -> unit [@@js.set "sdpMid"]
   val get_usernameFragment: 'tags this -> string or_null [@@js.get "usernameFragment"]
   val set_usernameFragment: 'tags this -> string or_null -> unit [@@js.set "usernameFragment"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: candidate:string -> ?sdpMLineIndex:float -> ?sdpMid:string -> ?usernameFragment:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The RTCIceCandidate interface—part of the WebRTC API—represents a candidate Internet Connectivity Establishment (ICE) configuration which may be used to establish an RTCPeerConnection. *)
@@ -3883,7 +3936,7 @@ module[@js.scope "RTCIceCandidate"] RTCIceCandidate : sig
   val get_type: 'tags this -> RTCIceCandidateType.t or_null [@@js.get "type"]
   val get_usernameFragment: 'tags this -> string or_null [@@js.get "usernameFragment"]
   val toJSON: 'tags this -> RTCIceCandidateInit.t [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?candidateInitDict:RTCIceCandidateInit.t -> unit -> t [@@js.create]
 end
@@ -3907,7 +3960,8 @@ module RTCPeerConnectionIceEventInit : sig
   val set_candidate: 'tags this -> RTCIceCandidate.t or_null -> unit [@@js.set "candidate"]
   val get_url: 'tags this -> string or_null [@@js.get "url"]
   val set_url: 'tags this -> string or_null -> unit [@@js.set "url"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?candidate:RTCIceCandidate.t -> ?url:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events that occurs in relation to ICE candidates with the target, usually an RTCPeerConnection. Only one event is of this type: icecandidate. *)
@@ -3928,9 +3982,10 @@ module[@js.scope "RTCPeerConnectionIceEvent"] RTCPeerConnectionIceEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_candidate: 'tags this -> RTCIceCandidate.t or_null [@@js.get "candidate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?candidate:RTCIceCandidate.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:RTCPeerConnectionIceEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:RTCPeerConnectionIceEventInit.t -> unit -> t [@@js.create]
 end
 module RTCPeerConnectionIceErrorEventInit : sig
   type t = [`EventInit | `RTCPeerConnectionIceErrorEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3958,7 +4013,8 @@ module RTCPeerConnectionIceErrorEventInit : sig
   val set_port: 'tags this -> float or_null -> unit [@@js.set "port"]
   val get_url: 'tags this -> string [@@js.get "url"]
   val set_url: 'tags this -> string -> unit [@@js.set "url"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?address:string -> errorCode:float -> errorText:string -> ?port:float -> url:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "RTCPeerConnectionIceErrorEvent"] RTCPeerConnectionIceErrorEvent : sig
   type t = [`Event | `RTCPeerConnectionIceErrorEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -3981,9 +4037,10 @@ module[@js.scope "RTCPeerConnectionIceErrorEvent"] RTCPeerConnectionIceErrorEven
   val get_errorText: 'tags this -> string [@@js.get "errorText"]
   val get_port: 'tags this -> float or_null [@@js.get "port"]
   val get_url: 'tags this -> string [@@js.get "url"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?address:string -> errorCode:float -> errorText:string -> ?port:float -> url:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:RTCPeerConnectionIceErrorEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:RTCPeerConnectionIceErrorEventInit.t -> t [@@js.create]
 end
 module RTCDataChannelState : sig
   type t = ([`L_s199_closed[@js "closed"] | `L_s201_closing[@js "closing"] | `L_s214_connecting[@js "connecting"] | `L_s544_open[@js "open"]] [@js.enum])
@@ -4021,7 +4078,8 @@ module PaymentCurrencyAmount : sig
   val set_currency: 'tags this -> string -> unit [@@js.set "currency"]
   val get_value: 'tags this -> string [@@js.get "value"]
   val set_value: 'tags this -> string -> unit [@@js.set "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: currency:string -> value:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentItem : sig
   type t = [`PaymentItem] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4045,7 +4103,8 @@ module PaymentItem : sig
   val set_label: 'tags this -> string -> unit [@@js.set "label"]
   val get_pending: 'tags this -> bool [@@js.get "pending"]
   val set_pending: 'tags this -> bool -> unit [@@js.set "pending"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: amount:PaymentCurrencyAmount.t -> label:string -> pending:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentDetailsModifier : sig
   type t = [`PaymentDetailsModifier] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4071,7 +4130,8 @@ module PaymentDetailsModifier : sig
   val set_supportedMethods: 'tags this -> string -> unit [@@js.set "supportedMethods"]
   val get_total: 'tags this -> PaymentItem.t [@@js.get "total"]
   val set_total: 'tags this -> PaymentItem.t -> unit [@@js.set "total"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: additionalDisplayItems:PaymentItem.t list -> data:any -> supportedMethods:string -> total:PaymentItem.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentDetailsBase : sig
   type t = [`PaymentDetailsBase] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4093,7 +4153,8 @@ module PaymentDetailsBase : sig
   val set_displayItems: 'tags this -> PaymentItem.t list -> unit [@@js.set "displayItems"]
   val get_modifiers: 'tags this -> PaymentDetailsModifier.t list [@@js.get "modifiers"]
   val set_modifiers: 'tags this -> PaymentDetailsModifier.t list -> unit [@@js.set "modifiers"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: displayItems:PaymentItem.t list -> modifiers:PaymentDetailsModifier.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentDetailsUpdate : sig
   type t = [`PaymentDetailsBase | `PaymentDetailsUpdate] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4115,7 +4176,8 @@ module PaymentDetailsUpdate : sig
   val set_paymentMethodErrors: 'tags this -> any -> unit [@@js.set "paymentMethodErrors"]
   val get_total: 'tags this -> PaymentItem.t [@@js.get "total"]
   val set_total: 'tags this -> PaymentItem.t -> unit [@@js.set "total"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: paymentMethodErrors:any -> total:PaymentItem.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentRequestUpdateEventInit : sig
   type t = [`EventInit | `PaymentRequestUpdateEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4133,7 +4195,7 @@ module PaymentRequestUpdateEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -4157,7 +4219,7 @@ module[@js.scope "PaymentRequestUpdateEvent"] PaymentRequestUpdateEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val updateWith: 'tags this -> detailsPromise:PaymentDetailsUpdate.t -> unit [@@js.call "updateWith"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:PaymentRequestUpdateEventInit.t -> unit -> t [@@js.create]
 end
@@ -4181,7 +4243,8 @@ module PaymentMethodChangeEventInit : sig
   val set_methodDetails: 'tags this -> any -> unit [@@js.set "methodDetails"]
   val get_methodName: 'tags this -> string [@@js.get "methodName"]
   val set_methodName: 'tags this -> string -> unit [@@js.set "methodName"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: methodDetails:any -> methodName:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Available only in secure contexts. *)
@@ -4203,9 +4266,10 @@ module[@js.scope "PaymentMethodChangeEvent"] PaymentMethodChangeEvent : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_methodDetails: 'tags this -> any [@@js.get "methodDetails"]
   val get_methodName: 'tags this -> string [@@js.get "methodName"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: methodDetails:any -> methodName:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:PaymentMethodChangeEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:PaymentMethodChangeEventInit.t -> unit -> t [@@js.create]
 end
 module AudioBufferOptions : sig
   type t = [`AudioBufferOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4229,7 +4293,8 @@ module AudioBufferOptions : sig
   val set_numberOfChannels: 'tags this -> float -> unit [@@js.set "numberOfChannels"]
   val get_sampleRate: 'tags this -> float [@@js.get "sampleRate"]
   val set_sampleRate: 'tags this -> float -> unit [@@js.set "sampleRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: length:float -> numberOfChannels:float -> sampleRate:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A short audio asset residing in memory, created from an audio file using the AudioContext.decodeAudioData() method, or from raw data using AudioContext.createBuffer(). Once put into an AudioBuffer, the audio can then be played by being passed into an AudioBufferSourceNode. *)
@@ -4256,7 +4321,7 @@ module[@js.scope "AudioBuffer"] AudioBuffer : sig
   val copyFromChannel: 'tags this -> destination:Float32Array.t_0 -> channelNumber:float -> ?bufferOffset:float -> unit -> unit [@@js.call "copyFromChannel"]
   val copyToChannel: 'tags this -> source:Float32Array.t_0 -> channelNumber:float -> ?bufferOffset:float -> unit -> unit [@@js.call "copyToChannel"]
   val getChannelData: 'tags this -> channel:float -> Float32Array.t_0 [@@js.call "getChannelData"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: AudioBufferOptions.t -> t [@@js.create]
 end
@@ -4278,7 +4343,8 @@ module OfflineAudioCompletionEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_renderedBuffer: 'tags this -> AudioBuffer.t [@@js.get "renderedBuffer"]
   val set_renderedBuffer: 'tags this -> AudioBuffer.t -> unit [@@js.set "renderedBuffer"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: renderedBuffer:AudioBuffer.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The Web Audio API OfflineAudioCompletionEvent interface represents events that occur when the processing of an OfflineAudioContext is terminated. The complete event implements this interface. *)
@@ -4299,9 +4365,10 @@ module[@js.scope "OfflineAudioCompletionEvent"] OfflineAudioCompletionEvent : si
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_renderedBuffer: 'tags this -> AudioBuffer.t [@@js.get "renderedBuffer"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: renderedBuffer:AudioBuffer.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:OfflineAudioCompletionEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:OfflineAudioCompletionEventInit.t -> t [@@js.create]
 end
 
 (** An abnormal event (called an exception) which occurs as a result of calling a method or accessing a property of a web API. *)
@@ -4349,9 +4416,10 @@ module[@js.scope "DOMException"] DOMException : sig
   val get_URL_MISMATCH_ERR: 'tags this -> float [@@js.get "URL_MISMATCH_ERR"]
   val get_VALIDATION_ERR: 'tags this -> float [@@js.get "VALIDATION_ERR"]
   val get_WRONG_DOCUMENT_ERR: 'tags this -> float [@@js.get "WRONG_DOCUMENT_ERR"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: code:float -> message:string -> name:string -> abort_err:(float[@js "ABORT_ERR"]) -> data_clone_err:(float[@js "DATA_CLONE_ERR"]) -> domstring_size_err:(float[@js "DOMSTRING_SIZE_ERR"]) -> hierarchy_request_err:(float[@js "HIERARCHY_REQUEST_ERR"]) -> index_size_err:(float[@js "INDEX_SIZE_ERR"]) -> inuse_attribute_err:(float[@js "INUSE_ATTRIBUTE_ERR"]) -> invalid_access_err:(float[@js "INVALID_ACCESS_ERR"]) -> invalid_character_err:(float[@js "INVALID_CHARACTER_ERR"]) -> invalid_modification_err:(float[@js "INVALID_MODIFICATION_ERR"]) -> invalid_node_type_err:(float[@js "INVALID_NODE_TYPE_ERR"]) -> invalid_state_err:(float[@js "INVALID_STATE_ERR"]) -> namespace_err:(float[@js "NAMESPACE_ERR"]) -> network_err:(float[@js "NETWORK_ERR"]) -> not_found_err:(float[@js "NOT_FOUND_ERR"]) -> not_supported_err:(float[@js "NOT_SUPPORTED_ERR"]) -> no_data_allowed_err:(float[@js "NO_DATA_ALLOWED_ERR"]) -> no_modification_allowed_err:(float[@js "NO_MODIFICATION_ALLOWED_ERR"]) -> quota_exceeded_err:(float[@js "QUOTA_EXCEEDED_ERR"]) -> security_err:(float[@js "SECURITY_ERR"]) -> syntax_err:(float[@js "SYNTAX_ERR"]) -> timeout_err:(float[@js "TIMEOUT_ERR"]) -> type_mismatch_err:(float[@js "TYPE_MISMATCH_ERR"]) -> url_mismatch_err:(float[@js "URL_MISMATCH_ERR"]) -> validation_err:(float[@js "VALIDATION_ERR"]) -> wrong_document_err:(float[@js "WRONG_DOCUMENT_ERR"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?message:string -> ?name:string -> unit -> t [@@js.create]
+  val create': ?message:string -> ?name:string -> unit -> t [@@js.create]
   val abort_err: unit -> float [@@js.get "ABORT_ERR"]
   val data_clone_err: unit -> float [@@js.get "DATA_CLONE_ERR"]
   val domstring_size_err: unit -> float [@@js.get "DOMSTRING_SIZE_ERR"]
@@ -4396,7 +4464,8 @@ module MediaRecorderErrorEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_error: 'tags this -> DOMException.t [@@js.get "error"]
   val set_error: 'tags this -> DOMException.t -> unit [@@js.set "error"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: error:DOMException.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "MediaRecorderErrorEvent"] MediaRecorderErrorEvent : sig
   type t = [`Event | `MediaRecorderErrorEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4415,9 +4484,10 @@ module[@js.scope "MediaRecorderErrorEvent"] MediaRecorderErrorEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_error: 'tags this -> DOMException.t [@@js.get "error"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: error:DOMException.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:MediaRecorderErrorEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:MediaRecorderErrorEventInit.t -> t [@@js.create]
 end
 module HTMLHyperlinkElementUtils : sig
   type t = [`HTMLHyperlinkElementUtils] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4579,7 +4649,7 @@ module HTMLHyperlinkElementUtils : sig
     Can be set, to change the URL's username.
   *)
   val set_username: 'tags this -> string -> unit [@@js.set "username"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module FontFaceSetLoadStatus : sig
   type t = ([`L_s456_loaded[@js "loaded"] | `L_s460_loading[@js "loading"]] [@js.enum])
@@ -4627,7 +4697,8 @@ module FontFaceDescriptors : sig
   val set_variant: 'tags this -> string -> unit [@@js.set "variant"]
   val get_weight: 'tags this -> string [@@js.get "weight"]
   val set_weight: 'tags this -> string -> unit [@@js.set "weight"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: display:string -> featureSettings:string -> stretch:string -> style:string -> unicodeRange:string -> variant:string -> weight:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module BinaryData : sig
   type t = never
@@ -4680,7 +4751,7 @@ module[@js.scope "FontFace"] FontFace : sig
   val get_weight: 'tags this -> string [@@js.get "weight"]
   val set_weight: 'tags this -> string -> unit [@@js.set "weight"]
   val load: 'tags this -> t Promise.t_1 [@@js.call "load"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: family:string -> source:BinaryData.t or_string -> ?descriptors:FontFaceDescriptors.t -> unit -> t [@@js.create]
 end
@@ -4751,7 +4822,7 @@ module[@js.scope "FontFaceSet"] FontFaceSet : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: FontFace.t list -> t [@@js.create]
 end
@@ -4772,7 +4843,8 @@ module FontFaceSource : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_fonts: 'tags this -> FontFaceSet.t [@@js.get "fonts"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: fonts:FontFaceSet.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module FontFaceSetLoadEventInit : sig
   type t = [`EventInit | `FontFaceSetLoadEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4792,7 +4864,8 @@ module FontFaceSetLoadEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_fontfaces: 'tags this -> FontFace.t list [@@js.get "fontfaces"]
   val set_fontfaces: 'tags this -> FontFace.t list -> unit [@@js.set "fontfaces"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: fontfaces:FontFace.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "FontFaceSetLoadEvent"] FontFaceSetLoadEvent : sig
   type t = [`Event | `FontFaceSetLoadEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4811,9 +4884,10 @@ module[@js.scope "FontFaceSetLoadEvent"] FontFaceSetLoadEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_fontfaces: 'tags this -> FontFace.t list [@@js.get "fontfaces"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: fontfaces:FontFace.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:FontFaceSetLoadEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:FontFaceSetLoadEventInit.t -> unit -> t [@@js.create]
 end
 module ElementCreationOptions : sig
   type t = [`ElementCreationOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4833,7 +4907,8 @@ module ElementCreationOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_is: 'tags this -> string [@@js.get "is"]
   val set_is: 'tags this -> string -> unit [@@js.set "is"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: is:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DocumentTimelineOptions : sig
   type t = [`DocumentTimelineOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4853,7 +4928,8 @@ module DocumentTimelineOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_originTime: 'tags this -> DOMHighResTimeStamp.t [@@js.get "originTime"]
   val set_originTime: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "originTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: originTime:DOMHighResTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "AnimationTimeline"] AnimationTimeline : sig
   type t = [`AnimationTimeline] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4872,9 +4948,10 @@ module[@js.scope "AnimationTimeline"] AnimationTimeline : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_currentTime: 'tags this -> float or_null [@@js.get "currentTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?currentTime:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module[@js.scope "DocumentTimeline"] DocumentTimeline : sig
   type t = [`AnimationTimeline | `DocumentTimeline] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -4892,7 +4969,7 @@ module[@js.scope "DocumentTimeline"] DocumentTimeline : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?options:DocumentTimelineOptions.t -> unit -> t [@@js.create]
 end
@@ -4927,7 +5004,8 @@ module CustomEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_detail: ('tags, 'T) this -> 'T [@@js.get "detail"]
   val set_detail: ('tags, 'T) this -> 'T -> unit [@@js.set "detail"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val create: detail:'T -> unit -> 'T t [@@js.builder]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "CustomEvent"] CustomEvent : sig
   type 'T t = [`CustomEvent of 'T | `Event] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
@@ -4956,7 +5034,7 @@ module[@js.scope "CustomEvent"] CustomEvent : sig
   
   (** @deprecated  *)
   val initCustomEvent: ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?detail:'T -> unit -> unit [@@js.call "initCustomEvent"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:'T CustomEventInit.t -> unit -> 'T t [@@js.create]
 end
@@ -4982,7 +5060,8 @@ module CloseEventInit : sig
   val set_reason: 'tags this -> string -> unit [@@js.set "reason"]
   val get_wasClean: 'tags this -> bool [@@js.get "wasClean"]
   val set_wasClean: 'tags this -> bool -> unit [@@js.set "wasClean"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: code:float -> reason:string -> wasClean:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A CloseEvent is sent to clients using WebSockets when the connection is closed. This is delivered to the listener indicated by the WebSocket object's onclose attribute. *)
@@ -5011,9 +5090,10 @@ module[@js.scope "CloseEvent"] CloseEvent : sig
   
   (** Returns true if the connection closed cleanly; false otherwise. *)
   val get_wasClean: 'tags this -> bool [@@js.get "wasClean"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: code:float -> reason:string -> wasClean:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:CloseEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:CloseEventInit.t -> unit -> t [@@js.create]
 end
 module BlobEventInit : sig
   type t = [`BlobEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5035,7 +5115,8 @@ module BlobEventInit : sig
   val set_data: 'tags this -> Blob.t -> unit [@@js.set "data"]
   val get_timecode: 'tags this -> DOMHighResTimeStamp.t [@@js.get "timecode"]
   val set_timecode: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "timecode"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: data:Blob.t -> timecode:DOMHighResTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "BlobEvent"] BlobEvent : sig
   type t = [`BlobEvent | `Event] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5055,9 +5136,10 @@ module[@js.scope "BlobEvent"] BlobEvent : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_data: 'tags this -> Blob.t [@@js.get "data"]
   val get_timecode: 'tags this -> DOMHighResTimeStamp.t [@@js.get "timecode"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: data:Blob.t -> timecode:DOMHighResTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:BlobEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:BlobEventInit.t -> t [@@js.create]
 end
 module AudioProcessingEventInit : sig
   type t = [`AudioProcessingEventInit | `EventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5081,7 +5163,8 @@ module AudioProcessingEventInit : sig
   val set_outputBuffer: 'tags this -> AudioBuffer.t -> unit [@@js.set "outputBuffer"]
   val get_playbackTime: 'tags this -> float [@@js.get "playbackTime"]
   val set_playbackTime: 'tags this -> float -> unit [@@js.set "playbackTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: inputBuffer:AudioBuffer.t -> outputBuffer:AudioBuffer.t -> playbackTime:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The Web Audio API events that occur when a ScriptProcessorNode input buffer is ready to be processed. *)
@@ -5110,9 +5193,10 @@ module[@js.scope "AudioProcessingEvent"] AudioProcessingEvent : sig
   
   (** @deprecated  *)
   val get_playbackTime: 'tags this -> float [@@js.get "playbackTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: inputBuffer:AudioBuffer.t -> outputBuffer:AudioBuffer.t -> playbackTime:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:AudioProcessingEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:AudioProcessingEventInit.t -> t [@@js.create]
 end
 module AssignedNodesOptions : sig
   type t = [`AssignedNodesOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5132,7 +5216,8 @@ module AssignedNodesOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_flatten: 'tags this -> bool [@@js.get "flatten"]
   val set_flatten: 'tags this -> bool -> unit [@@js.set "flatten"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: flatten:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module SlotAssignmentMode : sig
   type t = ([`L_s476_manual[@js "manual"] | `L_s510_named[@js "named"]] [@js.enum])
@@ -5172,7 +5257,8 @@ module ShadowRootInit : sig
   val set_mode: 'tags this -> ShadowRootMode.t -> unit [@@js.set "mode"]
   val get_slotAssignment: 'tags this -> SlotAssignmentMode.t [@@js.get "slotAssignment"]
   val set_slotAssignment: 'tags this -> SlotAssignmentMode.t -> unit [@@js.set "slotAssignment"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: delegatesFocus:bool -> mode:ShadowRootMode.t -> slotAssignment:SlotAssignmentMode.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ScrollLogicalPosition : sig
   type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s515_nearest[@js "nearest"] | `L_s723_start[@js "start"]] [@js.enum])
@@ -5208,7 +5294,8 @@ module ScrollOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_behavior: 'tags this -> ScrollBehavior.t [@@js.get "behavior"]
   val set_behavior: 'tags this -> ScrollBehavior.t -> unit [@@js.set "behavior"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: behavior:ScrollBehavior.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ScrollIntoViewOptions : sig
   type t = [`ScrollIntoViewOptions | `ScrollOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5230,7 +5317,8 @@ module ScrollIntoViewOptions : sig
   val set_block: 'tags this -> ScrollLogicalPosition.t -> unit [@@js.set "block"]
   val get_inline: 'tags this -> ScrollLogicalPosition.t [@@js.get "inline"]
   val set_inline: 'tags this -> ScrollLogicalPosition.t -> unit [@@js.set "inline"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: block:ScrollLogicalPosition.t -> inline:ScrollLogicalPosition.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module InsertPosition : sig
   type t = ([`L_s103_afterbegin[@js "afterbegin"] | `L_s104_afterend[@js "afterend"] | `L_s153_beforebegin[@js "beforebegin"] | `L_s154_beforeend[@js "beforeend"]] [@js.enum])
@@ -5262,7 +5350,8 @@ module TransitionEventInit : sig
   val set_propertyName: 'tags this -> string -> unit [@@js.set "propertyName"]
   val get_pseudoElement: 'tags this -> string [@@js.get "pseudoElement"]
   val set_pseudoElement: 'tags this -> string -> unit [@@js.set "pseudoElement"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: elapsedTime:float -> propertyName:string -> pseudoElement:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events providing information related to transitions. *)
@@ -5285,9 +5374,10 @@ module[@js.scope "TransitionEvent"] TransitionEvent : sig
   val get_elapsedTime: 'tags this -> float [@@js.get "elapsedTime"]
   val get_propertyName: 'tags this -> string [@@js.get "propertyName"]
   val get_pseudoElement: 'tags this -> string [@@js.get "pseudoElement"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: elapsedTime:float -> propertyName:string -> pseudoElement:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?transitionEventInitDict:TransitionEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?transitionEventInitDict:TransitionEventInit.t -> unit -> t [@@js.create]
 end
 module TouchType : sig
   type t = ([`L_s253_direct[@js "direct"] | `L_s733_stylus[@js "stylus"]] [@js.enum])
@@ -5343,7 +5433,8 @@ module TouchInit : sig
   val set_target: 'tags this -> EventTarget.t -> unit [@@js.set "target"]
   val get_touchType: 'tags this -> TouchType.t [@@js.get "touchType"]
   val set_touchType: 'tags this -> TouchType.t -> unit [@@js.set "touchType"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: altitudeAngle:float -> azimuthAngle:float -> clientX:float -> clientY:float -> force:float -> identifier:float -> pageX:float -> pageY:float -> radiusX:float -> radiusY:float -> rotationAngle:float -> screenX:float -> screenY:float -> target:EventTarget.t -> touchType:TouchType.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A single contact point on a touch-sensitive device. The contact point is commonly a finger or stylus and the device may be a touchscreen or trackpad. *)
@@ -5375,9 +5466,10 @@ module[@js.scope "Touch"] Touch : sig
   val get_screenX: 'tags this -> float [@@js.get "screenX"]
   val get_screenY: 'tags this -> float [@@js.get "screenY"]
   val get_target: 'tags this -> EventTarget.t [@@js.get "target"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: clientX:float -> clientY:float -> force:float -> identifier:float -> pageX:float -> pageY:float -> radiusX:float -> radiusY:float -> rotationAngle:float -> screenX:float -> screenY:float -> target:EventTarget.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: TouchInit.t -> t [@@js.create]
+  val create': TouchInit.t -> t [@@js.create]
 end
 
 (** A list of contact points on a touch surface. For example, if the user has three fingers on the touch surface (such as a screen or trackpad), the corresponding TouchList object would have one Touch object for each finger, for a total of three entries. *)
@@ -5402,7 +5494,7 @@ module[@js.scope "TouchList"] TouchList : sig
   val item: 'tags this -> index:float -> Touch.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> Touch.t [@@js.index_get]
   val set: 'tags this -> float -> Touch.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -5428,7 +5520,8 @@ module ProgressEventInit : sig
   val set_loaded: 'tags this -> float -> unit [@@js.set "loaded"]
   val get_total: 'tags this -> float [@@js.get "total"]
   val set_total: 'tags this -> float -> unit [@@js.set "total"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: lengthComputable:bool -> loaded:float -> total:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events measuring progress of an underlying process, like an HTTP request (for an XMLHttpRequest, or the loading of the underlying resource of an <img>, <audio>, <video>, <style> or <link>). *)
@@ -5459,9 +5552,10 @@ module[@js.scope "ProgressEvent"] ProgressEvent : sig
   (** Returns the object to which event is dispatched (its target). *)
   val get_target: ('tags, 'T) this -> 'T or_null [@@js.get "target"]
   val get_total: ('tags, 'T) this -> float [@@js.get "total"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val create: lengthComputable:bool -> loaded:float -> ?target:'T -> total:float -> unit -> 'T t [@@js.builder]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:ProgressEventInit.t -> unit -> t_0 [@@js.create]
+  val create': type_:string -> ?eventInitDict:ProgressEventInit.t -> unit -> t_0 [@@js.create]
 end
 module OnErrorEventHandlerNonNull : sig
   type t = [`OnErrorEventHandlerNonNull] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5480,7 +5574,7 @@ module OnErrorEventHandlerNonNull : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> event:Event.t or_string -> ?source:string -> ?lineno:float -> ?colno:float -> ?error:Error.t_0 -> unit -> any [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module OnErrorEventHandler : sig
   type t = OnErrorEventHandlerNonNull.t or_null
@@ -5542,7 +5636,7 @@ module[@js.scope "Storage"] Storage : sig
   val setItem: 'tags this -> key:string -> value:string -> unit [@@js.call "setItem"]
   val get: 'tags this -> string -> any [@@js.index_get]
   val set: 'tags this -> string -> any -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -5563,7 +5657,8 @@ module WindowSessionStorage : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_sessionStorage: 'tags this -> Storage.t [@@js.get "sessionStorage"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: sessionStorage:Storage.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module StructuredSerializeOptions : sig
   type t = [`StructuredSerializeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5583,7 +5678,8 @@ module StructuredSerializeOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_transfer: 'tags this -> any list [@@js.get "transfer"]
   val set_transfer: 'tags this -> any list -> unit [@@js.set "transfer"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: transfer:any list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WindowPostMessageOptions : sig
   type t = [`StructuredSerializeOptions | `WindowPostMessageOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5603,7 +5699,8 @@ module WindowPostMessageOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_targetOrigin: 'tags this -> string [@@js.get "targetOrigin"]
   val set_targetOrigin: 'tags this -> string -> unit [@@js.set "targetOrigin"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: targetOrigin:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module VoidFunction : sig
   type t = [`VoidFunction] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5622,7 +5719,7 @@ module VoidFunction : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module TimerHandler : sig
   type t = untyped_function or_string
@@ -5662,7 +5759,7 @@ module[@js.scope "SVGStringList"] SVGStringList : sig
   val replaceItem: 'tags this -> newItem:string -> index:float -> string [@@js.call "replaceItem"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -5684,7 +5781,8 @@ module SVGTests : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_requiredExtensions: 'tags this -> SVGStringList.t [@@js.get "requiredExtensions"]
   val get_systemLanguage: 'tags this -> SVGStringList.t [@@js.get "systemLanguage"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: requiredExtensions:SVGStringList.t -> systemLanguage:SVGStringList.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The SVGAnimatedString interface represents string attributes which can be animated from each SVG declaration. You need to create SVG attribute before doing anything else, everything should be declared inside this. *)
@@ -5707,9 +5805,10 @@ module[@js.scope "SVGAnimatedString"] SVGAnimatedString : sig
   val get_animVal: 'tags this -> string [@@js.get "animVal"]
   val get_baseVal: 'tags this -> string [@@js.get "baseVal"]
   val set_baseVal: 'tags this -> string -> unit [@@js.set "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:string -> baseVal:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module SVGURIReference : sig
   type t = [`SVGURIReference] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5728,7 +5827,8 @@ module SVGURIReference : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_href: 'tags this -> SVGAnimatedString.t [@@js.get "href"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: href:SVGAnimatedString.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Used for attributes whose value must be a constant from a particular enumeration and which can be animated. *)
@@ -5751,9 +5851,10 @@ module[@js.scope "SVGAnimatedEnumeration"] SVGAnimatedEnumeration : sig
   val get_animVal: 'tags this -> float [@@js.get "animVal"]
   val get_baseVal: 'tags this -> float [@@js.get "baseVal"]
   val set_baseVal: 'tags this -> float -> unit [@@js.set "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:float -> baseVal:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Corresponds to the <number> basic data type. *)
@@ -5775,9 +5876,10 @@ module[@js.scope "SVGNumber"] SVGNumber : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_value: 'tags this -> float [@@js.get "value"]
   val set_value: 'tags this -> float -> unit [@@js.set "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: value:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** The SVGNumberList defines a list of SVGNumber objects. *)
@@ -5809,7 +5911,7 @@ module[@js.scope "SVGNumberList"] SVGNumberList : sig
   val replaceItem: 'tags this -> newItem:SVGNumber.t -> index:float -> SVGNumber.t [@@js.call "replaceItem"]
   val get: 'tags this -> float -> SVGNumber.t [@@js.index_get]
   val set: 'tags this -> float -> SVGNumber.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -5833,9 +5935,10 @@ module[@js.scope "SVGAnimatedNumberList"] SVGAnimatedNumberList : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_animVal: 'tags this -> SVGNumberList.t [@@js.get "animVal"]
   val get_baseVal: 'tags this -> SVGNumberList.t [@@js.get "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:SVGNumberList.t -> baseVal:SVGNumberList.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Correspond to the <length> basic data type. *)
@@ -5875,7 +5978,7 @@ module[@js.scope "SVGLength"] SVGLength : sig
   val get_SVG_LENGTHTYPE_PT: 'tags this -> float [@@js.get "SVG_LENGTHTYPE_PT"]
   val get_SVG_LENGTHTYPE_PX: 'tags this -> float [@@js.get "SVG_LENGTHTYPE_PX"]
   val get_SVG_LENGTHTYPE_UNKNOWN: 'tags this -> float [@@js.get "SVG_LENGTHTYPE_UNKNOWN"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_lengthtype_cm: unit -> float [@@js.get "SVG_LENGTHTYPE_CM"]
@@ -5920,7 +6023,7 @@ module[@js.scope "SVGLengthList"] SVGLengthList : sig
   val replaceItem: 'tags this -> newItem:SVGLength.t -> index:float -> SVGLength.t [@@js.call "replaceItem"]
   val get: 'tags this -> float -> SVGLength.t [@@js.index_get]
   val set: 'tags this -> float -> SVGLength.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -5944,9 +6047,10 @@ module[@js.scope "SVGAnimatedLengthList"] SVGAnimatedLengthList : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_animVal: 'tags this -> SVGLengthList.t [@@js.get "animVal"]
   val get_baseVal: 'tags this -> SVGLengthList.t [@@js.get "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:SVGLengthList.t -> baseVal:SVGLengthList.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module DOMPointInit : sig
   type t = [`DOMPointInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5972,7 +6076,8 @@ module DOMPointInit : sig
   val set_y: 'tags this -> float -> unit [@@js.set "y"]
   val get_z: 'tags this -> float [@@js.get "z"]
   val set_z: 'tags this -> float -> unit [@@js.set "z"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: w:float -> x:float -> y:float -> z:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DOMMatrix2DInit : sig
   type t = [`DOMMatrix2DInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -6014,7 +6119,8 @@ module DOMMatrix2DInit : sig
   val set_m41: 'tags this -> float -> unit [@@js.set "m41"]
   val get_m42: 'tags this -> float [@@js.get "m42"]
   val set_m42: 'tags this -> float -> unit [@@js.set "m42"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: a:float -> b:float -> c:float -> d:float -> e:float -> f:float -> m11:float -> m12:float -> m21:float -> m22:float -> m41:float -> m42:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DOMMatrixInit : sig
   type t = [`DOMMatrix2DInit | `DOMMatrixInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -6054,7 +6160,8 @@ module DOMMatrixInit : sig
   val set_m43: 'tags this -> float -> unit [@@js.set "m43"]
   val get_m44: 'tags this -> float [@@js.get "m44"]
   val set_m44: 'tags this -> float -> unit [@@js.set "m44"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: is2D:bool -> m13:float -> m14:float -> m23:float -> m24:float -> m31:float -> m32:float -> m33:float -> m34:float -> m43:float -> m44:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "DOMPoint"] rec DOMPoint : sig
   type t = [`DOMPoint | `DOMPointReadOnly] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -6080,9 +6187,10 @@ module[@js.scope "DOMPoint"] rec DOMPoint : sig
   val set_y: 'tags this -> float -> unit [@@js.set "y"]
   val get_z: 'tags this -> float [@@js.get "z"]
   val set_z: 'tags this -> float -> unit [@@js.set "z"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: w:float -> x:float -> y:float -> z:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> t [@@js.create]
+  val create': ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> t [@@js.create]
   val fromPoint: ?other:DOMPointInit.t -> unit -> t [@@js.global "fromPoint"]
 end
 and[@js.scope "DOMPointReadOnly"] DOMPointReadOnly : sig
@@ -6107,7 +6215,7 @@ and[@js.scope "DOMPointReadOnly"] DOMPointReadOnly : sig
   val get_z: 'tags this -> float [@@js.get "z"]
   val matrixTransform: 'tags this -> ?matrix:DOMMatrixInit.t -> unit -> DOMPoint.t [@@js.call "matrixTransform"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?x:float -> ?y:float -> ?z:float -> ?w:float -> unit -> t [@@js.create]
   val fromPoint: ?other:DOMPointInit.t -> unit -> t [@@js.global "fromPoint"]
@@ -6140,7 +6248,7 @@ module[@js.scope "SVGPointList"] SVGPointList : sig
   val replaceItem: 'tags this -> newItem:DOMPoint.t -> index:float -> DOMPoint.t [@@js.call "replaceItem"]
   val get: 'tags this -> float -> DOMPoint.t [@@js.index_get]
   val set: 'tags this -> float -> DOMPoint.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -6162,7 +6270,8 @@ module SVGAnimatedPoints : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_animatedPoints: 'tags this -> SVGPointList.t [@@js.get "animatedPoints"]
   val get_points: 'tags this -> SVGPointList.t [@@js.get "points"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animatedPoints:SVGPointList.t -> points:SVGPointList.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DOMRectInit : sig
   type t = [`DOMRectInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -6188,7 +6297,8 @@ module DOMRectInit : sig
   val set_x: 'tags this -> float -> unit [@@js.set "x"]
   val get_y: 'tags this -> float [@@js.get "y"]
   val set_y: 'tags this -> float -> unit [@@js.set "y"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: height:float -> width:float -> x:float -> y:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "DOMRectReadOnly"] DOMRectReadOnly : sig
   type t = [`DOMRectReadOnly] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -6215,7 +6325,7 @@ module[@js.scope "DOMRectReadOnly"] DOMRectReadOnly : sig
   val get_x: 'tags this -> float [@@js.get "x"]
   val get_y: 'tags this -> float [@@js.get "y"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> t [@@js.create]
   val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
@@ -6244,9 +6354,10 @@ module[@js.scope "DOMRect"] DOMRect : sig
   val set_x: 'tags this -> float -> unit [@@js.set "x"]
   val get_y: 'tags this -> float [@@js.get "y"]
   val set_y: 'tags this -> float -> unit [@@js.set "y"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: height:float -> width:float -> x:float -> y:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> t [@@js.create]
+  val create': ?x:float -> ?y:float -> ?width:float -> ?height:float -> unit -> t [@@js.create]
   val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
 end
 
@@ -6269,9 +6380,10 @@ module[@js.scope "SVGAnimatedRect"] SVGAnimatedRect : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_animVal: 'tags this -> DOMRectReadOnly.t [@@js.get "animVal"]
   val get_baseVal: 'tags this -> DOMRect.t [@@js.get "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:DOMRectReadOnly.t -> baseVal:DOMRect.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Corresponds to the preserveAspectRatio attribute, which is available for some of SVG's elements. *)
@@ -6309,9 +6421,10 @@ module[@js.scope "SVGPreserveAspectRatio"] SVGPreserveAspectRatio : sig
   val get_SVG_PRESERVEASPECTRATIO_XMINYMAX: 'tags this -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMINYMAX"]
   val get_SVG_PRESERVEASPECTRATIO_XMINYMID: 'tags this -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMINYMID"]
   val get_SVG_PRESERVEASPECTRATIO_XMINYMIN: 'tags this -> float [@@js.get "SVG_PRESERVEASPECTRATIO_XMINYMIN"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: align:float -> meetOrSlice:float -> svg_meetorslice_meet:(float[@js "SVG_MEETORSLICE_MEET"]) -> svg_meetorslice_slice:(float[@js "SVG_MEETORSLICE_SLICE"]) -> svg_meetorslice_unknown:(float[@js "SVG_MEETORSLICE_UNKNOWN"]) -> svg_preserveaspectratio_none:(float[@js "SVG_PRESERVEASPECTRATIO_NONE"]) -> svg_preserveaspectratio_unknown:(float[@js "SVG_PRESERVEASPECTRATIO_UNKNOWN"]) -> svg_preserveaspectratio_xmaxymax:(float[@js "SVG_PRESERVEASPECTRATIO_XMAXYMAX"]) -> svg_preserveaspectratio_xmaxymid:(float[@js "SVG_PRESERVEASPECTRATIO_XMAXYMID"]) -> svg_preserveaspectratio_xmaxymin:(float[@js "SVG_PRESERVEASPECTRATIO_XMAXYMIN"]) -> svg_preserveaspectratio_xmidymax:(float[@js "SVG_PRESERVEASPECTRATIO_XMIDYMAX"]) -> svg_preserveaspectratio_xmidymid:(float[@js "SVG_PRESERVEASPECTRATIO_XMIDYMID"]) -> svg_preserveaspectratio_xmidymin:(float[@js "SVG_PRESERVEASPECTRATIO_XMIDYMIN"]) -> svg_preserveaspectratio_xminymax:(float[@js "SVG_PRESERVEASPECTRATIO_XMINYMAX"]) -> svg_preserveaspectratio_xminymid:(float[@js "SVG_PRESERVEASPECTRATIO_XMINYMID"]) -> svg_preserveaspectratio_xminymin:(float[@js "SVG_PRESERVEASPECTRATIO_XMINYMIN"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
   val svg_meetorslice_meet: unit -> float [@@js.get "SVG_MEETORSLICE_MEET"]
   val svg_meetorslice_slice: unit -> float [@@js.get "SVG_MEETORSLICE_SLICE"]
   val svg_meetorslice_unknown: unit -> float [@@js.get "SVG_MEETORSLICE_UNKNOWN"]
@@ -6347,9 +6460,10 @@ module[@js.scope "SVGAnimatedPreserveAspectRatio"] SVGAnimatedPreserveAspectRati
   val t_0_of_js: Ojs.t -> t_0
   val get_animVal: 'tags this -> SVGPreserveAspectRatio.t [@@js.get "animVal"]
   val get_baseVal: 'tags this -> SVGPreserveAspectRatio.t [@@js.get "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:SVGPreserveAspectRatio.t -> baseVal:SVGPreserveAspectRatio.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module SVGFitToViewBox : sig
   type t = [`SVGFitToViewBox] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -6369,7 +6483,8 @@ module SVGFitToViewBox : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_preserveAspectRatio: 'tags this -> SVGAnimatedPreserveAspectRatio.t [@@js.get "preserveAspectRatio"]
   val get_viewBox: 'tags this -> SVGAnimatedRect.t [@@js.get "viewBox"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: preserveAspectRatio:SVGAnimatedPreserveAspectRatio.t -> viewBox:SVGAnimatedRect.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Used for attributes of basic type <Number> which can be animated. *)
@@ -6392,9 +6507,10 @@ module[@js.scope "SVGAnimatedNumber"] SVGAnimatedNumber : sig
   val get_animVal: 'tags this -> float [@@js.get "animVal"]
   val get_baseVal: 'tags this -> float [@@js.get "baseVal"]
   val set_baseVal: 'tags this -> float -> unit [@@js.set "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:float -> baseVal:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Used to represent a value that can be an <angle> or <number> value. An SVGAngle reflected through the animVal attribute is always read only. *)
@@ -6428,7 +6544,7 @@ module[@js.scope "SVGAngle"] SVGAngle : sig
   val get_SVG_ANGLETYPE_RAD: 'tags this -> float [@@js.get "SVG_ANGLETYPE_RAD"]
   val get_SVG_ANGLETYPE_UNKNOWN: 'tags this -> float [@@js.get "SVG_ANGLETYPE_UNKNOWN"]
   val get_SVG_ANGLETYPE_UNSPECIFIED: 'tags this -> float [@@js.get "SVG_ANGLETYPE_UNSPECIFIED"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_angletype_deg: unit -> float [@@js.get "SVG_ANGLETYPE_DEG"]
@@ -6455,7 +6571,8 @@ module FocusOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_preventScroll: 'tags this -> bool [@@js.get "preventScroll"]
   val set_preventScroll: 'tags this -> bool -> unit [@@js.set "preventScroll"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: preventScroll:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Used by the dataset HTML attribute to represent data for custom attributes added to elements. *)
@@ -6477,7 +6594,7 @@ module[@js.scope "DOMStringMap"] DOMStringMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get: 'tags this -> string -> string or_undefined [@@js.index_get]
   val set: 'tags this -> string -> string or_undefined -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -6506,7 +6623,7 @@ module HTMLOrSVGElement : sig
   val set_tabIndex: 'tags this -> float -> unit [@@js.set "tabIndex"]
   val blur: 'tags this -> unit [@@js.call "blur"]
   val focus: 'tags this -> ?options:FocusOptions.t -> unit -> unit [@@js.call "focus"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module SVGBoundingBoxOptions : sig
   type t = [`SVGBoundingBoxOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -6532,7 +6649,8 @@ module SVGBoundingBoxOptions : sig
   val set_markers: 'tags this -> bool -> unit [@@js.set "markers"]
   val get_stroke: 'tags this -> bool [@@js.get "stroke"]
   val set_stroke: 'tags this -> bool -> unit [@@js.set "stroke"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: clipped:bool -> fill:bool -> markers:bool -> stroke:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "DOMMatrix"] rec DOMMatrix : sig
   type t = [`DOMMatrix | `DOMMatrixReadOnly] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -6606,7 +6724,7 @@ module[@js.scope "DOMMatrix"] rec DOMMatrix : sig
   val skewXSelf: 'tags this -> ?sx:float -> unit -> t [@@js.call "skewXSelf"]
   val skewYSelf: 'tags this -> ?sy:float -> unit -> t [@@js.call "skewYSelf"]
   val translateSelf: 'tags this -> ?tx:float -> ?ty:float -> ?tz:float -> unit -> t [@@js.call "translateSelf"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:float list or_string -> unit -> t [@@js.create]
   val fromFloat32Array: Float32Array.t_0 -> t [@@js.global "fromFloat32Array"]
@@ -6673,7 +6791,7 @@ and[@js.scope "DOMMatrixReadOnly"] DOMMatrixReadOnly : sig
   val transformPoint: 'tags this -> ?point:DOMPointInit.t -> unit -> DOMPoint.t [@@js.call "transformPoint"]
   val translate: 'tags this -> ?tx:float -> ?ty:float -> ?tz:float -> unit -> DOMMatrix.t [@@js.call "translate"]
   val toString: 'tags this -> string [@@js.call "toString"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:float list or_string -> unit -> t [@@js.create]
   val fromFloat32Array: Float32Array.t_0 -> t [@@js.global "fromFloat32Array"]
@@ -6715,7 +6833,7 @@ module[@js.scope "SVGTransform"] SVGTransform : sig
   val get_SVG_TRANSFORM_SKEWY: 'tags this -> float [@@js.get "SVG_TRANSFORM_SKEWY"]
   val get_SVG_TRANSFORM_TRANSLATE: 'tags this -> float [@@js.get "SVG_TRANSFORM_TRANSLATE"]
   val get_SVG_TRANSFORM_UNKNOWN: 'tags this -> float [@@js.get "SVG_TRANSFORM_UNKNOWN"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_transform_matrix: unit -> float [@@js.get "SVG_TRANSFORM_MATRIX"]
@@ -6758,7 +6876,7 @@ module[@js.scope "SVGTransformList"] SVGTransformList : sig
   val replaceItem: 'tags this -> newItem:SVGTransform.t -> index:float -> SVGTransform.t [@@js.call "replaceItem"]
   val get: 'tags this -> float -> SVGTransform.t [@@js.index_get]
   val set: 'tags this -> float -> SVGTransform.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -6782,9 +6900,10 @@ module[@js.scope "SVGAnimatedTransformList"] SVGAnimatedTransformList : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_animVal: 'tags this -> SVGTransformList.t [@@js.get "animVal"]
   val get_baseVal: 'tags this -> SVGTransformList.t [@@js.get "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:SVGTransformList.t -> baseVal:SVGTransformList.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Used for attributes of basic type <length> which can be animated. *)
@@ -6806,9 +6925,10 @@ module[@js.scope "SVGAnimatedLength"] SVGAnimatedLength : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_animVal: 'tags this -> SVGLength.t [@@js.get "animVal"]
   val get_baseVal: 'tags this -> SVGLength.t [@@js.get "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:SVGLength.t -> baseVal:SVGLength.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module GLint : sig
   type t = float
@@ -6839,9 +6959,10 @@ module[@js.scope "WebGLShaderPrecisionFormat"] WebGLShaderPrecisionFormat : sig
   val get_precision: 'tags this -> GLint.t [@@js.get "precision"]
   val get_rangeMax: 'tags this -> GLint.t [@@js.get "rangeMax"]
   val get_rangeMin: 'tags this -> GLint.t [@@js.get "rangeMin"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: precision:GLint.t -> rangeMax:GLint.t -> rangeMin:GLint.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Part of the WebGL API and represents a buffer that can contain an image, or can be source or target of an rendering operation. *)
@@ -6861,7 +6982,7 @@ module[@js.scope "WebGLRenderbuffer"] WebGLRenderbuffer : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -6883,7 +7004,7 @@ module[@js.scope "WebGLFramebuffer"] WebGLFramebuffer : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -6929,7 +7050,8 @@ module WebGLContextAttributes : sig
   val set_preserveDrawingBuffer: 'tags this -> bool -> unit [@@js.set "preserveDrawingBuffer"]
   val get_stencil: 'tags this -> bool [@@js.get "stencil"]
   val set_stencil: 'tags this -> bool -> unit [@@js.set "stencil"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: alpha:bool -> antialias:bool -> depth:bool -> desynchronized:bool -> failIfMajorPerformanceCaveat:bool -> powerPreference:WebGLPowerPreference.t -> premultipliedAlpha:bool -> preserveDrawingBuffer:bool -> stencil:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WEBGL_lose_context : sig
   type t = [`WEBGL_lose_context] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -6949,7 +7071,7 @@ module WEBGL_lose_context : sig
   val t_0_of_js: Ojs.t -> t_0
   val loseContext: 'tags this -> unit [@@js.call "loseContext"]
   val restoreContext: 'tags this -> unit [@@js.call "restoreContext"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module GLenum : sig
   type t = float
@@ -7011,7 +7133,7 @@ module WEBGL_draw_buffers : sig
   val get_DRAW_BUFFER9_WEBGL: 'tags this -> GLenum.t [@@js.get "DRAW_BUFFER9_WEBGL"]
   val get_MAX_COLOR_ATTACHMENTS_WEBGL: 'tags this -> GLenum.t [@@js.get "MAX_COLOR_ATTACHMENTS_WEBGL"]
   val get_MAX_DRAW_BUFFERS_WEBGL: 'tags this -> GLenum.t [@@js.get "MAX_DRAW_BUFFERS_WEBGL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The WEBGL_depth_texture extension is part of the WebGL API and defines 2D depth and depth-stencil textures. *)
@@ -7032,7 +7154,8 @@ module WEBGL_depth_texture : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_UNSIGNED_INT_24_8_WEBGL: 'tags this -> GLenum.t [@@js.get "UNSIGNED_INT_24_8_WEBGL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: unsigned_int_24_8_webgl:(GLenum.t[@js "UNSIGNED_INT_24_8_WEBGL"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The WebGLShader is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders. *)
@@ -7052,7 +7175,7 @@ module[@js.scope "WebGLShader"] WebGLShader : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7073,7 +7196,7 @@ module WEBGL_debug_shaders : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val getTranslatedShaderSource: 'tags this -> shader:WebGLShader.t -> string [@@js.call "getTranslatedShaderSource"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The WEBGL_debug_renderer_info extension is part of the WebGL API and exposes two constants with information about the graphics driver for debugging purposes. *)
@@ -7095,7 +7218,8 @@ module WEBGL_debug_renderer_info : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_UNMASKED_RENDERER_WEBGL: 'tags this -> GLenum.t [@@js.get "UNMASKED_RENDERER_WEBGL"]
   val get_UNMASKED_VENDOR_WEBGL: 'tags this -> GLenum.t [@@js.get "UNMASKED_VENDOR_WEBGL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: unmasked_renderer_webgl:(GLenum.t[@js "UNMASKED_RENDERER_WEBGL"]) -> unmasked_vendor_webgl:(GLenum.t[@js "UNMASKED_VENDOR_WEBGL"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WEBGL_compressed_texture_s3tc_srgb : sig
   type t = [`WEBGL_compressed_texture_s3tc_srgb] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7117,7 +7241,8 @@ module WEBGL_compressed_texture_s3tc_srgb : sig
   val get_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT"]
   val get_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT"]
   val get_COMPRESSED_SRGB_S3TC_DXT1_EXT: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SRGB_S3TC_DXT1_EXT"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: compressed_srgb_alpha_s3tc_dxt1_ext:(GLenum.t[@js "COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT"]) -> compressed_srgb_alpha_s3tc_dxt3_ext:(GLenum.t[@js "COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT"]) -> compressed_srgb_alpha_s3tc_dxt5_ext:(GLenum.t[@js "COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT"]) -> compressed_srgb_s3tc_dxt1_ext:(GLenum.t[@js "COMPRESSED_SRGB_S3TC_DXT1_EXT"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The WEBGL_compressed_texture_s3tc extension is part of the WebGL API and exposes four S3TC compressed texture formats. *)
@@ -7141,7 +7266,8 @@ module WEBGL_compressed_texture_s3tc : sig
   val get_COMPRESSED_RGBA_S3TC_DXT3_EXT: 'tags this -> GLenum.t [@@js.get "COMPRESSED_RGBA_S3TC_DXT3_EXT"]
   val get_COMPRESSED_RGBA_S3TC_DXT5_EXT: 'tags this -> GLenum.t [@@js.get "COMPRESSED_RGBA_S3TC_DXT5_EXT"]
   val get_COMPRESSED_RGB_S3TC_DXT1_EXT: 'tags this -> GLenum.t [@@js.get "COMPRESSED_RGB_S3TC_DXT1_EXT"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: compressed_rgba_s3tc_dxt1_ext:(GLenum.t[@js "COMPRESSED_RGBA_S3TC_DXT1_EXT"]) -> compressed_rgba_s3tc_dxt3_ext:(GLenum.t[@js "COMPRESSED_RGBA_S3TC_DXT3_EXT"]) -> compressed_rgba_s3tc_dxt5_ext:(GLenum.t[@js "COMPRESSED_RGBA_S3TC_DXT5_EXT"]) -> compressed_rgb_s3tc_dxt1_ext:(GLenum.t[@js "COMPRESSED_RGB_S3TC_DXT1_EXT"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WEBGL_compressed_texture_pvrtc : sig
   type t = [`WEBGL_compressed_texture_pvrtc] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7163,7 +7289,8 @@ module WEBGL_compressed_texture_pvrtc : sig
   val get_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG: 'tags this -> GLenum.t [@@js.get "COMPRESSED_RGBA_PVRTC_4BPPV1_IMG"]
   val get_COMPRESSED_RGB_PVRTC_2BPPV1_IMG: 'tags this -> GLenum.t [@@js.get "COMPRESSED_RGB_PVRTC_2BPPV1_IMG"]
   val get_COMPRESSED_RGB_PVRTC_4BPPV1_IMG: 'tags this -> GLenum.t [@@js.get "COMPRESSED_RGB_PVRTC_4BPPV1_IMG"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: compressed_rgba_pvrtc_2bppv1_img:(GLenum.t[@js "COMPRESSED_RGBA_PVRTC_2BPPV1_IMG"]) -> compressed_rgba_pvrtc_4bppv1_img:(GLenum.t[@js "COMPRESSED_RGBA_PVRTC_4BPPV1_IMG"]) -> compressed_rgb_pvrtc_2bppv1_img:(GLenum.t[@js "COMPRESSED_RGB_PVRTC_2BPPV1_IMG"]) -> compressed_rgb_pvrtc_4bppv1_img:(GLenum.t[@js "COMPRESSED_RGB_PVRTC_4BPPV1_IMG"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WEBGL_compressed_texture_etc1 : sig
   type t = [`WEBGL_compressed_texture_etc1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7182,7 +7309,8 @@ module WEBGL_compressed_texture_etc1 : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_COMPRESSED_RGB_ETC1_WEBGL: 'tags this -> GLenum.t [@@js.get "COMPRESSED_RGB_ETC1_WEBGL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: compressed_rgb_etc1_webgl:(GLenum.t[@js "COMPRESSED_RGB_ETC1_WEBGL"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WEBGL_compressed_texture_etc : sig
   type t = [`WEBGL_compressed_texture_etc] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7210,7 +7338,8 @@ module WEBGL_compressed_texture_etc : sig
   val get_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SRGB8_ALPHA8_ETC2_EAC"]
   val get_COMPRESSED_SRGB8_ETC2: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SRGB8_ETC2"]
   val get_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: compressed_r11_eac:(GLenum.t[@js "COMPRESSED_R11_EAC"]) -> compressed_rg11_eac:(GLenum.t[@js "COMPRESSED_RG11_EAC"]) -> compressed_rgb8_etc2:(GLenum.t[@js "COMPRESSED_RGB8_ETC2"]) -> compressed_rgb8_punchthrough_alpha1_etc2:(GLenum.t[@js "COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2"]) -> compressed_rgba8_etc2_eac:(GLenum.t[@js "COMPRESSED_RGBA8_ETC2_EAC"]) -> compressed_signed_r11_eac:(GLenum.t[@js "COMPRESSED_SIGNED_R11_EAC"]) -> compressed_signed_rg11_eac:(GLenum.t[@js "COMPRESSED_SIGNED_RG11_EAC"]) -> compressed_srgb8_alpha8_etc2_eac:(GLenum.t[@js "COMPRESSED_SRGB8_ALPHA8_ETC2_EAC"]) -> compressed_srgb8_etc2:(GLenum.t[@js "COMPRESSED_SRGB8_ETC2"]) -> compressed_srgb8_punchthrough_alpha1_etc2:(GLenum.t[@js "COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WEBGL_compressed_texture_astc : sig
   type t = [`WEBGL_compressed_texture_astc] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7257,7 +7386,7 @@ module WEBGL_compressed_texture_astc : sig
   val get_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR"]
   val get_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR"]
   val get_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WEBGL_color_buffer_float : sig
   type t = [`WEBGL_color_buffer_float] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7278,7 +7407,8 @@ module WEBGL_color_buffer_float : sig
   val get_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: 'tags this -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT"]
   val get_RGBA32F_EXT: 'tags this -> GLenum.t [@@js.get "RGBA32F_EXT"]
   val get_UNSIGNED_NORMALIZED_EXT: 'tags this -> GLenum.t [@@js.get "UNSIGNED_NORMALIZED_EXT"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: framebuffer_attachment_component_type_ext:(GLenum.t[@js "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT"]) -> rgba32f_ext:(GLenum.t[@js "RGBA32F_EXT"]) -> unsigned_normalized_ext:(GLenum.t[@js "UNSIGNED_NORMALIZED_EXT"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Part of the WebGL API and represents an opaque texture object providing storage and state for texturing operations. *)
@@ -7298,7 +7428,7 @@ module[@js.scope "WebGLTexture"] WebGLTexture : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7331,7 +7461,7 @@ module OVR_multiview2 : sig
   val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_NUM_VIEWS_OVR: 'tags this -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_NUM_VIEWS_OVR"]
   val get_FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR: 'tags this -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR"]
   val get_MAX_VIEWS_OVR: 'tags this -> GLenum.t [@@js.get "MAX_VIEWS_OVR"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WebGLVertexArrayObjectOES : sig
   type t = [`WebGLVertexArrayObjectOES] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7349,7 +7479,7 @@ module WebGLVertexArrayObjectOES : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module GLboolean : sig
   type t = bool
@@ -7380,7 +7510,7 @@ module OES_vertex_array_object : sig
   val deleteVertexArrayOES: 'tags this -> arrayObject:WebGLVertexArrayObjectOES.t or_null -> unit [@@js.call "deleteVertexArrayOES"]
   val isVertexArrayOES: 'tags this -> arrayObject:WebGLVertexArrayObjectOES.t or_null -> GLboolean.t [@@js.call "isVertexArrayOES"]
   val get_VERTEX_ARRAY_BINDING_OES: 'tags this -> GLenum.t [@@js.get "VERTEX_ARRAY_BINDING_OES"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The OES_texture_half_float_linear extension is part of the WebGL API and allows linear filtering with half floating-point pixel types for textures. *)
@@ -7400,7 +7530,7 @@ module OES_texture_half_float_linear : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The OES_texture_half_float extension is part of the WebGL API and adds texture formats with 16- (aka half float) and 32-bit floating-point components. *)
@@ -7421,7 +7551,8 @@ module OES_texture_half_float : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_HALF_FLOAT_OES: 'tags this -> GLenum.t [@@js.get "HALF_FLOAT_OES"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: half_float_oes:(GLenum.t[@js "HALF_FLOAT_OES"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The OES_texture_float_linear extension is part of the WebGL API and allows linear filtering with floating-point pixel types for textures. *)
@@ -7441,7 +7572,7 @@ module OES_texture_float_linear : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The OES_texture_float extension is part of the WebGL API and exposes floating-point pixel types for textures. *)
@@ -7461,7 +7592,7 @@ module OES_texture_float : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The OES_standard_derivatives extension is part of the WebGL API and adds the GLSL derivative functions dFdx, dFdy, and fwidth. *)
@@ -7482,7 +7613,8 @@ module OES_standard_derivatives : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_FRAGMENT_SHADER_DERIVATIVE_HINT_OES: 'tags this -> GLenum.t [@@js.get "FRAGMENT_SHADER_DERIVATIVE_HINT_OES"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: fragment_shader_derivative_hint_oes:(GLenum.t[@js "FRAGMENT_SHADER_DERIVATIVE_HINT_OES"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The OES_element_index_uint extension is part of the WebGL API and adds support for gl.UNSIGNED_INT types to WebGLRenderingContext.drawElements(). *)
@@ -7502,7 +7634,7 @@ module OES_element_index_uint : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module KHR_parallel_shader_compile : sig
   type t = [`KHR_parallel_shader_compile] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7521,7 +7653,8 @@ module KHR_parallel_shader_compile : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_COMPLETION_STATUS_KHR: 'tags this -> GLenum.t [@@js.get "COMPLETION_STATUS_KHR"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: completion_status_khr:(GLenum.t[@js "COMPLETION_STATUS_KHR"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module GLclampf : sig
   type t = float
@@ -7551,7 +7684,8 @@ module EXT_texture_filter_anisotropic : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_MAX_TEXTURE_MAX_ANISOTROPY_EXT: 'tags this -> GLenum.t [@@js.get "MAX_TEXTURE_MAX_ANISOTROPY_EXT"]
   val get_TEXTURE_MAX_ANISOTROPY_EXT: 'tags this -> GLenum.t [@@js.get "TEXTURE_MAX_ANISOTROPY_EXT"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: max_texture_max_anisotropy_ext:(GLenum.t[@js "MAX_TEXTURE_MAX_ANISOTROPY_EXT"]) -> texture_max_anisotropy_ext:(GLenum.t[@js "TEXTURE_MAX_ANISOTROPY_EXT"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EXT_shader_texture_lod : sig
   type t = [`EXT_shader_texture_lod] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7569,7 +7703,7 @@ module EXT_shader_texture_lod : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EXT_sRGB : sig
   type t = [`EXT_sRGB] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7591,7 +7725,8 @@ module EXT_sRGB : sig
   val get_SRGB8_ALPHA8_EXT: 'tags this -> GLenum.t [@@js.get "SRGB8_ALPHA8_EXT"]
   val get_SRGB_ALPHA_EXT: 'tags this -> GLenum.t [@@js.get "SRGB_ALPHA_EXT"]
   val get_SRGB_EXT: 'tags this -> GLenum.t [@@js.get "SRGB_EXT"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: framebuffer_attachment_color_encoding_ext:(GLenum.t[@js "FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT"]) -> srgb8_alpha8_ext:(GLenum.t[@js "SRGB8_ALPHA8_EXT"]) -> srgb_alpha_ext:(GLenum.t[@js "SRGB_ALPHA_EXT"]) -> srgb_ext:(GLenum.t[@js "SRGB_EXT"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The EXT_frag_depth extension is part of the WebGL API and enables to set a depth value of a fragment from within the fragment shader. *)
@@ -7611,7 +7746,7 @@ module EXT_frag_depth : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EXT_float_blend : sig
   type t = [`EXT_float_blend] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7629,7 +7764,7 @@ module EXT_float_blend : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EXT_color_buffer_half_float : sig
   type t = [`EXT_color_buffer_half_float] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7651,7 +7786,8 @@ module EXT_color_buffer_half_float : sig
   val get_RGB16F_EXT: 'tags this -> GLenum.t [@@js.get "RGB16F_EXT"]
   val get_RGBA16F_EXT: 'tags this -> GLenum.t [@@js.get "RGBA16F_EXT"]
   val get_UNSIGNED_NORMALIZED_EXT: 'tags this -> GLenum.t [@@js.get "UNSIGNED_NORMALIZED_EXT"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: framebuffer_attachment_component_type_ext:(GLenum.t[@js "FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT"]) -> rgb16f_ext:(GLenum.t[@js "RGB16F_EXT"]) -> rgba16f_ext:(GLenum.t[@js "RGBA16F_EXT"]) -> unsigned_normalized_ext:(GLenum.t[@js "UNSIGNED_NORMALIZED_EXT"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EXT_color_buffer_float : sig
   type t = [`EXT_color_buffer_float] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7669,7 +7805,7 @@ module EXT_color_buffer_float : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EXT_blend_minmax : sig
   type t = [`EXT_blend_minmax] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7689,7 +7825,8 @@ module EXT_blend_minmax : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_MAX_EXT: 'tags this -> GLenum.t [@@js.get "MAX_EXT"]
   val get_MIN_EXT: 'tags this -> GLenum.t [@@js.get "MIN_EXT"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: max_ext:(GLenum.t[@js "MAX_EXT"]) -> min_ext:(GLenum.t[@js "MIN_EXT"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "WebGLVertexArrayObject"] WebGLVertexArrayObject : sig
   type t = [`WebGLVertexArrayObject] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7707,7 +7844,7 @@ module[@js.scope "WebGLVertexArrayObject"] WebGLVertexArrayObject : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7729,7 +7866,7 @@ module[@js.scope "WebGLUniformLocation"] WebGLUniformLocation : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7749,7 +7886,7 @@ module[@js.scope "WebGLTransformFeedback"] WebGLTransformFeedback : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7769,7 +7906,7 @@ module[@js.scope "WebGLSync"] WebGLSync : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7789,7 +7926,7 @@ module[@js.scope "WebGLSampler"] WebGLSampler : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7809,7 +7946,7 @@ module[@js.scope "WebGLQuery"] WebGLQuery : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7831,7 +7968,7 @@ module[@js.scope "WebGLProgram"] WebGLProgram : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7853,7 +7990,7 @@ module[@js.scope "WebGLBuffer"] WebGLBuffer : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -7878,9 +8015,10 @@ module[@js.scope "WebGLActiveInfo"] WebGLActiveInfo : sig
   val get_name: 'tags this -> string [@@js.get "name"]
   val get_size: 'tags this -> GLint.t [@@js.get "size"]
   val get_type: 'tags this -> GLenum.t [@@js.get "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: name:string -> size:GLint.t -> type_:(GLenum.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module GLuint : sig
   type t = float
@@ -7922,9 +8060,10 @@ module[@js.scope "VideoPlaybackQuality"] VideoPlaybackQuality : sig
   val get_creationTime: 'tags this -> DOMHighResTimeStamp.t [@@js.get "creationTime"]
   val get_droppedVideoFrames: 'tags this -> float [@@js.get "droppedVideoFrames"]
   val get_totalVideoFrames: 'tags this -> float [@@js.get "totalVideoFrames"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: corruptedVideoFrames:float -> creationTime:DOMHighResTimeStamp.t -> droppedVideoFrames:float -> totalVideoFrames:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module[@js.scope "PictureInPictureWindow"] PictureInPictureWindow : sig
   type t = [`EventTarget | `PictureInPictureWindow] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -7986,7 +8125,7 @@ module[@js.scope "PictureInPictureWindow"] PictureInPictureWindow : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -8113,7 +8252,7 @@ module[@js.scope "TextTrack"] rec TextTrack : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -8238,7 +8377,7 @@ and[@js.scope "TextTrackCue"] TextTrackCue : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -8271,7 +8410,7 @@ and[@js.scope "TextTrackCueList"] TextTrackCueList : sig
   val getCueById: 'tags this -> id:string -> TextTrackCue.t or_null [@@js.call "getCueById"]
   val get: 'tags this -> float -> TextTrackCue.t [@@js.index_get]
   val set: 'tags this -> float -> TextTrackCue.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -8293,7 +8432,8 @@ module TrackEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_track: 'tags this -> TextTrack.t or_null [@@js.get "track"]
   val set_track: 'tags this -> TextTrack.t or_null -> unit [@@js.set "track"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?track:TextTrack.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The TrackEvent interface, part of the HTML DOM specification, is used for events which represent changes to the set of available tracks on an HTML media element; these events are addtrack and removetrack. *)
@@ -8316,9 +8456,10 @@ module[@js.scope "TrackEvent"] TrackEvent : sig
   
   (** Returns the track object (TextTrack, AudioTrack, or VideoTrack) to which the event relates. *)
   val get_track: 'tags this -> TextTrack.t or_null [@@js.get "track"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?track:TextTrack.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:TrackEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:TrackEventInit.t -> unit -> t [@@js.create]
 end
 module[@js.scope "TextTrackList"] TextTrackList : sig
   type t = [`EventTarget | `TextTrackList | TextTrack.t ArrayLike.tags_1 | TextTrack.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8387,7 +8528,7 @@ module[@js.scope "TextTrackList"] TextTrackList : sig
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val get: 'tags this -> float -> TextTrack.t [@@js.index_get]
   val set: 'tags this -> float -> TextTrack.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -8416,7 +8557,7 @@ module RemotePlaybackAvailabilityCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> available:bool -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "RemotePlayback"] RemotePlayback : sig
   type t = [`EventTarget | `RemotePlayback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8484,7 +8625,7 @@ module[@js.scope "RemotePlayback"] RemotePlayback : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -8520,9 +8661,10 @@ module[@js.scope "MediaError"] MediaError : sig
   val get_MEDIA_ERR_DECODE: 'tags this -> float [@@js.get "MEDIA_ERR_DECODE"]
   val get_MEDIA_ERR_NETWORK: 'tags this -> float [@@js.get "MEDIA_ERR_NETWORK"]
   val get_MEDIA_ERR_SRC_NOT_SUPPORTED: 'tags this -> float [@@js.get "MEDIA_ERR_SRC_NOT_SUPPORTED"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: code:float -> message:string -> media_err_aborted:(float[@js "MEDIA_ERR_ABORTED"]) -> media_err_decode:(float[@js "MEDIA_ERR_DECODE"]) -> media_err_network:(float[@js "MEDIA_ERR_NETWORK"]) -> media_err_src_not_supported:(float[@js "MEDIA_ERR_SRC_NOT_SUPPORTED"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
   val media_err_aborted: unit -> float [@@js.get "MEDIA_ERR_ABORTED"]
   val media_err_decode: unit -> float [@@js.get "MEDIA_ERR_DECODE"]
   val media_err_network: unit -> float [@@js.get "MEDIA_ERR_NETWORK"]
@@ -8548,7 +8690,8 @@ module MediaEncryptedEventInit : sig
   val set_initData: 'tags this -> ArrayBuffer.t_0 or_null -> unit [@@js.set "initData"]
   val get_initDataType: 'tags this -> string [@@js.get "initDataType"]
   val set_initDataType: 'tags this -> string -> unit [@@js.set "initDataType"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?initData:ArrayBuffer.t_0 -> initDataType:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "MediaEncryptedEvent"] MediaEncryptedEvent : sig
   type t = [`Event | `MediaEncryptedEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8568,9 +8711,10 @@ module[@js.scope "MediaEncryptedEvent"] MediaEncryptedEvent : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_initData: 'tags this -> ArrayBuffer.t_0 or_null [@@js.get "initData"]
   val get_initDataType: 'tags this -> string [@@js.get "initDataType"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?initData:ArrayBuffer.t_0 -> initDataType:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:MediaEncryptedEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:MediaEncryptedEventInit.t -> unit -> t [@@js.create]
 end
 module CanPlayTypeResult : sig
   type t = ([`L_s0[@js ""] | `L_s485_maybe[@js "maybe"] | `L_s616_probably[@js "probably"]] [@js.enum])
@@ -8654,7 +8798,8 @@ module ImageBitmapRenderingContextSettings : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_alpha: 'tags this -> bool [@@js.get "alpha"]
   val set_alpha: 'tags this -> bool -> unit [@@js.set "alpha"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: alpha:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasTransform : sig
   type t = [`CanvasTransform] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8680,7 +8825,7 @@ module CanvasTransform : sig
   val setTransform': 'tags this -> ?transform:DOMMatrix2DInit.t -> unit -> unit [@@js.call "setTransform"]
   val transform: 'tags this -> a:float -> b:float -> c:float -> d:float -> e:float -> f:float -> unit [@@js.call "transform"]
   val translate: 'tags this -> x:float -> y:float -> unit [@@js.call "translate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasTextBaseline : sig
   type t = ([`L_s110_alphabetic[@js "alphabetic"] | `L_s169_bottom[@js "bottom"] | `L_s368_hanging[@js "hanging"] | `L_s398_ideographic[@js "ideographic"] | `L_s495_middle[@js "middle"] | `L_s773_top[@js "top"]] [@js.enum])
@@ -8730,7 +8875,8 @@ module CanvasTextDrawingStyles : sig
   val set_textAlign: 'tags this -> CanvasTextAlign.t -> unit [@@js.set "textAlign"]
   val get_textBaseline: 'tags this -> CanvasTextBaseline.t [@@js.get "textBaseline"]
   val set_textBaseline: 'tags this -> CanvasTextBaseline.t -> unit [@@js.set "textBaseline"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: direction:CanvasDirection.t -> font:string -> textAlign:CanvasTextAlign.t -> textBaseline:CanvasTextBaseline.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The dimensions of a piece of text in the canvas, as created by the CanvasRenderingContext2D.measureText() method. *)
@@ -8771,9 +8917,10 @@ module[@js.scope "TextMetrics"] TextMetrics : sig
   
   (** Returns the measurement described below. *)
   val get_width: 'tags this -> float [@@js.get "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: actualBoundingBoxAscent:float -> actualBoundingBoxDescent:float -> actualBoundingBoxLeft:float -> actualBoundingBoxRight:float -> fontBoundingBoxAscent:float -> fontBoundingBoxDescent:float -> width:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module CanvasText : sig
   type t = [`CanvasText] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8794,7 +8941,7 @@ module CanvasText : sig
   val fillText: 'tags this -> text:string -> x:float -> y:float -> ?maxWidth:float -> unit -> unit [@@js.call "fillText"]
   val measureText: 'tags this -> text:string -> TextMetrics.t [@@js.call "measureText"]
   val strokeText: 'tags this -> text:string -> x:float -> y:float -> ?maxWidth:float -> unit -> unit [@@js.call "strokeText"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasState : sig
   type t = [`CanvasState] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8814,7 +8961,7 @@ module CanvasState : sig
   val t_0_of_js: Ojs.t -> t_0
   val restore: 'tags this -> unit [@@js.call "restore"]
   val save: 'tags this -> unit [@@js.call "save"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasShadowStyles : sig
   type t = [`CanvasShadowStyles] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8840,7 +8987,8 @@ module CanvasShadowStyles : sig
   val set_shadowOffsetX: 'tags this -> float -> unit [@@js.set "shadowOffsetX"]
   val get_shadowOffsetY: 'tags this -> float [@@js.get "shadowOffsetY"]
   val set_shadowOffsetY: 'tags this -> float -> unit [@@js.set "shadowOffsetY"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: shadowBlur:float -> shadowColor:string -> shadowOffsetX:float -> shadowOffsetY:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PredefinedColorSpace : sig
   type t = ([`L_s259_display_p3[@js "display-p3"] | `L_s719_srgb[@js "srgb"]] [@js.enum])
@@ -8874,7 +9022,8 @@ module CanvasRenderingContext2DSettings : sig
   val set_desynchronized: 'tags this -> bool -> unit [@@js.set "desynchronized"]
   val get_willReadFrequently: 'tags this -> bool [@@js.get "willReadFrequently"]
   val set_willReadFrequently: 'tags this -> bool -> unit [@@js.set "willReadFrequently"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: alpha:bool -> colorSpace:PredefinedColorSpace.t -> desynchronized:bool -> willReadFrequently:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasRect : sig
   type t = [`CanvasRect] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8895,7 +9044,7 @@ module CanvasRect : sig
   val clearRect: 'tags this -> x:float -> y:float -> w:float -> h:float -> unit [@@js.call "clearRect"]
   val fillRect: 'tags this -> x:float -> y:float -> w:float -> h:float -> unit [@@js.call "fillRect"]
   val strokeRect: 'tags this -> x:float -> y:float -> w:float -> h:float -> unit [@@js.call "strokeRect"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasLineJoin : sig
   type t = ([`L_s158_bevel[@js "bevel"] | `L_s496_miter[@js "miter"] | `L_s661_round[@js "round"]] [@js.enum])
@@ -8942,7 +9091,7 @@ module CanvasPathDrawingStyles : sig
   val set_miterLimit: 'tags this -> float -> unit [@@js.set "miterLimit"]
   val getLineDash: 'tags this -> float list [@@js.call "getLineDash"]
   val setLineDash': 'tags this -> segments:float list -> unit [@@js.call "setLineDash"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ImageSmoothingQuality : sig
   type t = ([`L_s381_high[@js "high"] | `L_s466_low[@js "low"] | `L_s487_medium[@js "medium"]] [@js.enum])
@@ -8972,7 +9121,8 @@ module CanvasImageSmoothing : sig
   val set_imageSmoothingEnabled: 'tags this -> bool -> unit [@@js.set "imageSmoothingEnabled"]
   val get_imageSmoothingQuality: 'tags this -> ImageSmoothingQuality.t [@@js.get "imageSmoothingQuality"]
   val set_imageSmoothingQuality: 'tags this -> ImageSmoothingQuality.t -> unit [@@js.set "imageSmoothingQuality"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: imageSmoothingEnabled:bool -> imageSmoothingQuality:ImageSmoothingQuality.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ImageDataSettings : sig
   type t = [`ImageDataSettings] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -8992,7 +9142,8 @@ module ImageDataSettings : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_colorSpace: 'tags this -> PredefinedColorSpace.t [@@js.get "colorSpace"]
   val set_colorSpace: 'tags this -> PredefinedColorSpace.t -> unit [@@js.set "colorSpace"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: colorSpace:PredefinedColorSpace.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The underlying pixel data of an area of a <canvas> element. It is created using the ImageData() constructor or creator methods on the CanvasRenderingContext2D object associated with a canvas: createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData(). *)
@@ -9021,10 +9172,11 @@ module[@js.scope "ImageData"] ImageData : sig
   
   (** Returns the actual dimensions of the data in the ImageData object, in pixels. *)
   val get_width: 'tags this -> float [@@js.get "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: data:Uint8ClampedArray.t_0 -> height:float -> width:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: sw:float -> sh:float -> ?settings:ImageDataSettings.t -> unit -> t [@@js.create]
-  val create': data:Uint8ClampedArray.t_0 -> sw:float -> ?sh:float -> ?settings:ImageDataSettings.t -> unit -> t [@@js.create]
+  val create': sw:float -> sh:float -> ?settings:ImageDataSettings.t -> unit -> t [@@js.create]
+  val create'': data:Uint8ClampedArray.t_0 -> sw:float -> ?sh:float -> ?settings:ImageDataSettings.t -> unit -> t [@@js.create]
 end
 module CanvasImageData : sig
   type t = [`CanvasImageData] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -9047,7 +9199,7 @@ module CanvasImageData : sig
   val getImageData: 'tags this -> sx:float -> sy:float -> sw:float -> sh:float -> ?settings:ImageDataSettings.t -> unit -> ImageData.t [@@js.call "getImageData"]
   val putImageData: 'tags this -> imagedata:ImageData.t -> dx:float -> dy:float -> unit [@@js.call "putImageData"]
   val putImageData': 'tags this -> imagedata:ImageData.t -> dx:float -> dy:float -> dirtyX:float -> dirtyY:float -> dirtyWidth:float -> dirtyHeight:float -> unit [@@js.call "putImageData"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasFilters : sig
   type t = [`CanvasFilters] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -9067,7 +9219,8 @@ module CanvasFilters : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_filter: 'tags this -> string [@@js.get "filter"]
   val set_filter: 'tags this -> string -> unit [@@js.set "filter"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: filter:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** An opaque object describing a pattern, based on an image, a canvas, or a video, created by the CanvasRenderingContext2D.createPattern() method. *)
@@ -9090,7 +9243,7 @@ module[@js.scope "CanvasPattern"] CanvasPattern : sig
   
   (** Sets the transformation matrix that will be used when rendering the pattern during a fill or stroke painting operation. *)
   val setTransform: 'tags this -> ?transform:DOMMatrix2DInit.t -> unit -> unit [@@js.call "setTransform"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -9119,7 +9272,7 @@ module[@js.scope "CanvasGradient"] CanvasGradient : sig
     Throws an "IndexSizeError" DOMException if the offset is out of range. Throws a "SyntaxError" DOMException if the color cannot be parsed.
   *)
   val addColorStop: 'tags this -> offset:float -> color:string -> unit [@@js.call "addColorStop"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -9148,7 +9301,7 @@ module CanvasPath : sig
   val moveTo: 'tags this -> x:float -> y:float -> unit [@@js.call "moveTo"]
   val quadraticCurveTo: 'tags this -> cpx:float -> cpy:float -> x:float -> y:float -> unit [@@js.call "quadraticCurveTo"]
   val rect: 'tags this -> x:float -> y:float -> w:float -> h:float -> unit [@@js.call "rect"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Canvas 2D API interface is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired. *)
@@ -9171,7 +9324,7 @@ module[@js.scope "Path2D"] Path2D : sig
   
   (** Adds to the path the path given by the argument. *)
   val addPath: 'tags this -> path:t -> ?transform:DOMMatrix2DInit.t -> unit -> unit [@@js.call "addPath"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?path:t or_string -> unit -> t [@@js.create]
 end
@@ -9210,7 +9363,7 @@ module CanvasDrawPath : sig
   val isPointInStroke': 'tags this -> path:Path2D.t -> x:float -> y:float -> bool [@@js.call "isPointInStroke"]
   val stroke: 'tags this -> unit [@@js.call "stroke"]
   val stroke': 'tags this -> path:Path2D.t -> unit [@@js.call "stroke"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasCompositing : sig
   type t = [`CanvasCompositing] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -9232,7 +9385,8 @@ module CanvasCompositing : sig
   val set_globalAlpha: 'tags this -> float -> unit [@@js.set "globalAlpha"]
   val get_globalCompositeOperation: 'tags this -> string [@@js.get "globalCompositeOperation"]
   val set_globalCompositeOperation: 'tags this -> string -> unit [@@js.set "globalCompositeOperation"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: globalAlpha:float -> globalCompositeOperation:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module BlobCallback : sig
   type t = [`BlobCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -9251,7 +9405,7 @@ module BlobCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> blob:Blob.t or_null -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ResizeQuality : sig
   type t = ([`L_s381_high[@js "high"] | `L_s466_low[@js "low"] | `L_s487_medium[@js "medium"] | `L_s582_pixelated[@js "pixelated"]] [@js.enum])
@@ -9313,7 +9467,8 @@ module ImageBitmapOptions : sig
   val set_resizeQuality: 'tags this -> ResizeQuality.t -> unit [@@js.set "resizeQuality"]
   val get_resizeWidth: 'tags this -> float [@@js.get "resizeWidth"]
   val set_resizeWidth: 'tags this -> float -> unit [@@js.set "resizeWidth"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: colorSpaceConversion:ColorSpaceConversion.t -> imageOrientation:ImageOrientation.t -> premultiplyAlpha:PremultiplyAlpha.t -> resizeHeight:float -> resizeQuality:ResizeQuality.t -> resizeWidth:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IDBVersionChangeEventInit : sig
   type t = [`EventInit | `IDBVersionChangeEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -9335,7 +9490,8 @@ module IDBVersionChangeEventInit : sig
   val set_newVersion: 'tags this -> float or_null -> unit [@@js.set "newVersion"]
   val get_oldVersion: 'tags this -> float [@@js.get "oldVersion"]
   val set_oldVersion: 'tags this -> float -> unit [@@js.set "oldVersion"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?newVersion:float -> oldVersion:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This IndexedDB API interface indicates that the version of the database has changed, as the result of an IDBOpenDBRequest.onupgradeneeded event handler function. *)
@@ -9357,9 +9513,10 @@ module[@js.scope "IDBVersionChangeEvent"] IDBVersionChangeEvent : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_newVersion: 'tags this -> float or_null [@@js.get "newVersion"]
   val get_oldVersion: 'tags this -> float [@@js.get "oldVersion"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?newVersion:float -> oldVersion:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:IDBVersionChangeEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:IDBVersionChangeEventInit.t -> unit -> t [@@js.create]
 end
 module IDBObjectStoreParameters : sig
   type t = [`IDBObjectStoreParameters] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -9381,7 +9538,8 @@ module IDBObjectStoreParameters : sig
   val set_autoIncrement: 'tags this -> bool -> unit [@@js.set "autoIncrement"]
   val get_keyPath: 'tags this -> string list or_string or_null [@@js.get "keyPath"]
   val set_keyPath: 'tags this -> string list or_string or_null -> unit [@@js.set "keyPath"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: autoIncrement:bool -> ?keyPath:string list or_string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IDBIndexParameters : sig
   type t = [`IDBIndexParameters] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -9403,7 +9561,8 @@ module IDBIndexParameters : sig
   val set_multiEntry: 'tags this -> bool -> unit [@@js.set "multiEntry"]
   val get_unique: 'tags this -> bool [@@js.get "unique"]
   val set_unique: 'tags this -> bool -> unit [@@js.set "unique"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: multiEntry:bool -> unique:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IDBValidKey : sig
   type t = t list or_string or_number
@@ -9462,7 +9621,7 @@ module[@js.scope "IDBKeyRange"] IDBKeyRange : sig
   
   (** Returns true if key is included in the range, and false otherwise. *)
   val includes: 'tags this -> key:any -> bool [@@js.call "includes"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   
@@ -9516,7 +9675,7 @@ module[@js.scope "DOMStringList"] DOMStringList : sig
   val item: 'tags this -> index:float -> string or_null [@@js.call "item"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -9576,7 +9735,7 @@ module[@js.scope "IDBCursor"] rec IDBCursor : sig
     If successful, request's result will be the record's key.
   *)
   val update: 'tags this -> value:any -> IDBValidKey.t IDBRequest.t [@@js.call "update"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -9601,9 +9760,10 @@ and[@js.scope "IDBCursorWithValue"] IDBCursorWithValue : sig
   
   (** Returns the cursor's current value. *)
   val get_value: 'tags this -> any [@@js.get "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: value:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** This IndexedDB API interface provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database. *)
@@ -9703,7 +9863,7 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -9786,7 +9946,7 @@ and[@js.scope "IDBIndex"] IDBIndex : sig
     If successful, request's result will be an IDBCursor, or null if there were no matching records.
   *)
   val openKeyCursor: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 or_null -> ?direction:IDBCursorDirection.t -> unit -> IDBCursor.t or_null IDBRequest.t [@@js.call "openKeyCursor"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -9933,7 +10093,7 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     If successful, request's result will be the record's key.
   *)
   val put: 'tags this -> value:any -> ?key:IDBValidKey.t -> unit -> IDBValidKey.t IDBRequest.t [@@js.call "put"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -10019,7 +10179,7 @@ and[@js.scope "IDBRequest"] IDBRequest : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': ('tags, 'T) this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: unit -> t_0 [@@js.create]
 end
@@ -10104,7 +10264,7 @@ and[@js.scope "IDBTransaction"] IDBTransaction : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -10170,7 +10330,7 @@ module[@js.scope "IDBOpenDBRequest"] IDBOpenDBRequest : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -10194,7 +10354,8 @@ module IDBDatabaseInfo : sig
   val set_name: 'tags this -> string -> unit [@@js.set "name"]
   val get_version: 'tags this -> float [@@js.get "version"]
   val set_version: 'tags this -> float -> unit [@@js.set "version"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: name:string -> version:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** In the following code snippet, we make a request to open a database, and include handlers for the success and error cases. For a full working example, see our To-do Notifications app (view example live.) *)
@@ -10228,7 +10389,7 @@ module[@js.scope "IDBFactory"] IDBFactory : sig
   
   (** Attempts to open a connection to the named database with the current version, or 1 if it does not already exist. If the request is successful request's result will be the connection. *)
   val open_: 'tags this -> name:string -> ?version:float -> unit -> IDBOpenDBRequest.t [@@js.call "open"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -10250,7 +10411,8 @@ module Algorithm : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_name: 'tags this -> string [@@js.get "name"]
   val set_name: 'tags this -> string -> unit [@@js.set "name"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: name:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RsaPssParams : sig
   type t = [`Algorithm | `RsaPssParams] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10270,7 +10432,8 @@ module RsaPssParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_saltLength: 'tags this -> float [@@js.get "saltLength"]
   val set_saltLength: 'tags this -> float -> unit [@@js.set "saltLength"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: saltLength:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RsaOaepParams : sig
   type t = [`Algorithm | `RsaOaepParams] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10290,7 +10453,8 @@ module RsaOaepParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_label: 'tags this -> BufferSource.t [@@js.get "label"]
   val set_label: 'tags this -> BufferSource.t -> unit [@@js.set "label"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: label:BufferSource.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module BigInteger : sig
   type t = Uint8Array.t_0
@@ -10320,7 +10484,8 @@ module RsaKeyGenParams : sig
   val set_modulusLength: 'tags this -> float -> unit [@@js.set "modulusLength"]
   val get_publicExponent: 'tags this -> BigInteger.t [@@js.get "publicExponent"]
   val set_publicExponent: 'tags this -> BigInteger.t -> unit [@@js.set "publicExponent"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: modulusLength:float -> publicExponent:BigInteger.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AlgorithmIdentifier : sig
   type t = Algorithm.t or_string
@@ -10356,7 +10521,8 @@ module RsaHashedKeyGenParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_hash: 'tags this -> HashAlgorithmIdentifier.t [@@js.get "hash"]
   val set_hash: 'tags this -> HashAlgorithmIdentifier.t -> unit [@@js.set "hash"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hash:HashAlgorithmIdentifier.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RsaHashedImportParams : sig
   type t = [`Algorithm | `RsaHashedImportParams] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10376,7 +10542,8 @@ module RsaHashedImportParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_hash: 'tags this -> HashAlgorithmIdentifier.t [@@js.get "hash"]
   val set_hash: 'tags this -> HashAlgorithmIdentifier.t -> unit [@@js.set "hash"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hash:HashAlgorithmIdentifier.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module Pbkdf2Params : sig
   type t = [`Algorithm | `Pbkdf2Params] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10400,7 +10567,8 @@ module Pbkdf2Params : sig
   val set_iterations: 'tags this -> float -> unit [@@js.set "iterations"]
   val get_salt: 'tags this -> BufferSource.t [@@js.get "salt"]
   val set_salt: 'tags this -> BufferSource.t -> unit [@@js.set "salt"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hash:HashAlgorithmIdentifier.t -> iterations:float -> salt:BufferSource.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module KeyFormat : sig
   type t = ([`L_s426_jwk[@js "jwk"] | `L_s583_pkcs8[@js "pkcs8"] | `L_s626_raw[@js "raw"] | `L_s716_spki[@js "spki"]] [@js.enum])
@@ -10432,7 +10600,8 @@ module RsaOtherPrimesInfo : sig
   val set_r: 'tags this -> string -> unit [@@js.set "r"]
   val get_t: 'tags this -> string [@@js.get "t"]
   val set_t: 'tags this -> string -> unit [@@js.set "t"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: d:string -> r:string -> t:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module JsonWebKey : sig
   type t = [`JsonWebKey] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10486,7 +10655,8 @@ module JsonWebKey : sig
   val set_x: 'tags this -> string -> unit [@@js.set "x"]
   val get_y: 'tags this -> string [@@js.get "y"]
   val set_y: 'tags this -> string -> unit [@@js.set "y"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: alg:string -> crv:string -> d:string -> dp:string -> dq:string -> e:string -> ext:bool -> k:string -> key_ops:string list -> kty:string -> n:string -> oth:RsaOtherPrimesInfo.t list -> p:string -> q:string -> qi:string -> use:string -> x:string -> y:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module HmacKeyGenParams : sig
   type t = [`Algorithm | `HmacKeyGenParams] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10508,7 +10678,8 @@ module HmacKeyGenParams : sig
   val set_hash: 'tags this -> HashAlgorithmIdentifier.t -> unit [@@js.set "hash"]
   val get_length: 'tags this -> float [@@js.get "length"]
   val set_length: 'tags this -> float -> unit [@@js.set "length"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hash:HashAlgorithmIdentifier.t -> length:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module HmacImportParams : sig
   type t = [`Algorithm | `HmacImportParams] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10530,7 +10701,8 @@ module HmacImportParams : sig
   val set_hash: 'tags this -> HashAlgorithmIdentifier.t -> unit [@@js.set "hash"]
   val get_length: 'tags this -> float [@@js.get "length"]
   val set_length: 'tags this -> float -> unit [@@js.set "length"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hash:HashAlgorithmIdentifier.t -> length:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module HkdfParams : sig
   type t = [`Algorithm | `HkdfParams] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10554,7 +10726,8 @@ module HkdfParams : sig
   val set_info: 'tags this -> BufferSource.t -> unit [@@js.set "info"]
   val get_salt: 'tags this -> BufferSource.t [@@js.get "salt"]
   val set_salt: 'tags this -> BufferSource.t -> unit [@@js.set "salt"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hash:HashAlgorithmIdentifier.t -> info:BufferSource.t -> salt:BufferSource.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EcdsaParams : sig
   type t = [`Algorithm | `EcdsaParams] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10574,7 +10747,8 @@ module EcdsaParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_hash: 'tags this -> HashAlgorithmIdentifier.t [@@js.get "hash"]
   val set_hash: 'tags this -> HashAlgorithmIdentifier.t -> unit [@@js.set "hash"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hash:HashAlgorithmIdentifier.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module KeyUsage : sig
   type t = ([`L_s236_decrypt[@js "decrypt"] | `L_s241_deriveBits[@js "deriveBits"] | `L_s242_deriveKey[@js "deriveKey"] | `L_s277_encrypt[@js "encrypt"] | `L_s697_sign[@js "sign"] | `L_s802_unwrapKey[@js "unwrapKey"] | `L_s815_verify[@js "verify"] | `L_s841_wrapKey[@js "wrapKey"]] [@js.enum])
@@ -10610,7 +10784,8 @@ module KeyAlgorithm : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_name: 'tags this -> string [@@js.get "name"]
   val set_name: 'tags this -> string -> unit [@@js.set "name"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: name:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -10637,9 +10812,10 @@ module[@js.scope "CryptoKey"] CryptoKey : sig
   val get_extractable: 'tags this -> bool [@@js.get "extractable"]
   val get_type: 'tags this -> KeyType.t [@@js.get "type"]
   val get_usages: 'tags this -> KeyUsage.t list [@@js.get "usages"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: algorithm:KeyAlgorithm.t -> extractable:bool -> type_:(KeyType.t[@js "type"]) -> usages:KeyUsage.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module EcdhKeyDeriveParams : sig
   type t = [`Algorithm | `EcdhKeyDeriveParams] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10659,7 +10835,8 @@ module EcdhKeyDeriveParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_public: 'tags this -> CryptoKey.t [@@js.get "public"]
   val set_public: 'tags this -> CryptoKey.t -> unit [@@js.set "public"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: public:CryptoKey.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NamedCurve : sig
   type t = string
@@ -10687,7 +10864,8 @@ module EcKeyImportParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_namedCurve: 'tags this -> NamedCurve.t [@@js.get "namedCurve"]
   val set_namedCurve: 'tags this -> NamedCurve.t -> unit [@@js.set "namedCurve"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: namedCurve:NamedCurve.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EcKeyGenParams : sig
   type t = [`Algorithm | `EcKeyGenParams] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10707,7 +10885,8 @@ module EcKeyGenParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_namedCurve: 'tags this -> NamedCurve.t [@@js.get "namedCurve"]
   val set_namedCurve: 'tags this -> NamedCurve.t -> unit [@@js.set "namedCurve"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: namedCurve:NamedCurve.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CryptoKeyPair : sig
   type t = [`CryptoKeyPair] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10729,7 +10908,8 @@ module CryptoKeyPair : sig
   val set_privateKey: 'tags this -> CryptoKey.t -> unit [@@js.set "privateKey"]
   val get_publicKey: 'tags this -> CryptoKey.t [@@js.get "publicKey"]
   val set_publicKey: 'tags this -> CryptoKey.t -> unit [@@js.set "publicKey"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: privateKey:CryptoKey.t -> publicKey:CryptoKey.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AesKeyGenParams : sig
   type t = [`AesKeyGenParams | `Algorithm] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10749,7 +10929,8 @@ module AesKeyGenParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_length: 'tags this -> float [@@js.get "length"]
   val set_length: 'tags this -> float -> unit [@@js.set "length"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: length:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AesKeyAlgorithm : sig
   type t = [`AesKeyAlgorithm | `KeyAlgorithm] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10769,7 +10950,8 @@ module AesKeyAlgorithm : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_length: 'tags this -> float [@@js.get "length"]
   val set_length: 'tags this -> float -> unit [@@js.set "length"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: length:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AesGcmParams : sig
   type t = [`AesGcmParams | `Algorithm] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10793,7 +10975,8 @@ module AesGcmParams : sig
   val set_iv: 'tags this -> BufferSource.t -> unit [@@js.set "iv"]
   val get_tagLength: 'tags this -> float [@@js.get "tagLength"]
   val set_tagLength: 'tags this -> float -> unit [@@js.set "tagLength"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: additionalData:BufferSource.t -> iv:BufferSource.t -> tagLength:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AesDerivedKeyParams : sig
   type t = [`AesDerivedKeyParams | `Algorithm] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10813,7 +10996,8 @@ module AesDerivedKeyParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_length: 'tags this -> float [@@js.get "length"]
   val set_length: 'tags this -> float -> unit [@@js.set "length"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: length:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AesCtrParams : sig
   type t = [`AesCtrParams | `Algorithm] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10835,7 +11019,8 @@ module AesCtrParams : sig
   val set_counter: 'tags this -> BufferSource.t -> unit [@@js.set "counter"]
   val get_length: 'tags this -> float [@@js.get "length"]
   val set_length: 'tags this -> float -> unit [@@js.set "length"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: counter:BufferSource.t -> length:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AesCbcParams : sig
   type t = [`AesCbcParams | `Algorithm] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10855,7 +11040,8 @@ module AesCbcParams : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_iv: 'tags this -> BufferSource.t [@@js.get "iv"]
   val set_iv: 'tags this -> BufferSource.t -> unit [@@js.set "iv"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: iv:BufferSource.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -10901,7 +11087,7 @@ module[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
   val verify: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t_1 [@@js.call "verify"]
   val wrapKey: 'tags this -> format:KeyFormat.t -> key:CryptoKey.t -> wrappingKey:CryptoKey.t -> wrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "wrapKey"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -10927,7 +11113,7 @@ module[@js.scope "Crypto"] Crypto : sig
   (** Available only in secure contexts. *)
   val get_subtle: 'tags this -> SubtleCrypto.t [@@js.get "subtle"]
   val getRandomValues: 'tags this -> array:'T -> 'T [@@js.call "getRandomValues"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -10953,7 +11139,8 @@ module CacheQueryOptions : sig
   val set_ignoreSearch: 'tags this -> bool -> unit [@@js.set "ignoreSearch"]
   val get_ignoreVary: 'tags this -> bool [@@js.get "ignoreVary"]
   val set_ignoreVary: 'tags this -> bool -> unit [@@js.set "ignoreVary"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ignoreMethod:bool -> ignoreSearch:bool -> ignoreVary:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MultiCacheQueryOptions : sig
   type t = [`CacheQueryOptions | `MultiCacheQueryOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -10973,7 +11160,8 @@ module MultiCacheQueryOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_cacheName: 'tags this -> string [@@js.get "cacheName"]
   val set_cacheName: 'tags this -> string -> unit [@@js.set "cacheName"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: cacheName:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ResponseType : sig
   type t = ([`L_s150_basic[@js "basic"] | `L_s222_cors[@js "cors"] | `L_s237_default[@js "default"] | `L_s287_error[@js "error"] | `L_s542_opaque[@js "opaque"] | `L_s543_opaqueredirect[@js "opaqueredirect"]] [@js.enum])
@@ -11017,7 +11205,7 @@ module[@js.scope "Headers"] rec Headers : sig
   val has: 'tags this -> name:string -> bool [@@js.call "has"]
   val set_: 'tags this -> name:string -> value:string -> unit [@@js.call "set"]
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:HeadersInit.t -> unit -> t [@@js.create]
 end
@@ -11051,7 +11239,8 @@ module ResponseInit : sig
   val set_status: 'tags this -> float -> unit [@@js.set "status"]
   val get_statusText: 'tags this -> string [@@js.get "statusText"]
   val set_statusText: 'tags this -> string -> unit [@@js.set "statusText"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: headers:HeadersInit.t -> status:float -> statusText:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RequestRedirect : sig
   type t = ([`L_s287_error[@js "error"] | `L_s338_follow[@js "follow"] | `L_s476_manual[@js "manual"]] [@js.enum])
@@ -11118,7 +11307,8 @@ module WindowLocalStorage : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_localStorage: 'tags this -> Storage.t [@@js.get "localStorage"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: localStorage:Storage.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module StorageEventInit : sig
   type t = [`EventInit | `StorageEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11146,7 +11336,8 @@ module StorageEventInit : sig
   val set_storageArea: 'tags this -> Storage.t or_null -> unit [@@js.set "storageArea"]
   val get_url: 'tags this -> string [@@js.get "url"]
   val set_url: 'tags this -> string -> unit [@@js.set "url"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?key:string -> ?newValue:string -> ?oldValue:string -> ?storageArea:Storage.t -> url:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A StorageEvent is sent to a window when a storage area it has access to is changed within the context of another document. *)
@@ -11182,7 +11373,7 @@ module[@js.scope "StorageEvent"] StorageEvent : sig
   (** Returns the URL of the document whose storage item changed. *)
   val get_url: 'tags this -> string [@@js.get "url"]
   val initStorageEvent: 'tags this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?key:string or_null -> ?oldValue:string or_null -> ?newValue:string or_null -> ?url:URL.t or_string -> ?storageArea:Storage.t or_null -> unit -> unit [@@js.call "initStorageEvent"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:StorageEventInit.t -> unit -> t [@@js.create]
 end
@@ -11206,7 +11397,8 @@ module PromiseRejectionEventInit : sig
   val set_promise: 'tags this -> any Promise.t_1 -> unit [@@js.set "promise"]
   val get_reason: 'tags this -> any [@@js.get "reason"]
   val set_reason: 'tags this -> any -> unit [@@js.set "reason"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: promise:any Promise.t_1 -> reason:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "PromiseRejectionEvent"] PromiseRejectionEvent : sig
   type t = [`Event | `PromiseRejectionEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11226,9 +11418,10 @@ module[@js.scope "PromiseRejectionEvent"] PromiseRejectionEvent : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_promise: 'tags this -> any Promise.t_1 [@@js.get "promise"]
   val get_reason: 'tags this -> any [@@js.get "reason"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: promise:any Promise.t_1 -> reason:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:PromiseRejectionEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:PromiseRejectionEventInit.t -> t [@@js.create]
 end
 module PopStateEventInit : sig
   type t = [`EventInit | `PopStateEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11248,7 +11441,8 @@ module PopStateEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_state: 'tags this -> any [@@js.get "state"]
   val set_state: 'tags this -> any -> unit [@@js.set "state"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: state:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** PopStateEvent is an event handler for the popstate event on the window. *)
@@ -11271,9 +11465,10 @@ module[@js.scope "PopStateEvent"] PopStateEvent : sig
   
   (** Returns a copy of the information that was provided to pushState() or replaceState(). *)
   val get_state: 'tags this -> any [@@js.get "state"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: state:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:PopStateEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:PopStateEventInit.t -> unit -> t [@@js.create]
 end
 module PageTransitionEventInit : sig
   type t = [`EventInit | `PageTransitionEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11293,7 +11488,8 @@ module PageTransitionEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_persisted: 'tags this -> bool [@@js.get "persisted"]
   val set_persisted: 'tags this -> bool -> unit [@@js.set "persisted"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: persisted:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The PageTransitionEvent is fired when a document is being loaded or unloaded. *)
@@ -11327,9 +11523,10 @@ module[@js.scope "PageTransitionEvent"] PageTransitionEvent : sig
     Aborting a Document
   *)
   val get_persisted: 'tags this -> bool [@@js.get "persisted"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: persisted:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:PageTransitionEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:PageTransitionEventInit.t -> unit -> t [@@js.create]
 end
 module HashChangeEventInit : sig
   type t = [`EventInit | `HashChangeEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11351,7 +11548,8 @@ module HashChangeEventInit : sig
   val set_newURL: 'tags this -> string -> unit [@@js.set "newURL"]
   val get_oldURL: 'tags this -> string [@@js.get "oldURL"]
   val set_oldURL: 'tags this -> string -> unit [@@js.set "oldURL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: newURL:string -> oldURL:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events that fire when the fragment identifier of the URL has changed. *)
@@ -11377,9 +11575,10 @@ module[@js.scope "HashChangeEvent"] HashChangeEvent : sig
   
   (** Returns the URL of the session history entry that was previously current. *)
   val get_oldURL: 'tags this -> string [@@js.get "oldURL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: newURL:string -> oldURL:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:HashChangeEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:HashChangeEventInit.t -> unit -> t [@@js.create]
 end
 module GamepadMappingType : sig
   type t = ([`L_s0[@js ""] | `L_s722_standard[@js "standard"] | `L_s844_xr_standard[@js "xr-standard"]] [@js.enum])
@@ -11416,9 +11615,10 @@ module[@js.scope "GamepadHapticActuator"] GamepadHapticActuator : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_type: 'tags this -> GamepadHapticActuatorType.t [@@js.get "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: type_:(GamepadHapticActuatorType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (**
@@ -11444,9 +11644,10 @@ module[@js.scope "GamepadButton"] GamepadButton : sig
   val get_pressed: 'tags this -> bool [@@js.get "pressed"]
   val get_touched: 'tags this -> bool [@@js.get "touched"]
   val get_value: 'tags this -> float [@@js.get "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: pressed:bool -> touched:bool -> value:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (**
@@ -11477,9 +11678,10 @@ module[@js.scope "Gamepad"] Gamepad : sig
   val get_index: 'tags this -> float [@@js.get "index"]
   val get_mapping: 'tags this -> GamepadMappingType.t [@@js.get "mapping"]
   val get_timestamp: 'tags this -> DOMHighResTimeStamp.t [@@js.get "timestamp"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: axes:float list -> buttons:GamepadButton.t list -> connected:bool -> hapticActuators:GamepadHapticActuator.t list -> id:string -> index:float -> mapping:GamepadMappingType.t -> timestamp:DOMHighResTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module GamepadEventInit : sig
   type t = [`EventInit | `GamepadEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11499,7 +11701,8 @@ module GamepadEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_gamepad: 'tags this -> Gamepad.t [@@js.get "gamepad"]
   val set_gamepad: 'tags this -> Gamepad.t -> unit [@@js.set "gamepad"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: gamepad:Gamepad.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -11523,9 +11726,10 @@ module[@js.scope "GamepadEvent"] GamepadEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_gamepad: 'tags this -> Gamepad.t [@@js.get "gamepad"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: gamepad:Gamepad.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:GamepadEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:GamepadEventInit.t -> t [@@js.create]
 end
 
 (** The beforeunload event is fired when the window, the document and its resources are about to be unloaded. *)
@@ -11547,9 +11751,10 @@ module[@js.scope "BeforeUnloadEvent"] BeforeUnloadEvent : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_returnValue: 'tags this -> any [@@js.get "returnValue"]
   val set_returnValue: 'tags this -> any -> unit [@@js.set "returnValue"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: returnValue:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module ScrollToOptions : sig
   type t = [`ScrollOptions | `ScrollToOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11571,7 +11776,8 @@ module ScrollToOptions : sig
   val set_left: 'tags this -> float -> unit [@@js.set "left"]
   val get_top: 'tags this -> float [@@js.get "top"]
   val set_top: 'tags this -> float -> unit [@@js.set "top"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: left:float -> top:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A screen, usually the one on which the current window is being rendered, and is obtained using window.screen. *)
@@ -11598,9 +11804,10 @@ module[@js.scope "Screen"] Screen : sig
   val get_orientation: 'tags this -> ScreenOrientation.t [@@js.get "orientation"]
   val get_pixelDepth: 'tags this -> float [@@js.get "pixelDepth"]
   val get_width: 'tags this -> float [@@js.get "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: availHeight:float -> availWidth:float -> colorDepth:float -> height:float -> orientation:ScreenOrientation.t -> pixelDepth:float -> width:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module FilePropertyBag : sig
   type t = [`BlobPropertyBag | `FilePropertyBag] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11620,7 +11827,8 @@ module FilePropertyBag : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_lastModified: 'tags this -> float [@@js.get "lastModified"]
   val set_lastModified: 'tags this -> float -> unit [@@js.set "lastModified"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: lastModified:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Provides information about files and allows JavaScript in a web page to access their content. *)
@@ -11643,9 +11851,10 @@ module[@js.scope "File"] File : sig
   val get_lastModified: 'tags this -> float [@@js.get "lastModified"]
   val get_name: 'tags this -> string [@@js.get "name"]
   val get_webkitRelativePath: 'tags this -> string [@@js.get "webkitRelativePath"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: lastModified:float -> name:string -> webkitRelativePath:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: fileBits:BlobPart.t list -> fileName:string -> ?options:FilePropertyBag.t -> unit -> t [@@js.create]
+  val create': fileBits:BlobPart.t list -> fileName:string -> ?options:FilePropertyBag.t -> unit -> t [@@js.create]
 end
 module ShareData : sig
   type t = [`ShareData] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11671,7 +11880,8 @@ module ShareData : sig
   val set_title: 'tags this -> string -> unit [@@js.set "title"]
   val get_url: 'tags this -> string [@@js.get "url"]
   val set_url: 'tags this -> string -> unit [@@js.set "url"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: files:File.t list -> text:string -> title:string -> url:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PushSubscriptionOptionsInit : sig
   type t = [`PushSubscriptionOptionsInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -11693,7 +11903,8 @@ module PushSubscriptionOptionsInit : sig
   val set_applicationServerKey: 'tags this -> BufferSource.t or_string or_null -> unit [@@js.set "applicationServerKey"]
   val get_userVisibleOnly: 'tags this -> bool [@@js.get "userVisibleOnly"]
   val set_userVisibleOnly: 'tags this -> bool -> unit [@@js.set "userVisibleOnly"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?applicationServerKey:BufferSource.t or_string -> userVisibleOnly:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Available only in secure contexts. *)
@@ -11714,9 +11925,10 @@ module[@js.scope "PushSubscriptionOptions"] PushSubscriptionOptions : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_applicationServerKey: 'tags this -> ArrayBuffer.t_0 or_null [@@js.get "applicationServerKey"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?applicationServerKey:ArrayBuffer.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module DOMTimeStamp : sig
   type t = float
@@ -11748,7 +11960,8 @@ module PushSubscriptionJSON : sig
   val set_expirationTime: 'tags this -> DOMTimeStamp.t or_null -> unit [@@js.set "expirationTime"]
   val get_keys: 'tags this -> (string, string) Record.t_2 [@@js.get "keys"]
   val set_keys: 'tags this -> (string, string) Record.t_2 -> unit [@@js.set "keys"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: endpoint:string -> ?expirationTime:DOMTimeStamp.t -> keys:(string, string) Record.t_2 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PushEncryptionKeyName : sig
   type t = ([`L_s140_auth[@js "auth"] | `L_s559_p256dh[@js "p256dh"]] [@js.enum])
@@ -11784,7 +11997,7 @@ module[@js.scope "PushSubscription"] PushSubscription : sig
   val getKey: 'tags this -> name:PushEncryptionKeyName.t -> ArrayBuffer.t_0 or_null [@@js.call "getKey"]
   val toJSON: 'tags this -> PushSubscriptionJSON.t [@@js.call "toJSON"]
   val unsubscribe: 'tags this -> bool Promise.t_1 [@@js.call "unsubscribe"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -11820,7 +12033,7 @@ module[@js.scope "PushManager"] PushManager : sig
   val getSubscription: 'tags this -> PushSubscription.t or_null Promise.t_1 [@@js.call "getSubscription"]
   val permissionState: 'tags this -> ?options:PushSubscriptionOptionsInit.t -> unit -> PushPermissionState.t Promise.t_1 [@@js.call "permissionState"]
   val subscribe: 'tags this -> ?options:PushSubscriptionOptionsInit.t -> unit -> PushSubscription.t Promise.t_1 [@@js.call "subscribe"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val supportedContentEncodings: unit -> string list [@@js.get "supportedContentEncodings"]
@@ -11850,7 +12063,7 @@ module NotificationPermissionCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> permission:NotificationPermission.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module VibratePattern : sig
   type t = float list or_number
@@ -11882,7 +12095,8 @@ module NotificationAction : sig
   val set_icon: 'tags this -> string -> unit [@@js.set "icon"]
   val get_title: 'tags this -> string [@@js.get "title"]
   val set_title: 'tags this -> string -> unit [@@js.set "title"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: action:string -> icon:string -> title:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NotificationDirection : sig
   type t = ([`L_s141_auto[@js "auto"] | `L_s471_ltr[@js "ltr"] | `L_s665_rtl[@js "rtl"]] [@js.enum])
@@ -11936,7 +12150,8 @@ module NotificationOptions : sig
   val set_timestamp: 'tags this -> DOMTimeStamp.t -> unit [@@js.set "timestamp"]
   val get_vibrate: 'tags this -> VibratePattern.t [@@js.get "vibrate"]
   val set_vibrate: 'tags this -> VibratePattern.t -> unit [@@js.set "vibrate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: actions:NotificationAction.t list -> badge:string -> body:string -> data:any -> dir:NotificationDirection.t -> icon:string -> image:string -> lang:string -> renotify:bool -> requireInteraction:bool -> silent:bool -> tag:string -> timestamp:DOMTimeStamp.t -> vibrate:VibratePattern.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Notifications API interface is used to configure and display desktop notifications to the user. *)
@@ -12012,7 +12227,7 @@ module[@js.scope "Notification"] Notification : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: title:string -> ?options:NotificationOptions.t -> unit -> t [@@js.create]
   val permission: unit -> NotificationPermission.t [@@js.get "permission"]
@@ -12036,7 +12251,8 @@ module GetNotificationOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_tag: 'tags this -> string [@@js.get "tag"]
   val set_tag: 'tags this -> string -> unit [@@js.set "tag"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: tag:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WorkerType : sig
   type t = ([`L_s195_classic[@js "classic"] | `L_s498_module[@js "module"]] [@js.enum])
@@ -12076,7 +12292,8 @@ module RegistrationOptions : sig
   val set_type: 'tags this -> WorkerType.t -> unit [@@js.set "type"]
   val get_updateViaCache: 'tags this -> ServiceWorkerUpdateViaCache.t [@@js.get "updateViaCache"]
   val set_updateViaCache: 'tags this -> ServiceWorkerUpdateViaCache.t -> unit [@@js.set "updateViaCache"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: scope:string -> type_:(WorkerType.t[@js "type"]) -> updateViaCache:ServiceWorkerUpdateViaCache.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerState : sig
   type t = ([`L_s416_installed[@js "installed"] | `L_s417_installing[@js "installing"] | `L_s565_parsed[@js "parsed"] | `L_s635_redundant[@js "redundant"] | `L_s96_activated[@js "activated"] | `L_s97_activating[@js "activating"]] [@js.enum])
@@ -12112,7 +12329,8 @@ module ErrorEventInit : sig
   val set_lineno: 'tags this -> float -> unit [@@js.set "lineno"]
   val get_message: 'tags this -> string [@@js.get "message"]
   val set_message: 'tags this -> string -> unit [@@js.set "message"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: colno:float -> error:any -> filename:string -> lineno:float -> message:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events providing information related to errors in scripts or in files. *)
@@ -12137,9 +12355,10 @@ module[@js.scope "ErrorEvent"] ErrorEvent : sig
   val get_filename: 'tags this -> string [@@js.get "filename"]
   val get_lineno: 'tags this -> float [@@js.get "lineno"]
   val get_message: 'tags this -> string [@@js.get "message"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: colno:float -> error:any -> filename:string -> lineno:float -> message:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:ErrorEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:ErrorEventInit.t -> unit -> t [@@js.create]
 end
 module AbstractWorker : sig
   type t = [`AbstractWorker] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12163,7 +12382,7 @@ module AbstractWorker : sig
   val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
   val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbstractWorkerEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "ImageBitmap"] ImageBitmap : sig
   type t = [`ImageBitmap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12190,7 +12409,7 @@ module[@js.scope "ImageBitmap"] ImageBitmap : sig
   
   (** Releases imageBitmap's underlying bitmap data. *)
   val close: 'tags this -> unit [@@js.call "close"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -12261,7 +12480,7 @@ module[@js.scope "PermissionStatus"] PermissionStatus : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -12291,7 +12510,8 @@ module PermissionDescriptor : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_name: 'tags this -> PermissionName.t [@@js.get "name"]
   val set_name: 'tags this -> PermissionName.t -> unit [@@js.set "name"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: name:PermissionName.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "Permissions"] Permissions : sig
   type t = [`Permissions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12310,7 +12530,7 @@ module[@js.scope "Permissions"] Permissions : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val query: 'tags this -> permissionDesc:PermissionDescriptor.t -> PermissionStatus.t Promise.t_1 [@@js.call "query"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -12334,7 +12554,8 @@ module StorageEstimate : sig
   val set_quota: 'tags this -> float -> unit [@@js.set "quota"]
   val get_usage: 'tags this -> float [@@js.get "usage"]
   val set_usage: 'tags this -> float -> unit [@@js.set "usage"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: quota:float -> usage:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Available only in secure contexts. *)
@@ -12357,7 +12578,7 @@ module[@js.scope "StorageManager"] StorageManager : sig
   val estimate: 'tags this -> StorageEstimate.t Promise.t_1 [@@js.call "estimate"]
   val persist: 'tags this -> bool Promise.t_1 [@@js.call "persist"]
   val persisted: 'tags this -> bool Promise.t_1 [@@js.call "persisted"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -12380,7 +12601,8 @@ module NavigatorStorage : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_storage: 'tags this -> StorageManager.t [@@js.get "storage"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: storage:StorageManager.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Provides contains information about a MIME type associated with a particular plugin. NavigatorPlugins.mimeTypes returns an array of this object. *)
@@ -12424,9 +12646,10 @@ module[@js.scope "MimeType"] rec MimeType : sig
     @deprecated 
   *)
   val get_type: 'tags this -> string [@@js.get "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: description:string -> enabledPlugin:Plugin.t -> suffixes:string -> type_:(string[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Provides information about a browser plugin. *)
@@ -12482,7 +12705,7 @@ and[@js.scope "Plugin"] Plugin : sig
   val namedItem: 'tags this -> name:string -> MimeType.t or_null [@@js.call "namedItem"]
   val get: 'tags this -> float -> MimeType.t [@@js.index_get]
   val set: 'tags this -> float -> MimeType.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -12519,7 +12742,7 @@ module[@js.scope "PluginArray"] PluginArray : sig
   val refresh: 'tags this -> unit [@@js.call "refresh"]
   val get: 'tags this -> float -> Plugin.t [@@js.index_get]
   val set: 'tags this -> float -> Plugin.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -12553,7 +12776,7 @@ module[@js.scope "MimeTypeArray"] MimeTypeArray : sig
   val namedItem: 'tags this -> name:string -> MimeType.t or_null [@@js.call "namedItem"]
   val get: 'tags this -> float -> MimeType.t [@@js.index_get]
   val set: 'tags this -> float -> MimeType.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -12582,7 +12805,7 @@ module NavigatorPlugins : sig
   
   (** @deprecated  *)
   val javaEnabled: 'tags this -> bool [@@js.call "javaEnabled"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NavigatorOnLine : sig
   type t = [`NavigatorOnLine] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12601,7 +12824,8 @@ module NavigatorOnLine : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_onLine: 'tags this -> bool [@@js.get "onLine"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: onLine:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ConnectionType : sig
   type t = ([`L_s164_bluetooth[@js "bluetooth"] | `L_s184_cellular[@js "cellular"] | `L_s288_ethernet[@js "ethernet"] | `L_s497_mixed[@js "mixed"] | `L_s528_none[@js "none"] | `L_s553_other[@js "other"] | `L_s796_unknown[@js "unknown"] | `L_s838_wifi[@js "wifi"]] [@js.enum])
@@ -12628,9 +12852,10 @@ module[@js.scope "NetworkInformation"] NetworkInformation : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_type: 'tags this -> ConnectionType.t [@@js.get "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: type_:(ConnectionType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module NavigatorNetworkInformation : sig
   type t = [`NavigatorNetworkInformation] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12649,7 +12874,8 @@ module NavigatorNetworkInformation : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_connection: 'tags this -> NetworkInformation.t [@@js.get "connection"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: connection:NetworkInformation.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NavigatorLanguage : sig
   type t = [`NavigatorLanguage] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12669,7 +12895,8 @@ module NavigatorLanguage : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_language: 'tags this -> string [@@js.get "language"]
   val get_languages: 'tags this -> string list [@@js.get "languages"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: language:string -> languages:string list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NavigatorID : sig
   type t = [`NavigatorID] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12710,7 +12937,8 @@ module NavigatorID : sig
   
   (** @deprecated  *)
   val get_vendorSub: 'tags this -> string [@@js.get "vendorSub"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: appCodeName:string -> appName:string -> appVersion:string -> platform:string -> product:string -> productSub:string -> userAgent:string -> vendor:string -> vendorSub:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NavigatorCookies : sig
   type t = [`NavigatorCookies] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12729,7 +12957,8 @@ module NavigatorCookies : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_cookieEnabled: 'tags this -> bool [@@js.get "cookieEnabled"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: cookieEnabled:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NavigatorContentUtils : sig
   type t = [`NavigatorContentUtils] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12750,7 +12979,7 @@ module NavigatorContentUtils : sig
   
   (** Available only in secure contexts. *)
   val registerProtocolHandler: 'tags this -> scheme:string -> url:URL.t or_string -> unit [@@js.call "registerProtocolHandler"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NavigatorConcurrentHardware : sig
   type t = [`NavigatorConcurrentHardware] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12769,7 +12998,8 @@ module NavigatorConcurrentHardware : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_hardwareConcurrency: 'tags this -> float [@@js.get "hardwareConcurrency"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hardwareConcurrency:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NavigatorAutomationInformation : sig
   type t = [`NavigatorAutomationInformation] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12788,7 +13018,8 @@ module NavigatorAutomationInformation : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_webdriver: 'tags this -> bool [@@js.get "webdriver"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: webdriver:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaSessionPlaybackState : sig
   type t = ([`L_s528_none[@js "none"] | `L_s572_paused[@js "paused"] | `L_s587_playing[@js "playing"]] [@js.enum])
@@ -12830,7 +13061,8 @@ module MediaSessionActionDetails : sig
   val set_seekOffset: 'tags this -> float or_null -> unit [@@js.set "seekOffset"]
   val get_seekTime: 'tags this -> float or_null [@@js.get "seekTime"]
   val set_seekTime: 'tags this -> float or_null -> unit [@@js.set "seekTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: action:MediaSessionAction.t -> ?fastSeek:bool -> ?seekOffset:float -> ?seekTime:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaSessionActionHandler : sig
   type t = [`MediaSessionActionHandler] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12849,7 +13081,7 @@ module MediaSessionActionHandler : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> details:MediaSessionActionDetails.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaPositionState : sig
   type t = [`MediaPositionState] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12873,7 +13105,8 @@ module MediaPositionState : sig
   val set_playbackRate: 'tags this -> float -> unit [@@js.set "playbackRate"]
   val get_position: 'tags this -> float [@@js.get "position"]
   val set_position: 'tags this -> float -> unit [@@js.set "position"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: duration:float -> playbackRate:float -> position:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaImage : sig
   type t = [`MediaImage] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12897,7 +13130,8 @@ module MediaImage : sig
   val set_src: 'tags this -> string -> unit [@@js.set "src"]
   val get_type: 'tags this -> string [@@js.get "type"]
   val set_type: 'tags this -> string -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: sizes:string -> src:string -> type_:(string[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaMetadataInit : sig
   type t = [`MediaMetadataInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12923,7 +13157,8 @@ module MediaMetadataInit : sig
   val set_artwork: 'tags this -> MediaImage.t list -> unit [@@js.set "artwork"]
   val get_title: 'tags this -> string [@@js.get "title"]
   val set_title: 'tags this -> string -> unit [@@js.set "title"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: album:string -> artist:string -> artwork:MediaImage.t list -> title:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "MediaMetadata"] MediaMetadata : sig
   type t = [`MediaMetadata] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12949,9 +13184,10 @@ module[@js.scope "MediaMetadata"] MediaMetadata : sig
   val set_artwork: 'tags this -> MediaImage.t list -> unit [@@js.set "artwork"]
   val get_title: 'tags this -> string [@@js.get "title"]
   val set_title: 'tags this -> string -> unit [@@js.set "title"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: album:string -> artist:string -> artwork:MediaImage.t list -> title:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?init:MediaMetadataInit.t -> unit -> t [@@js.create]
+  val create': ?init:MediaMetadataInit.t -> unit -> t [@@js.create]
 end
 module[@js.scope "MediaSession"] MediaSession : sig
   type t = [`MediaSession] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12975,7 +13211,7 @@ module[@js.scope "MediaSession"] MediaSession : sig
   val set_playbackState: 'tags this -> MediaSessionPlaybackState.t -> unit [@@js.set "playbackState"]
   val setActionHandler: 'tags this -> action:MediaSessionAction.t -> handler:MediaSessionActionHandler.t or_null -> unit [@@js.call "setActionHandler"]
   val setPositionState: 'tags this -> ?state:MediaPositionState.t -> unit -> unit [@@js.call "setPositionState"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -13024,7 +13260,7 @@ module[@js.scope "MediaKeyStatusMap"] MediaKeyStatusMap : sig
   val get_: 'tags this -> keyId:BufferSource.t -> MediaKeyStatus.t or_undefined [@@js.call "get"]
   val has: 'tags this -> keyId:BufferSource.t -> bool [@@js.call "has"]
   val forEach: 'tags this -> callbackfn:(value:MediaKeyStatus.t -> key:BufferSource.t -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -13064,7 +13300,8 @@ module MediaKeyMessageEventInit : sig
   val set_message: 'tags this -> ArrayBuffer.t_0 -> unit [@@js.set "message"]
   val get_messageType: 'tags this -> MediaKeyMessageType.t [@@js.get "messageType"]
   val set_messageType: 'tags this -> MediaKeyMessageType.t -> unit [@@js.set "messageType"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: message:ArrayBuffer.t_0 -> messageType:MediaKeyMessageType.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -13089,9 +13326,10 @@ module[@js.scope "MediaKeyMessageEvent"] MediaKeyMessageEvent : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_message: 'tags this -> ArrayBuffer.t_0 [@@js.get "message"]
   val get_messageType: 'tags this -> MediaKeyMessageType.t [@@js.get "messageType"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: message:ArrayBuffer.t_0 -> messageType:MediaKeyMessageType.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:MediaKeyMessageEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:MediaKeyMessageEventInit.t -> t [@@js.create]
 end
 
 (**
@@ -13167,7 +13405,7 @@ module[@js.scope "MediaKeySession"] MediaKeySession : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -13194,7 +13432,7 @@ module[@js.scope "MediaKeys"] MediaKeys : sig
   val t_0_of_js: Ojs.t -> t_0
   val createSession: 'tags this -> ?sessionType:MediaKeySessionType.t -> unit -> MediaKeySession.t [@@js.call "createSession"]
   val setServerCertificate: 'tags this -> serverCertificate:BufferSource.t -> bool Promise.t_1 [@@js.call "setServerCertificate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -13228,7 +13466,8 @@ module MediaKeySystemMediaCapability : sig
   val set_encryptionScheme: 'tags this -> string or_null -> unit [@@js.set "encryptionScheme"]
   val get_robustness: 'tags this -> string [@@js.get "robustness"]
   val set_robustness: 'tags this -> string -> unit [@@js.set "robustness"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: contentType:string -> ?encryptionScheme:string -> robustness:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaKeySystemConfiguration : sig
   type t = [`MediaKeySystemConfiguration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13260,7 +13499,8 @@ module MediaKeySystemConfiguration : sig
   val set_sessionTypes: 'tags this -> string list -> unit [@@js.set "sessionTypes"]
   val get_videoCapabilities: 'tags this -> MediaKeySystemMediaCapability.t list [@@js.get "videoCapabilities"]
   val set_videoCapabilities: 'tags this -> MediaKeySystemMediaCapability.t list -> unit [@@js.set "videoCapabilities"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: audioCapabilities:MediaKeySystemMediaCapability.t list -> distinctiveIdentifier:MediaKeysRequirement.t -> initDataTypes:string list -> label:string -> persistentState:MediaKeysRequirement.t -> sessionTypes:string list -> videoCapabilities:MediaKeySystemMediaCapability.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -13286,7 +13526,7 @@ module[@js.scope "MediaKeySystemAccess"] MediaKeySystemAccess : sig
   val get_keySystem: 'tags this -> string [@@js.get "keySystem"]
   val createMediaKeys: 'tags this -> MediaKeys.t Promise.t_1 [@@js.call "createMediaKeys"]
   val getConfiguration: 'tags this -> MediaKeySystemConfiguration.t [@@js.call "getConfiguration"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -13332,7 +13572,8 @@ module MediaTrackSupportedConstraints : sig
   val set_suppressLocalAudioPlayback: 'tags this -> bool -> unit [@@js.set "suppressLocalAudioPlayback"]
   val get_width: 'tags this -> bool [@@js.get "width"]
   val set_width: 'tags this -> bool -> unit [@@js.set "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: aspectRatio:bool -> autoGainControl:bool -> deviceId:bool -> echoCancellation:bool -> facingMode:bool -> frameRate:bool -> groupId:bool -> height:bool -> noiseSuppression:bool -> sampleRate:bool -> sampleSize:bool -> suppressLocalAudioPlayback:bool -> width:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaStreamConstraints : sig
   type t = [`MediaStreamConstraints] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13358,7 +13599,8 @@ module MediaStreamConstraints : sig
   val set_preferCurrentTab: 'tags this -> bool -> unit [@@js.set "preferCurrentTab"]
   val get_video: 'tags this -> MediaTrackConstraints.t or_boolean [@@js.get "video"]
   val set_video: 'tags this -> MediaTrackConstraints.t or_boolean -> unit [@@js.set "video"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: audio:MediaTrackConstraints.t or_boolean -> peerIdentity:string -> preferCurrentTab:bool -> video:MediaTrackConstraints.t or_boolean -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDeviceKind : sig
   type t = ([`L_s136_audioinput[@js "audioinput"] | `L_s137_audiooutput[@js "audiooutput"] | `L_s820_videoinput[@js "videoinput"]] [@js.enum])
@@ -13394,7 +13636,7 @@ module[@js.scope "MediaDeviceInfo"] MediaDeviceInfo : sig
   val get_kind: 'tags this -> MediaDeviceKind.t [@@js.get "kind"]
   val get_label: 'tags this -> string [@@js.get "label"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -13418,7 +13660,8 @@ module DisplayMediaStreamConstraints : sig
   val set_audio: 'tags this -> MediaTrackConstraints.t or_boolean -> unit [@@js.set "audio"]
   val get_video: 'tags this -> MediaTrackConstraints.t or_boolean [@@js.get "video"]
   val set_video: 'tags this -> MediaTrackConstraints.t or_boolean -> unit [@@js.set "video"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: audio:MediaTrackConstraints.t or_boolean -> video:MediaTrackConstraints.t or_boolean -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -13487,7 +13730,7 @@ module[@js.scope "MediaDevices"] MediaDevices : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -13557,7 +13800,8 @@ module VideoConfiguration : sig
   val set_transferFunction: 'tags this -> TransferFunction.t -> unit [@@js.set "transferFunction"]
   val get_width: 'tags this -> float [@@js.get "width"]
   val set_width: 'tags this -> float -> unit [@@js.set "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: bitrate:float -> colorGamut:ColorGamut.t -> contentType:string -> framerate:float -> hdrMetadataType:HdrMetadataType.t -> height:float -> scalabilityMode:string -> transferFunction:TransferFunction.t -> width:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AudioConfiguration : sig
   type t = [`AudioConfiguration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13585,7 +13829,8 @@ module AudioConfiguration : sig
   val set_samplerate: 'tags this -> float -> unit [@@js.set "samplerate"]
   val get_spatialRendering: 'tags this -> bool [@@js.get "spatialRendering"]
   val set_spatialRendering: 'tags this -> bool -> unit [@@js.set "spatialRendering"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: bitrate:float -> channels:string -> contentType:string -> samplerate:float -> spatialRendering:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaConfiguration : sig
   type t = [`MediaConfiguration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13607,7 +13852,8 @@ module MediaConfiguration : sig
   val set_audio: 'tags this -> AudioConfiguration.t -> unit [@@js.set "audio"]
   val get_video: 'tags this -> VideoConfiguration.t [@@js.get "video"]
   val set_video: 'tags this -> VideoConfiguration.t -> unit [@@js.set "video"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: audio:AudioConfiguration.t -> video:VideoConfiguration.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaEncodingConfiguration : sig
   type t = [`MediaConfiguration | `MediaEncodingConfiguration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13627,7 +13873,8 @@ module MediaEncodingConfiguration : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_type: 'tags this -> MediaEncodingType.t [@@js.get "type"]
   val set_type: 'tags this -> MediaEncodingType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: type_:(MediaEncodingType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaCapabilitiesInfo : sig
   type t = [`MediaCapabilitiesInfo] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13651,7 +13898,8 @@ module MediaCapabilitiesInfo : sig
   val set_smooth: 'tags this -> bool -> unit [@@js.set "smooth"]
   val get_supported: 'tags this -> bool [@@js.get "supported"]
   val set_supported: 'tags this -> bool -> unit [@@js.set "supported"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: powerEfficient:bool -> smooth:bool -> supported:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaCapabilitiesEncodingInfo : sig
   type t = [`MediaCapabilitiesEncodingInfo | `MediaCapabilitiesInfo] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13671,7 +13919,8 @@ module MediaCapabilitiesEncodingInfo : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_configuration: 'tags this -> MediaEncodingConfiguration.t [@@js.get "configuration"]
   val set_configuration: 'tags this -> MediaEncodingConfiguration.t -> unit [@@js.set "configuration"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: configuration:MediaEncodingConfiguration.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDecodingType : sig
   type t = ([`L_s330_file[@js "file"] | `L_s486_media_source[@js "media-source"] | `L_s836_webrtc[@js "webrtc"]] [@js.enum])
@@ -13699,7 +13948,8 @@ module MediaDecodingConfiguration : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_type: 'tags this -> MediaDecodingType.t [@@js.get "type"]
   val set_type: 'tags this -> MediaDecodingType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: type_:(MediaDecodingType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaCapabilitiesDecodingInfo : sig
   type t = [`MediaCapabilitiesDecodingInfo | `MediaCapabilitiesInfo] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13719,7 +13969,8 @@ module MediaCapabilitiesDecodingInfo : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_configuration: 'tags this -> MediaDecodingConfiguration.t [@@js.get "configuration"]
   val set_configuration: 'tags this -> MediaDecodingConfiguration.t -> unit [@@js.set "configuration"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: configuration:MediaDecodingConfiguration.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "MediaCapabilities"] MediaCapabilities : sig
   type t = [`MediaCapabilities] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13739,7 +13990,7 @@ module[@js.scope "MediaCapabilities"] MediaCapabilities : sig
   val t_0_of_js: Ojs.t -> t_0
   val decodingInfo: 'tags this -> configuration:MediaDecodingConfiguration.t -> MediaCapabilitiesDecodingInfo.t Promise.t_1 [@@js.call "decodingInfo"]
   val encodingInfo: 'tags this -> configuration:MediaEncodingConfiguration.t -> MediaCapabilitiesEncodingInfo.t Promise.t_1 [@@js.call "encodingInfo"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -13765,7 +14016,8 @@ module PositionOptions : sig
   val set_maximumAge: 'tags this -> float -> unit [@@js.set "maximumAge"]
   val get_timeout: 'tags this -> float [@@js.get "timeout"]
   val set_timeout: 'tags this -> float -> unit [@@js.set "timeout"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: enableHighAccuracy:bool -> maximumAge:float -> timeout:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "GeolocationPositionError"] GeolocationPositionError : sig
   type t = [`GeolocationPositionError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13788,9 +14040,10 @@ module[@js.scope "GeolocationPositionError"] GeolocationPositionError : sig
   val get_PERMISSION_DENIED: 'tags this -> float [@@js.get "PERMISSION_DENIED"]
   val get_POSITION_UNAVAILABLE: 'tags this -> float [@@js.get "POSITION_UNAVAILABLE"]
   val get_TIMEOUT: 'tags this -> float [@@js.get "TIMEOUT"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: code:float -> message:string -> permission_denied:(float[@js "PERMISSION_DENIED"]) -> position_unavailable:(float[@js "POSITION_UNAVAILABLE"]) -> timeout:(float[@js "TIMEOUT"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
   val permission_denied: unit -> float [@@js.get "PERMISSION_DENIED"]
   val position_unavailable: unit -> float [@@js.get "POSITION_UNAVAILABLE"]
   val timeout: unit -> float [@@js.get "TIMEOUT"]
@@ -13812,7 +14065,7 @@ module PositionErrorCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> positionError:GeolocationPositionError.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Available only in secure contexts. *)
@@ -13839,9 +14092,10 @@ module[@js.scope "GeolocationCoordinates"] GeolocationCoordinates : sig
   val get_latitude: 'tags this -> float [@@js.get "latitude"]
   val get_longitude: 'tags this -> float [@@js.get "longitude"]
   val get_speed: 'tags this -> float or_null [@@js.get "speed"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: accuracy:float -> ?altitude:float -> ?altitudeAccuracy:float -> ?heading:float -> latitude:float -> longitude:float -> ?speed:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Available only in secure contexts. *)
@@ -13863,9 +14117,10 @@ module[@js.scope "GeolocationPosition"] GeolocationPosition : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_coords: 'tags this -> GeolocationCoordinates.t [@@js.get "coords"]
   val get_timestamp: 'tags this -> DOMTimeStamp.t [@@js.get "timestamp"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: coords:GeolocationCoordinates.t -> timestamp:DOMTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module PositionCallback : sig
   type t = [`PositionCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -13884,7 +14139,7 @@ module PositionCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> position:GeolocationPosition.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** An object able to programmatically obtain the position of the device. It gives Web content access to the location of the device. This allows a Web site or app to offer customized results based on the user's location. *)
@@ -13907,7 +14162,7 @@ module[@js.scope "Geolocation"] Geolocation : sig
   val clearWatch: 'tags this -> watchId:float -> unit [@@js.call "clearWatch"]
   val getCurrentPosition: 'tags this -> successCallback:PositionCallback.t -> ?errorCallback:PositionErrorCallback.t or_null -> ?options:PositionOptions.t -> unit -> unit [@@js.call "getCurrentPosition"]
   val watchPosition: 'tags this -> successCallback:PositionCallback.t -> ?errorCallback:PositionErrorCallback.t or_null -> ?options:PositionOptions.t -> unit -> float [@@js.call "watchPosition"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -13949,7 +14204,8 @@ module PublicKeyCredentialDescriptor : sig
   val set_transports: 'tags this -> AuthenticatorTransport.t list -> unit [@@js.set "transports"]
   val get_type: 'tags this -> PublicKeyCredentialType.t [@@js.get "type"]
   val set_type: 'tags this -> PublicKeyCredentialType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: id:BufferSource.t -> transports:AuthenticatorTransport.t list -> type_:(PublicKeyCredentialType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module UserVerificationRequirement : sig
   type t = ([`L_s257_discouraged[@js "discouraged"] | `L_s607_preferred[@js "preferred"] | `L_s651_required[@js "required"]] [@js.enum])
@@ -13983,7 +14239,8 @@ module AuthenticationExtensionsClientInputs : sig
   val set_credProps: 'tags this -> bool -> unit [@@js.set "credProps"]
   val get_uvm: 'tags this -> bool [@@js.get "uvm"]
   val set_uvm: 'tags this -> bool -> unit [@@js.set "uvm"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: appid:string -> appidExclude:string -> credProps:bool -> uvm:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PublicKeyCredentialRequestOptions : sig
   type t = [`PublicKeyCredentialRequestOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14013,7 +14270,8 @@ module PublicKeyCredentialRequestOptions : sig
   val set_timeout: 'tags this -> float -> unit [@@js.set "timeout"]
   val get_userVerification: 'tags this -> UserVerificationRequirement.t [@@js.get "userVerification"]
   val set_userVerification: 'tags this -> UserVerificationRequirement.t -> unit [@@js.set "userVerification"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: allowCredentials:PublicKeyCredentialDescriptor.t list -> challenge:BufferSource.t -> extensions:AuthenticationExtensionsClientInputs.t -> rpId:string -> timeout:float -> userVerification:UserVerificationRequirement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CredentialMediationRequirement : sig
   type t = ([`L_s549_optional[@js "optional"] | `L_s651_required[@js "required"] | `L_s699_silent[@js "silent"]] [@js.enum])
@@ -14045,7 +14303,8 @@ module CredentialRequestOptions : sig
   val set_publicKey: 'tags this -> PublicKeyCredentialRequestOptions.t -> unit [@@js.set "publicKey"]
   val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
   val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: mediation:CredentialMediationRequirement.t -> publicKey:PublicKeyCredentialRequestOptions.t -> signal:AbortSignal.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PublicKeyCredentialEntity : sig
   type t = [`PublicKeyCredentialEntity] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14065,7 +14324,8 @@ module PublicKeyCredentialEntity : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_name: 'tags this -> string [@@js.get "name"]
   val set_name: 'tags this -> string -> unit [@@js.set "name"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: name:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PublicKeyCredentialUserEntity : sig
   type t = [`PublicKeyCredentialEntity | `PublicKeyCredentialUserEntity] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14087,7 +14347,8 @@ module PublicKeyCredentialUserEntity : sig
   val set_displayName: 'tags this -> string -> unit [@@js.set "displayName"]
   val get_id: 'tags this -> BufferSource.t [@@js.get "id"]
   val set_id: 'tags this -> BufferSource.t -> unit [@@js.set "id"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: displayName:string -> id:BufferSource.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PublicKeyCredentialRpEntity : sig
   type t = [`PublicKeyCredentialEntity | `PublicKeyCredentialRpEntity] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14107,7 +14368,8 @@ module PublicKeyCredentialRpEntity : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_id: 'tags this -> string [@@js.get "id"]
   val set_id: 'tags this -> string -> unit [@@js.set "id"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: id:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module COSEAlgorithmIdentifier : sig
   type t = float
@@ -14137,7 +14399,8 @@ module PublicKeyCredentialParameters : sig
   val set_alg: 'tags this -> COSEAlgorithmIdentifier.t -> unit [@@js.set "alg"]
   val get_type: 'tags this -> PublicKeyCredentialType.t [@@js.get "type"]
   val set_type: 'tags this -> PublicKeyCredentialType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: alg:COSEAlgorithmIdentifier.t -> type_:(PublicKeyCredentialType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ResidentKeyRequirement : sig
   type t = ([`L_s257_discouraged[@js "discouraged"] | `L_s607_preferred[@js "preferred"] | `L_s651_required[@js "required"]] [@js.enum])
@@ -14179,7 +14442,8 @@ module AuthenticatorSelectionCriteria : sig
   val set_residentKey: 'tags this -> ResidentKeyRequirement.t -> unit [@@js.set "residentKey"]
   val get_userVerification: 'tags this -> UserVerificationRequirement.t [@@js.get "userVerification"]
   val set_userVerification: 'tags this -> UserVerificationRequirement.t -> unit [@@js.set "userVerification"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: authenticatorAttachment:AuthenticatorAttachment.t -> requireResidentKey:bool -> residentKey:ResidentKeyRequirement.t -> userVerification:UserVerificationRequirement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AttestationConveyancePreference : sig
   type t = ([`L_s253_direct[@js "direct"] | `L_s284_enterprise[@js "enterprise"] | `L_s409_indirect[@js "indirect"] | `L_s528_none[@js "none"]] [@js.enum])
@@ -14223,7 +14487,8 @@ module PublicKeyCredentialCreationOptions : sig
   val set_timeout: 'tags this -> float -> unit [@@js.set "timeout"]
   val get_user: 'tags this -> PublicKeyCredentialUserEntity.t [@@js.get "user"]
   val set_user: 'tags this -> PublicKeyCredentialUserEntity.t -> unit [@@js.set "user"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: attestation:AttestationConveyancePreference.t -> authenticatorSelection:AuthenticatorSelectionCriteria.t -> challenge:BufferSource.t -> excludeCredentials:PublicKeyCredentialDescriptor.t list -> extensions:AuthenticationExtensionsClientInputs.t -> pubKeyCredParams:PublicKeyCredentialParameters.t list -> rp:PublicKeyCredentialRpEntity.t -> timeout:float -> user:PublicKeyCredentialUserEntity.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CredentialCreationOptions : sig
   type t = [`CredentialCreationOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14245,7 +14510,8 @@ module CredentialCreationOptions : sig
   val set_publicKey: 'tags this -> PublicKeyCredentialCreationOptions.t -> unit [@@js.set "publicKey"]
   val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
   val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: publicKey:PublicKeyCredentialCreationOptions.t -> signal:AbortSignal.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Available only in secure contexts. *)
@@ -14267,9 +14533,10 @@ module[@js.scope "Credential"] Credential : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_id: 'tags this -> string [@@js.get "id"]
   val get_type: 'tags this -> string [@@js.get "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: id:string -> type_:(string[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Available only in secure contexts. *)
@@ -14293,7 +14560,7 @@ module[@js.scope "CredentialsContainer"] CredentialsContainer : sig
   val get_: 'tags this -> ?options:CredentialRequestOptions.t -> unit -> Credential.t or_null Promise.t_1 [@@js.call "get"]
   val preventSilentAccess: 'tags this -> unit Promise.t_1 [@@js.call "preventSilentAccess"]
   val store: 'tags this -> credential:Credential.t -> Credential.t Promise.t_1 [@@js.call "store"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -14323,7 +14590,8 @@ module ClipboardItemOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_presentationStyle: 'tags this -> PresentationStyle.t [@@js.get "presentationStyle"]
   val set_presentationStyle: 'tags this -> PresentationStyle.t -> unit [@@js.set "presentationStyle"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: presentationStyle:PresentationStyle.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ClipboardItemDataType : sig
   type t = Blob.t or_string
@@ -14351,7 +14619,7 @@ module[@js.scope "ClipboardItem"] ClipboardItem : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_types: 'tags this -> string list [@@js.get "types"]
   val getType: 'tags this -> type_:string -> Blob.t Promise.t_1 [@@js.call "getType"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: items:(string, ClipboardItemDataType.t) Record.t_2 -> ?options:ClipboardItemOptions.t -> unit -> t [@@js.create]
 end
@@ -14385,7 +14653,7 @@ module[@js.scope "Clipboard"] Clipboard : sig
   val readText: 'tags this -> string Promise.t_1 [@@js.call "readText"]
   val write: 'tags this -> data:ClipboardItems.t -> unit Promise.t_1 [@@js.call "write"]
   val writeText: 'tags this -> data:string -> unit Promise.t_1 [@@js.call "writeText"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -14417,7 +14685,8 @@ module MediaQueryListEventInit : sig
   val set_matches: 'tags this -> bool -> unit [@@js.set "matches"]
   val get_media: 'tags this -> string [@@js.get "media"]
   val set_media: 'tags this -> string -> unit [@@js.set "media"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: matches:bool -> media:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "MediaQueryListEvent"] MediaQueryListEvent : sig
   type t = [`Event | `MediaQueryListEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14437,9 +14706,10 @@ module[@js.scope "MediaQueryListEvent"] MediaQueryListEvent : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_matches: 'tags this -> bool [@@js.get "matches"]
   val get_media: 'tags this -> string [@@js.get "media"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: matches:bool -> media:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:MediaQueryListEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:MediaQueryListEventInit.t -> unit -> t [@@js.create]
 end
 
 (** Stores information on a media query applied to a document, and handles sending notifications to listeners when the media query state change (i.e. when the media query test starts or stops evaluating to true). *)
@@ -14509,7 +14779,7 @@ module[@js.scope "MediaQueryList"] MediaQueryList : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -14659,7 +14929,7 @@ module[@js.scope "Location"] Location : sig
   
   (** Removes the current page from the session history and navigates to the given URL. *)
   val replace: 'tags this -> url:URL.t or_string -> unit [@@js.call "replace"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -14681,7 +14951,8 @@ module IdleRequestOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_timeout: 'tags this -> float [@@js.get "timeout"]
   val set_timeout: 'tags this -> float -> unit [@@js.set "timeout"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: timeout:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "IdleDeadline"] IdleDeadline : sig
   type t = [`IdleDeadline] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14701,7 +14972,7 @@ module[@js.scope "IdleDeadline"] IdleDeadline : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_didTimeout: 'tags this -> bool [@@js.get "didTimeout"]
   val timeRemaining: 'tags this -> DOMHighResTimeStamp.t [@@js.call "timeRemaining"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -14722,7 +14993,7 @@ module IdleRequestCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> deadline:IdleDeadline.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ScrollRestoration : sig
   type t = ([`L_s141_auto[@js "auto"] | `L_s476_manual[@js "manual"]] [@js.enum])
@@ -14759,7 +15030,7 @@ module[@js.scope "History"] History : sig
   val go: 'tags this -> ?delta:float -> unit -> unit [@@js.call "go"]
   val pushState: 'tags this -> data:any -> unused:string -> ?url:URL.t or_string or_null -> unit -> unit [@@js.call "pushState"]
   val replaceState: 'tags this -> data:any -> unused:string -> ?url:URL.t or_string or_null -> unit -> unit [@@js.call "replaceState"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -14787,7 +15058,7 @@ module[@js.scope "External"] External : sig
   
   (** @deprecated  *)
   val isSearchProviderInstalled: 'tags this -> unit [@@js.call "IsSearchProviderInstalled"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -14815,7 +15086,8 @@ module DeviceOrientationEventInit : sig
   val set_beta: 'tags this -> float or_null -> unit [@@js.set "beta"]
   val get_gamma: 'tags this -> float or_null [@@js.get "gamma"]
   val set_gamma: 'tags this -> float or_null -> unit [@@js.set "gamma"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: absolute:bool -> ?alpha:float -> ?beta:float -> ?gamma:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -14842,9 +15114,10 @@ module[@js.scope "DeviceOrientationEvent"] DeviceOrientationEvent : sig
   val get_alpha: 'tags this -> float or_null [@@js.get "alpha"]
   val get_beta: 'tags this -> float or_null [@@js.get "beta"]
   val get_gamma: 'tags this -> float or_null [@@js.get "gamma"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: absolute:bool -> ?alpha:float -> ?beta:float -> ?gamma:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:DeviceOrientationEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:DeviceOrientationEventInit.t -> unit -> t [@@js.create]
 end
 
 (** Available only in secure contexts. *)
@@ -14867,7 +15140,8 @@ module DeviceMotionEventRotationRate : sig
   val get_alpha: 'tags this -> float or_null [@@js.get "alpha"]
   val get_beta: 'tags this -> float or_null [@@js.get "beta"]
   val get_gamma: 'tags this -> float or_null [@@js.get "gamma"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?alpha:float -> ?beta:float -> ?gamma:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DeviceMotionEventRotationRateInit : sig
   type t = [`DeviceMotionEventRotationRateInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14891,7 +15165,8 @@ module DeviceMotionEventRotationRateInit : sig
   val set_beta: 'tags this -> float or_null -> unit [@@js.set "beta"]
   val get_gamma: 'tags this -> float or_null [@@js.get "gamma"]
   val set_gamma: 'tags this -> float or_null -> unit [@@js.set "gamma"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?alpha:float -> ?beta:float -> ?gamma:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DeviceMotionEventAccelerationInit : sig
   type t = [`DeviceMotionEventAccelerationInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14915,7 +15190,8 @@ module DeviceMotionEventAccelerationInit : sig
   val set_y: 'tags this -> float or_null -> unit [@@js.set "y"]
   val get_z: 'tags this -> float or_null [@@js.get "z"]
   val set_z: 'tags this -> float or_null -> unit [@@js.set "z"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?x:float -> ?y:float -> ?z:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DeviceMotionEventInit : sig
   type t = [`DeviceMotionEventInit | `EventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -14941,7 +15217,8 @@ module DeviceMotionEventInit : sig
   val set_interval: 'tags this -> float -> unit [@@js.set "interval"]
   val get_rotationRate: 'tags this -> DeviceMotionEventRotationRateInit.t [@@js.get "rotationRate"]
   val set_rotationRate: 'tags this -> DeviceMotionEventRotationRateInit.t -> unit [@@js.set "rotationRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: acceleration:DeviceMotionEventAccelerationInit.t -> accelerationIncludingGravity:DeviceMotionEventAccelerationInit.t -> interval:float -> rotationRate:DeviceMotionEventRotationRateInit.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Available only in secure contexts. *)
@@ -14964,7 +15241,8 @@ module DeviceMotionEventAcceleration : sig
   val get_x: 'tags this -> float or_null [@@js.get "x"]
   val get_y: 'tags this -> float or_null [@@js.get "y"]
   val get_z: 'tags this -> float or_null [@@js.get "z"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?x:float -> ?y:float -> ?z:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -14991,9 +15269,10 @@ module[@js.scope "DeviceMotionEvent"] DeviceMotionEvent : sig
   val get_accelerationIncludingGravity: 'tags this -> DeviceMotionEventAcceleration.t or_null [@@js.get "accelerationIncludingGravity"]
   val get_interval: 'tags this -> float [@@js.get "interval"]
   val get_rotationRate: 'tags this -> DeviceMotionEventRotationRate.t or_null [@@js.get "rotationRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?acceleration:DeviceMotionEventAcceleration.t -> ?accelerationIncludingGravity:DeviceMotionEventAcceleration.t -> interval:float -> ?rotationRate:DeviceMotionEventRotationRate.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:DeviceMotionEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:DeviceMotionEventInit.t -> unit -> t [@@js.create]
 end
 module ElementDefinitionOptions : sig
   type t = [`ElementDefinitionOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15013,7 +15292,8 @@ module ElementDefinitionOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_extends: 'tags this -> string [@@js.get "extends"]
   val set_extends: 'tags this -> string -> unit [@@js.set "extends"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: extends:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "BarProp"] BarProp : sig
   type t = [`BarProp] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15032,9 +15312,10 @@ module[@js.scope "BarProp"] BarProp : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_visible: 'tags this -> bool [@@js.get "visible"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: visible:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module FrameRequestCallback : sig
   type t = [`FrameRequestCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15053,7 +15334,7 @@ module FrameRequestCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> time:DOMHighResTimeStamp.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AnimationFrameProvider : sig
   type t = [`AnimationFrameProvider] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15073,7 +15354,7 @@ module AnimationFrameProvider : sig
   val t_0_of_js: Ojs.t -> t_0
   val cancelAnimationFrame: 'tags this -> handle:float -> unit [@@js.call "cancelAnimationFrame"]
   val requestAnimationFrame: 'tags this -> callback:FrameRequestCallback.t -> float [@@js.call "requestAnimationFrame"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module InnerHTML : sig
   type t = [`InnerHTML] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15093,7 +15374,8 @@ module InnerHTML : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_innerHTML: 'tags this -> string [@@js.get "innerHTML"]
   val set_innerHTML: 'tags this -> string -> unit [@@js.set "innerHTML"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: innerHTML:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ElementContentEditable : sig
   type t = [`ElementContentEditable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15118,7 +15400,8 @@ module ElementContentEditable : sig
   val get_inputMode: 'tags this -> string [@@js.get "inputMode"]
   val set_inputMode: 'tags this -> string -> unit [@@js.set "inputMode"]
   val get_isContentEditable: 'tags this -> bool [@@js.get "isContentEditable"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: contentEditable:string -> enterKeyHint:string -> inputMode:string -> isContentEditable:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "MediaList"] MediaList : sig
   type t = [`MediaList | string ArrayLike.tags_1 | string IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15146,7 +15429,7 @@ module[@js.scope "MediaList"] MediaList : sig
   val item: 'tags this -> index:float -> string or_null [@@js.call "item"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15172,7 +15455,8 @@ module CSSStyleSheetInit : sig
   val set_disabled: 'tags this -> bool -> unit [@@js.set "disabled"]
   val get_media: 'tags this -> MediaList.t or_string [@@js.get "media"]
   val set_media: 'tags this -> MediaList.t or_string -> unit [@@js.set "media"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: baseURL:string -> disabled:bool -> media:MediaList.t or_string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** An object of this type is returned by the files property of the HTML <input> element; this lets you access the list of files selected with the <input type="file"> element. It's also used for a list of files dropped into web content when using the drag and drop API; see the DataTransfer object for details on this usage. *)
@@ -15197,7 +15481,7 @@ module[@js.scope "FileList"] FileList : sig
   val item: 'tags this -> index:float -> File.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> File.t [@@js.index_get]
   val set: 'tags this -> float -> File.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15218,7 +15502,7 @@ module FunctionStringCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> data:string -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module FileSystemFlags : sig
   type t = [`FileSystemFlags] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15240,7 +15524,8 @@ module FileSystemFlags : sig
   val set_create: 'tags this -> bool -> unit [@@js.set "create"]
   val get_exclusive: 'tags this -> bool [@@js.get "exclusive"]
   val set_exclusive: 'tags this -> bool -> unit [@@js.set "exclusive"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: create_:(bool[@js "create"]) -> exclusive:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ErrorCallback : sig
   type t = [`ErrorCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15259,7 +15544,7 @@ module ErrorCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> err:DOMException.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "FileSystem"] rec FileSystem : sig
   type t = [`FileSystem] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15279,9 +15564,10 @@ module[@js.scope "FileSystem"] rec FileSystem : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_name: 'tags this -> string [@@js.get "name"]
   val get_root: 'tags this -> FileSystemDirectoryEntry.t [@@js.get "root"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: name:string -> root:FileSystemDirectoryEntry.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 and[@js.scope "FileSystemDirectoryEntry"] FileSystemDirectoryEntry : sig
   type t = [`FileSystemDirectoryEntry | `FileSystemEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15302,7 +15588,7 @@ and[@js.scope "FileSystemDirectoryEntry"] FileSystemDirectoryEntry : sig
   val createReader: 'tags this -> FileSystemDirectoryReader.t [@@js.call "createReader"]
   val getDirectory: 'tags this -> ?path:string or_null -> ?options:FileSystemFlags.t -> ?successCallback:FileSystemEntryCallback.t -> ?errorCallback:ErrorCallback.t -> unit -> unit [@@js.call "getDirectory"]
   val getFile: 'tags this -> ?path:string or_null -> ?options:FileSystemFlags.t -> ?successCallback:FileSystemEntryCallback.t -> ?errorCallback:ErrorCallback.t -> unit -> unit [@@js.call "getFile"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15323,7 +15609,7 @@ and[@js.scope "FileSystemDirectoryReader"] FileSystemDirectoryReader : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val readEntries: 'tags this -> successCallback:FileSystemEntriesCallback.t -> ?errorCallback:ErrorCallback.t -> unit -> unit [@@js.call "readEntries"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15344,7 +15630,7 @@ and FileSystemEntriesCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> entries:FileSystemEntry.t list -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and[@js.scope "FileSystemEntry"] FileSystemEntry : sig
   type t = [`FileSystemEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15368,7 +15654,7 @@ and[@js.scope "FileSystemEntry"] FileSystemEntry : sig
   val get_isFile: 'tags this -> bool [@@js.get "isFile"]
   val get_name: 'tags this -> string [@@js.get "name"]
   val getParent: 'tags this -> ?successCallback:FileSystemEntryCallback.t -> ?errorCallback:ErrorCallback.t -> unit -> unit [@@js.call "getParent"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15389,7 +15675,7 @@ and FileSystemEntryCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> entry:FileSystemEntry.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** One drag data item. During a drag operation, each drag event has a dataTransfer property which contains a list of drag data items. Each item in the list is a DataTransferItem object. *)
@@ -15422,7 +15708,7 @@ module[@js.scope "DataTransferItem"] DataTransferItem : sig
   (** Invokes the callback with the string data as the argument, if the drag data item kind is text. *)
   val getAsString: 'tags this -> callback:FunctionStringCallback.t or_null -> unit [@@js.call "getAsString"]
   val webkitGetAsEntry: 'tags this -> FileSystemEntry.t or_null [@@js.call "webkitGetAsEntry"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15462,7 +15748,7 @@ module[@js.scope "DataTransferItemList"] DataTransferItemList : sig
   val remove: 'tags this -> index:float -> unit [@@js.call "remove"]
   val get: 'tags this -> float -> DataTransferItem.t [@@js.index_get]
   val set: 'tags this -> float -> DataTransferItem.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15492,7 +15778,8 @@ module FullscreenOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_navigationUI: 'tags this -> FullscreenNavigationUI.t [@@js.get "navigationUI"]
   val set_navigationUI: 'tags this -> FullscreenNavigationUI.t -> unit [@@js.set "navigationUI"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: navigationUI:FullscreenNavigationUI.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A set of space-separated tokens. Such a set is returned by Element.classList, HTMLLinkElement.relList, HTMLAnchorElement.relList, HTMLAreaElement.relList, HTMLIframeElement.sandbox, or HTMLOutputElement.htmlFor. It is indexed beginning with 0 as with JavaScript Array objects. DOMTokenList is always case-sensitive. *)
@@ -15590,7 +15877,7 @@ module[@js.scope "DOMTokenList"] DOMTokenList : sig
   val forEach: 'tags this -> callbackfn:(value:string -> key:float -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15615,7 +15902,7 @@ module[@js.scope "DOMRectList"] DOMRectList : sig
   val item: 'tags this -> index:float -> DOMRect.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> DOMRect.t [@@js.index_get]
   val set: 'tags this -> float -> DOMRect.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15651,7 +15938,7 @@ module PropertyIndexedKeyframes : sig
   val set_offset: 'tags this -> float or_null list or_number -> unit [@@js.set "offset"]
   val get: 'tags this -> string -> float or_null or_string list or_string or_number or_null_or_undefined [@@js.index_get]
   val set: 'tags this -> string -> float or_null or_string list or_string or_number or_null_or_undefined -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IterationCompositeOperation : sig
   type t = ([`L_s648_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"]] [@js.enum])
@@ -15719,7 +16006,8 @@ module EffectTiming : sig
   val set_iterations: 'tags this -> float -> unit [@@js.set "iterations"]
   val get_playbackRate: 'tags this -> float [@@js.get "playbackRate"]
   val set_playbackRate: 'tags this -> float -> unit [@@js.set "playbackRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: delay:float -> direction:PlaybackDirection.t -> duration:string or_number -> easing:string -> endDelay:float -> fill:FillMode.t -> iterationStart:float -> iterations:float -> playbackRate:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module KeyframeEffectOptions : sig
   type t = [`EffectTiming | `KeyframeEffectOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15743,7 +16031,8 @@ module KeyframeEffectOptions : sig
   val set_iterationComposite: 'tags this -> IterationCompositeOperation.t -> unit [@@js.set "iterationComposite"]
   val get_pseudoElement: 'tags this -> string or_null [@@js.get "pseudoElement"]
   val set_pseudoElement: 'tags this -> string or_null -> unit [@@js.set "pseudoElement"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: composite:CompositeOperation.t -> iterationComposite:IterationCompositeOperation.t -> ?pseudoElement:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module KeyframeAnimationOptions : sig
   type t = [`EffectTiming | `KeyframeAnimationOptions | `KeyframeEffectOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15763,7 +16052,8 @@ module KeyframeAnimationOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_id: 'tags this -> string [@@js.get "id"]
   val set_id: 'tags this -> string -> unit [@@js.set "id"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: id:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module Keyframe : sig
   type t = [`Keyframe] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15789,7 +16079,7 @@ module Keyframe : sig
   val set_offset: 'tags this -> float or_null -> unit [@@js.set "offset"]
   val get: 'tags this -> string -> string or_number or_null_or_undefined [@@js.index_get]
   val set: 'tags this -> string -> string or_number or_null_or_undefined -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module GetAnimationsOptions : sig
   type t = [`GetAnimationsOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15809,7 +16099,8 @@ module GetAnimationsOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_subtree: 'tags this -> bool [@@js.get "subtree"]
   val set_subtree: 'tags this -> bool -> unit [@@js.set "subtree"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: subtree:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AnimationReplaceState : sig
   type t = ([`L_s577_persisted[@js "persisted"] | `L_s645_removed[@js "removed"] | `L_s98_active[@js "active"]] [@js.enum])
@@ -15861,7 +16152,8 @@ module OptionalEffectTiming : sig
   val set_iterations: 'tags this -> float -> unit [@@js.set "iterations"]
   val get_playbackRate: 'tags this -> float [@@js.get "playbackRate"]
   val set_playbackRate: 'tags this -> float -> unit [@@js.set "playbackRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: delay:float -> direction:PlaybackDirection.t -> duration:string or_number -> easing:string -> endDelay:float -> fill:FillMode.t -> iterationStart:float -> iterations:float -> playbackRate:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CSSNumberish : sig
   type t = float
@@ -15899,7 +16191,8 @@ module ComputedEffectTiming : sig
   val set_progress: 'tags this -> CSSNumberish.t or_null -> unit [@@js.set "progress"]
   val get_startTime: 'tags this -> CSSNumberish.t [@@js.get "startTime"]
   val set_startTime: 'tags this -> CSSNumberish.t -> unit [@@js.set "startTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: activeDuration:CSSNumberish.t -> ?currentIteration:float -> endTime:CSSNumberish.t -> ?localTime:CSSNumberish.t -> ?progress:CSSNumberish.t -> startTime:CSSNumberish.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "AnimationEffect"] AnimationEffect : sig
   type t = [`AnimationEffect] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15920,7 +16213,7 @@ module[@js.scope "AnimationEffect"] AnimationEffect : sig
   val getComputedTiming: 'tags this -> ComputedEffectTiming.t [@@js.call "getComputedTiming"]
   val getTiming: 'tags this -> EffectTiming.t [@@js.call "getTiming"]
   val updateTiming: 'tags this -> ?timing:OptionalEffectTiming.t -> unit -> unit [@@js.call "updateTiming"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -15944,7 +16237,8 @@ module AnimationPlaybackEventInit : sig
   val set_currentTime: 'tags this -> CSSNumberish.t or_null -> unit [@@js.set "currentTime"]
   val get_timelineTime: 'tags this -> CSSNumberish.t or_null [@@js.get "timelineTime"]
   val set_timelineTime: 'tags this -> CSSNumberish.t or_null -> unit [@@js.set "timelineTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?currentTime:CSSNumberish.t -> ?timelineTime:CSSNumberish.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "AnimationPlaybackEvent"] AnimationPlaybackEvent : sig
   type t = [`AnimationPlaybackEvent | `Event] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -15964,9 +16258,10 @@ module[@js.scope "AnimationPlaybackEvent"] AnimationPlaybackEvent : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_currentTime: 'tags this -> CSSNumberish.t or_null [@@js.get "currentTime"]
   val get_timelineTime: 'tags this -> CSSNumberish.t or_null [@@js.get "timelineTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?currentTime:CSSNumberish.t -> ?timelineTime:CSSNumberish.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:AnimationPlaybackEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:AnimationPlaybackEventInit.t -> unit -> t [@@js.create]
 end
 module[@js.scope "Animation"] Animation : sig
   type t = [`Animation | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -16055,7 +16350,7 @@ module[@js.scope "Animation"] Animation : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?effect:AnimationEffect.t or_null -> ?timeline:AnimationTimeline.t or_null -> unit -> t [@@js.create]
 end
@@ -16077,7 +16372,7 @@ module Animatable : sig
   val t_0_of_js: Ojs.t -> t_0
   val animate: 'tags this -> keyframes:(PropertyIndexedKeyframes.t, Keyframe.t) or_array or_null -> ?options:KeyframeAnimationOptions.t or_number -> unit -> Animation.t [@@js.call "animate"]
   val getAnimations: 'tags this -> ?options:GetAnimationsOptions.t -> unit -> Animation.t list [@@js.call "getAnimations"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AnimationEventInit : sig
   type t = [`AnimationEventInit | `EventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -16101,7 +16396,8 @@ module AnimationEventInit : sig
   val set_elapsedTime: 'tags this -> float -> unit [@@js.set "elapsedTime"]
   val get_pseudoElement: 'tags this -> string [@@js.get "pseudoElement"]
   val set_pseudoElement: 'tags this -> string -> unit [@@js.set "pseudoElement"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animationName:string -> elapsedTime:float -> pseudoElement:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events providing information related to animations. *)
@@ -16124,9 +16420,10 @@ module[@js.scope "AnimationEvent"] AnimationEvent : sig
   val get_animationName: 'tags this -> string [@@js.get "animationName"]
   val get_elapsedTime: 'tags this -> float [@@js.get "elapsedTime"]
   val get_pseudoElement: 'tags this -> string [@@js.get "pseudoElement"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animationName:string -> elapsedTime:float -> pseudoElement:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?animationEventInitDict:AnimationEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?animationEventInitDict:AnimationEventInit.t -> unit -> t [@@js.create]
 end
 module ARIAMixin : sig
   type t = [`ARIAMixin] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -16216,7 +16513,8 @@ module ARIAMixin : sig
   val set_ariaValueNow: 'tags this -> string -> unit [@@js.set "ariaValueNow"]
   val get_ariaValueText: 'tags this -> string [@@js.get "ariaValueText"]
   val set_ariaValueText: 'tags this -> string -> unit [@@js.set "ariaValueText"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ariaAtomic:string -> ariaAutoComplete:string -> ariaBusy:string -> ariaChecked:string -> ariaColCount:string -> ariaColIndex:string -> ariaColSpan:string -> ariaCurrent:string -> ariaDisabled:string -> ariaExpanded:string -> ariaHasPopup:string -> ariaHidden:string -> ariaKeyShortcuts:string -> ariaLabel:string -> ariaLevel:string -> ariaLive:string -> ariaModal:string -> ariaMultiLine:string -> ariaMultiSelectable:string -> ariaOrientation:string -> ariaPlaceholder:string -> ariaPosInSet:string -> ariaPressed:string -> ariaReadOnly:string -> ariaRequired:string -> ariaRoleDescription:string -> ariaRowCount:string -> ariaRowIndex:string -> ariaRowSpan:string -> ariaSelected:string -> ariaSetSize:string -> ariaSort:string -> ariaValueMax:string -> ariaValueMin:string -> ariaValueNow:string -> ariaValueText:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module GLintptr : sig
   type t = float
@@ -16248,7 +16546,7 @@ module ANGLE_instanced_arrays : sig
   val drawElementsInstancedANGLE: 'tags this -> mode:GLenum.t -> count:GLsizei.t -> type_:GLenum.t -> offset:GLintptr.t -> primcount:GLsizei.t -> unit [@@js.call "drawElementsInstancedANGLE"]
   val vertexAttribDivisorANGLE: 'tags this -> index:GLuint.t -> divisor:GLuint.t -> unit [@@js.call "vertexAttribDivisorANGLE"]
   val get_VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE: 'tags this -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "AbstractRange"] rec AbstractRange : sig
   type t = [`AbstractRange] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -16281,9 +16579,10 @@ module[@js.scope "AbstractRange"] rec AbstractRange : sig
   
   (** Returns range's start offset. *)
   val get_startOffset: 'tags this -> float [@@js.get "startOffset"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: collapsed:bool -> endContainer:Node.t -> endOffset:float -> startContainer:Node.t -> startOffset:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** A DOM element's attribute as an object. In most DOM methods, you will probably directly retrieve the attribute as a string (e.g., Element.getAttribute(), but certain functions (e.g., Element.getAttributeNode()) or means of iterating give Attr types. *)
@@ -16314,9 +16613,10 @@ and[@js.scope "Attr"] Attr : sig
   val get_specified: 'tags this -> bool [@@js.get "specified"]
   val get_value: 'tags this -> string [@@js.get "value"]
   val set_value: 'tags this -> string -> unit [@@js.set "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: localName:string -> name:string -> ?namespaceURI:string -> ownerDocument:Document.t -> ?ownerElement:Element.t -> ?prefix:string -> specified:bool -> value:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 and Body : sig
   type t = [`Body] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -16341,7 +16641,7 @@ and Body : sig
   val formData: 'tags this -> FormData.t Promise.t_1 [@@js.call "formData"]
   val json: 'tags this -> any Promise.t_1 [@@js.call "json"]
   val text: 'tags this -> string Promise.t_1 [@@js.call "text"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and BodyInit : sig
   type t = (ReadableStream.t_0, XMLHttpRequestBodyInit.t) union2
@@ -16369,7 +16669,7 @@ and[@js.scope "CDATASection"] CDATASection : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -16408,9 +16708,10 @@ and[@js.scope "CSSRule"] CSSRule : sig
   val get_PAGE_RULE: 'tags this -> float [@@js.get "PAGE_RULE"]
   val get_STYLE_RULE: 'tags this -> float [@@js.get "STYLE_RULE"]
   val get_SUPPORTS_RULE: 'tags this -> float [@@js.get "SUPPORTS_RULE"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: cssText:string -> ?parentRule:t -> ?parentStyleSheet:CSSStyleSheet.t -> type_:(float[@js "type"]) -> charset_rule:(float[@js "CHARSET_RULE"]) -> font_face_rule:(float[@js "FONT_FACE_RULE"]) -> import_rule:(float[@js "IMPORT_RULE"]) -> keyframes_rule:(float[@js "KEYFRAMES_RULE"]) -> keyframe_rule:(float[@js "KEYFRAME_RULE"]) -> media_rule:(float[@js "MEDIA_RULE"]) -> namespace_rule:(float[@js "NAMESPACE_RULE"]) -> page_rule:(float[@js "PAGE_RULE"]) -> style_rule:(float[@js "STYLE_RULE"]) -> supports_rule:(float[@js "SUPPORTS_RULE"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
   val charset_rule: unit -> float [@@js.get "CHARSET_RULE"]
   val font_face_rule: unit -> float [@@js.get "FONT_FACE_RULE"]
   val import_rule: unit -> float [@@js.get "IMPORT_RULE"]
@@ -16445,7 +16746,7 @@ and[@js.scope "CSSRuleList"] CSSRuleList : sig
   val item: 'tags this -> index:float -> CSSRule.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> CSSRule.t [@@js.index_get]
   val set: 'tags this -> float -> CSSRule.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -17649,7 +17950,7 @@ and[@js.scope "CSSStyleDeclaration"] CSSStyleDeclaration : sig
   val setProperty: 'tags this -> property:string -> value:string or_null -> ?priority:string -> unit -> unit [@@js.call "setProperty"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -17684,7 +17985,7 @@ and[@js.scope "CSSStyleSheet"] CSSStyleSheet : sig
   
   (** @deprecated  *)
   val removeRule: 'tags this -> ?index:float -> unit -> unit [@@js.call "removeRule"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?options:CSSStyleSheetInit.t -> unit -> t [@@js.create]
 end
@@ -17717,7 +18018,7 @@ and[@js.scope "Cache"] Cache : sig
   val match_: 'tags this -> request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Response.t or_undefined Promise.t_1 [@@js.call "match"]
   val matchAll: 'tags this -> ?request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Response.t list Promise.t_1 [@@js.call "matchAll"]
   val put: 'tags this -> request:RequestInfo.t -> response:Response.t -> unit Promise.t_1 [@@js.call "put"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -17747,7 +18048,7 @@ and[@js.scope "CacheStorage"] CacheStorage : sig
   val keys: 'tags this -> string list Promise.t_1 [@@js.call "keys"]
   val match_: 'tags this -> request:RequestInfo.t -> ?options:MultiCacheQueryOptions.t -> unit -> Response.t or_undefined Promise.t_1 [@@js.call "match"]
   val open_: 'tags this -> cacheName:string -> Cache.t Promise.t_1 [@@js.call "open"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -17770,7 +18071,7 @@ and CanvasDrawImage : sig
   val drawImage: 'tags this -> image:CanvasImageSource.t -> dx:float -> dy:float -> unit [@@js.call "drawImage"]
   val drawImage': 'tags this -> image:CanvasImageSource.t -> dx:float -> dy:float -> dw:float -> dh:float -> unit [@@js.call "drawImage"]
   val drawImage'': 'tags this -> image:CanvasImageSource.t -> sx:float -> sy:float -> sw:float -> sh:float -> dx:float -> dy:float -> dw:float -> dh:float -> unit [@@js.call "drawImage"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and CanvasFillStrokeStyles : sig
   type t = [`CanvasFillStrokeStyles] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -17795,7 +18096,7 @@ and CanvasFillStrokeStyles : sig
   val createLinearGradient: 'tags this -> x0:float -> y0:float -> x1:float -> y1:float -> CanvasGradient.t [@@js.call "createLinearGradient"]
   val createPattern: 'tags this -> image:CanvasImageSource.t -> repetition:string or_null -> CanvasPattern.t or_null [@@js.call "createPattern"]
   val createRadialGradient: 'tags this -> x0:float -> y0:float -> r0:float -> x1:float -> y1:float -> r1:float -> CanvasGradient.t [@@js.call "createRadialGradient"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and CanvasImageSource : sig
   type t = ((([`U_s130_async of HTMLOrSVGImageElement.t [@js "async"] | `U_s141_auto of HTMLOrSVGImageElement.t [@js "auto"] | `U_s746_sync of HTMLOrSVGImageElement.t [@js "sync"]] [@js.union on_field "decoding"]), ([`U_s0 of HTMLVideoElement.t [@js ""] | `U_s141_auto of HTMLVideoElement.t [@js "auto"] | `U_s493_metadata of HTMLVideoElement.t [@js "metadata"] | `U_s528_none of HTMLVideoElement.t [@js "none"]] [@js.union on_field "preload"])) union2, (HTMLCanvasElement.t, ImageBitmap.t) union2) or_
@@ -17825,7 +18126,7 @@ and[@js.scope "CanvasRenderingContext2D"] CanvasRenderingContext2D : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_canvas: 'tags this -> HTMLCanvasElement.t [@@js.get "canvas"]
   val getContextAttributes: 'tags this -> CanvasRenderingContext2DSettings.t [@@js.call "getContextAttributes"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -17847,7 +18148,7 @@ and CanvasUserInterface : sig
   val t_0_of_js: Ojs.t -> t_0
   val drawFocusIfNeeded: 'tags this -> element:Element.t -> unit [@@js.call "drawFocusIfNeeded"]
   val drawFocusIfNeeded': 'tags this -> path:Path2D.t -> element:Element.t -> unit [@@js.call "drawFocusIfNeeded"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The CharacterData abstract interface represents a Node object that contains characters. This is an abstract interface, meaning there aren't any object of type CharacterData: it is implemented by other interfaces, like Text, Comment, or ProcessingInstruction which aren't abstract. *)
@@ -17878,7 +18179,7 @@ and[@js.scope "CharacterData"] CharacterData : sig
   val insertData: 'tags this -> offset:float -> data:string -> unit [@@js.call "insertData"]
   val replaceData: 'tags this -> offset:float -> count:float -> data:string -> unit [@@js.call "replaceData"]
   val substringData: 'tags this -> offset:float -> count:float -> string [@@js.call "substringData"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -17922,7 +18223,7 @@ and ChildNode : sig
     Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
   *)
   val replaceWith: 'tags this -> nodes:(Node.t or_string list [@js.variadic]) -> unit [@@js.call "replaceWith"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events providing information related to modification of the clipboard, that is cut, copy, and paste events. *)
@@ -17943,9 +18244,10 @@ and[@js.scope "ClipboardEvent"] ClipboardEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_clipboardData: 'tags this -> DataTransfer.t or_null [@@js.get "clipboardData"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?clipboardData:DataTransfer.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:ClipboardEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:ClipboardEventInit.t -> unit -> t [@@js.create]
 end
 and ClipboardEventInit : sig
   type t = [`ClipboardEventInit | `EventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -17965,7 +18267,8 @@ and ClipboardEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_clipboardData: 'tags this -> DataTransfer.t or_null [@@js.get "clipboardData"]
   val set_clipboardData: 'tags this -> DataTransfer.t or_null -> unit [@@js.set "clipboardData"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?clipboardData:DataTransfer.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Textual notations within markup; although it is generally not visually shown, such comments are available to be read in the source view. *)
@@ -17985,7 +18288,7 @@ and[@js.scope "Comment"] Comment : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?data:string -> unit -> t [@@js.create]
 end
@@ -18011,7 +18314,7 @@ and[@js.scope "CompositionEvent"] CompositionEvent : sig
   
   (** @deprecated  *)
   val initCompositionEvent: 'tags this -> typeArg:string -> ?bubblesArg:bool -> ?cancelableArg:bool -> ?viewArg:WindowProxy.t or_null -> ?dataArg:string -> unit -> unit [@@js.call "initCompositionEvent"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:CompositionEventInit.t -> unit -> t [@@js.create]
 end
@@ -18033,7 +18336,8 @@ and CompositionEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_data: 'tags this -> string [@@js.get "data"]
   val set_data: 'tags this -> string -> unit [@@js.set "data"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: data:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and CustomElementConstructor : sig
   type t = [`CustomElementConstructor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -18052,7 +18356,7 @@ and CustomElementConstructor : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val create: 'tags this -> params:(any list [@js.variadic]) -> HTMLElement.t [@@js.apply_newable]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and[@js.scope "CustomElementRegistry"] CustomElementRegistry : sig
   type t = [`CustomElementRegistry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -18074,7 +18378,7 @@ and[@js.scope "CustomElementRegistry"] CustomElementRegistry : sig
   val get_: 'tags this -> name:string -> CustomElementConstructor.t or_undefined [@@js.call "get"]
   val upgrade: 'tags this -> root:Node.t -> unit [@@js.call "upgrade"]
   val whenDefined: 'tags this -> name:string -> CustomElementConstructor.t Promise.t_1 [@@js.call "whenDefined"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -18102,7 +18406,7 @@ and[@js.scope "DOMImplementation"] DOMImplementation : sig
   
   (** @deprecated  *)
   val hasFeature: 'tags this -> args:(any list [@js.variadic]) -> ([`L_b_true[@js true]] [@js.enum]) [@@js.call "hasFeature"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -18181,7 +18485,7 @@ and[@js.scope "DataTransfer"] DataTransfer : sig
   
   (** Uses the given element to update the drag feedback, replacing any previously specified feedback. *)
   val setDragImage: 'tags this -> image:Element.t -> x:float -> y:float -> unit [@@js.call "setDragImage"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -18859,7 +19163,7 @@ and[@js.scope "Document"] Document : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -18889,7 +19193,7 @@ and DocumentAndElementEventHandlers : sig
   val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
   val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'DocumentAndElementEventHandlersEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A minimal document object that has no parent. It is used as a lightweight version of Document that stores a segment of a document structure comprised of nodes just like a standard document. The key difference is that because the document fragment isn't part of the active document tree structure, changes made to the fragment don't affect the document, cause reflow, or incur any performance impact that can occur when changes are made. *)
@@ -18915,7 +19219,7 @@ and[@js.scope "DocumentFragment"] DocumentFragment : sig
   
   (** Returns the first element within node's descendants whose ID is elementId. *)
   val getElementById: 'tags this -> elementId:string -> HTMLElement.t or_null [@@js.call "getElementById"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -18961,7 +19265,7 @@ and DocumentOrShadowRoot : sig
   val elementFromPoint: 'tags this -> x:float -> y:float -> Element.t or_null [@@js.call "elementFromPoint"]
   val elementsFromPoint: 'tags this -> x:float -> y:float -> Element.t list [@@js.call "elementsFromPoint"]
   val getAnimations: 'tags this -> Animation.t list [@@js.call "getAnimations"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A Node containing a doctype. *)
@@ -18987,9 +19291,10 @@ and[@js.scope "DocumentType"] DocumentType : sig
   val get_ownerDocument: 'tags this -> Document.t [@@js.get "ownerDocument"]
   val get_publicId: 'tags this -> string [@@js.get "publicId"]
   val get_systemId: 'tags this -> string [@@js.get "systemId"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: name:string -> ownerDocument:Document.t -> publicId:string -> systemId:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** A DOM event that represents a drag and drop interaction. The user initiates a drag by placing a pointer device (such as a mouse) on the touch surface and then dragging the pointer to a new location (such as another DOM element). Applications are free to interpret a drag and drop interaction in an application-specific way. *)
@@ -19012,9 +19317,10 @@ and[@js.scope "DragEvent"] DragEvent : sig
   
   (** Returns the DataTransfer object for the event. *)
   val get_dataTransfer: 'tags this -> DataTransfer.t or_null [@@js.get "dataTransfer"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?dataTransfer:DataTransfer.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:DragEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:DragEventInit.t -> unit -> t [@@js.create]
 end
 and DragEventInit : sig
   type t = [`DragEventInit | `EventInit | `EventModifierInit | `MouseEventInit | `UIEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -19034,7 +19340,8 @@ and DragEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_dataTransfer: 'tags this -> DataTransfer.t or_null [@@js.get "dataTransfer"]
   val set_dataTransfer: 'tags this -> DataTransfer.t or_null -> unit [@@js.set "dataTransfer"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?dataTransfer:DataTransfer.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Element is the most general base class from which all objects in a Document inherit. It only has methods and properties common to all kinds of elements. More specific classes inherit from Element. *)
@@ -19243,7 +19550,7 @@ and[@js.scope "Element"] Element : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -19264,7 +19571,8 @@ and ElementCSSInlineStyle : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_style: 'tags this -> CSSStyleDeclaration.t [@@js.get "style"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: style:CSSStyleDeclaration.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and[@js.scope "ElementInternals"] ElementInternals : sig
   type t = [`ARIAMixin | `ElementInternals] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -19285,9 +19593,10 @@ and[@js.scope "ElementInternals"] ElementInternals : sig
   
   (** Returns the ShadowRoot for internals's target element, if the target element is a shadow host, or null otherwise. *)
   val get_shadowRoot: 'tags this -> ShadowRoot.t or_null [@@js.get "shadowRoot"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?shadowRoot:ShadowRoot.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 and EventModifierInit : sig
   type t = [`EventInit | `EventModifierInit | `UIEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -19333,7 +19642,8 @@ and EventModifierInit : sig
   val set_modifierSymbolLock: 'tags this -> bool -> unit [@@js.set "modifierSymbolLock"]
   val get_shiftKey: 'tags this -> bool [@@js.get "shiftKey"]
   val set_shiftKey: 'tags this -> bool -> unit [@@js.set "shiftKey"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: altKey:bool -> ctrlKey:bool -> metaKey:bool -> modifierAltGraph:bool -> modifierCapsLock:bool -> modifierFn:bool -> modifierFnLock:bool -> modifierHyper:bool -> modifierNumLock:bool -> modifierScrollLock:bool -> modifierSuper:bool -> modifierSymbol:bool -> modifierSymbolLock:bool -> shiftKey:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Focus-related events like focus, blur, focusin, or focusout. *)
@@ -19354,9 +19664,10 @@ and[@js.scope "FocusEvent"] FocusEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_relatedTarget: 'tags this -> EventTarget.t or_null [@@js.get "relatedTarget"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?relatedTarget:EventTarget.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:FocusEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:FocusEventInit.t -> unit -> t [@@js.create]
 end
 and FocusEventInit : sig
   type t = [`EventInit | `FocusEventInit | `UIEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -19376,7 +19687,8 @@ and FocusEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_relatedTarget: 'tags this -> EventTarget.t or_null [@@js.get "relatedTarget"]
   val set_relatedTarget: 'tags this -> EventTarget.t or_null -> unit [@@js.set "relatedTarget"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?relatedTarget:EventTarget.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to "multipart/form-data". *)
@@ -19413,7 +19725,7 @@ and[@js.scope "FormData"] FormData : sig
   val has: 'tags this -> name:string -> bool [@@js.call "has"]
   val set_: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "set"]
   val forEach: 'tags this -> callbackfn:(value:FormDataEntryValue.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?form:HTMLFormElement.t -> unit -> t [@@js.create]
 end
@@ -19436,9 +19748,10 @@ and[@js.scope "FormDataEvent"] FormDataEvent : sig
   
   (** Returns a FormData object representing names and values of elements associated to the target form. Operations on the FormData object will affect form data to be submitted. *)
   val get_formData: 'tags this -> FormData.t [@@js.get "formData"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: formData:FormData.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:FormDataEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:FormDataEventInit.t -> t [@@js.create]
 end
 and FormDataEventInit : sig
   type t = [`EventInit | `FormDataEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -19458,7 +19771,8 @@ and FormDataEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_formData: 'tags this -> FormData.t [@@js.get "formData"]
   val set_formData: 'tags this -> FormData.t -> unit [@@js.set "formData"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: formData:FormData.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and GlobalEventHandlers : sig
   type t = [`GlobalEventHandlers] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -20122,7 +20436,7 @@ and GlobalEventHandlers : sig
   val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
   val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'GlobalEventHandlersEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and[@js.scope "HTMLAllCollection"] HTMLAllCollection : sig
   type t = [`HTMLAllCollection | Element.t ArrayLike.tags_1 | Element.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -20158,7 +20472,7 @@ and[@js.scope "HTMLAllCollection"] HTMLAllCollection : sig
   val namedItem: 'tags this -> name:string -> (Element.t, HTMLCollection.t) union2 or_null [@@js.call "namedItem"]
   val get: 'tags this -> float -> Element.t [@@js.index_get]
   val set: 'tags this -> float -> Element.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -20325,7 +20639,7 @@ and[@js.scope "HTMLAnchorElement"] HTMLAnchorElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -20444,7 +20758,7 @@ and[@js.scope "HTMLAreaElement"] HTMLAreaElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -20556,7 +20870,7 @@ and[@js.scope "HTMLCanvasElement"] HTMLCanvasElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -20579,7 +20893,7 @@ and[@js.scope "HTMLCollection"] HTMLCollection : sig
   
   (** Retrieves a select object or an object from an options collection. *)
   val namedItem: 'tags this -> name:string -> Element.t or_null [@@js.call "namedItem"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -20610,7 +20924,7 @@ and HTMLCollectionBase : sig
   val item: 'tags this -> index:float -> Element.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> Element.t [@@js.index_get]
   val set: 'tags this -> float -> Element.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and HTMLCollectionOf : sig
   type 'T t = [`HTMLCollectionBase | `HTMLCollectionOf of 'T | 'T ArrayLike.tags_1 | 'T IterableIterator.tags_1] intf [@@js.custom { of_js=(fun _T -> Obj.magic); to_js=(fun _T -> Obj.magic) }]
@@ -20635,7 +20949,7 @@ and HTMLCollectionOf : sig
   val namedItem: ('tags, 'T) this -> name:string -> 'T or_null [@@js.call "namedItem"]
   val get: ('tags, 'T) this -> float -> 'T [@@js.index_get]
   val set: ('tags, 'T) this -> float -> 'T -> unit [@@js.index_set]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Any HTML element. Some elements directly implement this interface, while others implement it via an interface that inherits it. *)
@@ -20725,7 +21039,7 @@ and[@js.scope "HTMLElement"] HTMLElement : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -20838,7 +21152,7 @@ and[@js.scope "HTMLEmbedElement"] HTMLEmbedElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -20867,7 +21181,7 @@ and[@js.scope "HTMLFormControlsCollection"] HTMLFormControlsCollection : sig
     If there are multiple matching items, then a RadioNodeList object containing all those elements is returned.
   *)
   val namedItem: 'tags this -> name:string -> (Element.t, RadioNodeList.t) union2 or_null [@@js.call "namedItem"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -21017,7 +21331,7 @@ and[@js.scope "HTMLFormElement"] HTMLFormElement : sig
   val set: 'tags this -> float -> Element.t -> unit [@@js.index_set]
   val get': 'tags this -> string -> any [@@js.index_get]
   val set': 'tags this -> string -> any -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -21091,7 +21405,7 @@ and[@js.scope "HTMLHeadElement"] HTMLHeadElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -21304,7 +21618,7 @@ and[@js.scope "HTMLImageElement"] HTMLImageElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -21512,7 +21826,7 @@ and[@js.scope "HTMLMediaElement"] HTMLMediaElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val have_current_data: unit -> float [@@js.get "HAVE_CURRENT_DATA"]
@@ -21681,7 +21995,7 @@ and[@js.scope "HTMLScriptElement"] HTMLScriptElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -21758,7 +22072,7 @@ and[@js.scope "HTMLSlotElement"] HTMLSlotElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -21870,7 +22184,7 @@ and[@js.scope "HTMLVideoElement"] HTMLVideoElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -21896,7 +22210,7 @@ and[@js.scope "ImageBitmapRenderingContext"] ImageBitmapRenderingContext : sig
   
   (** Transfers the underlying bitmap data from imageBitmap to context, and the bitmap becomes the contents of the canvas element to which context is bound. *)
   val transferFromImageBitmap: 'tags this -> bitmap:ImageBitmap.t or_null -> unit [@@js.call "transferFromImageBitmap"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -21929,7 +22243,7 @@ and[@js.scope "InputEvent"] InputEvent : sig
   val get_inputType: 'tags this -> string [@@js.get "inputType"]
   val get_isComposing: 'tags this -> bool [@@js.get "isComposing"]
   val getTargetRanges: 'tags this -> StaticRange.t list [@@js.call "getTargetRanges"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:InputEventInit.t -> unit -> t [@@js.create]
 end
@@ -21959,7 +22273,8 @@ and InputEventInit : sig
   val set_isComposing: 'tags this -> bool -> unit [@@js.set "isComposing"]
   val get_targetRanges: 'tags this -> StaticRange.t list [@@js.get "targetRanges"]
   val set_targetRanges: 'tags this -> StaticRange.t list -> unit [@@js.set "targetRanges"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?data:string -> ?dataTransfer:DataTransfer.t -> inputType:string -> isComposing:bool -> targetRanges:StaticRange.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** KeyboardEvent objects describe a user interaction with the keyboard; each event describes a single interaction between the user and a key (or combination of a key with modifier keys) on the keyboard. *)
@@ -22002,7 +22317,7 @@ and[@js.scope "KeyboardEvent"] KeyboardEvent : sig
   val get_DOM_KEY_LOCATION_NUMPAD: 'tags this -> float [@@js.get "DOM_KEY_LOCATION_NUMPAD"]
   val get_DOM_KEY_LOCATION_RIGHT: 'tags this -> float [@@js.get "DOM_KEY_LOCATION_RIGHT"]
   val get_DOM_KEY_LOCATION_STANDARD: 'tags this -> float [@@js.get "DOM_KEY_LOCATION_STANDARD"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:KeyboardEventInit.t -> unit -> t [@@js.create]
   val dom_key_location_left: unit -> float [@@js.get "DOM_KEY_LOCATION_LEFT"]
@@ -22048,7 +22363,8 @@ and KeyboardEventInit : sig
   val set_location: 'tags this -> float -> unit [@@js.set "location"]
   val get_repeat: 'tags this -> bool [@@js.get "repeat"]
   val set_repeat: 'tags this -> bool -> unit [@@js.set "repeat"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: charCode:float -> code:string -> isComposing:bool -> key:string -> keyCode:float -> location:float -> repeat:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and LinkStyle : sig
   type t = [`LinkStyle] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -22067,7 +22383,8 @@ and LinkStyle : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_sheet: 'tags this -> CSSStyleSheet.t or_null [@@js.get "sheet"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?sheet:CSSStyleSheet.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A message received by a target object. *)
@@ -22113,7 +22430,7 @@ and[@js.scope "MessageEvent"] MessageEvent : sig
   
   (** @deprecated  *)
   val initMessageEvent': ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:'T MessageEventInit.t -> unit -> 'T t [@@js.create]
 end
@@ -22148,7 +22465,8 @@ and MessageEventInit : sig
   val set_ports: ('tags, 'T) this -> MessagePort.t list -> unit [@@js.set "ports"]
   val get_source: ('tags, 'T) this -> MessageEventSource.t or_null [@@js.get "source"]
   val set_source: ('tags, 'T) this -> MessageEventSource.t or_null -> unit [@@js.set "source"]
-  val cast_from: (('tags, 'T) this -> 'T t) [@@js.custom let cast_from = Obj.magic]
+  val create: data:'T -> lastEventId:string -> origin:string -> ports:MessagePort.t list -> ?source:MessageEventSource.t -> unit -> 'T t [@@js.builder]
+  val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
 and MessageEventSource : sig
   type t = (MessagePort.t, ServiceWorker.t, WindowProxy.t) union3
@@ -22240,7 +22558,7 @@ and[@js.scope "MessagePort"] MessagePort : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -22285,7 +22603,7 @@ and[@js.scope "MouseEvent"] MouseEvent : sig
   
   (** @deprecated  *)
   val initMouseEvent: 'tags this -> typeArg:string -> canBubbleArg:bool -> cancelableArg:bool -> viewArg:Window.t -> detailArg:float -> screenXArg:float -> screenYArg:float -> clientXArg:float -> clientYArg:float -> ctrlKeyArg:bool -> altKeyArg:bool -> shiftKeyArg:bool -> metaKeyArg:bool -> buttonArg:float -> relatedTargetArg:EventTarget.t or_null -> unit [@@js.call "initMouseEvent"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:MouseEventInit.t -> unit -> t [@@js.create]
 end
@@ -22323,7 +22641,8 @@ and MouseEventInit : sig
   val set_screenX: 'tags this -> float -> unit [@@js.set "screenX"]
   val get_screenY: 'tags this -> float [@@js.get "screenY"]
   val set_screenY: 'tags this -> float -> unit [@@js.set "screenY"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: button:float -> buttons:float -> clientX:float -> clientY:float -> movementX:float -> movementY:float -> ?relatedTarget:EventTarget.t -> screenX:float -> screenY:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Provides event properties that are specific to modifications to the Document Object Model (DOM) hierarchy and nodes. *)
@@ -22364,7 +22683,7 @@ and[@js.scope "MutationEvent"] MutationEvent : sig
   val get_ADDITION: 'tags this -> float [@@js.get "ADDITION"]
   val get_MODIFICATION: 'tags this -> float [@@js.get "MODIFICATION"]
   val get_REMOVAL: 'tags this -> float [@@js.get "REMOVAL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val addition: unit -> float [@@js.get "ADDITION"]
@@ -22400,7 +22719,7 @@ and[@js.scope "NamedNodeMap"] NamedNodeMap : sig
   val setNamedItemNS: 'tags this -> attr:Attr.t -> Attr.t or_null [@@js.call "setNamedItemNS"]
   val get: 'tags this -> float -> Attr.t [@@js.index_get]
   val set: 'tags this -> float -> Attr.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -22456,7 +22775,7 @@ and[@js.scope "Navigator"] Navigator : sig
   (** Available only in secure contexts. *)
   val share: 'tags this -> ?data:ShareData.t -> unit -> unit Promise.t_1 [@@js.call "share"]
   val vibrate': 'tags this -> pattern:VibratePattern.t -> bool [@@js.call "vibrate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -22591,7 +22910,7 @@ and[@js.scope "Node"] Node : sig
   
   (** node is a Text node. *)
   val get_TEXT_NODE: 'tags this -> float [@@js.get "TEXT_NODE"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val attribute_node: unit -> float [@@js.get "ATTRIBUTE_NODE"]
@@ -22697,7 +23016,7 @@ and[@js.scope "NodeIterator"] NodeIterator : sig
   val detach: 'tags this -> unit [@@js.call "detach"]
   val nextNode: 'tags this -> Node.t or_null [@@js.call "nextNode"]
   val previousNode: 'tags this -> Node.t or_null [@@js.call "previousNode"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -22744,7 +23063,7 @@ and[@js.scope "NodeList"] NodeList : sig
   val forEach: 'tags this -> callbackfn:(value:Node.t -> key:float -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: 'tags this -> float -> Node.t [@@js.index_get]
   val set: 'tags this -> float -> Node.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -22786,7 +23105,7 @@ and NodeListOf : sig
   val forEach: ('tags, 'TNode) this -> callbackfn:(value:'TNode -> key:float -> parent:'TNode t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val get: ('tags, 'TNode) this -> float -> 'TNode [@@js.index_get]
   val set: ('tags, 'TNode) this -> float -> 'TNode -> unit [@@js.index_set]
-  val cast_from: (('tags, 'TNode) this -> 'TNode t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'TNode) this -> 'TNode t [@@js.custom let cast_from = Obj.magic]
 end
 and NonDocumentTypeChildNode : sig
   type t = [`NonDocumentTypeChildNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -22810,7 +23129,8 @@ and NonDocumentTypeChildNode : sig
   
   (** Returns the first preceding sibling that is an element, and null otherwise. *)
   val get_previousElementSibling: 'tags this -> Element.t or_null [@@js.get "previousElementSibling"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?nextElementSibling:Element.t -> ?previousElementSibling:Element.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and NonElementParentNode : sig
   type t = [`NonElementParentNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -22831,7 +23151,7 @@ and NonElementParentNode : sig
   
   (** Returns the first element within node's descendants whose ID is elementId. *)
   val getElementById: 'tags this -> elementId:string -> Element.t or_null [@@js.call "getElementById"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and ParentNode : sig
   type t = [`EventTarget | `Node | `ParentNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -22898,7 +23218,7 @@ and ParentNode : sig
     Throws a "HierarchyRequestError" DOMException if the constraints of the node tree are violated.
   *)
   val replaceChildren: 'tags this -> nodes:(Node.t or_string list [@js.variadic]) -> unit [@@js.call "replaceChildren"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** The state of a DOM event produced by a pointer such as the geometry of the contact point, the device type that generated the event, the amount of pressure that was applied on the contact surface, etc. *)
@@ -22932,7 +23252,7 @@ and[@js.scope "PointerEvent"] PointerEvent : sig
   (** Available only in secure contexts. *)
   val getCoalescedEvents: 'tags this -> t list [@@js.call "getCoalescedEvents"]
   val getPredictedEvents: 'tags this -> t list [@@js.call "getPredictedEvents"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:PointerEventInit.t -> unit -> t [@@js.create]
 end
@@ -22976,7 +23296,8 @@ and PointerEventInit : sig
   val set_twist: 'tags this -> float -> unit [@@js.set "twist"]
   val get_width: 'tags this -> float [@@js.get "width"]
   val set_width: 'tags this -> float -> unit [@@js.set "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: coalescedEvents:PointerEvent.t list -> height:float -> isPrimary:bool -> pointerId:float -> pointerType:string -> predictedEvents:PointerEvent.t list -> pressure:float -> tangentialPressure:float -> tiltX:float -> tiltY:float -> twist:float -> width:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A processing instruction embeds application-specific instructions in XML which can be ignored by other applications that don't recognize them. *)
@@ -23000,9 +23321,10 @@ and[@js.scope "ProcessingInstruction"] ProcessingInstruction : sig
   (** Returns the node document. Returns null for documents. *)
   val get_ownerDocument: 'tags this -> Document.t [@@js.get "ownerDocument"]
   val get_target: 'tags this -> string [@@js.get "target"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ownerDocument:Document.t -> target:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 and[@js.scope "RTCDataChannel"] RTCDataChannel : sig
   type t = [`EventTarget | `RTCDataChannel] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -23088,7 +23410,7 @@ and[@js.scope "RTCDataChannel"] RTCDataChannel : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -23109,9 +23431,10 @@ and[@js.scope "RTCDataChannelEvent"] RTCDataChannelEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_channel: 'tags this -> RTCDataChannel.t [@@js.get "channel"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: channel:RTCDataChannel.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> eventInitDict:RTCDataChannelEventInit.t -> t [@@js.create]
+  val create': type_:string -> eventInitDict:RTCDataChannelEventInit.t -> t [@@js.create]
 end
 and RTCDataChannelEventInit : sig
   type t = [`EventInit | `RTCDataChannelEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -23131,7 +23454,8 @@ and RTCDataChannelEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_channel: 'tags this -> RTCDataChannel.t [@@js.get "channel"]
   val set_channel: 'tags this -> RTCDataChannel.t -> unit [@@js.set "channel"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: channel:RTCDataChannel.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and[@js.scope "RadioNodeList"] RadioNodeList : sig
   type t = [`NodeList | `RadioNodeList | Node.t ArrayLike.tags_1 | Node.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -23151,9 +23475,10 @@ and[@js.scope "RadioNodeList"] RadioNodeList : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_value: 'tags this -> string [@@js.get "value"]
   val set_value: 'tags this -> string -> unit [@@js.set "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: value:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** A fragment of a document that can contain nodes and parts of text nodes. *)
@@ -23210,7 +23535,7 @@ and[@js.scope "Range"] Range : sig
   val get_END_TO_START: 'tags this -> float [@@js.get "END_TO_START"]
   val get_START_TO_END: 'tags this -> float [@@js.get "START_TO_END"]
   val get_START_TO_START: 'tags this -> float [@@js.get "START_TO_START"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val end_to_end: unit -> float [@@js.get "END_TO_END"]
@@ -23285,7 +23610,7 @@ and[@js.scope "Request"] Request : sig
   (** Returns the URL of request as a string. *)
   val get_url: 'tags this -> string [@@js.get "url"]
   val clone: 'tags this -> t [@@js.call "clone"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: input:RequestInfo.t -> ?init:RequestInit.t -> unit -> t [@@js.create]
 end
@@ -23391,7 +23716,8 @@ and RequestInit : sig
   
   (** Can only be null. Used to disassociate request from any Window. *)
   val set_window: 'tags this -> never or_null -> unit [@@js.set "window"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?body:BodyInit.t -> cache:RequestCache.t -> credentials:RequestCredentials.t -> headers:HeadersInit.t -> integrity:string -> keepalive:bool -> method_:(string[@js "method"]) -> mode:RequestMode.t -> redirect:RequestRedirect.t -> referrer:string -> referrerPolicy:ReferrerPolicy.t -> ?signal:AbortSignal.t -> ?window:never -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Fetch API interface represents the response to a request. *)
@@ -23419,7 +23745,7 @@ and[@js.scope "Response"] Response : sig
   val get_type: 'tags this -> ResponseType.t [@@js.get "type"]
   val get_url: 'tags this -> string [@@js.get "url"]
   val clone: 'tags this -> t [@@js.call "clone"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?body:BodyInit.t or_null -> ?init:ResponseInit.t -> unit -> t [@@js.create]
   val error: unit -> t [@@js.global "error"]
@@ -23498,7 +23824,7 @@ and[@js.scope "SVGCircleElement"] SVGCircleElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -23568,7 +23894,7 @@ and[@js.scope "SVGElement"] SVGElement : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -23646,7 +23972,7 @@ and[@js.scope "SVGEllipseElement"] SVGEllipseElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -23723,7 +24049,7 @@ and[@js.scope "SVGGeometryElement"] SVGGeometryElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -23801,7 +24127,7 @@ and[@js.scope "SVGGraphicsElement"] SVGGraphicsElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -23880,7 +24206,7 @@ and[@js.scope "SVGImageElement"] SVGImageElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -23958,7 +24284,7 @@ and[@js.scope "SVGLineElement"] SVGLineElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24032,7 +24358,7 @@ and[@js.scope "SVGPathElement"] SVGPathElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24106,7 +24432,7 @@ and[@js.scope "SVGPolygonElement"] SVGPolygonElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24180,7 +24506,7 @@ and[@js.scope "SVGPolylineElement"] SVGPolylineElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24260,7 +24586,7 @@ and[@js.scope "SVGRectElement"] SVGRectElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24372,7 +24698,7 @@ and[@js.scope "SVGSVGElement"] SVGSVGElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24448,7 +24774,7 @@ and[@js.scope "SVGScriptElement"] SVGScriptElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24538,7 +24864,7 @@ and[@js.scope "SVGTextContentElement"] SVGTextContentElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val lengthadjust_spacing: unit -> float [@@js.get "LENGTHADJUST_SPACING"]
@@ -24615,7 +24941,7 @@ and[@js.scope "SVGTextElement"] SVGTextElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24694,7 +25020,7 @@ and[@js.scope "SVGTextPositioningElement"] SVGTextPositioningElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24772,7 +25098,7 @@ and[@js.scope "SVGUseElement"] SVGUseElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24816,7 +25142,7 @@ and[@js.scope "Selection"] Selection : sig
   val setBaseAndExtent: 'tags this -> anchorNode:Node.t -> anchorOffset:float -> focusNode:Node.t -> focusOffset:float -> unit [@@js.call "setBaseAndExtent"]
   val setPosition: 'tags this -> node:Node.t or_null -> ?offset:float -> unit -> unit [@@js.call "setPosition"]
   val toString: 'tags this -> string [@@js.call "toString"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val toString': unit -> string [@@js.global "toString"]
@@ -24888,7 +25214,7 @@ and[@js.scope "ServiceWorker"] ServiceWorker : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -24965,7 +25291,7 @@ and[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -25042,7 +25368,7 @@ and[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -25065,9 +25391,10 @@ and[@js.scope "ShadowRoot"] ShadowRoot : sig
   val get_delegatesFocus: 'tags this -> bool [@@js.get "delegatesFocus"]
   val get_host: 'tags this -> Element.t [@@js.get "host"]
   val get_mode: 'tags this -> ShadowRootMode.t [@@js.get "mode"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: delegatesFocus:bool -> host:Element.t -> mode:ShadowRootMode.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 and Slottable : sig
   type t = [`Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -25086,7 +25413,8 @@ and Slottable : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_assignedSlot: 'tags this -> HTMLSlotElement.t or_null [@@js.get "assignedSlot"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?assignedSlot:HTMLSlotElement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and[@js.scope "StaticRange"] StaticRange : sig
   type t = [`AbstractRange | `StaticRange] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -25104,7 +25432,7 @@ and[@js.scope "StaticRange"] StaticRange : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: StaticRangeInit.t -> t [@@js.create]
 end
@@ -25132,7 +25460,8 @@ and StaticRangeInit : sig
   val set_startContainer: 'tags this -> Node.t -> unit [@@js.set "startContainer"]
   val get_startOffset: 'tags this -> float [@@js.get "startOffset"]
   val set_startOffset: 'tags this -> float -> unit [@@js.set "startOffset"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: endContainer:Node.t -> endOffset:float -> startContainer:Node.t -> startOffset:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A single style sheet. CSS style sheets will further implement the more specialized CSSStyleSheet interface. *)
@@ -25160,9 +25489,10 @@ and[@js.scope "StyleSheet"] StyleSheet : sig
   val get_parentStyleSheet: 'tags this -> CSSStyleSheet.t or_null [@@js.get "parentStyleSheet"]
   val get_title: 'tags this -> string or_null [@@js.get "title"]
   val get_type: 'tags this -> string [@@js.get "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: disabled:bool -> ?href:string -> media:MediaList.t -> ?ownerNode:(Element.t, ProcessingInstruction.t) union2 -> ?parentStyleSheet:CSSStyleSheet.t -> ?title:string -> type_:(string[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** A list of StyleSheet. *)
@@ -25187,7 +25517,7 @@ and[@js.scope "StyleSheetList"] StyleSheetList : sig
   val item: 'tags this -> index:float -> CSSStyleSheet.t or_null [@@js.call "item"]
   val get: 'tags this -> float -> CSSStyleSheet.t [@@js.index_get]
   val set: 'tags this -> float -> CSSStyleSheet.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -25210,9 +25540,10 @@ and[@js.scope "SubmitEvent"] SubmitEvent : sig
   
   (** Returns the element representing the submit button that triggered the form submission, or null if the submission was not triggered by a button. *)
   val get_submitter: 'tags this -> HTMLElement.t or_null [@@js.get "submitter"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?submitter:HTMLElement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:SubmitEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:SubmitEventInit.t -> unit -> t [@@js.create]
 end
 and SubmitEventInit : sig
   type t = [`EventInit | `SubmitEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -25232,7 +25563,8 @@ and SubmitEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_submitter: 'tags this -> HTMLElement.t or_null [@@js.get "submitter"]
   val set_submitter: 'tags this -> HTMLElement.t or_null -> unit [@@js.set "submitter"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?submitter:HTMLElement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and TexImageSource : sig
   type t = ((([`U_s130_async of HTMLImageElement.t [@js "async"] | `U_s141_auto of HTMLImageElement.t [@js "auto"] | `U_s746_sync of HTMLImageElement.t [@js "sync"]] [@js.union on_field "decoding"]), ([`U_s0 of HTMLVideoElement.t [@js ""] | `U_s141_auto of HTMLVideoElement.t [@js "auto"] | `U_s493_metadata of HTMLVideoElement.t [@js "metadata"] | `U_s528_none of HTMLVideoElement.t [@js "none"]] [@js.union on_field "preload"])) union2, (HTMLCanvasElement.t, ImageBitmap.t, ImageData.t) union3) or_
@@ -25266,7 +25598,7 @@ and[@js.scope "Text"] Text : sig
   
   (** Splits data at the given offset and returns the remainder as Text node. *)
   val splitText: 'tags this -> offset:float -> t [@@js.call "splitText"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?data:string -> unit -> t [@@js.create]
 end
@@ -25295,9 +25627,10 @@ and[@js.scope "TouchEvent"] TouchEvent : sig
   val get_shiftKey: 'tags this -> bool [@@js.get "shiftKey"]
   val get_targetTouches: 'tags this -> TouchList.t [@@js.get "targetTouches"]
   val get_touches: 'tags this -> TouchList.t [@@js.get "touches"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: altKey:bool -> changedTouches:TouchList.t -> ctrlKey:bool -> metaKey:bool -> shiftKey:bool -> targetTouches:TouchList.t -> touches:TouchList.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:TouchEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:TouchEventInit.t -> unit -> t [@@js.create]
 end
 and TouchEventInit : sig
   type t = [`EventInit | `EventModifierInit | `TouchEventInit | `UIEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -25321,7 +25654,8 @@ and TouchEventInit : sig
   val set_targetTouches: 'tags this -> Touch.t list -> unit [@@js.set "targetTouches"]
   val get_touches: 'tags this -> Touch.t list [@@js.get "touches"]
   val set_touches: 'tags this -> Touch.t list -> unit [@@js.set "touches"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: changedTouches:Touch.t list -> targetTouches:Touch.t list -> touches:Touch.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and Transferable : sig
   type t = (ImageBitmap.t, MessagePort.t) union2
@@ -25361,7 +25695,7 @@ and[@js.scope "TreeWalker"] TreeWalker : sig
   val parentNode: 'tags this -> Node.t or_null [@@js.call "parentNode"]
   val previousNode: 'tags this -> Node.t or_null [@@js.call "previousNode"]
   val previousSibling: 'tags this -> Node.t or_null [@@js.call "previousSibling"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -25391,7 +25725,7 @@ and[@js.scope "UIEvent"] UIEvent : sig
   
   (** @deprecated  *)
   val initUIEvent: 'tags this -> typeArg:string -> ?bubblesArg:bool -> ?cancelableArg:bool -> ?viewArg:Window.t or_null -> ?detailArg:float -> unit -> unit [@@js.call "initUIEvent"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:UIEventInit.t -> unit -> t [@@js.create]
 end
@@ -25421,7 +25755,8 @@ and UIEventInit : sig
   
   (** @deprecated  *)
   val set_which: 'tags this -> float -> unit [@@js.set "which"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: detail:float -> ?view:Window.t -> which:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and[@js.scope "WebGL2RenderingContext"] WebGL2RenderingContext : sig
   type t = [`WebGL2RenderingContext | `WebGL2RenderingContextBase | `WebGL2RenderingContextOverloads | `WebGLRenderingContextBase] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -25439,7 +25774,7 @@ and[@js.scope "WebGL2RenderingContext"] WebGL2RenderingContext : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val active_uniform_blocks: unit -> GLenum.t [@@js.get "ACTIVE_UNIFORM_BLOCKS"]
@@ -26397,7 +26732,7 @@ and WebGL2RenderingContextBase : sig
   val get_VERTEX_ATTRIB_ARRAY_DIVISOR: 'tags this -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_DIVISOR"]
   val get_VERTEX_ATTRIB_ARRAY_INTEGER: 'tags this -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_INTEGER"]
   val get_WAIT_FAILED: 'tags this -> GLenum.t [@@js.get "WAIT_FAILED"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and WebGL2RenderingContextOverloads : sig
   type t = [`WebGL2RenderingContextOverloads] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -26459,7 +26794,7 @@ and WebGL2RenderingContextOverloads : sig
   val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
   val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
   val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Provides an interface to the OpenGL ES 2.0 graphics rendering context for the drawing surface of an HTML <canvas> element. *)
@@ -26479,7 +26814,7 @@ and[@js.scope "WebGLRenderingContext"] WebGLRenderingContext : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val active_attributes: unit -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
@@ -27246,7 +27581,7 @@ and WebGLRenderingContextBase : sig
   val get_VERTEX_SHADER: 'tags this -> GLenum.t [@@js.get "VERTEX_SHADER"]
   val get_VIEWPORT: 'tags this -> GLenum.t [@@js.get "VIEWPORT"]
   val get_ZERO: 'tags this -> GLenum.t [@@js.get "ZERO"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and WebGLRenderingContextOverloads : sig
   type t = [`WebGLRenderingContextOverloads] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -27296,7 +27631,7 @@ and WebGLRenderingContextOverloads : sig
   val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix2fv"]
   val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix3fv"]
   val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Events that occur due to the user moving a mouse wheel or similar input device. *)
@@ -27323,9 +27658,10 @@ and[@js.scope "WheelEvent"] WheelEvent : sig
   val get_DOM_DELTA_LINE: 'tags this -> float [@@js.get "DOM_DELTA_LINE"]
   val get_DOM_DELTA_PAGE: 'tags this -> float [@@js.get "DOM_DELTA_PAGE"]
   val get_DOM_DELTA_PIXEL: 'tags this -> float [@@js.get "DOM_DELTA_PIXEL"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: deltaMode:float -> deltaX:float -> deltaY:float -> deltaZ:float -> dom_delta_line:(float[@js "DOM_DELTA_LINE"]) -> dom_delta_page:(float[@js "DOM_DELTA_PAGE"]) -> dom_delta_pixel:(float[@js "DOM_DELTA_PIXEL"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: type_:string -> ?eventInitDict:WheelEventInit.t -> unit -> t [@@js.create]
+  val create': type_:string -> ?eventInitDict:WheelEventInit.t -> unit -> t [@@js.create]
   val dom_delta_line: unit -> float [@@js.get "DOM_DELTA_LINE"]
   val dom_delta_page: unit -> float [@@js.get "DOM_DELTA_PAGE"]
   val dom_delta_pixel: unit -> float [@@js.get "DOM_DELTA_PIXEL"]
@@ -27354,7 +27690,8 @@ and WheelEventInit : sig
   val set_deltaY: 'tags this -> float -> unit [@@js.set "deltaY"]
   val get_deltaZ: 'tags this -> float [@@js.get "deltaZ"]
   val set_deltaZ: 'tags this -> float -> unit [@@js.set "deltaZ"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: deltaMode:float -> deltaX:float -> deltaY:float -> deltaZ:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A window containing a DOM document; the document property points to the DOM document loaded in that window. *)
@@ -27580,7 +27917,7 @@ and[@js.scope "Window"] Window : sig
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val get: 'tags this -> float -> t [@@js.index_get]
   val set: 'tags this -> float -> t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -27640,7 +27977,7 @@ and WindowEventHandlers : sig
   val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
   val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WindowEventHandlersEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and WindowOrWorkerGlobalScope : sig
   type t = [`WindowOrWorkerGlobalScope] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -27677,7 +28014,7 @@ and WindowOrWorkerGlobalScope : sig
   val queueMicrotask: 'tags this -> callback:VoidFunction.t -> unit [@@js.call "queueMicrotask"]
   val setInterval: 'tags this -> handler:TimerHandler.t -> ?timeout:float -> arguments:(any list [@js.variadic]) -> unit -> float [@@js.call "setInterval"]
   val setTimeout: 'tags this -> handler:TimerHandler.t -> ?timeout:float -> arguments:(any list [@js.variadic]) -> unit -> float [@@js.call "setTimeout"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and WindowProxy : sig
   type t = Window.t
@@ -27757,7 +28094,7 @@ and[@js.scope "XMLDocument"] XMLDocument : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -27788,7 +28125,7 @@ and XPathEvaluatorBase : sig
   val createExpression: 'tags this -> expression:string -> ?resolver:XPathNSResolver.t or_null -> unit -> XPathExpression.t [@@js.call "createExpression"]
   val createNSResolver: 'tags this -> nodeResolver:Node.t -> XPathNSResolver.t [@@js.call "createNSResolver"]
   val evaluate: 'tags this -> expression:string -> contextNode:Node.t -> ?resolver:XPathNSResolver.t or_null -> ?type_:float -> ?result:XPathResult.t or_null -> unit -> XPathResult.t [@@js.call "evaluate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This interface is a compiled XPath expression that can be evaluated on a document or specific node to return information its DOM tree. *)
@@ -27809,7 +28146,7 @@ and[@js.scope "XPathExpression"] XPathExpression : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val evaluate: 'tags this -> contextNode:Node.t -> ?type_:float -> ?result:XPathResult.t or_null -> unit -> XPathResult.t [@@js.call "evaluate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -27850,7 +28187,7 @@ and[@js.scope "XPathResult"] XPathResult : sig
   val get_STRING_TYPE: 'tags this -> float [@@js.get "STRING_TYPE"]
   val get_UNORDERED_NODE_ITERATOR_TYPE: 'tags this -> float [@@js.get "UNORDERED_NODE_ITERATOR_TYPE"]
   val get_UNORDERED_NODE_SNAPSHOT_TYPE: 'tags this -> float [@@js.get "UNORDERED_NODE_SNAPSHOT_TYPE"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val any_type: unit -> float [@@js.get "ANY_TYPE"]
@@ -28997,7 +29334,7 @@ module[@js.scope "XSLTProcessor"] XSLTProcessor : sig
   val setParameter: 'tags this -> namespaceURI:string or_null -> localName:string -> value:any -> unit [@@js.call "setParameter"]
   val transformToDocument: 'tags this -> source:Node.t -> Document.t [@@js.call "transformToDocument"]
   val transformToFragment: 'tags this -> source:Node.t -> output:Document.t -> DocumentFragment.t [@@js.call "transformToFragment"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -29019,7 +29356,7 @@ module[@js.scope "XPathEvaluator"] XPathEvaluator : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -29042,7 +29379,7 @@ module[@js.scope "XMLSerializer"] XMLSerializer : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val serializeToString: 'tags this -> root:Node.t -> string [@@js.call "serializeToString"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -29249,7 +29586,7 @@ module[@js.scope "XMLHttpRequest"] rec XMLHttpRequest : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val done_: unit -> float [@@js.get "DONE"]
@@ -29328,7 +29665,7 @@ and[@js.scope "XMLHttpRequestEventTarget"] XMLHttpRequestEventTarget : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -29388,7 +29725,7 @@ and[@js.scope "XMLHttpRequestUpload"] XMLHttpRequestUpload : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -29422,7 +29759,8 @@ module XMLHttpRequestEventTargetEventMap : sig
   val set_progress: 'tags this -> XMLHttpRequestEventTarget.t ProgressEvent.t -> unit [@@js.set "progress"]
   val get_timeout: 'tags this -> XMLHttpRequestEventTarget.t ProgressEvent.t [@@js.get "timeout"]
   val set_timeout: 'tags this -> XMLHttpRequestEventTarget.t ProgressEvent.t -> unit [@@js.set "timeout"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: abort:XMLHttpRequestEventTarget.t ProgressEvent.t -> error:XMLHttpRequestEventTarget.t ProgressEvent.t -> load:XMLHttpRequestEventTarget.t ProgressEvent.t -> loadend:XMLHttpRequestEventTarget.t ProgressEvent.t -> loadstart:XMLHttpRequestEventTarget.t ProgressEvent.t -> progress:XMLHttpRequestEventTarget.t ProgressEvent.t -> timeout:XMLHttpRequestEventTarget.t ProgressEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module XMLHttpRequestEventMap : sig
   type t = [`XMLHttpRequestEventMap | `XMLHttpRequestEventTargetEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -29442,7 +29780,8 @@ module XMLHttpRequestEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_readystatechange: 'tags this -> Event.t [@@js.get "readystatechange"]
   val set_readystatechange: 'tags this -> Event.t -> unit [@@js.set "readystatechange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: readystatechange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AbstractWorkerEventMap : sig
   type t = [`AbstractWorkerEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -29462,7 +29801,8 @@ module AbstractWorkerEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_error: 'tags this -> ErrorEvent.t [@@js.get "error"]
   val set_error: 'tags this -> ErrorEvent.t -> unit [@@js.set "error"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: error:ErrorEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WorkerEventMap : sig
   type t = [`AbstractWorkerEventMap | `WorkerEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -29484,7 +29824,8 @@ module WorkerEventMap : sig
   val set_message: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "message"]
   val get_messageerror: 'tags this -> MessageEvent.t_0 [@@js.get "messageerror"]
   val set_messageerror: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "messageerror"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: message:MessageEvent.t_0 -> messageerror:MessageEvent.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WorkerOptions : sig
   type t = [`WorkerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -29508,7 +29849,8 @@ module WorkerOptions : sig
   val set_name: 'tags this -> string -> unit [@@js.set "name"]
   val get_type: 'tags this -> WorkerType.t [@@js.get "type"]
   val set_type: 'tags this -> WorkerType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: credentials:RequestCredentials.t -> name:string -> type_:(WorkerType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. *)
@@ -29581,7 +29923,7 @@ module[@js.scope "Worker"] Worker : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: scriptURL:URL.t or_string -> ?options:WorkerOptions.t -> unit -> t [@@js.create]
 end
@@ -29637,7 +29979,8 @@ module WindowEventHandlersEventMap : sig
   val set_unhandledrejection: 'tags this -> PromiseRejectionEvent.t -> unit [@@js.set "unhandledrejection"]
   val get_unload: 'tags this -> Event.t [@@js.get "unload"]
   val set_unload: 'tags this -> Event.t -> unit [@@js.set "unload"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: afterprint:Event.t -> beforeprint:Event.t -> beforeunload:BeforeUnloadEvent.t -> gamepadconnected:GamepadEvent.t -> gamepaddisconnected:GamepadEvent.t -> hashchange:HashChangeEvent.t -> languagechange:Event.t -> message:MessageEvent.t_0 -> messageerror:MessageEvent.t_0 -> offline:Event.t -> online:Event.t -> pagehide:PageTransitionEvent.t -> pageshow:PageTransitionEvent.t -> popstate:PopStateEvent.t -> rejectionhandled:PromiseRejectionEvent.t -> storage:StorageEvent.t -> unhandledrejection:PromiseRejectionEvent.t -> unload:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module GlobalEventHandlersEventMap : sig
   type t = [`GlobalEventHandlersEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -29843,7 +30186,8 @@ module GlobalEventHandlersEventMap : sig
   val set_webkittransitionend: 'tags this -> Event.t -> unit [@@js.set "webkittransitionend"]
   val get_wheel: 'tags this -> WheelEvent.t [@@js.get "wheel"]
   val set_wheel: 'tags this -> WheelEvent.t -> unit [@@js.set "wheel"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: abort:UIEvent.t -> animationcancel:AnimationEvent.t -> animationend:AnimationEvent.t -> animationiteration:AnimationEvent.t -> animationstart:AnimationEvent.t -> auxclick:MouseEvent.t -> beforeinput:InputEvent.t -> blur:FocusEvent.t -> canplay:Event.t -> canplaythrough:Event.t -> change:Event.t -> click:MouseEvent.t -> close:Event.t -> compositionend:CompositionEvent.t -> compositionstart:CompositionEvent.t -> compositionupdate:CompositionEvent.t -> contextmenu:MouseEvent.t -> cuechange:Event.t -> dblclick:MouseEvent.t -> drag:DragEvent.t -> dragend:DragEvent.t -> dragenter:DragEvent.t -> dragleave:DragEvent.t -> dragover:DragEvent.t -> dragstart:DragEvent.t -> drop:DragEvent.t -> durationchange:Event.t -> emptied:Event.t -> ended:Event.t -> error:ErrorEvent.t -> focus:FocusEvent.t -> focusin:FocusEvent.t -> focusout:FocusEvent.t -> formdata:FormDataEvent.t -> gotpointercapture:PointerEvent.t -> input:Event.t -> invalid:Event.t -> keydown:KeyboardEvent.t -> keypress:KeyboardEvent.t -> keyup:KeyboardEvent.t -> load:Event.t -> loadeddata:Event.t -> loadedmetadata:Event.t -> loadstart:Event.t -> lostpointercapture:PointerEvent.t -> mousedown:MouseEvent.t -> mouseenter:MouseEvent.t -> mouseleave:MouseEvent.t -> mousemove:MouseEvent.t -> mouseout:MouseEvent.t -> mouseover:MouseEvent.t -> mouseup:MouseEvent.t -> pause:Event.t -> play:Event.t -> playing:Event.t -> pointercancel:PointerEvent.t -> pointerdown:PointerEvent.t -> pointerenter:PointerEvent.t -> pointerleave:PointerEvent.t -> pointermove:PointerEvent.t -> pointerout:PointerEvent.t -> pointerover:PointerEvent.t -> pointerup:PointerEvent.t -> progress:ProgressEvent.t_0 -> ratechange:Event.t -> reset:Event.t -> resize:UIEvent.t -> scroll:Event.t -> securitypolicyviolation:SecurityPolicyViolationEvent.t -> seeked:Event.t -> seeking:Event.t -> select:Event.t -> selectionchange:Event.t -> selectstart:Event.t -> stalled:Event.t -> submit:SubmitEvent.t -> suspend:Event.t -> timeupdate:Event.t -> toggle:Event.t -> touchcancel:TouchEvent.t -> touchend:TouchEvent.t -> touchmove:TouchEvent.t -> touchstart:TouchEvent.t -> transitioncancel:TransitionEvent.t -> transitionend:TransitionEvent.t -> transitionrun:TransitionEvent.t -> transitionstart:TransitionEvent.t -> volumechange:Event.t -> waiting:Event.t -> webkitanimationend:Event.t -> webkitanimationiteration:Event.t -> webkitanimationstart:Event.t -> webkittransitionend:Event.t -> wheel:WheelEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WindowEventMap : sig
   type t = [`GlobalEventHandlersEventMap | `WindowEventHandlersEventMap | `WindowEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -29871,7 +30215,8 @@ module WindowEventMap : sig
   val set_gamepaddisconnected: 'tags this -> GamepadEvent.t -> unit [@@js.set "gamepaddisconnected"]
   val get_orientationchange: 'tags this -> Event.t [@@js.get "orientationchange"]
   val set_orientationchange: 'tags this -> Event.t -> unit [@@js.set "orientationchange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: devicemotion:DeviceMotionEvent.t -> deviceorientation:DeviceOrientationEvent.t -> gamepadconnected:GamepadEvent.t -> gamepaddisconnected:GamepadEvent.t -> orientationchange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WebSocketEventMap : sig
   type t = [`WebSocketEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -29897,7 +30242,8 @@ module WebSocketEventMap : sig
   val set_message: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "message"]
   val get_open: 'tags this -> Event.t [@@js.get "open"]
   val set_open: 'tags this -> Event.t -> unit [@@js.set "open"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: close:CloseEvent.t -> error:Event.t -> message:MessageEvent.t_0 -> open_:(Event.t[@js "open"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection. *)
@@ -30008,7 +30354,7 @@ module[@js.scope "WebSocket"] WebSocket : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: url:URL.t or_string -> ?protocols:string list or_string -> unit -> t [@@js.create]
   val closed: unit -> float [@@js.get "CLOSED"]
@@ -30060,7 +30406,8 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val set_module: 'tags this -> string -> unit [@@js.set "module"]
     val get_name: 'tags this -> string [@@js.get "name"]
     val set_name: 'tags this -> string -> unit [@@js.set "name"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val create: kind:ImportExportKind.t -> module_:(string[@js "module"]) -> name:string -> unit -> t [@@js.builder]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   end
   module ModuleExportDescriptor : sig
     type t = [`WebAssembly_ModuleExportDescriptor] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30082,7 +30429,8 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val set_kind: 'tags this -> ImportExportKind.t -> unit [@@js.set "kind"]
     val get_name: 'tags this -> string [@@js.get "name"]
     val set_name: 'tags this -> string -> unit [@@js.set "name"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val create: kind:ImportExportKind.t -> name:string -> unit -> t [@@js.builder]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   end
   module[@js.scope "Module"] Module : sig
     type t = [`WebAssembly_Module] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30100,7 +30448,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val t_of_js: Ojs.t -> t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
     val create: BufferSource.t -> t [@@js.create]
     val customSections: moduleObject:t -> sectionName:string -> ArrayBuffer.t_0 list [@@js.global "customSections"]
@@ -30137,7 +30485,8 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val set_initial: 'tags this -> float -> unit [@@js.set "initial"]
     val get_maximum: 'tags this -> float [@@js.get "maximum"]
     val set_maximum: 'tags this -> float -> unit [@@js.set "maximum"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val create: element:TableKind.t -> initial:float -> maximum:float -> unit -> t [@@js.builder]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   end
   module[@js.scope "Table"] Table : sig
     type t = [`WebAssembly_Table] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30159,7 +30508,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val get_: 'tags this -> index:float -> any [@@js.call "get"]
     val grow: 'tags this -> delta:float -> ?value:any -> unit -> float [@@js.call "grow"]
     val set_: 'tags this -> index:float -> ?value:any -> unit -> unit [@@js.call "set"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
     val create: descriptor:TableDescriptor.t -> ?value:any -> unit -> t [@@js.create]
   end
@@ -30185,7 +30534,8 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val set_maximum: 'tags this -> float -> unit [@@js.set "maximum"]
     val get_shared: 'tags this -> bool [@@js.get "shared"]
     val set_shared: 'tags this -> bool -> unit [@@js.set "shared"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val create: initial:float -> maximum:float -> shared:bool -> unit -> t [@@js.builder]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   end
   module[@js.scope "Memory"] Memory : sig
     type t = [`WebAssembly_Memory] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30205,7 +30555,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_of_js: Ojs.t -> t_0
     val get_buffer: 'tags this -> ArrayBuffer.t_0 [@@js.get "buffer"]
     val grow: 'tags this -> delta:float -> float [@@js.call "grow"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
     val create: MemoryDescriptor.t -> t [@@js.create]
   end
@@ -30237,7 +30587,8 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val set_mutable: 'tags this -> bool -> unit [@@js.set "mutable"]
     val get_value: 'tags this -> ValueType.t [@@js.get "value"]
     val set_value: 'tags this -> ValueType.t -> unit [@@js.set "value"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val create: mutable_:(bool[@js "mutable"]) -> value:ValueType.t -> unit -> t [@@js.builder]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   end
   module[@js.scope "Global"] Global : sig
     type t = [`WebAssembly_Global] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30258,7 +30609,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val get_value: 'tags this -> any [@@js.get "value"]
     val set_value: 'tags this -> any -> unit [@@js.set "value"]
     val valueOf: 'tags this -> any [@@js.call "valueOf"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
     val create: descriptor:GlobalDescriptor.t -> ?v:any -> unit -> t [@@js.create]
   end
@@ -30319,9 +30670,10 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
     val get_exports: 'tags this -> Exports.t [@@js.get "exports"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val create: exports:Exports.t -> unit -> t [@@js.builder]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
-    val create: module_:Module.t -> ?importObject:Imports.t -> unit -> t [@@js.create]
+    val create': module_:Module.t -> ?importObject:Imports.t -> unit -> t [@@js.create]
   end
   module WebAssemblyInstantiatedSource : sig
     type t = [`WebAssembly_WebAssemblyInstantiatedSource] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30343,7 +30695,8 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val set_instance: 'tags this -> Instance.t -> unit [@@js.set "instance"]
     val get_module: 'tags this -> Module.t [@@js.get "module"]
     val set_module: 'tags this -> Module.t -> unit [@@js.set "module"]
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val create: instance:Instance.t -> module_:(Module.t[@js "module"]) -> unit -> t [@@js.builder]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   end
   module[@js.scope "RuntimeError"] RuntimeError : sig
     type t = [`WebAssembly_RuntimeError] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30361,7 +30714,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val t_of_js: Ojs.t -> t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
     val create: ?message:string -> unit -> t [@@js.create]
     val invoke: ?message:string -> unit -> t [@@js.invoke]
@@ -30382,7 +30735,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val t_of_js: Ojs.t -> t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
     val create: ?message:string -> unit -> t [@@js.create]
     val invoke: ?message:string -> unit -> t [@@js.invoke]
@@ -30403,7 +30756,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val t_of_js: Ojs.t -> t
     val t_0_to_js: t_0 -> Ojs.t
     val t_0_of_js: Ojs.t -> t_0
-    val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+    val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
     val prototype: unit -> t [@@js.get "prototype"]
     val create: ?message:string -> unit -> t [@@js.create]
     val invoke: ?message:string -> unit -> t [@@js.invoke]
@@ -30435,7 +30788,8 @@ module VisualViewportEventMap : sig
   val set_resize: 'tags this -> Event.t -> unit [@@js.set "resize"]
   val get_scroll: 'tags this -> Event.t [@@js.get "scroll"]
   val set_scroll: 'tags this -> Event.t -> unit [@@js.set "scroll"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: resize:Event.t -> scroll:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module VideoFacingModeEnum : sig
   type t = ([`L_s285_environment[@js "environment"] | `L_s440_left[@js "left"] | `L_s658_right[@js "right"] | `L_s813_user[@js "user"]] [@js.enum])
@@ -30485,9 +30839,10 @@ module[@js.scope "VTTRegion"] VTTRegion : sig
   val set_viewportAnchorY: 'tags this -> float -> unit [@@js.set "viewportAnchorY"]
   val get_width: 'tags this -> float [@@js.get "width"]
   val set_width: 'tags this -> float -> unit [@@js.set "width"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: id:string -> lines:float -> regionAnchorX:float -> regionAnchorY:float -> scroll:ScrollSetting.t -> viewportAnchorX:float -> viewportAnchorY:float -> width:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module PositionAlignSetting : sig
   type t = ([`L_s141_auto[@js "auto"] | `L_s185_center[@js "center"] | `L_s447_line_left[@js "line-left"] | `L_s448_line_right[@js "line-right"]] [@js.enum])
@@ -30614,7 +30969,7 @@ module[@js.scope "VTTCue"] VTTCue : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: startTime:float -> endTime:float -> text:string -> t [@@js.create]
 end
@@ -30643,7 +30998,7 @@ module[@js.scope "TransformStreamDefaultController"] TransformStreamDefaultContr
   val enqueue: ('tags, 'O) this -> ?chunk:'O -> unit -> unit [@@js.call "enqueue"]
   val error: ('tags, 'O) this -> ?reason:any -> unit -> unit [@@js.call "error"]
   val terminate: ('tags, 'O) this -> unit [@@js.call "terminate"]
-  val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'O) this -> 'O t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: unit -> t_0 [@@js.create]
 end
@@ -30664,7 +31019,7 @@ module TransformerTransformCallback : sig
   val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
   val apply: ('tags, 'I, 'O) this -> chunk:'I -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
-  val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'I, 'O) this -> ('I, 'O) t [@@js.custom let cast_from = Obj.magic]
 end
 module TransformerStartCallback : sig
   type 'O t = [`TransformerStartCallback of 'O] intf [@@js.custom { of_js=(fun _O -> Obj.magic); to_js=(fun _O -> Obj.magic) }]
@@ -30683,7 +31038,7 @@ module TransformerStartCallback : sig
   val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
   val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> any [@@js.apply]
-  val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'O) this -> 'O t [@@js.custom let cast_from = Obj.magic]
 end
 module TransformerFlushCallback : sig
   type 'O t = [`TransformerFlushCallback of 'O] intf [@@js.custom { of_js=(fun _O -> Obj.magic); to_js=(fun _O -> Obj.magic) }]
@@ -30702,7 +31057,7 @@ module TransformerFlushCallback : sig
   val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
   val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
-  val cast_from: (('tags, 'O) this -> 'O t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: ('tags, 'O) this -> 'O t [@@js.custom let cast_from = Obj.magic]
 end
 module Transformer : sig
   type ('I, 'O) t = [`Transformer of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
@@ -30740,7 +31095,8 @@ module Transformer : sig
   val set_transform: ('tags, 'I, 'O) this -> ('I, 'O) TransformerTransformCallback.t -> unit [@@js.set "transform"]
   val get_writableType: ('tags, 'I, 'O) this -> never or_undefined [@@js.get "writableType"]
   val set_writableType: ('tags, 'I, 'O) this -> never or_undefined -> unit [@@js.set "writableType"]
-  val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
+  val create: flush:'O TransformerFlushCallback.t -> ?readableType:never -> start:'O TransformerStartCallback.t -> transform:('I, 'O) TransformerTransformCallback.t -> ?writableType:never -> unit -> ('I, 'O) t [@@js.builder]
+  val cast_from: ('tags, 'I, 'O) this -> ('I, 'O) t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "TransformStream"] TransformStream : sig
   type ('I, 'O) t = [`TransformStream of ('I * 'O)] intf [@@js.custom { of_js=(fun _I _O -> Obj.magic); to_js=(fun _I _O -> Obj.magic) }]
@@ -30770,9 +31126,10 @@ module[@js.scope "TransformStream"] TransformStream : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_readable: ('tags, 'I, 'O) this -> 'O ReadableStream.t [@@js.get "readable"]
   val get_writable: ('tags, 'I, 'O) this -> 'I WritableStream.t [@@js.get "writable"]
-  val cast_from: (('tags, 'I, 'O) this -> ('I, 'O) t) [@@js.custom let cast_from = Obj.magic]
+  val create: readable:'O ReadableStream.t -> writable:'I WritableStream.t -> unit -> ('I, 'O) t [@@js.builder]
+  val cast_from: ('tags, 'I, 'O) this -> ('I, 'O) t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
-  val create: ?transformer:('I, 'O) Transformer.t -> ?writableStrategy:'I QueuingStrategy.t -> ?readableStrategy:'O QueuingStrategy.t -> unit -> ('I, 'O) t [@@js.create]
+  val create': ?transformer:('I, 'O) Transformer.t -> ?writableStrategy:'I QueuingStrategy.t -> ?readableStrategy:'O QueuingStrategy.t -> unit -> ('I, 'O) t [@@js.create]
 end
 module TextTrackListEventMap : sig
   type t = [`TextTrackListEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30796,7 +31153,8 @@ module TextTrackListEventMap : sig
   val set_change: 'tags this -> Event.t -> unit [@@js.set "change"]
   val get_removetrack: 'tags this -> TrackEvent.t [@@js.get "removetrack"]
   val set_removetrack: 'tags this -> TrackEvent.t -> unit [@@js.set "removetrack"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: addtrack:TrackEvent.t -> change:Event.t -> removetrack:TrackEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module TextTrackEventMap : sig
   type t = [`TextTrackEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30816,7 +31174,8 @@ module TextTrackEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_cuechange: 'tags this -> Event.t [@@js.get "cuechange"]
   val set_cuechange: 'tags this -> Event.t -> unit [@@js.set "cuechange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: cuechange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module TextTrackCueEventMap : sig
   type t = [`TextTrackCueEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30838,7 +31197,8 @@ module TextTrackCueEventMap : sig
   val set_enter: 'tags this -> Event.t -> unit [@@js.set "enter"]
   val get_exit: 'tags this -> Event.t [@@js.get "exit"]
   val set_exit: 'tags this -> Event.t -> unit [@@js.set "exit"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: enter:Event.t -> exit:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module TextEncoderCommon : sig
   type t = [`TextEncoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30859,7 +31219,8 @@ module TextEncoderCommon : sig
   
   (** Returns "utf-8". *)
   val get_encoding: 'tags this -> string [@@js.get "encoding"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: encoding:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module GenericTransformStream : sig
   type t = [`GenericTransformStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30879,7 +31240,8 @@ module GenericTransformStream : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_readable: 'tags this -> ReadableStream.t_0 [@@js.get "readable"]
   val get_writable: 'tags this -> WritableStream.t_0 [@@js.get "writable"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: readable:ReadableStream.t_0 -> writable:WritableStream.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "TextEncoderStream"] TextEncoderStream : sig
   type t = [`GenericTransformStream | `TextEncoderCommon | `TextEncoderStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30899,9 +31261,10 @@ module[@js.scope "TextEncoderStream"] TextEncoderStream : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_readable: 'tags this -> Uint8Array.t_0 ReadableStream.t [@@js.get "readable"]
   val get_writable: 'tags this -> string WritableStream.t [@@js.get "writable"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: readable:Uint8Array.t_0 ReadableStream.t -> writable:string WritableStream.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module TextEncoderEncodeIntoResult : sig
   type t = [`TextEncoderEncodeIntoResult] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -30923,7 +31286,8 @@ module TextEncoderEncodeIntoResult : sig
   val set_read: 'tags this -> float -> unit [@@js.set "read"]
   val get_written: 'tags this -> float [@@js.get "written"]
   val set_written: 'tags this -> float -> unit [@@js.set "written"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: read:float -> written:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** TextEncoder takes a stream of code points as input and emits a stream of bytes. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
@@ -30949,7 +31313,7 @@ module[@js.scope "TextEncoder"] TextEncoder : sig
   
   (** Runs the UTF-8 encoder on source, stores the result of that operation into destination, and returns the progress made as an object wherein read is the number of converted code units of source and written is the number of bytes modified in destination. *)
   val encodeInto: 'tags this -> source:string -> destination:Uint8Array.t_0 -> TextEncoderEncodeIntoResult.t [@@js.call "encodeInto"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -30973,7 +31337,8 @@ module TextDecoderOptions : sig
   val set_fatal: 'tags this -> bool -> unit [@@js.set "fatal"]
   val get_ignoreBOM: 'tags this -> bool [@@js.get "ignoreBOM"]
   val set_ignoreBOM: 'tags this -> bool -> unit [@@js.set "ignoreBOM"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: fatal:bool -> ignoreBOM:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module TextDecoderCommon : sig
   type t = [`TextDecoderCommon] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31000,7 +31365,8 @@ module TextDecoderCommon : sig
   
   (** Returns the value of ignore BOM. *)
   val get_ignoreBOM: 'tags this -> bool [@@js.get "ignoreBOM"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: encoding:string -> fatal:bool -> ignoreBOM:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "TextDecoderStream"] TextDecoderStream : sig
   type t = [`GenericTransformStream | `TextDecoderCommon | `TextDecoderStream] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31020,9 +31386,10 @@ module[@js.scope "TextDecoderStream"] TextDecoderStream : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_readable: 'tags this -> string ReadableStream.t [@@js.get "readable"]
   val get_writable: 'tags this -> BufferSource.t WritableStream.t [@@js.get "writable"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: readable:string ReadableStream.t -> writable:BufferSource.t WritableStream.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
+  val create': ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
 end
 module TextDecodeOptions : sig
   type t = [`TextDecodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31042,7 +31409,8 @@ module TextDecodeOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_stream: 'tags this -> bool [@@js.get "stream"]
   val set_stream: 'tags this -> bool -> unit [@@js.set "stream"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: stream:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. *)
@@ -31077,7 +31445,7 @@ module[@js.scope "TextDecoder"] TextDecoder : sig
     If the error mode is "fatal" and encoding's decoder returns error, throws a TypeError.
   *)
   val decode: 'tags this -> ?input:BufferSource.t -> ?options:TextDecodeOptions.t -> unit -> string [@@js.call "decode"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?label:string -> ?options:TextDecoderOptions.t -> unit -> t [@@js.create]
 end
@@ -31102,7 +31470,7 @@ module StyleMedia : sig
   val get_type: 'tags this -> string [@@js.get "type"]
   val set_type: 'tags this -> string -> unit [@@js.set "type"]
   val matchMedium: 'tags this -> mediaquery:string -> bool [@@js.call "matchMedium"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module SpeechSynthesisUtteranceEventMap : sig
   type t = [`SpeechSynthesisUtteranceEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31134,7 +31502,8 @@ module SpeechSynthesisUtteranceEventMap : sig
   val set_resume: 'tags this -> SpeechSynthesisEvent.t -> unit [@@js.set "resume"]
   val get_start: 'tags this -> SpeechSynthesisEvent.t [@@js.get "start"]
   val set_start: 'tags this -> SpeechSynthesisEvent.t -> unit [@@js.set "start"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: boundary:SpeechSynthesisEvent.t -> end_:(SpeechSynthesisEvent.t[@js "end"]) -> error:SpeechSynthesisErrorEvent.t -> mark:SpeechSynthesisEvent.t -> pause:SpeechSynthesisEvent.t -> resume:SpeechSynthesisEvent.t -> start:SpeechSynthesisEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module SpeechSynthesisEventMap : sig
   type t = [`SpeechSynthesisEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31154,7 +31523,8 @@ module SpeechSynthesisEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_voiceschanged: 'tags this -> Event.t [@@js.get "voiceschanged"]
   val set_voiceschanged: 'tags this -> Event.t -> unit [@@js.set "voiceschanged"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: voiceschanged:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "SpeechRecognitionAlternative"] SpeechRecognitionAlternative : sig
   type t = [`SpeechRecognitionAlternative] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31174,9 +31544,10 @@ module[@js.scope "SpeechRecognitionAlternative"] SpeechRecognitionAlternative : 
   val t_0_of_js: Ojs.t -> t_0
   val get_confidence: 'tags this -> float [@@js.get "confidence"]
   val get_transcript: 'tags this -> string [@@js.get "transcript"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: confidence:float -> transcript:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module[@js.scope "SpeechRecognitionResult"] SpeechRecognitionResult : sig
   type t = [`SpeechRecognitionResult | SpeechRecognitionAlternative.t ArrayLike.tags_1 | SpeechRecognitionAlternative.t IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31200,7 +31571,7 @@ module[@js.scope "SpeechRecognitionResult"] SpeechRecognitionResult : sig
   val item: 'tags this -> index:float -> SpeechRecognitionAlternative.t [@@js.call "item"]
   val get: 'tags this -> float -> SpeechRecognitionAlternative.t [@@js.index_get]
   val set: 'tags this -> float -> SpeechRecognitionAlternative.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -31225,7 +31596,7 @@ module[@js.scope "SpeechRecognitionResultList"] SpeechRecognitionResultList : si
   val item: 'tags this -> index:float -> SpeechRecognitionResult.t [@@js.call "item"]
   val get: 'tags this -> float -> SpeechRecognitionResult.t [@@js.index_get]
   val set: 'tags this -> float -> SpeechRecognitionResult.t -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -31249,7 +31620,8 @@ module SourceBufferListEventMap : sig
   val set_addsourcebuffer: 'tags this -> Event.t -> unit [@@js.set "addsourcebuffer"]
   val get_removesourcebuffer: 'tags this -> Event.t [@@js.get "removesourcebuffer"]
   val set_removesourcebuffer: 'tags this -> Event.t -> unit [@@js.set "removesourcebuffer"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: addsourcebuffer:Event.t -> removesourcebuffer:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module SourceBufferEventMap : sig
   type t = [`SourceBufferEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31277,7 +31649,8 @@ module SourceBufferEventMap : sig
   val set_updateend: 'tags this -> Event.t -> unit [@@js.set "updateend"]
   val get_updatestart: 'tags this -> Event.t [@@js.get "updatestart"]
   val set_updatestart: 'tags this -> Event.t -> unit [@@js.set "updatestart"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: abort:Event.t -> error:Event.t -> update:Event.t -> updateend:Event.t -> updatestart:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "SharedWorker"] SharedWorker : sig
   type t = [`AbstractWorker | `EventTarget | `SharedWorker] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31338,7 +31711,7 @@ module[@js.scope "SharedWorker"] SharedWorker : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: scriptURL:URL.t or_string -> ?options:WorkerOptions.t or_string -> unit -> t [@@js.create]
 end
@@ -31360,7 +31733,8 @@ module ServiceWorkerRegistrationEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_updatefound: 'tags this -> Event.t [@@js.get "updatefound"]
   val set_updatefound: 'tags this -> Event.t -> unit [@@js.set "updatefound"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: updatefound:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerEventMap : sig
   type t = [`AbstractWorkerEventMap | `ServiceWorkerEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31380,7 +31754,8 @@ module ServiceWorkerEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_statechange: 'tags this -> Event.t [@@js.get "statechange"]
   val set_statechange: 'tags this -> Event.t -> unit [@@js.set "statechange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: statechange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerContainerEventMap : sig
   type t = [`ServiceWorkerContainerEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31404,7 +31779,8 @@ module ServiceWorkerContainerEventMap : sig
   val set_message: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "message"]
   val get_messageerror: 'tags this -> MessageEvent.t_0 [@@js.get "messageerror"]
   val set_messageerror: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "messageerror"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: controllerchange:Event.t -> message:MessageEvent.t_0 -> messageerror:MessageEvent.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ScriptProcessorNodeEventMap : sig
   type t = [`ScriptProcessorNodeEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31424,7 +31800,8 @@ module ScriptProcessorNodeEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_audioprocess: 'tags this -> AudioProcessingEvent.t [@@js.get "audioprocess"]
   val set_audioprocess: 'tags this -> AudioProcessingEvent.t -> unit [@@js.set "audioprocess"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: audioprocess:AudioProcessingEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ScreenOrientationEventMap : sig
   type t = [`ScreenOrientationEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31444,7 +31821,8 @@ module ScreenOrientationEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_change: 'tags this -> Event.t [@@js.get "change"]
   val set_change: 'tags this -> Event.t -> unit [@@js.set "change"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: change:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A commonly used set of constants used for reflecting gradientUnits, patternContentUnits and other similar attributes. *)
@@ -31467,9 +31845,10 @@ module[@js.scope "SVGUnitTypes"] SVGUnitTypes : sig
   val get_SVG_UNIT_TYPE_OBJECTBOUNDINGBOX: 'tags this -> float [@@js.get "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX"]
   val get_SVG_UNIT_TYPE_UNKNOWN: 'tags this -> float [@@js.get "SVG_UNIT_TYPE_UNKNOWN"]
   val get_SVG_UNIT_TYPE_USERSPACEONUSE: 'tags this -> float [@@js.get "SVG_UNIT_TYPE_USERSPACEONUSE"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: svg_unit_type_objectboundingbox:(float[@js "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX"]) -> svg_unit_type_unknown:(float[@js "SVG_UNIT_TYPE_UNKNOWN"]) -> svg_unit_type_userspaceonuse:(float[@js "SVG_UNIT_TYPE_USERSPACEONUSE"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
   val svg_unit_type_objectboundingbox: unit -> float [@@js.get "SVG_UNIT_TYPE_OBJECTBOUNDINGBOX"]
   val svg_unit_type_unknown: unit -> float [@@js.get "SVG_UNIT_TYPE_UNKNOWN"]
   val svg_unit_type_userspaceonuse: unit -> float [@@js.get "SVG_UNIT_TYPE_USERSPACEONUSE"]
@@ -31494,7 +31873,8 @@ module ElementEventMap : sig
   val set_fullscreenchange: 'tags this -> Event.t -> unit [@@js.set "fullscreenchange"]
   val get_fullscreenerror: 'tags this -> Event.t [@@js.get "fullscreenerror"]
   val set_fullscreenerror: 'tags this -> Event.t -> unit [@@js.set "fullscreenerror"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: fullscreenchange:Event.t -> fullscreenerror:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DocumentAndElementEventHandlersEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31518,7 +31898,8 @@ module DocumentAndElementEventHandlersEventMap : sig
   val set_cut: 'tags this -> ClipboardEvent.t -> unit [@@js.set "cut"]
   val get_paste: 'tags this -> ClipboardEvent.t [@@js.get "paste"]
   val set_paste: 'tags this -> ClipboardEvent.t -> unit [@@js.set "paste"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: copy:ClipboardEvent.t -> cut:ClipboardEvent.t -> paste:ClipboardEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module SVGElementEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `SVGElementEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31536,7 +31917,7 @@ module SVGElementEventMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module SVGSVGElementEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `SVGElementEventMap | `SVGSVGElementEventMap | `WindowEventHandlersEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31554,7 +31935,7 @@ module SVGSVGElementEventMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "SVGRect"] SVGRect : sig
   type t = DOMRect.t
@@ -31611,7 +31992,8 @@ module RsaKeyAlgorithm : sig
   val set_modulusLength: 'tags this -> float -> unit [@@js.set "modulusLength"]
   val get_publicExponent: 'tags this -> BigInteger.t [@@js.get "publicExponent"]
   val set_publicExponent: 'tags this -> BigInteger.t -> unit [@@js.set "publicExponent"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: modulusLength:float -> publicExponent:BigInteger.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RsaHashedKeyAlgorithm : sig
   type t = [`KeyAlgorithm | `RsaHashedKeyAlgorithm | `RsaKeyAlgorithm] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31631,7 +32013,8 @@ module RsaHashedKeyAlgorithm : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_hash: 'tags this -> KeyAlgorithm.t [@@js.get "hash"]
   val set_hash: 'tags this -> KeyAlgorithm.t -> unit [@@js.set "hash"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hash:KeyAlgorithm.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ResizeObserverBoxOptions : sig
   type t = ([`L_s167_border_box[@js "border-box"] | `L_s216_content_box[@js "content-box"] | `L_s246_device_pixel_content_box[@js "device-pixel-content-box"]] [@js.enum])
@@ -31659,7 +32042,8 @@ module ResizeObserverOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_box: 'tags this -> ResizeObserverBoxOptions.t [@@js.get "box"]
   val set_box: 'tags this -> ResizeObserverBoxOptions.t -> unit [@@js.set "box"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: box:ResizeObserverBoxOptions.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "ResizeObserverSize"] ResizeObserverSize : sig
   type t = [`ResizeObserverSize] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31679,9 +32063,10 @@ module[@js.scope "ResizeObserverSize"] ResizeObserverSize : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_blockSize: 'tags this -> float [@@js.get "blockSize"]
   val get_inlineSize: 'tags this -> float [@@js.get "inlineSize"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: blockSize:float -> inlineSize:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module[@js.scope "ResizeObserverEntry"] ResizeObserverEntry : sig
   type t = [`ResizeObserverEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31703,9 +32088,10 @@ module[@js.scope "ResizeObserverEntry"] ResizeObserverEntry : sig
   val get_contentBoxSize: 'tags this -> ResizeObserverSize.t list [@@js.get "contentBoxSize"]
   val get_contentRect: 'tags this -> DOMRectReadOnly.t [@@js.get "contentRect"]
   val get_target: 'tags this -> Element.t [@@js.get "target"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: borderBoxSize:ResizeObserverSize.t list -> contentBoxSize:ResizeObserverSize.t list -> contentRect:DOMRectReadOnly.t -> target:Element.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module[@js.scope "ResizeObserver"] rec ResizeObserver : sig
   type t = [`ResizeObserver] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31726,7 +32112,7 @@ module[@js.scope "ResizeObserver"] rec ResizeObserver : sig
   val disconnect: 'tags this -> unit [@@js.call "disconnect"]
   val observe: 'tags this -> target:Element.t -> ?options:ResizeObserverOptions.t -> unit -> unit [@@js.call "observe"]
   val unobserve: 'tags this -> target:Element.t -> unit [@@js.call "unobserve"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ResizeObserverCallback.t -> t [@@js.create]
 end
@@ -31747,7 +32133,7 @@ and ResizeObserverCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> entries:ResizeObserverEntry.t list -> observer:ResizeObserver.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RemotePlaybackEventMap : sig
   type t = [`RemotePlaybackEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31771,7 +32157,8 @@ module RemotePlaybackEventMap : sig
   val set_connecting: 'tags this -> Event.t -> unit [@@js.set "connecting"]
   val get_disconnect: 'tags this -> Event.t [@@js.get "disconnect"]
   val set_disconnect: 'tags this -> Event.t -> unit [@@js.set "disconnect"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: connect:Event.t -> connecting:Event.t -> disconnect:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ReadableStreamReader : sig
   type 'T t = 'T ReadableStreamDefaultReader.t
@@ -31811,7 +32198,8 @@ module RTCStats : sig
   val set_timestamp: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "timestamp"]
   val get_type: 'tags this -> RTCStatsType.t [@@js.get "type"]
   val set_type: 'tags this -> RTCStatsType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: id:string -> timestamp:DOMHighResTimeStamp.t -> type_:(RTCStatsType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCTransportStats : sig
   type t = [`RTCStats | `RTCTransportStats] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31849,7 +32237,8 @@ module RTCTransportStats : sig
   val set_srtpCipher: 'tags this -> string -> unit [@@js.set "srtpCipher"]
   val get_tlsVersion: 'tags this -> string [@@js.get "tlsVersion"]
   val set_tlsVersion: 'tags this -> string -> unit [@@js.set "tlsVersion"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: bytesReceived:float -> bytesSent:float -> dtlsCipher:string -> dtlsState:RTCDtlsTransportState.t -> localCertificateId:string -> remoteCertificateId:string -> rtcpTransportStatsId:string -> selectedCandidatePairId:string -> srtpCipher:string -> tlsVersion:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCPeerConnectionEventMap : sig
   type t = [`RTCPeerConnectionEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31885,7 +32274,8 @@ module RTCPeerConnectionEventMap : sig
   val set_signalingstatechange: 'tags this -> Event.t -> unit [@@js.set "signalingstatechange"]
   val get_track: 'tags this -> RTCTrackEvent.t [@@js.get "track"]
   val set_track: 'tags this -> RTCTrackEvent.t -> unit [@@js.set "track"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: connectionstatechange:Event.t -> datachannel:RTCDataChannelEvent.t -> icecandidate:RTCPeerConnectionIceEvent.t -> icecandidateerror:Event.t -> iceconnectionstatechange:Event.t -> icegatheringstatechange:Event.t -> negotiationneeded:Event.t -> signalingstatechange:Event.t -> track:RTCTrackEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCSignalingState : sig
   type t = ([`L_s199_closed[@js "closed"] | `L_s372_have_local_offer[@js "have-local-offer"] | `L_s373_have_local_pranswer[@js "have-local-pranswer"] | `L_s374_have_remote_offer[@js "have-remote-offer"] | `L_s375_have_remote_pranswer[@js "have-remote-pranswer"] | `L_s720_stable[@js "stable"]] [@js.enum])
@@ -31923,7 +32313,8 @@ module RTCSessionDescriptionInit : sig
   val set_sdp: 'tags this -> string -> unit [@@js.set "sdp"]
   val get_type: 'tags this -> RTCSdpType.t [@@js.get "type"]
   val set_type: 'tags this -> RTCSdpType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: sdp:string -> type_:(RTCSdpType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCSessionDescriptionCallback : sig
   type t = [`RTCSessionDescriptionCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -31942,7 +32333,7 @@ module RTCSessionDescriptionCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> description:RTCSessionDescriptionInit.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** One end of a connection—or potential connection—and how it's configured. Each RTCSessionDescription consists of a description type indicating which part of the offer/answer negotiation process it describes and of the SDP descriptor of the session. *)
@@ -31965,7 +32356,7 @@ module[@js.scope "RTCSessionDescription"] RTCSessionDescription : sig
   val get_sdp: 'tags this -> string [@@js.get "sdp"]
   val get_type: 'tags this -> RTCSdpType.t [@@js.get "type"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: RTCSessionDescriptionInit.t -> t [@@js.create]
 end
@@ -31991,7 +32382,8 @@ module RTCRtpTransceiverInit : sig
   val set_sendEncodings: 'tags this -> RTCRtpEncodingParameters.t list -> unit [@@js.set "sendEncodings"]
   val get_streams: 'tags this -> MediaStream.t list [@@js.get "streams"]
   val set_streams: 'tags this -> MediaStream.t list -> unit [@@js.set "streams"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: direction:RTCRtpTransceiverDirection.t -> sendEncodings:RTCRtpEncodingParameters.t list -> streams:MediaStream.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCPeerConnectionState : sig
   type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
@@ -32018,7 +32410,7 @@ module RTCPeerConnectionErrorCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> error:DOMException.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCOfferAnswerOptions : sig
   type t = [`RTCOfferAnswerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32036,7 +32428,7 @@ module RTCOfferAnswerOptions : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCOfferOptions : sig
   type t = [`RTCOfferAnswerOptions | `RTCOfferOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32060,7 +32452,8 @@ module RTCOfferOptions : sig
   val set_offerToReceiveAudio: 'tags this -> bool -> unit [@@js.set "offerToReceiveAudio"]
   val get_offerToReceiveVideo: 'tags this -> bool [@@js.get "offerToReceiveVideo"]
   val set_offerToReceiveVideo: 'tags this -> bool -> unit [@@js.set "offerToReceiveVideo"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: iceRestart:bool -> offerToReceiveAudio:bool -> offerToReceiveVideo:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCLocalSessionDescriptionInit : sig
   type t = [`RTCLocalSessionDescriptionInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32082,7 +32475,8 @@ module RTCLocalSessionDescriptionInit : sig
   val set_sdp: 'tags this -> string -> unit [@@js.set "sdp"]
   val get_type: 'tags this -> RTCSdpType.t [@@js.get "type"]
   val set_type: 'tags this -> RTCSdpType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: sdp:string -> type_:(RTCSdpType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCIceGatheringState : sig
   type t = ([`L_s206_complete[@js "complete"] | `L_s356_gathering[@js "gathering"] | `L_s518_new[@js "new"]] [@js.enum])
@@ -32128,7 +32522,8 @@ module RTCDataChannelInit : sig
   val set_ordered: 'tags this -> bool -> unit [@@js.set "ordered"]
   val get_protocol: 'tags this -> string [@@js.get "protocol"]
   val set_protocol: 'tags this -> string -> unit [@@js.set "protocol"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: id:float -> maxPacketLifeTime:float -> maxRetransmits:float -> negotiated:bool -> ordered:bool -> protocol:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtcpMuxPolicy : sig
   type t = ([`L_s650_require[@js "require"]] [@js.enum])
@@ -32178,7 +32573,8 @@ module RTCIceServer : sig
   val set_urls: 'tags this -> string list or_string -> unit [@@js.set "urls"]
   val get_username: 'tags this -> string [@@js.get "username"]
   val set_username: 'tags this -> string -> unit [@@js.set "username"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: credential:string -> credentialType:RTCIceCredentialType.t -> urls:string list or_string -> username:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDtlsFingerprint : sig
   type t = [`RTCDtlsFingerprint] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32200,7 +32596,8 @@ module RTCDtlsFingerprint : sig
   val set_algorithm: 'tags this -> string -> unit [@@js.set "algorithm"]
   val get_value: 'tags this -> string [@@js.get "value"]
   val set_value: 'tags this -> string -> unit [@@js.set "value"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: algorithm:string -> value:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "RTCCertificate"] RTCCertificate : sig
   type t = [`RTCCertificate] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32220,7 +32617,7 @@ module[@js.scope "RTCCertificate"] RTCCertificate : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_expires: 'tags this -> DOMTimeStamp.t [@@js.get "expires"]
   val getFingerprints: 'tags this -> RTCDtlsFingerprint.t list [@@js.call "getFingerprints"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -32260,7 +32657,8 @@ module RTCConfiguration : sig
   val set_iceTransportPolicy: 'tags this -> RTCIceTransportPolicy.t -> unit [@@js.set "iceTransportPolicy"]
   val get_rtcpMuxPolicy: 'tags this -> RTCRtcpMuxPolicy.t [@@js.get "rtcpMuxPolicy"]
   val set_rtcpMuxPolicy: 'tags this -> RTCRtcpMuxPolicy.t -> unit [@@js.set "rtcpMuxPolicy"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: bundlePolicy:RTCBundlePolicy.t -> certificates:RTCCertificate.t list -> iceCandidatePoolSize:float -> iceServers:RTCIceServer.t list -> iceTransportPolicy:RTCIceTransportPolicy.t -> rtcpMuxPolicy:RTCRtcpMuxPolicy.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCAnswerOptions : sig
   type t = [`RTCAnswerOptions | `RTCOfferAnswerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32278,7 +32676,7 @@ module RTCAnswerOptions : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A WebRTC connection between the local computer and a remote peer. It provides methods to connect to a remote peer, maintain and monitor the connection, and close the connection once it's no longer needed. *)
@@ -32399,7 +32797,7 @@ module[@js.scope "RTCPeerConnection"] RTCPeerConnection : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?configuration:RTCConfiguration.t -> unit -> t [@@js.create]
   val generateCertificate: AlgorithmIdentifier.t -> RTCCertificate.t Promise.t_1 [@@js.global "generateCertificate"]
@@ -32428,7 +32826,8 @@ module RTCRtpStreamStats : sig
   val set_ssrc: 'tags this -> float -> unit [@@js.set "ssrc"]
   val get_transportId: 'tags this -> string [@@js.get "transportId"]
   val set_transportId: 'tags this -> string -> unit [@@js.set "transportId"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: codecId:string -> kind:string -> ssrc:float -> transportId:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCSentRtpStreamStats : sig
   type t = [`RTCRtpStreamStats | `RTCSentRtpStreamStats | `RTCStats] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32450,7 +32849,8 @@ module RTCSentRtpStreamStats : sig
   val set_bytesSent: 'tags this -> float -> unit [@@js.set "bytesSent"]
   val get_packetsSent: 'tags this -> float [@@js.get "packetsSent"]
   val set_packetsSent: 'tags this -> float -> unit [@@js.set "packetsSent"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: bytesSent:float -> packetsSent:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCOutboundRtpStreamStats : sig
   type t = [`RTCOutboundRtpStreamStats | `RTCRtpStreamStats | `RTCSentRtpStreamStats | `RTCStats] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32480,7 +32880,8 @@ module RTCOutboundRtpStreamStats : sig
   val set_qpSum: 'tags this -> float -> unit [@@js.set "qpSum"]
   val get_remoteId: 'tags this -> string [@@js.get "remoteId"]
   val set_remoteId: 'tags this -> string -> unit [@@js.set "remoteId"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: firCount:float -> framesEncoded:float -> nackCount:float -> pliCount:float -> qpSum:float -> remoteId:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCReceivedRtpStreamStats : sig
   type t = [`RTCReceivedRtpStreamStats | `RTCRtpStreamStats | `RTCStats] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32506,7 +32907,8 @@ module RTCReceivedRtpStreamStats : sig
   val set_packetsLost: 'tags this -> float -> unit [@@js.set "packetsLost"]
   val get_packetsReceived: 'tags this -> float [@@js.get "packetsReceived"]
   val set_packetsReceived: 'tags this -> float -> unit [@@js.set "packetsReceived"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: jitter:float -> packetsDiscarded:float -> packetsLost:float -> packetsReceived:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCInboundRtpStreamStats : sig
   type t = [`RTCInboundRtpStreamStats | `RTCReceivedRtpStreamStats | `RTCRtpStreamStats | `RTCStats] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32536,7 +32938,8 @@ module RTCInboundRtpStreamStats : sig
   val set_qpSum: 'tags this -> float -> unit [@@js.set "qpSum"]
   val get_remoteId: 'tags this -> string [@@js.get "remoteId"]
   val set_remoteId: 'tags this -> string -> unit [@@js.set "remoteId"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: firCount:float -> framesDecoded:float -> nackCount:float -> pliCount:float -> qpSum:float -> remoteId:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCIceTransportState : sig
   type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
@@ -32574,9 +32977,10 @@ module[@js.scope "RTCIceTransport"] RTCIceTransport : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_gatheringState: 'tags this -> RTCIceGathererState.t [@@js.get "gatheringState"]
   val get_state: 'tags this -> RTCIceTransportState.t [@@js.get "state"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: gatheringState:RTCIceGathererState.t -> state:RTCIceTransportState.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module RTCStatsIceCandidatePairState : sig
   type t = ([`L_s301_failed[@js "failed"] | `L_s349_frozen[@js "frozen"] | `L_s405_in_progress[@js "in-progress"] | `L_s413_inprogress[@js "inprogress"] | `L_s737_succeeded[@js "succeeded"] | `L_s827_waiting[@js "waiting"]] [@js.enum])
@@ -32632,7 +33036,8 @@ module RTCIceCandidatePairStats : sig
   val set_totalRoundTripTime: 'tags this -> float -> unit [@@js.set "totalRoundTripTime"]
   val get_transportId: 'tags this -> string [@@js.get "transportId"]
   val set_transportId: 'tags this -> string -> unit [@@js.set "transportId"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: availableIncomingBitrate:float -> availableOutgoingBitrate:float -> bytesReceived:float -> bytesSent:float -> currentRoundTripTime:float -> localCandidateId:string -> nominated:bool -> remoteCandidateId:string -> requestsReceived:float -> requestsSent:float -> responsesReceived:float -> responsesSent:float -> state:RTCStatsIceCandidatePairState.t -> totalRoundTripTime:float -> transportId:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDtlsTransportEventMap : sig
   type t = [`RTCDtlsTransportEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32652,7 +33057,8 @@ module RTCDtlsTransportEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_statechange: 'tags this -> Event.t [@@js.get "statechange"]
   val set_statechange: 'tags this -> Event.t -> unit [@@js.set "statechange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: statechange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDataChannelEventMap : sig
   type t = [`RTCDataChannelEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32680,7 +33086,8 @@ module RTCDataChannelEventMap : sig
   val set_message: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "message"]
   val get_open: 'tags this -> Event.t [@@js.get "open"]
   val set_open: 'tags this -> Event.t -> unit [@@js.set "open"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: bufferedamountlow:Event.t -> close:Event.t -> error:Event.t -> message:MessageEvent.t_0 -> open_:(Event.t[@js "open"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDTMFSenderEventMap : sig
   type t = [`RTCDTMFSenderEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32700,7 +33107,8 @@ module RTCDTMFSenderEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_tonechange: 'tags this -> RTCDTMFToneChangeEvent.t [@@js.get "tonechange"]
   val set_tonechange: 'tags this -> RTCDTMFToneChangeEvent.t -> unit [@@js.set "tonechange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: tonechange:RTCDTMFToneChangeEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCCertificateExpiration : sig
   type t = [`RTCCertificateExpiration] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32720,7 +33128,8 @@ module RTCCertificateExpiration : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_expires: 'tags this -> DOMTimeStamp.t [@@js.get "expires"]
   val set_expires: 'tags this -> DOMTimeStamp.t -> unit [@@js.set "expires"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: expires:DOMTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Available only in secure contexts. *)
@@ -32741,9 +33150,10 @@ module[@js.scope "AuthenticatorResponse"] AuthenticatorResponse : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_clientDataJSON: 'tags this -> ArrayBuffer.t_0 [@@js.get "clientDataJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: clientDataJSON:ArrayBuffer.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module UvmEntry : sig
   type t = float list
@@ -32779,7 +33189,8 @@ module CredentialPropertiesOutput : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_rk: 'tags this -> bool [@@js.get "rk"]
   val set_rk: 'tags this -> bool -> unit [@@js.set "rk"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: rk:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AuthenticationExtensionsClientOutputs : sig
   type t = [`AuthenticationExtensionsClientOutputs] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32803,7 +33214,8 @@ module AuthenticationExtensionsClientOutputs : sig
   val set_credProps: 'tags this -> CredentialPropertiesOutput.t -> unit [@@js.set "credProps"]
   val get_uvm: 'tags this -> UvmEntries.t [@@js.get "uvm"]
   val set_uvm: 'tags this -> UvmEntries.t -> unit [@@js.set "uvm"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: appid:bool -> credProps:CredentialPropertiesOutput.t -> uvm:UvmEntries.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Available only in secure contexts. *)
@@ -32826,7 +33238,7 @@ module[@js.scope "PublicKeyCredential"] PublicKeyCredential : sig
   val get_rawId: 'tags this -> ArrayBuffer.t_0 [@@js.get "rawId"]
   val get_response: 'tags this -> AuthenticatorResponse.t [@@js.get "response"]
   val getClientExtensionResults: 'tags this -> AuthenticationExtensionsClientOutputs.t [@@js.call "getClientExtensionResults"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val isUserVerifyingPlatformAuthenticatorAvailable: unit -> bool Promise.t_1 [@@js.global "isUserVerifyingPlatformAuthenticatorAvailable"]
@@ -32849,7 +33261,8 @@ module PictureInPictureWindowEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_resize: 'tags this -> Event.t [@@js.get "resize"]
   val set_resize: 'tags this -> Event.t -> unit [@@js.set "resize"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: resize:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PermissionStatusEventMap : sig
   type t = [`PermissionStatusEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32869,7 +33282,8 @@ module PermissionStatusEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_change: 'tags this -> Event.t [@@js.get "change"]
   val set_change: 'tags this -> Event.t -> unit [@@js.set "change"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: change:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "PerformancePaintTiming"] PerformancePaintTiming : sig
   type t = [`PerformanceEntry | `PerformancePaintTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32887,7 +33301,7 @@ module[@js.scope "PerformancePaintTiming"] PerformancePaintTiming : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -32913,7 +33327,8 @@ module PerformanceObserverInit : sig
   val set_entryTypes: 'tags this -> string list -> unit [@@js.set "entryTypes"]
   val get_type: 'tags this -> string [@@js.get "type"]
   val set_type: 'tags this -> string -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: buffered:bool -> entryTypes:string list -> type_:(string[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "PerformanceObserverEntryList"] PerformanceObserverEntryList : sig
   type t = [`PerformanceObserverEntryList] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -32934,7 +33349,7 @@ module[@js.scope "PerformanceObserverEntryList"] PerformanceObserverEntryList : 
   val getEntries: 'tags this -> PerformanceEntryList.t [@@js.call "getEntries"]
   val getEntriesByName: 'tags this -> name:string -> ?type_:string -> unit -> PerformanceEntryList.t [@@js.call "getEntriesByName"]
   val getEntriesByType: 'tags this -> type_:string -> PerformanceEntryList.t [@@js.call "getEntriesByType"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -32957,7 +33372,7 @@ module[@js.scope "PerformanceObserver"] rec PerformanceObserver : sig
   val disconnect: 'tags this -> unit [@@js.call "disconnect"]
   val observe: 'tags this -> ?options:PerformanceObserverInit.t -> unit -> unit [@@js.call "observe"]
   val takeRecords: 'tags this -> PerformanceEntryList.t [@@js.call "takeRecords"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: PerformanceObserverCallback.t -> t [@@js.create]
   val supportedEntryTypes: unit -> string list [@@js.get "supportedEntryTypes"]
@@ -32979,7 +33394,7 @@ and PerformanceObserverCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> entries:PerformanceObserverEntryList.t -> observer:PerformanceObserver.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "PerformanceServerTiming"] PerformanceServerTiming : sig
   type t = [`PerformanceServerTiming] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33001,7 +33416,7 @@ module[@js.scope "PerformanceServerTiming"] PerformanceServerTiming : sig
   val get_duration: 'tags this -> DOMHighResTimeStamp.t [@@js.get "duration"]
   val get_name: 'tags this -> string [@@js.get "name"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -33042,7 +33457,7 @@ module[@js.scope "PerformanceResourceTiming"] PerformanceResourceTiming : sig
   val get_transferSize: 'tags this -> float [@@js.get "transferSize"]
   val get_workerStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "workerStart"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -33083,7 +33498,7 @@ module[@js.scope "PerformanceNavigationTiming"] PerformanceNavigationTiming : si
   val get_unloadEventEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "unloadEventEnd"]
   val get_unloadEventStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "unloadEventStart"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -33107,9 +33522,10 @@ module[@js.scope "PerformanceEventTiming"] PerformanceEventTiming : sig
   val get_processingEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "processingEnd"]
   val get_processingStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "processingStart"]
   val get_target: 'tags this -> Node.t or_null [@@js.get "target"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: cancelable:bool -> processingEnd:DOMHighResTimeStamp.t -> processingStart:DOMHighResTimeStamp.t -> ?target:Node.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module PerformanceEventMap : sig
   type t = [`PerformanceEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33129,7 +33545,8 @@ module PerformanceEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_resourcetimingbufferfull: 'tags this -> Event.t [@@js.get "resourcetimingbufferfull"]
   val set_resourcetimingbufferfull: 'tags this -> Event.t -> unit [@@js.set "resourcetimingbufferfull"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: resourcetimingbufferfull:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentRequestEventMap : sig
   type t = [`PaymentRequestEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33149,7 +33566,8 @@ module PaymentRequestEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_paymentmethodchange: 'tags this -> Event.t [@@js.get "paymentmethodchange"]
   val set_paymentmethodchange: 'tags this -> Event.t -> unit [@@js.set "paymentmethodchange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: paymentmethodchange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentValidationErrors : sig
   type t = [`PaymentValidationErrors] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33171,7 +33589,8 @@ module PaymentValidationErrors : sig
   val set_error: 'tags this -> string -> unit [@@js.set "error"]
   val get_paymentMethod: 'tags this -> any [@@js.get "paymentMethod"]
   val set_paymentMethod: 'tags this -> any -> unit [@@js.set "paymentMethod"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: error:string -> paymentMethod:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentComplete : sig
   type t = ([`L_s300_fail[@js "fail"] | `L_s738_success[@js "success"] | `L_s796_unknown[@js "unknown"]] [@js.enum])
@@ -33208,7 +33627,7 @@ module[@js.scope "PaymentResponse"] PaymentResponse : sig
   val complete: 'tags this -> ?result:PaymentComplete.t -> unit -> unit Promise.t_1 [@@js.call "complete"]
   val retry: 'tags this -> ?errorFields:PaymentValidationErrors.t -> unit -> unit Promise.t_1 [@@js.call "retry"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -33232,7 +33651,8 @@ module PaymentMethodData : sig
   val set_data: 'tags this -> any -> unit [@@js.set "data"]
   val get_supportedMethods: 'tags this -> string [@@js.get "supportedMethods"]
   val set_supportedMethods: 'tags this -> string -> unit [@@js.set "supportedMethods"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: data:any -> supportedMethods:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentDetailsInit : sig
   type t = [`PaymentDetailsBase | `PaymentDetailsInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33254,7 +33674,8 @@ module PaymentDetailsInit : sig
   val set_id: 'tags this -> string -> unit [@@js.set "id"]
   val get_total: 'tags this -> PaymentItem.t [@@js.get "total"]
   val set_total: 'tags this -> PaymentItem.t -> unit [@@js.set "total"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: id:string -> total:PaymentItem.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -33323,7 +33744,7 @@ module[@js.scope "PaymentRequest"] PaymentRequest : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: methodData:PaymentMethodData.t list -> details:PaymentDetailsInit.t -> t [@@js.create]
 end
@@ -33344,9 +33765,10 @@ module[@js.scope "OverconstrainedError"] OverconstrainedError : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_constraint: 'tags this -> string [@@js.get "constraint"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: constraint_:(string[@js "constraint"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: constraint_:string -> ?message:string -> unit -> t [@@js.create]
+  val create': constraint_:string -> ?message:string -> unit -> t [@@js.create]
 end
 
 (** <option> elements and inherits all classes and methods of the HTMLElement interface. *)
@@ -33456,7 +33878,7 @@ module[@js.scope "HTMLOptionElement"] HTMLOptionElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -33480,7 +33902,7 @@ module OnBeforeUnloadEventHandlerNonNull : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> event:Event.t -> string or_null [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module OnBeforeUnloadEventHandler : sig
   type t = OnBeforeUnloadEventHandlerNonNull.t or_null
@@ -33508,7 +33930,8 @@ module BaseAudioContextEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_statechange: 'tags this -> Event.t [@@js.get "statechange"]
   val set_statechange: 'tags this -> Event.t -> unit [@@js.set "statechange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: statechange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module OfflineAudioContextEventMap : sig
   type t = [`BaseAudioContextEventMap | `OfflineAudioContextEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33528,7 +33951,8 @@ module OfflineAudioContextEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_complete: 'tags this -> OfflineAudioCompletionEvent.t [@@js.get "complete"]
   val set_complete: 'tags this -> OfflineAudioCompletionEvent.t -> unit [@@js.set "complete"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: complete:OfflineAudioCompletionEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module OfflineAudioContextOptions : sig
   type t = [`OfflineAudioContextOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33552,7 +33976,8 @@ module OfflineAudioContextOptions : sig
   val set_numberOfChannels: 'tags this -> float -> unit [@@js.set "numberOfChannels"]
   val get_sampleRate: 'tags this -> float [@@js.get "sampleRate"]
   val set_sampleRate: 'tags this -> float -> unit [@@js.set "sampleRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: length:float -> numberOfChannels:float -> sampleRate:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module OverSampleType : sig
   type t = ([`L_s2_2x[@js "2x"] | `L_s3_4x[@js "4x"] | `L_s528_none[@js "none"]] [@js.enum])
@@ -33600,7 +34025,8 @@ module AudioNodeOptions : sig
   val set_channelCountMode: 'tags this -> ChannelCountMode.t -> unit [@@js.set "channelCountMode"]
   val get_channelInterpretation: 'tags this -> ChannelInterpretation.t [@@js.get "channelInterpretation"]
   val set_channelInterpretation: 'tags this -> ChannelInterpretation.t -> unit [@@js.set "channelInterpretation"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: channelCount:float -> channelCountMode:ChannelCountMode.t -> channelInterpretation:ChannelInterpretation.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WaveShaperOptions : sig
   type t = [`AudioNodeOptions | `WaveShaperOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33622,7 +34048,8 @@ module WaveShaperOptions : sig
   val set_curve: 'tags this -> (Float32Array.t_0, float) or_array -> unit [@@js.set "curve"]
   val get_oversample: 'tags this -> OverSampleType.t [@@js.get "oversample"]
   val set_oversample: 'tags this -> OverSampleType.t -> unit [@@js.set "oversample"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: curve:(Float32Array.t_0, float) or_array -> oversample:OverSampleType.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module StereoPannerOptions : sig
   type t = [`AudioNodeOptions | `StereoPannerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33642,7 +34069,8 @@ module StereoPannerOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_pan: 'tags this -> float [@@js.get "pan"]
   val set_pan: 'tags this -> float -> unit [@@js.set "pan"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: pan:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PanningModelType : sig
   type t = ([`L_s286_equalpower[@js "equalpower"] | `L_s30_HRTF[@js "HRTF"]] [@js.enum])
@@ -33704,7 +34132,8 @@ module PannerOptions : sig
   val set_refDistance: 'tags this -> float -> unit [@@js.set "refDistance"]
   val get_rolloffFactor: 'tags this -> float [@@js.get "rolloffFactor"]
   val set_rolloffFactor: 'tags this -> float -> unit [@@js.set "rolloffFactor"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: coneInnerAngle:float -> coneOuterAngle:float -> coneOuterGain:float -> distanceModel:DistanceModelType.t -> maxDistance:float -> orientationX:float -> orientationY:float -> orientationZ:float -> panningModel:PanningModelType.t -> positionX:float -> positionY:float -> positionZ:float -> refDistance:float -> rolloffFactor:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PeriodicWaveConstraints : sig
   type t = [`PeriodicWaveConstraints] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33724,7 +34153,8 @@ module PeriodicWaveConstraints : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_disableNormalization: 'tags this -> bool [@@js.get "disableNormalization"]
   val set_disableNormalization: 'tags this -> bool -> unit [@@js.set "disableNormalization"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: disableNormalization:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PeriodicWaveOptions : sig
   type t = [`PeriodicWaveConstraints | `PeriodicWaveOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33746,7 +34176,8 @@ module PeriodicWaveOptions : sig
   val set_imag: 'tags this -> (Float32Array.t_0, float) or_array -> unit [@@js.set "imag"]
   val get_real: 'tags this -> (Float32Array.t_0, float) or_array [@@js.get "real"]
   val set_real: 'tags this -> (Float32Array.t_0, float) or_array -> unit [@@js.set "real"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: imag:(Float32Array.t_0, float) or_array -> real:(Float32Array.t_0, float) or_array -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module OscillatorType : sig
   type t = ([`L_s226_custom[@js "custom"] | `L_s672_sawtooth[@js "sawtooth"] | `L_s700_sine[@js "sine"] | `L_s717_square[@js "square"] | `L_s786_triangle[@js "triangle"]] [@js.enum])
@@ -33776,7 +34207,8 @@ module IIRFilterOptions : sig
   val set_feedback: 'tags this -> float list -> unit [@@js.set "feedback"]
   val get_feedforward: 'tags this -> float list [@@js.get "feedforward"]
   val set_feedforward: 'tags this -> float list -> unit [@@js.set "feedforward"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: feedback:float list -> feedforward:float list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module GainOptions : sig
   type t = [`AudioNodeOptions | `GainOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33796,7 +34228,8 @@ module GainOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_gain: 'tags this -> float [@@js.get "gain"]
   val set_gain: 'tags this -> float -> unit [@@js.set "gain"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: gain:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DynamicsCompressorOptions : sig
   type t = [`AudioNodeOptions | `DynamicsCompressorOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33824,7 +34257,8 @@ module DynamicsCompressorOptions : sig
   val set_release: 'tags this -> float -> unit [@@js.set "release"]
   val get_threshold: 'tags this -> float [@@js.get "threshold"]
   val set_threshold: 'tags this -> float -> unit [@@js.set "threshold"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: attack:float -> knee:float -> ratio:float -> release:float -> threshold:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DelayOptions : sig
   type t = [`AudioNodeOptions | `DelayOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33846,7 +34280,8 @@ module DelayOptions : sig
   val set_delayTime: 'tags this -> float -> unit [@@js.set "delayTime"]
   val get_maxDelayTime: 'tags this -> float [@@js.get "maxDelayTime"]
   val set_maxDelayTime: 'tags this -> float -> unit [@@js.set "maxDelayTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: delayTime:float -> maxDelayTime:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DecodeSuccessCallback : sig
   type t = [`DecodeSuccessCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33865,7 +34300,7 @@ module DecodeSuccessCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> decodedData:AudioBuffer.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DecodeErrorCallback : sig
   type t = [`DecodeErrorCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33884,7 +34319,7 @@ module DecodeErrorCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> error:DOMException.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ConvolverOptions : sig
   type t = [`AudioNodeOptions | `ConvolverOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33906,7 +34341,8 @@ module ConvolverOptions : sig
   val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
   val get_disableNormalization: 'tags this -> bool [@@js.get "disableNormalization"]
   val set_disableNormalization: 'tags this -> bool -> unit [@@js.set "disableNormalization"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?buffer:AudioBuffer.t -> disableNormalization:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ConstantSourceOptions : sig
   type t = [`ConstantSourceOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33926,7 +34362,8 @@ module ConstantSourceOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_offset: 'tags this -> float [@@js.get "offset"]
   val set_offset: 'tags this -> float -> unit [@@js.set "offset"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: offset:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ChannelSplitterOptions : sig
   type t = [`AudioNodeOptions | `ChannelSplitterOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33946,7 +34383,8 @@ module ChannelSplitterOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_numberOfOutputs: 'tags this -> float [@@js.get "numberOfOutputs"]
   val set_numberOfOutputs: 'tags this -> float -> unit [@@js.set "numberOfOutputs"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: numberOfOutputs:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ChannelMergerOptions : sig
   type t = [`AudioNodeOptions | `ChannelMergerOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33966,7 +34404,8 @@ module ChannelMergerOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_numberOfInputs: 'tags this -> float [@@js.get "numberOfInputs"]
   val set_numberOfInputs: 'tags this -> float -> unit [@@js.set "numberOfInputs"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: numberOfInputs:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module BiquadFilterType : sig
   type t = ([`L_s109_allpass[@js "allpass"] | `L_s148_bandpass[@js "bandpass"] | `L_s383_highpass[@js "highpass"] | `L_s384_highshelf[@js "highshelf"] | `L_s468_lowpass[@js "lowpass"] | `L_s469_lowshelf[@js "lowshelf"] | `L_s533_notch[@js "notch"] | `L_s574_peaking[@js "peaking"]] [@js.enum])
@@ -34002,7 +34441,8 @@ module BiquadFilterOptions : sig
   val set_gain: 'tags this -> float -> unit [@@js.set "gain"]
   val get_type: 'tags this -> BiquadFilterType.t [@@js.get "type"]
   val set_type: 'tags this -> BiquadFilterType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: q:(float[@js "Q"]) -> detune:float -> frequency:float -> gain:float -> type_:(BiquadFilterType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WorkletOptions : sig
   type t = [`WorkletOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -34022,7 +34462,8 @@ module WorkletOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_credentials: 'tags this -> RequestCredentials.t [@@js.get "credentials"]
   val set_credentials: 'tags this -> RequestCredentials.t -> unit [@@js.set "credentials"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: credentials:RequestCredentials.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Available only in secure contexts. *)
@@ -34051,7 +34492,7 @@ module[@js.scope "Worklet"] Worklet : sig
     Any failures in fetching the script or its dependencies will cause the returned promise to be rejected with an "AbortError" DOMException. Any errors in parsing the script or its dependencies will cause the returned promise to be rejected with the exception generated during parsing.
   *)
   val addModule: 'tags this -> moduleURL:URL.t or_string -> ?options:WorkletOptions.t -> unit -> unit Promise.t_1 [@@js.call "addModule"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -34073,7 +34514,7 @@ module[@js.scope "AudioWorklet"] AudioWorklet : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -34118,7 +34559,7 @@ module[@js.scope "AudioParam"] AudioParam : sig
   val setTargetAtTime: 'tags this -> target:float -> startTime:float -> timeConstant:float -> t [@@js.call "setTargetAtTime"]
   val setValueAtTime: 'tags this -> value:float -> startTime:float -> t [@@js.call "setValueAtTime"]
   val setValueCurveAtTime': 'tags this -> values:(Float32Array.t_0, float) or_array -> startTime:float -> duration:float -> t [@@js.call "setValueCurveAtTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -34155,7 +34596,7 @@ module[@js.scope "AudioListener"] AudioListener : sig
   
   (** @deprecated  *)
   val setPosition: 'tags this -> x:float -> y:float -> z:float -> unit [@@js.call "setPosition"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -34195,7 +34636,8 @@ module AudioBufferSourceOptions : sig
   val set_loopStart: 'tags this -> float -> unit [@@js.set "loopStart"]
   val get_playbackRate: 'tags this -> float [@@js.get "playbackRate"]
   val set_playbackRate: 'tags this -> float -> unit [@@js.set "playbackRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?buffer:AudioBuffer.t -> detune:float -> loop:bool -> loopEnd:float -> loopStart:float -> playbackRate:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AnalyserOptions : sig
   type t = [`AnalyserOptions | `AudioNodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -34221,7 +34663,8 @@ module AnalyserOptions : sig
   val set_minDecibels: 'tags this -> float -> unit [@@js.set "minDecibels"]
   val get_smoothingTimeConstant: 'tags this -> float [@@js.get "smoothingTimeConstant"]
   val set_smoothingTimeConstant: 'tags this -> float -> unit [@@js.set "smoothingTimeConstant"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: fftSize:float -> maxDecibels:float -> minDecibels:float -> smoothingTimeConstant:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations. *)
@@ -34254,7 +34697,7 @@ module[@js.scope "AnalyserNode"] rec AnalyserNode : sig
   val getByteTimeDomainData: 'tags this -> array:Uint8Array.t_0 -> unit [@@js.call "getByteTimeDomainData"]
   val getFloatFrequencyData: 'tags this -> array:Float32Array.t_0 -> unit [@@js.call "getFloatFrequencyData"]
   val getFloatTimeDomainData: 'tags this -> array:Float32Array.t_0 -> unit [@@js.call "getFloatTimeDomainData"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:AnalyserOptions.t -> unit -> t [@@js.create]
 end
@@ -34327,7 +34770,7 @@ and[@js.scope "AudioBufferSourceNode"] AudioBufferSourceNode : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:AudioBufferSourceOptions.t -> unit -> t [@@js.create]
 end
@@ -34350,9 +34793,10 @@ and[@js.scope "AudioDestinationNode"] AudioDestinationNode : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_maxChannelCount: 'tags this -> float [@@js.get "maxChannelCount"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: maxChannelCount:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** A generic interface for representing an audio processing module. Examples include: *)
@@ -34390,7 +34834,7 @@ and[@js.scope "AudioNode"] AudioNode : sig
   val disconnect'''': 'tags this -> destinationNode:t -> output:float -> input:float -> unit [@@js.call "disconnect"]
   val disconnect''''': 'tags this -> destinationParam:AudioParam.t -> unit [@@js.call "disconnect"]
   val disconnect'''''': 'tags this -> destinationParam:AudioParam.t -> output:float -> unit [@@js.call "disconnect"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -34454,7 +34898,7 @@ and[@js.scope "AudioScheduledSourceNode"] AudioScheduledSourceNode : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -34547,7 +34991,7 @@ and[@js.scope "BaseAudioContext"] BaseAudioContext : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -34576,7 +35020,7 @@ and[@js.scope "BiquadFilterNode"] BiquadFilterNode : sig
   val get_type: 'tags this -> BiquadFilterType.t [@@js.get "type"]
   val set_type: 'tags this -> BiquadFilterType.t -> unit [@@js.set "type"]
   val getFrequencyResponse: 'tags this -> frequencyHz:Float32Array.t_0 -> magResponse:Float32Array.t_0 -> phaseResponse:Float32Array.t_0 -> unit [@@js.call "getFrequencyResponse"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:BiquadFilterOptions.t -> unit -> t [@@js.create]
 end
@@ -34598,7 +35042,7 @@ and[@js.scope "ChannelMergerNode"] ChannelMergerNode : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:ChannelMergerOptions.t -> unit -> t [@@js.create]
 end
@@ -34620,7 +35064,7 @@ and[@js.scope "ChannelSplitterNode"] ChannelSplitterNode : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:ChannelSplitterOptions.t -> unit -> t [@@js.create]
 end
@@ -34681,7 +35125,7 @@ and[@js.scope "ConstantSourceNode"] ConstantSourceNode : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:ConstantSourceOptions.t -> unit -> t [@@js.create]
 end
@@ -34707,9 +35151,10 @@ and[@js.scope "ConvolverNode"] ConvolverNode : sig
   val set_buffer: 'tags this -> AudioBuffer.t or_null -> unit [@@js.set "buffer"]
   val get_normalize: 'tags this -> bool [@@js.get "normalize"]
   val set_normalize: 'tags this -> bool -> unit [@@js.set "normalize"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?buffer:AudioBuffer.t -> normalize:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:ConvolverOptions.t -> unit -> t [@@js.create]
+  val create': context:BaseAudioContext.t -> ?options:ConvolverOptions.t -> unit -> t [@@js.create]
 end
 
 (** A delay-line; an AudioNode audio-processing module that causes a delay between the arrival of an input data and its propagation to the output. *)
@@ -34730,9 +35175,10 @@ and[@js.scope "DelayNode"] DelayNode : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_delayTime: 'tags this -> AudioParam.t [@@js.get "delayTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: delayTime:AudioParam.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:DelayOptions.t -> unit -> t [@@js.create]
+  val create': context:BaseAudioContext.t -> ?options:DelayOptions.t -> unit -> t [@@js.create]
 end
 
 (** Inherits properties from its parent, AudioNode. *)
@@ -34758,9 +35204,10 @@ and[@js.scope "DynamicsCompressorNode"] DynamicsCompressorNode : sig
   val get_reduction: 'tags this -> float [@@js.get "reduction"]
   val get_release: 'tags this -> AudioParam.t [@@js.get "release"]
   val get_threshold: 'tags this -> AudioParam.t [@@js.get "threshold"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: attack:AudioParam.t -> knee:AudioParam.t -> ratio:AudioParam.t -> reduction:float -> release:AudioParam.t -> threshold:AudioParam.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:DynamicsCompressorOptions.t -> unit -> t [@@js.create]
+  val create': context:BaseAudioContext.t -> ?options:DynamicsCompressorOptions.t -> unit -> t [@@js.create]
 end
 
 (** A change in volume. It is an AudioNode audio-processing module that causes a given gain to be applied to the input data before its propagation to the output. A GainNode always has exactly one input and one output, both with the same number of channels. *)
@@ -34781,9 +35228,10 @@ and[@js.scope "GainNode"] GainNode : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_gain: 'tags this -> AudioParam.t [@@js.get "gain"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: gain:AudioParam.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:GainOptions.t -> unit -> t [@@js.create]
+  val create': context:BaseAudioContext.t -> ?options:GainOptions.t -> unit -> t [@@js.create]
 end
 
 (** The IIRFilterNode interface of the Web Audio API is a AudioNode processor which implements a general infinite impulse response (IIR)  filter; this type of filter can be used to implement tone control devices and graphic equalizers as well. It lets the parameters of the filter response be specified, so that it can be tuned as needed. *)
@@ -34804,7 +35252,7 @@ and[@js.scope "IIRFilterNode"] IIRFilterNode : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val getFrequencyResponse: 'tags this -> frequencyHz:Float32Array.t_0 -> magResponse:Float32Array.t_0 -> phaseResponse:Float32Array.t_0 -> unit [@@js.call "getFrequencyResponse"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> options:IIRFilterOptions.t -> t [@@js.create]
 end
@@ -34871,7 +35319,7 @@ and[@js.scope "OscillatorNode"] OscillatorNode : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:OscillatorOptions.t -> unit -> t [@@js.create]
 end
@@ -34899,7 +35347,8 @@ and OscillatorOptions : sig
   val set_periodicWave: 'tags this -> PeriodicWave.t -> unit [@@js.set "periodicWave"]
   val get_type: 'tags this -> OscillatorType.t [@@js.get "type"]
   val set_type: 'tags this -> OscillatorType.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: detune:float -> frequency:float -> periodicWave:PeriodicWave.t -> type_:(OscillatorType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A PannerNode always has exactly one input and one output: the input can be mono or stereo but the output is always stereo (2 channels); you can't have panning effects without at least two audio channels! *)
@@ -34947,7 +35396,7 @@ and[@js.scope "PannerNode"] PannerNode : sig
   
   (** @deprecated  *)
   val setPosition: 'tags this -> x:float -> y:float -> z:float -> unit [@@js.call "setPosition"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:PannerOptions.t -> unit -> t [@@js.create]
 end
@@ -34969,7 +35418,7 @@ and[@js.scope "PeriodicWave"] PeriodicWave : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> ?options:PeriodicWaveOptions.t -> unit -> t [@@js.create]
 end
@@ -35040,7 +35489,7 @@ and[@js.scope "ScriptProcessorNode"] ScriptProcessorNode : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -35063,9 +35512,10 @@ and[@js.scope "StereoPannerNode"] StereoPannerNode : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_pan: 'tags this -> AudioParam.t [@@js.get "pan"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: pan:AudioParam.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:StereoPannerOptions.t -> unit -> t [@@js.create]
+  val create': context:BaseAudioContext.t -> ?options:StereoPannerOptions.t -> unit -> t [@@js.create]
 end
 
 (** A WaveShaperNode always has exactly one input and one output. *)
@@ -35089,9 +35539,10 @@ and[@js.scope "WaveShaperNode"] WaveShaperNode : sig
   val set_curve: 'tags this -> Float32Array.t_0 or_null -> unit [@@js.set "curve"]
   val get_oversample: 'tags this -> OverSampleType.t [@@js.get "oversample"]
   val set_oversample: 'tags this -> OverSampleType.t -> unit [@@js.set "oversample"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?curve:Float32Array.t_0 -> oversample:OverSampleType.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:BaseAudioContext.t -> ?options:WaveShaperOptions.t -> unit -> t [@@js.create]
+  val create': context:BaseAudioContext.t -> ?options:WaveShaperOptions.t -> unit -> t [@@js.create]
 end
 
 (** An AudioContext interface representing an audio-processing graph built from linked together AudioNodes. In contrast with a standard AudioContext, an OfflineAudioContext doesn't render the audio to the device hardware; instead, it generates it, as fast as it can, and outputs the result to an AudioBuffer. *)
@@ -35157,7 +35608,7 @@ module[@js.scope "OfflineAudioContext"] OfflineAudioContext : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: OfflineAudioContextOptions.t -> t [@@js.create]
   val create': numberOfChannels:float -> length:float -> sampleRate:float -> t [@@js.create]
@@ -35178,7 +35629,7 @@ module OES_fbo_render_mipmap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NotificationEventMap : sig
   type t = [`NotificationEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35204,7 +35655,8 @@ module NotificationEventMap : sig
   val set_error: 'tags this -> Event.t -> unit [@@js.set "error"]
   val get_show: 'tags this -> Event.t [@@js.get "show"]
   val set_show: 'tags this -> Event.t -> unit [@@js.set "show"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: click:Event.t -> close:Event.t -> error:Event.t -> show:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MutationRecordType : sig
   type t = ([`L_s132_attributes[@js "attributes"] | `L_s189_characterData[@js "characterData"] | `L_s191_childList[@js "childList"]] [@js.enum])
@@ -35259,9 +35711,10 @@ module[@js.scope "MutationRecord"] MutationRecord : sig
   
   (** Returns "attributes" if it was an attribute mutation. "characterData" if it was a mutation to a CharacterData node. And "childList" if it was a mutation to the tree of nodes. *)
   val get_type: 'tags this -> MutationRecordType.t [@@js.get "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: addedNodes:NodeList.t -> ?attributeName:string -> ?attributeNamespace:string -> ?nextSibling:Node.t -> ?oldValue:string -> ?previousSibling:Node.t -> removedNodes:NodeList.t -> target:Node.t -> type_:(MutationRecordType.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module MutationObserverInit : sig
   type t = [`MutationObserverInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35321,7 +35774,8 @@ module MutationObserverInit : sig
   
   (** Set to true if mutations to not just target, but also target's descendants are to be observed. *)
   val set_subtree: 'tags this -> bool -> unit [@@js.set "subtree"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: attributeFilter:string list -> attributeOldValue:bool -> attributes:bool -> characterData:bool -> characterDataOldValue:bool -> childList:bool -> subtree:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module rec MutationCallback : sig
   type t = [`MutationCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35340,7 +35794,7 @@ module rec MutationCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> mutations:MutationRecord.t list -> observer:MutationObserver.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Provides the ability to watch for changes being made to the DOM tree. It is designed as a replacement for the older Mutation Events feature which was part of the DOM3 Events specification. *)
@@ -35373,7 +35827,7 @@ and[@js.scope "MutationObserver"] MutationObserver : sig
   
   (** Empties the record queue and returns what was in there. *)
   val takeRecords: 'tags this -> MutationRecord.t list [@@js.call "takeRecords"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: MutationCallback.t -> t [@@js.create]
 end
@@ -35397,7 +35851,8 @@ module MessagePortEventMap : sig
   val set_message: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "message"]
   val get_messageerror: 'tags this -> MessageEvent.t_0 [@@js.get "messageerror"]
   val set_messageerror: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "messageerror"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: message:MessageEvent.t_0 -> messageerror:MessageEvent.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. *)
@@ -35423,9 +35878,10 @@ module[@js.scope "MessageChannel"] MessageChannel : sig
   
   (** Returns the second MessagePort object. *)
   val get_port2: 'tags this -> MessagePort.t [@@js.get "port2"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: port1:MessagePort.t -> port2:MessagePort.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module MediaStreamTrackEventMap : sig
   type t = [`MediaStreamTrackEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35449,7 +35905,8 @@ module MediaStreamTrackEventMap : sig
   val set_mute: 'tags this -> Event.t -> unit [@@js.set "mute"]
   val get_unmute: 'tags this -> Event.t [@@js.get "unmute"]
   val set_unmute: 'tags this -> Event.t -> unit [@@js.set "unmute"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ended:Event.t -> mute:Event.t -> unmute:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaStreamEventMap : sig
   type t = [`MediaStreamEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35471,7 +35928,8 @@ module MediaStreamEventMap : sig
   val set_addtrack: 'tags this -> MediaStreamTrackEvent.t -> unit [@@js.set "addtrack"]
   val get_removetrack: 'tags this -> MediaStreamTrackEvent.t [@@js.get "removetrack"]
   val set_removetrack: 'tags this -> MediaStreamTrackEvent.t -> unit [@@js.set "removetrack"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: addtrack:MediaStreamTrackEvent.t -> removetrack:MediaStreamTrackEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaSourceEventMap : sig
   type t = [`MediaSourceEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35495,7 +35953,8 @@ module MediaSourceEventMap : sig
   val set_sourceended: 'tags this -> Event.t -> unit [@@js.set "sourceended"]
   val get_sourceopen: 'tags this -> Event.t [@@js.get "sourceopen"]
   val set_sourceopen: 'tags this -> Event.t -> unit [@@js.set "sourceopen"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: sourceclose:Event.t -> sourceended:Event.t -> sourceopen:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaRecorderEventMap : sig
   type t = [`MediaRecorderEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35525,7 +35984,8 @@ module MediaRecorderEventMap : sig
   val set_start: 'tags this -> Event.t -> unit [@@js.set "start"]
   val get_stop: 'tags this -> Event.t [@@js.get "stop"]
   val set_stop: 'tags this -> Event.t -> unit [@@js.set "stop"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: dataavailable:BlobEvent.t -> error:MediaRecorderErrorEvent.t -> pause:Event.t -> resume:Event.t -> start:Event.t -> stop:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RecordingState : sig
   type t = ([`L_s406_inactive[@js "inactive"] | `L_s572_paused[@js "paused"] | `L_s632_recording[@js "recording"]] [@js.enum])
@@ -35559,7 +36019,8 @@ module MediaRecorderOptions : sig
   val set_mimeType: 'tags this -> string -> unit [@@js.set "mimeType"]
   val get_videoBitsPerSecond: 'tags this -> float [@@js.get "videoBitsPerSecond"]
   val set_videoBitsPerSecond: 'tags this -> float -> unit [@@js.set "videoBitsPerSecond"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: audioBitsPerSecond:float -> bitsPerSecond:float -> mimeType:string -> videoBitsPerSecond:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "MediaRecorder"] MediaRecorder : sig
   type t = [`EventTarget | `MediaRecorder] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35639,7 +36100,7 @@ module[@js.scope "MediaRecorder"] MediaRecorder : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: stream:MediaStream.t -> ?options:MediaRecorderOptions.t -> unit -> t [@@js.create]
   val isTypeSupported: string -> bool [@@js.global "isTypeSupported"]
@@ -35662,7 +36123,8 @@ module MediaQueryListEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_change: 'tags this -> MediaQueryListEvent.t [@@js.get "change"]
   val set_change: 'tags this -> MediaQueryListEvent.t -> unit [@@js.set "change"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: change:MediaQueryListEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaKeySessionEventMap : sig
   type t = [`MediaKeySessionEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35684,7 +36146,8 @@ module MediaKeySessionEventMap : sig
   val set_keystatuseschange: 'tags this -> Event.t -> unit [@@js.set "keystatuseschange"]
   val get_message: 'tags this -> MediaKeyMessageEvent.t [@@js.get "message"]
   val set_message: 'tags this -> MediaKeyMessageEvent.t -> unit [@@js.set "message"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: keystatuseschange:Event.t -> message:MediaKeyMessageEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDevicesEventMap : sig
   type t = [`MediaDevicesEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35704,7 +36167,8 @@ module MediaDevicesEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_devicechange: 'tags this -> Event.t [@@js.get "devicechange"]
   val set_devicechange: 'tags this -> Event.t -> unit [@@js.set "devicechange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: devicechange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MathMLElementEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `MathMLElementEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35722,7 +36186,7 @@ module MathMLElementEventMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "MathMLElement"] MathMLElement : sig
   type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `MathMLElement | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35780,7 +36244,7 @@ module[@js.scope "MathMLElement"] MathMLElement : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -35810,7 +36274,7 @@ module ComputedKeyframe : sig
   val set_offset: 'tags this -> float or_null -> unit [@@js.set "offset"]
   val get: 'tags this -> string -> string or_number or_null_or_undefined [@@js.index_get]
   val set: 'tags this -> string -> string or_number or_null_or_undefined -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "KeyframeEffect"] KeyframeEffect : sig
   type t = [`AnimationEffect | `KeyframeEffect] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35838,7 +36302,7 @@ module[@js.scope "KeyframeEffect"] KeyframeEffect : sig
   val set_target: 'tags this -> Element.t or_null -> unit [@@js.set "target"]
   val getKeyframes: 'tags this -> ComputedKeyframe.t list [@@js.call "getKeyframes"]
   val setKeyframes: 'tags this -> keyframes:(PropertyIndexedKeyframes.t, Keyframe.t) or_array or_null -> unit [@@js.call "setKeyframes"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: target:Element.t or_null -> keyframes:(PropertyIndexedKeyframes.t, Keyframe.t) or_array or_null -> ?options:KeyframeEffectOptions.t or_number -> unit -> t [@@js.create]
   val create': t -> t [@@js.create]
@@ -35865,7 +36329,8 @@ module IntersectionObserverInit : sig
   val set_rootMargin: 'tags this -> string -> unit [@@js.set "rootMargin"]
   val get_threshold: 'tags this -> float list or_number [@@js.get "threshold"]
   val set_threshold: 'tags this -> float list or_number -> unit [@@js.set "threshold"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ?root:(Document.t, Element.t) union2 -> rootMargin:string -> threshold:float list or_number -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IntersectionObserverEntryInit : sig
   type t = [`IntersectionObserverEntryInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -35897,7 +36362,8 @@ module IntersectionObserverEntryInit : sig
   val set_target: 'tags this -> Element.t -> unit [@@js.set "target"]
   val get_time: 'tags this -> DOMHighResTimeStamp.t [@@js.get "time"]
   val set_time: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "time"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: boundingClientRect:DOMRectInit.t -> intersectionRatio:float -> intersectionRect:DOMRectInit.t -> isIntersecting:bool -> ?rootBounds:DOMRectInit.t -> target:Element.t -> time:DOMHighResTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Intersection Observer API interface describes the intersection between the target element and its root container at a specific moment of transition. *)
@@ -35924,9 +36390,10 @@ module[@js.scope "IntersectionObserverEntry"] IntersectionObserverEntry : sig
   val get_rootBounds: 'tags this -> DOMRectReadOnly.t or_null [@@js.get "rootBounds"]
   val get_target: 'tags this -> Element.t [@@js.get "target"]
   val get_time: 'tags this -> DOMHighResTimeStamp.t [@@js.get "time"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: boundingClientRect:DOMRectReadOnly.t -> intersectionRatio:float -> intersectionRect:DOMRectReadOnly.t -> isIntersecting:bool -> ?rootBounds:DOMRectReadOnly.t -> target:Element.t -> time:DOMHighResTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: IntersectionObserverEntryInit.t -> t [@@js.create]
+  val create': IntersectionObserverEntryInit.t -> t [@@js.create]
 end
 
 (** provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with a top-level document's viewport. *)
@@ -35953,7 +36420,7 @@ module[@js.scope "IntersectionObserver"] rec IntersectionObserver : sig
   val observe: 'tags this -> target:Element.t -> unit [@@js.call "observe"]
   val takeRecords: 'tags this -> IntersectionObserverEntry.t list [@@js.call "takeRecords"]
   val unobserve: 'tags this -> target:Element.t -> unit [@@js.call "unobserve"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: callback:IntersectionObserverCallback.t -> ?options:IntersectionObserverInit.t -> unit -> t [@@js.create]
 end
@@ -35974,7 +36441,7 @@ and IntersectionObserverCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> entries:IntersectionObserverEntry.t list -> observer:IntersectionObserver.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (**
@@ -36001,7 +36468,8 @@ module ImportMeta : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_url: 'tags this -> string [@@js.get "url"]
   val set_url: 'tags this -> string -> unit [@@js.set "url"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: url:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "Image"] Image : sig
   val create: ?width:float -> ?height:float -> unit -> HTMLImageElement.t [@@js.create]
@@ -36028,7 +36496,8 @@ module IDBTransactionEventMap : sig
   val set_complete: 'tags this -> Event.t -> unit [@@js.set "complete"]
   val get_error: 'tags this -> Event.t [@@js.get "error"]
   val set_error: 'tags this -> Event.t -> unit [@@js.set "error"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: abort:Event.t -> complete:Event.t -> error:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IDBRequestEventMap : sig
   type t = [`IDBRequestEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36050,7 +36519,8 @@ module IDBRequestEventMap : sig
   val set_error: 'tags this -> Event.t -> unit [@@js.set "error"]
   val get_success: 'tags this -> Event.t [@@js.get "success"]
   val set_success: 'tags this -> Event.t -> unit [@@js.set "success"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: error:Event.t -> success:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IDBOpenDBRequestEventMap : sig
   type t = [`IDBOpenDBRequestEventMap | `IDBRequestEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36072,7 +36542,8 @@ module IDBOpenDBRequestEventMap : sig
   val set_blocked: 'tags this -> Event.t -> unit [@@js.set "blocked"]
   val get_upgradeneeded: 'tags this -> IDBVersionChangeEvent.t [@@js.get "upgradeneeded"]
   val set_upgradeneeded: 'tags this -> IDBVersionChangeEvent.t -> unit [@@js.set "upgradeneeded"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: blocked:Event.t -> upgradeneeded:IDBVersionChangeEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IDBDatabaseEventMap : sig
   type t = [`IDBDatabaseEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36098,7 +36569,8 @@ module IDBDatabaseEventMap : sig
   val set_error: 'tags this -> Event.t -> unit [@@js.set "error"]
   val get_versionchange: 'tags this -> IDBVersionChangeEvent.t [@@js.get "versionchange"]
   val set_versionchange: 'tags this -> IDBVersionChangeEvent.t -> unit [@@js.set "versionchange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: abort:Event.t -> close:Event.t -> error:Event.t -> versionchange:IDBVersionChangeEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module HmacKeyAlgorithm : sig
   type t = [`HmacKeyAlgorithm | `KeyAlgorithm] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36120,7 +36592,8 @@ module HmacKeyAlgorithm : sig
   val set_hash: 'tags this -> KeyAlgorithm.t -> unit [@@js.set "hash"]
   val get_length: 'tags this -> float [@@js.get "length"]
   val set_length: 'tags this -> float -> unit [@@js.set "length"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: hash:KeyAlgorithm.t -> length:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module HTMLElementEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLElementEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36138,7 +36611,7 @@ module HTMLElementEventMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module HTMLMediaElementEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLElementEventMap | `HTMLMediaElementEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36160,7 +36633,8 @@ module HTMLMediaElementEventMap : sig
   val set_encrypted: 'tags this -> MediaEncryptedEvent.t -> unit [@@js.set "encrypted"]
   val get_waitingforkey: 'tags this -> Event.t [@@js.get "waitingforkey"]
   val set_waitingforkey: 'tags this -> Event.t -> unit [@@js.set "waitingforkey"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: encrypted:MediaEncryptedEvent.t -> waitingforkey:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module HTMLVideoElementEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLElementEventMap | `HTMLMediaElementEventMap | `HTMLVideoElementEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36182,7 +36656,8 @@ module HTMLVideoElementEventMap : sig
   val set_enterpictureinpicture: 'tags this -> Event.t -> unit [@@js.set "enterpictureinpicture"]
   val get_leavepictureinpicture: 'tags this -> Event.t [@@js.get "leavepictureinpicture"]
   val set_leavepictureinpicture: 'tags this -> Event.t -> unit [@@js.set "leavepictureinpicture"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: enterpictureinpicture:Event.t -> leavepictureinpicture:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** An invalid HTML element and derives from the HTMLElement interface, but without implementing any additional properties or methods. *)
@@ -36254,7 +36729,7 @@ module[@js.scope "HTMLUnknownElement"] HTMLUnknownElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -36445,7 +36920,7 @@ module[@js.scope "HTMLTableCellElement"] HTMLTableCellElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -36519,7 +36994,7 @@ module HTMLTableHeaderCellElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** @deprecated prefer HTMLTableCellElement *)
@@ -36591,7 +37066,7 @@ module HTMLTableDataCellElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module HTMLFrameSetElementEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap | `ElementEventMap | `GlobalEventHandlersEventMap | `HTMLElementEventMap | `HTMLFrameSetElementEventMap | `WindowEventHandlersEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36609,7 +37084,7 @@ module HTMLFrameSetElementEventMap : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Exposes specific properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating a block of preformatted text (<pre>). *)
@@ -36693,7 +37168,7 @@ module[@js.scope "HTMLPreElement"] HTMLPreElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -36717,7 +37192,8 @@ module HTMLElementDeprecatedTagNameMap : sig
   val set_listing: 'tags this -> HTMLPreElement.t -> unit [@@js.set "listing"]
   val get_xmp: 'tags this -> HTMLPreElement.t [@@js.get "xmp"]
   val set_xmp: 'tags this -> HTMLPreElement.t -> unit [@@js.set "xmp"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: listing:HTMLPreElement.t -> xmp:HTMLPreElement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** @deprecated use Document *)
@@ -36789,7 +37265,7 @@ module[@js.scope "HTMLDocument"] HTMLDocument : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -36811,7 +37287,8 @@ module HTMLBodyElementEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_orientationchange: 'tags this -> Event.t [@@js.get "orientationchange"]
   val set_orientationchange: 'tags this -> Event.t -> unit [@@js.set "orientationchange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: orientationchange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module FontFaceSetEventMap : sig
   type t = [`FontFaceSetEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36835,7 +37312,8 @@ module FontFaceSetEventMap : sig
   val set_loadingdone: 'tags this -> Event.t -> unit [@@js.set "loadingdone"]
   val get_loadingerror: 'tags this -> Event.t [@@js.get "loadingerror"]
   val set_loadingerror: 'tags this -> Event.t -> unit [@@js.set "loadingerror"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: loading:Event.t -> loadingdone:Event.t -> loadingerror:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module FileCallback : sig
   type t = [`FileCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36854,7 +37332,7 @@ module FileCallback : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> file:File.t -> unit [@@js.apply]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "FileSystemFileEntry"] FileSystemFileEntry : sig
   type t = [`FileSystemEntry | `FileSystemFileEntry] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -36873,7 +37351,7 @@ module[@js.scope "FileSystemFileEntry"] FileSystemFileEntry : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val file: 'tags this -> successCallback:FileCallback.t -> ?errorCallback:ErrorCallback.t -> unit -> unit [@@js.call "file"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -36958,7 +37436,7 @@ module[@js.scope "FileReader"] FileReader : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val done_: unit -> float [@@js.get "DONE"]
@@ -36993,7 +37471,8 @@ module FileReaderEventMap : sig
   val set_loadstart: 'tags this -> FileReader.t ProgressEvent.t -> unit [@@js.set "loadstart"]
   val get_progress: 'tags this -> FileReader.t ProgressEvent.t [@@js.get "progress"]
   val set_progress: 'tags this -> FileReader.t ProgressEvent.t -> unit [@@js.set "progress"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: abort:FileReader.t ProgressEvent.t -> error:FileReader.t ProgressEvent.t -> load:FileReader.t ProgressEvent.t -> loadend:FileReader.t ProgressEvent.t -> loadstart:FileReader.t ProgressEvent.t -> progress:FileReader.t ProgressEvent.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EventSourceEventMap : sig
   type t = [`EventSourceEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -37017,7 +37496,8 @@ module EventSourceEventMap : sig
   val set_message: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "message"]
   val get_open: 'tags this -> Event.t [@@js.get "open"]
   val set_open: 'tags this -> Event.t -> unit [@@js.set "open"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: error:Event.t -> message:MessageEvent.t_0 -> open_:(Event.t[@js "open"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EventSourceInit : sig
   type t = [`EventSourceInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -37037,7 +37517,8 @@ module EventSourceInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_withCredentials: 'tags this -> bool [@@js.get "withCredentials"]
   val set_withCredentials: 'tags this -> bool -> unit [@@js.set "withCredentials"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: withCredentials:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "EventSource"] EventSource : sig
   type t = [`EventSource | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -37116,7 +37597,7 @@ module[@js.scope "EventSource"] EventSource : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: url:URL.t or_string -> ?eventSourceInitDict:EventSourceInit.t -> unit -> t [@@js.create]
   val closed: unit -> float [@@js.get "CLOSED"]
@@ -37193,7 +37674,7 @@ module[@js.scope "SVGViewElement"] SVGViewElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -37267,7 +37748,7 @@ module[@js.scope "SVGTitleElement"] SVGTitleElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -37350,7 +37831,7 @@ module[@js.scope "SVGTextPathElement"] SVGTextPathElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val textpath_methodtype_align: unit -> float [@@js.get "TEXTPATH_METHODTYPE_ALIGN"]
@@ -37430,7 +37911,7 @@ module[@js.scope "SVGTSpanElement"] SVGTSpanElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -37504,7 +37985,7 @@ module[@js.scope "SVGSymbolElement"] SVGSymbolElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -37578,7 +38059,7 @@ module[@js.scope "SVGSwitchElement"] SVGSwitchElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -37660,7 +38141,7 @@ module[@js.scope "SVGStyleElement"] SVGStyleElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -37735,7 +38216,7 @@ module[@js.scope "SVGStopElement"] SVGStopElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -37815,7 +38296,7 @@ module[@js.scope "SVGAnimationElement"] SVGAnimationElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -37887,7 +38368,7 @@ module[@js.scope "SVGSetElement"] SVGSetElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -37968,7 +38449,7 @@ module[@js.scope "SVGGradientElement"] SVGGradientElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_spreadmethod_pad: unit -> float [@@js.get "SVG_SPREADMETHOD_PAD"]
@@ -38052,7 +38533,7 @@ module[@js.scope "SVGRadialGradientElement"] SVGRadialGradientElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -38133,7 +38614,7 @@ module[@js.scope "SVGPatternElement"] SVGPatternElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -38207,7 +38688,7 @@ module[@js.scope "SVGMetadataElement"] SVGMetadataElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -38287,7 +38768,7 @@ module[@js.scope "SVGMaskElement"] SVGMaskElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -38311,9 +38792,10 @@ module[@js.scope "SVGAnimatedAngle"] SVGAnimatedAngle : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_animVal: 'tags this -> SVGAngle.t [@@js.get "animVal"]
   val get_baseVal: 'tags this -> SVGAngle.t [@@js.get "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:SVGAngle.t -> baseVal:SVGAngle.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module[@js.scope "SVGMarkerElement"] SVGMarkerElement : sig
   type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `EventTarget | `GlobalEventHandlers | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `SVGElement | `SVGFitToViewBox | `SVGMarkerElement | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -38398,7 +38880,7 @@ module[@js.scope "SVGMarkerElement"] SVGMarkerElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_markerunits_strokewidth: unit -> float [@@js.get "SVG_MARKERUNITS_STROKEWIDTH"]
@@ -38476,7 +38958,7 @@ module[@js.scope "SVGMPathElement"] SVGMPathElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -38554,7 +39036,7 @@ module[@js.scope "SVGLinearGradientElement"] SVGLinearGradientElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -38628,7 +39110,7 @@ module[@js.scope "SVGGElement"] SVGGElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -38706,7 +39188,7 @@ module[@js.scope "SVGForeignObjectElement"] SVGForeignObjectElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -38786,7 +39268,7 @@ module[@js.scope "SVGFilterElement"] SVGFilterElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -38811,9 +39293,10 @@ module[@js.scope "SVGAnimatedInteger"] SVGAnimatedInteger : sig
   val get_animVal: 'tags this -> float [@@js.get "animVal"]
   val get_baseVal: 'tags this -> float [@@js.get "baseVal"]
   val set_baseVal: 'tags this -> float -> unit [@@js.set "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:float -> baseVal:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module SVGFilterPrimitiveStandardAttributes : sig
   type t = [`SVGFilterPrimitiveStandardAttributes] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -38836,7 +39319,8 @@ module SVGFilterPrimitiveStandardAttributes : sig
   val get_width: 'tags this -> SVGAnimatedLength.t [@@js.get "width"]
   val get_x: 'tags this -> SVGAnimatedLength.t [@@js.get "x"]
   val get_y: 'tags this -> SVGAnimatedLength.t [@@js.get "y"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: height:SVGAnimatedLength.t -> result:SVGAnimatedString.t -> width:SVGAnimatedLength.t -> x:SVGAnimatedLength.t -> y:SVGAnimatedLength.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Corresponds to the <feTurbulence> element. *)
@@ -38920,7 +39404,7 @@ module[@js.scope "SVGFETurbulenceElement"] SVGFETurbulenceElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_stitchtype_nostitch: unit -> float [@@js.get "SVG_STITCHTYPE_NOSTITCH"]
@@ -39001,7 +39485,7 @@ module[@js.scope "SVGFETileElement"] SVGFETileElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39083,7 +39567,7 @@ module[@js.scope "SVGFESpotLightElement"] SVGFESpotLightElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39163,7 +39647,7 @@ module[@js.scope "SVGFESpecularLightingElement"] SVGFESpecularLightingElement : 
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39240,7 +39724,7 @@ module[@js.scope "SVGFEPointLightElement"] SVGFEPointLightElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39317,7 +39801,7 @@ module[@js.scope "SVGFEOffsetElement"] SVGFEOffsetElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39398,7 +39882,7 @@ module[@js.scope "SVGFEMorphologyElement"] SVGFEMorphologyElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_morphology_operator_dilate: unit -> float [@@js.get "SVG_MORPHOLOGY_OPERATOR_DILATE"]
@@ -39476,7 +39960,7 @@ module[@js.scope "SVGFEMergeNodeElement"] SVGFEMergeNodeElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39550,7 +40034,7 @@ module[@js.scope "SVGFEMergeElement"] SVGFEMergeElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39625,7 +40109,7 @@ module[@js.scope "SVGFEImageElement"] SVGFEImageElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39703,7 +40187,7 @@ module[@js.scope "SVGFEGaussianBlurElement"] SVGFEGaussianBlurElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39790,7 +40274,7 @@ module[@js.scope "SVGComponentTransferFunctionElement"] SVGComponentTransferFunc
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_fecomponenttransfer_type_discrete: unit -> float [@@js.get "SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE"]
@@ -39870,7 +40354,7 @@ module[@js.scope "SVGFEFuncRElement"] SVGFEFuncRElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -39944,7 +40428,7 @@ module[@js.scope "SVGFEFuncGElement"] SVGFEFuncGElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -40018,7 +40502,7 @@ module[@js.scope "SVGFEFuncBElement"] SVGFEFuncBElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -40092,7 +40576,7 @@ module[@js.scope "SVGFEFuncAElement"] SVGFEFuncAElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -40166,7 +40650,7 @@ module[@js.scope "SVGFEFloodElement"] SVGFEFloodElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -40244,7 +40728,7 @@ module[@js.scope "SVGFEDropShadowElement"] SVGFEDropShadowElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -40320,7 +40804,7 @@ module[@js.scope "SVGFEDistantLightElement"] SVGFEDistantLightElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -40404,7 +40888,7 @@ module[@js.scope "SVGFEDisplacementMapElement"] SVGFEDisplacementMapElement : si
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_channel_a: unit -> float [@@js.get "SVG_CHANNEL_A"]
@@ -40488,7 +40972,7 @@ module[@js.scope "SVGFEDiffuseLightingElement"] SVGFEDiffuseLightingElement : si
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -40513,9 +40997,10 @@ module[@js.scope "SVGAnimatedBoolean"] SVGAnimatedBoolean : sig
   val get_animVal: 'tags this -> bool [@@js.get "animVal"]
   val get_baseVal: 'tags this -> bool [@@js.get "baseVal"]
   val set_baseVal: 'tags this -> bool -> unit [@@js.set "baseVal"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: animVal:bool -> baseVal:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Corresponds to the <feConvolveMatrix> element. *)
@@ -40603,7 +41088,7 @@ module[@js.scope "SVGFEConvolveMatrixElement"] SVGFEConvolveMatrixElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_edgemode_duplicate: unit -> float [@@js.get "SVG_EDGEMODE_DUPLICATE"]
@@ -40695,7 +41180,7 @@ module[@js.scope "SVGFECompositeElement"] SVGFECompositeElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_fecomposite_operator_arithmetic: unit -> float [@@js.get "SVG_FECOMPOSITE_OPERATOR_ARITHMETIC"]
@@ -40777,7 +41262,7 @@ module[@js.scope "SVGFEComponentTransferElement"] SVGFEComponentTransferElement 
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -40859,7 +41344,7 @@ module[@js.scope "SVGFEColorMatrixElement"] SVGFEColorMatrixElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_fecolormatrix_type_huerotate: unit -> float [@@js.get "SVG_FECOLORMATRIX_TYPE_HUEROTATE"]
@@ -40958,7 +41443,7 @@ module[@js.scope "SVGFEBlendElement"] SVGFEBlendElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val svg_feblend_mode_color: unit -> float [@@js.get "SVG_FEBLEND_MODE_COLOR"]
@@ -41049,7 +41534,7 @@ module[@js.scope "SVGDescElement"] SVGDescElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -41123,7 +41608,7 @@ module[@js.scope "SVGDefsElement"] SVGDefsElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -41199,7 +41684,7 @@ module[@js.scope "SVGClipPathElement"] SVGClipPathElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -41271,7 +41756,7 @@ module[@js.scope "SVGAnimateTransformElement"] SVGAnimateTransformElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -41343,7 +41828,7 @@ module[@js.scope "SVGAnimateMotionElement"] SVGAnimateMotionElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -41415,7 +41900,7 @@ module[@js.scope "SVGAnimateElement"] SVGAnimateElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -41493,7 +41978,7 @@ module[@js.scope "SVGAElement"] SVGAElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -41639,7 +42124,8 @@ module SVGElementTagNameMap : sig
   val set_use: 'tags this -> SVGUseElement.t -> unit [@@js.set "use"]
   val get_view: 'tags this -> SVGViewElement.t [@@js.get "view"]
   val set_view: 'tags this -> SVGViewElement.t -> unit [@@js.set "view"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: a:SVGAElement.t -> animate:SVGAnimateElement.t -> animateMotion:SVGAnimateMotionElement.t -> animateTransform:SVGAnimateTransformElement.t -> circle:SVGCircleElement.t -> clipPath:SVGClipPathElement.t -> defs:SVGDefsElement.t -> desc:SVGDescElement.t -> ellipse:SVGEllipseElement.t -> feBlend:SVGFEBlendElement.t -> feColorMatrix:SVGFEColorMatrixElement.t -> feComponentTransfer:SVGFEComponentTransferElement.t -> feComposite:SVGFECompositeElement.t -> feConvolveMatrix:SVGFEConvolveMatrixElement.t -> feDiffuseLighting:SVGFEDiffuseLightingElement.t -> feDisplacementMap:SVGFEDisplacementMapElement.t -> feDistantLight:SVGFEDistantLightElement.t -> feDropShadow:SVGFEDropShadowElement.t -> feFlood:SVGFEFloodElement.t -> feFuncA:SVGFEFuncAElement.t -> feFuncB:SVGFEFuncBElement.t -> feFuncG:SVGFEFuncGElement.t -> feFuncR:SVGFEFuncRElement.t -> feGaussianBlur:SVGFEGaussianBlurElement.t -> feImage:SVGFEImageElement.t -> feMerge:SVGFEMergeElement.t -> feMergeNode:SVGFEMergeNodeElement.t -> feMorphology:SVGFEMorphologyElement.t -> feOffset:SVGFEOffsetElement.t -> fePointLight:SVGFEPointLightElement.t -> feSpecularLighting:SVGFESpecularLightingElement.t -> feSpotLight:SVGFESpotLightElement.t -> feTile:SVGFETileElement.t -> feTurbulence:SVGFETurbulenceElement.t -> filter:SVGFilterElement.t -> foreignObject:SVGForeignObjectElement.t -> g:SVGGElement.t -> image:SVGImageElement.t -> line:SVGLineElement.t -> linearGradient:SVGLinearGradientElement.t -> marker:SVGMarkerElement.t -> mask:SVGMaskElement.t -> metadata:SVGMetadataElement.t -> mpath:SVGMPathElement.t -> path:SVGPathElement.t -> pattern:SVGPatternElement.t -> polygon:SVGPolygonElement.t -> polyline:SVGPolylineElement.t -> radialGradient:SVGRadialGradientElement.t -> rect:SVGRectElement.t -> script:SVGScriptElement.t -> set_:(SVGSetElement.t[@js "set"]) -> stop:SVGStopElement.t -> style:SVGStyleElement.t -> svg:SVGSVGElement.t -> switch:SVGSwitchElement.t -> symbol:SVGSymbolElement.t -> text:SVGTextElement.t -> textPath:SVGTextPathElement.t -> title:SVGTitleElement.t -> tspan:SVGTSpanElement.t -> use:SVGUseElement.t -> view:SVGViewElement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** Provides special properties (beyond those defined on the regular HTMLElement interface it also has available to it by inheritance) for manipulating unordered list elements. *)
@@ -41723,7 +42209,7 @@ module[@js.scope "HTMLUListElement"] HTMLUListElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -41815,7 +42301,7 @@ module[@js.scope "HTMLTrackElement"] HTMLTrackElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
   val error: unit -> float [@@js.get "ERROR"]
@@ -41899,7 +42385,7 @@ module[@js.scope "HTMLTitleElement"] HTMLTitleElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -41975,7 +42461,7 @@ module[@js.scope "HTMLTimeElement"] HTMLTimeElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -42016,9 +42502,10 @@ module[@js.scope "ValidityState"] ValidityState : sig
   val get_typeMismatch: 'tags this -> bool [@@js.get "typeMismatch"]
   val get_valid: 'tags this -> bool [@@js.get "valid"]
   val get_valueMissing: 'tags this -> bool [@@js.get "valueMissing"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: badInput:bool -> customError:bool -> patternMismatch:bool -> rangeOverflow:bool -> rangeUnderflow:bool -> stepMismatch:bool -> tooLong:bool -> tooShort:bool -> typeMismatch:bool -> valid:bool -> valueMissing:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Gives access to properties specific to <label> elements. It inherits methods and properties from the base HTMLElement interface. *)
@@ -42102,7 +42589,7 @@ module[@js.scope "HTMLLabelElement"] HTMLLabelElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -42298,7 +42785,7 @@ module[@js.scope "HTMLTextAreaElement"] HTMLTextAreaElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -42375,7 +42862,7 @@ module[@js.scope "HTMLTemplateElement"] HTMLTemplateElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -42506,7 +42993,7 @@ module[@js.scope "HTMLTableRowElement"] HTMLTableRowElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -42625,7 +43112,7 @@ module[@js.scope "HTMLTableSectionElement"] HTMLTableSectionElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -42711,7 +43198,7 @@ module[@js.scope "HTMLTableCaptionElement"] HTMLTableCaptionElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -42944,7 +43431,7 @@ module[@js.scope "HTMLTableElement"] HTMLTableElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43066,7 +43553,7 @@ module[@js.scope "HTMLTableColElement"] HTMLTableColElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43158,7 +43645,7 @@ module[@js.scope "HTMLStyleElement"] HTMLStyleElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43232,7 +43719,7 @@ module[@js.scope "HTMLSpanElement"] HTMLSpanElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43328,7 +43815,7 @@ module[@js.scope "HTMLSourceElement"] HTMLSourceElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43410,7 +43897,7 @@ module[@js.scope "HTMLOptGroupElement"] HTMLOptGroupElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43478,7 +43965,7 @@ module[@js.scope "HTMLOptionsCollection"] HTMLOptionsCollection : sig
   
   (** Removes the item with index index from the collection. *)
   val remove: 'tags this -> index:float -> unit [@@js.call "remove"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43660,7 +44147,7 @@ module[@js.scope "HTMLSelectElement"] HTMLSelectElement : sig
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
   val get: 'tags this -> float -> (HTMLOptGroupElement.t, HTMLOptionElement.t) union2 [@@js.index_get]
   val set: 'tags this -> float -> (HTMLOptGroupElement.t, HTMLOptionElement.t) union2 -> unit [@@js.index_set]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43740,7 +44227,7 @@ module[@js.scope "HTMLQuoteElement"] HTMLQuoteElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43830,7 +44317,7 @@ module[@js.scope "HTMLProgressElement"] HTMLProgressElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -43904,7 +44391,7 @@ module[@js.scope "HTMLPictureElement"] HTMLPictureElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -44014,7 +44501,7 @@ module[@js.scope "HTMLParamElement"] HTMLParamElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -44100,7 +44587,7 @@ module[@js.scope "HTMLParagraphElement"] HTMLParagraphElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -44204,7 +44691,7 @@ module[@js.scope "HTMLOutputElement"] HTMLOutputElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -44431,7 +44918,7 @@ module[@js.scope "HTMLObjectElement"] HTMLObjectElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -44521,7 +45008,7 @@ module[@js.scope "HTMLOListElement"] HTMLOListElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -44607,7 +45094,7 @@ module[@js.scope "HTMLModElement"] HTMLModElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -44694,7 +45181,7 @@ module[@js.scope "HTMLMeterElement"] HTMLMeterElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -44798,7 +45285,7 @@ module[@js.scope "HTMLMetaElement"] HTMLMetaElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -44876,7 +45363,7 @@ module[@js.scope "HTMLMenuElement"] HTMLMenuElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -45022,7 +45509,7 @@ module[@js.scope "HTMLMarqueeElement"] HTMLMarqueeElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -45105,7 +45592,7 @@ module[@js.scope "HTMLMapElement"] HTMLMapElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -45261,7 +45748,7 @@ module[@js.scope "HTMLLinkElement"] HTMLLinkElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -45344,7 +45831,7 @@ module[@js.scope "HTMLLegendElement"] HTMLLegendElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -45430,7 +45917,7 @@ module[@js.scope "HTMLLIElement"] HTMLLIElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -45782,7 +46269,7 @@ module[@js.scope "HTMLInputElement"] HTMLInputElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -45972,7 +46459,7 @@ module[@js.scope "HTMLIFrameElement"] HTMLIFrameElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46058,7 +46545,7 @@ module[@js.scope "HTMLHtmlElement"] HTMLHtmlElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46144,7 +46631,7 @@ module[@js.scope "HTMLHeadingElement"] HTMLHeadingElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46266,7 +46753,7 @@ module[@js.scope "HTMLHRElement"] HTMLHRElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46364,7 +46851,7 @@ module[@js.scope "HTMLFrameSetElement"] HTMLFrameSetElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46546,7 +47033,7 @@ module[@js.scope "HTMLFrameElement"] HTMLFrameElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46644,7 +47131,7 @@ module[@js.scope "HTMLFontElement"] HTMLFontElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46750,7 +47237,7 @@ module[@js.scope "HTMLFieldSetElement"] HTMLFieldSetElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46836,7 +47323,7 @@ module[@js.scope "HTMLDivElement"] HTMLDivElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46916,7 +47403,7 @@ module[@js.scope "HTMLDirectoryElement"] HTMLDirectoryElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -46990,7 +47477,7 @@ module HTMLDialogElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "HTMLDetailsElement"] HTMLDetailsElement : sig
   type t = [`ARIAMixin | `Animatable | `ChildNode | `DocumentAndElementEventHandlers | `Element | `ElementCSSInlineStyle | `ElementContentEditable | `EventTarget | `GlobalEventHandlers | `HTMLDetailsElement | `HTMLElement | `HTMLOrSVGElement | `InnerHTML | `Node | `NonDocumentTypeChildNode | `ParentNode | `Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -47062,7 +47549,7 @@ module[@js.scope "HTMLDetailsElement"] HTMLDetailsElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -47139,7 +47626,7 @@ module[@js.scope "HTMLDataListElement"] HTMLDataListElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -47215,7 +47702,7 @@ module[@js.scope "HTMLDataElement"] HTMLDataElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -47295,7 +47782,7 @@ module[@js.scope "HTMLDListElement"] HTMLDListElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -47442,7 +47929,7 @@ module[@js.scope "HTMLButtonElement"] HTMLButtonElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -47558,7 +48045,7 @@ module[@js.scope "HTMLBodyElement"] HTMLBodyElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -47644,7 +48131,7 @@ module[@js.scope "HTMLBaseElement"] HTMLBaseElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -47730,7 +48217,7 @@ module[@js.scope "HTMLBRElement"] HTMLBRElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -47804,7 +48291,7 @@ module[@js.scope "HTMLAudioElement"] HTMLAudioElement : sig
     Removes the event listener in target's event listener list with the same type, callback, and options.
   *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -48058,7 +48545,8 @@ module HTMLElementTagNameMap : sig
   val set_video: 'tags this -> HTMLVideoElement.t -> unit [@@js.set "video"]
   val get_wbr: 'tags this -> HTMLElement.t [@@js.get "wbr"]
   val set_wbr: 'tags this -> HTMLElement.t -> unit [@@js.set "wbr"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: a:HTMLAnchorElement.t -> abbr:HTMLElement.t -> address:HTMLElement.t -> area:HTMLAreaElement.t -> article:HTMLElement.t -> aside:HTMLElement.t -> audio:HTMLAudioElement.t -> b:HTMLElement.t -> base:HTMLBaseElement.t -> bdi:HTMLElement.t -> bdo:HTMLElement.t -> blockquote:HTMLQuoteElement.t -> body:HTMLBodyElement.t -> br:HTMLBRElement.t -> button:HTMLButtonElement.t -> canvas:HTMLCanvasElement.t -> caption:HTMLTableCaptionElement.t -> cite:HTMLElement.t -> code:HTMLElement.t -> col:HTMLTableColElement.t -> colgroup:HTMLTableColElement.t -> data:HTMLDataElement.t -> datalist:HTMLDataListElement.t -> dd:HTMLElement.t -> del:HTMLModElement.t -> details:HTMLDetailsElement.t -> dfn:HTMLElement.t -> dialog:HTMLDialogElement.t -> dir:HTMLDirectoryElement.t -> div:HTMLDivElement.t -> dl:HTMLDListElement.t -> dt:HTMLElement.t -> em:HTMLElement.t -> embed:HTMLEmbedElement.t -> fieldset:HTMLFieldSetElement.t -> figcaption:HTMLElement.t -> figure:HTMLElement.t -> font:HTMLFontElement.t -> footer:HTMLElement.t -> form:HTMLFormElement.t -> frame:HTMLFrameElement.t -> frameset:HTMLFrameSetElement.t -> h1:HTMLHeadingElement.t -> h2:HTMLHeadingElement.t -> h3:HTMLHeadingElement.t -> h4:HTMLHeadingElement.t -> h5:HTMLHeadingElement.t -> h6:HTMLHeadingElement.t -> head:HTMLHeadElement.t -> header:HTMLElement.t -> hgroup:HTMLElement.t -> hr:HTMLHRElement.t -> html:HTMLHtmlElement.t -> i:HTMLElement.t -> iframe:HTMLIFrameElement.t -> img:HTMLImageElement.t -> input:HTMLInputElement.t -> ins:HTMLModElement.t -> kbd:HTMLElement.t -> label:HTMLLabelElement.t -> legend:HTMLLegendElement.t -> li:HTMLLIElement.t -> link:HTMLLinkElement.t -> main:HTMLElement.t -> map:HTMLMapElement.t -> mark:HTMLElement.t -> marquee:HTMLMarqueeElement.t -> menu:HTMLMenuElement.t -> meta:HTMLMetaElement.t -> meter:HTMLMeterElement.t -> nav:HTMLElement.t -> noscript:HTMLElement.t -> object_:(HTMLObjectElement.t[@js "object"]) -> ol:HTMLOListElement.t -> optgroup:HTMLOptGroupElement.t -> option:HTMLOptionElement.t -> output:HTMLOutputElement.t -> p:HTMLParagraphElement.t -> param:HTMLParamElement.t -> picture:HTMLPictureElement.t -> pre:HTMLPreElement.t -> progress:HTMLProgressElement.t -> q:HTMLQuoteElement.t -> rp:HTMLElement.t -> rt:HTMLElement.t -> ruby:HTMLElement.t -> s:HTMLElement.t -> samp:HTMLElement.t -> script:HTMLScriptElement.t -> section:HTMLElement.t -> select:HTMLSelectElement.t -> slot:HTMLSlotElement.t -> small:HTMLElement.t -> source:HTMLSourceElement.t -> span:HTMLSpanElement.t -> strong:HTMLElement.t -> style:HTMLStyleElement.t -> sub:HTMLElement.t -> summary:HTMLElement.t -> sup:HTMLElement.t -> table:HTMLTableElement.t -> tbody:HTMLTableSectionElement.t -> td:HTMLTableCellElement.t -> template:HTMLTemplateElement.t -> textarea:HTMLTextAreaElement.t -> tfoot:HTMLTableSectionElement.t -> th:HTMLTableCellElement.t -> thead:HTMLTableSectionElement.t -> time:HTMLTimeElement.t -> title:HTMLTitleElement.t -> tr:HTMLTableRowElement.t -> track:HTMLTrackElement.t -> u:HTMLElement.t -> ul:HTMLUListElement.t -> var:HTMLElement.t -> video:HTMLVideoElement.t -> wbr:HTMLElement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** @deprecated Directly use HTMLElementTagNameMap or SVGElementTagNameMap as appropriate, instead. *)
@@ -48088,7 +48576,8 @@ module EcKeyAlgorithm : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_namedCurve: 'tags this -> NamedCurve.t [@@js.get "namedCurve"]
   val set_namedCurve: 'tags this -> NamedCurve.t -> unit [@@js.set "namedCurve"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: namedCurve:NamedCurve.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module EXT_texture_compression_rgtc : sig
   type t = [`EXT_texture_compression_rgtc] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -48110,7 +48599,8 @@ module EXT_texture_compression_rgtc : sig
   val get_COMPRESSED_RED_RGTC1_EXT: 'tags this -> GLenum.t [@@js.get "COMPRESSED_RED_RGTC1_EXT"]
   val get_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT"]
   val get_COMPRESSED_SIGNED_RED_RGTC1_EXT: 'tags this -> GLenum.t [@@js.get "COMPRESSED_SIGNED_RED_RGTC1_EXT"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: compressed_red_green_rgtc2_ext:(GLenum.t[@js "COMPRESSED_RED_GREEN_RGTC2_EXT"]) -> compressed_red_rgtc1_ext:(GLenum.t[@js "COMPRESSED_RED_RGTC1_EXT"]) -> compressed_signed_red_green_rgtc2_ext:(GLenum.t[@js "COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT"]) -> compressed_signed_red_rgtc1_ext:(GLenum.t[@js "COMPRESSED_SIGNED_RED_RGTC1_EXT"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DocumentEventMap : sig
   type t = [`DocumentAndElementEventHandlersEventMap | `DocumentEventMap | `GlobalEventHandlersEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -48140,7 +48630,8 @@ module DocumentEventMap : sig
   val set_readystatechange: 'tags this -> Event.t -> unit [@@js.set "readystatechange"]
   val get_visibilitychange: 'tags this -> Event.t [@@js.get "visibilitychange"]
   val set_visibilitychange: 'tags this -> Event.t -> unit [@@js.set "visibilitychange"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: fullscreenchange:Event.t -> fullscreenerror:Event.t -> pointerlockchange:Event.t -> pointerlockerror:Event.t -> readystatechange:Event.t -> visibilitychange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DisplayCaptureSurfaceType : sig
   type t = ([`L_s123_application[@js "application"] | `L_s172_browser[@js "browser"] | `L_s499_monitor[@js "monitor"] | `L_s839_window[@js "window"]] [@js.enum])
@@ -48174,7 +48665,8 @@ module DOMQuadInit : sig
   val set_p3: 'tags this -> DOMPointInit.t -> unit [@@js.set "p3"]
   val get_p4: 'tags this -> DOMPointInit.t [@@js.get "p4"]
   val set_p4: 'tags this -> DOMPointInit.t -> unit [@@js.set "p4"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: p1:DOMPointInit.t -> p2:DOMPointInit.t -> p3:DOMPointInit.t -> p4:DOMPointInit.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "DOMQuad"] DOMQuad : sig
   type t = [`DOMQuad] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -48198,7 +48690,7 @@ module[@js.scope "DOMQuad"] DOMQuad : sig
   val get_p4: 'tags this -> DOMPoint.t [@@js.get "p4"]
   val getBounds: 'tags this -> DOMRect.t [@@js.call "getBounds"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?p1:DOMPointInit.t -> ?p2:DOMPointInit.t -> ?p3:DOMPointInit.t -> ?p4:DOMPointInit.t -> unit -> t [@@js.create]
   val fromQuad: ?other:DOMQuadInit.t -> unit -> t [@@js.global "fromQuad"]
@@ -48241,7 +48733,7 @@ module[@js.scope "DOMParser"] DOMParser : sig
     Values other than the above for type will cause a TypeError exception to be thrown.
   *)
   val parseFromString: 'tags this -> string:string -> type_:DOMParserSupportedType.t -> Document.t [@@js.call "parseFromString"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -48275,7 +48767,8 @@ module QueuingStrategyInit : sig
     Note that the provided high water mark will not be validated ahead of time. Instead, if it is negative, NaN, or not a number, the resulting ByteLengthQueuingStrategy will cause the corresponding stream constructor to throw.
   *)
   val set_highWaterMark: 'tags this -> float -> unit [@@js.set "highWaterMark"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: highWaterMark:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. *)
@@ -48297,9 +48790,10 @@ module[@js.scope "CountQueuingStrategy"] CountQueuingStrategy : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_highWaterMark: 'tags this -> float [@@js.get "highWaterMark"]
   val get_size: 'tags this -> QueuingStrategySize.t_0 [@@js.get "size"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: highWaterMark:float -> size:QueuingStrategySize.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: QueuingStrategyInit.t -> t [@@js.create]
+  val create': QueuingStrategyInit.t -> t [@@js.create]
 end
 module Console : sig
   type t = [`Console] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -48592,7 +49086,7 @@ module Console : sig
     .
   *)
   val warn: 'tags this -> data:(any list [@js.variadic]) -> unit [@@js.call "warn"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ClipboardItemData : sig
   type t = ClipboardItemDataType.t Promise.t_1
@@ -48620,7 +49114,7 @@ module ClientRect : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ClientTypes : sig
   type t = ([`L_s106_all[@js "all"] | `L_s694_sharedworker[@js "sharedworker"] | `L_s839_window[@js "window"] | `L_s840_worker[@js "worker"]] [@js.enum])
@@ -48650,7 +49144,8 @@ module ClientQueryOptions : sig
   val set_includeUncontrolled: 'tags this -> bool -> unit [@@js.set "includeUncontrolled"]
   val get_type: 'tags this -> ClientTypes.t [@@js.get "type"]
   val set_type: 'tags this -> ClientTypes.t -> unit [@@js.set "type"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: includeUncontrolled:bool -> type_:(ClientTypes.t[@js "type"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasTextRendering : sig
   type t = ([`L_s141_auto[@js "auto"] | `L_s358_geometricPrecision[@js "geometricPrecision"] | `L_s546_optimizeLegibility[@js "optimizeLegibility"] | `L_s547_optimizeSpeed[@js "optimizeSpeed"]] [@js.enum])
@@ -48741,7 +49236,7 @@ module[@js.scope "CSSTransition"] CSSTransition : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -48766,7 +49261,7 @@ module[@js.scope "CSSGroupingRule"] CSSGroupingRule : sig
   val get_cssRules: 'tags this -> CSSRuleList.t [@@js.get "cssRules"]
   val deleteRule: 'tags this -> index:float -> unit [@@js.call "deleteRule"]
   val insertRule: 'tags this -> rule:string -> ?index:float -> unit -> float [@@js.call "insertRule"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -48790,9 +49285,10 @@ module[@js.scope "CSSConditionRule"] CSSConditionRule : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_conditionText: 'tags this -> string [@@js.get "conditionText"]
   val set_conditionText: 'tags this -> string -> unit [@@js.set "conditionText"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: conditionText:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** An object representing a single CSS \@supports at-rule. It implements the CSSConditionRule interface, and therefore the CSSRule and CSSGroupingRule interfaces with a type value of 12 (CSSRule.SUPPORTS_RULE). *)
@@ -48812,7 +49308,7 @@ module[@js.scope "CSSSupportsRule"] CSSSupportsRule : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -48837,9 +49333,10 @@ module[@js.scope "CSSStyleRule"] CSSStyleRule : sig
   val get_selectorText: 'tags this -> string [@@js.get "selectorText"]
   val set_selectorText: 'tags this -> string -> unit [@@js.set "selectorText"]
   val get_style: 'tags this -> CSSStyleDeclaration.t [@@js.get "style"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: selectorText:string -> style:CSSStyleDeclaration.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** CSSPageRule is an interface representing a single CSS \@page rule. It implements the CSSRule interface with a type value of 6 (CSSRule.PAGE_RULE). *)
@@ -48862,9 +49359,10 @@ module[@js.scope "CSSPageRule"] CSSPageRule : sig
   val get_selectorText: 'tags this -> string [@@js.get "selectorText"]
   val set_selectorText: 'tags this -> string -> unit [@@js.set "selectorText"]
   val get_style: 'tags this -> CSSStyleDeclaration.t [@@js.get "style"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: selectorText:string -> style:CSSStyleDeclaration.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** An object representing a single CSS \@namespace at-rule. It implements the CSSRule interface, with a type value of 10 (CSSRule.NAMESPACE_RULE). *)
@@ -48886,9 +49384,10 @@ module[@js.scope "CSSNamespaceRule"] CSSNamespaceRule : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_namespaceURI: 'tags this -> string [@@js.get "namespaceURI"]
   val get_prefix: 'tags this -> string [@@js.get "prefix"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: namespaceURI:string -> prefix:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** A single CSS \@media rule. It implements the CSSConditionRule interface, and therefore the CSSGroupingRule and the CSSRule interface with a type value of 4 (CSSRule.MEDIA_RULE). *)
@@ -48909,9 +49408,10 @@ module[@js.scope "CSSMediaRule"] CSSMediaRule : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_media: 'tags this -> MediaList.t [@@js.get "media"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: media:MediaList.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** An object representing a set of style for a given keyframe. It corresponds to the contains of a single keyframe of a \@keyframes at-rule. It implements the CSSRule interface with a type value of 8 (CSSRule.KEYFRAME_RULE). *)
@@ -48934,9 +49434,10 @@ module[@js.scope "CSSKeyframeRule"] CSSKeyframeRule : sig
   val get_keyText: 'tags this -> string [@@js.get "keyText"]
   val set_keyText: 'tags this -> string -> unit [@@js.set "keyText"]
   val get_style: 'tags this -> CSSStyleDeclaration.t [@@js.get "style"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: keyText:string -> style:CSSStyleDeclaration.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** An object representing a complete set of keyframes for a CSS animation. It corresponds to the contains of a whole \@keyframes at-rule. It implements the CSSRule interface with a type value of 7 (CSSRule.KEYFRAMES_RULE). *)
@@ -48962,7 +49463,7 @@ module[@js.scope "CSSKeyframesRule"] CSSKeyframesRule : sig
   val appendRule: 'tags this -> rule:string -> unit [@@js.call "appendRule"]
   val deleteRule: 'tags this -> select:string -> unit [@@js.call "deleteRule"]
   val findRule: 'tags this -> select:string -> CSSKeyframeRule.t or_null [@@js.call "findRule"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -48985,9 +49486,10 @@ module[@js.scope "CSSImportRule"] CSSImportRule : sig
   val get_href: 'tags this -> string [@@js.get "href"]
   val get_media: 'tags this -> MediaList.t [@@js.get "media"]
   val get_styleSheet: 'tags this -> CSSStyleSheet.t [@@js.get "styleSheet"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: href:string -> media:MediaList.t -> styleSheet:CSSStyleSheet.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module[@js.scope "CSSFontFaceRule"] CSSFontFaceRule : sig
   type t = [`CSSFontFaceRule | `CSSRule] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49006,9 +49508,10 @@ module[@js.scope "CSSFontFaceRule"] CSSFontFaceRule : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_style: 'tags this -> CSSStyleDeclaration.t [@@js.get "style"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: style:CSSStyleDeclaration.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module[@js.scope "CSSCounterStyleRule"] CSSCounterStyleRule : sig
   type t = [`CSSCounterStyleRule | `CSSRule] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49048,9 +49551,10 @@ module[@js.scope "CSSCounterStyleRule"] CSSCounterStyleRule : sig
   val set_symbols: 'tags this -> string -> unit [@@js.set "symbols"]
   val get_system: 'tags this -> string [@@js.get "system"]
   val set_system: 'tags this -> string -> unit [@@js.set "system"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: additiveSymbols:string -> fallback:string -> name:string -> negative:string -> pad:string -> prefix:string -> range:string -> speakAs:string -> suffix:string -> symbols:string -> system:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module[@js.scope "CSSAnimation"] CSSAnimation : sig
   type t = [`Animation | `CSSAnimation | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49109,7 +49613,7 @@ module[@js.scope "CSSAnimation"] CSSAnimation : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -49140,9 +49644,10 @@ module[@js.scope "ByteLengthQueuingStrategy"] ByteLengthQueuingStrategy : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_highWaterMark: 'tags this -> float [@@js.get "highWaterMark"]
   val get_size: 'tags this -> ArrayBufferView.t_0 QueuingStrategySize.t [@@js.get "size"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: highWaterMark:float -> size:ArrayBufferView.t_0 QueuingStrategySize.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: QueuingStrategyInit.t -> t [@@js.create]
+  val create': QueuingStrategyInit.t -> t [@@js.create]
 end
 module BroadcastChannelEventMap : sig
   type t = [`BroadcastChannelEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49164,7 +49669,8 @@ module BroadcastChannelEventMap : sig
   val set_message: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "message"]
   val get_messageerror: 'tags this -> MessageEvent.t_0 [@@js.get "messageerror"]
   val set_messageerror: 'tags this -> MessageEvent.t_0 -> unit [@@js.set "messageerror"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: message:MessageEvent.t_0 -> messageerror:MessageEvent.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "BroadcastChannel"] BroadcastChannel : sig
   type t = [`BroadcastChannel | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49235,7 +49741,7 @@ module[@js.scope "BroadcastChannel"] BroadcastChannel : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: string -> t [@@js.create]
 end
@@ -49258,9 +49764,10 @@ module[@js.scope "AuthenticatorAttestationResponse"] AuthenticatorAttestationRes
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_attestationObject: 'tags this -> ArrayBuffer.t_0 [@@js.get "attestationObject"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: attestationObject:ArrayBuffer.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 
 (** Available only in secure contexts. *)
@@ -49283,9 +49790,10 @@ module[@js.scope "AuthenticatorAssertionResponse"] AuthenticatorAssertionRespons
   val get_authenticatorData: 'tags this -> ArrayBuffer.t_0 [@@js.get "authenticatorData"]
   val get_signature: 'tags this -> ArrayBuffer.t_0 [@@js.get "signature"]
   val get_userHandle: 'tags this -> ArrayBuffer.t_0 or_null [@@js.get "userHandle"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: authenticatorData:ArrayBuffer.t_0 -> signature:ArrayBuffer.t_0 -> ?userHandle:ArrayBuffer.t_0 -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: unit -> t [@@js.create]
+  val create': unit -> t [@@js.create]
 end
 module AudioWorkletNodeEventMap : sig
   type t = [`AudioWorkletNodeEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49305,7 +49813,8 @@ module AudioWorkletNodeEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_processorerror: 'tags this -> Event.t [@@js.get "processorerror"]
   val set_processorerror: 'tags this -> Event.t -> unit [@@js.set "processorerror"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: processorerror:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AudioWorkletNodeOptions : sig
   type t = [`AudioNodeOptions | `AudioWorkletNodeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49333,7 +49842,8 @@ module AudioWorkletNodeOptions : sig
   val set_parameterData: 'tags this -> (string, float) Record.t_2 -> unit [@@js.set "parameterData"]
   val get_processorOptions: 'tags this -> any [@@js.get "processorOptions"]
   val set_processorOptions: 'tags this -> any -> unit [@@js.set "processorOptions"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: numberOfInputs:float -> numberOfOutputs:float -> outputChannelCount:float list -> parameterData:(string, float) Record.t_2 -> processorOptions:any -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "AudioParamMap"] AudioParamMap : sig
   type t = [`AudioParamMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49352,7 +49862,7 @@ module[@js.scope "AudioParamMap"] AudioParamMap : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val forEach: 'tags this -> callbackfn:(value:AudioParam.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
@@ -49418,7 +49928,7 @@ module[@js.scope "AudioWorkletNode"] AudioWorkletNode : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: context:BaseAudioContext.t -> name:string -> ?options:AudioWorkletNodeOptions.t -> unit -> t [@@js.create]
 end
@@ -49440,7 +49950,8 @@ module AudioScheduledSourceNodeEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_ended: 'tags this -> Event.t [@@js.get "ended"]
   val set_ended: 'tags this -> Event.t -> unit [@@js.set "ended"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: ended:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaStreamAudioSourceOptions : sig
   type t = [`MediaStreamAudioSourceOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49460,7 +49971,8 @@ module MediaStreamAudioSourceOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_mediaStream: 'tags this -> MediaStream.t [@@js.get "mediaStream"]
   val set_mediaStream: 'tags this -> MediaStream.t -> unit [@@js.set "mediaStream"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: mediaStream:MediaStream.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaElementAudioSourceOptions : sig
   type t = [`MediaElementAudioSourceOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49480,7 +49992,8 @@ module MediaElementAudioSourceOptions : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_mediaElement: 'tags this -> HTMLMediaElement.t [@@js.get "mediaElement"]
   val set_mediaElement: 'tags this -> HTMLMediaElement.t -> unit [@@js.set "mediaElement"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: mediaElement:HTMLMediaElement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AudioTimestamp : sig
   type t = [`AudioTimestamp] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49502,7 +50015,8 @@ module AudioTimestamp : sig
   val set_contextTime: 'tags this -> float -> unit [@@js.set "contextTime"]
   val get_performanceTime: 'tags this -> DOMHighResTimeStamp.t [@@js.get "performanceTime"]
   val set_performanceTime: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "performanceTime"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: contextTime:float -> performanceTime:DOMHighResTimeStamp.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AudioContextLatencyCategory : sig
   type t = ([`L_s147_balanced[@js "balanced"] | `L_s418_interactive[@js "interactive"] | `L_s586_playback[@js "playback"]] [@js.enum])
@@ -49532,7 +50046,8 @@ module AudioContextOptions : sig
   val set_latencyHint: 'tags this -> AudioContextLatencyCategory.t or_number -> unit [@@js.set "latencyHint"]
   val get_sampleRate: 'tags this -> float [@@js.get "sampleRate"]
   val set_sampleRate: 'tags this -> float -> unit [@@js.set "sampleRate"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: latencyHint:AudioContextLatencyCategory.t or_number -> sampleRate:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** An audio-processing graph built from audio modules linked together, each represented by an AudioNode. *)
@@ -49600,7 +50115,7 @@ module[@js.scope "AudioContext"] rec AudioContext : sig
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?contextOptions:AudioContextOptions.t -> unit -> t [@@js.create]
 end
@@ -49623,9 +50138,10 @@ and[@js.scope "MediaElementAudioSourceNode"] MediaElementAudioSourceNode : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_mediaElement: 'tags this -> HTMLMediaElement.t [@@js.get "mediaElement"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: mediaElement:HTMLMediaElement.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:AudioContext.t -> options:MediaElementAudioSourceOptions.t -> t [@@js.create]
+  val create': context:AudioContext.t -> options:MediaElementAudioSourceOptions.t -> t [@@js.create]
 end
 and[@js.scope "MediaStreamAudioDestinationNode"] MediaStreamAudioDestinationNode : sig
   type t = [`AudioNode | `EventTarget | `MediaStreamAudioDestinationNode] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49644,9 +50160,10 @@ and[@js.scope "MediaStreamAudioDestinationNode"] MediaStreamAudioDestinationNode
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_stream: 'tags this -> MediaStream.t [@@js.get "stream"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: stream:MediaStream.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:AudioContext.t -> ?options:AudioNodeOptions.t -> unit -> t [@@js.create]
+  val create': context:AudioContext.t -> ?options:AudioNodeOptions.t -> unit -> t [@@js.create]
 end
 
 (** A type of AudioNode which operates as an audio source whose media is received from a MediaStream obtained using the WebRTC or Media Capture and Streams APIs. *)
@@ -49667,9 +50184,10 @@ and[@js.scope "MediaStreamAudioSourceNode"] MediaStreamAudioSourceNode : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_mediaStream: 'tags this -> MediaStream.t [@@js.get "mediaStream"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: mediaStream:MediaStream.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: context:AudioContext.t -> options:MediaStreamAudioSourceOptions.t -> t [@@js.create]
+  val create': context:AudioContext.t -> options:MediaStreamAudioSourceOptions.t -> t [@@js.create]
 end
 module[@js.scope "Audio"] Audio : sig
   val create: ?src:string -> unit -> HTMLAudioElement.t [@@js.create]
@@ -49696,7 +50214,8 @@ module AnimationEventMap : sig
   val set_finish: 'tags this -> AnimationPlaybackEvent.t -> unit [@@js.set "finish"]
   val get_remove: 'tags this -> Event.t [@@js.get "remove"]
   val set_remove: 'tags this -> Event.t -> unit [@@js.set "remove"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: cancel:AnimationPlaybackEvent.t -> finish:AnimationPlaybackEvent.t -> remove:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AbortSignalEventMap : sig
   type t = [`AbortSignalEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -49716,7 +50235,8 @@ module AbortSignalEventMap : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_abort: 'tags this -> Event.t [@@js.get "abort"]
   val set_abort: 'tags this -> Event.t -> unit [@@js.set "abort"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val create: abort:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
 (** A controller object that allows you to abort one or more DOM requests as and when desired. *)
@@ -49742,7 +50262,7 @@ module[@js.scope "AbortController"] AbortController : sig
   
   (** Invoking this method will set this object's AbortSignal's aborted flag and signal to any observers that the associated activity is to be aborted. *)
   val abort: 'tags this -> unit [@@js.call "abort"]
-  val cast_from: ('tags this -> t) [@@js.custom let cast_from = Obj.magic]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end

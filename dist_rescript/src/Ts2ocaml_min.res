@@ -99,19 +99,19 @@ module JsInterop = {
   let apply7 = (. it: 'Function, arg0, arg1, arg2, arg3, arg4, arg5, arg6) => %raw(`it(arg0, arg1, arg2, arg3, arg4, arg5, arg6)`)
   let applyN = (. it: 'Function, args: array<any>) => %raw(`it(...args)`)
 
-  let applyNewable0 = (. it: 'Function) => %raw(`new it()`)
-  let applyNewable1 = (. it: 'Function, arg0) => %raw(`new it(arg0)`)
-  let applyNewable2 = (. it: 'Function, arg0, arg1) => %raw(`new it(arg0, arg1)`)
-  let applyNewable3 = (. it: 'Function, arg0, arg1, arg2) => %raw(`new it(arg0, arg1, arg2)`)
-  let applyNewable4 = (. it: 'Function, arg0, arg1, arg2, arg3) => %raw(`new it(arg0, arg1, arg2, arg3)`)
-  let applyNewable5 = (. it: 'Function, arg0, arg1, arg2, arg3, arg4) => %raw(`new it(arg0, arg1, arg2, arg3, arg4)`)
-  let applyNewable6 = (. it: 'Function, arg0, arg1, arg2, arg3, arg4, arg5) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5)`)
-  let applyNewable7 = (. it: 'Function, arg0, arg1, arg2, arg3, arg4, arg5, arg6) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5, arg6)`)
-  let applyNewableN = (. it: 'NewableFunction, args: array<any>) => %raw(`new it(...args)`)
+  let applyNewable0 = (. it: 'Newable) => %raw(`new it()`)
+  let applyNewable1 = (. it: 'Newable, arg0) => %raw(`new it(arg0)`)
+  let applyNewable2 = (. it: 'Newable, arg0, arg1) => %raw(`new it(arg0, arg1)`)
+  let applyNewable3 = (. it: 'Newable, arg0, arg1, arg2) => %raw(`new it(arg0, arg1, arg2)`)
+  let applyNewable4 = (. it: 'Newable, arg0, arg1, arg2, arg3) => %raw(`new it(arg0, arg1, arg2, arg3)`)
+  let applyNewable5 = (. it: 'Newable, arg0, arg1, arg2, arg3, arg4) => %raw(`new it(arg0, arg1, arg2, arg3, arg4)`)
+  let applyNewable6 = (. it: 'Newable, arg0, arg1, arg2, arg3, arg4, arg5) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5)`)
+  let applyNewable7 = (. it: 'Newable, arg0, arg1, arg2, arg3, arg4, arg5, arg6) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5, arg6)`)
+  let applyNewableN = (. it: 'Newable, args: array<any>) => %raw(`new it(...args)`)
 
   module PolyVariant = {
-    let name  = (. it: 'PolyVariant) => %raw(`it.NAME`)
-    let value = (. it: 'PolyVariant) => %raw(`it.VAL`)
-    let make = (. name: string, value: 'a) : 'PolyVariant => %raw(`{ NAME: name, VAL: value }`)
+    let name  = (. it: 'PolyVariant) : 'name  => %raw(`it.NAME`)
+    let value = (. it: 'PolyVariant) : 'value => %raw(`it.VAL`)
+    let make  = (. name: 'name, value: 'value) : 'PolyVariant => %raw(`{ NAME: name, VAL: value }`)
   }
 }

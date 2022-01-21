@@ -920,7 +920,7 @@ let _ = Foo.someMethod (foo ()) 42.0
 A notable example is the `document` variable in DOM (https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts).
 
 
-## `--try-readable-names`
+## `--readable-names`
 
 Try to use more readable names instead of `AnonymousInterfaceN`.
 

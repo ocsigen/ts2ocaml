@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ts2ocaml now emits builder function `[@js.builder]` for POJO interfaces.
 
 ## [1.4.0-beta.3] - 2022-01-17
-- Add option `--human-readable-anonymous-interface-names` (or `--readable-names`) to try to use more readable names instead of `AnonymousInterfaceN`.
+- Add an option `--readable-names` to try to use more readable names instead of `AnonymousInterfaceN`.
 
 ## [1.4.0-beta.2] - 2022-01-17
 - Fix a bug which prevented ts2ocaml from generating anonymous interfaces when used with --simplify=named-interface-value

@@ -103,7 +103,7 @@ type Options =
   abstract recModule: RecModule with get, set
   abstract safeArity: FeatureFlag with get, set
   abstract simplify: Simplify list with get, set
-  abstract humanReadableAnonymousInterfaceNames: bool with get, set
+  abstract readableNames: bool with get, set
 
 module Options =
   open Fable.Core.JsInterop
@@ -247,11 +247,10 @@ module Options =
           sprintf "Turn on simplification features. Available features: %s"
                   (Simplify.Values |> Array.map string |> String.concat ", "))
       .addFlag(
-        "human-readable-anonymous-interface-names",
-        (fun (o: Options) -> o.humanReadableAnonymousInterfaceNames),
+        "readable-names",
+        (fun (o: Options) -> o.readableNames),
         descr="Try to use more readable names instead of AnonymousInterfaceN.",
-        defaultValue = false,
-        alias="readable-names"
+        defaultValue = false
       )
 
       .middleware(!^validate)

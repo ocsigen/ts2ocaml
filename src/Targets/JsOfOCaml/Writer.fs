@@ -88,7 +88,7 @@ let literalToIdentifier (ctx: Context) (l: Literal) : text =
 
 let anonymousInterfaceModuleName (ctx: Context) (info: AnonymousInterfaceInfo) =
   match info.origin.valueName, info.origin.argName with
-  | _, Some s | Some s, None when ctx.options.humanReadableAnonymousInterfaceNames ->
+  | _, Some s | Some s, None when ctx.options.readableNames ->
     sprintf "%s%d" (Naming.toCase Naming.PascalCase s) info.id
   | _, _ ->
     sprintf "AnonymousInterface%d" info.id

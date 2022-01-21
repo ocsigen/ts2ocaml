@@ -918,3 +918,52 @@ let _ = Foo.someMethod (foo ()) 42.0
 ```
 
 A notable example is the `document` variable in DOM (https://github.com/microsoft/TypeScript/blob/main/lib/lib.dom.d.ts).
+
+
+## `--try-readable-names`
+
+Try to use more readable names instead of `AnonymousInterfaceN`.
+
+* If the anonymous interface is an argument of a function, the name of the argument will be used.
+```typescript
+declare function foo(person: { name: string; age: number }) : void;
+```
+
+```ocaml
+module PersonN : sig
+  type t
+  val get_name: t -> string
+  val set_name: t -> string -> unit
+  val get_age:  t -> float
+  val set_age:  t -> float -> unit
+
+  val create: name:string -> age:float -> unit -> t
+end
+
+val foo: person:PersonN.t -> unit
+```
+
+* If the anonymous interface is the type of a field or the return type of a function, the name of the field/function will be used.
+```typescript
+declare const foo: { name: string };
+
+declare function bar(age: number) : { age: number };
+```
+
+```ocaml
+module FooN : sig
+  type t
+  val get_name: t -> string
+  ...
+end
+
+val get_foo: unit -> FooN.t
+
+module BarN : sig
+  type t
+  val get_age: t -> float
+  ...
+end
+
+val bar: float -> BarN.t
+```

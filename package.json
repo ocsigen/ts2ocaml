@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@angular/common": "^13.0.3",
-    "@babel/core": "7.16.10",
+    "@babel/core": "7.16.12",
     "@types/react-modal": "3.13.1",
     "@types/semver": "7.3.9",
     "@types/vscode": "^1.63.1",

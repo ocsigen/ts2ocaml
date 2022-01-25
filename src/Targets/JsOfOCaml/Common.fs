@@ -364,38 +364,6 @@ module And: sig
   val cdr: ('a, 'b) t -> 'b [@@js.custom let cdr (x: ('a, 'b) t) : 'b = Obj.magic x]
 end
 
-type ('a, 'b) intersection2 = ('b, 'a) and_
-val intersection2_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) intersection2 -> Ojs.t
-val intersection2_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) intersection2
-type ('a, 'b, 'c) intersection3 = (('b, 'c) intersection2, 'a) and_
-val intersection3_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('a, 'b, 'c) intersection3 -> Ojs.t
-val intersection3_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> Ojs.t -> ('a, 'b, 'c) intersection3
-type ('a, 'b, 'c, 'd) intersection4 = (('b, 'c, 'd) intersection3, 'a) and_
-val intersection4_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('a, 'b, 'c, 'd) intersection4 -> Ojs.t
-val intersection4_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> Ojs.t -> ('a, 'b, 'c, 'd) intersection4
-type ('a, 'b, 'c, 'd, 'e) intersection5 = (('b, 'c, 'd, 'e) intersection4, 'a) and_
-val intersection5_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e) intersection5 -> Ojs.t
-val intersection5_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e) intersection5
-type ('a, 'b, 'c, 'd, 'e, 'f) intersection6 = (('b, 'c, 'd, 'e, 'f) intersection5, 'a) and_
-val intersection6_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f) intersection6 -> Ojs.t
-val intersection6_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f) intersection6
-type ('a, 'b, 'c, 'd, 'e, 'f, 'g) intersection7 = (('b, 'c, 'd, 'e, 'f, 'g) intersection6, 'a) and_
-val intersection7_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('g -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) intersection7 -> Ojs.t
-val intersection7_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) intersection7
-type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) intersection8 = (('b, 'c, 'd, 'e, 'f, 'g, 'h) intersection7, 'a) and_
-val intersection8_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('g -> Ojs.t) -> ('h -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) intersection8 -> Ojs.t
-val intersection8_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> (Ojs.t -> 'h) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) intersection8
-
-module Intersection: sig
-  val get_0: ('a, 'b) intersection2 -> 'a [@@js.custom let get_0 x = Obj.magic x]
-  val get_1: ('a, 'b, 'c) intersection3 -> 'b [@@js.custom let get_1 x = Obj.magic x]
-  val get_2: ('a, 'b, 'c, 'd) intersection4 -> 'c [@@js.custom let get_2 x = Obj.magic x]
-  val get_3: ('a, 'b, 'c, 'd, 'e) intersection5 -> 'd [@@js.custom let get_3 x = Obj.magic x]
-  val get_4: ('a, 'b, 'c, 'd, 'e, 'f) intersection6 -> 'e [@@js.custom let get_4 x = Obj.magic x]
-  val get_5: ('a, 'b, 'c, 'd, 'e, 'f, 'g) intersection7 -> 'f [@@js.custom let get_5 x = Obj.magic x]
-  val get_6: ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) intersection8 -> 'g [@@js.custom let get_6 x = Obj.magic x]
-end
-
 [@@@js.stop]
 type ('a, 'b) or_
 val or__to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) or_ -> Ojs.t
@@ -431,37 +399,95 @@ module Or: sig
   ]
 end
 
-type ('a, 'b) union2 = ('b, 'a) or_
+module Intersection : sig
+  [@@@js.stop]
+  type -'cases t = private Ojs.t
+  val t_to_js: ('cases -> Ojs.t) -> 'cases t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'cases) -> Ojs.t -> 'cases t
+  [@@@js.start]
+  [@@@js.implem
+  type -'cases t = Ojs.t
+  let t_to_js _ x : Ojs.t = x
+  let t_of_js _ x : _ t = x
+  ]
+
+  val get_1: [> `I1 of 't1] t -> 't1 [@@js.custom let get_1 x = Obj.magic x]
+  val get_2: [> `I2 of 't2] t -> 't2 [@@js.custom let get_2 x = Obj.magic x]
+  val get_3: [> `I3 of 't3] t -> 't3 [@@js.custom let get_3 x = Obj.magic x]
+  val get_4: [> `I4 of 't4] t -> 't4 [@@js.custom let get_4 x = Obj.magic x]
+  val get_5: [> `I5 of 't5] t -> 't5 [@@js.custom let get_5 x = Obj.magic x]
+  val get_6: [> `I6 of 't6] t -> 't6 [@@js.custom let get_6 x = Obj.magic x]
+  val get_7: [> `I7 of 't7] t -> 't7 [@@js.custom let get_7 x = Obj.magic x]
+  val get_8: [> `I8 of 't8] t -> 't8 [@@js.custom let get_8 x = Obj.magic x]
+end
+
+type ('t1, 't2) intersection2 = [`I1 of 't1 | `I2 of 't2] Intersection.t [@@js.custom {of_js=(fun _ _ -> Obj.magic);to_js = (fun _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3) intersection3 = [`I1 of 't1 | `I2 of 't2 | `I3 of 't3] Intersection.t [@@js.custom {of_js=(fun _ _ _ -> Obj.magic);to_js = (fun _ _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3, 't4) intersection4 = [`I1 of 't1 | `I2 of 't2 | `I3 of 't3 | `I4 of 't4] Intersection.t [@@js.custom {of_js=(fun _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3, 't4, 't5) intersection5 = [`I1 of 't1 | `I2 of 't2 | `I3 of 't3 | `I4 of 't4 | `I5 of 't5] Intersection.t [@@js.custom {of_js=(fun _ _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3, 't4, 't5, 't6) intersection6 = [`I1 of 't1 | `I2 of 't2 | `I3 of 't3 | `I4 of 't4 | `I5 of 't5 | `I6 of 't6] Intersection.t [@@js.custom {of_js=(fun _ _ _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3, 't4, 't5, 't6, 't7) intersection7 = [`I1 of 't1 | `I2 of 't2 | `I3 of 't3 | `I4 of 't4 | `I5 of 't5 | `I6 of 't6 | `I7 of 't7] Intersection.t [@@js.custom {of_js=(fun _ _ _ _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ _ _ _-> Obj.magic)}]
+type ('t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8) intersection8 = [`I1 of 't1 | `I2 of 't2 | `I3 of 't3 | `I4 of 't4 | `I5 of 't5 | `I6 of 't6 | `I7 of 't7 | `I8 of 't8] Intersection.t [@@js.custom {of_js=(fun _ _ _ _ _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ _ _ _ _ -> Obj.magic)}]
+
+val intersection2_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) intersection2 -> Ojs.t
+val intersection2_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) intersection2
+val intersection3_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('a, 'b, 'c) intersection3 -> Ojs.t
+val intersection3_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> Ojs.t -> ('a, 'b, 'c) intersection3
+val intersection4_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('a, 'b, 'c, 'd) intersection4 -> Ojs.t
+val intersection4_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> Ojs.t -> ('a, 'b, 'c, 'd) intersection4
+val intersection5_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e) intersection5 -> Ojs.t
+val intersection5_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e) intersection5
+val intersection6_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f) intersection6 -> Ojs.t
+val intersection6_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f) intersection6
+val intersection7_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('g -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) intersection7 -> Ojs.t
+val intersection7_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) intersection7
+val intersection8_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('g -> Ojs.t) -> ('h -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) intersection8 -> Ojs.t
+val intersection8_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> (Ojs.t -> 'h) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) intersection8
+
+module Union : sig
+  [@@@js.stop]
+  type +'cases t = private Ojs.t
+  val t_to_js: ('cases -> Ojs.t) -> 'cases t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'cases) -> Ojs.t -> 'cases t
+  [@@@js.start]
+  [@@@js.implem
+  type +'cases t = Ojs.t
+  let t_to_js _ x : Ojs.t = x
+  let t_of_js _ x : _ t = x
+  ]
+
+  val inject_1: 't1 -> [> `U1 of 't1] t [@@js.custom let inject_1 x = Obj.magic x]
+  val inject_2: 't2 -> [> `U2 of 't2] t [@@js.custom let inject_2 x = Obj.magic x]
+  val inject_3: 't3 -> [> `U3 of 't3] t [@@js.custom let inject_3 x = Obj.magic x]
+  val inject_4: 't4 -> [> `U4 of 't4] t [@@js.custom let inject_4 x = Obj.magic x]
+  val inject_5: 't5 -> [> `U5 of 't5] t [@@js.custom let inject_5 x = Obj.magic x]
+  val inject_6: 't6 -> [> `U6 of 't6] t [@@js.custom let inject_6 x = Obj.magic x]
+  val inject_7: 't7 -> [> `U7 of 't7] t [@@js.custom let inject_7 x = Obj.magic x]
+  val inject_8: 't8 -> [> `U8 of 't8] t [@@js.custom let inject_8 x = Obj.magic x]
+end
+
+type ('t1, 't2) union2 = [`U1 of 't1 | `U2 of 't2] Union.t [@@js.custom {of_js=(fun _ _ -> Obj.magic);to_js = (fun _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3) union3 = [`U1 of 't1 | `U2 of 't2 | `U3 of 't3] Union.t [@@js.custom {of_js=(fun _ _ _ -> Obj.magic);to_js = (fun _ _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3, 't4) union4 = [`U1 of 't1 | `U2 of 't2 | `U3 of 't3 | `U4 of 't4] Union.t [@@js.custom {of_js=(fun _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3, 't4, 't5) union5 = [`U1 of 't1 | `U2 of 't2 | `U3 of 't3 | `U4 of 't4 | `U5 of 't5] Union.t [@@js.custom {of_js=(fun _ _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3, 't4, 't5, 't6) union6 = [`U1 of 't1 | `U2 of 't2 | `U3 of 't3 | `U4 of 't4 | `U5 of 't5 | `U6 of 't6] Union.t [@@js.custom {of_js=(fun _ _ _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ _ _ -> Obj.magic)}]
+type ('t1, 't2, 't3, 't4, 't5, 't6, 't7) union7 = [`U1 of 't1 | `U2 of 't2 | `U3 of 't3 | `U4 of 't4 | `U5 of 't5 | `U6 of 't6 | `U7 of 't7] Union.t [@@js.custom {of_js=(fun _ _ _ _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ _ _ _-> Obj.magic)}]
+type ('t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8) union8 = [`U1 of 't1 | `U2 of 't2 | `U3 of 't3 | `U4 of 't4 | `U5 of 't5 | `U6 of 't6 | `U7 of 't7 | `U8 of 't8] Union.t [@@js.custom {of_js=(fun _ _ _ _ _ _ _ _ -> Obj.magic);to_js = (fun _ _ _ _ _ _ _ _ -> Obj.magic)}]
+
 val union2_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) union2 -> Ojs.t
 val union2_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) union2
-type ('a, 'b, 'c) union3 = (('b, 'c) union2, 'a) or_
 val union3_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('a, 'b, 'c) union3 -> Ojs.t
 val union3_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> Ojs.t -> ('a, 'b, 'c) union3
-type ('a, 'b, 'c, 'd) union4 = (('b, 'c, 'd) union3, 'a) or_
 val union4_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('a, 'b, 'c, 'd) union4 -> Ojs.t
 val union4_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> Ojs.t -> ('a, 'b, 'c, 'd) union4
-type ('a, 'b, 'c, 'd, 'e) union5 = (('b, 'c, 'd, 'e) union4, 'a) or_
 val union5_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e) union5 -> Ojs.t
 val union5_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e) union5
-type ('a, 'b, 'c, 'd, 'e, 'f) union6 = (('b, 'c, 'd, 'e, 'f) union5, 'a) or_
 val union6_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f) union6 -> Ojs.t
 val union6_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f) union6
-type ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7 = (('b, 'c, 'd, 'e, 'f, 'g) union6, 'a) or_
 val union7_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('g -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7 -> Ojs.t
 val union7_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7
-type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 = (('b, 'c, 'd, 'e, 'f, 'g, 'h) union7, 'a) or_
 val union8_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('g -> Ojs.t) -> ('h -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 -> Ojs.t
 val union8_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> (Ojs.t -> 'h) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8
-
-module Union: sig
-  val inject_0: 'a -> ('a, 'b) union2 [@@js.custom let inject_0 x = Or.inr x]
-  val inject_1: 'b -> ('a, 'b, 'c) union3 [@@js.custom let inject_1 x = Or.inl (inject_0 x)]
-  val inject_2: 'c -> ('a, 'b, 'c, 'd) union4 [@@js.custom let inject_2 x = Or.inl (inject_1 x)]
-  val inject_3: 'd -> ('a, 'b, 'c, 'd, 'e) union5 [@@js.custom let inject_3 x = Or.inl (inject_2 x)]
-  val inject_4: 'e -> ('a, 'b, 'c, 'd, 'e, 'f) union6 [@@js.custom let inject_4 x = Or.inl (inject_3 x)]
-  val inject_5: 'f -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7 [@@js.custom let inject_5 x = Or.inl (inject_4 x) ]
-  val inject_6: 'g -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 [@@js.custom let inject_6 x = Or.inl (inject_5 x)]
-end
 
 type 'a or_string = [`String of string | `Other of 'a] [@@js.custom {
   of_js = (fun a_of_js x -> match Ojs.type_of x with "string" -> `String (Ojs.string_of_js x) | _ -> `Other (a_of_js x));

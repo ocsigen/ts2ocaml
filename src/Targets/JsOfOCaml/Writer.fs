@@ -298,12 +298,8 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
       Type.intersection (i.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
     | Union u ->
       let flags = { flags with needParen = true }
-      let safe_union_t = function
-        | [] -> failwith "union type with only zero types"
-        | [t] -> t
-        | ts -> Type.union ts
       if not flags.resolveUnion then
-        safe_union_t (u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
+        u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx) |> Type.union
       else
         let ru = ResolvedUnion.resolve ctx u
         let skipOnContravariant text =
@@ -349,11 +345,12 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
               let body = tprintf "%A of %A " name ty
               yield body + skipOnContravariant (Attr.js (Term.literal l))
           ]) + forceSkipAttr (tprintf " [@js.union on_field \"%s\"]" tagName) |> between "(" ")"
-        let treatOther otherTypes =
+        let treatOther t otherTypes =
           if Set.isEmpty otherTypes then
             failwith "impossible_emitResolvedUnion_treatOther_go"
           else
-            otherTypes |> Set.toList |> List.map (emitTypeImpl flags overrideFunc ctx) |> safe_union_t
+            let ts = otherTypes |> Set.toList |> List.map (emitTypeImpl flags overrideFunc ctx)
+            match t with Some t -> Type.union (t :: ts) | None -> Type.union ts
         let treatEnumOr (cases: Set<Choice<Enum * EnumCase, Literal>>) t =
           if Set.isEmpty cases then t
           else Type.enum_or (treatEnum flags ctx cases) t
@@ -363,20 +360,20 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
           else
             Map.toList du
             |> List.map (fun (tagName, cases) -> treatDU tagName cases)
-            |> safe_union_t
+            |> Type.union
         let baseType =
           match not (Set.isEmpty ru.caseEnum), not (Map.isEmpty ru.discriminatedUnions), not (Set.isEmpty ru.otherTypes) with
           | false, false, false -> None
           | true, false, false -> Some (treatEnum flags ctx ru.caseEnum)
           | false, true, hasOther ->
             let t = treatDUMany ru.discriminatedUnions
-            if hasOther then Type.or_ t (treatOther ru.otherTypes) |> Some
+            if hasOther then treatOther (Some t) ru.otherTypes |> Some
             else Some t
-          | false, false, true -> treatOther ru.otherTypes |> Some
-          | true, false, true -> treatOther ru.otherTypes |> treatEnumOr ru.caseEnum |> Some
+          | false, false, true -> treatOther None ru.otherTypes |> Some
+          | true, false, true -> treatOther None ru.otherTypes |> treatEnumOr ru.caseEnum |> Some
           | true, true, hasOther ->
             let t = treatDUMany ru.discriminatedUnions
-            let t = if hasOther then Type.or_ t (treatOther ru.otherTypes) else t
+            let t = if hasOther then treatOther (Some t) ru.otherTypes else t
             t |> treatEnumOr ru.caseEnum |> Some
         baseType |> treatArray ru.caseArray
                  |> treatTypeofableTypes ru.typeofableTypes

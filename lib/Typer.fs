@@ -1474,10 +1474,10 @@ module ResolvedUnion =
         |> Map.toList
         |> List.choose (fun (name, values) ->
           match tagDict.TryGetValue(name) with
-          | true, (i, commonValues) ->
+          | true, (i, commonValues) when values <> commonValues -> // reject the tag if it does not discriminate at all
             let intersect = Set.intersect values commonValues
             Some ((-(Set.count intersect), i), (name, values)) // prefer the tag with the least intersections
-          | false, _ -> None)
+          | _, _ -> None)
       if List.isEmpty xs then None
       else Some (xs |> List.maxBy fst |> snd)
 

@@ -161,32 +161,32 @@ module OverrideFunc =
       | Some text -> Some text
       | None -> f2 _emitType _ctx ty
 
-let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (ty: Type) : text =
-  let forceSkipAttr text =
-    if flags.forceSkipAttributes then empty else text
-  let treatEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<Enum * EnumCase, Literal>>) =
-    let usedValues =
-      cases
-      |> Seq.choose (function Choice1Of2 (_, { value = v }) -> v | _ -> None)
-      |> Set.ofSeq
-    let cases =
-      cases
-      // Remove literal cases (e.g. `42`) when it is a duplicate of some enum case (e.g. `Case = 42`).
-      |> Set.filter (function Choice2Of2 l when usedValues |> Set.contains l -> false | _ -> true)
-      // Convert to identifiers while merging duplicate enum cases
-      |> Set.map (function
-        | Choice1Of2 (e, c) -> enumCaseToIdentifier e c |> str, c.value
-        | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l)
-    between "[" "]" (concat (str " | ") [
-      for name, value in Set.toSeq cases do
-        let attr =
-          match value with
-          | _ when flags.forceSkipAttributes -> empty
-          | Some v -> Attr.js (Term.literal v)
-          | None -> empty
-        yield pv_head @+ name + attr
-    ]) + forceSkipAttr (str " [@js.enum]") |> between "(" ")"
+let emitEnum (flags: EmitTypeFlags) ctx (cases: Set<Choice<Enum * EnumCase, Literal>>) =
+  let forceSkipAttr text = if flags.forceSkipAttributes then empty else text
+  let usedValues =
+    cases
+    |> Seq.choose (function Choice1Of2 (_, { value = v }) -> v | _ -> None)
+    |> Set.ofSeq
+  let cases =
+    cases
+    // Remove literal cases (e.g. `42`) when it is a duplicate of some enum case (e.g. `Case = 42`).
+    |> Set.filter (function Choice2Of2 l when usedValues |> Set.contains l -> false | _ -> true)
+    // Convert to identifiers while merging duplicate enum cases
+    |> Set.map (function
+      | Choice1Of2 (e, c) -> enumCaseToIdentifier e c |> str, c.value
+      | Choice2Of2 l -> "L_" @+ literalToIdentifier ctx l, Some l)
+  between "[" "]" (concat (str " | ") [
+    for name, value in Set.toSeq cases do
+      let attr =
+        match value with
+        | _ when flags.forceSkipAttributes -> empty
+        | Some v -> Attr.js (Term.literal v)
+        | None -> empty
+      yield pv_head @+ name + attr
+  ]) + forceSkipAttr (str " [@js.enum]") |> between "(" ")"
 
+let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (ty: Type) : text =
+  let forceSkipAttr text = if flags.forceSkipAttributes then empty else text
   let treatIdent (i: Ident) (tyargs: Type list) (loc: Location) =
     let arity = List.length tyargs
     let withTyargs ty =
@@ -292,93 +292,11 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
       | Array -> Type.array | ReadonlyArray -> Type.readonlyArray
       | BigInt -> Type.bigint
     | TypeLiteral l ->
-      treatEnum flags ctx (Set.singleton (Choice2Of2 l))
+      emitEnum flags ctx (Set.singleton (Choice2Of2 l))
     | Intersection i ->
       let flags = { flags with needParen = true }
       Type.intersection (i.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx))
-    | Union u ->
-      let flags = { flags with needParen = true }
-      if not flags.resolveUnion then
-        u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx) |> Type.union
-      else
-        let ru = ResolvedUnion.resolve ctx u
-        let skipOnContravariant text =
-          if flags.forceSkipAttributes then empty
-          else if flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant then empty
-          else text
-        let treatNullUndefined t =
-          match ru.caseNull, ru.caseUndefined with
-          | true, true -> Type.app Type.null_undefined [t]
-          | true, false -> Type.app Type.null_ [t]
-          | false, true -> Type.app Type.undefined [t]
-          | false, false -> t
-        let treatTypeofableTypes (ts: Set<Typeofable>) t =
-          let emitOr tt t =
-            match tt with
-            | Typeofable.Number -> Type.number_or t
-            | Typeofable.String -> Type.string_or t
-            | Typeofable.Boolean -> Type.boolean_or t
-            | Typeofable.Symbol -> Type.symbol_or t
-            | Typeofable.BigInt -> Type.bigint_or t
-          let rec go = function
-            | [] -> t
-            | [x] ->
-              match t with
-              | None -> TypeofableType.toType x |> emitTypeImpl flags overrideFunc ctx |> Some
-              | Some t -> Some (emitOr x t)
-            | x :: rest -> go rest |> Option.map (emitOr x)
-          Set.toList ts |> go
-        let treatArray (arr: Set<Type> option) t =
-          match arr with
-          | None -> t
-          | Some ts ->
-            // TODO: think how to map multiple array cases properly
-            let elemT = emitTypeImpl flags overrideFunc ctx (Union { types = Set.toList ts })
-            match t with
-            | None -> Some (Type.app Type.array [elemT])
-            | Some t -> Some (Type.array_or elemT t)
-        let treatDU (tagName: string) (cases: Map<Literal, Type>) =
-          between "[" "]" (concat (str " | ") [
-            for (l, t) in Map.toSeq cases do
-              let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
-              let ty = emitTypeImpl { flags with resolveUnion = false } overrideFunc ctx t
-              let body = tprintf "%A of %A " name ty
-              yield body + skipOnContravariant (Attr.js (Term.literal l))
-          ]) + forceSkipAttr (tprintf " [@js.union on_field \"%s\"]" tagName) |> between "(" ")"
-        let treatOther t otherTypes =
-          if Set.isEmpty otherTypes then
-            failwith "impossible_emitResolvedUnion_treatOther_go"
-          else
-            let ts = otherTypes |> Set.toList |> List.map (emitTypeImpl flags overrideFunc ctx)
-            match t with Some t -> Type.union (t :: ts) | None -> Type.union ts
-        let treatEnumOr (cases: Set<Choice<Enum * EnumCase, Literal>>) t =
-          if Set.isEmpty cases then t
-          else Type.enum_or (treatEnum flags ctx cases) t
-        let treatDUMany du =
-          if Map.isEmpty du then
-            failwith "impossible_emitResolvedUnion_baseType_go"
-          else
-            Map.toList du
-            |> List.map (fun (tagName, cases) -> treatDU tagName cases)
-            |> Type.union
-        let baseType =
-          match not (Set.isEmpty ru.caseEnum), not (Map.isEmpty ru.discriminatedUnions), not (Set.isEmpty ru.otherTypes) with
-          | false, false, false -> None
-          | true, false, false -> Some (treatEnum flags ctx ru.caseEnum)
-          | false, true, hasOther ->
-            let t = treatDUMany ru.discriminatedUnions
-            if hasOther then treatOther (Some t) ru.otherTypes |> Some
-            else Some t
-          | false, false, true -> treatOther None ru.otherTypes |> Some
-          | true, false, true -> treatOther None ru.otherTypes |> treatEnumOr ru.caseEnum |> Some
-          | true, true, hasOther ->
-            let t = treatDUMany ru.discriminatedUnions
-            let t = if hasOther then treatOther (Some t) ru.otherTypes else t
-            t |> treatEnumOr ru.caseEnum |> Some
-        baseType |> treatArray ru.caseArray
-                 |> treatTypeofableTypes ru.typeofableTypes
-                 |> Option.defaultValue Type.never
-                 |> treatNullUndefined
+    | Union u ->  emitUnion flags overrideFunc ctx u
     | AnonymousInterface a -> anonymousInterfaceToIdentifier ctx a
     | PolymorphicThis -> commentStr "FIXME: polymorphic this" + Type.any
     | Intrinsic -> Type.ojs_t
@@ -438,6 +356,94 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     | NewableFunc (_, _, loc) -> failwithf "impossible_emitTypeImpl_NewableFunc: %s (%s)" loc.AsString (Type.pp ty)
     | UnknownType msgo ->
       match msgo with None -> commentStr "FIXME: unknown type" + Type.any | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + Type.any
+
+and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (u: UnionType) : text =
+  let flags = { flags with needParen = true }
+  if flags.variance = Contravariant then
+    u.types
+    |> List.indexed
+    |> List.map (fun (i, t) -> tprintf "`U%d of " (i+1) + emitTypeImpl flags overrideFunc ctx t)
+    |> concat (str " | ")
+    |> between "[" "] [@js.union]"
+    |> between "(" ")"
+  else if not flags.resolveUnion then
+    u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx) |> Type.union
+  else
+    let ru = ResolvedUnion.resolve ctx u
+    let forceSkipAttr text = if flags.forceSkipAttributes then empty else text
+    let treatNullUndefined t =
+      match ru.caseNull, ru.caseUndefined with
+      | true, true -> Type.app Type.null_undefined [t]
+      | true, false -> Type.app Type.null_ [t]
+      | false, true -> Type.app Type.undefined [t]
+      | false, false -> t
+    let treatTypeofableTypes (ts: Set<Typeofable>) t =
+      let emitOr tt t =
+        match tt with
+        | Typeofable.Number -> Type.number_or t
+        | Typeofable.String -> Type.string_or t
+        | Typeofable.Boolean -> Type.boolean_or t
+        | Typeofable.Symbol -> Type.symbol_or t
+        | Typeofable.BigInt -> Type.bigint_or t
+      let rec go = function
+        | [] -> t
+        | [x] ->
+          match t with
+          | None -> TypeofableType.toType x |> emitTypeImpl flags overrideFunc ctx |> Some
+          | Some t -> Some (emitOr x t)
+        | x :: rest -> go rest |> Option.map (emitOr x)
+      Set.toList ts |> go
+    let treatArray (arr: Set<Type> option) t =
+      match arr with
+      | None -> t
+      | Some ts ->
+        // TODO: think how to map multiple array cases properly
+        let elemT = emitTypeImpl flags overrideFunc ctx (Union { types = Set.toList ts })
+        match t with
+        | None -> Some (Type.app Type.array [elemT])
+        | Some t -> Some (Type.array_or elemT t)
+    let treatDU (tagName: string) (cases: Map<Literal, Type>) =
+      between "[" "]" (concat (str " | ") [
+        for (l, t) in Map.toSeq cases do
+          let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
+          let ty = emitTypeImpl { flags with resolveUnion = false } overrideFunc ctx t
+          let body = tprintf "%A of %A " name ty
+          yield body + forceSkipAttr (Attr.js (Term.literal l))
+      ]) + forceSkipAttr (tprintf " [@js.union on_field \"%s\"]" tagName) |> between "(" ")"
+    let treatOther t otherTypes =
+      if Set.isEmpty otherTypes then
+        failwith "impossible_emitResolvedUnion_treatOther_go"
+      else
+        let ts = otherTypes |> Set.toList |> List.map (emitTypeImpl flags overrideFunc ctx)
+        match t with Some t -> Type.union (t :: ts) | None -> Type.union ts
+    let treatEnumOr (cases: Set<Choice<Enum * EnumCase, Literal>>) t =
+      if Set.isEmpty cases then t
+      else Type.enum_or (emitEnum flags ctx cases) t
+    let treatDUMany du =
+      if Map.isEmpty du then
+        failwith "impossible_emitResolvedUnion_baseType_go"
+      else
+        Map.toList du
+        |> List.map (fun (tagName, cases) -> treatDU tagName cases)
+        |> Type.union
+    let baseType =
+      match not (Set.isEmpty ru.caseEnum), not (Map.isEmpty ru.discriminatedUnions), not (Set.isEmpty ru.otherTypes) with
+      | false, false, false -> None
+      | true, false, false -> Some (emitEnum flags ctx ru.caseEnum)
+      | false, true, hasOther ->
+        let t = treatDUMany ru.discriminatedUnions
+        if hasOther then treatOther (Some t) ru.otherTypes |> Some
+        else Some t
+      | false, false, true -> treatOther None ru.otherTypes |> Some
+      | true, false, true -> treatOther None ru.otherTypes |> treatEnumOr ru.caseEnum |> Some
+      | true, true, hasOther ->
+        let t = treatDUMany ru.discriminatedUnions
+        let t = if hasOther then treatOther (Some t) ru.otherTypes else t
+        t |> treatEnumOr ru.caseEnum |> Some
+    baseType |> treatArray ru.caseArray
+              |> treatTypeofableTypes ru.typeofableTypes
+              |> Option.defaultValue Type.never
+              |> treatNullUndefined
 
 and emitLabelsBody (ctx: Context) labels =
   let inline tag t =

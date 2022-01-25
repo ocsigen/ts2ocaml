@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 - Changed the representation of untagged union types and intersection types to make it easier to use.
+  - `('a, 'b) and_` and `('a, 'b) or_` types are removed in this change.
   - This is a breaking change.
 
 ## [1.4.0-beta.4] - 2022-01-21

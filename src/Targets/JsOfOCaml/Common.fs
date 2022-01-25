@@ -351,54 +351,6 @@ type 'a or_null_or_undefined = 'a option
 val or_null_or_undefined_to_js: ('a -> Ojs.t) -> 'a or_null_or_undefined -> Ojs.t
 val or_null_or_undefined_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_null_or_undefined
 
-type ('a, 'b) and_ = private Ojs.t
-val and__to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) and_ -> Ojs.t
-val and__of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) and_
-
-module And: sig
-  type ('a, 'b) t = ('a, 'b) and_
-  val t_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) t
-
-  val car: ('a, 'b) t -> 'a [@@js.custom let car (x: ('a, 'b) t) : 'a = Obj.magic x]
-  val cdr: ('a, 'b) t -> 'b [@@js.custom let cdr (x: ('a, 'b) t) : 'b = Obj.magic x]
-end
-
-[@@@js.stop]
-type ('a, 'b) or_
-val or__to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) or_ -> Ojs.t
-val or__of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) or_
-[@@@js.start]
-[@@@js.implem
-  type ('a, 'b) or_from_js = { a_of_js: (Ojs.t -> 'a); b_of_js: (Ojs.t -> 'b); value: Ojs.t }
-  type ('a, 'b) or_ = A of 'a | B of 'b | FromJS of ('a, 'b) or_from_js
-  let or__to_js a_to_js b_to_js = function
-    | A a -> a_to_js a
-    | B b -> b_to_js b
-    | FromJS x -> x.value
-  let or__of_js a_of_js b_of_js value = FromJS { a_of_js; b_of_js; value }
-]
-
-module Or: sig
-  type ('a, 'b) t = ('a, 'b) or_
-  val t_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) t -> Ojs.t
-  val t_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) t
-
-  val inl: 'a -> ('a, 'b) t [@@js.custom let inl (x: 'a) : ('a, 'b) t = A x]
-  val inr: 'b -> ('a, 'b) t [@@js.custom let inr (x: 'b) : ('a, 'b) t = B x]
-
-  val test: is_left:(Ojs.t -> bool) -> is_right:(Ojs.t -> bool) -> ('a, 'b) t -> [`Left of 'a | `Right of 'b | `Other of Ojs.t]
-  [@@js.custom
-    let test ~is_left ~is_right = function
-      | A a -> `Left a
-      | B b -> `Right b
-      | FromJS x ->
-        if is_left x.value then `Left (x.a_of_js x.value)
-        else if is_right x.value then `Right (x.b_of_js x.value)
-        else `Other x.value
-  ]
-end
-
 module Intersection : sig
   [@@@js.stop]
   type -'cases t = private Ojs.t

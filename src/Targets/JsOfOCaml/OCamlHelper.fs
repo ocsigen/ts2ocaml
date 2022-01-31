@@ -85,13 +85,21 @@ module Attr =
 [<RequireQualifiedAccess>]
 module Type =
   // prim types that are JS-able and defined as interface in typescript/lib/lib.*.d.ts
-  let jsablePrimTypeInterfaces =
+  let jsablePrimitives =
     Map.ofList [
       "Array",   Array
       "ReadonlyArray", Array
+
+      // these type don't really defined as interface, but have "boxed" interfaces.
+      // these interfaces have `constructor(any)` to box, and `valueOf()` to unbox.
+      // however, methods defined in those interfaces are still present when in "unboxed" form.
+      "Number", Number
+      "String", String
+      "Boolean", Bool
     ]
 
-  let nonJsablePrimTypeInterfaces =
+  // prim types that are NOT JS-able and defined as interface in typescript/lib/lib.*.d.ts
+  let nonJsablePrimitives =
     Map.ofList [
       "Object", Object
       "Function", UntypedFunction
@@ -99,6 +107,7 @@ module Type =
       "RegExp", RegExp
       "BigInt", BigInt
     ]
+
 
   // JS-able OCaml types
   let void_ = str "unit"

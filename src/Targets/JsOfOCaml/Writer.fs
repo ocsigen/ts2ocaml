@@ -496,15 +496,15 @@ and getLabelsFromInheritingTypes (emitType_: TypeEmitter) (ctx: Context) (inheri
 and getLabelsOfFullName emitType_ (ctx: Context) (fullName: FullName) (typeParams: TypeParam list) =
   let normalClass () = getAllInheritancesAndSelfFromName ctx fullName |> getLabelsFromInheritingTypes emitType_ ctx
   match fullName.name with
-  | [name] when ctx.options.stdlib && Map.containsKey name Type.nonJsablePrimTypeInterfaces && typeParams |> List.isEmpty ->
-    let prim = Type.nonJsablePrimTypeInterfaces |> Map.find name
+  | [name] when ctx.options.stdlib && Map.containsKey name Type.nonJsablePrimitives && typeParams |> List.isEmpty ->
+    let prim = Type.nonJsablePrimitives |> Map.find name
     Choice2Of2 (prim, Case (tprintf "%s%s" pv_head name))
   | _ -> Choice1Of2 (normalClass () |> List.sort)
 
 and getLabelOfFullName emitType_ (ctx: Context) (fullName: FullName) (typeParams: TypeParam list) =
   match fullName.name with
-  | [name] when ctx.options.stdlib && Map.containsKey name Type.nonJsablePrimTypeInterfaces && typeParams |> List.isEmpty ->
-    let prim = Type.nonJsablePrimTypeInterfaces |> Map.find name
+  | [name] when ctx.options.stdlib && Map.containsKey name Type.nonJsablePrimitives && typeParams |> List.isEmpty ->
+    let prim = Type.nonJsablePrimitives |> Map.find name
     Choice2Of2 (prim, Case (tprintf "%s%s" pv_head name))
   | _ ->
     let inheritingType = InheritingType.KnownIdent {| fullName = fullName; tyargs = typeParams |> List.map (fun tp -> TypeVar tp.name) |}
@@ -1052,9 +1052,11 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
           yield overloaded (fun rename -> [val_ (rename $"cast_to_{parentName}") ty + str " " + Attr.attr Attr.Category.Block "js.cast" empty])
 
       match kind with
+      // only applies to stdlib
+      | _ when not innerCtx.options.stdlib -> ()
       | ClassKind.NormalClass x ->
         // add `to_ml` and `of_ml` if the type is primitive and has an OCaml equivalent (e.g. number, boolean, string, array)
-        match Type.jsablePrimTypeInterfaces |> Map.tryFind x.name with
+        match Type.jsablePrimitives |> Map.tryFind x.name with
         | None -> ()
         | Some prim ->
           let targetTy =

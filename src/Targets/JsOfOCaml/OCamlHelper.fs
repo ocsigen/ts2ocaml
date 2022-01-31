@@ -89,11 +89,27 @@ module Type =
     Map.ofList [
       "Array",   Array
       "ReadonlyArray", Array
-
-      // these type don't really defined as interface, but have "boxed" interfaces.
-      // these interfaces have `constructor(any)` to box, and `valueOf()` to unbox.
-      // however, methods defined in those interfaces are still present when in "unboxed" form.
       "Number", Number
+      "String", String
+      "Boolean", Bool
+    ]
+
+  // these types don't really defined as interface, but have "boxed" interfaces.
+  // these interfaces have `constructor(any)` to box, and `valueOf()` to unbox.
+  // however, methods defined in those interfaces are still present even in "unboxed" form.
+  let jsableBoxedPrimitives =
+    Map.ofList [
+      "Number", Number
+      "String", String
+      "Boolean", Bool
+    ]
+
+  // these types have different JS representation than in OCaml,
+  // so it should be avoided to appear as type arguments.
+  let nonIdentityPrimitives =
+    Map.ofList [
+      "Array",   Array
+      "ReadonlyArray", Array
       "String", String
       "Boolean", Bool
     ]
@@ -107,7 +123,6 @@ module Type =
       "RegExp", RegExp
       "BigInt", BigInt
     ]
-
 
   // JS-able OCaml types
   let void_ = str "unit"

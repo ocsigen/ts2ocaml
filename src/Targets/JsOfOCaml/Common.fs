@@ -270,7 +270,6 @@ let stdlib = """[@@@ocaml.warning "-7-11-32-33-39"]
 type never = private Ojs.t
 val never_to_js: never -> Ojs.t
 val never_of_js: Ojs.t -> never
-
 module Never: sig
   type t = never
   val t_to_js: t -> Ojs.t
@@ -285,7 +284,6 @@ end
 type any = Ojs.t
 val any_to_js: any -> Ojs.t
 val any_of_js: Ojs.t -> any
-
 module Any: sig
   type t = any
   val t_to_js: t -> Ojs.t
@@ -299,7 +297,6 @@ end
 type unknown = private Ojs.t
 val unknown_to_js: unknown -> Ojs.t
 val unknown_of_js: Ojs.t -> unknown
-
 module Unknown: sig
   type t = unknown
   val t_to_js: t -> Ojs.t
@@ -320,26 +317,41 @@ val intf_of_js: (Ojs.t -> 'tags) -> Ojs.t -> 'tags intf
   let intf_to_js _ x : Ojs.t = x
   let intf_of_js _ x : _ intf = x
 ]
+module Intf : sig
+  type 'tags t = 'tags intf
+  val t_to_js: ('tags -> Ojs.t) -> 'tags t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'tags) -> Ojs.t -> 'tags t
+end
 
 type untyped_object = [`Object] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val untyped_object_of_js: Ojs.t -> untyped_object
 val untyped_object_to_js: untyped_object -> Ojs.t
+(* module will be generated in ts2ocaml_es.mli *)
 
 type untyped_function = [`Function] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val untyped_function_of_js: Ojs.t -> untyped_function
 val untyped_function_to_js: untyped_function -> Ojs.t
+(* module will be generated in ts2ocaml_es.mli *)
+
+type js_bool = [`Boolean] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+val js_bool_of_js: Ojs.t -> js_bool
+val js_bool_to_js: js_bool -> Ojs.t
+(* module will be generated in ts2ocaml_es.mli *)
 
 type symbol = [`Symbol] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val symbol_of_js: Ojs.t -> symbol
 val symbol_to_js: symbol -> Ojs.t
+(* module will be generated in ts2ocaml_es.mli *)
 
 type regexp = [`RegExp] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val regexp_of_js: Ojs.t -> regexp
 val regexp_to_js: regexp -> Ojs.t
+(* module will be generated in ts2ocaml_es.mli *)
 
 type bigint = [`BigInt] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val bigint_of_js: Ojs.t -> bigint
 val bigint_to_js: bigint -> Ojs.t
+(* module will be generated in ts2ocaml_es.mli *)
 
 type 'a or_null = 'a option
 val or_null_to_js: ('a -> Ojs.t) -> 'a or_null -> Ojs.t
@@ -350,6 +362,11 @@ val or_undefined_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_undefined
 type 'a or_null_or_undefined = 'a option
 val or_null_or_undefined_to_js: ('a -> Ojs.t) -> 'a or_null_or_undefined -> Ojs.t
 val or_null_or_undefined_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_null_or_undefined
+
+type js_string = [`String | `ArrayLike of js_string | `IterableIterator of js_string | `Iterator of (js_string * any * never or_undefined)] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+val js_string_of_js: Ojs.t -> js_string
+val js_string_to_js: js_string -> Ojs.t
+(* module will be generated in ts2ocaml_es.mli *)
 
 module Intersection : sig
   [@@@js.stop]
@@ -371,6 +388,14 @@ module Intersection : sig
   val get_6: [> `I6 of 't6] t -> 't6 [@@js.custom let get_6 x = Obj.magic x]
   val get_7: [> `I7 of 't7] t -> 't7 [@@js.custom let get_7 x = Obj.magic x]
   val get_8: [> `I8 of 't8] t -> 't8 [@@js.custom let get_8 x = Obj.magic x]
+  val get_1': (Ojs.t -> 't1) -> [> `I1 of 't1] t -> 't1 [@@js.custom let get_1' f x = f (x :> Ojs.t)]
+  val get_2': (Ojs.t -> 't2) -> [> `I2 of 't2] t -> 't2 [@@js.custom let get_2' f x = f (x :> Ojs.t)]
+  val get_3': (Ojs.t -> 't3) -> [> `I3 of 't3] t -> 't3 [@@js.custom let get_3' f x = f (x :> Ojs.t)]
+  val get_4': (Ojs.t -> 't4) -> [> `I4 of 't4] t -> 't4 [@@js.custom let get_4' f x = f (x :> Ojs.t)]
+  val get_5': (Ojs.t -> 't5) -> [> `I5 of 't5] t -> 't5 [@@js.custom let get_5' f x = f (x :> Ojs.t)]
+  val get_6': (Ojs.t -> 't6) -> [> `I6 of 't6] t -> 't6 [@@js.custom let get_6' f x = f (x :> Ojs.t)]
+  val get_7': (Ojs.t -> 't7) -> [> `I7 of 't7] t -> 't7 [@@js.custom let get_7' f x = f (x :> Ojs.t)]
+  val get_8': (Ojs.t -> 't8) -> [> `I8 of 't8] t -> 't8 [@@js.custom let get_8' f x = f (x :> Ojs.t)]
 end
 
 type ('t1, 't2) intersection2 = [`I1 of 't1 | `I2 of 't2] Intersection.t [@@js.custom {of_js=(fun _ _ -> Obj.magic);to_js = (fun _ _ -> Obj.magic)}]
@@ -416,6 +441,31 @@ module Union : sig
   val inject_6: 't6 -> [> `U6 of 't6] t [@@js.custom let inject_6 x = Obj.magic x]
   val inject_7: 't7 -> [> `U7 of 't7] t [@@js.custom let inject_7 x = Obj.magic x]
   val inject_8: 't8 -> [> `U8 of 't8] t [@@js.custom let inject_8 x = Obj.magic x]
+  val inject_1': ('t1 -> Ojs.t) -> 't1 -> [> `U1 of 't1] t [@@js.custom let inject_1' f x = Obj.magic (f x)]
+  val inject_2': ('t2 -> Ojs.t) -> 't2 -> [> `U2 of 't2] t [@@js.custom let inject_2' f x = Obj.magic (f x)]
+  val inject_3': ('t3 -> Ojs.t) -> 't3 -> [> `U3 of 't3] t [@@js.custom let inject_3' f x = Obj.magic (f x)]
+  val inject_4': ('t4 -> Ojs.t) -> 't4 -> [> `U4 of 't4] t [@@js.custom let inject_4' f x = Obj.magic (f x)]
+  val inject_5': ('t5 -> Ojs.t) -> 't5 -> [> `U5 of 't5] t [@@js.custom let inject_5' f x = Obj.magic (f x)]
+  val inject_6': ('t6 -> Ojs.t) -> 't6 -> [> `U6 of 't6] t [@@js.custom let inject_6' f x = Obj.magic (f x)]
+  val inject_7': ('t7 -> Ojs.t) -> 't7 -> [> `U7 of 't7] t [@@js.custom let inject_7' f x = Obj.magic (f x)]
+  val inject_8': ('t8 -> Ojs.t) -> 't8 -> [> `U8 of 't8] t [@@js.custom let inject_8' f x = Obj.magic (f x)]
+
+  val unsafe_get_1: [> `U1 of 't1] t -> 't1 [@@js.custom let unsafe_get_1 x = Obj.magic x]
+  val unsafe_get_2: [> `U2 of 't2] t -> 't2 [@@js.custom let unsafe_get_2 x = Obj.magic x]
+  val unsafe_get_3: [> `U3 of 't3] t -> 't3 [@@js.custom let unsafe_get_3 x = Obj.magic x]
+  val unsafe_get_4: [> `U4 of 't4] t -> 't4 [@@js.custom let unsafe_get_4 x = Obj.magic x]
+  val unsafe_get_5: [> `U5 of 't5] t -> 't5 [@@js.custom let unsafe_get_5 x = Obj.magic x]
+  val unsafe_get_6: [> `U6 of 't6] t -> 't6 [@@js.custom let unsafe_get_6 x = Obj.magic x]
+  val unsafe_get_7: [> `U7 of 't7] t -> 't7 [@@js.custom let unsafe_get_7 x = Obj.magic x]
+  val unsafe_get_8: [> `U8 of 't8] t -> 't8 [@@js.custom let unsafe_get_8 x = Obj.magic x]
+  val unsafe_get_1': (Ojs.t -> 't1) -> [> `U1 of 't1] t -> 't1 [@@js.custom let unsafe_get_1' f x = f (x :> Ojs.t)]
+  val unsafe_get_2': (Ojs.t -> 't2) -> [> `U2 of 't2] t -> 't2 [@@js.custom let unsafe_get_2' f x = f (x :> Ojs.t)]
+  val unsafe_get_3': (Ojs.t -> 't3) -> [> `U3 of 't3] t -> 't3 [@@js.custom let unsafe_get_3' f x = f (x :> Ojs.t)]
+  val unsafe_get_4': (Ojs.t -> 't4) -> [> `U4 of 't4] t -> 't4 [@@js.custom let unsafe_get_4' f x = f (x :> Ojs.t)]
+  val unsafe_get_5': (Ojs.t -> 't5) -> [> `U5 of 't5] t -> 't5 [@@js.custom let unsafe_get_5' f x = f (x :> Ojs.t)]
+  val unsafe_get_6': (Ojs.t -> 't6) -> [> `U6 of 't6] t -> 't6 [@@js.custom let unsafe_get_6' f x = f (x :> Ojs.t)]
+  val unsafe_get_7': (Ojs.t -> 't7) -> [> `U7 of 't7] t -> 't7 [@@js.custom let unsafe_get_7' f x = f (x :> Ojs.t)]
+  val unsafe_get_8': (Ojs.t -> 't8) -> [> `U8 of 't8] t -> 't8 [@@js.custom let unsafe_get_8' f x = f (x :> Ojs.t)]
 end
 
 type ('t1, 't2) union2 = [`U1 of 't1 | `U2 of 't2] Union.t [@@js.custom {of_js=(fun _ _ -> Obj.magic);to_js = (fun _ _ -> Obj.magic)}]
@@ -440,6 +490,61 @@ val union7_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.
 val union7_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7
 val union8_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('g -> Ojs.t) -> ('h -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 -> Ojs.t
 val union8_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> (Ojs.t -> 'h) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8
+
+module TypeofableUnion : sig
+  [@@@js.stop]
+  type +'cases t = private Ojs.t
+  val t_to_js: ('cases -> Ojs.t) -> 'cases t -> Ojs.t
+  val t_of_js: (Ojs.t -> 'cases) -> Ojs.t -> 'cases t
+  type 'other cases = [
+    | `String of string
+    | `Number of float
+    | `Boolean of bool
+    | `Symbol of symbol
+    | `BigInt of bigint
+    | `Null
+    | `Undefined
+    | `Other of 'other
+  ]
+  val inject: ([< 'other cases] as 'u) -> 'u t
+  val classify: ([< 'other cases] as 'u) t -> 'u
+  [@@@js.start]
+  [@@@js.implem
+  type +'cases t = Ojs.t
+  let t_to_js _ x : Ojs.t = x
+  let t_of_js _ x : _ t = x
+  type 'other cases = [
+    | `String of string
+    | `Number of float
+    | `Boolean of bool
+    | `Symbol of symbol
+    | `BigInt of bigint
+    | `Null
+    | `Undefined
+    | `Other of 'other
+  ]
+  let inject (c: ([< 'other cases] as 'u)) =
+    match c with
+    | `String s -> Obj.magic (Ojs.string_to_js s)
+    | `Number f -> Obj.magic (Ojs.float_to_js f)
+    | `Boolean b -> Obj.magic (Ojs.bool_to_js b)
+    | `Symbol s -> Obj.magic (symbol_to_js s)
+    | `BigInt i -> Obj.magic (bigint_to_js i)
+    | `Null -> Obj.magic Ojs.null
+    | `Undefined -> Obj.magic (Ojs.unit_to_js ())
+    | `Other o -> Obj.magic o
+  let classify (u: ([< 'other cases] as 'u) t) =
+    match Ojs.type_of u with
+    | "string" -> Obj.magic (`String (Ojs.string_of_js u))
+    | "number" -> Obj.magic (`Number (Ojs.float_of_js u))
+    | "boolean" -> Obj.magic (`Boolean (Ojs.bool_of_js u))
+    | "symbol" -> Obj.magic (`Symbol (symbol_of_js u))
+    | "bigint" -> Obj.magic (`BigInt (bigint_of_js u))
+    | "null" -> Obj.magic `Null
+    | "undefined" -> Obj.magic `Undefined
+    | _ -> Obj.magic (`Other u)
+  ]
+end
 
 type 'a or_string = [`String of string | `Other of 'a] [@@js.custom {
   of_js = (fun a_of_js x -> match Ojs.type_of x with "string" -> `String (Ojs.string_of_js x) | _ -> `Other (a_of_js x));

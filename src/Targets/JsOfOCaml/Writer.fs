@@ -134,6 +134,7 @@ type EmitTypeFlags = {
   forceVariadic: bool
   hasTypeArgumentsHandled: bool
   forceSkipAttributes: bool
+  convertNonIdentityPrimitives: bool
 }
 
 module EmitTypeFlags =
@@ -148,6 +149,7 @@ module EmitTypeFlags =
       forceVariadic = false
       hasTypeArgumentsHandled = false
       forceSkipAttributes = false
+      convertNonIdentityPrimitives = false
     }
 
 type TypeEmitter = Context -> Type -> text
@@ -189,8 +191,9 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
 
   let treatIdent (i: Ident) (tyargs: Type list) (loc: Location) =
     let arity = List.length tyargs
+    let flagsForArgs = { flags with needParen = true; forceVariadic = false; convertNonIdentityPrimitives = true }
     let withTyargs ty =
-      Type.appOpt ty (tyargs |> List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false } overrideFunc ctx))
+      Type.appOpt ty (tyargs |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx))
     let origin =
       Ident.pickDefinitionWithFullName ctx i (fun fn -> function
         | _ when fn.source <> ctx.currentSourceFile -> None
@@ -227,7 +230,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
               match tv.defaultType with
               | Some t -> t
               | None -> failwithf "error: insufficient type params for type '%s' at %s" (String.concat "." fn.name) loc.AsString)
-        Type.appOpt (str name) (ts |> List.map (emitTypeImpl { flags with needParen = true; forceVariadic = false  } overrideFunc ctx))
+        Type.appOpt (str name) (ts |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx))
       else
         let maxArity = List.length typrms
         let tyName = Naming.createTypeNameOfArity arity (Some maxArity) "t"
@@ -1064,11 +1067,19 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
             else App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
           let toMlTy = func { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = targetTy; loc = UnknownLocation } |> emitType_ innerCtx
           let ofMlTy = func { isVariadic = false; args = [Choice2Of2 targetTy]; returnType = selfTy; loc = UnknownLocation } |> emitType_ innerCtx
-          yield
-            overloaded (fun rename -> [
-              val_ (rename "to_ml") toMlTy + str " " + Attr.attr Attr.Category.Block "js.cast" empty
-              val_ (rename "of_ml") ofMlTy + str " " + Attr.attr Attr.Category.Block "js.cast" empty
-            ])
+
+          let ofMl rename =
+            val_ (rename "of_ml") ofMlTy + str " " + Attr.attr Attr.Category.Block "js.cast" empty
+
+          let toMl rename =
+            let attr =
+              if Type.jsableBoxedPrimitives |> Map.containsKey x.name then
+                Attr.js_call "valueOf"
+              else
+                Attr.attr Attr.Category.Block "js.cast" empty
+            val_ (rename "to_ml") toMlTy + str " " + attr
+
+          yield overloaded (fun rename -> [ofMl rename; toMl rename])
       | _ -> ()
     ]
 

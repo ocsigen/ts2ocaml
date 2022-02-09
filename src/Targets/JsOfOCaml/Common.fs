@@ -79,6 +79,16 @@ with
     | _ -> None
 
 [<StringEnum; RequireQualifiedAccess>]
+type Functor =
+  | [<CompiledName("on")>] On
+  | [<CompiledName("off")>] Off
+  | [<CompiledName("force-inline")>] ForceInline
+with
+  static member Values = [|On; Off; ForceInline|]
+
+  member this.IsOnOrForce = match this with On | ForceInline -> true | Off -> false
+
+[<StringEnum; RequireQualifiedAccess>]
 type Preset =
   | [<CompiledName("minimal")>] Minimal
   | [<CompiledName("safe")>] Safe
@@ -104,6 +114,7 @@ type Options =
   abstract safeArity: FeatureFlag with get, set
   abstract simplify: Simplify list with get, set
   abstract readableNames: bool with get, set
+  abstract functor: Functor with get, set
 
 module Options =
   open Fable.Core.JsInterop
@@ -224,7 +235,8 @@ module Options =
           "safe-arity";
           "rec-module";
           "simplify";
-          "human-readable-anonymous-interface-names"
+          "human-readable-anonymous-interface-names";
+          "functor"
         ],
         "Code Generator Options:")
       .addChoice(
@@ -251,6 +263,13 @@ module Options =
         (fun (o: Options) -> o.readableNames),
         descr="Try to use more readable names instead of AnonymousInterfaceN.",
         defaultValue = false
+      )
+      .addChoice(
+        "functor",
+        Functor.Values,
+        (fun (o: Options) -> o.functor),
+        descr="Emit functor for generic classes and interfaces.",
+        defaultValue=Functor.On
       )
 
       .middleware(!^validate)
@@ -507,7 +526,9 @@ module TypeofableUnion : sig
     | `Other of 'other
   ]
   val inject: ([< 'other cases] as 'u) -> 'u t
+  val inject': ('other -> Ojs.t) -> ([< 'other cases] as 'u) -> 'u t
   val classify: ([< 'other cases] as 'u) t -> 'u
+  val classify': (Ojs.t -> 'other) -> ([< 'other cases] as 'u) t -> 'u
   [@@@js.start]
   [@@@js.implem
   type +'cases t = Ojs.t
@@ -523,7 +544,7 @@ module TypeofableUnion : sig
     | `Undefined
     | `Other of 'other
   ]
-  let inject (c: ([< 'other cases] as 'u)) =
+  let inject' other_to_js (c: ([< 'other cases] as 'u)) =
     match c with
     | `String s -> Obj.magic (Ojs.string_to_js s)
     | `Number f -> Obj.magic (Ojs.float_to_js f)
@@ -532,8 +553,9 @@ module TypeofableUnion : sig
     | `BigInt i -> Obj.magic (bigint_to_js i)
     | `Null -> Obj.magic Ojs.null
     | `Undefined -> Obj.magic (Ojs.unit_to_js ())
-    | `Other o -> Obj.magic o
-  let classify (u: ([< 'other cases] as 'u) t) =
+    | `Other o -> Obj.magic (other_to_js o)
+  let inject c = inject' Obj.magic c
+  let classify' other_of_js (u: ([< 'other cases] as 'u) t) =
     match Ojs.type_of u with
     | "string" -> Obj.magic (`String (Ojs.string_of_js u))
     | "number" -> Obj.magic (`Number (Ojs.float_of_js u))
@@ -542,7 +564,8 @@ module TypeofableUnion : sig
     | "bigint" -> Obj.magic (`BigInt (bigint_of_js u))
     | "null" -> Obj.magic `Null
     | "undefined" -> Obj.magic `Undefined
-    | _ -> Obj.magic (`Other u)
+    | _ -> Obj.magic (`Other (other_of_js u))
+  let classify c = classify' Obj.magic c
   ]
 end
 

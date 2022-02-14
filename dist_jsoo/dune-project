@@ -1,6 +1,6 @@
 (lang dune 2.7)
 (name ts2ocaml-jsoo-stdlib)
-(version 1.4.0-beta.0)
+(version 1.4.0-beta.5)
 
 (maintainers "dev@ocsigen.org")
 (authors
@@ -18,4 +18,4 @@
   (description "You can choose not to use this standard library. See the documents in the repository.")
   (depends
     (ocaml (>= 4.08))
-    (ojs (>= 1.0.8))))
+    (ojs (>= 1.1.0))))

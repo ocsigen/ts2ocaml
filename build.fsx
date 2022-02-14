@@ -203,7 +203,7 @@ module Publish =
         Shell.copyFile targetDir (mlDir </> $"{target}.ml")
 
     let versionRegex =
-      String.getRegEx "\\(version ((?>\\w\\.)*\\w)\\)"
+      String.getRegEx "\\(version ((?>.)*)\\)"
 
     let updateVersion () =
       duneProject |> File.applyReplace (fun content ->

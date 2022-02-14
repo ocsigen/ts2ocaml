@@ -89,6 +89,7 @@ module Type =
     Map.ofList [
       "Array",   Array
       "ReadonlyArray", Array
+      "ArrayLike", Array
       "Number", Number
       "String", String
       "Boolean", Bool
@@ -110,6 +111,7 @@ module Type =
     Map.ofList [
       "Array",   Array
       "ReadonlyArray", Array
+      "ArrayLike", Array
       "String", String
       "Boolean", Bool
     ]
@@ -124,37 +126,7 @@ module Type =
       "BigInt", BigInt
     ]
 
-  // JS-able OCaml types
-  let void_ = str "unit"
-  let string  = str "string"
-  let boolean = str "bool"
-  let number (opt: Options) =
-    if opt.numberAsInt then str "int"
-    else str "float"
-  let array   = str "list"
-  let readonlyArray = str "list"
-
-  // JS only types
-  // ES5
-  let object  = str "untyped_object"
-  let function_ = str "untyped_function"
-  let symbol  = str "symbol"
-  let regexp  = str "regexp"
-  // ES2020
-  let bigint = str "bigint"
-
-  // TS types
-  let never   = str "never"
-  let any     = str "any"
-  let unknown = str "unknown"
-  let null_          = str "or_null"
-  let undefined      = str "or_undefined"
-  let null_undefined = str "or_null_or_undefined"
-
-  // gen_js_api types
-  let ojs_t = str "Ojs.t"
-
-  // our types
+  // basic type expressions
   let var s = tprintf "'%s" s
 
   let many sep = function
@@ -174,8 +146,42 @@ module Type =
     if List.isEmpty args then t
     else app t args
 
+  // JS-able OCaml types
+  let void_ = str "unit"
+  let string  = str "string"
+  let boolean = str "bool"
+  let number (opt: Options) =
+    if opt.numberAsInt then str "int"
+    else str "float"
+  let array = str "list"
+  let readonlyArray = str "list"
+  let option t = app (str "option") [t]
+
+  // JS only types
+  // ES5
+  let object  = str "untyped_object"
+  let function_ = str "untyped_function"
+  let symbol  = str "symbol"
+  let regexp  = str "regexp"
+  let null_ = str "null"
+  let undefined = str "undefined"
+  // ES2020
+  let bigint = str "bigint"
+
+  // TS types
+  let never   = str "never"
+  let any     = str "any"
+  let unknown = str "unknown"
+
+  // gen_js_api types
+  let ojs_t = str "Ojs.t"
+
+  // our types
   let intf  = str "intf"
 
+  let null_or t        = app (str "or_null") [t]
+  let undefined_or t   = app (str "or_undefined") [t]
+  let null_or_undefined_or t = app (str "or_null_or_undefined") [t]
   let string_or t  = app (str "or_string") [t]
   let number_or t  = app (str "or_number") [t]
   let boolean_or t = app (str "or_boolean") [t]

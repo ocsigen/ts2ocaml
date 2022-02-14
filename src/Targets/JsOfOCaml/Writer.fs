@@ -288,7 +288,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
         tprintf "'%s" v
     | Prim p ->
       match p with
-      | Null -> Type.app Type.null_ [Type.never] | Undefined -> Type.app Type.undefined [Type.never]
+      | Null -> Type.null_ | Undefined -> Type.undefined
       | String -> Type.string | Bool -> Type.boolean
       | Number -> Type.number ctx.options
       | Object -> Type.object | UntypedFunction -> Type.function_
@@ -362,15 +362,31 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
     | UnknownType msgo ->
       match msgo with None -> commentStr "FIXME: unknown type" + Type.any | Some msg -> commentStr (sprintf "FIXME: unknown type '%s'" msg) + Type.any
 
+and emitNullOrUndefined (flags: EmitTypeFlags) hasNull hasUndefined t =
+  match hasNull, hasUndefined with
+  | false, false -> t
+  | _ when flags.variance = Covariant -> Type.option t
+  | true, false -> Type.null_or t
+  | false, true -> Type.undefined_or t
+  | true, true -> Type.null_or_undefined_or t
+
 and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (u: UnionType) : text =
   let flags = { flags with needParen = true }
   if flags.variance = Contravariant && flags.simplifyContravariantUnion && not flags.forceSkipAttributes then
-    u.types
-    |> List.indexed
-    |> List.map (fun (i, t) -> tprintf "`U%d of " (i+1) + emitTypeImpl flags overrideFunc ctx t)
-    |> concat (str " | ")
-    |> between "[" "] [@js.union]"
-    |> between "(" ")"
+    let u = ResolvedUnion.checkNullOrUndefined u
+    let types =
+      u.rest |> List.filter (function Prim Never -> false | _ -> true)
+    match types with
+    | [t] -> emitNullOrUndefined flags u.hasNull u.hasUndefined (emitTypeImpl flags overrideFunc ctx t)
+    | [] when u.hasNull && u.hasUndefined -> Type.option Type.undefined
+    | _ ->
+      let cases = [
+        if u.hasNull then yield str "`Null"
+        if u.hasUndefined then yield str "`Undefined of undefined"
+        for i, t in List.indexed u.rest do
+          yield tprintf "`U%d of " (i+1) + emitTypeImpl flags overrideFunc ctx t
+      ]
+      cases |> concat (str " | ") |> between "([" "] [@js.union])"
   else if not flags.resolveUnion then
     u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx) |> Type.union
   else
@@ -381,11 +397,7 @@ and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context)
       if flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant then empty
       else forceSkipAttr text
     let treatNullUndefined t =
-      match ru.caseNull, ru.caseUndefined with
-      | true, true -> Type.app Type.null_undefined [t]
-      | true, false -> Type.app Type.null_ [t]
-      | false, true -> Type.app Type.undefined [t]
-      | false, false -> t
+      emitNullOrUndefined flags ru.caseNull ru.caseUndefined t
     let treatTypeofableTypes (ts: Set<Typeofable>) t =
       let emitOr tt t =
         match tt with

@@ -295,8 +295,8 @@ module Never: sig
   val t_of_js: Ojs.t -> t
   val absurd: t -> 'a
   [@@js.custom
-    exception Ts_Never
-    let absurd _ = raise Ts_Never
+    exception Ts2ocaml_Never
+    let absurd _ = raise Ts2ocaml_Never
   ]
 end
 
@@ -307,10 +307,10 @@ module Any: sig
   type t = any
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val cast_from: 'a -> t
-  [@@js.custom let cast_from x = Obj.magic x]
-  val unsafe_cast_to: t -> 'a
-  [@@js.custom let unsafe_cast_to x = Obj.magic x]
+  val cast_from: 't -> t [@@js.custom let cast_from x = Obj.magic x]
+  val cast_from': ('t -> Ojs.t) -> 't -> t [@@js.custom let cast_from' f x = f x]
+  val unsafe_cast: t -> 't [@@js.custom let unsafe_cast x = Obj.magic x]
+  val unsafe_cast': (Ojs.t -> 't) -> t -> 't [@@js.custom let unsafe_cast' f x = f x]
 end
 
 type unknown = private Ojs.t
@@ -320,10 +320,32 @@ module Unknown: sig
   type t = unknown
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
-  val unsafe_cast: t -> 'a
-  [@@js.custom
-    let unsafe_cast x = Obj.magic x
-  ]
+  val unsafe_cast: t -> 't [@@js.custom let unsafe_cast x = Obj.magic x]
+  val unsafe_cast': (Ojs.t -> 't) -> t -> 't [@@js.custom let unsafe_cast' f x = f x]
+end
+
+type null = private Ojs.t
+val null_of_js: Ojs.t -> null
+val null_to_js: null -> Ojs.t
+module Null : sig
+  type t = null
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  val value: t [@@js.custom let value = Ojs.null]
+  val unsafe_cast: t -> 't [@@js.custom let unsafe_cast x = Obj.magic x]
+  val unsafe_cast': (Ojs.t -> 't) -> t -> 't [@@js.custom let unsafe_cast' f x = f x]
+end
+
+type undefined = private Ojs.t
+val undefined_of_js: Ojs.t -> undefined
+val undefined_to_js: undefined -> Ojs.t
+module Undefined : sig
+  type t = undefined
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  val value: t [@@js.custom let value = Ojs.unit_to_js ()]
+  val unsafe_cast: t -> 't [@@js.custom let unsafe_cast x = Obj.magic x]
+  val unsafe_cast': (Ojs.t -> 't) -> t -> 't [@@js.custom let unsafe_cast' f x = f x]
 end
 
 [@@@js.stop]
@@ -372,17 +394,7 @@ val bigint_of_js: Ojs.t -> bigint
 val bigint_to_js: bigint -> Ojs.t
 (* module will be generated in ts2ocaml_es.mli *)
 
-type 'a or_null = 'a option
-val or_null_to_js: ('a -> Ojs.t) -> 'a or_null -> Ojs.t
-val or_null_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_null
-type 'a or_undefined = 'a option
-val or_undefined_to_js: ('a -> Ojs.t) -> 'a or_undefined -> Ojs.t
-val or_undefined_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_undefined
-type 'a or_null_or_undefined = 'a option
-val or_null_or_undefined_to_js: ('a -> Ojs.t) -> 'a or_null_or_undefined -> Ojs.t
-val or_null_or_undefined_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_null_or_undefined
-
-type js_string = [`String | `ArrayLike of js_string | `IterableIterator of js_string | `Iterator of (js_string * any * never or_undefined)] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+type js_string = [`String | `ArrayLike of js_string | `IterableIterator of js_string | `Iterator of (js_string * any * undefined)] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
 val js_string_of_js: Ojs.t -> js_string
 val js_string_to_js: js_string -> Ojs.t
 (* module will be generated in ts2ocaml_es.mli *)
@@ -568,6 +580,16 @@ module TypeofableUnion : sig
   let classify c = classify' Obj.magic c
   ]
 end
+
+type 'a or_null = 'a option
+val or_null_to_js: ('a -> Ojs.t) -> 'a or_null -> Ojs.t
+val or_null_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_null
+type 'a or_undefined = 'a option
+val or_undefined_to_js: ('a -> Ojs.t) -> 'a or_undefined -> Ojs.t
+val or_undefined_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_undefined
+type 'a or_null_or_undefined = 'a option
+val or_null_or_undefined_to_js: ('a -> Ojs.t) -> 'a or_null_or_undefined -> Ojs.t
+val or_null_or_undefined_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_null_or_undefined
 
 type 'a or_string = [`String of string | `Other of 'a] [@@js.custom {
   of_js = (fun a_of_js x -> match Ojs.type_of x with "string" -> `String (Ojs.string_of_js x) | _ -> `Other (a_of_js x));

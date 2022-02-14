@@ -1322,6 +1322,13 @@ module ResolvedUnion =
     ]
     cases |> String.concat " | "
 
+  let checkNullOrUndefined (u: UnionType) : {| hasNull: bool; hasUndefined: bool; rest: Type list |} =
+    let nullOrUndefined, rest =
+      u.types |> List.partition (function Prim (Null | Undefined) -> true | _ -> false)
+    let hasNull = nullOrUndefined |> List.contains (Prim Null)
+    let hasUndefined = nullOrUndefined |> List.contains (Prim Undefined)
+    {| hasNull = hasNull; hasUndefined = hasUndefined; rest = rest |}
+
   let rec private getEnumFromUnion ctx (u: UnionType) : Set<Choice<Enum * EnumCase, Literal>> * UnionType =
     let (|Dummy|) _ = []
 
@@ -1514,12 +1521,9 @@ module ResolvedUnion =
     match resolveUnionMap |> Map.tryFind u with
     | Some t -> t
     | None ->
-      let nullOrUndefined, rest =
-        u.types |> List.partition (function Prim (Null | Undefined) -> true | _ -> false)
-      let caseNull = nullOrUndefined |> List.contains (Prim Null)
-      let caseUndefined = nullOrUndefined |> List.contains (Prim Undefined)
+      let u' = checkNullOrUndefined u
       let prims, arrayTypes, rest =
-        rest |> List.fold (fun (prims, ats, rest) ->
+        u'.rest |> List.fold (fun (prims, ats, rest) ->
           function
           | Prim Number -> Typeofable.Number  :: prims, ats, rest
           | Prim String -> Typeofable.String  :: prims, ats, rest
@@ -1544,8 +1548,8 @@ module ResolvedUnion =
       let otherTypes = Set.ofList rest.types
 
       let result =
-        { caseNull = caseNull
-          caseUndefined = caseUndefined
+        { caseNull = u'.hasNull
+          caseUndefined = u'.hasUndefined
           typeofableTypes = typeofableTypes
           caseArray = caseArray
           caseEnum = caseEnum

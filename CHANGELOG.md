@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed the representation of untagged union types and intersection types to make it easier to use.
   - `('a, 'b) and_` and `('a, 'b) or_` types are removed in this change.
   - This is a breaking change.
+- Union types appearing as argument of function are now emitted in a simpler form: `` [`U1 of t1 | `U2 of t2 | .. ] [@js.union] ``.
+  - Now you don't have to do `Union.inject_n` on function arguments.
+  - This is a breaking change.
 
 ## [1.4.0-beta.4] - 2022-01-21
 - Ts2ocaml now emits builder function `[@js.builder]` for POJO interfaces.

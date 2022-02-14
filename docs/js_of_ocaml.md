@@ -276,7 +276,7 @@ Here we list the "safe" types, of which runtime representation is the same both 
 * Primitive types in the `Ts2ocaml_min` module, such as `any`, `never`, `bigint`, or `symbol`.
 * (Non-discriminated) union and intersection types, in the form `[ ... ] Union.t` or `[ ... ] Intersection.t`.
   - These modules has `get_n'` or `inject_n'` functions, which takes the conversion function of the contained type.
-* `typeof`-able unions, in the form `[ ... ] TypeofableUnion.t`.
+* Union of primitive types, in the form `[ ... ] Primitive.t`.
   - These modules has `inject'` and `classify'`, which takes the conversion function of the `'other` type.
 * Bindings to classes and interfaces.
   - It is an alias to `Ojs.t` (or `Ts2ocaml.intf`), which means the runtime representation is
@@ -291,7 +291,7 @@ Here we list the common "unsafe" types, which can cause problem when used as typ
   - Use `Ojs.list_to_js` and `Ojs.list_of_js` to explicitly convert these values.
 * Bindings to enums.
   - Use the `t_to_js` and `t_of_js` functions in the binding module.
-* Bindings to discriminated unions, which is represented as a polymorphic variant with `[@js.union]`.
+* Bindings to discriminated unions, which is represented as a polymorphic variant with `[@js.union on_field "..."]`.
   - Use the `t_to_js` and `t_of_js` functions in the binding module.
 
 Also, with the [`--functor`](#--functor) option (which is enabled by default),

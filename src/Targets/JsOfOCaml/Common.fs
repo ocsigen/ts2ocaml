@@ -327,6 +327,7 @@ end
 type null = private Ojs.t
 val null_of_js: Ojs.t -> null
 val null_to_js: null -> Ojs.t
+val null: null [@@js.custom let null = Ojs.null]
 module Null : sig
   type t = null
   val t_of_js: Ojs.t -> t
@@ -339,6 +340,7 @@ end
 type undefined = private Ojs.t
 val undefined_of_js: Ojs.t -> undefined
 val undefined_to_js: undefined -> Ojs.t
+val undefined: undefined [@@js.custom let undefined = Ojs.unit_to_js ()]
 module Undefined : sig
   type t = undefined
   val t_of_js: Ojs.t -> t
@@ -522,7 +524,7 @@ val union7_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> '
 val union8_to_js: ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('e -> Ojs.t) -> ('f -> Ojs.t) -> ('g -> Ojs.t) -> ('h -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 -> Ojs.t
 val union8_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> (Ojs.t -> 'e) -> (Ojs.t -> 'f) -> (Ojs.t -> 'g) -> (Ojs.t -> 'h) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8
 
-module TypeofableUnion : sig
+module Primitive : sig
   [@@@js.stop]
   type +'cases t = private Ojs.t
   val t_to_js: ('cases -> Ojs.t) -> 'cases t -> Ojs.t
@@ -574,71 +576,11 @@ module TypeofableUnion : sig
     | "boolean" -> Obj.magic (`Boolean (Ojs.bool_of_js u))
     | "symbol" -> Obj.magic (`Symbol (symbol_of_js u))
     | "bigint" -> Obj.magic (`BigInt (bigint_of_js u))
-    | "null" -> Obj.magic `Null
     | "undefined" -> Obj.magic `Undefined
-    | _ -> Obj.magic (`Other (other_of_js u))
+    | _ ->
+      if Ojs.is_null u then Obj.magic `Null
+      else Obj.magic (`Other (other_of_js u))
   let classify c = classify' Obj.magic c
   ]
 end
-
-type 'a or_null = 'a option
-val or_null_to_js: ('a -> Ojs.t) -> 'a or_null -> Ojs.t
-val or_null_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_null
-type 'a or_undefined = 'a option
-val or_undefined_to_js: ('a -> Ojs.t) -> 'a or_undefined -> Ojs.t
-val or_undefined_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_undefined
-type 'a or_null_or_undefined = 'a option
-val or_null_or_undefined_to_js: ('a -> Ojs.t) -> 'a or_null_or_undefined -> Ojs.t
-val or_null_or_undefined_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_null_or_undefined
-
-type 'a or_string = [`String of string | `Other of 'a] [@@js.custom {
-  of_js = (fun a_of_js x -> match Ojs.type_of x with "string" -> `String (Ojs.string_of_js x) | _ -> `Other (a_of_js x));
-  to_js = (fun a_to_js -> function `String x -> Ojs.string_to_js x | `Other x -> a_to_js x)
-}]
-val or_string_to_js: ('a -> Ojs.t) -> 'a or_string -> Ojs.t
-val or_string_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_string
-type 'a or_number = [`Number of float | `Other of 'a] [@@js.custom {
-  of_js = (fun a_of_js x -> match Ojs.type_of x with "number" -> `Number (Ojs.float_of_js x) | _ -> `Other (a_of_js x));
-  to_js = (fun a_to_js -> function `Number x -> Ojs.float_to_js x | `Other x -> a_to_js x)
-}]
-val or_number_to_js: ('a -> Ojs.t) -> 'a or_number -> Ojs.t
-val or_number_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_number
-type 'a or_boolean = [`Boolean of bool | `Other of 'a] [@@js.custom {
-  of_js = (fun a_of_js x -> match Ojs.type_of x with "boolean" -> `Boolean (Ojs.bool_of_js x) | _ -> `Other (a_of_js x));
-  to_js = (fun a_to_js -> function `Boolean x -> Ojs.bool_to_js x | `Other x -> a_to_js x)
-}]
-val or_boolean_to_js: ('a -> Ojs.t) -> 'a or_boolean -> Ojs.t
-val or_boolean_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_boolean
-type 'a or_symbol = [`Symbol of symbol | `Other of 'a] [@@js.custom {
-  of_js = (fun a_of_js x -> match Ojs.type_of x with "symbol" -> `Symbol (symbol_of_js x) | _ -> `Other (a_of_js x));
-  to_js = (fun a_to_js -> function `Symbol x -> symbol_to_js x | `Other x -> a_to_js x)
-}]
-val or_symbol_to_js: ('a -> Ojs.t) -> 'a or_symbol -> Ojs.t
-val or_symbol_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_symbol
-type 'a or_bigint = [`BigInt of bigint | `Other of 'a] [@@js.custom {
-  of_js = (fun a_of_js x -> match Ojs.type_of x with "bigint" -> `BigInt (bigint_of_js x) | _ -> `Other (a_of_js x));
-  to_js = (fun a_to_js -> function `BigInt x -> bigint_to_js x | `Other x -> a_to_js x)
-}]
-val or_bigint_to_js: ('a -> Ojs.t) -> 'a or_bigint -> Ojs.t
-val or_bigint_of_js: (Ojs.t -> 'a) -> Ojs.t -> 'a or_bigint
-
-val is_array: Ojs.t -> bool [@@js.global "Array.isArray"]
-
-type ('a, 't) or_array = [`Array of 't list | `Other of 'a] [@@js.custom {
-  of_js = (fun a_of_js t_of_js x ->
-    if is_array x then `Array (Ojs.list_of_js t_of_js x)
-    else `Other (a_of_js x)
-  );
-  to_js = (fun a_to_js t_to_js -> function `Array x -> Ojs.list_to_js t_to_js x | `Other x -> a_to_js x)
-}]
-val or_array_to_js: ('a -> Ojs.t) -> ('t -> Ojs.t) -> ('a, 't) or_array -> Ojs.t
-val or_array_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 't) -> Ojs.t -> ('a, 't) or_array
-
-type ('a, 'cases) or_enum = [`Enum of 'cases | `Other of 'a] [@@js.custom {
-  of_js = (fun a_of_js cases_of_js x ->
-    try `Enum (cases_of_js x) with _ -> `Other (a_of_js x));
-  to_js = (fun a_to_js cases_to_js -> function `Enum cases -> cases_to_js cases | `Other x -> a_to_js x)
-}]
-val or_enum_to_js: ('a -> Ojs.t) -> ('cases -> Ojs.t) -> ('a, 'cases) or_enum -> Ojs.t
-val or_enum_of_js: (Ojs.t -> 'a) -> (Ojs.t -> 'cases) -> Ojs.t -> ('a, 'cases) or_enum
 """

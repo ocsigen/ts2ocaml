@@ -179,18 +179,6 @@ module Type =
   // our types
   let intf  = str "intf"
 
-  let null_or t        = app (str "or_null") [t]
-  let undefined_or t   = app (str "or_undefined") [t]
-  let null_or_undefined_or t = app (str "or_null_or_undefined") [t]
-  let string_or t  = app (str "or_string") [t]
-  let number_or t  = app (str "or_number") [t]
-  let boolean_or t = app (str "or_boolean") [t]
-  let symbol_or t  = app (str "or_symbol") [t]
-  let bigint_or t  = app (str "or_bigint") [t]
-
-  let array_or elemT t = app (str "or_array") [t; elemT]
-  let enum_or cases t = app (str "or_enum") [t; cases]
-
   let rec union = function
     | [] -> failwith "union type with zero elements"
     | x :: [] -> x

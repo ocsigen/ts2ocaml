@@ -135,6 +135,7 @@ type EmitTypeFlags = {
   hasTypeArgumentsHandled: bool
   forceSkipAttributes: bool
   convertNonIdentityPrimitives: bool
+  simplifyContravariantUnion: bool
 }
 
 module EmitTypeFlags =
@@ -150,6 +151,7 @@ module EmitTypeFlags =
       hasTypeArgumentsHandled = false
       forceSkipAttributes = false
       convertNonIdentityPrimitives = false
+      simplifyContravariantUnion = false
     }
 
 type TypeEmitter = Context -> Type -> text
@@ -362,7 +364,7 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
 
 and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (u: UnionType) : text =
   let flags = { flags with needParen = true }
-  if flags.variance = Contravariant then
+  if flags.variance = Contravariant && flags.simplifyContravariantUnion && not flags.forceSkipAttributes then
     u.types
     |> List.indexed
     |> List.map (fun (i, t) -> tprintf "`U%d of " (i+1) + emitTypeImpl flags overrideFunc ctx t)
@@ -373,7 +375,11 @@ and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context)
     u.types |> List.distinct |> List.map (emitTypeImpl flags overrideFunc ctx) |> Type.union
   else
     let ru = ResolvedUnion.resolve ctx u
-    let forceSkipAttr text = if flags.forceSkipAttributes then empty else text
+    let forceSkipAttr text =
+      if flags.forceSkipAttributes then empty else text
+    let skipOnContravariant text =
+      if flags.skipAttributesOnContravariantPosition && flags.variance = Contravariant then empty
+      else forceSkipAttr text
     let treatNullUndefined t =
       match ru.caseNull, ru.caseUndefined with
       | true, true -> Type.app Type.null_undefined [t]
@@ -411,7 +417,7 @@ and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context)
           let name = pv_head @+ "U_" @+ literalToIdentifier ctx l
           let ty = emitTypeImpl { flags with resolveUnion = false } overrideFunc ctx t
           let body = tprintf "%A of %A " name ty
-          yield body + forceSkipAttr (Attr.js (Term.literal l))
+          yield body + skipOnContravariant (Attr.js (Term.literal l))
       ]) + forceSkipAttr (tprintf " [@js.union on_field \"%s\"]" tagName) |> between "(" ")"
     let treatOther t otherTypes =
       if Set.isEmpty otherTypes then
@@ -635,7 +641,10 @@ let removeLabels (xs: Choice<FieldLike, Type> list) =
 
 let inline func ft = Func (ft, [], ft.loc)
 
-let rec emitMembers (emitType_: TypeEmitter) ctx (selfTy: Type) (ma: MemberAttribute) m = [
+let rec emitMembers flags overrideFunc ctx (selfTy: Type) (ma: MemberAttribute) m = [
+  let flags = { flags with simplifyContravariantUnion = true }
+  let emitType_ = emitTypeImpl flags overrideFunc
+
   let inline comments () =
     match ma.comments with
     | [] -> Seq.empty
@@ -697,8 +706,8 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (selfTy: Type) (ma: MemberAttri
     yield! comments ()
     yield overloaded (fun rename -> [val_ ("set_" + Naming.removeInvalidChars fl.name |> rename) ty + str " " + Attr.js_set fl.name])
   | Field (fl, Mutable) ->
-    yield! emitMembers emitType_ ctx selfTy ma (Getter fl)
-    yield! emitMembers emitType_ ctx selfTy ma (Setter fl)
+    yield! emitMembers flags overrideFunc ctx selfTy ma (Getter fl)
+    yield! emitMembers flags overrideFunc ctx selfTy ma (Setter fl)
   | Callable (ft, _typrm) ->
     let ft = func { ft with args = Choice2Of2 PolymorphicThis :: ft.args } |> emitType_ ctx
     yield! comments ()
@@ -718,8 +727,8 @@ let rec emitMembers (emitType_: TypeEmitter) ctx (selfTy: Type) (ma: MemberAttri
     yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "set") ft + str " " + Attr.js_index_set])
   | Indexer (ft, Mutable) ->
-    yield! emitMembers emitType_ ctx selfTy ma (Indexer (ft, ReadOnly))
-    yield! emitMembers emitType_ ctx selfTy ma (Indexer (ft, WriteOnly))
+    yield! emitMembers flags overrideFunc ctx selfTy ma (Indexer (ft, ReadOnly))
+    yield! emitMembers flags overrideFunc ctx selfTy ma (Indexer (ft, WriteOnly))
   | SymbolIndexer (symbol, ft, _) ->
     let ft = func ft |> emitType_ ctx
     yield comment (tprintf "[Symbol.%s]: " symbol + ft) |> ScopeIndependent
@@ -993,10 +1002,9 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
                 else
                   Type.appOpt (str "parent") (ts |> List.map (_emitType _ctx)) |> Some
               | _ -> None
-        let emitType_ ctx ty = emitType overrideFunc ctx ty
         let members = [
           for ma, m in c.members do
-            yield! emitMembers emitType_ innerCtx PolymorphicThis ma m
+            yield! emitMembers flags overrideFunc innerCtx PolymorphicThis ma m
           yield! additionalMembers innerCtx flags overrideFunc
         ]
         // skip if the content does not have actual definitions
@@ -1036,10 +1044,9 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
           | _ -> None
 
     let emitType_ ctx ty = emitType overrideFunc ctx ty
-
     let members = [
       for ma, m in c.members do
-        yield! emitMembers emitType_ innerCtx PolymorphicThis ma m
+        yield! emitMembers flags overrideFunc innerCtx PolymorphicThis ma m
       yield! additionalMembers innerCtx flags overrideFunc
     ]
 

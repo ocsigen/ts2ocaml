@@ -33,11 +33,11 @@ module PerformanceMeasureOptions : sig
   val set_detail: 'tags this -> any -> unit [@@js.set "detail"]
   val get_duration: 'tags this -> DOMHighResTimeStamp.t [@@js.get "duration"]
   val set_duration: 'tags this -> DOMHighResTimeStamp.t -> unit [@@js.set "duration"]
-  val get_end: 'tags this -> DOMHighResTimeStamp.t or_string [@@js.get "end"]
-  val set_end: 'tags this -> DOMHighResTimeStamp.t or_string -> unit [@@js.set "end"]
-  val get_start: 'tags this -> DOMHighResTimeStamp.t or_string [@@js.get "start"]
-  val set_start: 'tags this -> DOMHighResTimeStamp.t or_string -> unit [@@js.set "start"]
-  val create: detail:any -> duration:DOMHighResTimeStamp.t -> end_:(DOMHighResTimeStamp.t or_string[@js "end"]) -> start:DOMHighResTimeStamp.t or_string -> unit -> t [@@js.builder]
+  val get_end: 'tags this -> ([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "end"]
+  val set_end: 'tags this -> ([`U1 of string | `U2 of DOMHighResTimeStamp.t] [@js.union]) -> unit [@@js.set "end"]
+  val get_start: 'tags this -> ([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "start"]
+  val set_start: 'tags this -> ([`U1 of string | `U2 of DOMHighResTimeStamp.t] [@js.union]) -> unit [@@js.set "start"]
+  val create: detail:any -> duration:DOMHighResTimeStamp.t -> end_:(([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t[@js "end"]) -> start:([`String of string | `Other of DOMHighResTimeStamp.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -213,8 +213,8 @@ module[@js.scope "AbortSignal"] rec AbortSignal : sig
   
   (** Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise. *)
   val get_aborted: 'tags this -> bool [@@js.get "aborted"]
-  val get_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onabort"]
-  val set_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onabort"]
+  val get_onabort: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onabort"]
+  val set_onabort: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onabort"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -231,7 +231,7 @@ module[@js.scope "AbortSignal"] rec AbortSignal : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbortSignalEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbortSignalEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -248,13 +248,13 @@ module[@js.scope "AbortSignal"] rec AbortSignal : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbortSignalEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbortSignalEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -315,7 +315,7 @@ and[@js.scope "Event"] Event : sig
   val get_composed: 'tags this -> bool [@@js.get "composed"]
   
   (** Returns the object whose event listener's callback is currently being invoked. *)
-  val get_currentTarget: 'tags this -> EventTarget.t or_null [@@js.get "currentTarget"]
+  val get_currentTarget: 'tags this -> EventTarget.t option [@@js.get "currentTarget"]
   
   (** Returns true if preventDefault() was invoked successfully to indicate cancelation, and false otherwise. *)
   val get_defaultPrevented: 'tags this -> bool [@@js.get "defaultPrevented"]
@@ -333,10 +333,10 @@ and[@js.scope "Event"] Event : sig
   val set_returnValue: 'tags this -> bool -> unit [@@js.set "returnValue"]
   
   (** @deprecated  *)
-  val get_srcElement: 'tags this -> EventTarget.t or_null [@@js.get "srcElement"]
+  val get_srcElement: 'tags this -> EventTarget.t option [@@js.get "srcElement"]
   
   (** Returns the object to which event is dispatched (its target). *)
-  val get_target: 'tags this -> EventTarget.t or_null [@@js.get "target"]
+  val get_target: 'tags this -> EventTarget.t option [@@js.get "target"]
   
   (** Returns the event's timestamp as the number of milliseconds measured relative to the time origin. *)
   val get_timeStamp: 'tags this -> DOMHighResTimeStamp.t [@@js.get "timeStamp"]
@@ -450,13 +450,13 @@ and[@js.scope "EventTarget"] EventTarget : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:string -> callback:EventListenerOrEventListenerObject.t or_null -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:string -> callback:EventListenerOrEventListenerObject.t option -> ?options:([`U1 of AddEventListenerOptions.t | `U2 of bool] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise. *)
   val dispatchEvent: 'tags this -> event:Event.t -> bool [@@js.call "dispatchEvent"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:string -> callback:EventListenerOrEventListenerObject.t or_null -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:string -> callback:EventListenerOrEventListenerObject.t option -> ?options:([`U1 of EventListenerOptions.t | `U2 of bool] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -479,8 +479,8 @@ module[@js.scope "Performance"] Performance : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onresourcetimingbufferfull: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onresourcetimingbufferfull"]
-  val set_onresourcetimingbufferfull: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onresourcetimingbufferfull"]
+  val get_onresourcetimingbufferfull: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onresourcetimingbufferfull"]
+  val set_onresourcetimingbufferfull: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onresourcetimingbufferfull"]
   val get_timeOrigin: 'tags this -> DOMHighResTimeStamp.t [@@js.get "timeOrigin"]
   val clearMarks: 'tags this -> ?markName:string -> unit -> unit [@@js.call "clearMarks"]
   val clearMeasures: 'tags this -> ?measureName:string -> unit -> unit [@@js.call "clearMeasures"]
@@ -489,7 +489,7 @@ module[@js.scope "Performance"] Performance : sig
   val getEntriesByName: 'tags this -> name:string -> ?type_:string -> unit -> PerformanceEntryList.t [@@js.call "getEntriesByName"]
   val getEntriesByType: 'tags this -> type_:string -> PerformanceEntryList.t [@@js.call "getEntriesByType"]
   val mark: 'tags this -> markName:string -> ?markOptions:PerformanceMarkOptions.t -> unit -> PerformanceMark.t [@@js.call "mark"]
-  val measure: 'tags this -> measureName:string -> ?startOrMeasureOptions:PerformanceMeasureOptions.t or_string -> ?endMark:string -> unit -> PerformanceMeasure.t [@@js.call "measure"]
+  val measure: 'tags this -> measureName:string -> ?startOrMeasureOptions:([`U1 of string | `U2 of PerformanceMeasureOptions.t] [@js.union]) -> ?endMark:string -> unit -> PerformanceMeasure.t [@@js.call "measure"]
   val now: 'tags this -> DOMHighResTimeStamp.t [@@js.call "now"]
   val setResourceTimingBufferSize: 'tags this -> maxSize:float -> unit [@@js.call "setResourceTimingBufferSize"]
   val toJSON: 'tags this -> any [@@js.call "toJSON"]
@@ -509,7 +509,7 @@ module[@js.scope "Performance"] Performance : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PerformanceEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PerformanceEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -526,19 +526,19 @@ module[@js.scope "Performance"] Performance : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PerformanceEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PerformanceEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
 module[@js.scope "performance"] PerformanceStatic : sig
-  val onresourcetimingbufferfull: unit -> (this:Performance.t -> ev:Event.t -> any) or_null [@@js.get "onresourcetimingbufferfull"]
+  val onresourcetimingbufferfull: unit -> (this:Performance.t -> ev:Event.t -> any) option [@@js.get "onresourcetimingbufferfull"]
   val timeOrigin: unit -> DOMHighResTimeStamp.t [@@js.get "timeOrigin"]
   val clearMarks: ?markName:string -> unit -> unit [@@js.global "clearMarks"]
   val clearMeasures: ?measureName:string -> unit -> unit [@@js.global "clearMeasures"]
@@ -547,7 +547,7 @@ module[@js.scope "performance"] PerformanceStatic : sig
   val getEntriesByName: name:string -> ?type_:string -> unit -> PerformanceEntryList.t [@@js.global "getEntriesByName"]
   val getEntriesByType: string -> PerformanceEntryList.t [@@js.global "getEntriesByType"]
   val mark: markName:string -> ?markOptions:PerformanceMarkOptions.t -> unit -> PerformanceMark.t [@@js.global "mark"]
-  val measure: measureName:string -> ?startOrMeasureOptions:PerformanceMeasureOptions.t or_string -> ?endMark:string -> unit -> PerformanceMeasure.t [@@js.global "measure"]
+  val measure: measureName:string -> ?startOrMeasureOptions:([`U1 of string | `U2 of PerformanceMeasureOptions.t] [@js.union]) -> ?endMark:string -> unit -> PerformanceMeasure.t [@@js.global "measure"]
   val now: unit -> DOMHighResTimeStamp.t [@@js.global "now"]
   val setResourceTimingBufferSize: float -> unit [@@js.global "setResourceTimingBufferSize"]
   val toJSON: unit -> any [@@js.global "toJSON"]
@@ -567,7 +567,7 @@ module[@js.scope "performance"] PerformanceStatic : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: type_:'K -> listener:(this:Performance.t -> ev:(* FIXME: unknown type 'PerformanceEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.global "addEventListener"]
+  val addEventListener: type_:'K -> listener:(this:Performance.t -> ev:(* FIXME: unknown type 'PerformanceEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.global "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -584,13 +584,13 @@ module[@js.scope "performance"] PerformanceStatic : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.global "addEventListener"]
+  val addEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.global "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: type_:'K -> listener:(this:Performance.t -> ev:(* FIXME: unknown type 'PerformanceEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
+  val removeEventListener: type_:'K -> listener:(this:Performance.t -> ev:(* FIXME: unknown type 'PerformanceEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.global "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
+  val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.global "removeEventListener"]
 end
 module StorageEstimate : sig
   type t = [`StorageEstimate] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -1098,8 +1098,8 @@ module IDBVersionChangeEventInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_newVersion: 'tags this -> float or_null [@@js.get "newVersion"]
-  val set_newVersion: 'tags this -> float or_null -> unit [@@js.set "newVersion"]
+  val get_newVersion: 'tags this -> float option [@@js.get "newVersion"]
+  val set_newVersion: 'tags this -> float option -> unit [@@js.set "newVersion"]
   val get_oldVersion: 'tags this -> float [@@js.get "oldVersion"]
   val set_oldVersion: 'tags this -> float -> unit [@@js.set "oldVersion"]
   val create: ?newVersion:float -> oldVersion:float -> unit -> t [@@js.builder]
@@ -1123,7 +1123,7 @@ module[@js.scope "IDBVersionChangeEvent"] IDBVersionChangeEvent : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_newVersion: 'tags this -> float or_null [@@js.get "newVersion"]
+  val get_newVersion: 'tags this -> float option [@@js.get "newVersion"]
   val get_oldVersion: 'tags this -> float [@@js.get "oldVersion"]
   val create: ?newVersion:float -> oldVersion:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -1148,9 +1148,9 @@ module IDBObjectStoreParameters : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_autoIncrement: 'tags this -> bool [@@js.get "autoIncrement"]
   val set_autoIncrement: 'tags this -> bool -> unit [@@js.set "autoIncrement"]
-  val get_keyPath: 'tags this -> string list or_string or_null [@@js.get "keyPath"]
-  val set_keyPath: 'tags this -> string list or_string or_null -> unit [@@js.set "keyPath"]
-  val create: autoIncrement:bool -> ?keyPath:string list or_string -> unit -> t [@@js.builder]
+  val get_keyPath: 'tags this -> ([`String of string | `Null | `Other of string list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "keyPath"]
+  val set_keyPath: 'tags this -> ([`Null | `U1 of string | `U2 of string list] [@js.union]) -> unit [@@js.set "keyPath"]
+  val create: autoIncrement:bool -> ?keyPath:([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IDBIndexParameters : sig
@@ -1177,7 +1177,7 @@ module IDBIndexParameters : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module BufferSource : sig
-  type t = never
+  type t = (ArrayBuffer.t_0, ArrayBufferView.t_0) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1185,7 +1185,7 @@ module BufferSource : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module IDBValidKey : sig
-  type t = t list or_string or_number
+  type t = ([`Number of float | `String of string | `Other of (t list, BufferSource.t, Date.t_0) union3] [@js.union on_field "dummy"]) Primitive.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1283,6 +1283,7 @@ module[@js.scope "DOMStringList"] DOMStringList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> string IterableIterator.t_1 *)
   
   (** Returns the number of strings in strings. *)
   val get_length: 'tags this -> float [@@js.get "length"]
@@ -1291,10 +1292,9 @@ module[@js.scope "DOMStringList"] DOMStringList : sig
   val contains: 'tags this -> string:string -> bool [@@js.call "contains"]
   
   (** Returns the string with index index from strings. *)
-  val item: 'tags this -> index:float -> string or_null [@@js.call "item"]
+  val item: 'tags this -> index:float -> string option [@@js.call "item"]
   val get: 'tags this -> float -> string [@@js.index_get]
   val set: 'tags this -> float -> string -> unit [@@js.index_set]
-  (* [Symbol.iterator]: unit -> string IterableIterator.t_1 *)
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -1421,7 +1421,7 @@ module[@js.scope "IDBCursor"] rec IDBCursor : sig
     
     If successful, request's result will be undefined.
   *)
-  val delete: 'tags this -> never or_undefined IDBRequest.t [@@js.call "delete"]
+  val delete: 'tags this -> undefined IDBRequest.t [@@js.call "delete"]
   
   (**
     Updated the record pointed at by the cursor with a new value.
@@ -1480,19 +1480,22 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
+  (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
+  val transaction: 'tags this -> storeNames:([`U1 of string | `U2 of string Iterable.t_1] [@js.union]) -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
+  
   (** Returns the name of the database. *)
   val get_name: 'tags this -> string [@@js.get "name"]
   
   (** Returns a list of the names of object stores in the database. *)
   val get_objectStoreNames: 'tags this -> DOMStringList.t [@@js.get "objectStoreNames"]
-  val get_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onabort"]
-  val set_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onabort"]
-  val get_onclose: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onclose"]
-  val set_onclose: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onclose"]
-  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onversionchange: 'tags this -> (this:t -> ev:IDBVersionChangeEvent.t -> any) or_null [@@js.get "onversionchange"]
-  val set_onversionchange: 'tags this -> (this:t -> ev:IDBVersionChangeEvent.t -> any) or_null -> unit [@@js.set "onversionchange"]
+  val get_onabort: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onabort"]
+  val set_onabort: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onabort"]
+  val get_onclose: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onclose"]
+  val set_onclose: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onclose"]
+  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onerror"]
+  val get_onversionchange: 'tags this -> (this:t -> ev:IDBVersionChangeEvent.t -> any) option [@@js.get "onversionchange"]
+  val set_onversionchange: 'tags this -> (this:t -> ev:IDBVersionChangeEvent.t -> any) option -> unit [@@js.set "onversionchange"]
   
   (** Returns the version of the database. *)
   val get_version: 'tags this -> float [@@js.get "version"]
@@ -1515,7 +1518,7 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
   val deleteObjectStore: 'tags this -> name:string -> unit [@@js.call "deleteObjectStore"]
   
   (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
-  val transaction: 'tags this -> storeNames:string list or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
+  val transaction': 'tags this -> storeNames:([`U1 of string | `U2 of string list] [@js.union]) -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -1532,7 +1535,7 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBDatabaseEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBDatabaseEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -1549,16 +1552,13 @@ and[@js.scope "IDBDatabase"] IDBDatabase : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBDatabaseEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBDatabaseEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  
-  (** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. *)
-  val transaction': 'tags this -> storeNames:string Iterable.t_1 or_string -> ?mode:IDBTransactionMode.t -> unit -> IDBTransaction.t [@@js.call "transaction"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -1581,7 +1581,7 @@ and[@js.scope "IDBIndex"] IDBIndex : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_keyPath: 'tags this -> string list or_string [@@js.get "keyPath"]
+  val get_keyPath: 'tags this -> ([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "keyPath"]
   val get_multiEntry: 'tags this -> bool [@@js.get "multiEntry"]
   
   (** Returns the name of the index. *)
@@ -1599,49 +1599,49 @@ and[@js.scope "IDBIndex"] IDBIndex : sig
     
     If successful, request's result will be the count.
   *)
-  val count: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 -> unit -> float IDBRequest.t [@@js.call "count"]
+  val count: 'tags this -> ?query:([`U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> unit -> float IDBRequest.t [@@js.call "count"]
   
   (**
     Retrieves the value of the first record matching the given key or key range in query.
     
     If successful, request's result will be the value, or undefined if there was no matching record.
   *)
-  val get_: 'tags this -> query:(IDBKeyRange.t, IDBValidKey.t) union2 -> any IDBRequest.t [@@js.call "get"]
+  val get_: 'tags this -> query:([`U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> any IDBRequest.t [@@js.call "get"]
   
   (**
     Retrieves the values of the records matching the given key or key range in query (up to count if given).
     
     If successful, request's result will be an Array of the values.
   *)
-  val getAll: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 or_null -> ?count:float -> unit -> any list IDBRequest.t [@@js.call "getAll"]
+  val getAll: 'tags this -> ?query:([`Null | `U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> ?count:float -> unit -> any list IDBRequest.t [@@js.call "getAll"]
   
   (**
     Retrieves the keys of records matching the given key or key range in query (up to count if given).
     
     If successful, request's result will be an Array of the keys.
   *)
-  val getAllKeys: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 or_null -> ?count:float -> unit -> IDBValidKey.t list IDBRequest.t [@@js.call "getAllKeys"]
+  val getAllKeys: 'tags this -> ?query:([`Null | `U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> ?count:float -> unit -> IDBValidKey.t list IDBRequest.t [@@js.call "getAllKeys"]
   
   (**
     Retrieves the key of the first record matching the given key or key range in query.
     
     If successful, request's result will be the key, or undefined if there was no matching record.
   *)
-  val getKey: 'tags this -> query:(IDBKeyRange.t, IDBValidKey.t) union2 -> IDBValidKey.t or_undefined IDBRequest.t [@@js.call "getKey"]
+  val getKey: 'tags this -> query:([`U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> IDBValidKey.t option IDBRequest.t [@@js.call "getKey"]
   
   (**
     Opens a cursor over the records matching query, ordered by direction. If query is null, all records in index are matched.
     
     If successful, request's result will be an IDBCursorWithValue, or null if there were no matching records.
   *)
-  val openCursor: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 or_null -> ?direction:IDBCursorDirection.t -> unit -> IDBCursorWithValue.t or_null IDBRequest.t [@@js.call "openCursor"]
+  val openCursor: 'tags this -> ?query:([`Null | `U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> ?direction:IDBCursorDirection.t -> unit -> IDBCursorWithValue.t option IDBRequest.t [@@js.call "openCursor"]
   
   (**
     Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in index are matched.
     
     If successful, request's result will be an IDBCursor, or null if there were no matching records.
   *)
-  val openKeyCursor: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 or_null -> ?direction:IDBCursorDirection.t -> unit -> IDBCursor.t or_null IDBRequest.t [@@js.call "openKeyCursor"]
+  val openKeyCursor: 'tags this -> ?query:([`Null | `U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> ?direction:IDBCursorDirection.t -> unit -> IDBCursor.t option IDBRequest.t [@@js.call "openKeyCursor"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -1665,6 +1665,13 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
+  (**
+    Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
+    
+    Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
+  *)
+  val createIndex: 'tags this -> name:string -> keyPath:([`U1 of string | `U2 of string Iterable.t_1] [@js.union]) -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
+  
   (** Returns true if the store has a key generator, and false otherwise. *)
   val get_autoIncrement: 'tags this -> bool [@@js.get "autoIncrement"]
   
@@ -1672,7 +1679,7 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
   val get_indexNames: 'tags this -> DOMStringList.t [@@js.get "indexNames"]
   
   (** Returns the key path of the store, or null if none. *)
-  val get_keyPath: 'tags this -> string list or_string [@@js.get "keyPath"]
+  val get_keyPath: 'tags this -> ([`String of string | `Other of string list] [@js.union on_field "dummy"]) Primitive.t [@@js.get "keyPath"]
   
   (** Returns the name of the store. *)
   val get_name: 'tags this -> string [@@js.get "name"]
@@ -1699,28 +1706,28 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     
     If successful, request's result will be undefined.
   *)
-  val clear: 'tags this -> never or_undefined IDBRequest.t [@@js.call "clear"]
+  val clear: 'tags this -> undefined IDBRequest.t [@@js.call "clear"]
   
   (**
     Retrieves the number of records matching the given key or key range in query.
     
     If successful, request's result will be the count.
   *)
-  val count: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 -> unit -> float IDBRequest.t [@@js.call "count"]
+  val count: 'tags this -> ?query:([`U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> unit -> float IDBRequest.t [@@js.call "count"]
   
   (**
     Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
     
     Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
   *)
-  val createIndex: 'tags this -> name:string -> keyPath:string list or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
+  val createIndex': 'tags this -> name:string -> keyPath:([`U1 of string | `U2 of string list] [@js.union]) -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
   
   (**
     Deletes records in store with the given key or in the given key range in query.
     
     If successful, request's result will be undefined.
   *)
-  val delete: 'tags this -> query:(IDBKeyRange.t, IDBValidKey.t) union2 -> never or_undefined IDBRequest.t [@@js.call "delete"]
+  val delete: 'tags this -> query:([`U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> undefined IDBRequest.t [@@js.call "delete"]
   
   (**
     Deletes the index in store with the given name.
@@ -1734,28 +1741,28 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     
     If successful, request's result will be the value, or undefined if there was no matching record.
   *)
-  val get_: 'tags this -> query:(IDBKeyRange.t, IDBValidKey.t) union2 -> any IDBRequest.t [@@js.call "get"]
+  val get_: 'tags this -> query:([`U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> any IDBRequest.t [@@js.call "get"]
   
   (**
     Retrieves the values of the records matching the given key or key range in query (up to count if given).
     
     If successful, request's result will be an Array of the values.
   *)
-  val getAll: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 or_null -> ?count:float -> unit -> any list IDBRequest.t [@@js.call "getAll"]
+  val getAll: 'tags this -> ?query:([`Null | `U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> ?count:float -> unit -> any list IDBRequest.t [@@js.call "getAll"]
   
   (**
     Retrieves the keys of records matching the given key or key range in query (up to count if given).
     
     If successful, request's result will be an Array of the keys.
   *)
-  val getAllKeys: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 or_null -> ?count:float -> unit -> IDBValidKey.t list IDBRequest.t [@@js.call "getAllKeys"]
+  val getAllKeys: 'tags this -> ?query:([`Null | `U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> ?count:float -> unit -> IDBValidKey.t list IDBRequest.t [@@js.call "getAllKeys"]
   
   (**
     Retrieves the key of the first record matching the given key or key range in query.
     
     If successful, request's result will be the key, or undefined if there was no matching record.
   *)
-  val getKey: 'tags this -> query:(IDBKeyRange.t, IDBValidKey.t) union2 -> IDBValidKey.t or_undefined IDBRequest.t [@@js.call "getKey"]
+  val getKey: 'tags this -> query:([`U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> IDBValidKey.t option IDBRequest.t [@@js.call "getKey"]
   val index: 'tags this -> name:string -> IDBIndex.t [@@js.call "index"]
   
   (**
@@ -1763,14 +1770,14 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     
     If successful, request's result will be an IDBCursorWithValue pointing at the first matching record, or null if there were no matching records.
   *)
-  val openCursor: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 or_null -> ?direction:IDBCursorDirection.t -> unit -> IDBCursorWithValue.t or_null IDBRequest.t [@@js.call "openCursor"]
+  val openCursor: 'tags this -> ?query:([`Null | `U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> ?direction:IDBCursorDirection.t -> unit -> IDBCursorWithValue.t option IDBRequest.t [@@js.call "openCursor"]
   
   (**
     Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in store are matched.
     
     If successful, request's result will be an IDBCursor pointing at the first matching record, or null if there were no matching records.
   *)
-  val openKeyCursor: 'tags this -> ?query:(IDBKeyRange.t, IDBValidKey.t) union2 or_null -> ?direction:IDBCursorDirection.t -> unit -> IDBCursor.t or_null IDBRequest.t [@@js.call "openKeyCursor"]
+  val openKeyCursor: 'tags this -> ?query:([`Null | `U1 of IDBValidKey.t | `U2 of IDBKeyRange.t] [@js.union]) -> ?direction:IDBCursorDirection.t -> unit -> IDBCursor.t option IDBRequest.t [@@js.call "openKeyCursor"]
   
   (**
     Adds or updates a record in store with the given value and key.
@@ -1782,13 +1789,6 @@ and[@js.scope "IDBObjectStore"] IDBObjectStore : sig
     If successful, request's result will be the record's key.
   *)
   val put: 'tags this -> value:any -> ?key:IDBValidKey.t -> unit -> IDBValidKey.t IDBRequest.t [@@js.call "put"]
-  
-  (**
-    Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be satisfied with the data already in store the upgrade transaction will abort with a "ConstraintError" DOMException.
-    
-    Throws an "InvalidStateError" DOMException if not called within an upgrade transaction.
-  *)
-  val createIndex': 'tags this -> name:string -> keyPath:string Iterable.t_1 or_string -> ?options:IDBIndexParameters.t -> unit -> IDBIndex.t [@@js.call "createIndex"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -1818,11 +1818,11 @@ and[@js.scope "IDBRequest"] IDBRequest : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (** When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws a "InvalidStateError" DOMException if the request is still pending. *)
-  val get_error: ('tags, 'T) this -> DOMException.t or_null [@@js.get "error"]
-  val get_onerror: ('tags, 'T) this -> (this:'T t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: ('tags, 'T) this -> (this:'T t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onsuccess: ('tags, 'T) this -> (this:'T t -> ev:Event.t -> any) or_null [@@js.get "onsuccess"]
-  val set_onsuccess: ('tags, 'T) this -> (this:'T t -> ev:Event.t -> any) or_null -> unit [@@js.set "onsuccess"]
+  val get_error: ('tags, 'T) this -> DOMException.t option [@@js.get "error"]
+  val get_onerror: ('tags, 'T) this -> (this:'T t -> ev:Event.t -> any) option [@@js.get "onerror"]
+  val set_onerror: ('tags, 'T) this -> (this:'T t -> ev:Event.t -> any) option -> unit [@@js.set "onerror"]
+  val get_onsuccess: ('tags, 'T) this -> (this:'T t -> ev:Event.t -> any) option [@@js.get "onsuccess"]
+  val set_onsuccess: ('tags, 'T) this -> (this:'T t -> ev:Event.t -> any) option -> unit [@@js.set "onsuccess"]
   
   (** Returns "pending" until a request is complete, then returns "done". *)
   val get_readyState: ('tags, 'T) this -> IDBRequestReadyState.t [@@js.get "readyState"]
@@ -1834,7 +1834,7 @@ and[@js.scope "IDBRequest"] IDBRequest : sig
   val get_source: ('tags, 'T) this -> (IDBCursor.t, IDBIndex.t, IDBObjectStore.t) union3 [@@js.get "source"]
   
   (** Returns the IDBTransaction the request was made within. If this as an open request, then it returns an upgrade transaction while it is running, or null otherwise. *)
-  val get_transaction: ('tags, 'T) this -> IDBTransaction.t or_null [@@js.get "transaction"]
+  val get_transaction: ('tags, 'T) this -> IDBTransaction.t option [@@js.get "transaction"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -1851,7 +1851,7 @@ and[@js.scope "IDBRequest"] IDBRequest : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: ('tags, 'T) this -> type_:'K -> listener:(this:'T t -> ev:(* FIXME: unknown type 'IDBRequestEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: ('tags, 'T) this -> type_:'K -> listener:(this:'T t -> ev:(* FIXME: unknown type 'IDBRequestEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -1868,13 +1868,13 @@ and[@js.scope "IDBRequest"] IDBRequest : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': ('tags, 'T) this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': ('tags, 'T) this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: ('tags, 'T) this -> type_:'K -> listener:(this:'T t -> ev:(* FIXME: unknown type 'IDBRequestEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: ('tags, 'T) this -> type_:'K -> listener:(this:'T t -> ev:(* FIXME: unknown type 'IDBRequestEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': ('tags, 'T) this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': ('tags, 'T) this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: unit -> t_0 [@@js.create]
@@ -1900,19 +1900,19 @@ and[@js.scope "IDBTransaction"] IDBTransaction : sig
   val get_db: 'tags this -> IDBDatabase.t [@@js.get "db"]
   
   (** If the transaction was aborted, returns the error (a DOMException) providing the reason. *)
-  val get_error: 'tags this -> DOMException.t or_null [@@js.get "error"]
+  val get_error: 'tags this -> DOMException.t option [@@js.get "error"]
   
   (** Returns the mode the transaction was created with ("readonly" or "readwrite"), or "versionchange" for an upgrade transaction. *)
   val get_mode: 'tags this -> IDBTransactionMode.t [@@js.get "mode"]
   
   (** Returns a list of the names of object stores in the transaction's scope. For an upgrade transaction this is all object stores in the database. *)
   val get_objectStoreNames: 'tags this -> DOMStringList.t [@@js.get "objectStoreNames"]
-  val get_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onabort"]
-  val set_onabort: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onabort"]
-  val get_oncomplete: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "oncomplete"]
-  val set_oncomplete: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "oncomplete"]
-  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
+  val get_onabort: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onabort"]
+  val set_onabort: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onabort"]
+  val get_oncomplete: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "oncomplete"]
+  val set_oncomplete: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "oncomplete"]
+  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onerror"]
   
   (** Aborts the transaction. All pending requests will fail with a "AbortError" DOMException and all changes made to the database will be reverted. *)
   val abort: 'tags this -> unit [@@js.call "abort"]
@@ -1936,7 +1936,7 @@ and[@js.scope "IDBTransaction"] IDBTransaction : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBTransactionEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBTransactionEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -1953,13 +1953,13 @@ and[@js.scope "IDBTransaction"] IDBTransaction : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBTransactionEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBTransactionEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -1982,10 +1982,10 @@ module[@js.scope "IDBOpenDBRequest"] IDBOpenDBRequest : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onblocked: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onblocked"]
-  val set_onblocked: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onblocked"]
-  val get_onupgradeneeded: 'tags this -> (this:t -> ev:IDBVersionChangeEvent.t -> any) or_null [@@js.get "onupgradeneeded"]
-  val set_onupgradeneeded: 'tags this -> (this:t -> ev:IDBVersionChangeEvent.t -> any) or_null -> unit [@@js.set "onupgradeneeded"]
+  val get_onblocked: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onblocked"]
+  val set_onblocked: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onblocked"]
+  val get_onupgradeneeded: 'tags this -> (this:t -> ev:IDBVersionChangeEvent.t -> any) option [@@js.get "onupgradeneeded"]
+  val set_onupgradeneeded: 'tags this -> (this:t -> ev:IDBVersionChangeEvent.t -> any) option -> unit [@@js.set "onupgradeneeded"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -2002,7 +2002,7 @@ module[@js.scope "IDBOpenDBRequest"] IDBOpenDBRequest : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBOpenDBRequestEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBOpenDBRequestEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -2019,13 +2019,13 @@ module[@js.scope "IDBOpenDBRequest"] IDBOpenDBRequest : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBOpenDBRequestEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBOpenDBRequestEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -2119,7 +2119,7 @@ module FontFaceDescriptors : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module BinaryData : sig
-  type t = never
+  type t = (ArrayBuffer.t_0, ArrayBufferView.t_0) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2171,7 +2171,7 @@ module[@js.scope "FontFace"] FontFace : sig
   val load: 'tags this -> t Promise.t_1 [@@js.call "load"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: family:string -> source:BinaryData.t or_string -> ?descriptors:FontFaceDescriptors.t -> unit -> t [@@js.create]
+  val create: family:string -> source:([`U1 of string | `U2 of BinaryData.t] [@js.union]) -> ?descriptors:FontFaceDescriptors.t -> unit -> t [@@js.create]
 end
 module[@js.scope "FontFaceSet"] FontFaceSet : sig
   type t = [`EventTarget | `FontFaceSet] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2189,12 +2189,12 @@ module[@js.scope "FontFaceSet"] FontFaceSet : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onloading: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onloading"]
-  val set_onloading: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onloading"]
-  val get_onloadingdone: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onloadingdone"]
-  val set_onloadingdone: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onloadingdone"]
-  val get_onloadingerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onloadingerror"]
-  val set_onloadingerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onloadingerror"]
+  val get_onloading: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onloading"]
+  val set_onloading: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onloading"]
+  val get_onloadingdone: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onloadingdone"]
+  val set_onloadingdone: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onloadingdone"]
+  val get_onloadingerror: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onloadingerror"]
+  val set_onloadingerror: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onloadingerror"]
   val get_ready: 'tags this -> t Promise.t_1 [@@js.get "ready"]
   val get_status: 'tags this -> FontFaceSetLoadStatus.t [@@js.get "status"]
   val check: 'tags this -> font:string -> ?text:string -> unit -> bool [@@js.call "check"]
@@ -2216,7 +2216,7 @@ module[@js.scope "FontFaceSet"] FontFaceSet : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'FontFaceSetEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'FontFaceSetEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -2233,21 +2233,21 @@ module[@js.scope "FontFaceSet"] FontFaceSet : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'FontFaceSetEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'FontFaceSetEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: FontFace.t list -> t [@@js.create]
 end
 module[@js.scope "fonts"] FontsStatic : sig
-  val onloading: unit -> (this:FontFaceSet.t -> ev:Event.t -> any) or_null [@@js.get "onloading"]
-  val onloadingdone: unit -> (this:FontFaceSet.t -> ev:Event.t -> any) or_null [@@js.get "onloadingdone"]
-  val onloadingerror: unit -> (this:FontFaceSet.t -> ev:Event.t -> any) or_null [@@js.get "onloadingerror"]
+  val onloading: unit -> (this:FontFaceSet.t -> ev:Event.t -> any) option [@@js.get "onloading"]
+  val onloadingdone: unit -> (this:FontFaceSet.t -> ev:Event.t -> any) option [@@js.get "onloadingdone"]
+  val onloadingerror: unit -> (this:FontFaceSet.t -> ev:Event.t -> any) option [@@js.get "onloadingerror"]
   val ready: unit -> FontFaceSet.t Promise.t_1 [@@js.get "ready"]
   val status: unit -> FontFaceSetLoadStatus.t [@@js.get "status"]
   val check: font:string -> ?text:string -> unit -> bool [@@js.global "check"]
@@ -2269,7 +2269,7 @@ module[@js.scope "fonts"] FontsStatic : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: type_:'K -> listener:(this:FontFaceSet.t -> ev:(* FIXME: unknown type 'FontFaceSetEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.global "addEventListener"]
+  val addEventListener: type_:'K -> listener:(this:FontFaceSet.t -> ev:(* FIXME: unknown type 'FontFaceSetEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.global "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -2286,13 +2286,13 @@ module[@js.scope "fonts"] FontsStatic : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.global "addEventListener"]
+  val addEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.global "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: type_:'K -> listener:(this:FontFaceSet.t -> ev:(* FIXME: unknown type 'FontFaceSetEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
+  val removeEventListener: type_:'K -> listener:(this:FontFaceSet.t -> ev:(* FIXME: unknown type 'FontFaceSetEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.global "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
+  val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.global "removeEventListener"]
 end
 module Algorithm : sig
   type t = [`Algorithm] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -2389,7 +2389,7 @@ module RsaKeyGenParams : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AlgorithmIdentifier : sig
-  type t = Algorithm.t or_string
+  type t = ([`String of string | `Other of Algorithm.t] [@js.union on_field "dummy"]) Primitive.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2965,29 +2965,29 @@ module[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val decrypt: 'tags this -> algorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "decrypt"]
-  val deriveBits: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> length:float -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "deriveBits"]
-  val deriveKey: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
+  val deriveKey: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> derivedKeyType:([`U1 of AlgorithmIdentifier.t | `U2 of AesDerivedKeyParams.t | `U3 of HmacImportParams.t | `U4 of HkdfParams.t | `U5 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
+  val generateKey: 'tags this -> algorithm:([`U1 of RsaHashedKeyGenParams.t | `U2 of EcKeyGenParams.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey': 'tags this -> algorithm:([`U1 of AesKeyGenParams.t | `U2 of HmacKeyGenParams.t | `U3 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
+  val importKey: 'tags this -> format:([`L_s97_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s97_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> unwrappedKeyAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
+  val decrypt: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "decrypt"]
+  val deriveBits: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> length:float -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "deriveBits"]
+  val deriveKey': 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> derivedKeyType:([`U1 of AlgorithmIdentifier.t | `U2 of AesDerivedKeyParams.t | `U3 of HmacImportParams.t | `U4 of HkdfParams.t | `U5 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
   val digest: 'tags this -> algorithm:AlgorithmIdentifier.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "digest"]
-  val encrypt: 'tags this -> algorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "encrypt"]
+  val encrypt: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "encrypt"]
   val exportKey: 'tags this -> format:([`L_s97_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t_1 [@@js.call "exportKey"]
   val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s97_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> key:CryptoKey.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "exportKey"]
-  val generateKey: 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
-  val importKey: 'tags this -> format:([`L_s97_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s97_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val sign: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "sign"]
-  val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
-  val verify: 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdsaParams.t, RsaPssParams.t) union3 -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t_1 [@@js.call "verify"]
-  val wrapKey: 'tags this -> format:KeyFormat.t -> key:CryptoKey.t -> wrappingKey:CryptoKey.t -> wrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "wrapKey"]
-  val deriveKey': 'tags this -> algorithm:(AlgorithmIdentifier.t, EcdhKeyDeriveParams.t, HkdfParams.t, Pbkdf2Params.t) union4 -> baseKey:CryptoKey.t -> derivedKeyType:(AesDerivedKeyParams.t, AlgorithmIdentifier.t, HkdfParams.t, HmacImportParams.t, Pbkdf2Params.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
-  val generateKey''': 'tags this -> algorithm:(EcKeyGenParams.t, RsaHashedKeyGenParams.t) union2 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey'''': 'tags this -> algorithm:(AesKeyGenParams.t, HmacKeyGenParams.t, Pbkdf2Params.t) union3 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
-  val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
-  val importKey'': 'tags this -> format:([`L_s97_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s97_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:(AesCbcParams.t, AesCtrParams.t, AesGcmParams.t, AlgorithmIdentifier.t, RsaOaepParams.t) union5 -> unwrappedKeyAlgorithm:(AesKeyAlgorithm.t, AlgorithmIdentifier.t, EcKeyImportParams.t, HmacImportParams.t, RsaHashedImportParams.t) union5 -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
+  val generateKey''': 'tags this -> algorithm:([`U1 of RsaHashedKeyGenParams.t | `U2 of EcKeyGenParams.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey'''': 'tags this -> algorithm:([`U1 of AesKeyGenParams.t | `U2 of HmacKeyGenParams.t | `U3 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
+  val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
+  val importKey'': 'tags this -> format:([`L_s97_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s97_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val sign: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaPssParams.t | `U3 of EcdsaParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "sign"]
+  val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> unwrappedKeyAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
+  val verify: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaPssParams.t | `U3 of EcdsaParams.t] [@js.union]) -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t_1 [@@js.call "verify"]
+  val wrapKey: 'tags this -> format:KeyFormat.t -> key:CryptoKey.t -> wrappingKey:CryptoKey.t -> wrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "wrapKey"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -3337,6 +3337,16 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t_1 *)
+  
+  (** Returns an array of key, value pairs for every entry in the search params. *)
+  val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
+  
+  (** Returns a list of keys in the search params. *)
+  val keys: 'tags this -> string IterableIterator.t_1 [@@js.call "keys"]
+  
+  (** Returns a list of values in the search params. *)
+  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
   
   (** Appends a specified key/value pair as a new search parameter. *)
   val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
@@ -3345,7 +3355,7 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
   
   (** Returns the first value associated to the given search parameter. *)
-  val get_: 'tags this -> name:string -> string or_null [@@js.call "get"]
+  val get_: 'tags this -> name:string -> string option [@@js.call "get"]
   
   (** Returns all the values association with a given search parameter. *)
   val getAll: 'tags this -> name:string -> string list [@@js.call "getAll"]
@@ -3360,19 +3370,9 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   (** Returns a string containing a query string suitable for use in a URL. Does not include the question mark. *)
   val toString: 'tags this -> string [@@js.call "toString"]
   val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
-  (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t_1 *)
-  
-  (** Returns an array of key, value pairs for every entry in the search params. *)
-  val entries: 'tags this -> (string * string) IterableIterator.t_1 [@@js.call "entries"]
-  
-  (** Returns a list of keys in the search params. *)
-  val keys: 'tags this -> string IterableIterator.t_1 [@@js.call "keys"]
-  
-  (** Returns a list of values in the search params. *)
-  val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?init:(t, string list) or_array or_string -> unit -> t [@@js.create]
+  val create: ?init:([`U1 of string list list | `U2 of (string, string) Record.t_2 | `U3 of string | `U4 of t] [@js.union]) -> unit -> t [@@js.create]
   val toString': unit -> string [@@js.global "toString"]
 end
 module[@js.scope "ReadableStreamDefaultController"] ReadableStreamDefaultController : sig
@@ -3396,7 +3396,7 @@ module[@js.scope "ReadableStreamDefaultController"] ReadableStreamDefaultControl
   val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_desiredSize: ('tags, 'R) this -> float or_null [@@js.get "desiredSize"]
+  val get_desiredSize: ('tags, 'R) this -> float option [@@js.get "desiredSize"]
   val close: ('tags, 'R) this -> unit [@@js.call "close"]
   val enqueue: ('tags, 'R) this -> ?chunk:'R -> unit -> unit [@@js.call "enqueue"]
   val error: ('tags, 'R) this -> ?e:any -> unit -> unit [@@js.call "error"]
@@ -3447,7 +3447,7 @@ module UnderlyingSourcePullCallback : sig
   val t_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t
   val t_1_to_js: ('R -> Ojs.t) -> 'R t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'R) -> Ojs.t -> 'R t_1
-  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> unit [@@js.apply]
+  val apply: ('tags, 'R) this -> controller:'R ReadableStreamController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   val cast_from: ('tags, 'R) this -> 'R t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSourceCancelCallback : sig
@@ -3466,7 +3466,7 @@ module UnderlyingSourceCancelCallback : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> ?reason:any -> unit -> unit [@@js.apply]
+  val apply: 'tags this -> ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSource : sig
@@ -3496,8 +3496,8 @@ module UnderlyingSource : sig
   val set_pull: ('tags, 'R) this -> 'R UnderlyingSourcePullCallback.t -> unit [@@js.set "pull"]
   val get_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t [@@js.get "start"]
   val set_start: ('tags, 'R) this -> 'R UnderlyingSourceStartCallback.t -> unit [@@js.set "start"]
-  val get_type: ('tags, 'R) this -> never or_undefined [@@js.get "type"]
-  val set_type: ('tags, 'R) this -> never or_undefined -> unit [@@js.set "type"]
+  val get_type: ('tags, 'R) this -> undefined [@@js.get "type"]
+  val set_type: ('tags, 'R) this -> undefined -> unit [@@js.set "type"]
   val create: cancel:UnderlyingSourceCancelCallback.t -> pull:'R UnderlyingSourcePullCallback.t -> start:'R UnderlyingSourceStartCallback.t -> ?type_:(never[@js "type"]) -> unit -> 'R t [@@js.builder]
   val cast_from: ('tags, 'R) this -> 'R t [@@js.custom let cast_from = Obj.magic]
 end
@@ -3603,7 +3603,7 @@ module UnderlyingSinkWriteCallback : sig
   val t_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t
   val t_1_to_js: ('W -> Ojs.t) -> 'W t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
-  val apply: ('tags, 'W) this -> chunk:'W -> controller:WritableStreamDefaultController.t -> unit [@@js.apply]
+  val apply: ('tags, 'W) this -> chunk:'W -> controller:WritableStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   val cast_from: ('tags, 'W) this -> 'W t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSinkStartCallback : sig
@@ -3641,7 +3641,7 @@ module UnderlyingSinkCloseCallback : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> unit [@@js.apply]
+  val apply: 'tags this -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSinkAbortCallback : sig
@@ -3660,7 +3660,7 @@ module UnderlyingSinkAbortCallback : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> ?reason:any -> unit -> unit [@@js.apply]
+  val apply: 'tags this -> ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module UnderlyingSink : sig
@@ -3690,8 +3690,8 @@ module UnderlyingSink : sig
   val set_close: ('tags, 'W) this -> UnderlyingSinkCloseCallback.t -> unit [@@js.set "close"]
   val get_start: ('tags, 'W) this -> UnderlyingSinkStartCallback.t [@@js.get "start"]
   val set_start: ('tags, 'W) this -> UnderlyingSinkStartCallback.t -> unit [@@js.set "start"]
-  val get_type: ('tags, 'W) this -> never or_undefined [@@js.get "type"]
-  val set_type: ('tags, 'W) this -> never or_undefined -> unit [@@js.set "type"]
+  val get_type: ('tags, 'W) this -> undefined [@@js.get "type"]
+  val set_type: ('tags, 'W) this -> undefined -> unit [@@js.set "type"]
   val get_write: ('tags, 'W) this -> 'W UnderlyingSinkWriteCallback.t [@@js.get "write"]
   val set_write: ('tags, 'W) this -> 'W UnderlyingSinkWriteCallback.t -> unit [@@js.set "write"]
   val create: abort:UnderlyingSinkAbortCallback.t -> close:UnderlyingSinkCloseCallback.t -> start:UnderlyingSinkStartCallback.t -> ?type_:(never[@js "type"]) -> write:'W UnderlyingSinkWriteCallback.t -> unit -> 'W t [@@js.builder]
@@ -3803,9 +3803,9 @@ and[@js.scope "WritableStreamDefaultWriter"] WritableStreamDefaultWriter : sig
   val t_1_of_js: (Ojs.t -> 'W) -> Ojs.t -> 'W t_1
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_closed: ('tags, 'W) this -> never or_undefined Promise.t_1 [@@js.get "closed"]
-  val get_desiredSize: ('tags, 'W) this -> float or_null [@@js.get "desiredSize"]
-  val get_ready: ('tags, 'W) this -> never or_undefined Promise.t_1 [@@js.get "ready"]
+  val get_closed: ('tags, 'W) this -> undefined Promise.t_1 [@@js.get "closed"]
+  val get_desiredSize: ('tags, 'W) this -> float option [@@js.get "desiredSize"]
+  val get_ready: ('tags, 'W) this -> undefined Promise.t_1 [@@js.get "ready"]
   val abort: ('tags, 'W) this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "abort"]
   val close: ('tags, 'W) this -> unit Promise.t_1 [@@js.call "close"]
   val releaseLock: ('tags, 'W) this -> unit [@@js.call "releaseLock"]
@@ -3830,7 +3830,7 @@ module ReadableStreamGenericReader : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_closed: 'tags this -> never or_undefined Promise.t_1 [@@js.get "closed"]
+  val get_closed: 'tags this -> undefined Promise.t_1 [@@js.get "closed"]
   val cancel: 'tags this -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "cancel"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
@@ -3875,8 +3875,8 @@ module ReadableStreamDefaultReadDoneResult : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_done: 'tags this -> ([`L_b_true[@js true]] [@js.enum]) [@@js.get "done"]
   val set_done: 'tags this -> ([`L_b_true[@js true]] [@js.enum]) -> unit [@@js.set "done"]
-  val get_value: 'tags this -> never or_undefined [@@js.get "value"]
-  val set_value: 'tags this -> never or_undefined -> unit [@@js.set "value"]
+  val get_value: 'tags this -> undefined [@@js.get "value"]
+  val set_value: 'tags this -> undefined -> unit [@@js.set "value"]
   val create: done_:(([`L_b_true[@js true]] [@js.enum])[@js "done"]) -> ?value:never -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
@@ -4053,7 +4053,7 @@ module[@js.scope "Blob"] rec Blob : sig
   val create: ?blobParts:BlobPart.t list -> ?options:BlobPropertyBag.t -> unit -> t [@@js.create]
 end
 and BlobPart : sig
-  type t = Blob.t or_string
+  type t = ([`String of string | `Other of (Blob.t, BufferSource.t) union2] [@js.union on_field "dummy"]) Primitive.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4104,7 +4104,7 @@ module[@js.scope "URL"] URL : sig
   val toJSON: 'tags this -> string [@@js.call "toJSON"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: url:t or_string -> ?base:t or_string -> unit -> t [@@js.create]
+  val create: url:([`U1 of string | `U2 of t] [@js.union]) -> ?base:([`U1 of string | `U2 of t] [@js.union]) -> unit -> t [@@js.create]
   val createObjectURL: Blob.t -> string [@@js.global "createObjectURL"]
   val revokeObjectURL: string -> unit [@@js.global "revokeObjectURL"]
 end
@@ -4134,12 +4134,6 @@ module[@js.scope "Headers"] rec Headers : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
-  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
-  val get_: 'tags this -> name:string -> string or_null [@@js.call "get"]
-  val has: 'tags this -> name:string -> bool [@@js.call "has"]
-  val set_: 'tags this -> name:string -> value:string -> unit [@@js.call "set"]
-  val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   (* [Symbol.iterator]: unit -> (string * string) IterableIterator.t_1 *)
   
   (** Returns an iterator allowing to go through all key/value pairs contained in this object. *)
@@ -4150,12 +4144,18 @@ module[@js.scope "Headers"] rec Headers : sig
   
   (** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. *)
   val values: 'tags this -> string IterableIterator.t_1 [@@js.call "values"]
+  val append: 'tags this -> name:string -> value:string -> unit [@@js.call "append"]
+  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
+  val get_: 'tags this -> name:string -> string option [@@js.call "get"]
+  val has: 'tags this -> name:string -> bool [@@js.call "has"]
+  val set_: 'tags this -> name:string -> value:string -> unit [@@js.call "set"]
+  val forEach: 'tags this -> callbackfn:(value:string -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?init:HeadersInit.t -> unit -> t [@@js.create]
 end
 and HeadersInit : sig
-  type t = (Headers.t, string list) or_array
+  type t = (string list list, Headers.t, (string, string) Record.t_2) union3
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4235,7 +4235,7 @@ module[@js.scope "File"] File : sig
   val create': fileBits:BlobPart.t list -> fileName:string -> ?options:FilePropertyBag.t -> unit -> t [@@js.create]
 end
 module FormDataEntryValue : sig
-  type t = File.t or_string
+  type t = ([`String of string | `Other of File.t] [@js.union on_field "dummy"]) Primitive.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4260,13 +4260,6 @@ module[@js.scope "FormData"] FormData : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val append: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "append"]
-  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
-  val get_: 'tags this -> name:string -> FormDataEntryValue.t or_null [@@js.call "get"]
-  val getAll: 'tags this -> name:string -> FormDataEntryValue.t list [@@js.call "getAll"]
-  val has: 'tags this -> name:string -> bool [@@js.call "has"]
-  val set_: 'tags this -> name:string -> value:Blob.t or_string -> ?fileName:string -> unit -> unit [@@js.call "set"]
-  val forEach: 'tags this -> callbackfn:(value:FormDataEntryValue.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   (* [Symbol.iterator]: unit -> (string * FormDataEntryValue.t) IterableIterator.t_1 *)
   
   (** Returns an array of key, value pairs for every entry in the list. *)
@@ -4277,12 +4270,19 @@ module[@js.scope "FormData"] FormData : sig
   
   (** Returns a list of values in the list. *)
   val values: 'tags this -> FormDataEntryValue.t IterableIterator.t_1 [@@js.call "values"]
+  val append: 'tags this -> name:string -> value:([`U1 of string | `U2 of Blob.t] [@js.union]) -> ?fileName:string -> unit -> unit [@@js.call "append"]
+  val delete: 'tags this -> name:string -> unit [@@js.call "delete"]
+  val get_: 'tags this -> name:string -> FormDataEntryValue.t option [@@js.call "get"]
+  val getAll: 'tags this -> name:string -> FormDataEntryValue.t list [@@js.call "getAll"]
+  val has: 'tags this -> name:string -> bool [@@js.call "has"]
+  val set_: 'tags this -> name:string -> value:([`U1 of string | `U2 of Blob.t] [@js.union]) -> ?fileName:string -> unit -> unit [@@js.call "set"]
+  val forEach: 'tags this -> callbackfn:(value:FormDataEntryValue.t -> key:string -> parent:t -> unit) -> ?thisArg:any -> unit -> unit [@@js.call "forEach"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
 module XMLHttpRequestBodyInit : sig
-  type t = (Blob.t, FormData.t, URLSearchParams.t) union3 or_string
+  type t = ([`String of string | `Other of (Blob.t, BufferSource.t, FormData.t, URLSearchParams.t) union4] [@js.union on_field "dummy"]) Primitive.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4313,7 +4313,7 @@ module Body : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_body: 'tags this -> Uint8Array.t_0 ReadableStream.t or_null [@@js.get "body"]
+  val get_body: 'tags this -> Uint8Array.t_0 ReadableStream.t option [@@js.get "body"]
   val get_bodyUsed: 'tags this -> bool [@@js.get "bodyUsed"]
   val arrayBuffer: 'tags this -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "arrayBuffer"]
   val blob: 'tags this -> Blob.t Promise.t_1 [@@js.call "blob"]
@@ -4350,9 +4350,9 @@ module[@js.scope "Response"] Response : sig
   val clone: 'tags this -> t [@@js.call "clone"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?body:BodyInit.t or_null -> ?init:ResponseInit.t -> unit -> t [@@js.create]
+  val create: ?body:BodyInit.t option -> ?init:ResponseInit.t -> unit -> t [@@js.create]
   val error: unit -> t [@@js.global "error"]
-  val redirect: url:URL.t or_string -> ?status:float -> unit -> t [@@js.global "redirect"]
+  val redirect: url:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?status:float -> unit -> t [@@js.global "redirect"]
 end
 module RequestRedirect : sig
   type t = ([`L_s110_manual[@js "manual"] | `L_s67_error[@js "error"] | `L_s75_follow[@js "follow"]] [@js.enum])
@@ -4412,10 +4412,10 @@ module RequestInit : sig
   val t_0_of_js: Ojs.t -> t_0
   
   (** A BodyInit object or null to set request's body. *)
-  val get_body: 'tags this -> BodyInit.t or_null [@@js.get "body"]
+  val get_body: 'tags this -> BodyInit.t option [@@js.get "body"]
   
   (** A BodyInit object or null to set request's body. *)
-  val set_body: 'tags this -> BodyInit.t or_null -> unit [@@js.set "body"]
+  val set_body: 'tags this -> BodyInit.t option -> unit [@@js.set "body"]
   
   (** A string indicating how the request will interact with the browser's cache to set request's cache. *)
   val get_cache: 'tags this -> RequestCache.t [@@js.get "cache"]
@@ -4478,16 +4478,16 @@ module RequestInit : sig
   val set_referrerPolicy: 'tags this -> ReferrerPolicy.t -> unit [@@js.set "referrerPolicy"]
   
   (** An AbortSignal to set request's signal. *)
-  val get_signal: 'tags this -> AbortSignal.t or_null [@@js.get "signal"]
+  val get_signal: 'tags this -> AbortSignal.t option [@@js.get "signal"]
   
   (** An AbortSignal to set request's signal. *)
-  val set_signal: 'tags this -> AbortSignal.t or_null -> unit [@@js.set "signal"]
+  val set_signal: 'tags this -> AbortSignal.t option -> unit [@@js.set "signal"]
   
   (** Can only be null. Used to disassociate request from any Window. *)
-  val get_window: 'tags this -> never or_null [@@js.get "window"]
+  val get_window: 'tags this -> null [@@js.get "window"]
   
   (** Can only be null. Used to disassociate request from any Window. *)
-  val set_window: 'tags this -> never or_null -> unit [@@js.set "window"]
+  val set_window: 'tags this -> null -> unit [@@js.set "window"]
   val create: ?body:BodyInit.t -> cache:RequestCache.t -> credentials:RequestCredentials.t -> headers:HeadersInit.t -> integrity:string -> keepalive:bool -> method_:(string[@js "method"]) -> mode:RequestMode.t -> redirect:RequestRedirect.t -> referrer:string -> referrerPolicy:ReferrerPolicy.t -> ?signal:AbortSignal.t -> ?window:never -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
@@ -4562,7 +4562,7 @@ module[@js.scope "Request"] rec Request : sig
   val create: input:RequestInfo.t -> ?init:RequestInit.t -> unit -> t [@@js.create]
 end
 and RequestInfo : sig
-  type t = Request.t or_string
+  type t = ([`String of string | `Other of Request.t] [@js.union on_field "dummy"]) Primitive.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4590,14 +4590,14 @@ module[@js.scope "Cache"] Cache : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val addAll: 'tags this -> requests:RequestInfo.t Iterable.t_1 -> unit Promise.t_1 [@@js.call "addAll"]
   val add: 'tags this -> request:RequestInfo.t -> unit Promise.t_1 [@@js.call "add"]
-  val addAll: 'tags this -> requests:RequestInfo.t list -> unit Promise.t_1 [@@js.call "addAll"]
+  val addAll': 'tags this -> requests:RequestInfo.t list -> unit Promise.t_1 [@@js.call "addAll"]
   val delete: 'tags this -> request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> bool Promise.t_1 [@@js.call "delete"]
   val keys: 'tags this -> ?request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Request.t list Promise.t_1 [@@js.call "keys"]
-  val match_: 'tags this -> request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Response.t or_undefined Promise.t_1 [@@js.call "match"]
+  val match_: 'tags this -> request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Response.t option Promise.t_1 [@@js.call "match"]
   val matchAll: 'tags this -> ?request:RequestInfo.t -> ?options:CacheQueryOptions.t -> unit -> Response.t list Promise.t_1 [@@js.call "matchAll"]
   val put: 'tags this -> request:RequestInfo.t -> response:Response.t -> unit Promise.t_1 [@@js.call "put"]
-  val addAll': 'tags this -> requests:RequestInfo.t Iterable.t_1 -> unit Promise.t_1 [@@js.call "addAll"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -4606,7 +4606,7 @@ module[@js.scope "caches"] CachesStatic : sig
   val delete: string -> bool Promise.t_1 [@@js.global "delete"]
   val has: string -> bool Promise.t_1 [@@js.global "has"]
   val keys: unit -> string list Promise.t_1 [@@js.global "keys"]
-  val match_: request:RequestInfo.t -> ?options:MultiCacheQueryOptions.t -> unit -> Response.t or_undefined Promise.t_1 [@@js.global "match"]
+  val match_: request:RequestInfo.t -> ?options:MultiCacheQueryOptions.t -> unit -> Response.t option Promise.t_1 [@@js.global "match"]
   val open_: string -> Cache.t Promise.t_1 [@@js.global "open"]
 end
 module XMLHttpRequestResponseType : sig
@@ -4669,7 +4669,7 @@ module[@js.scope "ProgressEvent"] ProgressEvent : sig
   val get_loaded: ('tags, 'T) this -> float [@@js.get "loaded"]
   
   (** Returns the object to which event is dispatched (its target). *)
-  val get_target: ('tags, 'T) this -> 'T or_null [@@js.get "target"]
+  val get_target: ('tags, 'T) this -> 'T option [@@js.get "target"]
   val get_total: ('tags, 'T) this -> float [@@js.get "total"]
   val create: lengthComputable:bool -> loaded:float -> ?target:'T -> total:float -> unit -> 'T t [@@js.builder]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
@@ -4694,8 +4694,8 @@ module[@js.scope "XMLHttpRequest"] rec XMLHttpRequest : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onreadystatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onreadystatechange"]
-  val set_onreadystatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onreadystatechange"]
+  val get_onreadystatechange: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onreadystatechange"]
+  val set_onreadystatechange: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onreadystatechange"]
   
   (** Returns client's state. *)
   val get_readyState: 'tags this -> float [@@js.get "readyState"]
@@ -4773,7 +4773,7 @@ module[@js.scope "XMLHttpRequest"] rec XMLHttpRequest : sig
   (** Cancels any network activity. *)
   val abort: 'tags this -> unit [@@js.call "abort"]
   val getAllResponseHeaders: 'tags this -> string [@@js.call "getAllResponseHeaders"]
-  val getResponseHeader: 'tags this -> name:string -> string or_null [@@js.call "getResponseHeader"]
+  val getResponseHeader: 'tags this -> name:string -> string option [@@js.call "getResponseHeader"]
   
   (**
     Sets the request method, request URL, and synchronous flag.
@@ -4784,7 +4784,7 @@ module[@js.scope "XMLHttpRequest"] rec XMLHttpRequest : sig
     
     Throws an "InvalidAccessError" DOMException if async is false, current global object is a Window object, and the timeout attribute is not zero or the responseType attribute is not the empty string.
   *)
-  val open_: 'tags this -> method_:string -> url:URL.t or_string -> unit [@@js.call "open"]
+  val open_: 'tags this -> method_:string -> url:([`U1 of string | `U2 of URL.t] [@js.union]) -> unit [@@js.call "open"]
   
   (**
     Sets the request method, request URL, and synchronous flag.
@@ -4795,7 +4795,7 @@ module[@js.scope "XMLHttpRequest"] rec XMLHttpRequest : sig
     
     Throws an "InvalidAccessError" DOMException if async is false, current global object is a Window object, and the timeout attribute is not zero or the responseType attribute is not the empty string.
   *)
-  val open_': 'tags this -> method_:string -> url:URL.t or_string -> async:bool -> ?username:string or_null -> ?password:string or_null -> unit -> unit [@@js.call "open"]
+  val open_': 'tags this -> method_:string -> url:([`U1 of string | `U2 of URL.t] [@js.union]) -> async:bool -> ?username:string option -> ?password:string option -> unit -> unit [@@js.call "open"]
   
   (**
     Acts as if the `Content-Type` header value for a response is mime. (It does not change the header.)
@@ -4809,7 +4809,7 @@ module[@js.scope "XMLHttpRequest"] rec XMLHttpRequest : sig
     
     Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
   *)
-  val send: 'tags this -> ?body:XMLHttpRequestBodyInit.t or_null -> unit -> unit [@@js.call "send"]
+  val send: 'tags this -> ?body:XMLHttpRequestBodyInit.t option -> unit -> unit [@@js.call "send"]
   
   (**
     Combines a header in author request headers.
@@ -4840,7 +4840,7 @@ module[@js.scope "XMLHttpRequest"] rec XMLHttpRequest : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -4857,13 +4857,13 @@ module[@js.scope "XMLHttpRequest"] rec XMLHttpRequest : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -4889,20 +4889,20 @@ and[@js.scope "XMLHttpRequestEventTarget"] XMLHttpRequestEventTarget : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onabort: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null [@@js.get "onabort"]
-  val set_onabort: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null -> unit [@@js.set "onabort"]
-  val get_onerror: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onload: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null [@@js.get "onload"]
-  val set_onload: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null -> unit [@@js.set "onload"]
-  val get_onloadend: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null [@@js.get "onloadend"]
-  val set_onloadend: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null -> unit [@@js.set "onloadend"]
-  val get_onloadstart: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null [@@js.get "onloadstart"]
-  val set_onloadstart: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null -> unit [@@js.set "onloadstart"]
-  val get_onprogress: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null [@@js.get "onprogress"]
-  val set_onprogress: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null -> unit [@@js.set "onprogress"]
-  val get_ontimeout: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null [@@js.get "ontimeout"]
-  val set_ontimeout: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) or_null -> unit [@@js.set "ontimeout"]
+  val get_onabort: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option [@@js.get "onabort"]
+  val set_onabort: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option -> unit [@@js.set "onabort"]
+  val get_onerror: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option -> unit [@@js.set "onerror"]
+  val get_onload: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option [@@js.get "onload"]
+  val set_onload: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option -> unit [@@js.set "onload"]
+  val get_onloadend: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option [@@js.get "onloadend"]
+  val set_onloadend: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option -> unit [@@js.set "onloadend"]
+  val get_onloadstart: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option [@@js.get "onloadstart"]
+  val set_onloadstart: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option -> unit [@@js.set "onloadstart"]
+  val get_onprogress: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option [@@js.get "onprogress"]
+  val set_onprogress: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option -> unit [@@js.set "onprogress"]
+  val get_ontimeout: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option [@@js.get "ontimeout"]
+  val set_ontimeout: 'tags this -> (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option -> unit [@@js.set "ontimeout"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -4919,7 +4919,7 @@ and[@js.scope "XMLHttpRequestEventTarget"] XMLHttpRequestEventTarget : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventTargetEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventTargetEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -4936,13 +4936,13 @@ and[@js.scope "XMLHttpRequestEventTarget"] XMLHttpRequestEventTarget : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventTargetEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventTargetEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -4979,7 +4979,7 @@ and[@js.scope "XMLHttpRequestUpload"] XMLHttpRequestUpload : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventTargetEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventTargetEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -4996,13 +4996,13 @@ and[@js.scope "XMLHttpRequestUpload"] XMLHttpRequestUpload : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventTargetEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'XMLHttpRequestEventTargetEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -5192,12 +5192,12 @@ module AbstractWorker : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onerror: 'tags this -> (this:t -> ev:ErrorEvent.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:ErrorEvent.t -> any) or_null -> unit [@@js.set "onerror"]
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbstractWorkerEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbstractWorkerEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val get_onerror: 'tags this -> (this:t -> ev:ErrorEvent.t -> any) option [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:ErrorEvent.t -> any) option -> unit [@@js.set "onerror"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbstractWorkerEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'AbstractWorkerEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -5224,6 +5224,9 @@ module[@js.scope "MessageEvent"] rec MessageEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
+  (** @deprecated  *)
+  val initMessageEvent: ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t Iterable.t_1 -> unit -> unit [@@js.call "initMessageEvent"]
+  
   (** Returns the data of the message. *)
   val get_data: ('tags, 'T) this -> 'T [@@js.get "data"]
   
@@ -5237,13 +5240,10 @@ module[@js.scope "MessageEvent"] rec MessageEvent : sig
   val get_ports: ('tags, 'T) this -> MessagePort.t list [@@js.get "ports"]
   
   (** Returns the WindowProxy of the source window, for cross-document messaging, and the MessagePort being attached, in the connect event fired at SharedWorkerGlobalScope objects. *)
-  val get_source: ('tags, 'T) this -> MessageEventSource.t or_null [@@js.get "source"]
+  val get_source: ('tags, 'T) this -> MessageEventSource.t option [@@js.get "source"]
   
   (** @deprecated  *)
-  val initMessageEvent: ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
-  
-  (** @deprecated  *)
-  val initMessageEvent': ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t or_null -> ?ports:MessagePort.t Iterable.t_1 -> unit -> unit [@@js.call "initMessageEvent"]
+  val initMessageEvent': ('tags, 'T) this -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t_0 [@@js.get "prototype"]
   val create: type_:string -> ?eventInitDict:'T MessageEventInit.t -> unit -> 'T t [@@js.create]
@@ -5277,8 +5277,8 @@ and MessageEventInit : sig
   val set_origin: ('tags, 'T) this -> string -> unit [@@js.set "origin"]
   val get_ports: ('tags, 'T) this -> MessagePort.t list [@@js.get "ports"]
   val set_ports: ('tags, 'T) this -> MessagePort.t list -> unit [@@js.set "ports"]
-  val get_source: ('tags, 'T) this -> MessageEventSource.t or_null [@@js.get "source"]
-  val set_source: ('tags, 'T) this -> MessageEventSource.t or_null -> unit [@@js.set "source"]
+  val get_source: ('tags, 'T) this -> MessageEventSource.t option [@@js.get "source"]
+  val set_source: ('tags, 'T) this -> MessageEventSource.t option -> unit [@@js.set "source"]
   val create: data:'T -> lastEventId:string -> origin:string -> ports:MessagePort.t list -> ?source:MessageEventSource.t -> unit -> 'T t [@@js.builder]
   val cast_from: ('tags, 'T) this -> 'T t [@@js.custom let cast_from = Obj.magic]
 end
@@ -5308,10 +5308,10 @@ and[@js.scope "MessagePort"] MessagePort : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
-  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessageerror"]
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessage"]
+  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessageerror"]
+  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessageerror"]
   
   (** Disconnects the port, so that it is no longer active. *)
   val close: 'tags this -> unit [@@js.call "close"]
@@ -5348,7 +5348,7 @@ and[@js.scope "MessagePort"] MessagePort : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MessagePortEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MessagePortEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -5365,13 +5365,13 @@ and[@js.scope "MessagePort"] MessagePort : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MessagePortEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MessagePortEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -5397,8 +5397,8 @@ and[@js.scope "ServiceWorker"] ServiceWorker : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onstatechange"]
-  val set_onstatechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onstatechange"]
+  val get_onstatechange: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onstatechange"]
+  val set_onstatechange: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onstatechange"]
   val get_scriptURL: 'tags this -> string [@@js.get "scriptURL"]
   val get_state: 'tags this -> ServiceWorkerState.t [@@js.get "state"]
   val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
@@ -5419,7 +5419,7 @@ and[@js.scope "ServiceWorker"] ServiceWorker : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -5436,19 +5436,19 @@ and[@js.scope "ServiceWorker"] ServiceWorker : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
 and Transferable : sig
-  type t = (ImageBitmap.t, MessagePort.t) union2
+  type t = (ArrayBuffer.t_0, ImageBitmap.t, MessagePort.t) union3
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5550,10 +5550,10 @@ module[@js.scope "Worker"] Worker : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
-  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessageerror"]
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessage"]
+  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessageerror"]
+  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessageerror"]
   
   (** Clones message and transmits it to worker's global environment. transfer can be passed as a list of objects that are to be transferred rather than cloned. *)
   val postMessage: 'tags this -> message:any -> transfer:Transferable.t list -> unit [@@js.call "postMessage"]
@@ -5579,7 +5579,7 @@ module[@js.scope "Worker"] Worker : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -5596,16 +5596,16 @@ module[@js.scope "Worker"] Worker : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: scriptURL:URL.t or_string -> ?options:WorkerOptions.t -> unit -> t [@@js.create]
+  val create: scriptURL:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?options:WorkerOptions.t -> unit -> t [@@js.create]
 end
 module CloseEventInit : sig
   type t = [`CloseEventInit | `EventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5741,14 +5741,14 @@ module[@js.scope "WebSocket"] WebSocket : sig
   
   (** Returns the extensions selected by the server, if any. *)
   val get_extensions: 'tags this -> string [@@js.get "extensions"]
-  val get_onclose: 'tags this -> (this:t -> ev:CloseEvent.t -> any) or_null [@@js.get "onclose"]
-  val set_onclose: 'tags this -> (this:t -> ev:CloseEvent.t -> any) or_null -> unit [@@js.set "onclose"]
-  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onopen"]
-  val set_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onopen"]
+  val get_onclose: 'tags this -> (this:t -> ev:CloseEvent.t -> any) option [@@js.get "onclose"]
+  val set_onclose: 'tags this -> (this:t -> ev:CloseEvent.t -> any) option -> unit [@@js.set "onclose"]
+  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onerror"]
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessage"]
+  val get_onopen: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onopen"]
+  val set_onopen: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onopen"]
   
   (** Returns the subprotocol selected by the server, if any. It can be used in conjunction with the array form of the constructor's second argument to perform subprotocol negotiation. *)
   val get_protocol: 'tags this -> string [@@js.get "protocol"]
@@ -5763,7 +5763,7 @@ module[@js.scope "WebSocket"] WebSocket : sig
   val close: 'tags this -> ?code:float -> ?reason:string -> unit -> unit [@@js.call "close"]
   
   (** Transmits data using the WebSocket connection. data can be a string, a Blob, an ArrayBuffer, or an ArrayBufferView. *)
-  val send: 'tags this -> data:Blob.t or_string -> unit [@@js.call "send"]
+  val send: 'tags this -> data:([`U1 of string | `U2 of ArrayBufferLike.t_0 | `U3 of Blob.t | `U4 of ArrayBufferView.t_0] [@js.union]) -> unit [@@js.call "send"]
   val get_CLOSED: 'tags this -> float [@@js.get "CLOSED"]
   val get_CLOSING: 'tags this -> float [@@js.get "CLOSING"]
   val get_CONNECTING: 'tags this -> float [@@js.get "CONNECTING"]
@@ -5784,7 +5784,7 @@ module[@js.scope "WebSocket"] WebSocket : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WebSocketEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WebSocketEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -5801,16 +5801,16 @@ module[@js.scope "WebSocket"] WebSocket : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WebSocketEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WebSocketEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: url:URL.t or_string -> ?protocols:string list or_string -> unit -> t [@@js.create]
+  val create: url:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?protocols:([`U1 of string | `U2 of string list] [@js.union]) -> unit -> t [@@js.create]
   val closed: unit -> float [@@js.get "CLOSED"]
   val closing: unit -> float [@@js.get "CLOSING"]
   val connecting: unit -> float [@@js.get "CONNECTING"]
@@ -5937,7 +5937,7 @@ module GLint : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module Int32List : sig
-  type t = (Int32Array.t_0, GLint.t) or_array
+  type t = (GLint.t list, Int32Array.t_0) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5969,7 +5969,7 @@ module GLfloat : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module Float32List : sig
-  type t = (Float32Array.t_0, GLfloat.t) or_array
+  type t = (GLfloat.t list, Float32Array.t_0) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -6016,38 +6016,38 @@ module WebGLRenderingContextOverloads : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform1fv"]
+  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform1iv"]
+  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform2fv"]
+  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform2iv"]
+  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform3fv"]
+  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform3iv"]
+  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform4fv"]
+  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t option -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix4fv"]
   val bufferData: 'tags this -> target:GLenum.t -> size:GLsizeiptr.t -> usage:GLenum.t -> unit [@@js.call "bufferData"]
-  val bufferData': 'tags this -> target:GLenum.t -> data:BufferSource.t or_null -> usage:GLenum.t -> unit [@@js.call "bufferData"]
+  val bufferData': 'tags this -> target:GLenum.t -> data:BufferSource.t option -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferSubData: 'tags this -> target:GLenum.t -> offset:GLintptr.t -> data:BufferSource.t -> unit [@@js.call "bufferSubData"]
   val compressedTexImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> data:ArrayBufferView.t_0 -> unit [@@js.call "compressedTexImage2D"]
   val compressedTexSubImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> data:ArrayBufferView.t_0 -> unit [@@js.call "compressedTexSubImage2D"]
-  val readPixels: 'tags this -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 or_null -> unit [@@js.call "readPixels"]
-  val texImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 or_null -> unit [@@js.call "texImage2D"]
+  val readPixels: 'tags this -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 option -> unit [@@js.call "readPixels"]
+  val texImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 option -> unit [@@js.call "texImage2D"]
   val texImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texImage2D"]
-  val texSubImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 or_null -> unit [@@js.call "texSubImage2D"]
+  val texSubImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 option -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage2D"]
-  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform1fv"]
-  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform1iv"]
-  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform2fv"]
-  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform2iv"]
-  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform3fv"]
-  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform3iv"]
-  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Float32List.t -> unit [@@js.call "uniform4fv"]
-  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> v:Int32List.t -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
-  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform1fv"]
-  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform1iv"]
-  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform2fv"]
-  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform2iv"]
-  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform3fv"]
-  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform3iv"]
-  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniform4fv"]
-  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> v:GLint.t Iterable.t_1 -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> value:GLfloat.t Iterable.t_1 -> unit [@@js.call "uniformMatrix4fv"]
+  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform1fv"]
+  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform1iv"]
+  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform2fv"]
+  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform2iv"]
+  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform3fv"]
+  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform3iv"]
+  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t option -> v:Float32List.t -> unit [@@js.call "uniform4fv"]
+  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t option -> v:Int32List.t -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> value:Float32List.t -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -6271,7 +6271,8 @@ module WEBGL_draw_buffers : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val drawBuffersWEBGL: 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffersWEBGL"]
+  val drawBuffersWEBGL: 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffersWEBGL"]
+  val drawBuffersWEBGL': 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffersWEBGL"]
   val get_COLOR_ATTACHMENT0_WEBGL: 'tags this -> GLenum.t [@@js.get "COLOR_ATTACHMENT0_WEBGL"]
   val get_COLOR_ATTACHMENT10_WEBGL: 'tags this -> GLenum.t [@@js.get "COLOR_ATTACHMENT10_WEBGL"]
   val get_COLOR_ATTACHMENT11_WEBGL: 'tags this -> GLenum.t [@@js.get "COLOR_ATTACHMENT11_WEBGL"]
@@ -6306,7 +6307,6 @@ module WEBGL_draw_buffers : sig
   val get_DRAW_BUFFER9_WEBGL: 'tags this -> GLenum.t [@@js.get "DRAW_BUFFER9_WEBGL"]
   val get_MAX_COLOR_ATTACHMENTS_WEBGL: 'tags this -> GLenum.t [@@js.get "MAX_COLOR_ATTACHMENTS_WEBGL"]
   val get_MAX_DRAW_BUFFERS_WEBGL: 'tags this -> GLenum.t [@@js.get "MAX_DRAW_BUFFERS_WEBGL"]
-  val drawBuffersWEBGL': 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffersWEBGL"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -6622,7 +6622,7 @@ module OVR_multiview2 : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val framebufferTextureMultiviewOVR: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> texture:WebGLTexture.t or_null -> level:GLint.t -> baseViewIndex:GLint.t -> numViews:GLsizei.t -> unit [@@js.call "framebufferTextureMultiviewOVR"]
+  val framebufferTextureMultiviewOVR: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> texture:WebGLTexture.t option -> level:GLint.t -> baseViewIndex:GLint.t -> numViews:GLsizei.t -> unit [@@js.call "framebufferTextureMultiviewOVR"]
   val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_BASE_VIEW_INDEX_OVR: 'tags this -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_BASE_VIEW_INDEX_OVR"]
   val get_FRAMEBUFFER_ATTACHMENT_TEXTURE_NUM_VIEWS_OVR: 'tags this -> GLenum.t [@@js.get "FRAMEBUFFER_ATTACHMENT_TEXTURE_NUM_VIEWS_OVR"]
   val get_FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR: 'tags this -> GLenum.t [@@js.get "FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR"]
@@ -6663,10 +6663,10 @@ module OES_vertex_array_object : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val bindVertexArrayOES: 'tags this -> arrayObject:WebGLVertexArrayObjectOES.t or_null -> unit [@@js.call "bindVertexArrayOES"]
-  val createVertexArrayOES: 'tags this -> WebGLVertexArrayObjectOES.t or_null [@@js.call "createVertexArrayOES"]
-  val deleteVertexArrayOES: 'tags this -> arrayObject:WebGLVertexArrayObjectOES.t or_null -> unit [@@js.call "deleteVertexArrayOES"]
-  val isVertexArrayOES: 'tags this -> arrayObject:WebGLVertexArrayObjectOES.t or_null -> GLboolean.t [@@js.call "isVertexArrayOES"]
+  val bindVertexArrayOES: 'tags this -> arrayObject:WebGLVertexArrayObjectOES.t option -> unit [@@js.call "bindVertexArrayOES"]
+  val createVertexArrayOES: 'tags this -> WebGLVertexArrayObjectOES.t option [@@js.call "createVertexArrayOES"]
+  val deleteVertexArrayOES: 'tags this -> arrayObject:WebGLVertexArrayObjectOES.t option -> unit [@@js.call "deleteVertexArrayOES"]
+  val isVertexArrayOES: 'tags this -> arrayObject:WebGLVertexArrayObjectOES.t option -> GLboolean.t [@@js.call "isVertexArrayOES"]
   val get_VERTEX_ARRAY_BINDING_OES: 'tags this -> GLenum.t [@@js.get "VERTEX_ARRAY_BINDING_OES"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
@@ -7042,15 +7042,19 @@ module WebGLRenderingContextBase : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val vertexAttrib1fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib1fv"]
+  val vertexAttrib2fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib2fv"]
+  val vertexAttrib3fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib3fv"]
+  val vertexAttrib4fv: 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib4fv"]
   val get_drawingBufferHeight: 'tags this -> GLsizei.t [@@js.get "drawingBufferHeight"]
   val get_drawingBufferWidth: 'tags this -> GLsizei.t [@@js.get "drawingBufferWidth"]
   val activeTexture: 'tags this -> texture:GLenum.t -> unit [@@js.call "activeTexture"]
   val attachShader: 'tags this -> program:WebGLProgram.t -> shader:WebGLShader.t -> unit [@@js.call "attachShader"]
   val bindAttribLocation: 'tags this -> program:WebGLProgram.t -> index:GLuint.t -> name:string -> unit [@@js.call "bindAttribLocation"]
-  val bindBuffer: 'tags this -> target:GLenum.t -> buffer:WebGLBuffer.t or_null -> unit [@@js.call "bindBuffer"]
-  val bindFramebuffer: 'tags this -> target:GLenum.t -> framebuffer:WebGLFramebuffer.t or_null -> unit [@@js.call "bindFramebuffer"]
-  val bindRenderbuffer: 'tags this -> target:GLenum.t -> renderbuffer:WebGLRenderbuffer.t or_null -> unit [@@js.call "bindRenderbuffer"]
-  val bindTexture: 'tags this -> target:GLenum.t -> texture:WebGLTexture.t or_null -> unit [@@js.call "bindTexture"]
+  val bindBuffer: 'tags this -> target:GLenum.t -> buffer:WebGLBuffer.t option -> unit [@@js.call "bindBuffer"]
+  val bindFramebuffer: 'tags this -> target:GLenum.t -> framebuffer:WebGLFramebuffer.t option -> unit [@@js.call "bindFramebuffer"]
+  val bindRenderbuffer: 'tags this -> target:GLenum.t -> renderbuffer:WebGLRenderbuffer.t option -> unit [@@js.call "bindRenderbuffer"]
+  val bindTexture: 'tags this -> target:GLenum.t -> texture:WebGLTexture.t option -> unit [@@js.call "bindTexture"]
   val blendColor: 'tags this -> red:GLclampf.t -> green:GLclampf.t -> blue:GLclampf.t -> alpha:GLclampf.t -> unit [@@js.call "blendColor"]
   val blendEquation: 'tags this -> mode:GLenum.t -> unit [@@js.call "blendEquation"]
   val blendEquationSeparate: 'tags this -> modeRGB:GLenum.t -> modeAlpha:GLenum.t -> unit [@@js.call "blendEquationSeparate"]
@@ -7065,19 +7069,19 @@ module WebGLRenderingContextBase : sig
   val compileShader: 'tags this -> shader:WebGLShader.t -> unit [@@js.call "compileShader"]
   val copyTexImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLenum.t -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> unit [@@js.call "copyTexImage2D"]
   val copyTexSubImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "copyTexSubImage2D"]
-  val createBuffer: 'tags this -> WebGLBuffer.t or_null [@@js.call "createBuffer"]
-  val createFramebuffer: 'tags this -> WebGLFramebuffer.t or_null [@@js.call "createFramebuffer"]
-  val createProgram: 'tags this -> WebGLProgram.t or_null [@@js.call "createProgram"]
-  val createRenderbuffer: 'tags this -> WebGLRenderbuffer.t or_null [@@js.call "createRenderbuffer"]
-  val createShader: 'tags this -> type_:GLenum.t -> WebGLShader.t or_null [@@js.call "createShader"]
-  val createTexture: 'tags this -> WebGLTexture.t or_null [@@js.call "createTexture"]
+  val createBuffer: 'tags this -> WebGLBuffer.t option [@@js.call "createBuffer"]
+  val createFramebuffer: 'tags this -> WebGLFramebuffer.t option [@@js.call "createFramebuffer"]
+  val createProgram: 'tags this -> WebGLProgram.t option [@@js.call "createProgram"]
+  val createRenderbuffer: 'tags this -> WebGLRenderbuffer.t option [@@js.call "createRenderbuffer"]
+  val createShader: 'tags this -> type_:GLenum.t -> WebGLShader.t option [@@js.call "createShader"]
+  val createTexture: 'tags this -> WebGLTexture.t option [@@js.call "createTexture"]
   val cullFace: 'tags this -> mode:GLenum.t -> unit [@@js.call "cullFace"]
-  val deleteBuffer: 'tags this -> buffer:WebGLBuffer.t or_null -> unit [@@js.call "deleteBuffer"]
-  val deleteFramebuffer: 'tags this -> framebuffer:WebGLFramebuffer.t or_null -> unit [@@js.call "deleteFramebuffer"]
-  val deleteProgram: 'tags this -> program:WebGLProgram.t or_null -> unit [@@js.call "deleteProgram"]
-  val deleteRenderbuffer: 'tags this -> renderbuffer:WebGLRenderbuffer.t or_null -> unit [@@js.call "deleteRenderbuffer"]
-  val deleteShader: 'tags this -> shader:WebGLShader.t or_null -> unit [@@js.call "deleteShader"]
-  val deleteTexture: 'tags this -> texture:WebGLTexture.t or_null -> unit [@@js.call "deleteTexture"]
+  val deleteBuffer: 'tags this -> buffer:WebGLBuffer.t option -> unit [@@js.call "deleteBuffer"]
+  val deleteFramebuffer: 'tags this -> framebuffer:WebGLFramebuffer.t option -> unit [@@js.call "deleteFramebuffer"]
+  val deleteProgram: 'tags this -> program:WebGLProgram.t option -> unit [@@js.call "deleteProgram"]
+  val deleteRenderbuffer: 'tags this -> renderbuffer:WebGLRenderbuffer.t option -> unit [@@js.call "deleteRenderbuffer"]
+  val deleteShader: 'tags this -> shader:WebGLShader.t option -> unit [@@js.call "deleteShader"]
+  val deleteTexture: 'tags this -> texture:WebGLTexture.t option -> unit [@@js.call "deleteTexture"]
   val depthFunc: 'tags this -> func:GLenum.t -> unit [@@js.call "depthFunc"]
   val depthMask: 'tags this -> flag:GLboolean.t -> unit [@@js.call "depthMask"]
   val depthRange: 'tags this -> zNear:GLclampf.t -> zFar:GLclampf.t -> unit [@@js.call "depthRange"]
@@ -7090,75 +7094,75 @@ module WebGLRenderingContextBase : sig
   val enableVertexAttribArray: 'tags this -> index:GLuint.t -> unit [@@js.call "enableVertexAttribArray"]
   val finish: 'tags this -> unit [@@js.call "finish"]
   val flush: 'tags this -> unit [@@js.call "flush"]
-  val framebufferRenderbuffer: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> renderbuffertarget:GLenum.t -> renderbuffer:WebGLRenderbuffer.t or_null -> unit [@@js.call "framebufferRenderbuffer"]
-  val framebufferTexture2D: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> textarget:GLenum.t -> texture:WebGLTexture.t or_null -> level:GLint.t -> unit [@@js.call "framebufferTexture2D"]
+  val framebufferRenderbuffer: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> renderbuffertarget:GLenum.t -> renderbuffer:WebGLRenderbuffer.t option -> unit [@@js.call "framebufferRenderbuffer"]
+  val framebufferTexture2D: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> textarget:GLenum.t -> texture:WebGLTexture.t option -> level:GLint.t -> unit [@@js.call "framebufferTexture2D"]
   val frontFace: 'tags this -> mode:GLenum.t -> unit [@@js.call "frontFace"]
   val generateMipmap: 'tags this -> target:GLenum.t -> unit [@@js.call "generateMipmap"]
-  val getActiveAttrib: 'tags this -> program:WebGLProgram.t -> index:GLuint.t -> WebGLActiveInfo.t or_null [@@js.call "getActiveAttrib"]
-  val getActiveUniform: 'tags this -> program:WebGLProgram.t -> index:GLuint.t -> WebGLActiveInfo.t or_null [@@js.call "getActiveUniform"]
-  val getAttachedShaders: 'tags this -> program:WebGLProgram.t -> WebGLShader.t list or_null [@@js.call "getAttachedShaders"]
+  val getActiveAttrib: 'tags this -> program:WebGLProgram.t -> index:GLuint.t -> WebGLActiveInfo.t option [@@js.call "getActiveAttrib"]
+  val getActiveUniform: 'tags this -> program:WebGLProgram.t -> index:GLuint.t -> WebGLActiveInfo.t option [@@js.call "getActiveUniform"]
+  val getAttachedShaders: 'tags this -> program:WebGLProgram.t -> WebGLShader.t list option [@@js.call "getAttachedShaders"]
   val getAttribLocation: 'tags this -> program:WebGLProgram.t -> name:string -> GLint.t [@@js.call "getAttribLocation"]
   val getBufferParameter: 'tags this -> target:GLenum.t -> pname:GLenum.t -> any [@@js.call "getBufferParameter"]
-  val getContextAttributes: 'tags this -> WebGLContextAttributes.t or_null [@@js.call "getContextAttributes"]
+  val getContextAttributes: 'tags this -> WebGLContextAttributes.t option [@@js.call "getContextAttributes"]
   val getError: 'tags this -> GLenum.t [@@js.call "getError"]
-  val getExtension: 'tags this -> extensionName:([`L_s2_EXT_blend_minmax[@js "EXT_blend_minmax"]] [@js.enum]) -> EXT_blend_minmax.t or_null [@@js.call "getExtension"]
-  val getExtension': 'tags this -> extensionName:([`L_s3_EXT_color_buffer_float[@js "EXT_color_buffer_float"]] [@js.enum]) -> EXT_color_buffer_float.t or_null [@@js.call "getExtension"]
-  val getExtension'': 'tags this -> extensionName:([`L_s4_EXT_color_buffer_half_float[@js "EXT_color_buffer_half_float"]] [@js.enum]) -> EXT_color_buffer_half_float.t or_null [@@js.call "getExtension"]
-  val getExtension''': 'tags this -> extensionName:([`L_s5_EXT_float_blend[@js "EXT_float_blend"]] [@js.enum]) -> EXT_float_blend.t or_null [@@js.call "getExtension"]
-  val getExtension'''': 'tags this -> extensionName:([`L_s9_EXT_texture_filter_anisotropic[@js "EXT_texture_filter_anisotropic"]] [@js.enum]) -> EXT_texture_filter_anisotropic.t or_null [@@js.call "getExtension"]
-  val getExtension''''': 'tags this -> extensionName:([`L_s6_EXT_frag_depth[@js "EXT_frag_depth"]] [@js.enum]) -> EXT_frag_depth.t or_null [@@js.call "getExtension"]
-  val getExtension'''''': 'tags this -> extensionName:([`L_s8_EXT_shader_texture_lod[@js "EXT_shader_texture_lod"]] [@js.enum]) -> EXT_shader_texture_lod.t or_null [@@js.call "getExtension"]
-  val getExtension''''''': 'tags this -> extensionName:([`L_s7_EXT_sRGB[@js "EXT_sRGB"]] [@js.enum]) -> EXT_sRGB.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''': 'tags this -> extensionName:([`L_s10_KHR_parallel_shader_compile[@js "KHR_parallel_shader_compile"]] [@js.enum]) -> KHR_parallel_shader_compile.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''': 'tags this -> extensionName:([`L_s17_OES_vertex_array_object[@js "OES_vertex_array_object"]] [@js.enum]) -> OES_vertex_array_object.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''': 'tags this -> extensionName:([`L_s18_OVR_multiview2[@js "OVR_multiview2"]] [@js.enum]) -> OVR_multiview2.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''': 'tags this -> extensionName:([`L_s19_WEBGL_color_buffer_float[@js "WEBGL_color_buffer_float"]] [@js.enum]) -> WEBGL_color_buffer_float.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''''': 'tags this -> extensionName:([`L_s20_WEBGL_compressed_texture_astc[@js "WEBGL_compressed_texture_astc"]] [@js.enum]) -> WEBGL_compressed_texture_astc.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''''': 'tags this -> extensionName:([`L_s21_WEBGL_compressed_texture_etc[@js "WEBGL_compressed_texture_etc"]] [@js.enum]) -> WEBGL_compressed_texture_etc.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''''''': 'tags this -> extensionName:([`L_s22_WEBGL_compressed_texture_etc1[@js "WEBGL_compressed_texture_etc1"]] [@js.enum]) -> WEBGL_compressed_texture_etc1.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''''''': 'tags this -> extensionName:([`L_s23_WEBGL_compressed_texture_pvrtc[@js "WEBGL_compressed_texture_pvrtc"]] [@js.enum]) -> WEBGL_compressed_texture_pvrtc.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''''''''': 'tags this -> extensionName:([`L_s25_WEBGL_compressed_texture_s3tc_srgb[@js "WEBGL_compressed_texture_s3tc_srgb"]] [@js.enum]) -> WEBGL_compressed_texture_s3tc_srgb.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''''''''': 'tags this -> extensionName:([`L_s27_WEBGL_debug_shaders[@js "WEBGL_debug_shaders"]] [@js.enum]) -> WEBGL_debug_shaders.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''''''''''': 'tags this -> extensionName:([`L_s29_WEBGL_draw_buffers[@js "WEBGL_draw_buffers"]] [@js.enum]) -> WEBGL_draw_buffers.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''''''''''': 'tags this -> extensionName:([`L_s30_WEBGL_lose_context[@js "WEBGL_lose_context"]] [@js.enum]) -> WEBGL_lose_context.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''''''''''''': 'tags this -> extensionName:([`L_s28_WEBGL_depth_texture[@js "WEBGL_depth_texture"]] [@js.enum]) -> WEBGL_depth_texture.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''''''''''''': 'tags this -> extensionName:([`L_s26_WEBGL_debug_renderer_info[@js "WEBGL_debug_renderer_info"]] [@js.enum]) -> WEBGL_debug_renderer_info.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''''''''''''''': 'tags this -> extensionName:([`L_s24_WEBGL_compressed_texture_s3tc[@js "WEBGL_compressed_texture_s3tc"]] [@js.enum]) -> WEBGL_compressed_texture_s3tc.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''''''''''''''': 'tags this -> extensionName:([`L_s16_OES_texture_half_float_linear[@js "OES_texture_half_float_linear"]] [@js.enum]) -> OES_texture_half_float_linear.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''''''''''''''''': 'tags this -> extensionName:([`L_s15_OES_texture_half_float[@js "OES_texture_half_float"]] [@js.enum]) -> OES_texture_half_float.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s14_OES_texture_float_linear[@js "OES_texture_float_linear"]] [@js.enum]) -> OES_texture_float_linear.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s13_OES_texture_float[@js "OES_texture_float"]] [@js.enum]) -> OES_texture_float.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s12_OES_standard_derivatives[@js "OES_standard_derivatives"]] [@js.enum]) -> OES_standard_derivatives.t or_null [@@js.call "getExtension"]
-  val getExtension'''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s11_OES_element_index_uint[@js "OES_element_index_uint"]] [@js.enum]) -> OES_element_index_uint.t or_null [@@js.call "getExtension"]
-  val getExtension''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s1_ANGLE_instanced_arrays[@js "ANGLE_instanced_arrays"]] [@js.enum]) -> ANGLE_instanced_arrays.t or_null [@@js.call "getExtension"]
+  val getExtension: 'tags this -> extensionName:([`L_s2_EXT_blend_minmax[@js "EXT_blend_minmax"]] [@js.enum]) -> EXT_blend_minmax.t option [@@js.call "getExtension"]
+  val getExtension': 'tags this -> extensionName:([`L_s3_EXT_color_buffer_float[@js "EXT_color_buffer_float"]] [@js.enum]) -> EXT_color_buffer_float.t option [@@js.call "getExtension"]
+  val getExtension'': 'tags this -> extensionName:([`L_s4_EXT_color_buffer_half_float[@js "EXT_color_buffer_half_float"]] [@js.enum]) -> EXT_color_buffer_half_float.t option [@@js.call "getExtension"]
+  val getExtension''': 'tags this -> extensionName:([`L_s5_EXT_float_blend[@js "EXT_float_blend"]] [@js.enum]) -> EXT_float_blend.t option [@@js.call "getExtension"]
+  val getExtension'''': 'tags this -> extensionName:([`L_s9_EXT_texture_filter_anisotropic[@js "EXT_texture_filter_anisotropic"]] [@js.enum]) -> EXT_texture_filter_anisotropic.t option [@@js.call "getExtension"]
+  val getExtension''''': 'tags this -> extensionName:([`L_s6_EXT_frag_depth[@js "EXT_frag_depth"]] [@js.enum]) -> EXT_frag_depth.t option [@@js.call "getExtension"]
+  val getExtension'''''': 'tags this -> extensionName:([`L_s8_EXT_shader_texture_lod[@js "EXT_shader_texture_lod"]] [@js.enum]) -> EXT_shader_texture_lod.t option [@@js.call "getExtension"]
+  val getExtension''''''': 'tags this -> extensionName:([`L_s7_EXT_sRGB[@js "EXT_sRGB"]] [@js.enum]) -> EXT_sRGB.t option [@@js.call "getExtension"]
+  val getExtension'''''''': 'tags this -> extensionName:([`L_s10_KHR_parallel_shader_compile[@js "KHR_parallel_shader_compile"]] [@js.enum]) -> KHR_parallel_shader_compile.t option [@@js.call "getExtension"]
+  val getExtension''''''''': 'tags this -> extensionName:([`L_s17_OES_vertex_array_object[@js "OES_vertex_array_object"]] [@js.enum]) -> OES_vertex_array_object.t option [@@js.call "getExtension"]
+  val getExtension'''''''''': 'tags this -> extensionName:([`L_s18_OVR_multiview2[@js "OVR_multiview2"]] [@js.enum]) -> OVR_multiview2.t option [@@js.call "getExtension"]
+  val getExtension''''''''''': 'tags this -> extensionName:([`L_s19_WEBGL_color_buffer_float[@js "WEBGL_color_buffer_float"]] [@js.enum]) -> WEBGL_color_buffer_float.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''': 'tags this -> extensionName:([`L_s20_WEBGL_compressed_texture_astc[@js "WEBGL_compressed_texture_astc"]] [@js.enum]) -> WEBGL_compressed_texture_astc.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''': 'tags this -> extensionName:([`L_s21_WEBGL_compressed_texture_etc[@js "WEBGL_compressed_texture_etc"]] [@js.enum]) -> WEBGL_compressed_texture_etc.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''': 'tags this -> extensionName:([`L_s22_WEBGL_compressed_texture_etc1[@js "WEBGL_compressed_texture_etc1"]] [@js.enum]) -> WEBGL_compressed_texture_etc1.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''': 'tags this -> extensionName:([`L_s23_WEBGL_compressed_texture_pvrtc[@js "WEBGL_compressed_texture_pvrtc"]] [@js.enum]) -> WEBGL_compressed_texture_pvrtc.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''': 'tags this -> extensionName:([`L_s25_WEBGL_compressed_texture_s3tc_srgb[@js "WEBGL_compressed_texture_s3tc_srgb"]] [@js.enum]) -> WEBGL_compressed_texture_s3tc_srgb.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''': 'tags this -> extensionName:([`L_s27_WEBGL_debug_shaders[@js "WEBGL_debug_shaders"]] [@js.enum]) -> WEBGL_debug_shaders.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''': 'tags this -> extensionName:([`L_s29_WEBGL_draw_buffers[@js "WEBGL_draw_buffers"]] [@js.enum]) -> WEBGL_draw_buffers.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''': 'tags this -> extensionName:([`L_s30_WEBGL_lose_context[@js "WEBGL_lose_context"]] [@js.enum]) -> WEBGL_lose_context.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''': 'tags this -> extensionName:([`L_s28_WEBGL_depth_texture[@js "WEBGL_depth_texture"]] [@js.enum]) -> WEBGL_depth_texture.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''': 'tags this -> extensionName:([`L_s26_WEBGL_debug_renderer_info[@js "WEBGL_debug_renderer_info"]] [@js.enum]) -> WEBGL_debug_renderer_info.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''': 'tags this -> extensionName:([`L_s24_WEBGL_compressed_texture_s3tc[@js "WEBGL_compressed_texture_s3tc"]] [@js.enum]) -> WEBGL_compressed_texture_s3tc.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''': 'tags this -> extensionName:([`L_s16_OES_texture_half_float_linear[@js "OES_texture_half_float_linear"]] [@js.enum]) -> OES_texture_half_float_linear.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''''': 'tags this -> extensionName:([`L_s15_OES_texture_half_float[@js "OES_texture_half_float"]] [@js.enum]) -> OES_texture_half_float.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s14_OES_texture_float_linear[@js "OES_texture_float_linear"]] [@js.enum]) -> OES_texture_float_linear.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s13_OES_texture_float[@js "OES_texture_float"]] [@js.enum]) -> OES_texture_float.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s12_OES_standard_derivatives[@js "OES_standard_derivatives"]] [@js.enum]) -> OES_standard_derivatives.t option [@@js.call "getExtension"]
+  val getExtension'''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s11_OES_element_index_uint[@js "OES_element_index_uint"]] [@js.enum]) -> OES_element_index_uint.t option [@@js.call "getExtension"]
+  val getExtension''''''''''''''''''''''''''''': 'tags this -> extensionName:([`L_s1_ANGLE_instanced_arrays[@js "ANGLE_instanced_arrays"]] [@js.enum]) -> ANGLE_instanced_arrays.t option [@@js.call "getExtension"]
   val getExtension'''''''''''''''''''''''''''''': 'tags this -> name:string -> any [@@js.call "getExtension"]
   val getFramebufferAttachmentParameter: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> pname:GLenum.t -> any [@@js.call "getFramebufferAttachmentParameter"]
   val getParameter: 'tags this -> pname:GLenum.t -> any [@@js.call "getParameter"]
-  val getProgramInfoLog: 'tags this -> program:WebGLProgram.t -> string or_null [@@js.call "getProgramInfoLog"]
+  val getProgramInfoLog: 'tags this -> program:WebGLProgram.t -> string option [@@js.call "getProgramInfoLog"]
   val getProgramParameter: 'tags this -> program:WebGLProgram.t -> pname:GLenum.t -> any [@@js.call "getProgramParameter"]
   val getRenderbufferParameter: 'tags this -> target:GLenum.t -> pname:GLenum.t -> any [@@js.call "getRenderbufferParameter"]
-  val getShaderInfoLog: 'tags this -> shader:WebGLShader.t -> string or_null [@@js.call "getShaderInfoLog"]
+  val getShaderInfoLog: 'tags this -> shader:WebGLShader.t -> string option [@@js.call "getShaderInfoLog"]
   val getShaderParameter: 'tags this -> shader:WebGLShader.t -> pname:GLenum.t -> any [@@js.call "getShaderParameter"]
-  val getShaderPrecisionFormat: 'tags this -> shadertype:GLenum.t -> precisiontype:GLenum.t -> WebGLShaderPrecisionFormat.t or_null [@@js.call "getShaderPrecisionFormat"]
-  val getShaderSource: 'tags this -> shader:WebGLShader.t -> string or_null [@@js.call "getShaderSource"]
-  val getSupportedExtensions: 'tags this -> string list or_null [@@js.call "getSupportedExtensions"]
+  val getShaderPrecisionFormat: 'tags this -> shadertype:GLenum.t -> precisiontype:GLenum.t -> WebGLShaderPrecisionFormat.t option [@@js.call "getShaderPrecisionFormat"]
+  val getShaderSource: 'tags this -> shader:WebGLShader.t -> string option [@@js.call "getShaderSource"]
+  val getSupportedExtensions: 'tags this -> string list option [@@js.call "getSupportedExtensions"]
   val getTexParameter: 'tags this -> target:GLenum.t -> pname:GLenum.t -> any [@@js.call "getTexParameter"]
   val getUniform: 'tags this -> program:WebGLProgram.t -> location:WebGLUniformLocation.t -> any [@@js.call "getUniform"]
-  val getUniformLocation: 'tags this -> program:WebGLProgram.t -> name:string -> WebGLUniformLocation.t or_null [@@js.call "getUniformLocation"]
+  val getUniformLocation: 'tags this -> program:WebGLProgram.t -> name:string -> WebGLUniformLocation.t option [@@js.call "getUniformLocation"]
   val getVertexAttrib: 'tags this -> index:GLuint.t -> pname:GLenum.t -> any [@@js.call "getVertexAttrib"]
   val getVertexAttribOffset: 'tags this -> index:GLuint.t -> pname:GLenum.t -> GLintptr.t [@@js.call "getVertexAttribOffset"]
   val hint: 'tags this -> target:GLenum.t -> mode:GLenum.t -> unit [@@js.call "hint"]
-  val isBuffer: 'tags this -> buffer:WebGLBuffer.t or_null -> GLboolean.t [@@js.call "isBuffer"]
+  val isBuffer: 'tags this -> buffer:WebGLBuffer.t option -> GLboolean.t [@@js.call "isBuffer"]
   val isContextLost: 'tags this -> bool [@@js.call "isContextLost"]
   val isEnabled: 'tags this -> cap:GLenum.t -> GLboolean.t [@@js.call "isEnabled"]
-  val isFramebuffer: 'tags this -> framebuffer:WebGLFramebuffer.t or_null -> GLboolean.t [@@js.call "isFramebuffer"]
-  val isProgram: 'tags this -> program:WebGLProgram.t or_null -> GLboolean.t [@@js.call "isProgram"]
-  val isRenderbuffer: 'tags this -> renderbuffer:WebGLRenderbuffer.t or_null -> GLboolean.t [@@js.call "isRenderbuffer"]
-  val isShader: 'tags this -> shader:WebGLShader.t or_null -> GLboolean.t [@@js.call "isShader"]
-  val isTexture: 'tags this -> texture:WebGLTexture.t or_null -> GLboolean.t [@@js.call "isTexture"]
+  val isFramebuffer: 'tags this -> framebuffer:WebGLFramebuffer.t option -> GLboolean.t [@@js.call "isFramebuffer"]
+  val isProgram: 'tags this -> program:WebGLProgram.t option -> GLboolean.t [@@js.call "isProgram"]
+  val isRenderbuffer: 'tags this -> renderbuffer:WebGLRenderbuffer.t option -> GLboolean.t [@@js.call "isRenderbuffer"]
+  val isShader: 'tags this -> shader:WebGLShader.t option -> GLboolean.t [@@js.call "isShader"]
+  val isTexture: 'tags this -> texture:WebGLTexture.t option -> GLboolean.t [@@js.call "isTexture"]
   val lineWidth: 'tags this -> width:GLfloat.t -> unit [@@js.call "lineWidth"]
   val linkProgram: 'tags this -> program:WebGLProgram.t -> unit [@@js.call "linkProgram"]
-  val pixelStorei: 'tags this -> pname:GLenum.t -> param:(GLboolean.t, GLint.t) union2 -> unit [@@js.call "pixelStorei"]
+  val pixelStorei: 'tags this -> pname:GLenum.t -> param:([`U1 of GLint.t | `U2 of GLboolean.t] [@js.union]) -> unit [@@js.call "pixelStorei"]
   val polygonOffset: 'tags this -> factor:GLfloat.t -> units:GLfloat.t -> unit [@@js.call "polygonOffset"]
   val renderbufferStorage: 'tags this -> target:GLenum.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "renderbufferStorage"]
   val sampleCoverage: 'tags this -> value:GLclampf.t -> invert:GLboolean.t -> unit [@@js.call "sampleCoverage"]
@@ -7172,24 +7176,24 @@ module WebGLRenderingContextBase : sig
   val stencilOpSeparate: 'tags this -> face:GLenum.t -> fail:GLenum.t -> zfail:GLenum.t -> zpass:GLenum.t -> unit [@@js.call "stencilOpSeparate"]
   val texParameterf: 'tags this -> target:GLenum.t -> pname:GLenum.t -> param:GLfloat.t -> unit [@@js.call "texParameterf"]
   val texParameteri: 'tags this -> target:GLenum.t -> pname:GLenum.t -> param:GLint.t -> unit [@@js.call "texParameteri"]
-  val uniform1f: 'tags this -> location:WebGLUniformLocation.t or_null -> x:GLfloat.t -> unit [@@js.call "uniform1f"]
-  val uniform1i: 'tags this -> location:WebGLUniformLocation.t or_null -> x:GLint.t -> unit [@@js.call "uniform1i"]
-  val uniform2f: 'tags this -> location:WebGLUniformLocation.t or_null -> x:GLfloat.t -> y:GLfloat.t -> unit [@@js.call "uniform2f"]
-  val uniform2i: 'tags this -> location:WebGLUniformLocation.t or_null -> x:GLint.t -> y:GLint.t -> unit [@@js.call "uniform2i"]
-  val uniform3f: 'tags this -> location:WebGLUniformLocation.t or_null -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> unit [@@js.call "uniform3f"]
-  val uniform3i: 'tags this -> location:WebGLUniformLocation.t or_null -> x:GLint.t -> y:GLint.t -> z:GLint.t -> unit [@@js.call "uniform3i"]
-  val uniform4f: 'tags this -> location:WebGLUniformLocation.t or_null -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> w:GLfloat.t -> unit [@@js.call "uniform4f"]
-  val uniform4i: 'tags this -> location:WebGLUniformLocation.t or_null -> x:GLint.t -> y:GLint.t -> z:GLint.t -> w:GLint.t -> unit [@@js.call "uniform4i"]
-  val useProgram: 'tags this -> program:WebGLProgram.t or_null -> unit [@@js.call "useProgram"]
+  val uniform1f: 'tags this -> location:WebGLUniformLocation.t option -> x:GLfloat.t -> unit [@@js.call "uniform1f"]
+  val uniform1i: 'tags this -> location:WebGLUniformLocation.t option -> x:GLint.t -> unit [@@js.call "uniform1i"]
+  val uniform2f: 'tags this -> location:WebGLUniformLocation.t option -> x:GLfloat.t -> y:GLfloat.t -> unit [@@js.call "uniform2f"]
+  val uniform2i: 'tags this -> location:WebGLUniformLocation.t option -> x:GLint.t -> y:GLint.t -> unit [@@js.call "uniform2i"]
+  val uniform3f: 'tags this -> location:WebGLUniformLocation.t option -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> unit [@@js.call "uniform3f"]
+  val uniform3i: 'tags this -> location:WebGLUniformLocation.t option -> x:GLint.t -> y:GLint.t -> z:GLint.t -> unit [@@js.call "uniform3i"]
+  val uniform4f: 'tags this -> location:WebGLUniformLocation.t option -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> w:GLfloat.t -> unit [@@js.call "uniform4f"]
+  val uniform4i: 'tags this -> location:WebGLUniformLocation.t option -> x:GLint.t -> y:GLint.t -> z:GLint.t -> w:GLint.t -> unit [@@js.call "uniform4i"]
+  val useProgram: 'tags this -> program:WebGLProgram.t option -> unit [@@js.call "useProgram"]
   val validateProgram: 'tags this -> program:WebGLProgram.t -> unit [@@js.call "validateProgram"]
   val vertexAttrib1f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> unit [@@js.call "vertexAttrib1f"]
-  val vertexAttrib1fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib1fv"]
+  val vertexAttrib1fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib1fv"]
   val vertexAttrib2f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> unit [@@js.call "vertexAttrib2f"]
-  val vertexAttrib2fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib2fv"]
+  val vertexAttrib2fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib2fv"]
   val vertexAttrib3f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> unit [@@js.call "vertexAttrib3f"]
-  val vertexAttrib3fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib3fv"]
+  val vertexAttrib3fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib3fv"]
   val vertexAttrib4f: 'tags this -> index:GLuint.t -> x:GLfloat.t -> y:GLfloat.t -> z:GLfloat.t -> w:GLfloat.t -> unit [@@js.call "vertexAttrib4f"]
-  val vertexAttrib4fv: 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib4fv"]
+  val vertexAttrib4fv': 'tags this -> index:GLuint.t -> values:Float32List.t -> unit [@@js.call "vertexAttrib4fv"]
   val vertexAttribPointer: 'tags this -> index:GLuint.t -> size:GLint.t -> type_:GLenum.t -> normalized:GLboolean.t -> stride:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "vertexAttribPointer"]
   val viewport: 'tags this -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "viewport"]
   val get_ACTIVE_ATTRIBUTES: 'tags this -> GLenum.t [@@js.get "ACTIVE_ATTRIBUTES"]
@@ -7488,10 +7492,6 @@ module WebGLRenderingContextBase : sig
   val get_VERTEX_SHADER: 'tags this -> GLenum.t [@@js.get "VERTEX_SHADER"]
   val get_VIEWPORT: 'tags this -> GLenum.t [@@js.get "VIEWPORT"]
   val get_ZERO: 'tags this -> GLenum.t [@@js.get "ZERO"]
-  val vertexAttrib1fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib1fv"]
-  val vertexAttrib2fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib2fv"]
-  val vertexAttrib3fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib3fv"]
-  val vertexAttrib4fv': 'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit [@@js.call "vertexAttrib4fv"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -7873,8 +7873,19 @@ module WebGL2RenderingContextOverloads : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
+  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
+  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
+  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
+  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
+  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
+  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
+  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
   val bufferData: 'tags this -> target:GLenum.t -> size:GLsizeiptr.t -> usage:GLenum.t -> unit [@@js.call "bufferData"]
-  val bufferData': 'tags this -> target:GLenum.t -> srcData:BufferSource.t or_null -> usage:GLenum.t -> unit [@@js.call "bufferData"]
+  val bufferData': 'tags this -> target:GLenum.t -> srcData:BufferSource.t option -> usage:GLenum.t -> unit [@@js.call "bufferData"]
   val bufferData'': 'tags this -> target:GLenum.t -> srcData:ArrayBufferView.t_0 -> usage:GLenum.t -> srcOffset:GLuint.t -> ?length:GLuint.t -> unit -> unit [@@js.call "bufferData"]
   val bufferSubData: 'tags this -> target:GLenum.t -> dstByteOffset:GLintptr.t -> srcData:BufferSource.t -> unit [@@js.call "bufferSubData"]
   val bufferSubData': 'tags this -> target:GLenum.t -> dstByteOffset:GLintptr.t -> srcData:ArrayBufferView.t_0 -> srcOffset:GLuint.t -> ?length:GLuint.t -> unit -> unit [@@js.call "bufferSubData"]
@@ -7882,41 +7893,30 @@ module WebGL2RenderingContextOverloads : sig
   val compressedTexImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> srcData:ArrayBufferView.t_0 -> ?srcOffset:GLuint.t -> ?srcLengthOverride:GLuint.t -> unit -> unit [@@js.call "compressedTexImage2D"]
   val compressedTexSubImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> imageSize:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "compressedTexSubImage2D"]
   val compressedTexSubImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> srcData:ArrayBufferView.t_0 -> ?srcOffset:GLuint.t -> ?srcLengthOverride:GLuint.t -> unit -> unit [@@js.call "compressedTexSubImage2D"]
-  val readPixels: 'tags this -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> dstData:ArrayBufferView.t_0 or_null -> unit [@@js.call "readPixels"]
+  val readPixels: 'tags this -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> dstData:ArrayBufferView.t_0 option -> unit [@@js.call "readPixels"]
   val readPixels': 'tags this -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> offset:GLintptr.t -> unit [@@js.call "readPixels"]
   val readPixels'': 'tags this -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> dstData:ArrayBufferView.t_0 -> dstOffset:GLuint.t -> unit [@@js.call "readPixels"]
-  val texImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 or_null -> unit [@@js.call "texImage2D"]
+  val texImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 option -> unit [@@js.call "texImage2D"]
   val texImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texImage2D"]
   val texImage2D'': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> pboOffset:GLintptr.t -> unit [@@js.call "texImage2D"]
   val texImage2D''': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texImage2D"]
   val texImage2D'''': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 -> srcOffset:GLuint.t -> unit [@@js.call "texImage2D"]
-  val texSubImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 or_null -> unit [@@js.call "texSubImage2D"]
+  val texSubImage2D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pixels:ArrayBufferView.t_0 option -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D'': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pboOffset:GLintptr.t -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D''': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage2D"]
   val texSubImage2D'''': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 -> srcOffset:GLuint.t -> unit [@@js.call "texSubImage2D"]
-  val uniform1fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
-  val uniform1iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
-  val uniform2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
-  val uniform2iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
-  val uniform3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
-  val uniform3iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
-  val uniform4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
-  val uniform4iv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
-  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
-  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
-  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
-  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
-  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
-  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
-  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
-  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
-  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
-  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
-  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
+  val uniform1fv': 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1fv"]
+  val uniform1iv': 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1iv"]
+  val uniform2fv': 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2fv"]
+  val uniform2iv': 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2iv"]
+  val uniform3fv': 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3fv"]
+  val uniform3iv': 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3iv"]
+  val uniform4fv': 'tags this -> location:WebGLUniformLocation.t option -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4fv"]
+  val uniform4iv': 'tags this -> location:WebGLUniformLocation.t option -> data:Int32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4iv"]
+  val uniformMatrix2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2fv"]
+  val uniformMatrix3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3fv"]
+  val uniformMatrix4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4fv"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "WebGLVertexArrayObject"] WebGLVertexArrayObject : sig
@@ -8020,7 +8020,7 @@ module[@js.scope "WebGLQuery"] WebGLQuery : sig
   val create: unit -> t [@@js.create]
 end
 module Uint32List : sig
-  type t = (Uint32Array.t_0, GLuint.t) or_array
+  type t = (GLuint.t list, Uint32Array.t_0) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8059,18 +8059,39 @@ module WebGL2RenderingContextBase : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val clearBufferfv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
+  val clearBufferiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
+  val clearBufferuiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
+  val drawBuffers: 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffers"]
+  val getActiveUniforms: 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t Iterable.t_1 -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
+  val getUniformIndices: 'tags this -> program:WebGLProgram.t -> uniformNames:string Iterable.t_1 -> GLuint.t Iterable.t_1 option [@@js.call "getUniformIndices"]
+  val invalidateFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> unit [@@js.call "invalidateFramebuffer"]
+  val invalidateSubFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
+  val transformFeedbackVaryings: 'tags this -> program:WebGLProgram.t -> varyings:string Iterable.t_1 -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
+  val uniform1uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
+  val uniform2uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
+  val uniform3uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
+  val uniform4uiv: 'tags this -> location:WebGLUniformLocation.t option -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
+  val uniformMatrix2x3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
+  val uniformMatrix2x4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
+  val uniformMatrix3x2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
+  val uniformMatrix3x4fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
+  val uniformMatrix4x2fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
+  val uniformMatrix4x3fv: 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
+  val vertexAttribI4iv: 'tags this -> index:GLuint.t -> values:GLint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4iv"]
+  val vertexAttribI4uiv: 'tags this -> index:GLuint.t -> values:GLuint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4uiv"]
   val beginQuery: 'tags this -> target:GLenum.t -> query:WebGLQuery.t -> unit [@@js.call "beginQuery"]
   val beginTransformFeedback: 'tags this -> primitiveMode:GLenum.t -> unit [@@js.call "beginTransformFeedback"]
-  val bindBufferBase: 'tags this -> target:GLenum.t -> index:GLuint.t -> buffer:WebGLBuffer.t or_null -> unit [@@js.call "bindBufferBase"]
-  val bindBufferRange: 'tags this -> target:GLenum.t -> index:GLuint.t -> buffer:WebGLBuffer.t or_null -> offset:GLintptr.t -> size:GLsizeiptr.t -> unit [@@js.call "bindBufferRange"]
-  val bindSampler: 'tags this -> unit:GLuint.t -> sampler:WebGLSampler.t or_null -> unit [@@js.call "bindSampler"]
-  val bindTransformFeedback: 'tags this -> target:GLenum.t -> tf:WebGLTransformFeedback.t or_null -> unit [@@js.call "bindTransformFeedback"]
-  val bindVertexArray: 'tags this -> array:WebGLVertexArrayObject.t or_null -> unit [@@js.call "bindVertexArray"]
+  val bindBufferBase: 'tags this -> target:GLenum.t -> index:GLuint.t -> buffer:WebGLBuffer.t option -> unit [@@js.call "bindBufferBase"]
+  val bindBufferRange: 'tags this -> target:GLenum.t -> index:GLuint.t -> buffer:WebGLBuffer.t option -> offset:GLintptr.t -> size:GLsizeiptr.t -> unit [@@js.call "bindBufferRange"]
+  val bindSampler: 'tags this -> unit:GLuint.t -> sampler:WebGLSampler.t option -> unit [@@js.call "bindSampler"]
+  val bindTransformFeedback: 'tags this -> target:GLenum.t -> tf:WebGLTransformFeedback.t option -> unit [@@js.call "bindTransformFeedback"]
+  val bindVertexArray: 'tags this -> array:WebGLVertexArrayObject.t option -> unit [@@js.call "bindVertexArray"]
   val blitFramebuffer: 'tags this -> srcX0:GLint.t -> srcY0:GLint.t -> srcX1:GLint.t -> srcY1:GLint.t -> dstX0:GLint.t -> dstY0:GLint.t -> dstX1:GLint.t -> dstY1:GLint.t -> mask:GLbitfield.t -> filter:GLenum.t -> unit [@@js.call "blitFramebuffer"]
   val clearBufferfi: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> depth:GLfloat.t -> stencil:GLint.t -> unit [@@js.call "clearBufferfi"]
-  val clearBufferfv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Float32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
-  val clearBufferiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Int32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
-  val clearBufferuiv: 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Uint32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
+  val clearBufferfv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Float32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
+  val clearBufferiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Int32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
+  val clearBufferuiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:Uint32List.t -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
   val clientWaitSync: 'tags this -> sync:WebGLSync.t -> flags:GLbitfield.t -> timeout:GLuint64.t -> GLenum.t [@@js.call "clientWaitSync"]
   val compressedTexImage3D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> imageSize:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "compressedTexImage3D"]
   val compressedTexImage3D': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> srcData:ArrayBufferView.t_0 -> ?srcOffset:GLuint.t -> ?srcLengthOverride:GLuint.t -> unit -> unit [@@js.call "compressedTexImage3D"]
@@ -8078,44 +8099,44 @@ module WebGL2RenderingContextBase : sig
   val compressedTexSubImage3D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> srcData:ArrayBufferView.t_0 -> ?srcOffset:GLuint.t -> ?srcLengthOverride:GLuint.t -> unit -> unit [@@js.call "compressedTexSubImage3D"]
   val copyBufferSubData: 'tags this -> readTarget:GLenum.t -> writeTarget:GLenum.t -> readOffset:GLintptr.t -> writeOffset:GLintptr.t -> size:GLsizeiptr.t -> unit [@@js.call "copyBufferSubData"]
   val copyTexSubImage3D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "copyTexSubImage3D"]
-  val createQuery: 'tags this -> WebGLQuery.t or_null [@@js.call "createQuery"]
-  val createSampler: 'tags this -> WebGLSampler.t or_null [@@js.call "createSampler"]
-  val createTransformFeedback: 'tags this -> WebGLTransformFeedback.t or_null [@@js.call "createTransformFeedback"]
-  val createVertexArray: 'tags this -> WebGLVertexArrayObject.t or_null [@@js.call "createVertexArray"]
-  val deleteQuery: 'tags this -> query:WebGLQuery.t or_null -> unit [@@js.call "deleteQuery"]
-  val deleteSampler: 'tags this -> sampler:WebGLSampler.t or_null -> unit [@@js.call "deleteSampler"]
-  val deleteSync: 'tags this -> sync:WebGLSync.t or_null -> unit [@@js.call "deleteSync"]
-  val deleteTransformFeedback: 'tags this -> tf:WebGLTransformFeedback.t or_null -> unit [@@js.call "deleteTransformFeedback"]
-  val deleteVertexArray: 'tags this -> vertexArray:WebGLVertexArrayObject.t or_null -> unit [@@js.call "deleteVertexArray"]
+  val createQuery: 'tags this -> WebGLQuery.t option [@@js.call "createQuery"]
+  val createSampler: 'tags this -> WebGLSampler.t option [@@js.call "createSampler"]
+  val createTransformFeedback: 'tags this -> WebGLTransformFeedback.t option [@@js.call "createTransformFeedback"]
+  val createVertexArray: 'tags this -> WebGLVertexArrayObject.t option [@@js.call "createVertexArray"]
+  val deleteQuery: 'tags this -> query:WebGLQuery.t option -> unit [@@js.call "deleteQuery"]
+  val deleteSampler: 'tags this -> sampler:WebGLSampler.t option -> unit [@@js.call "deleteSampler"]
+  val deleteSync: 'tags this -> sync:WebGLSync.t option -> unit [@@js.call "deleteSync"]
+  val deleteTransformFeedback: 'tags this -> tf:WebGLTransformFeedback.t option -> unit [@@js.call "deleteTransformFeedback"]
+  val deleteVertexArray: 'tags this -> vertexArray:WebGLVertexArrayObject.t option -> unit [@@js.call "deleteVertexArray"]
   val drawArraysInstanced: 'tags this -> mode:GLenum.t -> first:GLint.t -> count:GLsizei.t -> instanceCount:GLsizei.t -> unit [@@js.call "drawArraysInstanced"]
-  val drawBuffers: 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffers"]
+  val drawBuffers': 'tags this -> buffers:GLenum.t list -> unit [@@js.call "drawBuffers"]
   val drawElementsInstanced: 'tags this -> mode:GLenum.t -> count:GLsizei.t -> type_:GLenum.t -> offset:GLintptr.t -> instanceCount:GLsizei.t -> unit [@@js.call "drawElementsInstanced"]
   val drawRangeElements: 'tags this -> mode:GLenum.t -> start:GLuint.t -> end_:GLuint.t -> count:GLsizei.t -> type_:GLenum.t -> offset:GLintptr.t -> unit [@@js.call "drawRangeElements"]
   val endQuery: 'tags this -> target:GLenum.t -> unit [@@js.call "endQuery"]
   val endTransformFeedback: 'tags this -> unit [@@js.call "endTransformFeedback"]
-  val fenceSync: 'tags this -> condition:GLenum.t -> flags:GLbitfield.t -> WebGLSync.t or_null [@@js.call "fenceSync"]
-  val framebufferTextureLayer: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> texture:WebGLTexture.t or_null -> level:GLint.t -> layer:GLint.t -> unit [@@js.call "framebufferTextureLayer"]
-  val getActiveUniformBlockName: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> string or_null [@@js.call "getActiveUniformBlockName"]
+  val fenceSync: 'tags this -> condition:GLenum.t -> flags:GLbitfield.t -> WebGLSync.t option [@@js.call "fenceSync"]
+  val framebufferTextureLayer: 'tags this -> target:GLenum.t -> attachment:GLenum.t -> texture:WebGLTexture.t option -> level:GLint.t -> layer:GLint.t -> unit [@@js.call "framebufferTextureLayer"]
+  val getActiveUniformBlockName: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> string option [@@js.call "getActiveUniformBlockName"]
   val getActiveUniformBlockParameter: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> pname:GLenum.t -> any [@@js.call "getActiveUniformBlockParameter"]
-  val getActiveUniforms: 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t list -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
+  val getActiveUniforms': 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t list -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
   val getBufferSubData: 'tags this -> target:GLenum.t -> srcByteOffset:GLintptr.t -> dstBuffer:ArrayBufferView.t_0 -> ?dstOffset:GLuint.t -> ?length:GLuint.t -> unit -> unit [@@js.call "getBufferSubData"]
   val getFragDataLocation: 'tags this -> program:WebGLProgram.t -> name:string -> GLint.t [@@js.call "getFragDataLocation"]
   val getIndexedParameter: 'tags this -> target:GLenum.t -> index:GLuint.t -> any [@@js.call "getIndexedParameter"]
   val getInternalformatParameter: 'tags this -> target:GLenum.t -> internalformat:GLenum.t -> pname:GLenum.t -> any [@@js.call "getInternalformatParameter"]
-  val getQuery: 'tags this -> target:GLenum.t -> pname:GLenum.t -> WebGLQuery.t or_null [@@js.call "getQuery"]
+  val getQuery: 'tags this -> target:GLenum.t -> pname:GLenum.t -> WebGLQuery.t option [@@js.call "getQuery"]
   val getQueryParameter: 'tags this -> query:WebGLQuery.t -> pname:GLenum.t -> any [@@js.call "getQueryParameter"]
   val getSamplerParameter: 'tags this -> sampler:WebGLSampler.t -> pname:GLenum.t -> any [@@js.call "getSamplerParameter"]
   val getSyncParameter: 'tags this -> sync:WebGLSync.t -> pname:GLenum.t -> any [@@js.call "getSyncParameter"]
-  val getTransformFeedbackVarying: 'tags this -> program:WebGLProgram.t -> index:GLuint.t -> WebGLActiveInfo.t or_null [@@js.call "getTransformFeedbackVarying"]
+  val getTransformFeedbackVarying: 'tags this -> program:WebGLProgram.t -> index:GLuint.t -> WebGLActiveInfo.t option [@@js.call "getTransformFeedbackVarying"]
   val getUniformBlockIndex: 'tags this -> program:WebGLProgram.t -> uniformBlockName:string -> GLuint.t [@@js.call "getUniformBlockIndex"]
-  val getUniformIndices: 'tags this -> program:WebGLProgram.t -> uniformNames:string list -> GLuint.t list or_null [@@js.call "getUniformIndices"]
-  val invalidateFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> unit [@@js.call "invalidateFramebuffer"]
-  val invalidateSubFramebuffer: 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
-  val isQuery: 'tags this -> query:WebGLQuery.t or_null -> GLboolean.t [@@js.call "isQuery"]
-  val isSampler: 'tags this -> sampler:WebGLSampler.t or_null -> GLboolean.t [@@js.call "isSampler"]
-  val isSync: 'tags this -> sync:WebGLSync.t or_null -> GLboolean.t [@@js.call "isSync"]
-  val isTransformFeedback: 'tags this -> tf:WebGLTransformFeedback.t or_null -> GLboolean.t [@@js.call "isTransformFeedback"]
-  val isVertexArray: 'tags this -> vertexArray:WebGLVertexArrayObject.t or_null -> GLboolean.t [@@js.call "isVertexArray"]
+  val getUniformIndices': 'tags this -> program:WebGLProgram.t -> uniformNames:string list -> GLuint.t list option [@@js.call "getUniformIndices"]
+  val invalidateFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> unit [@@js.call "invalidateFramebuffer"]
+  val invalidateSubFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t list -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
+  val isQuery: 'tags this -> query:WebGLQuery.t option -> GLboolean.t [@@js.call "isQuery"]
+  val isSampler: 'tags this -> sampler:WebGLSampler.t option -> GLboolean.t [@@js.call "isSampler"]
+  val isSync: 'tags this -> sync:WebGLSync.t option -> GLboolean.t [@@js.call "isSync"]
+  val isTransformFeedback: 'tags this -> tf:WebGLTransformFeedback.t option -> GLboolean.t [@@js.call "isTransformFeedback"]
+  val isVertexArray: 'tags this -> vertexArray:WebGLVertexArrayObject.t option -> GLboolean.t [@@js.call "isVertexArray"]
   val pauseTransformFeedback: 'tags this -> unit [@@js.call "pauseTransformFeedback"]
   val readBuffer: 'tags this -> src:GLenum.t -> unit [@@js.call "readBuffer"]
   val renderbufferStorageMultisample: 'tags this -> target:GLenum.t -> samples:GLsizei.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "renderbufferStorageMultisample"]
@@ -8124,34 +8145,34 @@ module WebGL2RenderingContextBase : sig
   val samplerParameteri: 'tags this -> sampler:WebGLSampler.t -> pname:GLenum.t -> param:GLint.t -> unit [@@js.call "samplerParameteri"]
   val texImage3D: 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> pboOffset:GLintptr.t -> unit [@@js.call "texImage3D"]
   val texImage3D': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texImage3D"]
-  val texImage3D'': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 or_null -> unit [@@js.call "texImage3D"]
+  val texImage3D'': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 option -> unit [@@js.call "texImage3D"]
   val texImage3D''': 'tags this -> target:GLenum.t -> level:GLint.t -> internalformat:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> border:GLint.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 -> srcOffset:GLuint.t -> unit [@@js.call "texImage3D"]
   val texStorage2D: 'tags this -> target:GLenum.t -> levels:GLsizei.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "texStorage2D"]
   val texStorage3D: 'tags this -> target:GLenum.t -> levels:GLsizei.t -> internalformat:GLenum.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> unit [@@js.call "texStorage3D"]
   val texSubImage3D: 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> pboOffset:GLintptr.t -> unit [@@js.call "texSubImage3D"]
   val texSubImage3D': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> source:TexImageSource.t -> unit [@@js.call "texSubImage3D"]
-  val texSubImage3D'': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 or_null -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "texSubImage3D"]
-  val transformFeedbackVaryings: 'tags this -> program:WebGLProgram.t -> varyings:string list -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
-  val uniform1ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> unit [@@js.call "uniform1ui"]
-  val uniform1uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
-  val uniform2ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> v1:GLuint.t -> unit [@@js.call "uniform2ui"]
-  val uniform2uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
-  val uniform3ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> unit [@@js.call "uniform3ui"]
-  val uniform3uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
-  val uniform4ui: 'tags this -> location:WebGLUniformLocation.t or_null -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> v3:GLuint.t -> unit [@@js.call "uniform4ui"]
-  val uniform4uiv: 'tags this -> location:WebGLUniformLocation.t or_null -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
+  val texSubImage3D'': 'tags this -> target:GLenum.t -> level:GLint.t -> xoffset:GLint.t -> yoffset:GLint.t -> zoffset:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> depth:GLsizei.t -> format:GLenum.t -> type_:GLenum.t -> srcData:ArrayBufferView.t_0 option -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "texSubImage3D"]
+  val transformFeedbackVaryings': 'tags this -> program:WebGLProgram.t -> varyings:string list -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
+  val uniform1ui: 'tags this -> location:WebGLUniformLocation.t option -> v0:GLuint.t -> unit [@@js.call "uniform1ui"]
+  val uniform1uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
+  val uniform2ui: 'tags this -> location:WebGLUniformLocation.t option -> v0:GLuint.t -> v1:GLuint.t -> unit [@@js.call "uniform2ui"]
+  val uniform2uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
+  val uniform3ui: 'tags this -> location:WebGLUniformLocation.t option -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> unit [@@js.call "uniform3ui"]
+  val uniform3uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
+  val uniform4ui: 'tags this -> location:WebGLUniformLocation.t option -> v0:GLuint.t -> v1:GLuint.t -> v2:GLuint.t -> v3:GLuint.t -> unit [@@js.call "uniform4ui"]
+  val uniform4uiv': 'tags this -> location:WebGLUniformLocation.t option -> data:Uint32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
   val uniformBlockBinding: 'tags this -> program:WebGLProgram.t -> uniformBlockIndex:GLuint.t -> uniformBlockBinding:GLuint.t -> unit [@@js.call "uniformBlockBinding"]
-  val uniformMatrix2x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
-  val uniformMatrix2x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
-  val uniformMatrix3x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
-  val uniformMatrix3x4fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
-  val uniformMatrix4x2fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
-  val uniformMatrix4x3fv: 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
+  val uniformMatrix2x3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
+  val uniformMatrix2x4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
+  val uniformMatrix3x2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
+  val uniformMatrix3x4fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
+  val uniformMatrix4x2fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
+  val uniformMatrix4x3fv': 'tags this -> location:WebGLUniformLocation.t option -> transpose:GLboolean.t -> data:Float32List.t -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
   val vertexAttribDivisor: 'tags this -> index:GLuint.t -> divisor:GLuint.t -> unit [@@js.call "vertexAttribDivisor"]
   val vertexAttribI4i: 'tags this -> index:GLuint.t -> x:GLint.t -> y:GLint.t -> z:GLint.t -> w:GLint.t -> unit [@@js.call "vertexAttribI4i"]
-  val vertexAttribI4iv: 'tags this -> index:GLuint.t -> values:Int32List.t -> unit [@@js.call "vertexAttribI4iv"]
+  val vertexAttribI4iv': 'tags this -> index:GLuint.t -> values:Int32List.t -> unit [@@js.call "vertexAttribI4iv"]
   val vertexAttribI4ui: 'tags this -> index:GLuint.t -> x:GLuint.t -> y:GLuint.t -> z:GLuint.t -> w:GLuint.t -> unit [@@js.call "vertexAttribI4ui"]
-  val vertexAttribI4uiv: 'tags this -> index:GLuint.t -> values:Uint32List.t -> unit [@@js.call "vertexAttribI4uiv"]
+  val vertexAttribI4uiv': 'tags this -> index:GLuint.t -> values:Uint32List.t -> unit [@@js.call "vertexAttribI4uiv"]
   val vertexAttribIPointer: 'tags this -> index:GLuint.t -> size:GLint.t -> type_:GLenum.t -> stride:GLsizei.t -> offset:GLintptr.t -> unit [@@js.call "vertexAttribIPointer"]
   val waitSync: 'tags this -> sync:WebGLSync.t -> flags:GLbitfield.t -> timeout:GLint64.t -> unit [@@js.call "waitSync"]
   val get_ACTIVE_UNIFORM_BLOCKS: 'tags this -> GLenum.t [@@js.get "ACTIVE_UNIFORM_BLOCKS"]
@@ -8417,27 +8438,6 @@ module WebGL2RenderingContextBase : sig
   val get_VERTEX_ATTRIB_ARRAY_DIVISOR: 'tags this -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_DIVISOR"]
   val get_VERTEX_ATTRIB_ARRAY_INTEGER: 'tags this -> GLenum.t [@@js.get "VERTEX_ATTRIB_ARRAY_INTEGER"]
   val get_WAIT_FAILED: 'tags this -> GLenum.t [@@js.get "WAIT_FAILED"]
-  val clearBufferfv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferfv"]
-  val clearBufferiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferiv"]
-  val clearBufferuiv': 'tags this -> buffer:GLenum.t -> drawbuffer:GLint.t -> values:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> unit -> unit [@@js.call "clearBufferuiv"]
-  val drawBuffers': 'tags this -> buffers:GLenum.t Iterable.t_1 -> unit [@@js.call "drawBuffers"]
-  val getActiveUniforms': 'tags this -> program:WebGLProgram.t -> uniformIndices:GLuint.t Iterable.t_1 -> pname:GLenum.t -> any [@@js.call "getActiveUniforms"]
-  val getUniformIndices': 'tags this -> program:WebGLProgram.t -> uniformNames:string Iterable.t_1 -> GLuint.t Iterable.t_1 or_null [@@js.call "getUniformIndices"]
-  val invalidateFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> unit [@@js.call "invalidateFramebuffer"]
-  val invalidateSubFramebuffer': 'tags this -> target:GLenum.t -> attachments:GLenum.t Iterable.t_1 -> x:GLint.t -> y:GLint.t -> width:GLsizei.t -> height:GLsizei.t -> unit [@@js.call "invalidateSubFramebuffer"]
-  val transformFeedbackVaryings': 'tags this -> program:WebGLProgram.t -> varyings:string Iterable.t_1 -> bufferMode:GLenum.t -> unit [@@js.call "transformFeedbackVaryings"]
-  val uniform1uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform1uiv"]
-  val uniform2uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform2uiv"]
-  val uniform3uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform3uiv"]
-  val uniform4uiv': 'tags this -> location:WebGLUniformLocation.t or_null -> data:GLuint.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniform4uiv"]
-  val uniformMatrix2x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x3fv"]
-  val uniformMatrix2x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix2x4fv"]
-  val uniformMatrix3x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x2fv"]
-  val uniformMatrix3x4fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix3x4fv"]
-  val uniformMatrix4x2fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x2fv"]
-  val uniformMatrix4x3fv': 'tags this -> location:WebGLUniformLocation.t or_null -> transpose:GLboolean.t -> data:GLfloat.t Iterable.t_1 -> ?srcOffset:GLuint.t -> ?srcLength:GLuint.t -> unit -> unit [@@js.call "uniformMatrix4x3fv"]
-  val vertexAttribI4iv': 'tags this -> index:GLuint.t -> values:GLint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4iv"]
-  val vertexAttribI4uiv': 'tags this -> index:GLuint.t -> values:GLuint.t Iterable.t_1 -> unit [@@js.call "vertexAttribI4uiv"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "WebGL2RenderingContext"] WebGL2RenderingContext : sig
@@ -9258,7 +9258,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val create: descriptor:GlobalDescriptor.t -> ?v:any -> unit -> t [@@js.create]
   end
   module ExportValue : sig
-    type t = (Global.t, Memory.t, Table.t) union3
+    type t = (untyped_function, Global.t, Memory.t, Table.t) union4
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -9266,7 +9266,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val t_0_of_js: Ojs.t -> t_0
   end
   module ImportValue : sig
-    type t = ExportValue.t or_number
+    type t = ([`Number of float | `Other of ExportValue.t] [@js.union on_field "dummy"]) Primitive.t
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -9406,10 +9406,10 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val invoke: ?message:string -> unit -> t [@@js.invoke]
   end
   val compile: BufferSource.t -> Module.t Promise.t_1 [@@js.global "compile"]
-  val compileStreaming: Response.t -> Module.t Promise.t_1 [@@js.global "compileStreaming"]
+  val compileStreaming: (Response.t, Response.t PromiseLike.t_1) union2 -> Module.t Promise.t_1 [@@js.global "compileStreaming"]
   val instantiate: bytes:BufferSource.t -> ?importObject:Imports.t -> unit -> WebAssemblyInstantiatedSource.t Promise.t_1 [@@js.global "instantiate"]
   val instantiate': moduleObject:Module.t -> ?importObject:Imports.t -> unit -> Instance.t Promise.t_1 [@@js.global "instantiate"]
-  val instantiateStreaming: source:Response.t -> ?importObject:Imports.t -> unit -> WebAssemblyInstantiatedSource.t Promise.t_1 [@@js.global "instantiateStreaming"]
+  val instantiateStreaming: source:(Response.t, Response.t PromiseLike.t_1) union2 -> ?importObject:Imports.t -> unit -> WebAssemblyInstantiatedSource.t Promise.t_1 [@@js.global "instantiateStreaming"]
   val validate: BufferSource.t -> bool [@@js.global "validate"]
 end
 module[@js.scope "TransformStreamDefaultController"] TransformStreamDefaultController : sig
@@ -9433,7 +9433,7 @@ module[@js.scope "TransformStreamDefaultController"] TransformStreamDefaultContr
   val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_desiredSize: ('tags, 'O) this -> float or_null [@@js.get "desiredSize"]
+  val get_desiredSize: ('tags, 'O) this -> float option [@@js.get "desiredSize"]
   val enqueue: ('tags, 'O) this -> ?chunk:'O -> unit -> unit [@@js.call "enqueue"]
   val error: ('tags, 'O) this -> ?reason:any -> unit -> unit [@@js.call "error"]
   val terminate: ('tags, 'O) this -> unit [@@js.call "terminate"]
@@ -9457,7 +9457,7 @@ module TransformerTransformCallback : sig
   val t_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t
   val t_2_to_js: ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t
   val t_2_of_js: (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2
-  val apply: ('tags, 'I, 'O) this -> chunk:'I -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
+  val apply: ('tags, 'I, 'O) this -> chunk:'I -> controller:'O TransformStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   val cast_from: ('tags, 'I, 'O) this -> ('I, 'O) t [@@js.custom let cast_from = Obj.magic]
 end
 module TransformerStartCallback : sig
@@ -9495,7 +9495,7 @@ module TransformerFlushCallback : sig
   val t_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t
   val t_1_to_js: ('O -> Ojs.t) -> 'O t_1 -> Ojs.t
   val t_1_of_js: (Ojs.t -> 'O) -> Ojs.t -> 'O t_1
-  val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> unit [@@js.apply]
+  val apply: ('tags, 'O) this -> controller:'O TransformStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
   val cast_from: ('tags, 'O) this -> 'O t [@@js.custom let cast_from = Obj.magic]
 end
 module Transformer : sig
@@ -9526,14 +9526,14 @@ module Transformer : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_flush: ('tags, 'I, 'O) this -> 'O TransformerFlushCallback.t [@@js.get "flush"]
   val set_flush: ('tags, 'I, 'O) this -> 'O TransformerFlushCallback.t -> unit [@@js.set "flush"]
-  val get_readableType: ('tags, 'I, 'O) this -> never or_undefined [@@js.get "readableType"]
-  val set_readableType: ('tags, 'I, 'O) this -> never or_undefined -> unit [@@js.set "readableType"]
+  val get_readableType: ('tags, 'I, 'O) this -> undefined [@@js.get "readableType"]
+  val set_readableType: ('tags, 'I, 'O) this -> undefined -> unit [@@js.set "readableType"]
   val get_start: ('tags, 'I, 'O) this -> 'O TransformerStartCallback.t [@@js.get "start"]
   val set_start: ('tags, 'I, 'O) this -> 'O TransformerStartCallback.t -> unit [@@js.set "start"]
   val get_transform: ('tags, 'I, 'O) this -> ('I, 'O) TransformerTransformCallback.t [@@js.get "transform"]
   val set_transform: ('tags, 'I, 'O) this -> ('I, 'O) TransformerTransformCallback.t -> unit [@@js.set "transform"]
-  val get_writableType: ('tags, 'I, 'O) this -> never or_undefined [@@js.get "writableType"]
-  val set_writableType: ('tags, 'I, 'O) this -> never or_undefined -> unit [@@js.set "writableType"]
+  val get_writableType: ('tags, 'I, 'O) this -> undefined [@@js.get "writableType"]
+  val set_writableType: ('tags, 'I, 'O) this -> undefined -> unit [@@js.set "writableType"]
   val create: flush:'O TransformerFlushCallback.t -> ?readableType:never -> start:'O TransformerStartCallback.t -> transform:('I, 'O) TransformerTransformCallback.t -> ?writableType:never -> unit -> ('I, 'O) t [@@js.builder]
   val cast_from: ('tags, 'I, 'O) this -> ('I, 'O) t [@@js.custom let cast_from = Obj.magic]
 end
@@ -10037,7 +10037,7 @@ module VoidFunction : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module TimerHandler : sig
-  type t = untyped_function or_string
+  type t = ([`String of string | `Other of untyped_function] [@js.union on_field "dummy"]) Primitive.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10209,7 +10209,7 @@ module[@js.scope "CacheStorage"] CacheStorage : sig
   val delete: 'tags this -> cacheName:string -> bool Promise.t_1 [@@js.call "delete"]
   val has: 'tags this -> cacheName:string -> bool Promise.t_1 [@@js.call "has"]
   val keys: 'tags this -> string list Promise.t_1 [@@js.call "keys"]
-  val match_: 'tags this -> request:RequestInfo.t -> ?options:MultiCacheQueryOptions.t -> unit -> Response.t or_undefined Promise.t_1 [@@js.call "match"]
+  val match_: 'tags this -> request:RequestInfo.t -> ?options:MultiCacheQueryOptions.t -> unit -> Response.t option Promise.t_1 [@@js.call "match"]
   val open_: 'tags this -> cacheName:string -> Cache.t Promise.t_1 [@@js.call "open"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -10296,24 +10296,24 @@ module[@js.scope "WorkerGlobalScope"] WorkerGlobalScope : sig
   
   (** Returns workerGlobal's WorkerNavigator object. *)
   val get_navigator: 'tags this -> WorkerNavigator.t [@@js.get "navigator"]
-  val get_onerror: 'tags this -> (this:t -> ev:ErrorEvent.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:ErrorEvent.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onlanguagechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onlanguagechange"]
-  val set_onlanguagechange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onlanguagechange"]
-  val get_onoffline: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onoffline"]
-  val set_onoffline: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onoffline"]
-  val get_ononline: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "ononline"]
-  val set_ononline: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "ononline"]
-  val get_onrejectionhandled: 'tags this -> (this:t -> ev:PromiseRejectionEvent.t -> any) or_null [@@js.get "onrejectionhandled"]
-  val set_onrejectionhandled: 'tags this -> (this:t -> ev:PromiseRejectionEvent.t -> any) or_null -> unit [@@js.set "onrejectionhandled"]
-  val get_onunhandledrejection: 'tags this -> (this:t -> ev:PromiseRejectionEvent.t -> any) or_null [@@js.get "onunhandledrejection"]
-  val set_onunhandledrejection: 'tags this -> (this:t -> ev:PromiseRejectionEvent.t -> any) or_null -> unit [@@js.set "onunhandledrejection"]
+  val get_onerror: 'tags this -> (this:t -> ev:ErrorEvent.t -> any) option [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:ErrorEvent.t -> any) option -> unit [@@js.set "onerror"]
+  val get_onlanguagechange: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onlanguagechange"]
+  val set_onlanguagechange: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onlanguagechange"]
+  val get_onoffline: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onoffline"]
+  val set_onoffline: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onoffline"]
+  val get_ononline: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "ononline"]
+  val set_ononline: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "ononline"]
+  val get_onrejectionhandled: 'tags this -> (this:t -> ev:PromiseRejectionEvent.t -> any) option [@@js.get "onrejectionhandled"]
+  val set_onrejectionhandled: 'tags this -> (this:t -> ev:PromiseRejectionEvent.t -> any) option -> unit [@@js.set "onrejectionhandled"]
+  val get_onunhandledrejection: 'tags this -> (this:t -> ev:PromiseRejectionEvent.t -> any) option [@@js.get "onunhandledrejection"]
+  val set_onunhandledrejection: 'tags this -> (this:t -> ev:PromiseRejectionEvent.t -> any) option -> unit [@@js.set "onunhandledrejection"]
   
   (** Returns workerGlobal. *)
   val get_self: 'tags this -> (t, (* FIXME: unknown type 'typeof globalThis' *)any) intersection2 [@@js.get "self"]
   
   (** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
-  val importScripts: 'tags this -> urls:(URL.t or_string list [@js.variadic]) -> unit [@@js.call "importScripts"]
+  val importScripts: 'tags this -> urls:(([`U1 of string | `U2 of URL.t] [@js.union]) list [@js.variadic]) -> unit [@@js.call "importScripts"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -10330,7 +10330,7 @@ module[@js.scope "WorkerGlobalScope"] WorkerGlobalScope : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -10347,13 +10347,13 @@ module[@js.scope "WorkerGlobalScope"] WorkerGlobalScope : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'WorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -10377,8 +10377,8 @@ module[@js.scope "SharedWorkerGlobalScope"] SharedWorkerGlobalScope : sig
   
   (** Returns sharedWorkerGlobal's name, i.e. the value given to the SharedWorker constructor. Multiple SharedWorker objects can correspond to the same shared worker (and SharedWorkerGlobalScope), by reusing the same name. *)
   val get_name: 'tags this -> string [@@js.get "name"]
-  val get_onconnect: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onconnect"]
-  val set_onconnect: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onconnect"]
+  val get_onconnect: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onconnect"]
+  val set_onconnect: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onconnect"]
   
   (** Aborts sharedWorkerGlobal. *)
   val close: 'tags this -> unit [@@js.call "close"]
@@ -10398,7 +10398,7 @@ module[@js.scope "SharedWorkerGlobalScope"] SharedWorkerGlobalScope : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SharedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SharedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -10415,13 +10415,13 @@ module[@js.scope "SharedWorkerGlobalScope"] SharedWorkerGlobalScope : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SharedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'SharedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -10477,7 +10477,7 @@ module[@js.scope "PushMessageData"] PushMessageData : sig
   val create: unit -> t [@@js.create]
 end
 module PushMessageDataInit : sig
-  type t = BufferSource.t or_string
+  type t = ([`String of string | `Other of BufferSource.t] [@js.union on_field "dummy"]) Primitive.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10567,7 +10567,7 @@ module[@js.scope "PushEvent"] PushEvent : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_data: 'tags this -> PushMessageData.t or_null [@@js.get "data"]
+  val get_data: 'tags this -> PushMessageData.t option [@@js.get "data"]
   val create: ?data:PushMessageData.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -10582,7 +10582,7 @@ module NotificationPermission : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module VibratePattern : sig
-  type t = float list or_number
+  type t = ([`Number of float | `Other of float list] [@js.union on_field "dummy"]) Primitive.t
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10700,14 +10700,14 @@ module[@js.scope "Notification"] Notification : sig
   val get_dir: 'tags this -> NotificationDirection.t [@@js.get "dir"]
   val get_icon: 'tags this -> string [@@js.get "icon"]
   val get_lang: 'tags this -> string [@@js.get "lang"]
-  val get_onclick: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onclick"]
-  val set_onclick: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onclick"]
-  val get_onclose: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onclose"]
-  val set_onclose: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onclose"]
-  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onshow: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onshow"]
-  val set_onshow: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onshow"]
+  val get_onclick: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onclick"]
+  val set_onclick: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onclick"]
+  val get_onclose: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onclose"]
+  val set_onclose: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onclose"]
+  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onerror"]
+  val get_onshow: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onshow"]
+  val set_onshow: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onshow"]
   val get_tag: 'tags this -> string [@@js.get "tag"]
   val get_title: 'tags this -> string [@@js.get "title"]
   val close: 'tags this -> unit [@@js.call "close"]
@@ -10727,7 +10727,7 @@ module[@js.scope "Notification"] Notification : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'NotificationEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'NotificationEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -10744,13 +10744,13 @@ module[@js.scope "Notification"] Notification : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'NotificationEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'NotificationEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: title:string -> ?options:NotificationOptions.t -> unit -> t [@@js.create]
@@ -10822,8 +10822,8 @@ module FetchEventInit : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_clientId: 'tags this -> string [@@js.get "clientId"]
   val set_clientId: 'tags this -> string -> unit [@@js.set "clientId"]
-  val get_handled: 'tags this -> never or_undefined Promise.t_1 [@@js.get "handled"]
-  val set_handled: 'tags this -> never or_undefined Promise.t_1 -> unit [@@js.set "handled"]
+  val get_handled: 'tags this -> undefined Promise.t_1 [@@js.get "handled"]
+  val set_handled: 'tags this -> undefined Promise.t_1 -> unit [@@js.set "handled"]
   val get_preloadResponse: 'tags this -> any Promise.t_1 [@@js.get "preloadResponse"]
   val set_preloadResponse: 'tags this -> any Promise.t_1 -> unit [@@js.set "preloadResponse"]
   val get_replacesClientId: 'tags this -> string [@@js.get "replacesClientId"]
@@ -10832,7 +10832,7 @@ module FetchEventInit : sig
   val set_request: 'tags this -> Request.t -> unit [@@js.set "request"]
   val get_resultingClientId: 'tags this -> string [@@js.get "resultingClientId"]
   val set_resultingClientId: 'tags this -> string -> unit [@@js.set "resultingClientId"]
-  val create: clientId:string -> handled:never or_undefined Promise.t_1 -> preloadResponse:any Promise.t_1 -> replacesClientId:string -> request:Request.t -> resultingClientId:string -> unit -> t [@@js.builder]
+  val create: clientId:string -> handled:undefined Promise.t_1 -> preloadResponse:any Promise.t_1 -> replacesClientId:string -> request:Request.t -> resultingClientId:string -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -10854,10 +10854,10 @@ module[@js.scope "FetchEvent"] FetchEvent : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_clientId: 'tags this -> string [@@js.get "clientId"]
-  val get_handled: 'tags this -> never or_undefined Promise.t_1 [@@js.get "handled"]
+  val get_handled: 'tags this -> undefined Promise.t_1 [@@js.get "handled"]
   val get_request: 'tags this -> Request.t [@@js.get "request"]
   val get_resultingClientId: 'tags this -> string [@@js.get "resultingClientId"]
-  val respondWith: 'tags this -> r:Response.t -> unit [@@js.call "respondWith"]
+  val respondWith: 'tags this -> r:([`U1 of Response.t | `U2 of Response.t PromiseLike.t_1] [@js.union]) -> unit [@@js.call "respondWith"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: type_:string -> eventInitDict:FetchEventInit.t -> t [@@js.create]
@@ -10930,9 +10930,9 @@ module ExtendableMessageEventInit : sig
   val set_origin: 'tags this -> string -> unit [@@js.set "origin"]
   val get_ports: 'tags this -> MessagePort.t list [@@js.get "ports"]
   val set_ports: 'tags this -> MessagePort.t list -> unit [@@js.set "ports"]
-  val get_source: 'tags this -> ((([`U_s42_auxiliary of Client.t [@js "auxiliary"] | `U_s120_nested of Client.t [@js "nested"] | `U_s128_none of Client.t [@js "none"] | `U_s192_top_level of Client.t [@js "top-level"]] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t [@js "activated"] | `U_s34_activating of ServiceWorker.t [@js "activating"] | `U_s94_installed of ServiceWorker.t [@js "installed"] | `U_s95_installing of ServiceWorker.t [@js "installing"] | `U_s146_parsed of ServiceWorker.t [@js "parsed"] | `U_s166_redundant of ServiceWorker.t [@js "redundant"]] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null [@@js.get "source"]
-  val set_source: 'tags this -> ((([`U_s42_auxiliary of Client.t  | `U_s120_nested of Client.t  | `U_s128_none of Client.t  | `U_s192_top_level of Client.t ] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t  | `U_s34_activating of ServiceWorker.t  | `U_s94_installed of ServiceWorker.t  | `U_s95_installing of ServiceWorker.t  | `U_s146_parsed of ServiceWorker.t  | `U_s166_redundant of ServiceWorker.t ] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null -> unit [@@js.set "source"]
-  val create: data:any -> lastEventId:string -> origin:string -> ports:MessagePort.t list -> ?source:((([`U_s42_auxiliary of Client.t  | `U_s120_nested of Client.t  | `U_s128_none of Client.t  | `U_s192_top_level of Client.t ] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t  | `U_s34_activating of ServiceWorker.t  | `U_s94_installed of ServiceWorker.t  | `U_s95_installing of ServiceWorker.t  | `U_s146_parsed of ServiceWorker.t  | `U_s166_redundant of ServiceWorker.t ] [@js.union on_field "state"])) union2, MessagePort.t) or_ -> unit -> t [@@js.builder]
+  val get_source: 'tags this -> (Client.t, MessagePort.t, ServiceWorker.t) union3 option [@@js.get "source"]
+  val set_source: 'tags this -> ([`Null | `U1 of Client.t | `U2 of ServiceWorker.t | `U3 of MessagePort.t] [@js.union]) -> unit [@@js.set "source"]
+  val create: data:any -> lastEventId:string -> origin:string -> ports:MessagePort.t list -> ?source:(Client.t, MessagePort.t, ServiceWorker.t) union3 -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -10957,8 +10957,8 @@ module[@js.scope "ExtendableMessageEvent"] ExtendableMessageEvent : sig
   val get_lastEventId: 'tags this -> string [@@js.get "lastEventId"]
   val get_origin: 'tags this -> string [@@js.get "origin"]
   val get_ports: 'tags this -> MessagePort.t list [@@js.get "ports"]
-  val get_source: 'tags this -> ((([`U_s42_auxiliary of Client.t [@js "auxiliary"] | `U_s120_nested of Client.t [@js "nested"] | `U_s128_none of Client.t [@js "none"] | `U_s192_top_level of Client.t [@js "top-level"]] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t [@js "activated"] | `U_s34_activating of ServiceWorker.t [@js "activating"] | `U_s94_installed of ServiceWorker.t [@js "installed"] | `U_s95_installing of ServiceWorker.t [@js "installing"] | `U_s146_parsed of ServiceWorker.t [@js "parsed"] | `U_s166_redundant of ServiceWorker.t [@js "redundant"]] [@js.union on_field "state"])) union2, MessagePort.t) or_ or_null [@@js.get "source"]
-  val create: data:any -> lastEventId:string -> origin:string -> ports:MessagePort.t list -> ?source:((([`U_s42_auxiliary of Client.t  | `U_s120_nested of Client.t  | `U_s128_none of Client.t  | `U_s192_top_level of Client.t ] [@js.union on_field "frameType"]), ([`U_s33_activated of ServiceWorker.t  | `U_s34_activating of ServiceWorker.t  | `U_s94_installed of ServiceWorker.t  | `U_s95_installing of ServiceWorker.t  | `U_s146_parsed of ServiceWorker.t  | `U_s166_redundant of ServiceWorker.t ] [@js.union on_field "state"])) union2, MessagePort.t) or_ -> unit -> t [@@js.builder]
+  val get_source: 'tags this -> (Client.t, MessagePort.t, ServiceWorker.t) union3 option [@@js.get "source"]
+  val create: data:any -> lastEventId:string -> origin:string -> ports:MessagePort.t list -> ?source:(Client.t, MessagePort.t, ServiceWorker.t) union3 -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create': type_:string -> ?eventInitDict:ExtendableMessageEventInit.t -> unit -> t [@@js.create]
@@ -11022,11 +11022,11 @@ module PushSubscriptionOptionsInit : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_applicationServerKey: 'tags this -> BufferSource.t or_string or_null [@@js.get "applicationServerKey"]
-  val set_applicationServerKey: 'tags this -> BufferSource.t or_string or_null -> unit [@@js.set "applicationServerKey"]
+  val get_applicationServerKey: 'tags this -> ([`String of string | `Null | `Other of BufferSource.t] [@js.union on_field "dummy"]) Primitive.t [@@js.get "applicationServerKey"]
+  val set_applicationServerKey: 'tags this -> ([`Null | `U1 of BufferSource.t | `U2 of string] [@js.union]) -> unit [@@js.set "applicationServerKey"]
   val get_userVisibleOnly: 'tags this -> bool [@@js.get "userVisibleOnly"]
   val set_userVisibleOnly: 'tags this -> bool -> unit [@@js.set "userVisibleOnly"]
-  val create: ?applicationServerKey:BufferSource.t or_string -> userVisibleOnly:bool -> unit -> t [@@js.builder]
+  val create: ?applicationServerKey:([`String of string | `Other of BufferSource.t] [@js.union on_field "dummy"]) Primitive.t -> userVisibleOnly:bool -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -11047,7 +11047,7 @@ module[@js.scope "PushSubscriptionOptions"] PushSubscriptionOptions : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_applicationServerKey: 'tags this -> ArrayBuffer.t_0 or_null [@@js.get "applicationServerKey"]
+  val get_applicationServerKey: 'tags this -> ArrayBuffer.t_0 option [@@js.get "applicationServerKey"]
   val create: ?applicationServerKey:ArrayBuffer.t_0 -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -11071,8 +11071,8 @@ module PushSubscriptionJSON : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_endpoint: 'tags this -> string [@@js.get "endpoint"]
   val set_endpoint: 'tags this -> string -> unit [@@js.set "endpoint"]
-  val get_expirationTime: 'tags this -> DOMTimeStamp.t or_null [@@js.get "expirationTime"]
-  val set_expirationTime: 'tags this -> DOMTimeStamp.t or_null -> unit [@@js.set "expirationTime"]
+  val get_expirationTime: 'tags this -> DOMTimeStamp.t option [@@js.get "expirationTime"]
+  val set_expirationTime: 'tags this -> DOMTimeStamp.t option -> unit [@@js.set "expirationTime"]
   val get_keys: 'tags this -> (string, string) Record.t_2 [@@js.get "keys"]
   val set_keys: 'tags this -> (string, string) Record.t_2 -> unit [@@js.set "keys"]
   val create: endpoint:string -> ?expirationTime:DOMTimeStamp.t -> keys:(string, string) Record.t_2 -> unit -> t [@@js.builder]
@@ -11109,7 +11109,7 @@ module[@js.scope "PushSubscription"] PushSubscription : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_endpoint: 'tags this -> string [@@js.get "endpoint"]
   val get_options: 'tags this -> PushSubscriptionOptions.t [@@js.get "options"]
-  val getKey: 'tags this -> name:PushEncryptionKeyName.t -> ArrayBuffer.t_0 or_null [@@js.call "getKey"]
+  val getKey: 'tags this -> name:PushEncryptionKeyName.t -> ArrayBuffer.t_0 option [@@js.call "getKey"]
   val toJSON: 'tags this -> PushSubscriptionJSON.t [@@js.call "toJSON"]
   val unsubscribe: 'tags this -> bool Promise.t_1 [@@js.call "unsubscribe"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -11145,7 +11145,7 @@ module[@js.scope "PushManager"] PushManager : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val getSubscription: 'tags this -> PushSubscription.t or_null Promise.t_1 [@@js.call "getSubscription"]
+  val getSubscription: 'tags this -> PushSubscription.t option Promise.t_1 [@@js.call "getSubscription"]
   val permissionState: 'tags this -> ?options:PushSubscriptionOptionsInit.t -> unit -> PushPermissionState.t Promise.t_1 [@@js.call "permissionState"]
   val subscribe: 'tags this -> ?options:PushSubscriptionOptionsInit.t -> unit -> PushSubscription.t Promise.t_1 [@@js.call "subscribe"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -11195,14 +11195,14 @@ module[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_active: 'tags this -> ServiceWorker.t or_null [@@js.get "active"]
-  val get_installing: 'tags this -> ServiceWorker.t or_null [@@js.get "installing"]
-  val get_onupdatefound: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onupdatefound"]
-  val set_onupdatefound: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onupdatefound"]
+  val get_active: 'tags this -> ServiceWorker.t option [@@js.get "active"]
+  val get_installing: 'tags this -> ServiceWorker.t option [@@js.get "installing"]
+  val get_onupdatefound: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onupdatefound"]
+  val set_onupdatefound: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onupdatefound"]
   val get_pushManager: 'tags this -> PushManager.t [@@js.get "pushManager"]
   val get_scope: 'tags this -> string [@@js.get "scope"]
   val get_updateViaCache: 'tags this -> ServiceWorkerUpdateViaCache.t [@@js.get "updateViaCache"]
-  val get_waiting: 'tags this -> ServiceWorker.t or_null [@@js.get "waiting"]
+  val get_waiting: 'tags this -> ServiceWorker.t option [@@js.get "waiting"]
   val getNotifications: 'tags this -> ?filter:GetNotificationOptions.t -> unit -> Notification.t list Promise.t_1 [@@js.call "getNotifications"]
   val showNotification: 'tags this -> title:string -> ?options:NotificationOptions.t -> unit -> unit Promise.t_1 [@@js.call "showNotification"]
   val unregister: 'tags this -> bool Promise.t_1 [@@js.call "unregister"]
@@ -11223,7 +11223,7 @@ module[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerRegistrationEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerRegistrationEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -11240,13 +11240,13 @@ module[@js.scope "ServiceWorkerRegistration"] ServiceWorkerRegistration : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerRegistrationEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerRegistrationEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -11280,7 +11280,7 @@ module[@js.scope "WindowClient"] WindowClient : sig
   val get_focused: 'tags this -> bool [@@js.get "focused"]
   val get_visibilityState: 'tags this -> VisibilityState.t [@@js.get "visibilityState"]
   val focus: 'tags this -> t Promise.t_1 [@@js.call "focus"]
-  val navigate: 'tags this -> url:URL.t or_string -> t or_null Promise.t_1 [@@js.call "navigate"]
+  val navigate: 'tags this -> url:([`U1 of string | `U2 of URL.t] [@js.union]) -> t option Promise.t_1 [@@js.call "navigate"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -11327,9 +11327,9 @@ module[@js.scope "Clients"] Clients : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val claim: 'tags this -> unit Promise.t_1 [@@js.call "claim"]
-  val get_: 'tags this -> id:string -> Client.t or_undefined Promise.t_1 [@@js.call "get"]
+  val get_: 'tags this -> id:string -> Client.t option Promise.t_1 [@@js.call "get"]
   val matchAll: 'tags this -> ?options:'T -> unit -> (* FIXME: unknown type 'T["type"] extends "window" ? WindowClient : Client' *)any list Promise.t_1 [@@js.call "matchAll"]
-  val openWindow: 'tags this -> url:URL.t or_string -> WindowClient.t or_null Promise.t_1 [@@js.call "openWindow"]
+  val openWindow: 'tags this -> url:([`U1 of string | `U2 of URL.t] [@js.union]) -> WindowClient.t option Promise.t_1 [@@js.call "openWindow"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -11353,22 +11353,22 @@ module[@js.scope "ServiceWorkerGlobalScope"] ServiceWorkerGlobalScope : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_clients: 'tags this -> Clients.t [@@js.get "clients"]
-  val get_onactivate: 'tags this -> (this:t -> ev:ExtendableEvent.t -> any) or_null [@@js.get "onactivate"]
-  val set_onactivate: 'tags this -> (this:t -> ev:ExtendableEvent.t -> any) or_null -> unit [@@js.set "onactivate"]
-  val get_onfetch: 'tags this -> (this:t -> ev:FetchEvent.t -> any) or_null [@@js.get "onfetch"]
-  val set_onfetch: 'tags this -> (this:t -> ev:FetchEvent.t -> any) or_null -> unit [@@js.set "onfetch"]
-  val get_oninstall: 'tags this -> (this:t -> ev:ExtendableEvent.t -> any) or_null [@@js.get "oninstall"]
-  val set_oninstall: 'tags this -> (this:t -> ev:ExtendableEvent.t -> any) or_null -> unit [@@js.set "oninstall"]
-  val get_onmessage: 'tags this -> (this:t -> ev:ExtendableMessageEvent.t -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:ExtendableMessageEvent.t -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
-  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessageerror"]
-  val get_onnotificationclick: 'tags this -> (this:t -> ev:NotificationEvent.t -> any) or_null [@@js.get "onnotificationclick"]
-  val set_onnotificationclick: 'tags this -> (this:t -> ev:NotificationEvent.t -> any) or_null -> unit [@@js.set "onnotificationclick"]
-  val get_onnotificationclose: 'tags this -> (this:t -> ev:NotificationEvent.t -> any) or_null [@@js.get "onnotificationclose"]
-  val set_onnotificationclose: 'tags this -> (this:t -> ev:NotificationEvent.t -> any) or_null -> unit [@@js.set "onnotificationclose"]
-  val get_onpush: 'tags this -> (this:t -> ev:PushEvent.t -> any) or_null [@@js.get "onpush"]
-  val set_onpush: 'tags this -> (this:t -> ev:PushEvent.t -> any) or_null -> unit [@@js.set "onpush"]
+  val get_onactivate: 'tags this -> (this:t -> ev:ExtendableEvent.t -> any) option [@@js.get "onactivate"]
+  val set_onactivate: 'tags this -> (this:t -> ev:ExtendableEvent.t -> any) option -> unit [@@js.set "onactivate"]
+  val get_onfetch: 'tags this -> (this:t -> ev:FetchEvent.t -> any) option [@@js.get "onfetch"]
+  val set_onfetch: 'tags this -> (this:t -> ev:FetchEvent.t -> any) option -> unit [@@js.set "onfetch"]
+  val get_oninstall: 'tags this -> (this:t -> ev:ExtendableEvent.t -> any) option [@@js.get "oninstall"]
+  val set_oninstall: 'tags this -> (this:t -> ev:ExtendableEvent.t -> any) option -> unit [@@js.set "oninstall"]
+  val get_onmessage: 'tags this -> (this:t -> ev:ExtendableMessageEvent.t -> any) option [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:ExtendableMessageEvent.t -> any) option -> unit [@@js.set "onmessage"]
+  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessageerror"]
+  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessageerror"]
+  val get_onnotificationclick: 'tags this -> (this:t -> ev:NotificationEvent.t -> any) option [@@js.get "onnotificationclick"]
+  val set_onnotificationclick: 'tags this -> (this:t -> ev:NotificationEvent.t -> any) option -> unit [@@js.set "onnotificationclick"]
+  val get_onnotificationclose: 'tags this -> (this:t -> ev:NotificationEvent.t -> any) option [@@js.get "onnotificationclose"]
+  val set_onnotificationclose: 'tags this -> (this:t -> ev:NotificationEvent.t -> any) option -> unit [@@js.set "onnotificationclose"]
+  val get_onpush: 'tags this -> (this:t -> ev:PushEvent.t -> any) option [@@js.get "onpush"]
+  val set_onpush: 'tags this -> (this:t -> ev:PushEvent.t -> any) option -> unit [@@js.set "onpush"]
   val get_registration: 'tags this -> ServiceWorkerRegistration.t [@@js.get "registration"]
   val skipWaiting: 'tags this -> unit Promise.t_1 [@@js.call "skipWaiting"]
   
@@ -11387,7 +11387,7 @@ module[@js.scope "ServiceWorkerGlobalScope"] ServiceWorkerGlobalScope : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -11404,13 +11404,13 @@ module[@js.scope "ServiceWorkerGlobalScope"] ServiceWorkerGlobalScope : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -11507,17 +11507,17 @@ module[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_controller: 'tags this -> ServiceWorker.t or_null [@@js.get "controller"]
-  val get_oncontrollerchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "oncontrollerchange"]
-  val set_oncontrollerchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "oncontrollerchange"]
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
-  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessageerror"]
+  val get_controller: 'tags this -> ServiceWorker.t option [@@js.get "controller"]
+  val get_oncontrollerchange: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "oncontrollerchange"]
+  val set_oncontrollerchange: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "oncontrollerchange"]
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessage"]
+  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessageerror"]
+  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessageerror"]
   val get_ready: 'tags this -> ServiceWorkerRegistration.t Promise.t_1 [@@js.get "ready"]
-  val getRegistration: 'tags this -> ?clientURL:URL.t or_string -> unit -> ServiceWorkerRegistration.t or_undefined Promise.t_1 [@@js.call "getRegistration"]
+  val getRegistration: 'tags this -> ?clientURL:([`U1 of string | `U2 of URL.t] [@js.union]) -> unit -> ServiceWorkerRegistration.t option Promise.t_1 [@@js.call "getRegistration"]
   val getRegistrations: 'tags this -> ServiceWorkerRegistration.t list Promise.t_1 [@@js.call "getRegistrations"]
-  val register: 'tags this -> scriptURL:URL.t or_string -> ?options:RegistrationOptions.t -> unit -> ServiceWorkerRegistration.t Promise.t_1 [@@js.call "register"]
+  val register: 'tags this -> scriptURL:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?options:RegistrationOptions.t -> unit -> ServiceWorkerRegistration.t Promise.t_1 [@@js.call "register"]
   val startMessages: 'tags this -> unit [@@js.call "startMessages"]
   
   (**
@@ -11535,7 +11535,7 @@ module[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerContainerEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerContainerEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -11552,13 +11552,13 @@ module[@js.scope "ServiceWorkerContainer"] ServiceWorkerContainer : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerContainerEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ServiceWorkerContainerEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -11681,8 +11681,8 @@ module[@js.scope "PermissionStatus"] PermissionStatus : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onchange"]
-  val set_onchange: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onchange"]
+  val get_onchange: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onchange"]
+  val set_onchange: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onchange"]
   val get_state: 'tags this -> PermissionState.t [@@js.get "state"]
   
   (**
@@ -11700,7 +11700,7 @@ module[@js.scope "PermissionStatus"] PermissionStatus : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PermissionStatusEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PermissionStatusEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -11717,13 +11717,13 @@ module[@js.scope "PermissionStatus"] PermissionStatus : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PermissionStatusEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'PermissionStatusEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -12069,7 +12069,7 @@ module[@js.scope "Path2D"] Path2D : sig
   val addPath: 'tags this -> path:t -> ?transform:DOMMatrix2DInit.t -> unit -> unit [@@js.call "addPath"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?path:t or_string -> unit -> t [@@js.create]
+  val create: ?path:([`U1 of t | `U2 of string] [@js.union]) -> unit -> t [@@js.create]
 end
 module OnErrorEventHandlerNonNull : sig
   type t = [`OnErrorEventHandlerNonNull] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -12087,11 +12087,11 @@ module OnErrorEventHandlerNonNull : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val apply: 'tags this -> event:Event.t or_string -> ?source:string -> ?lineno:float -> ?colno:float -> ?error:Error.t_0 -> unit -> any [@@js.apply]
+  val apply: 'tags this -> event:([`U1 of Event.t | `U2 of string] [@js.union]) -> ?source:string -> ?lineno:float -> ?colno:float -> ?error:Error.t_0 -> unit -> any [@@js.apply]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module OnErrorEventHandler : sig
-  type t = OnErrorEventHandlerNonNull.t or_null
+  type t = OnErrorEventHandlerNonNull.t option
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12262,7 +12262,7 @@ module[@js.scope "ImageBitmapRenderingContext"] ImageBitmapRenderingContext : si
   val t_0_of_js: Ojs.t -> t_0
   
   (** Transfers the underlying bitmap data from imageBitmap to context, and the bitmap becomes the contents of the canvas element to which context is bound. *)
-  val transferFromImageBitmap: 'tags this -> bitmap:ImageBitmap.t or_null -> unit [@@js.call "transferFromImageBitmap"]
+  val transferFromImageBitmap: 'tags this -> bitmap:ImageBitmap.t option -> unit [@@js.call "transferFromImageBitmap"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -12479,21 +12479,21 @@ module[@js.scope "FileReader"] FileReader : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_error: 'tags this -> DOMException.t or_null [@@js.get "error"]
-  val get_onabort: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null [@@js.get "onabort"]
-  val set_onabort: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null -> unit [@@js.set "onabort"]
-  val get_onerror: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onload: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null [@@js.get "onload"]
-  val set_onload: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null -> unit [@@js.set "onload"]
-  val get_onloadend: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null [@@js.get "onloadend"]
-  val set_onloadend: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null -> unit [@@js.set "onloadend"]
-  val get_onloadstart: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null [@@js.get "onloadstart"]
-  val set_onloadstart: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null -> unit [@@js.set "onloadstart"]
-  val get_onprogress: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null [@@js.get "onprogress"]
-  val set_onprogress: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) or_null -> unit [@@js.set "onprogress"]
+  val get_error: 'tags this -> DOMException.t option [@@js.get "error"]
+  val get_onabort: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option [@@js.get "onabort"]
+  val set_onabort: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option -> unit [@@js.set "onabort"]
+  val get_onerror: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option -> unit [@@js.set "onerror"]
+  val get_onload: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option [@@js.get "onload"]
+  val set_onload: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option -> unit [@@js.set "onload"]
+  val get_onloadend: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option [@@js.get "onloadend"]
+  val set_onloadend: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option -> unit [@@js.set "onloadend"]
+  val get_onloadstart: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option [@@js.get "onloadstart"]
+  val set_onloadstart: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option -> unit [@@js.set "onloadstart"]
+  val get_onprogress: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option [@@js.get "onprogress"]
+  val set_onprogress: 'tags this -> (this:t -> ev:t ProgressEvent.t -> any) option -> unit [@@js.set "onprogress"]
   val get_readyState: 'tags this -> float [@@js.get "readyState"]
-  val get_result: 'tags this -> ArrayBuffer.t_0 or_string or_null [@@js.get "result"]
+  val get_result: 'tags this -> ([`String of string | `Null | `Other of ArrayBuffer.t_0] [@js.union on_field "dummy"]) Primitive.t [@@js.get "result"]
   val abort: 'tags this -> unit [@@js.call "abort"]
   val readAsArrayBuffer: 'tags this -> blob:Blob.t -> unit [@@js.call "readAsArrayBuffer"]
   val readAsBinaryString: 'tags this -> blob:Blob.t -> unit [@@js.call "readAsBinaryString"]
@@ -12518,7 +12518,7 @@ module[@js.scope "FileReader"] FileReader : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'FileReaderEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'FileReaderEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -12535,13 +12535,13 @@ module[@js.scope "FileReader"] FileReader : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'FileReaderEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'FileReaderEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -12598,11 +12598,11 @@ module[@js.scope "FileList"] FileList : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  (* [Symbol.iterator]: unit -> File.t IterableIterator.t_1 *)
   val get_length: 'tags this -> float [@@js.get "length"]
-  val item: 'tags this -> index:float -> File.t or_null [@@js.call "item"]
+  val item: 'tags this -> index:float -> File.t option [@@js.call "item"]
   val get: 'tags this -> float -> File.t [@@js.index_get]
   val set: 'tags this -> float -> File.t -> unit [@@js.index_set]
-  (* [Symbol.iterator]: unit -> File.t IterableIterator.t_1 *)
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -12669,12 +12669,12 @@ module[@js.scope "EventSource"] EventSource : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onerror"]
-  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onerror"]
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null [@@js.get "onopen"]
-  val set_onopen: 'tags this -> (this:t -> ev:Event.t -> any) or_null -> unit [@@js.set "onopen"]
+  val get_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onerror"]
+  val set_onerror: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onerror"]
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessage"]
+  val get_onopen: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onopen"]
+  val set_onopen: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onopen"]
   
   (** Returns the state of this EventSource object's connection. It can have the values described below. *)
   val get_readyState: 'tags this -> float [@@js.get "readyState"]
@@ -12706,7 +12706,7 @@ module[@js.scope "EventSource"] EventSource : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'EventSourceEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'EventSourceEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -12723,16 +12723,16 @@ module[@js.scope "EventSource"] EventSource : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'EventSourceEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'EventSourceEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: url:URL.t or_string -> ?eventSourceInitDict:EventSourceInit.t -> unit -> t [@@js.create]
+  val create: url:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?eventSourceInitDict:EventSourceInit.t -> unit -> t [@@js.create]
   val closed: unit -> float [@@js.get "CLOSED"]
   val connecting: unit -> float [@@js.get "CONNECTING"]
   val open_: unit -> float [@@js.get "OPEN"]
@@ -12843,10 +12843,10 @@ module[@js.scope "DedicatedWorkerGlobalScope"] DedicatedWorkerGlobalScope : sig
   
   (** Returns dedicatedWorkerGlobal's name, i.e. the value given to the Worker constructor. Primarily useful for debugging. *)
   val get_name: 'tags this -> string [@@js.get "name"]
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
-  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessageerror"]
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessage"]
+  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessageerror"]
+  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessageerror"]
   
   (** Aborts dedicatedWorkerGlobal. *)
   val close: 'tags this -> unit [@@js.call "close"]
@@ -12872,7 +12872,7 @@ module[@js.scope "DedicatedWorkerGlobalScope"] DedicatedWorkerGlobalScope : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -12889,13 +12889,13 @@ module[@js.scope "DedicatedWorkerGlobalScope"] DedicatedWorkerGlobalScope : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -13240,7 +13240,7 @@ module[@js.scope "DOMMatrix"] rec DOMMatrix : sig
   val translateSelf: 'tags this -> ?tx:float -> ?ty:float -> ?tz:float -> unit -> t [@@js.call "translateSelf"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?init:float list or_string -> unit -> t [@@js.create]
+  val create: ?init:([`U1 of string | `U2 of float list] [@js.union]) -> unit -> t [@@js.create]
   val fromFloat32Array: Float32Array.t_0 -> t [@@js.global "fromFloat32Array"]
   val fromFloat64Array: Float64Array.t_0 -> t [@@js.global "fromFloat64Array"]
   val fromMatrix: ?other:DOMMatrixInit.t -> unit -> t [@@js.global "fromMatrix"]
@@ -13306,7 +13306,7 @@ and[@js.scope "DOMMatrixReadOnly"] DOMMatrixReadOnly : sig
   val translate: 'tags this -> ?tx:float -> ?ty:float -> ?tz:float -> unit -> DOMMatrix.t [@@js.call "translate"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create: ?init:float list or_string -> unit -> t [@@js.create]
+  val create: ?init:([`U1 of string | `U2 of float list] [@js.union]) -> unit -> t [@@js.create]
   val fromFloat32Array: Float32Array.t_0 -> t [@@js.global "fromFloat32Array"]
   val fromFloat64Array: Float64Array.t_0 -> t [@@js.global "fromFloat64Array"]
   val fromMatrix: ?other:DOMMatrixInit.t -> unit -> t [@@js.global "fromMatrix"]
@@ -13840,10 +13840,10 @@ module[@js.scope "BroadcastChannel"] BroadcastChannel : sig
   
   (** Returns the channel name (as passed to the constructor). *)
   val get_name: 'tags this -> string [@@js.get "name"]
-  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessage"]
-  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
-  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) or_null -> unit [@@js.set "onmessageerror"]
+  val get_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessage"]
+  val set_onmessage: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessage"]
+  val get_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessageerror"]
+  val set_onmessageerror: 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option -> unit [@@js.set "onmessageerror"]
   
   (** Closes the BroadcastChannel object, opening it up to garbage collection. *)
   val close: 'tags this -> unit [@@js.call "close"]
@@ -13866,7 +13866,7 @@ module[@js.scope "BroadcastChannel"] BroadcastChannel : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'BroadcastChannelEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'BroadcastChannelEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (**
     Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
@@ -13883,13 +13883,13 @@ module[@js.scope "BroadcastChannel"] BroadcastChannel : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'BroadcastChannelEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'BroadcastChannelEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: string -> t [@@js.create]
@@ -13942,6 +13942,380 @@ module[@js.scope "AbortController"] AbortController : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
+end
+module CustomEventInit_Make (T : Ojs.T) : sig
+  type 'T parent = 'T CustomEventInit.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_detail: t -> T.t [@@js.get "detail"]
+  val set_detail: t -> T.t -> unit [@@js.set "detail"]
+end
+module MessageEventInit_Make (T : Ojs.T) : sig
+  type 'T parent = 'T MessageEventInit.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_data: t -> T.t [@@js.get "data"]
+  val set_data: t -> T.t -> unit [@@js.set "data"]
+  val get_lastEventId: t -> string [@@js.get "lastEventId"]
+  val set_lastEventId: t -> string -> unit [@@js.set "lastEventId"]
+  val get_origin: t -> string [@@js.get "origin"]
+  val set_origin: t -> string -> unit [@@js.set "origin"]
+  val get_ports: t -> MessagePort.t list [@@js.get "ports"]
+  val set_ports: t -> MessagePort.t list -> unit [@@js.set "ports"]
+  val get_source: t -> MessageEventSource.t option [@@js.get "source"]
+  val set_source: t -> MessageEventSource.t option -> unit [@@js.set "source"]
+end
+module QueuingStrategy_Make (T : Ojs.T) : sig
+  type 'T parent = 'T QueuingStrategy.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_highWaterMark: t -> float [@@js.get "highWaterMark"]
+  val set_highWaterMark: t -> float -> unit [@@js.set "highWaterMark"]
+  val get_size: t -> T.t QueuingStrategySize.t [@@js.get "size"]
+  val set_size: t -> T.t QueuingStrategySize.t -> unit [@@js.set "size"]
+end
+module ReadableStreamDefaultReadValueResult_Make (T : Ojs.T) : sig
+  type 'T parent = 'T ReadableStreamDefaultReadValueResult.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_done: t -> ([`L_b_false[@js false]] [@js.enum]) [@@js.get "done"]
+  val set_done: t -> ([`L_b_false[@js false]] [@js.enum]) -> unit [@@js.set "done"]
+  val get_value: t -> T.t [@@js.get "value"]
+  val set_value: t -> T.t -> unit [@@js.set "value"]
+end
+module ReadableWritablePair_Make (R : Ojs.T) (W : Ojs.T) : sig
+  type ('R, 'W) parent = ('R, 'W) ReadableWritablePair.t
+  type t = (R.t, W.t) parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_readable: t -> R.t ReadableStream.t [@@js.get "readable"]
+  val set_readable: t -> R.t ReadableStream.t -> unit [@@js.set "readable"]
+  
+  (**
+    Provides a convenient, chainable way of piping this readable stream through a transform stream (or any other \{ writable, readable \} pair). It simply pipes the stream into the writable side of the supplied pair, and returns the readable side for further use.
+    
+    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
+  *)
+  val get_writable: t -> W.t WritableStream.t [@@js.get "writable"]
+  
+  (**
+    Provides a convenient, chainable way of piping this readable stream through a transform stream (or any other \{ writable, readable \} pair). It simply pipes the stream into the writable side of the supplied pair, and returns the readable side for further use.
+    
+    Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader.
+  *)
+  val set_writable: t -> W.t WritableStream.t -> unit [@@js.set "writable"]
+end
+module Transformer_Make (I : Ojs.T) (O : Ojs.T) : sig
+  type ('I, 'O) parent = ('I, 'O) Transformer.t
+  type t = (I.t, O.t) parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_flush: t -> O.t TransformerFlushCallback.t [@@js.get "flush"]
+  val set_flush: t -> O.t TransformerFlushCallback.t -> unit [@@js.set "flush"]
+  val get_readableType: t -> undefined [@@js.get "readableType"]
+  val set_readableType: t -> undefined -> unit [@@js.set "readableType"]
+  val get_start: t -> O.t TransformerStartCallback.t [@@js.get "start"]
+  val set_start: t -> O.t TransformerStartCallback.t -> unit [@@js.set "start"]
+  val get_transform: t -> (I.t, O.t) TransformerTransformCallback.t [@@js.get "transform"]
+  val set_transform: t -> (I.t, O.t) TransformerTransformCallback.t -> unit [@@js.set "transform"]
+  val get_writableType: t -> undefined [@@js.get "writableType"]
+  val set_writableType: t -> undefined -> unit [@@js.set "writableType"]
+end
+module UnderlyingSink_Make (W : Ojs.T) : sig
+  type 'W parent = 'W UnderlyingSink.t
+  type t = W.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_abort: t -> UnderlyingSinkAbortCallback.t [@@js.get "abort"]
+  val set_abort: t -> UnderlyingSinkAbortCallback.t -> unit [@@js.set "abort"]
+  val get_close: t -> UnderlyingSinkCloseCallback.t [@@js.get "close"]
+  val set_close: t -> UnderlyingSinkCloseCallback.t -> unit [@@js.set "close"]
+  val get_start: t -> UnderlyingSinkStartCallback.t [@@js.get "start"]
+  val set_start: t -> UnderlyingSinkStartCallback.t -> unit [@@js.set "start"]
+  val get_type: t -> undefined [@@js.get "type"]
+  val set_type: t -> undefined -> unit [@@js.set "type"]
+  val get_write: t -> W.t UnderlyingSinkWriteCallback.t [@@js.get "write"]
+  val set_write: t -> W.t UnderlyingSinkWriteCallback.t -> unit [@@js.set "write"]
+end
+module UnderlyingSource_Make (R : Ojs.T) : sig
+  type 'R parent = 'R UnderlyingSource.t
+  type t = R.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_cancel: t -> UnderlyingSourceCancelCallback.t [@@js.get "cancel"]
+  val set_cancel: t -> UnderlyingSourceCancelCallback.t -> unit [@@js.set "cancel"]
+  val get_pull: t -> R.t UnderlyingSourcePullCallback.t [@@js.get "pull"]
+  val set_pull: t -> R.t UnderlyingSourcePullCallback.t -> unit [@@js.set "pull"]
+  val get_start: t -> R.t UnderlyingSourceStartCallback.t [@@js.get "start"]
+  val set_start: t -> R.t UnderlyingSourceStartCallback.t -> unit [@@js.set "start"]
+  val get_type: t -> undefined [@@js.get "type"]
+  val set_type: t -> undefined -> unit [@@js.set "type"]
+end
+module CustomEvent_Make (T : Ojs.T) : sig
+  type 'T parent = 'T CustomEvent.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  
+  (** Returns any custom data event was created with. Typically used for synthetic events. *)
+  val get_detail: t -> T.t [@@js.get "detail"]
+  
+  (** @deprecated  *)
+  val initCustomEvent: t -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?detail:T.t -> unit -> unit [@@js.call "initCustomEvent"]
+end
+module IDBRequest_Make (T : Ojs.T) : sig
+  type 'T parent = 'T IDBRequest.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  
+  (** When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws a "InvalidStateError" DOMException if the request is still pending. *)
+  val get_error: t -> DOMException.t option [@@js.get "error"]
+  val get_onerror: t -> (this:t -> ev:Event.t -> any) option [@@js.get "onerror"]
+  val set_onerror: t -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onerror"]
+  val get_onsuccess: t -> (this:t -> ev:Event.t -> any) option [@@js.get "onsuccess"]
+  val set_onsuccess: t -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onsuccess"]
+  
+  (** Returns "pending" until a request is complete, then returns "done". *)
+  val get_readyState: t -> IDBRequestReadyState.t [@@js.get "readyState"]
+  
+  (** When a request is completed, returns the result, or undefined if the request failed. Throws a "InvalidStateError" DOMException if the request is still pending. *)
+  val get_result: t -> T.t [@@js.get "result"]
+  
+  (** Returns the IDBObjectStore, IDBIndex, or IDBCursor the request was made against, or null if is was an open request. *)
+  val get_source: t -> (IDBCursor.t, IDBIndex.t, IDBObjectStore.t) union3 [@@js.get "source"]
+  
+  (** Returns the IDBTransaction the request was made within. If this as an open request, then it returns an upgrade transaction while it is running, or null otherwise. *)
+  val get_transaction: t -> IDBTransaction.t option [@@js.get "transaction"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: t -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBRequestEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': t -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: t -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'IDBRequestEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': t -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
+end
+module MessageEvent_Make (T : Ojs.T) : sig
+  type 'T parent = 'T MessageEvent.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  
+  (** @deprecated  *)
+  val initMessageEvent: t -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t Iterable.t_1 -> unit -> unit [@@js.call "initMessageEvent"]
+  
+  (** Returns the data of the message. *)
+  val get_data: t -> T.t [@@js.get "data"]
+  
+  (** Returns the last event ID string, for server-sent events. *)
+  val get_lastEventId: t -> string [@@js.get "lastEventId"]
+  
+  (** Returns the origin of the message, for server-sent events and cross-document messaging. *)
+  val get_origin: t -> string [@@js.get "origin"]
+  
+  (** Returns the MessagePort array sent with the message, for cross-document messaging and channel messaging. *)
+  val get_ports: t -> MessagePort.t list [@@js.get "ports"]
+  
+  (** Returns the WindowProxy of the source window, for cross-document messaging, and the MessagePort being attached, in the connect event fired at SharedWorkerGlobalScope objects. *)
+  val get_source: t -> MessageEventSource.t option [@@js.get "source"]
+  
+  (** @deprecated  *)
+  val initMessageEvent': t -> type_:string -> ?bubbles:bool -> ?cancelable:bool -> ?data:any -> ?origin:string -> ?lastEventId:string -> ?source:MessageEventSource.t option -> ?ports:MessagePort.t list -> unit -> unit [@@js.call "initMessageEvent"]
+end
+module ProgressEvent_Make (T : Ojs.T) : sig
+  type 'T parent = 'T ProgressEvent.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_lengthComputable: t -> bool [@@js.get "lengthComputable"]
+  val get_loaded: t -> float [@@js.get "loaded"]
+  
+  (** Returns the object to which event is dispatched (its target). *)
+  val get_target: t -> T.t option [@@js.get "target"]
+  val get_total: t -> float [@@js.get "total"]
+end
+module ReadableStream_Make (R : Ojs.T) : sig
+  type 'R parent = 'R ReadableStream.t
+  type t = R.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_locked: t -> bool [@@js.get "locked"]
+  val cancel: t -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "cancel"]
+  val getReader: t -> R.t ReadableStreamDefaultReader.t [@@js.call "getReader"]
+  val pipeThrough: t -> transform:('T, R.t) ReadableWritablePair.t -> ?options:StreamPipeOptions.t -> unit -> 'T parent [@@js.call "pipeThrough"]
+  val pipeTo: t -> destination:R.t WritableStream.t -> ?options:StreamPipeOptions.t -> unit -> unit Promise.t_1 [@@js.call "pipeTo"]
+  val tee: t -> (t * t) [@@js.call "tee"]
+end
+module ReadableStreamDefaultController_Make (R : Ojs.T) : sig
+  type 'R parent = 'R ReadableStreamDefaultController.t
+  type t = R.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_desiredSize: t -> float option [@@js.get "desiredSize"]
+  val close: t -> unit [@@js.call "close"]
+  val enqueue: t -> ?chunk:R.t -> unit -> unit [@@js.call "enqueue"]
+  val error: t -> ?e:any -> unit -> unit [@@js.call "error"]
+end
+module ReadableStreamDefaultReader_Make (R : Ojs.T) : sig
+  type 'R parent = 'R ReadableStreamDefaultReader.t
+  type t = R.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val read: t -> R.t ReadableStreamDefaultReadResult.t Promise.t_1 [@@js.call "read"]
+  val releaseLock: t -> unit [@@js.call "releaseLock"]
+end
+module TransformStream_Make (I : Ojs.T) (O : Ojs.T) : sig
+  type ('I, 'O) parent = ('I, 'O) TransformStream.t
+  type t = (I.t, O.t) parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_readable: t -> O.t ReadableStream.t [@@js.get "readable"]
+  val get_writable: t -> I.t WritableStream.t [@@js.get "writable"]
+end
+module TransformStreamDefaultController_Make (O : Ojs.T) : sig
+  type 'O parent = 'O TransformStreamDefaultController.t
+  type t = O.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_desiredSize: t -> float option [@@js.get "desiredSize"]
+  val enqueue: t -> ?chunk:O.t -> unit -> unit [@@js.call "enqueue"]
+  val error: t -> ?reason:any -> unit -> unit [@@js.call "error"]
+  val terminate: t -> unit [@@js.call "terminate"]
+end
+module WritableStream_Make (W : Ojs.T) : sig
+  type 'W parent = 'W WritableStream.t
+  type t = W.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_locked: t -> bool [@@js.get "locked"]
+  val abort: t -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "abort"]
+  val close: t -> unit Promise.t_1 [@@js.call "close"]
+  val getWriter: t -> W.t WritableStreamDefaultWriter.t [@@js.call "getWriter"]
+end
+module WritableStreamDefaultWriter_Make (W : Ojs.T) : sig
+  type 'W parent = 'W WritableStreamDefaultWriter.t
+  type t = W.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val get_closed: t -> undefined Promise.t_1 [@@js.get "closed"]
+  val get_desiredSize: t -> float option [@@js.get "desiredSize"]
+  val get_ready: t -> undefined Promise.t_1 [@@js.get "ready"]
+  val abort: t -> ?reason:any -> unit -> unit Promise.t_1 [@@js.call "abort"]
+  val close: t -> unit Promise.t_1 [@@js.call "close"]
+  val releaseLock: t -> unit [@@js.call "releaseLock"]
+  val write: t -> ?chunk:W.t -> unit -> unit Promise.t_1 [@@js.call "write"]
+end
+module QueuingStrategySize_Make (T : Ojs.T) : sig
+  type 'T parent = 'T QueuingStrategySize.t
+  type t = T.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val apply: t -> chunk:T.t -> float [@@js.apply]
+end
+module TransformerFlushCallback_Make (O : Ojs.T) : sig
+  type 'O parent = 'O TransformerFlushCallback.t
+  type t = O.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val apply: t -> controller:O.t TransformStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+end
+module TransformerStartCallback_Make (O : Ojs.T) : sig
+  type 'O parent = 'O TransformerStartCallback.t
+  type t = O.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val apply: t -> controller:O.t TransformStreamDefaultController.t -> any [@@js.apply]
+end
+module TransformerTransformCallback_Make (I : Ojs.T) (O : Ojs.T) : sig
+  type ('I, 'O) parent = ('I, 'O) TransformerTransformCallback.t
+  type t = (I.t, O.t) parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val apply: t -> chunk:I.t -> controller:O.t TransformStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+end
+module UnderlyingSinkWriteCallback_Make (W : Ojs.T) : sig
+  type 'W parent = 'W UnderlyingSinkWriteCallback.t
+  type t = W.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val apply: t -> chunk:W.t -> controller:WritableStreamDefaultController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+end
+module UnderlyingSourcePullCallback_Make (R : Ojs.T) : sig
+  type 'R parent = 'R UnderlyingSourcePullCallback.t
+  type t = R.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val apply: t -> controller:R.t ReadableStreamController.t -> (unit, unit PromiseLike.t_1) union2 [@@js.apply]
+end
+module UnderlyingSourceStartCallback_Make (R : Ojs.T) : sig
+  type 'R parent = 'R UnderlyingSourceStartCallback.t
+  type t = R.t parent
+  val t_of_js: Ojs.t -> t
+  val t_to_js: t -> Ojs.t
+  
+  val apply: t -> controller:R.t ReadableStreamController.t -> any [@@js.apply]
 end
 
 (** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
@@ -14007,8 +14381,8 @@ val console: unit -> Console.t [@@js.get "console"]
 
 (** Returns dedicatedWorkerGlobal's name, i.e. the value given to the Worker constructor. Primarily useful for debugging. *)
 val name: unit -> string [@@js.get "name"]
-val onmessage: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessage"]
-val onmessageerror: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:MessageEvent.t_0 -> any) or_null [@@js.get "onmessageerror"]
+val onmessage: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessage"]
+val onmessageerror: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:MessageEvent.t_0 -> any) option [@@js.get "onmessageerror"]
 
 (** Aborts dedicatedWorkerGlobal. *)
 val close: unit -> unit [@@js.global "close"]
@@ -14042,18 +14416,18 @@ val location: unit -> WorkerLocation.t [@@js.get "location"]
 val navigator: unit -> WorkerNavigator.t [@@js.get "navigator"]
 
 (** Fires when an error occurs during object loading. *)
-val onerror: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:ErrorEvent.t -> any) or_null [@@js.get "onerror"]
-val onlanguagechange: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Event.t -> any) or_null [@@js.get "onlanguagechange"]
-val onoffline: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Event.t -> any) or_null [@@js.get "onoffline"]
-val ononline: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Event.t -> any) or_null [@@js.get "ononline"]
-val onrejectionhandled: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:PromiseRejectionEvent.t -> any) or_null [@@js.get "onrejectionhandled"]
-val onunhandledrejection: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:PromiseRejectionEvent.t -> any) or_null [@@js.get "onunhandledrejection"]
+val onerror: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:ErrorEvent.t -> any) option [@@js.get "onerror"]
+val onlanguagechange: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Event.t -> any) option [@@js.get "onlanguagechange"]
+val onoffline: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Event.t -> any) option [@@js.get "onoffline"]
+val ononline: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:Event.t -> any) option [@@js.get "ononline"]
+val onrejectionhandled: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:PromiseRejectionEvent.t -> any) option [@@js.get "onrejectionhandled"]
+val onunhandledrejection: unit -> (this:DedicatedWorkerGlobalScope.t -> ev:PromiseRejectionEvent.t -> any) option [@@js.get "onunhandledrejection"]
 
 (** Returns workerGlobal. *)
 val self: unit -> (WorkerGlobalScope.t, (* FIXME: unknown type 'typeof globalThis' *)any) intersection2 [@@js.get "self"]
 
 (** Fetches each URL in urls, executes them one-by-one in the order they are passed, and then returns (or throws if something went amiss). *)
-val importScripts': (URL.t or_string list [@js.variadic]) -> unit [@@js.global "importScripts"]
+val importScripts': (([`String of string | `Other of URL.t] [@js.union on_field "dummy"]) Primitive.t list [@js.variadic]) -> unit [@@js.global "importScripts"]
 val fonts: unit -> FontFaceSet.t [@@js.get "fonts"]
 
 (** Available only in secure contexts. *)
@@ -14102,7 +14476,7 @@ val setInterval: handler:TimerHandler.t -> ?timeout:float -> arguments:(any list
 val setTimeout: handler:TimerHandler.t -> ?timeout:float -> arguments:(any list [@js.variadic]) -> unit -> float [@@js.global "setTimeout"]
 val cancelAnimationFrame: float -> unit [@@js.global "cancelAnimationFrame"]
 val requestAnimationFrame: FrameRequestCallback.t -> float [@@js.global "requestAnimationFrame"]
-val addEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.global "addEventListener"]
-val addEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:AddEventListenerOptions.t or_boolean -> unit -> unit [@@js.global "addEventListener"]
-val removeEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
-val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:EventListenerOptions.t or_boolean -> unit -> unit [@@js.global "removeEventListener"]
+val addEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`Boolean of bool | `Other of AddEventListenerOptions.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> unit [@@js.global "addEventListener"]
+val addEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`Boolean of bool | `Other of AddEventListenerOptions.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> unit [@@js.global "addEventListener"]
+val removeEventListener: type_:'K -> listener:(this:DedicatedWorkerGlobalScope.t -> ev:(* FIXME: unknown type 'DedicatedWorkerGlobalScopeEventMap[K]' *)any -> any) -> ?options:([`Boolean of bool | `Other of EventListenerOptions.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> unit [@@js.global "removeEventListener"]
+val removeEventListener': type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`Boolean of bool | `Other of EventListenerOptions.t] [@js.union on_field "dummy"]) Primitive.t -> unit -> unit [@@js.global "removeEventListener"]

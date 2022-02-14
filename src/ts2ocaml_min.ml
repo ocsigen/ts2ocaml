@@ -9,8 +9,8 @@ module Never =
     type t = never
     let rec t_of_js : Ojs.t -> t = fun (x4 : Ojs.t) -> never_of_js x4
     and t_to_js : t -> Ojs.t = fun (x3 : never) -> never_to_js x3
-    exception Ts_Never 
-    let absurd _ = raise Ts_Never
+    exception Ts2ocaml_Never 
+    let absurd _ = raise Ts2ocaml_Never
   end
 type any = Ojs.t
 let rec any_of_js : Ojs.t -> any = fun (x6 : Ojs.t) -> x6
@@ -21,7 +21,9 @@ module Any =
     let rec t_of_js : Ojs.t -> t = fun (x8 : Ojs.t) -> any_of_js x8
     and t_to_js : t -> Ojs.t = fun (x7 : any) -> any_to_js x7
     let cast_from x = Obj.magic x
-    let unsafe_cast_to x = Obj.magic x
+    let cast_from' f x = f x
+    let unsafe_cast x = Obj.magic x
+    let unsafe_cast' f x = f x
   end
 type unknown = Ojs.t
 let rec unknown_of_js : Ojs.t -> unknown = fun (x10 : Ojs.t) -> x10
@@ -32,16 +34,58 @@ module Unknown =
     let rec t_of_js : Ojs.t -> t = fun (x12 : Ojs.t) -> unknown_of_js x12
     and t_to_js : t -> Ojs.t = fun (x11 : unknown) -> unknown_to_js x11
     let unsafe_cast x = Obj.magic x
+    let unsafe_cast' f x = f x
+  end
+type null = Ojs.t
+let rec null_of_js : Ojs.t -> null = fun (x14 : Ojs.t) -> x14
+and null_to_js : null -> Ojs.t = fun (x13 : Ojs.t) -> x13
+let null = Ojs.null
+module Null =
+  struct
+    type t = null
+    let rec t_of_js : Ojs.t -> t = fun (x16 : Ojs.t) -> null_of_js x16
+    and t_to_js : t -> Ojs.t = fun (x15 : null) -> null_to_js x15
+    let value = Ojs.null
+    let unsafe_cast x = Obj.magic x
+    let unsafe_cast' f x = f x
+  end
+type undefined = Ojs.t
+let rec undefined_of_js : Ojs.t -> undefined = fun (x18 : Ojs.t) -> x18
+and undefined_to_js : undefined -> Ojs.t = fun (x17 : Ojs.t) -> x17
+let undefined = Ojs.unit_to_js ()
+module Undefined =
+  struct
+    type t = undefined
+    let rec t_of_js : Ojs.t -> t = fun (x20 : Ojs.t) -> undefined_of_js x20
+    and t_to_js : t -> Ojs.t = fun (x19 : undefined) -> undefined_to_js x19
+    let value = Ojs.unit_to_js ()
+    let unsafe_cast x = Obj.magic x
+    let unsafe_cast' f x = f x
   end
 type -'tags intf = Ojs.t
 let intf_to_js _ x = (x : Ojs.t)
 let intf_of_js _ x = (x : _ intf)
+module Intf =
+  struct
+    type 'tags t = 'tags intf
+    let rec t_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags t = fun
+      (type __tags) ->
+      fun (__tags_of_js : Ojs.t -> __tags) ->
+        fun (x23 : Ojs.t) -> intf_of_js __tags_of_js x23
+    and t_to_js : 'tags . ('tags -> Ojs.t) -> 'tags t -> Ojs.t = fun (type
+      __tags) ->
+      fun (__tags_to_js : __tags -> Ojs.t) ->
+        fun (x21 : __tags intf) -> intf_to_js __tags_to_js x21
+  end
 type untyped_object = [ `Object ] intf
 let rec untyped_object_of_js : Ojs.t -> untyped_object = Obj.magic
 and untyped_object_to_js : untyped_object -> Ojs.t = Obj.magic
 type untyped_function = [ `Function ] intf
 let rec untyped_function_of_js : Ojs.t -> untyped_function = Obj.magic
 and untyped_function_to_js : untyped_function -> Ojs.t = Obj.magic
+type js_bool = [ `Boolean ] intf
+let rec js_bool_of_js : Ojs.t -> js_bool = Obj.magic
+and js_bool_to_js : js_bool -> Ojs.t = Obj.magic
 type symbol = [ `Symbol ] intf
 let rec symbol_of_js : Ojs.t -> symbol = Obj.magic
 and symbol_to_js : symbol -> Ojs.t = Obj.magic
@@ -51,737 +95,376 @@ and regexp_to_js : regexp -> Ojs.t = Obj.magic
 type bigint = [ `BigInt ] intf
 let rec bigint_of_js : Ojs.t -> bigint = Obj.magic
 and bigint_to_js : bigint -> Ojs.t = Obj.magic
-type 'a or_null = 'a option
-let rec or_null_of_js : 'a . (Ojs.t -> 'a) -> Ojs.t -> 'a or_null = fun (type
-  __a) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (x15 : Ojs.t) -> Ojs.option_of_js __a_of_js x15
-and or_null_to_js : 'a . ('a -> Ojs.t) -> 'a or_null -> Ojs.t = fun (type
-  __a) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (x13 : __a option) -> Ojs.option_to_js __a_to_js x13
-type 'a or_undefined = 'a option
-let rec or_undefined_of_js : 'a . (Ojs.t -> 'a) -> Ojs.t -> 'a or_undefined =
-  fun (type __a) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (x19 : Ojs.t) -> Ojs.option_of_js __a_of_js x19
-and or_undefined_to_js : 'a . ('a -> Ojs.t) -> 'a or_undefined -> Ojs.t = fun
-  (type __a) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (x17 : __a option) -> Ojs.option_to_js __a_to_js x17
-type 'a or_null_or_undefined = 'a option
-let rec or_null_or_undefined_of_js :
-  'a . (Ojs.t -> 'a) -> Ojs.t -> 'a or_null_or_undefined = fun (type __a) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (x23 : Ojs.t) -> Ojs.option_of_js __a_of_js x23
-and or_null_or_undefined_to_js :
-  'a . ('a -> Ojs.t) -> 'a or_null_or_undefined -> Ojs.t = fun (type __a) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (x21 : __a option) -> Ojs.option_to_js __a_to_js x21
-type ('a, 'b) and_ = Ojs.t
-let rec and__of_js :
-  'a 'b . (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) and_ = fun
-  (type __a) -> fun (type __b) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) -> fun (x26 : Ojs.t) -> x26
-and and__to_js :
-  'a 'b . ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) and_ -> Ojs.t = fun
-  (type __a) -> fun (type __b) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) -> fun (x25 : Ojs.t) -> x25
-module And =
-  struct
-    type ('a, 'b) t = ('a, 'b) and_
-    let rec t_of_js :
-      'a 'b . (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) t = fun
-      (type __a) -> fun (type __b) ->
-      fun (__a_of_js : Ojs.t -> __a) ->
-        fun (__b_of_js : Ojs.t -> __b) ->
-          fun (x30 : Ojs.t) -> and__of_js __a_of_js __b_of_js x30
-    and t_to_js :
-      'a 'b . ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) t -> Ojs.t = fun
-      (type __a) -> fun (type __b) ->
-      fun (__a_to_js : __a -> Ojs.t) ->
-        fun (__b_to_js : __b -> Ojs.t) ->
-          fun (x27 : (__a, __b) and_) -> and__to_js __a_to_js __b_to_js x27
-    let car (x : ('a, 'b) t) = (Obj.magic x : 'a)
-    let cdr (x : ('a, 'b) t) = (Obj.magic x : 'b)
-  end
-type ('a, 'b) intersection2 = ('b, 'a) and_
-let rec intersection2_of_js :
-  'a 'b . (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) intersection2 =
-  fun (type __a) -> fun (type __b) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (x36 : Ojs.t) -> and__of_js __b_of_js __a_of_js x36
-and intersection2_to_js :
-  'a 'b . ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) intersection2 -> Ojs.t =
-  fun (type __a) -> fun (type __b) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (x33 : (__b, __a) and_) -> and__to_js __b_to_js __a_to_js x33
-type ('a, 'b, 'c) intersection3 = (('b, 'c) intersection2, 'a) and_
-let rec intersection3_of_js :
-  'a 'b 'c .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> Ojs.t -> ('a, 'b, 'c) intersection3
-  = fun (type __a) -> fun (type __b) -> fun (type __c) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (x44 : Ojs.t) ->
-          and__of_js
-            (fun (x45 : Ojs.t) -> intersection2_of_js __b_of_js __c_of_js x45)
-            __a_of_js x44
-and intersection3_to_js :
-  'a 'b 'c .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('a, 'b, 'c) intersection3 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (x39 : ((__b, __c) intersection2, __a) and_) ->
-          and__to_js
-            (fun (x40 : (__b, __c) intersection2) ->
-               intersection2_to_js __b_to_js __c_to_js x40) __a_to_js x39
-type ('a, 'b, 'c, 'd) intersection4 = (('b, 'c, 'd) intersection3, 'a) and_
-let rec intersection4_of_js :
-  'a 'b 'c 'd .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) ->
-          (Ojs.t -> 'd) -> Ojs.t -> ('a, 'b, 'c, 'd) intersection4
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (x55 : Ojs.t) ->
-            and__of_js
-              (fun (x56 : Ojs.t) ->
-                 intersection3_of_js __b_of_js __c_of_js __d_of_js x56)
-              __a_of_js x55
-and intersection4_to_js :
-  'a 'b 'c 'd .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) ->
-          ('d -> Ojs.t) -> ('a, 'b, 'c, 'd) intersection4 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (x49 : ((__b, __c, __d) intersection3, __a) and_) ->
-            and__to_js
-              (fun (x50 : (__b, __c, __d) intersection3) ->
-                 intersection3_to_js __b_to_js __c_to_js __d_to_js x50)
-              __a_to_js x49
-type ('a, 'b, 'c, 'd, 'e) intersection5 =
-  (('b, 'c, 'd, 'e) intersection4, 'a) and_
-let rec intersection5_of_js :
-  'a 'b 'c 'd 'e .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) ->
-          (Ojs.t -> 'd) ->
-            (Ojs.t -> 'e) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e) intersection5
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (__e_of_js : Ojs.t -> __e) ->
-            fun (x68 : Ojs.t) ->
-              and__of_js
-                (fun (x69 : Ojs.t) ->
-                   intersection4_of_js __b_of_js __c_of_js __d_of_js
-                     __e_of_js x69) __a_of_js x68
-and intersection5_to_js :
-  'a 'b 'c 'd 'e .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) ->
-          ('d -> Ojs.t) ->
-            ('e -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e) intersection5 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (__e_to_js : __e -> Ojs.t) ->
-            fun (x61 : ((__b, __c, __d, __e) intersection4, __a) and_) ->
-              and__to_js
-                (fun (x62 : (__b, __c, __d, __e) intersection4) ->
-                   intersection4_to_js __b_to_js __c_to_js __d_to_js
-                     __e_to_js x62) __a_to_js x61
-type ('a, 'b, 'c, 'd, 'e, 'f) intersection6 =
-  (('b, 'c, 'd, 'e, 'f) intersection5, 'a) and_
-let rec intersection6_of_js :
-  'a 'b 'c 'd 'e 'f .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) ->
-          (Ojs.t -> 'd) ->
-            (Ojs.t -> 'e) ->
-              (Ojs.t -> 'f) ->
-                Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f) intersection6
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (__e_of_js : Ojs.t -> __e) ->
-            fun (__f_of_js : Ojs.t -> __f) ->
-              fun (x83 : Ojs.t) ->
-                and__of_js
-                  (fun (x84 : Ojs.t) ->
-                     intersection5_of_js __b_of_js __c_of_js __d_of_js
-                       __e_of_js __f_of_js x84) __a_of_js x83
-and intersection6_to_js :
-  'a 'b 'c 'd 'e 'f .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) ->
-          ('d -> Ojs.t) ->
-            ('e -> Ojs.t) ->
-              ('f -> Ojs.t) ->
-                ('a, 'b, 'c, 'd, 'e, 'f) intersection6 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (__e_to_js : __e -> Ojs.t) ->
-            fun (__f_to_js : __f -> Ojs.t) ->
-              fun (x75 : ((__b, __c, __d, __e, __f) intersection5, __a) and_)
-                ->
-                and__to_js
-                  (fun (x76 : (__b, __c, __d, __e, __f) intersection5) ->
-                     intersection5_to_js __b_to_js __c_to_js __d_to_js
-                       __e_to_js __f_to_js x76) __a_to_js x75
-type ('a, 'b, 'c, 'd, 'e, 'f, 'g) intersection7 =
-  (('b, 'c, 'd, 'e, 'f, 'g) intersection6, 'a) and_
-let rec intersection7_of_js :
-  'a 'b 'c 'd 'e 'f 'g .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) ->
-          (Ojs.t -> 'd) ->
-            (Ojs.t -> 'e) ->
-              (Ojs.t -> 'f) ->
-                (Ojs.t -> 'g) ->
-                  Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) intersection7
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) -> fun (type __g) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (__e_of_js : Ojs.t -> __e) ->
-            fun (__f_of_js : Ojs.t -> __f) ->
-              fun (__g_of_js : Ojs.t -> __g) ->
-                fun (x100 : Ojs.t) ->
-                  and__of_js
-                    (fun (x101 : Ojs.t) ->
-                       intersection6_of_js __b_of_js __c_of_js __d_of_js
-                         __e_of_js __f_of_js __g_of_js x101) __a_of_js x100
-and intersection7_to_js :
-  'a 'b 'c 'd 'e 'f 'g .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) ->
-          ('d -> Ojs.t) ->
-            ('e -> Ojs.t) ->
-              ('f -> Ojs.t) ->
-                ('g -> Ojs.t) ->
-                  ('a, 'b, 'c, 'd, 'e, 'f, 'g) intersection7 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) -> fun (type __g) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (__e_to_js : __e -> Ojs.t) ->
-            fun (__f_to_js : __f -> Ojs.t) ->
-              fun (__g_to_js : __g -> Ojs.t) ->
-                fun
-                  (x91 :
-                    ((__b, __c, __d, __e, __f, __g) intersection6, __a) and_)
-                  ->
-                  and__to_js
-                    (fun (x92 : (__b, __c, __d, __e, __f, __g) intersection6)
-                       ->
-                       intersection6_to_js __b_to_js __c_to_js __d_to_js
-                         __e_to_js __f_to_js __g_to_js x92) __a_to_js x91
-type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) intersection8 =
-  (('b, 'c, 'd, 'e, 'f, 'g, 'h) intersection7, 'a) and_
-let rec intersection8_of_js :
-  'a 'b 'c 'd 'e 'f 'g 'h .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) ->
-          (Ojs.t -> 'd) ->
-            (Ojs.t -> 'e) ->
-              (Ojs.t -> 'f) ->
-                (Ojs.t -> 'g) ->
-                  (Ojs.t -> 'h) ->
-                    Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) intersection8
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) -> fun (type __g) -> fun (type __h) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (__e_of_js : Ojs.t -> __e) ->
-            fun (__f_of_js : Ojs.t -> __f) ->
-              fun (__g_of_js : Ojs.t -> __g) ->
-                fun (__h_of_js : Ojs.t -> __h) ->
-                  fun (x119 : Ojs.t) ->
-                    and__of_js
-                      (fun (x120 : Ojs.t) ->
-                         intersection7_of_js __b_of_js __c_of_js __d_of_js
-                           __e_of_js __f_of_js __g_of_js __h_of_js x120)
-                      __a_of_js x119
-and intersection8_to_js :
-  'a 'b 'c 'd 'e 'f 'g 'h .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) ->
-          ('d -> Ojs.t) ->
-            ('e -> Ojs.t) ->
-              ('f -> Ojs.t) ->
-                ('g -> Ojs.t) ->
-                  ('h -> Ojs.t) ->
-                    ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) intersection8 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) -> fun (type __g) -> fun (type __h) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (__e_to_js : __e -> Ojs.t) ->
-            fun (__f_to_js : __f -> Ojs.t) ->
-              fun (__g_to_js : __g -> Ojs.t) ->
-                fun (__h_to_js : __h -> Ojs.t) ->
-                  fun
-                    (x109 :
-                      ((__b, __c, __d, __e, __f, __g, __h) intersection7,
-                        __a) and_)
-                    ->
-                    and__to_js
-                      (fun
-                         (x110 :
-                           (__b, __c, __d, __e, __f, __g, __h) intersection7)
-                         ->
-                         intersection7_to_js __b_to_js __c_to_js __d_to_js
-                           __e_to_js __f_to_js __g_to_js __h_to_js x110)
-                      __a_to_js x109
+type js_string =
+  [ `String  | `ArrayLike of js_string  | `IterableIterator of js_string 
+  | `Iterator of (js_string * any * undefined) ] intf
+let rec js_string_of_js : Ojs.t -> js_string = Obj.magic
+and js_string_to_js : js_string -> Ojs.t = Obj.magic
 module Intersection =
   struct
-    let get_0 x = Obj.magic x
+    type -'cases t = Ojs.t
+    let t_to_js _ x = (x : Ojs.t)
+    let t_of_js _ x = (x : _ t)
     let get_1 x = Obj.magic x
     let get_2 x = Obj.magic x
     let get_3 x = Obj.magic x
     let get_4 x = Obj.magic x
     let get_5 x = Obj.magic x
     let get_6 x = Obj.magic x
+    let get_7 x = Obj.magic x
+    let get_8 x = Obj.magic x
+    let get_1' f x = f (x :> Ojs.t)
+    let get_2' f x = f (x :> Ojs.t)
+    let get_3' f x = f (x :> Ojs.t)
+    let get_4' f x = f (x :> Ojs.t)
+    let get_5' f x = f (x :> Ojs.t)
+    let get_6' f x = f (x :> Ojs.t)
+    let get_7' f x = f (x :> Ojs.t)
+    let get_8' f x = f (x :> Ojs.t)
   end
-type ('a, 'b) or_from_js =
-  {
-  a_of_js: Ojs.t -> 'a ;
-  b_of_js: Ojs.t -> 'b ;
-  value: Ojs.t }
-type ('a, 'b) or_ =
-  | A of 'a 
-  | B of 'b 
-  | FromJS of ('a, 'b) or_from_js 
-let or__to_js a_to_js b_to_js =
-  function | A a -> a_to_js a | B b -> b_to_js b | FromJS x -> x.value
-let or__of_js a_of_js b_of_js value = FromJS { a_of_js; b_of_js; value }
-module Or =
-  struct
-    type ('a, 'b) t = ('a, 'b) or_
-    let rec t_of_js :
-      'a 'b . (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) t = fun
-      (type __a) -> fun (type __b) ->
-      fun (__a_of_js : Ojs.t -> __a) ->
-        fun (__b_of_js : Ojs.t -> __b) ->
-          fun (x132 : Ojs.t) -> or__of_js __a_of_js __b_of_js x132
-    and t_to_js :
-      'a 'b . ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) t -> Ojs.t = fun
-      (type __a) -> fun (type __b) ->
-      fun (__a_to_js : __a -> Ojs.t) ->
-        fun (__b_to_js : __b -> Ojs.t) ->
-          fun (x129 : (__a, __b) or_) -> or__to_js __a_to_js __b_to_js x129
-    let inl (x : 'a) = (A x : ('a, 'b) t)
-    let inr (x : 'b) = (B x : ('a, 'b) t)
-    let test ~is_left  ~is_right  =
-      function
-      | A a -> `Left a
-      | B b -> `Right b
-      | FromJS x ->
-          if is_left x.value
-          then `Left (x.a_of_js x.value)
-          else
-            if is_right x.value
-            then `Right (x.b_of_js x.value)
-            else `Other (x.value)
-  end
-type ('a, 'b) union2 = ('b, 'a) or_
-let rec union2_of_js :
-  'a 'b . (Ojs.t -> 'a) -> (Ojs.t -> 'b) -> Ojs.t -> ('a, 'b) union2 = fun
-  (type __a) -> fun (type __b) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (x138 : Ojs.t) -> or__of_js __b_of_js __a_of_js x138
-and union2_to_js :
-  'a 'b . ('a -> Ojs.t) -> ('b -> Ojs.t) -> ('a, 'b) union2 -> Ojs.t = fun
-  (type __a) -> fun (type __b) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (x135 : (__b, __a) or_) -> or__to_js __b_to_js __a_to_js x135
-type ('a, 'b, 'c) union3 = (('b, 'c) union2, 'a) or_
-let rec union3_of_js :
-  'a 'b 'c .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) -> (Ojs.t -> 'c) -> Ojs.t -> ('a, 'b, 'c) union3
-  = fun (type __a) -> fun (type __b) -> fun (type __c) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (x146 : Ojs.t) ->
-          or__of_js
-            (fun (x147 : Ojs.t) -> union2_of_js __b_of_js __c_of_js x147)
-            __a_of_js x146
-and union3_to_js :
-  'a 'b 'c .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) -> ('c -> Ojs.t) -> ('a, 'b, 'c) union3 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (x141 : ((__b, __c) union2, __a) or_) ->
-          or__to_js
-            (fun (x142 : (__b, __c) union2) ->
-               union2_to_js __b_to_js __c_to_js x142) __a_to_js x141
-type ('a, 'b, 'c, 'd) union4 = (('b, 'c, 'd) union3, 'a) or_
-let rec union4_of_js :
-  'a 'b 'c 'd .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) -> (Ojs.t -> 'd) -> Ojs.t -> ('a, 'b, 'c, 'd) union4
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (x157 : Ojs.t) ->
-            or__of_js
-              (fun (x158 : Ojs.t) ->
-                 union3_of_js __b_of_js __c_of_js __d_of_js x158) __a_of_js
-              x157
-and union4_to_js :
-  'a 'b 'c 'd .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) -> ('d -> Ojs.t) -> ('a, 'b, 'c, 'd) union4 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (x151 : ((__b, __c, __d) union3, __a) or_) ->
-            or__to_js
-              (fun (x152 : (__b, __c, __d) union3) ->
-                 union3_to_js __b_to_js __c_to_js __d_to_js x152) __a_to_js
-              x151
-type ('a, 'b, 'c, 'd, 'e) union5 = (('b, 'c, 'd, 'e) union4, 'a) or_
-let rec union5_of_js :
-  'a 'b 'c 'd 'e .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) ->
-          (Ojs.t -> 'd) ->
-            (Ojs.t -> 'e) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e) union5
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (__e_of_js : Ojs.t -> __e) ->
-            fun (x170 : Ojs.t) ->
-              or__of_js
-                (fun (x171 : Ojs.t) ->
-                   union4_of_js __b_of_js __c_of_js __d_of_js __e_of_js x171)
-                __a_of_js x170
-and union5_to_js :
-  'a 'b 'c 'd 'e .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) ->
-          ('d -> Ojs.t) ->
-            ('e -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e) union5 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (__e_to_js : __e -> Ojs.t) ->
-            fun (x163 : ((__b, __c, __d, __e) union4, __a) or_) ->
-              or__to_js
-                (fun (x164 : (__b, __c, __d, __e) union4) ->
-                   union4_to_js __b_to_js __c_to_js __d_to_js __e_to_js x164)
-                __a_to_js x163
-type ('a, 'b, 'c, 'd, 'e, 'f) union6 = (('b, 'c, 'd, 'e, 'f) union5, 'a) or_
-let rec union6_of_js :
-  'a 'b 'c 'd 'e 'f .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) ->
-          (Ojs.t -> 'd) ->
-            (Ojs.t -> 'e) ->
-              (Ojs.t -> 'f) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f) union6
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (__e_of_js : Ojs.t -> __e) ->
-            fun (__f_of_js : Ojs.t -> __f) ->
-              fun (x185 : Ojs.t) ->
-                or__of_js
-                  (fun (x186 : Ojs.t) ->
-                     union5_of_js __b_of_js __c_of_js __d_of_js __e_of_js
-                       __f_of_js x186) __a_of_js x185
-and union6_to_js :
-  'a 'b 'c 'd 'e 'f .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) ->
-          ('d -> Ojs.t) ->
-            ('e -> Ojs.t) ->
-              ('f -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f) union6 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (__e_to_js : __e -> Ojs.t) ->
-            fun (__f_to_js : __f -> Ojs.t) ->
-              fun (x177 : ((__b, __c, __d, __e, __f) union5, __a) or_) ->
-                or__to_js
-                  (fun (x178 : (__b, __c, __d, __e, __f) union5) ->
-                     union5_to_js __b_to_js __c_to_js __d_to_js __e_to_js
-                       __f_to_js x178) __a_to_js x177
-type ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7 =
-  (('b, 'c, 'd, 'e, 'f, 'g) union6, 'a) or_
-let rec union7_of_js :
-  'a 'b 'c 'd 'e 'f 'g .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) ->
-          (Ojs.t -> 'd) ->
-            (Ojs.t -> 'e) ->
-              (Ojs.t -> 'f) ->
-                (Ojs.t -> 'g) -> Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) -> fun (type __g) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (__e_of_js : Ojs.t -> __e) ->
-            fun (__f_of_js : Ojs.t -> __f) ->
-              fun (__g_of_js : Ojs.t -> __g) ->
-                fun (x202 : Ojs.t) ->
-                  or__of_js
-                    (fun (x203 : Ojs.t) ->
-                       union6_of_js __b_of_js __c_of_js __d_of_js __e_of_js
-                         __f_of_js __g_of_js x203) __a_of_js x202
-and union7_to_js :
-  'a 'b 'c 'd 'e 'f 'g .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) ->
-          ('d -> Ojs.t) ->
-            ('e -> Ojs.t) ->
-              ('f -> Ojs.t) ->
-                ('g -> Ojs.t) -> ('a, 'b, 'c, 'd, 'e, 'f, 'g) union7 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) -> fun (type __g) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (__e_to_js : __e -> Ojs.t) ->
-            fun (__f_to_js : __f -> Ojs.t) ->
-              fun (__g_to_js : __g -> Ojs.t) ->
-                fun (x193 : ((__b, __c, __d, __e, __f, __g) union6, __a) or_)
-                  ->
-                  or__to_js
-                    (fun (x194 : (__b, __c, __d, __e, __f, __g) union6) ->
-                       union6_to_js __b_to_js __c_to_js __d_to_js __e_to_js
-                         __f_to_js __g_to_js x194) __a_to_js x193
-type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 =
-  (('b, 'c, 'd, 'e, 'f, 'g, 'h) union7, 'a) or_
-let rec union8_of_js :
-  'a 'b 'c 'd 'e 'f 'g 'h .
-    (Ojs.t -> 'a) ->
-      (Ojs.t -> 'b) ->
-        (Ojs.t -> 'c) ->
-          (Ojs.t -> 'd) ->
-            (Ojs.t -> 'e) ->
-              (Ojs.t -> 'f) ->
-                (Ojs.t -> 'g) ->
-                  (Ojs.t -> 'h) ->
-                    Ojs.t -> ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) -> fun (type __g) -> fun (type __h) ->
-  fun (__a_of_js : Ojs.t -> __a) ->
-    fun (__b_of_js : Ojs.t -> __b) ->
-      fun (__c_of_js : Ojs.t -> __c) ->
-        fun (__d_of_js : Ojs.t -> __d) ->
-          fun (__e_of_js : Ojs.t -> __e) ->
-            fun (__f_of_js : Ojs.t -> __f) ->
-              fun (__g_of_js : Ojs.t -> __g) ->
-                fun (__h_of_js : Ojs.t -> __h) ->
-                  fun (x221 : Ojs.t) ->
-                    or__of_js
-                      (fun (x222 : Ojs.t) ->
-                         union7_of_js __b_of_js __c_of_js __d_of_js __e_of_js
-                           __f_of_js __g_of_js __h_of_js x222) __a_of_js x221
-and union8_to_js :
-  'a 'b 'c 'd 'e 'f 'g 'h .
-    ('a -> Ojs.t) ->
-      ('b -> Ojs.t) ->
-        ('c -> Ojs.t) ->
-          ('d -> Ojs.t) ->
-            ('e -> Ojs.t) ->
-              ('f -> Ojs.t) ->
-                ('g -> Ojs.t) ->
-                  ('h -> Ojs.t) ->
-                    ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) union8 -> Ojs.t
-  = fun (type __a) -> fun (type __b) -> fun (type __c) -> fun (type __d) ->
-  fun (type __e) -> fun (type __f) -> fun (type __g) -> fun (type __h) ->
-  fun (__a_to_js : __a -> Ojs.t) ->
-    fun (__b_to_js : __b -> Ojs.t) ->
-      fun (__c_to_js : __c -> Ojs.t) ->
-        fun (__d_to_js : __d -> Ojs.t) ->
-          fun (__e_to_js : __e -> Ojs.t) ->
-            fun (__f_to_js : __f -> Ojs.t) ->
-              fun (__g_to_js : __g -> Ojs.t) ->
-                fun (__h_to_js : __h -> Ojs.t) ->
-                  fun
-                    (x211 :
-                      ((__b, __c, __d, __e, __f, __g, __h) union7, __a) or_)
-                    ->
-                    or__to_js
-                      (fun
-                         (x212 : (__b, __c, __d, __e, __f, __g, __h) union7)
-                         ->
-                         union7_to_js __b_to_js __c_to_js __d_to_js __e_to_js
-                           __f_to_js __g_to_js __h_to_js x212) __a_to_js x211
+type ('t1, 't2) intersection2 = [ `I1 of 't1  | `I2 of 't2 ] Intersection.t
+let rec intersection2_of_js :
+  't1 't2 .
+    (Ojs.t -> 't1) -> (Ojs.t -> 't2) -> Ojs.t -> ('t1, 't2) intersection2
+  = fun _ -> fun _ -> Obj.magic
+and intersection2_to_js :
+  't1 't2 .
+    ('t1 -> Ojs.t) -> ('t2 -> Ojs.t) -> ('t1, 't2) intersection2 -> Ojs.t
+  = fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3) intersection3 =
+  [ `I1 of 't1  | `I2 of 't2  | `I3 of 't3 ] Intersection.t
+let rec intersection3_of_js :
+  't1 't2 't3 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) -> Ojs.t -> ('t1, 't2, 't3) intersection3
+  = fun _ -> fun _ -> fun _ -> Obj.magic
+and intersection3_to_js :
+  't1 't2 't3 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) -> ('t1, 't2, 't3) intersection3 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4) intersection4 =
+  [ `I1 of 't1  | `I2 of 't2  | `I3 of 't3  | `I4 of 't4 ] Intersection.t
+let rec intersection4_of_js :
+  't1 't2 't3 't4 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) -> Ojs.t -> ('t1, 't2, 't3, 't4) intersection4
+  = fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and intersection4_to_js :
+  't1 't2 't3 't4 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) -> ('t1, 't2, 't3, 't4) intersection4 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4, 't5) intersection5 =
+  [ `I1 of 't1  | `I2 of 't2  | `I3 of 't3  | `I4 of 't4  | `I5 of 't5 ]
+    Intersection.t
+let rec intersection5_of_js :
+  't1 't2 't3 't4 't5 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) ->
+            (Ojs.t -> 't5) ->
+              Ojs.t -> ('t1, 't2, 't3, 't4, 't5) intersection5
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and intersection5_to_js :
+  't1 't2 't3 't4 't5 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) ->
+            ('t5 -> Ojs.t) ->
+              ('t1, 't2, 't3, 't4, 't5) intersection5 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4, 't5, 't6) intersection6 =
+  [ `I1 of 't1  | `I2 of 't2  | `I3 of 't3  | `I4 of 't4  | `I5 of 't5 
+  | `I6 of 't6 ] Intersection.t
+let rec intersection6_of_js :
+  't1 't2 't3 't4 't5 't6 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) ->
+            (Ojs.t -> 't5) ->
+              (Ojs.t -> 't6) ->
+                Ojs.t -> ('t1, 't2, 't3, 't4, 't5, 't6) intersection6
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and intersection6_to_js :
+  't1 't2 't3 't4 't5 't6 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) ->
+            ('t5 -> Ojs.t) ->
+              ('t6 -> Ojs.t) ->
+                ('t1, 't2, 't3, 't4, 't5, 't6) intersection6 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4, 't5, 't6, 't7) intersection7 =
+  [ `I1 of 't1  | `I2 of 't2  | `I3 of 't3  | `I4 of 't4  | `I5 of 't5 
+  | `I6 of 't6  | `I7 of 't7 ] Intersection.t
+let rec intersection7_of_js :
+  't1 't2 't3 't4 't5 't6 't7 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) ->
+            (Ojs.t -> 't5) ->
+              (Ojs.t -> 't6) ->
+                (Ojs.t -> 't7) ->
+                  Ojs.t -> ('t1, 't2, 't3, 't4, 't5, 't6, 't7) intersection7
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and intersection7_to_js :
+  't1 't2 't3 't4 't5 't6 't7 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) ->
+            ('t5 -> Ojs.t) ->
+              ('t6 -> Ojs.t) ->
+                ('t7 -> Ojs.t) ->
+                  ('t1, 't2, 't3, 't4, 't5, 't6, 't7) intersection7 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8) intersection8 =
+  [ `I1 of 't1  | `I2 of 't2  | `I3 of 't3  | `I4 of 't4  | `I5 of 't5 
+  | `I6 of 't6  | `I7 of 't7  | `I8 of 't8 ] Intersection.t
+let rec intersection8_of_js :
+  't1 't2 't3 't4 't5 't6 't7 't8 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) ->
+            (Ojs.t -> 't5) ->
+              (Ojs.t -> 't6) ->
+                (Ojs.t -> 't7) ->
+                  (Ojs.t -> 't8) ->
+                    Ojs.t ->
+                      ('t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8) intersection8
+  =
+  fun _ ->
+    fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and intersection8_to_js :
+  't1 't2 't3 't4 't5 't6 't7 't8 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) ->
+            ('t5 -> Ojs.t) ->
+              ('t6 -> Ojs.t) ->
+                ('t7 -> Ojs.t) ->
+                  ('t8 -> Ojs.t) ->
+                    ('t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8) intersection8 ->
+                      Ojs.t
+  =
+  fun _ ->
+    fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
 module Union =
   struct
-    let inject_0 x = Or.inr x
-    let inject_1 x = Or.inl (inject_0 x)
-    let inject_2 x = Or.inl (inject_1 x)
-    let inject_3 x = Or.inl (inject_2 x)
-    let inject_4 x = Or.inl (inject_3 x)
-    let inject_5 x = Or.inl (inject_4 x)
-    let inject_6 x = Or.inl (inject_5 x)
+    type +'cases t = Ojs.t
+    let t_to_js _ x = (x : Ojs.t)
+    let t_of_js _ x = (x : _ t)
+    let inject_1 x = Obj.magic x
+    let inject_2 x = Obj.magic x
+    let inject_3 x = Obj.magic x
+    let inject_4 x = Obj.magic x
+    let inject_5 x = Obj.magic x
+    let inject_6 x = Obj.magic x
+    let inject_7 x = Obj.magic x
+    let inject_8 x = Obj.magic x
+    let inject_1' f x = Obj.magic (f x)
+    let inject_2' f x = Obj.magic (f x)
+    let inject_3' f x = Obj.magic (f x)
+    let inject_4' f x = Obj.magic (f x)
+    let inject_5' f x = Obj.magic (f x)
+    let inject_6' f x = Obj.magic (f x)
+    let inject_7' f x = Obj.magic (f x)
+    let inject_8' f x = Obj.magic (f x)
+    let unsafe_get_1 x = Obj.magic x
+    let unsafe_get_2 x = Obj.magic x
+    let unsafe_get_3 x = Obj.magic x
+    let unsafe_get_4 x = Obj.magic x
+    let unsafe_get_5 x = Obj.magic x
+    let unsafe_get_6 x = Obj.magic x
+    let unsafe_get_7 x = Obj.magic x
+    let unsafe_get_8 x = Obj.magic x
+    let unsafe_get_1' f x = f (x :> Ojs.t)
+    let unsafe_get_2' f x = f (x :> Ojs.t)
+    let unsafe_get_3' f x = f (x :> Ojs.t)
+    let unsafe_get_4' f x = f (x :> Ojs.t)
+    let unsafe_get_5' f x = f (x :> Ojs.t)
+    let unsafe_get_6' f x = f (x :> Ojs.t)
+    let unsafe_get_7' f x = f (x :> Ojs.t)
+    let unsafe_get_8' f x = f (x :> Ojs.t)
   end
-type 'a or_string = [ `String of string  | `Other of 'a ]
-let rec or_string_of_js : 'a . (Ojs.t -> 'a) -> Ojs.t -> 'a or_string =
-  fun a_of_js ->
-    fun x ->
-      match Ojs.type_of x with
-      | "string" -> `String (Ojs.string_of_js x)
-      | _ -> `Other (a_of_js x)
-and or_string_to_js : 'a . ('a -> Ojs.t) -> 'a or_string -> Ojs.t =
-  fun a_to_js ->
-    function | `String x -> Ojs.string_to_js x | `Other x -> a_to_js x
-type 'a or_number = [ `Number of float  | `Other of 'a ]
-let rec or_number_of_js : 'a . (Ojs.t -> 'a) -> Ojs.t -> 'a or_number =
-  fun a_of_js ->
-    fun x ->
-      match Ojs.type_of x with
-      | "number" -> `Number (Ojs.float_of_js x)
-      | _ -> `Other (a_of_js x)
-and or_number_to_js : 'a . ('a -> Ojs.t) -> 'a or_number -> Ojs.t =
-  fun a_to_js ->
-    function | `Number x -> Ojs.float_to_js x | `Other x -> a_to_js x
-type 'a or_boolean = [ `Boolean of bool  | `Other of 'a ]
-let rec or_boolean_of_js : 'a . (Ojs.t -> 'a) -> Ojs.t -> 'a or_boolean =
-  fun a_of_js ->
-    fun x ->
-      match Ojs.type_of x with
-      | "boolean" -> `Boolean (Ojs.bool_of_js x)
-      | _ -> `Other (a_of_js x)
-and or_boolean_to_js : 'a . ('a -> Ojs.t) -> 'a or_boolean -> Ojs.t =
-  fun a_to_js ->
-    function | `Boolean x -> Ojs.bool_to_js x | `Other x -> a_to_js x
-type 'a or_symbol = [ `Symbol of symbol  | `Other of 'a ]
-let rec or_symbol_of_js : 'a . (Ojs.t -> 'a) -> Ojs.t -> 'a or_symbol =
-  fun a_of_js ->
-    fun x ->
-      match Ojs.type_of x with
-      | "symbol" -> `Symbol (symbol_of_js x)
-      | _ -> `Other (a_of_js x)
-and or_symbol_to_js : 'a . ('a -> Ojs.t) -> 'a or_symbol -> Ojs.t =
-  fun a_to_js ->
-    function | `Symbol x -> symbol_to_js x | `Other x -> a_to_js x
-type 'a or_bigint = [ `BigInt of bigint  | `Other of 'a ]
-let rec or_bigint_of_js : 'a . (Ojs.t -> 'a) -> Ojs.t -> 'a or_bigint =
-  fun a_of_js ->
-    fun x ->
-      match Ojs.type_of x with
-      | "bigint" -> `BigInt (bigint_of_js x)
-      | _ -> `Other (a_of_js x)
-and or_bigint_to_js : 'a . ('a -> Ojs.t) -> 'a or_bigint -> Ojs.t =
-  fun a_to_js ->
-    function | `BigInt x -> bigint_to_js x | `Other x -> a_to_js x
-let (is_array : Ojs.t -> bool) =
-  fun (x231 : Ojs.t) ->
-    Ojs.bool_of_js
-      (Ojs.call (Ojs.get_prop_ascii Ojs.global "Array") "isArray" [|x231|])
-type ('a, 't) or_array = [ `Array of 't list  | `Other of 'a ]
-let rec or_array_of_js :
-  'a 't . (Ojs.t -> 'a) -> (Ojs.t -> 't) -> Ojs.t -> ('a, 't) or_array =
-  fun a_of_js ->
-    fun t_of_js ->
-      fun x ->
-        if is_array x
-        then `Array (Ojs.list_of_js t_of_js x)
-        else `Other (a_of_js x)
-and or_array_to_js :
-  'a 't . ('a -> Ojs.t) -> ('t -> Ojs.t) -> ('a, 't) or_array -> Ojs.t =
-  fun a_to_js ->
-    fun t_to_js ->
-      function | `Array x -> Ojs.list_to_js t_to_js x | `Other x -> a_to_js x
-type ('a, 'cases) or_enum = [ `Enum of 'cases  | `Other of 'a ]
-let rec or_enum_of_js :
-  'a 'cases .
-    (Ojs.t -> 'a) -> (Ojs.t -> 'cases) -> Ojs.t -> ('a, 'cases) or_enum
+type ('t1, 't2) union2 = [ `U1 of 't1  | `U2 of 't2 ] Union.t
+let rec union2_of_js :
+  't1 't2 . (Ojs.t -> 't1) -> (Ojs.t -> 't2) -> Ojs.t -> ('t1, 't2) union2 =
+  fun _ -> fun _ -> Obj.magic
+and union2_to_js :
+  't1 't2 . ('t1 -> Ojs.t) -> ('t2 -> Ojs.t) -> ('t1, 't2) union2 -> Ojs.t =
+  fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3) union3 =
+  [ `U1 of 't1  | `U2 of 't2  | `U3 of 't3 ] Union.t
+let rec union3_of_js :
+  't1 't2 't3 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) -> (Ojs.t -> 't3) -> Ojs.t -> ('t1, 't2, 't3) union3
+  = fun _ -> fun _ -> fun _ -> Obj.magic
+and union3_to_js :
+  't1 't2 't3 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) -> ('t3 -> Ojs.t) -> ('t1, 't2, 't3) union3 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4) union4 =
+  [ `U1 of 't1  | `U2 of 't2  | `U3 of 't3  | `U4 of 't4 ] Union.t
+let rec union4_of_js :
+  't1 't2 't3 't4 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) -> Ojs.t -> ('t1, 't2, 't3, 't4) union4
+  = fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and union4_to_js :
+  't1 't2 't3 't4 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) -> ('t1, 't2, 't3, 't4) union4 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4, 't5) union5 =
+  [ `U1 of 't1  | `U2 of 't2  | `U3 of 't3  | `U4 of 't4  | `U5 of 't5 ]
+    Union.t
+let rec union5_of_js :
+  't1 't2 't3 't4 't5 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) ->
+            (Ojs.t -> 't5) -> Ojs.t -> ('t1, 't2, 't3, 't4, 't5) union5
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and union5_to_js :
+  't1 't2 't3 't4 't5 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) ->
+            ('t5 -> Ojs.t) -> ('t1, 't2, 't3, 't4, 't5) union5 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4, 't5, 't6) union6 =
+  [ `U1 of 't1  | `U2 of 't2  | `U3 of 't3  | `U4 of 't4  | `U5 of 't5 
+  | `U6 of 't6 ] Union.t
+let rec union6_of_js :
+  't1 't2 't3 't4 't5 't6 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) ->
+            (Ojs.t -> 't5) ->
+              (Ojs.t -> 't6) ->
+                Ojs.t -> ('t1, 't2, 't3, 't4, 't5, 't6) union6
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and union6_to_js :
+  't1 't2 't3 't4 't5 't6 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) ->
+            ('t5 -> Ojs.t) ->
+              ('t6 -> Ojs.t) ->
+                ('t1, 't2, 't3, 't4, 't5, 't6) union6 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4, 't5, 't6, 't7) union7 =
+  [ `U1 of 't1  | `U2 of 't2  | `U3 of 't3  | `U4 of 't4  | `U5 of 't5 
+  | `U6 of 't6  | `U7 of 't7 ] Union.t
+let rec union7_of_js :
+  't1 't2 't3 't4 't5 't6 't7 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) ->
+            (Ojs.t -> 't5) ->
+              (Ojs.t -> 't6) ->
+                (Ojs.t -> 't7) ->
+                  Ojs.t -> ('t1, 't2, 't3, 't4, 't5, 't6, 't7) union7
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and union7_to_js :
+  't1 't2 't3 't4 't5 't6 't7 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) ->
+            ('t5 -> Ojs.t) ->
+              ('t6 -> Ojs.t) ->
+                ('t7 -> Ojs.t) ->
+                  ('t1, 't2, 't3, 't4, 't5, 't6, 't7) union7 -> Ojs.t
+  = fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+type ('t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8) union8 =
+  [ `U1 of 't1  | `U2 of 't2  | `U3 of 't3  | `U4 of 't4  | `U5 of 't5 
+  | `U6 of 't6  | `U7 of 't7  | `U8 of 't8 ] Union.t
+let rec union8_of_js :
+  't1 't2 't3 't4 't5 't6 't7 't8 .
+    (Ojs.t -> 't1) ->
+      (Ojs.t -> 't2) ->
+        (Ojs.t -> 't3) ->
+          (Ojs.t -> 't4) ->
+            (Ojs.t -> 't5) ->
+              (Ojs.t -> 't6) ->
+                (Ojs.t -> 't7) ->
+                  (Ojs.t -> 't8) ->
+                    Ojs.t -> ('t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8) union8
   =
-  fun a_of_js ->
-    fun cases_of_js ->
-      fun x -> try `Enum (cases_of_js x) with | _ -> `Other (a_of_js x)
-and or_enum_to_js :
-  'a 'cases .
-    ('a -> Ojs.t) -> ('cases -> Ojs.t) -> ('a, 'cases) or_enum -> Ojs.t
+  fun _ ->
+    fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+and union8_to_js :
+  't1 't2 't3 't4 't5 't6 't7 't8 .
+    ('t1 -> Ojs.t) ->
+      ('t2 -> Ojs.t) ->
+        ('t3 -> Ojs.t) ->
+          ('t4 -> Ojs.t) ->
+            ('t5 -> Ojs.t) ->
+              ('t6 -> Ojs.t) ->
+                ('t7 -> Ojs.t) ->
+                  ('t8 -> Ojs.t) ->
+                    ('t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8) union8 -> Ojs.t
   =
-  fun a_to_js ->
-    fun cases_to_js ->
-      function | `Enum cases -> cases_to_js cases | `Other x -> a_to_js x
+  fun _ ->
+    fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> fun _ -> Obj.magic
+module Primitive =
+  struct
+    type +'cases t = Ojs.t
+    let t_to_js _ x = (x : Ojs.t)
+    let t_of_js _ x = (x : _ t)
+    type 'other cases =
+      [ `String of string  | `Number of float  | `Boolean of bool 
+      | `Symbol of symbol  | `BigInt of bigint  | `Null  | `Undefined 
+      | `Other of 'other ]
+    let inject' other_to_js (c : [< 'other cases] as 'u) =
+      match c with
+      | `String s -> Obj.magic (Ojs.string_to_js s)
+      | `Number f -> Obj.magic (Ojs.float_to_js f)
+      | `Boolean b -> Obj.magic (Ojs.bool_to_js b)
+      | `Symbol s -> Obj.magic (symbol_to_js s)
+      | `BigInt i -> Obj.magic (bigint_to_js i)
+      | `Null -> Obj.magic Ojs.null
+      | `Undefined -> Obj.magic (Ojs.unit_to_js ())
+      | `Other o -> Obj.magic (other_to_js o)
+    let inject c = inject' Obj.magic c
+    let classify' other_of_js (u : ([< 'other cases] as 'u) t) =
+      match Ojs.type_of u with
+      | "string" -> Obj.magic (`String (Ojs.string_of_js u))
+      | "number" -> Obj.magic (`Number (Ojs.float_of_js u))
+      | "boolean" -> Obj.magic (`Boolean (Ojs.bool_of_js u))
+      | "symbol" -> Obj.magic (`Symbol (symbol_of_js u))
+      | "bigint" -> Obj.magic (`BigInt (bigint_of_js u))
+      | "undefined" -> Obj.magic `Undefined
+      | _ ->
+          if Ojs.is_null u
+          then Obj.magic `Null
+          else Obj.magic (`Other (other_of_js u))
+    let classify c = classify' Obj.magic c
+  end

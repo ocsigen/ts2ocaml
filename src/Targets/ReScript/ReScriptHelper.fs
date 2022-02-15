@@ -16,8 +16,102 @@ let comment text =
     between "/*" "*/" inner
 let commentStr text = tprintf "/* %s */" text
 
+module Attr =
+  let as_ value = between "@as(" ")" value
+
+  module External =
+    /// https://rescript-lang.org/docs/manual/latest/import-from-export-to-js#import-from-javascript
+    let module_ nameOpt =
+      match nameOpt with
+      | Some name -> tprintf "@module(\"%s\")" name
+      | None -> str "@module"
+
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-global-js-values#global-modules
+    let val_ = str "@val"
+
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#object-method
+    let send = str "@send"
+
+    let scope = function
+      | [] -> failwith "empty scope"
+      | [s] -> tprintf "@scope(\"%s\")" s
+      | ss ->
+        ss |> List.map (tprintf "\"%s\"")
+          |> concat (str ", ") |> between "@scope((" "))"
+
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-object#bind-to-a-js-object-thats-a-class
+    let new_ = str "@new"
+
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-object#bind-using-special-getter-and-setter-attributes
+    let get_ = str "@get"
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-object#bind-using-special-getter-and-setter-attributes
+    let set_ = str "@set"
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-object#bind-using-special-getter-and-setter-attributes
+    let get_index = str "@get_index"
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-object#bind-using-special-getter-and-setter-attributes
+    let set_index = str "@set_index"
+
+  module ExternalModifier =
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#variadic-function-arguments
+    let variadic = str "@variadic"
+
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#constrain-arguments-better
+    let return_nullable = str "@return(nullable)"
+
+  module Doc =
+    /// https://rescript-lang.org/docs/manual/latest/attribute#usage
+    let deprecated = function
+      | None -> str "@deprecated"
+      | Some msg -> tprintf "@deprecated(\"%s\")" (String.escape msg)
+
+    let floating msg =
+      tprintf "@@ocaml.text(\"%s\")" (String.escape msg)
+
+    let doc msg =
+      tprintf "@ocaml.doc(\"%s\")" (String.escape msg)
+
+  module Arrow =
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#extra-solution
+    let uncurry = str "@uncurry"
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#modeling-this-based-callbacks
+    let this = str "@this"
+
+  module PolyVariant =
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#constrain-arguments-better
+    let int = str "@int"
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#constrain-arguments-better
+    let string = str "@string"
+    /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#trick-2-polymorphic-variant--unwrap
+    let unwrap = str "@unwrap"
+
+  module TypeDef =
+    /// https://rescript-lang.org/docs/manual/latest/unboxed
+    let unboxed = str "@unboxed"
+
 [<RequireQualifiedAccess>]
 module Type =
+  /// non-primitive types defined in the standard library
+  let predefinedTypes =
+    let typedArray name = name, sprintf "Js.TypedArray2.%s.t" name
+    Map.ofList [
+      "RegExp", "Js.Re.t"
+      "Date", "Js.Date.t"
+      "Promise", "Js.Promise.t" (* arity 1 *)
+      "Array", "Js.Array.t" (* arity 1*)
+      "ArrayLike", "Js.TypedArray2.array_like" (* arity 1 *)
+      "ArrayBuffer", "Js.TypedArray2.array_buffer"
+      typedArray "DataView"
+      typedArray "Int8Array"
+      typedArray "Uint8Array"
+      typedArray "Uint8ClampedArray"
+      typedArray "Int16Array"
+      typedArray "Uint16Array"
+      typedArray "Int32Array"
+      typedArray "Uint32Array"
+      typedArray "Float32Array"
+      typedArray "Float64Array"
+    ]
+
   // basic type expressions
   let var s = tprintf "'%s" s
 
@@ -40,7 +134,7 @@ module Type =
     let lhs =
       match args with
       | [] -> failwith "0-ary function"
-      | xs -> concat (str ", ") xs |> between "(." ")"
+      | xs -> concat (str ", ") xs |> between "(. " ")"
     lhs +@ " => " + ret
 
   let app t args =
@@ -97,3 +191,29 @@ module Type =
     | x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: rest ->
       app (str "intersection8") [x1; x2; x3; x4; x5; x6; x7; intersection (x8 :: rest)]
     | xs -> app (tprintf "intersection%i" (List.length xs)) xs
+
+[<RequireQualifiedAccess>]
+module Term =
+  let tuple = function
+    | [] -> failwith "empty tuple"
+    | _ :: [] -> failwith "1-ary tuple"
+    | xs -> concat (str ", ") xs |> between "(" ")"
+
+  let appCurried t us = t + (us |> concat (str ", ") |> between "(" ")")
+  let appUncurried t us = t + (us |> concat (str ", ") |> between "(. " ")")
+
+  let literal (l: Literal) =
+    match l with
+    | LBool true -> str "true" | LBool false -> str "false"
+    | LInt i -> string i |> str
+    | LFloat f -> tprintf "%f" f
+    | LString s -> tprintf "\"%s\"" (String.escape s)
+
+  let raw js = between "%raw(`" "`)" js
+
+let let_ name typ body =
+  tprintf "let %s: " name + typ +@ " = " + body
+
+let external (attrs: text list) name (typ: text) target =
+  concat (str " ") attrs
+  + tprintf " external %s: " name + typ + tprintf " = \"%s\"" target

@@ -18,33 +18,7 @@ let commentStr text = tprintf "/* %s */" text
 
 [<RequireQualifiedAccess>]
 module Type =
-  // primitive types
-  let void_ = str "unit"
-  let string  = str "string"
-  let boolean = str "bool"
-  let number (opt: Options) =
-    if opt.numberAsInt then str "int"
-    else str "float"
-  let array = str "array"
-  let readonlyArray = str "array"
-
-  // JS types
-  // ES5
-  let object = str "Js.Types.obj_val"
-  let function_ = str "Js.Types.function_val"
-  let symbol = str "Js.Types.symbol"
-  let regexp = str "Js.Re.t"
-  // ES2020
-  let bigint = str "bigint"
-
-  // TS types
-  let never = str "never"
-  let any = str "any"
-  let unknown = str "unknown"
-  let null_ = str "Js.null"
-  let undefined = str "Js.undefined"
-  let null_undefined = str "Js.nullable"
-
+  // basic type expressions
   let var s = tprintf "'%s" s
 
   let tuple = function
@@ -77,24 +51,49 @@ module Type =
     if List.isEmpty args then t
     else app t args
 
-  let and_ a b = app (str "and_") [a; b]
-  let or_  a b = app (str "or_")  [a; b]
+  // primitive types
+  let void_ = str "unit"
+  let string  = str "string"
+  let boolean = str "bool"
+  let number (opt: Options) =
+    if opt.numberAsInt then str "int"
+    else str "float"
+  let array = str "array"
+  let readonlyArray = str "array"
 
-  let union types =
-    let l = List.length types
-    if l < 1 then failwith "union type with only zero or one type"
-    else
-      let rec go i = function
-        | h :: t when i > 8 -> or_ (go (i-1) t) h
-        | xs -> app (tprintf "Union.t%i" i) xs
-      go l types
+  // JS types
+  // ES5
+  let object = str "untyped_object"
+  let function_ = str "untyped_function"
+  let symbol = str "symbol"
+  let regexp = str "regexp"
+  // ES2020
+  let bigint = str "bigint"
 
-  let intersection types =
-    let l = List.length types
-    if l < 1 then failwith "union type with only zero or one type"
-    else
-      let rec go i = function
-        | h :: t when i > 8 -> and_ (go (i-1) t) h
-        | xs -> app (tprintf "Intersection.t%i" i) xs
-      go l types
+  // TS types
+  let never = str "never"
+  let any = str "any"
+  let unknown = str "unknown"
+  let null_or t = app (str "null") [t]
+  let undefined_or t = app (str "undefined") [t]
+  let null_or_undefined_or t = app (str "nullable") [t]
+  let null_ = null_or never
+  let undefined = undefined_or never
 
+  // our types
+  let intf tags baseTy = app (str "intf") [tags; baseTy]
+  let prim cases = app (str "prim") [cases]
+
+  let rec union = function
+    | [] -> failwith "union type with zero elements"
+    | x :: [] -> x
+    | x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: rest ->
+      app (str "union8") [x1; x2; x3; x4; x5; x6; x7; union (x8 :: rest)]
+    | xs -> app (tprintf "union%i" (List.length xs)) xs
+
+  let rec intersection = function
+    | [] -> failwith "intersection type with zero elements"
+    | x :: [] -> x
+    | x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: rest ->
+      app (str "intersection8") [x1; x2; x3; x4; x5; x6; x7; intersection (x8 :: rest)]
+    | xs -> app (tprintf "intersection%i" (List.length xs)) xs

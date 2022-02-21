@@ -88,6 +88,85 @@ module Attr =
     /// https://rescript-lang.org/docs/manual/latest/unboxed
     let unboxed = str "@unboxed"
 
+module Naming =
+  let removeInvalidChars (s: string) =
+    s.ToCharArray()
+    |> Array.map (fun c -> if Char.isAlphabetOrDigit c || c = '_' then c else '_')
+    |> System.String
+
+  let isValid (s: string) =
+    Char.isAlphabet(s[0])
+    && s.ToCharArray() |> Array.forall(fun c -> Char.isAlphabetOrDigit c || c = '_')
+
+  let keywords =
+    set [
+      "and"; "as"; "assert"; "constraint"; "else"; "exception"; "external"
+      "false"; "for"; "if"; "in"; "include"; "lazy"; "let"; "module"; "mutable"
+      "of"; "open"; "rec"; "switch"; "true"; "try"; "type"; "when"; "while"; "with"
+    ]
+
+  let reservedValueNames =
+    set [
+      "create"; "apply"; "invoke"; "get"; "set"; "castFrom"
+    ] |> Set.union keywords
+
+  let valueName (name: string) =
+    let name = removeInvalidChars name
+    let result =
+      if name = "NaN" then "nan"
+      else if String.forall (fun c -> Char.IsLower c |> not) name then
+        name.ToLowerInvariant()
+      else if Char.IsUpper name.[0] then
+        sprintf "%c%s" (Char.ToLower name.[0]) name.[1..]
+      else name
+    if reservedValueNames |> Set.contains result then result + "_" else result
+
+  let reservedModuleNames =
+    Set.ofList [
+      "Export"; "Default"; "Types"
+    ] |> Set.union keywords
+
+  let moduleNameReserved (name: string) =
+    let name = removeInvalidChars name
+    if Char.IsLower name.[0] then
+      sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
+    else if name.[0] = '_' then
+      "M" + name
+    else name
+
+  let moduleName (name: string) =
+    let result = moduleNameReserved name
+    if reservedModuleNames |> Set.contains result then result + "_" else result
+
+  let constructorName (name: string list) =
+    let s = String.concat "_" name |> removeInvalidChars
+    let result =
+      if Char.IsLower s.[0] then
+        sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]
+      else s
+    if keywords |> Set.contains result then result + "_" else result
+
+  let flattenedTypeName (name: string list) =
+    let s = String.concat "_" name |> removeInvalidChars
+    let result =
+      if Char.IsUpper s.[0] then "_" + s
+      else s
+    if keywords |> Set.contains result then result + "_" else result
+
+  let structured (baseName: string -> string) (name: string list) =
+    let rec prettify = function
+      | [] -> ""
+      | [x] -> baseName x
+      | x :: xs -> moduleName x + "." + prettify xs
+    prettify name
+
+  let createTypeNameOfArity arity maxArityOpt name =
+    match maxArityOpt with
+    | Some maxArity ->
+      if arity = maxArity then name
+      else sprintf "%s%d" name arity
+    | None -> sprintf "%s%d" name arity
+
 [<RequireQualifiedAccess>]
 module Type =
   /// non-primitive types defined in the standard library
@@ -145,6 +224,24 @@ module Type =
     if List.isEmpty args then t
     else app t args
 
+  let polyVariantBody (cases: {| name:Choice<string, int>; value:text option; attr: text option |} list) =
+    let createCase (case: {| name:Choice<string, int>; value:text option; attr: text option |}) =
+      let name =
+        match case.name with
+        | Choice1Of2 str ->
+          if Naming.isValid str then str else sprintf "\"%s\"" (String.escape str)
+        | Choice2Of2 i -> sprintf "%d" i
+      let attr =
+        match case.attr with
+        | None -> empty
+        | Some a -> a +@ " "
+      match case.value with
+      | None -> attr + tprintf "#%s" name
+      | Some v -> attr + tprintf "#%s(" name + v +@ ")"
+    cases |> List.map createCase |> concat (str " | ")
+
+  let polyVariant cases = polyVariantBody cases |> between "[" "]"
+
   // primitive types
   let void_ = str "unit"
   let string  = str "string"
@@ -154,6 +251,7 @@ module Type =
     else str "float"
   let array = str "array"
   let readonlyArray = str "array"
+  let option t = app (str "option") [t]
 
   // JS types
   // ES5
@@ -173,6 +271,9 @@ module Type =
   let null_or_undefined_or t = app (str "nullable") [t]
   let null_ = null_or never
   let undefined = undefined_or never
+  let intrinsic = str "intrinsic"
+  let true_ = str "\\\"true\""
+  let false_ = str "\\\"false\""
 
   // our types
   let intf tags baseTy = app (str "intf") [tags; baseTy]
@@ -191,6 +292,24 @@ module Type =
     | x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: rest ->
       app (str "intersection8") [x1; x2; x3; x4; x5; x6; x7; intersection (x8 :: rest)]
     | xs -> app (tprintf "intersection%i" (List.length xs)) xs
+
+  let newable args retTy =
+    match args with
+    | [] -> app (str "Newable.t0") [retTy]
+    | [x1] -> app (str "Newable.t1") [x1; retTy]
+    | xs -> app (str "Newable.tn") [tuple xs; retTy]
+
+  let variadic args variadic retTy =
+    match args with
+    | [] -> app (str "Variadic.t0") [variadic; retTy]
+    | [x1] -> app (str "Variadic.t1") [x1; variadic; retTy]
+    | xs -> app (str "Variadic.tn") [tuple xs; variadic; retTy]
+
+  let newableVariadic args variadic retTy =
+    match args with
+    | [] -> app (str "NewableVariadic.t0") [variadic; retTy]
+    | [x1] -> app (str "NewableVariadic.t1") [x1; variadic; retTy]
+    | xs -> app (str "NewableVariadic.tn") [tuple xs; variadic; retTy]
 
 [<RequireQualifiedAccess>]
 module Term =

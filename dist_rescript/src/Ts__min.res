@@ -28,6 +28,8 @@ type untyped_function = Js.Types.function_val
 type symbol = Js.Types.symbol
 type regexp = Js.Re.t
 type bigint
+type \"true" = private bool
+type \"false" = private bool
 
 type null<+'a> = Js.null<'a>
 type undefined<+'a> = Js.undefined<'a>
@@ -127,29 +129,98 @@ module Primitive = {
 type prim<+'cases> = Primitive.t<'cases>
 
 module Interop = {
-  let apply0 = (. it: 'Function) => %raw(`it()`)
-  let apply1 = (. it: 'Function, arg0) => %raw(`it(arg0)`)
-  let apply2 = (. it: 'Function, arg0, arg1) => %raw(`it(arg0, arg1)`)
-  let apply3 = (. it: 'Function, arg0, arg1, arg2) => %raw(`it(arg0, arg1, arg2)`)
-  let apply4 = (. it: 'Function, arg0, arg1, arg2, arg3) => %raw(`it(arg0, arg1, arg2, arg3)`)
-  let apply5 = (. it: 'Function, arg0, arg1, arg2, arg3, arg4) => %raw(`it(arg0, arg1, arg2, arg3, arg4)`)
-  let apply6 = (. it: 'Function, arg0, arg1, arg2, arg3, arg4, arg5) => %raw(`it(arg0, arg1, arg2, arg3, arg4, arg5)`)
-  let apply7 = (. it: 'Function, arg0, arg1, arg2, arg3, arg4, arg5, arg6) => %raw(`it(arg0, arg1, arg2, arg3, arg4, arg5, arg6)`)
-  let applyN = (. it: 'Function, args: array<any>) => %raw(`it(...args)`)
+  let apply0 = (it: 'Function) => %raw(`it()`)
+  let apply1 = (it: 'Function, arg0) => %raw(`it(arg0)`)
+  let apply2 = (it: 'Function, arg0, arg1) => %raw(`it(arg0, arg1)`)
+  let apply3 = (it: 'Function, arg0, arg1, arg2) => %raw(`it(arg0, arg1, arg2)`)
+  let apply4 = (it: 'Function, arg0, arg1, arg2, arg3) => %raw(`it(arg0, arg1, arg2, arg3)`)
+  let apply5 = (it: 'Function, arg0, arg1, arg2, arg3, arg4) => %raw(`it(arg0, arg1, arg2, arg3, arg4)`)
+  let apply6 = (it: 'Function, arg0, arg1, arg2, arg3, arg4, arg5) => %raw(`it(arg0, arg1, arg2, arg3, arg4, arg5)`)
+  let apply7 = (it: 'Function, arg0, arg1, arg2, arg3, arg4, arg5, arg6) => %raw(`it(arg0, arg1, arg2, arg3, arg4, arg5, arg6)`)
+  let applyN = (it: 'Function, args: 'args) => %raw(`it(...args)`)
 
-  let applyNewable0 = (. it: 'Newable) => %raw(`new it()`)
-  let applyNewable1 = (. it: 'Newable, arg0) => %raw(`new it(arg0)`)
-  let applyNewable2 = (. it: 'Newable, arg0, arg1) => %raw(`new it(arg0, arg1)`)
-  let applyNewable3 = (. it: 'Newable, arg0, arg1, arg2) => %raw(`new it(arg0, arg1, arg2)`)
-  let applyNewable4 = (. it: 'Newable, arg0, arg1, arg2, arg3) => %raw(`new it(arg0, arg1, arg2, arg3)`)
-  let applyNewable5 = (. it: 'Newable, arg0, arg1, arg2, arg3, arg4) => %raw(`new it(arg0, arg1, arg2, arg3, arg4)`)
-  let applyNewable6 = (. it: 'Newable, arg0, arg1, arg2, arg3, arg4, arg5) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5)`)
-  let applyNewable7 = (. it: 'Newable, arg0, arg1, arg2, arg3, arg4, arg5, arg6) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5, arg6)`)
-  let applyNewableN = (. it: 'Newable, args: array<any>) => %raw(`new it(...args)`)
+  let applyNewable0 = (it: 'Newable) => %raw(`new it()`)
+  let applyNewable1 = (it: 'Newable, arg0) => %raw(`new it(arg0)`)
+  let applyNewable2 = (it: 'Newable, arg0, arg1) => %raw(`new it(arg0, arg1)`)
+  let applyNewable3 = (it: 'Newable, arg0, arg1, arg2) => %raw(`new it(arg0, arg1, arg2)`)
+  let applyNewable4 = (it: 'Newable, arg0, arg1, arg2, arg3) => %raw(`new it(arg0, arg1, arg2, arg3)`)
+  let applyNewable5 = (it: 'Newable, arg0, arg1, arg2, arg3, arg4) => %raw(`new it(arg0, arg1, arg2, arg3, arg4)`)
+  let applyNewable6 = (it: 'Newable, arg0, arg1, arg2, arg3, arg4, arg5) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5)`)
+  let applyNewable7 = (it: 'Newable, arg0, arg1, arg2, arg3, arg4, arg5, arg6) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5, arg6)`)
+  let applyNewableN = (it: 'Newable, args: 'args) => %raw(`new it(...args)`)
 
   module PolyVariant = {
-    let name  = (. it: 'PolyVariant) : 'name => %raw(`it.NAME`)
-    let value = (. it: 'PolyVariant) : 'value => %raw(`it.VAL`)
-    let make  = (. name: 'name, value: 'value) : 'PolyVariant => %raw(`{ NAME: name, VAL: value }`)
+    let name  = (it: 'PolyVariant) : 'name => %raw(`it.NAME`)
+    let value = (it: 'PolyVariant) : 'value => %raw(`it.VAL`)
+    let make  = (name: 'name, value: 'value) : 'PolyVariant => %raw(`{ NAME: name, VAL: value }`)
   }
+}
+
+module Newable = {
+  type t0<'t>
+  type t1<'arg1, 't>
+
+  @ocaml.doc(`\`'args\` must be a tuple type.`)
+  type tn<'args, 't>
+
+  let apply0 = (f0: t0<'t>) : 't => %raw(`new f0()`)
+  let apply1 = (f1: t1<'arg1, 't>, arg1: 'arg1) : 't => %raw(`new f1(arg1)`)
+  let applyN = (fn: tn<'args, 't>, args: 'args) : 't => %raw(`new fn(...args)`)
+}
+
+module Variadic = {
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  type t0<'variadic, 't>
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  type t1<'arg1, 'variadic, 't>
+
+  @ocaml.doc(`\`'args\` must be a tuple type. \`'variadic\` is expected to be array or some other iterable type.`)
+  type tn<'args, 'variadic, 't>
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  let create0 : ('variadic => 't) => t0<'variadic, 't> = f => %raw(`(function(...args) { return f(args); })`)
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  let create1 : (('arg1, 'variadic) => 't) => t1<'arg1, 'variadic, 't> = f => %raw(`(function(arg1, ...args) { return f(arg1, args); })`)
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  let create2 : (('arg1, 'arg2, 'variadic) => 't) => tn<('arg1, 'arg2), 'variadic, 't> = f => %raw(`(function(arg1, arg2, ...args) { return f(arg1, arg2, args); })`)
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  let create3 : (('arg1, 'arg2, 'arg3, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, ...args) { return f(arg1, arg2, arg3, args); })`)
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  let create4 : (('arg1, 'arg2, 'arg3, 'arg4, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, ...args) { return f(arg1, arg2, arg3, arg4, args); })`)
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  let create5 : (('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4, 'arg5), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, arg5, ...args) { return f(arg1, arg2, arg3, arg4, arg5, args); })`)
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  let create6 : (('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, arg5, arg6, ...args) { return f(arg1, arg2, arg3, arg4, arg5, arg6, args); })`)
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  let create7 : (('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6, 'arg7, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6, 'arg7), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, ...args) { return f(arg1, arg2, arg3, arg4, arg5, arg6, arg7, args); })`)
+
+  @ocaml.doc(`\`'args\` must be a tuple type. \`'variadic\` is expected to be array or some other iterable type.`)
+  let createN : (('args, 'variadic) => 't, int) => tn<'args, 'variadic, 't> = (f, n) => %raw(`(function(...args) { return f(args.slice(0, n), args.slice(n)); })`)
+
+  let apply0 = (f0: t0<'variadic, 't>, variadic: 'variadic) : 't => %raw(`f0(...variadic)`)
+  let apply1 = (f1: t1<'arg1, 'variadic, 't>, arg1: 'arg1, variadic: 'variadic) : 't => %raw(`f1(arg1, ...variadic)`)
+  let applyN = (fn: tn<'args, 'variadic, 't>, args: 'args, variadic: 'variadic) : 't => %raw(`fn(...args, ...variadic)`)
+}
+
+module NewableVariadic = {
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  type t0<'variadic, 't>
+
+  @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
+  type t1<'arg1, 'variadic, 't>
+
+  @ocaml.doc(`\`'args\` must be a tuple type. \`'variadic\` is expected to be array or some other iterable type.`)
+  type tn<'args, 'variadic, 't>
+
+  let apply0 = (f0: t0<'variadic, 't>, variadic: 'variadic) : 't => %raw(`new f0(...variadic)`)
+  let apply1 = (f1: t1<'arg1, 'variadic, 't>, arg1: 'arg1, variadic: 'variadic) : 't => %raw(`new f1(arg1, ...variadic)`)
+  let applyN = (fn: tn<'args, 'variadic, 't>, args: 'args, variadic: 'variadic) : 't => %raw(`new fn(...args, ...variadic)`)
 }

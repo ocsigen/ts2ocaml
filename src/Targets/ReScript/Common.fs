@@ -8,3 +8,4 @@ type Options =
   // code generator options
   abstract numberAsInt: bool with get, set
   abstract safeArity: FeatureFlag with get, set
+  abstract readableNames: bool with get, set

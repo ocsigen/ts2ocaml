@@ -3,6 +3,4 @@
   (public_name ts2ocaml-jsoo-stdlib)
   (libraries ojs)
   (wrapped false)
-  (modes byte)
-  (js_of_ocaml
-    (flags --pretty --enable deadcode --enable strict --enable inline)))
+  (modes byte))

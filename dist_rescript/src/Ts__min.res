@@ -30,9 +30,12 @@ type regexp = Js.Re.t
 type bigint
 type \"true" = private bool
 type \"false" = private bool
+type intrinsic = private string
 
 type null<+'a> = Js.null<'a>
+type null' = null<never>
 type undefined<+'a> = Js.undefined<'a>
+type undefined' = undefined<never>
 type nullable<+'a> = Js.nullable<'a>
 
 module Union = {

@@ -269,9 +269,9 @@ module Type =
   let null_or t = app (str "null") [t]
   let undefined_or t = app (str "undefined") [t]
   let null_or_undefined_or t = app (str "nullable") [t]
-  let null_ = null_or never
-  let undefined = undefined_or never
-  let intrinsic = str "intrinsic"
+  let null_ = str "null'"
+  let undefined = str "undefined'"
+  let intrinsic = app (str "intrinsic") [object]
   let true_ = str "\\\"true\""
   let false_ = str "\\\"false\""
 
@@ -321,6 +321,23 @@ module Term =
   let appCurried t us = t + (us |> concat (str ", ") |> between "(" ")")
   let appUncurried t us = t + (us |> concat (str ", ") |> between "(. " ")")
 
+  /// `(arg1, arg2) => ret`
+  let curriedArrow args ret =
+    let lhs =
+      match args with
+      | [] -> failwith "0-ary function"
+      | [x] -> x
+      | xs -> concat (str ", ") xs |> between "(" ")"
+    lhs +@ " => " + ret
+
+  /// `(. arg1, arg2) => ret`
+  let uncurriedArrow args ret =
+    let lhs =
+      match args with
+      | [] -> failwith "0-ary function"
+      | xs -> concat (str ", ") xs |> between "(. " ")"
+    lhs +@ " => " + ret
+
   let literal (l: Literal) =
     match l with
     | LBool true -> str "true" | LBool false -> str "false"
@@ -328,11 +345,18 @@ module Term =
     | LFloat f -> tprintf "%f" f
     | LString s -> tprintf "\"%s\"" (String.escape s)
 
-  let raw js = between "%raw(`" "`)" js
+  let raw js = js |> String.escapeWith ["`"] |> str |> between "%raw(`" "`)"
 
-let let_ name typ body =
-  tprintf "let %s: " name + typ +@ " = " + body
+[<RequireQualifiedAccess>]
+module Statement =
+  let let_ (attrs: text list) name typ value =
+    concat (str " ") attrs
+    + tprintf "let %s: " name + typ +@ " = " + value
 
-let external (attrs: text list) name (typ: text) target =
-  concat (str " ") attrs
-  + tprintf " external %s: " name + typ + tprintf " = \"%s\"" target
+  let val_ (attrs: text list) name typ =
+    concat (str " ") attrs
+    + tprintf "let %s: " name + typ
+
+  let external (attrs: text list) name (typ: text) target =
+    concat (str " ") attrs
+    + tprintf " external %s: " name + typ + tprintf " = \"%s\"" target

@@ -12,14 +12,16 @@ open Targets.ReScript.ReScriptHelper
 
 type ScriptTarget = TypeScript.Ts.ScriptTarget
 
-type State = {
+type State = {|
   fileNames: string list
   info: Result<PackageInfo, string option>
-}
+  referencesCache: MutableMap<string list, WeakTrie<string>>
+|}
 module State =
   let create fileNames info : State =
-    { fileNames = fileNames
-      info = info }
+    {| fileNames = fileNames
+       info = info
+       referencesCache = new MutableMap<_, _>() |}
 
 type Context = TyperContext<Options, State>
 module Context = TyperContext
@@ -78,7 +80,7 @@ module EmitTypeFlags =
           | External.Root (_, n) -> External.Return n
           | _ -> External.None }
 
-let classifyExternalFunction (f: FuncType<Type>) =
+let classifyExternalFunction flags (f: FuncType<Type>) =
   let isVariadic =
     if not f.isVariadic then false
     else if List.isEmpty f.args then false
@@ -95,7 +97,7 @@ let classifyExternalFunction (f: FuncType<Type>) =
       let u = ResolvedUnion.checkNullOrUndefined u
       u.hasNull || u.hasUndefined
     | _ -> false
-  let flags = { EmitTypeFlags.defaultValue with external = External.Root(isVariadic, isNullable) }
+  let flags = { flags with external = External.Root(isVariadic, isNullable) }
   {| flags = flags; isVariadic = isVariadic; isNullable = isNullable |}
 
 type TypeEmitter = Context -> Type -> text
@@ -325,3 +327,283 @@ let setTyperOptions (ctx: IContext<Options>) =
   ctx.options.replaceAliasToFunction <- false
   ctx.options.replaceNewableFunction <- false
   ctx.options.replaceRankNFunction <- true
+
+/// `[ #A | #B | ... ]`
+let rec emitLabels (ctx: Context) labels =
+  emitLabelsBody ctx labels |> between "[" "]"
+
+/// `#A | #B | ...`
+and emitLabelsBody (ctx: Context) labels =
+  let inline tag t =
+    if ctx.options.inheritWithTags.HasConsume then t
+    else empty
+  let rec go firstCaseEmitted acc = function
+    | [] -> acc
+    | Case c :: rest ->
+      if firstCaseEmitted then
+        go firstCaseEmitted (acc + str " | " + c) rest
+      else
+        go true (acc + c) rest
+    | TagType t :: rest ->
+      if firstCaseEmitted then
+        go firstCaseEmitted (acc + tag (" | " @+ t)) rest
+      else
+        go ctx.options.inheritWithTags.HasConsume (acc + tag t) rest
+  go false empty labels
+
+and getLabelsFromInheritingTypes (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (inheritingTypes: Set<InheritingType>) =
+  let emitType_ = emitTypeImpl flags overrideFunc
+  let emitCase name args =
+    match args with
+    | [] -> str (Naming.constructorName name)
+    | [arg] -> tprintf "%s(" (Naming.constructorName name) + arg +@ ")"
+    | _ -> Naming.constructorName name @+ Type.tuple args
+  let emitTagType name args =
+    let arity = List.length args
+    let tagTypeName =
+      if ctx.options.safeArity.HasConsume then
+        Naming.createTypeNameOfArity arity None "tags"
+      else
+        "tags"
+    let ty = Naming.structured Naming.moduleName name + "." + tagTypeName
+    let args = args |> List.map (emitType_ ctx)
+    Type.appOpt (str ty) args
+  [
+    for e in inheritingTypes do
+      match e with
+      | InheritingType.KnownIdent i ->
+        yield str "#" + emitCase i.fullName.name (i.tyargs |> List.map (emitType_ ctx)) |> Case
+      | InheritingType.UnknownIdent i ->
+        yield emitTagType i.name i.tyargs |> TagType
+      | InheritingType.Prim (p, ts) ->
+        match p.AsJSClassName with
+        | Some name ->
+          yield str "#" + emitCase [name] (ts |> List.map (emitType_ ctx)) |> Case
+        | None -> ()
+      | InheritingType.Other _ -> ()
+  ]
+
+/// `Choice2Of2` when it is an alias to a non-JSable prim type.
+and getLabelsOfFullName flags overrideFunc (ctx: Context) (fullName: FullName) (typeParams: TypeParam list) =
+  getAllInheritancesAndSelfFromName ctx fullName |> getLabelsFromInheritingTypes flags overrideFunc ctx |> List.sort
+
+and getLabelOfFullName flags overrideFunc (ctx: Context) (fullName: FullName) (typeParams: TypeParam list) =
+  let inheritingType = InheritingType.KnownIdent {| fullName = fullName; tyargs = typeParams |> List.map (fun tp -> TypeVar tp.name) |}
+  getLabelsFromInheritingTypes flags overrideFunc ctx (Set.singleton inheritingType) |> Choice1Of2
+
+type Scope = {
+  moduleName: string option
+  /// reversed list of scope
+  scopeRev: string list
+}
+
+type [<RequireQualifiedAccess>] Binding =
+  | Let of {| name: string; ty: text; body: text; attrs: text list; comments: text list |}
+  | Ext of {| name: string; ty: text; target: string; attrs: text list; comments: text list |}
+
+let let_ (attrs: text list) comments name ty body =
+  Binding.Let {| name = name; ty = ty; body = body; attrs = attrs; comments = comments |}
+
+let ext (attrs: text list) comments name ty target =
+  Binding.Ext {| name = name; ty = ty; target = target; attrs = attrs; comments = comments |}
+
+type StructuredTextItem =
+  | ImportText of text   // import texts should be at the top of the module
+  | TypeDefText of text  // and type definitions should come next
+  | ScopeIndependentText of text // floating comments, etc
+  | Binding of (OverloadRenamer -> Scope -> Binding)
+
+and [<RequireQualifiedAccess>] ExportItem =
+  | Export of {| comments: Comment list; clauses: (ExportClause * Set<Kind>) list; loc: Location; origText: string |}
+  | ReExport of {| comments: Comment list; clauses: (ReExportClause * Set<Kind>) list; loc: Location; specifier: string; origText: string |}
+  | DefaultUnnamedClass of StructuredTextNode
+
+and StructuredTextNode = {|
+  /// By default, key is used as a scope. `Some scope` to override it.
+  scope: string option
+  items: StructuredTextItem list
+  docCommentLines: text list
+  exports: ExportItem list
+  knownTypes: Set<KnownType>
+  anonymousInterfaces: Set<AnonymousInterface>
+|}
+
+and StructuredText = Trie<string, StructuredTextNode>
+
+module StructuredTextNode =
+  let empty : StructuredTextNode =
+    {| scope = None; items = []; docCommentLines = []; exports = []; knownTypes = Set.empty; anonymousInterfaces = Set.empty |}
+  let union (a: StructuredTextNode) (b: StructuredTextNode) : StructuredTextNode =
+    let mergeScope s1 s2 =
+      match s1, s2 with
+      | Some s1, Some s2 -> failwithf "impossible_union_mergeScope(%s, %s)" s1 s2
+      | Some s, None | None, Some s -> Some s
+      | None, None -> None
+    {| scope = mergeScope a.scope b.scope
+       items = List.append a.items b.items
+       docCommentLines = List.append a.docCommentLines b.docCommentLines
+       exports = List.append a.exports b.exports
+       knownTypes = Set.union a.knownTypes b.knownTypes
+       anonymousInterfaces = Set.union a.anonymousInterfaces b.anonymousInterfaces |}
+
+module StructuredText =
+  let pp (x: StructuredText) =
+    let rec go (x: StructuredText) =
+      concat newline [
+        for k, v in x.children |> Map.toArray do
+          tprintf "- %s" k
+          indent (go v)
+      ]
+    go x
+
+  let rec getReferences (ctx: Context) (x: StructuredText) : WeakTrie<string> =
+    match ctx.state.referencesCache.TryGetValue(ctx.currentNamespace) with
+    | true, ts -> ts
+    | false, _ ->
+      let fn = ctx.currentNamespace
+      let trie =
+        x.value
+        |> Option.map (fun v ->
+          v.knownTypes
+          |> Set.fold (fun state -> function
+            | KnownType.Ident fn when fn.source = ctx.currentSourceFile -> state |> WeakTrie.add fn.name
+            | KnownType.AnonymousInterface (_, i) ->
+              state |> WeakTrie.add (i.namespace_ @ [anonymousInterfaceModuleName ctx i])
+            | _ -> state
+          ) WeakTrie.empty)
+        |> Option.defaultValue WeakTrie.empty
+      let trie =
+        x.children
+        |> Map.fold (fun state k child ->
+          WeakTrie.union state (getReferences (ctx |> Context.ofChildNamespace k) child)) trie
+        |> WeakTrie.remove fn
+      ctx.state.referencesCache.[fn] <- trie
+      trie
+
+  let getDependenciesOfChildren (ctx: Context) (x: StructuredText) : (string * string) list =
+    let parent = ctx.currentNamespace
+    x.children
+    |> Map.fold (fun state k child ->
+      let refs =
+        getReferences (ctx |> Context.ofChildNamespace k) child
+        |> WeakTrie.getSubTrie parent
+        |> Option.defaultValue WeakTrie.empty
+        |> WeakTrie.ofDepth 1
+        |> WeakTrie.toList
+        |> List.map (function
+          | [x] -> k, x
+          | xs -> failwithf "impossible_StructuredText_getDependencyGraphOfChildren_refs(%s): %A" (ctx |> Context.getFullNameString [k]) xs)
+      refs :: state) []
+    |> List.rev
+    |> List.concat
+
+  let calculateSCCOfChildren (ctx: Context) (x: StructuredText) : string list list =
+    let g =
+      let deps = getDependenciesOfChildren ctx x
+      Graph.ofEdges deps
+    Graph.stronglyConnectedComponents g (x.children |> Map.toList |> List.map fst)
+
+let removeLabels (xs: Choice<FieldLike, Type> list) =
+    xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
+
+let inline func ft = Func (ft, [], ft.loc)
+
+let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass: bool) (ma: MemberAttribute) m =
+  let flags = { flags with simplifyContravariantUnion = true }
+  let emitType_ = emitTypeImpl flags overrideFunc
+
+  let comments =
+    // TODO
+    []
+
+  let scopeToAttr (s: Scope) attr =
+    match s.scopeRev, s.moduleName with
+    | [], None -> attr
+    | sr, None -> Attr.External.scope (List.rev sr) :: attr
+    | sr, Some m ->
+      Attr.External.module_ (Some m) :: Attr.External.scope (List.rev sr) :: attr
+
+  let extFunc (ft: FuncType<Type>) =
+    let c = classifyExternalFunction flags ft
+    let ty = emitTypeImpl c.flags overrideFunc ctx (func ft)
+    let attr = [
+      if c.isNullable then yield Attr.ExternalModifier.return_nullable
+      if c.isVariadic then yield Attr.ExternalModifier.variadic
+    ]
+    ty, attr
+  let inline func ft = func ft |> emitType_ ctx
+
+  let inline binding (f: (string -> string) -> Scope -> Binding) =
+    [Binding (fun renamer scope -> f (renamer.Rename "value") scope)]
+
+  let generateCallable isNewable (args: Choice<FieldLike, Type> list) =
+    let used =
+      args |> List.choose (function Choice1Of2 f -> Some f.name | Choice2Of2 _ -> None)
+           |> Set.ofList
+    let rec rename s =
+      if used |> Set.contains s |> not then s
+      else rename (s + "_")
+    let self = rename "t"
+    let args =
+      let rec createArgs index isOptional acc = function
+        | [] ->
+          if isOptional then
+            let name = rename "unit"
+            List.rev ({| ml = str name; js = name; used = false |} :: acc)
+          else
+            List.rev acc
+        | Choice2Of2 _ :: rest ->
+          let name = sprintf "arg%d" index |> rename
+          createArgs (index+1) false ({| ml = str name; js = name; used = true |} :: acc) rest
+        | Choice1Of2 { name = name; isOptional = isOptional } :: rest ->
+          let ml = if isOptional then sprintf "~%s=?" name else "~" + name
+          let js = name |> String.replace "'" "$p"
+          createArgs (index+1) isOptional ({| ml = str ml; js = js; used = true |} :: acc) rest
+      createArgs 1 false [] args
+    let body =
+      let args =
+        args |> List.filter (fun arg -> arg.used)
+             |> List.map (fun arg -> arg.js)
+             |> String.concat ", "
+      let body = sprintf "%s(%s)" self args
+      if isNewable then "new " + body else body
+    let args = str self :: (args |> List.map (fun arg -> arg.ml))
+    Term.curriedArrow args (Term.raw body)
+
+  match m with
+  | Constructor ft ->
+    let ty, attrs = extFunc { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy; loc = ft.loc }
+    binding (fun rename s ->
+      let target, attrs =
+        if isExportDefaultClass then
+          match s.moduleName with
+          | Some m -> m, Attr.External.module_ None :: attrs
+          | None -> failwithf "impossible_emitMembers_Constructor_ExportDefaultClass(%s)" ma.loc.AsString
+        else
+          match s.scopeRev with
+          | self :: sr ->
+            let attrs = scopeToAttr { s with scopeRev = sr } attrs
+            self, attrs
+          | [] -> failwithf "impossible_emitMembers_Constructor(%s)" ma.loc.AsString
+      let attrs = Attr.External.new_ :: attrs |> List.rev
+      ext attrs comments (rename "create") ty target
+    )
+  | Newable (ft, _typrm) ->
+    let ty = func { ft with args = Choice2Of2 PolymorphicThis :: ft.args }
+    let value = generateCallable true ft.args
+    binding (fun rename _ -> let_ [] comments (rename "create") ty value)
+  | Callable (ft, _typrm) ->
+    let ty = func { ft with args = Choice2Of2 PolymorphicThis :: ft.args }
+    let value = generateCallable false ft.args
+    binding (fun rename _ -> let_ [] comments (rename "invoke") ty value)
+  | Field ({ name = name; value = Func (ft, _typrm, _) }, _)
+  | Method (name, ft, _typrm) ->
+    let ty, attrs =
+      if ma.isStatic then extFunc ft
+      else
+        let ft = { ft with args = Choice2Of2 PolymorphicThis :: ft.args }
+        let ty, attr = extFunc ft
+        ty, Attr.External.send :: attr
+    binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name) ty name)
+  | _ -> failwith "TODO"
+

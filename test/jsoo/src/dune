@@ -1,11 +1,9 @@
 (executable
   (name main)
   (libraries gen_js_api)
-  (link_flags -no-check-prims)
   (preprocess (pps gen_js_api.ppx))
   (modes js)
   (js_of_ocaml
-    (flags --pretty --enable deadcode --enable strict --enable inline)
     (javascript_files stub.js))
 )
 

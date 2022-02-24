@@ -8,9 +8,9 @@ homepage: "https://github.com/ocsigen/ts2ocaml"
 doc: "https://github.com/ocsigen/ts2ocaml"
 bug-reports: "https://github.com/ocsigen/ts2ocaml/issues"
 depends: [
-  "dune" {>= "2.9"}
+  "dune" {>= "3.0"}
   "ocaml" {>= "4.08"}
   "gen_js_api" {>= "1.1.0"}
-  "js_of_ocaml-compiler"
+  "js_of_ocaml-compiler" {>= "4.0.0"}
 ]
 dev-repo: "git+https://github.com/ocsigen/ts2ocaml.git"

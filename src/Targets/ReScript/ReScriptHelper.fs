@@ -307,15 +307,15 @@ module Type =
     | [] -> failwith "union type with zero elements"
     | x :: [] -> x
     | x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: rest ->
-      app (str "union8") [x1; x2; x3; x4; x5; x6; x7; union (x8 :: rest)]
-    | xs -> app (tprintf "union%i" (List.length xs)) xs
+      app (str "Union.t8") [x1; x2; x3; x4; x5; x6; x7; union (x8 :: rest)]
+    | xs -> app (tprintf "Union.t%i" (List.length xs)) xs
 
   let rec intersection = function
     | [] -> failwith "intersection type with zero elements"
     | x :: [] -> x
     | x1 :: x2 :: x3 :: x4 :: x5 :: x6 :: x7 :: x8 :: rest ->
-      app (str "intersection8") [x1; x2; x3; x4; x5; x6; x7; intersection (x8 :: rest)]
-    | xs -> app (tprintf "intersection%i" (List.length xs)) xs
+      app (str "Intersection.t8") [x1; x2; x3; x4; x5; x6; x7; intersection (x8 :: rest)]
+    | xs -> app (tprintf "Intersection.t%i" (List.length xs)) xs
 
   let newable args retTy =
     match args with

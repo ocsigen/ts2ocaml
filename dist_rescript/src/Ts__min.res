@@ -9,18 +9,18 @@ module Never = {
 }
 
 @unboxed type rec any = Any('a): any
-let any : 'a => any = x => Any(x)
+external any : 'a => any = "%identity"
 
 module Any = {
   type t = any
-  let unsafeCast : t => 'a = x => Obj.magic(x)
+  external unsafeCast : t => 'a = "%identity"
 }
 
 type unknown
 
 module Unknown = {
   type t = unknown
-  let unsafeCast = (x: t) => Obj.magic(x)
+  external unsafeCast : t => 'a = "%identity"
 }
 
 type untyped_object = Js.Types.obj_val
@@ -30,7 +30,7 @@ type regexp = Js.Re.t
 type bigint
 type \"true" = private bool
 type \"false" = private bool
-type intrinsic = private string
+type intrinsic<'a> = private 'a
 
 type null<+'a> = Js.null<'a>
 type null' = null<never>
@@ -39,53 +39,55 @@ type undefined' = undefined<never>
 type nullable<+'a> = Js.nullable<'a>
 
 module Union = {
-  type t<+'cases>
+  type container<+'cases>
 
-  let return1 : 't1 => t<[> #U1('t1)]> = x => Obj.magic(x)
-  let return2 : 't2 => t<[> #U2('t2)]> = x => Obj.magic(x)
-  let return3 : 't3 => t<[> #U3('t3)]> = x => Obj.magic(x)
-  let return4 : 't4 => t<[> #U4('t4)]> = x => Obj.magic(x)
-  let return5 : 't5 => t<[> #U5('t5)]> = x => Obj.magic(x)
-  let return6 : 't6 => t<[> #U6('t6)]> = x => Obj.magic(x)
-  let return7 : 't7 => t<[> #U7('t7)]> = x => Obj.magic(x)
-  let return8 : 't8 => t<[> #U8('t8)]> = x => Obj.magic(x)
+  external return1 : 't1 => container<[> #U1('t1)]> = "%identity"
+  external return2 : 't2 => container<[> #U2('t2)]> = "%identity"
+  external return3 : 't3 => container<[> #U3('t3)]> = "%identity"
+  external return4 : 't4 => container<[> #U4('t4)]> = "%identity"
+  external return5 : 't5 => container<[> #U5('t5)]> = "%identity"
+  external return6 : 't6 => container<[> #U6('t6)]> = "%identity"
+  external return7 : 't7 => container<[> #U7('t7)]> = "%identity"
+  external return8 : 't8 => container<[> #U8('t8)]> = "%identity"
 
-  let getUnsafe1 : t<[> #U1('t1)]> => 't1 = x => Obj.magic(x)
-  let getUnsafe2 : t<[> #U2('t2)]> => 't2 = x => Obj.magic(x)
-  let getUnsafe3 : t<[> #U3('t3)]> => 't3 = x => Obj.magic(x)
-  let getUnsafe4 : t<[> #U4('t4)]> => 't4 = x => Obj.magic(x)
-  let getUnsafe5 : t<[> #U5('t5)]> => 't5 = x => Obj.magic(x)
-  let getUnsafe6 : t<[> #U6('t6)]> => 't6 = x => Obj.magic(x)
-  let getUnsafe7 : t<[> #U7('t7)]> => 't7 = x => Obj.magic(x)
-  let getUnsafe8 : t<[> #U8('t8)]> => 't8 = x => Obj.magic(x)
+  external getUnsafe1 : container<[> #U1('t1)]> => 't1 = "%identity"
+  external getUnsafe2 : container<[> #U2('t2)]> => 't2 = "%identity"
+  external getUnsafe3 : container<[> #U3('t3)]> => 't3 = "%identity"
+  external getUnsafe4 : container<[> #U4('t4)]> => 't4 = "%identity"
+  external getUnsafe5 : container<[> #U5('t5)]> => 't5 = "%identity"
+  external getUnsafe6 : container<[> #U6('t6)]> => 't6 = "%identity"
+  external getUnsafe7 : container<[> #U7('t7)]> => 't7 = "%identity"
+  external getUnsafe8 : container<[> #U8('t8)]> => 't8 = "%identity"
+
+  type t2<'t1, 't2> = container<[ #U1('t1) | #U2('t2) ]>
+  type t3<'t1, 't2, 't3> = container<[ #U1('t1) | #U2('t2) | #U3('t3) ]>
+  type t4<'t1, 't2, 't3, 't4> = container<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) ]>
+  type t5<'t1, 't2, 't3, 't4, 't5> = container<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) | #U5('t5) ]>
+  type t6<'t1, 't2, 't3, 't4, 't5, 't6> = container<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) | #U5('t5) | #U6('t6) ]>
+  type t7<'t1, 't2, 't3, 't4, 't5, 't6, 't7> = container<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) | #U5('t5) | #U6('t6) | #U7('t7) ]>
+  type t8<'t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8> = container<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) | #U5('t5) | #U6('t6) | #U7('t7) | #U8('t8) ]>
 }
-type union2<'t1, 't2> = Union.t<[ #U1('t1) | #U2('t2) ]>
-type union3<'t1, 't2, 't3> = Union.t<[ #U1('t1) | #U2('t2) | #U3('t3) ]>
-type union4<'t1, 't2, 't3, 't4> = Union.t<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) ]>
-type union5<'t1, 't2, 't3, 't4, 't5> = Union.t<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) | #U5('t5) ]>
-type union6<'t1, 't2, 't3, 't4, 't5, 't6> = Union.t<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) | #U5('t5) | #U6('t6) ]>
-type union7<'t1, 't2, 't3, 't4, 't5, 't6, 't7> = Union.t<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) | #U5('t5) | #U6('t6) | #U7('t7) ]>
-type union8<'t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8> = Union.t<[ #U1('t1) | #U2('t2) | #U3('t3) | #U4('t4) | #U5('t5) | #U6('t6) | #U7('t7) | #U8('t8) ]>
 
 module Intersection = {
-  type t<-'cases>
+  type container<-'cases>
 
-  let get1 : t<[> #I1('t1)]> => 't1 = x => Obj.magic(x)
-  let get2 : t<[> #I2('t2)]> => 't2 = x => Obj.magic(x)
-  let get3 : t<[> #I3('t3)]> => 't3 = x => Obj.magic(x)
-  let get4 : t<[> #I4('t4)]> => 't4 = x => Obj.magic(x)
-  let get5 : t<[> #I5('t5)]> => 't5 = x => Obj.magic(x)
-  let get6 : t<[> #I6('t6)]> => 't6 = x => Obj.magic(x)
-  let get7 : t<[> #I7('t7)]> => 't7 = x => Obj.magic(x)
-  let get8 : t<[> #I8('t8)]> => 't8 = x => Obj.magic(x)
+  external get1 : container<[> #I1('t1)]> => 't1 = "%identity"
+  external get2 : container<[> #I2('t2)]> => 't2 = "%identity"
+  external get3 : container<[> #I3('t3)]> => 't3 = "%identity"
+  external get4 : container<[> #I4('t4)]> => 't4 = "%identity"
+  external get5 : container<[> #I5('t5)]> => 't5 = "%identity"
+  external get6 : container<[> #I6('t6)]> => 't6 = "%identity"
+  external get7 : container<[> #I7('t7)]> => 't7 = "%identity"
+  external get8 : container<[> #I8('t8)]> => 't8 = "%identity"
+
+  type t2<'t1, 't2> = container<[ #I1('t1) | #I2('t2) ]>
+  type t3<'t1, 't2, 't3> = container<[ #I1('t1) | #I2('t2) | #I3('t3) ]>
+  type t4<'t1, 't2, 't3, 't4> = container<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) ]>
+  type t5<'t1, 't2, 't3, 't4, 't5> = container<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) | #I5('t5) ]>
+  type t6<'t1, 't2, 't3, 't4, 't5, 't6> = container<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) | #I5('t5) | #I6('t6) ]>
+  type t7<'t1, 't2, 't3, 't4, 't5, 't6, 't7> = container<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) | #I5('t5) | #I6('t6) | #I7('t7) ]>
+  type t8<'t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8> = container<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) | #I5('t5) | #I6('t6) | #I7('t7) | #I8('t8) ]>
 }
-type intersection2<'t1, 't2> = Intersection.t<[ #I1('t1) | #I2('t2) ]>
-type intersection3<'t1, 't2, 't3> = Intersection.t<[ #I1('t1) | #I2('t2) | #I3('t3) ]>
-type intersection4<'t1, 't2, 't3, 't4> = Intersection.t<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) ]>
-type intersection5<'t1, 't2, 't3, 't4, 't5> = Intersection.t<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) | #I5('t5) ]>
-type intersection6<'t1, 't2, 't3, 't4, 't5, 't6> = Intersection.t<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) | #I5('t5) | #I6('t6) ]>
-type intersection7<'t1, 't2, 't3, 't4, 't5, 't6, 't7> = Intersection.t<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) | #I5('t5) | #I6('t6) | #I7('t7) ]>
-type intersection8<'t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8> = Intersection.t<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) | #I5('t5) | #I6('t6) | #I7('t7) | #I8('t8) ]>
 
 module Interface = {
   @unboxed type t<-'tags, 'base> = { value: 'base }
@@ -93,6 +95,7 @@ module Interface = {
   let value = (x: t<_, _>) => x.value
 }
 type intf<-'tags, 'base> = Interface.t<'tags, 'base>
+type intf'<-'tags> = intf<'tags, any>
 
 module Primitive = {
   type cases<'other> = [ #Null | #Undefined | #String(string) | #Number(float) | #Boolean(bool) | #Symbol(symbol) | #BigInt(bigint) | #Other('other) ]

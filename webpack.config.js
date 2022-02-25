@@ -39,6 +39,14 @@ module.exports = {
     path: path.join(__dirname, CONFIG.outputDir),
     filename: 'ts2ocaml.js'
   },
+  module: {
+    rules: [
+      {
+        resourceQuery: /raw/,
+        type: 'asset/source'
+      }
+    ]
+  },
   plugins: [
     new webpack.BannerPlugin({
       banner: "#!/usr/bin/env node",

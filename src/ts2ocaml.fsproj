@@ -20,6 +20,9 @@
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="../node_modules/rescript/lib/ocaml/dom.ml" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Fable.Browser.Dom" Version="1.1.0" />
     <PackageReference Include="Fable.Core" Version="3.6.1" />
     <PackageReference Include="Fable.Node" Version="1.0.2" />

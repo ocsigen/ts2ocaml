@@ -8,8 +8,8 @@ module Never = {
   let absurd : t => 'a = x => raise(Never)
 }
 
-type any
-let any : 'a => any = Obj.magic
+@unboxed type rec any = Any('a): any
+let any : 'a => any = x => Any(x)
 
 module Any = {
   type t = any

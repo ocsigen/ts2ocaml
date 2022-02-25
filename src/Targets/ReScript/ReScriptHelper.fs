@@ -7,6 +7,10 @@ open Targets.ReScript.Common
 open DataTypes
 open DataTypes.Text
 
+module Source =
+  open Fable.Core
+  let [<ImportDefault("rescript/lib/ocaml/dom.ml?raw")>] dom: string = jsNative
+
 let comment text =
   if text = empty then empty
   else
@@ -110,15 +114,23 @@ module Naming =
       "create"; "apply"; "invoke"; "get"; "set"; "castFrom"
     ] |> Set.union keywords
 
+  let upperFirst (s: string) =
+    if Char.IsLower s[0] then
+      sprintf "%c%s" (Char.ToUpper s[0]) s[1..]
+    else s
+
+  let lowerFirst (s: string) =
+    if Char.IsUpper s[0] then
+      sprintf "%c%s" (Char.ToLower s[0]) s[1..]
+    else s
+
   let valueName (name: string) =
     let name = removeInvalidChars name
     let result =
       if name = "NaN" then "nan"
       else if String.forall (fun c -> Char.IsLower c |> not) name then
         name.ToLowerInvariant()
-      else if Char.IsUpper name.[0] then
-        sprintf "%c%s" (Char.ToLower name.[0]) name.[1..]
-      else name
+      else lowerFirst name
     if reservedValueNames |> Set.contains result then result + "_" else result
 
   let reservedModuleNames =
@@ -128,30 +140,21 @@ module Naming =
 
   let moduleNameReserved (name: string) =
     let name = removeInvalidChars name
-    if Char.IsLower name.[0] then
-      sprintf "%c%s" (Char.ToUpper name.[0]) name.[1..]
-    else if name.[0] = '_' then
+    if name.[0] = '_' then
       "M" + name
-    else name
+    else upperFirst name
 
   let moduleName (name: string) =
     let result = moduleNameReserved name
     if reservedModuleNames |> Set.contains result then result + "_" else result
 
   let constructorName (name: string list) =
-    let s = String.concat "_" name |> removeInvalidChars
-    let result =
-      if Char.IsLower s.[0] then
-        sprintf "%c%s" (Char.ToUpper s.[0]) s.[1..]
-      else s
-    if keywords |> Set.contains result then result + "_" else result
+    let s = String.concat "_" name |> removeInvalidChars |> upperFirst
+    if keywords |> Set.contains s then s + "_" else s
 
   let flattenedTypeName (name: string list) =
-    let s = String.concat "_" name |> removeInvalidChars
-    let result =
-      if Char.IsUpper s.[0] then "_" + s
-      else s
-    if keywords |> Set.contains result then result + "_" else result
+    let s = String.concat "_" name |> removeInvalidChars |> lowerFirst
+    if keywords |> Set.contains s then s + "_" else s
 
   let structured (baseName: string -> string) (name: string list) =
     let rec prettify = function
@@ -190,6 +193,27 @@ module Type =
       typedArray "Float32Array"
       typedArray "Float64Array"
     ]
+
+  /// non-primitive DOM types defined in the standard library
+  ///
+  /// `MutableMap` with ignore-case keys, because `dom.ml` has lowered all acronyms (e.g. HTML -> html)
+  let predefinedDOMTypes =
+    let types =
+      Source.dom
+      |> String.splitManyThenRemoveEmptyEntries ["\n"; "\r"]
+      |> Array.filter (fun s -> s.StartsWith("type ") && s.Contains("="))
+      |> Array.choose (fun s -> s |> String.replace "type " "" |> String.split " = " |> Array.tryHead)
+      |> Array.filter (fun s -> s.Length > 0 && s.ToCharArray() |> Array.forall Char.isAlphabet)
+      |> Array.map (fun s -> Naming.upperFirst s, "Dom." + s)
+    let ignoreCase =
+      { new Collections.Generic.IEqualityComparer<string> with
+          member __.Equals(s1: string, s2: string) =
+              s1.Equals(s2, StringComparison.InvariantCultureIgnoreCase)
+          member __.GetHashCode(s: string) = s.ToLowerInvariant().GetHashCode() }
+    let m = new MutableMap<string, string>(ignoreCase)
+    for k, v in types do m.Add(k, v)
+    m.Add("Storage", "Dom.Storage.t")
+    m
 
   // basic type expressions
   let var s = tprintf "'%s" s
@@ -360,3 +384,8 @@ module Statement =
   let external (attrs: text list) name (typ: text) target =
     concat (str " ") attrs
     + tprintf " external %s: " name + typ + tprintf " = \"%s\"" target
+
+  let typeAlias name tyargs ty =
+    str "type "
+    + (if List.isEmpty tyargs then str name else Type.app (str name) tyargs)
+    +@ " = " + ty

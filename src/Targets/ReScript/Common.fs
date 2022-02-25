@@ -210,3 +210,5 @@ type Output = {
   content: text
   stubLines: string list
 }
+
+let [<ImportDefault("../../../dist_rescript/src/Ts__min.res?raw")>] stdlib: string = jsNative

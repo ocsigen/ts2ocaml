@@ -110,14 +110,14 @@ module Primitive = {
     }
   })(x)`)
 
-  let fromNull: null<'a> => t<[> #Null | #Other('a) ]> = Obj.magic
-  let toNull: t<[< #Null | #Other('a) ]> => null<'a> = Obj.magic
+  external fromNull: null<'a> => t<[> #Null | #Other('a) ]> = "%identity"
+  external toNull: t<[< #Null | #Other('a) ]> => null<'a> = "%identity"
 
-  let fromUndefined: undefined<'a> => t<[> #Undefined | #Other('a) ]> = Obj.magic
-  let toUndefined: t<[< #Undefined | #Other('a) ]> => undefined<'a> = Obj.magic
+  external fromUndefined: undefined<'a> => t<[> #Undefined | #Other('a) ]> = "%identity"
+  external toUndefined: t<[< #Undefined | #Other('a) ]> => undefined<'a> = "%identity"
 
-  let fromNullable: nullable<'a> => t<[> #Null | #Undefined | #Other('a) ]> = Obj.magic
-  let toNullable: t<[< #Null | #Undefined | #Other('a) ]> => nullable<'a> = Obj.magic
+  external fromNullable: nullable<'a> => t<[> #Null | #Undefined | #Other('a) ]> = "%identity"
+  external toNullable: t<[< #Null | #Undefined | #Other('a) ]> => nullable<'a> = "%identity"
 
   let classify: t<[< cases<'other>] as 'cases> => 'cases = x =>
     switch (Js.typeof(x)) {
@@ -132,7 +132,6 @@ module Primitive = {
         else { Obj.magic(#Other(x)) }
     }
 }
-type prim<+'cases> = Primitive.t<'cases>
 
 module Interop = {
   let apply0 = (it: 'Function) => %raw(`it()`)
@@ -185,31 +184,31 @@ module Variadic = {
   type tn<'args, 'variadic, 't>
 
   @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
-  let create0 : ('variadic => 't) => t0<'variadic, 't> = f => %raw(`(function(...args) { return f(args); })`)
+  let make0 : ('variadic => 't) => t0<'variadic, 't> = f => %raw(`(function(...args) { return f(args); })`)
 
   @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
-  let create1 : (('arg1, 'variadic) => 't) => t1<'arg1, 'variadic, 't> = f => %raw(`(function(arg1, ...args) { return f(arg1, args); })`)
+  let make1 : (('arg1, 'variadic) => 't) => t1<'arg1, 'variadic, 't> = f => %raw(`(function(arg1, ...args) { return f(arg1, args); })`)
 
   @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
-  let create2 : (('arg1, 'arg2, 'variadic) => 't) => tn<('arg1, 'arg2), 'variadic, 't> = f => %raw(`(function(arg1, arg2, ...args) { return f(arg1, arg2, args); })`)
+  let make2 : (('arg1, 'arg2, 'variadic) => 't) => tn<('arg1, 'arg2), 'variadic, 't> = f => %raw(`(function(arg1, arg2, ...args) { return f(arg1, arg2, args); })`)
 
   @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
-  let create3 : (('arg1, 'arg2, 'arg3, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, ...args) { return f(arg1, arg2, arg3, args); })`)
+  let make3 : (('arg1, 'arg2, 'arg3, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, ...args) { return f(arg1, arg2, arg3, args); })`)
 
   @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
-  let create4 : (('arg1, 'arg2, 'arg3, 'arg4, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, ...args) { return f(arg1, arg2, arg3, arg4, args); })`)
+  let make4 : (('arg1, 'arg2, 'arg3, 'arg4, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, ...args) { return f(arg1, arg2, arg3, arg4, args); })`)
 
   @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
-  let create5 : (('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4, 'arg5), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, arg5, ...args) { return f(arg1, arg2, arg3, arg4, arg5, args); })`)
+  let make5 : (('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4, 'arg5), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, arg5, ...args) { return f(arg1, arg2, arg3, arg4, arg5, args); })`)
 
   @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
-  let create6 : (('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, arg5, arg6, ...args) { return f(arg1, arg2, arg3, arg4, arg5, arg6, args); })`)
+  let make6 : (('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, arg5, arg6, ...args) { return f(arg1, arg2, arg3, arg4, arg5, arg6, args); })`)
 
   @ocaml.doc(`\`'variadic\` is expected to be array or some other iterable type.`)
-  let create7 : (('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6, 'arg7, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6, 'arg7), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, ...args) { return f(arg1, arg2, arg3, arg4, arg5, arg6, arg7, args); })`)
+  let make7 : (('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6, 'arg7, 'variadic) => 't) => tn<('arg1, 'arg2, 'arg3, 'arg4, 'arg5, 'arg6, 'arg7), 'variadic, 't> = f => %raw(`(function(arg1, arg2, arg3, arg4, arg5, arg6, arg7, ...args) { return f(arg1, arg2, arg3, arg4, arg5, arg6, arg7, args); })`)
 
   @ocaml.doc(`\`'args\` must be a tuple type. \`'variadic\` is expected to be array or some other iterable type.`)
-  let createN : (('args, 'variadic) => 't, int) => tn<'args, 'variadic, 't> = (f, n) => %raw(`(function(...args) { return f(args.slice(0, n), args.slice(n)); })`)
+  let makeN : (('args, 'variadic) => 't, int) => tn<'args, 'variadic, 't> = (f, n) => %raw(`(function(...args) { return f(args.slice(0, n), args.slice(n)); })`)
 
   let apply0 = (f0: t0<'variadic, 't>, variadic: 'variadic) : 't => %raw(`f0(...variadic)`)
   let apply1 = (f1: t1<'arg1, 'variadic, 't>, arg1: 'arg1, variadic: 'variadic) : 't => %raw(`f1(arg1, ...variadic)`)

@@ -55,6 +55,9 @@ module Attr =
     /// https://rescript-lang.org/docs/manual/latest/bind-to-js-object#bind-using-special-getter-and-setter-attributes
     let set_index = str "@set_index"
 
+    /// https://rescript-lang.org/docs/manual/latest/generate-converters-accessors#convert-external-into-js-object-creation-function
+    let obj = str "@obj"
+
   module ExternalModifier =
     /// https://rescript-lang.org/docs/manual/latest/bind-to-js-function#variadic-function-arguments
     let variadic = str "@variadic"
@@ -111,7 +114,7 @@ module Naming =
 
   let reservedValueNames =
     set [
-      "create"; "apply"; "invoke"; "get"; "set"; "castFrom"
+      "make"; "apply"; "get"; "set"; "castFrom"
     ] |> Set.union keywords
 
   let upperFirst (s: string) =
@@ -152,10 +155,6 @@ module Naming =
     let s = String.concat "_" name |> removeInvalidChars |> upperFirst
     if keywords |> Set.contains s then s + "_" else s
 
-  let flattenedTypeName (name: string list) =
-    let s = String.concat "_" name |> removeInvalidChars |> lowerFirst
-    if keywords |> Set.contains s then s + "_" else s
-
   let structured (baseName: string -> string) (name: string list) =
     let rec prettify = function
       | [] -> ""
@@ -169,6 +168,28 @@ module Naming =
       if arity = maxArity then name
       else sprintf "%s%d" name arity
     | None -> sprintf "%s%d" name arity
+
+  let private jsModuleNameToReScriptName (jsModuleName: string) =
+    match jsModuleName.TrimStart('@') |> String.splitThenRemoveEmptyEntries "/" |> Array.toList with
+    | xs ->
+      xs
+      |> List.map (fun n ->
+        n |> Naming.toCase Naming.Case.LowerSnakeCase)
+      |> String.concat "__"
+
+  let jsModuleNameToFileName isInterfaceFile (jsModuleName: string) =
+    jsModuleName
+    |> jsModuleNameToReScriptName
+    |> fun x -> if isInterfaceFile then $"{x}.resi" else $"{x}.res"
+
+  let jsModuleNameToReScriptModuleName (jsModuleName: string) =
+    jsModuleName
+    |> jsModuleNameToReScriptName
+    |> moduleName
+
+module Kind =
+  let generatesReScriptModule kind =
+    Set.intersect kind (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not
 
 [<RequireQualifiedAccess>]
 module Type =
@@ -295,12 +316,15 @@ module Type =
   let null_or_undefined_or t = app (str "nullable") [t]
   let null_ = str "null'"
   let undefined = str "undefined'"
-  let intrinsic = app (str "intrinsic") [object]
+  let intrinsic = app (str "intrinsic") [string]
   let true_ = str "\\\"true\""
   let false_ = str "\\\"false\""
 
   // our types
-  let intf tags baseTy = app (str "intf") [tags; baseTy]
+  let intf tags baseTy =
+    match baseTy with
+    | Some t -> app (str "intf") [tags; t]
+    | None -> app (str "intf'") [tags]
   let prim cases = app (str "prim") [cases]
 
   let rec union = function
@@ -373,19 +397,25 @@ module Term =
 
 [<RequireQualifiedAccess>]
 module Statement =
+  let attr attrs =
+    if List.isEmpty attrs then empty
+    else concat (str " ") attrs + newline
+
   let let_ (attrs: text list) name typ value =
-    concat (str " ") attrs
-    + tprintf "let %s: " name + typ +@ " = " + value
+    attr attrs + tprintf "let %s: " name + typ +@ " = " + value
 
   let val_ (attrs: text list) name typ =
-    concat (str " ") attrs
-    + tprintf "let %s: " name + typ
+    attr attrs + tprintf "let %s: " name + typ
 
   let external (attrs: text list) name (typ: text) target =
-    concat (str " ") attrs
-    + tprintf " external %s: " name + typ + tprintf " = \"%s\"" target
+    attr attrs + tprintf "external %s: " name + typ + tprintf " = \"%s\"" target
 
   let typeAlias name tyargs ty =
     str "type "
     + (if List.isEmpty tyargs then str name else Type.app (str name) tyargs)
     +@ " = " + ty
+
+  let include_ name = tprintf "include %s" name
+  let open_ name = tprintf "open %s" name
+
+  let moduleAlias name target = tprintf "module %s = %s" name target

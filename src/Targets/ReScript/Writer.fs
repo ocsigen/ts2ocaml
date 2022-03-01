@@ -120,17 +120,6 @@ let fixme alternative fmt =
     commentStr (sprintf "FIXME: %s" msg) + alternative
   ) fmt
 
-let enumCaseToIdentifier (e: Enum) (c: EnumCase) =
-  let duplicateCases =
-    e.cases |> List.filter (fun c' -> c.value = c'.value)
-  match duplicateCases with
-  | [] -> failwith "impossible_enumCaseToIdentifier"
-  | [c'] ->
-    assert (c = c')
-    Naming.constructorName [c.name]
-  | cs ->
-    cs |> List.map (fun c -> c.name) |> Naming.constructorName
-
 let anonymousInterfaceModuleName (ctx: Context) (info: AnonymousInterfaceInfo) =
   match info.origin.valueName, info.origin.argName with
   | _, Some s | Some s, None when ctx.options.readableNames ->
@@ -437,7 +426,7 @@ let builder name (fields: {| isOptional: bool; name: string; value: text |} list
   Binding.Ext {| name = name; ty = ty; target = ""; attrs = [Attr.External.obj]; comments = []|}
 
 type EmitCondition = {
-  /// Emit in the `Types` module in `.res`
+  /// Emit in the `Types` module
   onTypes: bool
   /// Emit in `.res`
   onImpl: bool
@@ -447,10 +436,16 @@ type EmitCondition = {
   static member empty = { onTypes = false; onImpl = false; onIntf = false }
 
 type StructuredTextItem =
-  | ImportText of text   // import texts should be at the top of the module
-  | TypeDefText of text  // and type definitions should come next
+  /// Will always be emitted at the top of the module.
+  | ImportText of text
+  /// Will always be emitted at the next top of the module.
+  ///
+  /// In `.res`, the presence of this item makes `open ModuleName` also emitted.
+  | TypeDefText of text
   | Conditional of StructuredTextItem * EmitCondition
-  | ScopeIndependentText of text // floating comments, etc
+  /// Will be emitted in `.res` and `.resi`, but not in the `Types` module
+  | Comment of text
+  /// Will only be emitted in `.res` (not in `.resi` or in the `Types` module)
   | Binding of (OverloadRenamer -> Scope -> Binding)
 
 and [<RequireQualifiedAccess>] ExportItem =
@@ -464,7 +459,9 @@ and StructuredTextNode = {|
   items: StructuredTextItem list
   comments: text list
   exports: ExportItem list
-  knownTypes: Set<KnownType>
+  openTypesModule: bool
+  /// Used to emit module signatures recursively.
+  typeReferences: Set<KnownType>
   anonymousInterfaces: Set<AnonymousInterface>
 |}
 
@@ -474,7 +471,7 @@ let inline conditional cond x = Conditional (x, cond)
 
 module StructuredTextNode =
   let empty : StructuredTextNode =
-    {| scope = None; items = []; comments = []; exports = []; knownTypes = Set.empty; anonymousInterfaces = Set.empty |}
+    {| scope = None; items = []; comments = []; exports = []; typeReferences = Set.empty; anonymousInterfaces = Set.empty; openTypesModule = true |}
   let union (a: StructuredTextNode) (b: StructuredTextNode) : StructuredTextNode =
     let mergeScope s1 s2 =
       match s1, s2 with
@@ -485,7 +482,8 @@ module StructuredTextNode =
        items = List.append a.items b.items
        comments = List.append a.comments b.comments
        exports = List.append a.exports b.exports
-       knownTypes = Set.union a.knownTypes b.knownTypes
+       openTypesModule = a.openTypesModule || b.openTypesModule
+       typeReferences = Set.union a.typeReferences b.typeReferences
        anonymousInterfaces = Set.union a.anonymousInterfaces b.anonymousInterfaces |}
 
 module StructuredText =
@@ -506,7 +504,7 @@ module StructuredText =
       let trie =
         x.value
         |> Option.map (fun v ->
-          v.knownTypes
+          v.typeReferences
           |> Set.fold (fun state -> function
             | KnownType.Ident fn when fn.source = ctx.currentSourceFile -> state |> WeakTrie.add fn.name
             | KnownType.AnonymousInterface (_, i) ->
@@ -780,34 +778,6 @@ let emitTypeAlias flags overrideFunc ctx (typrms: TypeParam list) target =
       else []
   )
 
-module GetSelfTyText =
-  /// `ctx.currentNamespace` should be the class
-  let class_ flags overrideFunc (ctx: Context) (c: Class) (baseType: text option) =
-    let emitType = emitTypeImpl flags
-    let emitType_ = emitType overrideFunc
-    let fallback = str "private any"
-    match c.name with
-    | Name name ->
-      assert (name = List.last ctx.currentNamespace)
-      if ctx.options.subtyping |> List.contains Subtyping.Tag then
-        let labels =
-          getLabelsOfFullName flags overrideFunc ctx (ctx |> Context.getFullName []) c.typeParams
-        if List.isEmpty labels then fallback
-        else
-          Type.intf (emitLabels ctx labels) baseType
-      else fallback
-    | ExportDefaultUnnamedClass ->
-      let labels =
-        c.implements
-        |> List.map (getAllInheritancesAndSelf ctx) |> Set.unionMany
-        |> getLabelsFromInheritingTypes flags overrideFunc ctx
-      if List.isEmpty labels then fallback
-      else
-        Type.intf (emitLabels ctx labels) baseType
-
-  let enumCases (e: Enum) (cases: EnumCase list) =
-    failwith "TODO"
-
 let getTrie name current =
   current |> Trie.getSubTrie name |> Option.defaultValue Trie.empty
 let setTrie name trie current =
@@ -881,6 +851,9 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
   let knownTypes =
     let dummy = c.MapName(fun _ -> ExportDefaultUnnamedClass)
     Statement.getKnownTypes ctx [Class dummy] |> Set.union additionalKnownTypes
+
+  let typeReferences =
+    c.implements |> List.map (getKnownTypes ctx) |> Set.unionMany
 
   let isAnonymous, isExportDefaultClass =
     match kind with
@@ -989,16 +962,34 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         else fallback ()
 
     let typeDefinition =
+      let fallback = str "private any"
+      let getSelfTyText (c: Class) =
+        match c.name with
+        | Name name ->
+          assert (name = List.last innerCtx.currentNamespace)
+          if innerCtx.options.subtyping |> List.contains Subtyping.Tag then
+            let labels =
+              getLabelsOfFullName flags overrideFunc innerCtx (innerCtx |> Context.getFullName []) c.typeParams
+            if List.isEmpty labels then fallback
+            else
+              Type.intf (emitLabels innerCtx labels) baseType
+          else fallback
+        | ExportDefaultUnnamedClass ->
+          let labels =
+            c.implements
+            |> List.map (getAllInheritancesAndSelf innerCtx) |> Set.unionMany
+            |> getLabelsFromInheritingTypes flags overrideFunc innerCtx
+          if List.isEmpty labels then fallback
+          else
+            Type.intf (emitLabels innerCtx labels) baseType
       let selfTyText =
         match kind with
-        | ClassKind.NormalClass x -> GetSelfTyText.class_ flags overrideFunc innerCtx x.orig baseType
-        | ClassKind.ExportDefaultClass x -> GetSelfTyText.class_ flags overrideFunc innerCtx x.orig None
-        | ClassKind.AnonymousInterface _ -> str "private any"
-
+        | ClassKind.NormalClass x -> getSelfTyText x.orig
+        | ClassKind.ExportDefaultClass x -> getSelfTyText x.orig
+        | ClassKind.AnonymousInterface _ -> fallback
       let onTypes =
         emitTypeAlias flags overrideFunc innerCtx c.typeParams selfTyText
         |> List.map (conditional { EmitCondition.empty with onTypes = true })
-
       let onIntf =
         emitTypeAliases flags overrideFunc innerCtx c.typeParams selfTyText
         |> List.map (conditional { EmitCondition.empty with onIntf = true })
@@ -1067,7 +1058,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       yield! castFunctions
     ]
 
-    {| StructuredTextNode.empty with items = items; comments = comments; knownTypes = knownTypes; scope = scope |}
+    {| StructuredTextNode.empty with items = items; comments = comments; scope = scope; typeReferences = typeReferences |}
 
   let export =
     match kind with
@@ -1111,6 +1102,149 @@ and addAnonymousInterfaceExcluding emitTypeFlags (ctx: Context) knownTypes ais (
       |> set {| StructuredTextNode.empty with anonymousInterfaces = Set.singleton a |}
   ) current
 and addAnonymousInterface emitTypeFlags ctx knownTypes (current: StructuredText) = addAnonymousInterfaceExcluding emitTypeFlags ctx knownTypes [] current
+
+type EnumType =
+  /// Integer enum of which first case is `0` and (n+1)th case is `n`.
+  | CleanInt = 0
+  /// Integer enum but not 'clean' in the above sense.
+  | Int = 1
+  /// Float enum.
+  | Float = 2
+  /// Boolean enum.
+  | Boolean = 3
+  /// String enum.
+  | String = 4
+  /// Enum with integer and float cases.
+  | Number = 5
+  /// Enum with integer and string cases.
+  | PolyVariant = 6
+  /// Other heterogeneous enum.
+  | Heterogeneous = 7
+
+let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enum) =
+  let enumCaseToIdentifier (e: Enum) (c: EnumCase) =
+    let duplicateCases =
+      e.cases |> List.filter (fun c' -> c.value = c'.value)
+    match duplicateCases with
+    | [] -> failwith "impossible_enumCaseToIdentifier"
+    | [c'] ->
+      assert (c = c')
+      Naming.constructorName [c.name]
+    | cs ->
+      cs |> List.map (fun c -> c.name) |> Naming.constructorName
+
+  let distinctCases =
+    e.cases
+    |> List.map (fun c -> enumCaseToIdentifier e c, c.value)
+    |> List.distinctBy snd
+  let enumValues = distinctCases |> List.map snd
+  let enumType =
+    let types =
+      enumValues
+      |> List.map (function
+        | None -> EnumType.Heterogeneous
+        | Some (LString _) -> EnumType.String
+        | Some (LInt _) -> EnumType.Int
+        | Some (LFloat _) -> EnumType.Float
+        | Some (LBool _) -> EnumType.Boolean)
+      |> List.sort
+    match types with
+    | [EnumType.Int] ->
+      let values =
+        enumValues
+        |> List.map (function Some (LInt i) -> i | _ -> failwith "impossible")
+        |> Set.ofList
+      let min = Set.minElement values
+      let max = Set.maxElement values
+      let clean = Set.ofList [min..max]
+      if min = 0 && values = clean then EnumType.CleanInt
+      else EnumType.Int
+    | [x] -> x
+    | [EnumType.Int; EnumType.Float] -> EnumType.Number
+    | [EnumType.Int; EnumType.String] -> EnumType.PolyVariant
+    | _ -> EnumType.Heterogeneous
+
+  let aritySafety =
+    if ctx.options.safeArity.HasProvide then
+      Statement.typeAlias "t_0" [] (str "t")
+      |> TypeDefText
+      |> conditional { onIntf = true; onImpl = true; onTypes = false }
+      |> List.singleton
+    else []
+  let appendAritySafety x = x :: aritySafety
+
+  let parentNode =
+    let items =
+      match enumType with
+      | EnumType.CleanInt ->
+        let cases =
+          distinctCases
+          |> List.map (fun (n, v) -> n, match v with Some (LInt i) -> i | _ -> failwith "impossible")
+          |> List.sortBy snd
+          |> List.map fst
+        if (cases |> List.sumBy (fun s -> s.Length)) > 80 then
+          concat newline [
+            yield str "type t ="
+            for case in cases do
+              yield indent (tprintf "| %s" case)
+          ] |> TypeDefText |> appendAritySafety
+        else
+          cases |> String.concat " | " |> tprintf "type t = %s" |> TypeDefText |> appendAritySafety
+      | EnumType.Int | EnumType.String | EnumType.PolyVariant ->
+        let cases =
+          distinctCases
+          |> List.map snd
+          |> List.map (function
+            | Some (LString s) -> {| name = Choice1Of2 s; value = None; attr = None |}
+            | Some (LInt i) -> {| name = Choice2Of2 i; value = None; attr = None |}
+            | _ -> failwith "impossible")
+        Statement.typeAlias "t" [] (Type.polyVariant cases) |> TypeDefText |> appendAritySafety
+      | EnumType.Boolean -> Statement.typeAlias "t" [] (str "private bool") |> TypeDefText |> appendAritySafety
+      | EnumType.Float | EnumType.Number ->
+        ctx.logger.warnf "an enum type '%s' contains a case with float value, which is not supported in ReScript at %s" e.name e.loc.AsString
+        [
+          yield commentStr (sprintf "FIXME: float enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
+          yield Statement.typeAlias "t" [] (str "private float") |> TypeDefText
+          yield! aritySafety
+        ]
+      | _ ->
+        ctx.logger.warnf "a heterogeneous enum '%s' is not supported at %s" e.name e.loc.AsString
+        [
+          yield commentStr (sprintf "FIXME: heterogeneous enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
+          yield Statement.typeAlias "t" [] (str "private any") |> TypeDefText
+          yield! aritySafety
+        ]
+    let comments = e.comments |> emitComments
+    let exports = getExportFromStatement ctx e.name Kind.OfEnum "enum" (Enum e)
+    {| StructuredTextNode.empty with items = items; comments = comments; exports = Option.toList exports; openTypesModule = false |}
+
+  let childNode (c: EnumCase) =
+    let typeDef =
+      match enumType with
+      | EnumType.Int | EnumType.String | EnumType.PolyVariant ->
+        let case =
+          match c.value with
+          | Some (LString s) -> {| name = Choice1Of2 s; value = None; attr = None |}
+          | Some (LInt i) -> {| name = Choice2Of2 i; value = None; attr = None |}
+          | _ -> failwith "impossible"
+        Statement.typeAlias "t" [] (Type.polyVariant [case]) |> TypeDefText
+      | _ -> Statement.typeAlias "t" [] (str "private t") |> TypeDefText
+    let items = [
+      yield Statement.typeAlias "parent" [] (str "t") |> TypeDefText |> conditional { onIntf = true; onImpl = true; onTypes = false }
+      yield typeDef
+      yield! aritySafety
+      yield! // emit a binding to the enum case value
+        binding (fun rename s ->
+          ext (scopeToAttr s [Attr.External.val_]) [] (rename "value") (str "parent") c.name
+        )
+    ]
+    let comments = c.comments |> emitComments
+    {| StructuredTextNode.empty with items = items; comments = comments; openTypesModule = false |}
+
+  current
+  |> add [e.name] parentNode
+  |> inTrie [e.name] (fun m ->
+    e.cases |> List.fold (fun state c -> state |> add [c.name] (childNode c)) m)
 
 let emitVariable flags overrideFunc ctx (v: Variable) =
   let emitType = emitTypeImpl flags
@@ -1199,7 +1333,8 @@ let emitImport (ctx: Context) (i: Import) : StructuredTextItem list =
       yield! emitImportClause c]
 
 let emitTypeAliasToUnionFunctions flags overrideFunc ctx (u: UnionType) : StructuredTextItem list =
-  failwith "TODO"
+  // TODO
+  []
 
 let createStructuredText (rootCtx: Context) (stmts: Statement list) : StructuredText =
   let emitTypeFlags = EmitTypeFlags.defaultValue
@@ -1286,7 +1421,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     match s with
     | Module m ->
       let module' =
-        let node = {| StructuredTextNode.empty with comments = comments; knownTypes = knownTypes () |}
+        let node = {| StructuredTextNode.empty with comments = comments |}
         let module' = current |> getTrie [m.name] |> set node
         let ctx = ctx |> Context.ofChildNamespace m.name
         m.statements |> List.fold (folder ctx) module'
@@ -1303,27 +1438,13 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | Class c ->
       emitClass emitTypeFlags OverrideFunc.noOverride ctx current (c.MapName Choice1Of2) ((fun _ _ _ -> []), Set.empty, None)
     | Enum e ->
-      current
-      |> inTrie [e.name] (fun module' ->
-        let ctx = ctx |> Context.ofChildNamespace e.name
-        let items = emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e e.cases)
-        let module' =
-          let node = {| StructuredTextNode.empty with items = items; comments = comments; knownTypes = knownTypes () |}
-          module' |> set node
-        e.cases |> List.fold (fun state c ->
-          let ctx = ctx |> Context.ofChildNamespace c.name
-          let comments = emitComments c.comments
-          let items =
-            emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx [] (GetSelfTyText.enumCases e [c])
-          let node = {| StructuredTextNode.empty with items = items; comments = comments; knownTypes = knownTypes () |}
-          state |> add [c.name] node
-        ) module')
-      |> addExport e.name Kind.OfEnum "enum"
+      emitEnum emitTypeFlags OverrideFunc.noOverride ctx current e
     | TypeAlias ta ->
       let ctx = ctx |> Context.ofChildNamespace ta.name
       let items =
         emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target)
-      let node = {| StructuredTextNode.empty with items = items; comments = comments; knownTypes = knownTypes () |}
+      let typeReferences = getKnownTypes ctx ta.target
+      let node = {| StructuredTextNode.empty with items = items; typeReferences = typeReferences; comments = comments |}
       current
       |> inTrie [ta.name] (set node)
       |> addExport ta.name Kind.OfTypeAlias "type"
@@ -1344,7 +1465,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         let knownTypesInMembers = Statement.getKnownTypes ctx [Class intf]
         let createModule () =
           let items = intfToStmts intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
-          {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scope = Some value.name |}
+          {| StructuredTextNode.empty with items = items; scope = Some value.name |}
         if knownTypesInMembers |> Set.contains (KnownType.Ident (ctx |> Context.getFullName [intfName])) then
           fallback current
         else
@@ -1358,8 +1479,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | Function func ->
       let node =
         {| StructuredTextNode.empty with
-            items = emitFunction emitTypeFlags overrideFunc ctx func
-            knownTypes = knownTypes () |}
+            items = emitFunction emitTypeFlags overrideFunc ctx func |}
       current
       |> set node
       |> addExport func.name Kind.OfValue "function"
@@ -1368,8 +1488,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       let fallback current =
         let node =
           {| StructuredTextNode.empty with
-              items = emitVariable emitTypeFlags overrideFunc ctx value
-              knownTypes = knownTypes () |}
+              items = emitVariable emitTypeFlags overrideFunc ctx value |}
         current
         |> set node
         |> addExport value.name Kind.OfValue (if value.isConst then "const" else "let")
@@ -1377,15 +1496,12 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       let inline (|Dummy|) _ = []
       match value.typ with
       | AnonymousInterface intf when Simplify.Has(ctx.options.simplify, Simplify.AnonymousInterfaceValue) ->
-        let knownTypes = knownTypes ()
         let items = intfToStmts intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
         current
         |> inTrie [value.name]
           (set
             {| StructuredTextNode.empty with
                 items = items
-                knownTypes =
-                  knownTypes |> Set.filter (function KnownType.AnonymousInterface (ai, _) -> ai.loc <> intf.loc | _ -> true)
                 scope = Some value.name |})
         |> addExport value.name Kind.OfClass (if value.isConst then "const" else "let")
         |> inTrie [value.name] (addAnonymousInterfaceExcluding [intf])
@@ -1402,7 +1518,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           let knownTypesInMembers = Statement.getKnownTypes ctx [Class intf]
           let createModule () =
             let items = intfToStmts intf ctx emitTypeFlags overrideFunc
-            {| StructuredTextNode.empty with items = items; knownTypes = knownTypesInMembers; scope = Some value.name |}
+            {| StructuredTextNode.empty with items = items; scope = Some value.name |}
           current
           |> inTrie [name] (set (createModule ()))
           |> addExport name Kind.OfClass (if value.isConst then "const" else "let")
@@ -1432,10 +1548,26 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
       let cmt =
         match u.origText with
         | Some s -> commentStr s | None -> commentStr "unknown statement"
-      current |> set {| StructuredTextNode.empty with items = [ScopeIndependentText cmt] |}
+      current |> set {| StructuredTextNode.empty with items = [Comment cmt] |}
     | FloatingComment c ->
-      let cmt = c.comments |> emitComments |> List.map ScopeIndependentText
-      current |> set {| StructuredTextNode.empty with items = ScopeIndependentText empty :: cmt |}
+      let cmt = c.comments |> emitComments |> List.map Comment
+      current |> set {| StructuredTextNode.empty with items = Comment empty :: cmt |}
   and folder' ctx stmt node = folder ctx node stmt
 
   stmts |> List.fold (folder rootCtx) Trie.empty
+
+type ModuleEmitter = Context -> StructuredText -> (TextModule list -> text list)
+module ModuleEmitter =
+  let signature (ctx: Context) (st: StructuredText) =
+    if Map.count st.children < 3 then
+      Statement.moduleSigRec
+    else
+      let scc = StructuredText.calculateSCCOfChildren ctx st
+      fun (modules: TextModule list) ->
+        let modules = modules |> List.fold (fun state x -> state |> Map.add x.origName x) Map.empty
+        scc
+        |> List.map (fun group ->
+          group |> List.map (fun name -> modules |> Map.find name) |> Statement.moduleSigRec)
+        |> List.concat
+
+  let structure (_: Context) (_: StructuredText) = Statement.moduleValMany

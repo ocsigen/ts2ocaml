@@ -395,6 +395,30 @@ module Term =
 
   let raw js = js |> String.escapeWith ["`"] |> str |> between "%raw(`" "`)"
 
+type TextModule = {| name: string; origName: string; content: text list; comments: text list |}
+
+let private moduleSigImplLines (prefix: string) (isRec: bool) (m: TextModule) =
+  [ yield! m.comments
+    let isEmpty = List.isEmpty m.content
+    let head =
+      tprintf "%s %s%s : {"
+        prefix
+        (if isRec then "rec " else "")
+        m.name
+    if isEmpty then
+      yield head +@ " }"
+    else
+      // make it one liner if possible
+      if m.content |> List.forall (isMultiLine >> not) && (m.content |> List.sumBy Text.length) < 80 then
+        yield head +@ " " + (concat (str "; ") m.content) +@ " }"
+      else
+        yield head
+        yield indent (concat newline m.content)
+        yield str "}" ]
+
+let private moduleSigImpl (prefix: string) (isRec: bool) (m: TextModule) =
+  moduleSigImplLines prefix isRec m |> concat newline
+
 [<RequireQualifiedAccess>]
 module Statement =
   let attr attrs =
@@ -419,3 +443,24 @@ module Statement =
   let open_ name = tprintf "open %s" name
 
   let moduleAlias name target = tprintf "module %s = %s" name target
+
+  let moduleSig (m: TextModule) = moduleSigImpl "module" false m
+
+  let moduleSigRec (ms: TextModule list) =
+    match ms with
+    | [] -> []
+    | [m] -> [moduleSig m]
+    | m :: ms ->
+      moduleSigImpl "module" true m :: (ms |> List.map (moduleSigImpl "and" false))
+
+  let moduleSigNonRec (ms: TextModule list) = ms |> List.map moduleSig
+
+  let moduleVal (m: TextModule) : text =
+    concat newline [
+      yield! m.comments
+      yield tprintf "module %s = {" m.name
+      yield indent (concat newline m.content)
+      yield str "}"
+    ]
+
+  let moduleValMany ms = ms |> List.map moduleVal

@@ -99,7 +99,7 @@ module[@js.scope "TimeRanges"] TimeRanges : sig
   val create: unit -> t [@@js.create]
 end
 module AppendMode : sig
-  type t = ([`L_s684_segments[@js "segments"] | `L_s692_sequence[@js "sequence"]] [@js.enum])
+  type t = ([`L_s708_segments[@js "segments"] | `L_s716_sequence[@js "sequence"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -594,7 +594,7 @@ module[@js.scope "SourceBufferList"] SourceBufferList : sig
   val create: unit -> t [@@js.create]
 end
 module ReadyState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s280_ended[@js "ended"] | `L_s544_open[@js "open"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s291_ended[@js "ended"] | `L_s564_open[@js "open"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -602,7 +602,7 @@ module ReadyState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module EndOfStreamError : sig
-  type t = ([`L_s235_decode[@js "decode"] | `L_s517_network[@js "network"]] [@js.enum])
+  type t = ([`L_s239_decode[@js "decode"] | `L_s537_network[@js "network"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1307,7 +1307,7 @@ and ReadableWritablePair : sig
   val cast_from: ('tags, 'R, 'W) this -> ('R, 'W) t [@@js.custom let cast_from = Obj.magic]
 end
 module EndingType : sig
-  type t = ([`L_s511_native[@js "native"] | `L_s784_transparent[@js "transparent"]] [@js.enum])
+  type t = ([`L_s531_native[@js "native"] | `L_s816_transparent[@js "transparent"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1590,7 +1590,7 @@ module[@js.scope "SpeechSynthesisVoice"] SpeechSynthesisVoice : sig
   val create': unit -> t [@@js.create]
 end
 module SpeechSynthesisErrorCode : sig
-  type t = ([`L_s134_audio_busy[@js "audio-busy"] | `L_s135_audio_hardware[@js "audio-hardware"] | `L_s177_canceled[@js "canceled"] | `L_s421_interrupted[@js "interrupted"] | `L_s423_invalid_argument[@js "invalid-argument"] | `L_s437_language_unavailable[@js "language-unavailable"] | `L_s517_network[@js "network"] | `L_s532_not_allowed[@js "not-allowed"] | `L_s747_synthesis_failed[@js "synthesis-failed"] | `L_s748_synthesis_unavailable[@js "synthesis-unavailable"] | `L_s756_text_too_long[@js "text-too-long"] | `L_s824_voice_unavailable[@js "voice-unavailable"]] [@js.enum])
+  type t = ([`L_s134_audio_busy[@js "audio-busy"] | `L_s135_audio_hardware[@js "audio-hardware"] | `L_s177_canceled[@js "canceled"] | `L_s436_interrupted[@js "interrupted"] | `L_s438_invalid_argument[@js "invalid-argument"] | `L_s452_language_unavailable[@js "language-unavailable"] | `L_s537_network[@js "network"] | `L_s552_not_allowed[@js "not-allowed"] | `L_s779_synthesis_failed[@js "synthesis-failed"] | `L_s780_synthesis_unavailable[@js "synthesis-unavailable"] | `L_s788_text_too_long[@js "text-too-long"] | `L_s857_voice_unavailable[@js "voice-unavailable"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1947,7 +1947,7 @@ module[@js.scope "scrollbars"] ScrollbarsStatic : sig
   val visible: unit -> bool [@@js.get "visible"]
 end
 module OrientationType : sig
-  type t = ([`L_s435_landscape_primary[@js "landscape-primary"] | `L_s436_landscape_secondary[@js "landscape-secondary"] | `L_s602_portrait_primary[@js "portrait-primary"] | `L_s603_portrait_secondary[@js "portrait-secondary"]] [@js.enum])
+  type t = ([`L_s450_landscape_primary[@js "landscape-primary"] | `L_s451_landscape_secondary[@js "landscape-secondary"] | `L_s623_portrait_primary[@js "portrait-primary"] | `L_s624_portrait_secondary[@js "portrait-secondary"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -1955,7 +1955,7 @@ module OrientationType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module OrientationLockType : sig
-  type t = ([`L_s121_any[@js "any"] | `L_s434_landscape[@js "landscape"] | `L_s435_landscape_primary[@js "landscape-primary"] | `L_s436_landscape_secondary[@js "landscape-secondary"] | `L_s512_natural[@js "natural"] | `L_s601_portrait[@js "portrait"] | `L_s602_portrait_primary[@js "portrait-primary"] | `L_s603_portrait_secondary[@js "portrait-secondary"]] [@js.enum])
+  type t = ([`L_s121_any[@js "any"] | `L_s449_landscape[@js "landscape"] | `L_s450_landscape_primary[@js "landscape-primary"] | `L_s451_landscape_secondary[@js "landscape-secondary"] | `L_s532_natural[@js "natural"] | `L_s622_portrait[@js "portrait"] | `L_s623_portrait_primary[@js "portrait-primary"] | `L_s624_portrait_secondary[@js "portrait-secondary"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2465,13 +2465,13 @@ module GetRootNodeOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module XPathNSResolver : sig
-  module AnonymousInterface539 : sig
+  module AnonymousInterface546 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
     val lookupNamespaceURI: t -> prefix:string option -> string option [@@js.call "lookupNamespaceURI"]
   end
-  type t = (AnonymousInterface539.t, (string option -> string option)) union2
+  type t = (AnonymousInterface546.t, (string option -> string option)) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2523,102 +2523,8 @@ module[@js.scope "WebGLContextEvent"] WebGLContextEvent : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create': type_:string -> ?eventInit:WebGLContextEventInit.t -> unit -> t [@@js.create]
 end
-module VisibilityState : sig
-  type t = ([`L_s379_hidden[@js "hidden"] | `L_s823_visible[@js "visible"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module SecurityPolicyViolationEventDisposition : sig
-  type t = ([`L_s281_enforce[@js "enforce"] | `L_s649_report[@js "report"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
-module SecurityPolicyViolationEventInit : sig
-  type t = [`EventInit | `SecurityPolicyViolationEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`EventInit | `SecurityPolicyViolationEventInit]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`EventInit | `SecurityPolicyViolationEventInit]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SecurityPolicyViolationEventInit ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_blockedURI: 'tags this -> string [@@js.get "blockedURI"]
-  val set_blockedURI: 'tags this -> string -> unit [@@js.set "blockedURI"]
-  val get_columnNumber: 'tags this -> float [@@js.get "columnNumber"]
-  val set_columnNumber: 'tags this -> float -> unit [@@js.set "columnNumber"]
-  val get_disposition: 'tags this -> SecurityPolicyViolationEventDisposition.t [@@js.get "disposition"]
-  val set_disposition: 'tags this -> SecurityPolicyViolationEventDisposition.t -> unit [@@js.set "disposition"]
-  val get_documentURI: 'tags this -> string [@@js.get "documentURI"]
-  val set_documentURI: 'tags this -> string -> unit [@@js.set "documentURI"]
-  val get_effectiveDirective: 'tags this -> string [@@js.get "effectiveDirective"]
-  val set_effectiveDirective: 'tags this -> string -> unit [@@js.set "effectiveDirective"]
-  val get_lineNumber: 'tags this -> float [@@js.get "lineNumber"]
-  val set_lineNumber: 'tags this -> float -> unit [@@js.set "lineNumber"]
-  val get_originalPolicy: 'tags this -> string [@@js.get "originalPolicy"]
-  val set_originalPolicy: 'tags this -> string -> unit [@@js.set "originalPolicy"]
-  val get_referrer: 'tags this -> string [@@js.get "referrer"]
-  val set_referrer: 'tags this -> string -> unit [@@js.set "referrer"]
-  val get_sample: 'tags this -> string [@@js.get "sample"]
-  val set_sample: 'tags this -> string -> unit [@@js.set "sample"]
-  val get_sourceFile: 'tags this -> string [@@js.get "sourceFile"]
-  val set_sourceFile: 'tags this -> string -> unit [@@js.set "sourceFile"]
-  val get_statusCode: 'tags this -> float [@@js.get "statusCode"]
-  val set_statusCode: 'tags this -> float -> unit [@@js.set "statusCode"]
-  val get_violatedDirective: 'tags this -> string [@@js.get "violatedDirective"]
-  val set_violatedDirective: 'tags this -> string -> unit [@@js.set "violatedDirective"]
-  val create: blockedURI:string -> columnNumber:float -> disposition:SecurityPolicyViolationEventDisposition.t -> documentURI:string -> effectiveDirective:string -> lineNumber:float -> originalPolicy:string -> referrer:string -> sample:string -> sourceFile:string -> statusCode:float -> violatedDirective:string -> unit -> t [@@js.builder]
-  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-end
-
-(** Inherits from Event, and represents the event object of an event sent on a document or worker when its content security policy is violated. *)
-module[@js.scope "SecurityPolicyViolationEvent"] SecurityPolicyViolationEvent : sig
-  type t = [`Event | `SecurityPolicyViolationEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`Event | `SecurityPolicyViolationEvent]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`Event | `SecurityPolicyViolationEvent]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `SecurityPolicyViolationEvent ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_blockedURI: 'tags this -> string [@@js.get "blockedURI"]
-  val get_columnNumber: 'tags this -> float [@@js.get "columnNumber"]
-  val get_disposition: 'tags this -> SecurityPolicyViolationEventDisposition.t [@@js.get "disposition"]
-  val get_documentURI: 'tags this -> string [@@js.get "documentURI"]
-  val get_effectiveDirective: 'tags this -> string [@@js.get "effectiveDirective"]
-  val get_lineNumber: 'tags this -> float [@@js.get "lineNumber"]
-  val get_originalPolicy: 'tags this -> string [@@js.get "originalPolicy"]
-  val get_referrer: 'tags this -> string [@@js.get "referrer"]
-  val get_sample: 'tags this -> string [@@js.get "sample"]
-  val get_sourceFile: 'tags this -> string [@@js.get "sourceFile"]
-  val get_statusCode: 'tags this -> float [@@js.get "statusCode"]
-  val get_violatedDirective: 'tags this -> string [@@js.get "violatedDirective"]
-  val create: blockedURI:string -> columnNumber:float -> disposition:SecurityPolicyViolationEventDisposition.t -> documentURI:string -> effectiveDirective:string -> lineNumber:float -> originalPolicy:string -> referrer:string -> sample:string -> sourceFile:string -> statusCode:float -> violatedDirective:string -> unit -> t [@@js.builder]
-  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-  val prototype: unit -> t [@@js.get "prototype"]
-  val create': type_:string -> ?eventInitDict:SecurityPolicyViolationEventInit.t -> unit -> t [@@js.create]
-end
 module RTCRtpTransceiverDirection : sig
-  type t = ([`L_s406_inactive[@js "inactive"] | `L_s634_recvonly[@js "recvonly"] | `L_s690_sendonly[@js "sendonly"] | `L_s691_sendrecv[@js "sendrecv"] | `L_s727_stopped[@js "stopped"]] [@js.enum])
+  type t = ([`L_s421_inactive[@js "inactive"] | `L_s655_recvonly[@js "recvonly"] | `L_s714_sendonly[@js "sendonly"] | `L_s715_sendrecv[@js "sendrecv"] | `L_s758_stopped[@js "stopped"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2647,7 +2553,7 @@ module RTCRtpCodingParameters : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCPriorityType : sig
-  type t = ([`L_s381_high[@js "high"] | `L_s466_low[@js "low"] | `L_s487_medium[@js "medium"] | `L_s817_very_low[@js "very-low"]] [@js.enum])
+  type t = ([`L_s395_high[@js "high"] | `L_s484_low[@js "low"] | `L_s506_medium[@js "medium"] | `L_s850_very_low[@js "very-low"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -2682,7 +2588,7 @@ module RTCRtpEncodingParameters : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDegradationPreference : sig
-  type t = ([`L_s147_balanced[@js "balanced"] | `L_s473_maintain_framerate[@js "maintain-framerate"] | `L_s474_maintain_resolution[@js "maintain-resolution"]] [@js.enum])
+  type t = ([`L_s147_balanced[@js "balanced"] | `L_s492_maintain_framerate[@js "maintain-framerate"] | `L_s493_maintain_resolution[@js "maintain-resolution"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3019,7 +2925,7 @@ module RTCRtpCapabilities : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCDtlsTransportState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s216_connected[@js "connected"] | `L_s217_connecting[@js "connecting"] | `L_s314_failed[@js "failed"] | `L_s538_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3236,7 +3142,7 @@ module MediaTrackCapabilities : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaStreamTrackState : sig
-  type t = ([`L_s280_ended[@js "ended"] | `L_s454_live[@js "live"]] [@js.enum])
+  type t = ([`L_s291_ended[@js "ended"] | `L_s472_live[@js "live"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3781,12 +3687,14 @@ module[@js.scope "RTCRtpTransceiver"] RTCRtpTransceiver : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val setCodecPreferences: 'tags this -> codecs:RTCRtpCodecCapability.t Iterable.t_1 -> unit [@@js.call "setCodecPreferences"]
   val get_currentDirection: 'tags this -> RTCRtpTransceiverDirection.t option [@@js.get "currentDirection"]
   val get_direction: 'tags this -> RTCRtpTransceiverDirection.t [@@js.get "direction"]
   val set_direction: 'tags this -> RTCRtpTransceiverDirection.t -> unit [@@js.set "direction"]
   val get_mid: 'tags this -> string option [@@js.get "mid"]
   val get_receiver: 'tags this -> RTCRtpReceiver.t [@@js.get "receiver"]
   val get_sender: 'tags this -> RTCRtpSender.t [@@js.get "sender"]
+  val setCodecPreferences': 'tags this -> codecs:RTCRtpCodecCapability.t list -> unit [@@js.call "setCodecPreferences"]
   val stop: 'tags this -> unit [@@js.call "stop"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -3845,7 +3753,7 @@ module[@js.scope "RTCTrackEvent"] RTCTrackEvent : sig
   val create': type_:string -> eventInitDict:RTCTrackEventInit.t -> t [@@js.create]
 end
 module RTCIceTcpCandidateType : sig
-  type t = ([`L_s566_passive[@js "passive"] | `L_s709_so[@js "so"] | `L_s98_active[@js "active"]] [@js.enum])
+  type t = ([`L_s587_passive[@js "passive"] | `L_s735_so[@js "so"] | `L_s98_active[@js "active"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3853,7 +3761,7 @@ module RTCIceTcpCandidateType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceProtocol : sig
-  type t = ([`L_s751_tcp[@js "tcp"] | `L_s789_udp[@js "udp"]] [@js.enum])
+  type t = ([`L_s783_tcp[@js "tcp"] | `L_s821_udp[@js "udp"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3861,7 +3769,7 @@ module RTCIceProtocol : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceComponent : sig
-  type t = ([`L_s664_rtcp[@js "rtcp"] | `L_s666_rtp[@js "rtp"]] [@js.enum])
+  type t = ([`L_s686_rtcp[@js "rtcp"] | `L_s688_rtp[@js "rtp"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -3869,7 +3777,7 @@ module RTCIceComponent : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceCandidateType : sig
-  type t = ([`L_s386_host[@js "host"] | `L_s614_prflx[@js "prflx"] | `L_s637_relay[@js "relay"] | `L_s718_srflx[@js "srflx"]] [@js.enum])
+  type t = ([`L_s400_host[@js "host"] | `L_s635_prflx[@js "prflx"] | `L_s659_relay[@js "relay"] | `L_s749_srflx[@js "srflx"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4043,7 +3951,7 @@ module[@js.scope "RTCPeerConnectionIceErrorEvent"] RTCPeerConnectionIceErrorEven
   val create': type_:string -> eventInitDict:RTCPeerConnectionIceErrorEventInit.t -> t [@@js.create]
 end
 module RTCDataChannelState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s201_closing[@js "closing"] | `L_s214_connecting[@js "connecting"] | `L_s544_open[@js "open"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s201_closing[@js "closing"] | `L_s217_connecting[@js "connecting"] | `L_s564_open[@js "open"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4652,7 +4560,7 @@ module HTMLHyperlinkElementUtils : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module FontFaceSetLoadStatus : sig
-  type t = ([`L_s456_loaded[@js "loaded"] | `L_s460_loading[@js "loading"]] [@js.enum])
+  type t = ([`L_s474_loaded[@js "loaded"] | `L_s478_loading[@js "loading"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4660,7 +4568,7 @@ module FontFaceSetLoadStatus : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module FontFaceLoadStatus : sig
-  type t = ([`L_s287_error[@js "error"] | `L_s456_loaded[@js "loaded"] | `L_s460_loading[@js "loading"] | `L_s798_unloaded[@js "unloaded"]] [@js.enum])
+  type t = ([`L_s298_error[@js "error"] | `L_s474_loaded[@js "loaded"] | `L_s478_loading[@js "loading"] | `L_s830_unloaded[@js "unloaded"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -4910,6 +4818,14 @@ module ElementCreationOptions : sig
   val create: is:string -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
+module DocumentVisibilityState : sig
+  type t = ([`L_s393_hidden[@js "hidden"] | `L_s856_visible[@js "visible"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
 module DocumentTimelineOptions : sig
   type t = [`DocumentTimelineOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -4974,7 +4890,7 @@ module[@js.scope "DocumentTimeline"] DocumentTimeline : sig
   val create: ?options:DocumentTimelineOptions.t -> unit -> t [@@js.create]
 end
 module DocumentReadyState : sig
-  type t = ([`L_s206_complete[@js "complete"] | `L_s418_interactive[@js "interactive"] | `L_s460_loading[@js "loading"]] [@js.enum])
+  type t = ([`L_s209_complete[@js "complete"] | `L_s433_interactive[@js "interactive"] | `L_s478_loading[@js "loading"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5220,7 +5136,7 @@ module AssignedNodesOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module SlotAssignmentMode : sig
-  type t = ([`L_s476_manual[@js "manual"] | `L_s510_named[@js "named"]] [@js.enum])
+  type t = ([`L_s495_manual[@js "manual"] | `L_s530_named[@js "named"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5228,7 +5144,7 @@ module SlotAssignmentMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ShadowRootMode : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s544_open[@js "open"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s564_open[@js "open"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5261,7 +5177,7 @@ module ShadowRootInit : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ScrollLogicalPosition : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s515_nearest[@js "nearest"] | `L_s723_start[@js "start"]] [@js.enum])
+  type t = ([`L_s185_center[@js "center"] | `L_s290_end[@js "end"] | `L_s535_nearest[@js "nearest"] | `L_s754_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5269,7 +5185,7 @@ module ScrollLogicalPosition : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ScrollBehavior : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s705_smooth[@js "smooth"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s731_smooth[@js "smooth"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5380,7 +5296,7 @@ module[@js.scope "TransitionEvent"] TransitionEvent : sig
   val create': type_:string -> ?transitionEventInitDict:TransitionEventInit.t -> unit -> t [@@js.create]
 end
 module TouchType : sig
-  type t = ([`L_s253_direct[@js "direct"] | `L_s733_stylus[@js "stylus"]] [@js.enum])
+  type t = ([`L_s262_direct[@js "direct"] | `L_s765_stylus[@js "stylus"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -5497,6 +5413,92 @@ module[@js.scope "TouchList"] TouchList : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
+end
+module SecurityPolicyViolationEventDisposition : sig
+  type t = ([`L_s292_enforce[@js "enforce"] | `L_s671_report[@js "report"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module SecurityPolicyViolationEventInit : sig
+  type t = [`EventInit | `SecurityPolicyViolationEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`EventInit | `SecurityPolicyViolationEventInit]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`EventInit | `SecurityPolicyViolationEventInit]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SecurityPolicyViolationEventInit ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_blockedURI: 'tags this -> string [@@js.get "blockedURI"]
+  val set_blockedURI: 'tags this -> string -> unit [@@js.set "blockedURI"]
+  val get_columnNumber: 'tags this -> float [@@js.get "columnNumber"]
+  val set_columnNumber: 'tags this -> float -> unit [@@js.set "columnNumber"]
+  val get_disposition: 'tags this -> SecurityPolicyViolationEventDisposition.t [@@js.get "disposition"]
+  val set_disposition: 'tags this -> SecurityPolicyViolationEventDisposition.t -> unit [@@js.set "disposition"]
+  val get_documentURI: 'tags this -> string [@@js.get "documentURI"]
+  val set_documentURI: 'tags this -> string -> unit [@@js.set "documentURI"]
+  val get_effectiveDirective: 'tags this -> string [@@js.get "effectiveDirective"]
+  val set_effectiveDirective: 'tags this -> string -> unit [@@js.set "effectiveDirective"]
+  val get_lineNumber: 'tags this -> float [@@js.get "lineNumber"]
+  val set_lineNumber: 'tags this -> float -> unit [@@js.set "lineNumber"]
+  val get_originalPolicy: 'tags this -> string [@@js.get "originalPolicy"]
+  val set_originalPolicy: 'tags this -> string -> unit [@@js.set "originalPolicy"]
+  val get_referrer: 'tags this -> string [@@js.get "referrer"]
+  val set_referrer: 'tags this -> string -> unit [@@js.set "referrer"]
+  val get_sample: 'tags this -> string [@@js.get "sample"]
+  val set_sample: 'tags this -> string -> unit [@@js.set "sample"]
+  val get_sourceFile: 'tags this -> string [@@js.get "sourceFile"]
+  val set_sourceFile: 'tags this -> string -> unit [@@js.set "sourceFile"]
+  val get_statusCode: 'tags this -> float [@@js.get "statusCode"]
+  val set_statusCode: 'tags this -> float -> unit [@@js.set "statusCode"]
+  val get_violatedDirective: 'tags this -> string [@@js.get "violatedDirective"]
+  val set_violatedDirective: 'tags this -> string -> unit [@@js.set "violatedDirective"]
+  val create: blockedURI:string -> columnNumber:float -> disposition:SecurityPolicyViolationEventDisposition.t -> documentURI:string -> effectiveDirective:string -> lineNumber:float -> originalPolicy:string -> referrer:string -> sample:string -> sourceFile:string -> statusCode:float -> violatedDirective:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+(** Inherits from Event, and represents the event object of an event sent on a document or worker when its content security policy is violated. *)
+module[@js.scope "SecurityPolicyViolationEvent"] SecurityPolicyViolationEvent : sig
+  type t = [`Event | `SecurityPolicyViolationEvent] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Event | `SecurityPolicyViolationEvent]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Event | `SecurityPolicyViolationEvent]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `SecurityPolicyViolationEvent ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_blockedURI: 'tags this -> string [@@js.get "blockedURI"]
+  val get_columnNumber: 'tags this -> float [@@js.get "columnNumber"]
+  val get_disposition: 'tags this -> SecurityPolicyViolationEventDisposition.t [@@js.get "disposition"]
+  val get_documentURI: 'tags this -> string [@@js.get "documentURI"]
+  val get_effectiveDirective: 'tags this -> string [@@js.get "effectiveDirective"]
+  val get_lineNumber: 'tags this -> float [@@js.get "lineNumber"]
+  val get_originalPolicy: 'tags this -> string [@@js.get "originalPolicy"]
+  val get_referrer: 'tags this -> string [@@js.get "referrer"]
+  val get_sample: 'tags this -> string [@@js.get "sample"]
+  val get_sourceFile: 'tags this -> string [@@js.get "sourceFile"]
+  val get_statusCode: 'tags this -> float [@@js.get "statusCode"]
+  val get_violatedDirective: 'tags this -> string [@@js.get "violatedDirective"]
+  val create: blockedURI:string -> columnNumber:float -> disposition:SecurityPolicyViolationEventDisposition.t -> documentURI:string -> effectiveDirective:string -> lineNumber:float -> originalPolicy:string -> referrer:string -> sample:string -> sourceFile:string -> statusCode:float -> violatedDirective:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create': type_:string -> ?eventInitDict:SecurityPolicyViolationEventInit.t -> unit -> t [@@js.create]
 end
 module ProgressEventInit : sig
   type t = [`EventInit | `ProgressEventInit] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -5658,48 +5660,6 @@ module WindowSessionStorage : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_sessionStorage: 'tags this -> Storage.t [@@js.get "sessionStorage"]
   val create: sessionStorage:Storage.t -> unit -> t [@@js.builder]
-  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-end
-module StructuredSerializeOptions : sig
-  type t = [`StructuredSerializeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`StructuredSerializeOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`StructuredSerializeOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `StructuredSerializeOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_transfer: 'tags this -> any list [@@js.get "transfer"]
-  val set_transfer: 'tags this -> any list -> unit [@@js.set "transfer"]
-  val create: transfer:any list -> unit -> t [@@js.builder]
-  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
-end
-module WindowPostMessageOptions : sig
-  type t = [`StructuredSerializeOptions | `WindowPostMessageOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
-  type t_0 = t
-  [@@@js.stop]
-  type tags = [`StructuredSerializeOptions | `WindowPostMessageOptions]
-  type tags_0 = tags
-  [@@@js.start]
-  [@@@js.implem 
-    type tags = [`StructuredSerializeOptions | `WindowPostMessageOptions]
-    type tags_0 = tags
-  ]
-  type 'tags this = 'tags intf constraint 'tags = [> `WindowPostMessageOptions ]
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-  val get_targetOrigin: 'tags this -> string [@@js.get "targetOrigin"]
-  val set_targetOrigin: 'tags this -> string -> unit [@@js.set "targetOrigin"]
-  val create: targetOrigin:string -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module VoidFunction : sig
@@ -7009,7 +6969,7 @@ module[@js.scope "WebGLFramebuffer"] WebGLFramebuffer : sig
   val create: unit -> t [@@js.create]
 end
 module WebGLPowerPreference : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s382_high_performance[@js "high-performance"] | `L_s467_low_power[@js "low-power"]] [@js.enum])
+  type t = ([`L_s241_default[@js "default"] | `L_s396_high_performance[@js "high-performance"] | `L_s485_low_power[@js "low-power"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8130,7 +8090,7 @@ module[@js.scope "PictureInPictureWindow"] PictureInPictureWindow : sig
   val create: unit -> t [@@js.create]
 end
 module TextTrackMode : sig
-  type t = ([`L_s254_disabled[@js "disabled"] | `L_s379_hidden[@js "hidden"] | `L_s696_showing[@js "showing"]] [@js.enum])
+  type t = ([`L_s264_disabled[@js "disabled"] | `L_s393_hidden[@js "hidden"] | `L_s721_showing[@js "showing"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8138,7 +8098,7 @@ module TextTrackMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module TextTrackKind : sig
-  type t = ([`L_s183_captions[@js "captions"] | `L_s188_chapters[@js "chapters"] | `L_s244_descriptions[@js "descriptions"] | `L_s493_metadata[@js "metadata"] | `L_s736_subtitles[@js "subtitles"]] [@js.enum])
+  type t = ([`L_s183_captions[@js "captions"] | `L_s188_chapters[@js "chapters"] | `L_s248_descriptions[@js "descriptions"] | `L_s512_metadata[@js "metadata"] | `L_s768_subtitles[@js "subtitles"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8533,7 +8493,7 @@ module[@js.scope "TextTrackList"] TextTrackList : sig
   val create: unit -> t [@@js.create]
 end
 module RemotePlaybackState : sig
-  type t = ([`L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s256_disconnected[@js "disconnected"]] [@js.enum])
+  type t = ([`L_s216_connected[@js "connected"] | `L_s217_connecting[@js "connecting"] | `L_s266_disconnected[@js "disconnected"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8717,7 +8677,7 @@ module[@js.scope "MediaEncryptedEvent"] MediaEncryptedEvent : sig
   val create': type_:string -> ?eventInitDict:MediaEncryptedEventInit.t -> unit -> t [@@js.create]
 end
 module CanPlayTypeResult : sig
-  type t = ([`L_s0[@js ""] | `L_s485_maybe[@js "maybe"] | `L_s616_probably[@js "probably"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s504_maybe[@js "maybe"] | `L_s637_probably[@js "probably"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8828,7 +8788,7 @@ module CanvasTransform : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasTextBaseline : sig
-  type t = ([`L_s110_alphabetic[@js "alphabetic"] | `L_s169_bottom[@js "bottom"] | `L_s368_hanging[@js "hanging"] | `L_s398_ideographic[@js "ideographic"] | `L_s495_middle[@js "middle"] | `L_s773_top[@js "top"]] [@js.enum])
+  type t = ([`L_s110_alphabetic[@js "alphabetic"] | `L_s169_bottom[@js "bottom"] | `L_s381_hanging[@js "hanging"] | `L_s413_ideographic[@js "ideographic"] | `L_s514_middle[@js "middle"] | `L_s805_top[@js "top"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8836,7 +8796,7 @@ module CanvasTextBaseline : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasTextAlign : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s440_left[@js "left"] | `L_s658_right[@js "right"] | `L_s723_start[@js "start"]] [@js.enum])
+  type t = ([`L_s185_center[@js "center"] | `L_s290_end[@js "end"] | `L_s456_left[@js "left"] | `L_s680_right[@js "right"] | `L_s754_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8844,7 +8804,7 @@ module CanvasTextAlign : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasDirection : sig
-  type t = ([`L_s411_inherit[@js "inherit"] | `L_s471_ltr[@js "ltr"] | `L_s665_rtl[@js "rtl"]] [@js.enum])
+  type t = ([`L_s426_inherit[@js "inherit"] | `L_s489_ltr[@js "ltr"] | `L_s687_rtl[@js "rtl"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -8991,7 +8951,7 @@ module CanvasShadowStyles : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PredefinedColorSpace : sig
-  type t = ([`L_s259_display_p3[@js "display-p3"] | `L_s719_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s269_display_p3[@js "display-p3"] | `L_s750_srgb[@js "srgb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9047,7 +9007,7 @@ module CanvasRect : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasLineJoin : sig
-  type t = ([`L_s158_bevel[@js "bevel"] | `L_s496_miter[@js "miter"] | `L_s661_round[@js "round"]] [@js.enum])
+  type t = ([`L_s158_bevel[@js "bevel"] | `L_s515_miter[@js "miter"] | `L_s683_round[@js "round"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9055,7 +9015,7 @@ module CanvasLineJoin : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasLineCap : sig
-  type t = ([`L_s174_butt[@js "butt"] | `L_s661_round[@js "round"] | `L_s717_square[@js "square"]] [@js.enum])
+  type t = ([`L_s174_butt[@js "butt"] | `L_s683_round[@js "round"] | `L_s748_square[@js "square"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9094,7 +9054,7 @@ module CanvasPathDrawingStyles : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ImageSmoothingQuality : sig
-  type t = ([`L_s381_high[@js "high"] | `L_s466_low[@js "low"] | `L_s487_medium[@js "medium"]] [@js.enum])
+  type t = ([`L_s395_high[@js "high"] | `L_s484_low[@js "low"] | `L_s506_medium[@js "medium"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9329,7 +9289,7 @@ module[@js.scope "Path2D"] Path2D : sig
   val create: ?path:([`U1 of t | `U2 of string] [@js.union]) -> unit -> t [@@js.create]
 end
 module CanvasFillRule : sig
-  type t = ([`L_s289_evenodd[@js "evenodd"] | `L_s529_nonzero[@js "nonzero"]] [@js.enum])
+  type t = ([`L_s300_evenodd[@js "evenodd"] | `L_s549_nonzero[@js "nonzero"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9365,6 +9325,14 @@ module CanvasDrawPath : sig
   val stroke': 'tags this -> path:Path2D.t -> unit [@@js.call "stroke"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
+module GlobalCompositeOperation : sig
+  type t = ([`L_s206_color[@js "color"] | `L_s207_color_burn[@js "color-burn"] | `L_s208_color_dodge[@js "color-dodge"] | `L_s222_copy[@js "copy"] | `L_s231_darken[@js "darken"] | `L_s249_destination_atop[@js "destination-atop"] | `L_s250_destination_in[@js "destination-in"] | `L_s251_destination_out[@js "destination-out"] | `L_s252_destination_over[@js "destination-over"] | `L_s260_difference[@js "difference"] | `L_s301_exclusion[@js "exclusion"] | `L_s383_hard_light[@js "hard-light"] | `L_s405_hue[@js "hue"] | `L_s462_lighten[@js "lighten"] | `L_s463_lighter[@js "lighter"] | `L_s490_luminosity[@js "luminosity"] | `L_s528_multiply[@js "multiply"] | `L_s578_overlay[@js "overlay"] | `L_s694_saturation[@js "saturation"] | `L_s696_screen[@js "screen"] | `L_s736_soft_light[@js "soft-light"] | `L_s738_source_atop[@js "source-atop"] | `L_s739_source_in[@js "source-in"] | `L_s740_source_out[@js "source-out"] | `L_s741_source_over[@js "source-over"] | `L_s876_xor[@js "xor"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
 module CanvasCompositing : sig
   type t = [`CanvasCompositing] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -9383,9 +9351,9 @@ module CanvasCompositing : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_globalAlpha: 'tags this -> float [@@js.get "globalAlpha"]
   val set_globalAlpha: 'tags this -> float -> unit [@@js.set "globalAlpha"]
-  val get_globalCompositeOperation: 'tags this -> string [@@js.get "globalCompositeOperation"]
-  val set_globalCompositeOperation: 'tags this -> string -> unit [@@js.set "globalCompositeOperation"]
-  val create: globalAlpha:float -> globalCompositeOperation:string -> unit -> t [@@js.builder]
+  val get_globalCompositeOperation: 'tags this -> GlobalCompositeOperation.t [@@js.get "globalCompositeOperation"]
+  val set_globalCompositeOperation: 'tags this -> GlobalCompositeOperation.t -> unit [@@js.set "globalCompositeOperation"]
+  val create: globalAlpha:float -> globalCompositeOperation:GlobalCompositeOperation.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module BlobCallback : sig
@@ -9408,7 +9376,7 @@ module BlobCallback : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ResizeQuality : sig
-  type t = ([`L_s381_high[@js "high"] | `L_s466_low[@js "low"] | `L_s487_medium[@js "medium"] | `L_s582_pixelated[@js "pixelated"]] [@js.enum])
+  type t = ([`L_s395_high[@js "high"] | `L_s484_low[@js "low"] | `L_s506_medium[@js "medium"] | `L_s603_pixelated[@js "pixelated"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9416,7 +9384,7 @@ module ResizeQuality : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module PremultiplyAlpha : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s528_none[@js "none"] | `L_s608_premultiply[@js "premultiply"]] [@js.enum])
+  type t = ([`L_s241_default[@js "default"] | `L_s548_none[@js "none"] | `L_s629_premultiply[@js "premultiply"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9424,7 +9392,7 @@ module PremultiplyAlpha : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ImageOrientation : sig
-  type t = ([`L_s334_flipY[@js "flipY"] | `L_s528_none[@js "none"]] [@js.enum])
+  type t = ([`L_s347_flipY[@js "flipY"] | `L_s548_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9432,7 +9400,7 @@ module ImageOrientation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ColorSpaceConversion : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s528_none[@js "none"]] [@js.enum])
+  type t = ([`L_s241_default[@js "default"] | `L_s548_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9573,7 +9541,15 @@ module IDBValidKey : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module IDBTransactionMode : sig
-  type t = ([`L_s627_readonly[@js "readonly"] | `L_s628_readwrite[@js "readwrite"] | `L_s816_versionchange[@js "versionchange"]] [@js.enum])
+  type t = ([`L_s648_readonly[@js "readonly"] | `L_s649_readwrite[@js "readwrite"] | `L_s849_versionchange[@js "versionchange"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module IDBTransactionDurability : sig
+  type t = ([`L_s241_default[@js "default"] | `L_s658_relaxed[@js "relaxed"] | `L_s760_strict[@js "strict"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9581,7 +9557,7 @@ module IDBTransactionMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module IDBRequestReadyState : sig
-  type t = ([`L_s263_done[@js "done"] | `L_s576_pending[@js "pending"]] [@js.enum])
+  type t = ([`L_s273_done[@js "done"] | `L_s597_pending[@js "pending"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -9638,7 +9614,7 @@ module[@js.scope "IDBKeyRange"] IDBKeyRange : sig
   val upperBound: upper:any -> ?open_:bool -> unit -> t [@@js.global "upperBound"]
 end
 module IDBCursorDirection : sig
-  type t = ([`L_s519_next[@js "next"] | `L_s521_nextunique[@js "nextunique"] | `L_s611_prev[@js "prev"] | `L_s613_prevunique[@js "prevunique"]] [@js.enum])
+  type t = ([`L_s539_next[@js "next"] | `L_s541_nextunique[@js "nextunique"] | `L_s632_prev[@js "prev"] | `L_s634_prevunique[@js "prevunique"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10202,6 +10178,7 @@ and[@js.scope "IDBTransaction"] IDBTransaction : sig
   
   (** Returns the transaction's connection. *)
   val get_db: 'tags this -> IDBDatabase.t [@@js.get "db"]
+  val get_durability: 'tags this -> IDBTransactionDurability.t [@@js.get "durability"]
   
   (** If the transaction was aborted, returns the error (a DOMException) providing the reason. *)
   val get_error: 'tags this -> DOMException.t option [@@js.get "error"]
@@ -10571,7 +10548,7 @@ module Pbkdf2Params : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module KeyFormat : sig
-  type t = ([`L_s426_jwk[@js "jwk"] | `L_s583_pkcs8[@js "pkcs8"] | `L_s626_raw[@js "raw"] | `L_s716_spki[@js "spki"]] [@js.enum])
+  type t = ([`L_s441_jwk[@js "jwk"] | `L_s604_pkcs8[@js "pkcs8"] | `L_s647_raw[@js "raw"] | `L_s747_spki[@js "spki"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10751,7 +10728,7 @@ module EcdsaParams : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module KeyUsage : sig
-  type t = ([`L_s236_decrypt[@js "decrypt"] | `L_s241_deriveBits[@js "deriveBits"] | `L_s242_deriveKey[@js "deriveKey"] | `L_s277_encrypt[@js "encrypt"] | `L_s697_sign[@js "sign"] | `L_s802_unwrapKey[@js "unwrapKey"] | `L_s815_verify[@js "verify"] | `L_s841_wrapKey[@js "wrapKey"]] [@js.enum])
+  type t = ([`L_s240_decrypt[@js "decrypt"] | `L_s245_deriveBits[@js "deriveBits"] | `L_s246_deriveKey[@js "deriveKey"] | `L_s288_encrypt[@js "encrypt"] | `L_s722_sign[@js "sign"] | `L_s834_unwrapKey[@js "unwrapKey"] | `L_s848_verify[@js "verify"] | `L_s874_wrapKey[@js "wrapKey"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -10759,7 +10736,7 @@ module KeyUsage : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module KeyType : sig
-  type t = ([`L_s615_private[@js "private"] | `L_s620_public[@js "public"] | `L_s676_secret[@js "secret"]] [@js.enum])
+  type t = ([`L_s636_private[@js "private"] | `L_s641_public[@js "public"] | `L_s700_secret[@js "secret"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11068,21 +11045,21 @@ module[@js.scope "SubtleCrypto"] SubtleCrypto : sig
   val generateKey: 'tags this -> algorithm:([`U1 of RsaHashedKeyGenParams.t | `U2 of EcKeyGenParams.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
   val generateKey': 'tags this -> algorithm:([`U1 of AesKeyGenParams.t | `U2 of HmacKeyGenParams.t | `U3 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
   val generateKey'': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
-  val importKey: 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey: 'tags this -> format:([`L_s441_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey': 'tags this -> format:(KeyFormat.t, ([`L_s441_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
   val unwrapKey: 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> unwrappedKeyAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t Iterable.t_1 -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
   val decrypt: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "decrypt"]
   val deriveBits: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> length:float -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "deriveBits"]
   val deriveKey': 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of EcdhKeyDeriveParams.t | `U3 of HkdfParams.t | `U4 of Pbkdf2Params.t] [@js.union]) -> baseKey:CryptoKey.t -> derivedKeyType:([`U1 of AlgorithmIdentifier.t | `U2 of AesDerivedKeyParams.t | `U3 of HmacImportParams.t | `U4 of HkdfParams.t | `U5 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "deriveKey"]
   val digest: 'tags this -> algorithm:AlgorithmIdentifier.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "digest"]
   val encrypt: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> any Promise.t_1 [@@js.call "encrypt"]
-  val exportKey: 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t_1 [@@js.call "exportKey"]
-  val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> key:CryptoKey.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "exportKey"]
+  val exportKey: 'tags this -> format:([`L_s441_jwk[@js "jwk"]] [@js.enum]) -> key:CryptoKey.t -> JsonWebKey.t Promise.t_1 [@@js.call "exportKey"]
+  val exportKey': 'tags this -> format:(KeyFormat.t, ([`L_s441_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> key:CryptoKey.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "exportKey"]
   val generateKey''': 'tags this -> algorithm:([`U1 of RsaHashedKeyGenParams.t | `U2 of EcKeyGenParams.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKeyPair.t Promise.t_1 [@@js.call "generateKey"]
   val generateKey'''': 'tags this -> algorithm:([`U1 of AesKeyGenParams.t | `U2 of HmacKeyGenParams.t | `U3 of Pbkdf2Params.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "generateKey"]
   val generateKey''''': 'tags this -> algorithm:AlgorithmIdentifier.t -> extractable:bool -> keyUsages:KeyUsage.t list -> (CryptoKey.t, CryptoKeyPair.t) union2 Promise.t_1 [@@js.call "generateKey"]
-  val importKey'': 'tags this -> format:([`L_s426_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
-  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s426_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey'': 'tags this -> format:([`L_s441_jwk[@js "jwk"]] [@js.enum]) -> keyData:JsonWebKey.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
+  val importKey''': 'tags this -> format:(KeyFormat.t, ([`L_s441_jwk[@js "jwk"]] [@js.enum])) Exclude.t_2 -> keyData:BufferSource.t -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "importKey"]
   val sign: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaPssParams.t | `U3 of EcdsaParams.t] [@js.union]) -> key:CryptoKey.t -> data:BufferSource.t -> ArrayBuffer.t_0 Promise.t_1 [@@js.call "sign"]
   val unwrapKey': 'tags this -> format:KeyFormat.t -> wrappedKey:BufferSource.t -> unwrappingKey:CryptoKey.t -> unwrapAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaOaepParams.t | `U3 of AesCtrParams.t | `U4 of AesCbcParams.t | `U5 of AesGcmParams.t] [@js.union]) -> unwrappedKeyAlgorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaHashedImportParams.t | `U3 of EcKeyImportParams.t | `U4 of HmacImportParams.t | `U5 of AesKeyAlgorithm.t] [@js.union]) -> extractable:bool -> keyUsages:KeyUsage.t list -> CryptoKey.t Promise.t_1 [@@js.call "unwrapKey"]
   val verify: 'tags this -> algorithm:([`U1 of AlgorithmIdentifier.t | `U2 of RsaPssParams.t | `U3 of EcdsaParams.t] [@js.union]) -> key:CryptoKey.t -> signature:BufferSource.t -> data:BufferSource.t -> bool Promise.t_1 [@@js.call "verify"]
@@ -11113,6 +11090,9 @@ module[@js.scope "Crypto"] Crypto : sig
   (** Available only in secure contexts. *)
   val get_subtle: 'tags this -> SubtleCrypto.t [@@js.get "subtle"]
   val getRandomValues: 'tags this -> array:'T -> 'T [@@js.call "getRandomValues"]
+  
+  (** Available only in secure contexts. *)
+  val randomUUID: 'tags this -> string [@@js.call "randomUUID"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -11164,7 +11144,7 @@ module MultiCacheQueryOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ResponseType : sig
-  type t = ([`L_s150_basic[@js "basic"] | `L_s222_cors[@js "cors"] | `L_s237_default[@js "default"] | `L_s287_error[@js "error"] | `L_s542_opaque[@js "opaque"] | `L_s543_opaqueredirect[@js "opaqueredirect"]] [@js.enum])
+  type t = ([`L_s150_basic[@js "basic"] | `L_s225_cors[@js "cors"] | `L_s241_default[@js "default"] | `L_s298_error[@js "error"] | `L_s562_opaque[@js "opaque"] | `L_s563_opaqueredirect[@js "opaqueredirect"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11243,7 +11223,7 @@ module ResponseInit : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RequestRedirect : sig
-  type t = ([`L_s287_error[@js "error"] | `L_s338_follow[@js "follow"] | `L_s476_manual[@js "manual"]] [@js.enum])
+  type t = ([`L_s298_error[@js "error"] | `L_s351_follow[@js "follow"] | `L_s495_manual[@js "manual"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11251,7 +11231,7 @@ module RequestRedirect : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestMode : sig
-  type t = ([`L_s222_cors[@js "cors"] | `L_s514_navigate[@js "navigate"] | `L_s524_no_cors[@js "no-cors"] | `L_s670_same_origin[@js "same-origin"]] [@js.enum])
+  type t = ([`L_s225_cors[@js "cors"] | `L_s534_navigate[@js "navigate"] | `L_s544_no_cors[@js "no-cors"] | `L_s692_same_origin[@js "same-origin"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11259,7 +11239,7 @@ module RequestMode : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestDestination : sig
-  type t = ([`L_s0[@js ""] | `L_s133_audio[@js "audio"] | `L_s139_audioworklet[@js "audioworklet"] | `L_s262_document[@js "document"] | `L_s275_embed[@js "embed"] | `L_s339_font[@js "font"] | `L_s347_frame[@js "frame"] | `L_s400_iframe[@js "iframe"] | `L_s401_image[@js "image"] | `L_s475_manifest[@js "manifest"] | `L_s535_object[@js "object"] | `L_s563_paintworklet[@js "paintworklet"] | `L_s649_report[@js "report"] | `L_s674_script[@js "script"] | `L_s694_sharedworker[@js "sharedworker"] | `L_s732_style[@js "style"] | `L_s779_track[@js "track"] | `L_s819_video[@js "video"] | `L_s840_worker[@js "worker"] | `L_s845_xslt[@js "xslt"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s133_audio[@js "audio"] | `L_s139_audioworklet[@js "audioworklet"] | `L_s272_document[@js "document"] | `L_s286_embed[@js "embed"] | `L_s352_font[@js "font"] | `L_s360_frame[@js "frame"] | `L_s415_iframe[@js "iframe"] | `L_s416_image[@js "image"] | `L_s494_manifest[@js "manifest"] | `L_s555_object[@js "object"] | `L_s584_paintworklet[@js "paintworklet"] | `L_s671_report[@js "report"] | `L_s698_script[@js "script"] | `L_s719_sharedworker[@js "sharedworker"] | `L_s764_style[@js "style"] | `L_s811_track[@js "track"] | `L_s852_video[@js "video"] | `L_s873_worker[@js "worker"] | `L_s879_xslt[@js "xslt"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11267,7 +11247,7 @@ module RequestDestination : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestCredentials : sig
-  type t = ([`L_s408_include[@js "include"] | `L_s539_omit[@js "omit"] | `L_s670_same_origin[@js "same-origin"]] [@js.enum])
+  type t = ([`L_s423_include[@js "include"] | `L_s559_omit[@js "omit"] | `L_s692_same_origin[@js "same-origin"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11275,7 +11255,7 @@ module RequestCredentials : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RequestCache : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s341_force_cache[@js "force-cache"] | `L_s523_no_cache[@js "no-cache"] | `L_s527_no_store[@js "no-store"] | `L_s541_only_if_cached[@js "only-if-cached"] | `L_s640_reload[@js "reload"]] [@js.enum])
+  type t = ([`L_s241_default[@js "default"] | `L_s354_force_cache[@js "force-cache"] | `L_s543_no_cache[@js "no-cache"] | `L_s547_no_store[@js "no-store"] | `L_s561_only_if_cached[@js "only-if-cached"] | `L_s662_reload[@js "reload"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11283,7 +11263,7 @@ module RequestCache : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ReferrerPolicy : sig
-  type t = ([`L_s0[@js ""] | `L_s525_no_referrer[@js "no-referrer"] | `L_s526_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s551_origin[@js "origin"] | `L_s552_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s670_same_origin[@js "same-origin"] | `L_s729_strict_origin[@js "strict-origin"] | `L_s730_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s800_unsafe_url[@js "unsafe-url"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s545_no_referrer[@js "no-referrer"] | `L_s546_no_referrer_when_downgrade[@js "no-referrer-when-downgrade"] | `L_s571_origin[@js "origin"] | `L_s572_origin_when_cross_origin[@js "origin-when-cross-origin"] | `L_s692_same_origin[@js "same-origin"] | `L_s761_strict_origin[@js "strict-origin"] | `L_s762_strict_origin_when_cross_origin[@js "strict-origin-when-cross-origin"] | `L_s832_unsafe_url[@js "unsafe-url"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11581,7 +11561,7 @@ module[@js.scope "HashChangeEvent"] HashChangeEvent : sig
   val create': type_:string -> ?eventInitDict:HashChangeEventInit.t -> unit -> t [@@js.create]
 end
 module GamepadMappingType : sig
-  type t = ([`L_s0[@js ""] | `L_s722_standard[@js "standard"] | `L_s844_xr_standard[@js "xr-standard"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s753_standard[@js "standard"] | `L_s878_xr_standard[@js "xr-standard"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11589,7 +11569,7 @@ module GamepadMappingType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module GamepadHapticActuatorType : sig
-  type t = ([`L_s818_vibration[@js "vibration"]] [@js.enum])
+  type t = ([`L_s851_vibration[@js "vibration"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -11930,7 +11910,7 @@ module[@js.scope "PushSubscriptionOptions"] PushSubscriptionOptions : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create': unit -> t [@@js.create]
 end
-module DOMTimeStamp : sig
+module EpochTimeStamp : sig
   type t = float
   type t_0 = t
   val t_to_js: t -> Ojs.t
@@ -11956,15 +11936,15 @@ module PushSubscriptionJSON : sig
   val t_0_of_js: Ojs.t -> t_0
   val get_endpoint: 'tags this -> string [@@js.get "endpoint"]
   val set_endpoint: 'tags this -> string -> unit [@@js.set "endpoint"]
-  val get_expirationTime: 'tags this -> DOMTimeStamp.t option [@@js.get "expirationTime"]
-  val set_expirationTime: 'tags this -> DOMTimeStamp.t option -> unit [@@js.set "expirationTime"]
+  val get_expirationTime: 'tags this -> EpochTimeStamp.t option [@@js.get "expirationTime"]
+  val set_expirationTime: 'tags this -> EpochTimeStamp.t option -> unit [@@js.set "expirationTime"]
   val get_keys: 'tags this -> (string, string) Record.t_2 [@@js.get "keys"]
   val set_keys: 'tags this -> (string, string) Record.t_2 -> unit [@@js.set "keys"]
-  val create: endpoint:string -> ?expirationTime:DOMTimeStamp.t -> keys:(string, string) Record.t_2 -> unit -> t [@@js.builder]
+  val create: endpoint:string -> ?expirationTime:EpochTimeStamp.t -> keys:(string, string) Record.t_2 -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PushEncryptionKeyName : sig
-  type t = ([`L_s140_auth[@js "auth"] | `L_s559_p256dh[@js "p256dh"]] [@js.enum])
+  type t = ([`L_s140_auth[@js "auth"] | `L_s580_p256dh[@js "p256dh"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12001,8 +11981,8 @@ module[@js.scope "PushSubscription"] PushSubscription : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module PushPermissionState : sig
-  type t = ([`L_s240_denied[@js "denied"] | `L_s361_granted[@js "granted"] | `L_s619_prompt[@js "prompt"]] [@js.enum])
+module PermissionState : sig
+  type t = ([`L_s244_denied[@js "denied"] | `L_s374_granted[@js "granted"] | `L_s640_prompt[@js "prompt"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12031,7 +12011,7 @@ module[@js.scope "PushManager"] PushManager : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val getSubscription: 'tags this -> PushSubscription.t option Promise.t_1 [@@js.call "getSubscription"]
-  val permissionState: 'tags this -> ?options:PushSubscriptionOptionsInit.t -> unit -> PushPermissionState.t Promise.t_1 [@@js.call "permissionState"]
+  val permissionState: 'tags this -> ?options:PushSubscriptionOptionsInit.t -> unit -> PermissionState.t Promise.t_1 [@@js.call "permissionState"]
   val subscribe: 'tags this -> ?options:PushSubscriptionOptionsInit.t -> unit -> PushSubscription.t Promise.t_1 [@@js.call "subscribe"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
@@ -12039,7 +12019,7 @@ module[@js.scope "PushManager"] PushManager : sig
   val supportedContentEncodings: unit -> string list [@@js.get "supportedContentEncodings"]
 end
 module NotificationPermission : sig
-  type t = ([`L_s237_default[@js "default"] | `L_s240_denied[@js "denied"] | `L_s361_granted[@js "granted"]] [@js.enum])
+  type t = ([`L_s241_default[@js "default"] | `L_s244_denied[@js "denied"] | `L_s374_granted[@js "granted"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12099,7 +12079,7 @@ module NotificationAction : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module NotificationDirection : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s471_ltr[@js "ltr"] | `L_s665_rtl[@js "rtl"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s489_ltr[@js "ltr"] | `L_s687_rtl[@js "rtl"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12146,11 +12126,11 @@ module NotificationOptions : sig
   val set_silent: 'tags this -> bool -> unit [@@js.set "silent"]
   val get_tag: 'tags this -> string [@@js.get "tag"]
   val set_tag: 'tags this -> string -> unit [@@js.set "tag"]
-  val get_timestamp: 'tags this -> DOMTimeStamp.t [@@js.get "timestamp"]
-  val set_timestamp: 'tags this -> DOMTimeStamp.t -> unit [@@js.set "timestamp"]
+  val get_timestamp: 'tags this -> EpochTimeStamp.t [@@js.get "timestamp"]
+  val set_timestamp: 'tags this -> EpochTimeStamp.t -> unit [@@js.set "timestamp"]
   val get_vibrate: 'tags this -> VibratePattern.t [@@js.get "vibrate"]
   val set_vibrate: 'tags this -> VibratePattern.t -> unit [@@js.set "vibrate"]
-  val create: actions:NotificationAction.t list -> badge:string -> body:string -> data:any -> dir:NotificationDirection.t -> icon:string -> image:string -> lang:string -> renotify:bool -> requireInteraction:bool -> silent:bool -> tag:string -> timestamp:DOMTimeStamp.t -> vibrate:VibratePattern.t -> unit -> t [@@js.builder]
+  val create: actions:NotificationAction.t list -> badge:string -> body:string -> data:any -> dir:NotificationDirection.t -> icon:string -> image:string -> lang:string -> renotify:bool -> requireInteraction:bool -> silent:bool -> tag:string -> timestamp:EpochTimeStamp.t -> vibrate:VibratePattern.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -12255,7 +12235,7 @@ module GetNotificationOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WorkerType : sig
-  type t = ([`L_s195_classic[@js "classic"] | `L_s498_module[@js "module"]] [@js.enum])
+  type t = ([`L_s195_classic[@js "classic"] | `L_s517_module[@js "module"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12263,7 +12243,7 @@ module WorkerType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ServiceWorkerUpdateViaCache : sig
-  type t = ([`L_s106_all[@js "all"] | `L_s404_imports[@js "imports"] | `L_s528_none[@js "none"]] [@js.enum])
+  type t = ([`L_s106_all[@js "all"] | `L_s419_imports[@js "imports"] | `L_s548_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12296,7 +12276,7 @@ module RegistrationOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ServiceWorkerState : sig
-  type t = ([`L_s416_installed[@js "installed"] | `L_s417_installing[@js "installing"] | `L_s565_parsed[@js "parsed"] | `L_s635_redundant[@js "redundant"] | `L_s96_activated[@js "activated"] | `L_s97_activating[@js "activating"]] [@js.enum])
+  type t = ([`L_s431_installed[@js "installed"] | `L_s432_installing[@js "installing"] | `L_s586_parsed[@js "parsed"] | `L_s656_redundant[@js "redundant"] | `L_s96_activated[@js "activated"] | `L_s97_activating[@js "activating"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12413,14 +12393,6 @@ module[@js.scope "ImageBitmap"] ImageBitmap : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
-module PermissionState : sig
-  type t = ([`L_s240_denied[@js "denied"] | `L_s361_granted[@js "granted"] | `L_s619_prompt[@js "prompt"]] [@js.enum])
-  type t_0 = t
-  val t_to_js: t -> Ojs.t
-  val t_of_js: Ojs.t -> t
-  val t_0_to_js: t_0 -> Ojs.t
-  val t_0_of_js: Ojs.t -> t_0
-end
 module[@js.scope "PermissionStatus"] PermissionStatus : sig
   type t = [`EventTarget | `PermissionStatus] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -12485,7 +12457,7 @@ module[@js.scope "PermissionStatus"] PermissionStatus : sig
   val create: unit -> t [@@js.create]
 end
 module PermissionName : sig
-  type t = ([`L_s357_geolocation[@js "geolocation"] | `L_s534_notifications[@js "notifications"] | `L_s579_persistent_storage[@js "persistent-storage"] | `L_s622_push[@js "push"] | `L_s673_screen_wake_lock[@js "screen-wake-lock"] | `L_s843_xr_spatial_tracking[@js "xr-spatial-tracking"]] [@js.enum])
+  type t = ([`L_s370_geolocation[@js "geolocation"] | `L_s554_notifications[@js "notifications"] | `L_s600_persistent_storage[@js "persistent-storage"] | `L_s643_push[@js "push"] | `L_s697_screen_wake_lock[@js "screen-wake-lock"] | `L_s877_xr_spatial_tracking[@js "xr-spatial-tracking"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -12557,6 +12529,153 @@ module StorageEstimate : sig
   val create: quota:float -> usage:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
+module FileSystemRemoveOptions : sig
+  type t = [`FileSystemRemoveOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`FileSystemRemoveOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`FileSystemRemoveOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `FileSystemRemoveOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_recursive: 'tags this -> bool [@@js.get "recursive"]
+  val set_recursive: 'tags this -> bool -> unit [@@js.set "recursive"]
+  val create: recursive:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+module FileSystemGetFileOptions : sig
+  type t = [`FileSystemGetFileOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`FileSystemGetFileOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`FileSystemGetFileOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `FileSystemGetFileOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_create: 'tags this -> bool [@@js.get "create"]
+  val set_create: 'tags this -> bool -> unit [@@js.set "create"]
+  val create: create_:(bool[@js "create"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+module FileSystemGetDirectoryOptions : sig
+  type t = [`FileSystemGetDirectoryOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`FileSystemGetDirectoryOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`FileSystemGetDirectoryOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `FileSystemGetDirectoryOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_create: 'tags this -> bool [@@js.get "create"]
+  val set_create: 'tags this -> bool -> unit [@@js.set "create"]
+  val create: create_:(bool[@js "create"]) -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+module FileSystemHandleKind : sig
+  type t = ([`L_s263_directory[@js "directory"] | `L_s343_file[@js "file"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+
+(** Available only in secure contexts. *)
+module[@js.scope "FileSystemHandle"] FileSystemHandle : sig
+  type t = [`FileSystemHandle] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`FileSystemHandle]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`FileSystemHandle]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `FileSystemHandle ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_kind: 'tags this -> FileSystemHandleKind.t [@@js.get "kind"]
+  val get_name: 'tags this -> string [@@js.get "name"]
+  val isSameEntry: 'tags this -> other:t -> bool Promise.t_1 [@@js.call "isSameEntry"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** Available only in secure contexts. *)
+module[@js.scope "FileSystemFileHandle"] FileSystemFileHandle : sig
+  type t = [`FileSystemFileHandle | `FileSystemHandle] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`FileSystemFileHandle | `FileSystemHandle]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`FileSystemFileHandle | `FileSystemHandle]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `FileSystemFileHandle ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_kind: 'tags this -> ([`L_s343_file[@js "file"]] [@js.enum]) [@@js.get "kind"]
+  val getFile: 'tags this -> File.t Promise.t_1 [@@js.call "getFile"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
+
+(** Available only in secure contexts. *)
+module[@js.scope "FileSystemDirectoryHandle"] FileSystemDirectoryHandle : sig
+  type t = [`FileSystemDirectoryHandle | `FileSystemHandle] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`FileSystemDirectoryHandle | `FileSystemHandle]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`FileSystemDirectoryHandle | `FileSystemHandle]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `FileSystemDirectoryHandle ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_kind: 'tags this -> ([`L_s263_directory[@js "directory"]] [@js.enum]) [@@js.get "kind"]
+  val getDirectoryHandle: 'tags this -> name:string -> ?options:FileSystemGetDirectoryOptions.t -> unit -> t Promise.t_1 [@@js.call "getDirectoryHandle"]
+  val getFileHandle: 'tags this -> name:string -> ?options:FileSystemGetFileOptions.t -> unit -> FileSystemFileHandle.t Promise.t_1 [@@js.call "getFileHandle"]
+  val removeEntry: 'tags this -> name:string -> ?options:FileSystemRemoveOptions.t -> unit -> unit Promise.t_1 [@@js.call "removeEntry"]
+  val resolve: 'tags this -> possibleDescendant:FileSystemHandle.t -> string list option Promise.t_1 [@@js.call "resolve"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
 
 (** Available only in secure contexts. *)
 module[@js.scope "StorageManager"] StorageManager : sig
@@ -12576,6 +12695,7 @@ module[@js.scope "StorageManager"] StorageManager : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val estimate: 'tags this -> StorageEstimate.t Promise.t_1 [@@js.call "estimate"]
+  val getDirectory: 'tags this -> FileSystemDirectoryHandle.t Promise.t_1 [@@js.call "getDirectory"]
   val persist: 'tags this -> bool Promise.t_1 [@@js.call "persist"]
   val persisted: 'tags this -> bool Promise.t_1 [@@js.call "persisted"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
@@ -12828,7 +12948,7 @@ module NavigatorOnLine : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ConnectionType : sig
-  type t = ([`L_s164_bluetooth[@js "bluetooth"] | `L_s184_cellular[@js "cellular"] | `L_s288_ethernet[@js "ethernet"] | `L_s497_mixed[@js "mixed"] | `L_s528_none[@js "none"] | `L_s553_other[@js "other"] | `L_s796_unknown[@js "unknown"] | `L_s838_wifi[@js "wifi"]] [@js.enum])
+  type t = ([`L_s164_bluetooth[@js "bluetooth"] | `L_s184_cellular[@js "cellular"] | `L_s299_ethernet[@js "ethernet"] | `L_s516_mixed[@js "mixed"] | `L_s548_none[@js "none"] | `L_s573_other[@js "other"] | `L_s828_unknown[@js "unknown"] | `L_s871_wifi[@js "wifi"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13022,7 +13142,7 @@ module NavigatorAutomationInformation : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaSessionPlaybackState : sig
-  type t = ([`L_s528_none[@js "none"] | `L_s572_paused[@js "paused"] | `L_s587_playing[@js "playing"]] [@js.enum])
+  type t = ([`L_s548_none[@js "none"] | `L_s593_paused[@js "paused"] | `L_s608_playing[@js "playing"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13030,7 +13150,7 @@ module MediaSessionPlaybackState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module MediaSessionAction : sig
-  type t = ([`L_s369_hangup[@js "hangup"] | `L_s520_nexttrack[@js "nexttrack"] | `L_s571_pause[@js "pause"] | `L_s585_play[@js "play"] | `L_s612_previoustrack[@js "previoustrack"] | `L_s679_seekbackward[@js "seekbackward"] | `L_s681_seekforward[@js "seekforward"] | `L_s683_seekto[@js "seekto"] | `L_s701_skipad[@js "skipad"] | `L_s726_stop[@js "stop"] | `L_s770_togglecamera[@js "togglecamera"] | `L_s771_togglemicrophone[@js "togglemicrophone"]] [@js.enum])
+  type t = ([`L_s382_hangup[@js "hangup"] | `L_s540_nexttrack[@js "nexttrack"] | `L_s592_pause[@js "pause"] | `L_s606_play[@js "play"] | `L_s633_previoustrack[@js "previoustrack"] | `L_s703_seekbackward[@js "seekbackward"] | `L_s705_seekforward[@js "seekforward"] | `L_s707_seekto[@js "seekto"] | `L_s726_skipad[@js "skipad"] | `L_s757_stop[@js "stop"] | `L_s802_togglecamera[@js "togglecamera"] | `L_s803_togglemicrophone[@js "togglemicrophone"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13216,7 +13336,7 @@ module[@js.scope "MediaSession"] MediaSession : sig
   val create: unit -> t [@@js.create]
 end
 module MediaKeySessionType : sig
-  type t = ([`L_s578_persistent_license[@js "persistent-license"] | `L_s754_temporary[@js "temporary"]] [@js.enum])
+  type t = ([`L_s599_persistent_license[@js "persistent-license"] | `L_s786_temporary[@js "temporary"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13224,7 +13344,7 @@ module MediaKeySessionType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module MediaKeyStatus : sig
-  type t = ([`L_s292_expired[@js "expired"] | `L_s420_internal_error[@js "internal-error"] | `L_s556_output_downscaled[@js "output-downscaled"] | `L_s557_output_restricted[@js "output-restricted"] | `L_s639_released[@js "released"] | `L_s725_status_pending[@js "status-pending"] | `L_s809_usable[@js "usable"] | `L_s810_usable_in_future[@js "usable-in-future"]] [@js.enum])
+  type t = ([`L_s305_expired[@js "expired"] | `L_s435_internal_error[@js "internal-error"] | `L_s576_output_downscaled[@js "output-downscaled"] | `L_s577_output_restricted[@js "output-restricted"] | `L_s661_released[@js "released"] | `L_s756_status_pending[@js "status-pending"] | `L_s841_usable[@js "usable"] | `L_s842_usable_in_future[@js "usable-in-future"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13265,7 +13385,7 @@ module[@js.scope "MediaKeyStatusMap"] MediaKeyStatusMap : sig
   val create: unit -> t [@@js.create]
 end
 module MediaKeySessionClosedReason : sig
-  type t = ([`L_s200_closed_by_application[@js "closed-by-application"] | `L_s370_hardware_context_reset[@js "hardware-context-reset"] | `L_s420_internal_error[@js "internal-error"] | `L_s638_release_acknowledged[@js "release-acknowledged"] | `L_s654_resource_evicted[@js "resource-evicted"]] [@js.enum])
+  type t = ([`L_s200_closed_by_application[@js "closed-by-application"] | `L_s384_hardware_context_reset[@js "hardware-context-reset"] | `L_s435_internal_error[@js "internal-error"] | `L_s660_release_acknowledged[@js "release-acknowledged"] | `L_s676_resource_evicted[@js "resource-evicted"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13273,7 +13393,7 @@ module MediaKeySessionClosedReason : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module MediaKeyMessageType : sig
-  type t = ([`L_s410_individualization_request[@js "individualization-request"] | `L_s443_license_release[@js "license-release"] | `L_s444_license_renewal[@js "license-renewal"] | `L_s445_license_request[@js "license-request"]] [@js.enum])
+  type t = ([`L_s425_individualization_request[@js "individualization-request"] | `L_s459_license_release[@js "license-release"] | `L_s460_license_renewal[@js "license-renewal"] | `L_s461_license_request[@js "license-request"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13437,7 +13557,7 @@ module[@js.scope "MediaKeys"] MediaKeys : sig
   val create: unit -> t [@@js.create]
 end
 module MediaKeysRequirement : sig
-  type t = ([`L_s532_not_allowed[@js "not-allowed"] | `L_s549_optional[@js "optional"] | `L_s651_required[@js "required"]] [@js.enum])
+  type t = ([`L_s552_not_allowed[@js "not-allowed"] | `L_s569_optional[@js "optional"] | `L_s673_required[@js "required"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13603,7 +13723,7 @@ module MediaStreamConstraints : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDeviceKind : sig
-  type t = ([`L_s136_audioinput[@js "audioinput"] | `L_s137_audiooutput[@js "audiooutput"] | `L_s820_videoinput[@js "videoinput"]] [@js.enum])
+  type t = ([`L_s136_audioinput[@js "audioinput"] | `L_s137_audiooutput[@js "audiooutput"] | `L_s853_videoinput[@js "videoinput"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13735,7 +13855,7 @@ module[@js.scope "MediaDevices"] MediaDevices : sig
   val create: unit -> t [@@js.create]
 end
 module MediaEncodingType : sig
-  type t = ([`L_s631_record[@js "record"] | `L_s836_webrtc[@js "webrtc"]] [@js.enum])
+  type t = ([`L_s652_record[@js "record"] | `L_s869_webrtc[@js "webrtc"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13743,7 +13863,7 @@ module MediaEncodingType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module TransferFunction : sig
-  type t = ([`L_s385_hlg[@js "hlg"] | `L_s604_pq[@js "pq"] | `L_s719_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s399_hlg[@js "hlg"] | `L_s625_pq[@js "pq"] | `L_s750_srgb[@js "srgb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13751,7 +13871,7 @@ module TransferFunction : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module HdrMetadataType : sig
-  type t = ([`L_s706_smpteSt2086[@js "smpteSt2086"] | `L_s707_smpteSt2094_10[@js "smpteSt2094-10"] | `L_s708_smpteSt2094_40[@js "smpteSt2094-40"]] [@js.enum])
+  type t = ([`L_s732_smpteSt2086[@js "smpteSt2086"] | `L_s733_smpteSt2094_10[@js "smpteSt2094-10"] | `L_s734_smpteSt2094_40[@js "smpteSt2094-40"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13759,7 +13879,7 @@ module HdrMetadataType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ColorGamut : sig
-  type t = ([`L_s560_p3[@js "p3"] | `L_s630_rec2020[@js "rec2020"] | `L_s719_srgb[@js "srgb"]] [@js.enum])
+  type t = ([`L_s581_p3[@js "p3"] | `L_s651_rec2020[@js "rec2020"] | `L_s750_srgb[@js "srgb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -13923,7 +14043,7 @@ module MediaCapabilitiesEncodingInfo : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module MediaDecodingType : sig
-  type t = ([`L_s330_file[@js "file"] | `L_s486_media_source[@js "media-source"] | `L_s836_webrtc[@js "webrtc"]] [@js.enum])
+  type t = ([`L_s343_file[@js "file"] | `L_s505_media_source[@js "media-source"] | `L_s869_webrtc[@js "webrtc"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14116,8 +14236,8 @@ module[@js.scope "GeolocationPosition"] GeolocationPosition : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   val get_coords: 'tags this -> GeolocationCoordinates.t [@@js.get "coords"]
-  val get_timestamp: 'tags this -> DOMTimeStamp.t [@@js.get "timestamp"]
-  val create: coords:GeolocationCoordinates.t -> timestamp:DOMTimeStamp.t -> unit -> t [@@js.builder]
+  val get_timestamp: 'tags this -> EpochTimeStamp.t [@@js.get "timestamp"]
+  val create: coords:GeolocationCoordinates.t -> timestamp:EpochTimeStamp.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create': unit -> t [@@js.create]
@@ -14167,7 +14287,7 @@ module[@js.scope "Geolocation"] Geolocation : sig
   val create: unit -> t [@@js.create]
 end
 module PublicKeyCredentialType : sig
-  type t = ([`L_s621_public_key[@js "public-key"]] [@js.enum])
+  type t = ([`L_s642_public_key[@js "public-key"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14175,7 +14295,7 @@ module PublicKeyCredentialType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module AuthenticatorTransport : sig
-  type t = ([`L_s160_ble[@js "ble"] | `L_s419_internal[@js "internal"] | `L_s522_nfc[@js "nfc"] | `L_s811_usb[@js "usb"]] [@js.enum])
+  type t = ([`L_s160_ble[@js "ble"] | `L_s434_internal[@js "internal"] | `L_s542_nfc[@js "nfc"] | `L_s843_usb[@js "usb"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14208,7 +14328,7 @@ module PublicKeyCredentialDescriptor : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module UserVerificationRequirement : sig
-  type t = ([`L_s257_discouraged[@js "discouraged"] | `L_s607_preferred[@js "preferred"] | `L_s651_required[@js "required"]] [@js.enum])
+  type t = ([`L_s267_discouraged[@js "discouraged"] | `L_s628_preferred[@js "preferred"] | `L_s673_required[@js "required"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14274,7 +14394,7 @@ module PublicKeyCredentialRequestOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CredentialMediationRequirement : sig
-  type t = ([`L_s549_optional[@js "optional"] | `L_s651_required[@js "required"] | `L_s699_silent[@js "silent"]] [@js.enum])
+  type t = ([`L_s569_optional[@js "optional"] | `L_s673_required[@js "required"] | `L_s724_silent[@js "silent"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14403,7 +14523,7 @@ module PublicKeyCredentialParameters : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ResidentKeyRequirement : sig
-  type t = ([`L_s257_discouraged[@js "discouraged"] | `L_s607_preferred[@js "preferred"] | `L_s651_required[@js "required"]] [@js.enum])
+  type t = ([`L_s267_discouraged[@js "discouraged"] | `L_s628_preferred[@js "preferred"] | `L_s673_required[@js "required"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14411,7 +14531,7 @@ module ResidentKeyRequirement : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module AuthenticatorAttachment : sig
-  type t = ([`L_s223_cross_platform[@js "cross-platform"] | `L_s584_platform[@js "platform"]] [@js.enum])
+  type t = ([`L_s226_cross_platform[@js "cross-platform"] | `L_s605_platform[@js "platform"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14446,7 +14566,7 @@ module AuthenticatorSelectionCriteria : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AttestationConveyancePreference : sig
-  type t = ([`L_s253_direct[@js "direct"] | `L_s284_enterprise[@js "enterprise"] | `L_s409_indirect[@js "indirect"] | `L_s528_none[@js "none"]] [@js.enum])
+  type t = ([`L_s262_direct[@js "direct"] | `L_s295_enterprise[@js "enterprise"] | `L_s424_indirect[@js "indirect"] | `L_s548_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14565,7 +14685,7 @@ module[@js.scope "CredentialsContainer"] CredentialsContainer : sig
   val create: unit -> t [@@js.create]
 end
 module PresentationStyle : sig
-  type t = ([`L_s131_attachment[@js "attachment"] | `L_s412_inline[@js "inline"] | `L_s801_unspecified[@js "unspecified"]] [@js.enum])
+  type t = ([`L_s131_attachment[@js "attachment"] | `L_s427_inline[@js "inline"] | `L_s833_unspecified[@js "unspecified"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -14996,7 +15116,7 @@ module IdleRequestCallback : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ScrollRestoration : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s476_manual[@js "manual"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s495_manual[@js "manual"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15753,7 +15873,7 @@ module[@js.scope "DataTransferItemList"] DataTransferItemList : sig
   val create: unit -> t [@@js.create]
 end
 module FullscreenNavigationUI : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s380_hide[@js "hide"] | `L_s695_show[@js "show"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s394_hide[@js "hide"] | `L_s720_show[@js "show"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15907,7 +16027,7 @@ module[@js.scope "DOMRectList"] DOMRectList : sig
   val create: unit -> t [@@js.create]
 end
 module CompositeOperationOrAuto : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s648_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s670_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15941,7 +16061,7 @@ module PropertyIndexedKeyframes : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module IterationCompositeOperation : sig
-  type t = ([`L_s648_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"]] [@js.enum])
+  type t = ([`L_s670_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15949,7 +16069,7 @@ module IterationCompositeOperation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CompositeOperation : sig
-  type t = ([`L_s648_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"]] [@js.enum])
+  type t = ([`L_s670_replace[@js "replace"] | `L_s95_accumulate[@js "accumulate"] | `L_s99_add[@js "add"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15957,7 +16077,7 @@ module CompositeOperation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module PlaybackDirection : sig
-  type t = ([`L_s111_alternate[@js "alternate"] | `L_s112_alternate_reverse[@js "alternate-reverse"] | `L_s530_normal[@js "normal"] | `L_s657_reverse[@js "reverse"]] [@js.enum])
+  type t = ([`L_s111_alternate[@js "alternate"] | `L_s112_alternate_reverse[@js "alternate-reverse"] | `L_s550_normal[@js "normal"] | `L_s679_reverse[@js "reverse"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -15965,7 +16085,7 @@ module PlaybackDirection : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module FillMode : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s146_backwards[@js "backwards"] | `L_s168_both[@js "both"] | `L_s346_forwards[@js "forwards"] | `L_s528_none[@js "none"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s146_backwards[@js "backwards"] | `L_s168_both[@js "both"] | `L_s359_forwards[@js "forwards"] | `L_s548_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16103,7 +16223,7 @@ module GetAnimationsOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AnimationReplaceState : sig
-  type t = ([`L_s577_persisted[@js "persisted"] | `L_s645_removed[@js "removed"] | `L_s98_active[@js "active"]] [@js.enum])
+  type t = ([`L_s598_persisted[@js "persisted"] | `L_s667_removed[@js "removed"] | `L_s98_active[@js "active"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16111,7 +16231,7 @@ module AnimationReplaceState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module AnimationPlayState : sig
-  type t = ([`L_s333_finished[@js "finished"] | `L_s399_idle[@js "idle"] | `L_s572_paused[@js "paused"] | `L_s668_running[@js "running"]] [@js.enum])
+  type t = ([`L_s346_finished[@js "finished"] | `L_s414_idle[@js "idle"] | `L_s593_paused[@js "paused"] | `L_s690_running[@js "running"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -16187,11 +16307,11 @@ module ComputedEffectTiming : sig
   val set_endTime: 'tags this -> CSSNumberish.t -> unit [@@js.set "endTime"]
   val get_localTime: 'tags this -> CSSNumberish.t option [@@js.get "localTime"]
   val set_localTime: 'tags this -> CSSNumberish.t option -> unit [@@js.set "localTime"]
-  val get_progress: 'tags this -> CSSNumberish.t option [@@js.get "progress"]
-  val set_progress: 'tags this -> CSSNumberish.t option -> unit [@@js.set "progress"]
+  val get_progress: 'tags this -> float option [@@js.get "progress"]
+  val set_progress: 'tags this -> float option -> unit [@@js.set "progress"]
   val get_startTime: 'tags this -> CSSNumberish.t [@@js.get "startTime"]
   val set_startTime: 'tags this -> CSSNumberish.t -> unit [@@js.set "startTime"]
-  val create: activeDuration:CSSNumberish.t -> ?currentIteration:float -> endTime:CSSNumberish.t -> ?localTime:CSSNumberish.t -> ?progress:CSSNumberish.t -> startTime:CSSNumberish.t -> unit -> t [@@js.builder]
+  val create: activeDuration:CSSNumberish.t -> ?currentIteration:float -> endTime:CSSNumberish.t -> ?localTime:CSSNumberish.t -> ?progress:float -> startTime:CSSNumberish.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module[@js.scope "AnimationEffect"] AnimationEffect : sig
@@ -16441,79 +16561,79 @@ module ARIAMixin : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_ariaAtomic: 'tags this -> string [@@js.get "ariaAtomic"]
-  val set_ariaAtomic: 'tags this -> string -> unit [@@js.set "ariaAtomic"]
-  val get_ariaAutoComplete: 'tags this -> string [@@js.get "ariaAutoComplete"]
-  val set_ariaAutoComplete: 'tags this -> string -> unit [@@js.set "ariaAutoComplete"]
-  val get_ariaBusy: 'tags this -> string [@@js.get "ariaBusy"]
-  val set_ariaBusy: 'tags this -> string -> unit [@@js.set "ariaBusy"]
-  val get_ariaChecked: 'tags this -> string [@@js.get "ariaChecked"]
-  val set_ariaChecked: 'tags this -> string -> unit [@@js.set "ariaChecked"]
-  val get_ariaColCount: 'tags this -> string [@@js.get "ariaColCount"]
-  val set_ariaColCount: 'tags this -> string -> unit [@@js.set "ariaColCount"]
-  val get_ariaColIndex: 'tags this -> string [@@js.get "ariaColIndex"]
-  val set_ariaColIndex: 'tags this -> string -> unit [@@js.set "ariaColIndex"]
-  val get_ariaColSpan: 'tags this -> string [@@js.get "ariaColSpan"]
-  val set_ariaColSpan: 'tags this -> string -> unit [@@js.set "ariaColSpan"]
-  val get_ariaCurrent: 'tags this -> string [@@js.get "ariaCurrent"]
-  val set_ariaCurrent: 'tags this -> string -> unit [@@js.set "ariaCurrent"]
-  val get_ariaDisabled: 'tags this -> string [@@js.get "ariaDisabled"]
-  val set_ariaDisabled: 'tags this -> string -> unit [@@js.set "ariaDisabled"]
-  val get_ariaExpanded: 'tags this -> string [@@js.get "ariaExpanded"]
-  val set_ariaExpanded: 'tags this -> string -> unit [@@js.set "ariaExpanded"]
-  val get_ariaHasPopup: 'tags this -> string [@@js.get "ariaHasPopup"]
-  val set_ariaHasPopup: 'tags this -> string -> unit [@@js.set "ariaHasPopup"]
-  val get_ariaHidden: 'tags this -> string [@@js.get "ariaHidden"]
-  val set_ariaHidden: 'tags this -> string -> unit [@@js.set "ariaHidden"]
-  val get_ariaKeyShortcuts: 'tags this -> string [@@js.get "ariaKeyShortcuts"]
-  val set_ariaKeyShortcuts: 'tags this -> string -> unit [@@js.set "ariaKeyShortcuts"]
-  val get_ariaLabel: 'tags this -> string [@@js.get "ariaLabel"]
-  val set_ariaLabel: 'tags this -> string -> unit [@@js.set "ariaLabel"]
-  val get_ariaLevel: 'tags this -> string [@@js.get "ariaLevel"]
-  val set_ariaLevel: 'tags this -> string -> unit [@@js.set "ariaLevel"]
-  val get_ariaLive: 'tags this -> string [@@js.get "ariaLive"]
-  val set_ariaLive: 'tags this -> string -> unit [@@js.set "ariaLive"]
-  val get_ariaModal: 'tags this -> string [@@js.get "ariaModal"]
-  val set_ariaModal: 'tags this -> string -> unit [@@js.set "ariaModal"]
-  val get_ariaMultiLine: 'tags this -> string [@@js.get "ariaMultiLine"]
-  val set_ariaMultiLine: 'tags this -> string -> unit [@@js.set "ariaMultiLine"]
-  val get_ariaMultiSelectable: 'tags this -> string [@@js.get "ariaMultiSelectable"]
-  val set_ariaMultiSelectable: 'tags this -> string -> unit [@@js.set "ariaMultiSelectable"]
-  val get_ariaOrientation: 'tags this -> string [@@js.get "ariaOrientation"]
-  val set_ariaOrientation: 'tags this -> string -> unit [@@js.set "ariaOrientation"]
-  val get_ariaPlaceholder: 'tags this -> string [@@js.get "ariaPlaceholder"]
-  val set_ariaPlaceholder: 'tags this -> string -> unit [@@js.set "ariaPlaceholder"]
-  val get_ariaPosInSet: 'tags this -> string [@@js.get "ariaPosInSet"]
-  val set_ariaPosInSet: 'tags this -> string -> unit [@@js.set "ariaPosInSet"]
-  val get_ariaPressed: 'tags this -> string [@@js.get "ariaPressed"]
-  val set_ariaPressed: 'tags this -> string -> unit [@@js.set "ariaPressed"]
-  val get_ariaReadOnly: 'tags this -> string [@@js.get "ariaReadOnly"]
-  val set_ariaReadOnly: 'tags this -> string -> unit [@@js.set "ariaReadOnly"]
-  val get_ariaRequired: 'tags this -> string [@@js.get "ariaRequired"]
-  val set_ariaRequired: 'tags this -> string -> unit [@@js.set "ariaRequired"]
-  val get_ariaRoleDescription: 'tags this -> string [@@js.get "ariaRoleDescription"]
-  val set_ariaRoleDescription: 'tags this -> string -> unit [@@js.set "ariaRoleDescription"]
-  val get_ariaRowCount: 'tags this -> string [@@js.get "ariaRowCount"]
-  val set_ariaRowCount: 'tags this -> string -> unit [@@js.set "ariaRowCount"]
-  val get_ariaRowIndex: 'tags this -> string [@@js.get "ariaRowIndex"]
-  val set_ariaRowIndex: 'tags this -> string -> unit [@@js.set "ariaRowIndex"]
-  val get_ariaRowSpan: 'tags this -> string [@@js.get "ariaRowSpan"]
-  val set_ariaRowSpan: 'tags this -> string -> unit [@@js.set "ariaRowSpan"]
-  val get_ariaSelected: 'tags this -> string [@@js.get "ariaSelected"]
-  val set_ariaSelected: 'tags this -> string -> unit [@@js.set "ariaSelected"]
-  val get_ariaSetSize: 'tags this -> string [@@js.get "ariaSetSize"]
-  val set_ariaSetSize: 'tags this -> string -> unit [@@js.set "ariaSetSize"]
-  val get_ariaSort: 'tags this -> string [@@js.get "ariaSort"]
-  val set_ariaSort: 'tags this -> string -> unit [@@js.set "ariaSort"]
-  val get_ariaValueMax: 'tags this -> string [@@js.get "ariaValueMax"]
-  val set_ariaValueMax: 'tags this -> string -> unit [@@js.set "ariaValueMax"]
-  val get_ariaValueMin: 'tags this -> string [@@js.get "ariaValueMin"]
-  val set_ariaValueMin: 'tags this -> string -> unit [@@js.set "ariaValueMin"]
-  val get_ariaValueNow: 'tags this -> string [@@js.get "ariaValueNow"]
-  val set_ariaValueNow: 'tags this -> string -> unit [@@js.set "ariaValueNow"]
-  val get_ariaValueText: 'tags this -> string [@@js.get "ariaValueText"]
-  val set_ariaValueText: 'tags this -> string -> unit [@@js.set "ariaValueText"]
-  val create: ariaAtomic:string -> ariaAutoComplete:string -> ariaBusy:string -> ariaChecked:string -> ariaColCount:string -> ariaColIndex:string -> ariaColSpan:string -> ariaCurrent:string -> ariaDisabled:string -> ariaExpanded:string -> ariaHasPopup:string -> ariaHidden:string -> ariaKeyShortcuts:string -> ariaLabel:string -> ariaLevel:string -> ariaLive:string -> ariaModal:string -> ariaMultiLine:string -> ariaMultiSelectable:string -> ariaOrientation:string -> ariaPlaceholder:string -> ariaPosInSet:string -> ariaPressed:string -> ariaReadOnly:string -> ariaRequired:string -> ariaRoleDescription:string -> ariaRowCount:string -> ariaRowIndex:string -> ariaRowSpan:string -> ariaSelected:string -> ariaSetSize:string -> ariaSort:string -> ariaValueMax:string -> ariaValueMin:string -> ariaValueNow:string -> ariaValueText:string -> unit -> t [@@js.builder]
+  val get_ariaAtomic: 'tags this -> string option [@@js.get "ariaAtomic"]
+  val set_ariaAtomic: 'tags this -> string option -> unit [@@js.set "ariaAtomic"]
+  val get_ariaAutoComplete: 'tags this -> string option [@@js.get "ariaAutoComplete"]
+  val set_ariaAutoComplete: 'tags this -> string option -> unit [@@js.set "ariaAutoComplete"]
+  val get_ariaBusy: 'tags this -> string option [@@js.get "ariaBusy"]
+  val set_ariaBusy: 'tags this -> string option -> unit [@@js.set "ariaBusy"]
+  val get_ariaChecked: 'tags this -> string option [@@js.get "ariaChecked"]
+  val set_ariaChecked: 'tags this -> string option -> unit [@@js.set "ariaChecked"]
+  val get_ariaColCount: 'tags this -> string option [@@js.get "ariaColCount"]
+  val set_ariaColCount: 'tags this -> string option -> unit [@@js.set "ariaColCount"]
+  val get_ariaColIndex: 'tags this -> string option [@@js.get "ariaColIndex"]
+  val set_ariaColIndex: 'tags this -> string option -> unit [@@js.set "ariaColIndex"]
+  val get_ariaColSpan: 'tags this -> string option [@@js.get "ariaColSpan"]
+  val set_ariaColSpan: 'tags this -> string option -> unit [@@js.set "ariaColSpan"]
+  val get_ariaCurrent: 'tags this -> string option [@@js.get "ariaCurrent"]
+  val set_ariaCurrent: 'tags this -> string option -> unit [@@js.set "ariaCurrent"]
+  val get_ariaDisabled: 'tags this -> string option [@@js.get "ariaDisabled"]
+  val set_ariaDisabled: 'tags this -> string option -> unit [@@js.set "ariaDisabled"]
+  val get_ariaExpanded: 'tags this -> string option [@@js.get "ariaExpanded"]
+  val set_ariaExpanded: 'tags this -> string option -> unit [@@js.set "ariaExpanded"]
+  val get_ariaHasPopup: 'tags this -> string option [@@js.get "ariaHasPopup"]
+  val set_ariaHasPopup: 'tags this -> string option -> unit [@@js.set "ariaHasPopup"]
+  val get_ariaHidden: 'tags this -> string option [@@js.get "ariaHidden"]
+  val set_ariaHidden: 'tags this -> string option -> unit [@@js.set "ariaHidden"]
+  val get_ariaKeyShortcuts: 'tags this -> string option [@@js.get "ariaKeyShortcuts"]
+  val set_ariaKeyShortcuts: 'tags this -> string option -> unit [@@js.set "ariaKeyShortcuts"]
+  val get_ariaLabel: 'tags this -> string option [@@js.get "ariaLabel"]
+  val set_ariaLabel: 'tags this -> string option -> unit [@@js.set "ariaLabel"]
+  val get_ariaLevel: 'tags this -> string option [@@js.get "ariaLevel"]
+  val set_ariaLevel: 'tags this -> string option -> unit [@@js.set "ariaLevel"]
+  val get_ariaLive: 'tags this -> string option [@@js.get "ariaLive"]
+  val set_ariaLive: 'tags this -> string option -> unit [@@js.set "ariaLive"]
+  val get_ariaModal: 'tags this -> string option [@@js.get "ariaModal"]
+  val set_ariaModal: 'tags this -> string option -> unit [@@js.set "ariaModal"]
+  val get_ariaMultiLine: 'tags this -> string option [@@js.get "ariaMultiLine"]
+  val set_ariaMultiLine: 'tags this -> string option -> unit [@@js.set "ariaMultiLine"]
+  val get_ariaMultiSelectable: 'tags this -> string option [@@js.get "ariaMultiSelectable"]
+  val set_ariaMultiSelectable: 'tags this -> string option -> unit [@@js.set "ariaMultiSelectable"]
+  val get_ariaOrientation: 'tags this -> string option [@@js.get "ariaOrientation"]
+  val set_ariaOrientation: 'tags this -> string option -> unit [@@js.set "ariaOrientation"]
+  val get_ariaPlaceholder: 'tags this -> string option [@@js.get "ariaPlaceholder"]
+  val set_ariaPlaceholder: 'tags this -> string option -> unit [@@js.set "ariaPlaceholder"]
+  val get_ariaPosInSet: 'tags this -> string option [@@js.get "ariaPosInSet"]
+  val set_ariaPosInSet: 'tags this -> string option -> unit [@@js.set "ariaPosInSet"]
+  val get_ariaPressed: 'tags this -> string option [@@js.get "ariaPressed"]
+  val set_ariaPressed: 'tags this -> string option -> unit [@@js.set "ariaPressed"]
+  val get_ariaReadOnly: 'tags this -> string option [@@js.get "ariaReadOnly"]
+  val set_ariaReadOnly: 'tags this -> string option -> unit [@@js.set "ariaReadOnly"]
+  val get_ariaRequired: 'tags this -> string option [@@js.get "ariaRequired"]
+  val set_ariaRequired: 'tags this -> string option -> unit [@@js.set "ariaRequired"]
+  val get_ariaRoleDescription: 'tags this -> string option [@@js.get "ariaRoleDescription"]
+  val set_ariaRoleDescription: 'tags this -> string option -> unit [@@js.set "ariaRoleDescription"]
+  val get_ariaRowCount: 'tags this -> string option [@@js.get "ariaRowCount"]
+  val set_ariaRowCount: 'tags this -> string option -> unit [@@js.set "ariaRowCount"]
+  val get_ariaRowIndex: 'tags this -> string option [@@js.get "ariaRowIndex"]
+  val set_ariaRowIndex: 'tags this -> string option -> unit [@@js.set "ariaRowIndex"]
+  val get_ariaRowSpan: 'tags this -> string option [@@js.get "ariaRowSpan"]
+  val set_ariaRowSpan: 'tags this -> string option -> unit [@@js.set "ariaRowSpan"]
+  val get_ariaSelected: 'tags this -> string option [@@js.get "ariaSelected"]
+  val set_ariaSelected: 'tags this -> string option -> unit [@@js.set "ariaSelected"]
+  val get_ariaSetSize: 'tags this -> string option [@@js.get "ariaSetSize"]
+  val set_ariaSetSize: 'tags this -> string option -> unit [@@js.set "ariaSetSize"]
+  val get_ariaSort: 'tags this -> string option [@@js.get "ariaSort"]
+  val set_ariaSort: 'tags this -> string option -> unit [@@js.set "ariaSort"]
+  val get_ariaValueMax: 'tags this -> string option [@@js.get "ariaValueMax"]
+  val set_ariaValueMax: 'tags this -> string option -> unit [@@js.set "ariaValueMax"]
+  val get_ariaValueMin: 'tags this -> string option [@@js.get "ariaValueMin"]
+  val set_ariaValueMin: 'tags this -> string option -> unit [@@js.set "ariaValueMin"]
+  val get_ariaValueNow: 'tags this -> string option [@@js.get "ariaValueNow"]
+  val set_ariaValueNow: 'tags this -> string option -> unit [@@js.set "ariaValueNow"]
+  val get_ariaValueText: 'tags this -> string option [@@js.get "ariaValueText"]
+  val set_ariaValueText: 'tags this -> string option -> unit [@@js.set "ariaValueText"]
+  val create: ?ariaAtomic:string -> ?ariaAutoComplete:string -> ?ariaBusy:string -> ?ariaChecked:string -> ?ariaColCount:string -> ?ariaColIndex:string -> ?ariaColSpan:string -> ?ariaCurrent:string -> ?ariaDisabled:string -> ?ariaExpanded:string -> ?ariaHasPopup:string -> ?ariaHidden:string -> ?ariaKeyShortcuts:string -> ?ariaLabel:string -> ?ariaLevel:string -> ?ariaLive:string -> ?ariaModal:string -> ?ariaMultiLine:string -> ?ariaMultiSelectable:string -> ?ariaOrientation:string -> ?ariaPlaceholder:string -> ?ariaPosInSet:string -> ?ariaPressed:string -> ?ariaReadOnly:string -> ?ariaRequired:string -> ?ariaRoleDescription:string -> ?ariaRowCount:string -> ?ariaRowIndex:string -> ?ariaRowSpan:string -> ?ariaSelected:string -> ?ariaSetSize:string -> ?ariaSort:string -> ?ariaValueMax:string -> ?ariaValueMin:string -> ?ariaValueNow:string -> ?ariaValueText:string -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module GLintptr : sig
@@ -17423,6 +17543,8 @@ and[@js.scope "CSSStyleDeclaration"] CSSStyleDeclaration : sig
   val set_scrollSnapStop: 'tags this -> string -> unit [@@js.set "scrollSnapStop"]
   val get_scrollSnapType: 'tags this -> string [@@js.get "scrollSnapType"]
   val set_scrollSnapType: 'tags this -> string -> unit [@@js.set "scrollSnapType"]
+  val get_scrollbarGutter: 'tags this -> string [@@js.get "scrollbarGutter"]
+  val set_scrollbarGutter: 'tags this -> string -> unit [@@js.set "scrollbarGutter"]
   val get_shapeImageThreshold: 'tags this -> string [@@js.get "shapeImageThreshold"]
   val set_shapeImageThreshold: 'tags this -> string -> unit [@@js.set "shapeImageThreshold"]
   val get_shapeMargin: 'tags this -> string [@@js.get "shapeMargin"]
@@ -18093,6 +18215,7 @@ and CanvasFillStrokeStyles : sig
   val set_fillStyle: 'tags this -> ([`U1 of string | `U2 of CanvasGradient.t | `U3 of CanvasPattern.t] [@js.union]) -> unit [@@js.set "fillStyle"]
   val get_strokeStyle: 'tags this -> ([`String of string | `Other of (CanvasGradient.t, CanvasPattern.t) union2] [@js.union on_field "dummy"]) Primitive.t [@@js.get "strokeStyle"]
   val set_strokeStyle: 'tags this -> ([`U1 of string | `U2 of CanvasGradient.t | `U3 of CanvasPattern.t] [@js.union]) -> unit [@@js.set "strokeStyle"]
+  val createConicGradient: 'tags this -> startAngle:float -> x:float -> y:float -> CanvasGradient.t [@@js.call "createConicGradient"]
   val createLinearGradient: 'tags this -> x0:float -> y0:float -> x1:float -> y1:float -> CanvasGradient.t [@@js.call "createLinearGradient"]
   val createPattern: 'tags this -> image:CanvasImageSource.t -> repetition:string option -> CanvasPattern.t option [@@js.call "createPattern"]
   val createRadialGradient: 'tags this -> x0:float -> y0:float -> r0:float -> x1:float -> y1:float -> r1:float -> CanvasGradient.t [@@js.call "createRadialGradient"]
@@ -18436,7 +18559,7 @@ and[@js.scope "DataTransfer"] DataTransfer : sig
     
     The possible values are "none", "copy", "link", and "move".
   *)
-  val get_dropEffect: 'tags this -> ([`L_s219_copy[@js "copy"] | `L_s451_link[@js "link"] | `L_s507_move[@js "move"] | `L_s528_none[@js "none"]] [@js.enum]) [@@js.get "dropEffect"]
+  val get_dropEffect: 'tags this -> ([`L_s222_copy[@js "copy"] | `L_s469_link[@js "link"] | `L_s526_move[@js "move"] | `L_s548_none[@js "none"]] [@js.enum]) [@@js.get "dropEffect"]
   
   (**
     Returns the kind of operation that is currently selected. If the kind of operation isn't one of those that is allowed by the effectAllowed attribute, then the operation will fail.
@@ -18445,7 +18568,7 @@ and[@js.scope "DataTransfer"] DataTransfer : sig
     
     The possible values are "none", "copy", "link", and "move".
   *)
-  val set_dropEffect: 'tags this -> ([`U1 of ([`L_s528_none[@js "none"]] [@js.enum]) | `U2 of ([`L_s219_copy[@js "copy"]] [@js.enum]) | `U3 of ([`L_s451_link[@js "link"]] [@js.enum]) | `U4 of ([`L_s507_move[@js "move"]] [@js.enum])] [@js.union]) -> unit [@@js.set "dropEffect"]
+  val set_dropEffect: 'tags this -> ([`U1 of ([`L_s548_none[@js "none"]] [@js.enum]) | `U2 of ([`L_s222_copy[@js "copy"]] [@js.enum]) | `U3 of ([`L_s469_link[@js "link"]] [@js.enum]) | `U4 of ([`L_s526_move[@js "move"]] [@js.enum])] [@js.union]) -> unit [@@js.set "dropEffect"]
   
   (**
     Returns the kinds of operations that are to be allowed.
@@ -18454,7 +18577,7 @@ and[@js.scope "DataTransfer"] DataTransfer : sig
     
     The possible values are "none", "copy", "copyLink", "copyMove", "link", "linkMove", "move", "all", and "uninitialized",
   *)
-  val get_effectAllowed: 'tags this -> ([`L_s106_all[@js "all"] | `L_s219_copy[@js "copy"] | `L_s220_copyLink[@js "copyLink"] | `L_s221_copyMove[@js "copyMove"] | `L_s451_link[@js "link"] | `L_s452_linkMove[@js "linkMove"] | `L_s507_move[@js "move"] | `L_s528_none[@js "none"] | `L_s795_uninitialized[@js "uninitialized"]] [@js.enum]) [@@js.get "effectAllowed"]
+  val get_effectAllowed: 'tags this -> ([`L_s106_all[@js "all"] | `L_s222_copy[@js "copy"] | `L_s223_copyLink[@js "copyLink"] | `L_s224_copyMove[@js "copyMove"] | `L_s469_link[@js "link"] | `L_s470_linkMove[@js "linkMove"] | `L_s526_move[@js "move"] | `L_s548_none[@js "none"] | `L_s827_uninitialized[@js "uninitialized"]] [@js.enum]) [@@js.get "effectAllowed"]
   
   (**
     Returns the kinds of operations that are to be allowed.
@@ -18463,7 +18586,7 @@ and[@js.scope "DataTransfer"] DataTransfer : sig
     
     The possible values are "none", "copy", "copyLink", "copyMove", "link", "linkMove", "move", "all", and "uninitialized",
   *)
-  val set_effectAllowed: 'tags this -> ([`U1 of ([`L_s528_none[@js "none"]] [@js.enum]) | `U2 of ([`L_s219_copy[@js "copy"]] [@js.enum]) | `U3 of ([`L_s220_copyLink[@js "copyLink"]] [@js.enum]) | `U4 of ([`L_s221_copyMove[@js "copyMove"]] [@js.enum]) | `U5 of ([`L_s451_link[@js "link"]] [@js.enum]) | `U6 of ([`L_s452_linkMove[@js "linkMove"]] [@js.enum]) | `U7 of ([`L_s507_move[@js "move"]] [@js.enum]) | `U8 of ([`L_s106_all[@js "all"]] [@js.enum]) | `U9 of ([`L_s795_uninitialized[@js "uninitialized"]] [@js.enum])] [@js.union]) -> unit [@@js.set "effectAllowed"]
+  val set_effectAllowed: 'tags this -> ([`U1 of ([`L_s548_none[@js "none"]] [@js.enum]) | `U2 of ([`L_s222_copy[@js "copy"]] [@js.enum]) | `U3 of ([`L_s223_copyLink[@js "copyLink"]] [@js.enum]) | `U4 of ([`L_s224_copyMove[@js "copyMove"]] [@js.enum]) | `U5 of ([`L_s469_link[@js "link"]] [@js.enum]) | `U6 of ([`L_s470_linkMove[@js "linkMove"]] [@js.enum]) | `U7 of ([`L_s526_move[@js "move"]] [@js.enum]) | `U8 of ([`L_s106_all[@js "all"]] [@js.enum]) | `U9 of ([`L_s827_uninitialized[@js "uninitialized"]] [@js.enum])] [@js.union]) -> unit [@@js.set "effectAllowed"]
   
   (** Returns a FileList of the files being dragged, if any. *)
   val get_files: 'tags this -> FileList.t [@@js.get "files"]
@@ -18741,7 +18864,7 @@ and[@js.scope "Document"] Document : sig
   
   (** Contains the title of the document. *)
   val set_title: 'tags this -> string -> unit [@@js.set "title"]
-  val get_visibilityState: 'tags this -> VisibilityState.t [@@js.get "visibilityState"]
+  val get_visibilityState: 'tags this -> DocumentVisibilityState.t [@@js.get "visibilityState"]
   
   (**
     Sets or gets the color of the links that the user has visited.
@@ -18820,7 +18943,7 @@ and[@js.scope "Document"] Document : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS: 'tags this -> namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> qualifiedName:string -> HTMLElement.t [@@js.call "createElementNS"]
+  val createElementNS: 'tags this -> namespaceURI:([`L_s403_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> qualifiedName:string -> HTMLElement.t [@@js.call "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -18837,7 +18960,7 @@ and[@js.scope "Document"] Document : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS': 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any [@@js.call "createElementNS"]
+  val createElementNS': 'tags this -> namespaceURI:([`L_s404_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any [@@js.call "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -18854,7 +18977,7 @@ and[@js.scope "Document"] Document : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS'': 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:string -> SVGElement.t [@@js.call "createElementNS"]
+  val createElementNS'': 'tags this -> namespaceURI:([`L_s404_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:string -> SVGElement.t [@@js.call "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -19025,7 +19148,7 @@ and[@js.scope "Document"] Document : sig
     
     Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
   *)
-  val getElementsByTagNameNS: 'tags this -> namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
+  val getElementsByTagNameNS: 'tags this -> namespaceURI:([`L_s403_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
   
   (**
     If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
@@ -19036,7 +19159,7 @@ and[@js.scope "Document"] Document : sig
     
     Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
   *)
-  val getElementsByTagNameNS': 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
+  val getElementsByTagNameNS': 'tags this -> namespaceURI:([`L_s404_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
   
   (**
     If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
@@ -19449,8 +19572,8 @@ and[@js.scope "Element"] Element : sig
   val getElementsByTagName: 'tags this -> qualifiedName:'K -> (* FIXME: unknown type 'HTMLElementTagNameMap[K]' *)any HTMLCollectionOf.t [@@js.call "getElementsByTagName"]
   val getElementsByTagName': 'tags this -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any HTMLCollectionOf.t [@@js.call "getElementsByTagName"]
   val getElementsByTagName'': 'tags this -> qualifiedName:string -> t HTMLCollectionOf.t [@@js.call "getElementsByTagName"]
-  val getElementsByTagNameNS: 'tags this -> namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
-  val getElementsByTagNameNS': 'tags this -> namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
+  val getElementsByTagNameNS: 'tags this -> namespaceURI:([`L_s403_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
+  val getElementsByTagNameNS': 'tags this -> namespaceURI:([`L_s404_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
   val getElementsByTagNameNS'': 'tags this -> namespace:string option -> localName:string -> t HTMLCollectionOf.t [@@js.call "getElementsByTagNameNS"]
   
   (** Returns true if element has an attribute whose qualified name is qualifiedName, and false otherwise. *)
@@ -20286,6 +20409,8 @@ and GlobalEventHandlers : sig
     @param ev The event.
   *)
   val set_onscroll: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onscroll"]
+  val get_onsecuritypolicyviolation: 'tags this -> (this:t -> ev:SecurityPolicyViolationEvent.t -> any) option [@@js.get "onsecuritypolicyviolation"]
+  val set_onsecuritypolicyviolation: 'tags this -> (this:t -> ev:SecurityPolicyViolationEvent.t -> any) option -> unit [@@js.set "onsecuritypolicyviolation"]
   
   (**
     Occurs when the seek operation ends.
@@ -20326,6 +20451,8 @@ and GlobalEventHandlers : sig
   val set_onselectionchange: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onselectionchange"]
   val get_onselectstart: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onselectstart"]
   val set_onselectstart: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onselectstart"]
+  val get_onslotchange: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onslotchange"]
+  val set_onslotchange: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onslotchange"]
   
   (**
     Occurs when the download has stopped.
@@ -20804,10 +20931,10 @@ and[@js.scope "HTMLCanvasElement"] HTMLCanvasElement : sig
   val getContext': 'tags this -> contextId:([`L_s159_bitmaprenderer[@js "bitmaprenderer"]] [@js.enum]) -> ?options:ImageBitmapRenderingContextSettings.t -> unit -> ImageBitmapRenderingContext.t option [@@js.call "getContext"]
   
   (** Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas. *)
-  val getContext'': 'tags this -> contextId:([`L_s830_webgl[@js "webgl"]] [@js.enum]) -> ?options:WebGLContextAttributes.t -> unit -> WebGLRenderingContext.t option [@@js.call "getContext"]
+  val getContext'': 'tags this -> contextId:([`L_s863_webgl[@js "webgl"]] [@js.enum]) -> ?options:WebGLContextAttributes.t -> unit -> WebGLRenderingContext.t option [@@js.call "getContext"]
   
   (** Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas. *)
-  val getContext''': 'tags this -> contextId:([`L_s831_webgl2[@js "webgl2"]] [@js.enum]) -> ?options:WebGLContextAttributes.t -> unit -> WebGL2RenderingContext.t option [@@js.call "getContext"]
+  val getContext''': 'tags this -> contextId:([`L_s864_webgl2[@js "webgl2"]] [@js.enum]) -> ?options:WebGLContextAttributes.t -> unit -> WebGL2RenderingContext.t option [@@js.call "getContext"]
   
   (** Returns an object that provides methods and properties for drawing and manipulating images and graphics on a canvas element in a document. A context object includes information about colors, line widths, fonts, and other graphic parameters that can be drawn on a canvas. *)
   val getContext'''': 'tags this -> contextId:string -> ?options:any -> unit -> RenderingContext.t option [@@js.call "getContext"]
@@ -21463,8 +21590,8 @@ and[@js.scope "HTMLImageElement"] HTMLImageElement : sig
   val get_crossOrigin: 'tags this -> string option [@@js.get "crossOrigin"]
   val set_crossOrigin: 'tags this -> string option -> unit [@@js.set "crossOrigin"]
   val get_currentSrc: 'tags this -> string [@@js.get "currentSrc"]
-  val get_decoding: 'tags this -> ([`L_s130_async[@js "async"] | `L_s141_auto[@js "auto"] | `L_s746_sync[@js "sync"]] [@js.enum]) [@@js.get "decoding"]
-  val set_decoding: 'tags this -> ([`U1 of ([`L_s130_async[@js "async"]] [@js.enum]) | `U2 of ([`L_s746_sync[@js "sync"]] [@js.enum]) | `U3 of ([`L_s141_auto[@js "auto"]] [@js.enum])] [@js.union]) -> unit [@@js.set "decoding"]
+  val get_decoding: 'tags this -> ([`L_s130_async[@js "async"] | `L_s141_auto[@js "auto"] | `L_s778_sync[@js "sync"]] [@js.enum]) [@@js.get "decoding"]
+  val set_decoding: 'tags this -> ([`U1 of ([`L_s130_async[@js "async"]] [@js.enum]) | `U2 of ([`L_s778_sync[@js "sync"]] [@js.enum]) | `U3 of ([`L_s141_auto[@js "auto"]] [@js.enum])] [@js.union]) -> unit [@@js.set "decoding"]
   
   (** Sets or retrieves the height of the object. *)
   val get_height: 'tags this -> float [@@js.get "height"]
@@ -21489,8 +21616,12 @@ and[@js.scope "HTMLImageElement"] HTMLImageElement : sig
   
   (** Sets or retrieves whether the image is a server-side image map. *)
   val set_isMap: 'tags this -> bool -> unit [@@js.set "isMap"]
-  val get_loading: 'tags this -> string [@@js.get "loading"]
-  val set_loading: 'tags this -> string -> unit [@@js.set "loading"]
+  
+  (** Sets or retrieves the policy for loading image elements that are outside the viewport. *)
+  val get_loading: 'tags this -> ([`L_s283_eager[@js "eager"] | `L_s454_lazy[@js "lazy"]] [@js.enum]) [@@js.get "loading"]
+  
+  (** Sets or retrieves the policy for loading image elements that are outside the viewport. *)
+  val set_loading: 'tags this -> ([`U1 of ([`L_s283_eager[@js "eager"]] [@js.enum]) | `U2 of ([`L_s454_lazy[@js "lazy"]] [@js.enum])] [@js.union]) -> unit [@@js.set "loading"]
   
   (**
     Sets or retrieves a Uniform Resource Identifier (URI) to a long description of the object.
@@ -21721,10 +21852,10 @@ and[@js.scope "HTMLMediaElement"] HTMLMediaElement : sig
   val get_played: 'tags this -> TimeRanges.t [@@js.get "played"]
   
   (** Gets or sets a value indicating what data should be preloaded, if any. *)
-  val get_preload: 'tags this -> ([`L_s0[@js ""] | `L_s141_auto[@js "auto"] | `L_s493_metadata[@js "metadata"] | `L_s528_none[@js "none"]] [@js.enum]) [@@js.get "preload"]
+  val get_preload: 'tags this -> ([`L_s0[@js ""] | `L_s141_auto[@js "auto"] | `L_s512_metadata[@js "metadata"] | `L_s548_none[@js "none"]] [@js.enum]) [@@js.get "preload"]
   
   (** Gets or sets a value indicating what data should be preloaded, if any. *)
-  val set_preload: 'tags this -> ([`U1 of ([`L_s528_none[@js "none"]] [@js.enum]) | `U2 of ([`L_s493_metadata[@js "metadata"]] [@js.enum]) | `U3 of ([`L_s141_auto[@js "auto"]] [@js.enum]) | `U4 of ([`L_s0[@js ""]] [@js.enum])] [@js.union]) -> unit [@@js.set "preload"]
+  val set_preload: 'tags this -> ([`U1 of ([`L_s548_none[@js "none"]] [@js.enum]) | `U2 of ([`L_s512_metadata[@js "metadata"]] [@js.enum]) | `U3 of ([`L_s141_auto[@js "auto"]] [@js.enum]) | `U4 of ([`L_s0[@js ""]] [@js.enum])] [@js.union]) -> unit [@@js.set "preload"]
   val get_readyState: 'tags this -> float [@@js.get "readyState"]
   val get_remote: 'tags this -> RemotePlayback.t [@@js.get "remote"]
   
@@ -22959,13 +23090,13 @@ and[@js.scope "Node"] Node : sig
   val text_node: unit -> float [@@js.get "TEXT_NODE"]
 end
 and[@js.scope "NodeFilter"] NodeFilter : sig
-  module AnonymousInterface538 : sig
+  module AnonymousInterface545 : sig
     type t = private Ojs.t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
     val acceptNode: t -> node:Node.t -> float [@@js.call "acceptNode"]
   end
-  type t = (AnonymousInterface538.t, (Node.t -> float)) union2
+  type t = (AnonymousInterface545.t, (Node.t -> float)) union2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -25391,10 +25522,38 @@ and[@js.scope "ShadowRoot"] ShadowRoot : sig
   val get_delegatesFocus: 'tags this -> bool [@@js.get "delegatesFocus"]
   val get_host: 'tags this -> Element.t [@@js.get "host"]
   val get_mode: 'tags this -> ShadowRootMode.t [@@js.get "mode"]
-  val create: delegatesFocus:bool -> host:Element.t -> mode:ShadowRootMode.t -> unit -> t [@@js.builder]
+  val get_onslotchange: 'tags this -> (this:t -> ev:Event.t -> any) option [@@js.get "onslotchange"]
+  val set_onslotchange: 'tags this -> (this:t -> ev:Event.t -> any) option -> unit [@@js.set "onslotchange"]
+  val get_slotAssignment: 'tags this -> SlotAssignmentMode.t [@@js.get "slotAssignment"]
+  
+  (** Throws a "NotSupportedError" DOMException if context object is a shadow root. *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ShadowRootEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'ShadowRootEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
 end
 and Slottable : sig
   type t = [`Slottable] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -25461,6 +25620,27 @@ and StaticRangeInit : sig
   val get_startOffset: 'tags this -> float [@@js.get "startOffset"]
   val set_startOffset: 'tags this -> float -> unit [@@js.set "startOffset"]
   val create: endContainer:Node.t -> endOffset:float -> startContainer:Node.t -> startOffset:float -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+and StructuredSerializeOptions : sig
+  type t = [`StructuredSerializeOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`StructuredSerializeOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`StructuredSerializeOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `StructuredSerializeOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_transfer: 'tags this -> Transferable.t list [@@js.get "transfer"]
+  val set_transfer: 'tags this -> Transferable.t list -> unit [@@js.set "transfer"]
+  val create: transfer:Transferable.t list -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -28006,14 +28186,36 @@ and WindowOrWorkerGlobalScope : sig
   val get_performance: 'tags this -> Performance.t [@@js.get "performance"]
   val atob: 'tags this -> data:string -> string [@@js.call "atob"]
   val btoa: 'tags this -> data:string -> string [@@js.call "btoa"]
-  val clearInterval: 'tags this -> ?handle:float -> unit -> unit [@@js.call "clearInterval"]
-  val clearTimeout: 'tags this -> ?handle:float -> unit -> unit [@@js.call "clearTimeout"]
+  val clearInterval: 'tags this -> ?id:float -> unit -> unit [@@js.call "clearInterval"]
+  val clearTimeout: 'tags this -> ?id:float -> unit -> unit [@@js.call "clearTimeout"]
   val createImageBitmap: 'tags this -> image:ImageBitmapSource.t -> ?options:ImageBitmapOptions.t -> unit -> ImageBitmap.t Promise.t_1 [@@js.call "createImageBitmap"]
   val createImageBitmap': 'tags this -> image:ImageBitmapSource.t -> sx:float -> sy:float -> sw:float -> sh:float -> ?options:ImageBitmapOptions.t -> unit -> ImageBitmap.t Promise.t_1 [@@js.call "createImageBitmap"]
   val fetch: 'tags this -> input:RequestInfo.t -> ?init:RequestInit.t -> unit -> Response.t Promise.t_1 [@@js.call "fetch"]
   val queueMicrotask: 'tags this -> callback:VoidFunction.t -> unit [@@js.call "queueMicrotask"]
+  val reportError: 'tags this -> e:any -> unit [@@js.call "reportError"]
   val setInterval: 'tags this -> handler:TimerHandler.t -> ?timeout:float -> arguments:(any list [@js.variadic]) -> unit -> float [@@js.call "setInterval"]
   val setTimeout: 'tags this -> handler:TimerHandler.t -> ?timeout:float -> arguments:(any list [@js.variadic]) -> unit -> float [@@js.call "setTimeout"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+and WindowPostMessageOptions : sig
+  type t = [`StructuredSerializeOptions | `WindowPostMessageOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`StructuredSerializeOptions | `WindowPostMessageOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`StructuredSerializeOptions | `WindowPostMessageOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WindowPostMessageOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_targetOrigin: 'tags this -> string [@@js.get "targetOrigin"]
+  val set_targetOrigin: 'tags this -> string -> unit [@@js.set "targetOrigin"]
+  val create: targetOrigin:string -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 and WindowProxy : sig
@@ -28559,7 +28761,7 @@ module[@js.scope "document"] DocumentStatic : sig
   
   (** Contains the title of the document. *)
   val title: unit -> string [@@js.get "title"]
-  val visibilityState: unit -> VisibilityState.t [@@js.get "visibilityState"]
+  val visibilityState: unit -> DocumentVisibilityState.t [@@js.get "visibilityState"]
   
   (**
     Sets or gets the color of the links that the user has visited.
@@ -28632,7 +28834,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS: namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> qualifiedName:string -> HTMLElement.t [@@js.global "createElementNS"]
+  val createElementNS: namespaceURI:([`L_s403_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> qualifiedName:string -> HTMLElement.t [@@js.global "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -28649,7 +28851,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS': namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any [@@js.global "createElementNS"]
+  val createElementNS': namespaceURI:([`L_s404_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:'K -> (* FIXME: unknown type 'SVGElementTagNameMap[K]' *)any [@@js.global "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -28666,7 +28868,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     When supplied, options's is can be used to create a customized built-in element.
   *)
-  val createElementNS'': namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:string -> SVGElement.t [@@js.global "createElementNS"]
+  val createElementNS'': namespaceURI:([`L_s404_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> qualifiedName:string -> SVGElement.t [@@js.global "createElementNS"]
   
   (**
     Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after ":" (U+003E) in qualifiedName or qualifiedName.
@@ -28837,7 +29039,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
   *)
-  val getElementsByTagNameNS: namespaceURI:([`L_s389_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.global "getElementsByTagNameNS"]
+  val getElementsByTagNameNS: namespaceURI:([`L_s403_http___www_w3_org_1999_xhtml[@js "http://www.w3.org/1999/xhtml"]] [@js.enum]) -> localName:string -> HTMLElement.t HTMLCollectionOf.t [@@js.global "getElementsByTagNameNS"]
   
   (**
     If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
@@ -28848,7 +29050,7 @@ module[@js.scope "document"] DocumentStatic : sig
     
     Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
   *)
-  val getElementsByTagNameNS': namespaceURI:([`L_s390_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.global "getElementsByTagNameNS"]
+  val getElementsByTagNameNS': namespaceURI:([`L_s404_http___www_w3_org_2000_svg[@js "http://www.w3.org/2000/svg"]] [@js.enum]) -> localName:string -> SVGElement.t HTMLCollectionOf.t [@@js.global "getElementsByTagNameNS"]
   
   (**
     If namespace and localName are "*" returns a HTMLCollection of all descendant elements.
@@ -28987,6 +29189,9 @@ module[@js.scope "crypto"] CryptoStatic : sig
   (** Available only in secure contexts. *)
   val subtle: unit -> SubtleCrypto.t [@@js.get "subtle"]
   val getRandomValues: 'T -> 'T [@@js.global "getRandomValues"]
+  
+  (** Available only in secure contexts. *)
+  val randomUUID: unit -> string [@@js.global "randomUUID"]
 end
 module[@js.scope "console"] ConsoleStatic : sig
   
@@ -29384,7 +29589,7 @@ module[@js.scope "XMLSerializer"] XMLSerializer : sig
   val create: unit -> t [@@js.create]
 end
 module XMLHttpRequestResponseType : sig
-  type t = ([`L_s0[@js ""] | `L_s127_arraybuffer[@js "arraybuffer"] | `L_s161_blob[@js "blob"] | `L_s262_document[@js "document"] | `L_s425_json[@js "json"] | `L_s755_text[@js "text"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s127_arraybuffer[@js "arraybuffer"] | `L_s161_blob[@js "blob"] | `L_s272_document[@js "document"] | `L_s440_json[@js "json"] | `L_s787_text[@js "text"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -30146,6 +30351,8 @@ module GlobalEventHandlersEventMap : sig
   val set_selectionchange: 'tags this -> Event.t -> unit [@@js.set "selectionchange"]
   val get_selectstart: 'tags this -> Event.t [@@js.get "selectstart"]
   val set_selectstart: 'tags this -> Event.t -> unit [@@js.set "selectstart"]
+  val get_slotchange: 'tags this -> Event.t [@@js.get "slotchange"]
+  val set_slotchange: 'tags this -> Event.t -> unit [@@js.set "slotchange"]
   val get_stalled: 'tags this -> Event.t [@@js.get "stalled"]
   val set_stalled: 'tags this -> Event.t -> unit [@@js.set "stalled"]
   val get_submit: 'tags this -> SubmitEvent.t [@@js.get "submit"]
@@ -30186,7 +30393,7 @@ module GlobalEventHandlersEventMap : sig
   val set_webkittransitionend: 'tags this -> Event.t -> unit [@@js.set "webkittransitionend"]
   val get_wheel: 'tags this -> WheelEvent.t [@@js.get "wheel"]
   val set_wheel: 'tags this -> WheelEvent.t -> unit [@@js.set "wheel"]
-  val create: abort:UIEvent.t -> animationcancel:AnimationEvent.t -> animationend:AnimationEvent.t -> animationiteration:AnimationEvent.t -> animationstart:AnimationEvent.t -> auxclick:MouseEvent.t -> beforeinput:InputEvent.t -> blur:FocusEvent.t -> canplay:Event.t -> canplaythrough:Event.t -> change:Event.t -> click:MouseEvent.t -> close:Event.t -> compositionend:CompositionEvent.t -> compositionstart:CompositionEvent.t -> compositionupdate:CompositionEvent.t -> contextmenu:MouseEvent.t -> cuechange:Event.t -> dblclick:MouseEvent.t -> drag:DragEvent.t -> dragend:DragEvent.t -> dragenter:DragEvent.t -> dragleave:DragEvent.t -> dragover:DragEvent.t -> dragstart:DragEvent.t -> drop:DragEvent.t -> durationchange:Event.t -> emptied:Event.t -> ended:Event.t -> error:ErrorEvent.t -> focus:FocusEvent.t -> focusin:FocusEvent.t -> focusout:FocusEvent.t -> formdata:FormDataEvent.t -> gotpointercapture:PointerEvent.t -> input:Event.t -> invalid:Event.t -> keydown:KeyboardEvent.t -> keypress:KeyboardEvent.t -> keyup:KeyboardEvent.t -> load:Event.t -> loadeddata:Event.t -> loadedmetadata:Event.t -> loadstart:Event.t -> lostpointercapture:PointerEvent.t -> mousedown:MouseEvent.t -> mouseenter:MouseEvent.t -> mouseleave:MouseEvent.t -> mousemove:MouseEvent.t -> mouseout:MouseEvent.t -> mouseover:MouseEvent.t -> mouseup:MouseEvent.t -> pause:Event.t -> play:Event.t -> playing:Event.t -> pointercancel:PointerEvent.t -> pointerdown:PointerEvent.t -> pointerenter:PointerEvent.t -> pointerleave:PointerEvent.t -> pointermove:PointerEvent.t -> pointerout:PointerEvent.t -> pointerover:PointerEvent.t -> pointerup:PointerEvent.t -> progress:ProgressEvent.t_0 -> ratechange:Event.t -> reset:Event.t -> resize:UIEvent.t -> scroll:Event.t -> securitypolicyviolation:SecurityPolicyViolationEvent.t -> seeked:Event.t -> seeking:Event.t -> select:Event.t -> selectionchange:Event.t -> selectstart:Event.t -> stalled:Event.t -> submit:SubmitEvent.t -> suspend:Event.t -> timeupdate:Event.t -> toggle:Event.t -> touchcancel:TouchEvent.t -> touchend:TouchEvent.t -> touchmove:TouchEvent.t -> touchstart:TouchEvent.t -> transitioncancel:TransitionEvent.t -> transitionend:TransitionEvent.t -> transitionrun:TransitionEvent.t -> transitionstart:TransitionEvent.t -> volumechange:Event.t -> waiting:Event.t -> webkitanimationend:Event.t -> webkitanimationiteration:Event.t -> webkitanimationstart:Event.t -> webkittransitionend:Event.t -> wheel:WheelEvent.t -> unit -> t [@@js.builder]
+  val create: abort:UIEvent.t -> animationcancel:AnimationEvent.t -> animationend:AnimationEvent.t -> animationiteration:AnimationEvent.t -> animationstart:AnimationEvent.t -> auxclick:MouseEvent.t -> beforeinput:InputEvent.t -> blur:FocusEvent.t -> canplay:Event.t -> canplaythrough:Event.t -> change:Event.t -> click:MouseEvent.t -> close:Event.t -> compositionend:CompositionEvent.t -> compositionstart:CompositionEvent.t -> compositionupdate:CompositionEvent.t -> contextmenu:MouseEvent.t -> cuechange:Event.t -> dblclick:MouseEvent.t -> drag:DragEvent.t -> dragend:DragEvent.t -> dragenter:DragEvent.t -> dragleave:DragEvent.t -> dragover:DragEvent.t -> dragstart:DragEvent.t -> drop:DragEvent.t -> durationchange:Event.t -> emptied:Event.t -> ended:Event.t -> error:ErrorEvent.t -> focus:FocusEvent.t -> focusin:FocusEvent.t -> focusout:FocusEvent.t -> formdata:FormDataEvent.t -> gotpointercapture:PointerEvent.t -> input:Event.t -> invalid:Event.t -> keydown:KeyboardEvent.t -> keypress:KeyboardEvent.t -> keyup:KeyboardEvent.t -> load:Event.t -> loadeddata:Event.t -> loadedmetadata:Event.t -> loadstart:Event.t -> lostpointercapture:PointerEvent.t -> mousedown:MouseEvent.t -> mouseenter:MouseEvent.t -> mouseleave:MouseEvent.t -> mousemove:MouseEvent.t -> mouseout:MouseEvent.t -> mouseover:MouseEvent.t -> mouseup:MouseEvent.t -> pause:Event.t -> play:Event.t -> playing:Event.t -> pointercancel:PointerEvent.t -> pointerdown:PointerEvent.t -> pointerenter:PointerEvent.t -> pointerleave:PointerEvent.t -> pointermove:PointerEvent.t -> pointerout:PointerEvent.t -> pointerover:PointerEvent.t -> pointerup:PointerEvent.t -> progress:ProgressEvent.t_0 -> ratechange:Event.t -> reset:Event.t -> resize:UIEvent.t -> scroll:Event.t -> securitypolicyviolation:SecurityPolicyViolationEvent.t -> seeked:Event.t -> seeking:Event.t -> select:Event.t -> selectionchange:Event.t -> selectstart:Event.t -> slotchange:Event.t -> stalled:Event.t -> submit:SubmitEvent.t -> suspend:Event.t -> timeupdate:Event.t -> toggle:Event.t -> touchcancel:TouchEvent.t -> touchend:TouchEvent.t -> touchmove:TouchEvent.t -> touchstart:TouchEvent.t -> transitioncancel:TransitionEvent.t -> transitionend:TransitionEvent.t -> transitionrun:TransitionEvent.t -> transitionstart:TransitionEvent.t -> volumechange:Event.t -> waiting:Event.t -> webkitanimationend:Event.t -> webkitanimationiteration:Event.t -> webkitanimationstart:Event.t -> webkittransitionend:Event.t -> wheel:WheelEvent.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module WindowEventMap : sig
@@ -30377,7 +30584,7 @@ module[@js.scope "WebKitCSSMatrix"] WebKitCSSMatrix : sig
 end
 module[@js.scope "WebAssembly"] WebAssembly : sig
   module ImportExportKind : sig
-    type t = ([`L_s352_function[@js "function"] | `L_s359_global[@js "global"] | `L_s488_memory[@js "memory"] | `L_s749_table[@js "table"]] [@js.enum])
+    type t = ([`L_s365_function[@js "function"] | `L_s372_global[@js "global"] | `L_s507_memory[@js "memory"] | `L_s781_table[@js "table"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -30456,7 +30663,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val imports: t -> ModuleImportDescriptor.t list [@@js.global "imports"]
   end
   module TableKind : sig
-    type t = ([`L_s122_anyfunc[@js "anyfunc"] | `L_s295_externref[@js "externref"]] [@js.enum])
+    type t = ([`L_s122_anyfunc[@js "anyfunc"] | `L_s308_externref[@js "externref"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -30560,7 +30767,7 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
     val create: MemoryDescriptor.t -> t [@@js.create]
   end
   module ValueType : sig
-    type t = ([`L_s122_anyfunc[@js "anyfunc"] | `L_s295_externref[@js "externref"] | `L_s298_f32[@js "f32"] | `L_s299_f64[@js "f64"] | `L_s392_i32[@js "i32"] | `L_s393_i64[@js "i64"]] [@js.enum])
+    type t = ([`L_s122_anyfunc[@js "anyfunc"] | `L_s308_externref[@js "externref"] | `L_s311_f32[@js "f32"] | `L_s312_f64[@js "f64"] | `L_s407_i32[@js "i32"] | `L_s408_i64[@js "i64"] | `L_s846_v128[@js "v128"]] [@js.enum])
     type t_0 = t
     val t_to_js: t -> Ojs.t
     val t_of_js: Ojs.t -> t
@@ -30768,6 +30975,32 @@ module[@js.scope "WebAssembly"] WebAssembly : sig
   val instantiateStreaming: source:(Response.t, Response.t PromiseLike.t_1) union2 -> ?importObject:Imports.t -> unit -> WebAssemblyInstantiatedSource.t Promise.t_1 [@@js.global "instantiateStreaming"]
   val validate: BufferSource.t -> bool [@@js.global "validate"]
 end
+module WEBGL_multi_draw : sig
+  type t = [`WEBGL_multi_draw] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`WEBGL_multi_draw]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`WEBGL_multi_draw]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `WEBGL_multi_draw ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val multiDrawArraysInstancedWEBGL: 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t_0 | `U2 of GLint.t Iterable.t_1] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t Iterable.t_1] [@js.union]) -> countsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t Iterable.t_1] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysInstancedWEBGL"]
+  val multiDrawArraysWEBGL: 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t_0 | `U2 of GLint.t Iterable.t_1] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t Iterable.t_1] [@js.union]) -> countsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysWEBGL"]
+  val multiDrawElementsInstancedWEBGL: 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t_0 | `U2 of GLint.t Iterable.t_1] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t Iterable.t_1] [@js.union]) -> offsetsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t Iterable.t_1] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsInstancedWEBGL"]
+  val multiDrawElementsWEBGL: 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t_0 | `U2 of GLint.t Iterable.t_1] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t Iterable.t_1] [@js.union]) -> offsetsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsWEBGL"]
+  val multiDrawArraysInstancedWEBGL': 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t_0 | `U2 of GLint.t list] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t list] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysInstancedWEBGL"]
+  val multiDrawArraysWEBGL': 'tags this -> mode:GLenum.t -> firstsList:([`U1 of Int32Array.t_0 | `U2 of GLint.t list] [@js.union]) -> firstsOffset:GLuint.t -> countsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t list] [@js.union]) -> countsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawArraysWEBGL"]
+  val multiDrawElementsInstancedWEBGL': 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t_0 | `U2 of GLint.t list] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t list] [@js.union]) -> offsetsOffset:GLuint.t -> instanceCountsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t list] [@js.union]) -> instanceCountsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsInstancedWEBGL"]
+  val multiDrawElementsWEBGL': 'tags this -> mode:GLenum.t -> countsList:([`U1 of Int32Array.t_0 | `U2 of GLint.t list] [@js.union]) -> countsOffset:GLuint.t -> type_:GLenum.t -> offsetsList:([`U1 of Int32Array.t_0 | `U2 of GLsizei.t list] [@js.union]) -> offsetsOffset:GLuint.t -> drawcount:GLsizei.t -> unit [@@js.call "multiDrawElementsWEBGL"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
 module VisualViewportEventMap : sig
   type t = [`VisualViewportEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -30792,7 +31025,7 @@ module VisualViewportEventMap : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module VideoFacingModeEnum : sig
-  type t = ([`L_s285_environment[@js "environment"] | `L_s440_left[@js "left"] | `L_s658_right[@js "right"] | `L_s813_user[@js "user"]] [@js.enum])
+  type t = ([`L_s296_environment[@js "environment"] | `L_s456_left[@js "left"] | `L_s680_right[@js "right"] | `L_s845_user[@js "user"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -30800,7 +31033,7 @@ module VideoFacingModeEnum : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ScrollSetting : sig
-  type t = ([`L_s0[@js ""] | `L_s803_up[@js "up"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s835_up[@js "up"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -30845,7 +31078,7 @@ module[@js.scope "VTTRegion"] VTTRegion : sig
   val create': unit -> t [@@js.create]
 end
 module PositionAlignSetting : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s185_center[@js "center"] | `L_s447_line_left[@js "line-left"] | `L_s448_line_right[@js "line-right"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s185_center[@js "center"] | `L_s465_line_left[@js "line-left"] | `L_s466_line_right[@js "line-right"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -30869,7 +31102,7 @@ module LineAndPositionSetting : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module LineAlignSetting : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s723_start[@js "start"]] [@js.enum])
+  type t = ([`L_s185_center[@js "center"] | `L_s290_end[@js "end"] | `L_s754_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -30877,7 +31110,7 @@ module LineAlignSetting : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module DirectionSetting : sig
-  type t = ([`L_s0[@js ""] | `L_s470_lr[@js "lr"] | `L_s659_rl[@js "rl"]] [@js.enum])
+  type t = ([`L_s0[@js ""] | `L_s488_lr[@js "lr"] | `L_s681_rl[@js "rl"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -30885,7 +31118,7 @@ module DirectionSetting : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module AlignSetting : sig
-  type t = ([`L_s185_center[@js "center"] | `L_s279_end[@js "end"] | `L_s440_left[@js "left"] | `L_s658_right[@js "right"] | `L_s723_start[@js "start"]] [@js.enum])
+  type t = ([`L_s185_center[@js "center"] | `L_s290_end[@js "end"] | `L_s456_left[@js "left"] | `L_s680_right[@js "right"] | `L_s754_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -31715,6 +31948,27 @@ module[@js.scope "SharedWorker"] SharedWorker : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: scriptURL:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?options:([`U1 of string | `U2 of WorkerOptions.t] [@js.union]) -> unit -> t [@@js.create]
 end
+module ShadowRootEventMap : sig
+  type t = [`ShadowRootEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`ShadowRootEventMap]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`ShadowRootEventMap]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `ShadowRootEventMap ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_slotchange: 'tags this -> Event.t [@@js.get "slotchange"]
+  val set_slotchange: 'tags this -> Event.t -> unit [@@js.set "slotchange"]
+  val create: slotchange:Event.t -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
 module ServiceWorkerRegistrationEventMap : sig
   type t = [`ServiceWorkerRegistrationEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -32017,7 +32271,7 @@ module RsaHashedKeyAlgorithm : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ResizeObserverBoxOptions : sig
-  type t = ([`L_s167_border_box[@js "border-box"] | `L_s216_content_box[@js "content-box"] | `L_s246_device_pixel_content_box[@js "device-pixel-content-box"]] [@js.enum])
+  type t = ([`L_s167_border_box[@js "border-box"] | `L_s219_content_box[@js "content-box"] | `L_s254_device_pixel_content_box[@js "device-pixel-content-box"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32087,8 +32341,9 @@ module[@js.scope "ResizeObserverEntry"] ResizeObserverEntry : sig
   val get_borderBoxSize: 'tags this -> ResizeObserverSize.t list [@@js.get "borderBoxSize"]
   val get_contentBoxSize: 'tags this -> ResizeObserverSize.t list [@@js.get "contentBoxSize"]
   val get_contentRect: 'tags this -> DOMRectReadOnly.t [@@js.get "contentRect"]
+  val get_devicePixelContentBoxSize: 'tags this -> ResizeObserverSize.t list [@@js.get "devicePixelContentBoxSize"]
   val get_target: 'tags this -> Element.t [@@js.get "target"]
-  val create: borderBoxSize:ResizeObserverSize.t list -> contentBoxSize:ResizeObserverSize.t list -> contentRect:DOMRectReadOnly.t -> target:Element.t -> unit -> t [@@js.builder]
+  val create: borderBoxSize:ResizeObserverSize.t list -> contentBoxSize:ResizeObserverSize.t list -> contentRect:DOMRectReadOnly.t -> devicePixelContentBoxSize:ResizeObserverSize.t list -> target:Element.t -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create': unit -> t [@@js.create]
@@ -32169,7 +32424,7 @@ module ReadableStreamReader : sig
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
 end
 module RTCStatsType : sig
-  type t = ([`L_s178_candidate_pair[@js "candidate-pair"] | `L_s186_certificate[@js "certificate"] | `L_s203_codec[@js "codec"] | `L_s224_csrc[@js "csrc"] | `L_s229_data_channel[@js "data-channel"] | `L_s407_inbound_rtp[@js "inbound-rtp"] | `L_s464_local_candidate[@js "local-candidate"] | `L_s486_media_source[@js "media-source"] | `L_s554_outbound_rtp[@js "outbound-rtp"] | `L_s575_peer_connection[@js "peer-connection"] | `L_s641_remote_candidate[@js "remote-candidate"] | `L_s642_remote_inbound_rtp[@js "remote-inbound-rtp"] | `L_s643_remote_outbound_rtp[@js "remote-outbound-rtp"] | `L_s779_track[@js "track"] | `L_s785_transport[@js "transport"]] [@js.enum])
+  type t = ([`L_s178_candidate_pair[@js "candidate-pair"] | `L_s186_certificate[@js "certificate"] | `L_s203_codec[@js "codec"] | `L_s227_csrc[@js "csrc"] | `L_s233_data_channel[@js "data-channel"] | `L_s422_inbound_rtp[@js "inbound-rtp"] | `L_s482_local_candidate[@js "local-candidate"] | `L_s505_media_source[@js "media-source"] | `L_s574_outbound_rtp[@js "outbound-rtp"] | `L_s596_peer_connection[@js "peer-connection"] | `L_s663_remote_candidate[@js "remote-candidate"] | `L_s664_remote_inbound_rtp[@js "remote-inbound-rtp"] | `L_s665_remote_outbound_rtp[@js "remote-outbound-rtp"] | `L_s811_track[@js "track"] | `L_s817_transport[@js "transport"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32278,7 +32533,7 @@ module RTCPeerConnectionEventMap : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCSignalingState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s372_have_local_offer[@js "have-local-offer"] | `L_s373_have_local_pranswer[@js "have-local-pranswer"] | `L_s374_have_remote_offer[@js "have-remote-offer"] | `L_s375_have_remote_pranswer[@js "have-remote-pranswer"] | `L_s720_stable[@js "stable"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s386_have_local_offer[@js "have-local-offer"] | `L_s387_have_local_pranswer[@js "have-local-pranswer"] | `L_s388_have_remote_offer[@js "have-remote-offer"] | `L_s389_have_remote_pranswer[@js "have-remote-pranswer"] | `L_s751_stable[@js "stable"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32286,7 +32541,7 @@ module RTCSignalingState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCSdpType : sig
-  type t = ([`L_s120_answer[@js "answer"] | `L_s536_offer[@js "offer"] | `L_s605_pranswer[@js "pranswer"] | `L_s660_rollback[@js "rollback"]] [@js.enum])
+  type t = ([`L_s120_answer[@js "answer"] | `L_s556_offer[@js "offer"] | `L_s626_pranswer[@js "pranswer"] | `L_s682_rollback[@js "rollback"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32386,7 +32641,7 @@ module RTCRtpTransceiverInit : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCPeerConnectionState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s213_connected[@js "connected"] | `L_s214_connecting[@js "connecting"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s216_connected[@js "connected"] | `L_s217_connecting[@js "connecting"] | `L_s266_disconnected[@js "disconnected"] | `L_s314_failed[@js "failed"] | `L_s538_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32479,7 +32734,7 @@ module RTCLocalSessionDescriptionInit : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCIceGatheringState : sig
-  type t = ([`L_s206_complete[@js "complete"] | `L_s356_gathering[@js "gathering"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t = ([`L_s209_complete[@js "complete"] | `L_s369_gathering[@js "gathering"] | `L_s538_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32487,7 +32742,7 @@ module RTCIceGatheringState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceConnectionState : sig
-  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s210_completed[@js "completed"] | `L_s216_connected[@js "connected"] | `L_s266_disconnected[@js "disconnected"] | `L_s314_failed[@js "failed"] | `L_s538_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32526,7 +32781,7 @@ module RTCDataChannelInit : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCRtcpMuxPolicy : sig
-  type t = ([`L_s650_require[@js "require"]] [@js.enum])
+  type t = ([`L_s672_require[@js "require"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32534,7 +32789,7 @@ module RTCRtcpMuxPolicy : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceTransportPolicy : sig
-  type t = ([`L_s106_all[@js "all"] | `L_s637_relay[@js "relay"]] [@js.enum])
+  type t = ([`L_s106_all[@js "all"] | `L_s659_relay[@js "relay"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32542,7 +32797,7 @@ module RTCIceTransportPolicy : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceCredentialType : sig
-  type t = ([`L_s567_password[@js "password"]] [@js.enum])
+  type t = ([`L_s588_password[@js "password"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32615,14 +32870,14 @@ module[@js.scope "RTCCertificate"] RTCCertificate : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_expires: 'tags this -> DOMTimeStamp.t [@@js.get "expires"]
+  val get_expires: 'tags this -> EpochTimeStamp.t [@@js.get "expires"]
   val getFingerprints: 'tags this -> RTCDtlsFingerprint.t list [@@js.call "getFingerprints"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
 module RTCBundlePolicy : sig
-  type t = ([`L_s147_balanced[@js "balanced"] | `L_s483_max_bundle[@js "max-bundle"] | `L_s484_max_compat[@js "max-compat"]] [@js.enum])
+  type t = ([`L_s147_balanced[@js "balanced"] | `L_s502_max_bundle[@js "max-bundle"] | `L_s503_max_compat[@js "max-compat"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32942,7 +33197,7 @@ module RTCInboundRtpStreamStats : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RTCIceTransportState : sig
-  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s207_completed[@js "completed"] | `L_s213_connected[@js "connected"] | `L_s256_disconnected[@js "disconnected"] | `L_s301_failed[@js "failed"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t = ([`L_s190_checking[@js "checking"] | `L_s199_closed[@js "closed"] | `L_s210_completed[@js "completed"] | `L_s216_connected[@js "connected"] | `L_s266_disconnected[@js "disconnected"] | `L_s314_failed[@js "failed"] | `L_s538_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32950,7 +33205,7 @@ module RTCIceTransportState : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module RTCIceGathererState : sig
-  type t = ([`L_s206_complete[@js "complete"] | `L_s356_gathering[@js "gathering"] | `L_s518_new[@js "new"]] [@js.enum])
+  type t = ([`L_s209_complete[@js "complete"] | `L_s369_gathering[@js "gathering"] | `L_s538_new[@js "new"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -32983,7 +33238,7 @@ module[@js.scope "RTCIceTransport"] RTCIceTransport : sig
   val create': unit -> t [@@js.create]
 end
 module RTCStatsIceCandidatePairState : sig
-  type t = ([`L_s301_failed[@js "failed"] | `L_s349_frozen[@js "frozen"] | `L_s405_in_progress[@js "in-progress"] | `L_s413_inprogress[@js "inprogress"] | `L_s737_succeeded[@js "succeeded"] | `L_s827_waiting[@js "waiting"]] [@js.enum])
+  type t = ([`L_s314_failed[@js "failed"] | `L_s362_frozen[@js "frozen"] | `L_s420_in_progress[@js "in-progress"] | `L_s428_inprogress[@js "inprogress"] | `L_s769_succeeded[@js "succeeded"] | `L_s860_waiting[@js "waiting"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -33126,9 +33381,9 @@ module RTCCertificateExpiration : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  val get_expires: 'tags this -> DOMTimeStamp.t [@@js.get "expires"]
-  val set_expires: 'tags this -> DOMTimeStamp.t -> unit [@@js.set "expires"]
-  val create: expires:DOMTimeStamp.t -> unit -> t [@@js.builder]
+  val get_expires: 'tags this -> float [@@js.get "expires"]
+  val set_expires: 'tags this -> float -> unit [@@js.set "expires"]
+  val create: expires:float -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 
@@ -33462,7 +33717,7 @@ module[@js.scope "PerformanceResourceTiming"] PerformanceResourceTiming : sig
   val create: unit -> t [@@js.create]
 end
 module NavigationType : sig
-  type t = ([`L_s144_back_forward[@js "back_forward"] | `L_s514_navigate[@js "navigate"] | `L_s609_prerender[@js "prerender"] | `L_s640_reload[@js "reload"]] [@js.enum])
+  type t = ([`L_s144_back_forward[@js "back_forward"] | `L_s534_navigate[@js "navigate"] | `L_s630_prerender[@js "prerender"] | `L_s662_reload[@js "reload"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -33522,10 +33777,10 @@ module[@js.scope "PerformanceEventTiming"] PerformanceEventTiming : sig
   val get_processingEnd: 'tags this -> DOMHighResTimeStamp.t [@@js.get "processingEnd"]
   val get_processingStart: 'tags this -> DOMHighResTimeStamp.t [@@js.get "processingStart"]
   val get_target: 'tags this -> Node.t option [@@js.get "target"]
-  val create: cancelable:bool -> processingEnd:DOMHighResTimeStamp.t -> processingStart:DOMHighResTimeStamp.t -> ?target:Node.t -> unit -> t [@@js.builder]
+  val toJSON: 'tags this -> any [@@js.call "toJSON"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
-  val create': unit -> t [@@js.create]
+  val create: unit -> t [@@js.create]
 end
 module PerformanceEventMap : sig
   type t = [`PerformanceEventMap] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -33593,7 +33848,7 @@ module PaymentValidationErrors : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PaymentComplete : sig
-  type t = ([`L_s300_fail[@js "fail"] | `L_s738_success[@js "success"] | `L_s796_unknown[@js "unknown"]] [@js.enum])
+  type t = ([`L_s313_fail[@js "fail"] | `L_s770_success[@js "success"] | `L_s828_unknown[@js "unknown"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -33980,7 +34235,7 @@ module OfflineAudioContextOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module OverSampleType : sig
-  type t = ([`L_s2_2x[@js "2x"] | `L_s3_4x[@js "4x"] | `L_s528_none[@js "none"]] [@js.enum])
+  type t = ([`L_s2_2x[@js "2x"] | `L_s3_4x[@js "4x"] | `L_s548_none[@js "none"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -33988,7 +34243,7 @@ module OverSampleType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ChannelInterpretation : sig
-  type t = ([`L_s258_discrete[@js "discrete"] | `L_s715_speakers[@js "speakers"]] [@js.enum])
+  type t = ([`L_s268_discrete[@js "discrete"] | `L_s746_speakers[@js "speakers"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -33996,7 +34251,7 @@ module ChannelInterpretation : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module ChannelCountMode : sig
-  type t = ([`L_s194_clamped_max[@js "clamped-max"] | `L_s293_explicit[@js "explicit"] | `L_s482_max[@js "max"]] [@js.enum])
+  type t = ([`L_s194_clamped_max[@js "clamped-max"] | `L_s306_explicit[@js "explicit"] | `L_s501_max[@js "max"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -34073,7 +34328,7 @@ module StereoPannerOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module PanningModelType : sig
-  type t = ([`L_s286_equalpower[@js "equalpower"] | `L_s30_HRTF[@js "HRTF"]] [@js.enum])
+  type t = ([`L_s297_equalpower[@js "equalpower"] | `L_s30_HRTF[@js "HRTF"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -34081,7 +34336,7 @@ module PanningModelType : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module DistanceModelType : sig
-  type t = ([`L_s294_exponential[@js "exponential"] | `L_s424_inverse[@js "inverse"] | `L_s449_linear[@js "linear"]] [@js.enum])
+  type t = ([`L_s307_exponential[@js "exponential"] | `L_s439_inverse[@js "inverse"] | `L_s467_linear[@js "linear"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -34180,7 +34435,7 @@ module PeriodicWaveOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module OscillatorType : sig
-  type t = ([`L_s226_custom[@js "custom"] | `L_s672_sawtooth[@js "sawtooth"] | `L_s700_sine[@js "sine"] | `L_s717_square[@js "square"] | `L_s786_triangle[@js "triangle"]] [@js.enum])
+  type t = ([`L_s229_custom[@js "custom"] | `L_s695_sawtooth[@js "sawtooth"] | `L_s725_sine[@js "sine"] | `L_s748_square[@js "square"] | `L_s818_triangle[@js "triangle"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -34408,7 +34663,7 @@ module ChannelMergerOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module BiquadFilterType : sig
-  type t = ([`L_s109_allpass[@js "allpass"] | `L_s148_bandpass[@js "bandpass"] | `L_s383_highpass[@js "highpass"] | `L_s384_highshelf[@js "highshelf"] | `L_s468_lowpass[@js "lowpass"] | `L_s469_lowshelf[@js "lowshelf"] | `L_s533_notch[@js "notch"] | `L_s574_peaking[@js "peaking"]] [@js.enum])
+  type t = ([`L_s109_allpass[@js "allpass"] | `L_s148_bandpass[@js "bandpass"] | `L_s397_highpass[@js "highpass"] | `L_s398_highshelf[@js "highshelf"] | `L_s486_lowpass[@js "lowpass"] | `L_s487_lowshelf[@js "lowshelf"] | `L_s553_notch[@js "notch"] | `L_s595_peaking[@js "peaking"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -34519,7 +34774,7 @@ module[@js.scope "AudioWorklet"] AudioWorklet : sig
   val create: unit -> t [@@js.create]
 end
 module AutomationRate : sig
-  type t = ([`L_s427_k_rate[@js "k-rate"] | `L_s92_a_rate[@js "a-rate"]] [@js.enum])
+  type t = ([`L_s442_k_rate[@js "k-rate"] | `L_s92_a_rate[@js "a-rate"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -34601,7 +34856,7 @@ module[@js.scope "AudioListener"] AudioListener : sig
   val create: unit -> t [@@js.create]
 end
 module AudioContextState : sig
-  type t = ([`L_s199_closed[@js "closed"] | `L_s668_running[@js "running"] | `L_s742_suspended[@js "suspended"]] [@js.enum])
+  type t = ([`L_s199_closed[@js "closed"] | `L_s690_running[@js "running"] | `L_s774_suspended[@js "suspended"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -35988,7 +36243,7 @@ module MediaRecorderEventMap : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module RecordingState : sig
-  type t = ([`L_s406_inactive[@js "inactive"] | `L_s572_paused[@js "paused"] | `L_s632_recording[@js "recording"]] [@js.enum])
+  type t = ([`L_s421_inactive[@js "inactive"] | `L_s593_paused[@js "paused"] | `L_s653_recording[@js "recording"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -36248,6 +36503,158 @@ module[@js.scope "MathMLElement"] MathMLElement : sig
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
 end
+module LockMode : sig
+  type t = ([`L_s302_exclusive[@js "exclusive"] | `L_s718_shared[@js "shared"]] [@js.enum])
+  type t_0 = t
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+end
+module LockOptions : sig
+  type t = [`LockOptions] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`LockOptions]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`LockOptions]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `LockOptions ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_ifAvailable: 'tags this -> bool [@@js.get "ifAvailable"]
+  val set_ifAvailable: 'tags this -> bool -> unit [@@js.set "ifAvailable"]
+  val get_mode: 'tags this -> LockMode.t [@@js.get "mode"]
+  val set_mode: 'tags this -> LockMode.t -> unit [@@js.set "mode"]
+  val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
+  val set_signal: 'tags this -> AbortSignal.t -> unit [@@js.set "signal"]
+  val get_steal: 'tags this -> bool [@@js.get "steal"]
+  val set_steal: 'tags this -> bool -> unit [@@js.set "steal"]
+  val create: ifAvailable:bool -> mode:LockMode.t -> signal:AbortSignal.t -> steal:bool -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+module LockInfo : sig
+  type t = [`LockInfo] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`LockInfo]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`LockInfo]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `LockInfo ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_clientId: 'tags this -> string [@@js.get "clientId"]
+  val set_clientId: 'tags this -> string -> unit [@@js.set "clientId"]
+  val get_mode: 'tags this -> LockMode.t [@@js.get "mode"]
+  val set_mode: 'tags this -> LockMode.t -> unit [@@js.set "mode"]
+  val get_name: 'tags this -> string [@@js.get "name"]
+  val set_name: 'tags this -> string -> unit [@@js.set "name"]
+  val create: clientId:string -> mode:LockMode.t -> name:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+module LockManagerSnapshot : sig
+  type t = [`LockManagerSnapshot] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`LockManagerSnapshot]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`LockManagerSnapshot]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `LockManagerSnapshot ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_held: 'tags this -> LockInfo.t list [@@js.get "held"]
+  val set_held: 'tags this -> LockInfo.t list -> unit [@@js.set "held"]
+  val get_pending: 'tags this -> LockInfo.t list [@@js.get "pending"]
+  val set_pending: 'tags this -> LockInfo.t list -> unit [@@js.set "pending"]
+  val create: held:LockInfo.t list -> pending:LockInfo.t list -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+(** Available only in secure contexts. *)
+module[@js.scope "Lock"] Lock : sig
+  type t = [`Lock] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`Lock]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`Lock]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `Lock ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_mode: 'tags this -> LockMode.t [@@js.get "mode"]
+  val get_name: 'tags this -> string [@@js.get "name"]
+  val create: mode:LockMode.t -> name:string -> unit -> t [@@js.builder]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create': unit -> t [@@js.create]
+end
+module LockGrantedCallback : sig
+  type t = [`LockGrantedCallback] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`LockGrantedCallback]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`LockGrantedCallback]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `LockGrantedCallback ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val apply: 'tags this -> lock:Lock.t option -> any [@@js.apply]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+
+(** Available only in secure contexts. *)
+module[@js.scope "LockManager"] LockManager : sig
+  type t = [`LockManager] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`LockManager]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`LockManager]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `LockManager ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val query: 'tags this -> LockManagerSnapshot.t Promise.t_1 [@@js.call "query"]
+  val request: 'tags this -> name:string -> callback:LockGrantedCallback.t -> any Promise.t_1 [@@js.call "request"]
+  val request': 'tags this -> name:string -> options:LockOptions.t -> callback:LockGrantedCallback.t -> any Promise.t_1 [@@js.call "request"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
+end
 module ComputedKeyframe : sig
   type t = [`ComputedKeyframe] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -36442,6 +36849,26 @@ and IntersectionObserverCallback : sig
   val t_0_of_js: Ojs.t -> t_0
   val apply: 'tags this -> entries:IntersectionObserverEntry.t list -> observer:IntersectionObserver.t -> unit [@@js.apply]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+end
+module[@js.scope "InputDeviceInfo"] InputDeviceInfo : sig
+  type t = [`InputDeviceInfo | `MediaDeviceInfo] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`InputDeviceInfo | `MediaDeviceInfo]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`InputDeviceInfo | `MediaDeviceInfo]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `InputDeviceInfo ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
 end
 
 (**
@@ -37590,13 +38017,33 @@ module[@js.scope "EventSource"] EventSource : sig
     
     The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
   *)
-  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  val addEventListener': 'tags this -> type_:string -> listener:(this:t -> event:MessageEvent.t_0 -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener'': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
   val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'EventSourceEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   
   (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
-  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
+  val removeEventListener': 'tags this -> type_:string -> listener:(this:t -> event:MessageEvent.t_0 -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener'': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: url:([`U1 of string | `U2 of URL.t] [@js.union]) -> ?eventSourceInitDict:EventSourceInit.t -> unit -> t [@@js.create]
@@ -42466,7 +42913,7 @@ module[@js.scope "HTMLTimeElement"] HTMLTimeElement : sig
   val create: unit -> t [@@js.create]
 end
 module SelectionMode : sig
-  type t = ([`L_s279_end[@js "end"] | `L_s610_preserve[@js "preserve"] | `L_s685_select[@js "select"] | `L_s723_start[@js "start"]] [@js.enum])
+  type t = ([`L_s290_end[@js "end"] | `L_s631_preserve[@js "preserve"] | `L_s709_select[@js "select"] | `L_s754_start[@js "start"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -42671,8 +43118,8 @@ module[@js.scope "HTMLTextAreaElement"] HTMLTextAreaElement : sig
   
   (** Sets or retrieves the number of horizontal rows contained in the object. *)
   val set_rows: 'tags this -> float -> unit [@@js.set "rows"]
-  val get_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s528_none[@js "none"]] [@js.enum]) [@@js.get "selectionDirection"]
-  val set_selectionDirection: 'tags this -> ([`U1 of ([`L_s345_forward[@js "forward"]] [@js.enum]) | `U2 of ([`L_s145_backward[@js "backward"]] [@js.enum]) | `U3 of ([`L_s528_none[@js "none"]] [@js.enum])] [@js.union]) -> unit [@@js.set "selectionDirection"]
+  val get_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s358_forward[@js "forward"] | `L_s548_none[@js "none"]] [@js.enum]) [@@js.get "selectionDirection"]
+  val set_selectionDirection: 'tags this -> ([`U1 of ([`L_s358_forward[@js "forward"]] [@js.enum]) | `U2 of ([`L_s145_backward[@js "backward"]] [@js.enum]) | `U3 of ([`L_s548_none[@js "none"]] [@js.enum])] [@js.union]) -> unit [@@js.set "selectionDirection"]
   
   (** Gets or sets the end position or offset of a text selection. *)
   val get_selectionEnd: 'tags this -> float [@@js.get "selectionEnd"]
@@ -42732,7 +43179,7 @@ module[@js.scope "HTMLTextAreaElement"] HTMLTextAreaElement : sig
     @param end The offset into the text field for the end of the selection.
     @param direction The direction in which the selection is performed.
   *)
-  val setSelectionRange: 'tags this -> start:float option -> end_:float option -> ?direction:([`U1 of ([`L_s345_forward[@js "forward"]] [@js.enum]) | `U2 of ([`L_s145_backward[@js "backward"]] [@js.enum]) | `U3 of ([`L_s528_none[@js "none"]] [@js.enum])] [@js.union]) -> unit -> unit [@@js.call "setSelectionRange"]
+  val setSelectionRange: 'tags this -> start:float option -> end_:float option -> ?direction:([`U1 of ([`L_s358_forward[@js "forward"]] [@js.enum]) | `U2 of ([`L_s145_backward[@js "backward"]] [@js.enum]) | `U3 of ([`L_s548_none[@js "none"]] [@js.enum])] [@js.union]) -> unit -> unit [@@js.call "setSelectionRange"]
   
   (**
     
@@ -43741,6 +44188,8 @@ module[@js.scope "HTMLSourceElement"] HTMLSourceElement : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+  val get_height: 'tags this -> float [@@js.get "height"]
+  val set_height: 'tags this -> float -> unit [@@js.set "height"]
   
   (** Gets or sets the intended media type of the media source. *)
   val get_media: 'tags this -> string [@@js.get "media"]
@@ -43763,6 +44212,8 @@ module[@js.scope "HTMLSourceElement"] HTMLSourceElement : sig
   
   (** Gets or sets the MIME type of a media resource. *)
   val set_type: 'tags this -> string -> unit [@@js.set "type"]
+  val get_width: 'tags this -> float [@@js.get "width"]
+  val set_width: 'tags this -> float -> unit [@@js.set "width"]
   
   (**
     
@@ -45215,6 +45666,8 @@ module[@js.scope "HTMLMetaElement"] HTMLMetaElement : sig
   
   (** Gets or sets information used to bind the value of a content attribute of a meta element to an HTTP response header. *)
   val set_httpEquiv: 'tags this -> string -> unit [@@js.set "httpEquiv"]
+  val get_media: 'tags this -> string [@@js.get "media"]
+  val set_media: 'tags this -> string -> unit [@@js.set "media"]
   
   (** Sets or retrieves the value specified in the content attribute of the meta object. *)
   val get_name: 'tags this -> string [@@js.get "name"]
@@ -46100,8 +46553,8 @@ module[@js.scope "HTMLInputElement"] HTMLInputElement : sig
   
   (** When present, marks an element that can't be submitted without a value. *)
   val set_required: 'tags this -> bool -> unit [@@js.set "required"]
-  val get_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s345_forward[@js "forward"] | `L_s528_none[@js "none"]] [@js.enum]) option [@@js.get "selectionDirection"]
-  val set_selectionDirection: 'tags this -> ([`Null | `U1 of ([`L_s345_forward[@js "forward"]] [@js.enum]) | `U2 of ([`L_s145_backward[@js "backward"]] [@js.enum]) | `U3 of ([`L_s528_none[@js "none"]] [@js.enum])] [@js.union]) -> unit [@@js.set "selectionDirection"]
+  val get_selectionDirection: 'tags this -> ([`L_s145_backward[@js "backward"] | `L_s358_forward[@js "forward"] | `L_s548_none[@js "none"]] [@js.enum]) option [@@js.get "selectionDirection"]
+  val set_selectionDirection: 'tags this -> ([`Null | `U1 of ([`L_s358_forward[@js "forward"]] [@js.enum]) | `U2 of ([`L_s145_backward[@js "backward"]] [@js.enum]) | `U3 of ([`L_s548_none[@js "none"]] [@js.enum])] [@js.union]) -> unit [@@js.set "selectionDirection"]
   
   (** Gets or sets the end position or offset of a text selection. *)
   val get_selectionEnd: 'tags this -> float option [@@js.get "selectionEnd"]
@@ -46204,7 +46657,7 @@ module[@js.scope "HTMLInputElement"] HTMLInputElement : sig
     @param end The offset into the text field for the end of the selection.
     @param direction The direction in which the selection is performed.
   *)
-  val setSelectionRange: 'tags this -> start:float option -> end_:float option -> ?direction:([`U1 of ([`L_s345_forward[@js "forward"]] [@js.enum]) | `U2 of ([`L_s145_backward[@js "backward"]] [@js.enum]) | `U3 of ([`L_s528_none[@js "none"]] [@js.enum])] [@js.union]) -> unit -> unit [@@js.call "setSelectionRange"]
+  val setSelectionRange: 'tags this -> start:float option -> end_:float option -> ?direction:([`U1 of ([`L_s358_forward[@js "forward"]] [@js.enum]) | `U2 of ([`L_s145_backward[@js "backward"]] [@js.enum]) | `U3 of ([`L_s548_none[@js "none"]] [@js.enum])] [@js.union]) -> unit -> unit [@@js.call "setSelectionRange"]
   
   (**
     Decrements a range input control's value by the value given by the Step attribute. If the optional parameter is used, it will decrement the input control's step value multiplied by the parameter's value.
@@ -48551,7 +49004,7 @@ end
 
 (** @deprecated Directly use HTMLElementTagNameMap or SVGElementTagNameMap as appropriate, instead. *)
 module ElementTagNameMap : sig
-  type t = (HTMLElementTagNameMap.t, (SVGElementTagNameMap.t, (([`L_s113_animate[@js "animate"] | `L_s114_animateMotion[@js "animateMotion"] | `L_s115_animateTransform[@js "animateTransform"] | `L_s192_circle[@js "circle"] | `L_s197_clipPath[@js "clipPath"] | `L_s238_defs[@js "defs"] | `L_s243_desc[@js "desc"] | `L_s273_ellipse[@js "ellipse"] | `L_s302_feBlend[@js "feBlend"] | `L_s303_feColorMatrix[@js "feColorMatrix"] | `L_s304_feComponentTransfer[@js "feComponentTransfer"] | `L_s305_feComposite[@js "feComposite"] | `L_s306_feConvolveMatrix[@js "feConvolveMatrix"] | `L_s307_feDiffuseLighting[@js "feDiffuseLighting"] | `L_s308_feDisplacementMap[@js "feDisplacementMap"] | `L_s309_feDistantLight[@js "feDistantLight"] | `L_s310_feDropShadow[@js "feDropShadow"] | `L_s311_feFlood[@js "feFlood"] | `L_s312_feFuncA[@js "feFuncA"] | `L_s313_feFuncB[@js "feFuncB"] | `L_s314_feFuncG[@js "feFuncG"] | `L_s315_feFuncR[@js "feFuncR"] | `L_s316_feGaussianBlur[@js "feGaussianBlur"] | `L_s317_feImage[@js "feImage"] | `L_s318_feMerge[@js "feMerge"] | `L_s319_feMergeNode[@js "feMergeNode"] | `L_s320_feMorphology[@js "feMorphology"] | `L_s321_feOffset[@js "feOffset"] | `L_s322_fePointLight[@js "fePointLight"] | `L_s323_feSpecularLighting[@js "feSpecularLighting"] | `L_s324_feSpotLight[@js "feSpotLight"] | `L_s325_feTile[@js "feTile"] | `L_s326_feTurbulence[@js "feTurbulence"] | `L_s331_filter[@js "filter"] | `L_s342_foreignObject[@js "foreignObject"] | `L_s353_g[@js "g"] | `L_s401_image[@js "image"] | `L_s446_line[@js "line"] | `L_s450_linearGradient[@js "linearGradient"] | `L_s479_marker[@js "marker"] | `L_s481_mask[@js "mask"] | `L_s493_metadata[@js "metadata"] | `L_s508_mpath[@js "mpath"] | `L_s569_path[@js "path"] | `L_s570_pattern[@js "pattern"] | `L_s598_polygon[@js "polygon"] | `L_s599_polyline[@js "polyline"] | `L_s624_radialGradient[@js "radialGradient"] | `L_s633_rect[@js "rect"] | `L_s674_script[@js "script"] | `L_s693_set[@js "set"] | `L_s726_stop[@js "stop"] | `L_s732_style[@js "style"] | `L_s743_svg[@js "svg"] | `L_s744_switch[@js "switch"] | `L_s745_symbol[@js "symbol"] | `L_s755_text[@js "text"] | `L_s759_textPath[@js "textPath"] | `L_s767_title[@js "title"] | `L_s787_tspan[@js "tspan"] | `L_s812_use[@js "use"] | `L_s821_view[@js "view"] | `L_s91_a[@js "a"]] [@js.enum]), ([`L_s100_address[@js "address"] | `L_s126_area[@js "area"] | `L_s128_article[@js "article"] | `L_s129_aside[@js "aside"] | `L_s133_audio[@js "audio"] | `L_s143_b[@js "b"] | `L_s149_base[@js "base"] | `L_s151_bdi[@js "bdi"] | `L_s152_bdo[@js "bdo"] | `L_s163_blockquote[@js "blockquote"] | `L_s166_body[@js "body"] | `L_s171_br[@js "br"] | `L_s175_button[@js "button"] | `L_s181_canvas[@js "canvas"] | `L_s182_caption[@js "caption"] | `L_s193_cite[@js "cite"] | `L_s202_code[@js "code"] | `L_s204_col[@js "col"] | `L_s205_colgroup[@js "colgroup"] | `L_s228_data[@js "data"] | `L_s232_datalist[@js "datalist"] | `L_s234_dd[@js "dd"] | `L_s239_del[@js "del"] | `L_s245_details[@js "details"] | `L_s250_dfn[@js "dfn"] | `L_s251_dialog[@js "dialog"] | `L_s252_dir[@js "dir"] | `L_s260_div[@js "div"] | `L_s261_dl[@js "dl"] | `L_s271_dt[@js "dt"] | `L_s274_em[@js "em"] | `L_s275_embed[@js "embed"] | `L_s327_fieldset[@js "fieldset"] | `L_s328_figcaption[@js "figcaption"] | `L_s329_figure[@js "figure"] | `L_s339_font[@js "font"] | `L_s340_footer[@js "footer"] | `L_s343_form[@js "form"] | `L_s347_frame[@js "frame"] | `L_s348_frameset[@js "frameset"] | `L_s362_h1[@js "h1"] | `L_s363_h2[@js "h2"] | `L_s364_h3[@js "h3"] | `L_s365_h4[@js "h4"] | `L_s366_h5[@js "h5"] | `L_s367_h6[@js "h6"] | `L_s376_head[@js "head"] | `L_s377_header[@js "header"] | `L_s378_hgroup[@js "hgroup"] | `L_s387_hr[@js "hr"] | `L_s388_html[@js "html"] | `L_s391_i[@js "i"] | `L_s400_iframe[@js "iframe"] | `L_s403_img[@js "img"] | `L_s414_input[@js "input"] | `L_s415_ins[@js "ins"] | `L_s428_kbd[@js "kbd"] | `L_s433_label[@js "label"] | `L_s441_legend[@js "legend"] | `L_s442_li[@js "li"] | `L_s451_link[@js "link"] | `L_s472_main[@js "main"] | `L_s477_map[@js "map"] | `L_s478_mark[@js "mark"] | `L_s480_marquee[@js "marquee"] | `L_s489_menu[@js "menu"] | `L_s492_meta[@js "meta"] | `L_s494_meter[@js "meter"] | `L_s513_nav[@js "nav"] | `L_s531_noscript[@js "noscript"] | `L_s535_object[@js "object"] | `L_s538_ol[@js "ol"] | `L_s545_optgroup[@js "optgroup"] | `L_s548_option[@js "option"] | `L_s555_output[@js "output"] | `L_s558_p[@js "p"] | `L_s564_param[@js "param"] | `L_s581_picture[@js "picture"] | `L_s606_pre[@js "pre"] | `L_s618_progress[@js "progress"] | `L_s623_q[@js "q"] | `L_s662_rp[@js "rp"] | `L_s663_rt[@js "rt"] | `L_s667_ruby[@js "ruby"] | `L_s669_s[@js "s"] | `L_s671_samp[@js "samp"] | `L_s674_script[@js "script"] | `L_s677_section[@js "section"] | `L_s685_select[@js "select"] | `L_s702_slot[@js "slot"] | `L_s703_small[@js "small"] | `L_s710_source[@js "source"] | `L_s714_span[@js "span"] | `L_s731_strong[@js "strong"] | `L_s732_style[@js "style"] | `L_s734_sub[@js "sub"] | `L_s739_summary[@js "summary"] | `L_s740_sup[@js "sup"] | `L_s749_table[@js "table"] | `L_s750_tbody[@js "tbody"] | `L_s752_td[@js "td"] | `L_s753_template[@js "template"] | `L_s760_textarea[@js "textarea"] | `L_s761_tfoot[@js "tfoot"] | `L_s762_th[@js "th"] | `L_s763_thead[@js "thead"] | `L_s764_time[@js "time"] | `L_s767_title[@js "title"] | `L_s778_tr[@js "tr"] | `L_s779_track[@js "track"] | `L_s788_u[@js "u"] | `L_s790_ul[@js "ul"] | `L_s814_var[@js "var"] | `L_s819_video[@js "video"] | `L_s829_wbr[@js "wbr"] | `L_s91_a[@js "a"] | `L_s93_abbr[@js "abbr"]] [@js.enum])) Exclude.t_2) Pick.t_2) intersection2
+  type t = (HTMLElementTagNameMap.t, (SVGElementTagNameMap.t, (([`L_s113_animate[@js "animate"] | `L_s114_animateMotion[@js "animateMotion"] | `L_s115_animateTransform[@js "animateTransform"] | `L_s192_circle[@js "circle"] | `L_s197_clipPath[@js "clipPath"] | `L_s242_defs[@js "defs"] | `L_s247_desc[@js "desc"] | `L_s284_ellipse[@js "ellipse"] | `L_s315_feBlend[@js "feBlend"] | `L_s316_feColorMatrix[@js "feColorMatrix"] | `L_s317_feComponentTransfer[@js "feComponentTransfer"] | `L_s318_feComposite[@js "feComposite"] | `L_s319_feConvolveMatrix[@js "feConvolveMatrix"] | `L_s320_feDiffuseLighting[@js "feDiffuseLighting"] | `L_s321_feDisplacementMap[@js "feDisplacementMap"] | `L_s322_feDistantLight[@js "feDistantLight"] | `L_s323_feDropShadow[@js "feDropShadow"] | `L_s324_feFlood[@js "feFlood"] | `L_s325_feFuncA[@js "feFuncA"] | `L_s326_feFuncB[@js "feFuncB"] | `L_s327_feFuncG[@js "feFuncG"] | `L_s328_feFuncR[@js "feFuncR"] | `L_s329_feGaussianBlur[@js "feGaussianBlur"] | `L_s330_feImage[@js "feImage"] | `L_s331_feMerge[@js "feMerge"] | `L_s332_feMergeNode[@js "feMergeNode"] | `L_s333_feMorphology[@js "feMorphology"] | `L_s334_feOffset[@js "feOffset"] | `L_s335_fePointLight[@js "fePointLight"] | `L_s336_feSpecularLighting[@js "feSpecularLighting"] | `L_s337_feSpotLight[@js "feSpotLight"] | `L_s338_feTile[@js "feTile"] | `L_s339_feTurbulence[@js "feTurbulence"] | `L_s344_filter[@js "filter"] | `L_s355_foreignObject[@js "foreignObject"] | `L_s366_g[@js "g"] | `L_s416_image[@js "image"] | `L_s464_line[@js "line"] | `L_s468_linearGradient[@js "linearGradient"] | `L_s498_marker[@js "marker"] | `L_s500_mask[@js "mask"] | `L_s512_metadata[@js "metadata"] | `L_s527_mpath[@js "mpath"] | `L_s590_path[@js "path"] | `L_s591_pattern[@js "pattern"] | `L_s619_polygon[@js "polygon"] | `L_s620_polyline[@js "polyline"] | `L_s645_radialGradient[@js "radialGradient"] | `L_s654_rect[@js "rect"] | `L_s698_script[@js "script"] | `L_s717_set[@js "set"] | `L_s757_stop[@js "stop"] | `L_s764_style[@js "style"] | `L_s775_svg[@js "svg"] | `L_s776_switch[@js "switch"] | `L_s777_symbol[@js "symbol"] | `L_s787_text[@js "text"] | `L_s791_textPath[@js "textPath"] | `L_s799_title[@js "title"] | `L_s819_tspan[@js "tspan"] | `L_s844_use[@js "use"] | `L_s854_view[@js "view"] | `L_s91_a[@js "a"]] [@js.enum]), ([`L_s100_address[@js "address"] | `L_s126_area[@js "area"] | `L_s128_article[@js "article"] | `L_s129_aside[@js "aside"] | `L_s133_audio[@js "audio"] | `L_s143_b[@js "b"] | `L_s149_base[@js "base"] | `L_s151_bdi[@js "bdi"] | `L_s152_bdo[@js "bdo"] | `L_s163_blockquote[@js "blockquote"] | `L_s166_body[@js "body"] | `L_s171_br[@js "br"] | `L_s175_button[@js "button"] | `L_s181_canvas[@js "canvas"] | `L_s182_caption[@js "caption"] | `L_s193_cite[@js "cite"] | `L_s202_code[@js "code"] | `L_s204_col[@js "col"] | `L_s205_colgroup[@js "colgroup"] | `L_s232_data[@js "data"] | `L_s236_datalist[@js "datalist"] | `L_s238_dd[@js "dd"] | `L_s243_del[@js "del"] | `L_s253_details[@js "details"] | `L_s258_dfn[@js "dfn"] | `L_s259_dialog[@js "dialog"] | `L_s261_dir[@js "dir"] | `L_s270_div[@js "div"] | `L_s271_dl[@js "dl"] | `L_s281_dt[@js "dt"] | `L_s285_em[@js "em"] | `L_s286_embed[@js "embed"] | `L_s340_fieldset[@js "fieldset"] | `L_s341_figcaption[@js "figcaption"] | `L_s342_figure[@js "figure"] | `L_s352_font[@js "font"] | `L_s353_footer[@js "footer"] | `L_s356_form[@js "form"] | `L_s360_frame[@js "frame"] | `L_s361_frameset[@js "frameset"] | `L_s375_h1[@js "h1"] | `L_s376_h2[@js "h2"] | `L_s377_h3[@js "h3"] | `L_s378_h4[@js "h4"] | `L_s379_h5[@js "h5"] | `L_s380_h6[@js "h6"] | `L_s390_head[@js "head"] | `L_s391_header[@js "header"] | `L_s392_hgroup[@js "hgroup"] | `L_s401_hr[@js "hr"] | `L_s402_html[@js "html"] | `L_s406_i[@js "i"] | `L_s415_iframe[@js "iframe"] | `L_s418_img[@js "img"] | `L_s429_input[@js "input"] | `L_s430_ins[@js "ins"] | `L_s443_kbd[@js "kbd"] | `L_s448_label[@js "label"] | `L_s457_legend[@js "legend"] | `L_s458_li[@js "li"] | `L_s469_link[@js "link"] | `L_s491_main[@js "main"] | `L_s496_map[@js "map"] | `L_s497_mark[@js "mark"] | `L_s499_marquee[@js "marquee"] | `L_s508_menu[@js "menu"] | `L_s511_meta[@js "meta"] | `L_s513_meter[@js "meter"] | `L_s533_nav[@js "nav"] | `L_s551_noscript[@js "noscript"] | `L_s555_object[@js "object"] | `L_s558_ol[@js "ol"] | `L_s565_optgroup[@js "optgroup"] | `L_s568_option[@js "option"] | `L_s575_output[@js "output"] | `L_s579_p[@js "p"] | `L_s585_param[@js "param"] | `L_s602_picture[@js "picture"] | `L_s627_pre[@js "pre"] | `L_s639_progress[@js "progress"] | `L_s644_q[@js "q"] | `L_s684_rp[@js "rp"] | `L_s685_rt[@js "rt"] | `L_s689_ruby[@js "ruby"] | `L_s691_s[@js "s"] | `L_s693_samp[@js "samp"] | `L_s698_script[@js "script"] | `L_s701_section[@js "section"] | `L_s709_select[@js "select"] | `L_s727_slot[@js "slot"] | `L_s729_small[@js "small"] | `L_s737_source[@js "source"] | `L_s745_span[@js "span"] | `L_s763_strong[@js "strong"] | `L_s764_style[@js "style"] | `L_s766_sub[@js "sub"] | `L_s771_summary[@js "summary"] | `L_s772_sup[@js "sup"] | `L_s781_table[@js "table"] | `L_s782_tbody[@js "tbody"] | `L_s784_td[@js "td"] | `L_s785_template[@js "template"] | `L_s792_textarea[@js "textarea"] | `L_s793_tfoot[@js "tfoot"] | `L_s794_th[@js "th"] | `L_s795_thead[@js "thead"] | `L_s796_time[@js "time"] | `L_s799_title[@js "title"] | `L_s810_tr[@js "tr"] | `L_s811_track[@js "track"] | `L_s820_u[@js "u"] | `L_s822_ul[@js "ul"] | `L_s847_var[@js "var"] | `L_s852_video[@js "video"] | `L_s862_wbr[@js "wbr"] | `L_s91_a[@js "a"] | `L_s93_abbr[@js "abbr"]] [@js.enum])) Exclude.t_2) Pick.t_2) intersection2
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -48634,7 +49087,7 @@ module DocumentEventMap : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module DisplayCaptureSurfaceType : sig
-  type t = ([`L_s123_application[@js "application"] | `L_s172_browser[@js "browser"] | `L_s499_monitor[@js "monitor"] | `L_s839_window[@js "window"]] [@js.enum])
+  type t = ([`L_s123_application[@js "application"] | `L_s172_browser[@js "browser"] | `L_s518_monitor[@js "monitor"] | `L_s872_window[@js "window"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -48697,7 +49150,7 @@ module[@js.scope "DOMQuad"] DOMQuad : sig
   val fromRect: ?other:DOMRectInit.t -> unit -> t [@@js.global "fromRect"]
 end
 module DOMParserSupportedType : sig
-  type t = ([`L_s124_application_xhtml_xml[@js "application/xhtml+xml"] | `L_s125_application_xml[@js "application/xml"] | `L_s402_image_svg_xml[@js "image/svg+xml"] | `L_s757_text_html[@js "text/html"] | `L_s758_text_xml[@js "text/xml"]] [@js.enum])
+  type t = ([`L_s124_application_xhtml_xml[@js "application/xhtml+xml"] | `L_s125_application_xml[@js "application/xml"] | `L_s417_image_svg_xml[@js "image/svg+xml"] | `L_s789_text_html[@js "text/html"] | `L_s790_text_xml[@js "text/xml"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49117,7 +49570,7 @@ module ClientRect : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module ClientTypes : sig
-  type t = ([`L_s106_all[@js "all"] | `L_s694_sharedworker[@js "sharedworker"] | `L_s839_window[@js "window"] | `L_s840_worker[@js "worker"]] [@js.enum])
+  type t = ([`L_s106_all[@js "all"] | `L_s719_sharedworker[@js "sharedworker"] | `L_s872_window[@js "window"] | `L_s873_worker[@js "worker"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49148,7 +49601,7 @@ module ClientQueryOptions : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module CanvasTextRendering : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s358_geometricPrecision[@js "geometricPrecision"] | `L_s546_optimizeLegibility[@js "optimizeLegibility"] | `L_s547_optimizeSpeed[@js "optimizeSpeed"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s371_geometricPrecision[@js "geometricPrecision"] | `L_s566_optimizeLegibility[@js "optimizeLegibility"] | `L_s567_optimizeSpeed[@js "optimizeSpeed"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49156,7 +49609,7 @@ module CanvasTextRendering : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasFontVariantCaps : sig
-  type t = ([`L_s107_all_petite_caps[@js "all-petite-caps"] | `L_s108_all_small_caps[@js "all-small-caps"] | `L_s530_normal[@js "normal"] | `L_s580_petite_caps[@js "petite-caps"] | `L_s704_small_caps[@js "small-caps"] | `L_s768_titling_caps[@js "titling-caps"] | `L_s794_unicase[@js "unicase"]] [@js.enum])
+  type t = ([`L_s107_all_petite_caps[@js "all-petite-caps"] | `L_s108_all_small_caps[@js "all-small-caps"] | `L_s550_normal[@js "normal"] | `L_s601_petite_caps[@js "petite-caps"] | `L_s730_small_caps[@js "small-caps"] | `L_s800_titling_caps[@js "titling-caps"] | `L_s826_unicase[@js "unicase"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49164,7 +49617,7 @@ module CanvasFontVariantCaps : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasFontStretch : sig
-  type t = ([`L_s211_condensed[@js "condensed"] | `L_s291_expanded[@js "expanded"] | `L_s296_extra_condensed[@js "extra-condensed"] | `L_s297_extra_expanded[@js "extra-expanded"] | `L_s530_normal[@js "normal"] | `L_s688_semi_condensed[@js "semi-condensed"] | `L_s689_semi_expanded[@js "semi-expanded"] | `L_s791_ultra_condensed[@js "ultra-condensed"] | `L_s792_ultra_expanded[@js "ultra-expanded"]] [@js.enum])
+  type t = ([`L_s214_condensed[@js "condensed"] | `L_s304_expanded[@js "expanded"] | `L_s309_extra_condensed[@js "extra-condensed"] | `L_s310_extra_expanded[@js "extra-expanded"] | `L_s550_normal[@js "normal"] | `L_s712_semi_condensed[@js "semi-condensed"] | `L_s713_semi_expanded[@js "semi-expanded"] | `L_s823_ultra_condensed[@js "ultra-condensed"] | `L_s824_ultra_expanded[@js "ultra-expanded"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -49172,12 +49625,74 @@ module CanvasFontStretch : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 module CanvasFontKerning : sig
-  type t = ([`L_s141_auto[@js "auto"] | `L_s528_none[@js "none"] | `L_s530_normal[@js "normal"]] [@js.enum])
+  type t = ([`L_s141_auto[@js "auto"] | `L_s548_none[@js "none"] | `L_s550_normal[@js "normal"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
+end
+module[@js.scope "CanvasCaptureMediaStreamTrack"] CanvasCaptureMediaStreamTrack : sig
+  type t = [`CanvasCaptureMediaStreamTrack | `EventTarget | `MediaStreamTrack] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
+  type t_0 = t
+  [@@@js.stop]
+  type tags = [`CanvasCaptureMediaStreamTrack | `EventTarget | `MediaStreamTrack]
+  type tags_0 = tags
+  [@@@js.start]
+  [@@@js.implem 
+    type tags = [`CanvasCaptureMediaStreamTrack | `EventTarget | `MediaStreamTrack]
+    type tags_0 = tags
+  ]
+  type 'tags this = 'tags intf constraint 'tags = [> `CanvasCaptureMediaStreamTrack ]
+  val t_to_js: t -> Ojs.t
+  val t_of_js: Ojs.t -> t
+  val t_0_to_js: t_0 -> Ojs.t
+  val t_0_of_js: Ojs.t -> t_0
+  val get_canvas: 'tags this -> HTMLCanvasElement.t [@@js.get "canvas"]
+  val requestFrame: 'tags this -> unit [@@js.call "requestFrame"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaStreamTrackEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  
+  (**
+    Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+    
+    The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+    
+    When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+    
+    When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners.
+    
+    When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed.
+    
+    If an AbortSignal is passed for options's signal, then the event listener will be removed when signal is aborted.
+    
+    The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+  *)
+  val addEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of AddEventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "addEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener: 'tags this -> type_:'K -> listener:(this:t -> ev:(* FIXME: unknown type 'MediaStreamTrackEventMap[K]' *)any -> any) -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
+  
+  (** Removes the event listener in target's event listener list with the same type, callback, and options. *)
+  val removeEventListener': 'tags this -> type_:string -> listener:EventListenerOrEventListenerObject.t -> ?options:([`U1 of bool | `U2 of EventListenerOptions.t] [@js.union]) -> unit -> unit [@@js.call "removeEventListener"]
+  val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
+  val prototype: unit -> t [@@js.get "prototype"]
+  val create: unit -> t [@@js.create]
 end
 module[@js.scope "CSSTransition"] CSSTransition : sig
   type t = [`Animation | `CSSTransition | `EventTarget] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
@@ -50019,7 +50534,7 @@ module AudioTimestamp : sig
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
 module AudioContextLatencyCategory : sig
-  type t = ([`L_s147_balanced[@js "balanced"] | `L_s418_interactive[@js "interactive"] | `L_s586_playback[@js "playback"]] [@js.enum])
+  type t = ([`L_s147_balanced[@js "balanced"] | `L_s433_interactive[@js "interactive"] | `L_s607_playback[@js "playback"]] [@js.enum])
   type t_0 = t
   val t_to_js: t -> Ojs.t
   val t_of_js: Ojs.t -> t
@@ -50261,7 +50776,7 @@ module[@js.scope "AbortController"] AbortController : sig
   val get_signal: 'tags this -> AbortSignal.t [@@js.get "signal"]
   
   (** Invoking this method will set this object's AbortSignal's aborted flag and signal to any observers that the associated activity is to be aborted. *)
-  val abort: 'tags this -> unit [@@js.call "abort"]
+  val abort: 'tags this -> ?reason:any -> unit -> unit [@@js.call "abort"]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: unit -> t [@@js.create]
@@ -51155,6 +51670,7 @@ val onresize: unit -> (this:Window.t -> ev:UIEvent.t -> any) option [@@js.get "o
   @param ev The event.
 *)
 val onscroll: unit -> (this:Window.t -> ev:Event.t -> any) option [@@js.get "onscroll"]
+val onsecuritypolicyviolation: unit -> (this:Window.t -> ev:SecurityPolicyViolationEvent.t -> any) option [@@js.get "onsecuritypolicyviolation"]
 
 (**
   Occurs when the seek operation ends.
@@ -51175,6 +51691,7 @@ val onseeking: unit -> (this:Window.t -> ev:Event.t -> any) option [@@js.get "on
 val onselect: unit -> (this:Window.t -> ev:Event.t -> any) option [@@js.get "onselect"]
 val onselectionchange: unit -> (this:Window.t -> ev:Event.t -> any) option [@@js.get "onselectionchange"]
 val onselectstart: unit -> (this:Window.t -> ev:Event.t -> any) option [@@js.get "onselectstart"]
+val onslotchange: unit -> (this:Window.t -> ev:Event.t -> any) option [@@js.get "onslotchange"]
 
 (**
   Occurs when the download has stopped.
@@ -51284,12 +51801,13 @@ val atob: string -> string [@@js.global "atob"]
   **and binary data should be performed using `Buffer.from(str, 'base64')` and`buf.toString('base64')`.**
 *)
 val btoa: string -> string [@@js.global "btoa"]
-val clearInterval: ?handle:float -> unit -> unit [@@js.global "clearInterval"]
-val clearTimeout: ?handle:float -> unit -> unit [@@js.global "clearTimeout"]
+val clearInterval: ?id:float -> unit -> unit [@@js.global "clearInterval"]
+val clearTimeout: ?id:float -> unit -> unit [@@js.global "clearTimeout"]
 val createImageBitmap: image:ImageBitmapSource.t -> ?options:ImageBitmapOptions.t -> unit -> ImageBitmap.t Promise.t_1 [@@js.global "createImageBitmap"]
 val createImageBitmap': image:ImageBitmapSource.t -> sx:float -> sy:float -> sw:float -> sh:float -> ?options:ImageBitmapOptions.t -> unit -> ImageBitmap.t Promise.t_1 [@@js.global "createImageBitmap"]
 val fetch: input:RequestInfo.t -> ?init:RequestInit.t -> unit -> Response.t Promise.t_1 [@@js.global "fetch"]
 val queueMicrotask: VoidFunction.t -> unit [@@js.global "queueMicrotask"]
+val reportError: any -> unit [@@js.global "reportError"]
 val setInterval: handler:TimerHandler.t -> ?timeout:float -> arguments:(any list [@js.variadic]) -> unit -> float [@@js.global "setInterval"]
 val setTimeout: handler:TimerHandler.t -> ?timeout:float -> arguments:(any list [@js.variadic]) -> unit -> float [@@js.global "setTimeout"]
 val sessionStorage: unit -> Storage.t [@@js.get "sessionStorage"]

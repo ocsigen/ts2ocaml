@@ -177,10 +177,9 @@ module Naming =
         n |> Naming.toCase Naming.Case.LowerSnakeCase)
       |> String.concat "__"
 
-  let jsModuleNameToFileName isInterfaceFile (jsModuleName: string) =
-    jsModuleName
-    |> jsModuleNameToReScriptName
-    |> fun x -> if isInterfaceFile then $"{x}.resi" else $"{x}.res"
+  let jsModuleNameToFileName (jsModuleName: string) =
+    let basename = jsModuleName |> jsModuleNameToReScriptName
+    {| resi = $"{basename}.resi"; res = $"{basename}.res" |}
 
   let jsModuleNameToReScriptModuleName (jsModuleName: string) =
     jsModuleName
@@ -248,7 +247,7 @@ module Type =
   let curriedArrow args ret =
     let lhs =
       match args with
-      | [] -> failwith "0-ary function"
+      | [] -> str "()"
       | [x] -> x
       | xs -> concat (str ", ") xs |> between "(" ")"
     lhs +@ " => " + ret
@@ -257,7 +256,7 @@ module Type =
   let uncurriedArrow args ret =
     let lhs =
       match args with
-      | [] -> failwith "0-ary function"
+      | [] -> str "(. )"
       | xs -> concat (str ", ") xs |> between "(. " ")"
     lhs +@ " => " + ret
 
@@ -464,3 +463,10 @@ module Statement =
     ]
 
   let moduleValMany ms = ms |> List.map moduleVal
+
+  let moduleSigRec1 name (content: text list) =
+    concat newline [
+      yield tprintf "module %s : {" name
+      yield indent (concat newline content)
+      yield tprintf "} = %s" name
+    ]

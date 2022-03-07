@@ -315,14 +315,6 @@ and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context)
   | false, true -> Type.undefined_or rest
   | false, false -> rest
 
-let setTyperOptions (ctx: IContext<Options>) =
-  ctx.options.inheritArraylike <- true
-  ctx.options.inheritIterable <- true
-  ctx.options.inheritPromiselike <- true
-  ctx.options.replaceAliasToFunction <- false
-  ctx.options.replaceNewableFunction <- false
-  ctx.options.replaceRankNFunction <- true
-
 /// `[ #A | #B | ... ]`
 let rec emitLabels (ctx: Context) labels =
   emitLabelsBody ctx labels |> between "[" "]"
@@ -426,6 +418,7 @@ let builder name (fields: {| isOptional: bool; name: string; value: text |} list
   let args =
     fields
     |> List.map (fun f ->
+      let name = f.name
       let name =
         if Naming.isValid name && (name[0] = '_' || System.Char.IsLower(name[0])) then name
         else String.escape name |> sprintf "\\\"%s\""
@@ -584,6 +577,7 @@ let inline binding (f: (string -> string) -> CurrentScope -> Binding) =
 let scopeToAttr (s: CurrentScope) attr =
   match s.scopeRev, s.jsModule with
   | [], None -> attr
+  | [], Some m -> Attr.External.module_ (Some m) :: attr
   | sr, None -> Attr.External.scope (List.rev sr) :: attr
   | sr, Some m ->
     Attr.External.module_ (Some m) :: Attr.External.scope (List.rev sr) :: attr
@@ -1021,12 +1015,11 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       let onIntf =
         emitTypeAliases flags overrideFunc innerCtx c.typeParams selfTyText
         |> List.map (conditional { EmitCondition.empty with onIntf = true })
-
       let onImpl =
-        let selfTyText =
+        let origTyText =
           let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
           Type.appOpt (str "t") tyargs
-        emitTypeAliases flags overrideFunc innerCtx c.typeParams selfTyText
+        emitTypeAliases flags overrideFunc innerCtx c.typeParams origTyText
         |> List.map (conditional { EmitCondition.empty with onImpl = true })
 
       List.concat [onTypes; onIntf; onImpl]
@@ -1074,7 +1067,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
               Some {| isOptional = false; name = name; value = value |}
             *)
             | _ -> None)
-        binding (fun rename _ -> builder (rename "create") fields selfTyText)
+        binding (fun rename _ -> builder (rename "make") fields selfTyText)
 
     let items = [
       yield! baseTypeDefinition
@@ -1171,17 +1164,17 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
         | Some (LInt _) -> EnumType.Int
         | Some (LFloat _) -> EnumType.Float
         | Some (LBool _) -> EnumType.Boolean)
+      |> List.distinct
       |> List.sort
     match types with
     | [EnumType.Int] ->
-      let values =
+      let isClean =
         enumValues
         |> List.map (function Some (LInt i) -> i | _ -> failwith "impossible")
-        |> Set.ofList
-      let min = Set.minElement values
-      let max = Set.maxElement values
-      let clean = Set.ofList [min..max]
-      if min = 0 && values = clean then EnumType.CleanInt
+        |> Seq.sort
+        |> Seq.mapi ((=))
+        |> Seq.forall id
+      if isClean then EnumType.CleanInt
       else EnumType.Int
     | [x] -> x
     | [EnumType.Int; EnumType.Float] -> EnumType.Number
@@ -1608,7 +1601,7 @@ module ModuleEmitter =
         let modules = modules |> List.fold (fun state x -> state |> Map.add x.origName x) Map.empty
         scc
         |> List.map (fun group ->
-          group |> List.map (fun name -> modules |> Map.find name) |> Statement.moduleSigRec)
+          group |> List.choose (fun name -> modules |> Map.tryFind name) |> Statement.moduleSigRec)
         |> List.concat
 
   let structure (_: Context) (_: StructuredText) = Statement.moduleValMany
@@ -1752,3 +1745,186 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
     match st.value with None -> [] | Some v -> v.comments
 
   {| imports = imports; types = types; intf = intf; impl = impl; comments = comments |}
+
+let setTyperOptions (ctx: IContext<Options>) =
+  ctx.options.inheritArraylike <- true
+  ctx.options.inheritIterable <- true
+  ctx.options.inheritPromiselike <- true
+  ctx.options.replaceAliasToFunction <- false
+  ctx.options.replaceNewableFunction <- false
+  ctx.options.replaceRankNFunction <- true
+
+let emitTypes (types: text list) : text list =
+  [
+    Statement.moduleSigRec1 "Types" types
+    Statement.open_ "Types"
+  ]
+
+let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
+  let srcs = input.sources
+
+  ctx.logger.tracef "* looking up the minimal supported ES version for each definition..."
+  let esSrc =
+    srcs
+    |> List.filter (fun src -> src.fileName.Contains("lib.es") && src.fileName.EndsWith(".d.ts"))
+    |> mergeESLibDefinitions
+  let domSrc =
+    srcs
+    |> List.filter (fun src -> src.fileName.Contains("lib.dom") && src.fileName.EndsWith(".d.ts"))
+    |> mergeSources "lib.dom.d.ts"
+  let webworkerSrc =
+    srcs
+    |> List.filter (fun src -> src.fileName.Contains("lib.webworker") && src.fileName.EndsWith(".d.ts"))
+    |> mergeSources "lib.webworker.d.ts"
+    |> fun src ->
+      let statements =
+        src.statements |> Statement.mapIdent (fun i ->
+          i |> Ident.mapSource (fun path ->
+            // webworker does not depend on DOM but fullnames can still refer to it
+            if path.Contains("lib.dom") && src.fileName.EndsWith(".d.ts") then "lib.webworker.d.ts"
+            else path
+          )
+        )
+      { src with statements = statements }
+
+  ctx.logger.tracef "* running typer..."
+
+  setTyperOptions ctx
+  let opts = ctx.options
+  opts.simplify <- [Simplify.All]
+  opts.inheritWithTags <- FeatureFlag.Full
+  opts.safeArity <- FeatureFlag.Full
+  opts.subtyping <- [Subtyping.Tag]
+
+  let flags : EmitModuleFlags =
+    {| jsModule = None; scopeRev = []; isReservedModule = false |}
+
+  let esCtx, esSrc = runAll [esSrc] ctx
+  let domCtx, domSrc = runAll [domSrc] ctx
+  let webworkerCtx, webworkerSrc = runAll [webworkerSrc] ctx
+
+  let writerCtx (srcs: SourceFile list) ctx =
+    ctx |> Context.mapOptions (fun _ -> opts)
+        |> Context.mapState (fun _ -> State.create (srcs |> List.map (fun src -> src.fileName)) (Error None))
+
+  ctx.logger.tracef "* emitting stdlib..."
+
+  let createOutput (baseName: string) (opens: string list) (ctx: Context) (src: SourceFile list) =
+    let stmts = src |> List.collect (fun x -> x.statements)
+    let ctx = ctx |> Context.ofSourceFileRoot (src[0].fileName)
+    let st = createStructuredText ctx stmts
+    let m = emitModule flags ctx st
+    let res =
+      concat newline [
+        yield! m.comments
+        for o in opens do yield Statement.open_ o
+        yield! m.imports
+        yield! emitTypes m.types
+        yield! m.impl
+      ]
+    let resi =
+      concat newline [
+        yield! m.comments
+        for o in opens do yield Statement.open_ o
+        yield! m.imports
+        yield! m.intf
+      ]
+    { baseName = baseName; resi = Some resi; res = res }
+
+  let minLib =
+    { baseName = "Ts__min"; resi = None; res = str stdlib }
+
+  [ minLib
+    createOutput "Ts__es"  ["Ts__min"] (writerCtx esSrc esCtx) esSrc
+    createOutput "Ts__dom" ["Ts__min"; "Ts__es"] (writerCtx domSrc domCtx) domSrc
+    createOutput "Ts__webworker" ["Ts__min"; "Ts__es"] (writerCtx webworkerSrc webworkerCtx) webworkerSrc ]
+
+let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx: IContext<Options>) =
+  let moduleName =
+    match ctx.options.name with
+    | Some name -> name
+    | None ->
+      JsHelper.deriveModuleName info (sources |> List.map (fun s -> s.fileName))
+      |> JsHelper.InferenceResult.unwrap "package"
+
+  let outputBaseName =
+    match ctx.options.name with
+    | Some name -> name
+    | None ->
+      let inline log x =
+        ctx.logger.tracef "* the inferred output file name is '%s.res'" x
+        x
+      JsHelper.deriveModuleName info (sources |> List.map (fun s -> s.fileName))
+      |> JsHelper.InferenceResult.tryUnwrap
+      |> Option.map log
+      |> Option.defaultWith (fun () ->
+        ctx.logger.warnf "* the output file name cannot be inferred. 'output.res' is used instead."
+        "output")
+
+  let fileNames = sources |> List.map (fun s -> s.fileName)
+
+  let info =
+    match info with
+    | Some info -> Ok info
+    | None -> Error (Some moduleName)
+
+  let sources, mergedFileName =
+    match sources with
+    | [] -> failwith "impossible_emitImpl (empty sources)"
+    | [src] -> [src], src.fileName
+    | _ -> [mergeSources "input.d.ts" sources], "input.d.ts"
+
+  ctx.logger.tracef "* running typer..."
+  setTyperOptions ctx
+  let ctx, sources = runAll sources ctx
+  let ctx =
+    ctx
+    |> Context.mapState (fun _ -> State.create fileNames info)
+    |> Context.ofSourceFileRoot mergedFileName
+  let stmts = sources |> List.collect (fun x -> x.statements)
+
+  ctx.logger.tracef "* emitting a binding to '%s' for rescript..." moduleName
+  let structuredText = createStructuredText ctx stmts
+  let flags : EmitModuleFlags =
+    let jsModule =
+      match ctx.options.``module`` with
+      | ModuleKind.None -> None
+      | ModuleKind.ES | ModuleKind.CJS -> Some moduleName
+      | ModuleKind.Default ->
+        let hasExport =
+          ctx.info |> Map.exists (fun _ v -> v.exportMap |> Trie.isEmpty |> not)
+        if hasExport then Some moduleName else None
+    {| jsModule = jsModule; scopeRev = []; isReservedModule = false |}
+  let m = emitModule flags ctx structuredText
+
+  let opens = [
+    yield Statement.open_ "Ts"
+    yield Statement.open_ "Ts.Dom"
+  ]
+
+  let res =
+    concat newline [
+      yield! m.comments
+      yield! opens
+      yield! m.imports
+      yield! emitTypes m.types
+      yield! m.impl
+    ]
+  let resi =
+    if ctx.options.resi then
+      concat newline [
+        yield! m.comments
+        yield! opens
+        yield! m.imports
+        yield! m.intf
+      ] |> Some
+    else None
+
+  { baseName = outputBaseName; resi = resi; res = res}
+
+let emit (input: Input) (ctx: IContext<Options>) : Output list =
+  if ctx.options.merge then
+    [emitImpl input.sources input.info ctx]
+  else
+    input.sources
+    |> List.map (fun source -> emitImpl [source] input.info ctx)

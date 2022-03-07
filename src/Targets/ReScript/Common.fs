@@ -51,6 +51,15 @@ type Preset =
 with
   static member Values = [|Minimal; Safe; Full|]
 
+[<StringEnum; RequireQualifiedAccess>]
+type ModuleKind =
+  | [<CompiledName("none")>] None
+  | [<CompiledName("es")>] ES
+  | [<CompiledName("cjs")>] CJS
+  | [<CompiledName("default")>] Default
+with
+  static member Values = [|None; ES; CJS; Default|]
+
 type Options =
   inherit GlobalOptions
   inherit Typer.TyperOptions
@@ -58,8 +67,12 @@ type Options =
   abstract preset: Preset option with get
   abstract createMinimalStdlib: bool with get
   abstract stdlib: bool with get // hidden
+  // JS options
+  abstract ``module``: ModuleKind with get
+  abstract name: string option with get
   // output options
   abstract outputDir: string option with get
+  abstract resi: bool with get
   // code generator options
   abstract numberAsInt: bool with get, set
   abstract subtyping: Subtyping list with get, set
@@ -136,7 +149,24 @@ module Options =
       .group(!^ResizeArray[], "Parser Options:")
       .group(
         !^ResizeArray[
-          "output-dir"; "stub-file"
+          "module"; "name"
+        ], "JS Module Options:")
+      .addOption(
+        "name",
+        (fun (o: Options) -> o.name),
+        descr="Override the JS module name used in the @module attribute (default: inferred from package.json).",
+        alias="n"
+      )
+      .addChoice(
+        "module",
+        ModuleKind.Values,
+        (fun (o: Options) -> o.``module``),
+        descr="Override the JS module type (default: inferred from the input).",
+        defaultValue=ModuleKind.Default
+      )
+      .group(
+        !^ResizeArray[
+          "output-dir"; "resi"
         ],
         "Output Options:"
       )
@@ -145,6 +175,12 @@ module Options =
         (fun (o: Options) -> o.outputDir),
         descr="The directory to place the generated bindings.\nIf not set, it will be the current directory.",
         alias="o")
+      .addFlag(
+        "resi",
+        (fun (o: Options) -> o.resi),
+        descr = "Generate interface file (.resi) too. --no-resi to disable.",
+        defaultValue=true
+      )
 
       .group(
         !^ResizeArray[
@@ -176,10 +212,8 @@ module Options =
       .group(
         !^ResizeArray[
           "safe-arity";
-          "rec-module";
           "simplify";
           "human-readable-anonymous-interface-names";
-          "functor"
         ],
         "Code Generator Options:")
       .addChoice(
@@ -206,9 +240,11 @@ module Options =
 
 
 type Output = {
-  fileName: string
-  content: text
-  stubLines: string list
+  baseName: string
+  /// the content of `.resi` file
+  resi: text option
+  /// the content of `.res` file
+  res: text
 }
 
 let [<ImportDefault("../../../dist_rescript/src/Ts__min.res?raw")>] stdlib: string = jsNative

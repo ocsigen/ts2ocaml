@@ -167,15 +167,28 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
         | _ -> fallback ()
       tyName |> withTyargs
     | Some (fn, typrms, origLoc) ->
-      let name = Naming.structured Naming.moduleName fn.name + ".t"
-      let ts =
-        assignTypeParams fn.name (origLoc ++ loc) typrms tyargs
-          (fun _ t -> t)
-          (fun tv ->
-            match tv.defaultType with
-            | Some t -> t
-            | None -> failwithf "error: insufficient type params for type '%s' at %s" (String.concat "." fn.name) loc.AsString)
-      Type.appOpt (str name) (ts |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx))
+      let result name =
+        let ts =
+          assignTypeParams fn.name (origLoc ++ loc) typrms tyargs
+            (fun _ t -> t)
+            (fun tv ->
+              match tv.defaultType with
+              | Some t -> t
+              | None -> failwithf "error: insufficient type params for type '%s' at %s" (String.concat "." fn.name) loc.AsString)
+        Type.appOpt (str name) (ts |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx))
+      let fullName = Naming.structured Naming.moduleName fn.name + ".t"
+      if fn.source <> ctx.currentSourceFile then result fullName
+      else
+        match ctx |> Context.getRelativeNameTo fn.name with
+        | Ok relativeName -> result (Naming.structured Naming.moduleName relativeName + ".t")
+        | Error [] -> result "t"
+        | Error diff ->
+          let fn = String.concat "." fn.name
+          let selfName = String.concat "." diff
+          let warnText = $"cannot reference a type {fn} from its sub-namespace {selfName}"
+          Log.warnf ctx.options "%s at %s" warnText loc.AsString
+          commentStr warnText + Type.any
+
   match overrideFunc flags (emitTypeImpl flags overrideFunc) ctx ty with
   | Some t -> t
   | None ->
@@ -278,14 +291,14 @@ and emitFuncType (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Conte
       | Choice1Of2 x :: [] when f.isVariadic ->
         assert (not x.isOptional)
         let t = emitTypeImpl { flags with external = External.Argument true } overrideFunc ctx x.value
-        (tprintf "~%s:" x.name + t) :: acc
+        (tprintf "~%s:" (Naming.valueName x.name) + t) :: acc
       | Choice2Of2 t :: [] ->
         let flags =
           if f.isVariadic then { flags with external = External.Argument true } else flags
         emitTypeImpl flags overrideFunc ctx t :: acc
       | Choice1Of2 x :: rest ->
         let arg =
-          let tmp = tprintf "~%s:" x.name + emitTypeImpl flags overrideFunc ctx x.value
+          let tmp = tprintf "~%s:" (Naming.valueName x.name) + emitTypeImpl flags overrideFunc ctx x.value
           if x.isOptional then tmp +@ "=?" else tmp
         go (optional || x.isOptional) (arg :: acc) rest
       | Choice2Of2 t :: rest ->
@@ -295,11 +308,11 @@ and emitFuncType (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Conte
   match flags.external with
   | _ when isNewable ->
     if f.isVariadic then variadicFallback () else newableFallback ()
-  | External.Root (true, _) -> Type.curriedArrow (args ()) (retTy (EmitTypeFlags.ofFuncReturn flags))
+  | External.Root (true, _) -> Type.curriedArrow (args ()) (retTy flags)
   | _ when f.isVariadic -> variadicFallback ()
-  | External.Root (_, _) -> Type.curriedArrow (args ()) (retTy (EmitTypeFlags.ofFuncReturn flags))
-  | External.Argument _ -> paren ("@uncurry " @+ Type.curriedArrow (args ()) (retTy (EmitTypeFlags.ofFuncReturn flags)))
-  | _ -> Type.uncurriedArrow (args ()) (retTy (EmitTypeFlags.ofFuncReturn flags)) |> paren
+  | External.Root (_, _) -> Type.curriedArrow (args ()) (retTy flags)
+  | External.Argument _ -> paren ("@uncurry " @+ Type.curriedArrow (args ()) (retTy flags))
+  | _ -> Type.uncurriedArrow (args ()) (retTy flags) |> paren
 
 and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (u: UnionType) : text =
   // TODO: more classification
@@ -316,7 +329,7 @@ and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context)
   | false, false -> rest
 
 /// `[ #A | #B | ... ]`
-let rec emitLabels (ctx: Context) labels =
+and emitLabels (ctx: Context) labels =
   emitLabelsBody ctx labels |> between "[" "]"
 
 /// `#A | #B | ...`
@@ -403,7 +416,7 @@ module Binding =
     match b with
     | Binding.Let x -> yield Statement.let_ x.attrs x.name x.ty x.body
     | Binding.Ext x -> yield Statement.external x.attrs x.name x.ty x.target
-    | Binding.Unknown x -> match x.msg with Some msg -> yield msg | None -> ()
+    | Binding.Unknown x -> match x.msg with Some msg -> yield comment msg | None -> ()
   ]
 
   let emitForInterface (b: Binding) = [
@@ -411,17 +424,14 @@ module Binding =
     match b with
     | Binding.Let x -> yield Statement.val_ x.attrs x.name x.ty
     | Binding.Ext x -> yield Statement.external x.attrs x.name x.ty x.target
-    | Binding.Unknown x -> match x.msg with Some msg -> yield msg | None -> ()
+    | Binding.Unknown x -> match x.msg with Some msg -> yield comment msg | None -> ()
   ]
 
 let builder name (fields: {| isOptional: bool; name: string; value: text |} list) (thisType: text) =
   let args =
     fields
     |> List.map (fun f ->
-      let name = f.name
-      let name =
-        if Naming.isValid name && (name[0] = '_' || System.Char.IsLower(name[0])) then name
-        else String.escape name |> sprintf "\\\"%s\""
+      let name = f.name |> Naming.valueName
       let suffix =
         if f.isOptional then "=?" else ""
       tprintf "~%s: " name + f.value +@ suffix)
@@ -456,6 +466,7 @@ type StructuredTextItem =
   | Comment of text
   /// Will only be emitted in `.res` (not in `.resi` or in the `Types` module)
   | Binding of (OverloadRenamer -> CurrentScope -> Binding)
+  | EnumCaseText of {| name: string; ty: text; comments: Comment list |}
 
 and CurrentScope = {
   jsModule: string option
@@ -642,7 +653,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
     let ty, attrs = extFunc { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy; loc = ft.loc }
     binding (fun rename s ->
       let target, attrs =
-        if isExportDefaultClass then
+        if isExportDefaultClass || List.isEmpty s.scopeRev then
           match s.jsModule with
           | Some m -> m, Attr.External.module_ None :: attrs
           | None -> failwithf "impossible_emitMembers_Constructor_ExportDefaultClass(%s)" ma.loc.AsString
@@ -665,7 +676,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
     binding (fun rename _ -> let_ [] comments (rename "apply") ty value)
   | Field ({ name = name; value = Func (ft, _typrm, _) }, _)
   | Method (name, ft, _typrm) ->
-    let name = Naming.valueName name
+    let origName = name
     let ty, attrs =
       if ma.isStatic then
         let ty, attr = extFunc ft
@@ -674,12 +685,13 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
         let ft = { ft with args = Choice2Of2 PolymorphicThis :: ft.args }
         let ty, attr = extFunc ft
         ty, Attr.External.send :: attr
-    binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name) ty name)
+    binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
   | Getter fl | Field (fl, ReadOnly) ->
+    let origName = fl.name
     let name =
       match m with
-      | Getter _ -> "get" + Naming.upperFirst fl.name |> Naming.valueName
-      | _ -> fl.name |> Naming.valueName
+      | Getter _ -> "get" + Naming.upperFirst fl.name
+      | _ -> fl.name
     let fl =
       if fl.value <> Prim Void then fl
       else
@@ -692,7 +704,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
           Type.option ty, [Attr.External.val_; Attr.ExternalModifier.return_nullable]
         else
           ty, [Attr.External.val_]
-      binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name) ty name)
+      binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
     else
       let ty, attrs =
         let args = [Choice2Of2 PolymorphicThis]
@@ -701,16 +713,17 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
           else fl.value
         extFunc { isVariadic = false; args = args; returnType = ret; loc = ma.loc }
       let attrs = Attr.External.get_ :: attrs
-      binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name) ty name)
+      binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
   | Setter fl | Field (fl, WriteOnly) ->
+    let origName = fl.name
     if ma.isStatic then
       ctx.logger.warnf "writable global value or static setter '%s' is not supported in ReScript at %s" fl.name ma.loc.AsString
       []
     else
       let name =
         match m with
-        | Setter _ -> "set" + Naming.upperFirst fl.name |> Naming.valueName
-        | _ -> fl.name |> Naming.valueName
+        | Setter _ -> "set" + Naming.upperFirst fl.name
+        | _ -> fl.name
       let fl =
         if fl.value <> Prim Void then fl
         else
@@ -723,7 +736,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
         let ty, attrs =
           extFunc { isVariadic = false; args = args; returnType = Prim Void; loc = ma.loc }
         ty, Attr.External.set_ :: attrs
-      binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name) ty name)
+      binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
   | Field (fl, Mutable) ->
     List.concat [
       emitMembers flags overrideFunc ctx selfTy isExportDefaultClass ma (Getter fl)
@@ -750,7 +763,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
   | SymbolIndexer (symbol, ft, _) ->
     let c =
       let ft = func ft
-      tprintf "external [Symbol.%s]: " symbol + ft + tprintf " = \"[Symbol.%s]\"" symbol
+      tprintf "external [Symbol.%s]: " symbol + ft + tprintf " = \"[Symbol.%s]\"" symbol |> comment
     binding (fun _ _ -> unknownBinding comments (Some c))
   | UnknownMember msgo ->
     binding (fun _ _ -> unknownBinding comments (msgo |> Option.map str))
@@ -931,7 +944,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
     let emitType_ ctx ty = emitType overrideFunc ctx ty
     let members = [
       for ma, m in c.members do
-        yield! emitMembers flags overrideFunc innerCtx PolymorphicThis isExportDefaultClass ma m
+        yield! emitMembers flags overrideFunc innerCtx selfTy isExportDefaultClass ma m
       yield! additionalMembers innerCtx flags overrideFunc
     ]
 
@@ -1036,7 +1049,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         for parent in c.implements do
           let ty = func { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = parent; loc = UnknownLocation }
           let parentName = getHumanReadableName innerCtx parent
-          yield! binding (fun rename _ -> cast [] (rename $"cast_to_{parentName}") ty)
+          yield! binding (fun rename _ -> cast [] (rename $"as{parentName}") ty)
     ]
 
     let builder =
@@ -1161,7 +1174,7 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
       |> List.map (function
         | None -> EnumType.Heterogeneous
         | Some (LString _) -> EnumType.String
-        | Some (LInt _) -> EnumType.Int
+        | Some (LInt i) -> if i >= 0 then EnumType.Int else EnumType.Float
         | Some (LFloat _) -> EnumType.Float
         | Some (LBool _) -> EnumType.Boolean)
       |> List.distinct
@@ -1188,7 +1201,24 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
       |> conditional { onIntf = true; onImpl = true; onTypes = false }
       |> List.singleton
     else []
-  let appendAritySafety x = x :: aritySafety
+  let appendAritySafety x = [
+    yield x |> conditional { EmitCondition.all with onImpl = false }
+    yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
+    yield! aritySafety
+  ]
+
+  let child (c: EnumCase) =
+    let ty =
+      match enumType with
+      | EnumType.Int | EnumType.String | EnumType.PolyVariant ->
+        let case =
+          match c.value with
+          | Some (LString s) -> {| name = Choice1Of2 s; value = None; attr = None |}
+          | Some (LInt i) -> {| name = Choice2Of2 i; value = None; attr = None |}
+          | _ -> failwith "impossible"
+        Type.polyVariant [case]
+      | _ -> str "private t"
+    EnumCaseText {| name = c.name; ty = ty; comments = c.comments  |}
 
   let parentNode =
     let items =
@@ -1218,54 +1248,31 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
         Statement.typeAlias "t" [] (Type.polyVariant cases) |> TypeDefText |> appendAritySafety
       | EnumType.Boolean -> Statement.typeAlias "t" [] (str "private bool") |> TypeDefText |> appendAritySafety
       | EnumType.Float | EnumType.Number ->
-        ctx.logger.warnf "an enum type '%s' contains a case with float value, which is not supported in ReScript at %s" e.name e.loc.AsString
+        ctx.logger.warnf "an enum type '%s' contains a case with float or negative value, which is not supported in ReScript at %s" e.name e.loc.AsString
         [
-          yield commentStr (sprintf "FIXME: float enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
-          yield Statement.typeAlias "t" [] (str "private float") |> TypeDefText
+          yield commentStr (sprintf "FIXME: float/negative enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
+          yield Statement.typeAlias "t" [] (str "private float") |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
+          yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
           yield! aritySafety
         ]
       | _ ->
         ctx.logger.warnf "a heterogeneous enum '%s' is not supported at %s" e.name e.loc.AsString
         [
           yield commentStr (sprintf "FIXME: heterogeneous enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
-          yield Statement.typeAlias "t" [] (str "private any") |> TypeDefText
+          yield Statement.typeAlias "t" [] (str "private any") |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
+          yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
           yield! aritySafety
         ]
+    let items = items @ List.map child e.cases
     let comments = e.comments |> emitComments
     let exports = getExportFromStatement ctx e.name Kind.OfEnum "enum" (Enum e)
-    {| StructuredTextNode.empty with items = items; comments = comments; exports = Option.toList exports; openTypesModule = false |}
+    {| StructuredTextNode.empty with items = items; comments = comments; exports = Option.toList exports |}
 
-  let childNode (c: EnumCase) =
-    let typeDef =
-      match enumType with
-      | EnumType.Int | EnumType.String | EnumType.PolyVariant ->
-        let case =
-          match c.value with
-          | Some (LString s) -> {| name = Choice1Of2 s; value = None; attr = None |}
-          | Some (LInt i) -> {| name = Choice2Of2 i; value = None; attr = None |}
-          | _ -> failwith "impossible"
-        Statement.typeAlias "t" [] (Type.polyVariant [case]) |> TypeDefText
-      | _ -> Statement.typeAlias "t" [] (str "private t") |> TypeDefText
-    let items = [
-      yield Statement.typeAlias "parent" [] (str "t") |> TypeDefText |> conditional { onIntf = true; onImpl = true; onTypes = false }
-      yield typeDef
-      yield! aritySafety
-      yield! // emit a binding to the enum case value
-        binding (fun rename s ->
-          ext (scopeToAttr s [Attr.External.val_]) [] (rename "value") (str "parent") c.name
-        )
-    ]
-    let comments = c.comments |> emitComments
-    {| StructuredTextNode.empty with items = items; comments = comments; openTypesModule = false |}
-
-  current
-  |> add [e.name] parentNode
-  |> inTrie [e.name] (fun m ->
-    e.cases |> List.fold (fun state c -> state |> add [c.name] (childNode c)) m)
+  current |> add [e.name] parentNode
 
 let private createExternalForValue (ctx: Context) (rename: string -> string) (s: CurrentScope) attr comments name ty =
   let fallback () =
-    ext (scopeToAttr s attr) comments (Naming.valueName name |> rename) ty name
+    ext (scopeToAttr s attr) comments (rename name |> Naming.valueName) ty name
   let jsModule () =
     match s.jsModule with
     | None -> failwith "impossible_createExternalForValue"
@@ -1273,11 +1280,11 @@ let private createExternalForValue (ctx: Context) (rename: string -> string) (s:
   match ctx |> Context.getExportTypeOfName [name] with
   | None | Some (ExportType.Child _) | Some (ExportType.ES6 None) -> fallback ()
   | Some ExportType.CommonJS ->
-    ext (Attr.External.module_ None :: attr) comments (Naming.valueName name |> rename) ty (jsModule ())
+    ext (Attr.External.module_ None :: attr) comments (rename name |> Naming.valueName) ty (jsModule ())
   | Some ExportType.ES6Default ->
-    ext (scopeToAttr s attr) comments (Naming.valueName name |> rename) ty "default"
+    ext (scopeToAttr s attr) comments (rename name |> Naming.valueName) ty "default"
   | Some (ExportType.ES6 (Some renameAs)) ->
-    ext (scopeToAttr s attr) comments (Naming.valueName name |> rename) ty renameAs
+    ext (scopeToAttr s attr) comments (rename name |> Naming.valueName) ty renameAs
 
 let emitVariable flags overrideFunc ctx (v: Variable) =
   let emitType = emitTypeImpl flags
@@ -1409,7 +1416,10 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
                 | self :: sr ->
                   let attrs = scopeToAttr { s with scopeRev = sr } attrs
                   self, attrs
-                | [] -> failwithf "impossible_intfToStmts_Newable(%s)" ma.loc.AsString
+                | [] ->
+                  match s.jsModule with
+                  | Some m -> m, Attr.External.module_ None :: attrs
+                  | None -> failwithf "impossible_intfToStmts_Newable(%s)" ma.loc.AsString
               let attrs = Attr.External.new_ :: attrs |> List.rev
               ext attrs comments (rename "make") ty target
             )
@@ -1421,9 +1431,12 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
                 match s.scopeRev with
                 | self :: sr ->
                   let attrs = scopeToAttr { s with scopeRev = sr } attrs
-                  self, attrs
-                | [] -> failwithf "impossible_intfToStmts_Callable(%s)" ma.loc.AsString
-              let attrs = Attr.External.val_ :: attrs |> List.rev
+                  self, Attr.External.val_ :: attrs
+                | [] ->
+                  match s.jsModule with
+                  | Some m -> m, Attr.External.module_ None :: attrs
+                  | None -> failwithf "impossible_intfToStmts_Callable(%s)" ma.loc.AsString
+              let attrs = attrs |> List.rev
               ext attrs comments (rename "apply") ty target
             )
         | Constructor _ -> failwith "impossible_emitStructuredDefinition_Pattern_intfToModule_Constructor" // because interface!
@@ -1477,7 +1490,11 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | TypeAlias ta ->
       let ctx = ctx |> Context.ofChildNamespace ta.name
       let items =
-        emitTypeAliases emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target)
+        emitTypeAliasesImpl "t" emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target) (fun x ->
+          let a = Statement.typeAlias x.name (x.tyargs |> List.map snd) x.target |> TypeDefText
+          if x.isOverload then a |> conditional { onTypes = false; onIntf = true; onImpl = true } |> List.singleton
+          else a |> List.singleton
+        )
       let typeReferences = getKnownTypes ctx ta.target
       let node = {| StructuredTextNode.empty with items = items; typeReferences = typeReferences; comments = comments |}
       current
@@ -1640,7 +1657,7 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
           match ctx |> Context.getExportTypeOfName [name] with
           | None
           | Some (ExportType.Child _) -> name :: flags.scopeRev
-          | Some ExportType.CommonJS
+          | Some ExportType.CommonJS -> []
           | Some (ExportType.ES6 None) -> [name]
           | Some ExportType.ES6Default -> ["default"]
           | Some (ExportType.ES6 (Some name)) -> [name]
@@ -1664,20 +1681,38 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
 
   let items =
     let currentScope : CurrentScope = !!flags
+
+    let emitEnumCase (e: {| name: string; ty: text; comments: Comment list |}) =
+      let moduleName = Naming.moduleName e.name
+      let types =
+        tprintf "module %s : " moduleName +@ "{ type t = " + e.ty +@ " }"
+      let attrs = scopeToAttr currentScope [Attr.External.val_]
+      let content = [
+        Statement.open_ moduleName
+        str "type t = t"; str "type t0 = t"
+        Statement.external attrs "value" (str "t") e.name
+      ]
+      let m = {| name = moduleName; origName = e.name; content = content; comments = emitComments e.comments |}
+      {| types = types; intf = Statement.moduleSig m; impl = Statement.moduleVal m |}
+
     let rec f = function
       | Conditional (i, c) -> c, snd (f i)
-      | ImportText t -> { EmitCondition.all with onTypes = false }, Choice1Of4 t
-      | TypeDefText t -> EmitCondition.all, Choice2Of4 t
-      | Binding b -> { EmitCondition.all with onTypes = false }, Choice3Of4 (b renamer currentScope)
-      | Comment c -> { EmitCondition.all with onTypes = false }, Choice4Of4 c
+      | ImportText t -> { EmitCondition.all with onTypes = false }, Choice1Of5 t
+      | TypeDefText t -> EmitCondition.all, Choice2Of5 t
+      | Binding b -> { EmitCondition.all with onTypes = false }, Choice3Of5 (b renamer currentScope)
+      | EnumCaseText e -> EmitCondition.all, Choice4Of5 (emitEnumCase e)
+      | Comment c -> { EmitCondition.all with onTypes = false }, Choice5Of5 c
     match st.value with None -> [] | Some v -> v.items |> List.map f
 
   let imports =
-    items |> List.choose (function (_, Choice1Of4 t) -> Some t | _ -> None)
+    items |> List.choose (function (_, Choice1Of5 t) -> Some t | _ -> None)
 
   let types =
     let items =
-      items |> List.choose (function (c, Choice2Of4 t) when c.onTypes -> Some t | _ -> None)
+      items |> List.choose (function
+        | c, Choice2Of5 t when c.onTypes -> Some t
+        | _, Choice4Of5 e -> Some e.types
+        | _ -> None)
     let children =
       children
       |> List.filter (fun (_, _, c) -> c.types |> List.isEmpty |> not)
@@ -1693,24 +1728,23 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
     let children =
       children
       |> List.filter (fun (_, _, c) -> c.intf |> List.isEmpty |> not)
-      |> List.map (fun (k, openTypesModule, c) ->
-        let content =
-          if openTypesModule then
-            tprintf "open %s" k.name :: c.imports @ c.intf
-          else
-            c.imports @ c.intf
+      |> List.map (fun (k, _, c) ->
+        let content = c.imports @ c.intf
         {| k with content = content; comments = c.comments |})
-      |> ModuleEmitter.signature ctx st
+      |> Statement.moduleSigRec
     let typeDefs =
-      items |> List.choose (function (c, Choice2Of4 t) when c.onIntf -> Some t | _ -> None)
+      items |> List.choose (function
+        | c, Choice2Of5 t when c.onIntf -> Some t
+        | _, Choice4Of5 e -> Some e.intf
+        | _ -> None)
     [
       yield! children
       yield! typeDefs
       for cond, item in items do
         if cond.onIntf then
           match item with
-          | Choice3Of4 b -> yield! Binding.emitForInterface b
-          | Choice4Of4 c -> yield c
+          | Choice3Of5 b -> yield! Binding.emitForInterface b
+          | Choice5Of5 c -> yield c
           | _ -> ()
       yield! exports
     ]
@@ -1722,21 +1756,24 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
       |> List.map (fun (k, openTypesModule, c) ->
         let content =
           if openTypesModule then
-            tprintf "open %s" k.name :: c.imports @ c.intf
+            Statement.open_ k.name :: c.imports @ c.impl
           else
-            c.imports @ c.intf
+            c.imports @ c.impl
         {| k with content = content; comments = c.comments |})
-      |> ModuleEmitter.signature ctx st
+      |> ModuleEmitter.structure ctx st
     let typeDefs =
-      items |> List.choose (function (c, Choice2Of4 t) when c.onImpl -> Some t | _ -> None)
+      items |> List.choose (function
+        | c, Choice2Of5 t when c.onImpl -> Some t
+        | _, Choice4Of5 e -> Some e.impl
+        | _ -> None)
     [
       yield! children
       yield! typeDefs
       for cond, item in items do
         if cond.onImpl then
           match item with
-          | Choice3Of4 b -> yield! Binding.emitForImplementation b
-          | Choice4Of4 c -> yield c
+          | Choice3Of5 b -> yield! Binding.emitForImplementation b
+          | Choice5Of5 c -> yield c
           | _ -> ()
       yield! exports
     ]
@@ -1856,7 +1893,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
         x
       JsHelper.deriveModuleName info (sources |> List.map (fun s -> s.fileName))
       |> JsHelper.InferenceResult.tryUnwrap
-      |> Option.map log
+      |> Option.map (Naming.jsModuleNameToReScriptName >> log)
       |> Option.defaultWith (fun () ->
         ctx.logger.warnf "* the output file name cannot be inferred. 'output.res' is used instead."
         "output")

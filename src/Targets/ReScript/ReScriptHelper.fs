@@ -98,24 +98,19 @@ module Attr =
 module Naming =
   let removeInvalidChars (s: string) =
     s.ToCharArray()
-    |> Array.map (fun c -> if Char.isAlphabetOrDigit c || c = '_' then c else '_')
+    |> Array.map (fun c -> if Char.isAlphabetOrDigit c || c = '_' || c = '\'' then c else '_')
     |> System.String
 
   let isValid (s: string) =
     Char.isAlphabet(s[0])
-    && s.ToCharArray() |> Array.forall(fun c -> Char.isAlphabetOrDigit c || c = '_')
+    && s.ToCharArray() |> Array.forall(fun c -> Char.isAlphabetOrDigit c || c = '_' || c = '\'')
 
   let keywords =
     set [
       "and"; "as"; "assert"; "constraint"; "else"; "exception"; "external"
       "false"; "for"; "if"; "in"; "include"; "lazy"; "let"; "module"; "mutable"
-      "of"; "open"; "rec"; "switch"; "true"; "try"; "type"; "when"; "while"; "with"
+      "of"; "open"; "private"; "rec"; "switch"; "true"; "try"; "type"; "when"; "while"; "with"
     ]
-
-  let reservedValueNames =
-    set [
-      "make"; "apply"; "get"; "set"; "castFrom"
-    ] |> Set.union keywords
 
   let upperFirst (s: string) =
     if Char.IsLower s[0] then
@@ -128,13 +123,16 @@ module Naming =
     else s
 
   let valueName (name: string) =
-    let name = removeInvalidChars name
-    let result =
-      if name = "NaN" then "nan"
-      else if String.forall (fun c -> Char.IsLower c |> not) name then
-        name.ToLowerInvariant()
-      else lowerFirst name
-    if reservedValueNames |> Set.contains result then result + "_" else result
+    let check name =
+      if keywords |> Set.contains name then
+        String.escape name |> sprintf "\\\"%s\""
+      else name
+    if name = "NaN" then "nan"
+    else if not (isValid name) then
+      String.escape name |> sprintf "\\\"%s\""
+    else if String.forall (fun c -> Char.IsUpper c || c = '_' || c = '\'') name then
+      name.ToLower() |> check
+    else lowerFirst name |> check
 
   let reservedModuleNames =
     Set.ofList [
@@ -169,7 +167,7 @@ module Naming =
       else sprintf "%s%d" name arity
     | None -> sprintf "%s%d" name arity
 
-  let private jsModuleNameToReScriptName (jsModuleName: string) =
+  let jsModuleNameToReScriptName (jsModuleName: string) =
     match jsModuleName.TrimStart('@') |> String.splitThenRemoveEmptyEntries "/" |> Array.toList with
     | xs ->
       xs
@@ -256,7 +254,7 @@ module Type =
   let uncurriedArrow args ret =
     let lhs =
       match args with
-      | [] -> str "(. )"
+      | [] -> str "()"
       | xs -> concat (str ", ") xs |> between "(. " ")"
     lhs +@ " => " + ret
 
@@ -273,7 +271,9 @@ module Type =
       let name =
         match case.name with
         | Choice1Of2 str ->
-          if Naming.isValid str then str else sprintf "\"%s\"" (String.escape str)
+          if Naming.isValid str && Naming.keywords |> Set.contains str |> not then
+            str
+          else sprintf "\"%s\"" (String.escape str)
         | Choice2Of2 i -> sprintf "%d" i
       let attr =
         match case.attr with

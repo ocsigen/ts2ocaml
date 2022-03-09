@@ -107,7 +107,7 @@ module Naming =
 
   let keywords =
     set [
-      "and"; "as"; "assert"; "constraint"; "else"; "exception"; "external"
+      "and"; "as"; "assert"; "constraint"; "else"; "exception"; "external"; "export"
       "false"; "for"; "if"; "in"; "include"; "lazy"; "let"; "module"; "mutable"
       "of"; "open"; "private"; "rec"; "switch"; "true"; "try"; "type"; "when"; "while"; "with"
     ]

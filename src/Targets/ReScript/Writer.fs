@@ -222,7 +222,9 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
       match l with
       | LBool true -> Type.true_ | LBool false -> Type.false_
       | LString s -> Type.polyVariant [{| name = Choice1Of2 s; value = None; attr = None |}]
-      | LInt i -> Type.polyVariant [{| name = Choice2Of2 i; value = None; attr = None |}]
+      | LInt i ->
+        if i >= 0 then Type.polyVariant [{| name = Choice2Of2 i; value = None; attr = None |}]
+        else fixme (str "int") "%d" i
       | LFloat f -> fixme (str "float") "float literal %f" f
     | Intersection i ->
       let flags = { flags with needParen = true } |> EmitTypeFlags.ofChild
@@ -312,7 +314,7 @@ and emitFuncType (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Conte
   | _ when f.isVariadic -> variadicFallback ()
   | External.Root (_, _) -> Type.curriedArrow (args ()) (retTy flags)
   | External.Argument _ -> paren ("@uncurry " @+ Type.curriedArrow (args ()) (retTy flags))
-  | _ -> Type.uncurriedArrow (args ()) (retTy flags) |> paren
+  | _ -> Type.curriedArrow (args ()) (retTy flags) |> paren
 
 and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (u: UnionType) : text =
   // TODO: more classification
@@ -648,6 +650,9 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
     let args = str self :: (args |> List.map (fun arg -> arg.ml))
     Term.curriedArrow args (Term.raw body)
 
+  let scopeToAttrIf isStatic s attrs =
+    if isStatic then scopeToAttr s attrs else attrs
+
   match m with
   | Constructor ft ->
     let ty, attrs = extFunc { args = ft.args; isVariadic = ft.isVariadic; returnType = selfTy; loc = ft.loc }
@@ -685,7 +690,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
         let ft = { ft with args = Choice2Of2 PolymorphicThis :: ft.args }
         let ty, attr = extFunc ft
         ty, Attr.External.send :: attr
-    binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
+    binding (fun rename s -> ext (scopeToAttrIf ma.isStatic s attrs) comments (rename name |> Naming.valueName) ty origName)
   | Getter fl | Field (fl, ReadOnly) ->
     let origName = fl.name
     let name =
@@ -713,7 +718,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
           else fl.value
         extFunc { isVariadic = false; args = args; returnType = ret; loc = ma.loc }
       let attrs = Attr.External.get_ :: attrs
-      binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
+      binding (fun rename _ -> ext attrs comments (rename name |> Naming.valueName) ty origName)
   | Setter fl | Field (fl, WriteOnly) ->
     let origName = fl.name
     if ma.isStatic then
@@ -736,7 +741,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
         let ty, attrs =
           extFunc { isVariadic = false; args = args; returnType = Prim Void; loc = ma.loc }
         ty, Attr.External.set_ :: attrs
-      binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
+      binding (fun rename s -> ext (scopeToAttrIf ma.isStatic s attrs) comments (rename name |> Naming.valueName) ty origName)
   | Field (fl, Mutable) ->
     List.concat [
       emitMembers flags overrideFunc ctx selfTy isExportDefaultClass ma (Getter fl)
@@ -747,14 +752,14 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
       let args = Choice2Of2 PolymorphicThis :: removeLabels ft.args
       extFunc { ft with args = args }
     let attrs = Attr.External.get_index :: attrs
-    binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename "get") ty "")
+    binding (fun rename _ -> ext attrs comments (rename "get") ty "")
   | Indexer (ft, WriteOnly) ->
     let ty, attrs =
       let args = Choice2Of2 PolymorphicThis :: removeLabels ft.args @ [Choice2Of2 ft.returnType]
       let ret = Prim Void
       extFunc { ft with args = args; returnType = ret }
     let attrs = Attr.External.set_index :: attrs
-    binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename "set") ty "")
+    binding (fun rename _ -> ext attrs comments (rename "set") ty "")
   | Indexer (ft, Mutable) ->
     List.concat [
       emitMembers flags overrideFunc ctx selfTy isExportDefaultClass ma (Indexer (ft, ReadOnly))
@@ -1047,7 +1052,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       if innerCtx.options.subtyping |> List.contains Subtyping.CastFunction then
         let inline func ft = func flags overrideFunc innerCtx ft
         for parent in c.implements do
-          let ty = func { isVariadic = false; args = [Choice2Of2 selfTy]; returnType = parent; loc = UnknownLocation }
+          let ty = Type.curriedArrow [selfTyText] (emitType_ innerCtx parent)
           let parentName = getHumanReadableName innerCtx parent
           yield! binding (fun rename _ -> cast [] (rename $"as{parentName}") ty)
     ]
@@ -1517,7 +1522,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         let knownTypesInMembers = Statement.getKnownTypes ctx [Class intf]
         let createModule () =
           let items = intfToStmts intf (ctx |> Context.ofChildNamespace value.name) emitTypeFlags overrideFunc
-          {| StructuredTextNode.empty with items = items; scope = Scope.Path value.name |}
+          {| StructuredTextNode.empty with items = items; scope = Scope.Path value.name; openTypesModule = false |}
         if knownTypesInMembers |> Set.contains (KnownType.Ident (ctx |> Context.getFullName [intfName])) then
           fallback current
         else
@@ -1554,7 +1559,8 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           (set
             {| StructuredTextNode.empty with
                 items = items
-                scope = Scope.Path value.name |})
+                scope = Scope.Path value.name
+                openTypesModule = false |})
         |> addExport value.name Kind.OfClass (if value.isConst then "const" else "let")
         |> inTrie [value.name] (addAnonymousInterfaceExcluding [intf])
       | Ident (i & { loc = loc }) & Dummy tyargs
@@ -1570,7 +1576,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           let knownTypesInMembers = Statement.getKnownTypes ctx [Class intf]
           let createModule () =
             let items = intfToStmts intf ctx emitTypeFlags overrideFunc
-            {| StructuredTextNode.empty with items = items; scope = Scope.Path value.name |}
+            {| StructuredTextNode.empty with items = items; scope = Scope.Path value.name; openTypesModule = false |}
           current
           |> inTrie [name] (set (createModule ()))
           |> addExport name Kind.OfClass (if value.isConst then "const" else "let")

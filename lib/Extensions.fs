@@ -186,9 +186,12 @@ module Path =
   type Absolute = string
   type Difference = string
 
+  let normalizeSlashes (path: string) =
+    path |> String.replace "\\" "/"
+
   let absolute (path: string) : Absolute =
-    if Node.path.isAbsolute(path) then path
-    else Node.path.resolve(path)
+    if Node.path.isAbsolute(path) then path |> normalizeSlashes
+    else Node.path.resolve(path) |> normalizeSlashes
 
   let diff (fromPath: Absolute) (toPath: Absolute) : string =
     let fromPath =

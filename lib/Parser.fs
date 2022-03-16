@@ -1085,9 +1085,8 @@ let private getAllLocalReferences (ctx: #IContext<#IOptions>) (sourceFiles: Ts.S
     | _ -> ()
     n.forEachChild(go sourceFile)
 
-  and goSourceFile sourceFile =
-    for statement in sourceFile.statements do
-      go sourceFile statement |> ignore
+  and goSourceFile (sourceFile: Ts.SourceFile) =
+    sourceFile.forEachChild(go sourceFile) |> ignore
 
   for sourceFile in sourceFiles do goSourceFile sourceFile
 
@@ -1111,33 +1110,30 @@ let createDependencyGraph (sourceFiles: Ts.SourceFile seq) =
       let specifier = (!!e : Ts.StringLiteral).text
       if specifier.StartsWith(".") then
         tryFindDefinitionFile sourceFile specifier
-        |> Option.map (fun target ->
-          graph <- graph |> Graph.add sourceFile.fileName target.fileName
-          target)
-      else None
-    else None
+        |> Option.iter (fun target ->
+          graph <- graph |> Graph.add sourceFile.fileName target.fileName)
 
-  let rec go (sourceFile: Ts.SourceFile) (n: Ts.Node) : unit option =
-    match n.kind with
-    | Ts.SyntaxKind.ImportEqualsDeclaration ->
-      let n = n :?> Ts.ImportEqualsDeclaration
-      if (!!n.moduleReference : Ts.Node).kind = Ts.SyntaxKind.ExternalModuleReference then
-        (!!n.moduleReference : Ts.ExternalModuleReference).expression
+  let go (sourceFile: Ts.SourceFile) (ns: Ts.Node seq) =
+    for n in ns do
+      match n.kind with
+      | Ts.SyntaxKind.ImportEqualsDeclaration ->
+        let n = n :?> Ts.ImportEqualsDeclaration
+        if (!!n.moduleReference : Ts.Node).kind = Ts.SyntaxKind.ExternalModuleReference then
+          (!!n.moduleReference : Ts.ExternalModuleReference).expression
+          |> handleModuleSpecifier sourceFile
+      | Ts.SyntaxKind.ImportDeclaration ->
+        let n = n :?> Ts.ImportDeclaration
+        n.moduleSpecifier
         |> handleModuleSpecifier sourceFile
-        |> Option.iter goSourceFile
-    | Ts.SyntaxKind.ImportDeclaration ->
-      let n = n :?> Ts.ImportDeclaration
-      n.moduleSpecifier
-      |> handleModuleSpecifier sourceFile
-      |> Option.iter goSourceFile
-    | _ -> ()
-    n.forEachChild(go sourceFile)
+      | _ -> ()
+    ns |> Seq.collect (fun n -> n.getChildren(sourceFile))
 
-  and goSourceFile (sourceFile: Ts.SourceFile) =
-    for statement in sourceFile.statements do
-      go sourceFile statement |> ignore
+  let goSourceFile (sourceFile: Ts.SourceFile) =
+    let mutable nodes : Ts.Node seq = !!sourceFile.statements
+    while not (nodes |> Seq.isEmpty) do
+      nodes <- go sourceFile nodes
 
-  for sourceFile in sourceFiles do goSourceFile sourceFile
+  for source in sourceFiles do goSourceFile source
   graph
 
 let assertFileExistsAndHasCorrectExtension (fileName: string) =
@@ -1198,8 +1194,7 @@ let parse (ctx: ParserContext) : Input =
     |> Seq.filter (fun sf -> targets |> Set.contains sf.fileName)
   let sources =
     srcs
-    |> Seq.toList
-    |> List.map (fun src ->
+    |> Seq.map (fun src ->
       ctx.logger.tracef "* parsing %s..." src.fileName
       let references =
         Seq.concat [
@@ -1217,6 +1212,7 @@ let parse (ctx: ParserContext) : Input =
         fileName = src.fileName
         hasNoDefaultLib = src.hasNoDefaultLib
         references = references })
+    |> List.ofSeq
 
   let info =
     match sources with

@@ -1756,12 +1756,12 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
   let inline emitTypeName name args =
     Type.appOpt (str (Naming.flattenedTypeName name)) args
 
-  let rec go prefix (ctx: Context) (v: Statement) =
+  let rec go (prefix: unit -> string) (ctx: Context) (v: Statement) =
     match v with
     | Enum e ->
       let fn = ctx |> Context.getFullName [e.name]
       [
-        yield tprintf "%s %s = " prefix (Naming.flattenedTypeName fn.name) + GetSelfTyText.enumCases e e.cases
+        yield tprintf "%s %s = " (prefix()) (Naming.flattenedTypeName fn.name) + GetSelfTyText.enumCases e e.cases
         for c in e.cases do
           yield tprintf "and %s = " (Naming.flattenedTypeName (fn.name @ [c.name])) + GetSelfTyText.enumCases e [c]
       ]
@@ -1782,12 +1782,12 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
               | [] -> Prim prim
               | _  -> App (APrim prim, c.typeParams |> List.map (fun tp -> TypeVar tp.name), UnknownLocation)
             emitType_ ctx target
-        [prefix @+ " " @+ emitTypeName fn.name typrm +@ " = " + selfTyText]
+        [prefix() @+ " " @+ emitTypeName fn.name typrm +@ " = " + selfTyText]
     | TypeAlias { name = name; typeParams = typeParams; target = target } ->
       let fn = ctx |> Context.getFullName [name]
       let typrm = typeParams |> List.map (fun x -> tprintf "'%s" x.name)
       let selfTyText = emitType_ ctx target
-      [prefix @+ " " @+ emitTypeName fn.name typrm +@ " = " + selfTyText]
+      [prefix() @+ " " @+ emitTypeName fn.name typrm +@ " = " + selfTyText]
       // TODO: emit extends of type parameters
     | Module m -> m.statements |> List.collect (go prefix (ctx |> Context.ofChildNamespace m.name))
     | Global m -> m.statements |> List.collect (go prefix (ctx |> Context.ofRoot))
@@ -1835,7 +1835,7 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
     for a in aim |> Map.toList |> List.map fst do
       yield genAnonymousInterface (getPrefix()) a
     for stmt in stmts do
-      yield! go (getPrefix()) ctx stmt
+      yield! go getPrefix ctx stmt
   ]
 
 let emitStatementsWithStructuredText (ctx: Context) (stmts: Statement list) (st: StructuredText) =

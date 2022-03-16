@@ -39,6 +39,7 @@
     "@types/vscode": "^1.63.1",
     "@types/yargs": "17.0.9",
     "cassandra-driver": "^4.6.3",
+    "cdk8s": "^2.2.41",
     "monaco-editor": "0.33.0",
     "react-player": "2.9.0",
     "webpack": "5.70.0",

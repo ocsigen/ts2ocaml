@@ -35,7 +35,6 @@ type intrinsic<'a> = private 'a
 type null<+'a> = Js.null<'a>
 type null' = null<never>
 type undefined<+'a> = Js.undefined<'a>
-type undefined' = undefined<never>
 type nullable<+'a> = Js.nullable<'a>
 
 module Union = {

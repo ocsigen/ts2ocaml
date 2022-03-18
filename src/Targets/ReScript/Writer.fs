@@ -136,58 +136,77 @@ let anonymousInterfaceToIdentifier (ctx: Context) (a: AnonymousInterface) : text
   | None -> failwithf "impossible_anonymousInterfaceToIdentifier(%s)" a.loc.AsString
 
 let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (ty: Type) : text =
-  let treatIdent (i: Ident) (tyargs: Type list) (loc: Location) =
-    let arity = List.length tyargs
+  let treatBuiltinTypes (i: Ident) (tyargs: Type list) =
+    let len = List.length tyargs
     let flagsForArgs = { flags with needParen = true } |> EmitTypeFlags.ofChild
-    let withTyargs ty =
-      Type.appOpt ty (tyargs |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx))
-    let origin =
-      Ident.pickDefinitionWithFullName ctx i (fun fn -> function
-        | _ when fn.source <> ctx.currentSourceFile -> None
-        | Definition.Class     { typeParams = tps; loc = loc }
-        | Definition.TypeAlias { typeParams = tps; loc = loc } -> Some (fn, tps, loc)
-        | Definition.Enum { loc = loc }
-        | Definition.EnumCase ({ loc = loc }, _) -> Some (fn, [], loc)
-        | _ -> None
-      )
-    match origin with
+    match i.name with
+    | _ when ctx.options.stdlib -> None
+    | [] | _ :: _ :: _ -> None
+    | name :: [] ->
+      match Type.predefinedTypes |> Map.tryFind name with
+      | Some (ty, arity) when arity = len ->
+        Type.appOpt (str ty) (tyargs |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx)) |> Some
+      | _ when len = 0 ->
+        match Type.predefinedDOMTypes.TryGetValue(name) with
+        | true, ty -> str ty |> Some
+        | false, _ -> None
+      | _ -> None
+
+  let treatIdent (i: Ident) (tyargs: Type list) (loc: Location) =
+    match treatBuiltinTypes i tyargs with
+    | Some t -> t
     | None ->
-      let tyName =
-        let fallback () =
-          let tyName =
-            match ctx.options.safeArity with
-            | FeatureFlag.Full | FeatureFlag.Consume -> Naming.createTypeNameOfArity arity None "t"
-            | _ -> "t"
-          Naming.structured Naming.moduleName i.name + "." + tyName |> str
-        match i.name with
-        | [name] ->
-          match PrimType.FromJSClassName name with
-          | Some p -> emitTypeImpl flags overrideFunc ctx (Prim p)
-          | None -> fallback ()
-        | _ -> fallback ()
-      tyName |> withTyargs
-    | Some (fn, typrms, origLoc) ->
-      let result name =
-        let ts =
-          assignTypeParams fn.name (origLoc ++ loc) typrms tyargs
-            (fun _ t -> t)
-            (fun tv ->
-              match tv.defaultType with
-              | Some t -> t
-              | None -> failwithf "error: insufficient type params for type '%s' at %s" (String.concat "." fn.name) loc.AsString)
-        Type.appOpt (str name) (ts |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx))
-      let fullName = Naming.structured Naming.moduleName fn.name + ".t"
-      if fn.source <> ctx.currentSourceFile then result fullName
-      else
-        match ctx |> Context.getRelativeNameTo fn.name with
-        | Ok relativeName -> result (Naming.structured Naming.moduleName relativeName + ".t")
-        | Error [] -> result "t"
-        | Error diff ->
-          let fn = String.concat "." fn.name
-          let selfName = String.concat "." diff
-          let warnText = $"cannot reference a type {fn} from its sub-namespace {selfName}"
-          Log.warnf ctx.options "%s at %s" warnText loc.AsString
-          commentStr warnText + Type.any
+      let arity = List.length tyargs
+      let flagsForArgs = { flags with needParen = true } |> EmitTypeFlags.ofChild
+      let withTyargs ty =
+        Type.appOpt ty (tyargs |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx))
+      let origin =
+        Ident.pickDefinitionWithFullName ctx i (fun fn -> function
+          | _ when fn.source <> ctx.currentSourceFile -> None
+          | Definition.Class     { typeParams = tps; loc = loc }
+          | Definition.TypeAlias { typeParams = tps; loc = loc } -> Some (fn, tps, loc)
+          | Definition.Enum { loc = loc }
+          | Definition.EnumCase ({ loc = loc }, _) -> Some (fn, [], loc)
+          | _ -> None
+        )
+      match origin with
+      | None ->
+        let tyName =
+          let fallback () =
+            let tyName =
+              match ctx.options.safeArity with
+              | FeatureFlag.Full | FeatureFlag.Consume -> Naming.createTypeNameOfArity arity None "t"
+              | _ -> "t"
+            Naming.structured Naming.moduleName i.name + "." + tyName |> str
+          match i.name with
+          | [name] ->
+            match PrimType.FromJSClassName name with
+            | Some p -> emitTypeImpl flags overrideFunc ctx (Prim p)
+            | None -> fallback ()
+          | _ -> fallback ()
+        tyName |> withTyargs
+      | Some (fn, typrms, origLoc) ->
+        let result name =
+          let ts =
+            assignTypeParams fn.name (origLoc ++ loc) typrms tyargs
+              (fun _ t -> t)
+              (fun tv ->
+                match tv.defaultType with
+                | Some t -> t
+                | None -> failwithf "error: insufficient type params for type '%s' at %s" (String.concat "." fn.name) loc.AsString)
+          Type.appOpt (str name) (ts |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx))
+        let fullName = Naming.structured Naming.moduleName fn.name + ".t"
+        if fn.source <> ctx.currentSourceFile then result fullName
+        else
+          match ctx |> Context.getRelativeNameTo fn.name with
+          | Ok relativeName -> result (Naming.structured Naming.moduleName relativeName + ".t")
+          | Error [] -> result "t"
+          | Error diff ->
+            let fn = String.concat "." fn.name
+            let selfName = String.concat "." diff
+            let warnText = $"cannot reference a type {fn} from its sub-namespace {selfName}"
+            Log.warnf ctx.options "%s at %s" warnText loc.AsString
+            commentStr warnText + Type.any
 
   match overrideFunc flags (emitTypeImpl flags overrideFunc) ctx ty with
   | Some t -> t
@@ -993,7 +1012,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         if not innerCtx.options.stdlib then fallback ()
         else if innerCtx.currentSourceFile = stdlibEsSrc then
           match Type.predefinedTypes |> Map.tryFind x.name with
-          | Some t -> Some (str t), []
+          | Some (t, _) -> Some (str t), []
           | None -> fallback ()
         else if innerCtx.currentSourceFile = stdlibDomSrc then
           match Type.predefinedDOMTypes.TryGetValue(x.name) with
@@ -1234,14 +1253,18 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
           |> List.map (fun (n, v) -> n, match v with Some (LInt i) -> i | _ -> failwith "impossible")
           |> List.sortBy snd
           |> List.map fst
-        if (cases |> List.sumBy (fun s -> s.Length)) > 80 then
-          concat newline [
-            yield str "type t ="
-            for case in cases do
-              yield indent (tprintf "| %s" case)
-          ] |> TypeDefText |> appendAritySafety
-        else
-          cases |> String.concat " | " |> tprintf "type t = %s" |> TypeDefText |> appendAritySafety
+        let casesText =
+          if (cases |> List.sumBy (fun s -> s.Length)) > 80 then
+            concat newline [
+              for case in cases do
+                yield indent (tprintf "| %s" case)
+            ]
+          else cases |> String.concat " | " |> str
+        [
+          yield str "type t = " + casesText |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
+          yield str "type t = t = " + casesText |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
+          yield! aritySafety
+        ]
       | EnumType.Int | EnumType.String | EnumType.PolyVariant ->
         let cases =
           distinctCases
@@ -1680,9 +1703,10 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
       let ctx = ctx |> Context.ofChildNamespace k
       let result = emitModule flags ctx v
       let openTypesModule =
+        let hasTypeDefinitions = result.types |> List.isEmpty |> not
         v.value
-        |> Option.map (fun v -> v.openTypesModule)
-        |> Option.defaultValue (result.types |> List.isEmpty |> not)
+        |> Option.map (fun v -> hasTypeDefinitions && v.openTypesModule)
+        |> Option.defaultValue hasTypeDefinitions
       {| name = name; origName = k |}, openTypesModule, result)
 
   let items =
@@ -1693,13 +1717,19 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
       let types =
         tprintf "module %s : " moduleName +@ "{ type t = " + e.ty +@ " }"
       let attrs = scopeToAttr currentScope [Attr.External.val_]
-      let content = [
-        Statement.open_ moduleName
-        str "type t = t"; str "type t0 = t"
-        Statement.external attrs "value" (str "t") e.name
+      let intf = [
+        yield str $"type t = {e.ty}"
+        if ctx.options.safeArity.HasProvide then yield str "type t0 = t"
+        yield Statement.external attrs "value" (str "t") e.name
       ]
-      let m = {| name = moduleName; origName = e.name; content = content; comments = emitComments e.comments |}
-      {| types = types; intf = Statement.moduleSig m; impl = Statement.moduleVal m |}
+      let impl = [
+        yield Statement.open_ moduleName
+        yield str "type t = t"
+        if ctx.options.safeArity.HasProvide then yield str "type t0 = t"
+        yield Statement.external attrs "value" (str "t") e.name
+      ]
+      let m content = {| name = moduleName; origName = e.name; content = content; comments = emitComments e.comments |}
+      {| types = types; intf = Statement.moduleSig (m intf); impl = Statement.moduleVal (m impl) |}
 
     let rec f = function
       | Conditional (i, c) -> c, snd (f i)
@@ -1789,6 +1819,10 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
 
   {| imports = imports; types = types; intf = intf; impl = impl; comments = comments |}
 
+let header = [
+  str "@@warning(\"-27-33-44\")"
+]
+
 let setTyperOptions (ctx: IContext<Options>) =
   ctx.options.inheritArraylike <- true
   ctx.options.inheritIterable <- true
@@ -1859,6 +1893,7 @@ let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
     let m = emitModule flags ctx st
     let res =
       concat newline [
+        yield! header
         yield! m.comments
         for o in opens do yield Statement.open_ o
         yield! m.imports
@@ -1867,6 +1902,7 @@ let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
       ]
     let resi =
       concat newline [
+        yield! header
         yield! m.comments
         for o in opens do yield Statement.open_ o
         yield! m.imports
@@ -1947,6 +1983,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
 
   let res =
     concat newline [
+      yield! header
       yield! m.comments
       yield! opens
       yield! m.imports
@@ -1956,6 +1993,7 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
   let resi =
     if ctx.options.resi then
       concat newline [
+        yield! header
         yield! m.comments
         yield! opens
         yield! m.imports

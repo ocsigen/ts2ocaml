@@ -192,14 +192,14 @@ module Kind =
 module Type =
   /// non-primitive types defined in the standard library
   let predefinedTypes =
-    let typedArray name = name, sprintf "Js.TypedArray2.%s.t" name
+    let typedArray name = name, (sprintf "Js.TypedArray2.%s.t" name, 0)
     Map.ofList [
-      "RegExp", "Js.Re.t"
-      "Date", "Js.Date.t"
-      "Promise", "Js.Promise.t" (* arity 1 *)
-      "Array", "Js.Array.t" (* arity 1*)
-      "ArrayLike", "Js.TypedArray2.array_like" (* arity 1 *)
-      "ArrayBuffer", "Js.TypedArray2.array_buffer"
+      "RegExp", ("Js.Re.t", 0)
+      "Date", ("Js.Date.t", 0)
+      "Promise", ("Js.Promise.t", 1)
+      "Array", ("Js.Array.t", 1)
+      "ArrayLike", ("Js.TypedArray2.array_like", 1)
+      "ArrayBuffer", ("Js.TypedArray2.array_buffer", 0)
       typedArray "DataView"
       typedArray "Int8Array"
       typedArray "Uint8Array"
@@ -314,7 +314,7 @@ module Type =
   let undefined_or t = app (str "undefined") [t]
   let null_or_undefined_or t = app (str "nullable") [t]
   let null_ = str "null'"
-  let undefined = str "undefined'"
+  let undefined = str "unit"
   let intrinsic = app (str "intrinsic") [string]
   let true_ = str "\\\"true\""
   let false_ = str "\\\"false\""
@@ -466,7 +466,7 @@ module Statement =
 
   let moduleSigRec1 name (content: text list) =
     concat newline [
-      yield tprintf "module %s : {" name
+      yield tprintf "module rec %s : {" name
       yield indent (concat newline content)
       yield tprintf "} = %s" name
     ]

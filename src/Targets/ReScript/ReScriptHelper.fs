@@ -422,7 +422,7 @@ let private moduleSigImpl (prefix: string) (isRec: bool) (m: TextModule) =
 module Statement =
   let attr attrs =
     if List.isEmpty attrs then empty
-    else concat (str " ") attrs + newline
+    else concat (str " ") attrs +@ " "
 
   let let_ (attrs: text list) name typ value =
     attr attrs + tprintf "let %s: " name + typ +@ " = " + value

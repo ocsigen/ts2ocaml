@@ -766,7 +766,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
     let origName = fl.name
     let name =
       match m with
-      | Getter _ -> "get" + Naming.upperFirst fl.name
+      | Getter _ -> "get_" + fl.name
       | _ -> fl.name
     let fl =
       if fl.value <> Prim Void then fl
@@ -798,7 +798,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
     else
       let name =
         match m with
-        | Setter _ -> "set" + Naming.upperFirst fl.name
+        | Setter _ -> "set_" + fl.name
         | _ -> fl.name
       let fl =
         if fl.value <> Prim Void then fl
@@ -1899,6 +1899,7 @@ let setTyperOptions (ctx: IContext<Options>) =
   ctx.options.replaceAliasToFunction <- false
   ctx.options.replaceNewableFunction <- false
   ctx.options.replaceRankNFunction <- true
+  ctx.options.addAllParentMembersToClass <- true
 
 let emitTypes (types: text list) : text list =
   [

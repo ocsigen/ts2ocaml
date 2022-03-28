@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -25,6 +25,7 @@ jobs:
           - 4.11.x
           - 4.12.x
           - 4.13.x
+          - 4.14.x
 
     runs-on: ${{ matrix.os }}
 
@@ -50,8 +51,9 @@ jobs:
           dune-cache: true
 
       - name: Install .NET Dependencies
-        run: dotnet restore
-           | dotnet tool restore
+        run: |
+          dotnet restore
+          dotnet tool restore
 
       - name: Install OCaml Dependencies
         run: opam install . --deps-only

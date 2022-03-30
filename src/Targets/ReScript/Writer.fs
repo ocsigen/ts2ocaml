@@ -1739,6 +1739,10 @@ type EmitModuleResult = {|
   comments: text list
 |}
 
+module EmitModuleResult =
+  let empty : EmitModuleResult =
+    {| imports = []; types = []; impl = []; intf = []; comments = [] |}
+
 let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) : EmitModuleResult =
   let renamer = new OverloadRenamer()
   let children =
@@ -1826,8 +1830,9 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
     children @ items
 
   let exports =
-    // TODO
-    []
+    st.value
+    |> Option.map (fun m -> m.exports |> emitExportModule ctx)
+    |> Option.defaultValue EmitModuleResult.empty
 
   let intf =
     let children =
@@ -1851,7 +1856,7 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
           | Choice3Of5 b -> yield! Binding.emitForInterface b
           | Choice5Of5 c -> yield c
           | _ -> ()
-      yield! exports
+      // yield! exports.intf
     ]
 
   let impl =
@@ -1880,13 +1885,68 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
           | Choice3Of5 b -> yield! Binding.emitForImplementation b
           | Choice5Of5 c -> yield c
           | _ -> ()
-      yield! exports
+      // yield! exports.impl
     ]
 
   let comments =
     match st.value with None -> [] | Some v -> v.comments
 
   {| imports = imports; types = types; intf = intf; impl = impl; comments = comments |}
+
+and emitExportModule (ctx: Context) (exports: ExportItem list) : EmitModuleResult =
+  let emitComment comments origText = [
+    let hasDocComment = not (List.isEmpty comments)
+    yield commentStr origText |> TypeDefText
+    if hasDocComment then
+      yield comments |> emitComments |> concat newline |> comment |> TypeDefText
+  ]
+
+  let emitModuleAlias name (i: Ident) =
+    if i.kind |> Option.map Kind.generatesReScriptModule |> Option.defaultValue false then
+      [ Statement.moduleAlias
+          (name |> Naming.moduleNameReserved)
+          (i.name |> Naming.structured Naming.moduleName) |> TypeDefText ]
+    else []
+
+  let addItems items (acc: StructuredText) =
+    acc |> Trie.setOrUpdate {| StructuredTextNode.empty with items = items |} StructuredTextNode.union
+
+  let setItems path items (acc: StructuredText) =
+    acc |> Trie.addOrUpdate path {| StructuredTextNode.empty with items = items |} StructuredTextNode.union
+
+  let rec go isFirst (acc: StructuredText) (exports: ExportItem list) =
+    match exports with
+    | [] -> acc
+    | ExportItem.DefaultUnnamedClass node :: rest ->
+      go false (acc |> Trie.addOrUpdate ["Export"; "Default"] node StructuredTextNode.union) rest
+    | ExportItem.Export export :: rest ->
+      let clauses = export.clauses |> List.map fst
+      let rec go' acc = function
+        | [] -> acc
+        | NamespaceExport _ :: rest -> go' acc rest
+        | CommonJsExport i :: rest ->
+          go' (acc |> addItems (emitModuleAlias "Export" i)) rest
+        | ES6DefaultExport e :: rest ->
+          go' (acc |> setItems ["Export"] (emitModuleAlias "Default" e)) rest
+        | ES6Export e :: rest ->
+          let name = e.renameAs |> Option.defaultValue (e.target.name |> List.last)
+          go' (acc |> setItems ["Export"] (emitModuleAlias name e.target)) rest
+      let acc =
+        let generatesExportModule =
+          clauses |> List.exists (function ES6Export _ | ES6DefaultExport _ -> true | _ -> false)
+        if generatesExportModule then
+          acc |> setItems ["Export"] (emitComment export.comments export.origText)
+        else
+          acc |> addItems (emitComment export.comments export.origText)
+      go false (go' acc clauses) rest
+    | ExportItem.ReExport export :: rest ->
+      // TODO
+      let acc =
+        acc |> setItems ["Export"] (emitComment export.comments export.origText)
+      go isFirst acc rest
+
+  let st = go true Trie.empty exports
+  st |> emitModule {| isReservedModule = true; jsModule = None; scopeRev = [] |} ctx
 
 let header = [
   str "@@warning(\"-27-32-33-44\")"

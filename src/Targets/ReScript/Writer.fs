@@ -1316,7 +1316,7 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
           |> List.map fst
         let casesText =
           if (cases |> List.sumBy (fun s -> s.Length)) > 80 then
-            concat newline [
+            newline + concat newline [
               for case in cases do
                 yield indent (tprintf "| %s" case)
             ]
@@ -1354,10 +1354,12 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
         ]
     let items = items @ List.map child e.cases
     let comments = e.comments |> emitComments
-    let exports = getExportFromStatement ctx e.name Kind.OfEnum "enum" (Enum e)
-    {| StructuredTextNode.empty with items = items; comments = comments; exports = Option.toList exports |}
+    {| StructuredTextNode.empty with items = items; comments = comments |}
 
-  current |> add [e.name] parentNode
+  let exports = getExportFromStatement ctx e.name Kind.OfEnum "enum" (Enum e)
+  current
+  |> add [e.name] parentNode
+  |> set {| StructuredTextNode.empty with exports = Option.toList exports |}
 
 let private createExternalForValue (ctx: Context) (rename: string -> string) (s: CurrentScope) attr comments name ty =
   let fallback () =
@@ -1776,10 +1778,12 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
       let ctx = ctx |> Context.ofChildNamespace k
       let result = emitModule flags ctx v
       let openTypesModule =
-        let hasTypeDefinitions = result.types |> List.isEmpty |> not
-        v.value
-        |> Option.map (fun v -> hasTypeDefinitions && v.openTypesModule)
-        |> Option.defaultValue hasTypeDefinitions
+        if flags.isReservedModule then false
+        else
+          let hasTypeDefinitions = result.types |> List.isEmpty |> not
+          v.value
+          |> Option.map (fun v -> hasTypeDefinitions && v.openTypesModule)
+          |> Option.defaultValue hasTypeDefinitions
       {| name = name; origName = k |}, openTypesModule, result)
 
   let items =
@@ -1856,7 +1860,7 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
           | Choice3Of5 b -> yield! Binding.emitForInterface b
           | Choice5Of5 c -> yield c
           | _ -> ()
-      // yield! exports.intf
+      yield! exports.intf
     ]
 
   let impl =
@@ -1885,7 +1889,7 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
           | Choice3Of5 b -> yield! Binding.emitForImplementation b
           | Choice5Of5 c -> yield c
           | _ -> ()
-      // yield! exports.impl
+      yield! exports.impl
     ]
 
   let comments =
@@ -1894,13 +1898,6 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
   {| imports = imports; types = types; intf = intf; impl = impl; comments = comments |}
 
 and emitExportModule (ctx: Context) (exports: ExportItem list) : EmitModuleResult =
-  let emitComment comments origText = [
-    let hasDocComment = not (List.isEmpty comments)
-    yield commentStr origText |> TypeDefText
-    if hasDocComment then
-      yield comments |> emitComments |> concat newline |> comment |> TypeDefText
-  ]
-
   let emitModuleAlias name (i: Ident) =
     if i.kind |> Option.map Kind.generatesReScriptModule |> Option.defaultValue false then
       [ Statement.moduleAlias
@@ -1931,18 +1928,9 @@ and emitExportModule (ctx: Context) (exports: ExportItem list) : EmitModuleResul
         | ES6Export e :: rest ->
           let name = e.renameAs |> Option.defaultValue (e.target.name |> List.last)
           go' (acc |> setItems ["Export"] (emitModuleAlias name e.target)) rest
-      let acc =
-        let generatesExportModule =
-          clauses |> List.exists (function ES6Export _ | ES6DefaultExport _ -> true | _ -> false)
-        if generatesExportModule then
-          acc |> setItems ["Export"] (emitComment export.comments export.origText)
-        else
-          acc |> addItems (emitComment export.comments export.origText)
       go false (go' acc clauses) rest
     | ExportItem.ReExport export :: rest ->
       // TODO
-      let acc =
-        acc |> setItems ["Export"] (emitComment export.comments export.origText)
       go isFirst acc rest
 
   let st = go true Trie.empty exports

@@ -57,6 +57,8 @@ module Option =
     | None -> f (); None
 
 module Result =
+  let ofOption opt =
+    match opt with Some x -> Ok x | None -> Error (Unchecked.defaultof<_>)
   let toOption result =
     match result with Ok x -> Some x | Error _ -> None
 

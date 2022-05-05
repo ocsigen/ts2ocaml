@@ -4213,6 +4213,11 @@ module MultiCacheQueryOptions : sig
   val create: cacheName:string -> unit -> t [@@js.builder]
   val cast_from: 'tags this -> t [@@js.custom let cast_from = Obj.magic]
 end
+
+(**
+  `URLSearchParams` class is a global reference for `require('url').URLSearchParams`
+  https://nodejs.org/api/url.html#class-urlsearchparams
+*)
 module[@js.scope "URLSearchParams"] URLSearchParams : sig
   type t = [`URLSearchParams | (string * string) IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -4268,7 +4273,13 @@ module[@js.scope "URLSearchParams"] URLSearchParams : sig
   val toString': unit -> string [@@js.global "toString"]
 end
 
-(** The URL interface represents an object providing static methods used for creating object URLs. *)
+(**
+  The URL interface represents an object providing static methods used for creating object URLs.
+  
+  
+  `URL` class is a global reference for `require('url').URL`
+  https://nodejs.org/api/url.html#the-whatwg-url-api
+*)
 module[@js.scope "URL"] URL : sig
   type t = [`URL] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t

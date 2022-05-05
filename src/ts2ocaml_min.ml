@@ -68,14 +68,14 @@ let intf_of_js _ x = (x : _ intf)
 module Intf =
   struct
     type 'tags t = 'tags intf
-    let rec t_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags t = fun
-      (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x23 : Ojs.t) -> intf_of_js __tags_of_js x23
-    and t_to_js : 'tags . ('tags -> Ojs.t) -> 'tags t -> Ojs.t = fun (type
-      __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x21 : __tags intf) -> intf_to_js __tags_to_js x21
+    let rec t_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags t =
+      fun (type __tags) ->
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x23 : Ojs.t) -> intf_of_js __tags_of_js x23
+    and t_to_js : 'tags . ('tags -> Ojs.t) -> 'tags t -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x21 : __tags intf) -> intf_to_js __tags_to_js x21
   end
 type untyped_object = [ `Object ] intf
 let rec untyped_object_of_js : Ojs.t -> untyped_object = Obj.magic

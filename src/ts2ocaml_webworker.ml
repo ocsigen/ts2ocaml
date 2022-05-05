@@ -26,12 +26,12 @@ module PerformanceMeasureOptions =
       'tags intf constraint 'tags = [> `PerformanceMeasureOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x9 : Ojs.t) -> intf_of_js __tags_of_js x9
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x7 : __tags intf) -> intf_to_js __tags_to_js x7
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x9 : Ojs.t) -> intf_of_js __tags_of_js x9
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x7 : __tags intf) -> intf_to_js __tags_to_js x7
     let (get_detail : 'tags this -> any) =
       fun (x11 : 'tags this) ->
         any_of_js (Ojs.get_prop_ascii (this_to_js Obj.magic x11) "detail")
@@ -154,12 +154,12 @@ module PerformanceEntry =
     type 'tags this = 'tags intf constraint 'tags = [> `PerformanceEntry ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x54 : Ojs.t) -> intf_of_js __tags_of_js x54
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x52 : __tags intf) -> intf_to_js __tags_to_js x52
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x54 : Ojs.t) -> intf_of_js __tags_of_js x54
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x52 : __tags intf) -> intf_to_js __tags_to_js x52
     let (get_duration : 'tags this -> DOMHighResTimeStamp.t) =
       fun (x56 : 'tags this) ->
         DOMHighResTimeStamp.t_of_js
@@ -204,12 +204,12 @@ module PerformanceMeasure =
     type 'tags this = 'tags intf constraint 'tags = [> `PerformanceMeasure ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x70 : Ojs.t) -> intf_of_js __tags_of_js x70
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x68 : __tags intf) -> intf_to_js __tags_to_js x68
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x70 : Ojs.t) -> intf_of_js __tags_of_js x70
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x68 : __tags intf) -> intf_to_js __tags_to_js x68
     let (get_detail : 'tags this -> any) =
       fun (x72 : 'tags this) ->
         any_of_js (Ojs.get_prop_ascii (this_to_js Obj.magic x72) "detail")
@@ -244,12 +244,12 @@ module PerformanceMarkOptions =
       'tags intf constraint 'tags = [> `PerformanceMarkOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x80 : Ojs.t) -> intf_of_js __tags_of_js x80
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x78 : __tags intf) -> intf_to_js __tags_to_js x78
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x80 : Ojs.t) -> intf_of_js __tags_of_js x80
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x78 : __tags intf) -> intf_to_js __tags_to_js x78
     let (get_detail : 'tags this -> any) =
       fun (x82 : 'tags this) ->
         any_of_js (Ojs.get_prop_ascii (this_to_js Obj.magic x82) "detail")
@@ -292,12 +292,12 @@ module PerformanceMark =
     type 'tags this = 'tags intf constraint 'tags = [> `PerformanceMark ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x99 : Ojs.t) -> intf_of_js __tags_of_js x99
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x97 : __tags intf) -> intf_to_js __tags_to_js x97
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x99 : Ojs.t) -> intf_of_js __tags_of_js x99
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x97 : __tags intf) -> intf_to_js __tags_to_js x97
     let (get_detail : 'tags this -> any) =
       fun (x101 : 'tags this) ->
         any_of_js (Ojs.get_prop_ascii (this_to_js Obj.magic x101) "detail")
@@ -357,12 +357,12 @@ module EventInit =
     type 'tags this = 'tags intf constraint 'tags = [> `EventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x119 : Ojs.t) -> intf_of_js __tags_of_js x119
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x117 : __tags intf) -> intf_to_js __tags_to_js x117
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x119 : Ojs.t) -> intf_of_js __tags_of_js x119
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x117 : __tags intf) -> intf_to_js __tags_to_js x117
     let (get_bubbles : 'tags this -> bool) =
       fun (x121 : 'tags this) ->
         Ojs.bool_of_js
@@ -417,12 +417,12 @@ module EventListenerOptions =
       'tags intf constraint 'tags = [> `EventListenerOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x144 : Ojs.t) -> intf_of_js __tags_of_js x144
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x142 : __tags intf) -> intf_to_js __tags_to_js x142
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x144 : Ojs.t) -> intf_of_js __tags_of_js x144
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x142 : __tags intf) -> intf_to_js __tags_to_js x142
     let (get_capture : 'tags this -> bool) =
       fun (x146 : 'tags this) ->
         Ojs.bool_of_js
@@ -506,12 +506,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `AbortSignal ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x157 : Ojs.t) -> intf_of_js __tags_of_js x157
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x155 : __tags intf) -> intf_to_js __tags_to_js x155
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x157 : Ojs.t) -> intf_of_js __tags_of_js x157
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x155 : __tags intf) -> intf_to_js __tags_to_js x155
     let (get_aborted : 'tags this -> bool) =
       fun (x159 : 'tags this) ->
         Ojs.bool_of_js
@@ -773,12 +773,12 @@ module rec
       'tags intf constraint 'tags = [> `AddEventListenerOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x220 : Ojs.t) -> intf_of_js __tags_of_js x220
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x218 : __tags intf) -> intf_to_js __tags_to_js x218
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x220 : Ojs.t) -> intf_of_js __tags_of_js x220
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x218 : __tags intf) -> intf_to_js __tags_to_js x218
     let (get_once : 'tags this -> bool) =
       fun (x222 : 'tags this) ->
         Ojs.bool_of_js
@@ -881,13 +881,14 @@ module rec
          type tags_0 = tags
          type 'tags this = 'tags intf constraint 'tags = [> `Event ]
          let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-           = fun (type __tags) ->
-           fun (__tags_of_js : Ojs.t -> __tags) ->
-             fun (x245 : Ojs.t) -> intf_of_js __tags_of_js x245
+           =
+           fun (type __tags) ->
+             fun (__tags_of_js : Ojs.t -> __tags) ->
+               fun (x245 : Ojs.t) -> intf_of_js __tags_of_js x245
          and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
            fun (type __tags) ->
-           fun (__tags_to_js : __tags -> Ojs.t) ->
-             fun (x243 : __tags intf) -> intf_to_js __tags_to_js x243
+             fun (__tags_to_js : __tags -> Ojs.t) ->
+               fun (x243 : __tags intf) -> intf_to_js __tags_to_js x243
          let (get_bubbles : 'tags this -> bool) =
            fun (x247 : 'tags this) ->
              Ojs.bool_of_js
@@ -1100,15 +1101,15 @@ module rec
               type 'tags this =
                 'tags intf constraint 'tags = [> `EventListener ]
               let rec this_of_js :
-                'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this = fun (type
-                __tags) ->
-                fun (__tags_of_js : Ojs.t -> __tags) ->
-                  fun (x316 : Ojs.t) -> intf_of_js __tags_of_js x316
+                'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
+                fun (type __tags) ->
+                  fun (__tags_of_js : Ojs.t -> __tags) ->
+                    fun (x316 : Ojs.t) -> intf_of_js __tags_of_js x316
               and this_to_js :
-                'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun (type
-                __tags) ->
-                fun (__tags_to_js : __tags -> Ojs.t) ->
-                  fun (x314 : __tags intf) -> intf_to_js __tags_to_js x314
+                'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+                fun (type __tags) ->
+                  fun (__tags_to_js : __tags -> Ojs.t) ->
+                    fun (x314 : __tags intf) -> intf_to_js __tags_to_js x314
               let (apply : 'tags this -> evt:Event.t -> unit) =
                 fun (x319 : 'tags this) ->
                   fun ~evt:(x318 : Event.t) ->
@@ -1154,16 +1155,16 @@ module rec
                    type 'tags this =
                      'tags intf constraint 'tags = [> `EventListenerObject ]
                    let rec this_of_js :
-                     'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this = fun
-                     (type __tags) ->
-                     fun (__tags_of_js : Ojs.t -> __tags) ->
-                       fun (x325 : Ojs.t) -> intf_of_js __tags_of_js x325
+                     'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
+                     fun (type __tags) ->
+                       fun (__tags_of_js : Ojs.t -> __tags) ->
+                         fun (x325 : Ojs.t) -> intf_of_js __tags_of_js x325
                    and this_to_js :
-                     'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-                     (type __tags) ->
-                     fun (__tags_to_js : __tags -> Ojs.t) ->
-                       fun (x323 : __tags intf) ->
-                         intf_to_js __tags_to_js x323
+                     'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+                     fun (type __tags) ->
+                       fun (__tags_to_js : __tags -> Ojs.t) ->
+                         fun (x323 : __tags intf) ->
+                           intf_to_js __tags_to_js x323
                    let (handleEvent : 'tags this -> object_:Event.t -> unit)
                      =
                      fun (x328 : 'tags this) ->
@@ -1269,17 +1270,19 @@ module rec
                              let rec this_of_js :
                                'tags .
                                  (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-                               = fun (type __tags) ->
-                               fun (__tags_of_js : Ojs.t -> __tags) ->
-                                 fun (x342 : Ojs.t) ->
-                                   intf_of_js __tags_of_js x342
+                               =
+                               fun (type __tags) ->
+                                 fun (__tags_of_js : Ojs.t -> __tags) ->
+                                   fun (x342 : Ojs.t) ->
+                                     intf_of_js __tags_of_js x342
                              and this_to_js :
                                'tags .
                                  ('tags -> Ojs.t) -> 'tags this -> Ojs.t
-                               = fun (type __tags) ->
-                               fun (__tags_to_js : __tags -> Ojs.t) ->
-                                 fun (x340 : __tags intf) ->
-                                   intf_to_js __tags_to_js x340
+                               =
+                               fun (type __tags) ->
+                                 fun (__tags_to_js : __tags -> Ojs.t) ->
+                                   fun (x340 : __tags intf) ->
+                                     intf_to_js __tags_to_js x340
                              let (addEventListener :
                                'tags this ->
                                  type_:string ->
@@ -1454,12 +1457,12 @@ module Performance =
     type 'tags this = 'tags intf constraint 'tags = [> `Performance ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x373 : Ojs.t) -> intf_of_js __tags_of_js x373
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x371 : __tags intf) -> intf_to_js __tags_to_js x371
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x373 : Ojs.t) -> intf_of_js __tags_of_js x373
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x371 : __tags intf) -> intf_to_js __tags_to_js x371
     let (get_onresourcetimingbufferfull :
       'tags this -> (this:t -> ev:Event.t -> any) option) =
       fun (x375 : 'tags this) ->
@@ -2185,12 +2188,12 @@ module StorageEstimate =
     type 'tags this = 'tags intf constraint 'tags = [> `StorageEstimate ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x555 : Ojs.t) -> intf_of_js __tags_of_js x555
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x553 : __tags intf) -> intf_to_js __tags_to_js x553
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x555 : Ojs.t) -> intf_of_js __tags_of_js x555
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x553 : __tags intf) -> intf_to_js __tags_to_js x553
     let (get_quota : 'tags this -> float) =
       fun (x557 : 'tags this) ->
         Ojs.float_of_js
@@ -2233,12 +2236,12 @@ module FileSystemRemoveOptions =
       'tags intf constraint 'tags = [> `FileSystemRemoveOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x574 : Ojs.t) -> intf_of_js __tags_of_js x574
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x572 : __tags intf) -> intf_to_js __tags_to_js x572
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x574 : Ojs.t) -> intf_of_js __tags_of_js x574
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x572 : __tags intf) -> intf_to_js __tags_to_js x572
     let (get_recursive : 'tags this -> bool) =
       fun (x576 : 'tags this) ->
         Ojs.bool_of_js
@@ -2270,12 +2273,12 @@ module FileSystemGetFileOptions =
       'tags intf constraint 'tags = [> `FileSystemGetFileOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x587 : Ojs.t) -> intf_of_js __tags_of_js x587
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x585 : __tags intf) -> intf_to_js __tags_to_js x585
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x587 : Ojs.t) -> intf_of_js __tags_of_js x587
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x585 : __tags intf) -> intf_to_js __tags_to_js x585
     let (get_create : 'tags this -> bool) =
       fun (x589 : 'tags this) ->
         Ojs.bool_of_js
@@ -2307,12 +2310,12 @@ module FileSystemGetDirectoryOptions =
       'tags intf constraint 'tags = [> `FileSystemGetDirectoryOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x600 : Ojs.t) -> intf_of_js __tags_of_js x600
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x598 : __tags intf) -> intf_to_js __tags_to_js x598
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x600 : Ojs.t) -> intf_of_js __tags_of_js x600
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x598 : __tags intf) -> intf_to_js __tags_to_js x598
     let (get_create : 'tags this -> bool) =
       fun (x602 : 'tags this) ->
         Ojs.bool_of_js
@@ -2362,12 +2365,12 @@ module FileSystemHandle =
     type 'tags this = 'tags intf constraint 'tags = [> `FileSystemHandle ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x618 : Ojs.t) -> intf_of_js __tags_of_js x618
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x616 : __tags intf) -> intf_to_js __tags_to_js x616
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x618 : Ojs.t) -> intf_of_js __tags_of_js x618
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x616 : __tags intf) -> intf_to_js __tags_to_js x616
     let (get_kind : 'tags this -> FileSystemHandleKind.t) =
       fun (x620 : 'tags this) ->
         FileSystemHandleKind.t_of_js
@@ -2426,12 +2429,12 @@ module BlobPropertyBag =
     type 'tags this = 'tags intf constraint 'tags = [> `BlobPropertyBag ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x637 : Ojs.t) -> intf_of_js __tags_of_js x637
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x635 : __tags intf) -> intf_to_js __tags_to_js x635
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x637 : Ojs.t) -> intf_of_js __tags_of_js x637
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x635 : __tags intf) -> intf_to_js __tags_to_js x635
     let (get_endings : 'tags this -> EndingType.t) =
       fun (x639 : 'tags this) ->
         EndingType.t_of_js
@@ -2473,12 +2476,12 @@ module FilePropertyBag =
     type 'tags this = 'tags intf constraint 'tags = [> `FilePropertyBag ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x656 : Ojs.t) -> intf_of_js __tags_of_js x656
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x654 : __tags intf) -> intf_to_js __tags_to_js x654
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x656 : Ojs.t) -> intf_of_js __tags_of_js x656
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x654 : __tags intf) -> intf_to_js __tags_to_js x654
     let (get_lastModified : 'tags this -> float) =
       fun (x658 : 'tags this) ->
         Ojs.float_of_js
@@ -2503,13 +2506,14 @@ module ReadableStreamDefaultController =
       fun _R -> Obj.magic
     and t_to_js : 'R . ('R -> Ojs.t) -> 'R t -> Ojs.t = fun _R -> Obj.magic
     type 'R t_1 = 'R t
-    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 = fun (type
-      __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x667 : Ojs.t) -> t_of_js __R_of_js x667
-    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t = fun (type __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x665 : __R t) -> t_to_js __R_to_js x665
+    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x667 : Ojs.t) -> t_of_js __R_of_js x667
+    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x665 : __R t) -> t_to_js __R_to_js x665
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x671 : Ojs.t) -> t_of_js any_of_js x671
@@ -2524,17 +2528,21 @@ module ReadableStreamDefaultController =
     let rec this_of_js :
       'tags 'R .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'R) -> Ojs.t -> ('tags, 'R) this
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__R_of_js : Ojs.t -> __R) ->
-          fun (x675 : Ojs.t) -> intf_of_js __tags_of_js x675
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__R_of_js : Ojs.t -> __R) ->
+              fun (x675 : Ojs.t) -> intf_of_js __tags_of_js x675
     and this_to_js :
       'tags 'R .
         ('tags -> Ojs.t) -> ('R -> Ojs.t) -> ('tags, 'R) this -> Ojs.t
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__R_to_js : __R -> Ojs.t) ->
-          fun (x673 : __tags intf) -> intf_to_js __tags_to_js x673
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__R_to_js : __R -> Ojs.t) ->
+              fun (x673 : __tags intf) -> intf_to_js __tags_to_js x673
     let (get_desiredSize : ('tags, 'R) this -> float option) =
       fun (x677 : ('tags, 'R) this) ->
         Ojs.option_of_js Ojs.float_of_js
@@ -2594,22 +2602,25 @@ module ReadableStreamDefaultController =
 module ReadableStreamController =
   struct
     type 'T t = 'T ReadableStreamDefaultController.t
-    let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t = fun (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x700 : Ojs.t) ->
-          ReadableStreamDefaultController.t_of_js __T_of_js x700
-    and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x698 : __T ReadableStreamDefaultController.t) ->
-          ReadableStreamDefaultController.t_to_js __T_to_js x698
+    let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x700 : Ojs.t) ->
+            ReadableStreamDefaultController.t_of_js __T_of_js x700
+    and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x698 : __T ReadableStreamDefaultController.t) ->
+            ReadableStreamDefaultController.t_to_js __T_to_js x698
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x704 : Ojs.t) -> t_of_js __T_of_js x704
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x702 : __T t) -> t_to_js __T_to_js x702
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x704 : Ojs.t) -> t_of_js __T_of_js x704
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x702 : __T t) -> t_to_js __T_to_js x702
   end
 module UnderlyingSourceStartCallback =
   struct
@@ -2618,13 +2629,14 @@ module UnderlyingSourceStartCallback =
       fun _R -> Obj.magic
     and t_to_js : 'R . ('R -> Ojs.t) -> 'R t -> Ojs.t = fun _R -> Obj.magic
     type 'R t_1 = 'R t
-    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 = fun (type
-      __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x708 : Ojs.t) -> t_of_js __R_of_js x708
-    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t = fun (type __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x706 : __R t) -> t_to_js __R_to_js x706
+    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x708 : Ojs.t) -> t_of_js __R_of_js x708
+    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x706 : __R t) -> t_to_js __R_to_js x706
     type 'R tags = [ `UnderlyingSourceStartCallback of 'R ]
     type 'R tags_1 = 'R tags
     type ('tags, 'R) this =
@@ -2632,17 +2644,21 @@ module UnderlyingSourceStartCallback =
     let rec this_of_js :
       'tags 'R .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'R) -> Ojs.t -> ('tags, 'R) this
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__R_of_js : Ojs.t -> __R) ->
-          fun (x712 : Ojs.t) -> intf_of_js __tags_of_js x712
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__R_of_js : Ojs.t -> __R) ->
+              fun (x712 : Ojs.t) -> intf_of_js __tags_of_js x712
     and this_to_js :
       'tags 'R .
         ('tags -> Ojs.t) -> ('R -> Ojs.t) -> ('tags, 'R) this -> Ojs.t
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__R_to_js : __R -> Ojs.t) ->
-          fun (x710 : __tags intf) -> intf_to_js __tags_to_js x710
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__R_to_js : __R -> Ojs.t) ->
+              fun (x710 : __tags intf) -> intf_to_js __tags_to_js x710
     let (apply :
       ('tags, 'R) this -> controller:'R ReadableStreamController.t -> any) =
       fun (x716 : ('tags, 'R) this) ->
@@ -2659,13 +2675,14 @@ module UnderlyingSourcePullCallback =
       fun _R -> Obj.magic
     and t_to_js : 'R . ('R -> Ojs.t) -> 'R t -> Ojs.t = fun _R -> Obj.magic
     type 'R t_1 = 'R t
-    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 = fun (type
-      __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x721 : Ojs.t) -> t_of_js __R_of_js x721
-    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t = fun (type __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x719 : __R t) -> t_to_js __R_to_js x719
+    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x721 : Ojs.t) -> t_of_js __R_of_js x721
+    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x719 : __R t) -> t_to_js __R_to_js x719
     type 'R tags = [ `UnderlyingSourcePullCallback of 'R ]
     type 'R tags_1 = 'R tags
     type ('tags, 'R) this =
@@ -2673,17 +2690,21 @@ module UnderlyingSourcePullCallback =
     let rec this_of_js :
       'tags 'R .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'R) -> Ojs.t -> ('tags, 'R) this
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__R_of_js : Ojs.t -> __R) ->
-          fun (x725 : Ojs.t) -> intf_of_js __tags_of_js x725
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__R_of_js : Ojs.t -> __R) ->
+              fun (x725 : Ojs.t) -> intf_of_js __tags_of_js x725
     and this_to_js :
       'tags 'R .
         ('tags -> Ojs.t) -> ('R -> Ojs.t) -> ('tags, 'R) this -> Ojs.t
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__R_to_js : __R -> Ojs.t) ->
-          fun (x723 : __tags intf) -> intf_to_js __tags_to_js x723
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__R_to_js : __R -> Ojs.t) ->
+              fun (x723 : __tags intf) -> intf_to_js __tags_to_js x723
     let (apply :
       ('tags, 'R) this ->
         controller:'R ReadableStreamController.t ->
@@ -2711,12 +2732,12 @@ module UnderlyingSourceCancelCallback =
       'tags intf constraint 'tags = [> `UnderlyingSourceCancelCallback ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x739 : Ojs.t) -> intf_of_js __tags_of_js x739
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x737 : __tags intf) -> intf_to_js __tags_to_js x737
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x739 : Ojs.t) -> intf_of_js __tags_of_js x739
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x737 : __tags intf) -> intf_to_js __tags_to_js x737
     let (apply :
       'tags this ->
         ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2)
@@ -2748,13 +2769,14 @@ module UnderlyingSource =
       fun _R -> Obj.magic
     and t_to_js : 'R . ('R -> Ojs.t) -> 'R t -> Ojs.t = fun _R -> Obj.magic
     type 'R t_1 = 'R t
-    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 = fun (type
-      __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x751 : Ojs.t) -> t_of_js __R_of_js x751
-    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t = fun (type __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x749 : __R t) -> t_to_js __R_to_js x749
+    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x751 : Ojs.t) -> t_of_js __R_of_js x751
+    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x749 : __R t) -> t_to_js __R_to_js x749
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x755 : Ojs.t) -> t_of_js any_of_js x755
@@ -2768,17 +2790,21 @@ module UnderlyingSource =
     let rec this_of_js :
       'tags 'R .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'R) -> Ojs.t -> ('tags, 'R) this
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__R_of_js : Ojs.t -> __R) ->
-          fun (x759 : Ojs.t) -> intf_of_js __tags_of_js x759
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__R_of_js : Ojs.t -> __R) ->
+              fun (x759 : Ojs.t) -> intf_of_js __tags_of_js x759
     and this_to_js :
       'tags 'R .
         ('tags -> Ojs.t) -> ('R -> Ojs.t) -> ('tags, 'R) this -> Ojs.t
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__R_to_js : __R -> Ojs.t) ->
-          fun (x757 : __tags intf) -> intf_to_js __tags_to_js x757
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__R_to_js : __R -> Ojs.t) ->
+              fun (x757 : __tags intf) -> intf_to_js __tags_to_js x757
     let (get_cancel : ('tags, 'R) this -> UnderlyingSourceCancelCallback.t) =
       fun (x761 : ('tags, 'R) this) ->
         UnderlyingSourceCancelCallback.t_of_js
@@ -2857,12 +2883,12 @@ module StreamPipeOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `StreamPipeOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x806 : Ojs.t) -> intf_of_js __tags_of_js x806
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x804 : __tags intf) -> intf_to_js __tags_to_js x804
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x806 : Ojs.t) -> intf_of_js __tags_of_js x806
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x804 : __tags intf) -> intf_to_js __tags_to_js x804
     let (get_preventAbort : 'tags this -> bool) =
       fun (x808 : 'tags this) ->
         Ojs.bool_of_js
@@ -2931,12 +2957,12 @@ module WritableStreamDefaultController =
       'tags intf constraint 'tags = [> `WritableStreamDefaultController ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x837 : Ojs.t) -> intf_of_js __tags_of_js x837
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x835 : __tags intf) -> intf_to_js __tags_to_js x835
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x837 : Ojs.t) -> intf_of_js __tags_of_js x837
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x835 : __tags intf) -> intf_to_js __tags_to_js x835
     let (error : 'tags this -> ?e:any -> unit -> unit) =
       fun (x842 : 'tags this) ->
         fun ?e:(x839 : any option) ->
@@ -2975,13 +3001,14 @@ module UnderlyingSinkWriteCallback =
       fun _W -> Obj.magic
     and t_to_js : 'W . ('W -> Ojs.t) -> 'W t -> Ojs.t = fun _W -> Obj.magic
     type 'W t_1 = 'W t
-    let rec t_1_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W t_1 = fun (type
-      __W) ->
-      fun (__W_of_js : Ojs.t -> __W) ->
-        fun (x847 : Ojs.t) -> t_of_js __W_of_js x847
-    and t_1_to_js : 'W . ('W -> Ojs.t) -> 'W t_1 -> Ojs.t = fun (type __W) ->
-      fun (__W_to_js : __W -> Ojs.t) ->
-        fun (x845 : __W t) -> t_to_js __W_to_js x845
+    let rec t_1_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W t_1 =
+      fun (type __W) ->
+        fun (__W_of_js : Ojs.t -> __W) ->
+          fun (x847 : Ojs.t) -> t_of_js __W_of_js x847
+    and t_1_to_js : 'W . ('W -> Ojs.t) -> 'W t_1 -> Ojs.t =
+      fun (type __W) ->
+        fun (__W_to_js : __W -> Ojs.t) ->
+          fun (x845 : __W t) -> t_to_js __W_to_js x845
     type 'W tags = [ `UnderlyingSinkWriteCallback of 'W ]
     type 'W tags_1 = 'W tags
     type ('tags, 'W) this =
@@ -2989,17 +3016,21 @@ module UnderlyingSinkWriteCallback =
     let rec this_of_js :
       'tags 'W .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'W) -> Ojs.t -> ('tags, 'W) this
-      = fun (type __tags) -> fun (type __W) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__W_of_js : Ojs.t -> __W) ->
-          fun (x851 : Ojs.t) -> intf_of_js __tags_of_js x851
+      =
+      fun (type __tags) ->
+        fun (type __W) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__W_of_js : Ojs.t -> __W) ->
+              fun (x851 : Ojs.t) -> intf_of_js __tags_of_js x851
     and this_to_js :
       'tags 'W .
         ('tags -> Ojs.t) -> ('W -> Ojs.t) -> ('tags, 'W) this -> Ojs.t
-      = fun (type __tags) -> fun (type __W) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__W_to_js : __W -> Ojs.t) ->
-          fun (x849 : __tags intf) -> intf_to_js __tags_to_js x849
+      =
+      fun (type __tags) ->
+        fun (type __W) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__W_to_js : __W -> Ojs.t) ->
+              fun (x849 : __tags intf) -> intf_to_js __tags_to_js x849
     let (apply :
       ('tags, 'W) this ->
         chunk:'W ->
@@ -3031,12 +3062,12 @@ module UnderlyingSinkStartCallback =
       'tags intf constraint 'tags = [> `UnderlyingSinkStartCallback ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x865 : Ojs.t) -> intf_of_js __tags_of_js x865
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x863 : __tags intf) -> intf_to_js __tags_to_js x863
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x865 : Ojs.t) -> intf_of_js __tags_of_js x865
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x863 : __tags intf) -> intf_to_js __tags_to_js x863
     let (apply :
       'tags this -> controller:WritableStreamDefaultController.t -> any) =
       fun (x868 : 'tags this) ->
@@ -3060,12 +3091,12 @@ module UnderlyingSinkCloseCallback =
       'tags intf constraint 'tags = [> `UnderlyingSinkCloseCallback ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x874 : Ojs.t) -> intf_of_js __tags_of_js x874
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x872 : __tags intf) -> intf_to_js __tags_to_js x872
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x874 : Ojs.t) -> intf_of_js __tags_of_js x874
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x872 : __tags intf) -> intf_to_js __tags_to_js x872
     let (apply : 'tags this -> (unit, unit PromiseLike.t_1) union2) =
       fun (x876 : 'tags this) ->
         union2_of_js Ojs.unit_of_js
@@ -3087,12 +3118,12 @@ module UnderlyingSinkAbortCallback =
       'tags intf constraint 'tags = [> `UnderlyingSinkAbortCallback ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x885 : Ojs.t) -> intf_of_js __tags_of_js x885
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x883 : __tags intf) -> intf_to_js __tags_to_js x883
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x885 : Ojs.t) -> intf_of_js __tags_of_js x885
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x883 : __tags intf) -> intf_to_js __tags_to_js x883
     let (apply :
       'tags this ->
         ?reason:any -> unit -> (unit, unit PromiseLike.t_1) union2)
@@ -3124,13 +3155,14 @@ module UnderlyingSink =
       fun _W -> Obj.magic
     and t_to_js : 'W . ('W -> Ojs.t) -> 'W t -> Ojs.t = fun _W -> Obj.magic
     type 'W t_1 = 'W t
-    let rec t_1_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W t_1 = fun (type
-      __W) ->
-      fun (__W_of_js : Ojs.t -> __W) ->
-        fun (x897 : Ojs.t) -> t_of_js __W_of_js x897
-    and t_1_to_js : 'W . ('W -> Ojs.t) -> 'W t_1 -> Ojs.t = fun (type __W) ->
-      fun (__W_to_js : __W -> Ojs.t) ->
-        fun (x895 : __W t) -> t_to_js __W_to_js x895
+    let rec t_1_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W t_1 =
+      fun (type __W) ->
+        fun (__W_of_js : Ojs.t -> __W) ->
+          fun (x897 : Ojs.t) -> t_of_js __W_of_js x897
+    and t_1_to_js : 'W . ('W -> Ojs.t) -> 'W t_1 -> Ojs.t =
+      fun (type __W) ->
+        fun (__W_to_js : __W -> Ojs.t) ->
+          fun (x895 : __W t) -> t_to_js __W_to_js x895
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x901 : Ojs.t) -> t_of_js any_of_js x901
@@ -3144,17 +3176,21 @@ module UnderlyingSink =
     let rec this_of_js :
       'tags 'W .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'W) -> Ojs.t -> ('tags, 'W) this
-      = fun (type __tags) -> fun (type __W) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__W_of_js : Ojs.t -> __W) ->
-          fun (x905 : Ojs.t) -> intf_of_js __tags_of_js x905
+      =
+      fun (type __tags) ->
+        fun (type __W) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__W_of_js : Ojs.t -> __W) ->
+              fun (x905 : Ojs.t) -> intf_of_js __tags_of_js x905
     and this_to_js :
       'tags 'W .
         ('tags -> Ojs.t) -> ('W -> Ojs.t) -> ('tags, 'W) this -> Ojs.t
-      = fun (type __tags) -> fun (type __W) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__W_to_js : __W -> Ojs.t) ->
-          fun (x903 : __tags intf) -> intf_to_js __tags_to_js x903
+      =
+      fun (type __tags) ->
+        fun (type __W) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__W_to_js : __W -> Ojs.t) ->
+              fun (x903 : __tags intf) -> intf_to_js __tags_to_js x903
     let (get_abort : ('tags, 'W) this -> UnderlyingSinkAbortCallback.t) =
       fun (x907 : ('tags, 'W) this) ->
         UnderlyingSinkAbortCallback.t_of_js
@@ -3240,13 +3276,14 @@ module QueuingStrategySize =
       fun _T -> Obj.magic
     and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun _T -> Obj.magic
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x955 : Ojs.t) -> t_of_js __T_of_js x955
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x953 : __T t) -> t_to_js __T_to_js x953
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x955 : Ojs.t) -> t_of_js __T_of_js x955
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x953 : __T t) -> t_to_js __T_to_js x953
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x959 : Ojs.t) -> t_of_js any_of_js x959
@@ -3260,17 +3297,21 @@ module QueuingStrategySize =
     let rec this_of_js :
       'tags 'T .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'T) -> Ojs.t -> ('tags, 'T) this
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x963 : Ojs.t) -> intf_of_js __tags_of_js x963
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__T_of_js : Ojs.t -> __T) ->
+              fun (x963 : Ojs.t) -> intf_of_js __tags_of_js x963
     and this_to_js :
       'tags 'T .
         ('tags -> Ojs.t) -> ('T -> Ojs.t) -> ('tags, 'T) this -> Ojs.t
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x961 : __tags intf) -> intf_to_js __tags_to_js x961
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__T_to_js : __T -> Ojs.t) ->
+              fun (x961 : __tags intf) -> intf_to_js __tags_to_js x961
     let (apply : ('tags, 'T) this -> chunk:'T -> float) =
       fun (x966 : ('tags, 'T) this) ->
         fun ~chunk:(x965 : 'T) ->
@@ -3286,13 +3327,14 @@ module QueuingStrategy =
       fun _T -> Obj.magic
     and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun _T -> Obj.magic
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x971 : Ojs.t) -> t_of_js __T_of_js x971
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x969 : __T t) -> t_to_js __T_to_js x969
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x971 : Ojs.t) -> t_of_js __T_of_js x971
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x969 : __T t) -> t_to_js __T_to_js x969
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x975 : Ojs.t) -> t_of_js any_of_js x975
@@ -3306,17 +3348,21 @@ module QueuingStrategy =
     let rec this_of_js :
       'tags 'T .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'T) -> Ojs.t -> ('tags, 'T) this
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x979 : Ojs.t) -> intf_of_js __tags_of_js x979
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__T_of_js : Ojs.t -> __T) ->
+              fun (x979 : Ojs.t) -> intf_of_js __tags_of_js x979
     and this_to_js :
       'tags 'T .
         ('tags -> Ojs.t) -> ('T -> Ojs.t) -> ('tags, 'T) this -> Ojs.t
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x977 : __tags intf) -> intf_to_js __tags_to_js x977
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__T_to_js : __T -> Ojs.t) ->
+              fun (x977 : __tags intf) -> intf_to_js __tags_to_js x977
     let (get_highWaterMark : ('tags, 'T) this -> float) =
       fun (x981 : ('tags, 'T) this) ->
         Ojs.float_of_js
@@ -3389,13 +3435,14 @@ module rec
       fun _W -> Obj.magic
     and t_to_js : 'W . ('W -> Ojs.t) -> 'W t -> Ojs.t = fun _W -> Obj.magic
     type 'W t_1 = 'W t
-    let rec t_1_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W t_1 = fun (type
-      __W) ->
-      fun (__W_of_js : Ojs.t -> __W) ->
-        fun (x1004 : Ojs.t) -> t_of_js __W_of_js x1004
-    and t_1_to_js : 'W . ('W -> Ojs.t) -> 'W t_1 -> Ojs.t = fun (type __W) ->
-      fun (__W_to_js : __W -> Ojs.t) ->
-        fun (x1002 : __W t) -> t_to_js __W_to_js x1002
+    let rec t_1_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W t_1 =
+      fun (type __W) ->
+        fun (__W_of_js : Ojs.t -> __W) ->
+          fun (x1004 : Ojs.t) -> t_of_js __W_of_js x1004
+    and t_1_to_js : 'W . ('W -> Ojs.t) -> 'W t_1 -> Ojs.t =
+      fun (type __W) ->
+        fun (__W_to_js : __W -> Ojs.t) ->
+          fun (x1002 : __W t) -> t_to_js __W_to_js x1002
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x1008 : Ojs.t) -> t_of_js any_of_js x1008
@@ -3409,17 +3456,21 @@ module rec
     let rec this_of_js :
       'tags 'W .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'W) -> Ojs.t -> ('tags, 'W) this
-      = fun (type __tags) -> fun (type __W) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__W_of_js : Ojs.t -> __W) ->
-          fun (x1012 : Ojs.t) -> intf_of_js __tags_of_js x1012
+      =
+      fun (type __tags) ->
+        fun (type __W) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__W_of_js : Ojs.t -> __W) ->
+              fun (x1012 : Ojs.t) -> intf_of_js __tags_of_js x1012
     and this_to_js :
       'tags 'W .
         ('tags -> Ojs.t) -> ('W -> Ojs.t) -> ('tags, 'W) this -> Ojs.t
-      = fun (type __tags) -> fun (type __W) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__W_to_js : __W -> Ojs.t) ->
-          fun (x1010 : __tags intf) -> intf_to_js __tags_to_js x1010
+      =
+      fun (type __tags) ->
+        fun (type __W) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__W_to_js : __W -> Ojs.t) ->
+              fun (x1010 : __tags intf) -> intf_to_js __tags_to_js x1010
     let (get_locked : ('tags, 'W) this -> bool) =
       fun (x1014 : ('tags, 'W) this) ->
         Ojs.bool_of_js
@@ -3538,13 +3589,14 @@ module rec
       fun _W -> Obj.magic
     and t_to_js : 'W . ('W -> Ojs.t) -> 'W t -> Ojs.t = fun _W -> Obj.magic
     type 'W t_1 = 'W t
-    let rec t_1_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W t_1 = fun (type
-      __W) ->
-      fun (__W_of_js : Ojs.t -> __W) ->
-        fun (x1043 : Ojs.t) -> t_of_js __W_of_js x1043
-    and t_1_to_js : 'W . ('W -> Ojs.t) -> 'W t_1 -> Ojs.t = fun (type __W) ->
-      fun (__W_to_js : __W -> Ojs.t) ->
-        fun (x1041 : __W t) -> t_to_js __W_to_js x1041
+    let rec t_1_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W t_1 =
+      fun (type __W) ->
+        fun (__W_of_js : Ojs.t -> __W) ->
+          fun (x1043 : Ojs.t) -> t_of_js __W_of_js x1043
+    and t_1_to_js : 'W . ('W -> Ojs.t) -> 'W t_1 -> Ojs.t =
+      fun (type __W) ->
+        fun (__W_to_js : __W -> Ojs.t) ->
+          fun (x1041 : __W t) -> t_to_js __W_to_js x1041
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x1047 : Ojs.t) -> t_of_js any_of_js x1047
@@ -3558,17 +3610,21 @@ module rec
     let rec this_of_js :
       'tags 'W .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'W) -> Ojs.t -> ('tags, 'W) this
-      = fun (type __tags) -> fun (type __W) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__W_of_js : Ojs.t -> __W) ->
-          fun (x1051 : Ojs.t) -> intf_of_js __tags_of_js x1051
+      =
+      fun (type __tags) ->
+        fun (type __W) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__W_of_js : Ojs.t -> __W) ->
+              fun (x1051 : Ojs.t) -> intf_of_js __tags_of_js x1051
     and this_to_js :
       'tags 'W .
         ('tags -> Ojs.t) -> ('W -> Ojs.t) -> ('tags, 'W) this -> Ojs.t
-      = fun (type __tags) -> fun (type __W) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__W_to_js : __W -> Ojs.t) ->
-          fun (x1049 : __tags intf) -> intf_to_js __tags_to_js x1049
+      =
+      fun (type __tags) ->
+        fun (type __W) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__W_to_js : __W -> Ojs.t) ->
+              fun (x1049 : __tags intf) -> intf_to_js __tags_to_js x1049
     let (get_closed : ('tags, 'W) this -> undefined Promise.t_1) =
       fun (x1053 : ('tags, 'W) this) ->
         Promise.t_1_of_js undefined_of_js
@@ -3655,12 +3711,12 @@ module ReadableStreamGenericReader =
       'tags intf constraint 'tags = [> `ReadableStreamGenericReader ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1095 : Ojs.t) -> intf_of_js __tags_of_js x1095
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1093 : __tags intf) -> intf_to_js __tags_to_js x1093
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1095 : Ojs.t) -> intf_of_js __tags_of_js x1095
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1093 : __tags intf) -> intf_to_js __tags_to_js x1093
     let (get_closed : 'tags this -> undefined Promise.t_1) =
       fun (x1097 : 'tags this) ->
         Promise.t_1_of_js undefined_of_js
@@ -3692,13 +3748,14 @@ module ReadableStreamDefaultReadValueResult =
       fun _T -> Obj.magic
     and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun _T -> Obj.magic
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x1109 : Ojs.t) -> t_of_js __T_of_js x1109
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x1107 : __T t) -> t_to_js __T_to_js x1107
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x1109 : Ojs.t) -> t_of_js __T_of_js x1109
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x1107 : __T t) -> t_to_js __T_to_js x1107
     type 'T tags = [ `ReadableStreamDefaultReadValueResult of 'T ]
     type 'T tags_1 = 'T tags
     type ('tags, 'T) this =
@@ -3707,17 +3764,21 @@ module ReadableStreamDefaultReadValueResult =
     let rec this_of_js :
       'tags 'T .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'T) -> Ojs.t -> ('tags, 'T) this
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x1113 : Ojs.t) -> intf_of_js __tags_of_js x1113
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__T_of_js : Ojs.t -> __T) ->
+              fun (x1113 : Ojs.t) -> intf_of_js __tags_of_js x1113
     and this_to_js :
       'tags 'T .
         ('tags -> Ojs.t) -> ('T -> Ojs.t) -> ('tags, 'T) this -> Ojs.t
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x1111 : __tags intf) -> intf_to_js __tags_to_js x1111
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__T_to_js : __T -> Ojs.t) ->
+              fun (x1111 : __tags intf) -> intf_to_js __tags_to_js x1111
     let (get_done : ('tags, 'T) this -> [ `L_b_false ]) =
       fun (x1115 : ('tags, 'T) this) ->
         let x1118 =
@@ -3764,12 +3825,12 @@ module ReadableStreamDefaultReadDoneResult =
       'tags intf constraint 'tags = [> `ReadableStreamDefaultReadDoneResult ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1138 : Ojs.t) -> intf_of_js __tags_of_js x1138
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1136 : __tags intf) -> intf_to_js __tags_to_js x1136
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1138 : Ojs.t) -> intf_of_js __tags_of_js x1138
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1136 : __tags intf) -> intf_to_js __tags_to_js x1136
     let (get_done : 'tags this -> [ `L_b_true ]) =
       fun (x1140 : 'tags this) ->
         let x1142 = Ojs.get_prop_ascii (this_to_js Obj.magic x1140) "done" in
@@ -3809,36 +3870,40 @@ module ReadableStreamDefaultReadResult =
     type 'T t =
       [ `U_b_false of 'T ReadableStreamDefaultReadValueResult.t 
       | `U_b_true of ReadableStreamDefaultReadDoneResult.t ]
-    let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t = fun (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x1159 : Ojs.t) ->
-          let x1160 = x1159 in
-          match Ojs.bool_of_js (Ojs.get_prop_ascii x1160 "done") with
-          | false ->
-              `U_b_false
-                (ReadableStreamDefaultReadValueResult.t_of_js __T_of_js x1160)
-          | true ->
-              `U_b_true (ReadableStreamDefaultReadDoneResult.t_of_js x1160)
-    and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun
-          (x1155 :
-            [ `U_b_false of __T ReadableStreamDefaultReadValueResult.t 
-            | `U_b_true of ReadableStreamDefaultReadDoneResult.t ])
-          ->
-          match x1155 with
-          | `U_b_false x1156 ->
-              ReadableStreamDefaultReadValueResult.t_to_js __T_to_js x1156
-          | `U_b_true x1158 ->
-              ReadableStreamDefaultReadDoneResult.t_to_js x1158
+    let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x1159 : Ojs.t) ->
+            let x1160 = x1159 in
+            match Ojs.bool_of_js (Ojs.get_prop_ascii x1160 "done") with
+            | false ->
+                `U_b_false
+                  (ReadableStreamDefaultReadValueResult.t_of_js __T_of_js
+                     x1160)
+            | true ->
+                `U_b_true (ReadableStreamDefaultReadDoneResult.t_of_js x1160)
+    and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun
+            (x1155 :
+              [ `U_b_false of __T ReadableStreamDefaultReadValueResult.t 
+              | `U_b_true of ReadableStreamDefaultReadDoneResult.t ])
+            ->
+            match x1155 with
+            | `U_b_false x1156 ->
+                ReadableStreamDefaultReadValueResult.t_to_js __T_to_js x1156
+            | `U_b_true x1158 ->
+                ReadableStreamDefaultReadDoneResult.t_to_js x1158
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x1164 : Ojs.t) -> t_of_js __T_of_js x1164
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x1162 : __T t) -> t_to_js __T_to_js x1162
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x1164 : Ojs.t) -> t_of_js __T_of_js x1164
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x1162 : __T t) -> t_to_js __T_to_js x1162
   end
 module rec
   ReadableStream:sig
@@ -3890,13 +3955,14 @@ module rec
       fun _R -> Obj.magic
     and t_to_js : 'R . ('R -> Ojs.t) -> 'R t -> Ojs.t = fun _R -> Obj.magic
     type 'R t_1 = 'R t
-    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 = fun (type
-      __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x1168 : Ojs.t) -> t_of_js __R_of_js x1168
-    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t = fun (type __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x1166 : __R t) -> t_to_js __R_to_js x1166
+    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x1168 : Ojs.t) -> t_of_js __R_of_js x1168
+    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x1166 : __R t) -> t_to_js __R_to_js x1166
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x1172 : Ojs.t) -> t_of_js any_of_js x1172
@@ -3910,17 +3976,21 @@ module rec
     let rec this_of_js :
       'tags 'R .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'R) -> Ojs.t -> ('tags, 'R) this
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__R_of_js : Ojs.t -> __R) ->
-          fun (x1176 : Ojs.t) -> intf_of_js __tags_of_js x1176
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__R_of_js : Ojs.t -> __R) ->
+              fun (x1176 : Ojs.t) -> intf_of_js __tags_of_js x1176
     and this_to_js :
       'tags 'R .
         ('tags -> Ojs.t) -> ('R -> Ojs.t) -> ('tags, 'R) this -> Ojs.t
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__R_to_js : __R -> Ojs.t) ->
-          fun (x1174 : __tags intf) -> intf_to_js __tags_to_js x1174
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__R_to_js : __R -> Ojs.t) ->
+              fun (x1174 : __tags intf) -> intf_to_js __tags_to_js x1174
     let (get_locked : ('tags, 'R) this -> bool) =
       fun (x1178 : ('tags, 'R) this) ->
         Ojs.bool_of_js
@@ -4089,13 +4159,14 @@ module rec
       fun _R -> Obj.magic
     and t_to_js : 'R . ('R -> Ojs.t) -> 'R t -> Ojs.t = fun _R -> Obj.magic
     type 'R t_1 = 'R t
-    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 = fun (type
-      __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x1230 : Ojs.t) -> t_of_js __R_of_js x1230
-    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t = fun (type __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x1228 : __R t) -> t_to_js __R_to_js x1228
+    let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x1230 : Ojs.t) -> t_of_js __R_of_js x1230
+    and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x1228 : __R t) -> t_to_js __R_to_js x1228
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x1234 : Ojs.t) -> t_of_js any_of_js x1234
@@ -4110,17 +4181,21 @@ module rec
     let rec this_of_js :
       'tags 'R .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'R) -> Ojs.t -> ('tags, 'R) this
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__R_of_js : Ojs.t -> __R) ->
-          fun (x1238 : Ojs.t) -> intf_of_js __tags_of_js x1238
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__R_of_js : Ojs.t -> __R) ->
+              fun (x1238 : Ojs.t) -> intf_of_js __tags_of_js x1238
     and this_to_js :
       'tags 'R .
         ('tags -> Ojs.t) -> ('R -> Ojs.t) -> ('tags, 'R) this -> Ojs.t
-      = fun (type __tags) -> fun (type __R) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__R_to_js : __R -> Ojs.t) ->
-          fun (x1236 : __tags intf) -> intf_to_js __tags_to_js x1236
+      =
+      fun (type __tags) ->
+        fun (type __R) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__R_to_js : __R -> Ojs.t) ->
+              fun (x1236 : __tags intf) -> intf_to_js __tags_to_js x1236
     let (read :
       ('tags, 'R) this -> 'R ReadableStreamDefaultReadResult.t Promise.t_1) =
       fun (x1240 : ('tags, 'R) this) ->
@@ -4216,26 +4291,29 @@ module rec
          type ('R, 'W) t_2 = ('R, 'W) t
          let rec t_2_of_js :
            'R 'W . (Ojs.t -> 'R) -> (Ojs.t -> 'W) -> Ojs.t -> ('R, 'W) t_2 =
-           fun (type __R) -> fun (type __W) ->
-           fun (__R_of_js : Ojs.t -> __R) ->
-             fun (__W_of_js : Ojs.t -> __W) ->
-               fun (x1254 : Ojs.t) -> t_of_js __R_of_js __W_of_js x1254
+           fun (type __R) ->
+             fun (type __W) ->
+               fun (__R_of_js : Ojs.t -> __R) ->
+                 fun (__W_of_js : Ojs.t -> __W) ->
+                   fun (x1254 : Ojs.t) -> t_of_js __R_of_js __W_of_js x1254
          and t_2_to_js :
            'R 'W . ('R -> Ojs.t) -> ('W -> Ojs.t) -> ('R, 'W) t_2 -> Ojs.t =
-           fun (type __R) -> fun (type __W) ->
-           fun (__R_to_js : __R -> Ojs.t) ->
-             fun (__W_to_js : __W -> Ojs.t) ->
-               fun (x1251 : (__R, __W) t) ->
-                 t_to_js __R_to_js __W_to_js x1251
+           fun (type __R) ->
+             fun (type __W) ->
+               fun (__R_to_js : __R -> Ojs.t) ->
+                 fun (__W_to_js : __W -> Ojs.t) ->
+                   fun (x1251 : (__R, __W) t) ->
+                     t_to_js __R_to_js __W_to_js x1251
          type 'R t_1 = ('R, any) t
-         let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 = fun
-           (type __R) ->
-           fun (__R_of_js : Ojs.t -> __R) ->
-             fun (x1260 : Ojs.t) -> t_of_js __R_of_js any_of_js x1260
-         and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t = fun (type
-           __R) ->
-           fun (__R_to_js : __R -> Ojs.t) ->
-             fun (x1257 : (__R, any) t) -> t_to_js __R_to_js any_to_js x1257
+         let rec t_1_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R t_1 =
+           fun (type __R) ->
+             fun (__R_of_js : Ojs.t -> __R) ->
+               fun (x1260 : Ojs.t) -> t_of_js __R_of_js any_of_js x1260
+         and t_1_to_js : 'R . ('R -> Ojs.t) -> 'R t_1 -> Ojs.t =
+           fun (type __R) ->
+             fun (__R_to_js : __R -> Ojs.t) ->
+               fun (x1257 : (__R, any) t) ->
+                 t_to_js __R_to_js any_to_js x1257
          type t_0 = (any, any) t
          let rec t_0_of_js : Ojs.t -> t_0 =
            fun (x1266 : Ojs.t) -> t_of_js any_of_js any_of_js x1266
@@ -4253,21 +4331,28 @@ module rec
              (Ojs.t -> 'tags) ->
                (Ojs.t -> 'R) ->
                  (Ojs.t -> 'W) -> Ojs.t -> ('tags, 'R, 'W) this
-           = fun (type __tags) -> fun (type __R) -> fun (type __W) ->
-           fun (__tags_of_js : Ojs.t -> __tags) ->
-             fun (__R_of_js : Ojs.t -> __R) ->
-               fun (__W_of_js : Ojs.t -> __W) ->
-                 fun (x1271 : Ojs.t) -> intf_of_js __tags_of_js x1271
+           =
+           fun (type __tags) ->
+             fun (type __R) ->
+               fun (type __W) ->
+                 fun (__tags_of_js : Ojs.t -> __tags) ->
+                   fun (__R_of_js : Ojs.t -> __R) ->
+                     fun (__W_of_js : Ojs.t -> __W) ->
+                       fun (x1271 : Ojs.t) -> intf_of_js __tags_of_js x1271
          and this_to_js :
            'tags 'R 'W .
              ('tags -> Ojs.t) ->
                ('R -> Ojs.t) ->
                  ('W -> Ojs.t) -> ('tags, 'R, 'W) this -> Ojs.t
-           = fun (type __tags) -> fun (type __R) -> fun (type __W) ->
-           fun (__tags_to_js : __tags -> Ojs.t) ->
-             fun (__R_to_js : __R -> Ojs.t) ->
-               fun (__W_to_js : __W -> Ojs.t) ->
-                 fun (x1269 : __tags intf) -> intf_to_js __tags_to_js x1269
+           =
+           fun (type __tags) ->
+             fun (type __R) ->
+               fun (type __W) ->
+                 fun (__tags_to_js : __tags -> Ojs.t) ->
+                   fun (__R_to_js : __R -> Ojs.t) ->
+                     fun (__W_to_js : __W -> Ojs.t) ->
+                       fun (x1269 : __tags intf) ->
+                         intf_to_js __tags_to_js x1269
          let (get_readable : ('tags, 'R, 'W) this -> 'R ReadableStream.t) =
            fun (x1273 : ('tags, 'R, 'W) this) ->
              ReadableStream.t_of_js Obj.magic
@@ -4361,12 +4446,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `Blob ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1314 : Ojs.t) -> intf_of_js __tags_of_js x1314
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1312 : __tags intf) -> intf_to_js __tags_to_js x1312
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1314 : Ojs.t) -> intf_of_js __tags_of_js x1314
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1312 : __tags intf) -> intf_to_js __tags_to_js x1312
     let (get_size : 'tags this -> float) =
       fun (x1316 : 'tags this) ->
         Ojs.float_of_js
@@ -4511,12 +4596,12 @@ module File =
     type 'tags this = 'tags intf constraint 'tags = [> `File ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1361 : Ojs.t) -> intf_of_js __tags_of_js x1361
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1359 : __tags intf) -> intf_to_js __tags_to_js x1359
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1361 : Ojs.t) -> intf_of_js __tags_of_js x1361
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1359 : __tags intf) -> intf_to_js __tags_to_js x1359
     let (get_lastModified : 'tags this -> float) =
       fun (x1363 : 'tags this) ->
         Ojs.float_of_js
@@ -4590,12 +4675,12 @@ module FileSystemFileHandle =
       'tags intf constraint 'tags = [> `FileSystemFileHandle ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1383 : Ojs.t) -> intf_of_js __tags_of_js x1383
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1381 : __tags intf) -> intf_to_js __tags_to_js x1381
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1383 : Ojs.t) -> intf_of_js __tags_of_js x1383
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1381 : __tags intf) -> intf_to_js __tags_to_js x1381
     let (get_kind : 'tags this -> [ `L_s75_file ]) =
       fun (x1385 : 'tags this) ->
         let x1387 = Ojs.get_prop_ascii (this_to_js Obj.magic x1385) "kind" in
@@ -4633,12 +4718,12 @@ module FileSystemDirectoryHandle =
       'tags intf constraint 'tags = [> `FileSystemDirectoryHandle ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1395 : Ojs.t) -> intf_of_js __tags_of_js x1395
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1393 : __tags intf) -> intf_to_js __tags_to_js x1393
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1395 : Ojs.t) -> intf_of_js __tags_of_js x1395
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1393 : __tags intf) -> intf_to_js __tags_to_js x1393
     let (get_kind : 'tags this -> [ `L_s61_directory ]) =
       fun (x1397 : 'tags this) ->
         let x1399 = Ojs.get_prop_ascii (this_to_js Obj.magic x1397) "kind" in
@@ -4769,12 +4854,12 @@ module StorageManager =
     type 'tags this = 'tags intf constraint 'tags = [> `StorageManager ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1434 : Ojs.t) -> intf_of_js __tags_of_js x1434
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1432 : __tags intf) -> intf_to_js __tags_to_js x1432
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1434 : Ojs.t) -> intf_of_js __tags_of_js x1434
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1432 : __tags intf) -> intf_to_js __tags_to_js x1432
     let (estimate : 'tags this -> StorageEstimate.t Promise.t_1) =
       fun (x1436 : 'tags this) ->
         Promise.t_1_of_js StorageEstimate.t_of_js
@@ -4812,12 +4897,12 @@ module NavigatorStorage =
     type 'tags this = 'tags intf constraint 'tags = [> `NavigatorStorage ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1449 : Ojs.t) -> intf_of_js __tags_of_js x1449
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1447 : __tags intf) -> intf_to_js __tags_to_js x1447
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1449 : Ojs.t) -> intf_of_js __tags_of_js x1449
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1447 : __tags intf) -> intf_to_js __tags_to_js x1447
     let (get_storage : 'tags this -> StorageManager.t) =
       fun (x1451 : 'tags this) ->
         StorageManager.t_of_js
@@ -4843,12 +4928,12 @@ module NavigatorOnLine =
     type 'tags this = 'tags intf constraint 'tags = [> `NavigatorOnLine ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1459 : Ojs.t) -> intf_of_js __tags_of_js x1459
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1457 : __tags intf) -> intf_to_js __tags_to_js x1457
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1459 : Ojs.t) -> intf_of_js __tags_of_js x1459
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1457 : __tags intf) -> intf_to_js __tags_to_js x1457
     let (get_onLine : 'tags this -> bool) =
       fun (x1461 : 'tags this) ->
         Ojs.bool_of_js
@@ -4913,12 +4998,12 @@ module NetworkInformation =
     type 'tags this = 'tags intf constraint 'tags = [> `NetworkInformation ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1474 : Ojs.t) -> intf_of_js __tags_of_js x1474
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1472 : __tags intf) -> intf_to_js __tags_to_js x1472
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1474 : Ojs.t) -> intf_of_js __tags_of_js x1474
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1472 : __tags intf) -> intf_to_js __tags_to_js x1472
     let (get_type : 'tags this -> ConnectionType.t) =
       fun (x1476 : 'tags this) ->
         ConnectionType.t_of_js
@@ -4955,12 +5040,12 @@ module NavigatorNetworkInformation =
       'tags intf constraint 'tags = [> `NavigatorNetworkInformation ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1484 : Ojs.t) -> intf_of_js __tags_of_js x1484
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1482 : __tags intf) -> intf_to_js __tags_to_js x1482
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1484 : Ojs.t) -> intf_of_js __tags_of_js x1484
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1482 : __tags intf) -> intf_to_js __tags_to_js x1482
     let (get_connection : 'tags this -> NetworkInformation.t) =
       fun (x1486 : 'tags this) ->
         NetworkInformation.t_of_js
@@ -4987,12 +5072,12 @@ module NavigatorLanguage =
     type 'tags this = 'tags intf constraint 'tags = [> `NavigatorLanguage ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1494 : Ojs.t) -> intf_of_js __tags_of_js x1494
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1492 : __tags intf) -> intf_to_js __tags_to_js x1492
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1494 : Ojs.t) -> intf_of_js __tags_of_js x1494
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1492 : __tags intf) -> intf_to_js __tags_to_js x1492
     let (get_language : 'tags this -> string) =
       fun (x1496 : 'tags this) ->
         Ojs.string_of_js
@@ -5025,12 +5110,12 @@ module NavigatorID =
     type 'tags this = 'tags intf constraint 'tags = [> `NavigatorID ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1509 : Ojs.t) -> intf_of_js __tags_of_js x1509
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1507 : __tags intf) -> intf_to_js __tags_to_js x1507
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1509 : Ojs.t) -> intf_of_js __tags_of_js x1509
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1507 : __tags intf) -> intf_to_js __tags_to_js x1507
     let (get_appCodeName : 'tags this -> string) =
       fun (x1511 : 'tags this) ->
         Ojs.string_of_js
@@ -5099,12 +5184,12 @@ module NavigatorConcurrentHardware =
       'tags intf constraint 'tags = [> `NavigatorConcurrentHardware ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1534 : Ojs.t) -> intf_of_js __tags_of_js x1534
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1532 : __tags intf) -> intf_to_js __tags_to_js x1532
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1534 : Ojs.t) -> intf_of_js __tags_of_js x1534
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1532 : __tags intf) -> intf_to_js __tags_to_js x1532
     let (get_hardwareConcurrency : 'tags this -> float) =
       fun (x1536 : 'tags this) ->
         Ojs.float_of_js
@@ -5220,12 +5305,12 @@ module VideoConfiguration =
     type 'tags this = 'tags intf constraint 'tags = [> `VideoConfiguration ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1564 : Ojs.t) -> intf_of_js __tags_of_js x1564
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1562 : __tags intf) -> intf_to_js __tags_to_js x1562
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1564 : Ojs.t) -> intf_of_js __tags_of_js x1564
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1562 : __tags intf) -> intf_to_js __tags_to_js x1562
     let (get_bitrate : 'tags this -> float) =
       fun (x1566 : 'tags this) ->
         Ojs.float_of_js
@@ -5363,12 +5448,12 @@ module AudioConfiguration =
     type 'tags this = 'tags intf constraint 'tags = [> `AudioConfiguration ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1625 : Ojs.t) -> intf_of_js __tags_of_js x1625
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1623 : __tags intf) -> intf_to_js __tags_to_js x1623
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1625 : Ojs.t) -> intf_of_js __tags_of_js x1625
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1623 : __tags intf) -> intf_to_js __tags_to_js x1623
     let (get_bitrate : 'tags this -> float) =
       fun (x1627 : 'tags this) ->
         Ojs.float_of_js
@@ -5452,12 +5537,12 @@ module MediaConfiguration =
     type 'tags this = 'tags intf constraint 'tags = [> `MediaConfiguration ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1662 : Ojs.t) -> intf_of_js __tags_of_js x1662
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1660 : __tags intf) -> intf_to_js __tags_to_js x1660
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1662 : Ojs.t) -> intf_of_js __tags_of_js x1662
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1660 : __tags intf) -> intf_to_js __tags_to_js x1660
     let (get_audio : 'tags this -> AudioConfiguration.t) =
       fun (x1664 : 'tags this) ->
         AudioConfiguration.t_of_js
@@ -5504,12 +5589,12 @@ module MediaEncodingConfiguration =
       'tags intf constraint 'tags = [> `MediaEncodingConfiguration ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1681 : Ojs.t) -> intf_of_js __tags_of_js x1681
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1679 : __tags intf) -> intf_to_js __tags_to_js x1679
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1681 : Ojs.t) -> intf_of_js __tags_of_js x1681
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1679 : __tags intf) -> intf_to_js __tags_to_js x1679
     let (get_type : 'tags this -> MediaEncodingType.t) =
       fun (x1683 : 'tags this) ->
         MediaEncodingType.t_of_js
@@ -5541,12 +5626,12 @@ module MediaCapabilitiesInfo =
       'tags intf constraint 'tags = [> `MediaCapabilitiesInfo ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1694 : Ojs.t) -> intf_of_js __tags_of_js x1694
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1692 : __tags intf) -> intf_to_js __tags_to_js x1692
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1694 : Ojs.t) -> intf_of_js __tags_of_js x1694
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1692 : __tags intf) -> intf_to_js __tags_to_js x1692
     let (get_powerEfficient : 'tags this -> bool) =
       fun (x1696 : 'tags this) ->
         Ojs.bool_of_js
@@ -5603,12 +5688,12 @@ module MediaCapabilitiesEncodingInfo =
       'tags intf constraint 'tags = [> `MediaCapabilitiesEncodingInfo ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1719 : Ojs.t) -> intf_of_js __tags_of_js x1719
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1717 : __tags intf) -> intf_to_js __tags_to_js x1717
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1719 : Ojs.t) -> intf_of_js __tags_of_js x1719
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1717 : __tags intf) -> intf_to_js __tags_to_js x1717
     let (get_configuration : 'tags this -> MediaEncodingConfiguration.t) =
       fun (x1721 : 'tags this) ->
         MediaEncodingConfiguration.t_of_js
@@ -5664,12 +5749,12 @@ module MediaDecodingConfiguration =
       'tags intf constraint 'tags = [> `MediaDecodingConfiguration ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1737 : Ojs.t) -> intf_of_js __tags_of_js x1737
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1735 : __tags intf) -> intf_to_js __tags_to_js x1735
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1737 : Ojs.t) -> intf_of_js __tags_of_js x1737
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1735 : __tags intf) -> intf_to_js __tags_to_js x1735
     let (get_type : 'tags this -> MediaDecodingType.t) =
       fun (x1739 : 'tags this) ->
         MediaDecodingType.t_of_js
@@ -5702,12 +5787,12 @@ module MediaCapabilitiesDecodingInfo =
       'tags intf constraint 'tags = [> `MediaCapabilitiesDecodingInfo ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1750 : Ojs.t) -> intf_of_js __tags_of_js x1750
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1748 : __tags intf) -> intf_to_js __tags_to_js x1748
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1750 : Ojs.t) -> intf_of_js __tags_of_js x1750
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1748 : __tags intf) -> intf_to_js __tags_to_js x1748
     let (get_configuration : 'tags this -> MediaDecodingConfiguration.t) =
       fun (x1752 : 'tags this) ->
         MediaDecodingConfiguration.t_of_js
@@ -5740,12 +5825,12 @@ module MediaCapabilities =
     type 'tags this = 'tags intf constraint 'tags = [> `MediaCapabilities ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1763 : Ojs.t) -> intf_of_js __tags_of_js x1763
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1761 : __tags intf) -> intf_to_js __tags_to_js x1761
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1763 : Ojs.t) -> intf_of_js __tags_of_js x1763
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1761 : __tags intf) -> intf_to_js __tags_to_js x1761
     let (decodingInfo :
       'tags this ->
         configuration:MediaDecodingConfiguration.t ->
@@ -5853,12 +5938,12 @@ module IDBVersionChangeEventInit =
       'tags intf constraint 'tags = [> `IDBVersionChangeEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1777 : Ojs.t) -> intf_of_js __tags_of_js x1777
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1775 : __tags intf) -> intf_to_js __tags_to_js x1775
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1777 : Ojs.t) -> intf_of_js __tags_of_js x1777
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1775 : __tags intf) -> intf_to_js __tags_to_js x1775
     let (get_newVersion : 'tags this -> float option) =
       fun (x1779 : 'tags this) ->
         Ojs.option_of_js Ojs.float_of_js
@@ -5905,12 +5990,12 @@ module IDBVersionChangeEvent =
       'tags intf constraint 'tags = [> `IDBVersionChangeEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1799 : Ojs.t) -> intf_of_js __tags_of_js x1799
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1797 : __tags intf) -> intf_to_js __tags_to_js x1797
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1799 : Ojs.t) -> intf_of_js __tags_of_js x1799
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1797 : __tags intf) -> intf_to_js __tags_to_js x1797
     let (get_newVersion : 'tags this -> float option) =
       fun (x1801 : 'tags this) ->
         Ojs.option_of_js Ojs.float_of_js
@@ -5972,12 +6057,12 @@ module IDBObjectStoreParameters =
       'tags intf constraint 'tags = [> `IDBObjectStoreParameters ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1818 : Ojs.t) -> intf_of_js __tags_of_js x1818
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1816 : __tags intf) -> intf_to_js __tags_to_js x1816
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1818 : Ojs.t) -> intf_of_js __tags_of_js x1818
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1816 : __tags intf) -> intf_to_js __tags_to_js x1816
     let (get_autoIncrement : 'tags this -> bool) =
       fun (x1820 : 'tags this) ->
         Ojs.bool_of_js
@@ -6054,12 +6139,12 @@ module IDBIndexParameters =
     type 'tags this = 'tags intf constraint 'tags = [> `IDBIndexParameters ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1848 : Ojs.t) -> intf_of_js __tags_of_js x1848
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1846 : __tags intf) -> intf_to_js __tags_to_js x1846
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1848 : Ojs.t) -> intf_of_js __tags_of_js x1848
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1846 : __tags intf) -> intf_to_js __tags_to_js x1846
     let (get_multiEntry : 'tags this -> bool) =
       fun (x1850 : 'tags this) ->
         Ojs.bool_of_js
@@ -6209,12 +6294,12 @@ module IDBKeyRange =
     type 'tags this = 'tags intf constraint 'tags = [> `IDBKeyRange ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1900 : Ojs.t) -> intf_of_js __tags_of_js x1900
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1898 : __tags intf) -> intf_to_js __tags_to_js x1898
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1900 : Ojs.t) -> intf_of_js __tags_of_js x1900
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1898 : __tags intf) -> intf_to_js __tags_to_js x1898
     let (get_lower : 'tags this -> any) =
       fun (x1902 : 'tags this) ->
         any_of_js (Ojs.get_prop_ascii (this_to_js Obj.magic x1902) "lower")
@@ -6370,12 +6455,12 @@ module DOMStringList =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMStringList ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1941 : Ojs.t) -> intf_of_js __tags_of_js x1941
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1939 : __tags intf) -> intf_to_js __tags_to_js x1939
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1941 : Ojs.t) -> intf_of_js __tags_of_js x1941
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1939 : __tags intf) -> intf_to_js __tags_to_js x1939
     let (get_length : 'tags this -> float) =
       fun (x1943 : 'tags this) ->
         Ojs.float_of_js
@@ -6428,12 +6513,12 @@ module DOMException =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMException ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x1963 : Ojs.t) -> intf_of_js __tags_of_js x1963
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x1961 : __tags intf) -> intf_to_js __tags_to_js x1961
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x1963 : Ojs.t) -> intf_of_js __tags_of_js x1963
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x1961 : __tags intf) -> intf_to_js __tags_to_js x1961
     let (get_code : 'tags this -> float) =
       fun (x1965 : 'tags this) ->
         Ojs.float_of_js
@@ -6995,12 +7080,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `IDBCursor ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x2059 : Ojs.t) -> intf_of_js __tags_of_js x2059
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x2057 : __tags intf) -> intf_to_js __tags_to_js x2057
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x2059 : Ojs.t) -> intf_of_js __tags_of_js x2059
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x2057 : __tags intf) -> intf_to_js __tags_to_js x2057
     let (get_direction : 'tags this -> IDBCursorDirection.t) =
       fun (x2061 : 'tags this) ->
         IDBCursorDirection.t_of_js
@@ -7110,12 +7195,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `IDBCursorWithValue ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x2097 : Ojs.t) -> intf_of_js __tags_of_js x2097
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x2095 : __tags intf) -> intf_to_js __tags_to_js x2095
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x2097 : Ojs.t) -> intf_of_js __tags_of_js x2097
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x2095 : __tags intf) -> intf_to_js __tags_to_js x2095
     let (get_value : 'tags this -> any) =
       fun (x2099 : 'tags this) ->
         any_of_js (Ojs.get_prop_ascii (this_to_js Obj.magic x2099) "value")
@@ -7242,13 +7327,14 @@ module rec
          type tags_0 = tags
          type 'tags this = 'tags intf constraint 'tags = [> `IDBDatabase ]
          let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-           = fun (type __tags) ->
-           fun (__tags_of_js : Ojs.t -> __tags) ->
-             fun (x2107 : Ojs.t) -> intf_of_js __tags_of_js x2107
+           =
+           fun (type __tags) ->
+             fun (__tags_of_js : Ojs.t -> __tags) ->
+               fun (x2107 : Ojs.t) -> intf_of_js __tags_of_js x2107
          and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
            fun (type __tags) ->
-           fun (__tags_to_js : __tags -> Ojs.t) ->
-             fun (x2105 : __tags intf) -> intf_to_js __tags_to_js x2105
+             fun (__tags_to_js : __tags -> Ojs.t) ->
+               fun (x2105 : __tags intf) -> intf_to_js __tags_to_js x2105
          let (transaction :
            'tags this ->
              storeNames:[ `U1 of string  | `U2 of string Iterable.t_1 ] ->
@@ -7761,15 +7847,16 @@ module rec
               type tags_0 = tags
               type 'tags this = 'tags intf constraint 'tags = [> `IDBIndex ]
               let rec this_of_js :
-                'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this = fun (type
-                __tags) ->
-                fun (__tags_of_js : Ojs.t -> __tags) ->
-                  fun (x2239 : Ojs.t) -> intf_of_js __tags_of_js x2239
+                'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
+                fun (type __tags) ->
+                  fun (__tags_of_js : Ojs.t -> __tags) ->
+                    fun (x2239 : Ojs.t) -> intf_of_js __tags_of_js x2239
               and this_to_js :
-                'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun (type
-                __tags) ->
-                fun (__tags_to_js : __tags -> Ojs.t) ->
-                  fun (x2237 : __tags intf) -> intf_to_js __tags_to_js x2237
+                'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+                fun (type __tags) ->
+                  fun (__tags_to_js : __tags -> Ojs.t) ->
+                    fun (x2237 : __tags intf) ->
+                      intf_to_js __tags_to_js x2237
               let (get_keyPath :
                 'tags this ->
                   [ `String of string  | `Other of string list ] Primitive.t)
@@ -8201,16 +8288,16 @@ module rec
                    type 'tags this =
                      'tags intf constraint 'tags = [> `IDBObjectStore ]
                    let rec this_of_js :
-                     'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this = fun
-                     (type __tags) ->
-                     fun (__tags_of_js : Ojs.t -> __tags) ->
-                       fun (x2331 : Ojs.t) -> intf_of_js __tags_of_js x2331
+                     'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
+                     fun (type __tags) ->
+                       fun (__tags_of_js : Ojs.t -> __tags) ->
+                         fun (x2331 : Ojs.t) -> intf_of_js __tags_of_js x2331
                    and this_to_js :
-                     'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-                     (type __tags) ->
-                     fun (__tags_to_js : __tags -> Ojs.t) ->
-                       fun (x2329 : __tags intf) ->
-                         intf_to_js __tags_to_js x2329
+                     'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+                     fun (type __tags) ->
+                       fun (__tags_to_js : __tags -> Ojs.t) ->
+                         fun (x2329 : __tags intf) ->
+                           intf_to_js __tags_to_js x2329
                    let (createIndex :
                      'tags this ->
                        name:string ->
@@ -8835,14 +8922,15 @@ module rec
                           fun _T -> Obj.magic
                         type 'T t_1 = 'T t
                         let rec t_1_of_js :
-                          'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-                          __T) ->
-                          fun (__T_of_js : Ojs.t -> __T) ->
-                            fun (x2474 : Ojs.t) -> t_of_js __T_of_js x2474
+                          'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+                          fun (type __T) ->
+                            fun (__T_of_js : Ojs.t -> __T) ->
+                              fun (x2474 : Ojs.t) -> t_of_js __T_of_js x2474
                         and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t
-                          = fun (type __T) ->
-                          fun (__T_to_js : __T -> Ojs.t) ->
-                            fun (x2472 : __T t) -> t_to_js __T_to_js x2472
+                          =
+                          fun (type __T) ->
+                            fun (__T_to_js : __T -> Ojs.t) ->
+                              fun (x2472 : __T t) -> t_to_js __T_to_js x2472
                         type t_0 = any t
                         let rec t_0_of_js : Ojs.t -> t_0 =
                           fun (x2478 : Ojs.t) -> t_of_js any_of_js x2478
@@ -8858,20 +8946,24 @@ module rec
                           'tags 'T .
                             (Ojs.t -> 'tags) ->
                               (Ojs.t -> 'T) -> Ojs.t -> ('tags, 'T) this
-                          = fun (type __tags) -> fun (type __T) ->
-                          fun (__tags_of_js : Ojs.t -> __tags) ->
-                            fun (__T_of_js : Ojs.t -> __T) ->
-                              fun (x2482 : Ojs.t) ->
-                                intf_of_js __tags_of_js x2482
+                          =
+                          fun (type __tags) ->
+                            fun (type __T) ->
+                              fun (__tags_of_js : Ojs.t -> __tags) ->
+                                fun (__T_of_js : Ojs.t -> __T) ->
+                                  fun (x2482 : Ojs.t) ->
+                                    intf_of_js __tags_of_js x2482
                         and this_to_js :
                           'tags 'T .
                             ('tags -> Ojs.t) ->
                               ('T -> Ojs.t) -> ('tags, 'T) this -> Ojs.t
-                          = fun (type __tags) -> fun (type __T) ->
-                          fun (__tags_to_js : __tags -> Ojs.t) ->
-                            fun (__T_to_js : __T -> Ojs.t) ->
-                              fun (x2480 : __tags intf) ->
-                                intf_to_js __tags_to_js x2480
+                          =
+                          fun (type __tags) ->
+                            fun (type __T) ->
+                              fun (__tags_to_js : __tags -> Ojs.t) ->
+                                fun (__T_to_js : __T -> Ojs.t) ->
+                                  fun (x2480 : __tags intf) ->
+                                    intf_to_js __tags_to_js x2480
                         let (get_error :
                           ('tags, 'T) this -> DOMException.t option) =
                           fun (x2484 : ('tags, 'T) this) ->
@@ -9403,17 +9495,19 @@ module rec
                              let rec this_of_js :
                                'tags .
                                  (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-                               = fun (type __tags) ->
-                               fun (__tags_of_js : Ojs.t -> __tags) ->
-                                 fun (x2588 : Ojs.t) ->
-                                   intf_of_js __tags_of_js x2588
+                               =
+                               fun (type __tags) ->
+                                 fun (__tags_of_js : Ojs.t -> __tags) ->
+                                   fun (x2588 : Ojs.t) ->
+                                     intf_of_js __tags_of_js x2588
                              and this_to_js :
                                'tags .
                                  ('tags -> Ojs.t) -> 'tags this -> Ojs.t
-                               = fun (type __tags) ->
-                               fun (__tags_to_js : __tags -> Ojs.t) ->
-                                 fun (x2586 : __tags intf) ->
-                                   intf_to_js __tags_to_js x2586
+                               =
+                               fun (type __tags) ->
+                                 fun (__tags_to_js : __tags -> Ojs.t) ->
+                                   fun (x2586 : __tags intf) ->
+                                     intf_to_js __tags_to_js x2586
                              let (get_db : 'tags this -> IDBDatabase.t) =
                                fun (x2590 : 'tags this) ->
                                  IDBDatabase.t_of_js
@@ -9909,12 +10003,12 @@ module IDBOpenDBRequest =
     type 'tags this = 'tags intf constraint 'tags = [> `IDBOpenDBRequest ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x2689 : Ojs.t) -> intf_of_js __tags_of_js x2689
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x2687 : __tags intf) -> intf_to_js __tags_to_js x2687
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x2689 : Ojs.t) -> intf_of_js __tags_of_js x2689
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x2687 : __tags intf) -> intf_to_js __tags_to_js x2687
     let (get_onblocked : 'tags this -> (this:t -> ev:Event.t -> any) option)
       =
       fun (x2691 : 'tags this) ->
@@ -10168,12 +10262,12 @@ module IDBDatabaseInfo =
     type 'tags this = 'tags intf constraint 'tags = [> `IDBDatabaseInfo ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x2761 : Ojs.t) -> intf_of_js __tags_of_js x2761
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x2759 : __tags intf) -> intf_to_js __tags_to_js x2759
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x2761 : Ojs.t) -> intf_of_js __tags_of_js x2761
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x2759 : __tags intf) -> intf_to_js __tags_to_js x2759
     let (get_name : 'tags this -> string) =
       fun (x2763 : 'tags this) ->
         Ojs.string_of_js
@@ -10306,12 +10400,12 @@ module FontFaceDescriptors =
     type 'tags this = 'tags intf constraint 'tags = [> `FontFaceDescriptors ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x2800 : Ojs.t) -> intf_of_js __tags_of_js x2800
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x2798 : __tags intf) -> intf_to_js __tags_to_js x2798
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x2800 : Ojs.t) -> intf_of_js __tags_of_js x2800
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x2798 : __tags intf) -> intf_to_js __tags_to_js x2798
     let (get_display : 'tags this -> string) =
       fun (x2802 : 'tags this) ->
         Ojs.string_of_js
@@ -10435,12 +10529,12 @@ module FontFace =
     type 'tags this = 'tags intf constraint 'tags = [> `FontFace ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x2857 : Ojs.t) -> intf_of_js __tags_of_js x2857
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x2855 : __tags intf) -> intf_to_js __tags_to_js x2855
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x2857 : Ojs.t) -> intf_of_js __tags_of_js x2857
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x2855 : __tags intf) -> intf_to_js __tags_to_js x2855
     let (get_ascentOverride : 'tags this -> string) =
       fun (x2859 : 'tags this) ->
         Ojs.string_of_js
@@ -10610,12 +10704,12 @@ module FontFaceSet =
     type 'tags this = 'tags intf constraint 'tags = [> `FontFaceSet ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x2938 : Ojs.t) -> intf_of_js __tags_of_js x2938
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x2936 : __tags intf) -> intf_to_js __tags_to_js x2936
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x2938 : Ojs.t) -> intf_of_js __tags_of_js x2938
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x2936 : __tags intf) -> intf_to_js __tags_to_js x2936
     let (get_onloading : 'tags this -> (this:t -> ev:Event.t -> any) option)
       =
       fun (x2940 : 'tags this) ->
@@ -11285,12 +11379,12 @@ module Algorithm =
     type 'tags this = 'tags intf constraint 'tags = [> `Algorithm ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3120 : Ojs.t) -> intf_of_js __tags_of_js x3120
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3118 : __tags intf) -> intf_to_js __tags_to_js x3118
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3120 : Ojs.t) -> intf_of_js __tags_of_js x3120
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3118 : __tags intf) -> intf_to_js __tags_to_js x3118
     let (get_name : 'tags this -> string) =
       fun (x3122 : 'tags this) ->
         Ojs.string_of_js
@@ -11321,12 +11415,12 @@ module RsaPssParams =
     type 'tags this = 'tags intf constraint 'tags = [> `RsaPssParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3133 : Ojs.t) -> intf_of_js __tags_of_js x3133
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3131 : __tags intf) -> intf_to_js __tags_to_js x3131
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3133 : Ojs.t) -> intf_of_js __tags_of_js x3133
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3131 : __tags intf) -> intf_to_js __tags_to_js x3131
     let (get_saltLength : 'tags this -> float) =
       fun (x3135 : 'tags this) ->
         Ojs.float_of_js
@@ -11357,12 +11451,12 @@ module RsaOaepParams =
     type 'tags this = 'tags intf constraint 'tags = [> `RsaOaepParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3146 : Ojs.t) -> intf_of_js __tags_of_js x3146
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3144 : __tags intf) -> intf_to_js __tags_to_js x3144
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3146 : Ojs.t) -> intf_of_js __tags_of_js x3146
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3144 : __tags intf) -> intf_to_js __tags_to_js x3144
     let (get_label : 'tags this -> BufferSource.t) =
       fun (x3148 : 'tags this) ->
         BufferSource.t_of_js
@@ -11404,12 +11498,12 @@ module RsaKeyGenParams =
     type 'tags this = 'tags intf constraint 'tags = [> `RsaKeyGenParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3163 : Ojs.t) -> intf_of_js __tags_of_js x3163
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3161 : __tags intf) -> intf_to_js __tags_to_js x3161
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3163 : Ojs.t) -> intf_of_js __tags_of_js x3163
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3161 : __tags intf) -> intf_to_js __tags_to_js x3161
     let (get_modulusLength : 'tags this -> float) =
       fun (x3165 : 'tags this) ->
         Ojs.float_of_js
@@ -11492,12 +11586,12 @@ module RsaHashedKeyGenParams =
       'tags intf constraint 'tags = [> `RsaHashedKeyGenParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3195 : Ojs.t) -> intf_of_js __tags_of_js x3195
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3193 : __tags intf) -> intf_to_js __tags_to_js x3193
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3195 : Ojs.t) -> intf_of_js __tags_of_js x3195
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3193 : __tags intf) -> intf_to_js __tags_to_js x3193
     let (get_hash : 'tags this -> HashAlgorithmIdentifier.t) =
       fun (x3197 : 'tags this) ->
         HashAlgorithmIdentifier.t_of_js
@@ -11530,12 +11624,12 @@ module RsaHashedImportParams =
       'tags intf constraint 'tags = [> `RsaHashedImportParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3208 : Ojs.t) -> intf_of_js __tags_of_js x3208
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3206 : __tags intf) -> intf_to_js __tags_to_js x3206
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3208 : Ojs.t) -> intf_of_js __tags_of_js x3208
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3206 : __tags intf) -> intf_to_js __tags_to_js x3206
     let (get_hash : 'tags this -> HashAlgorithmIdentifier.t) =
       fun (x3210 : 'tags this) ->
         HashAlgorithmIdentifier.t_of_js
@@ -11567,12 +11661,12 @@ module Pbkdf2Params =
     type 'tags this = 'tags intf constraint 'tags = [> `Pbkdf2Params ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3221 : Ojs.t) -> intf_of_js __tags_of_js x3221
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3219 : __tags intf) -> intf_to_js __tags_to_js x3219
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3221 : Ojs.t) -> intf_of_js __tags_of_js x3221
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3219 : __tags intf) -> intf_to_js __tags_to_js x3219
     let (get_hash : 'tags this -> HashAlgorithmIdentifier.t) =
       fun (x3223 : 'tags this) ->
         HashAlgorithmIdentifier.t_of_js
@@ -11655,12 +11749,12 @@ module RsaOtherPrimesInfo =
     type 'tags this = 'tags intf constraint 'tags = [> `RsaOtherPrimesInfo ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3251 : Ojs.t) -> intf_of_js __tags_of_js x3251
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3249 : __tags intf) -> intf_to_js __tags_to_js x3249
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3251 : Ojs.t) -> intf_of_js __tags_of_js x3251
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3249 : __tags intf) -> intf_to_js __tags_to_js x3249
     let (get_d : 'tags this -> string) =
       fun (x3253 : 'tags this) ->
         Ojs.string_of_js
@@ -11713,12 +11807,12 @@ module JsonWebKey =
     type 'tags this = 'tags intf constraint 'tags = [> `JsonWebKey ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3276 : Ojs.t) -> intf_of_js __tags_of_js x3276
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3274 : __tags intf) -> intf_to_js __tags_to_js x3274
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3276 : Ojs.t) -> intf_of_js __tags_of_js x3276
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3274 : __tags intf) -> intf_to_js __tags_to_js x3274
     let (get_alg : 'tags this -> string) =
       fun (x3278 : 'tags this) ->
         Ojs.string_of_js
@@ -11975,12 +12069,12 @@ module HmacKeyGenParams =
     type 'tags this = 'tags intf constraint 'tags = [> `HmacKeyGenParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3397 : Ojs.t) -> intf_of_js __tags_of_js x3397
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3395 : __tags intf) -> intf_to_js __tags_to_js x3395
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3397 : Ojs.t) -> intf_of_js __tags_of_js x3397
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3395 : __tags intf) -> intf_to_js __tags_to_js x3395
     let (get_hash : 'tags this -> HashAlgorithmIdentifier.t) =
       fun (x3399 : 'tags this) ->
         HashAlgorithmIdentifier.t_of_js
@@ -12024,12 +12118,12 @@ module HmacImportParams =
     type 'tags this = 'tags intf constraint 'tags = [> `HmacImportParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3416 : Ojs.t) -> intf_of_js __tags_of_js x3416
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3414 : __tags intf) -> intf_to_js __tags_to_js x3414
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3416 : Ojs.t) -> intf_of_js __tags_of_js x3416
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3414 : __tags intf) -> intf_to_js __tags_to_js x3414
     let (get_hash : 'tags this -> HashAlgorithmIdentifier.t) =
       fun (x3418 : 'tags this) ->
         HashAlgorithmIdentifier.t_of_js
@@ -12073,12 +12167,12 @@ module HkdfParams =
     type 'tags this = 'tags intf constraint 'tags = [> `HkdfParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3435 : Ojs.t) -> intf_of_js __tags_of_js x3435
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3433 : __tags intf) -> intf_to_js __tags_to_js x3433
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3435 : Ojs.t) -> intf_of_js __tags_of_js x3435
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3433 : __tags intf) -> intf_to_js __tags_to_js x3433
     let (get_hash : 'tags this -> HashAlgorithmIdentifier.t) =
       fun (x3437 : 'tags this) ->
         HashAlgorithmIdentifier.t_of_js
@@ -12135,12 +12229,12 @@ module EcdsaParams =
     type 'tags this = 'tags intf constraint 'tags = [> `EcdsaParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3460 : Ojs.t) -> intf_of_js __tags_of_js x3460
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3458 : __tags intf) -> intf_to_js __tags_to_js x3458
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3460 : Ojs.t) -> intf_of_js __tags_of_js x3460
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3458 : __tags intf) -> intf_to_js __tags_to_js x3458
     let (get_hash : 'tags this -> HashAlgorithmIdentifier.t) =
       fun (x3462 : 'tags this) ->
         HashAlgorithmIdentifier.t_of_js
@@ -12233,12 +12327,12 @@ module KeyAlgorithm =
     type 'tags this = 'tags intf constraint 'tags = [> `KeyAlgorithm ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3483 : Ojs.t) -> intf_of_js __tags_of_js x3483
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3481 : __tags intf) -> intf_to_js __tags_to_js x3481
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3483 : Ojs.t) -> intf_of_js __tags_of_js x3483
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3481 : __tags intf) -> intf_to_js __tags_to_js x3481
     let (get_name : 'tags this -> string) =
       fun (x3485 : 'tags this) ->
         Ojs.string_of_js
@@ -12269,12 +12363,12 @@ module CryptoKey =
     type 'tags this = 'tags intf constraint 'tags = [> `CryptoKey ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3496 : Ojs.t) -> intf_of_js __tags_of_js x3496
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3494 : __tags intf) -> intf_to_js __tags_to_js x3494
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3496 : Ojs.t) -> intf_of_js __tags_of_js x3496
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3494 : __tags intf) -> intf_to_js __tags_to_js x3494
     let (get_algorithm : 'tags this -> KeyAlgorithm.t) =
       fun (x3498 : 'tags this) ->
         KeyAlgorithm.t_of_js
@@ -12333,12 +12427,12 @@ module EcdhKeyDeriveParams =
     type 'tags this = 'tags intf constraint 'tags = [> `EcdhKeyDeriveParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3517 : Ojs.t) -> intf_of_js __tags_of_js x3517
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3515 : __tags intf) -> intf_to_js __tags_to_js x3515
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3517 : Ojs.t) -> intf_of_js __tags_of_js x3517
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3515 : __tags intf) -> intf_to_js __tags_to_js x3515
     let (get_public : 'tags this -> CryptoKey.t) =
       fun (x3519 : 'tags this) ->
         CryptoKey.t_of_js
@@ -12379,12 +12473,12 @@ module EcKeyImportParams =
     type 'tags this = 'tags intf constraint 'tags = [> `EcKeyImportParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3534 : Ojs.t) -> intf_of_js __tags_of_js x3534
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3532 : __tags intf) -> intf_to_js __tags_to_js x3532
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3534 : Ojs.t) -> intf_of_js __tags_of_js x3534
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3532 : __tags intf) -> intf_to_js __tags_to_js x3532
     let (get_namedCurve : 'tags this -> NamedCurve.t) =
       fun (x3536 : 'tags this) ->
         NamedCurve.t_of_js
@@ -12415,12 +12509,12 @@ module EcKeyGenParams =
     type 'tags this = 'tags intf constraint 'tags = [> `EcKeyGenParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3547 : Ojs.t) -> intf_of_js __tags_of_js x3547
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3545 : __tags intf) -> intf_to_js __tags_to_js x3545
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3547 : Ojs.t) -> intf_of_js __tags_of_js x3547
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3545 : __tags intf) -> intf_to_js __tags_to_js x3545
     let (get_namedCurve : 'tags this -> NamedCurve.t) =
       fun (x3549 : 'tags this) ->
         NamedCurve.t_of_js
@@ -12451,12 +12545,12 @@ module CryptoKeyPair =
     type 'tags this = 'tags intf constraint 'tags = [> `CryptoKeyPair ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3560 : Ojs.t) -> intf_of_js __tags_of_js x3560
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3558 : __tags intf) -> intf_to_js __tags_to_js x3558
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3560 : Ojs.t) -> intf_of_js __tags_of_js x3560
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3558 : __tags intf) -> intf_to_js __tags_to_js x3558
     let (get_privateKey : 'tags this -> CryptoKey.t) =
       fun (x3562 : 'tags this) ->
         CryptoKey.t_of_js
@@ -12499,12 +12593,12 @@ module AesKeyGenParams =
     type 'tags this = 'tags intf constraint 'tags = [> `AesKeyGenParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3579 : Ojs.t) -> intf_of_js __tags_of_js x3579
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3577 : __tags intf) -> intf_to_js __tags_to_js x3577
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3579 : Ojs.t) -> intf_of_js __tags_of_js x3579
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3577 : __tags intf) -> intf_to_js __tags_to_js x3577
     let (get_length : 'tags this -> float) =
       fun (x3581 : 'tags this) ->
         Ojs.float_of_js
@@ -12535,12 +12629,12 @@ module AesKeyAlgorithm =
     type 'tags this = 'tags intf constraint 'tags = [> `AesKeyAlgorithm ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3592 : Ojs.t) -> intf_of_js __tags_of_js x3592
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3590 : __tags intf) -> intf_to_js __tags_to_js x3590
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3592 : Ojs.t) -> intf_of_js __tags_of_js x3592
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3590 : __tags intf) -> intf_to_js __tags_to_js x3590
     let (get_length : 'tags this -> float) =
       fun (x3594 : 'tags this) ->
         Ojs.float_of_js
@@ -12571,12 +12665,12 @@ module AesGcmParams =
     type 'tags this = 'tags intf constraint 'tags = [> `AesGcmParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3605 : Ojs.t) -> intf_of_js __tags_of_js x3605
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3603 : __tags intf) -> intf_to_js __tags_to_js x3603
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3605 : Ojs.t) -> intf_of_js __tags_of_js x3605
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3603 : __tags intf) -> intf_to_js __tags_to_js x3603
     let (get_additionalData : 'tags this -> BufferSource.t) =
       fun (x3607 : 'tags this) ->
         BufferSource.t_of_js
@@ -12633,12 +12727,12 @@ module AesDerivedKeyParams =
     type 'tags this = 'tags intf constraint 'tags = [> `AesDerivedKeyParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3630 : Ojs.t) -> intf_of_js __tags_of_js x3630
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3628 : __tags intf) -> intf_to_js __tags_to_js x3628
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3630 : Ojs.t) -> intf_of_js __tags_of_js x3630
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3628 : __tags intf) -> intf_to_js __tags_to_js x3628
     let (get_length : 'tags this -> float) =
       fun (x3632 : 'tags this) ->
         Ojs.float_of_js
@@ -12669,12 +12763,12 @@ module AesCtrParams =
     type 'tags this = 'tags intf constraint 'tags = [> `AesCtrParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3643 : Ojs.t) -> intf_of_js __tags_of_js x3643
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3641 : __tags intf) -> intf_to_js __tags_to_js x3641
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3643 : Ojs.t) -> intf_of_js __tags_of_js x3643
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3641 : __tags intf) -> intf_to_js __tags_to_js x3641
     let (get_counter : 'tags this -> BufferSource.t) =
       fun (x3645 : 'tags this) ->
         BufferSource.t_of_js
@@ -12716,12 +12810,12 @@ module AesCbcParams =
     type 'tags this = 'tags intf constraint 'tags = [> `AesCbcParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3662 : Ojs.t) -> intf_of_js __tags_of_js x3662
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3660 : __tags intf) -> intf_to_js __tags_to_js x3660
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3662 : Ojs.t) -> intf_of_js __tags_of_js x3662
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3660 : __tags intf) -> intf_to_js __tags_to_js x3660
     let (get_iv : 'tags this -> BufferSource.t) =
       fun (x3664 : 'tags this) ->
         BufferSource.t_of_js
@@ -12752,12 +12846,12 @@ module SubtleCrypto =
     type 'tags this = 'tags intf constraint 'tags = [> `SubtleCrypto ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x3675 : Ojs.t) -> intf_of_js __tags_of_js x3675
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x3673 : __tags intf) -> intf_to_js __tags_to_js x3673
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x3675 : Ojs.t) -> intf_of_js __tags_of_js x3675
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x3673 : __tags intf) -> intf_to_js __tags_to_js x3673
     let (deriveKey :
       'tags this ->
         algorithm:[ `U1 of AlgorithmIdentifier.t 
@@ -13894,12 +13988,12 @@ module CacheQueryOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `CacheQueryOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4037 : Ojs.t) -> intf_of_js __tags_of_js x4037
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4035 : __tags intf) -> intf_to_js __tags_to_js x4035
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4037 : Ojs.t) -> intf_of_js __tags_of_js x4037
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4035 : __tags intf) -> intf_to_js __tags_to_js x4035
     let (get_ignoreMethod : 'tags this -> bool) =
       fun (x4039 : 'tags this) ->
         Ojs.bool_of_js
@@ -13955,12 +14049,12 @@ module MultiCacheQueryOptions =
       'tags intf constraint 'tags = [> `MultiCacheQueryOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4062 : Ojs.t) -> intf_of_js __tags_of_js x4062
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4060 : __tags intf) -> intf_to_js __tags_to_js x4060
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4062 : Ojs.t) -> intf_of_js __tags_of_js x4062
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4060 : __tags intf) -> intf_to_js __tags_to_js x4060
     let (get_cacheName : 'tags this -> string) =
       fun (x4064 : 'tags this) ->
         Ojs.string_of_js
@@ -13993,12 +14087,12 @@ module URLSearchParams =
     type 'tags this = 'tags intf constraint 'tags = [> `URLSearchParams ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4075 : Ojs.t) -> intf_of_js __tags_of_js x4075
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4073 : __tags intf) -> intf_to_js __tags_to_js x4073
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4075 : Ojs.t) -> intf_of_js __tags_of_js x4075
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4073 : __tags intf) -> intf_to_js __tags_to_js x4073
     let (entries : 'tags this -> (string * string) IterableIterator.t_1) =
       fun (x4077 : 'tags this) ->
         IterableIterator.t_1_of_js
@@ -14156,12 +14250,12 @@ module URL =
     type 'tags this = 'tags intf constraint 'tags = [> `URL ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4138 : Ojs.t) -> intf_of_js __tags_of_js x4138
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4136 : __tags intf) -> intf_to_js __tags_to_js x4136
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4138 : Ojs.t) -> intf_of_js __tags_of_js x4138
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4136 : __tags intf) -> intf_to_js __tags_to_js x4136
     let (get_hash : 'tags this -> string) =
       fun (x4140 : 'tags this) ->
         Ojs.string_of_js
@@ -14391,12 +14485,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `Headers ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4217 : Ojs.t) -> intf_of_js __tags_of_js x4217
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4215 : __tags intf) -> intf_to_js __tags_to_js x4215
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4217 : Ojs.t) -> intf_of_js __tags_of_js x4217
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4215 : __tags intf) -> intf_to_js __tags_to_js x4215
     let (entries : 'tags this -> (string * string) IterableIterator.t_1) =
       fun (x4219 : 'tags this) ->
         IterableIterator.t_1_of_js
@@ -14555,12 +14649,12 @@ module ResponseInit =
     type 'tags this = 'tags intf constraint 'tags = [> `ResponseInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4282 : Ojs.t) -> intf_of_js __tags_of_js x4282
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4280 : __tags intf) -> intf_to_js __tags_to_js x4280
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4282 : Ojs.t) -> intf_of_js __tags_of_js x4282
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4280 : __tags intf) -> intf_to_js __tags_to_js x4280
     let (get_headers : 'tags this -> HeadersInit.t) =
       fun (x4284 : 'tags this) ->
         HeadersInit.t_of_js
@@ -14641,12 +14735,12 @@ module FormData =
     type 'tags this = 'tags intf constraint 'tags = [> `FormData ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4316 : Ojs.t) -> intf_of_js __tags_of_js x4316
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4314 : __tags intf) -> intf_to_js __tags_to_js x4314
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4316 : Ojs.t) -> intf_of_js __tags_of_js x4316
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4314 : __tags intf) -> intf_to_js __tags_to_js x4314
     let (entries :
       'tags this -> (string * FormDataEntryValue.t) IterableIterator.t_1) =
       fun (x4318 : 'tags this) ->
@@ -14876,12 +14970,12 @@ module Body =
     type 'tags this = 'tags intf constraint 'tags = [> `Body ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4401 : Ojs.t) -> intf_of_js __tags_of_js x4401
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4399 : __tags intf) -> intf_to_js __tags_to_js x4399
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4401 : Ojs.t) -> intf_of_js __tags_of_js x4401
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4399 : __tags intf) -> intf_to_js __tags_to_js x4399
     let (get_body : 'tags this -> Uint8Array.t_0 ReadableStream.t option) =
       fun (x4403 : 'tags this) ->
         Ojs.option_of_js
@@ -14927,12 +15021,12 @@ module Response =
     type 'tags this = 'tags intf constraint 'tags = [> `Response ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4428 : Ojs.t) -> intf_of_js __tags_of_js x4428
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4426 : __tags intf) -> intf_to_js __tags_to_js x4426
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4428 : Ojs.t) -> intf_of_js __tags_of_js x4428
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4426 : __tags intf) -> intf_to_js __tags_to_js x4426
     let (get_headers : 'tags this -> Headers.t) =
       fun (x4430 : 'tags this) ->
         Headers.t_of_js
@@ -15186,12 +15280,12 @@ module RequestInit =
     type 'tags this = 'tags intf constraint 'tags = [> `RequestInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4488 : Ojs.t) -> intf_of_js __tags_of_js x4488
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4486 : __tags intf) -> intf_to_js __tags_to_js x4486
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4488 : Ojs.t) -> intf_of_js __tags_of_js x4488
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4486 : __tags intf) -> intf_to_js __tags_to_js x4486
     let (get_body : 'tags this -> BodyInit.t option) =
       fun (x4490 : 'tags this) ->
         Ojs.option_of_js BodyInit.t_of_js
@@ -15492,12 +15586,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `Request ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4585 : Ojs.t) -> intf_of_js __tags_of_js x4585
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4583 : __tags intf) -> intf_to_js __tags_to_js x4583
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4585 : Ojs.t) -> intf_of_js __tags_of_js x4585
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4583 : __tags intf) -> intf_to_js __tags_to_js x4583
     let (get_cache : 'tags this -> RequestCache.t) =
       fun (x4587 : 'tags this) ->
         RequestCache.t_of_js
@@ -15623,12 +15717,12 @@ module Cache =
     type 'tags this = 'tags intf constraint 'tags = [> `Cache ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4632 : Ojs.t) -> intf_of_js __tags_of_js x4632
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4630 : __tags intf) -> intf_to_js __tags_to_js x4630
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4632 : Ojs.t) -> intf_of_js __tags_of_js x4632
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4630 : __tags intf) -> intf_to_js __tags_to_js x4630
     let (addAll :
       'tags this -> requests:RequestInfo.t Iterable.t_1 -> unit Promise.t_1)
       =
@@ -15880,12 +15974,12 @@ module ProgressEventInit =
     type 'tags this = 'tags intf constraint 'tags = [> `ProgressEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4714 : Ojs.t) -> intf_of_js __tags_of_js x4714
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4712 : __tags intf) -> intf_to_js __tags_to_js x4712
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4714 : Ojs.t) -> intf_of_js __tags_of_js x4714
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4712 : __tags intf) -> intf_to_js __tags_to_js x4712
     let (get_lengthComputable : 'tags this -> bool) =
       fun (x4716 : 'tags this) ->
         Ojs.bool_of_js
@@ -15934,13 +16028,14 @@ module ProgressEvent =
       fun _T -> Obj.magic
     and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun _T -> Obj.magic
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x4737 : Ojs.t) -> t_of_js __T_of_js x4737
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x4735 : __T t) -> t_to_js __T_to_js x4735
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x4737 : Ojs.t) -> t_of_js __T_of_js x4737
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x4735 : __T t) -> t_to_js __T_to_js x4735
     type t_0 = EventTarget.t t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x4741 : Ojs.t) -> t_of_js EventTarget.t_of_js x4741
@@ -15954,17 +16049,21 @@ module ProgressEvent =
     let rec this_of_js :
       'tags 'T .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'T) -> Ojs.t -> ('tags, 'T) this
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x4745 : Ojs.t) -> intf_of_js __tags_of_js x4745
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__T_of_js : Ojs.t -> __T) ->
+              fun (x4745 : Ojs.t) -> intf_of_js __tags_of_js x4745
     and this_to_js :
       'tags 'T .
         ('tags -> Ojs.t) -> ('T -> Ojs.t) -> ('tags, 'T) this -> Ojs.t
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x4743 : __tags intf) -> intf_to_js __tags_to_js x4743
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__T_to_js : __T -> Ojs.t) ->
+              fun (x4743 : __tags intf) -> intf_to_js __tags_to_js x4743
     let (get_lengthComputable : ('tags, 'T) this -> bool) =
       fun (x4747 : ('tags, 'T) this) ->
         Ojs.bool_of_js
@@ -16146,12 +16245,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `XMLHttpRequest ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4775 : Ojs.t) -> intf_of_js __tags_of_js x4775
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4773 : __tags intf) -> intf_to_js __tags_to_js x4773
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4775 : Ojs.t) -> intf_of_js __tags_of_js x4775
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4773 : __tags intf) -> intf_to_js __tags_to_js x4773
     let (get_onreadystatechange :
       'tags this -> (this:t -> ev:Event.t -> any) option) =
       fun (x4777 : 'tags this) ->
@@ -16724,12 +16823,12 @@ module rec
       'tags intf constraint 'tags = [> `XMLHttpRequestEventTarget ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x4918 : Ojs.t) -> intf_of_js __tags_of_js x4918
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x4916 : __tags intf) -> intf_to_js __tags_to_js x4916
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x4918 : Ojs.t) -> intf_of_js __tags_of_js x4918
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x4916 : __tags intf) -> intf_to_js __tags_to_js x4916
     let (get_onabort :
       'tags this ->
         (this:XMLHttpRequest.t -> ev:ProgressEvent.t_0 -> any) option)
@@ -17246,13 +17345,14 @@ module rec
          type 'tags this =
            'tags intf constraint 'tags = [> `XMLHttpRequestUpload ]
          let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-           = fun (type __tags) ->
-           fun (__tags_of_js : Ojs.t -> __tags) ->
-             fun (x5045 : Ojs.t) -> intf_of_js __tags_of_js x5045
+           =
+           fun (type __tags) ->
+             fun (__tags_of_js : Ojs.t -> __tags) ->
+               fun (x5045 : Ojs.t) -> intf_of_js __tags_of_js x5045
          and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
            fun (type __tags) ->
-           fun (__tags_to_js : __tags -> Ojs.t) ->
-             fun (x5043 : __tags intf) -> intf_to_js __tags_to_js x5043
+             fun (__tags_to_js : __tags -> Ojs.t) ->
+               fun (x5043 : __tags intf) -> intf_to_js __tags_to_js x5043
          let (addEventListener :
            'tags this ->
              type_:'K ->
@@ -17469,12 +17569,12 @@ module XMLHttpRequestEventTargetEventMap =
       'tags intf constraint 'tags = [> `XMLHttpRequestEventTargetEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5095 : Ojs.t) -> intf_of_js __tags_of_js x5095
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5093 : __tags intf) -> intf_to_js __tags_to_js x5093
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5095 : Ojs.t) -> intf_of_js __tags_of_js x5095
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5093 : __tags intf) -> intf_to_js __tags_to_js x5093
     let (get_abort :
       'tags this -> XMLHttpRequestEventTarget.t ProgressEvent.t) =
       fun (x5097 : 'tags this) ->
@@ -17622,12 +17722,12 @@ module XMLHttpRequestEventMap =
       'tags intf constraint 'tags = [> `XMLHttpRequestEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5165 : Ojs.t) -> intf_of_js __tags_of_js x5165
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5163 : __tags intf) -> intf_to_js __tags_to_js x5163
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5165 : Ojs.t) -> intf_of_js __tags_of_js x5165
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5163 : __tags intf) -> intf_to_js __tags_to_js x5163
     let (get_readystatechange : 'tags this -> Event.t) =
       fun (x5167 : 'tags this) ->
         Event.t_of_js
@@ -17691,12 +17791,12 @@ module ImageBitmap =
     type 'tags this = 'tags intf constraint 'tags = [> `ImageBitmap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5183 : Ojs.t) -> intf_of_js __tags_of_js x5183
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5181 : __tags intf) -> intf_to_js __tags_to_js x5181
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5183 : Ojs.t) -> intf_of_js __tags_of_js x5183
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5181 : __tags intf) -> intf_to_js __tags_to_js x5181
     let (get_height : 'tags this -> float) =
       fun (x5185 : 'tags this) ->
         Ojs.float_of_js
@@ -17732,12 +17832,12 @@ module ErrorEventInit =
     type 'tags this = 'tags intf constraint 'tags = [> `ErrorEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5195 : Ojs.t) -> intf_of_js __tags_of_js x5195
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5193 : __tags intf) -> intf_to_js __tags_to_js x5193
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5195 : Ojs.t) -> intf_of_js __tags_of_js x5195
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5193 : __tags intf) -> intf_to_js __tags_to_js x5193
     let (get_colno : 'tags this -> float) =
       fun (x5197 : 'tags this) ->
         Ojs.float_of_js
@@ -17816,12 +17916,12 @@ module ErrorEvent =
     type 'tags this = 'tags intf constraint 'tags = [> `ErrorEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5232 : Ojs.t) -> intf_of_js __tags_of_js x5232
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5230 : __tags intf) -> intf_to_js __tags_to_js x5230
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5232 : Ojs.t) -> intf_of_js __tags_of_js x5232
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5230 : __tags intf) -> intf_to_js __tags_to_js x5230
     let (get_colno : 'tags this -> float) =
       fun (x5234 : 'tags this) ->
         Ojs.float_of_js
@@ -17897,12 +17997,12 @@ module AbstractWorker =
     type 'tags this = 'tags intf constraint 'tags = [> `AbstractWorker ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5258 : Ojs.t) -> intf_of_js __tags_of_js x5258
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5256 : __tags intf) -> intf_to_js __tags_to_js x5256
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5258 : Ojs.t) -> intf_of_js __tags_of_js x5258
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5256 : __tags intf) -> intf_to_js __tags_to_js x5256
     let (get_onerror :
       'tags this -> (this:t -> ev:ErrorEvent.t -> any) option) =
       fun (x5260 : 'tags this) ->
@@ -18168,13 +18268,14 @@ module rec
       fun _T -> Obj.magic
     and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun _T -> Obj.magic
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x5317 : Ojs.t) -> t_of_js __T_of_js x5317
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x5315 : __T t) -> t_to_js __T_to_js x5315
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x5317 : Ojs.t) -> t_of_js __T_of_js x5317
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x5315 : __T t) -> t_to_js __T_to_js x5315
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x5321 : Ojs.t) -> t_of_js any_of_js x5321
@@ -18188,17 +18289,21 @@ module rec
     let rec this_of_js :
       'tags 'T .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'T) -> Ojs.t -> ('tags, 'T) this
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x5325 : Ojs.t) -> intf_of_js __tags_of_js x5325
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__T_of_js : Ojs.t -> __T) ->
+              fun (x5325 : Ojs.t) -> intf_of_js __tags_of_js x5325
     and this_to_js :
       'tags 'T .
         ('tags -> Ojs.t) -> ('T -> Ojs.t) -> ('tags, 'T) this -> Ojs.t
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x5323 : __tags intf) -> intf_to_js __tags_to_js x5323
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__T_to_js : __T -> Ojs.t) ->
+              fun (x5323 : __tags intf) -> intf_to_js __tags_to_js x5323
     let (initMessageEvent :
       ('tags, 'T) this ->
         type_:string ->
@@ -18460,13 +18565,14 @@ module rec
       fun _T -> Obj.magic
     and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun _T -> Obj.magic
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x5396 : Ojs.t) -> t_of_js __T_of_js x5396
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x5394 : __T t) -> t_to_js __T_to_js x5394
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x5396 : Ojs.t) -> t_of_js __T_of_js x5396
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x5394 : __T t) -> t_to_js __T_to_js x5394
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x5400 : Ojs.t) -> t_of_js any_of_js x5400
@@ -18480,17 +18586,21 @@ module rec
     let rec this_of_js :
       'tags 'T .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'T) -> Ojs.t -> ('tags, 'T) this
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x5404 : Ojs.t) -> intf_of_js __tags_of_js x5404
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__T_of_js : Ojs.t -> __T) ->
+              fun (x5404 : Ojs.t) -> intf_of_js __tags_of_js x5404
     and this_to_js :
       'tags 'T .
         ('tags -> Ojs.t) -> ('T -> Ojs.t) -> ('tags, 'T) this -> Ojs.t
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x5402 : __tags intf) -> intf_to_js __tags_to_js x5402
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__T_to_js : __T -> Ojs.t) ->
+              fun (x5402 : __tags intf) -> intf_to_js __tags_to_js x5402
     let (get_data : ('tags, 'T) this -> 'T) =
       fun (x5406 : ('tags, 'T) this) ->
         Obj.magic
@@ -18675,15 +18785,16 @@ module rec
               type 'tags this =
                 'tags intf constraint 'tags = [> `MessagePort ]
               let rec this_of_js :
-                'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this = fun (type
-                __tags) ->
-                fun (__tags_of_js : Ojs.t -> __tags) ->
-                  fun (x5466 : Ojs.t) -> intf_of_js __tags_of_js x5466
+                'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
+                fun (type __tags) ->
+                  fun (__tags_of_js : Ojs.t -> __tags) ->
+                    fun (x5466 : Ojs.t) -> intf_of_js __tags_of_js x5466
               and this_to_js :
-                'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun (type
-                __tags) ->
-                fun (__tags_to_js : __tags -> Ojs.t) ->
-                  fun (x5464 : __tags intf) -> intf_to_js __tags_to_js x5464
+                'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+                fun (type __tags) ->
+                  fun (__tags_to_js : __tags -> Ojs.t) ->
+                    fun (x5464 : __tags intf) ->
+                      intf_to_js __tags_to_js x5464
               let (get_onmessage :
                 'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option)
                 =
@@ -19116,16 +19227,16 @@ module rec
                    type 'tags this =
                      'tags intf constraint 'tags = [> `ServiceWorker ]
                    let rec this_of_js :
-                     'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this = fun
-                     (type __tags) ->
-                     fun (__tags_of_js : Ojs.t -> __tags) ->
-                       fun (x5554 : Ojs.t) -> intf_of_js __tags_of_js x5554
+                     'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
+                     fun (type __tags) ->
+                       fun (__tags_of_js : Ojs.t -> __tags) ->
+                         fun (x5554 : Ojs.t) -> intf_of_js __tags_of_js x5554
                    and this_to_js :
-                     'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-                     (type __tags) ->
-                     fun (__tags_to_js : __tags -> Ojs.t) ->
-                       fun (x5552 : __tags intf) ->
-                         intf_to_js __tags_to_js x5552
+                     'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+                     fun (type __tags) ->
+                       fun (__tags_to_js : __tags -> Ojs.t) ->
+                         fun (x5552 : __tags intf) ->
+                           intf_to_js __tags_to_js x5552
                    let (get_onstatechange :
                      'tags this -> (this:t -> ev:Event.t -> any) option) =
                      fun (x5556 : 'tags this) ->
@@ -19510,15 +19621,15 @@ module rec
                         let rec this_of_js :
                           'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
                           fun (type __tags) ->
-                          fun (__tags_of_js : Ojs.t -> __tags) ->
-                            fun (x5631 : Ojs.t) ->
-                              intf_of_js __tags_of_js x5631
+                            fun (__tags_of_js : Ojs.t -> __tags) ->
+                              fun (x5631 : Ojs.t) ->
+                                intf_of_js __tags_of_js x5631
                         and this_to_js :
                           'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
                           fun (type __tags) ->
-                          fun (__tags_to_js : __tags -> Ojs.t) ->
-                            fun (x5629 : __tags intf) ->
-                              intf_to_js __tags_to_js x5629
+                            fun (__tags_to_js : __tags -> Ojs.t) ->
+                              fun (x5629 : __tags intf) ->
+                                intf_to_js __tags_to_js x5629
                         let (get_transfer :
                           'tags this -> Transferable.t list) =
                           fun (x5633 : 'tags this) ->
@@ -19590,12 +19701,12 @@ module AbstractWorkerEventMap =
       'tags intf constraint 'tags = [> `AbstractWorkerEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5657 : Ojs.t) -> intf_of_js __tags_of_js x5657
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5655 : __tags intf) -> intf_to_js __tags_to_js x5655
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5657 : Ojs.t) -> intf_of_js __tags_of_js x5657
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5655 : __tags intf) -> intf_to_js __tags_to_js x5655
     let (get_error : 'tags this -> ErrorEvent.t) =
       fun (x5659 : 'tags this) ->
         ErrorEvent.t_of_js
@@ -19626,12 +19737,12 @@ module WorkerEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `WorkerEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5670 : Ojs.t) -> intf_of_js __tags_of_js x5670
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5668 : __tags intf) -> intf_to_js __tags_to_js x5668
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5670 : Ojs.t) -> intf_of_js __tags_of_js x5670
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5668 : __tags intf) -> intf_to_js __tags_to_js x5668
     let (get_message : 'tags this -> MessageEvent.t_0) =
       fun (x5672 : 'tags this) ->
         MessageEvent.t_0_of_js
@@ -19695,12 +19806,12 @@ module WorkerOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `WorkerOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5694 : Ojs.t) -> intf_of_js __tags_of_js x5694
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5692 : __tags intf) -> intf_to_js __tags_to_js x5692
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5694 : Ojs.t) -> intf_of_js __tags_of_js x5694
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5692 : __tags intf) -> intf_to_js __tags_to_js x5692
     let (get_credentials : 'tags this -> RequestCredentials.t) =
       fun (x5696 : 'tags this) ->
         RequestCredentials.t_of_js
@@ -19757,12 +19868,12 @@ module Worker =
     type 'tags this = 'tags intf constraint 'tags = [> `Worker ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5719 : Ojs.t) -> intf_of_js __tags_of_js x5719
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5717 : __tags intf) -> intf_to_js __tags_to_js x5717
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5719 : Ojs.t) -> intf_of_js __tags_of_js x5719
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5717 : __tags intf) -> intf_to_js __tags_to_js x5717
     let (get_onmessage :
       'tags this -> (this:t -> ev:MessageEvent.t_0 -> any) option) =
       fun (x5721 : 'tags this) ->
@@ -20069,12 +20180,12 @@ module CloseEventInit =
     type 'tags this = 'tags intf constraint 'tags = [> `CloseEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5811 : Ojs.t) -> intf_of_js __tags_of_js x5811
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5809 : __tags intf) -> intf_to_js __tags_to_js x5809
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5811 : Ojs.t) -> intf_of_js __tags_of_js x5811
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5809 : __tags intf) -> intf_to_js __tags_to_js x5809
     let (get_code : 'tags this -> float) =
       fun (x5813 : 'tags this) ->
         Ojs.float_of_js
@@ -20128,12 +20239,12 @@ module CloseEvent =
     type 'tags this = 'tags intf constraint 'tags = [> `CloseEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5836 : Ojs.t) -> intf_of_js __tags_of_js x5836
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5834 : __tags intf) -> intf_to_js __tags_to_js x5834
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5836 : Ojs.t) -> intf_of_js __tags_of_js x5836
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5834 : __tags intf) -> intf_to_js __tags_to_js x5834
     let (get_code : 'tags this -> float) =
       fun (x5838 : 'tags this) ->
         Ojs.float_of_js
@@ -20194,12 +20305,12 @@ module WebSocketEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `WebSocketEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5856 : Ojs.t) -> intf_of_js __tags_of_js x5856
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5854 : __tags intf) -> intf_to_js __tags_to_js x5854
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5856 : Ojs.t) -> intf_of_js __tags_of_js x5856
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5854 : __tags intf) -> intf_to_js __tags_to_js x5854
     let (get_close : 'tags this -> CloseEvent.t) =
       fun (x5858 : 'tags this) ->
         CloseEvent.t_of_js
@@ -20287,12 +20398,12 @@ module WebSocket =
     type 'tags this = 'tags intf constraint 'tags = [> `WebSocket ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x5892 : Ojs.t) -> intf_of_js __tags_of_js x5892
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x5890 : __tags intf) -> intf_to_js __tags_to_js x5890
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x5892 : Ojs.t) -> intf_of_js __tags_of_js x5892
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x5890 : __tags intf) -> intf_to_js __tags_to_js x5890
     let (get_binaryType : 'tags this -> BinaryType.t) =
       fun (x5894 : 'tags this) ->
         BinaryType.t_of_js
@@ -20722,12 +20833,12 @@ module WebGLUniformLocation =
       'tags intf constraint 'tags = [> `WebGLUniformLocation ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6033 : Ojs.t) -> intf_of_js __tags_of_js x6033
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6031 : __tags intf) -> intf_to_js __tags_to_js x6031
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6033 : Ojs.t) -> intf_of_js __tags_of_js x6033
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6031 : __tags intf) -> intf_to_js __tags_to_js x6031
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -20773,12 +20884,12 @@ module ImageDataSettings =
     type 'tags this = 'tags intf constraint 'tags = [> `ImageDataSettings ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6044 : Ojs.t) -> intf_of_js __tags_of_js x6044
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6042 : __tags intf) -> intf_to_js __tags_to_js x6042
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6044 : Ojs.t) -> intf_of_js __tags_of_js x6044
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6042 : __tags intf) -> intf_to_js __tags_to_js x6042
     let (get_colorSpace : 'tags this -> PredefinedColorSpace.t) =
       fun (x6046 : 'tags this) ->
         PredefinedColorSpace.t_of_js
@@ -20810,12 +20921,12 @@ module ImageData =
     type 'tags this = 'tags intf constraint 'tags = [> `ImageData ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6057 : Ojs.t) -> intf_of_js __tags_of_js x6057
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6055 : __tags intf) -> intf_to_js __tags_to_js x6055
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6057 : Ojs.t) -> intf_of_js __tags_of_js x6057
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6055 : __tags intf) -> intf_to_js __tags_to_js x6055
     let (get_data : 'tags this -> Uint8ClampedArray.t_0) =
       fun (x6059 : 'tags this) ->
         Uint8ClampedArray.t_0_of_js
@@ -20916,12 +21027,12 @@ module OffscreenCanvas =
     type 'tags this = 'tags intf constraint 'tags = [> `OffscreenCanvas ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6085 : Ojs.t) -> intf_of_js __tags_of_js x6085
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6083 : __tags intf) -> intf_to_js __tags_to_js x6083
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6085 : Ojs.t) -> intf_of_js __tags_of_js x6085
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6083 : __tags intf) -> intf_to_js __tags_to_js x6083
     let cast_from = Obj.magic
   end
 module TexImageSource =
@@ -21058,12 +21169,12 @@ module WebGLRenderingContextOverloads =
       'tags intf constraint 'tags = [> `WebGLRenderingContextOverloads ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6149 : Ojs.t) -> intf_of_js __tags_of_js x6149
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6147 : __tags intf) -> intf_to_js __tags_to_js x6147
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6149 : Ojs.t) -> intf_of_js __tags_of_js x6149
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6147 : __tags intf) -> intf_to_js __tags_to_js x6147
     let (uniform1fv :
       'tags this ->
         location:WebGLUniformLocation.t option ->
@@ -21566,12 +21677,12 @@ module WebGLShaderPrecisionFormat =
       'tags intf constraint 'tags = [> `WebGLShaderPrecisionFormat ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6368 : Ojs.t) -> intf_of_js __tags_of_js x6368
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6366 : __tags intf) -> intf_to_js __tags_to_js x6366
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6368 : Ojs.t) -> intf_of_js __tags_of_js x6368
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6366 : __tags intf) -> intf_to_js __tags_to_js x6366
     let (get_precision : 'tags this -> GLint.t) =
       fun (x6370 : 'tags this) ->
         GLint.t_of_js
@@ -21623,12 +21734,12 @@ module WebGLRenderbuffer =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLRenderbuffer ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6384 : Ojs.t) -> intf_of_js __tags_of_js x6384
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6382 : __tags intf) -> intf_to_js __tags_to_js x6382
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6384 : Ojs.t) -> intf_of_js __tags_of_js x6384
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6382 : __tags intf) -> intf_to_js __tags_to_js x6382
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -21654,12 +21765,12 @@ module WebGLFramebuffer =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLFramebuffer ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6390 : Ojs.t) -> intf_of_js __tags_of_js x6390
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6388 : __tags intf) -> intf_to_js __tags_to_js x6388
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6390 : Ojs.t) -> intf_of_js __tags_of_js x6390
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6388 : __tags intf) -> intf_to_js __tags_to_js x6388
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -21711,12 +21822,12 @@ module WebGLContextAttributes =
       'tags intf constraint 'tags = [> `WebGLContextAttributes ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6401 : Ojs.t) -> intf_of_js __tags_of_js x6401
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6399 : __tags intf) -> intf_to_js __tags_to_js x6399
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6401 : Ojs.t) -> intf_of_js __tags_of_js x6401
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6399 : __tags intf) -> intf_to_js __tags_to_js x6399
     let (get_alpha : 'tags this -> bool) =
       fun (x6403 : 'tags this) ->
         Ojs.bool_of_js
@@ -21858,12 +21969,12 @@ module WebGLProgram =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLProgram ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6462 : Ojs.t) -> intf_of_js __tags_of_js x6462
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6460 : __tags intf) -> intf_to_js __tags_to_js x6460
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6462 : Ojs.t) -> intf_of_js __tags_of_js x6462
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6460 : __tags intf) -> intf_to_js __tags_to_js x6460
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -21888,12 +21999,12 @@ module WebGLBuffer =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLBuffer ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6468 : Ojs.t) -> intf_of_js __tags_of_js x6468
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6466 : __tags intf) -> intf_to_js __tags_to_js x6466
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6468 : Ojs.t) -> intf_of_js __tags_of_js x6468
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6466 : __tags intf) -> intf_to_js __tags_to_js x6466
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -21918,12 +22029,12 @@ module WebGLActiveInfo =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLActiveInfo ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6474 : Ojs.t) -> intf_of_js __tags_of_js x6474
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6472 : __tags intf) -> intf_to_js __tags_to_js x6472
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6474 : Ojs.t) -> intf_of_js __tags_of_js x6474
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6472 : __tags intf) -> intf_to_js __tags_to_js x6472
     let (get_name : 'tags this -> string) =
       fun (x6476 : 'tags this) ->
         Ojs.string_of_js
@@ -21971,12 +22082,12 @@ module WEBGL_lose_context =
     type 'tags this = 'tags intf constraint 'tags = [> `WEBGL_lose_context ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6490 : Ojs.t) -> intf_of_js __tags_of_js x6490
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6488 : __tags intf) -> intf_to_js __tags_to_js x6488
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6490 : Ojs.t) -> intf_of_js __tags_of_js x6490
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6488 : __tags intf) -> intf_to_js __tags_to_js x6488
     let (loseContext : 'tags this -> unit) =
       fun (x6492 : 'tags this) ->
         ignore (Ojs.call (this_to_js Obj.magic x6492) "loseContext" [||])
@@ -21998,12 +22109,12 @@ module WEBGL_draw_buffers =
     type 'tags this = 'tags intf constraint 'tags = [> `WEBGL_draw_buffers ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6500 : Ojs.t) -> intf_of_js __tags_of_js x6500
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6498 : __tags intf) -> intf_to_js __tags_to_js x6498
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6500 : Ojs.t) -> intf_of_js __tags_of_js x6500
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6498 : __tags intf) -> intf_to_js __tags_to_js x6498
     let (drawBuffersWEBGL :
       'tags this -> buffers:GLenum.t Iterable.t_1 -> unit) =
       fun (x6504 : 'tags this) ->
@@ -22202,12 +22313,12 @@ module WEBGL_depth_texture =
     type 'tags this = 'tags intf constraint 'tags = [> `WEBGL_depth_texture ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6582 : Ojs.t) -> intf_of_js __tags_of_js x6582
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6580 : __tags intf) -> intf_to_js __tags_to_js x6580
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6582 : Ojs.t) -> intf_of_js __tags_of_js x6582
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6580 : __tags intf) -> intf_to_js __tags_to_js x6580
     let (get_UNSIGNED_INT_24_8_WEBGL : 'tags this -> GLenum.t) =
       fun (x6584 : 'tags this) ->
         GLenum.t_of_js
@@ -22235,12 +22346,12 @@ module WebGLShader =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLShader ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6592 : Ojs.t) -> intf_of_js __tags_of_js x6592
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6590 : __tags intf) -> intf_to_js __tags_to_js x6590
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6592 : Ojs.t) -> intf_of_js __tags_of_js x6592
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6590 : __tags intf) -> intf_to_js __tags_to_js x6590
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -22265,12 +22376,12 @@ module WEBGL_debug_shaders =
     type 'tags this = 'tags intf constraint 'tags = [> `WEBGL_debug_shaders ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6598 : Ojs.t) -> intf_of_js __tags_of_js x6598
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6596 : __tags intf) -> intf_to_js __tags_to_js x6596
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6598 : Ojs.t) -> intf_of_js __tags_of_js x6598
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6596 : __tags intf) -> intf_to_js __tags_to_js x6596
     let (getTranslatedShaderSource :
       'tags this -> shader:WebGLShader.t -> string) =
       fun (x6601 : 'tags this) ->
@@ -22294,12 +22405,12 @@ module WEBGL_debug_renderer_info =
       'tags intf constraint 'tags = [> `WEBGL_debug_renderer_info ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6607 : Ojs.t) -> intf_of_js __tags_of_js x6607
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6605 : __tags intf) -> intf_to_js __tags_to_js x6605
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6607 : Ojs.t) -> intf_of_js __tags_of_js x6607
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6605 : __tags intf) -> intf_to_js __tags_to_js x6605
     let (get_UNMASKED_RENDERER_WEBGL : 'tags this -> GLenum.t) =
       fun (x6609 : 'tags this) ->
         GLenum.t_of_js
@@ -22339,12 +22450,12 @@ module WEBGL_compressed_texture_s3tc_srgb =
       'tags intf constraint 'tags = [> `WEBGL_compressed_texture_s3tc_srgb ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6620 : Ojs.t) -> intf_of_js __tags_of_js x6620
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6618 : __tags intf) -> intf_to_js __tags_to_js x6618
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6620 : Ojs.t) -> intf_of_js __tags_of_js x6620
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6618 : __tags intf) -> intf_to_js __tags_to_js x6618
     let (get_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT : 'tags this -> GLenum.t) =
       fun (x6622 : 'tags this) ->
         GLenum.t_of_js
@@ -22405,12 +22516,12 @@ module WEBGL_compressed_texture_s3tc =
       'tags intf constraint 'tags = [> `WEBGL_compressed_texture_s3tc ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6639 : Ojs.t) -> intf_of_js __tags_of_js x6639
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6637 : __tags intf) -> intf_to_js __tags_to_js x6637
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6639 : Ojs.t) -> intf_of_js __tags_of_js x6639
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6637 : __tags intf) -> intf_to_js __tags_to_js x6637
     let (get_COMPRESSED_RGBA_S3TC_DXT1_EXT : 'tags this -> GLenum.t) =
       fun (x6641 : 'tags this) ->
         GLenum.t_of_js
@@ -22468,12 +22579,12 @@ module WEBGL_compressed_texture_pvrtc =
       'tags intf constraint 'tags = [> `WEBGL_compressed_texture_pvrtc ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6658 : Ojs.t) -> intf_of_js __tags_of_js x6658
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6656 : __tags intf) -> intf_to_js __tags_to_js x6656
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6658 : Ojs.t) -> intf_of_js __tags_of_js x6658
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6656 : __tags intf) -> intf_to_js __tags_to_js x6656
     let (get_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG : 'tags this -> GLenum.t) =
       fun (x6660 : 'tags this) ->
         GLenum.t_of_js
@@ -22531,12 +22642,12 @@ module WEBGL_compressed_texture_etc1 =
       'tags intf constraint 'tags = [> `WEBGL_compressed_texture_etc1 ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6677 : Ojs.t) -> intf_of_js __tags_of_js x6677
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6675 : __tags intf) -> intf_to_js __tags_to_js x6675
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6677 : Ojs.t) -> intf_of_js __tags_of_js x6677
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6675 : __tags intf) -> intf_to_js __tags_to_js x6675
     let (get_COMPRESSED_RGB_ETC1_WEBGL : 'tags this -> GLenum.t) =
       fun (x6679 : 'tags this) ->
         GLenum.t_of_js
@@ -22565,12 +22676,12 @@ module WEBGL_compressed_texture_etc =
       'tags intf constraint 'tags = [> `WEBGL_compressed_texture_etc ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6687 : Ojs.t) -> intf_of_js __tags_of_js x6687
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6685 : __tags intf) -> intf_to_js __tags_to_js x6685
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6687 : Ojs.t) -> intf_of_js __tags_of_js x6687
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6685 : __tags intf) -> intf_to_js __tags_to_js x6685
     let (get_COMPRESSED_R11_EAC : 'tags this -> GLenum.t) =
       fun (x6689 : 'tags this) ->
         GLenum.t_of_js
@@ -22695,12 +22806,12 @@ module WEBGL_compressed_texture_astc =
       'tags intf constraint 'tags = [> `WEBGL_compressed_texture_astc ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6724 : Ojs.t) -> intf_of_js __tags_of_js x6724
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6722 : __tags intf) -> intf_to_js __tags_to_js x6722
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6724 : Ojs.t) -> intf_of_js __tags_of_js x6724
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6722 : __tags intf) -> intf_to_js __tags_to_js x6722
     let (getSupportedProfiles : 'tags this -> string list) =
       fun (x6726 : 'tags this) ->
         Ojs.list_of_js Ojs.string_of_js
@@ -22867,12 +22978,12 @@ module WEBGL_color_buffer_float =
       'tags intf constraint 'tags = [> `WEBGL_color_buffer_float ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6789 : Ojs.t) -> intf_of_js __tags_of_js x6789
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6787 : __tags intf) -> intf_to_js __tags_to_js x6787
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6789 : Ojs.t) -> intf_of_js __tags_of_js x6789
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6787 : __tags intf) -> intf_to_js __tags_to_js x6787
     let (get_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT :
       'tags this -> GLenum.t) =
       fun (x6791 : 'tags this) ->
@@ -22919,12 +23030,12 @@ module WebGLTexture =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLTexture ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6805 : Ojs.t) -> intf_of_js __tags_of_js x6805
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6803 : __tags intf) -> intf_to_js __tags_to_js x6803
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6805 : Ojs.t) -> intf_of_js __tags_of_js x6805
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6803 : __tags intf) -> intf_to_js __tags_to_js x6803
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -22949,12 +23060,12 @@ module OVR_multiview2 =
     type 'tags this = 'tags intf constraint 'tags = [> `OVR_multiview2 ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6811 : Ojs.t) -> intf_of_js __tags_of_js x6811
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6809 : __tags intf) -> intf_to_js __tags_to_js x6809
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6811 : Ojs.t) -> intf_of_js __tags_of_js x6811
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6809 : __tags intf) -> intf_to_js __tags_to_js x6809
     let (framebufferTextureMultiviewOVR :
       'tags this ->
         target:GLenum.t ->
@@ -23015,12 +23126,12 @@ module WebGLVertexArrayObjectOES =
       'tags intf constraint 'tags = [> `WebGLVertexArrayObjectOES ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6834 : Ojs.t) -> intf_of_js __tags_of_js x6834
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6832 : __tags intf) -> intf_to_js __tags_to_js x6832
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6834 : Ojs.t) -> intf_of_js __tags_of_js x6834
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6832 : __tags intf) -> intf_to_js __tags_to_js x6832
     let cast_from = Obj.magic
   end
 module OES_vertex_array_object =
@@ -23037,12 +23148,12 @@ module OES_vertex_array_object =
       'tags intf constraint 'tags = [> `OES_vertex_array_object ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6840 : Ojs.t) -> intf_of_js __tags_of_js x6840
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6838 : __tags intf) -> intf_to_js __tags_to_js x6838
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6840 : Ojs.t) -> intf_of_js __tags_of_js x6840
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6838 : __tags intf) -> intf_to_js __tags_to_js x6838
     let (bindVertexArrayOES :
       'tags this -> arrayObject:WebGLVertexArrayObjectOES.t option -> unit) =
       fun (x6844 : 'tags this) ->
@@ -23092,12 +23203,12 @@ module OES_texture_half_float_linear =
       'tags intf constraint 'tags = [> `OES_texture_half_float_linear ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6863 : Ojs.t) -> intf_of_js __tags_of_js x6863
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6861 : __tags intf) -> intf_to_js __tags_to_js x6861
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6863 : Ojs.t) -> intf_of_js __tags_of_js x6863
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6861 : __tags intf) -> intf_to_js __tags_to_js x6861
     let cast_from = Obj.magic
   end
 module OES_texture_half_float =
@@ -23114,12 +23225,12 @@ module OES_texture_half_float =
       'tags intf constraint 'tags = [> `OES_texture_half_float ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6869 : Ojs.t) -> intf_of_js __tags_of_js x6869
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6867 : __tags intf) -> intf_to_js __tags_to_js x6867
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6869 : Ojs.t) -> intf_of_js __tags_of_js x6869
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6867 : __tags intf) -> intf_to_js __tags_to_js x6867
     let (get_HALF_FLOAT_OES : 'tags this -> GLenum.t) =
       fun (x6871 : 'tags this) ->
         GLenum.t_of_js
@@ -23146,12 +23257,12 @@ module OES_texture_float_linear =
       'tags intf constraint 'tags = [> `OES_texture_float_linear ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6879 : Ojs.t) -> intf_of_js __tags_of_js x6879
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6877 : __tags intf) -> intf_to_js __tags_to_js x6877
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6879 : Ojs.t) -> intf_of_js __tags_of_js x6879
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6877 : __tags intf) -> intf_to_js __tags_to_js x6877
     let cast_from = Obj.magic
   end
 module OES_texture_float =
@@ -23167,12 +23278,12 @@ module OES_texture_float =
     type 'tags this = 'tags intf constraint 'tags = [> `OES_texture_float ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6885 : Ojs.t) -> intf_of_js __tags_of_js x6885
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6883 : __tags intf) -> intf_to_js __tags_to_js x6883
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6885 : Ojs.t) -> intf_of_js __tags_of_js x6885
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6883 : __tags intf) -> intf_to_js __tags_to_js x6883
     let cast_from = Obj.magic
   end
 module OES_standard_derivatives =
@@ -23189,12 +23300,12 @@ module OES_standard_derivatives =
       'tags intf constraint 'tags = [> `OES_standard_derivatives ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6891 : Ojs.t) -> intf_of_js __tags_of_js x6891
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6889 : __tags intf) -> intf_to_js __tags_to_js x6889
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6891 : Ojs.t) -> intf_of_js __tags_of_js x6891
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6889 : __tags intf) -> intf_to_js __tags_to_js x6889
     let (get_FRAGMENT_SHADER_DERIVATIVE_HINT_OES : 'tags this -> GLenum.t) =
       fun (x6893 : 'tags this) ->
         GLenum.t_of_js
@@ -23224,12 +23335,12 @@ module OES_element_index_uint =
       'tags intf constraint 'tags = [> `OES_element_index_uint ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6901 : Ojs.t) -> intf_of_js __tags_of_js x6901
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6899 : __tags intf) -> intf_to_js __tags_to_js x6899
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6901 : Ojs.t) -> intf_of_js __tags_of_js x6901
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6899 : __tags intf) -> intf_to_js __tags_to_js x6899
     let cast_from = Obj.magic
   end
 module KHR_parallel_shader_compile =
@@ -23246,12 +23357,12 @@ module KHR_parallel_shader_compile =
       'tags intf constraint 'tags = [> `KHR_parallel_shader_compile ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6907 : Ojs.t) -> intf_of_js __tags_of_js x6907
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6905 : __tags intf) -> intf_to_js __tags_to_js x6905
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6907 : Ojs.t) -> intf_of_js __tags_of_js x6907
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6905 : __tags intf) -> intf_to_js __tags_to_js x6905
     let (get_COMPLETION_STATUS_KHR : 'tags this -> GLenum.t) =
       fun (x6909 : 'tags this) ->
         GLenum.t_of_js
@@ -23300,12 +23411,12 @@ module EXT_texture_filter_anisotropic =
       'tags intf constraint 'tags = [> `EXT_texture_filter_anisotropic ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6925 : Ojs.t) -> intf_of_js __tags_of_js x6925
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6923 : __tags intf) -> intf_to_js __tags_to_js x6923
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6925 : Ojs.t) -> intf_of_js __tags_of_js x6925
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6923 : __tags intf) -> intf_to_js __tags_to_js x6923
     let (get_MAX_TEXTURE_MAX_ANISOTROPY_EXT : 'tags this -> GLenum.t) =
       fun (x6927 : 'tags this) ->
         GLenum.t_of_js
@@ -23345,12 +23456,12 @@ module EXT_shader_texture_lod =
       'tags intf constraint 'tags = [> `EXT_shader_texture_lod ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6938 : Ojs.t) -> intf_of_js __tags_of_js x6938
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6936 : __tags intf) -> intf_to_js __tags_to_js x6936
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6938 : Ojs.t) -> intf_of_js __tags_of_js x6938
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6936 : __tags intf) -> intf_to_js __tags_to_js x6936
     let cast_from = Obj.magic
   end
 module EXT_sRGB =
@@ -23366,12 +23477,12 @@ module EXT_sRGB =
     type 'tags this = 'tags intf constraint 'tags = [> `EXT_sRGB ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6944 : Ojs.t) -> intf_of_js __tags_of_js x6944
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6942 : __tags intf) -> intf_to_js __tags_to_js x6942
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6944 : Ojs.t) -> intf_of_js __tags_of_js x6944
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6942 : __tags intf) -> intf_to_js __tags_to_js x6942
     let (get_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT :
       'tags this -> GLenum.t) =
       fun (x6946 : 'tags this) ->
@@ -23425,12 +23536,12 @@ module EXT_frag_depth =
     type 'tags this = 'tags intf constraint 'tags = [> `EXT_frag_depth ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6963 : Ojs.t) -> intf_of_js __tags_of_js x6963
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6961 : __tags intf) -> intf_to_js __tags_to_js x6961
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6963 : Ojs.t) -> intf_of_js __tags_of_js x6963
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6961 : __tags intf) -> intf_to_js __tags_to_js x6961
     let cast_from = Obj.magic
   end
 module EXT_float_blend =
@@ -23446,12 +23557,12 @@ module EXT_float_blend =
     type 'tags this = 'tags intf constraint 'tags = [> `EXT_float_blend ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6969 : Ojs.t) -> intf_of_js __tags_of_js x6969
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6967 : __tags intf) -> intf_to_js __tags_to_js x6967
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6969 : Ojs.t) -> intf_of_js __tags_of_js x6969
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6967 : __tags intf) -> intf_to_js __tags_to_js x6967
     let cast_from = Obj.magic
   end
 module EXT_color_buffer_half_float =
@@ -23468,12 +23579,12 @@ module EXT_color_buffer_half_float =
       'tags intf constraint 'tags = [> `EXT_color_buffer_half_float ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6975 : Ojs.t) -> intf_of_js __tags_of_js x6975
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6973 : __tags intf) -> intf_to_js __tags_to_js x6973
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6975 : Ojs.t) -> intf_of_js __tags_of_js x6975
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6973 : __tags intf) -> intf_to_js __tags_to_js x6973
     let (get_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT :
       'tags this -> GLenum.t) =
       fun (x6977 : 'tags this) ->
@@ -23529,12 +23640,12 @@ module EXT_color_buffer_float =
       'tags intf constraint 'tags = [> `EXT_color_buffer_float ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x6994 : Ojs.t) -> intf_of_js __tags_of_js x6994
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6992 : __tags intf) -> intf_to_js __tags_to_js x6992
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x6994 : Ojs.t) -> intf_of_js __tags_of_js x6994
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6992 : __tags intf) -> intf_to_js __tags_to_js x6992
     let cast_from = Obj.magic
   end
 module EXT_blend_minmax =
@@ -23550,12 +23661,12 @@ module EXT_blend_minmax =
     type 'tags this = 'tags intf constraint 'tags = [> `EXT_blend_minmax ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x7000 : Ojs.t) -> intf_of_js __tags_of_js x7000
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x6998 : __tags intf) -> intf_to_js __tags_to_js x6998
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x7000 : Ojs.t) -> intf_of_js __tags_of_js x7000
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x6998 : __tags intf) -> intf_to_js __tags_to_js x6998
     let (get_MAX_EXT : 'tags this -> GLenum.t) =
       fun (x7002 : 'tags this) ->
         GLenum.t_of_js
@@ -23598,12 +23709,12 @@ module ANGLE_instanced_arrays =
       'tags intf constraint 'tags = [> `ANGLE_instanced_arrays ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x7017 : Ojs.t) -> intf_of_js __tags_of_js x7017
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x7015 : __tags intf) -> intf_to_js __tags_to_js x7015
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x7017 : Ojs.t) -> intf_of_js __tags_of_js x7017
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x7015 : __tags intf) -> intf_to_js __tags_to_js x7015
     let (drawArraysInstancedANGLE :
       'tags this ->
         mode:GLenum.t ->
@@ -23668,12 +23779,12 @@ module WebGLRenderingContextBase =
       'tags intf constraint 'tags = [> `WebGLRenderingContextBase ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x7042 : Ojs.t) -> intf_of_js __tags_of_js x7042
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x7040 : __tags intf) -> intf_to_js __tags_to_js x7040
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x7042 : Ojs.t) -> intf_of_js __tags_of_js x7042
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x7040 : __tags intf) -> intf_to_js __tags_to_js x7040
     let (vertexAttrib1fv :
       'tags this -> index:GLuint.t -> values:GLfloat.t Iterable.t_1 -> unit)
       =
@@ -26487,12 +26598,12 @@ module WebGLRenderingContext =
       'tags intf constraint 'tags = [> `WebGLRenderingContext ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8306 : Ojs.t) -> intf_of_js __tags_of_js x8306
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8304 : __tags intf) -> intf_to_js __tags_to_js x8304
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8306 : Ojs.t) -> intf_of_js __tags_of_js x8306
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8304 : __tags intf) -> intf_to_js __tags_to_js x8304
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -28262,12 +28373,12 @@ module WebGLContextEventInit =
       'tags intf constraint 'tags = [> `WebGLContextEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8312 : Ojs.t) -> intf_of_js __tags_of_js x8312
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8310 : __tags intf) -> intf_to_js __tags_to_js x8310
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8312 : Ojs.t) -> intf_of_js __tags_of_js x8312
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8310 : __tags intf) -> intf_to_js __tags_to_js x8310
     let (get_statusMessage : 'tags this -> string) =
       fun (x8314 : 'tags this) ->
         Ojs.string_of_js
@@ -28298,12 +28409,12 @@ module WebGLContextEvent =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLContextEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8325 : Ojs.t) -> intf_of_js __tags_of_js x8325
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8323 : __tags intf) -> intf_to_js __tags_to_js x8323
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8325 : Ojs.t) -> intf_of_js __tags_of_js x8325
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8323 : __tags intf) -> intf_to_js __tags_to_js x8323
     let (get_statusMessage : 'tags this -> string) =
       fun (x8327 : 'tags this) ->
         Ojs.string_of_js
@@ -28353,12 +28464,12 @@ module WebGL2RenderingContextOverloads =
       'tags intf constraint 'tags = [> `WebGL2RenderingContextOverloads ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8339 : Ojs.t) -> intf_of_js __tags_of_js x8339
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8337 : __tags intf) -> intf_to_js __tags_to_js x8337
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8339 : Ojs.t) -> intf_of_js __tags_of_js x8339
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8337 : __tags intf) -> intf_to_js __tags_to_js x8337
     let (uniform1fv :
       'tags this ->
         location:WebGLUniformLocation.t option ->
@@ -29980,12 +30091,12 @@ module WebGLVertexArrayObject =
       'tags intf constraint 'tags = [> `WebGLVertexArrayObject ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8830 : Ojs.t) -> intf_of_js __tags_of_js x8830
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8828 : __tags intf) -> intf_to_js __tags_to_js x8828
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8830 : Ojs.t) -> intf_of_js __tags_of_js x8830
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8828 : __tags intf) -> intf_to_js __tags_to_js x8828
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -30014,12 +30125,12 @@ module WebGLTransformFeedback =
       'tags intf constraint 'tags = [> `WebGLTransformFeedback ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8836 : Ojs.t) -> intf_of_js __tags_of_js x8836
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8834 : __tags intf) -> intf_to_js __tags_to_js x8834
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8836 : Ojs.t) -> intf_of_js __tags_of_js x8836
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8834 : __tags intf) -> intf_to_js __tags_to_js x8834
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -30047,12 +30158,12 @@ module WebGLSync =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLSync ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8842 : Ojs.t) -> intf_of_js __tags_of_js x8842
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8840 : __tags intf) -> intf_to_js __tags_to_js x8840
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8842 : Ojs.t) -> intf_of_js __tags_of_js x8842
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8840 : __tags intf) -> intf_to_js __tags_to_js x8840
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -30077,12 +30188,12 @@ module WebGLSampler =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLSampler ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8848 : Ojs.t) -> intf_of_js __tags_of_js x8848
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8846 : __tags intf) -> intf_to_js __tags_to_js x8846
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8848 : Ojs.t) -> intf_of_js __tags_of_js x8848
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8846 : __tags intf) -> intf_to_js __tags_to_js x8846
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -30107,12 +30218,12 @@ module WebGLQuery =
     type 'tags this = 'tags intf constraint 'tags = [> `WebGLQuery ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8854 : Ojs.t) -> intf_of_js __tags_of_js x8854
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8852 : __tags intf) -> intf_to_js __tags_to_js x8852
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8854 : Ojs.t) -> intf_of_js __tags_of_js x8854
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8852 : __tags intf) -> intf_to_js __tags_to_js x8852
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -30175,12 +30286,12 @@ module WebGL2RenderingContextBase =
       'tags intf constraint 'tags = [> `WebGL2RenderingContextBase ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x8878 : Ojs.t) -> intf_of_js __tags_of_js x8878
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x8876 : __tags intf) -> intf_to_js __tags_to_js x8876
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x8878 : Ojs.t) -> intf_of_js __tags_of_js x8878
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x8876 : __tags intf) -> intf_to_js __tags_to_js x8876
     let (clearBufferfv :
       'tags this ->
         buffer:GLenum.t ->
@@ -34010,12 +34121,12 @@ module WebGL2RenderingContext =
       'tags intf constraint 'tags = [> `WebGL2RenderingContext ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x10280 : Ojs.t) -> intf_of_js __tags_of_js x10280
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x10278 : __tags intf) -> intf_to_js __tags_to_js x10278
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x10280 : Ojs.t) -> intf_of_js __tags_of_js x10280
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x10278 : __tags intf) -> intf_to_js __tags_to_js x10278
     let cast_from = Obj.magic
     let (prototype : unit -> t) =
       fun () ->
@@ -37380,13 +37491,14 @@ module WebAssembly =
           'tags intf constraint 'tags =
                       [> `WebAssembly_ModuleImportDescriptor ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10291 : Ojs.t) -> intf_of_js __tags_of_js x10291
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10291 : Ojs.t) -> intf_of_js __tags_of_js x10291
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10289 : __tags intf) -> intf_to_js __tags_to_js x10289
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10289 : __tags intf) -> intf_to_js __tags_to_js x10289
         let (get_kind : 'tags this -> ImportExportKind.t) =
           fun (x10293 : 'tags this) ->
             ImportExportKind.t_of_js
@@ -37446,13 +37558,14 @@ module WebAssembly =
           'tags intf constraint 'tags =
                       [> `WebAssembly_ModuleExportDescriptor ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10316 : Ojs.t) -> intf_of_js __tags_of_js x10316
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10316 : Ojs.t) -> intf_of_js __tags_of_js x10316
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10314 : __tags intf) -> intf_to_js __tags_to_js x10314
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10314 : __tags intf) -> intf_to_js __tags_to_js x10314
         let (get_kind : 'tags this -> ImportExportKind.t) =
           fun (x10318 : 'tags this) ->
             ImportExportKind.t_of_js
@@ -37496,13 +37609,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_Module ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10335 : Ojs.t) -> intf_of_js __tags_of_js x10335
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10335 : Ojs.t) -> intf_of_js __tags_of_js x10335
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10333 : __tags intf) -> intf_to_js __tags_to_js x10333
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10333 : __tags intf) -> intf_to_js __tags_to_js x10333
         let cast_from = Obj.magic
         let (prototype : unit -> t) =
           fun () ->
@@ -37577,13 +37691,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_TableDescriptor ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10354 : Ojs.t) -> intf_of_js __tags_of_js x10354
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10354 : Ojs.t) -> intf_of_js __tags_of_js x10354
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10352 : __tags intf) -> intf_to_js __tags_to_js x10352
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10352 : __tags intf) -> intf_to_js __tags_to_js x10352
         let (get_element : 'tags this -> TableKind.t) =
           fun (x10356 : 'tags this) ->
             TableKind.t_of_js
@@ -37642,13 +37757,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_Table ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10379 : Ojs.t) -> intf_of_js __tags_of_js x10379
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10379 : Ojs.t) -> intf_of_js __tags_of_js x10379
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10377 : __tags intf) -> intf_to_js __tags_to_js x10377
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10377 : __tags intf) -> intf_to_js __tags_to_js x10377
         let (get_length : 'tags this -> float) =
           fun (x10381 : 'tags this) ->
             Ojs.float_of_js
@@ -37749,13 +37865,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_MemoryDescriptor ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10408 : Ojs.t) -> intf_of_js __tags_of_js x10408
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10408 : Ojs.t) -> intf_of_js __tags_of_js x10408
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10406 : __tags intf) -> intf_to_js __tags_to_js x10406
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10406 : __tags intf) -> intf_to_js __tags_to_js x10406
         let (get_initial : 'tags this -> float) =
           fun (x10410 : 'tags this) ->
             Ojs.float_of_js
@@ -37812,13 +37929,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_Memory ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10433 : Ojs.t) -> intf_of_js __tags_of_js x10433
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10433 : Ojs.t) -> intf_of_js __tags_of_js x10433
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10431 : __tags intf) -> intf_to_js __tags_to_js x10431
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10431 : __tags intf) -> intf_to_js __tags_to_js x10431
         let (get_buffer : 'tags this -> ArrayBuffer.t_0) =
           fun (x10435 : 'tags this) ->
             ArrayBuffer.t_0_of_js
@@ -37895,13 +38013,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_GlobalDescriptor ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10450 : Ojs.t) -> intf_of_js __tags_of_js x10450
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10450 : Ojs.t) -> intf_of_js __tags_of_js x10450
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10448 : __tags intf) -> intf_to_js __tags_to_js x10448
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10448 : __tags intf) -> intf_to_js __tags_to_js x10448
         let (get_mutable : 'tags this -> bool) =
           fun (x10452 : 'tags this) ->
             Ojs.bool_of_js
@@ -37944,13 +38063,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_Global ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10469 : Ojs.t) -> intf_of_js __tags_of_js x10469
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10469 : Ojs.t) -> intf_of_js __tags_of_js x10469
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10467 : __tags intf) -> intf_to_js __tags_to_js x10467
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10467 : __tags intf) -> intf_to_js __tags_to_js x10467
         let (get_value : 'tags this -> any) =
           fun (x10471 : 'tags this) ->
             any_of_js
@@ -38096,13 +38216,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_Instance ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10531 : Ojs.t) -> intf_of_js __tags_of_js x10531
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10531 : Ojs.t) -> intf_of_js __tags_of_js x10531
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10529 : __tags intf) -> intf_to_js __tags_to_js x10529
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10529 : __tags intf) -> intf_to_js __tags_to_js x10529
         let (get_exports : 'tags this -> Exports.t) =
           fun (x10533 : 'tags this) ->
             Exports.t_of_js
@@ -38159,13 +38280,14 @@ module WebAssembly =
           'tags intf constraint 'tags =
                       [> `WebAssembly_WebAssemblyInstantiatedSource ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10545 : Ojs.t) -> intf_of_js __tags_of_js x10545
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10545 : Ojs.t) -> intf_of_js __tags_of_js x10545
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10543 : __tags intf) -> intf_to_js __tags_to_js x10543
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10543 : __tags intf) -> intf_to_js __tags_to_js x10543
         let (get_instance : 'tags this -> Instance.t) =
           fun (x10547 : 'tags this) ->
             Instance.t_of_js
@@ -38209,13 +38331,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_RuntimeError ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10564 : Ojs.t) -> intf_of_js __tags_of_js x10564
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10564 : Ojs.t) -> intf_of_js __tags_of_js x10564
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10562 : __tags intf) -> intf_to_js __tags_to_js x10562
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10562 : __tags intf) -> intf_to_js __tags_to_js x10562
         let cast_from = Obj.magic
         let (prototype : unit -> t) =
           fun () ->
@@ -38276,13 +38399,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_LinkError ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10576 : Ojs.t) -> intf_of_js __tags_of_js x10576
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10576 : Ojs.t) -> intf_of_js __tags_of_js x10576
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10574 : __tags intf) -> intf_to_js __tags_to_js x10574
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10574 : __tags intf) -> intf_to_js __tags_to_js x10574
         let cast_from = Obj.magic
         let (prototype : unit -> t) =
           fun () ->
@@ -38343,13 +38467,14 @@ module WebAssembly =
         type 'tags this =
           'tags intf constraint 'tags = [> `WebAssembly_CompileError ]
         let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this
-          = fun (type __tags) ->
-          fun (__tags_of_js : Ojs.t -> __tags) ->
-            fun (x10588 : Ojs.t) -> intf_of_js __tags_of_js x10588
+          =
+          fun (type __tags) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (x10588 : Ojs.t) -> intf_of_js __tags_of_js x10588
         and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
           fun (type __tags) ->
-          fun (__tags_to_js : __tags -> Ojs.t) ->
-            fun (x10586 : __tags intf) -> intf_to_js __tags_to_js x10586
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (x10586 : __tags intf) -> intf_to_js __tags_to_js x10586
         let cast_from = Obj.magic
         let (prototype : unit -> t) =
           fun () ->
@@ -38512,12 +38637,12 @@ module WEBGL_multi_draw =
     type 'tags this = 'tags intf constraint 'tags = [> `WEBGL_multi_draw ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x10629 : Ojs.t) -> intf_of_js __tags_of_js x10629
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x10627 : __tags intf) -> intf_to_js __tags_to_js x10627
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x10629 : Ojs.t) -> intf_of_js __tags_of_js x10629
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x10627 : __tags intf) -> intf_to_js __tags_to_js x10627
     let (multiDrawArraysInstancedWEBGL :
       'tags this ->
         mode:GLenum.t ->
@@ -38956,13 +39081,14 @@ module TransformStreamDefaultController =
       fun _O -> Obj.magic
     and t_to_js : 'O . ('O -> Ojs.t) -> 'O t -> Ojs.t = fun _O -> Obj.magic
     type 'O t_1 = 'O t
-    let rec t_1_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O t_1 = fun (type
-      __O) ->
-      fun (__O_of_js : Ojs.t -> __O) ->
-        fun (x10769 : Ojs.t) -> t_of_js __O_of_js x10769
-    and t_1_to_js : 'O . ('O -> Ojs.t) -> 'O t_1 -> Ojs.t = fun (type __O) ->
-      fun (__O_to_js : __O -> Ojs.t) ->
-        fun (x10767 : __O t) -> t_to_js __O_to_js x10767
+    let rec t_1_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O t_1 =
+      fun (type __O) ->
+        fun (__O_of_js : Ojs.t -> __O) ->
+          fun (x10769 : Ojs.t) -> t_of_js __O_of_js x10769
+    and t_1_to_js : 'O . ('O -> Ojs.t) -> 'O t_1 -> Ojs.t =
+      fun (type __O) ->
+        fun (__O_to_js : __O -> Ojs.t) ->
+          fun (x10767 : __O t) -> t_to_js __O_to_js x10767
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x10773 : Ojs.t) -> t_of_js any_of_js x10773
@@ -38977,17 +39103,21 @@ module TransformStreamDefaultController =
     let rec this_of_js :
       'tags 'O .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'O) -> Ojs.t -> ('tags, 'O) this
-      = fun (type __tags) -> fun (type __O) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__O_of_js : Ojs.t -> __O) ->
-          fun (x10777 : Ojs.t) -> intf_of_js __tags_of_js x10777
+      =
+      fun (type __tags) ->
+        fun (type __O) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__O_of_js : Ojs.t -> __O) ->
+              fun (x10777 : Ojs.t) -> intf_of_js __tags_of_js x10777
     and this_to_js :
       'tags 'O .
         ('tags -> Ojs.t) -> ('O -> Ojs.t) -> ('tags, 'O) this -> Ojs.t
-      = fun (type __tags) -> fun (type __O) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__O_to_js : __O -> Ojs.t) ->
-          fun (x10775 : __tags intf) -> intf_to_js __tags_to_js x10775
+      =
+      fun (type __tags) ->
+        fun (type __O) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__O_to_js : __O -> Ojs.t) ->
+              fun (x10775 : __tags intf) -> intf_to_js __tags_to_js x10775
     let (get_desiredSize : ('tags, 'O) this -> float option) =
       fun (x10779 : ('tags, 'O) this) ->
         Ojs.option_of_js Ojs.float_of_js
@@ -39058,17 +39188,20 @@ module TransformerTransformCallback =
       fun _I -> fun _O -> Obj.magic
     type ('I, 'O) t_2 = ('I, 'O) t
     let rec t_2_of_js :
-      'I 'O . (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2 = fun
-      (type __I) -> fun (type __O) ->
-      fun (__I_of_js : Ojs.t -> __I) ->
-        fun (__O_of_js : Ojs.t -> __O) ->
-          fun (x10803 : Ojs.t) -> t_of_js __I_of_js __O_of_js x10803
+      'I 'O . (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2 =
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_of_js : Ojs.t -> __I) ->
+            fun (__O_of_js : Ojs.t -> __O) ->
+              fun (x10803 : Ojs.t) -> t_of_js __I_of_js __O_of_js x10803
     and t_2_to_js :
-      'I 'O . ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t = fun
-      (type __I) -> fun (type __O) ->
-      fun (__I_to_js : __I -> Ojs.t) ->
-        fun (__O_to_js : __O -> Ojs.t) ->
-          fun (x10800 : (__I, __O) t) -> t_to_js __I_to_js __O_to_js x10800
+      'I 'O . ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t =
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_to_js : __I -> Ojs.t) ->
+            fun (__O_to_js : __O -> Ojs.t) ->
+              fun (x10800 : (__I, __O) t) ->
+                t_to_js __I_to_js __O_to_js x10800
     type ('I, 'O) tags = [ `TransformerTransformCallback of ('I * 'O) ]
     type ('I, 'O) tags_2 = ('I, 'O) tags
     type ('tags, 'I, 'O) this =
@@ -39078,20 +39211,27 @@ module TransformerTransformCallback =
       'tags 'I 'O .
         (Ojs.t -> 'tags) ->
           (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('tags, 'I, 'O) this
-      = fun (type __tags) -> fun (type __I) -> fun (type __O) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__I_of_js : Ojs.t -> __I) ->
-          fun (__O_of_js : Ojs.t -> __O) ->
-            fun (x10808 : Ojs.t) -> intf_of_js __tags_of_js x10808
+      =
+      fun (type __tags) ->
+        fun (type __I) ->
+          fun (type __O) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (__I_of_js : Ojs.t -> __I) ->
+                fun (__O_of_js : Ojs.t -> __O) ->
+                  fun (x10808 : Ojs.t) -> intf_of_js __tags_of_js x10808
     and this_to_js :
       'tags 'I 'O .
         ('tags -> Ojs.t) ->
           ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('tags, 'I, 'O) this -> Ojs.t
-      = fun (type __tags) -> fun (type __I) -> fun (type __O) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__I_to_js : __I -> Ojs.t) ->
-          fun (__O_to_js : __O -> Ojs.t) ->
-            fun (x10806 : __tags intf) -> intf_to_js __tags_to_js x10806
+      =
+      fun (type __tags) ->
+        fun (type __I) ->
+          fun (type __O) ->
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (__I_to_js : __I -> Ojs.t) ->
+                fun (__O_to_js : __O -> Ojs.t) ->
+                  fun (x10806 : __tags intf) ->
+                    intf_to_js __tags_to_js x10806
     let (apply :
       ('tags, 'I, 'O) this ->
         chunk:'I ->
@@ -39116,13 +39256,14 @@ module TransformerStartCallback =
       fun _O -> Obj.magic
     and t_to_js : 'O . ('O -> Ojs.t) -> 'O t -> Ojs.t = fun _O -> Obj.magic
     type 'O t_1 = 'O t
-    let rec t_1_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O t_1 = fun (type
-      __O) ->
-      fun (__O_of_js : Ojs.t -> __O) ->
-        fun (x10822 : Ojs.t) -> t_of_js __O_of_js x10822
-    and t_1_to_js : 'O . ('O -> Ojs.t) -> 'O t_1 -> Ojs.t = fun (type __O) ->
-      fun (__O_to_js : __O -> Ojs.t) ->
-        fun (x10820 : __O t) -> t_to_js __O_to_js x10820
+    let rec t_1_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O t_1 =
+      fun (type __O) ->
+        fun (__O_of_js : Ojs.t -> __O) ->
+          fun (x10822 : Ojs.t) -> t_of_js __O_of_js x10822
+    and t_1_to_js : 'O . ('O -> Ojs.t) -> 'O t_1 -> Ojs.t =
+      fun (type __O) ->
+        fun (__O_to_js : __O -> Ojs.t) ->
+          fun (x10820 : __O t) -> t_to_js __O_to_js x10820
     type 'O tags = [ `TransformerStartCallback of 'O ]
     type 'O tags_1 = 'O tags
     type ('tags, 'O) this =
@@ -39130,17 +39271,21 @@ module TransformerStartCallback =
     let rec this_of_js :
       'tags 'O .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'O) -> Ojs.t -> ('tags, 'O) this
-      = fun (type __tags) -> fun (type __O) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__O_of_js : Ojs.t -> __O) ->
-          fun (x10826 : Ojs.t) -> intf_of_js __tags_of_js x10826
+      =
+      fun (type __tags) ->
+        fun (type __O) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__O_of_js : Ojs.t -> __O) ->
+              fun (x10826 : Ojs.t) -> intf_of_js __tags_of_js x10826
     and this_to_js :
       'tags 'O .
         ('tags -> Ojs.t) -> ('O -> Ojs.t) -> ('tags, 'O) this -> Ojs.t
-      = fun (type __tags) -> fun (type __O) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__O_to_js : __O -> Ojs.t) ->
-          fun (x10824 : __tags intf) -> intf_to_js __tags_to_js x10824
+      =
+      fun (type __tags) ->
+        fun (type __O) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__O_to_js : __O -> Ojs.t) ->
+              fun (x10824 : __tags intf) -> intf_to_js __tags_to_js x10824
     let (apply :
       ('tags, 'O) this ->
         controller:'O TransformStreamDefaultController.t -> any)
@@ -39159,13 +39304,14 @@ module TransformerFlushCallback =
       fun _O -> Obj.magic
     and t_to_js : 'O . ('O -> Ojs.t) -> 'O t -> Ojs.t = fun _O -> Obj.magic
     type 'O t_1 = 'O t
-    let rec t_1_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O t_1 = fun (type
-      __O) ->
-      fun (__O_of_js : Ojs.t -> __O) ->
-        fun (x10835 : Ojs.t) -> t_of_js __O_of_js x10835
-    and t_1_to_js : 'O . ('O -> Ojs.t) -> 'O t_1 -> Ojs.t = fun (type __O) ->
-      fun (__O_to_js : __O -> Ojs.t) ->
-        fun (x10833 : __O t) -> t_to_js __O_to_js x10833
+    let rec t_1_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O t_1 =
+      fun (type __O) ->
+        fun (__O_of_js : Ojs.t -> __O) ->
+          fun (x10835 : Ojs.t) -> t_of_js __O_of_js x10835
+    and t_1_to_js : 'O . ('O -> Ojs.t) -> 'O t_1 -> Ojs.t =
+      fun (type __O) ->
+        fun (__O_to_js : __O -> Ojs.t) ->
+          fun (x10833 : __O t) -> t_to_js __O_to_js x10833
     type 'O tags = [ `TransformerFlushCallback of 'O ]
     type 'O tags_1 = 'O tags
     type ('tags, 'O) this =
@@ -39173,17 +39319,21 @@ module TransformerFlushCallback =
     let rec this_of_js :
       'tags 'O .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'O) -> Ojs.t -> ('tags, 'O) this
-      = fun (type __tags) -> fun (type __O) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__O_of_js : Ojs.t -> __O) ->
-          fun (x10839 : Ojs.t) -> intf_of_js __tags_of_js x10839
+      =
+      fun (type __tags) ->
+        fun (type __O) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__O_of_js : Ojs.t -> __O) ->
+              fun (x10839 : Ojs.t) -> intf_of_js __tags_of_js x10839
     and this_to_js :
       'tags 'O .
         ('tags -> Ojs.t) -> ('O -> Ojs.t) -> ('tags, 'O) this -> Ojs.t
-      = fun (type __tags) -> fun (type __O) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__O_to_js : __O -> Ojs.t) ->
-          fun (x10837 : __tags intf) -> intf_to_js __tags_to_js x10837
+      =
+      fun (type __tags) ->
+        fun (type __O) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__O_to_js : __O -> Ojs.t) ->
+              fun (x10837 : __tags intf) -> intf_to_js __tags_to_js x10837
     let (apply :
       ('tags, 'O) this ->
         controller:'O TransformStreamDefaultController.t ->
@@ -39209,25 +39359,29 @@ module Transformer =
       fun _I -> fun _O -> Obj.magic
     type ('I, 'O) t_2 = ('I, 'O) t
     let rec t_2_of_js :
-      'I 'O . (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2 = fun
-      (type __I) -> fun (type __O) ->
-      fun (__I_of_js : Ojs.t -> __I) ->
-        fun (__O_of_js : Ojs.t -> __O) ->
-          fun (x10852 : Ojs.t) -> t_of_js __I_of_js __O_of_js x10852
+      'I 'O . (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2 =
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_of_js : Ojs.t -> __I) ->
+            fun (__O_of_js : Ojs.t -> __O) ->
+              fun (x10852 : Ojs.t) -> t_of_js __I_of_js __O_of_js x10852
     and t_2_to_js :
-      'I 'O . ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t = fun
-      (type __I) -> fun (type __O) ->
-      fun (__I_to_js : __I -> Ojs.t) ->
-        fun (__O_to_js : __O -> Ojs.t) ->
-          fun (x10849 : (__I, __O) t) -> t_to_js __I_to_js __O_to_js x10849
+      'I 'O . ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t =
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_to_js : __I -> Ojs.t) ->
+            fun (__O_to_js : __O -> Ojs.t) ->
+              fun (x10849 : (__I, __O) t) ->
+                t_to_js __I_to_js __O_to_js x10849
     type 'I t_1 = ('I, any) t
-    let rec t_1_of_js : 'I . (Ojs.t -> 'I) -> Ojs.t -> 'I t_1 = fun (type
-      __I) ->
-      fun (__I_of_js : Ojs.t -> __I) ->
-        fun (x10858 : Ojs.t) -> t_of_js __I_of_js any_of_js x10858
-    and t_1_to_js : 'I . ('I -> Ojs.t) -> 'I t_1 -> Ojs.t = fun (type __I) ->
-      fun (__I_to_js : __I -> Ojs.t) ->
-        fun (x10855 : (__I, any) t) -> t_to_js __I_to_js any_to_js x10855
+    let rec t_1_of_js : 'I . (Ojs.t -> 'I) -> Ojs.t -> 'I t_1 =
+      fun (type __I) ->
+        fun (__I_of_js : Ojs.t -> __I) ->
+          fun (x10858 : Ojs.t) -> t_of_js __I_of_js any_of_js x10858
+    and t_1_to_js : 'I . ('I -> Ojs.t) -> 'I t_1 -> Ojs.t =
+      fun (type __I) ->
+        fun (__I_to_js : __I -> Ojs.t) ->
+          fun (x10855 : (__I, any) t) -> t_to_js __I_to_js any_to_js x10855
     type t_0 = (any, any) t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x10864 : Ojs.t) -> t_of_js any_of_js any_of_js x10864
@@ -39243,20 +39397,27 @@ module Transformer =
       'tags 'I 'O .
         (Ojs.t -> 'tags) ->
           (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('tags, 'I, 'O) this
-      = fun (type __tags) -> fun (type __I) -> fun (type __O) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__I_of_js : Ojs.t -> __I) ->
-          fun (__O_of_js : Ojs.t -> __O) ->
-            fun (x10869 : Ojs.t) -> intf_of_js __tags_of_js x10869
+      =
+      fun (type __tags) ->
+        fun (type __I) ->
+          fun (type __O) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (__I_of_js : Ojs.t -> __I) ->
+                fun (__O_of_js : Ojs.t -> __O) ->
+                  fun (x10869 : Ojs.t) -> intf_of_js __tags_of_js x10869
     and this_to_js :
       'tags 'I 'O .
         ('tags -> Ojs.t) ->
           ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('tags, 'I, 'O) this -> Ojs.t
-      = fun (type __tags) -> fun (type __I) -> fun (type __O) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__I_to_js : __I -> Ojs.t) ->
-          fun (__O_to_js : __O -> Ojs.t) ->
-            fun (x10867 : __tags intf) -> intf_to_js __tags_to_js x10867
+      =
+      fun (type __tags) ->
+        fun (type __I) ->
+          fun (type __O) ->
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (__I_to_js : __I -> Ojs.t) ->
+                fun (__O_to_js : __O -> Ojs.t) ->
+                  fun (x10867 : __tags intf) ->
+                    intf_to_js __tags_to_js x10867
     let (get_flush : ('tags, 'I, 'O) this -> 'O TransformerFlushCallback.t) =
       fun (x10871 : ('tags, 'I, 'O) this) ->
         TransformerFlushCallback.t_of_js Obj.magic
@@ -39363,25 +39524,29 @@ module TransformStream =
       fun _I -> fun _O -> Obj.magic
     type ('I, 'O) t_2 = ('I, 'O) t
     let rec t_2_of_js :
-      'I 'O . (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2 = fun
-      (type __I) -> fun (type __O) ->
-      fun (__I_of_js : Ojs.t -> __I) ->
-        fun (__O_of_js : Ojs.t -> __O) ->
-          fun (x10941 : Ojs.t) -> t_of_js __I_of_js __O_of_js x10941
+      'I 'O . (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) t_2 =
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_of_js : Ojs.t -> __I) ->
+            fun (__O_of_js : Ojs.t -> __O) ->
+              fun (x10941 : Ojs.t) -> t_of_js __I_of_js __O_of_js x10941
     and t_2_to_js :
-      'I 'O . ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t = fun
-      (type __I) -> fun (type __O) ->
-      fun (__I_to_js : __I -> Ojs.t) ->
-        fun (__O_to_js : __O -> Ojs.t) ->
-          fun (x10938 : (__I, __O) t) -> t_to_js __I_to_js __O_to_js x10938
+      'I 'O . ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) t_2 -> Ojs.t =
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_to_js : __I -> Ojs.t) ->
+            fun (__O_to_js : __O -> Ojs.t) ->
+              fun (x10938 : (__I, __O) t) ->
+                t_to_js __I_to_js __O_to_js x10938
     type 'I t_1 = ('I, any) t
-    let rec t_1_of_js : 'I . (Ojs.t -> 'I) -> Ojs.t -> 'I t_1 = fun (type
-      __I) ->
-      fun (__I_of_js : Ojs.t -> __I) ->
-        fun (x10947 : Ojs.t) -> t_of_js __I_of_js any_of_js x10947
-    and t_1_to_js : 'I . ('I -> Ojs.t) -> 'I t_1 -> Ojs.t = fun (type __I) ->
-      fun (__I_to_js : __I -> Ojs.t) ->
-        fun (x10944 : (__I, any) t) -> t_to_js __I_to_js any_to_js x10944
+    let rec t_1_of_js : 'I . (Ojs.t -> 'I) -> Ojs.t -> 'I t_1 =
+      fun (type __I) ->
+        fun (__I_of_js : Ojs.t -> __I) ->
+          fun (x10947 : Ojs.t) -> t_of_js __I_of_js any_of_js x10947
+    and t_1_to_js : 'I . ('I -> Ojs.t) -> 'I t_1 -> Ojs.t =
+      fun (type __I) ->
+        fun (__I_to_js : __I -> Ojs.t) ->
+          fun (x10944 : (__I, any) t) -> t_to_js __I_to_js any_to_js x10944
     type t_0 = (any, any) t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x10953 : Ojs.t) -> t_of_js any_of_js any_of_js x10953
@@ -39397,20 +39562,27 @@ module TransformStream =
       'tags 'I 'O .
         (Ojs.t -> 'tags) ->
           (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('tags, 'I, 'O) this
-      = fun (type __tags) -> fun (type __I) -> fun (type __O) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__I_of_js : Ojs.t -> __I) ->
-          fun (__O_of_js : Ojs.t -> __O) ->
-            fun (x10958 : Ojs.t) -> intf_of_js __tags_of_js x10958
+      =
+      fun (type __tags) ->
+        fun (type __I) ->
+          fun (type __O) ->
+            fun (__tags_of_js : Ojs.t -> __tags) ->
+              fun (__I_of_js : Ojs.t -> __I) ->
+                fun (__O_of_js : Ojs.t -> __O) ->
+                  fun (x10958 : Ojs.t) -> intf_of_js __tags_of_js x10958
     and this_to_js :
       'tags 'I 'O .
         ('tags -> Ojs.t) ->
           ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('tags, 'I, 'O) this -> Ojs.t
-      = fun (type __tags) -> fun (type __I) -> fun (type __O) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__I_to_js : __I -> Ojs.t) ->
-          fun (__O_to_js : __O -> Ojs.t) ->
-            fun (x10956 : __tags intf) -> intf_to_js __tags_to_js x10956
+      =
+      fun (type __tags) ->
+        fun (type __I) ->
+          fun (type __O) ->
+            fun (__tags_to_js : __tags -> Ojs.t) ->
+              fun (__I_to_js : __I -> Ojs.t) ->
+                fun (__O_to_js : __O -> Ojs.t) ->
+                  fun (x10956 : __tags intf) ->
+                    intf_to_js __tags_to_js x10956
     let (get_readable : ('tags, 'I, 'O) this -> 'O ReadableStream.t) =
       fun (x10960 : ('tags, 'I, 'O) this) ->
         ReadableStream.t_of_js Obj.magic
@@ -39489,12 +39661,12 @@ module TextMetrics =
     type 'tags this = 'tags intf constraint 'tags = [> `TextMetrics ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x10994 : Ojs.t) -> intf_of_js __tags_of_js x10994
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x10992 : __tags intf) -> intf_to_js __tags_to_js x10992
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x10994 : Ojs.t) -> intf_of_js __tags_of_js x10994
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x10992 : __tags intf) -> intf_to_js __tags_to_js x10992
     let (get_actualBoundingBoxAscent : 'tags this -> float) =
       fun (x10996 : 'tags this) ->
         Ojs.float_of_js
@@ -39585,12 +39757,12 @@ module TextEncoderCommon =
     type 'tags this = 'tags intf constraint 'tags = [> `TextEncoderCommon ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11022 : Ojs.t) -> intf_of_js __tags_of_js x11022
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11020 : __tags intf) -> intf_to_js __tags_to_js x11020
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11022 : Ojs.t) -> intf_of_js __tags_of_js x11022
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11020 : __tags intf) -> intf_to_js __tags_to_js x11020
     let (get_encoding : 'tags this -> string) =
       fun (x11024 : 'tags this) ->
         Ojs.string_of_js
@@ -39617,12 +39789,12 @@ module GenericTransformStream =
       'tags intf constraint 'tags = [> `GenericTransformStream ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11032 : Ojs.t) -> intf_of_js __tags_of_js x11032
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11030 : __tags intf) -> intf_to_js __tags_to_js x11030
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11032 : Ojs.t) -> intf_of_js __tags_of_js x11032
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11030 : __tags intf) -> intf_to_js __tags_to_js x11030
     let (get_readable : 'tags this -> ReadableStream.t_0) =
       fun (x11034 : 'tags this) ->
         ReadableStream.t_0_of_js
@@ -39661,12 +39833,12 @@ module TextEncoderStream =
     type 'tags this = 'tags intf constraint 'tags = [> `TextEncoderStream ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11045 : Ojs.t) -> intf_of_js __tags_of_js x11045
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11043 : __tags intf) -> intf_to_js __tags_to_js x11043
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11045 : Ojs.t) -> intf_of_js __tags_of_js x11045
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11043 : __tags intf) -> intf_to_js __tags_to_js x11043
     let (get_readable : 'tags this -> Uint8Array.t_0 ReadableStream.t) =
       fun (x11047 : 'tags this) ->
         ReadableStream.t_of_js Uint8Array.t_0_of_js
@@ -39714,12 +39886,12 @@ module TextEncoderEncodeIntoResult =
       'tags intf constraint 'tags = [> `TextEncoderEncodeIntoResult ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11062 : Ojs.t) -> intf_of_js __tags_of_js x11062
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11060 : __tags intf) -> intf_to_js __tags_to_js x11060
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11062 : Ojs.t) -> intf_of_js __tags_of_js x11062
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11060 : __tags intf) -> intf_to_js __tags_to_js x11060
     let (get_read : 'tags this -> float) =
       fun (x11064 : 'tags this) ->
         Ojs.float_of_js
@@ -39761,12 +39933,12 @@ module TextEncoder =
     type 'tags this = 'tags intf constraint 'tags = [> `TextEncoder ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11081 : Ojs.t) -> intf_of_js __tags_of_js x11081
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11079 : __tags intf) -> intf_to_js __tags_to_js x11079
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11081 : Ojs.t) -> intf_of_js __tags_of_js x11081
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11079 : __tags intf) -> intf_to_js __tags_to_js x11079
     let (encode : 'tags this -> ?input:string -> unit -> Uint8Array.t_0) =
       fun (x11086 : 'tags this) ->
         fun ?input:(x11083 : string option) ->
@@ -39820,12 +39992,12 @@ module TextDecoderOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `TextDecoderOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11097 : Ojs.t) -> intf_of_js __tags_of_js x11097
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11095 : __tags intf) -> intf_to_js __tags_to_js x11095
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11097 : Ojs.t) -> intf_of_js __tags_of_js x11097
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11095 : __tags intf) -> intf_to_js __tags_to_js x11095
     let (get_fatal : 'tags this -> bool) =
       fun (x11099 : 'tags this) ->
         Ojs.bool_of_js
@@ -39867,12 +40039,12 @@ module TextDecoderCommon =
     type 'tags this = 'tags intf constraint 'tags = [> `TextDecoderCommon ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11116 : Ojs.t) -> intf_of_js __tags_of_js x11116
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11114 : __tags intf) -> intf_to_js __tags_to_js x11114
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11116 : Ojs.t) -> intf_of_js __tags_of_js x11116
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11114 : __tags intf) -> intf_to_js __tags_to_js x11114
     let (get_encoding : 'tags this -> string) =
       fun (x11118 : 'tags this) ->
         Ojs.string_of_js
@@ -39914,12 +40086,12 @@ module TextDecoderStream =
     type 'tags this = 'tags intf constraint 'tags = [> `TextDecoderStream ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11132 : Ojs.t) -> intf_of_js __tags_of_js x11132
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11130 : __tags intf) -> intf_to_js __tags_to_js x11130
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11132 : Ojs.t) -> intf_of_js __tags_of_js x11132
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11130 : __tags intf) -> intf_to_js __tags_to_js x11130
     let (get_readable : 'tags this -> string ReadableStream.t) =
       fun (x11134 : 'tags this) ->
         ReadableStream.t_of_js Ojs.string_of_js
@@ -39984,12 +40156,12 @@ module TextDecodeOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `TextDecodeOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11154 : Ojs.t) -> intf_of_js __tags_of_js x11154
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11152 : __tags intf) -> intf_to_js __tags_to_js x11152
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11154 : Ojs.t) -> intf_of_js __tags_of_js x11154
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11152 : __tags intf) -> intf_to_js __tags_to_js x11152
     let (get_stream : 'tags this -> bool) =
       fun (x11156 : 'tags this) ->
         Ojs.bool_of_js
@@ -40020,12 +40192,12 @@ module TextDecoder =
     type 'tags this = 'tags intf constraint 'tags = [> `TextDecoder ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11167 : Ojs.t) -> intf_of_js __tags_of_js x11167
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11165 : __tags intf) -> intf_to_js __tags_to_js x11165
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11167 : Ojs.t) -> intf_of_js __tags_of_js x11167
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11165 : __tags intf) -> intf_to_js __tags_to_js x11165
     let (decode :
       'tags this ->
         ?input:BufferSource.t ->
@@ -40098,12 +40270,12 @@ module PromiseRejectionEventInit =
       'tags intf constraint 'tags = [> `PromiseRejectionEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11186 : Ojs.t) -> intf_of_js __tags_of_js x11186
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11184 : __tags intf) -> intf_to_js __tags_to_js x11184
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11186 : Ojs.t) -> intf_of_js __tags_of_js x11186
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11184 : __tags intf) -> intf_to_js __tags_to_js x11184
     let (get_promise : 'tags this -> any Promise.t_1) =
       fun (x11188 : 'tags this) ->
         Promise.t_1_of_js any_of_js
@@ -40146,12 +40318,12 @@ module PromiseRejectionEvent =
       'tags intf constraint 'tags = [> `PromiseRejectionEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11208 : Ojs.t) -> intf_of_js __tags_of_js x11208
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11206 : __tags intf) -> intf_to_js __tags_to_js x11206
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11208 : Ojs.t) -> intf_of_js __tags_of_js x11208
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11206 : __tags intf) -> intf_to_js __tags_to_js x11206
     let (get_promise : 'tags this -> any Promise.t_1) =
       fun (x11210 : 'tags this) ->
         Promise.t_1_of_js any_of_js
@@ -40199,12 +40371,12 @@ module WorkerGlobalScopeEventMap =
       'tags intf constraint 'tags = [> `WorkerGlobalScopeEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11225 : Ojs.t) -> intf_of_js __tags_of_js x11225
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11223 : __tags intf) -> intf_to_js __tags_to_js x11223
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11225 : Ojs.t) -> intf_of_js __tags_of_js x11225
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11223 : __tags intf) -> intf_to_js __tags_to_js x11223
     let (get_error : 'tags this -> ErrorEvent.t) =
       fun (x11227 : 'tags this) ->
         ErrorEvent.t_of_js
@@ -40309,12 +40481,12 @@ module SharedWorkerGlobalScopeEventMap =
       'tags intf constraint 'tags = [> `SharedWorkerGlobalScopeEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11268 : Ojs.t) -> intf_of_js __tags_of_js x11268
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11266 : __tags intf) -> intf_to_js __tags_to_js x11266
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11268 : Ojs.t) -> intf_of_js __tags_of_js x11268
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11266 : __tags intf) -> intf_to_js __tags_to_js x11266
     let (get_connect : 'tags this -> MessageEvent.t_0) =
       fun (x11270 : 'tags this) ->
         MessageEvent.t_0_of_js
@@ -40351,12 +40523,12 @@ module WorkerNavigator =
     type 'tags this = 'tags intf constraint 'tags = [> `WorkerNavigator ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11281 : Ojs.t) -> intf_of_js __tags_of_js x11281
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11279 : __tags intf) -> intf_to_js __tags_to_js x11279
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11281 : Ojs.t) -> intf_of_js __tags_of_js x11281
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11279 : __tags intf) -> intf_to_js __tags_to_js x11279
     let (get_mediaCapabilities : 'tags this -> MediaCapabilities.t) =
       fun (x11283 : 'tags this) ->
         MediaCapabilities.t_of_js
@@ -40393,12 +40565,12 @@ module WorkerLocation =
     type 'tags this = 'tags intf constraint 'tags = [> `WorkerLocation ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11291 : Ojs.t) -> intf_of_js __tags_of_js x11291
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11289 : __tags intf) -> intf_to_js __tags_to_js x11289
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11291 : Ojs.t) -> intf_of_js __tags_of_js x11291
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11289 : __tags intf) -> intf_to_js __tags_to_js x11289
     let (get_hash : 'tags this -> string) =
       fun (x11293 : 'tags this) ->
         Ojs.string_of_js
@@ -40463,12 +40635,12 @@ module VoidFunction =
     type 'tags this = 'tags intf constraint 'tags = [> `VoidFunction ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11317 : Ojs.t) -> intf_of_js __tags_of_js x11317
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11315 : __tags intf) -> intf_to_js __tags_to_js x11315
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11317 : Ojs.t) -> intf_of_js __tags_of_js x11317
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11315 : __tags intf) -> intf_to_js __tags_to_js x11315
     let (apply : 'tags this -> unit) =
       fun (x11319 : 'tags this) ->
         ignore (Ojs.apply (this_to_js Obj.magic x11319) [||])
@@ -40631,12 +40803,12 @@ module ImageBitmapOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `ImageBitmapOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11372 : Ojs.t) -> intf_of_js __tags_of_js x11372
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11370 : __tags intf) -> intf_to_js __tags_to_js x11370
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11372 : Ojs.t) -> intf_of_js __tags_of_js x11372
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11370 : __tags intf) -> intf_to_js __tags_to_js x11370
     let (get_colorSpaceConversion : 'tags this -> ColorSpaceConversion.t) =
       fun (x11374 : 'tags this) ->
         ColorSpaceConversion.t_of_js
@@ -40738,12 +40910,12 @@ module IDBFactory =
     type 'tags this = 'tags intf constraint 'tags = [> `IDBFactory ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11415 : Ojs.t) -> intf_of_js __tags_of_js x11415
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11413 : __tags intf) -> intf_to_js __tags_to_js x11413
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11415 : Ojs.t) -> intf_of_js __tags_of_js x11415
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11413 : __tags intf) -> intf_to_js __tags_to_js x11413
     let (cmp : 'tags this -> first:any -> second:any -> float) =
       fun (x11419 : 'tags this) ->
         fun ~first:(x11417 : any) ->
@@ -40812,12 +40984,12 @@ module Crypto =
     type 'tags this = 'tags intf constraint 'tags = [> `Crypto ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11439 : Ojs.t) -> intf_of_js __tags_of_js x11439
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11437 : __tags intf) -> intf_to_js __tags_to_js x11437
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11439 : Ojs.t) -> intf_of_js __tags_of_js x11439
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11437 : __tags intf) -> intf_to_js __tags_to_js x11437
     let (get_subtle : 'tags this -> SubtleCrypto.t) =
       fun (x11441 : 'tags this) ->
         SubtleCrypto.t_of_js
@@ -40855,12 +41027,12 @@ module CacheStorage =
     type 'tags this = 'tags intf constraint 'tags = [> `CacheStorage ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11452 : Ojs.t) -> intf_of_js __tags_of_js x11452
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11450 : __tags intf) -> intf_to_js __tags_to_js x11450
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11452 : Ojs.t) -> intf_of_js __tags_of_js x11452
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11450 : __tags intf) -> intf_to_js __tags_to_js x11450
     let (delete : 'tags this -> cacheName:string -> bool Promise.t_1) =
       fun (x11455 : 'tags this) ->
         fun ~cacheName:(x11454 : string) ->
@@ -40939,12 +41111,12 @@ module WindowOrWorkerGlobalScope =
       'tags intf constraint 'tags = [> `WindowOrWorkerGlobalScope ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11483 : Ojs.t) -> intf_of_js __tags_of_js x11483
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11481 : __tags intf) -> intf_to_js __tags_to_js x11481
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11483 : Ojs.t) -> intf_of_js __tags_of_js x11483
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11481 : __tags intf) -> intf_to_js __tags_to_js x11481
     let (get_caches : 'tags this -> CacheStorage.t) =
       fun (x11485 : 'tags this) ->
         CacheStorage.t_of_js
@@ -41217,12 +41389,12 @@ module FontFaceSource =
     type 'tags this = 'tags intf constraint 'tags = [> `FontFaceSource ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11573 : Ojs.t) -> intf_of_js __tags_of_js x11573
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11571 : __tags intf) -> intf_to_js __tags_to_js x11571
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11573 : Ojs.t) -> intf_of_js __tags_of_js x11573
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11571 : __tags intf) -> intf_to_js __tags_to_js x11571
     let (get_fonts : 'tags this -> FontFaceSet.t) =
       fun (x11575 : 'tags this) ->
         FontFaceSet.t_of_js
@@ -41252,12 +41424,12 @@ module WorkerGlobalScope =
     type 'tags this = 'tags intf constraint 'tags = [> `WorkerGlobalScope ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11583 : Ojs.t) -> intf_of_js __tags_of_js x11583
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11581 : __tags intf) -> intf_to_js __tags_to_js x11581
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11583 : Ojs.t) -> intf_of_js __tags_of_js x11583
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11581 : __tags intf) -> intf_to_js __tags_to_js x11581
     let (get_location : 'tags this -> WorkerLocation.t) =
       fun (x11585 : 'tags this) ->
         WorkerLocation.t_of_js
@@ -41662,12 +41834,12 @@ module SharedWorkerGlobalScope =
       'tags intf constraint 'tags = [> `SharedWorkerGlobalScope ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11715 : Ojs.t) -> intf_of_js __tags_of_js x11715
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11713 : __tags intf) -> intf_to_js __tags_to_js x11713
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11715 : Ojs.t) -> intf_of_js __tags_of_js x11715
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11713 : __tags intf) -> intf_to_js __tags_to_js x11713
     let (get_name : 'tags this -> string) =
       fun (x11717 : 'tags this) ->
         Ojs.string_of_js
@@ -41909,12 +42081,12 @@ module ServiceWorkerRegistrationEventMap =
       'tags intf constraint 'tags = [> `ServiceWorkerRegistrationEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11780 : Ojs.t) -> intf_of_js __tags_of_js x11780
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11778 : __tags intf) -> intf_to_js __tags_to_js x11778
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11780 : Ojs.t) -> intf_of_js __tags_of_js x11780
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11778 : __tags intf) -> intf_to_js __tags_to_js x11778
     let (get_updatefound : 'tags this -> Event.t) =
       fun (x11782 : 'tags this) ->
         Event.t_of_js
@@ -41945,12 +42117,12 @@ module PushMessageData =
     type 'tags this = 'tags intf constraint 'tags = [> `PushMessageData ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11793 : Ojs.t) -> intf_of_js __tags_of_js x11793
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11791 : __tags intf) -> intf_to_js __tags_to_js x11791
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11793 : Ojs.t) -> intf_of_js __tags_of_js x11793
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11791 : __tags intf) -> intf_to_js __tags_to_js x11791
     let (arrayBuffer : 'tags this -> ArrayBuffer.t_0) =
       fun (x11795 : 'tags this) ->
         ArrayBuffer.t_0_of_js
@@ -42015,12 +42187,12 @@ module ExtendableEventInit =
     type 'tags this = 'tags intf constraint 'tags = [> `ExtendableEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11816 : Ojs.t) -> intf_of_js __tags_of_js x11816
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11814 : __tags intf) -> intf_to_js __tags_to_js x11814
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11816 : Ojs.t) -> intf_of_js __tags_of_js x11816
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11814 : __tags intf) -> intf_to_js __tags_to_js x11814
     let cast_from = Obj.magic
   end
 module PushEventInit =
@@ -42036,12 +42208,12 @@ module PushEventInit =
     type 'tags this = 'tags intf constraint 'tags = [> `PushEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11822 : Ojs.t) -> intf_of_js __tags_of_js x11822
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11820 : __tags intf) -> intf_to_js __tags_to_js x11820
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11822 : Ojs.t) -> intf_of_js __tags_of_js x11822
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11820 : __tags intf) -> intf_to_js __tags_to_js x11820
     let (get_data : 'tags this -> PushMessageDataInit.t) =
       fun (x11824 : 'tags this) ->
         PushMessageDataInit.t_of_js
@@ -42073,12 +42245,12 @@ module ExtendableEvent =
     type 'tags this = 'tags intf constraint 'tags = [> `ExtendableEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11835 : Ojs.t) -> intf_of_js __tags_of_js x11835
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11833 : __tags intf) -> intf_to_js __tags_to_js x11833
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11835 : Ojs.t) -> intf_of_js __tags_of_js x11835
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11833 : __tags intf) -> intf_to_js __tags_to_js x11833
     let (waitUntil : 'tags this -> f:any -> unit) =
       fun (x11838 : 'tags this) ->
         fun ~f:(x11837 : any) ->
@@ -42124,12 +42296,12 @@ module PushEvent =
     type 'tags this = 'tags intf constraint 'tags = [> `PushEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11848 : Ojs.t) -> intf_of_js __tags_of_js x11848
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11846 : __tags intf) -> intf_to_js __tags_to_js x11846
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11848 : Ojs.t) -> intf_of_js __tags_of_js x11848
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11846 : __tags intf) -> intf_to_js __tags_to_js x11846
     let (get_data : 'tags this -> PushMessageData.t option) =
       fun (x11850 : 'tags this) ->
         Ojs.option_of_js PushMessageData.t_of_js
@@ -42227,12 +42399,12 @@ module NotificationAction =
     type 'tags this = 'tags intf constraint 'tags = [> `NotificationAction ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11880 : Ojs.t) -> intf_of_js __tags_of_js x11880
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11878 : __tags intf) -> intf_to_js __tags_to_js x11878
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11880 : Ojs.t) -> intf_of_js __tags_of_js x11880
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11878 : __tags intf) -> intf_to_js __tags_to_js x11878
     let (get_action : 'tags this -> string) =
       fun (x11882 : 'tags this) ->
         Ojs.string_of_js
@@ -42317,12 +42489,12 @@ module NotificationOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `NotificationOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x11914 : Ojs.t) -> intf_of_js __tags_of_js x11914
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x11912 : __tags intf) -> intf_to_js __tags_to_js x11912
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x11914 : Ojs.t) -> intf_of_js __tags_of_js x11914
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x11912 : __tags intf) -> intf_to_js __tags_to_js x11912
     let (get_actions : 'tags this -> NotificationAction.t list) =
       fun (x11916 : 'tags this) ->
         Ojs.list_of_js NotificationAction.t_of_js
@@ -42527,12 +42699,12 @@ module Notification =
     type 'tags this = 'tags intf constraint 'tags = [> `Notification ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12008 : Ojs.t) -> intf_of_js __tags_of_js x12008
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12006 : __tags intf) -> intf_to_js __tags_to_js x12006
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12008 : Ojs.t) -> intf_of_js __tags_of_js x12008
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12006 : __tags intf) -> intf_to_js __tags_to_js x12006
     let (get_body : 'tags this -> string) =
       fun (x12010 : 'tags this) ->
         Ojs.string_of_js
@@ -42883,12 +43055,12 @@ module NotificationEventInit =
       'tags intf constraint 'tags = [> `NotificationEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12122 : Ojs.t) -> intf_of_js __tags_of_js x12122
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12120 : __tags intf) -> intf_to_js __tags_to_js x12120
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12122 : Ojs.t) -> intf_of_js __tags_of_js x12122
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12120 : __tags intf) -> intf_to_js __tags_to_js x12120
     let (get_action : 'tags this -> string) =
       fun (x12124 : 'tags this) ->
         Ojs.string_of_js
@@ -42932,12 +43104,12 @@ module NotificationEvent =
     type 'tags this = 'tags intf constraint 'tags = [> `NotificationEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12141 : Ojs.t) -> intf_of_js __tags_of_js x12141
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12139 : __tags intf) -> intf_to_js __tags_to_js x12139
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12141 : Ojs.t) -> intf_of_js __tags_of_js x12141
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12139 : __tags intf) -> intf_to_js __tags_to_js x12139
     let (get_action : 'tags this -> string) =
       fun (x12143 : 'tags this) ->
         Ojs.string_of_js
@@ -42984,12 +43156,12 @@ module FetchEventInit =
     type 'tags this = 'tags intf constraint 'tags = [> `FetchEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12156 : Ojs.t) -> intf_of_js __tags_of_js x12156
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12154 : __tags intf) -> intf_to_js __tags_to_js x12154
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12156 : Ojs.t) -> intf_of_js __tags_of_js x12156
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12154 : __tags intf) -> intf_to_js __tags_to_js x12154
     let (get_clientId : 'tags this -> string) =
       fun (x12158 : 'tags this) ->
         Ojs.string_of_js
@@ -43089,12 +43261,12 @@ module FetchEvent =
     type 'tags this = 'tags intf constraint 'tags = [> `FetchEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12205 : Ojs.t) -> intf_of_js __tags_of_js x12205
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12203 : __tags intf) -> intf_to_js __tags_to_js x12203
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12205 : Ojs.t) -> intf_of_js __tags_of_js x12205
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12203 : __tags intf) -> intf_to_js __tags_to_js x12203
     let (get_clientId : 'tags this -> string) =
       fun (x12207 : 'tags this) ->
         Ojs.string_of_js
@@ -43211,12 +43383,12 @@ module Client =
     type 'tags this = 'tags intf constraint 'tags = [> `Client ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12238 : Ojs.t) -> intf_of_js __tags_of_js x12238
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12236 : __tags intf) -> intf_to_js __tags_to_js x12236
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12238 : Ojs.t) -> intf_of_js __tags_of_js x12238
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12236 : __tags intf) -> intf_to_js __tags_to_js x12236
     let (get_frameType : 'tags this -> FrameType.t) =
       fun (x12240 : 'tags this) ->
         FrameType.t_of_js
@@ -43295,12 +43467,12 @@ module ExtendableMessageEventInit =
       'tags intf constraint 'tags = [> `ExtendableMessageEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12264 : Ojs.t) -> intf_of_js __tags_of_js x12264
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12262 : __tags intf) -> intf_to_js __tags_to_js x12262
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12264 : Ojs.t) -> intf_of_js __tags_of_js x12264
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12262 : __tags intf) -> intf_to_js __tags_to_js x12262
     let (get_data : 'tags this -> any) =
       fun (x12266 : 'tags this) ->
         any_of_js (Ojs.get_prop_ascii (this_to_js Obj.magic x12266) "data")
@@ -43411,12 +43583,12 @@ module ExtendableMessageEvent =
       'tags intf constraint 'tags = [> `ExtendableMessageEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12315 : Ojs.t) -> intf_of_js __tags_of_js x12315
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12313 : __tags intf) -> intf_to_js __tags_to_js x12313
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12315 : Ojs.t) -> intf_of_js __tags_of_js x12315
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12313 : __tags intf) -> intf_to_js __tags_to_js x12313
     let (get_data : 'tags this -> any) =
       fun (x12317 : 'tags this) ->
         any_of_js (Ojs.get_prop_ascii (this_to_js Obj.magic x12317) "data")
@@ -43520,12 +43692,12 @@ module ServiceWorkerGlobalScopeEventMap =
       'tags intf constraint 'tags = [> `ServiceWorkerGlobalScopeEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12351 : Ojs.t) -> intf_of_js __tags_of_js x12351
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12349 : __tags intf) -> intf_to_js __tags_to_js x12349
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12351 : Ojs.t) -> intf_of_js __tags_of_js x12351
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12349 : __tags intf) -> intf_to_js __tags_to_js x12349
     let (get_activate : 'tags this -> ExtendableEvent.t) =
       fun (x12353 : 'tags this) ->
         ExtendableEvent.t_of_js
@@ -43674,12 +43846,12 @@ module PushSubscriptionOptionsInit =
       'tags intf constraint 'tags = [> `PushSubscriptionOptionsInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12411 : Ojs.t) -> intf_of_js __tags_of_js x12411
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12409 : __tags intf) -> intf_to_js __tags_to_js x12409
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12411 : Ojs.t) -> intf_of_js __tags_of_js x12411
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12409 : __tags intf) -> intf_to_js __tags_to_js x12409
     let (get_applicationServerKey :
       'tags this ->
         [ `String of string  | `Null  | `Other of BufferSource.t ]
@@ -43762,12 +43934,12 @@ module PushSubscriptionOptions =
       'tags intf constraint 'tags = [> `PushSubscriptionOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12438 : Ojs.t) -> intf_of_js __tags_of_js x12438
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12436 : __tags intf) -> intf_to_js __tags_to_js x12436
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12438 : Ojs.t) -> intf_of_js __tags_of_js x12438
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12436 : __tags intf) -> intf_to_js __tags_to_js x12436
     let (get_applicationServerKey : 'tags this -> ArrayBuffer.t_0 option) =
       fun (x12440 : 'tags this) ->
         Ojs.option_of_js ArrayBuffer.t_0_of_js
@@ -43811,12 +43983,12 @@ module PushSubscriptionJSON =
       'tags intf constraint 'tags = [> `PushSubscriptionJSON ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12450 : Ojs.t) -> intf_of_js __tags_of_js x12450
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12448 : __tags intf) -> intf_to_js __tags_to_js x12448
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12450 : Ojs.t) -> intf_of_js __tags_of_js x12450
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12448 : __tags intf) -> intf_to_js __tags_to_js x12448
     let (get_endpoint : 'tags this -> string) =
       fun (x12452 : 'tags this) ->
         Ojs.string_of_js
@@ -43898,12 +44070,12 @@ module PushSubscription =
     type 'tags this = 'tags intf constraint 'tags = [> `PushSubscription ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12489 : Ojs.t) -> intf_of_js __tags_of_js x12489
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12487 : __tags intf) -> intf_to_js __tags_to_js x12487
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12489 : Ojs.t) -> intf_of_js __tags_of_js x12489
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12487 : __tags intf) -> intf_to_js __tags_to_js x12487
     let (get_endpoint : 'tags this -> string) =
       fun (x12491 : 'tags this) ->
         Ojs.string_of_js
@@ -43973,12 +44145,12 @@ module PushManager =
     type 'tags this = 'tags intf constraint 'tags = [> `PushManager ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12513 : Ojs.t) -> intf_of_js __tags_of_js x12513
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12511 : __tags intf) -> intf_to_js __tags_to_js x12511
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12513 : Ojs.t) -> intf_of_js __tags_of_js x12513
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12511 : __tags intf) -> intf_to_js __tags_to_js x12511
     let (getSubscription :
       'tags this -> PushSubscription.t option Promise.t_1) =
       fun (x12515 : 'tags this) ->
@@ -44062,12 +44234,12 @@ module GetNotificationOptions =
       'tags intf constraint 'tags = [> `GetNotificationOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12538 : Ojs.t) -> intf_of_js __tags_of_js x12538
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12536 : __tags intf) -> intf_to_js __tags_to_js x12536
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12538 : Ojs.t) -> intf_of_js __tags_of_js x12538
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12536 : __tags intf) -> intf_to_js __tags_to_js x12536
     let (get_tag : 'tags this -> string) =
       fun (x12540 : 'tags this) ->
         Ojs.string_of_js
@@ -44099,12 +44271,12 @@ module ServiceWorkerRegistration =
       'tags intf constraint 'tags = [> `ServiceWorkerRegistration ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12551 : Ojs.t) -> intf_of_js __tags_of_js x12551
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12549 : __tags intf) -> intf_to_js __tags_to_js x12549
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12551 : Ojs.t) -> intf_of_js __tags_of_js x12551
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12549 : __tags intf) -> intf_to_js __tags_to_js x12549
     let (get_active : 'tags this -> ServiceWorker.t option) =
       fun (x12553 : 'tags this) ->
         Ojs.option_of_js ServiceWorker.t_of_js
@@ -44442,12 +44614,12 @@ module WindowClient =
     type 'tags this = 'tags intf constraint 'tags = [> `WindowClient ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12654 : Ojs.t) -> intf_of_js __tags_of_js x12654
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12652 : __tags intf) -> intf_to_js __tags_to_js x12652
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12654 : Ojs.t) -> intf_of_js __tags_of_js x12654
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12652 : __tags intf) -> intf_to_js __tags_to_js x12652
     let (get_focused : 'tags this -> bool) =
       fun (x12656 : 'tags this) ->
         Ojs.bool_of_js
@@ -44496,12 +44668,12 @@ module ClientQueryOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `ClientQueryOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12674 : Ojs.t) -> intf_of_js __tags_of_js x12674
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12672 : __tags intf) -> intf_to_js __tags_to_js x12672
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12674 : Ojs.t) -> intf_of_js __tags_of_js x12674
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12672 : __tags intf) -> intf_to_js __tags_to_js x12672
     let (get_includeUncontrolled : 'tags this -> bool) =
       fun (x12676 : 'tags this) ->
         Ojs.bool_of_js
@@ -44546,12 +44718,12 @@ module Clients =
     type 'tags this = 'tags intf constraint 'tags = [> `Clients ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12693 : Ojs.t) -> intf_of_js __tags_of_js x12693
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12691 : __tags intf) -> intf_to_js __tags_to_js x12691
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12693 : Ojs.t) -> intf_of_js __tags_of_js x12693
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12691 : __tags intf) -> intf_to_js __tags_to_js x12691
     let (claim : 'tags this -> unit Promise.t_1) =
       fun (x12695 : 'tags this) ->
         Promise.t_1_of_js Ojs.unit_of_js
@@ -44625,12 +44797,12 @@ module ServiceWorkerGlobalScope =
       'tags intf constraint 'tags = [> `ServiceWorkerGlobalScope ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12722 : Ojs.t) -> intf_of_js __tags_of_js x12722
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12720 : __tags intf) -> intf_to_js __tags_to_js x12720
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12722 : Ojs.t) -> intf_of_js __tags_of_js x12722
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12720 : __tags intf) -> intf_to_js __tags_to_js x12720
     let (get_clients : 'tags this -> Clients.t) =
       fun (x12724 : 'tags this) ->
         Clients.t_of_js
@@ -45059,12 +45231,12 @@ module ServiceWorkerEventMap =
       'tags intf constraint 'tags = [> `ServiceWorkerEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12867 : Ojs.t) -> intf_of_js __tags_of_js x12867
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12865 : __tags intf) -> intf_to_js __tags_to_js x12865
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12867 : Ojs.t) -> intf_of_js __tags_of_js x12867
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12865 : __tags intf) -> intf_to_js __tags_to_js x12865
     let (get_statechange : 'tags this -> Event.t) =
       fun (x12869 : 'tags this) ->
         Event.t_of_js
@@ -45096,12 +45268,12 @@ module ServiceWorkerContainerEventMap =
       'tags intf constraint 'tags = [> `ServiceWorkerContainerEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12880 : Ojs.t) -> intf_of_js __tags_of_js x12880
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12878 : __tags intf) -> intf_to_js __tags_to_js x12878
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12880 : Ojs.t) -> intf_of_js __tags_of_js x12880
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12878 : __tags intf) -> intf_to_js __tags_to_js x12878
     let (get_controllerchange : 'tags this -> Event.t) =
       fun (x12882 : 'tags this) ->
         Event.t_of_js
@@ -45162,12 +45334,12 @@ module RegistrationOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `RegistrationOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12905 : Ojs.t) -> intf_of_js __tags_of_js x12905
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12903 : __tags intf) -> intf_to_js __tags_to_js x12903
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12905 : Ojs.t) -> intf_of_js __tags_of_js x12905
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12903 : __tags intf) -> intf_to_js __tags_to_js x12903
     let (get_scope : 'tags this -> string) =
       fun (x12907 : 'tags this) ->
         Ojs.string_of_js
@@ -45227,12 +45399,12 @@ module ServiceWorkerContainer =
       'tags intf constraint 'tags = [> `ServiceWorkerContainer ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x12930 : Ojs.t) -> intf_of_js __tags_of_js x12930
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x12928 : __tags intf) -> intf_to_js __tags_to_js x12928
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x12930 : Ojs.t) -> intf_of_js __tags_of_js x12930
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x12928 : __tags intf) -> intf_to_js __tags_to_js x12928
     let (get_controller : 'tags this -> ServiceWorker.t option) =
       fun (x12932 : 'tags this) ->
         Ojs.option_of_js ServiceWorker.t_of_js
@@ -45611,12 +45783,12 @@ module SecurityPolicyViolationEventInit =
       'tags intf constraint 'tags = [> `SecurityPolicyViolationEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13050 : Ojs.t) -> intf_of_js __tags_of_js x13050
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13048 : __tags intf) -> intf_to_js __tags_to_js x13048
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13050 : Ojs.t) -> intf_of_js __tags_of_js x13050
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13048 : __tags intf) -> intf_to_js __tags_to_js x13048
     let (get_blockedURI : 'tags this -> string) =
       fun (x13052 : 'tags this) ->
         Ojs.string_of_js
@@ -45802,12 +45974,12 @@ module SecurityPolicyViolationEvent =
       'tags intf constraint 'tags = [> `SecurityPolicyViolationEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13129 : Ojs.t) -> intf_of_js __tags_of_js x13129
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13127 : __tags intf) -> intf_to_js __tags_to_js x13127
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13129 : Ojs.t) -> intf_of_js __tags_of_js x13129
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13127 : __tags intf) -> intf_to_js __tags_to_js x13127
     let (get_blockedURI : 'tags this -> string) =
       fun (x13131 : 'tags this) ->
         Ojs.string_of_js
@@ -45952,22 +46124,25 @@ module SecurityPolicyViolationEvent =
 module ReadableStreamReader =
   struct
     type 'T t = 'T ReadableStreamDefaultReader.t
-    let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t = fun (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x13174 : Ojs.t) ->
-          ReadableStreamDefaultReader.t_of_js __T_of_js x13174
-    and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x13172 : __T ReadableStreamDefaultReader.t) ->
-          ReadableStreamDefaultReader.t_to_js __T_to_js x13172
+    let rec t_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x13174 : Ojs.t) ->
+            ReadableStreamDefaultReader.t_of_js __T_of_js x13174
+    and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x13172 : __T ReadableStreamDefaultReader.t) ->
+            ReadableStreamDefaultReader.t_to_js __T_to_js x13172
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x13178 : Ojs.t) -> t_of_js __T_of_js x13178
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x13176 : __T t) -> t_to_js __T_to_js x13176
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x13178 : Ojs.t) -> t_of_js __T_of_js x13178
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x13176 : __T t) -> t_to_js __T_to_js x13176
   end
 module PermissionStatus =
   struct
@@ -45982,12 +46157,12 @@ module PermissionStatus =
     type 'tags this = 'tags intf constraint 'tags = [> `PermissionStatus ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13184 : Ojs.t) -> intf_of_js __tags_of_js x13184
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13182 : __tags intf) -> intf_to_js __tags_to_js x13182
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13184 : Ojs.t) -> intf_of_js __tags_of_js x13184
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13182 : __tags intf) -> intf_to_js __tags_to_js x13182
     let (get_onchange : 'tags this -> (this:t -> ev:Event.t -> any) option) =
       fun (x13186 : 'tags this) ->
         Ojs.option_of_js
@@ -46259,12 +46434,12 @@ module PermissionDescriptor =
       'tags intf constraint 'tags = [> `PermissionDescriptor ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13252 : Ojs.t) -> intf_of_js __tags_of_js x13252
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13250 : __tags intf) -> intf_to_js __tags_to_js x13250
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13252 : Ojs.t) -> intf_of_js __tags_of_js x13252
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13250 : __tags intf) -> intf_to_js __tags_to_js x13250
     let (get_name : 'tags this -> PermissionName.t) =
       fun (x13254 : 'tags this) ->
         PermissionName.t_of_js
@@ -46295,12 +46470,12 @@ module Permissions =
     type 'tags this = 'tags intf constraint 'tags = [> `Permissions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13265 : Ojs.t) -> intf_of_js __tags_of_js x13265
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13263 : __tags intf) -> intf_to_js __tags_to_js x13263
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13265 : Ojs.t) -> intf_of_js __tags_of_js x13265
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13263 : __tags intf) -> intf_to_js __tags_to_js x13263
     let (query :
       'tags this ->
         permissionDesc:PermissionDescriptor.t ->
@@ -46336,12 +46511,12 @@ module PermissionStatusEventMap =
       'tags intf constraint 'tags = [> `PermissionStatusEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13275 : Ojs.t) -> intf_of_js __tags_of_js x13275
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13273 : __tags intf) -> intf_to_js __tags_to_js x13273
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13275 : Ojs.t) -> intf_of_js __tags_of_js x13275
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13273 : __tags intf) -> intf_to_js __tags_to_js x13273
     let (get_change : 'tags this -> Event.t) =
       fun (x13277 : 'tags this) ->
         Event.t_of_js
@@ -46373,12 +46548,12 @@ module PerformanceServerTiming =
       'tags intf constraint 'tags = [> `PerformanceServerTiming ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13288 : Ojs.t) -> intf_of_js __tags_of_js x13288
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13286 : __tags intf) -> intf_to_js __tags_to_js x13286
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13288 : Ojs.t) -> intf_of_js __tags_of_js x13288
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13286 : __tags intf) -> intf_to_js __tags_to_js x13286
     let (get_description : 'tags this -> string) =
       fun (x13290 : 'tags this) ->
         Ojs.string_of_js
@@ -46422,12 +46597,12 @@ module PerformanceResourceTiming =
       'tags intf constraint 'tags = [> `PerformanceResourceTiming ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13302 : Ojs.t) -> intf_of_js __tags_of_js x13302
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13300 : __tags intf) -> intf_to_js __tags_to_js x13300
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13302 : Ojs.t) -> intf_of_js __tags_of_js x13302
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13300 : __tags intf) -> intf_to_js __tags_to_js x13300
     let (get_connectEnd : 'tags this -> DOMHighResTimeStamp.t) =
       fun (x13304 : 'tags this) ->
         DOMHighResTimeStamp.t_of_js
@@ -46533,12 +46708,12 @@ module PerformanceObserverInit =
       'tags intf constraint 'tags = [> `PerformanceObserverInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13347 : Ojs.t) -> intf_of_js __tags_of_js x13347
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13345 : __tags intf) -> intf_to_js __tags_to_js x13345
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13347 : Ojs.t) -> intf_of_js __tags_of_js x13347
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13345 : __tags intf) -> intf_to_js __tags_to_js x13345
     let (get_buffered : 'tags this -> bool) =
       fun (x13349 : 'tags this) ->
         Ojs.bool_of_js
@@ -46594,12 +46769,12 @@ module PerformanceObserverEntryList =
       'tags intf constraint 'tags = [> `PerformanceObserverEntryList ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13375 : Ojs.t) -> intf_of_js __tags_of_js x13375
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13373 : __tags intf) -> intf_to_js __tags_to_js x13373
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13375 : Ojs.t) -> intf_of_js __tags_of_js x13375
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13373 : __tags intf) -> intf_to_js __tags_to_js x13373
     let (getEntries : 'tags this -> PerformanceEntryList.t) =
       fun (x13377 : 'tags this) ->
         PerformanceEntryList.t_of_js
@@ -46693,12 +46868,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `PerformanceObserver ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13393 : Ojs.t) -> intf_of_js __tags_of_js x13393
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13391 : __tags intf) -> intf_to_js __tags_to_js x13391
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13393 : Ojs.t) -> intf_of_js __tags_of_js x13393
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13391 : __tags intf) -> intf_to_js __tags_to_js x13391
     let (disconnect : 'tags this -> unit) =
       fun (x13395 : 'tags this) ->
         ignore (Ojs.call (this_to_js Obj.magic x13395) "disconnect" [||])
@@ -46785,12 +46960,12 @@ module rec
       'tags intf constraint 'tags = [> `PerformanceObserverCallback ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13411 : Ojs.t) -> intf_of_js __tags_of_js x13411
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13409 : __tags intf) -> intf_to_js __tags_to_js x13409
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13411 : Ojs.t) -> intf_of_js __tags_of_js x13411
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13409 : __tags intf) -> intf_to_js __tags_to_js x13409
     let (apply :
       'tags this ->
         entries:PerformanceObserverEntryList.t ->
@@ -46818,12 +46993,12 @@ module PerformanceEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `PerformanceEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13421 : Ojs.t) -> intf_of_js __tags_of_js x13421
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13419 : __tags intf) -> intf_to_js __tags_to_js x13419
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13421 : Ojs.t) -> intf_of_js __tags_of_js x13421
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13419 : __tags intf) -> intf_to_js __tags_to_js x13419
     let (get_resourcetimingbufferfull : 'tags this -> Event.t) =
       fun (x13423 : 'tags this) ->
         Event.t_of_js
@@ -46856,12 +47031,12 @@ module DOMMatrix2DInit =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMMatrix2DInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13434 : Ojs.t) -> intf_of_js __tags_of_js x13434
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13432 : __tags intf) -> intf_to_js __tags_to_js x13432
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13434 : Ojs.t) -> intf_of_js __tags_of_js x13434
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13432 : __tags intf) -> intf_to_js __tags_to_js x13432
     let (get_a : 'tags this -> float) =
       fun (x13436 : 'tags this) ->
         Ojs.float_of_js
@@ -47036,12 +47211,12 @@ module CanvasPath =
     type 'tags this = 'tags intf constraint 'tags = [> `CanvasPath ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13513 : Ojs.t) -> intf_of_js __tags_of_js x13513
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13511 : __tags intf) -> intf_to_js __tags_to_js x13511
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13513 : Ojs.t) -> intf_of_js __tags_of_js x13513
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13511 : __tags intf) -> intf_to_js __tags_to_js x13511
     let (arc :
       'tags this ->
         x:float ->
@@ -47230,12 +47405,12 @@ module Path2D =
     type 'tags this = 'tags intf constraint 'tags = [> `Path2D ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13580 : Ojs.t) -> intf_of_js __tags_of_js x13580
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13578 : __tags intf) -> intf_to_js __tags_to_js x13578
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13580 : Ojs.t) -> intf_of_js __tags_of_js x13580
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13578 : __tags intf) -> intf_to_js __tags_to_js x13578
     let (addPath :
       'tags this -> path:t -> ?transform:DOMMatrix2DInit.t -> unit -> unit) =
       fun (x13586 : 'tags this) ->
@@ -47295,12 +47470,12 @@ module OnErrorEventHandlerNonNull =
       'tags intf constraint 'tags = [> `OnErrorEventHandlerNonNull ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13598 : Ojs.t) -> intf_of_js __tags_of_js x13598
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13596 : __tags intf) -> intf_to_js __tags_to_js x13596
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13598 : Ojs.t) -> intf_of_js __tags_of_js x13598
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13596 : __tags intf) -> intf_to_js __tags_to_js x13596
     let (apply :
       'tags this ->
         event:[ `U1 of Event.t  | `U2 of string ] ->
@@ -47381,12 +47556,12 @@ module OES_fbo_render_mipmap =
       'tags intf constraint 'tags = [> `OES_fbo_render_mipmap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13624 : Ojs.t) -> intf_of_js __tags_of_js x13624
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13622 : __tags intf) -> intf_to_js __tags_to_js x13622
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13624 : Ojs.t) -> intf_of_js __tags_of_js x13624
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13622 : __tags intf) -> intf_to_js __tags_to_js x13622
     let cast_from = Obj.magic
   end
 module NotificationEventMap =
@@ -47403,12 +47578,12 @@ module NotificationEventMap =
       'tags intf constraint 'tags = [> `NotificationEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13630 : Ojs.t) -> intf_of_js __tags_of_js x13630
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13628 : __tags intf) -> intf_to_js __tags_to_js x13628
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13630 : Ojs.t) -> intf_of_js __tags_of_js x13630
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13628 : __tags intf) -> intf_to_js __tags_to_js x13628
     let (get_click : 'tags this -> Event.t) =
       fun (x13632 : 'tags this) ->
         Event.t_of_js
@@ -47475,12 +47650,12 @@ module MessagePortEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `MessagePortEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13661 : Ojs.t) -> intf_of_js __tags_of_js x13661
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13659 : __tags intf) -> intf_to_js __tags_to_js x13659
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13661 : Ojs.t) -> intf_of_js __tags_of_js x13661
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13659 : __tags intf) -> intf_to_js __tags_to_js x13659
     let (get_message : 'tags this -> MessageEvent.t_0) =
       fun (x13663 : 'tags this) ->
         MessageEvent.t_0_of_js
@@ -47526,12 +47701,12 @@ module MessageChannel =
     type 'tags this = 'tags intf constraint 'tags = [> `MessageChannel ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13680 : Ojs.t) -> intf_of_js __tags_of_js x13680
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13678 : __tags intf) -> intf_to_js __tags_to_js x13678
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13680 : Ojs.t) -> intf_of_js __tags_of_js x13680
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13678 : __tags intf) -> intf_to_js __tags_to_js x13678
     let (get_port1 : 'tags this -> MessagePort.t) =
       fun (x13682 : 'tags this) ->
         MessagePort.t_of_js
@@ -47591,12 +47766,12 @@ module LockOptions =
     type 'tags this = 'tags intf constraint 'tags = [> `LockOptions ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13698 : Ojs.t) -> intf_of_js __tags_of_js x13698
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13696 : __tags intf) -> intf_to_js __tags_to_js x13696
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13698 : Ojs.t) -> intf_of_js __tags_of_js x13698
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13696 : __tags intf) -> intf_to_js __tags_to_js x13696
     let (get_ifAvailable : 'tags this -> bool) =
       fun (x13700 : 'tags this) ->
         Ojs.bool_of_js
@@ -47665,12 +47840,12 @@ module LockInfo =
     type 'tags this = 'tags intf constraint 'tags = [> `LockInfo ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13729 : Ojs.t) -> intf_of_js __tags_of_js x13729
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13727 : __tags intf) -> intf_to_js __tags_to_js x13727
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13729 : Ojs.t) -> intf_of_js __tags_of_js x13729
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13727 : __tags intf) -> intf_to_js __tags_to_js x13727
     let (get_clientId : 'tags this -> string) =
       fun (x13731 : 'tags this) ->
         Ojs.string_of_js
@@ -47724,12 +47899,12 @@ module LockManagerSnapshot =
     type 'tags this = 'tags intf constraint 'tags = [> `LockManagerSnapshot ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13754 : Ojs.t) -> intf_of_js __tags_of_js x13754
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13752 : __tags intf) -> intf_to_js __tags_to_js x13752
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13754 : Ojs.t) -> intf_of_js __tags_of_js x13754
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13752 : __tags intf) -> intf_to_js __tags_to_js x13752
     let (get_held : 'tags this -> LockInfo.t list) =
       fun (x13756 : 'tags this) ->
         Ojs.list_of_js LockInfo.t_of_js
@@ -47774,12 +47949,12 @@ module Lock =
     type 'tags this = 'tags intf constraint 'tags = [> `Lock ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13779 : Ojs.t) -> intf_of_js __tags_of_js x13779
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13777 : __tags intf) -> intf_to_js __tags_to_js x13777
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13779 : Ojs.t) -> intf_of_js __tags_of_js x13779
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13777 : __tags intf) -> intf_to_js __tags_to_js x13777
     let (get_mode : 'tags this -> LockMode.t) =
       fun (x13781 : 'tags this) ->
         LockMode.t_of_js
@@ -47819,12 +47994,12 @@ module LockGrantedCallback =
     type 'tags this = 'tags intf constraint 'tags = [> `LockGrantedCallback ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13792 : Ojs.t) -> intf_of_js __tags_of_js x13792
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13790 : __tags intf) -> intf_to_js __tags_to_js x13790
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13792 : Ojs.t) -> intf_of_js __tags_of_js x13792
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13790 : __tags intf) -> intf_to_js __tags_to_js x13790
     let (apply : 'tags this -> lock:Lock.t option -> any) =
       fun (x13796 : 'tags this) ->
         fun ~lock:(x13794 : Lock.t option) ->
@@ -47846,12 +48021,12 @@ module LockManager =
     type 'tags this = 'tags intf constraint 'tags = [> `LockManager ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13802 : Ojs.t) -> intf_of_js __tags_of_js x13802
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13800 : __tags intf) -> intf_to_js __tags_to_js x13800
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13802 : Ojs.t) -> intf_of_js __tags_of_js x13802
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13800 : __tags intf) -> intf_to_js __tags_to_js x13800
     let (query : 'tags this -> LockManagerSnapshot.t Promise.t_1) =
       fun (x13804 : 'tags this) ->
         Promise.t_1_of_js LockManagerSnapshot.t_of_js
@@ -47905,12 +48080,12 @@ module ImportMeta =
     type 'tags this = 'tags intf constraint 'tags = [> `ImportMeta ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13822 : Ojs.t) -> intf_of_js __tags_of_js x13822
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13820 : __tags intf) -> intf_to_js __tags_to_js x13820
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13822 : Ojs.t) -> intf_of_js __tags_of_js x13822
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13820 : __tags intf) -> intf_to_js __tags_to_js x13820
     let (get_url : 'tags this -> string) =
       fun (x13824 : 'tags this) ->
         Ojs.string_of_js
@@ -47942,12 +48117,12 @@ module ImageBitmapRenderingContextSettings =
       'tags intf constraint 'tags = [> `ImageBitmapRenderingContextSettings ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13835 : Ojs.t) -> intf_of_js __tags_of_js x13835
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13833 : __tags intf) -> intf_to_js __tags_to_js x13833
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13835 : Ojs.t) -> intf_of_js __tags_of_js x13835
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13833 : __tags intf) -> intf_to_js __tags_to_js x13833
     let (get_alpha : 'tags this -> bool) =
       fun (x13837 : 'tags this) ->
         Ojs.bool_of_js
@@ -47979,12 +48154,12 @@ module ImageBitmapRenderingContext =
       'tags intf constraint 'tags = [> `ImageBitmapRenderingContext ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13848 : Ojs.t) -> intf_of_js __tags_of_js x13848
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13846 : __tags intf) -> intf_to_js __tags_to_js x13846
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13848 : Ojs.t) -> intf_of_js __tags_of_js x13848
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13846 : __tags intf) -> intf_to_js __tags_to_js x13846
     let (transferFromImageBitmap :
       'tags this -> bitmap:ImageBitmap.t option -> unit) =
       fun (x13852 : 'tags this) ->
@@ -48020,12 +48195,12 @@ module IDBTransactionEventMap =
       'tags intf constraint 'tags = [> `IDBTransactionEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13858 : Ojs.t) -> intf_of_js __tags_of_js x13858
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13856 : __tags intf) -> intf_to_js __tags_to_js x13856
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13858 : Ojs.t) -> intf_of_js __tags_of_js x13858
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13856 : __tags intf) -> intf_to_js __tags_to_js x13856
     let (get_abort : 'tags this -> Event.t) =
       fun (x13860 : 'tags this) ->
         Event.t_of_js
@@ -48079,12 +48254,12 @@ module IDBRequestEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `IDBRequestEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13883 : Ojs.t) -> intf_of_js __tags_of_js x13883
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13881 : __tags intf) -> intf_to_js __tags_to_js x13881
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13883 : Ojs.t) -> intf_of_js __tags_of_js x13883
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13881 : __tags intf) -> intf_to_js __tags_to_js x13881
     let (get_error : 'tags this -> Event.t) =
       fun (x13885 : 'tags this) ->
         Event.t_of_js
@@ -48127,12 +48302,12 @@ module IDBOpenDBRequestEventMap =
       'tags intf constraint 'tags = [> `IDBOpenDBRequestEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13902 : Ojs.t) -> intf_of_js __tags_of_js x13902
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13900 : __tags intf) -> intf_to_js __tags_to_js x13900
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13902 : Ojs.t) -> intf_of_js __tags_of_js x13902
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13900 : __tags intf) -> intf_to_js __tags_to_js x13900
     let (get_blocked : 'tags this -> Event.t) =
       fun (x13904 : 'tags this) ->
         Event.t_of_js
@@ -48177,12 +48352,12 @@ module IDBDatabaseEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `IDBDatabaseEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13921 : Ojs.t) -> intf_of_js __tags_of_js x13921
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13919 : __tags intf) -> intf_to_js __tags_to_js x13919
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13921 : Ojs.t) -> intf_of_js __tags_of_js x13921
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13919 : __tags intf) -> intf_to_js __tags_to_js x13919
     let (get_abort : 'tags this -> Event.t) =
       fun (x13923 : 'tags this) ->
         Event.t_of_js
@@ -48252,12 +48427,12 @@ module FontFaceSetLoadEventInit =
       'tags intf constraint 'tags = [> `FontFaceSetLoadEventInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13952 : Ojs.t) -> intf_of_js __tags_of_js x13952
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13950 : __tags intf) -> intf_to_js __tags_to_js x13950
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13952 : Ojs.t) -> intf_of_js __tags_of_js x13952
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13950 : __tags intf) -> intf_to_js __tags_to_js x13950
     let (get_fontfaces : 'tags this -> FontFace.t list) =
       fun (x13954 : 'tags this) ->
         Ojs.list_of_js FontFace.t_of_js
@@ -48290,12 +48465,12 @@ module FontFaceSetLoadEvent =
       'tags intf constraint 'tags = [> `FontFaceSetLoadEvent ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13968 : Ojs.t) -> intf_of_js __tags_of_js x13968
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13966 : __tags intf) -> intf_to_js __tags_to_js x13966
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13968 : Ojs.t) -> intf_of_js __tags_of_js x13968
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13966 : __tags intf) -> intf_to_js __tags_to_js x13966
     let (get_fontfaces : 'tags this -> FontFace.t list) =
       fun (x13970 : 'tags this) ->
         Ojs.list_of_js FontFace.t_of_js
@@ -48348,12 +48523,12 @@ module FontFaceSetEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `FontFaceSetEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x13984 : Ojs.t) -> intf_of_js __tags_of_js x13984
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x13982 : __tags intf) -> intf_to_js __tags_to_js x13982
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x13984 : Ojs.t) -> intf_of_js __tags_of_js x13984
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x13982 : __tags intf) -> intf_to_js __tags_to_js x13982
     let (get_loading : 'tags this -> Event.t) =
       fun (x13986 : 'tags this) ->
         Event.t_of_js
@@ -48409,12 +48584,12 @@ module FileReaderSync =
     type 'tags this = 'tags intf constraint 'tags = [> `FileReaderSync ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14009 : Ojs.t) -> intf_of_js __tags_of_js x14009
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14007 : __tags intf) -> intf_to_js __tags_to_js x14007
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14009 : Ojs.t) -> intf_of_js __tags_of_js x14009
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14007 : __tags intf) -> intf_to_js __tags_to_js x14007
     let (readAsArrayBuffer : 'tags this -> blob:Blob.t -> ArrayBuffer.t_0) =
       fun (x14012 : 'tags this) ->
         fun ~blob:(x14011 : Blob.t) ->
@@ -48480,12 +48655,12 @@ module FileReader =
     type 'tags this = 'tags intf constraint 'tags = [> `FileReader ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14031 : Ojs.t) -> intf_of_js __tags_of_js x14031
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14029 : __tags intf) -> intf_to_js __tags_to_js x14029
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14031 : Ojs.t) -> intf_of_js __tags_of_js x14031
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14029 : __tags intf) -> intf_to_js __tags_to_js x14029
     let (get_error : 'tags this -> DOMException.t option) =
       fun (x14033 : 'tags this) ->
         Ojs.option_of_js DOMException.t_of_js
@@ -48942,12 +49117,12 @@ module FileReaderEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `FileReaderEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14192 : Ojs.t) -> intf_of_js __tags_of_js x14192
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14190 : __tags intf) -> intf_to_js __tags_to_js x14190
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14192 : Ojs.t) -> intf_of_js __tags_of_js x14192
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14190 : __tags intf) -> intf_to_js __tags_to_js x14190
     let (get_abort : 'tags this -> FileReader.t ProgressEvent.t) =
       fun (x14194 : 'tags this) ->
         ProgressEvent.t_of_js FileReader.t_of_js
@@ -49051,12 +49226,12 @@ module FileList =
     type 'tags this = 'tags intf constraint 'tags = [> `FileList ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14253 : Ojs.t) -> intf_of_js __tags_of_js x14253
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14251 : __tags intf) -> intf_to_js __tags_to_js x14251
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14253 : Ojs.t) -> intf_of_js __tags_of_js x14253
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14251 : __tags intf) -> intf_to_js __tags_to_js x14251
     let (get_length : 'tags this -> float) =
       fun (x14255 : 'tags this) ->
         Ojs.float_of_js
@@ -49102,12 +49277,12 @@ module EventSourceEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `EventSourceEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14272 : Ojs.t) -> intf_of_js __tags_of_js x14272
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14270 : __tags intf) -> intf_to_js __tags_to_js x14270
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14272 : Ojs.t) -> intf_of_js __tags_of_js x14272
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14270 : __tags intf) -> intf_to_js __tags_to_js x14270
     let (get_error : 'tags this -> Event.t) =
       fun (x14274 : 'tags this) ->
         Event.t_of_js
@@ -49163,12 +49338,12 @@ module EventSourceInit =
     type 'tags this = 'tags intf constraint 'tags = [> `EventSourceInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14297 : Ojs.t) -> intf_of_js __tags_of_js x14297
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14295 : __tags intf) -> intf_to_js __tags_to_js x14295
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14297 : Ojs.t) -> intf_of_js __tags_of_js x14297
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14295 : __tags intf) -> intf_to_js __tags_to_js x14295
     let (get_withCredentials : 'tags this -> bool) =
       fun (x14299 : 'tags this) ->
         Ojs.bool_of_js
@@ -49199,12 +49374,12 @@ module EventSource =
     type 'tags this = 'tags intf constraint 'tags = [> `EventSource ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14310 : Ojs.t) -> intf_of_js __tags_of_js x14310
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14308 : __tags intf) -> intf_to_js __tags_to_js x14308
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14310 : Ojs.t) -> intf_of_js __tags_of_js x14310
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14308 : __tags intf) -> intf_to_js __tags_to_js x14308
     let (get_onerror : 'tags this -> (this:t -> ev:Event.t -> any) option) =
       fun (x14312 : 'tags this) ->
         Ojs.option_of_js
@@ -49641,12 +49816,12 @@ module EXT_texture_compression_rgtc =
       'tags intf constraint 'tags = [> `EXT_texture_compression_rgtc ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14437 : Ojs.t) -> intf_of_js __tags_of_js x14437
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14435 : __tags intf) -> intf_to_js __tags_to_js x14435
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14437 : Ojs.t) -> intf_of_js __tags_of_js x14437
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14435 : __tags intf) -> intf_to_js __tags_to_js x14435
     let (get_COMPRESSED_RED_GREEN_RGTC2_EXT : 'tags this -> GLenum.t) =
       fun (x14439 : 'tags this) ->
         GLenum.t_of_js
@@ -49709,12 +49884,12 @@ module DedicatedWorkerGlobalScopeEventMap =
       'tags intf constraint 'tags = [> `DedicatedWorkerGlobalScopeEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14456 : Ojs.t) -> intf_of_js __tags_of_js x14456
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14454 : __tags intf) -> intf_to_js __tags_to_js x14454
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14456 : Ojs.t) -> intf_of_js __tags_of_js x14456
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14454 : __tags intf) -> intf_to_js __tags_to_js x14454
     let (get_message : 'tags this -> MessageEvent.t_0) =
       fun (x14458 : 'tags this) ->
         MessageEvent.t_0_of_js
@@ -49761,12 +49936,12 @@ module FrameRequestCallback =
       'tags intf constraint 'tags = [> `FrameRequestCallback ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14475 : Ojs.t) -> intf_of_js __tags_of_js x14475
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14473 : __tags intf) -> intf_to_js __tags_to_js x14473
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14475 : Ojs.t) -> intf_of_js __tags_of_js x14475
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14473 : __tags intf) -> intf_to_js __tags_to_js x14473
     let (apply : 'tags this -> time:DOMHighResTimeStamp.t -> unit) =
       fun (x14478 : 'tags this) ->
         fun ~time:(x14477 : DOMHighResTimeStamp.t) ->
@@ -49789,12 +49964,12 @@ module AnimationFrameProvider =
       'tags intf constraint 'tags = [> `AnimationFrameProvider ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14484 : Ojs.t) -> intf_of_js __tags_of_js x14484
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14482 : __tags intf) -> intf_to_js __tags_to_js x14482
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14484 : Ojs.t) -> intf_of_js __tags_of_js x14484
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14482 : __tags intf) -> intf_to_js __tags_to_js x14482
     let (cancelAnimationFrame : 'tags this -> handle:float -> unit) =
       fun (x14487 : 'tags this) ->
         fun ~handle:(x14486 : float) ->
@@ -49830,12 +50005,12 @@ module DedicatedWorkerGlobalScope =
       'tags intf constraint 'tags = [> `DedicatedWorkerGlobalScope ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14496 : Ojs.t) -> intf_of_js __tags_of_js x14496
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14494 : __tags intf) -> intf_to_js __tags_to_js x14494
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14496 : Ojs.t) -> intf_of_js __tags_of_js x14496
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14494 : __tags intf) -> intf_to_js __tags_to_js x14494
     let (get_name : 'tags this -> string) =
       fun (x14498 : 'tags this) ->
         Ojs.string_of_js
@@ -50135,12 +50310,12 @@ module DOMRectInit =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMRectInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14584 : Ojs.t) -> intf_of_js __tags_of_js x14584
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14582 : __tags intf) -> intf_to_js __tags_to_js x14582
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14584 : Ojs.t) -> intf_of_js __tags_of_js x14584
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14582 : __tags intf) -> intf_to_js __tags_to_js x14582
     let (get_height : 'tags this -> float) =
       fun (x14586 : 'tags this) ->
         Ojs.float_of_js
@@ -50205,12 +50380,12 @@ module DOMRectReadOnly =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMRectReadOnly ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14615 : Ojs.t) -> intf_of_js __tags_of_js x14615
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14613 : __tags intf) -> intf_to_js __tags_to_js x14613
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14615 : Ojs.t) -> intf_of_js __tags_of_js x14615
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14613 : __tags intf) -> intf_to_js __tags_to_js x14613
     let (get_bottom : 'tags this -> float) =
       fun (x14617 : 'tags this) ->
         Ojs.float_of_js
@@ -50321,12 +50496,12 @@ module DOMRect =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMRect ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14652 : Ojs.t) -> intf_of_js __tags_of_js x14652
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14650 : __tags intf) -> intf_to_js __tags_to_js x14650
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14652 : Ojs.t) -> intf_of_js __tags_of_js x14652
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14650 : __tags intf) -> intf_to_js __tags_to_js x14650
     let (get_height : 'tags this -> float) =
       fun (x14654 : 'tags this) ->
         Ojs.float_of_js
@@ -50450,12 +50625,12 @@ module DOMPointInit =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMPointInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14696 : Ojs.t) -> intf_of_js __tags_of_js x14696
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14694 : __tags intf) -> intf_to_js __tags_to_js x14694
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14696 : Ojs.t) -> intf_of_js __tags_of_js x14696
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14694 : __tags intf) -> intf_to_js __tags_to_js x14694
     let (get_w : 'tags this -> float) =
       fun (x14698 : 'tags this) ->
         Ojs.float_of_js
@@ -50519,12 +50694,12 @@ module DOMQuadInit =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMQuadInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14727 : Ojs.t) -> intf_of_js __tags_of_js x14727
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14725 : __tags intf) -> intf_to_js __tags_to_js x14725
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14727 : Ojs.t) -> intf_of_js __tags_of_js x14727
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14725 : __tags intf) -> intf_to_js __tags_to_js x14725
     let (get_p1 : 'tags this -> DOMPointInit.t) =
       fun (x14729 : 'tags this) ->
         DOMPointInit.t_of_js
@@ -50592,12 +50767,12 @@ module DOMMatrixInit =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMMatrixInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14758 : Ojs.t) -> intf_of_js __tags_of_js x14758
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14756 : __tags intf) -> intf_to_js __tags_to_js x14756
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14758 : Ojs.t) -> intf_of_js __tags_of_js x14758
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14756 : __tags intf) -> intf_to_js __tags_to_js x14756
     let (get_is2D : 'tags this -> bool) =
       fun (x14760 : 'tags this) ->
         Ojs.bool_of_js
@@ -50790,12 +50965,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `DOMPoint ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14831 : Ojs.t) -> intf_of_js __tags_of_js x14831
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14829 : __tags intf) -> intf_to_js __tags_to_js x14829
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14831 : Ojs.t) -> intf_of_js __tags_of_js x14831
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14829 : __tags intf) -> intf_to_js __tags_to_js x14829
     let (get_w : 'tags this -> float) =
       fun (x14833 : 'tags this) ->
         Ojs.float_of_js
@@ -50949,12 +51124,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `DOMPointReadOnly ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14875 : Ojs.t) -> intf_of_js __tags_of_js x14875
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14873 : __tags intf) -> intf_to_js __tags_to_js x14873
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14875 : Ojs.t) -> intf_of_js __tags_of_js x14875
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14873 : __tags intf) -> intf_to_js __tags_to_js x14873
     let (get_w : 'tags this -> float) =
       fun (x14877 : 'tags this) ->
         Ojs.float_of_js
@@ -51068,12 +51243,12 @@ module DOMQuad =
     type 'tags this = 'tags intf constraint 'tags = [> `DOMQuad ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14910 : Ojs.t) -> intf_of_js __tags_of_js x14910
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14908 : __tags intf) -> intf_to_js __tags_to_js x14908
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14910 : Ojs.t) -> intf_of_js __tags_of_js x14910
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14908 : __tags intf) -> intf_to_js __tags_to_js x14908
     let (get_p1 : 'tags this -> DOMPoint.t) =
       fun (x14912 : 'tags this) ->
         DOMPoint.t_of_js
@@ -51289,12 +51464,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `DOMMatrix ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x14945 : Ojs.t) -> intf_of_js __tags_of_js x14945
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x14943 : __tags intf) -> intf_to_js __tags_to_js x14943
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x14945 : Ojs.t) -> intf_of_js __tags_of_js x14945
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x14943 : __tags intf) -> intf_to_js __tags_to_js x14943
     let (get_a : 'tags this -> float) =
       fun (x14947 : 'tags this) ->
         Ojs.float_of_js
@@ -51975,12 +52150,12 @@ module rec
     type 'tags this = 'tags intf constraint 'tags = [> `DOMMatrixReadOnly ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15167 : Ojs.t) -> intf_of_js __tags_of_js x15167
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15165 : __tags intf) -> intf_to_js __tags_to_js x15165
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15167 : Ojs.t) -> intf_of_js __tags_of_js x15167
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15165 : __tags intf) -> intf_to_js __tags_to_js x15165
     let (get_a : 'tags this -> float) =
       fun (x15169 : 'tags this) ->
         Ojs.float_of_js
@@ -52506,13 +52681,14 @@ module CustomEventInit =
       fun _T -> Obj.magic
     and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun _T -> Obj.magic
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x15343 : Ojs.t) -> t_of_js __T_of_js x15343
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x15341 : __T t) -> t_to_js __T_to_js x15341
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x15343 : Ojs.t) -> t_of_js __T_of_js x15343
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x15341 : __T t) -> t_to_js __T_to_js x15341
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x15347 : Ojs.t) -> t_of_js any_of_js x15347
@@ -52526,17 +52702,21 @@ module CustomEventInit =
     let rec this_of_js :
       'tags 'T .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'T) -> Ojs.t -> ('tags, 'T) this
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x15351 : Ojs.t) -> intf_of_js __tags_of_js x15351
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__T_of_js : Ojs.t -> __T) ->
+              fun (x15351 : Ojs.t) -> intf_of_js __tags_of_js x15351
     and this_to_js :
       'tags 'T .
         ('tags -> Ojs.t) -> ('T -> Ojs.t) -> ('tags, 'T) this -> Ojs.t
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x15349 : __tags intf) -> intf_to_js __tags_to_js x15349
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__T_to_js : __T -> Ojs.t) ->
+              fun (x15349 : __tags intf) -> intf_to_js __tags_to_js x15349
     let (get_detail : ('tags, 'T) this -> 'T) =
       fun (x15353 : ('tags, 'T) this) ->
         Obj.magic
@@ -52562,13 +52742,14 @@ module CustomEvent =
       fun _T -> Obj.magic
     and t_to_js : 'T . ('T -> Ojs.t) -> 'T t -> Ojs.t = fun _T -> Obj.magic
     type 'T t_1 = 'T t
-    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 = fun (type
-      __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x15365 : Ojs.t) -> t_of_js __T_of_js x15365
-    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t = fun (type __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x15363 : __T t) -> t_to_js __T_to_js x15363
+    let rec t_1_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T t_1 =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x15365 : Ojs.t) -> t_of_js __T_of_js x15365
+    and t_1_to_js : 'T . ('T -> Ojs.t) -> 'T t_1 -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x15363 : __T t) -> t_to_js __T_to_js x15363
     type t_0 = any t
     let rec t_0_of_js : Ojs.t -> t_0 =
       fun (x15369 : Ojs.t) -> t_of_js any_of_js x15369
@@ -52582,17 +52763,21 @@ module CustomEvent =
     let rec this_of_js :
       'tags 'T .
         (Ojs.t -> 'tags) -> (Ojs.t -> 'T) -> Ojs.t -> ('tags, 'T) this
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (__T_of_js : Ojs.t -> __T) ->
-          fun (x15373 : Ojs.t) -> intf_of_js __tags_of_js x15373
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_of_js : Ojs.t -> __tags) ->
+            fun (__T_of_js : Ojs.t -> __T) ->
+              fun (x15373 : Ojs.t) -> intf_of_js __tags_of_js x15373
     and this_to_js :
       'tags 'T .
         ('tags -> Ojs.t) -> ('T -> Ojs.t) -> ('tags, 'T) this -> Ojs.t
-      = fun (type __tags) -> fun (type __T) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (__T_to_js : __T -> Ojs.t) ->
-          fun (x15371 : __tags intf) -> intf_to_js __tags_to_js x15371
+      =
+      fun (type __tags) ->
+        fun (type __T) ->
+          fun (__tags_to_js : __tags -> Ojs.t) ->
+            fun (__T_to_js : __T -> Ojs.t) ->
+              fun (x15371 : __tags intf) -> intf_to_js __tags_to_js x15371
     let (get_detail : ('tags, 'T) this -> 'T) =
       fun (x15375 : ('tags, 'T) this) ->
         Obj.magic
@@ -52677,12 +52862,12 @@ module QueuingStrategyInit =
     type 'tags this = 'tags intf constraint 'tags = [> `QueuingStrategyInit ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15400 : Ojs.t) -> intf_of_js __tags_of_js x15400
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15398 : __tags intf) -> intf_to_js __tags_to_js x15398
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15400 : Ojs.t) -> intf_of_js __tags_of_js x15400
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15398 : __tags intf) -> intf_to_js __tags_to_js x15398
     let (get_highWaterMark : 'tags this -> float) =
       fun (x15402 : 'tags this) ->
         Ojs.float_of_js
@@ -52714,12 +52899,12 @@ module CountQueuingStrategy =
       'tags intf constraint 'tags = [> `CountQueuingStrategy ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15413 : Ojs.t) -> intf_of_js __tags_of_js x15413
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15411 : __tags intf) -> intf_to_js __tags_to_js x15411
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15413 : Ojs.t) -> intf_of_js __tags_of_js x15413
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15411 : __tags intf) -> intf_to_js __tags_to_js x15411
     let (get_highWaterMark : 'tags this -> float) =
       fun (x15415 : 'tags this) ->
         Ojs.float_of_js
@@ -52765,12 +52950,12 @@ module Console =
     type 'tags this = 'tags intf constraint 'tags = [> `Console ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15427 : Ojs.t) -> intf_of_js __tags_of_js x15427
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15425 : __tags intf) -> intf_to_js __tags_to_js x15425
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15427 : Ojs.t) -> intf_of_js __tags_of_js x15427
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15425 : __tags intf) -> intf_to_js __tags_to_js x15425
     let (assert_ :
       'tags this -> ?condition:bool -> data:any list -> unit -> unit) =
       fun (x15434 : 'tags this) ->
@@ -53130,12 +53315,12 @@ module CanvasPattern =
     type 'tags this = 'tags intf constraint 'tags = [> `CanvasPattern ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15554 : Ojs.t) -> intf_of_js __tags_of_js x15554
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15552 : __tags intf) -> intf_to_js __tags_to_js x15552
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15554 : Ojs.t) -> intf_of_js __tags_of_js x15554
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15552 : __tags intf) -> intf_to_js __tags_to_js x15552
     let (setTransform :
       'tags this -> ?transform:DOMMatrix2DInit.t -> unit -> unit) =
       fun (x15559 : 'tags this) ->
@@ -53179,12 +53364,12 @@ module CanvasGradient =
     type 'tags this = 'tags intf constraint 'tags = [> `CanvasGradient ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15566 : Ojs.t) -> intf_of_js __tags_of_js x15566
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15564 : __tags intf) -> intf_to_js __tags_to_js x15564
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15566 : Ojs.t) -> intf_of_js __tags_of_js x15566
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15564 : __tags intf) -> intf_to_js __tags_to_js x15564
     let (addColorStop : 'tags this -> offset:float -> color:string -> unit) =
       fun (x15570 : 'tags this) ->
         fun ~offset:(x15568 : float) ->
@@ -53221,12 +53406,12 @@ module ByteLengthQueuingStrategy =
       'tags intf constraint 'tags = [> `ByteLengthQueuingStrategy ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15576 : Ojs.t) -> intf_of_js __tags_of_js x15576
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15574 : __tags intf) -> intf_to_js __tags_to_js x15574
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15576 : Ojs.t) -> intf_of_js __tags_of_js x15576
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15574 : __tags intf) -> intf_to_js __tags_to_js x15574
     let (get_highWaterMark : 'tags this -> float) =
       fun (x15578 : 'tags this) ->
         Ojs.float_of_js
@@ -53277,12 +53462,12 @@ module BroadcastChannelEventMap =
       'tags intf constraint 'tags = [> `BroadcastChannelEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15592 : Ojs.t) -> intf_of_js __tags_of_js x15592
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15590 : __tags intf) -> intf_to_js __tags_to_js x15590
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15592 : Ojs.t) -> intf_of_js __tags_of_js x15592
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15590 : __tags intf) -> intf_to_js __tags_to_js x15590
     let (get_message : 'tags this -> MessageEvent.t_0) =
       fun (x15594 : 'tags this) ->
         MessageEvent.t_0_of_js
@@ -53328,12 +53513,12 @@ module BroadcastChannel =
     type 'tags this = 'tags intf constraint 'tags = [> `BroadcastChannel ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15611 : Ojs.t) -> intf_of_js __tags_of_js x15611
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15609 : __tags intf) -> intf_to_js __tags_to_js x15609
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15611 : Ojs.t) -> intf_of_js __tags_of_js x15611
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15609 : __tags intf) -> intf_to_js __tags_to_js x15609
     let (get_name : 'tags this -> string) =
       fun (x15613 : 'tags this) ->
         Ojs.string_of_js
@@ -53602,12 +53787,12 @@ module AbortSignalEventMap =
     type 'tags this = 'tags intf constraint 'tags = [> `AbortSignalEventMap ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15691 : Ojs.t) -> intf_of_js __tags_of_js x15691
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15689 : __tags intf) -> intf_to_js __tags_to_js x15689
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15691 : Ojs.t) -> intf_of_js __tags_of_js x15691
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15689 : __tags intf) -> intf_to_js __tags_to_js x15689
     let (get_abort : 'tags this -> Event.t) =
       fun (x15693 : 'tags this) ->
         Event.t_of_js
@@ -53638,12 +53823,12 @@ module AbortController =
     type 'tags this = 'tags intf constraint 'tags = [> `AbortController ]
     let rec this_of_js : 'tags . (Ojs.t -> 'tags) -> Ojs.t -> 'tags this =
       fun (type __tags) ->
-      fun (__tags_of_js : Ojs.t -> __tags) ->
-        fun (x15704 : Ojs.t) -> intf_of_js __tags_of_js x15704
-    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t = fun
-      (type __tags) ->
-      fun (__tags_to_js : __tags -> Ojs.t) ->
-        fun (x15702 : __tags intf) -> intf_to_js __tags_to_js x15702
+        fun (__tags_of_js : Ojs.t -> __tags) ->
+          fun (x15704 : Ojs.t) -> intf_of_js __tags_of_js x15704
+    and this_to_js : 'tags . ('tags -> Ojs.t) -> 'tags this -> Ojs.t =
+      fun (type __tags) ->
+        fun (__tags_to_js : __tags -> Ojs.t) ->
+          fun (x15702 : __tags intf) -> intf_to_js __tags_to_js x15702
     let (get_signal : 'tags this -> AbortSignal.t) =
       fun (x15706 : 'tags this) ->
         AbortSignal.t_of_js
@@ -53680,15 +53865,15 @@ module AbortController =
 module CustomEventInit_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T CustomEventInit.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent = fun
-      (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x15716 : Ojs.t) -> CustomEventInit.t_of_js __T_of_js x15716
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t = fun (type
-      __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x15714 : __T CustomEventInit.t) ->
-          CustomEventInit.t_to_js __T_to_js x15714
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x15716 : Ojs.t) -> CustomEventInit.t_of_js __T_of_js x15716
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x15714 : __T CustomEventInit.t) ->
+            CustomEventInit.t_to_js __T_to_js x15714
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15720 : Ojs.t) -> parent_of_js T.t_of_js x15720
@@ -53705,15 +53890,15 @@ module CustomEventInit_Make(T:Ojs.T) =
 module MessageEventInit_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T MessageEventInit.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent = fun
-      (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x15727 : Ojs.t) -> MessageEventInit.t_of_js __T_of_js x15727
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t = fun (type
-      __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x15725 : __T MessageEventInit.t) ->
-          MessageEventInit.t_to_js __T_to_js x15725
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x15727 : Ojs.t) -> MessageEventInit.t_of_js __T_of_js x15727
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x15725 : __T MessageEventInit.t) ->
+            MessageEventInit.t_to_js __T_to_js x15725
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15731 : Ojs.t) -> parent_of_js T.t_of_js x15731
@@ -53764,15 +53949,15 @@ module MessageEventInit_Make(T:Ojs.T) =
 module QueuingStrategy_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T QueuingStrategy.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent = fun
-      (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x15754 : Ojs.t) -> QueuingStrategy.t_of_js __T_of_js x15754
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t = fun (type
-      __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x15752 : __T QueuingStrategy.t) ->
-          QueuingStrategy.t_to_js __T_to_js x15752
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x15754 : Ojs.t) -> QueuingStrategy.t_of_js __T_of_js x15754
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x15752 : __T QueuingStrategy.t) ->
+            QueuingStrategy.t_to_js __T_to_js x15752
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15758 : Ojs.t) -> parent_of_js T.t_of_js x15758
@@ -53799,16 +53984,16 @@ module QueuingStrategy_Make(T:Ojs.T) =
 module ReadableStreamDefaultReadValueResult_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T ReadableStreamDefaultReadValueResult.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent = fun
-      (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x15770 : Ojs.t) ->
-          ReadableStreamDefaultReadValueResult.t_of_js __T_of_js x15770
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t = fun (type
-      __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x15768 : __T ReadableStreamDefaultReadValueResult.t) ->
-          ReadableStreamDefaultReadValueResult.t_to_js __T_to_js x15768
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x15770 : Ojs.t) ->
+            ReadableStreamDefaultReadValueResult.t_of_js __T_of_js x15770
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x15768 : __T ReadableStreamDefaultReadValueResult.t) ->
+            ReadableStreamDefaultReadValueResult.t_to_js __T_to_js x15768
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15774 : Ojs.t) -> parent_of_js T.t_of_js x15774
@@ -53838,18 +54023,20 @@ module ReadableWritablePair_Make(R:Ojs.T)(W:Ojs.T) =
     type ('R, 'W) parent = ('R, 'W) ReadableWritablePair.t
     let rec parent_of_js :
       'R 'W . (Ojs.t -> 'R) -> (Ojs.t -> 'W) -> Ojs.t -> ('R, 'W) parent =
-      fun (type __R) -> fun (type __W) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (__W_of_js : Ojs.t -> __W) ->
-          fun (x15786 : Ojs.t) ->
-            ReadableWritablePair.t_of_js __R_of_js __W_of_js x15786
+      fun (type __R) ->
+        fun (type __W) ->
+          fun (__R_of_js : Ojs.t -> __R) ->
+            fun (__W_of_js : Ojs.t -> __W) ->
+              fun (x15786 : Ojs.t) ->
+                ReadableWritablePair.t_of_js __R_of_js __W_of_js x15786
     and parent_to_js :
       'R 'W . ('R -> Ojs.t) -> ('W -> Ojs.t) -> ('R, 'W) parent -> Ojs.t =
-      fun (type __R) -> fun (type __W) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (__W_to_js : __W -> Ojs.t) ->
-          fun (x15783 : (__R, __W) ReadableWritablePair.t) ->
-            ReadableWritablePair.t_to_js __R_to_js __W_to_js x15783
+      fun (type __R) ->
+        fun (type __W) ->
+          fun (__R_to_js : __R -> Ojs.t) ->
+            fun (__W_to_js : __W -> Ojs.t) ->
+              fun (x15783 : (__R, __W) ReadableWritablePair.t) ->
+                ReadableWritablePair.t_to_js __R_to_js __W_to_js x15783
     type t = (R.t, W.t) parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15792 : Ojs.t) -> parent_of_js R.t_of_js W.t_of_js x15792
@@ -53880,18 +54067,20 @@ module Transformer_Make(I:Ojs.T)(O:Ojs.T) =
     type ('I, 'O) parent = ('I, 'O) Transformer.t
     let rec parent_of_js :
       'I 'O . (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) parent =
-      fun (type __I) -> fun (type __O) ->
-      fun (__I_of_js : Ojs.t -> __I) ->
-        fun (__O_of_js : Ojs.t -> __O) ->
-          fun (x15808 : Ojs.t) ->
-            Transformer.t_of_js __I_of_js __O_of_js x15808
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_of_js : Ojs.t -> __I) ->
+            fun (__O_of_js : Ojs.t -> __O) ->
+              fun (x15808 : Ojs.t) ->
+                Transformer.t_of_js __I_of_js __O_of_js x15808
     and parent_to_js :
       'I 'O . ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) parent -> Ojs.t =
-      fun (type __I) -> fun (type __O) ->
-      fun (__I_to_js : __I -> Ojs.t) ->
-        fun (__O_to_js : __O -> Ojs.t) ->
-          fun (x15805 : (__I, __O) Transformer.t) ->
-            Transformer.t_to_js __I_to_js __O_to_js x15805
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_to_js : __I -> Ojs.t) ->
+            fun (__O_to_js : __O -> Ojs.t) ->
+              fun (x15805 : (__I, __O) Transformer.t) ->
+                Transformer.t_to_js __I_to_js __O_to_js x15805
     type t = (I.t, O.t) parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15814 : Ojs.t) -> parent_of_js I.t_of_js O.t_of_js x15814
@@ -53946,15 +54135,15 @@ module Transformer_Make(I:Ojs.T)(O:Ojs.T) =
 module UnderlyingSink_Make(W:Ojs.T) =
   struct
     type 'W parent = 'W UnderlyingSink.t
-    let rec parent_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W parent = fun
-      (type __W) ->
-      fun (__W_of_js : Ojs.t -> __W) ->
-        fun (x15842 : Ojs.t) -> UnderlyingSink.t_of_js __W_of_js x15842
-    and parent_to_js : 'W . ('W -> Ojs.t) -> 'W parent -> Ojs.t = fun (type
-      __W) ->
-      fun (__W_to_js : __W -> Ojs.t) ->
-        fun (x15840 : __W UnderlyingSink.t) ->
-          UnderlyingSink.t_to_js __W_to_js x15840
+    let rec parent_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W parent =
+      fun (type __W) ->
+        fun (__W_of_js : Ojs.t -> __W) ->
+          fun (x15842 : Ojs.t) -> UnderlyingSink.t_of_js __W_of_js x15842
+    and parent_to_js : 'W . ('W -> Ojs.t) -> 'W parent -> Ojs.t =
+      fun (type __W) ->
+        fun (__W_to_js : __W -> Ojs.t) ->
+          fun (x15840 : __W UnderlyingSink.t) ->
+            UnderlyingSink.t_to_js __W_to_js x15840
     type t = W.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15846 : Ojs.t) -> parent_of_js W.t_of_js x15846
@@ -54007,15 +54196,15 @@ module UnderlyingSink_Make(W:Ojs.T) =
 module UnderlyingSource_Make(R:Ojs.T) =
   struct
     type 'R parent = 'R UnderlyingSource.t
-    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent = fun
-      (type __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x15867 : Ojs.t) -> UnderlyingSource.t_of_js __R_of_js x15867
-    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t = fun (type
-      __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x15865 : __R UnderlyingSource.t) ->
-          UnderlyingSource.t_to_js __R_to_js x15865
+    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x15867 : Ojs.t) -> UnderlyingSource.t_of_js __R_of_js x15867
+    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x15865 : __R UnderlyingSource.t) ->
+            UnderlyingSource.t_to_js __R_to_js x15865
     type t = R.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15871 : Ojs.t) -> parent_of_js R.t_of_js x15871
@@ -54059,15 +54248,15 @@ module UnderlyingSource_Make(R:Ojs.T) =
 module CustomEvent_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T CustomEvent.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent = fun
-      (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x15891 : Ojs.t) -> CustomEvent.t_of_js __T_of_js x15891
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t = fun (type
-      __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x15889 : __T CustomEvent.t) ->
-          CustomEvent.t_to_js __T_to_js x15889
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x15891 : Ojs.t) -> CustomEvent.t_of_js __T_of_js x15891
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x15889 : __T CustomEvent.t) ->
+            CustomEvent.t_to_js __T_to_js x15889
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15895 : Ojs.t) -> parent_of_js T.t_of_js x15895
@@ -54121,15 +54310,15 @@ module CustomEvent_Make(T:Ojs.T) =
 module IDBRequest_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T IDBRequest.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent = fun
-      (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x15910 : Ojs.t) -> IDBRequest.t_of_js __T_of_js x15910
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t = fun (type
-      __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x15908 : __T IDBRequest.t) ->
-          IDBRequest.t_to_js __T_to_js x15908
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x15910 : Ojs.t) -> IDBRequest.t_of_js __T_of_js x15910
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x15908 : __T IDBRequest.t) ->
+            IDBRequest.t_to_js __T_to_js x15908
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15914 : Ojs.t) -> parent_of_js T.t_of_js x15914
@@ -54386,15 +54575,15 @@ module IDBRequest_Make(T:Ojs.T) =
 module MessageEvent_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T MessageEvent.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent = fun
-      (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x15986 : Ojs.t) -> MessageEvent.t_of_js __T_of_js x15986
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t = fun (type
-      __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x15984 : __T MessageEvent.t) ->
-          MessageEvent.t_to_js __T_to_js x15984
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x15986 : Ojs.t) -> MessageEvent.t_of_js __T_of_js x15986
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x15984 : __T MessageEvent.t) ->
+            MessageEvent.t_to_js __T_to_js x15984
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x15990 : Ojs.t) -> parent_of_js T.t_of_js x15990
@@ -54588,15 +54777,15 @@ module MessageEvent_Make(T:Ojs.T) =
 module ProgressEvent_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T ProgressEvent.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent = fun
-      (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x16041 : Ojs.t) -> ProgressEvent.t_of_js __T_of_js x16041
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t = fun (type
-      __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x16039 : __T ProgressEvent.t) ->
-          ProgressEvent.t_to_js __T_to_js x16039
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x16041 : Ojs.t) -> ProgressEvent.t_of_js __T_of_js x16041
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x16039 : __T ProgressEvent.t) ->
+            ProgressEvent.t_to_js __T_to_js x16039
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16045 : Ojs.t) -> parent_of_js T.t_of_js x16045
@@ -54620,15 +54809,15 @@ module ProgressEvent_Make(T:Ojs.T) =
 module ReadableStream_Make(R:Ojs.T) =
   struct
     type 'R parent = 'R ReadableStream.t
-    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent = fun
-      (type __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x16054 : Ojs.t) -> ReadableStream.t_of_js __R_of_js x16054
-    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t = fun (type
-      __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x16052 : __R ReadableStream.t) ->
-          ReadableStream.t_to_js __R_to_js x16052
+    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x16054 : Ojs.t) -> ReadableStream.t_of_js __R_of_js x16054
+    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x16052 : __R ReadableStream.t) ->
+            ReadableStream.t_to_js __R_to_js x16052
     type t = R.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16058 : Ojs.t) -> parent_of_js R.t_of_js x16058
@@ -54721,16 +54910,16 @@ module ReadableStream_Make(R:Ojs.T) =
 module ReadableStreamDefaultController_Make(R:Ojs.T) =
   struct
     type 'R parent = 'R ReadableStreamDefaultController.t
-    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent = fun
-      (type __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x16090 : Ojs.t) ->
-          ReadableStreamDefaultController.t_of_js __R_of_js x16090
-    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t = fun (type
-      __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x16088 : __R ReadableStreamDefaultController.t) ->
-          ReadableStreamDefaultController.t_to_js __R_to_js x16088
+    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x16090 : Ojs.t) ->
+            ReadableStreamDefaultController.t_of_js __R_of_js x16090
+    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x16088 : __R ReadableStreamDefaultController.t) ->
+            ReadableStreamDefaultController.t_to_js __R_to_js x16088
     type t = R.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16094 : Ojs.t) -> parent_of_js R.t_of_js x16094
@@ -54782,16 +54971,16 @@ module ReadableStreamDefaultController_Make(R:Ojs.T) =
 module ReadableStreamDefaultReader_Make(R:Ojs.T) =
   struct
     type 'R parent = 'R ReadableStreamDefaultReader.t
-    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent = fun
-      (type __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x16111 : Ojs.t) ->
-          ReadableStreamDefaultReader.t_of_js __R_of_js x16111
-    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t = fun (type
-      __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x16109 : __R ReadableStreamDefaultReader.t) ->
-          ReadableStreamDefaultReader.t_to_js __R_to_js x16109
+    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x16111 : Ojs.t) ->
+            ReadableStreamDefaultReader.t_of_js __R_of_js x16111
+    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x16109 : __R ReadableStreamDefaultReader.t) ->
+            ReadableStreamDefaultReader.t_to_js __R_to_js x16109
     type t = R.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16115 : Ojs.t) -> parent_of_js R.t_of_js x16115
@@ -54812,18 +55001,20 @@ module TransformStream_Make(I:Ojs.T)(O:Ojs.T) =
     type ('I, 'O) parent = ('I, 'O) TransformStream.t
     let rec parent_of_js :
       'I 'O . (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) parent =
-      fun (type __I) -> fun (type __O) ->
-      fun (__I_of_js : Ojs.t -> __I) ->
-        fun (__O_of_js : Ojs.t -> __O) ->
-          fun (x16124 : Ojs.t) ->
-            TransformStream.t_of_js __I_of_js __O_of_js x16124
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_of_js : Ojs.t -> __I) ->
+            fun (__O_of_js : Ojs.t -> __O) ->
+              fun (x16124 : Ojs.t) ->
+                TransformStream.t_of_js __I_of_js __O_of_js x16124
     and parent_to_js :
       'I 'O . ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) parent -> Ojs.t =
-      fun (type __I) -> fun (type __O) ->
-      fun (__I_to_js : __I -> Ojs.t) ->
-        fun (__O_to_js : __O -> Ojs.t) ->
-          fun (x16121 : (__I, __O) TransformStream.t) ->
-            TransformStream.t_to_js __I_to_js __O_to_js x16121
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_to_js : __I -> Ojs.t) ->
+            fun (__O_to_js : __O -> Ojs.t) ->
+              fun (x16121 : (__I, __O) TransformStream.t) ->
+                TransformStream.t_to_js __I_to_js __O_to_js x16121
     type t = (I.t, O.t) parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16130 : Ojs.t) -> parent_of_js I.t_of_js O.t_of_js x16130
@@ -54842,16 +55033,16 @@ module TransformStream_Make(I:Ojs.T)(O:Ojs.T) =
 module TransformStreamDefaultController_Make(O:Ojs.T) =
   struct
     type 'O parent = 'O TransformStreamDefaultController.t
-    let rec parent_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O parent = fun
-      (type __O) ->
-      fun (__O_of_js : Ojs.t -> __O) ->
-        fun (x16139 : Ojs.t) ->
-          TransformStreamDefaultController.t_of_js __O_of_js x16139
-    and parent_to_js : 'O . ('O -> Ojs.t) -> 'O parent -> Ojs.t = fun (type
-      __O) ->
-      fun (__O_to_js : __O -> Ojs.t) ->
-        fun (x16137 : __O TransformStreamDefaultController.t) ->
-          TransformStreamDefaultController.t_to_js __O_to_js x16137
+    let rec parent_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O parent =
+      fun (type __O) ->
+        fun (__O_of_js : Ojs.t -> __O) ->
+          fun (x16139 : Ojs.t) ->
+            TransformStreamDefaultController.t_of_js __O_of_js x16139
+    and parent_to_js : 'O . ('O -> Ojs.t) -> 'O parent -> Ojs.t =
+      fun (type __O) ->
+        fun (__O_to_js : __O -> Ojs.t) ->
+          fun (x16137 : __O TransformStreamDefaultController.t) ->
+            TransformStreamDefaultController.t_to_js __O_to_js x16137
     type t = O.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16143 : Ojs.t) -> parent_of_js O.t_of_js x16143
@@ -54903,15 +55094,15 @@ module TransformStreamDefaultController_Make(O:Ojs.T) =
 module WritableStream_Make(W:Ojs.T) =
   struct
     type 'W parent = 'W WritableStream.t
-    let rec parent_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W parent = fun
-      (type __W) ->
-      fun (__W_of_js : Ojs.t -> __W) ->
-        fun (x16160 : Ojs.t) -> WritableStream.t_of_js __W_of_js x16160
-    and parent_to_js : 'W . ('W -> Ojs.t) -> 'W parent -> Ojs.t = fun (type
-      __W) ->
-      fun (__W_to_js : __W -> Ojs.t) ->
-        fun (x16158 : __W WritableStream.t) ->
-          WritableStream.t_to_js __W_to_js x16158
+    let rec parent_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W parent =
+      fun (type __W) ->
+        fun (__W_of_js : Ojs.t -> __W) ->
+          fun (x16160 : Ojs.t) -> WritableStream.t_of_js __W_of_js x16160
+    and parent_to_js : 'W . ('W -> Ojs.t) -> 'W parent -> Ojs.t =
+      fun (type __W) ->
+        fun (__W_to_js : __W -> Ojs.t) ->
+          fun (x16158 : __W WritableStream.t) ->
+            WritableStream.t_to_js __W_to_js x16158
     type t = W.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16164 : Ojs.t) -> parent_of_js W.t_of_js x16164
@@ -54950,16 +55141,16 @@ module WritableStream_Make(W:Ojs.T) =
 module WritableStreamDefaultWriter_Make(W:Ojs.T) =
   struct
     type 'W parent = 'W WritableStreamDefaultWriter.t
-    let rec parent_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W parent = fun
-      (type __W) ->
-      fun (__W_of_js : Ojs.t -> __W) ->
-        fun (x16179 : Ojs.t) ->
-          WritableStreamDefaultWriter.t_of_js __W_of_js x16179
-    and parent_to_js : 'W . ('W -> Ojs.t) -> 'W parent -> Ojs.t = fun (type
-      __W) ->
-      fun (__W_to_js : __W -> Ojs.t) ->
-        fun (x16177 : __W WritableStreamDefaultWriter.t) ->
-          WritableStreamDefaultWriter.t_to_js __W_to_js x16177
+    let rec parent_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W parent =
+      fun (type __W) ->
+        fun (__W_of_js : Ojs.t -> __W) ->
+          fun (x16179 : Ojs.t) ->
+            WritableStreamDefaultWriter.t_of_js __W_of_js x16179
+    and parent_to_js : 'W . ('W -> Ojs.t) -> 'W parent -> Ojs.t =
+      fun (type __W) ->
+        fun (__W_to_js : __W -> Ojs.t) ->
+          fun (x16177 : __W WritableStreamDefaultWriter.t) ->
+            WritableStreamDefaultWriter.t_to_js __W_to_js x16177
     type t = W.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16183 : Ojs.t) -> parent_of_js W.t_of_js x16183
@@ -55024,15 +55215,16 @@ module WritableStreamDefaultWriter_Make(W:Ojs.T) =
 module QueuingStrategySize_Make(T:Ojs.T) =
   struct
     type 'T parent = 'T QueuingStrategySize.t
-    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent = fun
-      (type __T) ->
-      fun (__T_of_js : Ojs.t -> __T) ->
-        fun (x16208 : Ojs.t) -> QueuingStrategySize.t_of_js __T_of_js x16208
-    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t = fun (type
-      __T) ->
-      fun (__T_to_js : __T -> Ojs.t) ->
-        fun (x16206 : __T QueuingStrategySize.t) ->
-          QueuingStrategySize.t_to_js __T_to_js x16206
+    let rec parent_of_js : 'T . (Ojs.t -> 'T) -> Ojs.t -> 'T parent =
+      fun (type __T) ->
+        fun (__T_of_js : Ojs.t -> __T) ->
+          fun (x16208 : Ojs.t) ->
+            QueuingStrategySize.t_of_js __T_of_js x16208
+    and parent_to_js : 'T . ('T -> Ojs.t) -> 'T parent -> Ojs.t =
+      fun (type __T) ->
+        fun (__T_to_js : __T -> Ojs.t) ->
+          fun (x16206 : __T QueuingStrategySize.t) ->
+            QueuingStrategySize.t_to_js __T_to_js x16206
     type t = T.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16212 : Ojs.t) -> parent_of_js T.t_of_js x16212
@@ -55046,16 +55238,16 @@ module QueuingStrategySize_Make(T:Ojs.T) =
 module TransformerFlushCallback_Make(O:Ojs.T) =
   struct
     type 'O parent = 'O TransformerFlushCallback.t
-    let rec parent_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O parent = fun
-      (type __O) ->
-      fun (__O_of_js : Ojs.t -> __O) ->
-        fun (x16218 : Ojs.t) ->
-          TransformerFlushCallback.t_of_js __O_of_js x16218
-    and parent_to_js : 'O . ('O -> Ojs.t) -> 'O parent -> Ojs.t = fun (type
-      __O) ->
-      fun (__O_to_js : __O -> Ojs.t) ->
-        fun (x16216 : __O TransformerFlushCallback.t) ->
-          TransformerFlushCallback.t_to_js __O_to_js x16216
+    let rec parent_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O parent =
+      fun (type __O) ->
+        fun (__O_of_js : Ojs.t -> __O) ->
+          fun (x16218 : Ojs.t) ->
+            TransformerFlushCallback.t_of_js __O_of_js x16218
+    and parent_to_js : 'O . ('O -> Ojs.t) -> 'O parent -> Ojs.t =
+      fun (type __O) ->
+        fun (__O_to_js : __O -> Ojs.t) ->
+          fun (x16216 : __O TransformerFlushCallback.t) ->
+            TransformerFlushCallback.t_to_js __O_to_js x16216
     type t = O.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16222 : Ojs.t) -> parent_of_js O.t_of_js x16222
@@ -55077,16 +55269,16 @@ module TransformerFlushCallback_Make(O:Ojs.T) =
 module TransformerStartCallback_Make(O:Ojs.T) =
   struct
     type 'O parent = 'O TransformerStartCallback.t
-    let rec parent_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O parent = fun
-      (type __O) ->
-      fun (__O_of_js : Ojs.t -> __O) ->
-        fun (x16232 : Ojs.t) ->
-          TransformerStartCallback.t_of_js __O_of_js x16232
-    and parent_to_js : 'O . ('O -> Ojs.t) -> 'O parent -> Ojs.t = fun (type
-      __O) ->
-      fun (__O_to_js : __O -> Ojs.t) ->
-        fun (x16230 : __O TransformerStartCallback.t) ->
-          TransformerStartCallback.t_to_js __O_to_js x16230
+    let rec parent_of_js : 'O . (Ojs.t -> 'O) -> Ojs.t -> 'O parent =
+      fun (type __O) ->
+        fun (__O_of_js : Ojs.t -> __O) ->
+          fun (x16232 : Ojs.t) ->
+            TransformerStartCallback.t_of_js __O_of_js x16232
+    and parent_to_js : 'O . ('O -> Ojs.t) -> 'O parent -> Ojs.t =
+      fun (type __O) ->
+        fun (__O_to_js : __O -> Ojs.t) ->
+          fun (x16230 : __O TransformerStartCallback.t) ->
+            TransformerStartCallback.t_to_js __O_to_js x16230
     type t = O.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16236 : Ojs.t) -> parent_of_js O.t_of_js x16236
@@ -55105,18 +55297,22 @@ module TransformerTransformCallback_Make(I:Ojs.T)(O:Ojs.T) =
     type ('I, 'O) parent = ('I, 'O) TransformerTransformCallback.t
     let rec parent_of_js :
       'I 'O . (Ojs.t -> 'I) -> (Ojs.t -> 'O) -> Ojs.t -> ('I, 'O) parent =
-      fun (type __I) -> fun (type __O) ->
-      fun (__I_of_js : Ojs.t -> __I) ->
-        fun (__O_of_js : Ojs.t -> __O) ->
-          fun (x16244 : Ojs.t) ->
-            TransformerTransformCallback.t_of_js __I_of_js __O_of_js x16244
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_of_js : Ojs.t -> __I) ->
+            fun (__O_of_js : Ojs.t -> __O) ->
+              fun (x16244 : Ojs.t) ->
+                TransformerTransformCallback.t_of_js __I_of_js __O_of_js
+                  x16244
     and parent_to_js :
       'I 'O . ('I -> Ojs.t) -> ('O -> Ojs.t) -> ('I, 'O) parent -> Ojs.t =
-      fun (type __I) -> fun (type __O) ->
-      fun (__I_to_js : __I -> Ojs.t) ->
-        fun (__O_to_js : __O -> Ojs.t) ->
-          fun (x16241 : (__I, __O) TransformerTransformCallback.t) ->
-            TransformerTransformCallback.t_to_js __I_to_js __O_to_js x16241
+      fun (type __I) ->
+        fun (type __O) ->
+          fun (__I_to_js : __I -> Ojs.t) ->
+            fun (__O_to_js : __O -> Ojs.t) ->
+              fun (x16241 : (__I, __O) TransformerTransformCallback.t) ->
+                TransformerTransformCallback.t_to_js __I_to_js __O_to_js
+                  x16241
     type t = (I.t, O.t) parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16250 : Ojs.t) -> parent_of_js I.t_of_js O.t_of_js x16250
@@ -55143,16 +55339,16 @@ module TransformerTransformCallback_Make(I:Ojs.T)(O:Ojs.T) =
 module UnderlyingSinkWriteCallback_Make(W:Ojs.T) =
   struct
     type 'W parent = 'W UnderlyingSinkWriteCallback.t
-    let rec parent_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W parent = fun
-      (type __W) ->
-      fun (__W_of_js : Ojs.t -> __W) ->
-        fun (x16262 : Ojs.t) ->
-          UnderlyingSinkWriteCallback.t_of_js __W_of_js x16262
-    and parent_to_js : 'W . ('W -> Ojs.t) -> 'W parent -> Ojs.t = fun (type
-      __W) ->
-      fun (__W_to_js : __W -> Ojs.t) ->
-        fun (x16260 : __W UnderlyingSinkWriteCallback.t) ->
-          UnderlyingSinkWriteCallback.t_to_js __W_to_js x16260
+    let rec parent_of_js : 'W . (Ojs.t -> 'W) -> Ojs.t -> 'W parent =
+      fun (type __W) ->
+        fun (__W_of_js : Ojs.t -> __W) ->
+          fun (x16262 : Ojs.t) ->
+            UnderlyingSinkWriteCallback.t_of_js __W_of_js x16262
+    and parent_to_js : 'W . ('W -> Ojs.t) -> 'W parent -> Ojs.t =
+      fun (type __W) ->
+        fun (__W_to_js : __W -> Ojs.t) ->
+          fun (x16260 : __W UnderlyingSinkWriteCallback.t) ->
+            UnderlyingSinkWriteCallback.t_to_js __W_to_js x16260
     type t = W.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16266 : Ojs.t) -> parent_of_js W.t_of_js x16266
@@ -55177,16 +55373,16 @@ module UnderlyingSinkWriteCallback_Make(W:Ojs.T) =
 module UnderlyingSourcePullCallback_Make(R:Ojs.T) =
   struct
     type 'R parent = 'R UnderlyingSourcePullCallback.t
-    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent = fun
-      (type __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x16276 : Ojs.t) ->
-          UnderlyingSourcePullCallback.t_of_js __R_of_js x16276
-    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t = fun (type
-      __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x16274 : __R UnderlyingSourcePullCallback.t) ->
-          UnderlyingSourcePullCallback.t_to_js __R_to_js x16274
+    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x16276 : Ojs.t) ->
+            UnderlyingSourcePullCallback.t_of_js __R_of_js x16276
+    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x16274 : __R UnderlyingSourcePullCallback.t) ->
+            UnderlyingSourcePullCallback.t_to_js __R_to_js x16274
     type t = R.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16280 : Ojs.t) -> parent_of_js R.t_of_js x16280
@@ -55208,16 +55404,16 @@ module UnderlyingSourcePullCallback_Make(R:Ojs.T) =
 module UnderlyingSourceStartCallback_Make(R:Ojs.T) =
   struct
     type 'R parent = 'R UnderlyingSourceStartCallback.t
-    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent = fun
-      (type __R) ->
-      fun (__R_of_js : Ojs.t -> __R) ->
-        fun (x16290 : Ojs.t) ->
-          UnderlyingSourceStartCallback.t_of_js __R_of_js x16290
-    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t = fun (type
-      __R) ->
-      fun (__R_to_js : __R -> Ojs.t) ->
-        fun (x16288 : __R UnderlyingSourceStartCallback.t) ->
-          UnderlyingSourceStartCallback.t_to_js __R_to_js x16288
+    let rec parent_of_js : 'R . (Ojs.t -> 'R) -> Ojs.t -> 'R parent =
+      fun (type __R) ->
+        fun (__R_of_js : Ojs.t -> __R) ->
+          fun (x16290 : Ojs.t) ->
+            UnderlyingSourceStartCallback.t_of_js __R_of_js x16290
+    and parent_to_js : 'R . ('R -> Ojs.t) -> 'R parent -> Ojs.t =
+      fun (type __R) ->
+        fun (__R_to_js : __R -> Ojs.t) ->
+          fun (x16288 : __R UnderlyingSourceStartCallback.t) ->
+            UnderlyingSourceStartCallback.t_to_js __R_to_js x16288
     type t = R.t parent
     let rec t_of_js : Ojs.t -> t =
       fun (x16294 : Ojs.t) -> parent_of_js R.t_of_js x16294

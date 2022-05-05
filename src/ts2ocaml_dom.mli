@@ -5,6 +5,11 @@
 open Ts2ocaml_min
 open Ts2ocaml_es
 
+
+(**
+  `URLSearchParams` class is a global reference for `require('url').URLSearchParams`
+  https://nodejs.org/api/url.html#class-urlsearchparams
+*)
 module[@js.scope "URLSearchParams"] URLSearchParams : sig
   type t = [`URLSearchParams | (string * string) IterableIterator.tags_1] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t
@@ -1374,7 +1379,13 @@ and BlobPart : sig
   val t_0_of_js: Ojs.t -> t_0
 end
 
-(** The URL interface represents an object providing static methods used for creating object URLs. *)
+(**
+  The URL interface represents an object providing static methods used for creating object URLs.
+  
+  
+  `URL` class is a global reference for `require('url').URL`
+  https://nodejs.org/api/url.html#the-whatwg-url-api
+*)
 module[@js.scope "URL"] URL : sig
   type t = [`URL] intf [@@js.custom { of_js=Obj.magic; to_js=Obj.magic }]
   type t_0 = t

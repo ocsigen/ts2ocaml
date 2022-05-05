@@ -876,13 +876,6 @@ module ReadonlyArray : sig
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
   
   (**
-    language version: ESNext
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: ('tags, 'T) this -> index:float -> 'T option [@@js.call "at"]
-  
-  (**
     language version: ES2019
     Calls a defined callback function on each element of an array. Then, flattens the result into
     a new array.
@@ -901,6 +894,13 @@ module ReadonlyArray : sig
     @param depth The maximum recursion depth
   *)
   val flat: ('tags, 'T) this -> this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list [@@js.call "flat"]
+  
+  (**
+    language version: ESNext
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: ('tags, 'T) this -> index:float -> 'T option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -1332,13 +1332,6 @@ module[@js.scope "Array"] Array : sig
   val t_1_of_js: (Ojs.t -> 'T) -> Ojs.t -> 'T t_1
   
   (**
-    language version: ESNext
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: ('tags, 'T) this -> index:float -> 'T option [@@js.call "at"]
-  
-  (**
     language version: ES2019
     Calls a defined callback function on each element of an array. Then, flattens the result into
     a new array.
@@ -1357,6 +1350,13 @@ module[@js.scope "Array"] Array : sig
     @param depth The maximum recursion depth
   *)
   val flat: ('tags, 'T) this -> this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list [@@js.call "flat"]
+  
+  (**
+    language version: ESNext
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: ('tags, 'T) this -> index:float -> 'T option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -3495,13 +3495,6 @@ module[@js.scope "String"] String : sig
   
   (**
     language version: ESNext
-    Returns a new String consisting of the single UTF-16 code unit located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> string option [@@js.call "at"]
-  
-  (**
-    language version: ESNext
     Replace all instances of a substring in a string, using a regular expression or search string.
     @param searchValue A string to search for.
     @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
@@ -3515,6 +3508,13 @@ module[@js.scope "String"] String : sig
     @param replacer A function that returns the replacement text.
   *)
   val replaceAll': 'tags this -> searchValue:([`U1 of string | `U2 of RegExp.t] [@js.union]) -> replacer:(substring:string -> args:(any list [@js.variadic]) -> string) -> string [@@js.call "replaceAll"]
+  
+  (**
+    language version: ESNext
+    Returns a new String consisting of the single UTF-16 code unit located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> string option [@@js.call "at"]
   
   (**
     language version: ESNext
@@ -4579,14 +4579,6 @@ module[@js.scope "Object"] Object : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
-  (**
-    language version: ESNext
-    Determines whether an object has a property with the specified name.
-    @param o An object.
-    @param v A property name.
-  *)
-  val hasOwn: 'tags this -> o:untyped_object -> v:PropertyKey.t -> bool [@@js.call "hasOwn"]
-  
   (** The initial value of Object.prototype.constructor is the standard built-in Object constructor. *)
   val get_constructor: 'tags this -> Function.t [@@js.get "constructor"]
   
@@ -4619,6 +4611,14 @@ module[@js.scope "Object"] Object : sig
     @param v A property name.
   *)
   val propertyIsEnumerable: 'tags this -> v:PropertyKey.t -> bool [@@js.call "propertyIsEnumerable"]
+  
+  (**
+    language version: ESNext
+    Determines whether an object has a property with the specified name.
+    @param o An object.
+    @param v A property name.
+  *)
+  val hasOwn: o:untyped_object -> v:PropertyKey.t -> bool [@@js.global "hasOwn"]
   
   (**
     language version: ES2019
@@ -9347,13 +9347,6 @@ module[@js.scope "BigUint64Array"] BigUint64Array : sig
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
   
-  (**
-    language version: ESNext
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> bigint option [@@js.call "at"]
-  
   (** The size in bytes of each element in the array. *)
   val get_BYTES_PER_ELEMENT: 'tags this -> float [@@js.get "BYTES_PER_ELEMENT"]
   
@@ -9590,6 +9583,13 @@ module[@js.scope "BigUint64Array"] BigUint64Array : sig
   (* [Symbol.toStringTag]: unit -> ([`L_s4_BigUint64Array[@js "BigUint64Array"]] [@js.enum]) *)
   val get: 'tags this -> float -> bigint [@@js.index_get]
   val set: 'tags this -> float -> bigint -> unit [@@js.index_set]
+  
+  (**
+    language version: ESNext
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> bigint option [@@js.call "at"]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?length:float -> unit -> t [@@js.create]
   val create': bigint Iterable.t -> t [@@js.create]
@@ -9634,13 +9634,6 @@ module[@js.scope "BigInt64Array"] BigInt64Array : sig
   val t_of_js: Ojs.t -> t
   val t_0_to_js: t_0 -> Ojs.t
   val t_0_of_js: Ojs.t -> t_0
-  
-  (**
-    language version: ESNext
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: 'tags this -> index:float -> bigint option [@@js.call "at"]
   
   (** The size in bytes of each element in the array. *)
   val get_BYTES_PER_ELEMENT: 'tags this -> float [@@js.get "BYTES_PER_ELEMENT"]
@@ -9878,6 +9871,13 @@ module[@js.scope "BigInt64Array"] BigInt64Array : sig
   (* [Symbol.toStringTag]: unit -> ([`L_s3_BigInt64Array[@js "BigInt64Array"]] [@js.enum]) *)
   val get: 'tags this -> float -> bigint [@@js.index_get]
   val set: 'tags this -> float -> bigint -> unit [@@js.index_set]
+  
+  (**
+    language version: ESNext
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: 'tags this -> index:float -> bigint option [@@js.call "at"]
   val prototype: unit -> t [@@js.get "prototype"]
   val create: ?length:float -> unit -> t [@@js.create]
   val create': bigint Iterable.t -> t [@@js.create]
@@ -10610,13 +10610,6 @@ module ReadonlyArray_Make (T : Ojs.T) : sig
   
   
   (**
-    language version: ESNext
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: t -> index:float -> T.t option [@@js.call "at"]
-  
-  (**
     language version: ES2019
     Calls a defined callback function on each element of an array. Then, flattens the result into
     a new array.
@@ -10635,6 +10628,13 @@ module ReadonlyArray_Make (T : Ojs.T) : sig
     @param depth The maximum recursion depth
   *)
   val flat: t -> this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list [@@js.call "flat"]
+  
+  (**
+    language version: ESNext
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: t -> index:float -> T.t option [@@js.call "at"]
   
   (**
     language version: ES2016
@@ -10874,13 +10874,6 @@ module[@js.scope "Array"] Array_Make (T : Ojs.T) : sig
   
   
   (**
-    language version: ESNext
-    Returns the item located at the specified index.
-    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
-  *)
-  val at: t -> index:float -> T.t option [@@js.call "at"]
-  
-  (**
     language version: ES2019
     Calls a defined callback function on each element of an array. Then, flattens the result into
     a new array.
@@ -10899,6 +10892,13 @@ module[@js.scope "Array"] Array_Make (T : Ojs.T) : sig
     @param depth The maximum recursion depth
   *)
   val flat: t -> this:'A -> ?depth:'D -> unit -> ('A, 'D) FlatArray.t list [@@js.call "flat"]
+  
+  (**
+    language version: ESNext
+    Returns the item located at the specified index.
+    @param index The zero-based index of the desired code unit. A negative index will count back from the last item.
+  *)
+  val at: t -> index:float -> T.t option [@@js.call "at"]
   
   (**
     language version: ES2016

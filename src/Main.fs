@@ -26,6 +26,7 @@ let main argv =
          .Invoke(argv)
          .wrap(yargs.terminalWidth() |> Some)
          .parserConfiguration({| ``parse-positional-numbers`` = false |})
+         .strict()
          .config()
     |> GlobalOptions.register
     |> Target.register parse Targets.JsOfOCaml.Target.target

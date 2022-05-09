@@ -251,7 +251,7 @@ module private ParserImpl =
       |> Array.toList
 
   let readJSDocTag (tag: Ts.JSDocTag) : Comment =
-    let text = tag.comment |> Option.map readCommentText |> Option.defaultValue []
+    let text = tag.comment |> Option.map readCommentText |? []
     match tag.kind with
     | Kind.JSDocParameterTag ->
       let tag = tag :?> Ts.JSDocParameterTag
@@ -376,7 +376,7 @@ module private ParserImpl =
         match t.kind with
         | Kind.TypeReference -> !!(t :?> Ts.TypeReferenceNode).typeName
         | Kind.ExpressionWithTypeArguments -> !!(t :?> Ts.ExpressionWithTypeArguments).expression
-        | _ -> failwith "impossible"
+        | _ -> impossible "readTypeNode_TypeReference"
       match readIdentOrTypeVar ctx typrm lhs with
       | Choice1Of2 lt ->
         match t.typeArguments with
@@ -508,7 +508,7 @@ module private ParserImpl =
     { args = args; isVariadic = isVariadic; returnType = retType; loc = Node.location parent }
 
   and readMemberAttribute (ctx: ParserContext) (nd: Ts.NamedDeclaration) : MemberAttribute =
-    let accessibility = getAccessibility nd.modifiers |> Option.defaultValue Public
+    let accessibility = getAccessibility nd.modifiers |? Public
     let isStatic = hasModifier Kind.StaticKeyword nd.modifiers
     let comments = readCommentsForNamedDeclaration ctx nd
     { accessibility = accessibility; isStatic = isStatic; comments = comments; loc = Node.location nd }
@@ -675,7 +675,7 @@ module private ParserImpl =
     {
       comments = readCommentsForNamedDeclaration ctx i
       name = Name name
-      accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
+      accessibility = getAccessibility i.modifiers |? Public
       typeParams = typrms
       implements = readInherits typrmsSet ctx i.heritageClauses
       isInterface = true
@@ -689,8 +689,8 @@ module private ParserImpl =
     let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
     {
       comments = readCommentsForNamedDeclaration ctx i
-      name = i.name |> Option.map (fun id -> Name id.text) |> Option.defaultValue ExportDefaultUnnamedClass
-      accessibility = getAccessibility i.modifiers |> Option.defaultValue Public
+      name = i.name |> Option.map (fun id -> Name id.text) |? ExportDefaultUnnamedClass
+      accessibility = getAccessibility i.modifiers |? Public
       typeParams = typrms
       implements = readInherits typrmsSet ctx i.heritageClauses
       isInterface = false
@@ -925,11 +925,11 @@ module private ParserImpl =
     let desc =
       doc.comment
       |> Option.map (readCommentText >> Description >> List.singleton)
-      |> Option.defaultValue []
+      |? []
     let tags =
       doc.tags
       |> Option.map (Array.map readJSDocTag >> List.ofArray)
-      |> Option.defaultValue []
+      |? []
     desc @ tags
 
   let readJSDoc (ctx: ParserContext) (doc: Ts.JSDoc) : Statement option =

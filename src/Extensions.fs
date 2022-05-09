@@ -59,7 +59,7 @@ type Argv<'T> with
         :> Argv<'U>
   member this.addFlag (key: string, f: 'U -> bool, ?descr, ?defaultValue, ?defaultDescr, ?alias) =
     this.boolean(!^key)
-        .addImpl<bool>(key, descr, dv=(defaultValue |> Option.defaultValue false), ?dd=defaultDescr, ?alias=alias)
+        .addImpl<bool>(key, descr, dv=(defaultValue |? false), ?dd=defaultDescr, ?alias=alias)
         :> Argv<'U>
   member this.addCounter (key: string, f: 'U -> int, ?descr, ?alias) =
     this.count(!^key)

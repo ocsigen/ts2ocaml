@@ -222,7 +222,7 @@ module FullName =
     | Some info ->
       info.definitionsMap
       |> Trie.tryFind fullName.name
-      |> Option.defaultValue []
+      |? []
 
   let getExportType (ctx: TyperContext<_, _>) (fullName: FullName) : ExportType option =
     match ctx.info |> Map.tryFind fullName.source with
@@ -236,7 +236,7 @@ module FullName =
     | Definition.EnumCase _ -> Kind.OfEnumCase
     | Definition.Module m -> if m.isNamespace then Kind.OfNamespace else Kind.OfModule
     | Definition.Variable _ | Definition.Function _ -> Kind.OfValue
-    | Definition.Import (c, _) -> c.kind |> Option.map Set.toList |> Option.defaultValue []
+    | Definition.Import (c, _) -> c.kind |> Option.map Set.toList |? []
     | Definition.Member _ -> Kind.OfMember
 
   let hasKind (ctx: TyperContext<_, _>) (kind: Kind) (fullName: FullName) =
@@ -422,8 +422,8 @@ module Type =
   let rec findTypesInFieldLike pred s (fl: FieldLike) = findTypes pred s fl.value
   and findTypesInTypeParam pred s (tp: TypeParam) =
     seq {
-      yield! tp.extends |> Option.map (findTypes pred s) |> Option.defaultValue Seq.empty
-      yield! tp.defaultType |> Option.map (findTypes pred s) |> Option.defaultValue Seq.empty
+      yield! tp.extends |> Option.map (findTypes pred s) |? Seq.empty
+      yield! tp.defaultType |> Option.map (findTypes pred s) |? Seq.empty
     }
   and findTypesInFuncType pred s (ft: FuncType<Type>) =
     seq {
@@ -1080,8 +1080,8 @@ module Statement =
     and treatTypeParameters (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) (tps: TypeParam list) =
       seq {
         for tp in tps do
-          yield! tp.extends |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
-          yield! tp.defaultType |> Option.map (findTypes typeFinder state) |> Option.defaultValue Seq.empty
+          yield! tp.extends |> Option.map (findTypes typeFinder state) |? Seq.empty
+          yield! tp.defaultType |> Option.map (findTypes typeFinder state) |? Seq.empty
       }
     and treatNamed (state: {| origin: AnonymousInterfaceOrigin; namespace_: string list |}) name value =
       findTypes typeFinder {| state with origin = { state.origin with valueName = Some name } |} value
@@ -1442,7 +1442,7 @@ module ResolvedUnion =
       let inline getLiteralFieldsFromClass c = getLiteralFieldsFromClass getLiteralFieldsFromType c
       match ty with
       | Intrinsic | PolymorphicThis | TypeVar _ | Prim _ | TypeLiteral _ | Tuple _ | Func _ | NewableFunc _ -> Map.empty
-      | Erased _ -> failwith "impossible_getDiscriminatedFromUnion_getLiteralFieldsFromType_Erased"
+      | Erased _ -> impossible "getDiscriminatedFromUnion_getLiteralFieldsFromType_Erased"
       | Union u ->
         let result = u.types |> List.map getLiteralFieldsFromType
         result |> List.fold (fun state fields ->
@@ -1708,7 +1708,7 @@ let mergeSources newFileName (srcs: SourceFile list) =
     srcs |> List.map (fun src -> src.fileName, newFileName) |> Map.ofList
   let f (i: Ident) =
     i |> Ident.mapSource (fun path ->
-      sourceMapping |> Map.tryFind path |> Option.defaultValue path
+      sourceMapping |> Map.tryFind path |? path
     )
   let statements =
     srcs

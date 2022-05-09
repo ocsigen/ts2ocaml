@@ -21,7 +21,7 @@ let getPackageJsonPath (exampleFilePath: string) =
           match rest with
           | userName :: packageName :: _ when userName.StartsWith("@") -> [userName; packageName]
           | packageName :: _ -> [packageName]
-          | _ -> failwith "impossible_getPackageJsonPath_root"
+          | _ -> impossible "getPackageJsonPath_root"
         let path =
           prefix @ packageName @ ["package.json"] |> String.concat Path.separator
 
@@ -163,7 +163,7 @@ let getJsModuleName (info: Syntax.PackageInfo option) (sourceFile: Path.Absolute
     match List.rev rest with
     | "index.d.ts" :: name :: _ -> name
     | name :: _ -> stripExtension name
-    | [] -> failwith "impossible"
+    | [] -> impossible "getJsModuleName_getSubmodule"
   match info with
   | Some info ->
     if info.indexFile |> Option.exists ((=) sourceFile) then

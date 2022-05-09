@@ -1,6 +1,12 @@
 [<AutoOpen>]
 module Ts2Ml.Extensions
 
+let inline (|?) (xo: 'a option) (y: 'a) : 'a = Option.defaultValue y xo
+
+/// Use when a certain code path is impossible or unreachable.
+let impossible fmt =
+  Printf.ksprintf (fun msg -> failwith ("impossible: " + msg)) fmt
+
 open System
 
 module Enum =

@@ -16,30 +16,6 @@ with
   member this.IsOffOrDefault = match this with Off | Default -> true | _ -> false
 
 [<StringEnum; RequireQualifiedAccess>]
-type FeatureFlag =
-  | [<CompiledName("full")>] Full
-  | [<CompiledName("provide")>] Provide
-  | [<CompiledName("consume")>] Consume
-  | [<CompiledName("off")>] Off
-  | [<CompiledName("default")>] Default
-with
-  static member Values = [|Full; Provide; Consume; Off; Default|]
-
-  member this.HasProvide = match this with Full | Provide -> true | _ -> false
-  member this.HasConsume = match this with Full | Consume -> true | _ -> false
-  member this.IsOffOrDefault = match this with Off | Default -> true | _ -> false
-
-  member this.WithProvide(b: bool) =
-    match this with
-    | Provide | Off | Default -> if b then Provide else Off
-    | Full | Consume -> if b then Full else Consume
-
-  member this.WithConsume(b: bool) =
-    match this with
-    | Consume | Off | Default -> if b then Consume else Off
-    | Full | Provide -> if b then Full else Provide
-
-[<StringEnum; RequireQualifiedAccess>]
 type Simplify =
   | [<CompiledName("all")>] All
   | [<CompiledName("immediate-instance")>] ImmediateInstance

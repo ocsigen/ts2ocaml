@@ -7,10 +7,6 @@ type Trie<'k, 'v when 'k: comparison> = {
 
 type Trie<'k when 'k: comparison> = Trie<'k, unit>
 
-type WeakTrie<'k when 'k: comparison> = {
-  children: Map<'k, WeakTrie<'k>>
-}
-
 module Trie =
   let empty<'k, 'v when 'k: comparison> : Trie<'k, 'v> =
     { value = None; children = Map.empty }
@@ -164,6 +160,10 @@ module Trie =
   let ofSet (xs: Set<'k list>) : Trie<'k> = xs |> Set.fold (fun state ks -> add ks () state) empty
   let toMap (t: Trie<'k, 'v>) : Map<'k list, 'v> = t |> fold (fun state ks v -> Map.add ks v state) Map.empty
   let ofMap (xs: Map<'k list, 'v>) : Trie<'k, 'v> = xs |> Map.fold (fun state ks v -> add ks v state) empty
+
+type WeakTrie<'k when 'k: comparison> = {
+  children: Map<'k, WeakTrie<'k>>
+}
 
 module WeakTrie =
   let empty<'k when 'k: comparison> : WeakTrie<'k> = { children = Map.empty }

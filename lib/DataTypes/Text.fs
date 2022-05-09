@@ -103,3 +103,11 @@ module Text =
     | Indent x -> isMultiLine x
     | Concat (x, y) -> isMultiLine x || isMultiLine y
     | Empty | Str _ -> false
+
+  /// Get the length of a text. Indents are ignored.
+  let rec length = function
+    | Empty -> 0
+    | Newline -> 1
+    | Str s -> s.Length
+    | Concat (x, y) -> length x + length y
+    | Indent x -> length x

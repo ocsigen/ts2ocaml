@@ -16,6 +16,10 @@ type TyperOptions =
   /// Make class inherit `PromiseLike<T>` when it has `then(onfulfilled: T => _, onrejected: _)`.
   abstract inheritPromiselike: bool with get,set
 
+  /// Make class contain all the members inherited from the parent classes.
+  /// Useful for targets without proper nominal subtyping.
+  abstract addAllParentMembersToClass: bool with get,set
+
   /// Replaces alias to function type with named interface.
   /// ```ts
   /// type F = (...) => T      // before
@@ -83,11 +87,27 @@ type AnonymousInterfaceInfo = {
   origin: AnonymousInterfaceOrigin
 }
 
+type [<RequireQualifiedAccess>] KnownType =
+  | Ident of fullName:FullName
+  | AnonymousInterface of AnonymousInterface * AnonymousInterfaceInfo
+
+type [<RequireQualifiedAccess>] ExportType =
+  | Child of ExportType * path:string list
+  | CommonJS
+  | ES6Default
+  | ES6 of renameAs:string option
+with
+  member this.CreateChild(name) =
+    match this with
+    | Child (e, path) -> Child (e, path @ [name])
+    | e -> Child (e, [name])
+
 type SourceFileInfo = {
   sourceFile: SourceFile
   definitionsMap: Trie<string, Definition list>
   typeLiteralsMap: Map<Literal, int>
   anonymousInterfacesMap: Map<AnonymousInterface, AnonymousInterfaceInfo>
+  exportMap: Trie<string, ExportType>
   unknownIdentTypes: Trie<string, Set<int>>
 }
 
@@ -167,6 +187,8 @@ module TyperContext =
       | _ -> List.rev ctx._currentNamespace @ name
     { name = name; source = ctx._currentSourceFile }
 
+  let getFullNameOfCurrentNamespace (ctx: TyperContext<'a, 's>) : FullName = getFullName [] ctx
+
   let getFullNameString (name: string list) (ctx: TyperContext<'a, 's>) =
     (getFullName name ctx).name |> String.concat "."
 
@@ -188,6 +210,11 @@ module TyperContext =
       ctx.logger.errorf "%s not in [%s]" ctx._currentSourceFile (ctx._info |> Map.toSeq |> Seq.map fst |> String.concat ", ")
     ctx._info |> Map.tryFind ctx._currentSourceFile |> Option.bind f
 
+  let getExportTypeOfName (name: string list) (ctx: TyperContext<'a, 's>) =
+    ctx |> bindCurrentSourceInfo (fun info ->
+      info.exportMap |> Trie.tryFind (ctx.currentNamespace @ name)
+    )
+
 module FullName =
   let getDefinitions (ctx: TyperContext<_, _>) (fullName: FullName) : Definition list =
     match ctx.info |> Map.tryFind fullName.source with
@@ -196,6 +223,11 @@ module FullName =
       info.definitionsMap
       |> Trie.tryFind fullName.name
       |> Option.defaultValue []
+
+  let getExportType (ctx: TyperContext<_, _>) (fullName: FullName) : ExportType option =
+    match ctx.info |> Map.tryFind fullName.source with
+    | None -> None
+    | Some info -> info.exportMap |> Trie.tryFind fullName.name
 
   let private classify = function
     | Definition.TypeAlias _ -> Kind.OfTypeAlias
@@ -235,6 +267,12 @@ module Ident =
   let pickDefinitionWithFullName ctx ident (picker: FullName -> Definition -> _ option) =
     getDefinitionsWithFullName ctx ident |> List.tryPick (fun x -> picker x.fullName x.definition)
 
+  let collectDefinition ctx ident collector =
+    getDefinitions ctx ident |> List.collect collector
+
+  let collectDefinitionWithFullName ctx ident (collector: FullName -> Definition -> _ list) =
+    getDefinitionsWithFullName ctx ident |> List.collect (fun x -> collector x.fullName x.definition)
+
   let hasKind (ctx: TyperContext<_, _>) (kind: Kind) (ident: Ident) =
     match ident.kind with
     | Some kinds -> kinds |> Set.contains kind
@@ -270,6 +308,12 @@ module Type =
         args = List.map (mapInArg mapping ctx) f.args }
 
   and mapInClass mapping (ctx: 'Context) (c: Class<'a>) : Class<'a> =
+    { c with
+        implements = c.implements |> List.map (mapping ctx)
+        members = c.members |> List.map (mapInMember mapping ctx)
+        typeParams = c.typeParams |> List.map (mapInTypeParam mapping ctx) }
+
+  and mapInMember mapping ctx (ma, m) =
     let mapMember = function
       | Field (f, m) -> Field (mapInFieldLike mapping ctx f, m)
       | Callable (f, tps) -> Callable (mapInFuncType mapping ctx f, List.map (mapInTypeParam mapping ctx) tps)
@@ -281,10 +325,7 @@ module Type =
       | Method (name, f, tps) -> Method (name, mapInFuncType mapping ctx f, List.map (mapInTypeParam mapping ctx) tps)
       | SymbolIndexer (sn, ft, m) -> SymbolIndexer (sn, mapInFuncType mapping ctx ft, m)
       | UnknownMember msgo -> UnknownMember msgo
-    { c with
-        implements = c.implements |> List.map (mapping ctx)
-        members = c.members |> List.map (fun (a, m) -> a, mapMember m)
-        typeParams = c.typeParams |> List.map (mapInTypeParam mapping ctx) }
+    ma, mapMember m
 
   and mapInFieldLike mapping (ctx: 'Context) (fl: FieldLike) : FieldLike =
     { fl with value = mapping ctx fl.value }
@@ -507,6 +548,14 @@ module Type =
       | [] -> []
     maxArity :: go maxArity typrms |> Set.ofList
 
+  let matchArity arity (typrms: TypeParam list) : TypeParam list option =
+    let rec go i acc = function
+      | tp :: rest when i > 0 -> go (i-1) (tp :: acc) rest
+      | { defaultType = None } :: _ -> None
+      | { defaultType = Some _ } :: rest -> go 0 acc rest
+      | [] -> if i = 0 then List.rev acc |> Some else None
+    go arity [] typrms
+
   let createFunctionInterface (funcs: {| ty: FuncType<Type>; typrms: TypeParam list; comments: Comment list; loc: Location; isNewable: bool |} list) =
     let usedTyprms =
       funcs |> Seq.collect (fun f -> getTypeVars (Func (f.ty, f.typrms, f.loc))) |> Set.ofSeq
@@ -599,6 +648,9 @@ module Type =
       | App (APrim p, ts, _) ->
         if includeSelf then
           yield InheritingType.Prim (p, ts), depth
+      | Intersection i ->
+        for t in i.types do
+          yield! getAllInheritancesImpl (depth+1) includeSelf ctx t
       | _ ->
         if includeSelf then
           yield InheritingType.Other ty, depth
@@ -660,6 +712,25 @@ module Type =
   let getAllInheritancesFromName ctx fn = getAllInheritancesFromNameImpl 0 false ctx fn |> removeDuplicatesFromInheritingTypes
   let getAllInheritancesAndSelf ctx ty = getAllInheritancesImpl 0 true ctx ty |> removeDuplicatesFromInheritingTypes
   let getAllInheritancesAndSelfFromName ctx fn = getAllInheritancesFromNameImpl 0 true ctx fn |> removeDuplicatesFromInheritingTypes
+
+  let isSuperClass ctx (super: Type) (sub: Type) =
+    Set.isProperSubset (getAllInheritancesAndSelf ctx super) (getAllInheritancesAndSelf ctx sub)
+
+  let isSubClass ctx (sub: Type) (super: Type) =
+    Set.isProperSuperset (getAllInheritancesAndSelf ctx super) (getAllInheritancesAndSelf ctx sub)
+
+  let getKnownTypes (ctx: TyperContext<_, _>) t =
+    findTypes (fun state -> function
+      | Ident { fullName = fns } -> None, state, List.map KnownType.Ident fns
+      | AnonymousInterface a ->
+        let info =
+          ctx |> TyperContext.bindCurrentSourceInfo (fun info -> info.anonymousInterfacesMap |> Map.tryFind a)
+        None, state,
+        match info with
+        | None -> []
+        | Some info -> [KnownType.AnonymousInterface (a, info)]
+      | _ -> None, state, []
+    ) () t |> Set.ofSeq
 
   let rec resolveErasedTypeImpl typeQueries ctx = function
     | PolymorphicThis -> PolymorphicThis | Intrinsic -> Intrinsic
@@ -921,62 +992,8 @@ module Type =
         s1 + s2
     | UnknownType _ -> "unknown"
 
-type [<RequireQualifiedAccess>] KnownType =
-  | Ident of fullName:FullName
-  | AnonymousInterface of AnonymousInterface * AnonymousInterfaceInfo
-
 module Statement =
   open Type
-
-  let createDefinitionsMap (stmts: Statement list) : Trie<string, Definition list> =
-    let add ns name x trie =
-      let key = List.rev (name :: ns)
-      trie |> Trie.addOrUpdate key [x] List.append
-    let rec go (ns: string list) trie s =
-      match s with
-      | Export _
-      | ReExport _
-      | UnknownStatement _
-      | FloatingComment _ -> trie
-      | Import import ->
-        import.clauses
-        |> List.fold (fun trie c ->
-          match c with
-          | NamespaceImport i -> trie |> add ns i.name (Definition.Import (c, import))
-          | ES6WildcardImport _ -> trie
-          | ES6Import i -> trie |> add ns i.name (Definition.Import (c, import))
-          | ES6DefaultImport i -> trie |> add ns i.name (Definition.Import (c, import))
-          | LocalImport i -> trie |> add ns i.name (Definition.Import (c, import))
-        ) trie
-      | TypeAlias a -> trie |> add ns a.name (Definition.TypeAlias a)
-      | Class c ->
-        match c.name with
-        | Name name ->
-          c.members
-          |> List.fold (fun trie (ma, m) ->
-            let ns = name :: ns
-            let d = Definition.Member (ma, m, c)
-            match m with
-            | Field (fl, _) | Getter fl | Setter fl -> trie |> add ns fl.name d
-            | Method (n, _, _) -> trie |> add ns n d
-            | _ -> trie
-          ) trie
-          |> add ns name (Definition.Class c)
-        | ExportDefaultUnnamedClass -> trie
-      | Enum e ->
-        e.cases
-        |> List.fold (fun trie c -> trie |> add (e.name :: ns) c.name (Definition.EnumCase (c, e))) trie
-        |> add ns e.name (Definition.Enum e)
-      | Variable v -> trie |> add ns v.name (Definition.Variable v)
-      | Function f -> trie |> add ns f.name (Definition.Function f)
-      | Pattern p -> p.underlyingStatements |> List.fold (go ns) trie
-      | Module m ->
-        m.statements
-        |> List.fold (go (m.name :: ns)) trie
-        |> add ns m.name (Definition.Module m)
-      | Global m ->
-        m.statements |> List.fold (go []) trie
-    stmts |> List.fold (go []) Trie.empty
 
   type StatementFinder<'State, 'Result> =
     string list -> 'State -> Statement -> Statement list option * 'State * 'Result seq
@@ -1760,6 +1777,79 @@ let addDefaultConstructorToClass (ctx: TyperContext<_, _>) (stmts: Statement lis
       | x -> x)
   go stmts
 
+[<RequireQualifiedAccess; StructuralEquality; StructuralComparison>]
+type private MemberType =
+  | Getter of string | Setter of string
+  | Method of string * int | Callable of int | Newable of int | Indexer of int | Constructor of int
+
+let addParentMembersToClass (ctx: TyperContext<#TyperOptions, _>) (stmts: Statement list) : Statement list =
+  if not ctx.options.addAllParentMembersToClass then stmts
+  else
+    let m = new MutableMap<Location, Class>()
+    let processing = new MutableSet<Location>()
+    let rec addMembers (c: Class) =
+      match m.TryGetValue(c.loc) with
+      | true, c -> c
+      | false, _ when processing.Contains(c.loc) -> c
+      | false, _ ->
+        processing.Add(c.loc) |> ignore
+        // we remove any parent type which is a super type of some other parent type
+        let implements =
+          c.implements
+          |> List.filter (fun t -> c.implements |> List.forall (fun t' -> Type.isSuperClass ctx t t' |> not))
+        let getMemberType m =
+          match m with
+          | Field (fl, _) | Getter fl -> MemberType.Getter (fl.name |> String.normalize) |> Some
+          | Setter fl -> MemberType.Setter (fl.name |> String.normalize) |> Some
+          | Method (name, ft, _) -> MemberType.Method (name |> String.normalize, ft.args.Length) |> Some
+          | Callable (ft, _) -> MemberType.Callable (ft.args.Length) |> Some
+          | Newable (ft, _) -> MemberType.Newable (ft.args.Length) |> Some
+          | Indexer (ft, _) -> MemberType.Indexer (ft.args.Length) |> Some
+          | Constructor ft -> MemberType.Constructor (ft.args.Length) |> Some
+          | SymbolIndexer _ | UnknownMember _ -> None
+        // if a parent member has the same arity as the member in a child,
+        // we should only keep the one from the child.
+        let memberTypes : Set<MemberType> =
+          c.members |> List.choose (snd >> getMemberType) |> Set.ofList
+        let parentMembers : (MemberAttribute * Member) list =
+          let (|Dummy|) _ = []
+          let rec collector : _ -> _ list = function
+            | (Ident ({ loc = loc } & i) & Dummy ts) | App (AIdent i, ts, loc) ->
+              let collect = function
+                | Definition.TypeAlias a ->
+                  if List.isEmpty ts then collector a.target
+                  else
+                    let bindings = Type.createBindings i.name loc a.typeParams ts
+                    collector a.target |> List.map (Type.mapInMember (Type.substTypeVar bindings) ())
+                // we ignore `implements` clauses i.e. interfaces inherited by a class.
+                | Definition.Class c' when c.isInterface || not c'.isInterface ->
+                  if List.isEmpty ts then (addMembers c').members
+                  else
+                    let members = (addMembers c').members
+                    let bindings = Type.createBindings i.name loc c'.typeParams ts
+                    members |> List.map (Type.mapInMember (Type.substTypeVar bindings) ())
+                | _ -> []
+              Ident.collectDefinition ctx i collect |> List.distinct
+            | Intersection i -> i.types |> List.collect collector |> List.distinct
+            | _ -> []
+          implements
+          |> List.collect collector
+          |> List.filter (fun (_, m) ->
+            match getMemberType m with
+            | None -> false
+            | Some mt -> memberTypes |> Set.contains mt |> not)
+          |> List.distinct
+        let c = { c with members = c.members @ parentMembers }
+        m[c.loc] <- c
+        c
+    let rec go stmts =
+      stmts |> List.map (function
+        | Class c when c.isInterface -> Class (addMembers c)
+        | Module m -> Module { m with statements = go m.statements }
+        | Global m -> Global { m with statements = go m.statements }
+        | x -> x)
+    go stmts
+
 let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statement list) : Statement list =
   let opts = ctx.options
   let rec go stmts =
@@ -1776,7 +1866,14 @@ let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statem
           )
 
         let inline app t ts loc =
-          App (AIdent { name = [t]; kind = Some (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Statement]); fullName = []; loc = loc; parent = None}, ts, loc)
+          App (
+            AIdent {
+              name = [t]
+              kind = Some (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Statement])
+              fullName = [{ name = [t]; source = "lib.es.d.ts" }]
+              loc = loc
+              parent = None
+            }, ts, loc)
 
         for ma, m in c.members do
           match m with
@@ -1967,16 +2064,128 @@ let replaceFunctions (ctx: #IContext<#TyperOptions>) (stmts: Statement list) =
     | _ -> None
   Statement.mapTypeWith goStatement goType (fun _ x -> x) id ctx stmts
 
+let createExportMap (stmts: Statement list) : Trie<string, ExportType> =
+  let add ns name xo trie =
+    match xo with
+    | Some x -> trie |> Trie.add (List.rev (name :: ns)) x
+    | None -> trie
+  let rec go (eo: ExportType option) (ns: string list) trie stmts =
+    let exportMap =
+      stmts
+      |> List.collect (function
+        | Export e ->
+          e.clauses |> List.choose (function
+            | CommonJsExport { name = [name] } ->
+              Some (name, ExportType.CommonJS)
+            | ES6DefaultExport { name = [name] } ->
+              Some (name, ExportType.ES6Default)
+            | ES6Export e when e.target.name.Length = 1 ->
+              let name = e.target.name[0]
+              Some (name, ExportType.ES6 e.renameAs)
+            | _ -> None
+          )
+        | _ -> [])
+      |> Map.ofList
+    let getExportType name (isExported: Exported) =
+      match isExported with
+      | Exported.Yes -> Some (ExportType.ES6 None)
+      | Exported.Default -> Some ExportType.ES6Default
+      | Exported.Declared | Exported.No ->
+        match exportMap |> Map.tryFind name with
+        | Some e -> Some e
+        | None -> eo |> Option.map (fun e -> e.CreateChild name)
+    let rec f trie s =
+      match s with
+      | Export _ | ReExport _ | UnknownStatement _ | FloatingComment _ | Import _ | TypeAlias _ -> trie
+      | Pattern p -> p.underlyingStatements |> List.fold f trie
+      | Module m ->
+        if m.isNamespace then
+          let eo = getExportType m.name m.isExported
+          let trie = trie |> add ns m.name eo
+          go eo (m.name :: ns) trie m.statements
+        else
+          go None (m.name :: ns) trie m.statements
+      | Global m -> go None [] trie m.statements
+      | Class c ->
+        if c.isInterface then trie
+        else
+          match c.name with
+          | ExportDefaultUnnamedClass -> trie
+          | Name n -> trie |> add ns n (getExportType n c.isExported)
+      | Enum e ->
+        let eo = getExportType e.name e.isExported
+        let trie = trie |> add ns e.name eo
+        e.cases |> List.fold (fun trie c ->
+          let ceo = eo |> Option.map (fun e -> e.CreateChild c.name)
+          trie |> add (e.name :: ns) c.name ceo
+        ) trie
+      | Variable { name = name; isExported = isExported }
+      | Function { name = name; isExported = isExported } ->
+        trie |> add ns name (getExportType name isExported)
+    stmts |> List.fold f trie
+  go None [] Trie.empty stmts
+
+let createDefinitionsMap (stmts: Statement list) : Trie<string, Definition list> =
+  let add ns name x trie =
+    let key = List.rev (name :: ns)
+    trie |> Trie.addOrUpdate key [x] List.append
+  let rec go (ns: string list) trie s =
+    match s with
+    | Export _
+    | ReExport _
+    | UnknownStatement _
+    | FloatingComment _ -> trie
+    | Import import ->
+      import.clauses
+      |> List.fold (fun trie c ->
+        match c with
+        | NamespaceImport i -> trie |> add ns i.name (Definition.Import (c, import))
+        | ES6WildcardImport _ -> trie
+        | ES6Import i -> trie |> add ns i.name (Definition.Import (c, import))
+        | ES6DefaultImport i -> trie |> add ns i.name (Definition.Import (c, import))
+        | LocalImport i -> trie |> add ns i.name (Definition.Import (c, import))
+      ) trie
+    | TypeAlias a -> trie |> add ns a.name (Definition.TypeAlias a)
+    | Class c ->
+      match c.name with
+      | Name name ->
+        c.members
+        |> List.fold (fun trie (ma, m) ->
+          let ns = name :: ns
+          let d = Definition.Member (ma, m, c)
+          match m with
+          | Field (fl, _) | Getter fl | Setter fl -> trie |> add ns fl.name d
+          | Method (n, _, _) -> trie |> add ns n d
+          | _ -> trie
+        ) trie
+        |> add ns name (Definition.Class c)
+      | ExportDefaultUnnamedClass -> trie
+    | Enum e ->
+      e.cases
+      |> List.fold (fun trie c -> trie |> add (e.name :: ns) c.name (Definition.EnumCase (c, e))) trie
+      |> add ns e.name (Definition.Enum e)
+    | Variable v -> trie |> add ns v.name (Definition.Variable v)
+    | Function f -> trie |> add ns f.name (Definition.Function f)
+    | Pattern p -> p.underlyingStatements |> List.fold (go ns) trie
+    | Module m ->
+      m.statements
+      |> List.fold (go (m.name :: ns)) trie
+      |> add ns m.name (Definition.Module m)
+    | Global m ->
+      m.statements |> List.fold (go []) trie
+  stmts |> List.fold (go []) Trie.empty
+
 let private createRootContextForTyper (srcs: SourceFile list) (baseCtx: IContext<'Options>) : TyperContext<'Options, unit> =
   let info =
     srcs
     |> List.map (fun sf ->
       sf.fileName,
       { sourceFile = sf
-        definitionsMap = Statement.createDefinitionsMap sf.statements
+        definitionsMap = createDefinitionsMap sf.statements
         typeLiteralsMap = Map.empty
         anonymousInterfacesMap = Map.empty
-        unknownIdentTypes = Trie.empty })
+        unknownIdentTypes = Trie.empty
+        exportMap = Trie.empty })
     |> Map.ofList
   { _currentSourceFile = ""; _currentNamespace = [];
     _info = info; _state = ()
@@ -1994,10 +2203,12 @@ let createRootContext (srcs: SourceFile list) (baseCtx: IContext<'Options>) : Ty
             Statement.getAnonymousInterfaces stmts
             |> Seq.mapi (fun i (c, info) -> c, { id = i; namespace_ = info.namespace_; origin = info.origin }) |> Map.ofSeq
           let uit = Statement.getUnknownIdentTypes ctx stmts
+          let exm = createExportMap stmts
           { v with
               typeLiteralsMap = tlm
               anonymousInterfacesMap = aim
-              unknownIdentTypes = uit }
+              unknownIdentTypes = uit
+              exportMap = exm }
         ) }
 
 module Ts = TypeScript.Ts
@@ -2070,6 +2281,8 @@ let runAll (srcs: SourceFile list) (baseCtx: IContext<#TyperOptions>) =
       withSourceFileContext ctx (fun ctx src ->
         src |> mapStatements (fun stmts ->
           stmts
+          // add members inherited from parent classes/interfaces to interfaces
+          |> addParentMembersToClass ctx
           |> Statement.resolveErasedTypes ctx
           // add common inheritances which tends not to be defined by `extends` or `implements`
           |> introduceAdditionalInheritance ctx

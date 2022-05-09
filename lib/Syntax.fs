@@ -357,15 +357,15 @@ and Statement =
   /// ```
   | Enum of Enum
   /// ```ts
-  /// module Name { ... }
-  /// ```
-  /// or
-  /// ```ts
   /// namespace Name { ... }
   /// ```
-  | Module of Module
+  | Namespace of Namespace
   /// ```ts
-  /// namespace global { ... }
+  /// declare module "name" { ... }
+  /// ```
+  | AmbientModule of AmbientModule
+  /// ```ts
+  /// declare global { ... }
   /// ```
   | Global of Global
   /// ```ts
@@ -399,23 +399,26 @@ and Statement =
   member this.loc =
     match this with
     | TypeAlias ta -> ta.loc | Class c -> c.loc | Enum e -> e.loc
-    | Module m -> m.loc | Global m -> m.loc | Variable v -> v.loc | Function f -> f.loc
+    | Namespace m -> m.loc | AmbientModule m -> m.loc | Global m -> m.loc
+    | Variable v -> v.loc | Function f -> f.loc
     | Import i -> i.loc | Export e -> e.loc | ReExport e -> e.loc
     | Pattern p -> p.loc
     | UnknownStatement u -> u.loc | FloatingComment c -> c.loc
   member this.isExported =
     match this with
     | TypeAlias { isExported = i } | Class { isExported = i }
-    | Enum { isExported = i } | Module { isExported = i }
+    | Enum { isExported = i } | Namespace { isExported = i }
     | Variable { isExported = i } | Function { isExported = i }
     | Import { isExported = i } -> i
     | Pattern p -> p.isExported
+    | AmbientModule _ -> Exported.Declared
     | Export _ | ReExport _ | UnknownStatement _ | FloatingComment _ | Global _ -> Exported.No
   interface ICommented<Statement> with
     member this.getComments() =
       match this with
       | TypeAlias ta -> ta.comments | Class c -> c.comments
-      | Enum e -> e.comments | Module m -> m.comments | Global m -> m.comments
+      | Enum e -> e.comments
+      | Namespace m -> m.comments | AmbientModule m -> m.comments | Global m -> m.comments
       | Variable v -> v.comments | Function f -> f.comments
       | Import i -> i.comments
       | Export e -> e.comments | ReExport e -> e.comments
@@ -428,7 +431,8 @@ and Statement =
       | TypeAlias ta -> TypeAlias (map f ta)
       | Class c -> Class (map f c)
       | Enum e -> Enum (map f e)
-      | Module m -> Module (map f m)
+      | Namespace m -> Namespace (map f m)
+      | AmbientModule m -> AmbientModule (map f m)
       | Global m -> Global (map f m)
       | Variable v -> Variable (map f v)
       | Function g -> Function (map f g)
@@ -483,20 +487,20 @@ and Pattern =
       | ImmediateConstructor (bi, ci, v) ->
         ImmediateConstructor ((bi :> ICommented<_>).mapComments f, (ci :> ICommented<_>).mapComments f, (v :> ICommented<_>).mapComments f)
 
-and Module<'name> = {
+and NamespaceLike<'name, 'exported> = {
   name: 'name
-  isExported: Exported
-  isNamespace: bool
+  isExported: 'exported
   statements: Statement list
   comments: Comment list
   loc: Location
 } with
-  interface ICommented<Module<'name>> with
+  interface ICommented<NamespaceLike<'name, 'exported>> with
     member this.getComments() = this.comments
     member this.mapComments f = { this with comments = f this.comments }
 
-and Module = Module<string>
-and Global = Module<unit>
+and Namespace = NamespaceLike<string, Exported>
+and AmbientModule = NamespaceLike<string, unit>
+and Global = NamespaceLike<unit, unit>
 
 and Export = {
   comments: Comment list

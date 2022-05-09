@@ -1449,7 +1449,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     let addAnonymousInterfaceExcluding ais current = addAnonymousInterfaceExcludingWithKnownTypes (knownTypes ()) ais current
 
     match s with
-    | Module m ->
+    | Namespace m ->
       let module' =
         let node = {| StructuredTextNode.empty with docCommentLines = comments; knownTypes = knownTypes () |}
         let module' = current |> getTrie [m.name] |> set node
@@ -1463,7 +1463,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         let kind =
           if v.scoped <> Scoped.No then Kind.OfModule
           else Kind.OfNamespace
-        current |> addExport m.name kind (if m.isNamespace then "namespace" else "module")
+        current |> addExport m.name kind "namespace"
     | Global m -> m.statements |> List.fold (folder ctx) current
     | Class c ->
       emitClass emitTypeFlags OverrideFunc.noOverride ctx current (c.MapName Choice1Of2) ((fun _ _ _ -> []), Set.empty, None)
@@ -1785,7 +1785,7 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
       let selfTyText = emitType_ ctx target
       [prefix() @+ " " @+ emitTypeName fn.name typrm +@ " = " + selfTyText]
       // TODO: emit extends of type parameters
-    | Module m -> m.statements |> List.collect (go prefix (ctx |> Context.ofChildNamespace m.name))
+    | Namespace m -> m.statements |> List.collect (go prefix (ctx |> Context.ofChildNamespace m.name))
     | Global m -> m.statements |> List.collect (go prefix (ctx |> Context.ofRoot))
     | Pattern p ->
       match p with
@@ -1802,7 +1802,6 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
     | Import _
     | Variable _
     | Function _
-    | Module _
     | Export _
     | ReExport _
     | UnknownStatement _

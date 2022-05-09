@@ -48,7 +48,7 @@ type [<RequireQualifiedAccess>] Definition =
   | Class of Class
   | Enum of Enum
   | EnumCase of EnumCase * Enum
-  | Module of Module
+  | Namespace of Namespace
   | Variable of Variable
   | Function of Function
   | Import of ImportClause * Import
@@ -234,7 +234,7 @@ module FullName =
     | Definition.Class c -> if c.isInterface then Kind.OfInterface else Kind.OfClass
     | Definition.Enum _ -> Kind.OfEnum
     | Definition.EnumCase _ -> Kind.OfEnumCase
-    | Definition.Module m -> if m.isNamespace then Kind.OfNamespace else Kind.OfModule
+    | Definition.Namespace _ -> Kind.OfNamespace
     | Definition.Variable _ | Definition.Function _ -> Kind.OfValue
     | Definition.Import (c, _) -> c.kind |> Option.map Set.toList |? []
     | Definition.Member _ -> Kind.OfMember
@@ -1007,14 +1007,14 @@ module Statement =
           match stmts with
           | Some stmts ->
             match stmt with
-            | Module { name = name } ->
+            | Namespace { name = name } ->
               yield! go (name :: ns) state stmts
             | _ -> yield! go ns state stmts
           | None ->
             match stmt with
-            | Module { name = name; statements = statements } ->
+            | Namespace { name = name; statements = statements } ->
               yield! go (name :: ns) state statements
-            | Global { statements = statements } ->
+            | Global { statements = statements } | AmbientModule { statements = statements } ->
               yield! go [] state statements
             | Pattern p ->
               yield! go ns state p.underlyingStatements
@@ -1051,11 +1051,11 @@ module Statement =
         | Pattern p ->
           for stmt in p.underlyingStatements do
             yield! go ns state stmt
-        | Module m ->
+        | Namespace m ->
           for stmt in m.statements do
             yield! go (m.name :: ns) state stmt
-        | Global m ->
-          for stmt in m.statements do
+        | AmbientModule { statements = statements } | Global { statements = statements } ->
+          for stmt in statements do
             yield! go [] state stmt
       }
     stmts |> Seq.collect (go [] state)
@@ -1196,8 +1196,8 @@ module Statement =
       | ReExport e -> ReExport e
       | Variable v -> Variable (mapVariable v)
       | Function f -> Function (mapFunction f)
-      | Module m ->
-        Module {
+      | Namespace m ->
+        Namespace {
           m with
             statements =
               mapTypeWith
@@ -1210,6 +1210,18 @@ module Statement =
         }
       | Global m ->
         Global {
+          m with
+            statements =
+              mapTypeWith
+                overrideFunc
+                mapping
+                ctxOfChildNamespace
+                ctxOfRoot
+                (ctx |> ctxOfRoot)
+                m.statements
+        }
+      | AmbientModule m ->
+        AmbientModule {
           m with
             statements =
               mapTypeWith
@@ -1607,16 +1619,17 @@ let inferEnumCaseValue (stmts: Statement list) : Statement list =
             | Some _ -> None
           { c with value = v }, v
       Enum { e with cases = e.cases |> List.mapFold f None |> fst }
-    | Module m -> Module { m with statements = m.statements |> List.map go }
+    | Namespace m -> Namespace { m with statements = m.statements |> List.map go }
     | Global m -> Global { m with statements = m.statements |> List.map go }
     | s -> s
   stmts |> List.map go
 
 let rec mergeStatements (stmts: Statement list) =
-  let mutable result : Choice<Statement, Class ref, Module ref, Global ref> list = []
+  let mutable result : Choice<Statement, Class ref, Namespace ref, AmbientModule ref, Global ref> list = []
 
   let mutable intfMap = Map.empty
   let mutable nsMap = Map.empty
+  let mutable amMap = Map.empty
   let mutable globalM = None
   let mutable otherStmtSet = Set.empty
   let mergeTypeParams tps1 tps2 =
@@ -1651,7 +1664,7 @@ let rec mergeStatements (stmts: Statement list) =
       | None ->
         let iref = ref i
         intfMap <- (intfMap |> Map.add i.name iref)
-        result <- Choice2Of4 iref :: result
+        result <- Choice2Of5 iref :: result
       | Some iref' ->
         let i' = iref'.Value
         assert (i.accessibility = i'.accessibility)
@@ -1664,12 +1677,25 @@ let rec mergeStatements (stmts: Statement list) =
               implements = List.distinct (i.implements @ i'.implements)
               members = i.members @ i'.members }
         iref'.Value <- i
-    | Module n (* when n.isNamespace *) ->
+    | Namespace n ->
       match nsMap |> Map.tryFind n.name with
       | None ->
         let nref = ref n
         nsMap <- (nsMap |> Map.add n.name nref)
-        result <- Choice3Of4 nref :: result
+        result <- Choice3Of5 nref :: result
+      | Some nref' ->
+        let n' = nref'.Value
+        nref'.Value <-
+          { n with
+              loc = n.loc ++ n'.loc
+              comments = n.comments @ n'.comments |> List.distinct
+              statements = n'.statements @ n.statements }
+    | AmbientModule n ->
+      match amMap |> Map.tryFind n.name with
+      | None ->
+        let nref = ref n
+        amMap <- (amMap |> Map.add n.name nref)
+        result <- Choice4Of5 nref :: result
       | Some nref' ->
         let n' = nref'.Value
         nref'.Value <-
@@ -1682,7 +1708,7 @@ let rec mergeStatements (stmts: Statement list) =
       | None ->
         let nref = ref n
         globalM <- Some nref
-        result <- Choice4Of4 nref :: result
+        result <- Choice5Of5 nref :: result
       | Some nref ->
         let n' = nref.Value
         nref.Value <-
@@ -1693,14 +1719,15 @@ let rec mergeStatements (stmts: Statement list) =
     | stmt ->
       if otherStmtSet |> Set.contains stmt |> not then
         otherStmtSet <- otherStmtSet |> Set.add stmt
-        result <- Choice1Of4 stmt :: result
+        result <- Choice1Of5 stmt :: result
   result
   |> List.rev
   |> List.map (function
-    | Choice1Of4 s -> s
-    | Choice2Of4 i -> Class i.Value
-    | Choice3Of4 n -> Module { n.Value with statements = mergeStatements n.Value.statements }
-    | Choice4Of4 n -> Global { n.Value with statements = mergeStatements n.Value.statements }
+    | Choice1Of5 s -> s
+    | Choice2Of5 i -> Class i.Value
+    | Choice3Of5 n -> Namespace { n.Value with statements = mergeStatements n.Value.statements }
+    | Choice4Of5 n -> AmbientModule { n.Value with statements = mergeStatements n.Value.statements }
+    | Choice5Of5 n -> Global { n.Value with statements = mergeStatements n.Value.statements }
   )
 
 let mergeSources newFileName (srcs: SourceFile list) =
@@ -1772,7 +1799,8 @@ let addDefaultConstructorToClass (ctx: TyperContext<_, _>) (stmts: Statement lis
   let rec go stmts =
     stmts |> List.map (function
       | Class c when not c.isInterface -> Class (addConstructors c |> fst)
-      | Module m -> Module { m with statements = go m.statements }
+      | Namespace m -> Namespace { m with statements = go m.statements }
+      | AmbientModule m -> AmbientModule { m with statements = go m.statements }
       | Global m -> Global { m with statements = go m.statements }
       | x -> x)
   go stmts
@@ -1845,7 +1873,8 @@ let addParentMembersToClass (ctx: TyperContext<#TyperOptions, _>) (stmts: Statem
     let rec go stmts =
       stmts |> List.map (function
         | Class c when c.isInterface -> Class (addMembers c)
-        | Module m -> Module { m with statements = go m.statements }
+        | Namespace m -> Namespace { m with statements = go m.statements }
+        | AmbientModule m -> AmbientModule { m with statements = go m.statements }
         | Global m -> Global { m with statements = go m.statements }
         | x -> x)
     go stmts
@@ -1916,7 +1945,8 @@ let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statem
           | _ -> ()
 
         Class { c with implements = List.ofSeq inherits |> List.distinct }
-      | Module m -> Module { m with statements = go m.statements }
+      | Namespace m -> Namespace { m with statements = go m.statements }
+      | AmbientModule m -> AmbientModule { m with statements = go m.statements }
       | Global m -> Global { m with statements = go m.statements }
       | x -> x
     )
@@ -1979,7 +2009,8 @@ let detectPatterns (stmts: Statement list) : Statement list =
           if immediateCtors.Contains origName then None
           else Some (Class intf)
         else Some (Class intf)
-      | Module m -> Some (Module { m with statements = go m.statements })
+      | Namespace m -> Some (Namespace { m with statements = go m.statements })
+      | AmbientModule m -> Some (AmbientModule { m with statements = go m.statements })
       | Global m -> Global { m with statements = go m.statements } |> Some
       | x -> Some x
     )
@@ -1987,7 +2018,8 @@ let detectPatterns (stmts: Statement list) : Statement list =
 
 let replaceAliasToFunction (ctx: #IContext<#TyperOptions>) stmts =
   let rec go = function
-    | Module m -> Module { m with statements = List.map go m.statements }
+    | Namespace m -> Namespace { m with statements = List.map go m.statements }
+    | AmbientModule m -> AmbientModule { m with statements = List.map go m.statements }
     | Global m -> Global { m with statements = List.map go m.statements }
     | TypeAlias ta ->
       match ta.target with
@@ -2098,13 +2130,10 @@ let createExportMap (stmts: Statement list) : Trie<string, ExportType> =
       match s with
       | Export _ | ReExport _ | UnknownStatement _ | FloatingComment _ | Import _ | TypeAlias _ -> trie
       | Pattern p -> p.underlyingStatements |> List.fold f trie
-      | Module m ->
-        if m.isNamespace then
-          let eo = getExportType m.name m.isExported
-          let trie = trie |> add ns m.name eo
-          go eo (m.name :: ns) trie m.statements
-        else
-          go None (m.name :: ns) trie m.statements
+      | Namespace m ->
+        let eo = getExportType m.name m.isExported
+        let trie = trie |> add ns m.name eo
+        go eo (m.name :: ns) trie m.statements
       | Global m -> go None [] trie m.statements
       | Class c ->
         if c.isInterface then trie
@@ -2167,10 +2196,10 @@ let createDefinitionsMap (stmts: Statement list) : Trie<string, Definition list>
     | Variable v -> trie |> add ns v.name (Definition.Variable v)
     | Function f -> trie |> add ns f.name (Definition.Function f)
     | Pattern p -> p.underlyingStatements |> List.fold (go ns) trie
-    | Module m ->
+    | Namespace m ->
       m.statements
       |> List.fold (go (m.name :: ns)) trie
-      |> add ns m.name (Definition.Module m)
+      |> add ns m.name (Definition.Namespace m)
     | Global m ->
       m.statements |> List.fold (go []) trie
   stmts |> List.fold (go []) Trie.empty
@@ -2255,7 +2284,8 @@ let mergeESLibDefinitions (srcs: SourceFile list) =
   let rec mapStmt (s: Statement) =
     let vo, s = map None s.loc s
     match s with
-    | Module m -> Module { m with statements = List.map mapStmt m.statements }
+    | Namespace m -> Namespace { m with statements = List.map mapStmt m.statements }
+    | AmbientModule m -> AmbientModule { m with statements = List.map mapStmt m.statements }
     | Global m -> Global { m with statements = List.map mapStmt m.statements }
     | Enum e -> Enum { e with cases = e.cases |> List.map (fun c -> map vo c.loc c |> snd) }
     | Class c -> Class { c with members = c.members |> List.map (fun (a, m) -> map vo a.loc a |> snd, m) }

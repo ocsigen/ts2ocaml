@@ -939,17 +939,8 @@ module private ParserImpl =
 
   type ModuleName = Ts.ModuleName
   let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Statement =
-    let name =
-      match md.name with
-      | ModuleName.Identifier i ->
-        match i.text with
-        | "global" -> None
-        | name -> Some name
-      | ModuleName.StringLiteral s -> s.text |> Some
     let check kind =
       md.getChildren() |> Array.exists (fun nd -> nd.kind = kind)
-    let isNamespace = check Kind.NamespaceKeyword
-    let isExported = getExported md.modifiers
     let statements =
       md.getChildren()
       |> Array.toList
@@ -971,11 +962,16 @@ module private ParserImpl =
       |> Array.filter (fun nd -> nd.kind = Kind.JSDocComment)
       |> List.ofArray
       |> List.collect (fun nd -> nd :?> Ts.JSDoc |> readJSDocImpl ctx)
-    match name with
-    | Some name ->
-      Module { isExported = isExported; isNamespace = isNamespace; name = name; statements = statements; comments = comments; loc = Node.location md }
-    | None ->
-      Global { isExported = isExported; isNamespace = isNamespace; name = (); statements = statements; comments = comments; loc = Node.location md }
+    let loc = Node.location md
+    match md.name with
+    | ModuleName.Identifier i ->
+      if i.text = "global" then
+        Global { name = (); isExported = (); statements = statements; comments = comments; loc = loc }
+      else
+        let isExported = getExported md.modifiers
+        Namespace { name = i.text; isExported = isExported; statements = statements; comments = comments; loc = loc }
+    | ModuleName.StringLiteral s ->
+      AmbientModule { name = s.text; isExported = (); statements = statements; comments = comments; loc = loc }
 
   and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
     let onError () =

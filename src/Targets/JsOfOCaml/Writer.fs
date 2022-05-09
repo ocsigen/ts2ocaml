@@ -1180,6 +1180,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
               let nulls, others =
                 u.types |> List.partition (function Prim Null | Prim Undefined -> true | _ -> false)
               if List.isEmpty nulls then fl.value, fl.isOptional
+              else if List.isEmpty others then Prim Null, true
               else Union { types = others }, true
             | _ -> fl.value, fl.isOptional
           {| fl with value = value |> emitType_ innerCtx; isOptional = isOptional |}

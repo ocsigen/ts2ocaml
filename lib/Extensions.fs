@@ -93,6 +93,13 @@ module Map =
   let addNoOverwrite k v m =
     m |> Map.change k (function None -> Some v | Some v -> Some v)
 
+  let mergeWith f m1 m2 =
+    m2 |> Map.fold (fun m1 k v2 ->
+      match m1 |> Map.tryFind k with
+      | None -> m1 |> Map.add k v2
+      | Some v1 -> m1 |> Map.add k (f v1 v2)
+    ) m1
+
 type MutableMap<'k, 'v> = Collections.Generic.Dictionary<'k, 'v>
 type MutableSet<'v> = Collections.Generic.HashSet<'v>
 

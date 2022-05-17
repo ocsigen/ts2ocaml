@@ -1464,6 +1464,13 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           if v.scoped <> Scoped.No then Kind.OfModule
           else Kind.OfNamespace
         current |> addExport m.name kind "namespace"
+    | AmbientModule m ->
+      let module' =
+        let node = {| StructuredTextNode.empty with docCommentLines = comments; knownTypes = knownTypes (); scoped = Scoped.Force (m.name.unquoted) |}
+        let module' = current |> getTrie [m.name.orig] |> set node
+        let ctx = ctx |> Context.ofChildNamespace m.name.orig
+        m.statements |> List.fold (folder ctx) module'
+      current |> setTrie [m.name.orig] module'
     | Global m -> m.statements |> List.fold (folder ctx) current
     | Class c ->
       emitClass emitTypeFlags OverrideFunc.noOverride ctx current (c.MapName Choice1Of2) ((fun _ _ _ -> []), Set.empty, None)
@@ -1786,6 +1793,7 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
       [prefix() @+ " " @+ emitTypeName fn.name typrm +@ " = " + selfTyText]
       // TODO: emit extends of type parameters
     | Namespace m -> m.statements |> List.collect (go prefix (ctx |> Context.ofChildNamespace m.name))
+    | AmbientModule m -> m.statements |> List.collect (go prefix (ctx |> Context.ofChildNamespace m.name.orig))
     | Global m -> m.statements |> List.collect (go prefix (ctx |> Context.ofRoot))
     | Pattern p ->
       match p with

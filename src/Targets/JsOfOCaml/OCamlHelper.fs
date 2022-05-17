@@ -324,7 +324,7 @@ module Naming =
     ]
 
   let removeInvalidChars (s: string) =
-    s.ToCharArray()
+    s.Trim('"').ToCharArray()
     |> Array.map (fun c -> if Char.isAlphabetOrDigit c || c = '_' then c else '_')
     |> System.String
 

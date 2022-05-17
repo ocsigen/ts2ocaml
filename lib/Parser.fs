@@ -12,11 +12,13 @@ open TypeScript
 type Node = Ts.Node
 type TypeChecker = Ts.TypeChecker
 type Kind = Ts.SyntaxKind
+type ModuleName = Ts.ModuleName
 
 type ParserContext =
   inherit IContext
   abstract checker: TypeChecker
   abstract currentSource: Ts.SourceFile with get, set
+  abstract currentAmbientModule: string option with get, set
   abstract program: Ts.Program
   abstract fileNames: Path.Absolute[]
 
@@ -137,15 +139,19 @@ module private ParserImpl =
           ] |> Some
       go s
 
-  let normalizeQualifiedName (fileNames: string list) (s: string) =
+  let normalizeQualifiedName (ctx: ParserContext) (fileNames: string list) (s: string) =
     s
     |> String.split "."
     |> List.ofArray
     |> function
       | x :: xs when x.StartsWith("\"") ->
         let basenames = fileNames |> List.map JsHelper.stripExtension
-        if basenames |> List.exists (fun basename -> x.EndsWith(basename + "\"")) then xs
-        else x.Trim('"') :: xs
+        if basenames |> List.exists (fun basename -> x.Contains basename) then xs
+        else x :: xs
+      | x :: xs ->
+        match ctx.currentAmbientModule with
+        | None -> x :: xs
+        | Some amb -> amb :: x :: xs // workaround the bug which omits the enclosing ambient module from the full name
       | xs -> xs
 
   let getFullName (ctx: ParserContext) (nd: Node) =
@@ -154,7 +160,7 @@ module private ParserImpl =
     | Some s ->
       let source = ctx.currentSource.fileName
       let fullName =
-        ctx.checker.getFullyQualifiedName s |> normalizeQualifiedName [source]
+        ctx.checker.getFullyQualifiedName s |> normalizeQualifiedName ctx [source]
       Some { source = source; name = fullName }
 
   let getFullNames (ctx: ParserContext) (nd: Node) =
@@ -163,7 +169,7 @@ module private ParserImpl =
       |> Option.toList
       |> List.collect (fun decs ->
         decs |> Array.map (fun dec -> dec.getSourceFile()) |> List.ofArray)
-      |> List.map (fun x -> x.fileName)
+      |> List.map (fun x -> x.fileName |> Path.absolute)
       |> List.distinct
 
     let getRootAndAliasedSymbols (s: Ts.Symbol) =
@@ -183,7 +189,7 @@ module private ParserImpl =
         let sources = getSources s
         let fullName =
           ctx.checker.getFullyQualifiedName s
-          |> normalizeQualifiedName sources
+          |> normalizeQualifiedName ctx sources
         let newItems =
           sources
           |> List.map (fun source -> { source = source; name = fullName })
@@ -937,11 +943,10 @@ module private ParserImpl =
     | [] -> None
     | xs -> FloatingComment {| comments = xs; loc = Node.location doc |} |> Some
 
-  type ModuleName = Ts.ModuleName
   let rec readModule (ctx: ParserContext) (md: Ts.ModuleDeclaration) : Statement =
     let check kind =
       md.getChildren() |> Array.exists (fun nd -> nd.kind = kind)
-    let statements =
+    let statements ctx =
       md.getChildren()
       |> Array.toList
       |> List.collect (fun nd ->
@@ -966,12 +971,14 @@ module private ParserImpl =
     match md.name with
     | ModuleName.Identifier i ->
       if i.text = "global" then
-        Global { name = (); isExported = (); statements = statements; comments = comments; loc = loc }
+        Global { name = (); isExported = (); statements = statements ctx; comments = comments; loc = loc }
       else
         let isExported = getExported md.modifiers
-        Namespace { name = i.text; isExported = isExported; statements = statements; comments = comments; loc = loc }
+        Namespace { name = i.text; isExported = isExported; statements = statements ctx; comments = comments; loc = loc }
     | ModuleName.StringLiteral s ->
-      AmbientModule { name = s.text; isExported = (); statements = statements; comments = comments; loc = loc }
+      let orig = $"\"{s.text}\""
+      let ctx = ctx |> JS.cloneWith (fun x -> x.currentAmbientModule <- Some orig)
+      AmbientModule { name = { orig = orig; unquoted = s.text }; isExported = (); statements = statements ctx; comments = comments; loc = loc }
 
   and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =
     let onError () =
@@ -1141,6 +1148,7 @@ let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileName
     checker = program.getTypeChecker()
     fileNames = fileNames
     currentSource = (null : Ts.SourceFile)
+    currentAmbientModule = (None : string option)
   |}
 
 let createContextFromString (ctx: #IContext<#IOptions>) compilerOptions (files: {| fileName: string; text: string |} seq) : ParserContext =
@@ -1156,6 +1164,7 @@ let createContextFromString (ctx: #IContext<#IOptions>) compilerOptions (files: 
     checker = program.getTypeChecker()
     fileNames = files |> Seq.map (fun x -> x.fileName) |> Seq.toArray
     currentSource = (null : Ts.SourceFile)
+    currentAmbientModule = (None : string option)
   |}
 
 let parse (ctx: ParserContext) : Input =

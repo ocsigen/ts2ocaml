@@ -499,7 +499,12 @@ and NamespaceLike<'name, 'exported> = {
     member this.mapComments f = { this with comments = f this.comments }
 
 and Namespace = NamespaceLike<string, Exported>
-and AmbientModule = NamespaceLike<string, unit>
+and QuotedString = {
+  /// This is used in TyperContext.
+  orig: string
+  unquoted: string
+}
+and AmbientModule = NamespaceLike<QuotedString, unit>
 and Global = NamespaceLike<unit, unit>
 
 and Export = {

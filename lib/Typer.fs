@@ -1229,7 +1229,7 @@ module Statement =
                 mapping
                 ctxOfChildNamespace
                 ctxOfRoot
-                (ctx |> ctxOfRoot)
+                (ctx |> ctxOfChildNamespace m.name.orig)
                 m.statements
         }
       | UnknownStatement u -> UnknownStatement u
@@ -2134,6 +2134,7 @@ let createExportMap (stmts: Statement list) : Trie<string, ExportType> =
         let eo = getExportType m.name m.isExported
         let trie = trie |> add ns m.name eo
         go eo (m.name :: ns) trie m.statements
+      | AmbientModule m -> go None (m.name.orig :: ns) trie m.statements
       | Global m -> go None [] trie m.statements
       | Class c ->
         if c.isInterface then trie
@@ -2200,6 +2201,8 @@ let createDefinitionsMap (stmts: Statement list) : Trie<string, Definition list>
       m.statements
       |> List.fold (go (m.name :: ns)) trie
       |> add ns m.name (Definition.Namespace m)
+    | AmbientModule m ->
+      m.statements |> List.fold (go (m.name.orig :: ns)) trie
     | Global m ->
       m.statements |> List.fold (go []) trie
   stmts |> List.fold (go []) Trie.empty

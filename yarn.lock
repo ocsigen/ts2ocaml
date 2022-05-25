@@ -776,12 +776,12 @@ cassandra-driver@^4.6.3:
     long "^2.2.0"
 
 cdk8s@^2.2.41:
-  version "2.2.85"
-  resolved "https://registry.yarnpkg.com/cdk8s/-/cdk8s-2.2.85.tgz#fff95213d2ee3b690a4a026f2b7d6cdeb2ad1e63"
-  integrity sha512-nZg+p44hqVT8MViNl7Ny/qwmys/BCkZbOifXSaKuIOLclXDLAak24sy2l1NsO4ugf9pn0hEqMQ9eLR41c+M/iQ==
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/cdk8s/-/cdk8s-2.3.5.tgz#f35c83be2b370f4e5e59ba63db3168aa5ed07c84"
+  integrity sha512-yGsI/PL9tVw4Au8UQtmoZLCbYDxcC908j30OWhrPMQJc0gl8EzGrIb9rvhH0IHjEHrTE8ZHZCspceLhQ8cUSgA==
   dependencies:
     fast-json-patch "^2.2.1"
-    follow-redirects "^1.14.9"
+    follow-redirects "^1.15.0"
     yaml "2.0.0-7"
 
 chalk@^2.0.0:
@@ -1212,10 +1212,10 @@ find-up@^4.0.0:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
 
-follow-redirects@^1.0.0, follow-redirects@^1.14.9:
-  version "1.14.9"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.9.tgz#dd4ea157de7bfaf9ea9b3fbd85aa16951f78d8d7"
-  integrity sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==
+follow-redirects@^1.0.0, follow-redirects@^1.15.0:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.0.tgz#06441868281c86d0dda4ad8bdaead2d02dca89d4"
+  integrity sha512-aExlJShTV4qOUOL7yF1U5tvLCB0xQuudbf6toyYA0E/acBNw71mvjFTnLaRp50aQaYocMR0a/RMMBIHeZnGyjQ==
 
 forwarded@0.2.0:
   version "0.2.0"

@@ -1015,7 +1015,7 @@ let private getAllLocalReferences (ctx: #IContext<#IOptions>) (sourceFiles: Ts.S
     sourceFilesMap.Add(Path.absolute sourceFile.fileName, sourceFile)
 
   let createSourceFile path =
-    ts.createSourceFile(path, Node.fs.readFileSync(path, "utf-8"), Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS)
+    ts.createSourceFile(path, Node.fs.readFileSync(path, "utf-8"), !^Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS)
 
   let tryAdd (from: Ts.SourceFile) path =
     let path = Path.absolute path
@@ -1136,7 +1136,7 @@ let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileName
         |> Array.map assertFileExistsAndHasCorrectExtension
         |> Array.map (fun a -> a, Node.fs.readFileSync(a, "utf-8"))
         |> Array.map (fun (a, i) ->
-          ts.createSourceFile (a, i, Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
+          ts.createSourceFile (a, i, !^Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
         |> fun srcs ->
           ctx.logger.tracef "* following relative references..."
           getAllLocalReferences ctx srcs |> fst
@@ -1154,7 +1154,7 @@ let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileName
 let createContextFromString (ctx: #IContext<#IOptions>) compilerOptions (files: {| fileName: string; text: string |} seq) : ParserContext =
   let sourceFiles =
     files
-    |> Seq.map (fun x -> ts.createSourceFile (x.fileName, x.text, Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
+    |> Seq.map (fun x -> ts.createSourceFile (x.fileName, x.text, !^Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))
     |> Seq.toArray
   let program = TypeScriptHelper.createProgramForBrowser sourceFiles compilerOptions
   !!{|

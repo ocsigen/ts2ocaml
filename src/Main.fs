@@ -5,13 +5,7 @@ open Fable.Core.JsInterop
 open TypeScript
 open Syntax
 
-let options =
-  jsOptions<Ts.CompilerOptions>(fun o ->
-    o.target <- Some Ts.ScriptTarget.Latest
-    o.noEmit <- Some true
-    o.moduleResolution <- Some Ts.ModuleResolutionKind.Node12
-    //o.traceResolution <- Some true
-  )
+let options = TypeScriptHelper.defaultCompilerOptions
 
 open Yargs
 

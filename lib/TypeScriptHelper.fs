@@ -7,7 +7,7 @@ let defaultCompilerOptions =
   jsOptions<Ts.CompilerOptions>(fun o ->
     o.target <- Some Ts.ScriptTarget.Latest
     o.noEmit <- Some true
-    o.moduleResolution <- Some Ts.ModuleResolutionKind.Node12
+    o.moduleResolution <- Some Ts.ModuleResolutionKind.NodeNext
   )
 
 type IDummyCompilerHost =

@@ -1556,23 +1556,23 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     let addAnonymousInterfaceExcluding ais current = addAnonymousInterfaceExcludingWithKnownTypes (knownTypes ()) ais current
 
     match s with
-    | Module m ->
+    | Namespace m ->
       let module' =
-        let scope =
-          if m.isNamespace then Scope.Default
-          else Scope.Module m.name
-        let node = {| StructuredTextNode.empty with comments = comments; scope = scope |}
+        let node = {| StructuredTextNode.empty with comments = comments; scope = Scope.Default |}
         let module' = current |> getTrie [m.name] |> set node
         let ctx = ctx |> Context.ofChildNamespace m.name
         m.statements |> List.fold (folder ctx) module'
       let current = current |> setTrie [m.name] module'
       match module'.value with
       | None -> current
-      | Some _ ->
-        let kind =
-          if m.isNamespace then Kind.OfNamespace
-          else Kind.OfModule
-        current |> addExport m.name kind (if m.isNamespace then "namespace" else "module")
+      | Some _ -> current |> addExport m.name Kind.OfNamespace "namespace"
+    | AmbientModule m ->
+      let module' =
+        let node = {| StructuredTextNode.empty with comments = comments; scope = Scope.Module m.name.unquoted |}
+        let module' = current |> getTrie [m.name.orig] |> set node
+        let ctx = ctx |> Context.ofChildNamespace m.name.orig
+        m.statements |> List.fold (folder ctx) module'
+      current |> setTrie [m.name.orig] module'
     | Global m ->
       current |> inTrie ["global"] (fun g ->
         let node = {| StructuredTextNode.empty with scope = Scope.Global |}

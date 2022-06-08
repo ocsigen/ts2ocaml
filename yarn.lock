@@ -790,11 +790,11 @@ cassandra-driver@^4.6.3:
     long "^2.2.0"
 
 cdk8s@^2.2.41:
-  version "2.3.10"
-  resolved "https://registry.yarnpkg.com/cdk8s/-/cdk8s-2.3.10.tgz#89998e866cfe44a05dabf1e3ef88a6535af510f2"
-  integrity sha512-Qql5YLyIPkDqYYRwjFVukaWRDwKFoTFdiNFZI1f9dL1dW3TMVhLqmgsQwlYrUQSrlz0j9KkpYd4HeAPt6Z7rgA==
+  version "2.3.19"
+  resolved "https://registry.yarnpkg.com/cdk8s/-/cdk8s-2.3.19.tgz#152bd704ceff219ce91bcbc5f43bea1223eee645"
+  integrity sha512-TxAMyZPDMbglBlJMS0X1keCbKm2ObWI9keQKgVrtHt24REdYoaMrwJ4ap+IqweTgYGjiOs+XgStQqd7Exfrjvg==
   dependencies:
-    fast-json-patch "^2.2.1"
+    fast-json-patch "^3.1.1"
     follow-redirects "^1.15.1"
     yaml "2.0.0-7"
 
@@ -1164,22 +1164,15 @@ express@^4.17.3:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
-fast-deep-equal@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
-  integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
-
 fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
 
-fast-json-patch@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/fast-json-patch/-/fast-json-patch-2.2.1.tgz#18150d36c9ab65c7209e7d4eb113f4f8eaabe6d9"
-  integrity sha512-4j5uBaTnsYAV5ebkidvxiLUYOwjQ+JSFljeqfTxCrH9bDmlCQaOJFS84oDJ2rAXZq2yskmk3ORfoP9DCwqFNig==
-  dependencies:
-    fast-deep-equal "^2.0.1"
+fast-json-patch@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/fast-json-patch/-/fast-json-patch-3.1.1.tgz#85064ea1b1ebf97a3f7ad01e23f9337e72c66947"
+  integrity sha512-vf6IHUX2SBcA+5/+4883dsIjpBTqmfBjmYiWK1savxQmFk4JfBMLa7ynTYOs1Rolp/T1betJxHiGD3g1Mn8lUQ==
 
 fast-json-stable-stringify@^2.0.0:
   version "2.1.0"

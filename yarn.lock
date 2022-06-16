@@ -10,9 +10,9 @@
     "@jridgewell/trace-mapping" "^0.3.0"
 
 "@angular/common@^14.0.0":
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-14.0.0.tgz#65245a5386819449a6ccc35cdb3f7ebd61a1d753"
-  integrity sha512-VYydSXelPlcAnWZs6SKkOxV+rNe8zOtHKLf9jBTYT5nP5P66+va4zITo1C9bs5tbK+mRssayf615+SIGEXyJFg==
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-14.0.2.tgz#af18c23b24ca5bae5d2624361cad8eafe5385efd"
+  integrity sha512-vNZpun9ymZEDJ0CWskTZZqCbuCumgYxbsZgp9nALnRAJt3fK8fRFgIZTn7smEXvbStL4PvngnvESa/t9Jd4wMg==
   dependencies:
     tslib "^2.3.0"
 

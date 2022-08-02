@@ -220,6 +220,11 @@ module Path =
     if Node.path.isAbsolute(path) then path |> normalizeSlashes
     else Node.path.resolve(path) |> normalizeSlashes
 
+  let relativeToCwd (path: string) =
+    if Node.path.isAbsolute(path) then
+      Node.path.relative(Node.``process``.cwd(), path) |> normalizeSlashes
+    else path |> normalizeSlashes
+
   let diff (fromPath: Absolute) (toPath: Absolute) : string =
     let fromPath =
       if Node.fs.lstatSync(!^fromPath).isDirectory() then fromPath

@@ -32,16 +32,21 @@ module private ParserImpl =
     let ppLocation (n: Node) =
       let src = n.getSourceFile()
       let pos = src.getLineAndCharacterOfPosition (n.getStart())
-      sprintf "line %i, col %i of %s" (int pos.line + 1) (int pos.character + 1) src.fileName
+      sprintf "line %i, col %i of %s" (int pos.line + 1) (int pos.character + 1) (Path.relativeToCwd src.fileName)
 
     let ppLine (n: Node) =
       let src = n.getSourceFile()
-      let pos = src.getLineAndCharacterOfPosition (n.getStart())
-      let startPos = int <| src.getPositionOfLineAndCharacter(pos.line, 0.)
-      let endPos = int <| src.getLineEndOfPosition(n.getEnd())
-      let lines =
-        src.text.Substring(startPos, endPos - startPos) |> String.toLines
-      lines |> Array.map (sprintf "> %s") |> String.concat System.Environment.NewLine
+      let startPos = src.getLineAndCharacterOfPosition(n.getStart())
+      let endPos = src.getLineAndCharacterOfPosition(n.getEnd())
+      let text = src.text
+      Codeframe.Codeframe.CreateColumns(
+        text,
+        int startPos.line + 1,
+        int startPos.character + 1,
+        int endPos.line + 1,
+        int endPos.character + 1,
+        linesAbove=0, linesBelow=0
+      )
 
   let nodeWarn (ctx: ParserContext) (node: Node) format =
     Printf.kprintf (fun s ->
@@ -1114,12 +1119,12 @@ let createDependencyGraph (sourceFiles: Ts.SourceFile[]) =
   for source in sourceFiles do goSourceFile source
   graph
 
-let assertFileExistsAndHasCorrectExtension (fileName: string) =
+let assertFileExistsAndHasCorrectExtension (ctx: #IContext<#IOptions>) (fileName: string) =
   assertNode ()
   if not <| Node.fs.existsSync(!^fileName) then
-    failwithf "file '%s' does not exist" fileName
-  if fileName.EndsWith(".d.ts") |> not then
-    failwithf "file '%s' is not a TypeScript declaration file" fileName
+    ctx.logger.errorf "file '%s' does not exist" fileName
+  if fileName.EndsWith(".ts") |> not then
+    ctx.logger.errorf "file '%s' is not a TypeScript file" fileName
   fileName
 
 let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileNames: string[]) : ParserContext =
@@ -1129,11 +1134,11 @@ let createContextFromFiles (ctx: #IContext<#IOptions>) compilerOptions (fileName
       if not ctx.options.followRelativeReferences then
         fileNames
         |> Array.map Path.absolute
-        |> Array.map assertFileExistsAndHasCorrectExtension
+        |> Array.map (assertFileExistsAndHasCorrectExtension ctx)
       else
         fileNames
         |> Array.map Path.absolute
-        |> Array.map assertFileExistsAndHasCorrectExtension
+        |> Array.map (assertFileExistsAndHasCorrectExtension ctx)
         |> Array.map (fun a -> a, Node.fs.readFileSync(a, "utf-8"))
         |> Array.map (fun (a, i) ->
           ts.createSourceFile (a, i, !^Ts.ScriptTarget.Latest, setParentNodes=true, scriptKind=Ts.ScriptKind.TS))

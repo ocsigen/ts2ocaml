@@ -45,7 +45,14 @@ module Log =
   let warnf (opt: 'Options) fmt : _ when 'Options :> GlobalOptions =
     Printf.ksprintf (fun str ->
       if not opt.nowarn then
-        eprintfn "warn: %s" str
+        eprintfn "%s %s" (Chalk.chalk.yellow["warn:"]) str
+    ) fmt
+
+  let errorf fmt =
+    Printf.ksprintf (fun str ->
+      eprintfn "%s %s" (Chalk.chalk.red["error:"]) str
+      Node.Api.``process``.exit -1
+      failwith str
     ) fmt
 
 let createBaseContext (opts: #GlobalOptions) : IContext<_> =
@@ -53,7 +60,7 @@ let createBaseContext (opts: #GlobalOptions) : IContext<_> =
     { new ILogger with
         member _.tracef fmt = Log.tracef opts fmt
         member _.warnf  fmt = Log.warnf opts fmt
-        member _.errorf fmt = failwithf fmt
+        member _.errorf fmt = Log.errorf fmt
     }
   { new IContext<_> with
       member _.options = opts

@@ -22,7 +22,7 @@ let private run (input: Input) (ctx: IContext<Options>) =
         if Node.Api.path.isAbsolute dir then dir
         else Node.Api.path.join [|curdir; dir|]
       let fail () =
-        failwithf "The output directory '%s' does not exist." path
+        ctx.logger.errorf "The output directory '%s' does not exist." path
       try
         if Node.Api.fs.lstatSync(!^path).isDirectory() then path
         else fail ()
@@ -60,7 +60,7 @@ let private run (input: Input) (ctx: IContext<Options>) =
                     .Split([|Node.Api.os.EOL|], System.StringSplitOptions.RemoveEmptyEntries)
         |> Set.ofArray
       else
-        failwithf "The path '%s' is not a file." stubFile
+        ctx.logger.errorf "The path '%s' is not a file." stubFile
     let stubLines = Set.union existingStubLines newStubLines
     if stubLines <> existingStubLines then
       ctx.logger.tracef "* writing the stub file to '%s'..." stubFile

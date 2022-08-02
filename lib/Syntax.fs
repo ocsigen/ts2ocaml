@@ -45,12 +45,12 @@ with
       sprintf "line %i, col %i of %s"
         (int pos.line + 1)
         (int pos.character + 1)
-        src.fileName
+        (Path.relativeToCwd src.fileName)
     | Location l ->
       sprintf "line %i, col %i of %s"
         (int l.line + 1)
         (int l.character + 1)
-        l.src.fileName
+        (Path.relativeToCwd l.src.fileName)
     | MultipleLocation l ->
       l |> List.map (fun x -> x.AsString) |> String.concat " and "
     | UnknownLocation -> "<unknown>"

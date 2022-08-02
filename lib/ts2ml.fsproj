@@ -5,6 +5,8 @@
   <ItemGroup>
     <Compile Include="Bindings/TypeScript.fs" />
     <Compile Include="Bindings/BrowserOrNode.fs" />
+    <Compile Include="Bindings/Chalk.fs" />
+    <Compile Include="Bindings/Codeframe.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="DataTypes/Text.fs" />
     <Compile Include="DataTypes/Trie.fs" />

@@ -136,7 +136,7 @@ type TyperContext<'Options, 'State when 'Options :> IOptions> = private {
     member this.logger = this.logger
 
 let inline private warn (ctx: IContext<_>) (loc: Location) fmt =
-  Printf.kprintf (fun s -> ctx.logger.warnf "%s at %s" s loc.AsString) fmt
+  Printf.kprintf (fun s -> ctx.logger.warnf "%s at %s" s (Path.relativeToCwd loc.AsString)) fmt
 
 module TyperContext =
   type private Anonoymous<'Options, 'State when 'Options :> IOptions> = {|

@@ -30,13 +30,14 @@ fs.readdirSync(nodeModulesDir)
 module.exports = {
   target: "node",
   entry: CONFIG.fsharpEntry,
-  externals: nodeExternals,
+  externals: {
+    typescript: "commonjs typescript",
+    yargs: "commonjs yargs",
+    'yargs-parser': "commonjs yargs-parser"
+  },
   output: {
     path: path.join(__dirname, CONFIG.outputDir),
     filename: 'ts2ocaml.js'
-  },
-  resolve: {
-    modules: [nodeModulesDir]
   },
   plugins: [
     new webpack.BannerPlugin({

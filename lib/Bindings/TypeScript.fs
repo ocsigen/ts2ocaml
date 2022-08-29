@@ -442,6 +442,7 @@ module Ts =
         abstract isImportEqualsDeclaration: node: Node -> bool
         abstract isImportDeclaration: node: Node -> bool
         abstract isImportClause: node: Node -> bool
+        abstract isImportTypeAssertionContainer: node: Node -> bool
         abstract isAssertClause: node: Node -> bool
         abstract isAssertEntry: node: Node -> bool
         abstract isNamespaceImport: node: Node -> bool
@@ -657,6 +658,27 @@ module Ts =
         abstract formatDiagnostic: diagnostic: Diagnostic * host: FormatDiagnosticsHost -> string
         abstract formatDiagnosticsWithColorAndContext: diagnostics: Diagnostic[] * host: FormatDiagnosticsHost -> string
         abstract flattenDiagnosticMessageText: diag: U2<string, DiagnosticMessageChain> option * newLine: string * ?indent: float -> string
+        /// Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
+        /// provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
+        abstract getModeForFileReference: ref: U2<FileReference, string> * containingFileMode: obj -> ModuleKind option
+        /// <summary>
+        /// Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
+        /// defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
+        /// If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
+        /// </summary>
+        /// <param name="file">File to fetch the resolution mode within</param>
+        /// <param name="index">Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations</param>
+        abstract getModeForResolutionAtIndex: file: SourceFile * index: float -> ModuleKind option
+        /// <summary>
+        /// Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
+        /// one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
+        /// Notably, this function always returns <c>undefined</c> if the containing file has an <c>undefined</c> <c>impliedNodeFormat</c> - this field is only set when
+        /// <c>moduleResolution</c> is <c>node16</c>+.
+        /// </summary>
+        /// <param name="file">The file the import or import-like reference is contained within</param>
+        /// <param name="usage">The module reference string</param>
+        /// <returns>The final resolution mode of the import</returns>
+        abstract getModeForUsageLocation: file: {| impliedNodeFormat: obj option |} * usage: StringLiteralLike -> ModuleKind option
         abstract getConfigFileParsingDiagnostics: configFileParseResult: ParsedCommandLine -> Diagnostic[]
         /// <summary>
         /// A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
@@ -748,704 +770,6 @@ module Ts =
         /// <param name="transformers">An array of <c>TransformerFactory</c> callbacks used to process the transformation.</param>
         /// <param name="compilerOptions">Optional compiler options.</param>
         abstract transform: source: U2<'T, 'T[]> * transformers: TransformerFactory<'T>[] * ?compilerOptions: CompilerOptions -> TransformationResult<'T> when 'T :> Node
-        [<Obsolete("Use `factory.createNodeArray` or the factory supplied by your transformation context instead.")>]
-        abstract createNodeArray: ('T[]) option -> (bool) option -> 'T[] when 'T :> Node
-        [<Obsolete("Use `factory.createNumericLiteral` or the factory supplied by your transformation context instead.")>]
-        abstract createNumericLiteral: U2<string, float> -> (TokenFlags) option -> NumericLiteral
-        [<Obsolete("Use `factory.createBigIntLiteral` or the factory supplied by your transformation context instead.")>]
-        abstract createBigIntLiteral: U2<string, PseudoBigInt> -> BigIntLiteral
-        [<Obsolete("Use `factory.createStringLiteral` or the factory supplied by your transformation context instead.")>]
-        abstract createStringLiteral: {| Invoke: string -> bool option -> StringLiteral; Invoke: string -> bool option -> bool option -> StringLiteral |}
-        [<Obsolete("Use `factory.createStringLiteralFromNode` or the factory supplied by your transformation context instead.")>]
-        abstract createStringLiteralFromNode: PropertyNameLiteral -> (bool) option -> StringLiteral
-        [<Obsolete("Use `factory.createRegularExpressionLiteral` or the factory supplied by your transformation context instead.")>]
-        abstract createRegularExpressionLiteral: string -> RegularExpressionLiteral
-        [<Obsolete("Use `factory.createLoopVariable` or the factory supplied by your transformation context instead.")>]
-        abstract createLoopVariable: (bool) option -> Identifier
-        [<Obsolete("Use `factory.createUniqueName` or the factory supplied by your transformation context instead.")>]
-        abstract createUniqueName: string -> (GeneratedIdentifierFlags) option -> Identifier
-        [<Obsolete("Use `factory.createPrivateIdentifier` or the factory supplied by your transformation context instead.")>]
-        abstract createPrivateIdentifier: string -> PrivateIdentifier
-        [<Obsolete("Use `factory.createSuper` or the factory supplied by your transformation context instead.")>]
-        abstract createSuper: unit -> SuperExpression
-        [<Obsolete("Use `factory.createThis` or the factory supplied by your transformation context instead.")>]
-        abstract createThis: unit -> ThisExpression
-        [<Obsolete("Use `factory.createNull` or the factory supplied by your transformation context instead.")>]
-        abstract createNull: unit -> NullLiteral
-        [<Obsolete("Use `factory.createTrue` or the factory supplied by your transformation context instead.")>]
-        abstract createTrue: unit -> TrueLiteral
-        [<Obsolete("Use `factory.createFalse` or the factory supplied by your transformation context instead.")>]
-        abstract createFalse: unit -> FalseLiteral
-        [<Obsolete("Use `factory.createModifier` or the factory supplied by your transformation context instead.")>]
-        abstract createModifier: 'T -> ModifierToken<'T>
-        [<Obsolete("Use `factory.createModifiersFromModifierFlags` or the factory supplied by your transformation context instead.")>]
-        abstract createModifiersFromModifierFlags: ModifierFlags -> Modifier[] option
-        [<Obsolete("Use `factory.createQualifiedName` or the factory supplied by your transformation context instead.")>]
-        abstract createQualifiedName: EntityName -> U2<string, Identifier> -> QualifiedName
-        [<Obsolete("Use `factory.updateQualifiedName` or the factory supplied by your transformation context instead.")>]
-        abstract updateQualifiedName: QualifiedName -> EntityName -> Identifier -> QualifiedName
-        [<Obsolete("Use `factory.createComputedPropertyName` or the factory supplied by your transformation context instead.")>]
-        abstract createComputedPropertyName: Expression -> ComputedPropertyName
-        [<Obsolete("Use `factory.updateComputedPropertyName` or the factory supplied by your transformation context instead.")>]
-        abstract updateComputedPropertyName: ComputedPropertyName -> Expression -> ComputedPropertyName
-        [<Obsolete("Use `factory.createTypeParameterDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createTypeParameterDeclaration: {| Invoke: Modifier[] option -> U2<string, Identifier> -> TypeNode option -> TypeNode option -> TypeParameterDeclaration; Invoke: U2<string, Identifier> -> TypeNode option -> TypeNode option -> TypeParameterDeclaration |}
-        [<Obsolete("Use `factory.updateTypeParameterDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypeParameterDeclaration: {| Invoke: TypeParameterDeclaration -> Modifier[] option -> Identifier -> TypeNode option -> TypeNode option -> TypeParameterDeclaration; Invoke: TypeParameterDeclaration -> Identifier -> TypeNode option -> TypeNode option -> TypeParameterDeclaration |}
-        [<Obsolete("Use `factory.createParameterDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createParameter: Decorator[] option -> Modifier[] option -> DotDotDotToken option -> U2<string, BindingName> -> (QuestionToken) option -> (TypeNode) option -> (Expression) option -> ParameterDeclaration
-        [<Obsolete("Use `factory.updateParameterDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateParameter: ParameterDeclaration -> Decorator[] option -> Modifier[] option -> DotDotDotToken option -> U2<string, BindingName> -> QuestionToken option -> TypeNode option -> Expression option -> ParameterDeclaration
-        [<Obsolete("Use `factory.createDecorator` or the factory supplied by your transformation context instead.")>]
-        abstract createDecorator: Expression -> Decorator
-        [<Obsolete("Use `factory.updateDecorator` or the factory supplied by your transformation context instead.")>]
-        abstract updateDecorator: Decorator -> Expression -> Decorator
-        [<Obsolete("Use `factory.createPropertyDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createProperty: Decorator[] option -> Modifier[] option -> U2<string, PropertyName> -> U2<QuestionToken, ExclamationToken> option -> TypeNode option -> Expression option -> PropertyDeclaration
-        [<Obsolete("Use `factory.updatePropertyDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateProperty: PropertyDeclaration -> Decorator[] option -> Modifier[] option -> U2<string, PropertyName> -> U2<QuestionToken, ExclamationToken> option -> TypeNode option -> Expression option -> PropertyDeclaration
-        [<Obsolete("Use `factory.createMethodDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createMethod: Decorator[] option -> Modifier[] option -> AsteriskToken option -> U2<string, PropertyName> -> QuestionToken option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> Block option -> MethodDeclaration
-        [<Obsolete("Use `factory.updateMethodDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateMethod: MethodDeclaration -> Decorator[] option -> Modifier[] option -> AsteriskToken option -> PropertyName -> QuestionToken option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> Block option -> MethodDeclaration
-        [<Obsolete("Use `factory.createConstructorDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createConstructor: Decorator[] option -> Modifier[] option -> ParameterDeclaration[] -> Block option -> ConstructorDeclaration
-        [<Obsolete("Use `factory.updateConstructorDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateConstructor: ConstructorDeclaration -> Decorator[] option -> Modifier[] option -> ParameterDeclaration[] -> Block option -> ConstructorDeclaration
-        [<Obsolete("Use `factory.createGetAccessorDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createGetAccessor: Decorator[] option -> Modifier[] option -> U2<string, PropertyName> -> ParameterDeclaration[] -> TypeNode option -> Block option -> GetAccessorDeclaration
-        [<Obsolete("Use `factory.updateGetAccessorDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateGetAccessor: GetAccessorDeclaration -> Decorator[] option -> Modifier[] option -> PropertyName -> ParameterDeclaration[] -> TypeNode option -> Block option -> GetAccessorDeclaration
-        [<Obsolete("Use `factory.createSetAccessorDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createSetAccessor: Decorator[] option -> Modifier[] option -> U2<string, PropertyName> -> ParameterDeclaration[] -> Block option -> SetAccessorDeclaration
-        [<Obsolete("Use `factory.updateSetAccessorDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateSetAccessor: SetAccessorDeclaration -> Decorator[] option -> Modifier[] option -> PropertyName -> ParameterDeclaration[] -> Block option -> SetAccessorDeclaration
-        [<Obsolete("Use `factory.createCallSignature` or the factory supplied by your transformation context instead.")>]
-        abstract createCallSignature: TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> CallSignatureDeclaration
-        [<Obsolete("Use `factory.updateCallSignature` or the factory supplied by your transformation context instead.")>]
-        abstract updateCallSignature: CallSignatureDeclaration -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> CallSignatureDeclaration
-        [<Obsolete("Use `factory.createConstructSignature` or the factory supplied by your transformation context instead.")>]
-        abstract createConstructSignature: TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> ConstructSignatureDeclaration
-        [<Obsolete("Use `factory.updateConstructSignature` or the factory supplied by your transformation context instead.")>]
-        abstract updateConstructSignature: ConstructSignatureDeclaration -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> ConstructSignatureDeclaration
-        [<Obsolete("Use `factory.updateIndexSignature` or the factory supplied by your transformation context instead.")>]
-        abstract updateIndexSignature: IndexSignatureDeclaration -> Decorator[] option -> Modifier[] option -> ParameterDeclaration[] -> TypeNode -> IndexSignatureDeclaration
-        [<Obsolete("Use `factory.createKeywordTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createKeywordTypeNode: 'TKind -> KeywordTypeNode<'TKind>
-        [<Obsolete("Use `factory.createTypePredicateNode` or the factory supplied by your transformation context instead.")>]
-        abstract createTypePredicateNodeWithModifier: AssertsKeyword option -> U3<string, Identifier, ThisTypeNode> -> TypeNode option -> TypePredicateNode
-        [<Obsolete("Use `factory.updateTypePredicateNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypePredicateNodeWithModifier: TypePredicateNode -> AssertsKeyword option -> U2<Identifier, ThisTypeNode> -> TypeNode option -> TypePredicateNode
-        [<Obsolete("Use `factory.createTypeReferenceNode` or the factory supplied by your transformation context instead.")>]
-        abstract createTypeReferenceNode: U2<string, EntityName> -> (TypeNode[]) option -> TypeReferenceNode
-        [<Obsolete("Use `factory.updateTypeReferenceNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypeReferenceNode: TypeReferenceNode -> EntityName -> TypeNode[] option -> TypeReferenceNode
-        [<Obsolete("Use `factory.createFunctionTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createFunctionTypeNode: TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode -> FunctionTypeNode
-        [<Obsolete("Use `factory.updateFunctionTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateFunctionTypeNode: FunctionTypeNode -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode -> FunctionTypeNode
-        [<Obsolete("Use `factory.createConstructorTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createConstructorTypeNode: TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode -> ConstructorTypeNode
-        [<Obsolete("Use `factory.updateConstructorTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateConstructorTypeNode: ConstructorTypeNode -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode -> ConstructorTypeNode
-        [<Obsolete("Use `factory.createTypeQueryNode` or the factory supplied by your transformation context instead.")>]
-        abstract createTypeQueryNode: EntityName -> (TypeNode[]) option -> TypeQueryNode
-        [<Obsolete("Use `factory.updateTypeQueryNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypeQueryNode: TypeQueryNode -> EntityName -> (TypeNode[]) option -> TypeQueryNode
-        [<Obsolete("Use `factory.createTypeLiteralNode` or the factory supplied by your transformation context instead.")>]
-        abstract createTypeLiteralNode: TypeElement[] option -> TypeLiteralNode
-        [<Obsolete("Use `factory.updateTypeLiteralNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypeLiteralNode: TypeLiteralNode -> TypeElement[] -> TypeLiteralNode
-        [<Obsolete("Use `factory.createArrayTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createArrayTypeNode: TypeNode -> ArrayTypeNode
-        [<Obsolete("Use `factory.updateArrayTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateArrayTypeNode: ArrayTypeNode -> TypeNode -> ArrayTypeNode
-        [<Obsolete("Use `factory.createTupleTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createTupleTypeNode: U2<TypeNode, NamedTupleMember>[] -> TupleTypeNode
-        [<Obsolete("Use `factory.updateTupleTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateTupleTypeNode: TupleTypeNode -> U2<TypeNode, NamedTupleMember>[] -> TupleTypeNode
-        [<Obsolete("Use `factory.createOptionalTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createOptionalTypeNode: TypeNode -> OptionalTypeNode
-        [<Obsolete("Use `factory.updateOptionalTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateOptionalTypeNode: OptionalTypeNode -> TypeNode -> OptionalTypeNode
-        [<Obsolete("Use `factory.createRestTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createRestTypeNode: TypeNode -> RestTypeNode
-        [<Obsolete("Use `factory.updateRestTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateRestTypeNode: RestTypeNode -> TypeNode -> RestTypeNode
-        [<Obsolete("Use `factory.createUnionTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createUnionTypeNode: TypeNode[] -> UnionTypeNode
-        [<Obsolete("Use `factory.updateUnionTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateUnionTypeNode: UnionTypeNode -> TypeNode[] -> UnionTypeNode
-        [<Obsolete("Use `factory.createIntersectionTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createIntersectionTypeNode: TypeNode[] -> IntersectionTypeNode
-        [<Obsolete("Use `factory.updateIntersectionTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateIntersectionTypeNode: IntersectionTypeNode -> TypeNode[] -> IntersectionTypeNode
-        [<Obsolete("Use `factory.createConditionalTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createConditionalTypeNode: TypeNode -> TypeNode -> TypeNode -> TypeNode -> ConditionalTypeNode
-        [<Obsolete("Use `factory.updateConditionalTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateConditionalTypeNode: ConditionalTypeNode -> TypeNode -> TypeNode -> TypeNode -> TypeNode -> ConditionalTypeNode
-        [<Obsolete("Use `factory.createInferTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createInferTypeNode: TypeParameterDeclaration -> InferTypeNode
-        [<Obsolete("Use `factory.updateInferTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateInferTypeNode: InferTypeNode -> TypeParameterDeclaration -> InferTypeNode
-        [<Obsolete("Use `factory.createImportTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createImportTypeNode: {| Invoke: TypeNode -> EntityName option -> TypeNode[] option -> bool option -> ImportTypeNode; Invoke: TypeNode -> ImportTypeAssertionContainer option -> EntityName option -> TypeNode[] option -> bool option -> ImportTypeNode |}
-        [<Obsolete("Use `factory.updateImportTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateImportTypeNode: {| Invoke: ImportTypeNode -> TypeNode -> EntityName option -> TypeNode[] option -> bool option -> ImportTypeNode; Invoke: ImportTypeNode -> TypeNode -> ImportTypeAssertionContainer option -> EntityName option -> TypeNode[] option -> bool option -> ImportTypeNode |}
-        [<Obsolete("Use `factory.createParenthesizedType` or the factory supplied by your transformation context instead.")>]
-        abstract createParenthesizedType: TypeNode -> ParenthesizedTypeNode
-        [<Obsolete("Use `factory.updateParenthesizedType` or the factory supplied by your transformation context instead.")>]
-        abstract updateParenthesizedType: ParenthesizedTypeNode -> TypeNode -> ParenthesizedTypeNode
-        [<Obsolete("Use `factory.createThisTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createThisTypeNode: unit -> ThisTypeNode
-        [<Obsolete("Use `factory.updateTypeOperatorNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypeOperatorNode: TypeOperatorNode -> TypeNode -> TypeOperatorNode
-        [<Obsolete("Use `factory.createIndexedAccessTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createIndexedAccessTypeNode: TypeNode -> TypeNode -> IndexedAccessTypeNode
-        [<Obsolete("Use `factory.updateIndexedAccessTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateIndexedAccessTypeNode: IndexedAccessTypeNode -> TypeNode -> TypeNode -> IndexedAccessTypeNode
-        [<Obsolete("Use `factory.createMappedTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createMappedTypeNode: U3<ReadonlyKeyword, PlusToken, MinusToken> option -> TypeParameterDeclaration -> TypeNode option -> U3<QuestionToken, PlusToken, MinusToken> option -> TypeNode option -> TypeElement[] option -> MappedTypeNode
-        [<Obsolete("Use `factory.updateMappedTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateMappedTypeNode: MappedTypeNode -> U3<ReadonlyKeyword, PlusToken, MinusToken> option -> TypeParameterDeclaration -> TypeNode option -> U3<QuestionToken, PlusToken, MinusToken> option -> TypeNode option -> TypeElement[] option -> MappedTypeNode
-        [<Obsolete("Use `factory.createLiteralTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract createLiteralTypeNode: U4<LiteralExpression, BooleanLiteral, PrefixUnaryExpression, NullLiteral> -> LiteralTypeNode
-        [<Obsolete("Use `factory.updateLiteralTypeNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateLiteralTypeNode: LiteralTypeNode -> U4<LiteralExpression, BooleanLiteral, PrefixUnaryExpression, NullLiteral> -> LiteralTypeNode
-        [<Obsolete("Use `factory.createObjectBindingPattern` or the factory supplied by your transformation context instead.")>]
-        abstract createObjectBindingPattern: BindingElement[] -> ObjectBindingPattern
-        [<Obsolete("Use `factory.updateObjectBindingPattern` or the factory supplied by your transformation context instead.")>]
-        abstract updateObjectBindingPattern: ObjectBindingPattern -> BindingElement[] -> ObjectBindingPattern
-        [<Obsolete("Use `factory.createArrayBindingPattern` or the factory supplied by your transformation context instead.")>]
-        abstract createArrayBindingPattern: ArrayBindingElement[] -> ArrayBindingPattern
-        [<Obsolete("Use `factory.updateArrayBindingPattern` or the factory supplied by your transformation context instead.")>]
-        abstract updateArrayBindingPattern: ArrayBindingPattern -> ArrayBindingElement[] -> ArrayBindingPattern
-        [<Obsolete("Use `factory.createBindingElement` or the factory supplied by your transformation context instead.")>]
-        abstract createBindingElement: DotDotDotToken option -> U2<string, PropertyName> option -> U2<string, BindingName> -> (Expression) option -> BindingElement
-        [<Obsolete("Use `factory.updateBindingElement` or the factory supplied by your transformation context instead.")>]
-        abstract updateBindingElement: BindingElement -> DotDotDotToken option -> PropertyName option -> BindingName -> Expression option -> BindingElement
-        [<Obsolete("Use `factory.createArrayLiteralExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createArrayLiteral: (Expression[]) option -> (bool) option -> ArrayLiteralExpression
-        [<Obsolete("Use `factory.updateArrayLiteralExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateArrayLiteral: ArrayLiteralExpression -> Expression[] -> ArrayLiteralExpression
-        [<Obsolete("Use `factory.createObjectLiteralExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createObjectLiteral: (ObjectLiteralElementLike[]) option -> (bool) option -> ObjectLiteralExpression
-        [<Obsolete("Use `factory.updateObjectLiteralExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateObjectLiteral: ObjectLiteralExpression -> ObjectLiteralElementLike[] -> ObjectLiteralExpression
-        [<Obsolete("Use `factory.createPropertyAccessExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createPropertyAccess: Expression -> U2<string, MemberName> -> PropertyAccessExpression
-        [<Obsolete("Use `factory.updatePropertyAccessExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updatePropertyAccess: PropertyAccessExpression -> Expression -> MemberName -> PropertyAccessExpression
-        [<Obsolete("Use `factory.createPropertyAccessChain` or the factory supplied by your transformation context instead.")>]
-        abstract createPropertyAccessChain: Expression -> QuestionDotToken option -> U2<string, MemberName> -> PropertyAccessChain
-        [<Obsolete("Use `factory.updatePropertyAccessChain` or the factory supplied by your transformation context instead.")>]
-        abstract updatePropertyAccessChain: PropertyAccessChain -> Expression -> QuestionDotToken option -> MemberName -> PropertyAccessChain
-        [<Obsolete("Use `factory.createElementAccessExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createElementAccess: Expression -> U2<float, Expression> -> ElementAccessExpression
-        [<Obsolete("Use `factory.updateElementAccessExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateElementAccess: ElementAccessExpression -> Expression -> Expression -> ElementAccessExpression
-        [<Obsolete("Use `factory.createElementAccessChain` or the factory supplied by your transformation context instead.")>]
-        abstract createElementAccessChain: Expression -> QuestionDotToken option -> U2<float, Expression> -> ElementAccessChain
-        [<Obsolete("Use `factory.updateElementAccessChain` or the factory supplied by your transformation context instead.")>]
-        abstract updateElementAccessChain: ElementAccessChain -> Expression -> QuestionDotToken option -> Expression -> ElementAccessChain
-        [<Obsolete("Use `factory.createCallExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createCall: Expression -> TypeNode[] option -> Expression[] option -> CallExpression
-        [<Obsolete("Use `factory.updateCallExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateCall: CallExpression -> Expression -> TypeNode[] option -> Expression[] -> CallExpression
-        [<Obsolete("Use `factory.createCallChain` or the factory supplied by your transformation context instead.")>]
-        abstract createCallChain: Expression -> QuestionDotToken option -> TypeNode[] option -> Expression[] option -> CallChain
-        [<Obsolete("Use `factory.updateCallChain` or the factory supplied by your transformation context instead.")>]
-        abstract updateCallChain: CallChain -> Expression -> QuestionDotToken option -> TypeNode[] option -> Expression[] -> CallChain
-        [<Obsolete("Use `factory.createNewExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createNew: Expression -> TypeNode[] option -> Expression[] option -> NewExpression
-        [<Obsolete("Use `factory.updateNewExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateNew: NewExpression -> Expression -> TypeNode[] option -> Expression[] option -> NewExpression
-        [<Obsolete("Use `factory.createTypeAssertion` or the factory supplied by your transformation context instead.")>]
-        abstract createTypeAssertion: TypeNode -> Expression -> TypeAssertion
-        [<Obsolete("Use `factory.updateTypeAssertion` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypeAssertion: TypeAssertion -> TypeNode -> Expression -> TypeAssertion
-        [<Obsolete("Use `factory.createParenthesizedExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createParen: Expression -> ParenthesizedExpression
-        [<Obsolete("Use `factory.updateParenthesizedExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateParen: ParenthesizedExpression -> Expression -> ParenthesizedExpression
-        [<Obsolete("Use `factory.createFunctionExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createFunctionExpression: Modifier[] option -> AsteriskToken option -> U2<string, Identifier> option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] option -> TypeNode option -> Block -> FunctionExpression
-        [<Obsolete("Use `factory.updateFunctionExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateFunctionExpression: FunctionExpression -> Modifier[] option -> AsteriskToken option -> Identifier option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> Block -> FunctionExpression
-        [<Obsolete("Use `factory.createDeleteExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createDelete: Expression -> DeleteExpression
-        [<Obsolete("Use `factory.updateDeleteExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateDelete: DeleteExpression -> Expression -> DeleteExpression
-        [<Obsolete("Use `factory.createTypeOfExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createTypeOf: Expression -> TypeOfExpression
-        [<Obsolete("Use `factory.updateTypeOfExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypeOf: TypeOfExpression -> Expression -> TypeOfExpression
-        [<Obsolete("Use `factory.createVoidExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createVoid: Expression -> VoidExpression
-        [<Obsolete("Use `factory.updateVoidExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateVoid: VoidExpression -> Expression -> VoidExpression
-        [<Obsolete("Use `factory.createAwaitExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createAwait: Expression -> AwaitExpression
-        [<Obsolete("Use `factory.updateAwaitExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateAwait: AwaitExpression -> Expression -> AwaitExpression
-        [<Obsolete("Use `factory.createPrefixExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createPrefix: PrefixUnaryOperator -> Expression -> PrefixUnaryExpression
-        [<Obsolete("Use `factory.updatePrefixExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updatePrefix: PrefixUnaryExpression -> Expression -> PrefixUnaryExpression
-        [<Obsolete("Use `factory.createPostfixUnaryExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createPostfix: Expression -> PostfixUnaryOperator -> PostfixUnaryExpression
-        [<Obsolete("Use `factory.updatePostfixUnaryExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updatePostfix: PostfixUnaryExpression -> Expression -> PostfixUnaryExpression
-        [<Obsolete("Use `factory.createBinaryExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createBinary: Expression -> U2<BinaryOperator, BinaryOperatorToken> -> Expression -> BinaryExpression
-        [<Obsolete("Use `factory.updateConditionalExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateConditional: ConditionalExpression -> Expression -> QuestionToken -> Expression -> ColonToken -> Expression -> ConditionalExpression
-        [<Obsolete("Use `factory.createTemplateExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createTemplateExpression: TemplateHead -> TemplateSpan[] -> TemplateExpression
-        [<Obsolete("Use `factory.updateTemplateExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateTemplateExpression: TemplateExpression -> TemplateHead -> TemplateSpan[] -> TemplateExpression
-        [<Obsolete("Use `factory.createTemplateHead` or the factory supplied by your transformation context instead.")>]
-        abstract createTemplateHead: {| Invoke: string -> string option -> TokenFlags option -> TemplateHead; Invoke: string option -> string -> TokenFlags option -> TemplateHead |}
-        [<Obsolete("Use `factory.createTemplateMiddle` or the factory supplied by your transformation context instead.")>]
-        abstract createTemplateMiddle: {| Invoke: string -> string option -> TokenFlags option -> TemplateMiddle; Invoke: string option -> string -> TokenFlags option -> TemplateMiddle |}
-        [<Obsolete("Use `factory.createTemplateTail` or the factory supplied by your transformation context instead.")>]
-        abstract createTemplateTail: {| Invoke: string -> string option -> TokenFlags option -> TemplateTail; Invoke: string option -> string -> TokenFlags option -> TemplateTail |}
-        [<Obsolete("Use `factory.createNoSubstitutionTemplateLiteral` or the factory supplied by your transformation context instead.")>]
-        abstract createNoSubstitutionTemplateLiteral: {| Invoke: string -> string option -> NoSubstitutionTemplateLiteral; Invoke: string option -> string -> NoSubstitutionTemplateLiteral |}
-        [<Obsolete("Use `factory.updateYieldExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateYield: YieldExpression -> AsteriskToken option -> Expression option -> YieldExpression
-        [<Obsolete("Use `factory.createSpreadExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createSpread: Expression -> SpreadElement
-        [<Obsolete("Use `factory.updateSpreadExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateSpread: SpreadElement -> Expression -> SpreadElement
-        [<Obsolete("Use `factory.createOmittedExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createOmittedExpression: unit -> OmittedExpression
-        [<Obsolete("Use `factory.createAsExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createAsExpression: Expression -> TypeNode -> AsExpression
-        [<Obsolete("Use `factory.updateAsExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateAsExpression: AsExpression -> Expression -> TypeNode -> AsExpression
-        [<Obsolete("Use `factory.createNonNullExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createNonNullExpression: Expression -> NonNullExpression
-        [<Obsolete("Use `factory.updateNonNullExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateNonNullExpression: NonNullExpression -> Expression -> NonNullExpression
-        [<Obsolete("Use `factory.createNonNullChain` or the factory supplied by your transformation context instead.")>]
-        abstract createNonNullChain: Expression -> NonNullChain
-        [<Obsolete("Use `factory.updateNonNullChain` or the factory supplied by your transformation context instead.")>]
-        abstract updateNonNullChain: NonNullChain -> Expression -> NonNullChain
-        [<Obsolete("Use `factory.createMetaProperty` or the factory supplied by your transformation context instead.")>]
-        abstract createMetaProperty: SyntaxKind -> Identifier -> MetaProperty
-        [<Obsolete("Use `factory.updateMetaProperty` or the factory supplied by your transformation context instead.")>]
-        abstract updateMetaProperty: MetaProperty -> Identifier -> MetaProperty
-        [<Obsolete("Use `factory.createTemplateSpan` or the factory supplied by your transformation context instead.")>]
-        abstract createTemplateSpan: Expression -> U2<TemplateMiddle, TemplateTail> -> TemplateSpan
-        [<Obsolete("Use `factory.updateTemplateSpan` or the factory supplied by your transformation context instead.")>]
-        abstract updateTemplateSpan: TemplateSpan -> Expression -> U2<TemplateMiddle, TemplateTail> -> TemplateSpan
-        [<Obsolete("Use `factory.createSemicolonClassElement` or the factory supplied by your transformation context instead.")>]
-        abstract createSemicolonClassElement: unit -> SemicolonClassElement
-        [<Obsolete("Use `factory.createBlock` or the factory supplied by your transformation context instead.")>]
-        abstract createBlock: Statement[] -> (bool) option -> Block
-        [<Obsolete("Use `factory.updateBlock` or the factory supplied by your transformation context instead.")>]
-        abstract updateBlock: Block -> Statement[] -> Block
-        [<Obsolete("Use `factory.createVariableStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createVariableStatement: Modifier[] option -> U2<VariableDeclarationList, VariableDeclaration[]> -> VariableStatement
-        [<Obsolete("Use `factory.updateVariableStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateVariableStatement: VariableStatement -> Modifier[] option -> VariableDeclarationList -> VariableStatement
-        [<Obsolete("Use `factory.createEmptyStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createEmptyStatement: unit -> EmptyStatement
-        [<Obsolete("Use `factory.createExpressionStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createExpressionStatement: Expression -> ExpressionStatement
-        [<Obsolete("Use `factory.updateExpressionStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateExpressionStatement: ExpressionStatement -> Expression -> ExpressionStatement
-        [<Obsolete("Use `factory.createExpressionStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createStatement: Expression -> ExpressionStatement
-        [<Obsolete("Use `factory.updateExpressionStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateStatement: ExpressionStatement -> Expression -> ExpressionStatement
-        [<Obsolete("Use `factory.createIfStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createIf: Expression -> Statement -> (Statement) option -> IfStatement
-        [<Obsolete("Use `factory.updateIfStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateIf: IfStatement -> Expression -> Statement -> Statement option -> IfStatement
-        [<Obsolete("Use `factory.createDoStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createDo: Statement -> Expression -> DoStatement
-        [<Obsolete("Use `factory.updateDoStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateDo: DoStatement -> Statement -> Expression -> DoStatement
-        [<Obsolete("Use `factory.createWhileStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createWhile: Expression -> Statement -> WhileStatement
-        [<Obsolete("Use `factory.updateWhileStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateWhile: WhileStatement -> Expression -> Statement -> WhileStatement
-        [<Obsolete("Use `factory.createForStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createFor: ForInitializer option -> Expression option -> Expression option -> Statement -> ForStatement
-        [<Obsolete("Use `factory.updateForStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateFor: ForStatement -> ForInitializer option -> Expression option -> Expression option -> Statement -> ForStatement
-        [<Obsolete("Use `factory.createForInStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createForIn: ForInitializer -> Expression -> Statement -> ForInStatement
-        [<Obsolete("Use `factory.updateForInStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateForIn: ForInStatement -> ForInitializer -> Expression -> Statement -> ForInStatement
-        [<Obsolete("Use `factory.createForOfStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createForOf: AwaitKeyword option -> ForInitializer -> Expression -> Statement -> ForOfStatement
-        [<Obsolete("Use `factory.updateForOfStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateForOf: ForOfStatement -> AwaitKeyword option -> ForInitializer -> Expression -> Statement -> ForOfStatement
-        [<Obsolete("Use `factory.createContinueStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createContinue: (U2<string, Identifier>) option -> ContinueStatement
-        [<Obsolete("Use `factory.updateContinueStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateContinue: ContinueStatement -> Identifier option -> ContinueStatement
-        [<Obsolete("Use `factory.createBreakStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createBreak: (U2<string, Identifier>) option -> BreakStatement
-        [<Obsolete("Use `factory.updateBreakStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateBreak: BreakStatement -> Identifier option -> BreakStatement
-        [<Obsolete("Use `factory.createReturnStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createReturn: (Expression) option -> ReturnStatement
-        [<Obsolete("Use `factory.updateReturnStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateReturn: ReturnStatement -> Expression option -> ReturnStatement
-        [<Obsolete("Use `factory.createWithStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createWith: Expression -> Statement -> WithStatement
-        [<Obsolete("Use `factory.updateWithStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateWith: WithStatement -> Expression -> Statement -> WithStatement
-        [<Obsolete("Use `factory.createSwitchStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createSwitch: Expression -> CaseBlock -> SwitchStatement
-        [<Obsolete("Use `factory.updateSwitchStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateSwitch: SwitchStatement -> Expression -> CaseBlock -> SwitchStatement
-        [<Obsolete("Use `factory.createLabelStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createLabel: U2<string, Identifier> -> Statement -> LabeledStatement
-        [<Obsolete("Use `factory.updateLabelStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateLabel: LabeledStatement -> Identifier -> Statement -> LabeledStatement
-        [<Obsolete("Use `factory.createThrowStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createThrow: Expression -> ThrowStatement
-        [<Obsolete("Use `factory.updateThrowStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateThrow: ThrowStatement -> Expression -> ThrowStatement
-        [<Obsolete("Use `factory.createTryStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createTry: Block -> CatchClause option -> Block option -> TryStatement
-        [<Obsolete("Use `factory.updateTryStatement` or the factory supplied by your transformation context instead.")>]
-        abstract updateTry: TryStatement -> Block -> CatchClause option -> Block option -> TryStatement
-        [<Obsolete("Use `factory.createDebuggerStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createDebuggerStatement: unit -> DebuggerStatement
-        [<Obsolete("Use `factory.createVariableDeclarationList` or the factory supplied by your transformation context instead.")>]
-        abstract createVariableDeclarationList: VariableDeclaration[] -> (NodeFlags) option -> VariableDeclarationList
-        [<Obsolete("Use `factory.updateVariableDeclarationList` or the factory supplied by your transformation context instead.")>]
-        abstract updateVariableDeclarationList: VariableDeclarationList -> VariableDeclaration[] -> VariableDeclarationList
-        [<Obsolete("Use `factory.createFunctionDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createFunctionDeclaration: Decorator[] option -> Modifier[] option -> AsteriskToken option -> U2<string, Identifier> option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> Block option -> FunctionDeclaration
-        [<Obsolete("Use `factory.updateFunctionDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateFunctionDeclaration: FunctionDeclaration -> Decorator[] option -> Modifier[] option -> AsteriskToken option -> Identifier option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> Block option -> FunctionDeclaration
-        [<Obsolete("Use `factory.createClassDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createClassDeclaration: Decorator[] option -> Modifier[] option -> U2<string, Identifier> option -> TypeParameterDeclaration[] option -> HeritageClause[] option -> ClassElement[] -> ClassDeclaration
-        [<Obsolete("Use `factory.updateClassDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateClassDeclaration: ClassDeclaration -> Decorator[] option -> Modifier[] option -> Identifier option -> TypeParameterDeclaration[] option -> HeritageClause[] option -> ClassElement[] -> ClassDeclaration
-        [<Obsolete("Use `factory.createInterfaceDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createInterfaceDeclaration: Decorator[] option -> Modifier[] option -> U2<string, Identifier> -> TypeParameterDeclaration[] option -> HeritageClause[] option -> TypeElement[] -> InterfaceDeclaration
-        [<Obsolete("Use `factory.updateInterfaceDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateInterfaceDeclaration: InterfaceDeclaration -> Decorator[] option -> Modifier[] option -> Identifier -> TypeParameterDeclaration[] option -> HeritageClause[] option -> TypeElement[] -> InterfaceDeclaration
-        [<Obsolete("Use `factory.createTypeAliasDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createTypeAliasDeclaration: Decorator[] option -> Modifier[] option -> U2<string, Identifier> -> TypeParameterDeclaration[] option -> TypeNode -> TypeAliasDeclaration
-        [<Obsolete("Use `factory.updateTypeAliasDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypeAliasDeclaration: TypeAliasDeclaration -> Decorator[] option -> Modifier[] option -> Identifier -> TypeParameterDeclaration[] option -> TypeNode -> TypeAliasDeclaration
-        [<Obsolete("Use `factory.createEnumDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createEnumDeclaration: Decorator[] option -> Modifier[] option -> U2<string, Identifier> -> EnumMember[] -> EnumDeclaration
-        [<Obsolete("Use `factory.updateEnumDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateEnumDeclaration: EnumDeclaration -> Decorator[] option -> Modifier[] option -> Identifier -> EnumMember[] -> EnumDeclaration
-        [<Obsolete("Use `factory.createModuleDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createModuleDeclaration: Decorator[] option -> Modifier[] option -> ModuleName -> ModuleBody option -> (NodeFlags) option -> ModuleDeclaration
-        [<Obsolete("Use `factory.updateModuleDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateModuleDeclaration: ModuleDeclaration -> Decorator[] option -> Modifier[] option -> ModuleName -> ModuleBody option -> ModuleDeclaration
-        [<Obsolete("Use `factory.createModuleBlock` or the factory supplied by your transformation context instead.")>]
-        abstract createModuleBlock: Statement[] -> ModuleBlock
-        [<Obsolete("Use `factory.updateModuleBlock` or the factory supplied by your transformation context instead.")>]
-        abstract updateModuleBlock: ModuleBlock -> Statement[] -> ModuleBlock
-        [<Obsolete("Use `factory.createCaseBlock` or the factory supplied by your transformation context instead.")>]
-        abstract createCaseBlock: CaseOrDefaultClause[] -> CaseBlock
-        [<Obsolete("Use `factory.updateCaseBlock` or the factory supplied by your transformation context instead.")>]
-        abstract updateCaseBlock: CaseBlock -> CaseOrDefaultClause[] -> CaseBlock
-        [<Obsolete("Use `factory.createNamespaceExportDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createNamespaceExportDeclaration: U2<string, Identifier> -> NamespaceExportDeclaration
-        [<Obsolete("Use `factory.updateNamespaceExportDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateNamespaceExportDeclaration: NamespaceExportDeclaration -> Identifier -> NamespaceExportDeclaration
-        [<Obsolete("Use `factory.createImportEqualsDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createImportEqualsDeclaration: Decorator[] option -> Modifier[] option -> bool -> U2<string, Identifier> -> ModuleReference -> ImportEqualsDeclaration
-        [<Obsolete("Use `factory.updateImportEqualsDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateImportEqualsDeclaration: ImportEqualsDeclaration -> Decorator[] option -> Modifier[] option -> bool -> Identifier -> ModuleReference -> ImportEqualsDeclaration
-        [<Obsolete("Use `factory.createImportDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createImportDeclaration: Decorator[] option -> Modifier[] option -> ImportClause option -> Expression -> (AssertClause) option -> ImportDeclaration
-        [<Obsolete("Use `factory.updateImportDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateImportDeclaration: ImportDeclaration -> Decorator[] option -> Modifier[] option -> ImportClause option -> Expression -> AssertClause option -> ImportDeclaration
-        [<Obsolete("Use `factory.createNamespaceImport` or the factory supplied by your transformation context instead.")>]
-        abstract createNamespaceImport: Identifier -> NamespaceImport
-        [<Obsolete("Use `factory.updateNamespaceImport` or the factory supplied by your transformation context instead.")>]
-        abstract updateNamespaceImport: NamespaceImport -> Identifier -> NamespaceImport
-        [<Obsolete("Use `factory.createNamedImports` or the factory supplied by your transformation context instead.")>]
-        abstract createNamedImports: ImportSpecifier[] -> NamedImports
-        [<Obsolete("Use `factory.updateNamedImports` or the factory supplied by your transformation context instead.")>]
-        abstract updateNamedImports: NamedImports -> ImportSpecifier[] -> NamedImports
-        [<Obsolete("Use `factory.createImportSpecifier` or the factory supplied by your transformation context instead.")>]
-        abstract createImportSpecifier: bool -> Identifier option -> Identifier -> ImportSpecifier
-        [<Obsolete("Use `factory.updateImportSpecifier` or the factory supplied by your transformation context instead.")>]
-        abstract updateImportSpecifier: ImportSpecifier -> bool -> Identifier option -> Identifier -> ImportSpecifier
-        [<Obsolete("Use `factory.createExportAssignment` or the factory supplied by your transformation context instead.")>]
-        abstract createExportAssignment: Decorator[] option -> Modifier[] option -> bool option -> Expression -> ExportAssignment
-        [<Obsolete("Use `factory.updateExportAssignment` or the factory supplied by your transformation context instead.")>]
-        abstract updateExportAssignment: ExportAssignment -> Decorator[] option -> Modifier[] option -> Expression -> ExportAssignment
-        [<Obsolete("Use `factory.createNamedExports` or the factory supplied by your transformation context instead.")>]
-        abstract createNamedExports: ExportSpecifier[] -> NamedExports
-        [<Obsolete("Use `factory.updateNamedExports` or the factory supplied by your transformation context instead.")>]
-        abstract updateNamedExports: NamedExports -> ExportSpecifier[] -> NamedExports
-        [<Obsolete("Use `factory.createExportSpecifier` or the factory supplied by your transformation context instead.")>]
-        abstract createExportSpecifier: bool -> U2<string, Identifier> option -> U2<string, Identifier> -> ExportSpecifier
-        [<Obsolete("Use `factory.updateExportSpecifier` or the factory supplied by your transformation context instead.")>]
-        abstract updateExportSpecifier: ExportSpecifier -> bool -> Identifier option -> Identifier -> ExportSpecifier
-        [<Obsolete("Use `factory.createExternalModuleReference` or the factory supplied by your transformation context instead.")>]
-        abstract createExternalModuleReference: Expression -> ExternalModuleReference
-        [<Obsolete("Use `factory.updateExternalModuleReference` or the factory supplied by your transformation context instead.")>]
-        abstract updateExternalModuleReference: ExternalModuleReference -> Expression -> ExternalModuleReference
-        [<Obsolete("Use `factory.createJSDocTypeExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocTypeExpression: TypeNode -> JSDocTypeExpression
-        [<Obsolete("Use `factory.createJSDocTypeTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocTypeTag: Identifier option -> JSDocTypeExpression -> (U2<string, JSDocComment[]>) option -> JSDocTypeTag
-        [<Obsolete("Use `factory.createJSDocReturnTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocReturnTag: Identifier option -> (JSDocTypeExpression) option -> (U2<string, JSDocComment[]>) option -> JSDocReturnTag
-        [<Obsolete("Use `factory.createJSDocThisTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocThisTag: Identifier option -> JSDocTypeExpression -> (U2<string, JSDocComment[]>) option -> JSDocThisTag
-        [<Obsolete("Use `factory.createJSDocComment` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocComment: (U2<string, JSDocComment[]>) option -> (JSDocTag[]) option -> JSDoc
-        [<Obsolete("Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocParameterTag: Identifier option -> EntityName -> bool -> (JSDocTypeExpression) option -> (bool) option -> (U2<string, JSDocComment[]>) option -> JSDocParameterTag
-        [<Obsolete("Use `factory.createJSDocClassTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocClassTag: Identifier option -> (U2<string, JSDocComment[]>) option -> JSDocClassTag
-        [<Obsolete("Use `factory.createJSDocAugmentsTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocAugmentsTag: Identifier option -> obj -> (U2<string, JSDocComment[]>) option -> JSDocAugmentsTag
-        [<Obsolete("Use `factory.createJSDocEnumTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocEnumTag: Identifier option -> JSDocTypeExpression -> (U2<string, JSDocComment[]>) option -> JSDocEnumTag
-        [<Obsolete("Use `factory.createJSDocTemplateTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocTemplateTag: Identifier option -> JSDocTypeExpression option -> TypeParameterDeclaration[] -> (U2<string, JSDocComment[]>) option -> JSDocTemplateTag
-        [<Obsolete("Use `factory.createJSDocTypedefTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocTypedefTag: Identifier option -> (U2<JSDocTypeLiteral, JSDocTypeExpression>) option -> (U2<Identifier, JSDocNamespaceDeclaration>) option -> (U2<string, JSDocComment[]>) option -> JSDocTypedefTag
-        [<Obsolete("Use `factory.createJSDocCallbackTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocCallbackTag: Identifier option -> JSDocSignature -> (U2<Identifier, JSDocNamespaceDeclaration>) option -> (U2<string, JSDocComment[]>) option -> JSDocCallbackTag
-        [<Obsolete("Use `factory.createJSDocSignature` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocSignature: JSDocTemplateTag[] option -> JSDocParameterTag[] -> (JSDocReturnTag) option -> JSDocSignature
-        [<Obsolete("Use `factory.createJSDocPropertyTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocPropertyTag: Identifier option -> EntityName -> bool -> (JSDocTypeExpression) option -> (bool) option -> (U2<string, JSDocComment[]>) option -> JSDocPropertyTag
-        [<Obsolete("Use `factory.createJSDocTypeLiteral` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocTypeLiteral: (JSDocPropertyLikeTag[]) option -> (bool) option -> JSDocTypeLiteral
-        [<Obsolete("Use `factory.createJSDocImplementsTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocImplementsTag: Identifier option -> obj -> (U2<string, JSDocComment[]>) option -> JSDocImplementsTag
-        [<Obsolete("Use `factory.createJSDocAuthorTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocAuthorTag: Identifier option -> (U2<string, JSDocComment[]>) option -> JSDocAuthorTag
-        [<Obsolete("Use `factory.createJSDocPublicTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocPublicTag: Identifier option -> (U2<string, JSDocComment[]>) option -> JSDocPublicTag
-        [<Obsolete("Use `factory.createJSDocPrivateTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocPrivateTag: Identifier option -> (U2<string, JSDocComment[]>) option -> JSDocPrivateTag
-        [<Obsolete("Use `factory.createJSDocProtectedTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocProtectedTag: Identifier option -> (U2<string, JSDocComment[]>) option -> JSDocProtectedTag
-        [<Obsolete("Use `factory.createJSDocReadonlyTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocReadonlyTag: Identifier option -> (U2<string, JSDocComment[]>) option -> JSDocReadonlyTag
-        [<Obsolete("Use `factory.createJSDocUnknownTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocTag: Identifier -> (U2<string, JSDocComment[]>) option -> JSDocUnknownTag
-        [<Obsolete("Use `factory.createJsxElement` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxElement: JsxOpeningElement -> JsxChild[] -> JsxClosingElement -> JsxElement
-        [<Obsolete("Use `factory.updateJsxElement` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxElement: JsxElement -> JsxOpeningElement -> JsxChild[] -> JsxClosingElement -> JsxElement
-        [<Obsolete("Use `factory.createJsxSelfClosingElement` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxSelfClosingElement: JsxTagNameExpression -> TypeNode[] option -> JsxAttributes -> JsxSelfClosingElement
-        [<Obsolete("Use `factory.updateJsxSelfClosingElement` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxSelfClosingElement: JsxSelfClosingElement -> JsxTagNameExpression -> TypeNode[] option -> JsxAttributes -> JsxSelfClosingElement
-        [<Obsolete("Use `factory.createJsxOpeningElement` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxOpeningElement: JsxTagNameExpression -> TypeNode[] option -> JsxAttributes -> JsxOpeningElement
-        [<Obsolete("Use `factory.updateJsxOpeningElement` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxOpeningElement: JsxOpeningElement -> JsxTagNameExpression -> TypeNode[] option -> JsxAttributes -> JsxOpeningElement
-        [<Obsolete("Use `factory.createJsxClosingElement` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxClosingElement: JsxTagNameExpression -> JsxClosingElement
-        [<Obsolete("Use `factory.updateJsxClosingElement` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxClosingElement: JsxClosingElement -> JsxTagNameExpression -> JsxClosingElement
-        [<Obsolete("Use `factory.createJsxFragment` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxFragment: JsxOpeningFragment -> JsxChild[] -> JsxClosingFragment -> JsxFragment
-        [<Obsolete("Use `factory.createJsxText` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxText: string -> (bool) option -> JsxText
-        [<Obsolete("Use `factory.updateJsxText` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxText: JsxText -> string -> (bool) option -> JsxText
-        [<Obsolete("Use `factory.createJsxOpeningFragment` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxOpeningFragment: unit -> JsxOpeningFragment
-        [<Obsolete("Use `factory.createJsxJsxClosingFragment` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxJsxClosingFragment: unit -> JsxClosingFragment
-        [<Obsolete("Use `factory.updateJsxFragment` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxFragment: JsxFragment -> JsxOpeningFragment -> JsxChild[] -> JsxClosingFragment -> JsxFragment
-        [<Obsolete("Use `factory.createJsxAttribute` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxAttribute: Identifier -> U2<StringLiteral, JsxExpression> option -> JsxAttribute
-        [<Obsolete("Use `factory.updateJsxAttribute` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxAttribute: JsxAttribute -> Identifier -> U2<StringLiteral, JsxExpression> option -> JsxAttribute
-        [<Obsolete("Use `factory.createJsxAttributes` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxAttributes: JsxAttributeLike[] -> JsxAttributes
-        [<Obsolete("Use `factory.updateJsxAttributes` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxAttributes: JsxAttributes -> JsxAttributeLike[] -> JsxAttributes
-        [<Obsolete("Use `factory.createJsxSpreadAttribute` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxSpreadAttribute: Expression -> JsxSpreadAttribute
-        [<Obsolete("Use `factory.updateJsxSpreadAttribute` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxSpreadAttribute: JsxSpreadAttribute -> Expression -> JsxSpreadAttribute
-        [<Obsolete("Use `factory.createJsxExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createJsxExpression: DotDotDotToken option -> Expression option -> JsxExpression
-        [<Obsolete("Use `factory.updateJsxExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateJsxExpression: JsxExpression -> Expression option -> JsxExpression
-        [<Obsolete("Use `factory.createCaseClause` or the factory supplied by your transformation context instead.")>]
-        abstract createCaseClause: Expression -> Statement[] -> CaseClause
-        [<Obsolete("Use `factory.updateCaseClause` or the factory supplied by your transformation context instead.")>]
-        abstract updateCaseClause: CaseClause -> Expression -> Statement[] -> CaseClause
-        [<Obsolete("Use `factory.createDefaultClause` or the factory supplied by your transformation context instead.")>]
-        abstract createDefaultClause: Statement[] -> DefaultClause
-        [<Obsolete("Use `factory.updateDefaultClause` or the factory supplied by your transformation context instead.")>]
-        abstract updateDefaultClause: DefaultClause -> Statement[] -> DefaultClause
-        [<Obsolete("Use `factory.createHeritageClause` or the factory supplied by your transformation context instead.")>]
-        abstract createHeritageClause: SyntaxKind -> ExpressionWithTypeArguments[] -> HeritageClause
-        [<Obsolete("Use `factory.updateHeritageClause` or the factory supplied by your transformation context instead.")>]
-        abstract updateHeritageClause: HeritageClause -> ExpressionWithTypeArguments[] -> HeritageClause
-        [<Obsolete("Use `factory.createCatchClause` or the factory supplied by your transformation context instead.")>]
-        abstract createCatchClause: U3<string, VariableDeclaration, BindingName> option -> Block -> CatchClause
-        [<Obsolete("Use `factory.updateCatchClause` or the factory supplied by your transformation context instead.")>]
-        abstract updateCatchClause: CatchClause -> VariableDeclaration option -> Block -> CatchClause
-        [<Obsolete("Use `factory.createPropertyAssignment` or the factory supplied by your transformation context instead.")>]
-        abstract createPropertyAssignment: U2<string, PropertyName> -> Expression -> PropertyAssignment
-        [<Obsolete("Use `factory.updatePropertyAssignment` or the factory supplied by your transformation context instead.")>]
-        abstract updatePropertyAssignment: PropertyAssignment -> PropertyName -> Expression -> PropertyAssignment
-        [<Obsolete("Use `factory.createShorthandPropertyAssignment` or the factory supplied by your transformation context instead.")>]
-        abstract createShorthandPropertyAssignment: U2<string, Identifier> -> (Expression) option -> ShorthandPropertyAssignment
-        [<Obsolete("Use `factory.updateShorthandPropertyAssignment` or the factory supplied by your transformation context instead.")>]
-        abstract updateShorthandPropertyAssignment: ShorthandPropertyAssignment -> Identifier -> Expression option -> ShorthandPropertyAssignment
-        [<Obsolete("Use `factory.createSpreadAssignment` or the factory supplied by your transformation context instead.")>]
-        abstract createSpreadAssignment: Expression -> SpreadAssignment
-        [<Obsolete("Use `factory.updateSpreadAssignment` or the factory supplied by your transformation context instead.")>]
-        abstract updateSpreadAssignment: SpreadAssignment -> Expression -> SpreadAssignment
-        [<Obsolete("Use `factory.createEnumMember` or the factory supplied by your transformation context instead.")>]
-        abstract createEnumMember: U2<string, PropertyName> -> (Expression) option -> EnumMember
-        [<Obsolete("Use `factory.updateEnumMember` or the factory supplied by your transformation context instead.")>]
-        abstract updateEnumMember: EnumMember -> PropertyName -> Expression option -> EnumMember
-        [<Obsolete("Use `factory.updateSourceFile` or the factory supplied by your transformation context instead.")>]
-        abstract updateSourceFileNode: SourceFile -> Statement[] -> (bool) option -> (FileReference[]) option -> (FileReference[]) option -> (bool) option -> (FileReference[]) option -> SourceFile
-        [<Obsolete("Use `factory.createNotEmittedStatement` or the factory supplied by your transformation context instead.")>]
-        abstract createNotEmittedStatement: Node -> NotEmittedStatement
-        [<Obsolete("Use `factory.createPartiallyEmittedExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createPartiallyEmittedExpression: Expression -> (Node) option -> PartiallyEmittedExpression
-        [<Obsolete("Use `factory.updatePartiallyEmittedExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updatePartiallyEmittedExpression: PartiallyEmittedExpression -> Expression -> PartiallyEmittedExpression
-        [<Obsolete("Use `factory.createCommaListExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createCommaList: Expression[] -> CommaListExpression
-        [<Obsolete("Use `factory.updateCommaListExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateCommaList: CommaListExpression -> Expression[] -> CommaListExpression
-        [<Obsolete("Use `factory.createBundle` or the factory supplied by your transformation context instead.")>]
-        abstract createBundle: SourceFile[] -> (U2<UnparsedSource, InputFiles>[]) option -> Bundle
-        [<Obsolete("Use `factory.updateBundle` or the factory supplied by your transformation context instead.")>]
-        abstract updateBundle: Bundle -> SourceFile[] -> (U2<UnparsedSource, InputFiles>[]) option -> Bundle
-        [<Obsolete("Use `factory.createImmediatelyInvokedFunctionExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createImmediatelyInvokedFunctionExpression: {| Invoke: Statement[] -> CallExpression; Invoke: Statement[] -> ParameterDeclaration -> Expression -> CallExpression |}
-        [<Obsolete("Use `factory.createImmediatelyInvokedArrowFunction` or the factory supplied by your transformation context instead.")>]
-        abstract createImmediatelyInvokedArrowFunction: {| Invoke: Statement[] -> CallExpression; Invoke: Statement[] -> ParameterDeclaration -> Expression -> CallExpression |}
-        [<Obsolete("Use `factory.createVoidZero` or the factory supplied by your transformation context instead.")>]
-        abstract createVoidZero: unit -> VoidExpression
-        [<Obsolete("Use `factory.createExportDefault` or the factory supplied by your transformation context instead.")>]
-        abstract createExportDefault: Expression -> ExportAssignment
-        [<Obsolete("Use `factory.createExternalModuleExport` or the factory supplied by your transformation context instead.")>]
-        abstract createExternalModuleExport: Identifier -> ExportDeclaration
-        [<Obsolete("Use `factory.createNamespaceExport` or the factory supplied by your transformation context instead.")>]
-        abstract createNamespaceExport: Identifier -> NamespaceExport
-        [<Obsolete("Use `factory.updateNamespaceExport` or the factory supplied by your transformation context instead.")>]
-        abstract updateNamespaceExport: NamespaceExport -> Identifier -> NamespaceExport
-        [<Obsolete("Use `factory.createToken` or the factory supplied by your transformation context instead.")>]
-        abstract createToken: 'TKind -> Token<'TKind>
-        [<Obsolete("Use `factory.createIdentifier` or the factory supplied by your transformation context instead.")>]
-        abstract createIdentifier: string -> Identifier
-        [<Obsolete("Use `factory.createTempVariable` or the factory supplied by your transformation context instead.")>]
-        abstract createTempVariable: (Identifier -> unit) option -> Identifier
-        [<Obsolete("Use `factory.getGeneratedNameForNode` or the factory supplied by your transformation context instead.")>]
-        abstract getGeneratedNameForNode: Node option -> Identifier
-        [<Obsolete("Use `factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic)` or the factory supplied by your transformation context instead.")>]
-        abstract createOptimisticUniqueName: string -> Identifier
-        [<Obsolete("Use `factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)` or the factory supplied by your transformation context instead.")>]
-        abstract createFileLevelUniqueName: string -> Identifier
-        [<Obsolete("Use `factory.createIndexSignature` or the factory supplied by your transformation context instead.")>]
-        abstract createIndexSignature: Decorator[] option -> Modifier[] option -> ParameterDeclaration[] -> TypeNode -> IndexSignatureDeclaration
-        [<Obsolete("Use `factory.createTypePredicateNode` or the factory supplied by your transformation context instead.")>]
-        abstract createTypePredicateNode: U3<Identifier, ThisTypeNode, string> -> TypeNode -> TypePredicateNode
-        [<Obsolete("Use `factory.updateTypePredicateNode` or the factory supplied by your transformation context instead.")>]
-        abstract updateTypePredicateNode: TypePredicateNode -> U2<Identifier, ThisTypeNode> -> TypeNode -> TypePredicateNode
-        [<Obsolete("Use `factory.createStringLiteral`, `factory.createStringLiteralFromNode`, `factory.createNumericLiteral`, `factory.createBigIntLiteral`, `factory.createTrue`, `factory.createFalse`, or the factory supplied by your transformation context instead.")>]
-        abstract createLiteral: {| Invoke: U5<string, StringLiteral, NoSubstitutionTemplateLiteral, NumericLiteral, Identifier> -> StringLiteral; Invoke: U2<float, PseudoBigInt> -> NumericLiteral; Invoke: bool -> BooleanLiteral; Invoke: U4<string, float, PseudoBigInt, bool> -> PrimaryExpression |}
-        [<Obsolete("Use `factory.createMethodSignature` or the factory supplied by your transformation context instead.")>]
-        abstract createMethodSignature: TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> U2<string, PropertyName> -> QuestionToken option -> MethodSignature
-        [<Obsolete("Use `factory.updateMethodSignature` or the factory supplied by your transformation context instead.")>]
-        abstract updateMethodSignature: MethodSignature -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> PropertyName -> QuestionToken option -> MethodSignature
-        [<Obsolete("Use `factory.createTypeOperatorNode` or the factory supplied by your transformation context instead.")>]
-        abstract createTypeOperatorNode: {| Invoke: TypeNode -> TypeOperatorNode; Invoke: SyntaxKind -> TypeNode -> TypeOperatorNode |}
-        [<Obsolete("Use `factory.createTaggedTemplate` or the factory supplied by your transformation context instead.")>]
-        abstract createTaggedTemplate: {| Invoke: Expression -> TemplateLiteral -> TaggedTemplateExpression; Invoke: Expression -> TypeNode[] option -> TemplateLiteral -> TaggedTemplateExpression |}
-        [<Obsolete("Use `factory.updateTaggedTemplate` or the factory supplied by your transformation context instead.")>]
-        abstract updateTaggedTemplate: {| Invoke: TaggedTemplateExpression -> Expression -> TemplateLiteral -> TaggedTemplateExpression; Invoke: TaggedTemplateExpression -> Expression -> TypeNode[] option -> TemplateLiteral -> TaggedTemplateExpression |}
-        [<Obsolete("Use `factory.updateBinary` or the factory supplied by your transformation context instead.")>]
-        abstract updateBinary: BinaryExpression -> Expression -> Expression -> (U2<BinaryOperator, BinaryOperatorToken>) option -> BinaryExpression
-        [<Obsolete("Use `factory.createConditional` or the factory supplied by your transformation context instead.")>]
-        abstract createConditional: {| Invoke: Expression -> Expression -> Expression -> ConditionalExpression; Invoke: Expression -> QuestionToken -> Expression -> ColonToken -> Expression -> ConditionalExpression |}
-        [<Obsolete("Use `factory.createYield` or the factory supplied by your transformation context instead.")>]
-        abstract createYield: {| Invoke: Expression option -> YieldExpression; Invoke: AsteriskToken option -> Expression -> YieldExpression |}
-        [<Obsolete("Use `factory.createClassExpression` or the factory supplied by your transformation context instead.")>]
-        abstract createClassExpression: Modifier[] option -> U2<string, Identifier> option -> TypeParameterDeclaration[] option -> HeritageClause[] option -> ClassElement[] -> ClassExpression
-        [<Obsolete("Use `factory.updateClassExpression` or the factory supplied by your transformation context instead.")>]
-        abstract updateClassExpression: ClassExpression -> Modifier[] option -> Identifier option -> TypeParameterDeclaration[] option -> HeritageClause[] option -> ClassElement[] -> ClassExpression
-        [<Obsolete("Use `factory.createPropertySignature` or the factory supplied by your transformation context instead.")>]
-        abstract createPropertySignature: Modifier[] option -> U2<PropertyName, string> -> QuestionToken option -> TypeNode option -> (Expression) option -> PropertySignature
-        [<Obsolete("Use `factory.updatePropertySignature` or the factory supplied by your transformation context instead.")>]
-        abstract updatePropertySignature: PropertySignature -> Modifier[] option -> PropertyName -> QuestionToken option -> TypeNode option -> Expression option -> PropertySignature
-        [<Obsolete("Use `factory.createExpressionWithTypeArguments` or the factory supplied by your transformation context instead.")>]
-        abstract createExpressionWithTypeArguments: TypeNode[] option -> Expression -> ExpressionWithTypeArguments
-        [<Obsolete("Use `factory.updateExpressionWithTypeArguments` or the factory supplied by your transformation context instead.")>]
-        abstract updateExpressionWithTypeArguments: ExpressionWithTypeArguments -> TypeNode[] option -> Expression -> ExpressionWithTypeArguments
-        [<Obsolete("Use `factory.createArrowFunction` or the factory supplied by your transformation context instead.")>]
-        abstract createArrowFunction: {| Invoke: Modifier[] option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> EqualsGreaterThanToken option -> ConciseBody -> ArrowFunction; Invoke: Modifier[] option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> ConciseBody -> ArrowFunction |}
-        [<Obsolete("Use `factory.updateArrowFunction` or the factory supplied by your transformation context instead.")>]
-        abstract updateArrowFunction: {| Invoke: ArrowFunction -> Modifier[] option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> EqualsGreaterThanToken -> ConciseBody -> ArrowFunction; Invoke: ArrowFunction -> Modifier[] option -> TypeParameterDeclaration[] option -> ParameterDeclaration[] -> TypeNode option -> ConciseBody -> ArrowFunction |}
-        [<Obsolete("Use `factory.createVariableDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createVariableDeclaration: {| Invoke: U2<string, BindingName> -> TypeNode option -> Expression option -> VariableDeclaration; Invoke: U2<string, BindingName> -> ExclamationToken option -> TypeNode option -> Expression option -> VariableDeclaration |}
-        [<Obsolete("Use `factory.updateVariableDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateVariableDeclaration: {| Invoke: VariableDeclaration -> BindingName -> TypeNode option -> Expression option -> VariableDeclaration; Invoke: VariableDeclaration -> BindingName -> ExclamationToken option -> TypeNode option -> Expression option -> VariableDeclaration |}
-        [<Obsolete("Use `factory.createImportClause` or the factory supplied by your transformation context instead.")>]
-        abstract createImportClause: Identifier option -> NamedImportBindings option -> (obj) option -> ImportClause
-        [<Obsolete("Use `factory.updateImportClause` or the factory supplied by your transformation context instead.")>]
-        abstract updateImportClause: ImportClause -> Identifier option -> NamedImportBindings option -> bool -> ImportClause
-        [<Obsolete("Use `factory.createExportDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract createExportDeclaration: Decorator[] option -> Modifier[] option -> NamedExportBindings option -> (Expression) option -> (obj) option -> ExportDeclaration
-        [<Obsolete("Use `factory.updateExportDeclaration` or the factory supplied by your transformation context instead.")>]
-        abstract updateExportDeclaration: ExportDeclaration -> Decorator[] option -> Modifier[] option -> NamedExportBindings option -> Expression option -> bool -> ExportDeclaration
-        [<Obsolete("Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead.")>]
-        abstract createJSDocParamTag: EntityName -> bool -> (JSDocTypeExpression) option -> (string) option -> JSDocParameterTag
-        [<Obsolete("Use `factory.createComma` or the factory supplied by your transformation context instead.")>]
-        abstract createComma: Expression -> Expression -> Expression
-        [<Obsolete("Use `factory.createLessThan` or the factory supplied by your transformation context instead.")>]
-        abstract createLessThan: Expression -> Expression -> Expression
-        [<Obsolete("Use `factory.createAssignment` or the factory supplied by your transformation context instead.")>]
-        abstract createAssignment: Expression -> Expression -> BinaryExpression
-        [<Obsolete("Use `factory.createStrictEquality` or the factory supplied by your transformation context instead.")>]
-        abstract createStrictEquality: Expression -> Expression -> BinaryExpression
-        [<Obsolete("Use `factory.createStrictInequality` or the factory supplied by your transformation context instead.")>]
-        abstract createStrictInequality: Expression -> Expression -> BinaryExpression
-        [<Obsolete("Use `factory.createAdd` or the factory supplied by your transformation context instead.")>]
-        abstract createAdd: Expression -> Expression -> BinaryExpression
-        [<Obsolete("Use `factory.createSubtract` or the factory supplied by your transformation context instead.")>]
-        abstract createSubtract: Expression -> Expression -> BinaryExpression
-        [<Obsolete("Use `factory.createLogicalAnd` or the factory supplied by your transformation context instead.")>]
-        abstract createLogicalAnd: Expression -> Expression -> BinaryExpression
-        [<Obsolete("Use `factory.createLogicalOr` or the factory supplied by your transformation context instead.")>]
-        abstract createLogicalOr: Expression -> Expression -> BinaryExpression
-        [<Obsolete("Use `factory.createPostfixIncrement` or the factory supplied by your transformation context instead.")>]
-        abstract createPostfixIncrement: Expression -> PostfixUnaryExpression
-        [<Obsolete("Use `factory.createLogicalNot` or the factory supplied by your transformation context instead.")>]
-        abstract createLogicalNot: Expression -> PrefixUnaryExpression
-        [<Obsolete("Use an appropriate `factory` method instead.")>]
-        abstract createNode: SyntaxKind -> (obj) option -> (obj) option -> Node
-        /// <summary>
-        /// Creates a shallow, memberwise clone of a node ~for mutation~ with its <c>pos</c>, <c>end</c>, and <c>parent</c> set.
-        ///
-        /// NOTE: It is unsafe to change any properties of a <c>Node</c> that relate to its AST children, as those changes won't be
-        /// captured with respect to transformations.
-        /// </summary>
-        [<Obsolete("Use an appropriate `factory.update...` method instead, use `setCommentRange` or `setSourceMapRange`, and avoid setting `parent`.")>]
-        abstract getMutableClone: 'T -> 'T when 'T :> Node
-        [<Obsolete("Use `isTypeAssertionExpression` instead.")>]
-        abstract isTypeAssertion: Node -> bool
-        [<Obsolete("Use `isMemberName` instead.")>]
-        abstract isIdentifierOrPrivateIdentifier: Node -> bool
 
     /// <summary>
     /// Type of objects whose values are all of the same type.
@@ -2178,37 +1502,37 @@ module Ts =
         inherit Token<'TKind>
 
     type DotToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type DotDotDotToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type QuestionToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type ExclamationToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type ColonToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type EqualsToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type AsteriskToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type EqualsGreaterThanToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type PlusToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type MinusToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type QuestionDotToken =
-        inherit PunctuationToken<SyntaxKind>
+        PunctuationToken<SyntaxKind>
 
     type [<AllowNullLiteral>] KeywordToken<'TKind> =
         inherit Token<'TKind>
@@ -2234,46 +1558,46 @@ module Ts =
         inherit KeywordToken<'TKind>
 
     type AbstractKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type AsyncKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type ConstKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type DeclareKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type DefaultKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type ExportKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type InKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type PrivateKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type ProtectedKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type PublicKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type ReadonlyKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type OutKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type OverrideKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     type StaticKeyword =
-        inherit ModifierToken<SyntaxKind>
+        ModifierToken<SyntaxKind>
 
     [<Obsolete("Use `ReadonlyKeyword` instead.")>]
     type ReadonlyToken =
@@ -2296,38 +1620,17 @@ module Ts =
         | [<CompiledValue(124)>] StaticKeyword of StaticKeyword
         [<Emit("$0.kind")>]
         member _.kind : SyntaxKind = jsNative
-        static member inline op_ErasedCast(x: AbstractKeyword) = AbstractKeyword x
-        static member inline op_ErasedCast(x: AsyncKeyword) = AsyncKeyword x
-        static member inline op_ErasedCast(x: ConstKeyword) = ConstKeyword x
-        static member inline op_ErasedCast(x: DeclareKeyword) = DeclareKeyword x
-        static member inline op_ErasedCast(x: DefaultKeyword) = DefaultKeyword x
-        static member inline op_ErasedCast(x: ExportKeyword) = ExportKeyword x
-        static member inline op_ErasedCast(x: InKeyword) = InKeyword x
-        static member inline op_ErasedCast(x: OutKeyword) = OutKeyword x
-        static member inline op_ErasedCast(x: OverrideKeyword) = OverrideKeyword x
-        static member inline op_ErasedCast(x: PrivateKeyword) = PrivateKeyword x
-        static member inline op_ErasedCast(x: ProtectedKeyword) = ProtectedKeyword x
-        static member inline op_ErasedCast(x: PublicKeyword) = PublicKeyword x
-        static member inline op_ErasedCast(x: ReadonlyKeyword) = ReadonlyKeyword x
-        static member inline op_ErasedCast(x: StaticKeyword) = StaticKeyword x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AccessibilityModifier =
         | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
         | [<CompiledValue(122)>] ProtectedKeyword of ProtectedKeyword
         | [<CompiledValue(123)>] PublicKeyword of PublicKeyword
-        static member inline op_ErasedCast(x: PrivateKeyword) = PrivateKeyword x
-        static member inline op_ErasedCast(x: ProtectedKeyword) = ProtectedKeyword x
-        static member inline op_ErasedCast(x: PublicKeyword) = PublicKeyword x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ParameterPropertyModifier =
         | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
         | [<CompiledValue(122)>] ProtectedKeyword of ProtectedKeyword
         | [<CompiledValue(123)>] PublicKeyword of PublicKeyword
         | [<CompiledValue(145)>] ReadonlyKeyword of ReadonlyKeyword
-        static member inline op_ErasedCast(x: PrivateKeyword) = PrivateKeyword x
-        static member inline op_ErasedCast(x: ProtectedKeyword) = ProtectedKeyword x
-        static member inline op_ErasedCast(x: PublicKeyword) = PublicKeyword x
-        static member inline op_ErasedCast(x: ReadonlyKeyword) = ReadonlyKeyword x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ClassMemberModifier =
         | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
@@ -2335,11 +1638,6 @@ module Ts =
         | [<CompiledValue(123)>] PublicKeyword of PublicKeyword
         | [<CompiledValue(145)>] ReadonlyKeyword of ReadonlyKeyword
         | [<CompiledValue(124)>] StaticKeyword of StaticKeyword
-        static member inline op_ErasedCast(x: PrivateKeyword) = PrivateKeyword x
-        static member inline op_ErasedCast(x: ProtectedKeyword) = ProtectedKeyword x
-        static member inline op_ErasedCast(x: PublicKeyword) = PublicKeyword x
-        static member inline op_ErasedCast(x: ReadonlyKeyword) = ReadonlyKeyword x
-        static member inline op_ErasedCast(x: StaticKeyword) = StaticKeyword x
 
     type ModifiersArray =
         Modifier[]
@@ -6720,7 +6018,7 @@ Use typeAcquisition.enable instead.")>]
         [<Emit("$0($1...)")>] abstract Invoke: nodes: 'T[] * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[]
         [<Emit("$0($1...)")>] abstract Invoke: nodes: 'T[] option * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[] option
 
-    type VisitResult<'T> =
+    type VisitResult<'T when 'T :> Node> =
         U2<'T, 'T[]> option
 
     type [<AllowNullLiteral>] Printer =
@@ -7751,8 +7049,8 @@ Use typeAcquisition.enable instead.")>]
         abstract skipDestructiveCodeActions: bool option with get, set
 
     type [<StringEnum>] [<RequireQualifiedAccess>] CompletionsTriggerCharacter =
-        | [<CompiledName(".")>] Dot
-        | [<CompiledName("\"")>] DoubleQuote
+        | [<CompiledName(".")>] Period
+        | [<CompiledName("\"")>] Backslash
         | [<CompiledName("'")>] SingleQuote
         | [<CompiledName("`")>] BackQuote
         | [<CompiledName("/")>] Slash

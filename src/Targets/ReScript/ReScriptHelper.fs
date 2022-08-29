@@ -296,6 +296,7 @@ module Type =
   let array = str "array"
   let readonlyArray = str "array"
   let option t = app (str "option") [t]
+  let id t = app (str "id") [t]
 
   // JS types
   // ES5

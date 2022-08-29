@@ -27,11 +27,12 @@ type untyped_object = Js.Types.obj_val
 type untyped_function = Js.Types.function_val
 type symbol = Js.Types.symbol
 type regexp = Js.Re.t
-type bigint
+type bigint = Js.Types.bigint_val
 type \"true" = private bool
 type \"false" = private bool
 type intrinsic<'a> = private 'a
 
+type id<'a> = 'a
 type null<+'a> = Js.null<'a>
 type null' = null<never>
 type undefined<+'a> = Js.undefined<'a>

@@ -17,11 +17,8 @@ let [<Literal>] stdlibEsSrc = "lib.es.d.ts"
 let [<Literal>] stdlibDomSrc = "lib.dom.d.ts"
 let [<Literal>] stdlibWebworkerSrc = "lib.webworker.d.ts"
 
-let impossible fmt =
-  Printf.ksprintf (fun msg -> failwith ("impossible_" + msg)) fmt
-
 let impossibleNone msgf (x: 'a option) =
-  match x with None -> failwith ("impossible_" + msgf ()) | Some x -> x
+  match x with None -> failwith ("impossible (not None): " + msgf ()) | Some x -> x
 
 type ScriptTarget = TypeScript.Ts.ScriptTarget
 
@@ -350,6 +347,7 @@ and emitFuncType (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Conte
   | _ when f.isVariadic -> variadicFallback ()
   | External.Root (_, _) -> Type.curriedArrow (args ()) (retTy flags)
   | External.Argument _ -> paren ("@uncurry " @+ Type.curriedArrow (args ()) (retTy flags))
+  | External.Return _ -> Type.curriedArrow (args ()) (retTy flags) |> Type.id
   | _ -> Type.curriedArrow (args ()) (retTy flags) |> paren
 
 and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (u: UnionType) : text =
@@ -532,8 +530,6 @@ and StructuredTextNode = {|
   comments: text list
   exports: ExportItem list
   openTypesModule: bool
-  /// Used to emit module signatures recursively.
-  typeReferences: Set<KnownType>
   anonymousInterfaces: Set<AnonymousInterface>
 |}
 
@@ -543,7 +539,7 @@ let inline conditional cond x = Conditional (x, cond)
 
 module StructuredTextNode =
   let empty : StructuredTextNode =
-    {| scope = Scope.Default; items = []; comments = []; exports = []; typeReferences = Set.empty; anonymousInterfaces = Set.empty; openTypesModule = true |}
+    {| scope = Scope.Default; items = []; comments = []; exports = []; anonymousInterfaces = Set.empty; openTypesModule = true |}
   let union (a: StructuredTextNode) (b: StructuredTextNode) : StructuredTextNode =
     let mergeScope s1 s2 =
       match s1, s2 with
@@ -554,7 +550,6 @@ module StructuredTextNode =
        comments = List.append a.comments b.comments
        exports = List.append a.exports b.exports
        openTypesModule = a.openTypesModule || b.openTypesModule
-       typeReferences = Set.union a.typeReferences b.typeReferences
        anonymousInterfaces = Set.union a.anonymousInterfaces b.anonymousInterfaces |}
 
 module StructuredText =
@@ -566,53 +561,6 @@ module StructuredText =
           indent (go v)
       ]
     go x
-
-  let rec getReferences (ctx: Context) (x: StructuredText) : WeakTrie<string> =
-    match ctx.state.referencesCache.TryGetValue(ctx.currentNamespace) with
-    | true, ts -> ts
-    | false, _ ->
-      let fn = ctx.currentNamespace
-      let trie =
-        x.value
-        |> Option.map (fun v ->
-          v.typeReferences
-          |> Set.fold (fun state -> function
-            | KnownType.Ident fn when fn.source = ctx.currentSourceFile -> state |> WeakTrie.add fn.name
-            | KnownType.AnonymousInterface (_, i) ->
-              state |> WeakTrie.add (i.namespace_ @ [anonymousInterfaceModuleName ctx i])
-            | _ -> state
-          ) WeakTrie.empty)
-        |> Option.defaultValue WeakTrie.empty
-      let trie =
-        x.children
-        |> Map.fold (fun state k child ->
-          WeakTrie.union state (getReferences (ctx |> Context.ofChildNamespace k) child)) trie
-        |> WeakTrie.remove fn
-      ctx.state.referencesCache.[fn] <- trie
-      trie
-
-  let getDependenciesOfChildren (ctx: Context) (x: StructuredText) : (string * string) list =
-    let parent = ctx.currentNamespace
-    x.children
-    |> Map.fold (fun state k child ->
-      let refs =
-        getReferences (ctx |> Context.ofChildNamespace k) child
-        |> WeakTrie.getSubTrie parent
-        |> Option.defaultValue WeakTrie.empty
-        |> WeakTrie.ofDepth 1
-        |> WeakTrie.toList
-        |> List.map (function
-          | [x] -> k, x
-          | xs -> impossible "StructuredText_getDependencyGraphOfChildren_refs(%s): %A" (ctx |> Context.getFullNameString [k]) xs)
-      refs :: state) []
-    |> List.rev
-    |> List.concat
-
-  let calculateSCCOfChildren (ctx: Context) (x: StructuredText) : string list list =
-    let g =
-      let deps = getDependenciesOfChildren ctx x
-      Graph.ofEdges deps
-    Graph.stronglyConnectedComponents g (x.children |> Map.toList |> List.map fst)
 
 let removeLabels (xs: Choice<FieldLike, Type> list) =
     xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
@@ -963,9 +911,6 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
     let dummy = c.MapName(fun _ -> ExportDefaultUnnamedClass)
     Statement.getKnownTypes ctx [Class dummy] |> Set.union additionalKnownTypes
 
-  let typeReferences =
-    c.implements |> List.map (getKnownTypes ctx) |> Set.unionMany
-
   let isAnonymous, isExportDefaultClass =
     match kind with
     | ClassKind.AnonymousInterface _ -> true, false
@@ -1177,7 +1122,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       yield! castFunctions
     ]
 
-    {| StructuredTextNode.empty with items = items; comments = comments; scope = scope; typeReferences = typeReferences |}
+    {| StructuredTextNode.empty with items = items; comments = comments; scope = scope |}
 
   let export =
     match kind with
@@ -1585,8 +1530,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | TypeAlias ta ->
       let ctx = ctx |> Context.ofChildNamespace ta.name
       let isRec =
-        ta.target
-        |> getKnownTypes ctx
+        knownTypes ()
         |> Set.contains (KnownType.Ident (ctx |> Context.getFullNameOfCurrentNamespace))
       let items =
         emitTypeAliasesImpl "t" emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target) (fun x ->
@@ -1594,8 +1538,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
           if x.isOverload then a |> conditional { onTypes = false; onIntf = true; onImpl = true } |> List.singleton
           else a |> List.singleton
         )
-      let typeReferences = getKnownTypes ctx ta.target
-      let node = {| StructuredTextNode.empty with items = items; typeReferences = typeReferences; comments = comments |}
+      let node = {| StructuredTextNode.empty with items = items; comments = comments |}
       current
       |> inTrie [ta.name] (set node)
       |> addExport ta.name Kind.OfTypeAlias "type"
@@ -1708,21 +1651,6 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
 
   stmts |> List.fold (folder rootCtx) Trie.empty
 
-module ModuleEmitter =
-  let signature (ctx: Context) (st: StructuredText) =
-    if Map.count st.children < 3 then
-      Statement.moduleSigRec
-    else
-      let scc = StructuredText.calculateSCCOfChildren ctx st
-      fun (modules: TextModule list) ->
-        let modules = modules |> List.fold (fun state x -> state |> Map.add x.origName x) Map.empty
-        scc
-        |> List.map (fun group ->
-          group |> List.choose (fun name -> modules |> Map.tryFind name) |> Statement.moduleSigRec)
-        |> List.concat
-
-  let structure (_: Context) (_: StructuredText) = Statement.moduleValMany
-
 type EmitModuleFlags = {|
   /// The module being emitted is a reserved one (e.g. `Export`)
   isReservedModule: bool
@@ -1830,7 +1758,7 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
       children
       |> List.filter (fun (_, _, c) -> c.types |> List.isEmpty |> not)
       |> List.map (fun (k, _, c) -> {| k with content = c.imports @ c.types; comments = [] |})
-      |> ModuleEmitter.signature ctx st
+      |> Statement.moduleSigRec
     children @ items
 
   let exports =
@@ -1874,7 +1802,7 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
           else
             c.imports @ c.impl
         {| k with content = content; comments = c.comments |})
-      |> ModuleEmitter.structure ctx st
+      |> Statement.moduleValMany
     let typeDefs =
       items |> List.choose (function
         | c, Choice2Of5 t when c.onImpl -> Some t
@@ -2036,6 +1964,49 @@ let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
     createOutput "Ts__dom" ["Ts__min"; "Ts__es"] (writerCtx domSrc domCtx) domSrc
     createOutput "Ts__webworker" ["Ts__min"; "Ts__es"] (writerCtx webworkerSrc webworkerCtx) webworkerSrc ]
 
+let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
+  let refs =
+    src.references
+    |> List.choose (function TypeReference r -> Some r | _ -> None)
+  if List.isEmpty refs then []
+  else
+    let comments =
+      refs
+      |> List.map (sprintf "<reference types=\"%s\">")
+      |> List.map commentStr
+    let openRefs =
+      refs
+      |> List.map Naming.jsModuleNameToReScriptModuleName
+      |> List.map Statement.open_
+    empty :: comments @ openRefs
+
+let emitReferenceFileDirectives (ctx: Context) (src: SourceFile) : text list =
+  let refs =
+    src.references
+    |> List.choose (function FileReference r -> Some r | _ -> None)
+  if List.isEmpty refs then []
+  else
+    // if the referenced file is included in the input files, skip emitting it
+    let validRefs =
+      refs
+      |> List.choose (fun ref ->
+        let relativePath = Path.join [Path.dirname src.fileName; ref]
+        if ctx.state.fileNames |> List.contains relativePath |> not then
+          Some {| path = ref; relativePath = relativePath |}
+        else None)
+    let comments =
+      refs
+      |> List.map (sprintf "<reference path=\"%s\">")
+      |> List.map commentStr
+    let openRefs =
+      validRefs
+      |> List.choose (fun x ->
+        JsHelper.deriveModuleName (Result.toOption ctx.state.info) [x.relativePath]
+        |> JsHelper.InferenceResult.tryUnwrap
+        |> Option.map Naming.jsModuleNameToReScriptModuleName)
+      |> List.map Statement.open_
+    empty :: comments @ openRefs
+
 let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx: IContext<Options>) =
   let moduleName =
     match ctx.options.name with
@@ -2097,6 +2068,9 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
   let opens = [
     yield Statement.open_ "Ts"
     yield Statement.open_ "Ts.Dom"
+    for src in sources do
+      yield! emitReferenceTypeDirectives ctx src
+      yield! emitReferenceFileDirectives ctx src
   ]
 
   let res =

@@ -149,7 +149,7 @@ module Test =
     let testDir = testDir </> "res"
     let outputDir = outputDir </> "test_res"
     let srcDir = testDir </> "src"
-    let srcGeneratedDir = testDir </> "src" </> "generated"
+    let srcGeneratedDir = srcDir </> "generated"
 
     let clean () =
       !! $"{outputDir}/*"

@@ -4,3 +4,4 @@
 .bsb.lock
 .merlin
 /src/generated
+*.bs.js

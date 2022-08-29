@@ -2,13 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main,v2]
   pull_request:
-    branches: [main]
+    branches: [main,v2]
   workflow_dispatch:
 
 jobs:
-  build:
+  build-jsoo:
     strategy:
       fail-fast: false
       matrix:
@@ -56,12 +56,49 @@ jobs:
         run: opam install . --deps-only
 
       - name: Build and test the project
-        run: bash fake test
+        run: bash fake TestJsoo
+
+  build-res:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        dotnet:
+          - 5.0.x
+        node-version:
+          - 16.x
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use .NET ${{ matrix.dotnet }}
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: yarn
+
+      - name: Install .NET Dependencies
+        run: |
+          dotnet restore
+          dotnet tool restore
+
+      - name: Run FAKE
+        run: bash fake TestRes
 
   auto-merge:
     name: Auto-Merge PRs by Dependabot
     needs:
-      - build
+      - build-jsoo
+      - build-res
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write

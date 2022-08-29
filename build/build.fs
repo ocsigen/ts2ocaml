@@ -27,8 +27,9 @@ let run cmd dir args =
     failwithf "Error while running '%s' with args: %s " cmd args
 
 let platformTool tool =
-  ProcessUtils.tryFindFileOnPath tool
-  |> function Some t -> t | _ -> failwithf "%s not found" tool
+  lazy
+    ProcessUtils.tryFindFileOnPath tool
+    |> function Some t -> t | _ -> failwithf "%s not found" tool
 
 let dotnetExec cmd args =
   let result = DotNet.exec id cmd args
@@ -36,8 +37,8 @@ let dotnetExec cmd args =
     failwithf "Error while running 'dotnet %s %s'" cmd args
 
 let opamTool = platformTool "opam"
-let opam args = run opamTool "./" args
-let dune args = run opamTool "./" (sprintf "exec -- dune %s" args)
+let opam args = run opamTool.Value "./" args
+let dune args = run opamTool.Value "./" (sprintf "exec -- dune %s" args)
 
 // Build targets
 
@@ -193,7 +194,9 @@ module Test =
       Shell.mkdir srcGeneratedDir
       for file in outputDir |> Shell.copyRecursiveTo true srcGeneratedDir do
         printfn "* copied to %s" file
-      // inDirectory testDir <| fun () -> dune "build"
+      inDirectory testDir <| fun () ->
+        Yarn.install id
+        Yarn.exec "rescript" id
 
   let setup () =
     Target.create "TestJsooClean" <| fun _ -> Jsoo.clean ()
@@ -206,6 +209,7 @@ module Test =
       ==> "TestJsooGenerateBindings"
       ==> "TestJsooBuild"
       ==> "TestJsoo"
+      ==> "Test"
 
     Target.create "TestResClean" <| fun _ -> Test.Res.clean ()
     Target.create "TestResGenerateBindings" <| fun _ -> Test.Res.generateBindings ()
@@ -217,6 +221,7 @@ module Test =
       ==> "TestResGenerateBindings"
       ==> "TestResBuild"
       ==> "TestRes"
+      ==> "Test"
 
 // Publish targets
 

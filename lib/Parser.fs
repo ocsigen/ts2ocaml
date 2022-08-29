@@ -18,7 +18,6 @@ type ParserContext =
   inherit IContext
   abstract checker: TypeChecker
   abstract currentSource: Ts.SourceFile with get, set
-  abstract currentAmbientModule: string option with get, set
   abstract program: Ts.Program
   abstract fileNames: Path.Absolute[]
 
@@ -144,38 +143,43 @@ module private ParserImpl =
           ] |> Some
       go s
 
-  let normalizeQualifiedName (ctx: ParserContext) (fileNames: string list) (s: string) =
-    s
-    |> String.split "."
-    |> List.ofArray
-    |> function
-      | x :: xs when x.StartsWith("\"") ->
-        let basenames = fileNames |> List.map JsHelper.stripExtension
-        if basenames |> List.exists (fun basename -> x.Contains basename) then xs
-        else x :: xs
-      | x :: xs ->
-        match ctx.currentAmbientModule with
-        | None -> x :: xs
-        | Some amb -> amb :: x :: xs // workaround the bug which omits the enclosing ambient module from the full name
-      | xs -> xs
+  type Source = {|
+    file: Path.Absolute
+    moduleName: string option
+  |}
 
-  let getFullName (ctx: ParserContext) (nd: Node) =
-    match ctx.checker.getSymbolAtLocation nd with
-    | None -> None
-    | Some s ->
-      let source = ctx.currentSource.fileName
-      let fullName =
-        ctx.checker.getFullyQualifiedName s |> normalizeQualifiedName ctx [source]
-      Some { source = source; name = fullName }
+  let getSource (d: Ts.Declaration) : Source =
+    let sourceFile = d.getSourceFile()
+    let rec findAmbientModule (n: Ts.Node) =
+      if isNullOrUndefined n then None
+      else
+        match n.kind with
+        | Kind.SourceFile -> None
+        | Kind.ModuleDeclaration ->
+          let md = n :?> Ts.ModuleDeclaration
+          match md.name with
+          | ModuleName.StringLiteral s -> Some s.text
+          | ModuleName.Identifier _ -> findAmbientModule n.parent
+        | _ -> findAmbientModule n.parent
+    let ambientModuleName = findAmbientModule d
+    {| file = Path.absolute sourceFile.fileName; moduleName = ambientModuleName |}
+
+  let makeFullName (fn: string list) (s: Source) =
+    let name =
+      match s.moduleName, fn with
+      | Some m, x :: _ when x = $"\"{m}\"" -> fn
+      | Some m, _ -> $"\"{m}\"" :: fn
+      | None, x :: fn when x.StartsWith("\"") -> fn
+      | None, _ -> fn
+    { source = s.file; name = name }
 
   let getFullNames (ctx: ParserContext) (nd: Node) =
     let getSources (s: Ts.Symbol) =
       s.declarations
-      |> Option.toList
-      |> List.collect (fun decs ->
-        decs |> Array.map (fun dec -> dec.getSourceFile()) |> List.ofArray)
-      |> List.map (fun x -> x.fileName |> Path.absolute)
-      |> List.distinct
+      |> Option.toArray
+      |> Array.collect (Array.map getSource)
+      |> Array.distinctBy (fun x -> x.file)
+      |> List.ofArray
 
     let getRootAndAliasedSymbols (s: Ts.Symbol) =
       let roots = ctx.checker.getRootSymbols(s) |> ResizeArray
@@ -194,10 +198,11 @@ module private ParserImpl =
         let sources = getSources s
         let fullName =
           ctx.checker.getFullyQualifiedName s
-          |> normalizeQualifiedName ctx sources
+          |> String.split "."
+          |> List.ofArray
         let newItems =
           sources
-          |> List.map (fun source -> { source = source; name = fullName })
+          |> List.map (makeFullName fullName)
           |> Set.ofList
         if Set.isSubset newItems acc then acc
         else
@@ -982,7 +987,6 @@ module private ParserImpl =
         Namespace { name = i.text; isExported = isExported; statements = statements ctx; comments = comments; loc = loc }
     | ModuleName.StringLiteral s ->
       let orig = $"\"{s.text}\""
-      let ctx = ctx |> JS.cloneWith (fun x -> x.currentAmbientModule <- Some orig)
       AmbientModule { name = { orig = orig; unquoted = s.text }; isExported = (); statements = statements ctx; comments = comments; loc = loc }
 
   and readStatement (ctx: ParserContext) (stmt: Ts.Statement) : Statement list =

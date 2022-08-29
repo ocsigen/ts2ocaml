@@ -156,7 +156,10 @@ let inferPackageInfoFromFileName (sourceFile: Path.Absolute) : {| name: string; 
   | _ -> None
 
 let inline stripExtension path =
-  path |> String.replace ".ts" "" |> String.replace ".d" ""
+  let stripEnd ext cont (path: string) =
+    if path.EndsWith(ext) then path.Substring(0, path.Length - ext.Length)
+    else cont path
+  stripEnd ".d.ts" (stripEnd ".ts" id) path
 
 let getJsModuleName (info: Syntax.PackageInfo option) (sourceFile: Path.Absolute) =
   let getSubmodule rest =

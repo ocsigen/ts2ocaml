@@ -86,7 +86,6 @@ let setup () =
 
   "Prepare"
     ?=> "BuildForTest"
-    ?=> "TestComplete"
     ?=> "BuildForPublish"
     ==> "Build"
 

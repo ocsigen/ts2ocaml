@@ -211,9 +211,9 @@ module Test =
       ==> "TestJsoo"
       ==> "Test"
 
-    Target.create "TestResClean" <| fun _ -> Test.Res.clean ()
-    Target.create "TestResGenerateBindings" <| fun _ -> Test.Res.generateBindings ()
-    Target.create "TestResBuild" <| fun _ -> Test.Res.build ()
+    Target.create "TestResClean" <| fun _ -> Res.clean ()
+    Target.create "TestResGenerateBindings" <| fun _ -> Res.generateBindings ()
+    Target.create "TestResBuild" <| fun _ -> Res.build ()
     Target.create "TestRes" ignore
 
     "BuildForTest"

@@ -467,11 +467,12 @@ module Binding =
 let builder name (fields: {| isOptional: bool; name: string; value: text |} list) (thisType: text) =
   let args =
     fields
+    |> List.distinctBy (fun x -> x.name)
     |> List.map (fun f ->
       let name = f.name |> Naming.valueName
       let suffix =
         if f.isOptional then "=?" else ""
-      tprintf "~%s: " name + f.value +@ suffix)
+      tprintf "~%s:" name + f.value +@ suffix)
   let args =
     match List.tryLast fields with
     | None -> args
@@ -606,6 +607,20 @@ let extFunc flags overrideFunc ctx (ft: FuncType<Type>) =
     ]
   ty, attr
 
+let extValue flags overrideFunc ctx (t: Type) =
+  let isNullable =
+    match t with
+    | Union u ->
+      let u = ResolvedUnion.checkNullOrUndefined u
+      u.hasNull || u.hasUndefined
+    | _ -> false
+  let flags = { flags with external = External.Return isNullable }
+  let attr =
+    if isNullable then [Attr.ExternalModifier.return_nullable]
+    else []
+  let ty = emitTypeImpl flags overrideFunc ctx t
+  ty, attr
+
 let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass: bool) (ma: MemberAttribute) m =
   let flags = { flags with simplifyContravariantUnion = true }
   let emitType_ = emitTypeImpl flags overrideFunc
@@ -613,6 +628,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
   let comments = emitComments ma.comments
 
   let inline extFunc ft = extFunc flags overrideFunc ctx ft
+  let inline extValue t = extValue flags overrideFunc ctx t
   let inline func ft = func flags overrideFunc ctx ft
   let inline newableFunc ft = newableFunc flags overrideFunc ctx ft
 
@@ -693,7 +709,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
     let ty = func { ft with args = Choice2Of2 PolymorphicThis :: ft.args; isVariadic = false }
     let value = createRawCall None ft.isVariadic false ft.args
     binding (fun rename _ -> let_ [] comments (rename "apply") ty value)
-  | Field ({ name = name; value = Func (ft, _typrm, _) }, _)
+  | Field ({ name = name; value = Func (ft, _typrm, _); isOptional = false }, _)
   | Method (name, ft, _typrm) ->
     let origName = name
     let ext ty attrs =
@@ -716,26 +732,16 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
       match m with
       | Getter _ -> "get_" + fl.name
       | _ -> fl.name
-    let fl =
-      if fl.value <> Prim Void then fl
-      else
-        ctx.logger.warnf "the field/getter '%s' at %s has type 'void' and treated as 'undefined'" fl.name ma.loc.AsString
-        { fl with value = Prim Undefined }
+    let ty = Member.getActualTypeOfFieldLike fl
     if ma.isStatic then
       let ty, attrs =
-        let ty = emitType_ ctx fl.value
-        if fl.isOptional then
-          Type.option ty, [Attr.External.val_; Attr.ExternalModifier.return_nullable]
-        else
-          ty, [Attr.External.val_]
+        let ty, attrs = extValue ty
+        ty, Attr.External.val_ :: attrs
       binding (fun rename s -> ext (scopeToAttr s attrs) comments (rename name |> Naming.valueName) ty origName)
     else
       let ty, attrs =
         let args = [Choice2Of2 PolymorphicThis]
-        let ret =
-          if fl.isOptional then Union { types = [fl.value; Prim Undefined] }
-          else fl.value
-        let ty, attrs = extFunc { isVariadic = false; args = args; returnType = ret; loc = ma.loc }
+        let ty, attrs = extFunc { isVariadic = false; args = args; returnType = ty; loc = ma.loc }
         ty, Attr.External.get_ :: impossibleNone (fun () -> "emitMembers_Getter") attrs
       binding (fun rename _ -> ext attrs comments (rename name |> Naming.valueName) ty origName)
   | Setter fl | Field (fl, WriteOnly) ->
@@ -748,15 +754,11 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (isExportDefaultClass:
         match m with
         | Setter _ -> "set_" + fl.name
         | _ -> fl.name
-      let fl =
-        if fl.value <> Prim Void then fl
-        else
-          ctx.logger.warnf "the field/setter '%s' at %s has type 'void' and treated as 'undefined'" fl.name ma.loc.AsString
-          { fl with value = Prim Undefined }
       let ty, attrs =
+        let ty = Member.getActualTypeOfFieldLike fl
         let args =
-          if ma.isStatic then [Choice2Of2 fl.value]
-          else [Choice2Of2 PolymorphicThis; Choice2Of2 fl.value]
+          if ma.isStatic then [Choice2Of2 ty]
+          else [Choice2Of2 PolymorphicThis; Choice2Of2 ty]
         let ty, attrs =
           extFunc { isVariadic = false; args = args; returnType = Prim Void; loc = ma.loc }
         ty, Attr.External.set_ :: impossibleNone (fun () -> "emitMembers_Setter") attrs
@@ -998,6 +1000,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
           (Type.intf (str "'tags") (Some (str "'base")) +@ " constraint 'tags = " + tags)
         |> TypeDefText |> conditional { onIntf = true; onImpl = true; onTypes = false } |> Some
       else None
+    // " this resets the weird syntax highlighting
 
     let baseType, baseTypeDefinition =
       let fallback () =
@@ -1345,7 +1348,6 @@ and emitVariable flags overrideFunc ctx (v: Variable) =
   | _ ->
     let emitType = emitTypeImpl flags
     let emitType_ = emitType overrideFunc
-    let inline extFunc ft = extFunc flags overrideFunc ctx ft
     let ty, attr = emitType_ ctx v.typ, [Attr.External.val_]
     let comments = emitComments v.comments
     binding (fun rename s -> createExternalForValue ctx rename s attr comments v.name ty)

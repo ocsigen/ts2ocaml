@@ -437,8 +437,6 @@ module Statement =
     if not (Naming.isValidJSIdentifier target) &&
       [Attr.External.new_; Attr.External.val_] |> List.exists (fun attr -> attrs |> List.contains attr) then
       comment result // ReScript doesn't allow exotic names except for get, set, and send.
-    else if attrs |> List.contains Attr.External.new_ && attrs |> List.contains Attr.ExternalModifier.variadic then
-      comment result // TODO: remove this once the PR is merged
     else result
 
   let typeAlias isRec name tyargs ty =

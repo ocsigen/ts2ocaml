@@ -589,19 +589,35 @@ module Type =
         MultipleLocation (funcs |> List.map (fun f -> f.loc))
       )
 
+  let normalizeUnion (u: UnionType) : UnionType =
+    let rec go ts =
+      ts |> List.collect (function
+        | Union u -> go u.types
+        | t -> [t]
+      )
+    { u with types = go u.types |> List.distinct }
+
+  let normalizeIntersection (i: IntersectionType) : IntersectionType =
+    let rec go ts =
+      ts |> List.collect (function
+        | Intersection i -> go i.types
+        | t -> [t]
+      )
+    { i with types = go i.types |> List.distinct }
+
   // TODO: more optimization
-  let createUnion (_ctx: TyperContext<_, _>) (types: Type list) =
+  let createUnion (types: Type list) =
     match types with
     | [] -> Prim Never
     | [x] -> x
-    | _ -> Union { types = types }
+    | _ -> Union (normalizeUnion { types = types })
 
   // TODO: more optimization
-  let createIntersection (_ctx: TyperContext<_, _>) (types: Type list) =
+  let createIntersection (types: Type list) =
     match types with
     | [] -> Prim Any
     | [x] -> x
-    | _ -> Intersection { types = types }
+    | _ -> Intersection (normalizeIntersection { types = types })
 
   let substTypeVarInInheritingType subst ctx = function
     | InheritingType.KnownIdent x ->
@@ -765,7 +781,7 @@ module Type =
           let members = c.members |> List.map snd
           let intersection = function
             | [] -> None
-            | ts -> createIntersection ctx ts |> Some
+            | ts -> createIntersection ts |> Some
           let rec go = function
             | TypeLiteral (LString name) ->
               let funcs, others =
@@ -886,7 +902,7 @@ module Type =
               | _ -> None)
           match types with
           | [] -> onFail ()
-          | _ -> createIntersection ctx types
+          | _ -> createIntersection types
 
       | Keyof t ->
         let t = resolveErasedTypeImpl typeQueries ctx t
@@ -1276,32 +1292,32 @@ module Statement =
 type Class<'a> with
   /// check if an interface consists only of fields and properties (but not methods)
   ///
-  /// setters are ignored
+  /// setters and indexers are ignored
   member this.isPOJO : bool =
     this.isInterface &&
     this.members |> List.exists (fun (_, m) -> match m with Field _ | Getter _ -> true | _ -> false) &&
     this.members
-    |> List.filter (fun (_, m) -> match m with Setter _ | UnknownMember _ -> false | _ -> true)
+    |> List.filter (fun (_, m) -> match m with Setter _ | UnknownMember _ | Indexer _ -> false | _ -> true)
     |> List.forall (fun (_, m) ->
       match m with
       | Field _ | Getter _ -> true
-      | Method _ | Callable _ | Newable _ | Indexer _ | Constructor _ | SymbolIndexer _ -> false
-      | Setter _ | UnknownMember _ -> true // impossible
+      | Method _ | Callable _ | Newable _ | Constructor _ | SymbolIndexer _ -> false
+      | Setter _ | UnknownMember _ | Indexer _ -> true // impossible
     )
 
   /// check if an interface consists only of fields, properties, and methods (but not callable, newable, etc)
   ///
-  /// setters are ignored
+  /// setters and indexers are ignored
   member this.isPOJOWithMethods : bool =
     this.isInterface &&
     this.members |> List.exists (fun (_, m) -> match m with Field _ | Getter _ | Method _ -> true | _ -> false) &&
     this.members
-    |> List.filter (fun (_, m) -> match m with Setter _ | UnknownMember _ -> false | _ -> true)
+    |> List.filter (fun (_, m) -> match m with Setter _ | UnknownMember _ | Indexer _ -> false | _ -> true)
     |> List.forall (fun (_, m) ->
       match m with
       | Field _ | Getter _ | Method _ -> true
-      | Callable _ | Newable _ | Indexer _ | Constructor _ | SymbolIndexer _ -> false
-      | Setter _ | UnknownMember _ -> true // impossible
+      | Callable _ | Newable _ | Constructor _ | SymbolIndexer _ -> false
+      | Setter _ | UnknownMember _ | Indexer _ -> true // impossible
     )
 
 type [<RequireQualifiedAccess>] Typeofable = Number | String | Boolean | Symbol | BigInt
@@ -1352,6 +1368,7 @@ module ResolvedUnion =
     cases |> String.concat " | "
 
   let checkNullOrUndefined (u: UnionType) : {| hasNull: bool; hasUndefined: bool; rest: Type list |} =
+    let u = Type.normalizeUnion u
     let nullOrUndefined, rest =
       u.types |> List.partition (function Prim (Null | Undefined) -> true | _ -> false)
     let hasNull = nullOrUndefined |> List.contains (Prim Null)
@@ -1604,6 +1621,15 @@ module ResolvedUnion =
       resolveUnionMap <- resolveUnionMap |> Map.add u result
       result
 
+module Member =
+  let getActualTypeOfFieldLike (fl: FieldLike) =
+    if fl.isOptional then
+      Type.createUnion [Prim Undefined; fl.value]
+    else
+      match fl.value with
+      | Union u -> Union (Type.normalizeUnion u)
+      | t -> t
+
 let inferEnumCaseValue (stmts: Statement list) : Statement list =
   let rec go = function
     | Enum e ->
@@ -1671,11 +1697,11 @@ let rec mergeStatements (stmts: Statement list) =
         let i =
           { i with
               isInterface = i.isInterface && i'.isInterface
-              comments = i.comments @ i'.comments |> List.distinct
+              comments = List.distinct (i.comments @ i'.comments)
               loc = i.loc ++ i'.loc
               typeParams = mergeTypeParams i.typeParams i'.typeParams
               implements = List.distinct (i.implements @ i'.implements)
-              members = i.members @ i'.members }
+              members = List.distinct (i.members @ i'.members) }
         iref'.Value <- i
     | Namespace n ->
       match nsMap |> Map.tryFind n.name with
@@ -1688,8 +1714,8 @@ let rec mergeStatements (stmts: Statement list) =
         nref'.Value <-
           { n with
               loc = n.loc ++ n'.loc
-              comments = n.comments @ n'.comments |> List.distinct
-              statements = n'.statements @ n.statements }
+              comments = List.distinct (n.comments @ n'.comments)
+              statements = List.distinct (n'.statements @ n.statements) }
     | AmbientModule n ->
       match amMap |> Map.tryFind n.name with
       | None ->
@@ -1702,7 +1728,7 @@ let rec mergeStatements (stmts: Statement list) =
           { n with
               loc = n.loc ++ n'.loc
               comments = n.comments @ n'.comments |> List.distinct
-              statements = n'.statements @ n.statements }
+              statements = n'.statements @ n.statements |> List.distinct }
     | Global n ->
       match globalM with
       | None ->
@@ -2254,23 +2280,26 @@ let mergeESLibDefinitions (srcs: SourceFile list) =
   let getESVersionFromFileName (s: string) =
     let es = s.Split '.' |> Array.tryFind (fun s -> s.StartsWith "es")
     match es with
-    | None -> Ts.ScriptTarget.ESNext
-    | Some "es3" -> Ts.ScriptTarget.ES3
-    | Some "es5" -> Ts.ScriptTarget.ES5
-    | Some "es6" | Some "es2015" -> Ts.ScriptTarget.ES2015
-    | Some "es2016" -> Ts.ScriptTarget.ES2016
-    | Some "es2017" -> Ts.ScriptTarget.ES2017
-    | Some "es2018" -> Ts.ScriptTarget.ES2018
-    | Some "es2019" -> Ts.ScriptTarget.ES2019
-    | Some "es2020" -> Ts.ScriptTarget.ES2020
-    | Some _ -> Ts.ScriptTarget.ESNext
+    | None -> Some Ts.ScriptTarget.ESNext
+    | Some "es3" -> Some Ts.ScriptTarget.ES3
+    | Some "es5" -> Some Ts.ScriptTarget.ES5
+    | Some "es6" | Some "es2015" -> Some Ts.ScriptTarget.ES2015
+    | Some "es2016" -> Some Ts.ScriptTarget.ES2016
+    | Some "es2017" -> Some Ts.ScriptTarget.ES2017
+    | Some "es2018" -> Some Ts.ScriptTarget.ES2018
+    | Some "es2019" -> Some Ts.ScriptTarget.ES2019
+    | Some "es2020" -> Some Ts.ScriptTarget.ES2020
+    | Some "es2021" -> Some Ts.ScriptTarget.ES2021
+    | Some "es2022" -> Some Ts.ScriptTarget.ES2022
+    | Some "esnext" -> Some Ts.ScriptTarget.ESNext
+    | _ -> None
 
   let map (parentVersion: Ts.ScriptTarget option) (loc: Location) (x: ICommented<_>) =
     let esVersion =
       let rec go = function
       | UnknownLocation -> None
-      | LocationTs (sf, _) -> getESVersionFromFileName sf.fileName |> Some
-      | Location x -> getESVersionFromFileName x.src.fileName |> Some
+      | LocationTs (sf, _) -> getESVersionFromFileName sf.fileName
+      | Location x -> getESVersionFromFileName x.src.fileName
       | MultipleLocation ls ->
         match ls |> List.choose go with
         | [] -> None

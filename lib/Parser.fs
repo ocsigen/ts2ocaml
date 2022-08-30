@@ -576,7 +576,8 @@ module private ParserImpl =
         | UnknownType None ->
           nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
         | _ -> ()
-        let fl = { name = name; isOptional = false; value = ty }
+        let isOptional = nd.questionToken |> Option.isSome
+        let fl = { name = name; isOptional = isOptional; value = ty }
         attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
       | Error expr -> readSymbolIndexer expr (Choice1Of2 ty) fail
     | Kind.PropertyDeclaration ->
@@ -592,7 +593,8 @@ module private ParserImpl =
         | UnknownType None ->
           nodeWarn ctx nd "type not specified for field '%s'" (getText nd.name)
         | _ -> ()
-        let fl = { name = name; isOptional = false; value = ty }
+        let isOptional = nd.questionToken |> Option.isSome
+        let fl = { name = name; isOptional = isOptional; value = ty }
         attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
       | Error _ -> nodeWarn ctx nd "unsupported property name '%s' in PropertyDeclaration" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
     | Kind.CallSignature ->
@@ -639,7 +641,8 @@ module private ParserImpl =
       | Ok name ->
         let localTyprm, ty = extractType nd
         if not (List.isEmpty localTyprm) then nodeWarn ctx nd "getter with type argument is not supported"
-        let fl = { name = name; isOptional = false; value = ty }
+        let isOptional = nd.questionToken |> Option.isSome
+        let fl = { name = name; isOptional = isOptional; value = ty }
         attr, Getter fl
       | Error _ -> nodeWarn ctx nd "unsupported property name '%s' in GetAccessor" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
     | Kind.SetAccessor ->
@@ -655,7 +658,8 @@ module private ParserImpl =
           | Choice1Of2 named ->
             attr, Setter { named with name = name }
           | Choice2Of2 ty ->
-            attr, Setter { name = name; isOptional = false; value = ty }
+            let isOptional = nd.questionToken |> Option.isSome
+            attr, Setter { name = name; isOptional = isOptional; value = ty }
         | _ ->
           nodeWarn ctx nd "invalid setter for '%s'" (getText nd.name)
           attr, UnknownMember (Some (getText nd))

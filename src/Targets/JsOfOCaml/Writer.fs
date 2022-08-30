@@ -679,7 +679,7 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (ma: MemberAttribute) 
     let ft = func { ft with args = Choice2Of2 selfTy :: ft.args } |> emitType_ ctx
     yield! comments ()
     yield overloaded (fun rename -> [val_ (rename "create") ft + str " " + Attr.js_apply true])
-  | Field ({ name = name; value = Func (ft, _typrm, _) }, _)
+  | Field ({ name = name; value = Func (ft, _typrm, _); isOptional = false }, _)
   | Method (name, ft, _typrm) ->
     let ty, attr =
       if ma.isStatic then func ft, Attr.js_global name

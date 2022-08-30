@@ -420,11 +420,16 @@ module Kind =
     Set.intersect kind (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Module]) |> Set.isEmpty |> not
 
 let jsBuilder name (fields: {| isOptional: bool; name: string; value: text |} list) (thisType: text) =
+  let renamer = new OverloadRenamer(used=(fields |> List.map (fun x -> "arg", x.name) |> Set.ofList))
   let args =
     fields
+    |> List.distinctBy (fun x -> x.name)
     |> List.map (fun f ->
       let prefix = if f.isOptional then str "?" else empty
-      let name = Naming.valueName f.name
+      let name =
+        match Naming.valueName f.name with
+        | "_" -> renamer.Rename "arg" "__"
+        | name -> name
       let value =
         if name = f.name then f.value
         else

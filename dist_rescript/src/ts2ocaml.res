@@ -1,42 +1,32 @@
 @@warning("-27")
 
-type never
-
+@unboxed type never = { absurd : 'a. 'a }
 module Never = {
   type t = never
-  exception Never
-  let absurd : t => 'a = x => raise(Never)
+  external absurd : t => 'a = "%identity"
 }
 
 @unboxed type rec any = Any('a): any
-external any : 'a => any = "%identity"
-
 module Any = {
   type t = any
+  external upcast : 'a => t = "%identity"
   external unsafeCast : t => 'a = "%identity"
 }
 
-type unknown
-
+@unboxed type rec unknown = Unknown('a): unknown
 module Unknown = {
   type t = unknown
+  external upcast : 'a => t = "%identity"
   external unsafeCast : t => 'a = "%identity"
 }
 
-type untyped_object = Js.Types.obj_val
-type untyped_function = Js.Types.function_val
+type true_ = bool
+type false_ = bool
 type symbol = Js.Types.symbol
-type regexp = Js.Re.t
-type bigint = Js.Types.bigint_val
-type \"true" = private bool
-type \"false" = private bool
-type intrinsic<'a> = private 'a
-
-type id<'a> = 'a
-type null<+'a> = Js.null<'a>
-type null' = null<never>
-type undefined<+'a> = Js.undefined<'a>
-type nullable<+'a> = Js.nullable<'a>
+type bigint = Js.Bigint.t
+type intrinsic = private string
+type untypedObject = any
+type untypedFunction = any
 
 module Union = {
   type container<+'cases>
@@ -110,14 +100,14 @@ module Primitive = {
     }
   })(x)`)
 
-  external fromNull: null<'a> => t<[> #Null | #Other('a) ]> = "%identity"
-  external toNull: t<[< #Null | #Other('a) ]> => null<'a> = "%identity"
+  external fromNull: Js.null<'a> => t<[> #Null | #Other('a) ]> = "%identity"
+  external toNull: t<[< #Null | #Other('a) ]> => Js.null<'a> = "%identity"
 
-  external fromUndefined: undefined<'a> => t<[> #Undefined | #Other('a) ]> = "%identity"
-  external toUndefined: t<[< #Undefined | #Other('a) ]> => undefined<'a> = "%identity"
+  external fromUndefined: Js.undefined<'a> => t<[> #Undefined | #Other('a) ]> = "%identity"
+  external toUndefined: t<[< #Undefined | #Other('a) ]> => Js.undefined<'a> = "%identity"
 
-  external fromNullable: nullable<'a> => t<[> #Null | #Undefined | #Other('a) ]> = "%identity"
-  external toNullable: t<[< #Null | #Undefined | #Other('a) ]> => nullable<'a> = "%identity"
+  external fromNullable: Js.nullable<'a> => t<[> #Null | #Undefined | #Other('a) ]> = "%identity"
+  external toNullable: t<[< #Null | #Undefined | #Other('a) ]> => Js.nullable<'a> = "%identity"
 
   let classify: t<[< cases<'other>] as 'cases> => 'cases = x =>
     switch (Js.typeof(x)) {
@@ -134,26 +124,6 @@ module Primitive = {
 }
 
 module Interop = {
-  let apply0 = (it: 'Function) => %raw(`it()`)
-  let apply1 = (it: 'Function, arg0) => %raw(`it(arg0)`)
-  let apply2 = (it: 'Function, arg0, arg1) => %raw(`it(arg0, arg1)`)
-  let apply3 = (it: 'Function, arg0, arg1, arg2) => %raw(`it(arg0, arg1, arg2)`)
-  let apply4 = (it: 'Function, arg0, arg1, arg2, arg3) => %raw(`it(arg0, arg1, arg2, arg3)`)
-  let apply5 = (it: 'Function, arg0, arg1, arg2, arg3, arg4) => %raw(`it(arg0, arg1, arg2, arg3, arg4)`)
-  let apply6 = (it: 'Function, arg0, arg1, arg2, arg3, arg4, arg5) => %raw(`it(arg0, arg1, arg2, arg3, arg4, arg5)`)
-  let apply7 = (it: 'Function, arg0, arg1, arg2, arg3, arg4, arg5, arg6) => %raw(`it(arg0, arg1, arg2, arg3, arg4, arg5, arg6)`)
-  let applyN = (it: 'Function, args: 'args) => %raw(`it(...args)`)
-
-  let applyNewable0 = (it: 'Newable) => %raw(`new it()`)
-  let applyNewable1 = (it: 'Newable, arg0) => %raw(`new it(arg0)`)
-  let applyNewable2 = (it: 'Newable, arg0, arg1) => %raw(`new it(arg0, arg1)`)
-  let applyNewable3 = (it: 'Newable, arg0, arg1, arg2) => %raw(`new it(arg0, arg1, arg2)`)
-  let applyNewable4 = (it: 'Newable, arg0, arg1, arg2, arg3) => %raw(`new it(arg0, arg1, arg2, arg3)`)
-  let applyNewable5 = (it: 'Newable, arg0, arg1, arg2, arg3, arg4) => %raw(`new it(arg0, arg1, arg2, arg3, arg4)`)
-  let applyNewable6 = (it: 'Newable, arg0, arg1, arg2, arg3, arg4, arg5) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5)`)
-  let applyNewable7 = (it: 'Newable, arg0, arg1, arg2, arg3, arg4, arg5, arg6) => %raw(`new it(arg0, arg1, arg2, arg3, arg4, arg5, arg6)`)
-  let applyNewableN = (it: 'Newable, args: 'args) => %raw(`new it(...args)`)
-
   module PolyVariant = {
     let name  = (it: 'PolyVariant) : 'name => %raw(`it.NAME`)
     let value = (it: 'PolyVariant) : 'value => %raw(`it.VAL`)
@@ -229,3 +199,26 @@ module NewableVariadic = {
   let apply1 = (f1: t1<'arg1, 'variadic, 't>, arg1: 'arg1, variadic: 'variadic) : 't => %raw(`new f1(arg1, ...variadic)`)
   let applyN = (fn: tn<'args, 'variadic, 't>, args: 'args, variadic: 'variadic) : 't => %raw(`new fn(...args, ...variadic)`)
 }
+
+/*
+type partial<'t> = 't
+type required<'t> = 't
+type readonly<'t> = 't
+type pick<'t, 'keys> = 't
+type record<'keys, 't> = Js.Dict.t<'t>
+type exclude<'t, 'u> = 't
+type extract<'t, 'u> = 't
+type omit<'t, 'keys> = 't
+type nonNullable<'t> = 't
+type parameters<'t> = any
+type constructorParameters<'t> = any
+type returnType<'t> = any
+type instanceType<'t> = any
+type thisParameterType<'t> = any
+type omitThisParameter<'t> = any
+type thisType<'t> = any
+type uppercase<'s> = intrinsic
+type lowercase<'s> = intrinsic
+type capitalize<'s> = intrinsic
+type uncapitalize<'s> = intrinsic
+*/

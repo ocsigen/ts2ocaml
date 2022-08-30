@@ -118,7 +118,7 @@ module Test =
 
       let packages = [
          // "full" package involving a lot of inheritance
-         "full", !! "node_modules/typescript/lib/typescript.d.ts", [];
+         "full", !! "node_modules/typescript/lib/typescript.d.ts", ["--safe-arity=off"];
 
          // "full" packages involving a lot of dependencies (which includes some "safe" packages)
          "safe", !! "node_modules/@types/scheduler/tracing.d.ts", [];
@@ -153,8 +153,9 @@ module Test =
 
     let clean () =
       !! $"{outputDir}/*"
-      ++ $"{srcGeneratedDir}/generated/*.res"
-      ++ $"{srcGeneratedDir}/generated/*.resi"
+      ++ $"{srcGeneratedDir}/*.res"
+      ++ $"{srcGeneratedDir}/*.resi"
+      ++ $"{srcGeneratedDir}/*.bs.js"
       |> Seq.iter Shell.rm
 
     let generateBindings () =

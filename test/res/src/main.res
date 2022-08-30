@@ -1,3 +1,1 @@
-open Ts
-
-Dom.ConsoleStatic.log([])
+open Ts2ocaml

@@ -147,7 +147,7 @@ let anonymousInterfaceToIdentifier (ctx: Context) (a: AnonymousInterface) : text
 
 let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (ty: Type) : text =
   let treatBuiltinTypes (i: Ident) (tyargs: Type list) =
-    if i.fullName |> List.exists (fun fn -> fn.source.Contains("node_modules/typescript/lib/lib.")) then
+    if i.fullName |> List.exists (fun fn -> fn.source.Contains("node_modules/typescript/lib/lib")) then
       let len = List.length tyargs
       let flagsForArgs = { flags with needParen = true } |> EmitTypeFlags.noExternal
       match i.name with
@@ -157,12 +157,10 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
         match Type.predefinedTypes |> Map.tryFind name with
         | Some (ty, arity) when arity = len ->
           Type.appOpt (str ty) (tyargs |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx)) |> Some
-        (* // This is not really useful. rescript-webapi uses `Webapi.Dom.ClassName.t` format anyway
         | _ when len = 0 ->
           match Type.predefinedDOMTypes.TryGetValue(name) with
           | true, ty -> str ty |> Some
           | false, _ -> None
-        *)
         | _ -> None
     else None
 
@@ -347,7 +345,7 @@ and emitFuncType (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Conte
   | _ when f.isVariadic -> variadicFallback ()
   | External.Root (_, _) -> Type.curriedArrow (args ()) (retTy flags)
   | External.Argument _ -> paren ("@uncurry " @+ Type.curriedArrow (args ()) (retTy flags))
-  | External.Return _ -> Type.curriedArrow (args ()) (retTy flags) |> Type.id
+  | External.Return _ -> Type.uncurriedArrow (args ()) (retTy flags)
   | _ -> Type.curriedArrow (args ()) (retTy flags) |> paren
 
 and emitUnion (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (u: UnionType) : text =
@@ -799,8 +797,8 @@ let emitTypeAliasesImpl
     flags overrideFunc
     (ctx: Context)
     (typrms: TypeParam list)
-    (target: text)
-    (lines: {| name: string; tyargs:(TypeParam * text) list; target: text; isOverload: bool |} -> 'a list) =
+    (target: text option)
+    (lines: {| name: string; tyargs:(TypeParam * text) list; target: text option; isOverload: bool |} -> 'a list) =
   let emitType_ = emitTypeImpl flags overrideFunc
   let tyargs = typrms |> List.map (fun x -> tprintf "'%s" x.name)
   [
@@ -822,7 +820,7 @@ let emitTypeAliasesImpl
                 | None -> impossible "emitTypeAliases"
                 | Some t -> yield emitType_ ctx t
             ]
-        yield! lines {| name = name; tyargs = List.zip typrms' tyargs'; target = target; isOverload = true |}
+        yield! lines {| name = name; tyargs = List.zip typrms' tyargs'; target = Some target; isOverload = true |}
   ]
 
 let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target isRec =
@@ -982,7 +980,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
       if useTags && innerCtx.options.inheritWithTags.HasProvide then
         let alias =
           emitTypeAliasesImpl
-            "tags" flags overrideFunc innerCtx c.typeParams (emitLabels innerCtx labels)
+            "tags" flags overrideFunc innerCtx c.typeParams (emitLabels innerCtx labels |> Some)
             (fun x -> [Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target])
           |> concat newline
         alias|> TypeDefText |> conditional { onIntf = true; onImpl = true; onTypes = false } |> Some
@@ -997,7 +995,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
           |> between "[> " " ]"
         Statement.typeAlias false "this"
           (str "'tags" :: str "'base" :: typrms)
-          (Type.intf (str "'tags") (Some (str "'base")) +@ " constraint 'tags = " + tags)
+          (Type.intf (str "'tags") (Some (str "'base")) +@ " constraint 'tags = " + tags |> Some)
         |> TypeDefText |> conditional { onIntf = true; onImpl = true; onTypes = false } |> Some
       else None
     // " this resets the weird syntax highlighting
@@ -1025,7 +1023,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         else fallback ()
 
     let typeDefinition =
-      let fallback = {| ty = str "private any"; isRec = false |}
+      let fallback = {| ty = None; isRec = false |}
       let getSelfTyText (c: Class) =
         match c.name with
         | Name name ->
@@ -1040,7 +1038,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
                   | Case (_, args) | TagType (_, args) ->
                     args |> List.contains (str "t")
                 )
-              {| ty = Type.intf (emitLabels innerCtx labels) baseType; isRec = isRec |}
+              {| ty = Type.intf (emitLabels innerCtx labels) baseType |> Some; isRec = isRec |}
           else fallback
         | ExportDefaultUnnamedClass ->
           let labels =
@@ -1049,7 +1047,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
             |> getLabelsFromInheritingTypes flags overrideFunc innerCtx
           if List.isEmpty labels then fallback
           else
-            {| ty = Type.intf (emitLabels innerCtx labels) baseType; isRec = false |}
+            {| ty = Type.intf (emitLabels innerCtx labels) baseType |> Some; isRec = false |}
       let selfTyText =
         match kind with
         | ClassKind.NormalClass x -> getSelfTyText x.orig
@@ -1065,7 +1063,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         let origTyText =
           let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
           Type.appOpt (str "t") tyargs
-        emitTypeAliases flags overrideFunc innerCtx c.typeParams origTyText false
+        emitTypeAliases flags overrideFunc innerCtx c.typeParams (Some origTyText) false
         |> List.map (conditional { EmitCondition.empty with onImpl = true })
 
       List.concat [onTypes; onIntf; onImpl]
@@ -1229,7 +1227,7 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
 
   let aritySafety =
     if ctx.options.safeArity.HasProvide then
-      Statement.typeAlias false "t_0" [] (str "t")
+      Statement.typeAlias false "t_0" [] (str "t" |> Some)
       |> TypeDefText
       |> conditional { onIntf = true; onImpl = true; onTypes = false }
       |> List.singleton
@@ -1282,13 +1280,13 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
             | Some (LString s) -> {| name = Choice1Of2 s; value = None; attr = None |}
             | Some (LInt i) -> {| name = Choice2Of2 i; value = None; attr = None |}
             | _ -> impossible "emitEnum_parentNode_PolyVariant")
-        Statement.typeAlias false "t" [] (Type.polyVariant cases) |> TypeDefText |> appendAritySafety
-      | EnumType.Boolean -> Statement.typeAlias false "t" [] (str "private bool") |> TypeDefText |> appendAritySafety
+        Statement.typeAlias false "t" [] (Type.polyVariant cases |> Some) |> TypeDefText |> appendAritySafety
+      | EnumType.Boolean -> Statement.typeAlias false "t" [] (str "private bool" |> Some) |> TypeDefText |> appendAritySafety
       | EnumType.Float | EnumType.Number ->
         ctx.logger.warnf "an enum type '%s' contains a case with float or negative value, which is not supported in ReScript at %s" e.name e.loc.AsString
         [
           yield commentStr (sprintf "FIXME: float/negative enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
-          yield Statement.typeAlias false "t" [] (str "private float") |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
+          yield Statement.typeAlias false "t" [] (str "private float" |> Some) |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
           yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
           yield! aritySafety
         ]
@@ -1296,7 +1294,7 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
         ctx.logger.warnf "a heterogeneous enum '%s' is not supported at %s" e.name e.loc.AsString
         [
           yield commentStr (sprintf "FIXME: heterogeneous enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
-          yield Statement.typeAlias false "t" [] (str "private any") |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
+          yield Statement.typeAlias false "t" [] None |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
           yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
           yield! aritySafety
         ]
@@ -1535,7 +1533,7 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         knownTypes ()
         |> Set.contains (KnownType.Ident (ctx |> Context.getFullNameOfCurrentNamespace))
       let items =
-        emitTypeAliasesImpl "t" emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target) (fun x ->
+        emitTypeAliasesImpl "t" emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target |> Some) (fun x ->
           let a = Statement.typeAlias (isRec && not x.isOverload) x.name (x.tyargs |> List.map snd) x.target |> TypeDefText
           if x.isOverload then a |> conditional { onTypes = false; onIntf = true; onImpl = true } |> List.singleton
           else a |> List.singleton
@@ -1896,17 +1894,17 @@ let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
   let domSrc =
     srcs
     |> List.filter (fun src -> src.fileName.Contains("lib.dom") && src.fileName.EndsWith(".d.ts"))
-    |> mergeSources "lib.dom.d.ts"
+    |> mergeSources stdlibDomSrc
   let webworkerSrc =
     srcs
     |> List.filter (fun src -> src.fileName.Contains("lib.webworker") && src.fileName.EndsWith(".d.ts"))
-    |> mergeSources "lib.webworker.d.ts"
+    |> mergeSources stdlibWebworkerSrc
     |> fun src ->
       let statements =
         src.statements |> Statement.mapIdent (fun i ->
           i |> Ident.mapSource (fun path ->
             // webworker does not depend on DOM but fullnames can still refer to it
-            if path.Contains("lib.dom") && src.fileName.EndsWith(".d.ts") then "lib.webworker.d.ts"
+            if path.Contains("lib.dom") && src.fileName.EndsWith(".d.ts") then stdlibWebworkerSrc
             else path
           )
         )
@@ -1959,12 +1957,12 @@ let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
     { baseName = baseName; resi = Some resi; res = res }
 
   let minLib =
-    { baseName = "Ts__min"; resi = None; res = str stdlib }
+    { baseName = "ts2ocaml"; resi = None; res = str stdlib }
 
   [ minLib
-    createOutput "Ts__es"  ["Ts__min"] (writerCtx esSrc esCtx) esSrc
-    createOutput "Ts__dom" ["Ts__min"; "Ts__es"] (writerCtx domSrc domCtx) domSrc
-    createOutput "Ts__webworker" ["Ts__min"; "Ts__es"] (writerCtx webworkerSrc webworkerCtx) webworkerSrc ]
+    createOutput "ts2ocaml_es"  ["Ts2ocaml"] (writerCtx esSrc esCtx) esSrc
+    createOutput "ts2ocaml_dom" ["Ts2ocaml"; "Ts2ocaml_es"] (writerCtx domSrc domCtx) domSrc
+    createOutput "ts2ocaml_webworker" ["Ts2ocaml"; "Ts2ocaml_es"] (writerCtx webworkerSrc webworkerCtx) webworkerSrc ]
 
 let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
   let refs =
@@ -2068,8 +2066,8 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
   let m = emitModule flags ctx structuredText
 
   let opens = [
-    yield Statement.open_ "Ts"
-    yield Statement.open_ "Ts.Dom"
+    yield Statement.open_ "Ts2ocaml"
+    yield Statement.open_ "Ts2ocaml_es"
     for src in sources do
       yield! emitReferenceTypeDirectives ctx src
       yield! emitReferenceFileDirectives ctx src

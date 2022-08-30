@@ -190,27 +190,48 @@ module Kind =
 
 [<RequireQualifiedAccess>]
 module Type =
+  let tsUtilityTypes = [
+    "Partial", 1; "Required", 1; "Readonly", 1;
+    "Record", 2; "Pick", 2; "Omit", 2; "Exclude", 2; "Extract", 2;
+    "NonNullable", 1;
+    "Parameters", 1; "ConstructorParameters", 1; "ReturnType", 1; "InstanceType", 1;
+    "ThisParameterType", 1; "OmitThisParameter", 1; "ThisType", 1;
+    "Uppercase", 1; "Lowercase", 1; "Capitalize", 1; "Uncapitalize", 1;
+  ]
+
   /// non-primitive types defined in the standard library
   let predefinedTypes =
-    let typedArray name = name, (sprintf "Js.TypedArray2.%s.t" name, 0)
-    Map.ofList [
+    let builtins = [
       "RegExp", ("Js.Re.t", 0)
       "Date", ("Js.Date.t", 0)
       "Promise", ("Js.Promise.t", 1)
+      "PromiseLike", ("Js.Promise.t", 1)
       "Array", ("Js.Array.t", 1)
       "ArrayLike", ("Js.TypedArray2.array_like", 1)
       "ArrayBuffer", ("Js.TypedArray2.array_buffer", 0)
-      typedArray "DataView"
-      typedArray "Int8Array"
-      typedArray "Uint8Array"
-      typedArray "Uint8ClampedArray"
-      typedArray "Int16Array"
-      typedArray "Uint16Array"
-      typedArray "Int32Array"
-      typedArray "Uint32Array"
-      typedArray "Float32Array"
-      typedArray "Float64Array"
+      "Error", ("Js.Exn.t", 0)
     ]
+    let typedArrays =
+      let typedArray name = name, (sprintf "Js.TypedArray2.%s.t" name, 0)
+      [
+        typedArray "DataView"
+        typedArray "Int8Array"
+        typedArray "Uint8Array"
+        typedArray "Uint8ClampedArray"
+        typedArray "Int16Array"
+        typedArray "Uint16Array"
+        typedArray "Int32Array"
+        typedArray "Uint32Array"
+        typedArray "Float32Array"
+        typedArray "Float64Array"
+      ]
+    (*
+    let utilities =
+      tsUtilityTypes |> List.map (fun (name, arity) ->
+        name, (Naming.lowerFirst name, arity)
+      )
+    *)
+    Map.ofList (builtins @ typedArrays)
 
   /// non-primitive DOM types defined in the standard library
   ///
@@ -219,8 +240,8 @@ module Type =
     let types =
       Source.dom
       |> String.splitManyThenRemoveEmptyEntries ["\n"; "\r"]
-      |> Array.filter (fun s -> s.StartsWith("type ") && s.Contains("="))
-      |> Array.choose (fun s -> s |> String.replace "type " "" |> String.split " = " |> Array.tryHead)
+      |> Array.filter (fun s -> s.StartsWith("type "))
+      |> Array.choose (fun s -> s |> String.replace "type " "" |> String.splitMany [" = "; " (*"] |> Array.tryHead)
       |> Array.filter (fun s -> s.Length > 0 && s.ToCharArray() |> Array.forall Char.isAlphabet)
       |> Array.map (fun s -> Naming.upperFirst s, "Dom." + s)
     let ignoreCase =
@@ -296,29 +317,28 @@ module Type =
   let array = str "array"
   let readonlyArray = str "array"
   let option t = app (str "option") [t]
-  let id t = app (str "id") [t]
 
   // JS types
   // ES5
-  let object = str "untyped_object"
-  let function_ = str "untyped_function"
+  let object = str "untypedObject"
+  let function_ = str "untypedFunction"
   let symbol = str "symbol"
-  let regexp = str "regexp"
+  let regexp = str "Js.Re.t"
   // ES2020
-  let bigint = str "bigint"
+  let bigint = str "Js.Bigint.t"
 
   // TS types
   let never = str "never"
   let any = str "any"
   let unknown = str "unknown"
-  let null_or t = app (str "null") [t]
-  let undefined_or t = app (str "undefined") [t]
-  let null_or_undefined_or t = app (str "nullable") [t]
-  let null_ = str "null'"
+  let null_or t = app (str "Js.null") [t]
+  let undefined_or t = app (str "option") [t]
+  let null_or_undefined_or t = app (str "Js.nullable") [t]
+  let null_ = str "Js.null<never>"
   let undefined = str "unit"
-  let intrinsic = app (str "intrinsic") [string]
-  let true_ = str "\\\"true\""
-  let false_ = str "\\\"false\""
+  let intrinsic = str "intrinsic"
+  let true_ = str "true_"
+  let false_ = str "false_"
 
   // our types
   let intf tags baseTy =
@@ -409,7 +429,7 @@ let private moduleSigImplLines (prefix: string) (isRec: bool) (m: TextModule) =
       yield head +@ " }"
     else
       // make it one liner if possible
-      if m.content |> List.forall (isMultiLine >> not) && (m.content |> List.sumBy Text.length) < 80 then
+      if m.content |> List.forall (isMultiLine >> not) && (m.content |> List.sumBy Text.length) < 60 then
         yield head +@ " " + (concat (str "; ") m.content) +@ " }"
       else
         yield head
@@ -439,11 +459,14 @@ module Statement =
       comment result // ReScript doesn't allow exotic names except for get, set, and send.
     else result
 
-  let typeAlias isRec name tyargs ty =
-    str "type "
-    + (if isRec then str "rec " else empty)
-    + (if List.isEmpty tyargs then str name else Type.app (str name) tyargs)
-    +@ " = " + ty
+  let typeAlias isRec name tyargs tyOpt =
+    let lhs =
+      str "type "
+      + (if isRec then str "rec " else empty)
+      + (if List.isEmpty tyargs then str name else Type.app (str name) tyargs)
+    match tyOpt with
+    | None -> lhs
+    | Some ty -> lhs +@ " = " + ty
 
   let include_ name = tprintf "include %s" name
   let open_ name = tprintf "open %s" name
@@ -457,7 +480,12 @@ module Statement =
     | [] -> []
     | [m] -> [moduleSig m]
     | m :: ms ->
-      moduleSigImpl "module" true m :: (ms |> List.map (moduleSigImpl "and" false))
+      let content = moduleSigImpl "module" true m :: (ms |> List.map (moduleSigImpl "and" false))
+      // make it one liner if possible
+      if content |> List.forall (isMultiLine >> not) && (content |> List.sumBy Text.length) < 60 then
+        [content |> concat (str " ")]
+      else
+        [content |> concat newline]
 
   let moduleSigNonRec (ms: TextModule list) = ms |> List.map moduleSig
 

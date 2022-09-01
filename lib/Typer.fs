@@ -1920,12 +1920,12 @@ let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statem
             | _ -> false
           )
 
-        let inline app t ts loc =
+        let inline app esVersion t ts loc =
           App (
             AIdent {
               name = [t]
               kind = Some (Set.ofList [Kind.Type; Kind.ClassLike; Kind.Statement])
-              fullName = [{ name = [t]; source = "lib.es.d.ts" }]
+              fullName = [{ name = [t]; source = Path.absolute $"./node_modules/typescript/lib/lib.{esVersion}.d.ts" }]
               loc = loc
               parent = None
             }, ts, loc)
@@ -1936,35 +1936,35 @@ let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statem
           | SymbolIndexer ("iterator", { returnType = ty }, _) when opts.inheritIterable ->
             match ty with
             | App (AIdent { name = ["Iterator"] }, [argTy], _) when not (has "Iterable") ->
-              inherits.Add(app "Iterable" [argTy] ma.loc)
+              inherits.Add(app "es2015.iterable" "Iterable" [argTy] ma.loc)
             | App (AIdent { name = ["IterableIterator"] }, [argTy], _) when not (has "IterableIterator") ->
-              inherits.Add(app "IterableIterator" [argTy] ma.loc)
+              inherits.Add(app "es2015.iterable" "IterableIterator" [argTy] ma.loc)
             | _ -> ()
 
           // async iterator & iterable iterator
           | SymbolIndexer ("asyncIterator", { returnType = ty }, _) when opts.inheritIterable ->
             match ty with
             | App (AIdent { name = ["AsyncIterator"] }, [argTy], _) when not (has "AsyncIterable") ->
-              inherits.Add(app "AsyncIterable" [argTy] ma.loc)
+              inherits.Add(app "es2018.asynciterable" "AsyncIterable" [argTy] ma.loc)
             | App (AIdent { name = ["AsyncIterableIterator"] }, [argTy], _) when not (has "AsyncIterableIterator") ->
-              inherits.Add(app "AsyncIterableIterator" [argTy] ma.loc)
+              inherits.Add(app "es2018.asynciterable" "AsyncIterableIterator" [argTy] ma.loc)
             | _ -> ()
 
           // ArrayLike
           | Indexer ({ args = [Choice1Of2 { value = Prim Number } | Choice2Of2 (Prim Number)]; returnType = retTy }, _)
-            when opts.inheritArraylike && not (has "ArrayLike") -> inherits.Add(app "ArrayLike" [retTy] ma.loc)
+            when opts.inheritArraylike && not (has "ArrayLike") -> inherits.Add(app "es5" "ArrayLike" [retTy] ma.loc)
 
           // PromiseLike
           | Method ("then", { args = [Choice1Of2 { name = "onfulfilled"; value = onfulfilled }; Choice1Of2 { name = "onrejected" }] }, _)
             when opts.inheritPromiselike && not (has "PromiseLike") ->
             match onfulfilled with
             | Func ({ args = [Choice1Of2 { value = t } | Choice2Of2 t] }, _, _) ->
-              inherits.Add(app "PromiseLike" [t] ma.loc)
+              inherits.Add(app "es5" "PromiseLike" [t] ma.loc)
             | Union { types = ts } ->
               for t in ts do
                 match t with
                 | Func ({ args = [Choice1Of2 { value = t } | Choice2Of2 t] }, _, _) ->
-                  inherits.Add(app "PromiseLike" [t] ma.loc)
+                  inherits.Add(app "es5" "PromiseLike" [t] ma.loc)
                 | _ -> ()
             | _ -> ()
 

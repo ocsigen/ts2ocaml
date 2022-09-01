@@ -202,17 +202,16 @@ module Type =
   /// non-primitive types defined in the standard library
   let predefinedTypes =
     let builtins = [
-      "RegExp", ("Js.Re.t", 0)
-      "Date", ("Js.Date.t", 0)
-      "Promise", ("Js.Promise.t", 1)
-      "PromiseLike", ("Js.Promise.t", 1)
-      "Array", ("Js.Array.t", 1)
-      "ArrayLike", ("Js.TypedArray2.array_like", 1)
-      "ArrayBuffer", ("Js.TypedArray2.array_buffer", 0)
-      "Error", ("Js.Exn.t", 0)
+      "RegExp", ("Re.t", 0)
+      "PromiseLike", ("Promise.t", 1)
+      "Array", ("array", 1)
+      "ArrayLike", ("Array2.array_like", 1)
+      "ReadonlyArray", ("array", 1)
+      "ArrayBuffer", ("TypedArray2.ArrayBuffer.t", 0)
+      "Error", ("Exn.t", 0)
     ]
     let typedArrays =
-      let typedArray name = name, (sprintf "Js.TypedArray2.%s.t" name, 0)
+      let typedArray name = name, (sprintf "TypedArray2.%s.t" name, 0)
       [
         typedArray "DataView"
         typedArray "Int8Array"

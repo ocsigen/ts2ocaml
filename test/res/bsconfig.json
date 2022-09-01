@@ -9,10 +9,5 @@
     "module": "commonjs",
     "in-source": true
   },
-  "suffix": ".bs.js",
-  "bs-dependencies": [
-  ],
-  "warnings": {
-    "error" : "+101"
-  }
+  "suffix": ".bs.js"
 }

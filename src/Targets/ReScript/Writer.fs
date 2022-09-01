@@ -147,21 +147,24 @@ let anonymousInterfaceToIdentifier (ctx: Context) (a: AnonymousInterface) : text
 
 let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (ty: Type) : text =
   let treatBuiltinTypes (i: Ident) (tyargs: Type list) =
-    if i.fullName |> List.exists (fun fn -> fn.source.Contains("node_modules/typescript/lib/lib")) then
+    let contains path = i.fullName |> List.exists (fun fn -> fn.source.Contains(path))
+    if contains "node_modules/typescript/lib/lib" then
       let len = List.length tyargs
       let flagsForArgs = { flags with needParen = true } |> EmitTypeFlags.noExternal
+      let emitWith ty = Type.appOpt (str ty) (tyargs |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx)) |> Some
       match i.name with
       | _ when ctx.options.stdlib -> None
       | [] | _ :: _ :: _ -> None
-      | name :: [] ->
+      | [name] ->
         match Type.predefinedTypes |> Map.tryFind name with
-        | Some (ty, arity) when arity = len ->
-          Type.appOpt (str ty) (tyargs |> List.map (emitTypeImpl flagsForArgs overrideFunc ctx)) |> Some
-        | _ when len = 0 ->
-          match Type.predefinedDOMTypes.TryGetValue(name) with
-          | true, ty -> str ty |> Some
-          | false, _ -> None
-        | _ -> None
+        | Some (ty, arity) when arity = len -> emitWith ty
+        | _ ->
+          if contains "lib.es" then emitWith (sprintf "%s.t" name)
+          else if contains "lib.dom" || contains "lib.webworker" then
+            match Type.predefinedDOMTypes.TryGetValue(name) with
+            | true, ty -> emitWith ty
+            | _, _ -> None
+          else None
     else None
 
   let treatIdent (i: Ident) (tyargs: Type list) (loc: Location) =
@@ -1960,9 +1963,9 @@ let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
     { baseName = "ts2ocaml"; resi = None; res = str stdlib }
 
   [ minLib
-    createOutput "ts2ocaml_es"  ["Ts2ocaml"] (writerCtx esSrc esCtx) esSrc
-    createOutput "ts2ocaml_dom" ["Ts2ocaml"; "Ts2ocaml_es"] (writerCtx domSrc domCtx) domSrc
-    createOutput "ts2ocaml_webworker" ["Ts2ocaml"; "Ts2ocaml_es"] (writerCtx webworkerSrc webworkerCtx) webworkerSrc ]
+    createOutput "ts2ocaml_es"  ["Js"; "Ts2ocaml"] (writerCtx esSrc esCtx) esSrc
+    createOutput "ts2ocaml_dom" ["Js"; "Ts2ocaml"; "Ts2ocaml_es"] (writerCtx domSrc domCtx) domSrc
+    createOutput "ts2ocaml_webworker" ["Js"; "Ts2ocaml"; "Ts2ocaml_es"] (writerCtx webworkerSrc webworkerCtx) webworkerSrc ]
 
 let emitReferenceTypeDirectives (ctx: Context) (src: SourceFile) : text list =
   let refs =
@@ -2066,8 +2069,8 @@ let private emitImpl (sources: SourceFile list) (info: PackageInfo option) (ctx:
   let m = emitModule flags ctx structuredText
 
   let opens = [
+    yield Statement.open_ "Js"
     yield Statement.open_ "Ts2ocaml"
-    yield Statement.open_ "Ts2ocaml_es"
     for src in sources do
       yield! emitReferenceTypeDirectives ctx src
       yield! emitReferenceFileDirectives ctx src

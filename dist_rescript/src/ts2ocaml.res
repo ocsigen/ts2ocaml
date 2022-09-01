@@ -200,25 +200,24 @@ module NewableVariadic = {
   let applyN = (fn: tn<'args, 'variadic, 't>, args: 'args, variadic: 'variadic) : 't => %raw(`new fn(...args, ...variadic)`)
 }
 
-/*
-type partial<'t> = 't
-type required<'t> = 't
-type readonly<'t> = 't
-type pick<'t, 'keys> = 't
-type record<'keys, 't> = Js.Dict.t<'t>
-type exclude<'t, 'u> = 't
-type extract<'t, 'u> = 't
-type omit<'t, 'keys> = 't
-type nonNullable<'t> = 't
-type parameters<'t> = any
-type constructorParameters<'t> = any
-type returnType<'t> = any
-type instanceType<'t> = any
-type thisParameterType<'t> = any
-type omitThisParameter<'t> = any
-type thisType<'t> = any
-type uppercase<'s> = intrinsic
-type lowercase<'s> = intrinsic
-type capitalize<'s> = intrinsic
-type uncapitalize<'s> = intrinsic
-*/
+// utility type fallbacks
+module Partial = { type t<'a> = 'a }
+module Required = { type t<'a> = 'a }
+module Readonly = { type t<'a> = 'a }
+module Pick = { type t<'a, 'keys> = 'a }
+module Record = { type t<'keys, 'a> = Js.Dict.t<'a> }
+module Exclude = { type t<'a, 'b> = 'a }
+module Extract = { type t<'a, 'b> = 'a }
+module Omit = { type t<'a, 'keys> = 'a }
+module NonNullable = { type t<'a> = 'a }
+module Parameters = { type t<'a> }
+module ConstructorParameters = { type t<'a> }
+module ReturnType = { type t<'a> }
+module InstanceType = { type t<'a> }
+module ThisParameterType = { type t<'a> }
+module OmitThisParameter = { type t<'a> }
+module ThisType = { type t<'a> }
+module Uppercase = { type t<'s> = private intrinsic }
+module Lowercase = { type t<'s> = private intrinsic }
+module Capitalize = { type t<'s> = private intrinsic }
+module Uncapitalize = { type t<'s> = private intrinsic }

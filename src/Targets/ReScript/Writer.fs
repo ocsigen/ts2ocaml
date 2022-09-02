@@ -189,9 +189,9 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
         let tyName =
           let fallback () =
             let tyName =
-              match ctx.options.safeArity with
-              | FeatureFlag.Full | FeatureFlag.Consume -> Naming.createTypeNameOfArity arity None "t"
-              | _ -> "t"
+              if Option.isSome i.misc.maxArity then
+                Naming.createTypeNameOfArity arity i.misc.maxArity "t"
+              else "t"
             Naming.structured Naming.moduleName i.name + "." + tyName |> str
           match i.name with
           | [name] ->
@@ -396,13 +396,12 @@ and emitLabelsBody (ctx: Context) labels =
 and getLabelsFromInheritingTypes (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: Context) (inheritingTypes: Set<InheritingType>) =
   let emitType_ = emitTypeImpl flags overrideFunc
   let createCase name args = Case (str (Naming.constructorName name), args)
-  let createTagType name args =
+  let createTagType name args maxArity =
     let arity = List.length args
     let tagTypeName =
-      if ctx.options.safeArity.HasConsume then
-        Naming.createTypeNameOfArity arity None "tags"
-      else
-        "tags"
+      if Option.isSome maxArity then
+        Naming.createTypeNameOfArity arity maxArity "tags"
+      else "tags"
     let ty = Naming.structured Naming.moduleName name + "." + tagTypeName
     let args = args |> List.map (emitType_ ctx)
     TagType (str ty, args)
@@ -412,7 +411,7 @@ and getLabelsFromInheritingTypes (flags: EmitTypeFlags) (overrideFunc: OverrideF
       | InheritingType.KnownIdent i ->
         yield createCase i.fullName.name (i.tyargs |> List.map (emitType_ ctx))
       | InheritingType.UnknownIdent i ->
-        yield createTagType i.name i.tyargs
+        yield createTagType i.name i.tyargs i.maxArity
       | InheritingType.Prim (p, ts) ->
         match p.AsJSClassName with
         | Some name ->
@@ -809,7 +808,7 @@ let emitTypeAliasesImpl
     let arities = getPossibleArity typrms
     let maxArity = List.length tyargs
     for arity in arities |> Set.toSeq |> Seq.sortDescending do
-      if arity <> maxArity || ctx.options.safeArity.HasProvide then
+      if arity <> maxArity then
         let name = Naming.createTypeNameOfArity arity None baseName
         let tyargs' = List.take arity tyargs
         let typrms' = List.take arity typrms
@@ -856,7 +855,7 @@ let add name node current = current |> Trie.addOrUpdate name node StructuredText
 
 let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kindString: string) (s: Statement) : ExportItem option =
   let fn = ctx |> Context.getFullName [name]
-  let ident = { name = [name]; fullName = [fn]; kind = Some (Set.ofList kind); parent = None; loc = s.loc }
+  let ident = { name = [name]; fullName = [fn]; kind = Some (Set.ofList kind); parent = None; loc = s.loc; misc = IdentMiscData.Internal  }
   match s.isExported.AsExport ident with
   | None -> None
   | Some clause ->
@@ -879,7 +878,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
     match c.name with
     | Choice1Of2 (Name n) ->
       let k = ctx |> Context.getFullName [n]
-      let ident = { name = [n]; fullName = [k]; kind = Some (Set.ofList Kind.OfClass); parent = None; loc = UnknownLocation }
+      let ident = { name = [n]; fullName = [k]; kind = Some (Set.ofList Kind.OfClass); parent = None; loc = UnknownLocation; misc = IdentMiscData.Internal }
       let selfTy =
         if List.isEmpty c.typeParams then Ident ident
         else App (AIdent ident, typrms, UnknownLocation)
@@ -928,11 +927,6 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
           | ClassKind.NormalClass x -> Context.ofChildNamespace x.name
           | ClassKind.AnonymousInterface x -> Context.ofChildNamespace x.name
           | ClassKind.ExportDefaultClass _ -> id)
-      |> Context.mapOptions (fun options ->
-        if not isAnonymous then options
-        else
-          // no need to generate t_n types for anonymous interfaces
-          ctx.options |> JS.cloneWith (fun o -> o.safeArity <- o.safeArity.WithProvide(false)))
     let typrms = List.map (fun (tp: TypeParam) -> tprintf "'%s" tp.name) c.typeParams
     let selfTyText = Type.appOpt (str "t") typrms
     let currentNamespace = innerCtx |> Context.getFullName []
@@ -1228,19 +1222,6 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
     | [EnumType.Int; EnumType.String] -> EnumType.PolyVariant
     | _ -> EnumType.Heterogeneous
 
-  let aritySafety =
-    if ctx.options.safeArity.HasProvide then
-      Statement.typeAlias false "t_0" [] (str "t" |> Some)
-      |> TypeDefText
-      |> conditional { onIntf = true; onImpl = true; onTypes = false }
-      |> List.singleton
-    else []
-  let appendAritySafety x = [
-    yield x |> conditional { EmitCondition.all with onImpl = false }
-    yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
-    yield! aritySafety
-  ]
-
   let child (c: EnumCase) =
     let ty =
       match enumType with
@@ -1273,7 +1254,6 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
         [
           yield str "type t = " + casesText |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
           yield str "type t = t = " + casesText |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
-          yield! aritySafety
         ]
       | EnumType.Int | EnumType.String | EnumType.PolyVariant ->
         let cases =
@@ -1283,15 +1263,14 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
             | Some (LString s) -> {| name = Choice1Of2 s; value = None; attr = None |}
             | Some (LInt i) -> {| name = Choice2Of2 i; value = None; attr = None |}
             | _ -> impossible "emitEnum_parentNode_PolyVariant")
-        Statement.typeAlias false "t" [] (Type.polyVariant cases |> Some) |> TypeDefText |> appendAritySafety
-      | EnumType.Boolean -> Statement.typeAlias false "t" [] (str "private bool" |> Some) |> TypeDefText |> appendAritySafety
+        Statement.typeAlias false "t" [] (Type.polyVariant cases |> Some) |> TypeDefText |> List.singleton
+      | EnumType.Boolean -> Statement.typeAlias false "t" [] (str "private bool" |> Some) |> TypeDefText |> List.singleton
       | EnumType.Float | EnumType.Number ->
         ctx.logger.warnf "an enum type '%s' contains a case with float or negative value, which is not supported in ReScript at %s" e.name e.loc.AsString
         [
           yield commentStr (sprintf "FIXME: float/negative enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
           yield Statement.typeAlias false "t" [] (str "private float" |> Some) |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
           yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
-          yield! aritySafety
         ]
       | _ ->
         ctx.logger.warnf "a heterogeneous enum '%s' is not supported at %s" e.name e.loc.AsString
@@ -1299,7 +1278,6 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
           yield commentStr (sprintf "FIXME: heterogeneous enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
           yield Statement.typeAlias false "t" [] None |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
           yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
-          yield! aritySafety
         ]
     let items = items @ List.map child e.cases
     let comments = e.comments |> emitComments
@@ -1727,13 +1705,11 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (st: StructuredText) 
       let attrs = scopeToAttr currentScope [Attr.External.val_]
       let intf = [
         yield str $"type t = {e.ty}"
-        if ctx.options.safeArity.HasProvide then yield str "type t0 = t"
         yield Statement.external attrs "value" (str "t") e.name
       ]
       let impl = [
         yield Statement.open_ moduleName
         yield str "type t = t"
-        if ctx.options.safeArity.HasProvide then yield str "type t0 = t"
         yield Statement.external attrs "value" (str "t") e.name
       ]
       let m content = {| name = moduleName; origName = e.name; content = content; comments = emitComments e.comments |}
@@ -1919,7 +1895,6 @@ let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
   let opts = ctx.options
   opts.simplify <- [Simplify.All]
   opts.inheritWithTags <- FeatureFlag.Full
-  opts.safeArity <- FeatureFlag.Full
   opts.subtyping <- [Subtyping.Tag]
 
   let flags : EmitModuleFlags =

@@ -77,7 +77,6 @@ type Options =
   abstract numberAsInt: bool with get, set
   abstract subtyping: Subtyping list with get, set
   abstract inheritWithTags: FeatureFlag with get, set
-  abstract safeArity: FeatureFlag with get, set
   abstract simplify: Simplify list with get, set
   abstract readableNames: bool with get, set
 
@@ -102,8 +101,6 @@ module Options =
             opts.simplify <- [Simplify.All]
 
         if p = Preset.Safe || p = Preset.Full then
-          if opts.safeArity = FeatureFlag.Default then
-            opts.safeArity <- FeatureFlag.Full
           if subtypingIsDefault then
             opts.subtyping <- Subtyping.CastFunction :: opts.subtyping
 
@@ -211,17 +208,10 @@ module Options =
 
       .group(
         !^ResizeArray[
-          "safe-arity";
           "simplify";
           "human-readable-anonymous-interface-names";
         ],
         "Code Generator Options:")
-      .addChoice(
-        "safe-arity",
-        FeatureFlag.Values,
-        (fun (o: Options) -> o.safeArity),
-        descr="Use `TypeName.t_n` type names to safely use overloaded types from other packages.",
-        defaultValue=FeatureFlag.Default)
       .addCommaSeparatedStringSet(
         "simplify",
         Simplify.TryParse,

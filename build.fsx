@@ -143,7 +143,7 @@ module Test =
          "safe", !! "node_modules/@types/yargs-parser/index.d.ts", [];
          "safe", !! "node_modules/@types/yargs/index.d.ts", ["--rec-module=off"];
 
-         "minimal", !! "node_modules/@types/vscode/index.d.ts", ["--safe-arity=full"; "--readable-names"];
+         "minimal", !! "node_modules/@types/vscode/index.d.ts", ["--readable-names"];
       ]
 
       for preset, package, additionalOptions in packages do

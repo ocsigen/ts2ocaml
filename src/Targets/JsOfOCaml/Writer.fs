@@ -206,10 +206,9 @@ let rec emitTypeImpl (flags: EmitTypeFlags) (overrideFunc: OverrideFunc) (ctx: C
       let tyName =
         let fallback () =
           let tyName =
-            match ctx.options.safeArity with
-            | FeatureFlag.Full | FeatureFlag.Consume ->
-              Naming.createTypeNameOfArity arity None "t"
-            | _ -> "t"
+            if Option.isSome i.misc.maxArity then
+              Naming.createTypeNameOfArity arity i.misc.maxArity "t"
+            else "t"
           Naming.structured Naming.moduleName i.name + "." + tyName |> str
         match i.name with
         | [name] ->
@@ -495,13 +494,12 @@ and getLabelsFromInheritingTypes (flags: EmitTypeFlags) (overrideFunc: OverrideF
     | [] -> str (Naming.constructorName name)
     | [arg] -> tprintf "%s of %A" (Naming.constructorName name) arg
     | _ -> tprintf "%s of %A" (Naming.constructorName name) (Type.tuple args)
-  let emitTagType name args =
+  let emitTagType name args maxArity =
     let arity = List.length args
     let tagTypeName =
-      if ctx.options.safeArity.HasConsume then
-        Naming.createTypeNameOfArity arity None "tags"
-      else
-        "tags"
+      if Option.isSome maxArity then
+        Naming.createTypeNameOfArity arity maxArity "tags"
+      else "tags"
     let ty = Naming.structured Naming.moduleName name + "." + tagTypeName
     let args = args |> List.map (emitType_ ctx)
     Type.appOpt (str ty) args
@@ -511,7 +509,7 @@ and getLabelsFromInheritingTypes (flags: EmitTypeFlags) (overrideFunc: OverrideF
       | InheritingType.KnownIdent i ->
         yield str pv_head + emitCase i.fullName.name (i.tyargs |> List.map (emitType_ ctx)) |> Case
       | InheritingType.UnknownIdent i ->
-        yield emitTagType i.name i.tyargs |> TagType
+        yield emitTagType i.name i.tyargs i.maxArity |> TagType
       | InheritingType.Prim (p, ts) ->
         match p.AsJSClassName with
         | Some name ->
@@ -535,7 +533,11 @@ and getLabelOfFullName flags overrideFunc (ctx: Context) (fullName: FullName) (t
     let prim = Type.nonJsablePrimitives |> Map.find name
     Choice2Of2 (prim, Case (tprintf "%s%s" pv_head name))
   | _ ->
-    let inheritingType = InheritingType.KnownIdent {| fullName = fullName; tyargs = typeParams |> List.map (fun tp -> TypeVar tp.name) |}
+    let inheritingType =
+      InheritingType.KnownIdent {|
+        fullName = fullName
+        tyargs = typeParams |> List.map (fun tp -> TypeVar tp.name)
+      |}
     getLabelsFromInheritingTypes flags overrideFunc ctx (Set.singleton inheritingType) |> Choice1Of2
 
 type StructuredTextItem =
@@ -801,7 +803,7 @@ let emitTypeAliasesImpl
     let arities = getPossibleArity typrms
     let maxArity = List.length tyargs
     for arity in arities |> Set.toSeq |> Seq.sortDescending do
-      if arity <> maxArity || ctx.options.safeArity.HasProvide then
+      if arity <> maxArity then
         let name = Naming.createTypeNameOfArity arity None baseName
         let tyargs' = List.take arity tyargs
         let typrms' = List.take arity typrms
@@ -965,11 +967,6 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
           | ClassKind.NormalClass x -> Context.ofChildNamespace x.name
           | ClassKind.AnonymousInterface x -> Context.ofChildNamespace x.name
           | ClassKind.ExportDefaultClass _ -> id)
-      |> Context.mapOptions (fun options ->
-        if not isAnonymous then options
-        else
-          // no need to generate t_n types for anonymous interfaces
-          ctx.options |> JS.cloneWith (fun o -> o.safeArity <- o.safeArity.WithProvide(false)))
     let typrms = List.map (fun (tp: TypeParam) -> tprintf "'%s" tp.name) c.typeParams
     let selfTyText = Type.appOpt (str "t") typrms
     let currentNamespace = innerCtx |> Context.getFullName []
@@ -1909,7 +1906,6 @@ let emitStdlib (input: Input) (ctx: IContext<Options>) : Output list =
   let opts = ctx.options
   opts.simplify <- [Simplify.All]
   opts.inheritWithTags <- FeatureFlag.Full
-  opts.safeArity <- FeatureFlag.Full
   opts.recModule <- RecModule.Optimized
   opts.subtyping <- [Subtyping.Tag]
   opts.functor <- Functor.On

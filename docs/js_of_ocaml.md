@@ -318,7 +318,7 @@ Specify the preset to use.
 * `--preset=minimal`
   - It sets `--simplify=all` and `--rec-module=optimized`.
 * `--preset=safe`
-  - It sets `--safe-arity=full` and `--subtyping=cast-function`.
+  - It sets `--subtyping=cast-function`.
   - It also sets all the options `--preset=minimal` sets.
 * `--preset=full`
   - It sets `--inherit-with-tags=full` and `--subtyping=tag`.
@@ -577,97 +577,7 @@ Otherwise, you can't safely cast `B.t` to `A.t`. To do it, you will have to
 * set [`--subtyping=cast-function`](#feature-cast-function) to obtain `val cast_to_A: t -> A.t`, or
 * manually add `` `A `` to the definition of `B.t` (and `B.tags` if you choose to provide).
 
-> **Note:** `TypeName.tags` types will come with the "arity-safe" version of them if [`--safe-arity`](#--safe-arity) is also set.
-
 # Code Generator Options
-
-## `--safe-arity`
-
-Use `TypeName.t_n` type names to safely use overloaded types from other packages.
-
-* `--safe-arity=full`
-  - It generates `t_n` types in the module, and tries to use `t_n` type if the type is unknown (e.g. from another package).
-* `--safe-arity=provide`
-  - It only generates `t_n` types in the module.
-* `--safe-arity=consume`
-  - It only tries to use `t_n` type if the type is unknown.
-* `--safe-arity=off` (default)
-  - It disables any usage of `t_n` types.
-
-For example, assume we have `node_modules/foo/index.d.ts` and `node_modules/bar/index.d.ts` as the following:
-
-```typescript
-// foo/index.d.ts
-
-declare namespace foo {
-  interface A<T> { ... }
-
-  interface B<T = any> { ... }
-}
-
-export = foo;
-```
-
-```typescript
-// bar/index.d.ts
-
-import * as Foo from 'foo';
-
-declare function useA(a: Foo.A<T>) : void;
-
-declare function useB(b: Foo.B<T>) : void;
-
-declare function useBDefault(b: Foo.B) : void;
-```
-
-Then the outputs will look like depending on the option you set:
-
-```ocaml
-(* Foo.mli *)
-
-module Foo : sig
-  module A : sig
-    type 'T t = [`A of 'T] intf
-
-    (* this will be generated if `full` or `provide` is set *)
-    type 'T t_1 = 'T t (* for arity 1 *)
-
-    ...
-  end
-
-  module B : sig
-    type 'T t = [`B of 'T] intf
-
-    (* this will be generated if `full` or `provide` is set *)
-    type 'T t_1 =  'T t  (* for arity 1 *)
-
-    (* this will be generated regardless of the option, since B contains an optional type parameter *)
-    type    t_0 = any t  (* for arity 0 *)
-
-    ...
-  end
-end
-
-(* export = foo; *)
-module Export = Foo
-```
-
-```ocaml
-(* Bar.mli *)
-
-(* import * as Foo from "foo"; *)
-module Foo = Foo.Export
-
-(* if `full` or `consume` is set, this will be generated *)
-val useA: 'T Foo.A.t_1 -> unit
-val useB: 'T Foo.B.t_1 -> unit
-val useBDefault: Foo.B.t_0 -> unit
-
-(* otherwise, this will be generated *)
-val useA: 'T Foo.A.t -> unit
-val useB: 'T Foo.B.t -> unit
-val useBDefault: Foo.B.t -> unit (* this does not compile! *)
-```
 
 ## `--rec-module`
 
@@ -1093,3 +1003,74 @@ end
 >   end
 > end
 > ```
+
+# Deprecated Options in v2
+
+## `--safe-arity` (deprecated)
+
+~~Use `TypeName.t_n` type names to safely use overloaded types from other packages.~~
+
+From v2, `ts2ocaml` uses TypeScript API to check if a generic type has optional type parameters,
+and generates the minimum type-safe output. This option is deprecated because the current behavior is the optimal.
+
+For example, assume we have `node_modules/foo/index.d.ts` and `node_modules/bar/index.d.ts` as the following:
+
+```typescript
+// foo/index.d.ts
+
+declare namespace foo {
+  interface A<T> { ... }
+
+  interface B<T = any> { ... }
+}
+
+export = foo;
+```
+
+```typescript
+// bar/index.d.ts
+
+import * as Foo from 'foo';
+
+declare function useA(a: Foo.A<T>) : void;
+
+declare function useB(b: Foo.B<T>) : void;
+
+declare function useBDefault(b: Foo.B) : void;
+```
+
+Then the outputs will look like this:
+
+```ocaml
+(* Foo.mli *)
+
+module Foo : sig
+  module A : sig
+    type 'T t = [`A of 'T] intf
+
+    ...
+  end
+
+  module B : sig
+    type 'T t = [`B of 'T] intf
+
+    type t_0 = any t
+
+    ...
+  end
+end
+
+(* export = foo; *)
+module Export = Foo
+```
+
+```ocaml
+(* Bar.mli *)
+
+(* import * as Foo from "foo"; *)
+module Foo = Foo.Export
+
+val useA: 'T Foo.A.t -> unit
+val useB: 'T Foo.B.t -> unit
+val useBDefault: Foo.B.t_0 -> unit
+```

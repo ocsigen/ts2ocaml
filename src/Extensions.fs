@@ -82,3 +82,5 @@ type Argv<'T> with
               | None -> failwithf "Unknown value '%s' for option '%s'" s key)
             |> Array.toList)
         :> Argv<'U>
+  member this.addDeprecated (key: string, ?msg) =
+    this.deprecateOption(key, ?msg=msg)

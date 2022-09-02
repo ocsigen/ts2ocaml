@@ -58,7 +58,7 @@ type [<RequireQualifiedAccess>] InheritingType =
   | KnownIdent of {| fullName: FullName; tyargs: Type list |}
   | Prim of PrimType * tyargs:Type list
   | Other of Type
-  | UnknownIdent of {| name: string list; tyargs: Type list |}
+  | UnknownIdent of {| name: string list; tyargs: Type list; maxArity: int option |}
 
 type AnonymousInterfaceOrigin = {
   // the name of the type containing the anonymous interface.
@@ -656,10 +656,10 @@ module Type =
               |> Seq.map (fun (t, d) -> substTypeVarInInheritingType subst ctx t, d) |> Some
             | _ -> None
           ) |> Seq.concat
-      | Ident { name = name } & Dummy ts | App (AIdent { name = name }, ts, _) ->
+      | Ident { name = name; misc = misc } & Dummy ts | App (AIdent { name = name; misc = misc }, ts, _) ->
         yield! treatPrimTypeInterfaces name ts |> Option.toList
         if includeSelf then
-          yield InheritingType.UnknownIdent {| name = name; tyargs = ts |}, depth
+          yield InheritingType.UnknownIdent {| name = name; tyargs = ts; maxArity = misc.maxArity |}, depth
       | Prim p & Dummy ts
       | App (APrim p, ts, _) ->
         if includeSelf then
@@ -688,7 +688,10 @@ module Type =
           |> List.choose (function
             | Definition.Class c ->
               let self =
-                InheritingType.KnownIdent {| fullName = fn; tyargs = c.typeParams |> List.map (fun tp -> TypeVar tp.name) |}
+                InheritingType.KnownIdent {|
+                  fullName = fn
+                  tyargs = c.typeParams |> List.map (fun tp -> TypeVar tp.name)
+                |}
               let s = c.implements |> Seq.collect (getAllInheritancesImpl (depth+1) true ctx)
               Some (s, Some self)
             | Definition.TypeAlias a ->

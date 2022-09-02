@@ -75,3 +75,4 @@ jobs:
           github-token: ${{ secrets.GH_TOKEN }}
           target: minor
           exclude: 'typescript'
+          merge-method: merge

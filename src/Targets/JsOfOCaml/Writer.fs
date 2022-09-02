@@ -755,11 +755,11 @@ let rec emitMembers flags overrideFunc ctx (selfTy: Type) (ma: MemberAttribute) 
 
 let emitMappers (ctx: Context) emitType tName (typrms: TypeParam list) =
   let t =
-    { name = [tName]; fullName = []; kind = None; loc = UnknownLocation; parent = None }
+    { name = [tName]; fullName = []; kind = None; loc = UnknownLocation; parent = None; misc = IdentMiscData.Internal }
   let t_ty =
     if List.isEmpty typrms then Ident t
     else App (AIdent t, typrms |> List.map (fun typrm -> TypeVar typrm.name), UnknownLocation)
-  let ojs_t = { name = ["Ojs"; "t"]; fullName = []; kind = None; loc = UnknownLocation; parent = None }
+  let ojs_t = { name = ["Ojs"; "t"]; fullName = []; kind = None; loc = UnknownLocation; parent = None; misc = IdentMiscData.Internal  }
   let ojs_t_ty = Ident ojs_t
   let orf _flags _emitType _ctx ty =
     match ty with
@@ -880,7 +880,7 @@ module GetSelfTyText =
 
 let getExportFromStatement (ctx: Context) (name: string) (kind: Kind list) (kindString: string) (s: Statement) : ExportItem option =
   let fn = ctx |> Context.getFullName [name]
-  let ident = { name = [name]; fullName = [fn]; kind = Some (Set.ofList kind); parent = None; loc = s.loc }
+  let ident = { name = [name]; fullName = [fn]; kind = Some (Set.ofList kind); parent = None; loc = s.loc; misc = IdentMiscData.Internal  }
   match s.isExported.AsExport ident with
   | None -> None
   | Some clause ->
@@ -917,7 +917,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
     match c.name with
     | Choice1Of2 (Name n) ->
       let k = ctx |> Context.getFullName [n]
-      let ident = { name = [n]; fullName = [k]; kind = Some (Set.ofList Kind.OfClass); parent = None; loc = UnknownLocation }
+      let ident = { name = [n]; fullName = [k]; kind = Some (Set.ofList Kind.OfClass); parent = None; loc = UnknownLocation; misc = IdentMiscData.Internal  }
       let selfTy =
         if List.isEmpty c.typeParams then Ident ident
         else App (AIdent ident, typrms, UnknownLocation)

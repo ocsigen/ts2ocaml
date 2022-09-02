@@ -199,13 +199,29 @@ and TupleType = {
   isReadOnly: bool
 }
 
-and Ident = {
+and IdentMiscData = {
+  maxArity: int option
+  /// if true, then this ident was created by ts2ocaml.
+  /// otherwise, then this ident came from `.d.ts`.
+  internallyCreated: bool
+} with
+  static member Empty = {
+    maxArity = None
+    internallyCreated = false
+  }
+  static member Internal = { IdentMiscData.Empty with internallyCreated = true }
+
+and [<StructuredFormatDisplay("{AsString}")>] Ident = {
   name: string list
   kind: Set<Kind> option
   fullName: FullName list
   loc: Location
   parent: Ident option
-}
+  misc: IdentMiscData
+} with
+  member i.AsString =
+    String.concat "." i.name + " (at " + i.loc.AsString + ")"
+  override i.ToString() = i.AsString
 
 and [<StructuralEquality; StructuralComparison>] FullName = {
   source: Path.Absolute

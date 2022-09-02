@@ -220,7 +220,7 @@ module private ParserImpl =
       let kind = getKindFromName ctx nd
       let loc = Node.location nd
       let fullName = getFullNames ctx nd
-      { name = name; kind = kind; fullName = fullName; loc = loc; parent = parent }
+      { name = name; kind = kind; fullName = fullName; loc = loc; parent = parent; misc = IdentMiscData.Empty }
     match nd.kind with
     | Kind.Identifier | Kind.PrivateIdentifier ->
       let i = nd :?> Ts.Identifier
@@ -241,6 +241,25 @@ module private ParserImpl =
       (nd :?> Ts.Identifier).text |> Choice2Of2
     else
       readIdent ctx nd |> Choice1Of2
+
+  type DeclarationWithTypeParameters =
+    inherit Ts.Node
+    abstract typeParameters: Ts.TypeParameterDeclaration[] option with get
+
+  let getArityOfIdentType (ctx: ParserContext) (nd: Ts.Node) (i: Ident) : Ident =
+    match ctx.checker.getSymbolAtLocation nd with
+    | None -> i
+    | Some symbol ->
+      let arity =
+        symbol.declarations
+        |> Option.toArray
+        |> Array.concat
+        |> Array.fold (fun maxArity decl ->
+            match (decl :?> DeclarationWithTypeParameters).typeParameters with
+            | Some tps when tps.Length > maxArity -> tps.Length
+            | _ -> maxArity
+          ) 0
+      { i with misc = { i.misc with maxArity = Some arity } }
 
   let sanitizeCommentText str : string list =
     str |> String.toLines |> List.ofArray
@@ -393,8 +412,10 @@ module private ParserImpl =
         | Kind.TypeReference -> !!(t :?> Ts.TypeReferenceNode).typeName
         | Kind.ExpressionWithTypeArguments -> !!(t :?> Ts.ExpressionWithTypeArguments).expression
         | _ -> impossible "readTypeNode_TypeReference"
+      let arity = getArityOfIdentType ctx lhs
       match readIdentOrTypeVar ctx typrm lhs with
       | Choice1Of2 lt ->
+        let lt = lt |> getArityOfIdentType ctx lhs
         match t.typeArguments with
         | None -> Ident lt
         | Some args -> App (AIdent lt, args |> Array.map (readTypeNode typrm ctx) |> List.ofArray, Node.location t)

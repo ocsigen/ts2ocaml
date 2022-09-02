@@ -1928,6 +1928,7 @@ let introduceAdditionalInheritance (ctx: IContext<#TyperOptions>) (stmts: Statem
               fullName = [{ name = [t]; source = Path.absolute $"./node_modules/typescript/lib/lib.{esVersion}.d.ts" }]
               loc = loc
               parent = None
+              misc = { IdentMiscData.Internal with maxArity = Some (List.length ts) }
             }, ts, loc)
 
         for ma, m in c.members do

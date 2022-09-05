@@ -579,6 +579,7 @@ and StructuredText = Trie<string, StructuredTextNode>
 module StructuredTextNode =
   let empty : StructuredTextNode =
     {| scoped = Scoped.No; items = []; docCommentLines = []; exports = []; knownTypes = Set.empty; anonymousInterfaces = Set.empty |}
+
   let union (a: StructuredTextNode) (b: StructuredTextNode) : StructuredTextNode =
     {| scoped = Scoped.union a.scoped b.scoped
        items = List.append a.items b.items
@@ -587,69 +588,20 @@ module StructuredTextNode =
        knownTypes = Set.union a.knownTypes b.knownTypes
        anonymousInterfaces = Set.union a.anonymousInterfaces b.anonymousInterfaces |}
 
+  let getReferences (ctx: Context) (v: StructuredTextNode) : WeakTrie<string> =
+    v.knownTypes
+    |> Set.fold (fun state -> function
+      | KnownType.Ident fn when fn.source = ctx.currentSourceFile -> state |> WeakTrie.add fn.name
+      | KnownType.AnonymousInterface (_, i) ->
+        state |> WeakTrie.add (i.namespace_ @ [anonymousInterfaceModuleName ctx i])
+      | _ -> state
+    ) WeakTrie.empty
+
 module StructuredTextItem =
   let emit renamer = function
     | ImportText t | TypeDef t | ScopeIndependent t -> [t]
     | Functor _ -> []
     | OverloadedText f -> f renamer
-
-
-module StructuredText =
-  let pp (x: StructuredText) =
-    let rec go (x: StructuredText) =
-      concat newline [
-        for k, v in x.children |> Map.toArray do
-          tprintf "- %s" k
-          indent (go v)
-      ]
-    go x
-
-  let rec getReferences (ctx: Context) (x: StructuredText) : WeakTrie<string> =
-    match ctx.state.referencesCache.TryGetValue(ctx.currentNamespace) with
-    | true, ts -> ts
-    | false, _ ->
-      let fn = ctx.currentNamespace
-      let trie =
-        x.value
-        |> Option.map (fun v ->
-          v.knownTypes
-          |> Set.fold (fun state -> function
-            | KnownType.Ident fn when fn.source = ctx.currentSourceFile -> state |> WeakTrie.add fn.name
-            | KnownType.AnonymousInterface (_, i) ->
-              state |> WeakTrie.add (i.namespace_ @ [anonymousInterfaceModuleName ctx i])
-            | _ -> state
-          ) WeakTrie.empty)
-        |? WeakTrie.empty
-      let trie =
-        x.children
-        |> Map.fold (fun state k child ->
-          WeakTrie.union state (getReferences (ctx |> Context.ofChildNamespace k) child)) trie
-        |> WeakTrie.remove fn
-      ctx.state.referencesCache.[fn] <- trie
-      trie
-
-  let getDependenciesOfChildren (ctx: Context) (x: StructuredText) : (string * string) list =
-    let parent = ctx.currentNamespace
-    x.children
-    |> Map.fold (fun state k child ->
-      let refs =
-        getReferences (ctx |> Context.ofChildNamespace k) child
-        |> WeakTrie.getSubTrie parent
-        |? WeakTrie.empty
-        |> WeakTrie.ofDepth 1
-        |> WeakTrie.toList
-        |> List.map (function
-          | [x] -> k, x
-          | xs -> impossible "StructuredText_getDependencyGraphOfChildren_refs(%s): %A" (ctx |> Context.getFullNameString [k]) xs)
-      refs :: state) []
-    |> List.rev
-    |> List.concat
-
-  let calculateSCCOfChildren (ctx: Context) (x: StructuredText) : string list list =
-    let g =
-      let deps = getDependenciesOfChildren ctx x
-      Graph.ofEdges deps
-    Graph.stronglyConnectedComponents g (x.children |> Map.toList |> List.map fst)
 
 let removeLabels (xs: Choice<FieldLike, Type> list) =
     xs |> List.map (function Choice2Of2 t -> Choice2Of2 t | Choice1Of2 fl -> Choice2Of2 fl.value)
@@ -1607,26 +1559,30 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
 
   stmts |> List.fold (folder rootCtx) Trie.empty
 
-type ModuleEmitter = Context -> StructuredText -> (TextModuleSig list -> text list)
+type ModuleEmitter = Context -> (TextModuleSig list -> text list)
 module ModuleEmitter =
-  let nonRec _ctx _st modules = moduleSigNonRec modules
-  let recAll _ctx _st modules = moduleSigRec modules
-  let recOptimized (ctx: Context) (st: StructuredText) =
-    if Map.count st.children < 3 then
-      recAll ctx st
-    else
-      let scc = StructuredText.calculateSCCOfChildren ctx st
-      fun (modules: TextModuleSig list) ->
-        let modules = modules |> List.fold (fun state x -> state |> Map.add x.origName x) Map.empty
+  let nonRec _ctx modules = moduleSigNonRec modules
+  let recAll _ctx modules = moduleSigRec modules
+  let recOptimized dt (ctx: Context) =
+    let scc = dt |> Trie.tryFind ctx.currentNamespace |? []
+    let sccSet = scc |> List.concat |> Set.ofList
+    fun (modules: TextModuleSig list) ->
+      let modulesMap = modules |> List.fold (fun state x -> state |> Map.add x.origName x) Map.empty
+      let sccModules =
         scc
         |> List.map (fun group ->
-          group |> List.map (fun name -> modules |> Map.find name) |> moduleSigRec)
+          group |> List.choose (fun name -> modulesMap |> Map.tryFind name) |> moduleSigRec)
         |> List.concat
-  let fromOption (opt: Options) =
+      let otherModules =
+        modules
+        |> List.filter (fun x -> sccSet |> Set.contains x.origName |> not)
+        |> moduleSigNonRec
+      sccModules @ otherModules
+  let create (dt: DependencyTrie<string>) (opt: Options) : ModuleEmitter =
     match opt.recModule with
     | RecModule.Off | RecModule.Default -> nonRec
     | RecModule.Naive -> recAll
-    | RecModule.Optimized -> recOptimized
+    | RecModule.Optimized -> recOptimized dt
 
 type ExportWithKind = {| comments: Comment list; clauses: (ExportClause * Set<Kind>) list; loc: Location; origText: string |}
 
@@ -1655,7 +1611,7 @@ let rec private emitStructuredText (reserved: bool) (moduleEmitter: ModuleEmitte
         docCommentBody = result.docCommentBody
       |}
     )
-  let emitModules = moduleEmitter ctx st
+  let emitModules = moduleEmitter ctx
   let imports, typedefs, items, functors, docCommentBody =
     match st.value with
     | None -> [], [], [], [], []
@@ -1742,7 +1698,7 @@ and emitExportModule (moduleEmitter: ModuleEmitter) (ctx: Context) (exports: Exp
       go isFirst acc rest
 
   let st = go true Trie.empty exports
-  let emitted = st |> emitStructuredText true moduleEmitter ctx
+  let emitted = st |> emitStructuredText true ModuleEmitter.nonRec ctx
   // add newline if not empty
   if not (List.isEmpty emitted.content) then
     empty :: emitted.content
@@ -1839,7 +1795,8 @@ let emitFlattenedDefinitions (ctx: Context) (stmts: Statement list) : text list 
   ]
 
 let emitStatementsWithStructuredText (ctx: Context) (stmts: Statement list) (st: StructuredText) =
-  let moduleEmitter = ModuleEmitter.fromOption ctx.options
+  let dt = DependencyTrie.ofTrie (StructuredTextNode.getReferences ctx) st
+  let moduleEmitter = ModuleEmitter.create dt ctx.options
   let result = st |> emitStructuredText false moduleEmitter ctx
   let imports =
     if List.isEmpty result.imports then []

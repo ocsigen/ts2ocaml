@@ -60,3 +60,19 @@ jobs:
 
       - name: Run FAKE
         run: dotnet fake build target Test
+
+  auto-merge:
+    name: Auto-Merge PRs by Dependabot
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v3.0.0
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          target: minor
+          exclude: 'typescript'
+          merge-method: merge

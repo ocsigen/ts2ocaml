@@ -164,8 +164,7 @@ module Test =
       let ts2res args files =
         Yarn.exec (sprintf "ts2ocaml res %s" (String.concat " " (Seq.append args files))) id
 
-      ts2res ["--verbose"; "--nowarn"; "--stdlib"; $"-o {outputDir}"] <|
-        !! "node_modules/typescript/lib/lib.*.d.ts"
+      ts2res ["--create-stdlib"; $"-o {outputDir}"] []
 
       let packages = [
          // "full" package involving a lot of inheritance

@@ -79,13 +79,7 @@ module Intersection = {
   type t8<'t1, 't2, 't3, 't4, 't5, 't6, 't7, 't8> = container<[ #I1('t1) | #I2('t2) | #I3('t3) | #I4('t4) | #I5('t5) | #I6('t6) | #I7('t7) | #I8('t8) ]>
 }
 
-module Interface = {
-  @unboxed type t<-'tags, 'base> = { value: 'base }
-
-  let value = (x: t<_, _>) => x.value
-}
-type intf<-'tags, 'base> = Interface.t<'tags, 'base>
-type intf'<-'tags> = intf<'tags, any>
+type intf<-'tags>
 
 module Primitive = {
   type cases<'other> = [ #Null | #Undefined | #String(string) | #Number(float) | #Boolean(bool) | #Symbol(symbol) | #BigInt(bigint) | #Other('other) ]

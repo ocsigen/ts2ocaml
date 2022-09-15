@@ -65,8 +65,7 @@ type Options =
   inherit Typer.TyperOptions
   // general options
   abstract preset: Preset option with get
-  abstract createMinimalStdlib: bool with get
-  abstract stdlib: bool with get // hidden
+  abstract createStdlib: bool with get
   // JS options
   abstract ``module``: ModuleKind with get
   abstract name: string option with get
@@ -122,21 +121,16 @@ module Options =
     yargs
       .group(
         !^ResizeArray[
-          "create-minimal-stdlib"; "stdlib"; "preset"
+          "create-stdlib"; "preset"
         ],
         "General Options:"
       )
       .addFlag(
-        "create-minimal-stdlib",
-        (fun (o:Options) -> o.createMinimalStdlib),
-        descr="Create ts2ocaml_min.mli. When this option is used, most of the other options are ignored.",
+        "create-stdlib",
+        (fun (o:Options) -> o.createStdlib),
+        descr="Create ts2ocaml.res.",
         defaultValue=false
       )
-      .addFlag(
-        "stdlib",
-        (fun (o: Options) -> o.stdlib),
-        descr = "Internal. Used to generate Ts2ocaml.mli from typescript/lib/lib.*.d.ts."
-      ).hide("stdlib")
       .addChoice(
         "preset",
         Preset.Values,

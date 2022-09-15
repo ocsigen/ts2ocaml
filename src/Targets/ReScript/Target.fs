@@ -32,12 +32,10 @@ let private run (input: Input) (ctx: IContext<Options>) =
 
   let results =
     let result =
-      if ctx.options.createMinimalStdlib then
+      if ctx.options.createStdlib then
         [{ baseName = "ts2ocaml"; res = Text.str stdlib; resi = None }]
       else []
     if List.isEmpty input.sources then result
-    else if ctx.options.stdlib then
-      result @ emitStdlib input ctx
     else
       result @ emit input ctx
 

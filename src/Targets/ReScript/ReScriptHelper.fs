@@ -340,10 +340,7 @@ module Type =
   let false_ = str "false_"
 
   // our types
-  let intf tags baseTy =
-    match baseTy with
-    | Some t -> app (str "intf") [tags; t]
-    | None -> app (str "intf'") [tags]
+  let intf tags = app (str "intf") [tags]
   let prim cases = app (str "prim") [cases]
 
   let rec union = function
@@ -416,24 +413,26 @@ module Term =
 
 type TextModule = {| name: string; origName: string; content: text list; comments: text list |}
 
+let private moduleSigImplBody head oneliner (m: TextModule) =
+  if List.isEmpty m.content then [ head +@ "{ }" ]
+  else if oneliner then
+    [ head +@ "{ " + (concat (str "; ") m.content) +@ " }"]
+  else [
+    yield head + str "{"
+    yield indent (concat newline m.content)
+    yield str "}"
+  ]
+
 let private moduleSigImplLines (prefix: string) (isRec: bool) (m: TextModule) =
+  let oneliner =
+    m.content |> List.forall (isMultiLine >> not) && (m.content |> List.sumBy Text.length) < 60
+  let head =
+    tprintf "%s %s%s : "
+      prefix
+      (if isRec then "rec " else "")
+      m.name
   [ yield! m.comments
-    let isEmpty = List.isEmpty m.content
-    let head =
-      tprintf "%s %s%s : {"
-        prefix
-        (if isRec then "rec " else "")
-        m.name
-    if isEmpty then
-      yield head +@ " }"
-    else
-      // make it one liner if possible
-      if m.content |> List.forall (isMultiLine >> not) && (m.content |> List.sumBy Text.length) < 60 then
-        yield head +@ " " + (concat (str "; ") m.content) +@ " }"
-      else
-        yield head
-        yield indent (concat newline m.content)
-        yield str "}" ]
+    yield! moduleSigImplBody head oneliner m ]
 
 let private moduleSigImpl (prefix: string) (isRec: bool) (m: TextModule) =
   moduleSigImplLines prefix isRec m |> concat newline
@@ -504,3 +503,19 @@ module Statement =
       yield indent (concat newline content)
       yield tprintf "} = %s" name
     ]
+
+  let moduleSCC (dt: DependencyTrie<string>) emitRec emitNonRec (ctx: Typer.TyperContext<_, _>) =
+    let scc = dt |> Trie.tryFind ctx.currentNamespace |? []
+    let sccSet = scc |> List.concat |> Set.ofList
+    fun (modules: TextModule list) ->
+      let modulesMap = modules |> List.fold (fun state x -> state |> Map.add x.origName x) Map.empty
+      let sccModules =
+        scc
+        |> List.map (fun group ->
+          group |> List.choose (fun name -> modulesMap |> Map.tryFind name) |> emitRec)
+        |> List.concat
+      let otherModules =
+        modules
+        |> List.filter (fun x -> sccSet |> Set.contains x.origName |> not)
+        |> emitNonRec
+      sccModules @ otherModules

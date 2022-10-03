@@ -57,6 +57,9 @@ module private ParserImpl =
       ctx.logger.errorf "%s at %s\n%s" s (Node.ppLocation node) (Node.ppLine node)
     ) format
 
+  let modifiers (n: Ts.Node) =
+    if ts.canHaveModifiers(n) then ts.getModifiers(!!n) else None
+
   let hasModifier (kind: Ts.SyntaxKind) (modifiers: Ts.ModifiersArray option) =
     match modifiers with
     | None -> false
@@ -384,13 +387,13 @@ module private ParserImpl =
     | Kind.ArrayType ->
       let t = t :?> Ts.ArrayTypeNode
       let elem = readTypeNode typrm ctx t.elementType
-      if isReadOnly t.modifiers then
+      if t |> modifiers |> isReadOnly then
         App (APrim ReadonlyArray, [elem], Node.location t)
       else
         App (APrim Array, [elem], Node.location t)
     | Kind.TupleType ->
       let t = t :?> Ts.TupleTypeNode
-      readTupleTypeNode typrm ctx t (isReadOnly t.modifiers)
+      readTupleTypeNode typrm ctx t (t |> modifiers |> isReadOnly)
     // complex types
     | Kind.IntrinsicKeyword -> Intrinsic
     | Kind.ThisType -> PolymorphicThis
@@ -545,8 +548,9 @@ module private ParserImpl =
     { args = args; isVariadic = isVariadic; returnType = retType; loc = Node.location parent }
 
   and readMemberAttribute (ctx: ParserContext) (nd: Ts.NamedDeclaration) : MemberAttribute =
-    let accessibility = getAccessibility nd.modifiers |? Public
-    let isStatic = hasModifier Kind.StaticKeyword nd.modifiers
+    let modifiers = modifiers nd
+    let accessibility = getAccessibility modifiers |? Public
+    let isStatic = hasModifier Kind.StaticKeyword modifiers
     let comments = readCommentsForNamedDeclaration ctx nd
     { accessibility = accessibility; isStatic = isStatic; comments = comments; loc = Node.location nd }
 
@@ -578,7 +582,7 @@ module private ParserImpl =
             match ty with
             | Choice1Of2 t -> { args = []; isVariadic = false; returnType = t; loc = Node.location nd }
             | Choice2Of2 ft -> ft
-          attr, SymbolIndexer (symbolName, ft, if isReadOnly nd.modifiers then ReadOnly else Mutable)
+          attr, SymbolIndexer (symbolName, ft, if isReadOnly (modifiers nd) then ReadOnly else Mutable)
         | _ -> fail ()
       | _ -> fail ()
 
@@ -616,7 +620,7 @@ module private ParserImpl =
         | _ -> ()
         let isOptional = nd.questionToken |> Option.isSome
         let fl = { name = name; isOptional = isOptional; value = ty }
-        attr, Field (fl, (if isReadOnly nd.modifiers then ReadOnly else Mutable))
+        attr, Field (fl, (if isReadOnly (modifiers nd) then ReadOnly else Mutable))
       | Error _ -> nodeWarn ctx nd "unsupported property name '%s' in PropertyDeclaration" (getText nd.name); (attr, UnknownMember (Some (getText nd)))
     | Kind.CallSignature ->
       let nd = nd :?> Ts.CallSignatureDeclaration
@@ -728,14 +732,15 @@ module private ParserImpl =
   let readClass (ctx: ParserContext) (i: Ts.ClassDeclaration) : Class<ClassName> =
     let typrms = readTypeParameters Set.empty ctx i.typeParameters
     let typrmsSet = typrms |> List.map (fun tp -> tp.name) |> Set.ofList
+    let modifiers = modifiers i
     {
       comments = readCommentsForNamedDeclaration ctx i
       name = i.name |> Option.map (fun id -> Name id.text) |? ExportDefaultUnnamedClass
-      accessibility = getAccessibility i.modifiers |? Public
+      accessibility = getAccessibility modifiers |? Public
       typeParams = typrms
       implements = readInherits typrmsSet ctx i.heritageClauses
       isInterface = false
-      isExported = getExported i.modifiers
+      isExported = getExported modifiers
       members = i.members |> Array.map (readNamedDeclaration typrmsSet ctx) |> List.ofArray
       loc = Node.location i
     }
@@ -804,8 +809,9 @@ module private ParserImpl =
               nodeWarn ctx vd "type missing for variable '%s'" name
               UnknownType None
         let isConst = (int vd.flags) ||| (int Ts.NodeFlags.Const) <> 0
-        let isExported = getExported vd.modifiers
-        let accessibility = getAccessibility vd.modifiers
+        let modifiers = modifiers vd
+        let isExported = getExported modifiers
+        let accessibility = getAccessibility modifiers
         Variable { comments = comments; loc = Node.location vd; name = name; typ = ty; isConst = isConst; isExported = isExported; accessibility = accessibility }
     ) |> List.ofArray
 

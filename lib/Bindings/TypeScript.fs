@@ -1,4 +1,4 @@
-// ts2fable 0.8.0-build.658
+// ts2fable 0.8.0-build.664
 module rec TypeScript
 
 #nowarn "3390" // disable warnings for invalid XML comments
@@ -51,7 +51,7 @@ module Ts =
         abstract isIdentifierPart: ch: float * languageVersion: ScriptTarget option * ?identifierVariant: LanguageVariant -> bool
         abstract createScanner: languageVersion: ScriptTarget * skipTrivia: bool * ?languageVariant: LanguageVariant * ?textInitial: string * ?onError: ErrorCallback * ?start: float * ?length: float -> Scanner
         abstract isExternalModuleNameRelative: moduleName: string -> bool
-        abstract sortAndDeduplicateDiagnostics: diagnostics: 'T[] -> SortedReadonlyArray<'T> when 'T :> Diagnostic
+        abstract sortAndDeduplicateDiagnostics: diagnostics: 'T[] -> SortedReadonlyArray<'T>
         abstract getDefaultLibFileName: options: CompilerOptions -> string
         abstract textSpanEnd: span: TextSpan -> float
         abstract textSpanIsEmpty: span: TextSpan -> bool
@@ -73,7 +73,7 @@ module Ts =
         /// Called to merge all the changes that occurred across several versions of a script snapshot
         /// into a single change.  i.e. if a user keeps making successive edits to a script we will
         /// have a text change from V1 to V2, V2 to V3, ..., Vn.
-        ///
+        /// 
         /// This function will then merge those changes into a single change range valid between V1 and
         /// Vn.
         abstract collapseTextChangeRangesAcrossMultipleVersions: changes: TextChangeRange[] -> TextChangeRange
@@ -88,14 +88,14 @@ module Ts =
         /// and if it is, attempts to set the appropriate language.
         abstract validateLocaleAndSetLanguage: locale: string * sys: {| getExecutingFilePath: unit -> string; resolvePath: string -> string; fileExists: string -> bool; readFile: string -> string option |} * ?errors: Push<Diagnostic> -> unit
         abstract getOriginalNode: node: Node -> Node
-        abstract getOriginalNode: node: Node * nodeTest: (Node -> bool) -> 'T when 'T :> Node
+        abstract getOriginalNode: node: Node * nodeTest: (Node -> bool) -> 'T
         abstract getOriginalNode: node: Node option -> Node option
-        abstract getOriginalNode: node: Node option * nodeTest: (Node option -> bool) -> 'T option when 'T :> Node
+        abstract getOriginalNode: node: Node option * nodeTest: (Node option -> bool) -> 'T option
         /// Iterates through the parent chain of a node and performs the callback on each parent until the callback
         /// returns a truthy value, then returns that value.
         /// If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
         /// At that point findAncestor returns undefined.
-        abstract findAncestor: node: Node option * callback: (Node -> bool) -> 'T option when 'T :> Node
+        abstract findAncestor: node: Node option * callback: (Node -> bool) -> 'T option
         abstract findAncestor: node: Node option * callback: (Node -> U2<bool, string>) -> Node option
         /// <summary>Gets a value indicating whether a node originated in the parse tree.</summary>
         /// <param name="node">The node to test.</param>
@@ -108,7 +108,7 @@ module Ts =
         /// <param name="node">The original node.</param>
         /// <param name="nodeTest">A callback used to ensure the correct type of parse tree node is returned.</param>
         /// <returns>The original parse tree node if found; otherwise, undefined.</returns>
-        abstract getParseTreeNode: node: 'T option * ?nodeTest: (Node -> bool) -> 'T option when 'T :> Node
+        abstract getParseTreeNode: node: 'T option * ?nodeTest: (Node -> bool) -> 'T option
         /// Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
         abstract escapeLeadingUnderscores: identifier: string -> __String
         /// <summary>Remove extra underscore from escaped identifier text content.</summary>
@@ -119,6 +119,8 @@ module Ts =
         abstract symbolName: symbol: Symbol -> string
         abstract getNameOfJSDocTypedef: declaration: JSDocTypedefTag -> U2<Identifier, PrivateIdentifier> option
         abstract getNameOfDeclaration: declaration: U2<Declaration, Expression> option -> DeclarationName option
+        abstract getDecorators: node: HasDecorators -> Decorator[] option
+        abstract getModifiers: node: HasModifiers -> Modifier[] option
         /// <summary>Gets the JSDoc parameter tags for the node if present.</summary>
         /// <remarks>
         /// Returns any JSDoc param tag whose name matches the provided
@@ -127,7 +129,7 @@ module Ts =
         /// initializer is the containing function. The tags closest to the
         /// node are returned first, so in the previous example, the param
         /// tag on the containing function expression would be first.
-        ///
+        /// 
         /// For binding patterns, parameter tags are matched by position.
         /// </remarks>
         abstract getJSDocParameterTags: param: ParameterDeclaration -> JSDocParameterTag[]
@@ -194,7 +196,7 @@ module Ts =
         /// Get all JSDoc tags related to a node, including those on parent nodes.
         abstract getJSDocTags: node: Node -> JSDocTag[]
         /// Gets all JSDoc tags that match a specified predicate
-        abstract getAllJSDocTags: node: Node * predicate: (JSDocTag -> bool) -> 'T[] when 'T :> JSDocTag
+        abstract getAllJSDocTags: node: Node * predicate: (JSDocTag -> bool) -> 'T[]
         /// Gets all JSDoc tags of a specified kind
         abstract getAllJSDocTagsOfKind: node: Node * kind: SyntaxKind -> JSDocTag[]
         /// Gets the text of a jsdoc comment, flattening links to their text.
@@ -202,6 +204,12 @@ module Ts =
         /// <summary>
         /// Gets the effective type parameters. If the node was parsed in a
         /// JavaScript file, gets the type parameters from the <c>@template</c> tag from JSDoc.
+        /// 
+        /// This does *not* return type parameters from a jsdoc reference to a generic type, eg
+        /// 
+        /// type Id = &lt;T&gt;(x: T) =&gt; T
+        /// /** @type {Id} /
+        /// function id(x) { return x }
         /// </summary>
         abstract getEffectiveTypeParameterDeclarations: node: DeclarationWithTypeParameters -> TypeParameterDeclaration[]
         abstract getEffectiveConstraintOfTypeParameter: node: TypeParameterDeclaration -> TypeNode option
@@ -243,6 +251,7 @@ module Ts =
         abstract isClassElement: node: Node -> bool
         abstract isClassLike: node: Node -> bool
         abstract isAccessor: node: Node -> bool
+        abstract isModifierLike: node: Node -> bool
         abstract isTypeElement: node: Node -> bool
         abstract isClassOrTypeElement: node: Node -> bool
         abstract isObjectLiteralElementLike: node: Node -> bool
@@ -270,6 +279,8 @@ module Ts =
         abstract isObjectLiteralElement: node: Node -> bool
         abstract isStringLiteralLike: node: Node -> bool
         abstract isJSDocLinkLike: node: Node -> bool
+        abstract hasRestParameter: s: U2<SignatureDeclaration, JSDocSignature> -> bool
+        abstract isRestParameter: node: U2<ParameterDeclaration, JSDocParameterTag> -> bool
         abstract factory: NodeFactory
         abstract createUnparsedSourceFile: text: string -> UnparsedSource
         abstract createUnparsedSourceFile: inputFile: InputFiles * ``type``: IExportsCreateUnparsedSourceFile * ?stripInternal: bool -> UnparsedSource
@@ -279,39 +290,39 @@ module Ts =
         abstract createInputFiles: javascriptText: string * declarationText: string * javascriptMapPath: string option * javascriptMapText: string option * declarationMapPath: string option * declarationMapText: string option -> InputFiles
         /// Create an external source map source file reference
         abstract createSourceMapSource: fileName: string * text: string * ?skipTrivia: (float -> float) -> SourceMapSource
-        abstract setOriginalNode: node: 'T * original: Node option -> 'T when 'T :> Node
+        abstract setOriginalNode: node: 'T * original: Node option -> 'T
         /// <summary>Clears any <c>EmitNode</c> entries from parse-tree nodes.</summary>
         /// <param name="sourceFile">A source file.</param>
         abstract disposeEmitNodes: sourceFile: SourceFile option -> unit
         /// Sets flags that control emit behavior of a node.
-        abstract setEmitFlags: node: 'T * emitFlags: EmitFlags -> 'T when 'T :> Node
+        abstract setEmitFlags: node: 'T * emitFlags: EmitFlags -> 'T
         /// Gets a custom text range to use when emitting source maps.
         abstract getSourceMapRange: node: Node -> SourceMapRange
         /// Sets a custom text range to use when emitting source maps.
-        abstract setSourceMapRange: node: 'T * range: SourceMapRange option -> 'T when 'T :> Node
+        abstract setSourceMapRange: node: 'T * range: SourceMapRange option -> 'T
         /// Gets the TextRange to use for source maps for a token of a node.
         abstract getTokenSourceMapRange: node: Node * token: SyntaxKind -> SourceMapRange option
         /// Sets the TextRange to use for source maps for a token of a node.
-        abstract setTokenSourceMapRange: node: 'T * token: SyntaxKind * range: SourceMapRange option -> 'T when 'T :> Node
+        abstract setTokenSourceMapRange: node: 'T * token: SyntaxKind * range: SourceMapRange option -> 'T
         /// Gets a custom text range to use when emitting comments.
         abstract getCommentRange: node: Node -> TextRange
         /// Sets a custom text range to use when emitting comments.
-        abstract setCommentRange: node: 'T * range: TextRange -> 'T when 'T :> Node
+        abstract setCommentRange: node: 'T * range: TextRange -> 'T
         abstract getSyntheticLeadingComments: node: Node -> SynthesizedComment[] option
-        abstract setSyntheticLeadingComments: node: 'T * comments: SynthesizedComment[] option -> 'T when 'T :> Node
-        abstract addSyntheticLeadingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T when 'T :> Node
+        abstract setSyntheticLeadingComments: node: 'T * comments: SynthesizedComment[] option -> 'T
+        abstract addSyntheticLeadingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T
         abstract getSyntheticTrailingComments: node: Node -> SynthesizedComment[] option
-        abstract setSyntheticTrailingComments: node: 'T * comments: SynthesizedComment[] option -> 'T when 'T :> Node
-        abstract addSyntheticTrailingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T when 'T :> Node
-        abstract moveSyntheticComments: node: 'T * original: Node -> 'T when 'T :> Node
+        abstract setSyntheticTrailingComments: node: 'T * comments: SynthesizedComment[] option -> 'T
+        abstract addSyntheticTrailingComment: node: 'T * kind: SyntaxKind * text: string * ?hasTrailingNewLine: bool -> 'T
+        abstract moveSyntheticComments: node: 'T * original: Node -> 'T
         /// Gets the constant value to emit for an expression representing an enum.
         abstract getConstantValue: node: AccessExpression -> U2<string, float> option
         /// Sets the constant value to emit for an expression.
         abstract setConstantValue: node: AccessExpression * value: U2<string, float> -> AccessExpression
         /// Adds an EmitHelper to a node.
-        abstract addEmitHelper: node: 'T * helper: EmitHelper -> 'T when 'T :> Node
+        abstract addEmitHelper: node: 'T * helper: EmitHelper -> 'T
         /// Add EmitHelpers to a node.
-        abstract addEmitHelpers: node: 'T * helpers: EmitHelper[] option -> 'T when 'T :> Node
+        abstract addEmitHelpers: node: 'T * helpers: EmitHelper[] option -> 'T
         /// Removes an EmitHelper from a node.
         abstract removeEmitHelper: node: Node * helper: EmitHelper -> bool
         /// Gets the EmitHelpers of a node.
@@ -517,7 +528,9 @@ module Ts =
         abstract isJSDocUnknownTag: node: Node -> bool
         abstract isJSDocPropertyTag: node: Node -> bool
         abstract isJSDocImplementsTag: node: Node -> bool
-        abstract setTextRange: range: 'T * location: TextRange option -> 'T when 'T :> TextRange
+        abstract setTextRange: range: 'T * location: TextRange option -> 'T
+        abstract canHaveModifiers: node: Node -> bool
+        abstract canHaveDecorators: node: Node -> bool
         /// <summary>
         /// Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
         /// stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -598,27 +611,27 @@ module Ts =
         /// <param name="visitor">The callback used to visit the Node.</param>
         /// <param name="test">A callback to execute to verify the Node is valid.</param>
         /// <param name="lift">An optional callback to execute to lift a NodeArray into a valid Node.</param>
-        abstract visitNode: node: 'T * visitor: Visitor option * ?test: (Node -> bool) * ?lift: (Node[] -> 'T) -> 'T when 'T :> Node
+        abstract visitNode: node: 'T * visitor: Visitor option * ?test: (Node -> bool) * ?lift: (Node[] -> 'T) -> 'T
         /// <summary>Visits a Node using the supplied visitor, possibly returning a new Node in its place.</summary>
         /// <param name="node">The Node to visit.</param>
         /// <param name="visitor">The callback used to visit the Node.</param>
         /// <param name="test">A callback to execute to verify the Node is valid.</param>
         /// <param name="lift">An optional callback to execute to lift a NodeArray into a valid Node.</param>
-        abstract visitNode: node: 'T option * visitor: Visitor option * ?test: (Node -> bool) * ?lift: (Node[] -> 'T) -> 'T option when 'T :> Node
+        abstract visitNode: node: 'T option * visitor: Visitor option * ?test: (Node -> bool) * ?lift: (Node[] -> 'T) -> 'T option
         /// <summary>Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.</summary>
         /// <param name="nodes">The NodeArray to visit.</param>
         /// <param name="visitor">The callback used to visit a Node.</param>
         /// <param name="test">A node test to execute for each node.</param>
         /// <param name="start">An optional value indicating the starting offset at which to start visiting.</param>
         /// <param name="count">An optional value indicating the maximum number of nodes to visit.</param>
-        abstract visitNodes: nodes: 'T[] * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[] when 'T :> Node
+        abstract visitNodes: nodes: 'T[] * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[]
         /// <summary>Visits a NodeArray using the supplied visitor, possibly returning a new NodeArray in its place.</summary>
         /// <param name="nodes">The NodeArray to visit.</param>
         /// <param name="visitor">The callback used to visit a Node.</param>
         /// <param name="test">A node test to execute for each node.</param>
         /// <param name="start">An optional value indicating the starting offset at which to start visiting.</param>
         /// <param name="count">An optional value indicating the maximum number of nodes to visit.</param>
-        abstract visitNodes: nodes: 'T[] option * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[] option when 'T :> Node
+        abstract visitNodes: nodes: 'T[] option * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[] option
         /// Starts a new lexical environment and visits a statement list, ending the lexical environment
         /// and merging hoisted declarations upon completion.
         abstract visitLexicalEnvironment: statements: Statement[] * visitor: Visitor * context: TransformationContext * ?start: float * ?ensureUseStrict: bool * ?nodesVisitor: NodesVisitor -> Statement[]
@@ -641,12 +654,12 @@ module Ts =
         /// <param name="node">The Node whose children will be visited.</param>
         /// <param name="visitor">The callback used to visit each child.</param>
         /// <param name="context">A lexical environment context for the visitor.</param>
-        abstract visitEachChild: node: 'T * visitor: Visitor * context: TransformationContext -> 'T when 'T :> Node
+        abstract visitEachChild: node: 'T * visitor: Visitor * context: TransformationContext -> 'T
         /// <summary>Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.</summary>
         /// <param name="node">The Node whose children will be visited.</param>
         /// <param name="visitor">The callback used to visit each child.</param>
         /// <param name="context">A lexical environment context for the visitor.</param>
-        abstract visitEachChild: node: 'T option * visitor: Visitor * context: TransformationContext * ?nodesVisitor: obj * ?tokenVisitor: Visitor -> 'T option when 'T :> Node
+        abstract visitEachChild: node: 'T option * visitor: Visitor * context: TransformationContext * ?nodesVisitor: obj * ?tokenVisitor: Visitor -> 'T option
         abstract getTsBuildInfoEmitOutputFilePath: options: CompilerOptions -> string option
         abstract getOutputFileNames: commandLine: ParsedCommandLine * inputFileName: string * ignoreCase: bool -> string[]
         abstract createPrinter: ?printerOptions: PrinterOptions * ?handlers: PrintHandlers -> Printer
@@ -693,7 +706,7 @@ module Ts =
         /// <summary>
         /// Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
         /// that represent a compilation unit.
-        ///
+        /// 
         /// Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
         /// triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
         /// </summary>
@@ -703,7 +716,7 @@ module Ts =
         /// <summary>
         /// Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
         /// that represent a compilation unit.
-        ///
+        /// 
         /// Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
         /// triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
         /// </summary>
@@ -731,20 +744,20 @@ module Ts =
         abstract createAbstractBuilder: rootNames: string[] option * options: CompilerOptions option * ?host: CompilerHost * ?oldProgram: BuilderProgram * ?configFileParsingDiagnostics: Diagnostic[] * ?projectReferences: ProjectReference[] -> BuilderProgram
         abstract readBuilderProgram: compilerOptions: CompilerOptions * host: ReadBuildProgramHost -> EmitAndSemanticDiagnosticsBuilderProgram option
         abstract createIncrementalCompilerHost: options: CompilerOptions * ?system: System -> CompilerHost
-        abstract createIncrementalProgram: p0: IncrementalProgramOptions<'T> -> 'T when 'T :> BuilderProgram
+        abstract createIncrementalProgram: p0: IncrementalProgramOptions<'T> -> 'T
         /// Create the watch compiler host for either configFile or fileNames and its options
-        abstract createWatchCompilerHost: configFileName: string * optionsToExtend: CompilerOptions option * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?watchOptionsToExtend: WatchOptions * ?extraFileExtensions: FileExtensionInfo[] -> WatchCompilerHostOfConfigFile<'T> when 'T :> BuilderProgram
-        abstract createWatchCompilerHost: rootFiles: string[] * options: CompilerOptions * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?projectReferences: ProjectReference[] * ?watchOptions: WatchOptions -> WatchCompilerHostOfFilesAndCompilerOptions<'T> when 'T :> BuilderProgram
+        abstract createWatchCompilerHost: configFileName: string * optionsToExtend: CompilerOptions option * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?watchOptionsToExtend: WatchOptions * ?extraFileExtensions: FileExtensionInfo[] -> WatchCompilerHostOfConfigFile<'T>
+        abstract createWatchCompilerHost: rootFiles: string[] * options: CompilerOptions * system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter * ?projectReferences: ProjectReference[] * ?watchOptions: WatchOptions -> WatchCompilerHostOfFilesAndCompilerOptions<'T>
         /// Creates the watch from the host for root files and compiler options
-        abstract createWatchProgram: host: WatchCompilerHostOfFilesAndCompilerOptions<'T> -> WatchOfFilesAndCompilerOptions<'T> when 'T :> BuilderProgram
+        abstract createWatchProgram: host: WatchCompilerHostOfFilesAndCompilerOptions<'T> -> WatchOfFilesAndCompilerOptions<'T>
         /// Creates the watch from the host for config file
-        abstract createWatchProgram: host: WatchCompilerHostOfConfigFile<'T> -> WatchOfConfigFile<'T> when 'T :> BuilderProgram
+        abstract createWatchProgram: host: WatchCompilerHostOfConfigFile<'T> -> WatchOfConfigFile<'T>
         /// Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
         abstract createBuilderStatusReporter: system: System * ?pretty: bool -> DiagnosticReporter
-        abstract createSolutionBuilderHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportErrorSummary: ReportEmitErrorSummary -> SolutionBuilderHost<'T> when 'T :> BuilderProgram
-        abstract createSolutionBuilderWithWatchHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter -> SolutionBuilderWithWatchHost<'T> when 'T :> BuilderProgram
-        abstract createSolutionBuilder: host: SolutionBuilderHost<'T> * rootNames: string[] * defaultOptions: BuildOptions -> SolutionBuilder<'T> when 'T :> BuilderProgram
-        abstract createSolutionBuilderWithWatch: host: SolutionBuilderWithWatchHost<'T> * rootNames: string[] * defaultOptions: BuildOptions * ?baseWatchOptions: WatchOptions -> SolutionBuilder<'T> when 'T :> BuilderProgram
+        abstract createSolutionBuilderHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportErrorSummary: ReportEmitErrorSummary -> SolutionBuilderHost<'T>
+        abstract createSolutionBuilderWithWatchHost: ?system: System * ?createProgram: CreateProgram<'T> * ?reportDiagnostic: DiagnosticReporter * ?reportSolutionBuilderStatus: DiagnosticReporter * ?reportWatchStatus: WatchStatusReporter -> SolutionBuilderWithWatchHost<'T>
+        abstract createSolutionBuilder: host: SolutionBuilderHost<'T> * rootNames: string[] * defaultOptions: BuildOptions -> SolutionBuilder<'T>
+        abstract createSolutionBuilderWithWatch: host: SolutionBuilderWithWatchHost<'T> * rootNames: string[] * defaultOptions: BuildOptions * ?baseWatchOptions: WatchOptions -> SolutionBuilder<'T>
         abstract getDefaultFormatCodeSettings: ?newLineCharacter: string -> FormatCodeSettings
         /// The classifier is used for syntactic highlighting in editors via the TSServer
         abstract createClassifier: unit -> Classifier
@@ -769,7 +782,7 @@ module Ts =
         /// <param name="source">A single <c>Node</c> or an array of <c>Node</c> objects.</param>
         /// <param name="transformers">An array of <c>TransformerFactory</c> callbacks used to process the transformation.</param>
         /// <param name="compilerOptions">Optional compiler options.</param>
-        abstract transform: source: U2<'T, 'T[]> * transformers: TransformerFactory<'T>[] * ?compilerOptions: CompilerOptions -> TransformationResult<'T> when 'T :> Node
+        abstract transform: source: U2<'T, 'T[]> * transformers: TransformerFactory<'T>[] * ?compilerOptions: CompilerOptions -> TransformationResult<'T>
 
     /// <summary>
     /// Type of objects whose values are all of the same type.
@@ -1178,6 +1191,7 @@ module Ts =
         | JSDocFunctionType = 317
         | JSDocVariadicType = 318
         | JSDocNamepathType = 319
+        | JSDoc = 320
         /// <deprecated>Use SyntaxKind.JSDoc</deprecated>
         | JSDocComment = 320
         | JSDocText = 321
@@ -1246,7 +1260,6 @@ module Ts =
         | LastJSDocNode = 347
         | FirstJSDocTagNode = 327
         | LastJSDocTagNode = 347
-        | JSDoc = 320
 
     type TriviaSyntaxKind =
         SyntaxKind
@@ -1327,13 +1340,15 @@ module Ts =
         | Override = 16384
         | In = 32768
         | Out = 65536
+        | Decorator = 131072
         | HasComputedFlags = 536870912
         | AccessibilityModifier = 28
         | ParameterPropertyModifier = 16476
         | NonPublicAccessibilityModifier = 24
         | TypeScriptModifier = 116958
         | ExportDefault = 513
-        | All = 125951
+        | All = 257023
+        | Modifier = 125951
 
     type [<RequireQualifiedAccess>] JsxFlags =
         | None = 0
@@ -1347,8 +1362,6 @@ module Ts =
         inherit ReadonlyTextRange
         abstract kind: SyntaxKind
         abstract flags: NodeFlags
-        abstract decorators: Decorator[] option
-        abstract modifiers: ModifiersArray option
         abstract parent: Node
         abstract getSourceFile: unit -> SourceFile
         abstract getChildCount: ?sourceFile: SourceFile -> float
@@ -1456,7 +1469,6 @@ module Ts =
         | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
         | [<CompiledValue(296)>] PropertyAssignment of PropertyAssignment
         | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(166)>] PropertySignature of PropertySignature
         | [<CompiledValue(254)>] VariableDeclaration of VariableDeclaration
         static member inline op_ErasedCast(x: BindingElement) = BindingElement x
         static member inline op_ErasedCast(x: EnumMember) = EnumMember x
@@ -1467,7 +1479,6 @@ module Ts =
         static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
         static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
         static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
-        static member inline op_ErasedCast(x: PropertySignature) = PropertySignature x
         static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasExpressionInitializer =
@@ -1476,17 +1487,83 @@ module Ts =
         | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
         | [<CompiledValue(296)>] PropertyAssignment of PropertyAssignment
         | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
-        | [<CompiledValue(166)>] PropertySignature of PropertySignature
         | [<CompiledValue(254)>] VariableDeclaration of VariableDeclaration
         static member inline op_ErasedCast(x: BindingElement) = BindingElement x
         static member inline op_ErasedCast(x: EnumMember) = EnumMember x
         static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
         static member inline op_ErasedCast(x: PropertyAssignment) = PropertyAssignment x
         static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
-        static member inline op_ErasedCast(x: PropertySignature) = PropertySignature x
         static member inline op_ErasedCast(x: VariableDeclaration) = VariableDeclaration x
 
-    type [<AllowNullLiteral>] NodeArray<'T when 'T :> Node> =
+    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasDecorators =
+        | [<CompiledValue(257)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(226)>] ClassExpression of ClassExpression
+        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
+        static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
+        static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
+        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
+        static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
+        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+
+    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] HasModifiers =
+        | [<CompiledValue(214)>] ArrowFunction of ArrowFunction
+        | [<CompiledValue(257)>] ClassDeclaration of ClassDeclaration
+        | [<CompiledValue(226)>] ClassExpression of ClassExpression
+        | [<CompiledValue(171)>] ConstructorDeclaration of ConstructorDeclaration
+        | [<CompiledValue(180)>] ConstructorTypeNode of ConstructorTypeNode
+        | [<CompiledValue(260)>] EnumDeclaration of EnumDeclaration
+        | [<CompiledValue(271)>] ExportAssignment of ExportAssignment
+        | [<CompiledValue(272)>] ExportDeclaration of ExportDeclaration
+        | [<CompiledValue(256)>] FunctionDeclaration of FunctionDeclaration
+        | [<CompiledValue(213)>] FunctionExpression of FunctionExpression
+        | [<CompiledValue(172)>] GetAccessorDeclaration of GetAccessorDeclaration
+        | [<CompiledValue(266)>] ImportDeclaration of ImportDeclaration
+        | [<CompiledValue(265)>] ImportEqualsDeclaration of ImportEqualsDeclaration
+        | [<CompiledValue(176)>] IndexSignatureDeclaration of IndexSignatureDeclaration
+        | [<CompiledValue(258)>] InterfaceDeclaration of InterfaceDeclaration
+        | [<CompiledValue(169)>] MethodDeclaration of MethodDeclaration
+        | [<CompiledValue(168)>] MethodSignature of MethodSignature
+        | [<CompiledValue(261)>] ModuleDeclaration of ModuleDeclaration
+        | [<CompiledValue(164)>] ParameterDeclaration of ParameterDeclaration
+        | [<CompiledValue(167)>] PropertyDeclaration of PropertyDeclaration
+        | [<CompiledValue(166)>] PropertySignature of PropertySignature
+        | [<CompiledValue(173)>] SetAccessorDeclaration of SetAccessorDeclaration
+        | [<CompiledValue(259)>] TypeAliasDeclaration of TypeAliasDeclaration
+        | [<CompiledValue(163)>] TypeParameterDeclaration of TypeParameterDeclaration
+        | [<CompiledValue(237)>] VariableStatement of VariableStatement
+        static member inline op_ErasedCast(x: ArrowFunction) = ArrowFunction x
+        static member inline op_ErasedCast(x: ClassDeclaration) = ClassDeclaration x
+        static member inline op_ErasedCast(x: ClassExpression) = ClassExpression x
+        static member inline op_ErasedCast(x: ConstructorDeclaration) = ConstructorDeclaration x
+        static member inline op_ErasedCast(x: ConstructorTypeNode) = ConstructorTypeNode x
+        static member inline op_ErasedCast(x: EnumDeclaration) = EnumDeclaration x
+        static member inline op_ErasedCast(x: ExportAssignment) = ExportAssignment x
+        static member inline op_ErasedCast(x: ExportDeclaration) = ExportDeclaration x
+        static member inline op_ErasedCast(x: FunctionDeclaration) = FunctionDeclaration x
+        static member inline op_ErasedCast(x: FunctionExpression) = FunctionExpression x
+        static member inline op_ErasedCast(x: GetAccessorDeclaration) = GetAccessorDeclaration x
+        static member inline op_ErasedCast(x: ImportDeclaration) = ImportDeclaration x
+        static member inline op_ErasedCast(x: ImportEqualsDeclaration) = ImportEqualsDeclaration x
+        static member inline op_ErasedCast(x: IndexSignatureDeclaration) = IndexSignatureDeclaration x
+        static member inline op_ErasedCast(x: InterfaceDeclaration) = InterfaceDeclaration x
+        static member inline op_ErasedCast(x: MethodDeclaration) = MethodDeclaration x
+        static member inline op_ErasedCast(x: MethodSignature) = MethodSignature x
+        static member inline op_ErasedCast(x: ModuleDeclaration) = ModuleDeclaration x
+        static member inline op_ErasedCast(x: ParameterDeclaration) = ParameterDeclaration x
+        static member inline op_ErasedCast(x: PropertyDeclaration) = PropertyDeclaration x
+        static member inline op_ErasedCast(x: PropertySignature) = PropertySignature x
+        static member inline op_ErasedCast(x: SetAccessorDeclaration) = SetAccessorDeclaration x
+        static member inline op_ErasedCast(x: TypeAliasDeclaration) = TypeAliasDeclaration x
+        static member inline op_ErasedCast(x: TypeParameterDeclaration) = TypeParameterDeclaration x
+        static member inline op_ErasedCast(x: VariableStatement) = VariableStatement x
+
+    type [<AllowNullLiteral>] NodeArray<'T> =
         inherit ReadonlyArray<'T>
         inherit ReadonlyTextRange
         abstract hasTrailingComma: bool
@@ -1621,6 +1698,23 @@ module Ts =
         [<Emit("$0.kind")>]
         member _.kind : SyntaxKind = jsNative
 
+    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ModifierLike =
+        | [<CompiledValue(126)>] AbstractKeyword of AbstractKeyword
+        | [<CompiledValue(131)>] AsyncKeyword of AsyncKeyword
+        | [<CompiledValue(85)>] ConstKeyword of ConstKeyword
+        | [<CompiledValue(135)>] DeclareKeyword of DeclareKeyword
+        | [<CompiledValue(165)>] Decorator of Decorator
+        | [<CompiledValue(88)>] DefaultKeyword of DefaultKeyword
+        | [<CompiledValue(93)>] ExportKeyword of ExportKeyword
+        | [<CompiledValue(101)>] InKeyword of InKeyword
+        | [<CompiledValue(144)>] OutKeyword of OutKeyword
+        | [<CompiledValue(159)>] OverrideKeyword of OverrideKeyword
+        | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
+        | [<CompiledValue(122)>] ProtectedKeyword of ProtectedKeyword
+        | [<CompiledValue(123)>] PublicKeyword of PublicKeyword
+        | [<CompiledValue(145)>] ReadonlyKeyword of ReadonlyKeyword
+        | [<CompiledValue(124)>] StaticKeyword of StaticKeyword
+
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] AccessibilityModifier =
         | [<CompiledValue(121)>] PrivateKeyword of PrivateKeyword
         | [<CompiledValue(122)>] ProtectedKeyword of ProtectedKeyword
@@ -1753,6 +1847,7 @@ module Ts =
         inherit NamedDeclaration
         abstract kind: SyntaxKind
         abstract parent: U2<DeclarationWithTypeParameterChildren, InferTypeNode>
+        abstract modifiers: Modifier[] option
         abstract name: Identifier
         /// <summary>Note: Consider calling <c>getEffectiveConstraintOfTypeParameter</c></summary>
         abstract ``constraint``: TypeNode option
@@ -1837,6 +1932,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: SignatureDeclaration
+        abstract modifiers: ModifierLike[] option
         abstract dotDotDotToken: DotDotDotToken option
         abstract name: BindingName
         abstract questionToken: QuestionToken option
@@ -1856,16 +1952,19 @@ module Ts =
         inherit TypeElement
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract modifiers: Modifier[] option
         abstract name: PropertyName
         abstract questionToken: QuestionToken option
         abstract ``type``: TypeNode option
-        abstract initializer: Expression option with get, set
+        [<Obsolete("A property signature cannot have an initializer")>]
+        abstract initializer: Expression option
 
     type [<AllowNullLiteral>] PropertyDeclaration =
         inherit ClassElement
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: ClassLikeDeclaration
+        abstract modifiers: ModifierLike[] option
         abstract name: PropertyName
         abstract questionToken: QuestionToken option
         abstract exclamationToken: ExclamationToken option
@@ -1898,9 +1997,11 @@ module Ts =
         abstract kind: SyntaxKind
         abstract parent: ObjectLiteralExpression
         abstract name: PropertyName
-        abstract questionToken: QuestionToken option
-        abstract exclamationToken: ExclamationToken option
         abstract initializer: Expression
+        [<Obsolete("A property assignment cannot have a question token")>]
+        abstract questionToken: QuestionToken option
+        [<Obsolete("A property assignment cannot have an exclamation token")>]
+        abstract exclamationToken: ExclamationToken option
 
     type [<AllowNullLiteral>] ShorthandPropertyAssignment =
         inherit ObjectLiteralElement
@@ -1908,10 +2009,14 @@ module Ts =
         abstract kind: SyntaxKind
         abstract parent: ObjectLiteralExpression
         abstract name: Identifier
-        abstract questionToken: QuestionToken option
-        abstract exclamationToken: ExclamationToken option
         abstract equalsToken: EqualsToken option
         abstract objectAssignmentInitializer: Expression option
+        [<Obsolete("A shorthand property assignment cannot have modifiers")>]
+        abstract modifiers: Modifier[] option
+        [<Obsolete("A shorthand property assignment cannot have a question token")>]
+        abstract questionToken: QuestionToken option
+        [<Obsolete("A shorthand property assignment cannot have an exclamation token")>]
+        abstract exclamationToken: ExclamationToken option
 
     type [<AllowNullLiteral>] SpreadAssignment =
         inherit ObjectLiteralElement
@@ -2010,6 +2115,7 @@ module Ts =
         inherit FunctionLikeDeclarationBase
         inherit DeclarationStatement
         abstract kind: SyntaxKind
+        abstract modifiers: Modifier[] option
         abstract name: Identifier option
         abstract body: FunctionBody option
 
@@ -2018,6 +2124,7 @@ module Ts =
         inherit TypeElement
         abstract kind: SyntaxKind
         abstract parent: ObjectTypeDeclaration
+        abstract modifiers: Modifier[] option
         abstract name: PropertyName
 
     type [<AllowNullLiteral>] MethodDeclaration =
@@ -2027,6 +2134,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<ClassLikeDeclaration, ObjectLiteralExpression>
+        abstract modifiers: ModifierLike[] option
         abstract name: PropertyName
         abstract body: FunctionBody option
 
@@ -2036,6 +2144,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: ClassLikeDeclaration
+        abstract modifiers: Modifier[] option
         abstract body: FunctionBody option
 
     /// For when we encounter a semicolon in a class declaration. ES6 allows these as class elements.
@@ -2052,6 +2161,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U4<ClassLikeDeclaration, ObjectLiteralExpression, TypeLiteralNode, InterfaceDeclaration>
+        abstract modifiers: ModifierLike[] option
         abstract name: PropertyName
         abstract body: FunctionBody option
 
@@ -2063,6 +2173,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U4<ClassLikeDeclaration, ObjectLiteralExpression, TypeLiteralNode, InterfaceDeclaration>
+        abstract modifiers: ModifierLike[] option
         abstract name: PropertyName
         abstract body: FunctionBody option
 
@@ -2078,6 +2189,7 @@ module Ts =
         inherit TypeElement
         abstract kind: SyntaxKind
         abstract parent: ObjectTypeDeclaration
+        abstract modifiers: Modifier[] option
         abstract ``type``: TypeNode
 
     type [<AllowNullLiteral>] ClassStaticBlockDeclaration =
@@ -2133,10 +2245,13 @@ module Ts =
     type [<AllowNullLiteral>] FunctionTypeNode =
         inherit FunctionOrConstructorTypeNodeBase
         abstract kind: SyntaxKind
+        [<Obsolete("A function type cannot have modifiers")>]
+        abstract modifiers: Modifier[] option
 
     type [<AllowNullLiteral>] ConstructorTypeNode =
         inherit FunctionOrConstructorTypeNodeBase
         abstract kind: SyntaxKind
+        abstract modifiers: Modifier[] option
 
     type [<AllowNullLiteral>] NodeWithTypeArguments =
         inherit TypeNode
@@ -2641,6 +2756,7 @@ module Ts =
         inherit FunctionLikeDeclarationBase
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract modifiers: Modifier[] option
         abstract name: Identifier option
         abstract body: FunctionBody
 
@@ -2649,6 +2765,7 @@ module Ts =
         inherit FunctionLikeDeclarationBase
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract modifiers: Modifier[] option
         abstract equalsGreaterThanToken: EqualsGreaterThanToken
         abstract body: ConciseBody
         abstract name: obj
@@ -3028,7 +3145,19 @@ module Ts =
         abstract kind: SyntaxKind
         abstract parent: JsxAttributes
         abstract name: Identifier
-        abstract initializer: U2<StringLiteral, JsxExpression> option
+        abstract initializer: JsxAttributeValue option
+
+    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] JsxAttributeValue =
+        | [<CompiledValue(278)>] JsxElement of JsxElement
+        | [<CompiledValue(288)>] JsxExpression of JsxExpression
+        | [<CompiledValue(282)>] JsxFragment of JsxFragment
+        | [<CompiledValue(279)>] JsxSelfClosingElement of JsxSelfClosingElement
+        | [<CompiledValue(10)>] StringLiteral of StringLiteral
+        static member inline op_ErasedCast(x: JsxElement) = JsxElement x
+        static member inline op_ErasedCast(x: JsxExpression) = JsxExpression x
+        static member inline op_ErasedCast(x: JsxFragment) = JsxFragment x
+        static member inline op_ErasedCast(x: JsxSelfClosingElement) = JsxSelfClosingElement x
+        static member inline op_ErasedCast(x: StringLiteral) = StringLiteral x
 
     type [<AllowNullLiteral>] JsxSpreadAttribute =
         inherit ObjectLiteralElement
@@ -3115,6 +3244,7 @@ module Ts =
     type [<AllowNullLiteral>] VariableStatement =
         inherit Statement
         abstract kind: SyntaxKind
+        abstract modifiers: Modifier[] option
         abstract declarationList: VariableDeclarationList
 
     type [<AllowNullLiteral>] ExpressionStatement =
@@ -3366,6 +3496,7 @@ module Ts =
         inherit ClassLikeDeclarationBase
         inherit DeclarationStatement
         abstract kind: SyntaxKind
+        abstract modifiers: ModifierLike[] option
         /// <summary>May be undefined in <c>export default class { ... }</c>.</summary>
         abstract name: Identifier option
 
@@ -3373,6 +3504,7 @@ module Ts =
         inherit ClassLikeDeclarationBase
         inherit PrimaryExpression
         abstract kind: SyntaxKind
+        abstract modifiers: ModifierLike[] option
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] ClassLikeDeclaration =
         | [<CompiledValue(257)>] ClassDeclaration of ClassDeclaration
@@ -3395,6 +3527,7 @@ module Ts =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract modifiers: Modifier[] option
         abstract name: Identifier
         abstract typeParameters: TypeParameterDeclaration[] option
         abstract heritageClauses: HeritageClause[] option
@@ -3411,6 +3544,7 @@ module Ts =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract modifiers: Modifier[] option
         abstract name: Identifier
         abstract typeParameters: TypeParameterDeclaration[] option
         abstract ``type``: TypeNode
@@ -3427,6 +3561,7 @@ module Ts =
         inherit DeclarationStatement
         inherit JSDocContainer
         abstract kind: SyntaxKind
+        abstract modifiers: Modifier[] option
         abstract name: Identifier
         abstract members: EnumMember[]
 
@@ -3449,6 +3584,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<ModuleBody, SourceFile>
+        abstract modifiers: Modifier[] option
         abstract name: ModuleName
         abstract body: U2<ModuleBody, JSDocNamespaceDeclaration> option
 
@@ -3497,6 +3633,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<SourceFile, ModuleBlock>
+        abstract modifiers: Modifier[] option
         abstract name: Identifier
         abstract isTypeOnly: bool
         abstract moduleReference: ModuleReference
@@ -3511,6 +3648,7 @@ module Ts =
         inherit Statement
         abstract kind: SyntaxKind
         abstract parent: U2<SourceFile, ModuleBlock>
+        abstract modifiers: Modifier[] option
         abstract importClause: ImportClause option
         /// If this is not a StringLiteral it will be a grammar error.
         abstract moduleSpecifier: Expression
@@ -3579,6 +3717,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: U2<SourceFile, ModuleBlock>
+        abstract modifiers: Modifier[] option
         abstract isTypeOnly: bool
         /// <summary>Will not be assigned in the case of <c>export * from "foo";</c></summary>
         abstract exportClause: NamedExportBindings option
@@ -3651,6 +3790,7 @@ module Ts =
         inherit JSDocContainer
         abstract kind: SyntaxKind
         abstract parent: SourceFile
+        abstract modifiers: Modifier[] option
         abstract isExportEquals: bool option
         abstract expression: Expression
 
@@ -4025,9 +4165,9 @@ module Ts =
         abstract languageVariant: LanguageVariant with get, set
         abstract isDeclarationFile: bool with get, set
         /// lib.d.ts should have a reference comment like
-        ///
+        /// 
         ///   /// <reference no-default-lib="true"/>
-        ///
+        /// 
         /// If any other file has this comment, it signals not to include lib.d.ts
         /// because this containing file is intended to act as a default library.
         abstract hasNoDefaultLib: bool with get, set
@@ -4038,10 +4178,16 @@ module Ts =
         /// module. This is derived by the module resolver as it looks up the file, since
         /// it is derived from either the file extension of the module, or the containing
         /// <c>package.json</c> context, and affects both checking and emit.
-        ///
+        /// 
         /// It is _public_ so that (pre)transformers can set this field,
         /// since it switches the builtin <c>node</c> module transform. Generally speaking, if unset,
         /// the field is treated as though it is <c>ModuleKind.CommonJS</c>.
+        /// 
+        /// Note that this field is only set by the module resolution process when
+        /// <c>moduleResolution</c> is <c>Node16</c> or <c>NodeNext</c>, which is implied by the <c>module</c> setting
+        /// of <c>Node16</c> or <c>NodeNext</c>, respectively, but may be overriden (eg, by a <c>moduleResolution</c>
+        /// of <c>node</c>). If so, this field will be unset and source files will be considered to be
+        /// CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
         /// </summary>
         abstract impliedNodeFormat: ModuleKind option with get, set
         abstract getLineAndCharacterOfPosition: pos: float -> LineAndCharacter
@@ -4088,8 +4234,6 @@ module Ts =
         | [<CompiledValue(303)>] UnparsedTextLike of UnparsedTextLike
         | [<CompiledValue(301)>] UnparsedPrepend of UnparsedPrepend
         | [<CompiledValue(302)>] UnparsedTextLike' of UnparsedTextLike
-        static member inline op_ErasedCast(x: UnparsedTextLike) = UnparsedTextLike x
-        static member inline op_ErasedCast(x: UnparsedPrepend) = UnparsedPrepend x
 
     type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] UnparsedNode =
         | [<CompiledValue(303)>] UnparsedTextLike of UnparsedTextLike
@@ -4097,10 +4241,6 @@ module Ts =
         | [<CompiledValue(300)>] UnparsedPrologue of UnparsedPrologue
         | [<CompiledValue(304)>] UnparsedSyntheticReference of UnparsedSyntheticReference
         | [<CompiledValue(302)>] UnparsedTextLike' of UnparsedTextLike
-        static member inline op_ErasedCast(x: UnparsedTextLike) = UnparsedTextLike x
-        static member inline op_ErasedCast(x: UnparsedPrepend) = UnparsedPrepend x
-        static member inline op_ErasedCast(x: UnparsedPrologue) = UnparsedPrologue x
-        static member inline op_ErasedCast(x: UnparsedSyntheticReference) = UnparsedSyntheticReference x
 
     type [<AllowNullLiteral>] UnparsedSection =
         inherit Node
@@ -4216,7 +4356,7 @@ module Ts =
         /// the JavaScript and declaration files will be produced for all the files in this program.
         /// If targetSourceFile is specified, then only the JavaScript and declaration for that
         /// specific file will be generated.
-        ///
+        /// 
         /// If writeFile is not specified then the writeFile callback from the compiler host will be
         /// used for writing the JavaScript and declaration files.  Otherwise, the writeFile parameter
         /// will be invoked when writing the JavaScript and declaration files.
@@ -4403,6 +4543,7 @@ module Ts =
         | UseAliasDefinedOutsideCurrentScope = 16384
         | UseSingleQuotesForStringLiteralType = 268435456
         | NoTypeReduction = 536870912
+        | OmitThisParameter = 33554432
         | AllowThisInObjectLiteral = 32768
         | AllowQualifiedNameInPlaceOfIdentifier = 65536
         /// <deprecated>AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead.</deprecated>
@@ -4433,6 +4574,7 @@ module Ts =
         | UseAliasDefinedOutsideCurrentScope = 16384
         | UseSingleQuotesForStringLiteralType = 268435456
         | NoTypeReduction = 536870912
+        | OmitThisParameter = 33554432
         | AllowUniqueESSymbolType = 1048576
         | AddUndefined = 131072
         | WriteArrowStyleSignature = 262144
@@ -4442,7 +4584,7 @@ module Ts =
         | InTypeAlias = 8388608
         /// <deprecated />
         | WriteOwnNameForAnyLike = 0
-        | NodeBuilderFlagsMask = 814775659
+        | NodeBuilderFlagsMask = 848330091
 
     type [<RequireQualifiedAccess>] SymbolFormatFlags =
         | None = 0
@@ -5272,7 +5414,7 @@ Use typeAcquisition.enable instead.")>]
     /// Represents the result of module resolution.
     /// Module resolution will pick up tsx/jsx/js files even if '--jsx' and '--allowJs' are turned off.
     /// The Program will then filter results based on these flags.
-    ///
+    /// 
     /// Prefer to return a <c>ResolvedModuleFull</c> so that the file type does not have to be inferred.
     /// </summary>
     type [<AllowNullLiteral>] ResolvedModule =
@@ -5368,7 +5510,7 @@ Use typeAcquisition.enable instead.")>]
     type [<AllowNullLiteral>] SourceMapSource =
         abstract fileName: string with get, set
         abstract text: string with get, set
-        abstract skipTrivia: (float -> float) option with get, set
+        abstract skipTrivia: pos: float -> float
         abstract getLineAndCharacterOfPosition: pos: float -> LineAndCharacter
 
     type [<RequireQualifiedAccess>] EmitFlags =
@@ -5456,7 +5598,7 @@ Use typeAcquisition.enable instead.")>]
         | Function
 
     type [<AllowNullLiteral>] NodeFactory =
-        abstract createNodeArray: ?elements: 'T[] * ?hasTrailingComma: bool -> 'T[] when 'T :> Node
+        abstract createNodeArray: ?elements: 'T[] * ?hasTrailingComma: bool -> 'T[]
         abstract createNumericLiteral: value: U2<string, float> * ?numericLiteralFlags: TokenFlags -> NumericLiteral
         abstract createBigIntLiteral: value: U2<string, PseudoBigInt> -> BigIntLiteral
         abstract createStringLiteral: text: string * ?isSingleQuote: bool -> StringLiteral
@@ -5487,7 +5629,7 @@ Use typeAcquisition.enable instead.")>]
         /// Create a unique name generated for a node.
         abstract getGeneratedNameForNode: node: Node option * ?flags: GeneratedIdentifierFlags -> Identifier
         abstract createPrivateIdentifier: text: string -> PrivateIdentifier
-        abstract createToken: token: 'TKind -> Token<'TKind>
+        abstract createToken: token: SyntaxKind -> SuperExpression
         abstract createSuper: unit -> SuperExpression
         abstract createThis: unit -> ThisExpression
         abstract createNull: unit -> NullLiteral
@@ -5500,39 +5642,35 @@ Use typeAcquisition.enable instead.")>]
         abstract createComputedPropertyName: expression: Expression -> ComputedPropertyName
         abstract updateComputedPropertyName: node: ComputedPropertyName * expression: Expression -> ComputedPropertyName
         abstract createTypeParameterDeclaration: modifiers: Modifier[] option * name: U2<string, Identifier> * ?``constraint``: TypeNode * ?defaultType: TypeNode -> TypeParameterDeclaration
-        [<Obsolete("")>]
-        abstract createTypeParameterDeclaration: name: U2<string, Identifier> * ?``constraint``: TypeNode * ?defaultType: TypeNode -> TypeParameterDeclaration
         abstract updateTypeParameterDeclaration: node: TypeParameterDeclaration * modifiers: Modifier[] option * name: Identifier * ``constraint``: TypeNode option * defaultType: TypeNode option -> TypeParameterDeclaration
-        [<Obsolete("")>]
-        abstract updateTypeParameterDeclaration: node: TypeParameterDeclaration * name: Identifier * ``constraint``: TypeNode option * defaultType: TypeNode option -> TypeParameterDeclaration
-        abstract createParameterDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * ?questionToken: QuestionToken * ?``type``: TypeNode * ?initializer: Expression -> ParameterDeclaration
-        abstract updateParameterDeclaration: node: ParameterDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * questionToken: QuestionToken option * ``type``: TypeNode option * initializer: Expression option -> ParameterDeclaration
+        abstract createParameterDeclaration: modifiers: ModifierLike[] option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * ?questionToken: QuestionToken * ?``type``: TypeNode * ?initializer: Expression -> ParameterDeclaration
+        abstract updateParameterDeclaration: node: ParameterDeclaration * modifiers: ModifierLike[] option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * questionToken: QuestionToken option * ``type``: TypeNode option * initializer: Expression option -> ParameterDeclaration
         abstract createDecorator: expression: Expression -> Decorator
         abstract updateDecorator: node: Decorator * expression: Expression -> Decorator
         abstract createPropertySignature: modifiers: Modifier[] option * name: U2<PropertyName, string> * questionToken: QuestionToken option * ``type``: TypeNode option -> PropertySignature
         abstract updatePropertySignature: node: PropertySignature * modifiers: Modifier[] option * name: PropertyName * questionToken: QuestionToken option * ``type``: TypeNode option -> PropertySignature
-        abstract createPropertyDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
-        abstract updatePropertyDeclaration: node: PropertyDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
+        abstract createPropertyDeclaration: modifiers: ModifierLike[] option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
+        abstract updatePropertyDeclaration: node: PropertyDeclaration * modifiers: ModifierLike[] option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
         abstract createMethodSignature: modifiers: Modifier[] option * name: U2<string, PropertyName> * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> MethodSignature
         abstract updateMethodSignature: node: MethodSignature * modifiers: Modifier[] option * name: PropertyName * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> MethodSignature
-        abstract createMethodDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: U2<string, PropertyName> * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
-        abstract updateMethodDeclaration: node: MethodDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: PropertyName * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
-        abstract createConstructorDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
-        abstract updateConstructorDeclaration: node: ConstructorDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
-        abstract createGetAccessorDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
-        abstract updateGetAccessorDeclaration: node: GetAccessorDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: PropertyName * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
-        abstract createSetAccessorDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * body: Block option -> SetAccessorDeclaration
-        abstract updateSetAccessorDeclaration: node: SetAccessorDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: PropertyName * parameters: ParameterDeclaration[] * body: Block option -> SetAccessorDeclaration
+        abstract createMethodDeclaration: modifiers: ModifierLike[] option * asteriskToken: AsteriskToken option * name: U2<string, PropertyName> * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
+        abstract updateMethodDeclaration: node: MethodDeclaration * modifiers: ModifierLike[] option * asteriskToken: AsteriskToken option * name: PropertyName * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
+        abstract createConstructorDeclaration: modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
+        abstract updateConstructorDeclaration: node: ConstructorDeclaration * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
+        abstract createGetAccessorDeclaration: modifiers: ModifierLike[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
+        abstract updateGetAccessorDeclaration: node: GetAccessorDeclaration * modifiers: ModifierLike[] option * name: PropertyName * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
+        abstract createSetAccessorDeclaration: modifiers: ModifierLike[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * body: Block option -> SetAccessorDeclaration
+        abstract updateSetAccessorDeclaration: node: SetAccessorDeclaration * modifiers: ModifierLike[] option * name: PropertyName * parameters: ParameterDeclaration[] * body: Block option -> SetAccessorDeclaration
         abstract createCallSignature: typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> CallSignatureDeclaration
         abstract updateCallSignature: node: CallSignatureDeclaration * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> CallSignatureDeclaration
         abstract createConstructSignature: typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> ConstructSignatureDeclaration
         abstract updateConstructSignature: node: ConstructSignatureDeclaration * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option -> ConstructSignatureDeclaration
-        abstract createIndexSignature: decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
-        abstract updateIndexSignature: node: IndexSignatureDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
+        abstract createIndexSignature: modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
+        abstract updateIndexSignature: node: IndexSignatureDeclaration * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
         abstract createTemplateLiteralTypeSpan: ``type``: TypeNode * literal: U2<TemplateMiddle, TemplateTail> -> TemplateLiteralTypeSpan
         abstract updateTemplateLiteralTypeSpan: node: TemplateLiteralTypeSpan * ``type``: TypeNode * literal: U2<TemplateMiddle, TemplateTail> -> TemplateLiteralTypeSpan
-        abstract createClassStaticBlockDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * body: Block -> ClassStaticBlockDeclaration
-        abstract updateClassStaticBlockDeclaration: node: ClassStaticBlockDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * body: Block -> ClassStaticBlockDeclaration
+        abstract createClassStaticBlockDeclaration: body: Block -> ClassStaticBlockDeclaration
+        abstract updateClassStaticBlockDeclaration: node: ClassStaticBlockDeclaration * body: Block -> ClassStaticBlockDeclaration
         abstract createKeywordTypeNode: kind: 'TKind -> KeywordTypeNode<'TKind>
         abstract createTypePredicateNode: assertsModifier: AssertsKeyword option * parameterName: U3<Identifier, ThisTypeNode, string> * ``type``: TypeNode option -> TypePredicateNode
         abstract updateTypePredicateNode: node: TypePredicateNode * assertsModifier: AssertsKeyword option * parameterName: U2<Identifier, ThisTypeNode> * ``type``: TypeNode option -> TypePredicateNode
@@ -5541,11 +5679,7 @@ Use typeAcquisition.enable instead.")>]
         abstract createFunctionTypeNode: typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> FunctionTypeNode
         abstract updateFunctionTypeNode: node: FunctionTypeNode * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> FunctionTypeNode
         abstract createConstructorTypeNode: modifiers: Modifier[] option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> ConstructorTypeNode
-        [<Obsolete("")>]
-        abstract createConstructorTypeNode: typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> ConstructorTypeNode
         abstract updateConstructorTypeNode: node: ConstructorTypeNode * modifiers: Modifier[] option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> ConstructorTypeNode
-        [<Obsolete("")>]
-        abstract updateConstructorTypeNode: node: ConstructorTypeNode * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> ConstructorTypeNode
         abstract createTypeQueryNode: exprName: EntityName * ?typeArguments: TypeNode[] -> TypeQueryNode
         abstract updateTypeQueryNode: node: TypeQueryNode * exprName: EntityName * ?typeArguments: TypeNode[] -> TypeQueryNode
         abstract createTypeLiteralNode: members: TypeElement[] option -> TypeLiteralNode
@@ -5568,9 +5702,7 @@ Use typeAcquisition.enable instead.")>]
         abstract updateConditionalTypeNode: node: ConditionalTypeNode * checkType: TypeNode * extendsType: TypeNode * trueType: TypeNode * falseType: TypeNode -> ConditionalTypeNode
         abstract createInferTypeNode: typeParameter: TypeParameterDeclaration -> InferTypeNode
         abstract updateInferTypeNode: node: InferTypeNode * typeParameter: TypeParameterDeclaration -> InferTypeNode
-        abstract createImportTypeNode: argument: TypeNode * ?qualifier: EntityName * ?typeArguments: TypeNode[] * ?isTypeOf: bool -> ImportTypeNode
         abstract createImportTypeNode: argument: TypeNode * ?assertions: ImportTypeAssertionContainer * ?qualifier: EntityName * ?typeArguments: TypeNode[] * ?isTypeOf: bool -> ImportTypeNode
-        abstract updateImportTypeNode: node: ImportTypeNode * argument: TypeNode * qualifier: EntityName option * typeArguments: TypeNode[] option * ?isTypeOf: bool -> ImportTypeNode
         abstract updateImportTypeNode: node: ImportTypeNode * argument: TypeNode * assertions: ImportTypeAssertionContainer option * qualifier: EntityName option * typeArguments: TypeNode[] option * ?isTypeOf: bool -> ImportTypeNode
         abstract createParenthesizedType: ``type``: TypeNode -> ParenthesizedTypeNode
         abstract updateParenthesizedType: node: ParenthesizedTypeNode * ``type``: TypeNode -> ParenthesizedTypeNode
@@ -5650,8 +5782,8 @@ Use typeAcquisition.enable instead.")>]
         abstract updateYieldExpression: node: YieldExpression * asteriskToken: AsteriskToken option * expression: Expression option -> YieldExpression
         abstract createSpreadElement: expression: Expression -> SpreadElement
         abstract updateSpreadElement: node: SpreadElement * expression: Expression -> SpreadElement
-        abstract createClassExpression: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassExpression
-        abstract updateClassExpression: node: ClassExpression * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassExpression
+        abstract createClassExpression: modifiers: ModifierLike[] option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassExpression
+        abstract updateClassExpression: node: ClassExpression * modifiers: ModifierLike[] option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassExpression
         abstract createOmittedExpression: unit -> OmittedExpression
         abstract createExpressionWithTypeArguments: expression: Expression * typeArguments: TypeNode[] option -> ExpressionWithTypeArguments
         abstract updateExpressionWithTypeArguments: node: ExpressionWithTypeArguments * expression: Expression * typeArguments: TypeNode[] option -> ExpressionWithTypeArguments
@@ -5706,28 +5838,28 @@ Use typeAcquisition.enable instead.")>]
         abstract updateVariableDeclaration: node: VariableDeclaration * name: BindingName * exclamationToken: ExclamationToken option * ``type``: TypeNode option * initializer: Expression option -> VariableDeclaration
         abstract createVariableDeclarationList: declarations: VariableDeclaration[] * ?flags: NodeFlags -> VariableDeclarationList
         abstract updateVariableDeclarationList: node: VariableDeclarationList * declarations: VariableDeclaration[] -> VariableDeclarationList
-        abstract createFunctionDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
-        abstract updateFunctionDeclaration: node: FunctionDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
-        abstract createClassDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
-        abstract updateClassDeclaration: node: ClassDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
-        abstract createInterfaceDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
-        abstract updateInterfaceDeclaration: node: InterfaceDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
-        abstract createTypeAliasDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
-        abstract updateTypeAliasDeclaration: node: TypeAliasDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
-        abstract createEnumDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> * members: EnumMember[] -> EnumDeclaration
-        abstract updateEnumDeclaration: node: EnumDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier * members: EnumMember[] -> EnumDeclaration
-        abstract createModuleDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option * ?flags: NodeFlags -> ModuleDeclaration
-        abstract updateModuleDeclaration: node: ModuleDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option -> ModuleDeclaration
+        abstract createFunctionDeclaration: modifiers: ModifierLike[] option * asteriskToken: AsteriskToken option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
+        abstract updateFunctionDeclaration: node: FunctionDeclaration * modifiers: ModifierLike[] option * asteriskToken: AsteriskToken option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
+        abstract createClassDeclaration: modifiers: ModifierLike[] option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
+        abstract updateClassDeclaration: node: ClassDeclaration * modifiers: ModifierLike[] option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
+        abstract createInterfaceDeclaration: modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
+        abstract updateInterfaceDeclaration: node: InterfaceDeclaration * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
+        abstract createTypeAliasDeclaration: modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
+        abstract updateTypeAliasDeclaration: node: TypeAliasDeclaration * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
+        abstract createEnumDeclaration: modifiers: Modifier[] option * name: U2<string, Identifier> * members: EnumMember[] -> EnumDeclaration
+        abstract updateEnumDeclaration: node: EnumDeclaration * modifiers: Modifier[] option * name: Identifier * members: EnumMember[] -> EnumDeclaration
+        abstract createModuleDeclaration: modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option * ?flags: NodeFlags -> ModuleDeclaration
+        abstract updateModuleDeclaration: node: ModuleDeclaration * modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option -> ModuleDeclaration
         abstract createModuleBlock: statements: Statement[] -> ModuleBlock
         abstract updateModuleBlock: node: ModuleBlock * statements: Statement[] -> ModuleBlock
         abstract createCaseBlock: clauses: CaseOrDefaultClause[] -> CaseBlock
         abstract updateCaseBlock: node: CaseBlock * clauses: CaseOrDefaultClause[] -> CaseBlock
         abstract createNamespaceExportDeclaration: name: U2<string, Identifier> -> NamespaceExportDeclaration
         abstract updateNamespaceExportDeclaration: node: NamespaceExportDeclaration * name: Identifier -> NamespaceExportDeclaration
-        abstract createImportEqualsDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * name: U2<string, Identifier> * moduleReference: ModuleReference -> ImportEqualsDeclaration
-        abstract updateImportEqualsDeclaration: node: ImportEqualsDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * name: Identifier * moduleReference: ModuleReference -> ImportEqualsDeclaration
-        abstract createImportDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * ?assertClause: AssertClause -> ImportDeclaration
-        abstract updateImportDeclaration: node: ImportDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * assertClause: AssertClause option -> ImportDeclaration
+        abstract createImportEqualsDeclaration: modifiers: Modifier[] option * isTypeOnly: bool * name: U2<string, Identifier> * moduleReference: ModuleReference -> ImportEqualsDeclaration
+        abstract updateImportEqualsDeclaration: node: ImportEqualsDeclaration * modifiers: Modifier[] option * isTypeOnly: bool * name: Identifier * moduleReference: ModuleReference -> ImportEqualsDeclaration
+        abstract createImportDeclaration: modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * ?assertClause: AssertClause -> ImportDeclaration
+        abstract updateImportDeclaration: node: ImportDeclaration * modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * assertClause: AssertClause option -> ImportDeclaration
         abstract createImportClause: isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
         abstract updateImportClause: node: ImportClause * isTypeOnly: bool * name: Identifier option * namedBindings: NamedImportBindings option -> ImportClause
         abstract createAssertClause: elements: AssertEntry[] * ?multiLine: bool -> AssertClause
@@ -5744,10 +5876,10 @@ Use typeAcquisition.enable instead.")>]
         abstract updateNamedImports: node: NamedImports * elements: ImportSpecifier[] -> NamedImports
         abstract createImportSpecifier: isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ImportSpecifier
         abstract updateImportSpecifier: node: ImportSpecifier * isTypeOnly: bool * propertyName: Identifier option * name: Identifier -> ImportSpecifier
-        abstract createExportAssignment: decorators: Decorator[] option * modifiers: Modifier[] option * isExportEquals: bool option * expression: Expression -> ExportAssignment
-        abstract updateExportAssignment: node: ExportAssignment * decorators: Decorator[] option * modifiers: Modifier[] option * expression: Expression -> ExportAssignment
-        abstract createExportDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?assertClause: AssertClause -> ExportDeclaration
-        abstract updateExportDeclaration: node: ExportDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * assertClause: AssertClause option -> ExportDeclaration
+        abstract createExportAssignment: modifiers: Modifier[] option * isExportEquals: bool option * expression: Expression -> ExportAssignment
+        abstract updateExportAssignment: node: ExportAssignment * modifiers: Modifier[] option * expression: Expression -> ExportAssignment
+        abstract createExportDeclaration: modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?assertClause: AssertClause -> ExportDeclaration
+        abstract updateExportDeclaration: node: ExportDeclaration * modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * assertClause: AssertClause option -> ExportDeclaration
         abstract createNamedExports: elements: ExportSpecifier[] -> NamedExports
         abstract updateNamedExports: node: NamedExports * elements: ExportSpecifier[] -> NamedExports
         abstract createExportSpecifier: isTypeOnly: bool * propertyName: U2<string, Identifier> option * name: U2<string, Identifier> -> ExportSpecifier
@@ -5844,8 +5976,8 @@ Use typeAcquisition.enable instead.")>]
         abstract createJsxOpeningFragment: unit -> JsxOpeningFragment
         abstract createJsxJsxClosingFragment: unit -> JsxClosingFragment
         abstract updateJsxFragment: node: JsxFragment * openingFragment: JsxOpeningFragment * children: JsxChild[] * closingFragment: JsxClosingFragment -> JsxFragment
-        abstract createJsxAttribute: name: Identifier * initializer: U2<StringLiteral, JsxExpression> option -> JsxAttribute
-        abstract updateJsxAttribute: node: JsxAttribute * name: Identifier * initializer: U2<StringLiteral, JsxExpression> option -> JsxAttribute
+        abstract createJsxAttribute: name: Identifier * initializer: JsxAttributeValue option -> JsxAttribute
+        abstract updateJsxAttribute: node: JsxAttribute * name: Identifier * initializer: JsxAttributeValue option -> JsxAttribute
         abstract createJsxAttributes: properties: JsxAttributeLike[] -> JsxAttributes
         abstract updateJsxAttributes: node: JsxAttributes * properties: JsxAttributeLike[] -> JsxAttributes
         abstract createJsxSpreadAttribute: expression: Expression -> JsxSpreadAttribute
@@ -5918,6 +6050,94 @@ Use typeAcquisition.enable instead.")>]
         abstract createExportDefault: expression: Expression -> ExportAssignment
         abstract createExternalModuleExport: exportName: Identifier -> ExportDeclaration
         abstract restoreOuterExpressions: outerExpression: Expression option * innerExpression: Expression * ?kinds: OuterExpressionKinds -> Expression
+        [<Obsolete("Use the overload that accepts 'modifiers'")>]
+        abstract createConstructorTypeNode: typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> ConstructorTypeNode
+        [<Obsolete("Use the overload that accepts 'modifiers'")>]
+        abstract updateConstructorTypeNode: node: ConstructorTypeNode * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> ConstructorTypeNode
+        [<Obsolete("Use the overload that accepts 'assertions'")>]
+        abstract createImportTypeNode: argument: TypeNode * ?qualifier: EntityName * ?typeArguments: TypeNode[] * ?isTypeOf: bool -> ImportTypeNode
+        [<Obsolete("Use the overload that accepts 'assertions'")>]
+        abstract updateImportTypeNode: node: ImportTypeNode * argument: TypeNode * qualifier: EntityName option * typeArguments: TypeNode[] option * ?isTypeOf: bool -> ImportTypeNode
+        [<Obsolete("Use the overload that accepts 'modifiers'")>]
+        abstract createTypeParameterDeclaration: name: U2<string, Identifier> * ?``constraint``: TypeNode * ?defaultType: TypeNode -> TypeParameterDeclaration
+        [<Obsolete("Use the overload that accepts 'modifiers'")>]
+        abstract updateTypeParameterDeclaration: node: TypeParameterDeclaration * name: Identifier * ``constraint``: TypeNode option * defaultType: TypeNode option -> TypeParameterDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createParameterDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * ?questionToken: QuestionToken * ?``type``: TypeNode * ?initializer: Expression -> ParameterDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateParameterDeclaration: node: ParameterDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * dotDotDotToken: DotDotDotToken option * name: U2<string, BindingName> * questionToken: QuestionToken option * ``type``: TypeNode option * initializer: Expression option -> ParameterDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createPropertyDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updatePropertyDeclaration: node: PropertyDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * questionOrExclamationToken: U2<QuestionToken, ExclamationToken> option * ``type``: TypeNode option * initializer: Expression option -> PropertyDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createMethodDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: U2<string, PropertyName> * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateMethodDeclaration: node: MethodDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: PropertyName * questionToken: QuestionToken option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> MethodDeclaration
+        [<Obsolete("This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createConstructorDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
+        [<Obsolete("This node does not support Decorators. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateConstructorDeclaration: node: ConstructorDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * body: Block option -> ConstructorDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createGetAccessorDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateGetAccessorDeclaration: node: GetAccessorDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: PropertyName * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> GetAccessorDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createSetAccessorDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, PropertyName> * parameters: ParameterDeclaration[] * body: Block option -> SetAccessorDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateSetAccessorDeclaration: node: SetAccessorDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: PropertyName * parameters: ParameterDeclaration[] * body: Block option -> SetAccessorDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createIndexSignature: decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
+        [<Obsolete("Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.")>]
+        abstract updateIndexSignature: node: IndexSignatureDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode -> IndexSignatureDeclaration
+        [<Obsolete("Decorators and modifiers are no longer supported for this function. Callers should use an overload that does not accept the `decorators` and `modifiers` parameters.")>]
+        abstract createClassStaticBlockDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * body: Block -> ClassStaticBlockDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateClassStaticBlockDeclaration: node: ClassStaticBlockDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * body: Block -> ClassStaticBlockDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createClassExpression: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassExpression
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateClassExpression: node: ClassExpression * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassExpression
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createFunctionDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateFunctionDeclaration: node: FunctionDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * asteriskToken: AsteriskToken option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * parameters: ParameterDeclaration[] * ``type``: TypeNode option * body: Block option -> FunctionDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createClassDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
+        [<Obsolete("Decorators have been combined with modifiers. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateClassDeclaration: node: ClassDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier option * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: ClassElement[] -> ClassDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createInterfaceDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateInterfaceDeclaration: node: InterfaceDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * heritageClauses: HeritageClause[] option * members: TypeElement[] -> InterfaceDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createTypeAliasDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateTypeAliasDeclaration: node: TypeAliasDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier * typeParameters: TypeParameterDeclaration[] option * ``type``: TypeNode -> TypeAliasDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createEnumDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: U2<string, Identifier> * members: EnumMember[] -> EnumDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateEnumDeclaration: node: EnumDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: Identifier * members: EnumMember[] -> EnumDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createModuleDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option * ?flags: NodeFlags -> ModuleDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateModuleDeclaration: node: ModuleDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * name: ModuleName * body: ModuleBody option -> ModuleDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createImportEqualsDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * name: U2<string, Identifier> * moduleReference: ModuleReference -> ImportEqualsDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateImportEqualsDeclaration: node: ImportEqualsDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * name: Identifier * moduleReference: ModuleReference -> ImportEqualsDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createImportDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * ?assertClause: AssertClause -> ImportDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateImportDeclaration: node: ImportDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * importClause: ImportClause option * moduleSpecifier: Expression * assertClause: AssertClause option -> ImportDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createExportAssignment: decorators: Decorator[] option * modifiers: Modifier[] option * isExportEquals: bool option * expression: Expression -> ExportAssignment
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateExportAssignment: node: ExportAssignment * decorators: Decorator[] option * modifiers: Modifier[] option * expression: Expression -> ExportAssignment
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract createExportDeclaration: decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * ?moduleSpecifier: Expression * ?assertClause: AssertClause -> ExportDeclaration
+        [<Obsolete("Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.")>]
+        abstract updateExportDeclaration: node: ExportDeclaration * decorators: Decorator[] option * modifiers: Modifier[] option * isTypeOnly: bool * exportClause: NamedExportBindings option * moduleSpecifier: Expression option * assertClause: AssertClause option -> ExportDeclaration
 
     type [<AllowNullLiteral>] CoreTransformationContext =
         abstract factory: NodeFactory
@@ -5949,11 +6169,11 @@ Use typeAcquisition.enable instead.")>]
         /// <summary>
         /// Hook used by transformers to substitute expressions just before they
         /// are emitted by the pretty printer.
-        ///
+        /// 
         /// NOTE: Transformation hooks should only be modified during <c>Transformer</c> initialization,
         /// before returning the <c>NodeTransformer</c> callback.
         /// </summary>
-        abstract onSubstituteNode: (EmitHint -> Node -> Node) with get, set
+        abstract onSubstituteNode: hint: EmitHint * node: Node -> Node
         /// Enables before/after emit notifications in the pretty printer for the provided
         /// SyntaxKind.
         abstract enableEmitNotification: kind: SyntaxKind -> unit
@@ -5963,13 +6183,13 @@ Use typeAcquisition.enable instead.")>]
         /// <summary>
         /// Hook used to allow transformers to capture state before or after
         /// the printer emits a node.
-        ///
+        /// 
         /// NOTE: Transformation hooks should only be modified during <c>Transformer</c> initialization,
         /// before returning the <c>NodeTransformer</c> callback.
         /// </summary>
-        abstract onEmitNode: (EmitHint -> Node -> (EmitHint -> Node -> unit) -> unit) with get, set
+        abstract onEmitNode: hint: EmitHint * node: Node * emitCallback: (EmitHint -> Node -> unit) -> unit
 
-    type [<AllowNullLiteral>] TransformationResult<'T when 'T :> Node> =
+    type [<AllowNullLiteral>] TransformationResult<'T> =
         /// Gets the transformed source files.
         abstract transformed: 'T[] with get, set
         /// Gets diagnostics for the transformation.
@@ -6018,7 +6238,7 @@ Use typeAcquisition.enable instead.")>]
         [<Emit("$0($1...)")>] abstract Invoke: nodes: 'T[] * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[]
         [<Emit("$0($1...)")>] abstract Invoke: nodes: 'T[] option * visitor: Visitor option * ?test: (Node -> bool) * ?start: float * ?count: float -> 'T[] option
 
-    type VisitResult<'T when 'T :> Node> =
+    type VisitResult<'T> =
         U2<'T, 'T[]> option
 
     type [<AllowNullLiteral>] Printer =
@@ -6041,7 +6261,7 @@ Use typeAcquisition.enable instead.")>]
         /// </param>
         abstract printNode: hint: EmitHint * node: Node * sourceFile: SourceFile -> string
         /// Prints a list of nodes using the given format flags
-        abstract printList: format: ListFormat * list: 'T[] * sourceFile: SourceFile -> string when 'T :> Node
+        abstract printList: format: ListFormat * list: 'T[] * sourceFile: SourceFile -> string
         /// Prints a source file as-is, without any emit transformations.
         abstract printFile: sourceFile: SourceFile -> string
         /// Prints a bundle of source files as-is, without any emit transformations.
@@ -6146,7 +6366,7 @@ Use typeAcquisition.enable instead.")>]
         | NoSpaceIfEmpty = 524288
         | SingleElement = 1048576
         | SpaceAfterList = 2097152
-        | Modifiers = 262656
+        | Modifiers = 2359808
         | HeritageClauses = 512
         | SingleLineTypeLiteralMembers = 768
         | MultiLineTypeLiteralMembers = 32897
@@ -6210,9 +6430,12 @@ Use typeAcquisition.enable instead.")>]
         abstract includeInlayParameterNameHintsWhenArgumentMatchesName: bool option
         abstract includeInlayFunctionParameterTypeHints: bool option
         abstract includeInlayVariableTypeHints: bool option
+        abstract includeInlayVariableTypeHintsWhenTypeMatchesName: bool option
         abstract includeInlayPropertyDeclarationTypeHints: bool option
         abstract includeInlayFunctionLikeReturnTypeHints: bool option
         abstract includeInlayEnumMemberValueHints: bool option
+        abstract allowRenameOfImportPath: bool option
+        abstract autoImportFileExcludePatterns: string[] option
 
     /// Represents a bigint literal value without requiring bigint support
     type [<AllowNullLiteral>] PseudoBigInt =
@@ -6225,7 +6448,7 @@ Use typeAcquisition.enable instead.")>]
         | Deleted = 2
 
     type [<AllowNullLiteral>] FileWatcherCallback =
-        [<Emit("$0($1...)")>] abstract Invoke: fileName: string * eventKind: FileWatcherEventKind -> unit
+        [<Emit("$0($1...)")>] abstract Invoke: fileName: string * eventKind: FileWatcherEventKind * ?modifiedTime: DateTime -> unit
 
     type [<AllowNullLiteral>] DirectoryWatcherCallback =
         [<Emit("$0($1...)")>] abstract Invoke: fileName: string -> unit
@@ -6327,7 +6550,7 @@ Use typeAcquisition.enable instead.")>]
         /// <c>getSetExternalModuleIndicator</c> on a valid <c>CompilerOptions</c> object. If not present, the default
         /// check specified by <c>isFileProbablyExternalModule</c> will be used to set the field.
         /// </summary>
-        abstract setExternalModuleIndicator: (SourceFile -> unit) option with get, set
+        abstract setExternalModuleIndicator: file: SourceFile -> unit
 
     type [<AllowNullLiteral>] DiagnosticReporter =
         [<Emit("$0($1...)")>] abstract Invoke: diagnostic: Diagnostic -> unit
@@ -6420,7 +6643,7 @@ Use typeAcquisition.enable instead.")>]
         /// return true if file names are treated with case sensitivity
         abstract useCaseSensitiveFileNames: unit -> bool
         /// If provided this would be used this hash instead of actual file shape text for detecting changes
-        abstract createHash: (string -> string) option with get, set
+        abstract createHash: data: string -> string
         /// When emit or emitNextAffectedFile are called without writeFile,
         /// this callback if present would be used to write files
         abstract writeFile: WriteFileCallback option with get, set
@@ -6460,7 +6683,7 @@ Use typeAcquisition.enable instead.")>]
         /// In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
         /// it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
         /// it will only emit all the affected files instead of whole program
-        ///
+        /// 
         /// The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
         /// in that order would be used to write the files
         abstract emit: ?targetSourceFile: SourceFile * ?writeFile: WriteFileCallback * ?cancellationToken: CancellationToken * ?emitOnlyDtsFiles: bool * ?customTransformers: CustomTransformers -> EmitResult
@@ -6488,7 +6711,7 @@ Use typeAcquisition.enable instead.")>]
         abstract getCurrentDirectory: unit -> string
         abstract readFile: fileName: string -> string option
 
-    type [<AllowNullLiteral>] IncrementalProgramOptions<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] IncrementalProgramOptions<'T> =
         abstract rootNames: string[] with get, set
         abstract options: CompilerOptions with get, set
         abstract configFileParsingDiagnostics: Diagnostic[] option with get, set
@@ -6500,7 +6723,7 @@ Use typeAcquisition.enable instead.")>]
         [<Emit("$0($1...)")>] abstract Invoke: diagnostic: Diagnostic * newLine: string * options: CompilerOptions * ?errorCount: float -> unit
 
     /// Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program
-    type [<AllowNullLiteral>] CreateProgram<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] CreateProgram<'T> =
         /// Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program
         [<Emit("$0($1...)")>] abstract Invoke: rootNames: string[] option * options: CompilerOptions option * ?host: CompilerHost * ?oldProgram: 'T * ?configFileParsingDiagnostics: Diagnostic[] * ?projectReferences: ProjectReference[] -> 'T
 
@@ -6517,7 +6740,7 @@ Use typeAcquisition.enable instead.")>]
         /// If provided, will be used to reset existing delayed compilation
         abstract clearTimeout: timeoutId: obj option -> unit
 
-    type [<AllowNullLiteral>] ProgramHost<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] ProgramHost<'T> =
         /// Used to create the program when need for program creation or recreation detected
         abstract createProgram: CreateProgram<'T> with get, set
         abstract useCaseSensitiveFileNames: unit -> bool
@@ -6548,8 +6771,10 @@ Use typeAcquisition.enable instead.")>]
         abstract resolveModuleNames: moduleNames: string[] * containingFile: string * reusedNames: string[] option * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingSourceFile: SourceFile -> ResolvedModule option[]
         /// If provided, used to resolve type reference directives, otherwise typescript's default resolution
         abstract resolveTypeReferenceDirectives: typeReferenceDirectiveNames: U2<string[], FileReference[]> * containingFile: string * redirectedReference: ResolvedProjectReference option * options: CompilerOptions * ?containingFileMode: obj -> ResolvedTypeReferenceDirective option[]
+        /// <summary>Returns the module resolution cache used by a provided <c>resolveModuleNames</c> implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it</summary>
+        abstract getModuleResolutionCache: unit -> ModuleResolutionCache option
 
-    type [<AllowNullLiteral>] WatchCompilerHost<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] WatchCompilerHost<'T> =
         inherit ProgramHost<'T>
         inherit WatchHost
         /// Instead of using output d.ts file from project reference, use its source file
@@ -6560,7 +6785,7 @@ Use typeAcquisition.enable instead.")>]
         abstract afterProgramCreate: program: 'T -> unit
 
     /// Host to create watch with root files and options
-    type [<AllowNullLiteral>] WatchCompilerHostOfFilesAndCompilerOptions<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] WatchCompilerHostOfFilesAndCompilerOptions<'T> =
         inherit WatchCompilerHost<'T>
         /// root files to use to generate program
         abstract rootFiles: string[] with get, set
@@ -6571,7 +6796,7 @@ Use typeAcquisition.enable instead.")>]
         abstract projectReferences: ProjectReference[] option with get, set
 
     /// Host to create watch with config file
-    type [<AllowNullLiteral>] WatchCompilerHostOfConfigFile<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] WatchCompilerHostOfConfigFile<'T> =
         inherit WatchCompilerHost<'T>
         inherit ConfigFileDiagnosticsReporter
         /// Name of the config file to compile
@@ -6616,13 +6841,13 @@ Use typeAcquisition.enable instead.")>]
         abstract fileName: string with get, set
         abstract line: float with get, set
 
-    type [<AllowNullLiteral>] SolutionBuilderHostBase<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] SolutionBuilderHostBase<'T> =
         inherit ProgramHost<'T>
         abstract createDirectory: path: string -> unit
         /// Should provide create directory and writeFile if done of invalidatedProjects is not invoked with
         /// writeFileCallback
         abstract writeFile: path: string * data: string * ?writeByteOrderMark: bool -> unit
-        abstract getCustomTransformers: (string -> CustomTransformers option) option with get, set
+        abstract getCustomTransformers: project: string -> CustomTransformers option
         abstract getModifiedTime: fileName: string -> DateTime option
         abstract setModifiedTime: fileName: string * date: DateTime -> unit
         abstract deleteFile: fileName: string -> unit
@@ -6631,15 +6856,15 @@ Use typeAcquisition.enable instead.")>]
         abstract reportSolutionBuilderStatus: DiagnosticReporter with get, set
         abstract afterProgramEmitAndDiagnostics: program: 'T -> unit
 
-    type [<AllowNullLiteral>] SolutionBuilderHost<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] SolutionBuilderHost<'T> =
         inherit SolutionBuilderHostBase<'T>
         abstract reportErrorSummary: ReportEmitErrorSummary option with get, set
 
-    type [<AllowNullLiteral>] SolutionBuilderWithWatchHost<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] SolutionBuilderWithWatchHost<'T> =
         inherit SolutionBuilderHostBase<'T>
         inherit WatchHost
 
-    type [<AllowNullLiteral>] SolutionBuilder<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] SolutionBuilder<'T> =
         abstract build: ?project: string * ?cancellationToken: CancellationToken * ?writeFile: WriteFileCallback * ?getCustomTransformers: (string -> CustomTransformers) -> ExitStatus
         abstract clean: ?project: string -> ExitStatus
         abstract buildReferences: project: string * ?cancellationToken: CancellationToken * ?writeFile: WriteFileCallback * ?getCustomTransformers: (string -> CustomTransformers) -> ExitStatus
@@ -6664,7 +6889,7 @@ Use typeAcquisition.enable instead.")>]
         abstract kind: InvalidatedProjectKind
         abstract updateOutputFileStatmps: unit -> unit
 
-    type [<AllowNullLiteral>] BuildInvalidedProject<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] BuildInvalidedProject<'T> =
         inherit InvalidatedProjectBase
         abstract kind: InvalidatedProjectKind
         abstract getBuilderProgram: unit -> 'T option
@@ -6680,12 +6905,12 @@ Use typeAcquisition.enable instead.")>]
         abstract getSemanticDiagnosticsOfNextAffectedFile: ?cancellationToken: CancellationToken * ?ignoreSourceFile: (SourceFile -> bool) -> AffectedFileResult<Diagnostic[]>
         abstract emit: ?targetSourceFile: SourceFile * ?writeFile: WriteFileCallback * ?cancellationToken: CancellationToken * ?emitOnlyDtsFiles: bool * ?customTransformers: CustomTransformers -> EmitResult option
 
-    type [<AllowNullLiteral>] UpdateBundleProject<'T when 'T :> BuilderProgram> =
+    type [<AllowNullLiteral>] UpdateBundleProject<'T> =
         inherit InvalidatedProjectBase
         abstract kind: InvalidatedProjectKind
         abstract emit: ?writeFile: WriteFileCallback * ?customTransformers: CustomTransformers -> U2<EmitResult, BuildInvalidedProject<'T>> option
 
-    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] InvalidatedProject<'T when 'T :> BuilderProgram> =
+    type [<TypeScriptTaggedUnion("kind")>] [<RequireQualifiedAccess>] InvalidatedProject<'T> =
         | [<CompiledValue(0)>] BuildInvalidedProject of BuildInvalidedProject<'T>
         | [<CompiledValue(1)>] UpdateBundleProject of UpdateBundleProject<'T>
         | [<CompiledValue(2)>] UpdateOutputFileStampsProject of UpdateOutputFileStampsProject
@@ -6890,16 +7115,16 @@ Use typeAcquisition.enable instead.")>]
         abstract cleanupSemanticCache: unit -> unit
         /// <summary>
         /// Gets errors indicating invalid syntax in a file.
-        ///
+        /// 
         /// In English, "this cdeo have, erorrs" is syntactically invalid because it has typos,
         /// grammatical errors, and misplaced punctuation. Likewise, examples of syntax
         /// errors in TypeScript are missing parentheses in an <c>if</c> statement, mismatched
         /// curly braces, and using a reserved keyword as a variable name.
-        ///
+        /// 
         /// These diagnostics are inexpensive to compute and don't require knowledge of
         /// other files. Note that a non-empty result increases the likelihood of false positives
         /// from <c>getSemanticDiagnostics</c>.
-        ///
+        /// 
         /// While these represent the majority of syntax-related diagnostics, there are some
         /// that require the type system, which will be present in <c>getSemanticDiagnostics</c>.
         /// </summary>
@@ -6909,11 +7134,11 @@ Use typeAcquisition.enable instead.")>]
         /// Gets warnings or errors indicating type system issues in a given file.
         /// Requesting semantic diagnostics may start up the type system and
         /// run deferred work, so the first call may take longer than subsequent calls.
-        ///
+        /// 
         /// Unlike the other get*Diagnostics functions, these diagnostics can potentially not
         /// include a reference to a source file. Specifically, the first time this is called,
         /// it will return global diagnostics with no associated location.
-        ///
+        /// 
         /// To contrast the differences between semantic and syntactic diagnostics, consider the
         /// sentence: "The sun is green." is syntactically correct; those are real English words with
         /// correct sentence structure. However, it is semantically invalid, because it is not true.
@@ -6975,6 +7200,8 @@ Use typeAcquisition.enable instead.")>]
         abstract getNameOrDottedNameSpan: fileName: string * startPos: float * endPos: float -> TextSpan option
         abstract getBreakpointStatementAtPosition: fileName: string * position: float -> TextSpan option
         abstract getSignatureHelpItems: fileName: string * position: float * options: SignatureHelpItemsOptions option -> SignatureHelpItems option
+        abstract getRenameInfo: fileName: string * position: float * preferences: UserPreferences -> RenameInfo
+        [<Obsolete("Use the signature with `UserPreferences` instead.")>]
         abstract getRenameInfo: fileName: string * position: float * ?options: RenameInfoOptions -> RenameInfo
         abstract findRenameLocations: fileName: string * position: float * findInStrings: bool * findInComments: bool * ?providePrefixAndSuffixTextForRename: bool -> RenameLocation[] option
         abstract getSmartSelectionRange: fileName: string * position: float -> SelectionRange
@@ -7049,8 +7276,8 @@ Use typeAcquisition.enable instead.")>]
         abstract skipDestructiveCodeActions: bool option with get, set
 
     type [<StringEnum>] [<RequireQualifiedAccess>] CompletionsTriggerCharacter =
-        | [<CompiledName(".")>] Period
-        | [<CompiledName("\"")>] Backslash
+        | [<CompiledName(".")>] Dot
+        | [<CompiledName("\"")>] BackSlash
         | [<CompiledName("'")>] SingleQuote
         | [<CompiledName("`")>] BackQuote
         | [<CompiledName("/")>] Slash
@@ -7254,7 +7481,7 @@ Use typeAcquisition.enable instead.")>]
         /// Inlineable refactorings can have their actions hoisted out to the top level
         /// of a context menu. Non-inlineanable refactorings should always be shown inside
         /// their parent grouping.
-        ///
+        /// 
         /// If not specified, this value is assumed to be 'true'
         abstract inlineable: bool option with get, set
         abstract actions: RefactorActionInfo[] with get, set
@@ -7352,6 +7579,7 @@ Use typeAcquisition.enable instead.")>]
         | Insert
         | Remove
 
+    [<Obsolete("- consider using EditorSettings instead")>]
     type [<AllowNullLiteral>] EditorOptions =
         abstract BaseIndentSize: float option with get, set
         abstract IndentSize: float with get, set
@@ -7369,6 +7597,7 @@ Use typeAcquisition.enable instead.")>]
         abstract indentStyle: IndentStyle option with get, set
         abstract trimTrailingWhitespace: bool option with get, set
 
+    [<Obsolete("- consider using FormatCodeSettings instead")>]
     type [<AllowNullLiteral>] FormatCodeOptions =
         inherit EditorOptions
         abstract InsertSpaceAfterCommaDelimiter: bool with get, set
@@ -7504,6 +7733,7 @@ Use typeAcquisition.enable instead.")>]
         abstract canRename: bool with get, set
         abstract localizedErrorMessage: string with get, set
 
+    [<Obsolete("Use `UserPreferences` instead.")>]
     type [<AllowNullLiteral>] RenameInfoOptions =
         abstract allowRenameOfImportPath: bool option
 
@@ -7886,10 +8116,10 @@ Use typeAcquisition.enable instead.")>]
     /// the same DocumentRegistry instance between different instances of LanguageService allow
     /// for more efficient memory utilization since all projects will share at least the library
     /// file (lib.d.ts).
-    ///
+    /// 
     /// A more advanced use of the document registry is to serialize sourceFile objects to disk
     /// and re-hydrate them when needed.
-    ///
+    /// 
     /// To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
     /// to all subsequent createLanguageService calls.
     type [<AllowNullLiteral>] DocumentRegistry =
@@ -7915,8 +8145,8 @@ Use typeAcquisition.enable instead.")>]
         /// Current version of the file. Only used if the file was not found
         /// in the registry and a new one was created.
         /// </param>
-        abstract acquireDocument: fileName: string * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind -> SourceFile
-        abstract acquireDocumentWithKey: fileName: string * path: Path * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * key: DocumentRegistryBucketKey * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind -> SourceFile
+        abstract acquireDocument: fileName: string * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
+        abstract acquireDocumentWithKey: fileName: string * path: Path * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * key: DocumentRegistryBucketKey * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
         /// <summary>
         /// Request an updated version of an already existing SourceFile with a given fileName
         /// and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
@@ -7933,24 +8163,25 @@ Use typeAcquisition.enable instead.")>]
         /// </param>
         /// <param name="scriptSnapshot">Text of the file.</param>
         /// <param name="version">Current version of the file.</param>
-        abstract updateDocument: fileName: string * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind -> SourceFile
-        abstract updateDocumentWithKey: fileName: string * path: Path * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * key: DocumentRegistryBucketKey * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind -> SourceFile
+        abstract updateDocument: fileName: string * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
+        abstract updateDocumentWithKey: fileName: string * path: Path * compilationSettingsOrHost: U2<CompilerOptions, MinimalResolutionCacheHost> * key: DocumentRegistryBucketKey * scriptSnapshot: IScriptSnapshot * version: string * ?scriptKind: ScriptKind * ?sourceFileOptions: U2<CreateSourceFileOptions, ScriptTarget> -> SourceFile
         abstract getKeyForCompilationSettings: settings: CompilerOptions -> DocumentRegistryBucketKey
-        [<Obsolete("pass scriptKind for correctness")>]
-        abstract releaseDocument: fileName: string * compilationSettings: CompilerOptions -> unit
+        [<Obsolete("pass scriptKind and impliedNodeFormat for correctness")>]
+        abstract releaseDocument: fileName: string * compilationSettings: CompilerOptions * ?scriptKind: ScriptKind -> unit
         /// <summary>
         /// Informs the DocumentRegistry that a file is not needed any longer.
-        ///
+        /// 
         /// Note: It is not allowed to call release on a SourceFile that was not acquired from
         /// this registry originally.
         /// </summary>
         /// <param name="fileName">The name of the file to be released</param>
         /// <param name="compilationSettings">The compilation settings used to acquire the file</param>
         /// <param name="scriptKind">The script kind of the file to be released</param>
-        abstract releaseDocument: fileName: string * compilationSettings: CompilerOptions * scriptKind: ScriptKind -> unit
-        [<Obsolete("pass scriptKind for correctness")>]
-        abstract releaseDocumentWithKey: path: Path * key: DocumentRegistryBucketKey -> unit
-        abstract releaseDocumentWithKey: path: Path * key: DocumentRegistryBucketKey * scriptKind: ScriptKind -> unit
+        /// <param name="impliedNodeFormat">The implied source file format of the file to be released</param>
+        abstract releaseDocument: fileName: string * compilationSettings: CompilerOptions * scriptKind: ScriptKind * impliedNodeFormat: obj -> unit
+        [<Obsolete("pass scriptKind for and impliedNodeFormat correctness")>]
+        abstract releaseDocumentWithKey: path: Path * key: DocumentRegistryBucketKey * ?scriptKind: ScriptKind -> unit
+        abstract releaseDocumentWithKey: path: Path * key: DocumentRegistryBucketKey * scriptKind: ScriptKind * impliedNodeFormat: obj -> unit
         abstract reportStats: unit -> string
 
     type [<AllowNullLiteral>] DocumentRegistryBucketKey =

@@ -1726,7 +1726,6 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (dt: DependencyTrie<s
       children
       |> List.filter (fun (_, _, c) -> c.types |> List.isEmpty |> not)
       |> List.map (fun (k, _, c) -> {| k with content = c.imports @ c.types; comments = [] |})
-      // |> Statement.moduleSigRec
       |> Statement.moduleSCC dt Statement.moduleSigRec Statement.moduleSigNonRec ctx
     children @ items
 

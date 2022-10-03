@@ -505,7 +505,7 @@ module Statement =
     ]
 
   let moduleSCC (dt: DependencyTrie<string>) emitRec emitNonRec (ctx: Typer.TyperContext<_, _>) =
-    let scc = dt |> Trie.tryFind ctx.currentNamespace |? []
+    let scc = dt |> Trie.tryFind ctx.currentNamespace |> Option.map (fun x -> x.scc) |? []
     let sccSet = scc |> List.concat |> Set.ofList
     fun (modules: TextModule list) ->
       let modulesMap = modules |> List.fold (fun state x -> state |> Map.add x.origName x) Map.empty

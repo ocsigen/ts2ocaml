@@ -1575,7 +1575,7 @@ module ModuleEmitter =
   let nonRec _ctx modules = moduleSigNonRec modules
   let recAll _ctx modules = moduleSigRec modules
   let recOptimized dt (ctx: Context) =
-    let scc = dt |> Trie.tryFind ctx.currentNamespace |? []
+    let scc = dt |> Trie.tryFind ctx.currentNamespace |> Option.map (fun x -> x.scc) |? []
     let sccSet = scc |> List.concat |> Set.ofList
     fun (modules: TextModuleSig list) ->
       let modulesMap = modules |> List.fold (fun state x -> state |> Map.add x.origName x) Map.empty

@@ -476,30 +476,24 @@ let builder name (fields: {| isOptional: bool; name: string; value: text |} list
     Type.curriedArrow args thisType
   Binding.Ext {| name = name; ty = ty; target = ""; attrs = [Attr.External.obj]; comments = []|}
 
-type EmitCondition = {
-  /// Emit in the `Types` module
-  onTypes: bool
-  /// Emit in `.res`
-  onImpl: bool
-  /// Emit in `.resi`
-  onIntf: bool
-} with
-  static member empty = { onTypes = false; onImpl = false; onIntf = false }
-  static member all = { onTypes = true; onImpl = true; onIntf = true }
-
-type StructuredTextItem =
+type StructuredTextItemBase<'TypeDef, 'Binding, 'EnumCase> =
   /// Will always be emitted at the top of the module.
   | ImportText of text
   /// Will always be emitted at the next top of the module.
-  ///
-  /// In `.res`, the presence of this item makes `open ModuleName` also emitted.
-  | TypeDefText of text
-  | Conditional of StructuredTextItem * EmitCondition
+  | TypeDefText of 'TypeDef
+  | TypeAliasText of text
   /// Will be emitted in `.res` and `.resi`, but not in the `Types` module
   | Comment of text
   /// Will only be emitted in `.res` (not in `.resi` or in the `Types` module)
-  | Binding of (OverloadRenamer -> CurrentScope -> Binding)
-  | EnumCaseText of {| name: string; ty: text; comments: Comment list |}
+  | Binding of 'Binding
+  | EnumCaseText of 'EnumCase
+
+and StructuredTextItem =
+  StructuredTextItemBase<
+    {| name: string; tyargs: (TypeParam * text) list; isRec: bool; body: text option; shouldAssert: bool |},
+    (OverloadRenamer -> CurrentScope -> Binding),
+    {| name: string; ty: text; comments: Comment list |}
+  >
 
 and CurrentScope = {
   jsModule: string option
@@ -531,8 +525,6 @@ and StructuredTextNode = {|
 |}
 
 and StructuredText = Trie<string, StructuredTextNode>
-
-let inline conditional cond x = Conditional (x, cond)
 
 module StructuredTextNode =
   let empty : StructuredTextNode =
@@ -577,7 +569,7 @@ let emitComments (comments: Comment list) : text list =
   // TODO
   []
 
-let inline binding (f: (string -> string) -> CurrentScope -> Binding) =
+let inline binding (f: (string -> string) -> CurrentScope -> Binding) : StructuredTextItem list =
   [Binding (fun renamer scope -> f (renamer.Rename "value") scope)]
 
 let scopeToAttr (s: CurrentScope) attr =
@@ -832,20 +824,6 @@ let emitTypeAliasesImpl
         yield! lines {| name = name; tyargs = List.zip typrms' tyargs'; target = Some target; isOverload = true |}
   ]
 
-let emitTypeAliases flags overrideFunc ctx (typrms: TypeParam list) target isRec =
-  let emitType = emitTypeImpl flags
-  emitTypeAliasesImpl "t" flags overrideFunc ctx typrms target (
-    fun x -> [Statement.typeAlias (isRec && not x.isOverload) x.name (x.tyargs |> List.map snd) x.target |> TypeDefText]
-  )
-
-let emitTypeAlias flags overrideFunc ctx (typrms: TypeParam list) target isRec =
-  let emitType = emitTypeImpl flags
-  emitTypeAliasesImpl "t" flags overrideFunc ctx typrms target (
-    fun x ->
-      if not x.isOverload then [Statement.typeAlias isRec x.name (x.tyargs |> List.map snd) x.target |> TypeDefText]
-      else []
-  )
-
 let getTrie name current =
   current |> Trie.getSubTrie name |> Option.defaultValue Trie.empty
 let setTrie name trie current =
@@ -987,7 +965,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
             "tags" flags overrideFunc innerCtx c.typeParams (emitLabels innerCtx labels |> Some)
             (fun x -> [Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target])
           |> concat newline
-        alias|> TypeDefText |> conditional { onIntf = true; onImpl = true; onTypes = false } |> Some
+        alias|> TypeAliasText |> Some
       else None
 
     let polymorphicThisDefinition =
@@ -1000,7 +978,7 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         Statement.typeAlias false "this"
           (str "'tags" :: typrms)
           (Type.intf (str "'tags") +@ " constraint 'tags = " + tags |> Some)
-        |> TypeDefText |> conditional { onIntf = true; onImpl = true; onTypes = false } |> Some
+        |> TypeAliasText |> Some
       else None
     // " this resets the weird syntax highlighting
 
@@ -1035,20 +1013,13 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         | ClassKind.NormalClass x -> getSelfTyText x.orig
         | ClassKind.ExportDefaultClass x -> getSelfTyText x.orig
         | ClassKind.AnonymousInterface _ -> fallback
-      let onTypes =
-        emitTypeAlias flags overrideFunc innerCtx c.typeParams selfTyText.ty selfTyText.isRec
-        |> List.map (conditional { EmitCondition.empty with onTypes = true })
-      let onIntf =
-        emitTypeAliases flags overrideFunc innerCtx c.typeParams selfTyText.ty selfTyText.isRec
-        |> List.map (conditional { EmitCondition.empty with onIntf = true })
-      let onImpl =
-        let origTyText =
-          let tyargs = c.typeParams |> List.map (fun x -> tprintf "'%s" x.name)
-          Type.appOpt (str "t") tyargs
-        emitTypeAliases flags overrideFunc innerCtx c.typeParams (Some origTyText) false
-        |> List.map (conditional { EmitCondition.empty with onImpl = true })
 
-      List.concat [onTypes; onIntf; onImpl]
+      emitTypeAliasesImpl "t" flags overrideFunc innerCtx c.typeParams selfTyText.ty (fun x ->
+        if not x.isOverload then
+          [TypeDefText {| name = x.name; tyargs = x.tyargs; body = x.target; isRec = selfTyText.isRec; shouldAssert = false |}]
+        else
+          [TypeAliasText (Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target)]
+      )
 
     let castFunctions = [
       // add a generic cast function if tag is available
@@ -1058,7 +1029,6 @@ let rec emitClass flags overrideFunc (ctx: Context) (current: StructuredText) (c
         yield! binding (fun _ _ -> cast [] "castFrom" castTy)
 
       if innerCtx.options.subtyping |> List.contains Subtyping.CastFunction then
-        let inline func ft = func flags overrideFunc innerCtx ft
         for parent in c.implements do
           let ty = Type.curriedArrow [selfTyText] (emitType_ innerCtx parent)
           let parentName = getHumanReadableName innerCtx parent
@@ -1235,10 +1205,7 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
                 yield indent (tprintf "| %s" case)
             ]
           else cases |> String.concat " | " |> str
-        [
-          yield str "type t = " + casesText |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
-          yield str "type t = t = " + casesText |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
-        ]
+        [TypeDefText {| name = "t"; tyargs = []; isRec = false; body = Some casesText; shouldAssert = true |}]
       | EnumType.Int | EnumType.String | EnumType.PolyVariant ->
         let cases =
           distinctCases
@@ -1247,22 +1214,16 @@ let emitEnum flags overrideFunc (ctx: Context) (current: StructuredText) (e: Enu
             | Some (LString s) -> {| name = Choice1Of2 s; value = None; attr = None |}
             | Some (LInt i) -> {| name = Choice2Of2 i; value = None; attr = None |}
             | _ -> impossible "emitEnum_parentNode_PolyVariant")
-        Statement.typeAlias false "t" [] (Type.polyVariant cases |> Some) |> TypeDefText |> List.singleton
-      | EnumType.Boolean -> Statement.typeAlias false "t" [] (str "private bool" |> Some) |> TypeDefText |> List.singleton
+        [TypeDefText {| name = "t"; tyargs = []; isRec = false; body = (Type.polyVariant cases |> Some); shouldAssert = false |}]
+      | EnumType.Boolean -> Statement.typeAlias false "t" [] (str "private bool" |> Some) |> TypeAliasText |> List.singleton
       | EnumType.Float | EnumType.Number ->
         ctx.logger.warnf "an enum type '%s' contains a case with float or negative value, which is not supported in ReScript at %s" e.name e.loc.AsString
-        [
-          yield commentStr (sprintf "FIXME: float/negative enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
-          yield Statement.typeAlias false "t" [] (str "private float" |> Some) |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
-          yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
-        ]
-      | _ ->
+        let def = "private float " @+ commentStr (sprintf "FIXME: float/negative enum (at %s)" e.loc.AsString)
+        [TypeDefText {| name = "t"; tyargs = []; isRec = false; body = Some def; shouldAssert = false |}]
+      | EnumType.Heterogeneous | _ ->
         ctx.logger.warnf "a heterogeneous enum '%s' is not supported at %s" e.name e.loc.AsString
-        [
-          yield commentStr (sprintf "FIXME: heterogeneous enum (at %s)" e.loc.AsString) |> TypeDefText |> conditional { onImpl = true; onIntf = true; onTypes = false }
-          yield Statement.typeAlias false "t" [] None |> TypeDefText |> conditional { EmitCondition.all with onImpl = false }
-          yield str "type t = t" |> TypeDefText |> conditional { EmitCondition.empty with onImpl = true }
-        ]
+        let def = Type.object +@ " " + commentStr (sprintf "FIXME: heterogeneous enum (at %s)" e.loc.AsString)
+        [TypeDefText {| name = "t"; tyargs = []; isRec = false; body = Some def; shouldAssert = false |}]
     let items = items @ List.map child e.cases
     let comments = e.comments |> emitComments
     {| StructuredTextNode.empty with items = items; comments = comments |}
@@ -1294,8 +1255,6 @@ let rec emitFunction flags overrideFunc ctx (f: Function) =
       { accessibility = f.accessibility; comments = f.comments; isExported = f.isExported;
         loc = f.loc; name = f.name; isConst = true; typ = Func (f.typ, [], f.loc) }
   else
-    let emitType = emitTypeImpl flags
-    let emitType_ = emitType overrideFunc
     let inline extFunc ft = extFunc flags overrideFunc ctx ft
     let ty, attr = extFunc f.typ
     let attr = attr |> impossibleNone (fun () -> "emitFunction")
@@ -1371,7 +1330,7 @@ let emitImport (ctx: Context) (i: Import) : StructuredTextItem list =
       |> Option.defaultValue []
     | NamespaceImport _ | ES6DefaultImport _ | ES6Import _ -> []
 
-  [ yield! emitComments i.comments |> List.map (ImportText >> conditional { onImpl = true; onIntf = true; onTypes = false })
+  [ yield! emitComments i.comments |> List.map ImportText
     yield commentStr i.origText |> ImportText
     for c in i.clauses do
       yield! emitImportClause c]
@@ -1384,13 +1343,11 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
   let emitTypeFlags = EmitTypeFlags.defaultValue
   let overrideFunc = OverrideFunc.noOverride
   let emitType = emitTypeImpl emitTypeFlags
-  let emitType_ = emitType overrideFunc
   let emitSelfType = emitTypeImpl emitTypeFlags overrideFunc
 
   /// convert interface members to appropriate statements
   let intfToStmts (moduleIntf: Class<_>) ctx flags overrideFunc =
     let flags = { flags with simplifyContravariantUnion = true }
-    let emitType_ = emitTypeImpl flags overrideFunc
     let inline extFunc ft = extFunc flags overrideFunc ctx ft
     let inline func ft = func flags overrideFunc ctx ft
     let inline newableFunc ft = newableFunc flags overrideFunc ctx ft
@@ -1499,9 +1456,10 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
         knownTypes |> Set.contains (KnownType.Ident (ctx |> Context.getFullNameOfCurrentNamespace))
       let items =
         emitTypeAliasesImpl "t" emitTypeFlags OverrideFunc.noOverride ctx ta.typeParams (emitSelfType ctx ta.target |> Some) (fun x ->
-          let a = Statement.typeAlias (isRec && not x.isOverload) x.name (x.tyargs |> List.map snd) x.target |> TypeDefText
-          if x.isOverload then a |> conditional { onTypes = false; onIntf = true; onImpl = true } |> List.singleton
-          else a |> List.singleton
+          if not x.isOverload then
+            [TypeDefText {| name = x.name; tyargs = x.tyargs; body = x.target; isRec = false; shouldAssert = false |}]
+          else
+            [TypeAliasText (Statement.typeAlias false x.name (x.tyargs |> List.map snd) x.target)]
         )
       let node = {| StructuredTextNode.empty with items = items; comments = comments; knownTypes = knownTypes |}
       current
@@ -1617,7 +1575,6 @@ let createStructuredText (rootCtx: Context) (stmts: Statement list) : Structured
     | FloatingComment c ->
       let cmt = c.comments |> emitComments |> List.map Comment
       current |> set {| StructuredTextNode.empty with items = Comment empty :: cmt |}
-  and folder' ctx stmt node = folder ctx node stmt
 
   stmts |> List.fold (folder rootCtx) Trie.empty
 
@@ -1704,23 +1661,34 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (dt: DependencyTrie<s
       let m content = {| name = moduleName; origName = e.name; content = content; comments = emitComments e.comments |}
       {| types = types; intf = Statement.moduleSig (m intf); impl = Statement.moduleVal (m impl) |}
 
+    let emitTypeDefText (e: {| name: string; tyargs:(TypeParam * text) list; isRec: bool; body: text option; shouldAssert: bool |}) =
+      let actual = Statement.typeAlias e.isRec e.name (e.tyargs |> List.map snd) e.body
+      let alias =
+        let tmp =
+          Statement.typeAlias false e.name (e.tyargs |> List.map snd)
+            (Type.appOpt (str e.name) (e.tyargs |> List.map snd) |> Some)
+        match e.body, e.shouldAssert with
+        | _, false | None, _ -> tmp
+        | Some b, true -> tmp +@ " = " + b
+      {| types = actual; intf = actual; impl = alias |}
+
     let rec f = function
-      | Conditional (i, c) -> c, snd (f i)
-      | ImportText t -> { EmitCondition.all with onTypes = false }, Choice1Of5 t
-      | TypeDefText t -> EmitCondition.all, Choice2Of5 t
-      | Binding b -> { EmitCondition.all with onTypes = false }, Choice3Of5 (b renamer currentScope)
-      | EnumCaseText e -> EmitCondition.all, Choice4Of5 (emitEnumCase e)
-      | Comment c -> { EmitCondition.all with onTypes = false }, Choice5Of5 c
+      | ImportText t -> ImportText t
+      | TypeAliasText t -> TypeAliasText t
+      | TypeDefText d -> TypeDefText (emitTypeDefText d)
+      | Binding b -> Binding (b renamer currentScope)
+      | EnumCaseText e -> EnumCaseText (emitEnumCase e)
+      | Comment c -> Comment c
     match st.value with None -> [] | Some v -> v.items |> List.map f
 
   let imports =
-    items |> List.choose (function (_, Choice1Of5 t) -> Some t | _ -> None)
+    items |> List.choose (function ImportText t -> Some t | _ -> None)
 
   let types =
     let items =
       items |> List.choose (function
-        | c, Choice2Of5 t when c.onTypes -> Some t
-        | _, Choice4Of5 e -> Some e.types
+        | TypeDefText d -> Some d.types
+        | EnumCaseText e -> Some e.types
         | _ -> None)
     let children =
       children
@@ -1744,18 +1712,18 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (dt: DependencyTrie<s
       |> Statement.moduleSigRec
     let typeDefs =
       items |> List.choose (function
-        | c, Choice2Of5 t when c.onIntf -> Some t
-        | _, Choice4Of5 e -> Some e.intf
+        | TypeAliasText t -> Some t
+        | TypeDefText d -> Some d.intf
+        | EnumCaseText e -> Some e.intf
         | _ -> None)
     [
       yield! children
       yield! typeDefs
-      for cond, item in items do
-        if cond.onIntf then
-          match item with
-          | Choice3Of5 b -> yield! Binding.emitForInterface b
-          | Choice5Of5 c -> yield c
-          | _ -> ()
+      for item in items do
+        match item with
+        | Binding b -> yield! Binding.emitForInterface b
+        | Comment c -> yield c
+        | _ -> ()
       yield! exports.intf
     ]
 
@@ -1773,18 +1741,18 @@ let rec emitModule (flags: EmitModuleFlags) (ctx: Context) (dt: DependencyTrie<s
       |> Statement.moduleValMany
     let typeDefs =
       items |> List.choose (function
-        | c, Choice2Of5 t when c.onImpl -> Some t
-        | _, Choice4Of5 e -> Some e.impl
+        | TypeAliasText t -> Some t
+        | TypeDefText d -> Some d.impl
+        | EnumCaseText e -> Some e.impl
         | _ -> None)
     [
       yield! children
       yield! typeDefs
-      for cond, item in items do
-        if cond.onImpl then
-          match item with
-          | Choice3Of5 b -> yield! Binding.emitForImplementation b
-          | Choice5Of5 c -> yield c
-          | _ -> ()
+      for item in items do
+        match item with
+        | Binding b -> yield! Binding.emitForImplementation b
+        | Comment c -> yield c
+        | _ -> ()
       yield! exports.impl
     ]
 
@@ -1798,7 +1766,7 @@ and emitExportModule (ctx: Context) (exports: ExportItem list) : EmitModuleResul
     if i.kind |> Option.map Kind.generatesReScriptModule |> Option.defaultValue false then
       [ Statement.moduleAlias
           (name |> Naming.moduleNameReserved)
-          (i.name |> Naming.structured Naming.moduleName) |> TypeDefText ]
+          (i.name |> Naming.structured Naming.moduleName) |> TypeAliasText ]
     else []
 
   let addItems items (acc: StructuredText) =

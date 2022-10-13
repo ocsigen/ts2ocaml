@@ -137,6 +137,13 @@ type DependencyTrie<'k when 'k: comparison> = Trie<'k, DependencyTrieInfo<'k>>
 module DependencyTrie =
   open Ts2Ml.Extensions
 
+  let rec isLinear (dt: DependencyTrie<'k>) =
+    let searchChildren () =
+      dt.children.Values |> Seq.forall isLinear
+    match dt.value with
+    | Some { isRecursive = true } -> false
+    | _ -> searchChildren ()
+
   let ofTrie (getReferences: 'v -> WeakTrie<'k>) (trie: Trie<'k, 'v>) : DependencyTrie<'k> =
     let refTrieMap = new MutableMap<'k list, WeakTrie<'k>>()
     let rec getRefTrie nsRev (x: Trie<'k, 'v>) =

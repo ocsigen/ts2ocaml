@@ -139,7 +139,10 @@ module DependencyTrie =
 
   let rec isLinear (dt: DependencyTrie<'k>) =
     let searchChildren () =
-      dt.children.Values |> Seq.forall isLinear
+      dt.children
+      |> Map.toSeq
+      |> Seq.map snd
+      |> Seq.forall isLinear
     match dt.value with
     | Some { isRecursive = true } -> false
     | _ -> searchChildren ()
